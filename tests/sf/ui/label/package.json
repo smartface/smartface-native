@@ -1,0 +1,25 @@
+{
+  "name": "core-modules/tests/sf/ui/label",
+  "version": "0.0.1",
+  "description": "SF UI Label Test",
+  "main": "smf-ui-label-test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/smartface-team/core-modules.git"
+  },
+  "keywords": [
+    "smartface",
+    "core-modules",
+    "javascript"
+  ],
+  "author": {
+    "name": "Smartface",
+    "email": "info@smartface.io",
+    "url": "http://smartface.io"
+  },
+  "license": "ISC",
+  "homepage": "http://bitbucket.org/smartface-team/core-modules#readme"
+}
