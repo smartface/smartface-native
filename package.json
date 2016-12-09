@@ -1,7 +1,7 @@
 {
   "name": "sf-core",
   "version": "0.0.4",
-  "description": "Core Modules of Native Libraries..",
+  "description": "Core Modules of Native Libraries.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
