@@ -1,6 +1,6 @@
 {
   "name": "core-modules",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Core Modules of Native Libraries.",
   "main": "index.js",
   "scripts": {
