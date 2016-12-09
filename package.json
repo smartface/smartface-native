@@ -1,10 +1,6 @@
 {
-<<<<<<< a6b8a6f1598f6a05f1405a391a7059840b9348fd
   "name": "sf-core",
-=======
-  "name": "core-modules",
->>>>>>> update version to 0.0.3
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Core Modules of Native Libraries..",
   "main": "index.js",
   "scripts": {
