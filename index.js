@@ -1,3 +1,1 @@
-const sf = require("./sf");
-
-module.exports = {sf};
+module.exports = require("dist/" + deviceOS);

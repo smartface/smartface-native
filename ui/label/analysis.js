@@ -37,6 +37,8 @@ class Label {
          * @property {number} alpha Alpha value of Label object
          */
         this.alpha = 1.0;
+
+        const UILabel = require("UILabel");
         
         Object.defineProperty(this, 'alpha', {
             get: function() {
