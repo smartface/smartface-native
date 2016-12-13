@@ -1,7 +1,7 @@
 var expect  = require("chai").expect;
 var assert  = require("chai").assert;
 
-const Label = require("../scripts/lib/smf-ui-label");
+const Label = require("sf-core/ui/label");
 
 function getNewLabel(){
   return new Label({
