@@ -79,9 +79,33 @@ function View(params) {
     this.width = "0%";
 
     /**
+     * This method returns all position values in one object.
+     * 
+     * @return {Object} Object with properties:
+     * @return {Number} return.width Width value
+     * @return {Number} return.height Height value
+     * @return {Number} return.left Position X value
+     * @return {Number} return.top Position Y value
+     */
+    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
+
+    /**
+     * This method allows setting all position values within one function call.
+     * Using this method will be faster than setting all position values (width,
+     * height etc.) separately.
+     * 
+     * @param {Object} position Object describing position values
+     * @param {Number} [position.width] Width value
+     * @param {Number} [position.height] Height value
+     * @param {Number} [position.left] Position X value
+     * @param {Number} [position.top] Position Y value
+     */
+    this.setPosition = function(position){}
+
+    /**
      * Gets/sets touch event for view. This event fires when touch started.
      * 
-     * @event {function} onTouch - Touch event
+     * @event {function} onTouch Touch event
      */
     this.onTouch = function(){ }
 

@@ -75,10 +75,7 @@ function Label (options) {
      * 
      * @member {Color} textColor Text Color
      */
-    this.textColor = "#00FFFFFF";
-    
-    this.setPosition = function(positionObject){}
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
+    this.textColor = "#000000";
     
     // Assign properties given in constructor
     if (props) {
