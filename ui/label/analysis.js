@@ -4,8 +4,6 @@
  *
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
- *
- *
  * @example
  * const Label = require('sf-core/ui/label');
  * var myLabel = new Label({
@@ -13,8 +11,6 @@
  *     visible: true
  * });
  * myLabel.backgroundColor = "#00FFFFFF";
- *
- *
  */
 function Label (options) {
     /** 
