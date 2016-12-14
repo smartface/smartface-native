@@ -13,44 +13,6 @@
  * myLabel.backgroundColor = "#00FFFFFF";
  */
 function Label (options) {
-    /** 
-     * Defines opacity of Label view. The value of this property is float number
-     * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
-     * represents view is completely opaque.
-     *
-     * @example
-     * var label = new Label();
-     * label.alpha = 0.5;
-     *
-     * @member {number} alpha Alpha value of Label object
-     */
-    this.alpha = 1.0;
-
-    /**
-     * Gets/sets background color of label view. It allows setting background 
-     * color with string or UI.Color properties.
-     * 
-     * @example
-     * var label = new Label();
-     * label.backgroundColor = "#00FFFFFF";
-     * 
-     * @member {Color} backgroundColor Background color
-     */ 
-    this.backgroundColor = "#00FFFFFF";
-    
-    /**
-     * Gets/sets height of label view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @example
-     * var label = new Label({
-     *   height: "10%"
-     * });
-     * 
-     * @property {number} height Height of view
-     */
-    this.height = "0%";
-
     /**
      * Gets/sets HTML text value. This property helps user showing HTML
      * tagged texts in Label view.
@@ -64,14 +26,6 @@ function Label (options) {
      * @member {string} htmlText HTML text to display in object
      */
     this.htmlText = "";
-    
-    /**
-     * Gets/sets id of label view. Should be unique number for all objects
-     * inside project.
-     * 
-     * @member {number} id View identifier
-     */
-    this.id = 5421;
 
     /**
      * Gets/sets font of label view. When set to null label uses system font.
@@ -80,19 +34,6 @@ function Label (options) {
      * @member {Font} font Font of label view.
      */
     this.font = null;
-
-    /**
-     * Gets/sets position X value of label view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @example
-     * var label = new Label({
-     *   left: "10%"
-     * });
-     * 
-     * @property {number} left Position X value of view
-     */
-    this.left = "0%";
 
     /**
      * Gets/sets allowing multiple line for label view. If set to true
@@ -135,62 +76,6 @@ function Label (options) {
      * @member {Color} textColor Text Color
      */
     this.textColor = "#00FFFFFF";
-
-    /**
-     * Gets/sets position Y value of label view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @example
-     * var label = new Label({
-     *   top: "10%"
-     * });
-     * 
-     * @property {number} top Position Y value of view
-     */
-    this.top = "0%";
-
-    /**
-     * Enables/disables touches to label view. When set to false events
-     * related to touches won't fire. It is set to true as default.
-     * 
-     * @member {boolean} touchEnabled Touch enable
-     */
-    this.touchEnabled = true;
-
-    /**
-     * Gets/sets visibility of view. It is set to true as default.
-     * 
-     * @member {boolean} visible View visibility
-     */
-    this.visible = true;
-
-    /**
-     * Gets/sets width of label view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @example
-     * var label = new Label({
-     *   width: "10%"
-     * });
-     * 
-     * @property {number} width Width of view
-     */
-    this.width = "0%";
-
-    /**
-     * Gets/sets touch event for label view. This event fires when touch started.
-     * 
-     * @event Label#onTouch - Touch event
-     */
-    this.onTouch = function(){ }
-
-    /**
-     * Gets/sets touch ended event for label view. This event fires when touch
-     * finished.
-     * 
-     * @event {function} onTouchEnded Touch ended event
-     */
-    this.onTouchEnded = function(){ }
     
     this.setPosition = function(positionObject){}
     this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
