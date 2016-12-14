@@ -64,11 +64,11 @@ function Label (options) {
      * 
      * @example
      * var label = new Label();
-     * label.textAlignment = UI.TextAlignment.CENTER;
+     * label.textAlignment = TextAlignment.CENTER;
      * 
      * @member {number} textAlignment Text alignment
      */
-    this.textAlignment = SF.TextAlignment.CENTER;
+    this.textAlignment = TextAlignment.CENTER;
 
     /**
      * Gets/sets text color of view.
