@@ -76,6 +76,13 @@ function Label (options) {
      * @member {Color} textColor Text Color
      */
     this.textColor = "#000000";
+
+    /**
+     * Sets/gets showing scroll bar when text doesn't fit to label view.
+     * 
+     * @member {Boolean} showScrollBar
+     */
+    this.showScrollBar = true;
     
     // Assign properties given in constructor
     if (props) {
