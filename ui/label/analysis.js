@@ -2,17 +2,16 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class Label
- *
- *
+ * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
- * @example
- * const Label = require('sf-core/ui/label');
- * var myLabel = new Label({
- *     text: "This is my label",
- *     visible: true
- * });
- * myLabel.backgroundColor = "#00FFFFFF";
+ *      @example
+ *      const Label = require('sf-core/ui/label');
+ *      var myLabel = new Label({
+ *          text: "This is my label",
+ *          visible: true
+ *      });
+ *      myLabel.backgroundColor = "#00FFFFFF";
  */
 const Label = extend(View)(
     function (_super, params) {
@@ -22,13 +21,13 @@ const Label = extend(View)(
          * Gets/sets HTML text value. This property helps user showing HTML
          * tagged texts in Label view.
          * 
-         * @example
-         * // In this example 'This link' text inside Label will shown blue and
-         * // underlined
-         * var label = new Label();
-         * label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
+         *      @example
+         *      // In this example 'This link' text inside Label will shown blue and
+         *      // underlined
+         *      var label = new Label();
+         *      label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
-         * @member {string} htmlText HTML text to display in object
+         * @property {String} htmlText HTML text to display in object
          */
         this.htmlText = "";
 
@@ -36,7 +35,7 @@ const Label = extend(View)(
          * Gets/sets font of label view. When set to null label uses system font.
          * It is set to null by default.
          * 
-         * @member {Font} font Font of label view.
+         * @property {Font} font Font of label view.
          */
         this.font = null;
 
@@ -45,21 +44,21 @@ const Label = extend(View)(
          * and text is too long to show in single line label shows text as 
          * multiline. 
          * 
-         * @member {boolean} multipleLine Show multiple line in label 
+         * @property {Boolean} multipleLine Show multiple line in label 
          */
         this.multipleLine = true;
 
         /**
          * Gets/sets style of view. 
          * 
-         * @member {Style} style Style of view
+         * @property {Style} style Style of view
          */
         this.style = {};
 
         /**
          * Gets/sets text inside label view.
          * 
-         * @member {string} text Text inside label
+         * @property {String} text Text inside label
          */
         this.text = "Text";
 
@@ -67,25 +66,25 @@ const Label = extend(View)(
          * Gets/sets text alignment of label view. UI.TextAlignment constants
          * can be used.
          * 
-         * @example
-         * var label = new Label();
-         * label.textAlignment = TextAlignment.CENTER;
+         *      @example
+         *      var label = new Label();
+         *      label.textAlignment = TextAlignment.CENTER;
          * 
-         * @member {number} textAlignment Text alignment
+         * @property {Number} textAlignment Text alignment
          */
         this.textAlignment = TextAlignment.CENTER;
 
         /**
          * Gets/sets text color of view.
          * 
-         * @member {Color} textColor Text Color
+         * @property {Color} textColor Text Color
          */
         this.textColor = "#000000";
 
         /**
          * Sets/gets showing scroll bar when text doesn't fit to label view.
          * 
-         * @member {Boolean} showScrollBar
+         * @property {Boolean} showScrollBar
          */
         this.showScrollBar = true;
         

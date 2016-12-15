@@ -19,7 +19,7 @@ function Style(params) {
     /**
      * Sets/gets border color of bounded view.
      * 
-     * @member {Color} borderColor Border color
+     * @property {Color} borderColor Border color
      */
     this.borderColor = "#000000";
 
@@ -27,7 +27,7 @@ function Style(params) {
      * Sets/gets border thickness of bounded view. Accepts unsigned
      * numbers, 0 means no border.
      * 
-     * @member {Number} borderWidth Border width
+     * @property {Number} borderWidth Border width
      */
     this.borderWidth = 0;
 }

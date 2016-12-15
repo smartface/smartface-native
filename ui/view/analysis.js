@@ -11,7 +11,7 @@ function View(params) {
      * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
      * represents view is completely opaque.
      *
-     * @member {number} alpha Alpha value of view
+     * @property {Number} alpha Alpha value of view
      */
     this.alpha = 1.0;
     
@@ -19,7 +19,7 @@ function View(params) {
      * Gets/sets background color of view. It allows setting background 
      * color with string or UI.Color properties.
      * 
-     * @member {Color} backgroundColor Background color
+     * @property {Color} backgroundColor Background color
      */ 
     this.backgroundColor = "#FFFFFF";
 
@@ -27,7 +27,7 @@ function View(params) {
      * Gets/sets height of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {number} height Height of view
+     * @property {Number} height Height of view
      */
     this.height = "0%";
         
@@ -35,7 +35,7 @@ function View(params) {
      * Gets/sets id of view. Should be unique number for all objects
      * inside project.
      * 
-     * @member {number} id View identifier
+     * @property {Number} id View identifier
      */
     this.id = 5421;
 
@@ -43,7 +43,7 @@ function View(params) {
      * Gets/sets position X value of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {number} left Position X value of view
+     * @property {Number} left Position X value of view
      */
     this.left = "0%";
 
@@ -51,14 +51,14 @@ function View(params) {
      * Gets/sets position Y value of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {number} top Position Y value of view
+     * @property {Number} top Position Y value of view
      */
     this.top = "0%";
 
     /**
      * Gets/sets visibility of view. It is set to true as default.
      * 
-     * @member {boolean} visible View visibility
+     * @property {Boolean} visible View visibility
      */
     this.visible = true;
 
@@ -66,7 +66,7 @@ function View(params) {
      * Enables/disables touches to view. When set to false events
      * related to touches won't fire. It is set to true as default.
      * 
-     * @member {boolean} touchEnabled Touch enable
+     * @property {Boolean} touchEnabled Touch enable
      */
     this.touchEnabled = true;
 
@@ -74,7 +74,7 @@ function View(params) {
      * Gets/sets width of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {number} width Width of view
+     * @property {Number} width Width of view
      */
     this.width = "0%";
 
@@ -99,23 +99,24 @@ function View(params) {
      * @param {Number} [position.height] Height value
      * @param {Number} [position.left] Position X value
      * @param {Number} [position.top] Position Y value
+     * @method setPosition
      */
     this.setPosition = function(position){}
 
     /**
      * Gets/sets touch event for view. This event fires when touch started.
      * 
-     * @event {function} onTouch Touch event
+     * @event onTouch
      */
-    this.onTouch = function(){ }
+    this.onTouch = function onTouch(){ }
 
     /**
      * Gets/sets touch ended event for view. This event fires when touch
      * finished.
      * 
-     * @event {function} onTouchEnded Touch ended event
+     * @event onTouchEnded
      */
-    this.onTouchEnded = function(){ }
+    this.onTouchEnded = function onTouchEnded(){ }
 }
 
 module.exports = View;
