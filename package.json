@@ -18,8 +18,8 @@
   "author": {
     "name": "Smartface",
     "email": "info@smartface.io",
-    "url": "http://smartface.io"
+    "url": "http://www.smartface.io"
   },
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "http://bitbucket.org/smartface-team/core-modules#readme"
 }
