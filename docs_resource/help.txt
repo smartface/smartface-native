@@ -1,0 +1,13 @@
+gulp autocomplete --baseUrl=https://docs.smartfacecloud.io
+
+gulp autocomplete
+
+gulp start-server
+gulp stop-server
+
+gulp docs
+
+gulp check
+gulp help
+
+gulp commit x [y], x->repo y-> master
