@@ -1,5 +1,4 @@
-const label = require("./label");
-
 module.exports = {
-    Label: label
+    View: require('./view'),
+    Label: require('./label')
 };
