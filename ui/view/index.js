@@ -1,1 +1,1 @@
-module.exports = require('./index-' + Device.deviceOS + '.js');
+module.exports = require('./view-' + Device.deviceOS + '.js');

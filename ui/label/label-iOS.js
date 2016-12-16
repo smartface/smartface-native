@@ -62,8 +62,6 @@ const Label = extend(View)(
             }
             
         });
-        
-        this.style = {};
 
         Object.defineProperty(self, 'text', {
             get: function() {

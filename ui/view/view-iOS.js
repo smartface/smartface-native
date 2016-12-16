@@ -1,6 +1,27 @@
 function View(params) {
     var self = this;
     
+    var _style;
+    Object.defineProperty(self, 'style', {
+        get: function() {
+           return _style;
+        },
+        set: function(value) {
+           _style = value;
+           
+           self.nativeObject.layer.borderColor = UIColor.hexColor(value.borderColor);
+           self.nativeObject.layer.borderWidth = value.borderWidth;
+           
+           _style.addChangeHandler(function(propertyName,value){
+               if(propertyName == 'borderColor'){
+                   self.nativeObject.layer.borderColor = UIColor.hexColor(value);
+               }else if(propertyName == 'borderWidth'){
+                   self.nativeObject.layer.borderWidth = value;
+               }
+           });
+        }
+    });
+    
     Object.defineProperty(self, 'alpha', {
         get: function() {
             return self.nativeObject.alpha;
