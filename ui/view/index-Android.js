@@ -1,35 +1,34 @@
 function View(params) {
 
-    const View = android.widget.View || require("core-modules/android-mock/android.view.View");
-    this.inner = new View(Android.getActivity()); 
+    this.nativeObject = new android.widget.View(Android.getActivity()); 
     
     Object.defineProperty(this, 'alpha', {
         get: function() {
-            return this.inner.getAlpha();
+            return this.nativeObject.getAlpha();
         },
         set: function(alpha) {
-            this.inner.setAlpha(alpha);
+            this.nativeObject.setAlpha(alpha);
         }
      });
     
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return this.inner.getBackgroundColor();
+            return this.nativeObject.getBackgroundColor();
         },
         set: function(backgroundColor) {
-            this.inner.setBackgroundColor(android.graphics.Color.parseColor(backgroundColor));
+            this.nativeObject.setBackgroundColor(android.graphics.Color.parseColor(backgroundColor));
         }
      });
 
     Object.defineProperty(this, 'height', {
         get: function() {
-            return this.inner.getHeight();
+            return this.nativeObject.getHeight();
         },
         set: function(height) {
-            if(this.inner.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams != null){
                 // Needs global layout param setter. Layout params can be number or %
                 // If we can work just pixels except LinearLayout this will enought for setting.
-                // this.inner.getLayoutParams().height
+                // this.nativeObject.getLayoutParams().height
             }
             else{
                 this.heightInitial = height;
@@ -39,20 +38,20 @@ function View(params) {
         
     Object.defineProperty(this, 'id', {
         get: function() {
-            return this.inner.getId();
+            return this.nativeObject.getId();
         },
         set: function(id) {
-            this.inner.setId(id);
+            this.nativeObject.setId(id);
         }
      });
     
     Object.defineProperty(this, 'left', {
         get: function() {
-            return this.inner.getLeft();
+            return this.nativeObject.getLeft();
         },
         set: function(left) {
             this.leftInitial = left;
-            if(this.inner.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams != null){
                 // Needs global layout param setter. Layout params can be number or %
             }
         }
@@ -60,11 +59,11 @@ function View(params) {
 
     Object.defineProperty(this, 'top', {
         get: function() {
-            return this.inner.getTop();
+            return this.nativeObject.getTop();
         },
         set: function(top) {
             this.topInitial = top;
-            if(this.inner.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams != null){
                 // Needs global layout param setter. Layout params can be number or %
             }
         }
@@ -72,25 +71,25 @@ function View(params) {
 
     Object.defineProperty(this, 'visible', {
         get: function() {
-            return this.inner.getVisibility() == android.view.View.VISIBLE;
+            return this.nativeObject.getVisibility() == android.view.View.VISIBLE;
         },
         set: function(visible) {
             if(visible)
-                this.inner.setVisibility(android.view.View.VISIBLE);
+                this.nativeObject.setVisibility(android.view.View.VISIBLE);
             else
-                this.inner.setVisibility(android.view.View.INVISIBLE);
+                this.nativeObject.setVisibility(android.view.View.INVISIBLE);
         }
     });
 
     Object.defineProperty(this, 'width', {
         get: function() {
-            return this.inner.getWidth();
+            return this.nativeObject.getWidth();
         },
         set: function(width) {
-            if(this.inner.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams != null){
                 // Needs global layout param setter. Layout params can be number or %
                 // If we can work just pixels except LinearLayout this will enought for setting.
-                // this.inner.getLayoutParams().width
+                // this.nativeObject.getLayoutParams().width
             }
             else{
                 this.widthInitial = width;
@@ -100,15 +99,15 @@ function View(params) {
 
     this.getPosition = function(){
         return  {
-            width: this.inner.getWidth(), 
-            height: this.inner.getHeight(), 
-            top: this.inner.getTop(), 
-            left: this.inner.getLeft()
+            width: this.nativeObject.getWidth(), 
+            height: this.nativeObject.getHeight(), 
+            top: this.nativeObject.getTop(), 
+            left: this.nativeObject.getLeft()
         }; 
     }
 
     this.setPosition = function(position){
-        if(this.inner.getLayoutParams != null){
+        if(this.nativeObject.getLayoutParams != null){
             // Needs global layout param setter. Layout params can be number or %
         }
         else{
@@ -149,7 +148,7 @@ function View(params) {
     
     var setOnTouchListener = function(){
         isOnTouchSet = true;
-        this.inner.setOnTouchListener(android.view.View.OnTouchListener.implement({
+        this.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
             onTouch: function(view, event) {
                 if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                     this.onTouchEndedCallback && this.onTouchEndedCallback();
