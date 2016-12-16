@@ -48,6 +48,13 @@ function View(params) {
     this.left = "0%";
 
     /**
+     * Gets/sets style of view. 
+     * 
+     * @property {Style} style Style of view
+     */
+    this.style = {};
+
+    /**
      * Gets/sets position Y value of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 

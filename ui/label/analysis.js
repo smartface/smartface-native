@@ -49,13 +49,6 @@ const Label = extend(View)(
         this.multipleLine = true;
 
         /**
-         * Gets/sets style of view. 
-         * 
-         * @property {Style} style Style of view
-         */
-        this.style = {};
-
-        /**
          * Gets/sets text inside label view.
          * 
          * @property {String} text Text inside label
