@@ -20,7 +20,7 @@ Core Modules of Native Libraries. sf-core has implementations of Android and iOS
 * Create workspace on Smartface Cloud
 * Clone js-base repository to the root of workspace
 ```
-git clone https://github.com/smartface/js-base
+    git clone https://github.com/smartface/js-base
 ```
 * Install downloaded js-base library (You can remove js-base folder after installation)
 ```
@@ -35,10 +35,10 @@ git clone https://github.com/smartface/js-base
 ```
 * You're ready to use sf-core library in your workspace
 ```
-const Label = require('sf-core/ui/label');
-var label = new Label();
-label.text = "Hello World!";
-page.add(label);
+    const Label = require('sf-core/ui/label');
+    var label = new Label();
+    label.text = "Hello World!";
+    page.add(label);
 ```
 ### What's Next? ###
 
