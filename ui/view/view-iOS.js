@@ -10,12 +10,14 @@ function View(params) {
         }
     });
     
+    var _backgroundColor;
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return self.nativeObject.backgroundColor;
+            return _backgroundColor;
         },
         set: function(value) {
-            self.nativeObject.backgroundColor = value;
+            _backgroundColor = value;
+            self.nativeObject.backgroundColor = UIColor.hexColor(value);
         }
     });
 

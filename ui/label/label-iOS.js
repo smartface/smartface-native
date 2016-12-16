@@ -62,12 +62,7 @@ const Label = extend(View)(
             }
             
         });
-
-        /**
-         * Gets/sets style of view. 
-         * 
-         * @property {Style} style Style of view
-         */
+        
         this.style = {};
 
         Object.defineProperty(self, 'text', {
@@ -87,13 +82,15 @@ const Label = extend(View)(
                 self.nativeObject.textAlignment = value;
             }
         });
-
+        
+        var textColor;
         Object.defineProperty(self, 'textColor', {
             get: function() {
-                return self.nativeObject.textColor;
+                return _textColor;
             },
             set: function(value) {
-                self.nativeObject.textColor = value;
+                _textColor = value;
+                self.nativeObject.textColor = UIColor.hexColor(value);
             }
         });
         
