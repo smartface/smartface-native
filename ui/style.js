@@ -28,7 +28,7 @@ function Style(params) {
         },
         set: function(value) {
             borderColor = value;
-            changeHandlers.forEach(function(handler) {
+            changeHandlers && changeHandlers.forEach(function(handler) {
                 handler('borderColor', value);
             });
         }
@@ -47,11 +47,17 @@ function Style(params) {
         },
         set: function(value) {
             borderWidth = value;
-            changeHandlers.forEach(function(handler) {
+            changeHandlers && changeHandlers.forEach(function(handler) {
                 handler('borderWidth', value);
             });
         }
     });
+
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 
     var changeHandlers = [];
     this.addChangeHandler = function(handler) {
