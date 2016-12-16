@@ -16,7 +16,8 @@ function View(params) {
             return this.nativeObject.getBackgroundColor();
         },
         set: function(backgroundColor) {
-            this.nativeObject.setBackgroundColor(android.graphics.Color.parseColor(backgroundColor));
+            var colorParam = android.graphics.Color.parseColor(backgroundColor);
+            this.nativeObject.setBackgroundColor(colorParam);
         }
      });
 
@@ -25,10 +26,11 @@ function View(params) {
             return this.nativeObject.getHeight();
         },
         set: function(height) {
-            if(this.nativeObject.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                // If we can work just pixels except LinearLayout this will enought for setting.
-                // this.nativeObject.getLayoutParams().height
+                var layoutParams = this.nativeObject.getLayoutParams();
+                layoutParams.height = height;
+                this.nativeObject.setLayoutParams(layoutParams);
             }
             else{
                 this.heightInitial = height;
@@ -50,9 +52,16 @@ function View(params) {
             return this.nativeObject.getLeft();
         },
         set: function(left) {
-            this.leftInitial = left;
-            if(this.nativeObject.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
+                var layoutParams = this.nativeObject.getLayoutParams();
+                if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
+                    layoutParams.left = left;
+                    this.nativeObject.setLayoutParams(layoutParams);
+                }
+            }
+            else{
+                this.leftInitial = left;
             }
         }
      });
@@ -62,9 +71,16 @@ function View(params) {
             return this.nativeObject.getTop();
         },
         set: function(top) {
-            this.topInitial = top;
-            if(this.nativeObject.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
+                var layoutParams = this.nativeObject.getLayoutParams();
+                if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
+                    layoutParams.top = top;
+                    this.nativeObject.setLayoutParams(layoutParams);
+                }
+            }
+            else{
+                this.topInitial = top;
             }
         }
      });
@@ -86,10 +102,11 @@ function View(params) {
             return this.nativeObject.getWidth();
         },
         set: function(width) {
-            if(this.nativeObject.getLayoutParams != null){
+            if(this.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                // If we can work just pixels except LinearLayout this will enought for setting.
-                // this.nativeObject.getLayoutParams().width
+                var layoutParam = this.nativeObject.getLayoutParams();
+                layoutParam.width = width;
+                this.nativeObject.setLayoutParams(layoutParam);
             }
             else{
                 this.widthInitial = width;
@@ -107,14 +124,22 @@ function View(params) {
     }
 
     this.setPosition = function(position){
-        if(this.nativeObject.getLayoutParams != null){
+        if(this.nativeObject.getLayoutParams() != null){
             // Needs global layout param setter. Layout params can be number or %
+            var layoutParams = this.nativeObject.getLayoutParams();
+            layoutParams.width = position.width;
+            layoutParams.height = position.height;
+            if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
+                    layoutParams.top = position.top;
+                    layoutParams.left = position.left;
+            }
+            this.nativeObject.setLayoutParams(layoutParams);
         }
         else{
             widthInitial = position.width;
-            heightInitial = height;
-            topInitial = top;
-            leftInitial = left;
+            heightInitial = position.height;
+            topInitial = position.top;
+            leftInitial = position.left;
         }
     }
 
@@ -126,10 +151,10 @@ function View(params) {
         get: function() {
             return this.onTouchCallback;
         },
-        set: function(top) {
+        set: function(onTouch) {
             this.onTouchCallback = onTouch;
             if(!isOnTouchSet && this.touchEnabled){
-                setOnTouchListener();
+                setOnTouchListener(this);
             }
         }
     });
@@ -138,22 +163,22 @@ function View(params) {
         get: function() {
             return this.onTouchEndedCallback;
         },
-        set: function(top) {
-            this.onTouchEndedCallback = onTouch;
+        set: function(onTouchEnded) {
+            this.onTouchEndedCallback = onTouchEnded;
             if(!isOnTouchSet && this.touchEnabled){
-                setOnTouchListener();
+                setOnTouchListener(this);
             }
         }
     });
     
-    var setOnTouchListener = function(){
+    var setOnTouchListener = function(jsView){
         isOnTouchSet = true;
-        this.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
+        jsView.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
             onTouch: function(view, event) {
                 if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                    this.onTouchEndedCallback && this.onTouchEndedCallback();
+                    jsView.onTouchEndedCallback && jsView.onTouchEndedCallback();
                 } else {
-                    this.onTouchCallback && this.onTouchCallback();
+                    jsView.onTouchCallback && jsView.onTouchCallback();
                 }
             }
         }));

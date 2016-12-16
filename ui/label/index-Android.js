@@ -8,10 +8,13 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                return android.text.Html.toHtml(this.nativeObject.getEditableText()).toString();
+                var editableText = this.nativeObject.getEditableText();
+                var htmlText = android.text.Html.toHtml(editableText)
+                return htmlText.toString();
             },
             set: function(htmlText) {
-                this.nativeObject.setText(android.text.Html.fromHtml(htmlText));
+                var htmlTextNative = android.text.Html.fromHtml(htmlText);
+                this.nativeObject.setText(htmlTextNative);
             }
         });
 
@@ -41,7 +44,8 @@ const Label = extend(View)(
             set: function(style) {
                 styleInitial = style;
                 var gd = new android.graphics.drawable.GradientDrawable();
-                gd.setStroke(style.borderWidth, android.graphics.Color.parseColor.parseColor(style.borderColor));
+                var borderColor = android.graphics.Color.parseColor(style.borderColor);
+                gd.setStroke(style.borderWidth, borderColor);
                 this.nativeObject.setBackgroundDrawable(gd);
             }
         });
@@ -61,6 +65,7 @@ const Label = extend(View)(
                 return textAlignmentInitial;
             },
             set: function(textAlignment) {
+                textAlignmentInitial = textAlignment;
                 var alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
                 switch(textAlignment){
                     case 0:
@@ -100,7 +105,8 @@ const Label = extend(View)(
                 return this.nativeObject.getTextColor();
             },
             set: function(color) {
-                this.nativeObject.setTextColor(android.graphics.Color.parseColor.parseColor(color));
+                var colorParam = android.graphics.Color.parseColor(color);
+                this.nativeObject.setTextColor(colorParam);
             }
         });
 
