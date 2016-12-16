@@ -1,10 +1,3 @@
-/**
- * @class View
- *
- * View class represents a rectangular area drawable to user interface. This class
- * is base of all UI classes.
- *
- */
 function View(params) {
 
     const View = android.widget.View || require("core-modules/android-mock/android.view.View");
