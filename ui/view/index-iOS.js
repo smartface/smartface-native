@@ -86,8 +86,11 @@ function View(params) {
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
      */
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
-
+   // this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
+    this.getPosition = function(){
+        
+       return  {left : self.nativeObject.frame.x , top : self.nativeObject.frame.y , width : self.nativeObject.frame.width, height : self.nativeObject.frame.height};
+    }
     /**
      * This method allows setting all position values within one function call.
      * Using this method will be faster than setting all position values (width,
@@ -100,7 +103,9 @@ function View(params) {
      * @param {Number} [position.top] Position Y value
      * @method setPosition
      */
-    this.setPosition = function(position){}
+    this.setPosition = function(position){
+        self.nativeObject.frame = { x : position.left, y : position.top, width : position.width, height : position.height};
+    }
 
     Object.defineProperty(self, 'onTouch', {
         get: function() {

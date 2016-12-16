@@ -4,7 +4,7 @@ const Label = extend(View)(
     function (_super, params) {
         _super(this);
         var self = this;
-        
+
         // TODO Dogan Check params before using it
         self.nativeObject = new SMFUITextView({
             left: params.left,
@@ -13,12 +13,26 @@ const Label = extend(View)(
             height: params.height
         });
 
+        self.nativeObject.setSelectable = false;
+		self.nativeObject.setEditable = false;	
+		self.nativeObject.setDelaysContentTouches = true;
+	    
         Object.defineProperty(self, 'htmlText', {
             get:function() {
                 return self.nativeObject.htmlText;
             },
             set:function(value) {
                 self.nativeObject.htmlText = value;
+            }
+        });
+        
+        Object.defineProperty(self, 'showScrollBar', {
+            get:function() {
+                return self.nativeObject.showsHorizontalScrollIndicator;
+            },
+            set:function(value) {
+                self.nativeObject.showsHorizontalScrollIndicator = value;
+                self.nativeObject.showsVerticalScrollIndicator = value;
             }
         });
 
@@ -82,15 +96,7 @@ const Label = extend(View)(
                 self.nativeObject.textColor = value;
             }
         });
-
-        /**
-         * Sets/gets showing scroll bar when text doesn't fit to label view.
-         * 
-         * @property {Boolean} showScrollBar
-         */
-        this.showScrollBar = true;
         
-        // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
