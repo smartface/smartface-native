@@ -1,67 +1,67 @@
 function View(params) {
-
-    this.nativeObject = new android.view.View(Android.getActivity()); 
+    var self = this;
+    self.nativeObject = new android.view.View(Android.getActivity()); 
     
     Object.defineProperty(this, 'alpha', {
         get: function() {
-            return this.nativeObject.getAlpha();
+            return self.nativeObject.getAlpha();
         },
         set: function(alpha) {
-            this.nativeObject.setAlpha(alpha);
+            self.nativeObject.setAlpha(alpha);
         }
      });
     
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return this.nativeObject.getBackgroundColor();
+            return self.nativeObject.getBackgroundColor();
         },
         set: function(backgroundColor) {
             var colorParam = android.graphics.Color.parseColor(backgroundColor);
-            this.nativeObject.setBackgroundColor(colorParam);
+            self.nativeObject.setBackgroundColor(colorParam);
         }
      });
 
     Object.defineProperty(this, 'height', {
         get: function() {
-            return this.nativeObject.getHeight();
+            return self.nativeObject.getHeight();
         },
         set: function(height) {
-            if(this.nativeObject.getLayoutParams() != null){
+            if(self.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = this.nativeObject.getLayoutParams();
+                var layoutParams = self.nativeObject.getLayoutParams();
                 layoutParams.height = height;
-                this.nativeObject.setLayoutParams(layoutParams);
+                self.nativeObject.setLayoutParams(layoutParams);
             }
             else{
-                this.heightInitial = height;
+                self.heightInitial = height;
             }
         }
      });
         
     Object.defineProperty(this, 'id', {
         get: function() {
-            return this.nativeObject.getId();
+            return self.nativeObject.getId();
         },
         set: function(id) {
-            this.nativeObject.setId(id);
+            self.nativeObject.setId(id);
         }
      });
     
     Object.defineProperty(this, 'left', {
         get: function() {
-            return this.nativeObject.getLeft();
+            return self.nativeObject.getLeft();
         },
         set: function(left) {
-            if(this.nativeObject.getLayoutParams() != null){
+            if(self.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = this.nativeObject.getLayoutParams();
+                var layoutParams = self.nativeObject.getLayoutParams();
                 if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
                     layoutParams.left = left;
-                    this.nativeObject.setLayoutParams(layoutParams);
+                    self.nativeObject.setLayoutParams(layoutParams);
                 }
             }
             else{
-                this.leftInitial = left;
+                self.leftInitial = left;
             }
         }
      });
@@ -71,69 +71,69 @@ function View(params) {
             return this.nativeObject.getTop();
         },
         set: function(top) {
-            if(this.nativeObject.getLayoutParams() != null){
+            if(self.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = this.nativeObject.getLayoutParams();
+                var layoutParams = self.nativeObject.getLayoutParams();
                 if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
                     layoutParams.top = top;
-                    this.nativeObject.setLayoutParams(layoutParams);
+                    self.nativeObject.setLayoutParams(layoutParams);
                 }
             }
             else{
-                this.topInitial = top;
+                self.topInitial = top;
             }
         }
      });
 
     Object.defineProperty(this, 'visible', {
         get: function() {
-            return this.nativeObject.getVisibility() == android.view.View.VISIBLE;
+            return self.nativeObject.getVisibility() == android.view.View.VISIBLE;
         },
         set: function(visible) {
             if(visible)
-                this.nativeObject.setVisibility(android.view.View.VISIBLE);
+                self.nativeObject.setVisibility(android.view.View.VISIBLE);
             else
-                this.nativeObject.setVisibility(android.view.View.INVISIBLE);
+                self.nativeObject.setVisibility(android.view.View.INVISIBLE);
         }
     });
 
     Object.defineProperty(this, 'width', {
         get: function() {
-            return this.nativeObject.getWidth();
+            return self.nativeObject.getWidth();
         },
         set: function(width) {
-            if(this.nativeObject.getLayoutParams() != null){
+            if(self.nativeObject.getLayoutParams() != null){
                 // Needs global layout param setter. Layout params can be number or %
-                var layoutParam = this.nativeObject.getLayoutParams();
+                var layoutParam = self.nativeObject.getLayoutParams();
                 layoutParam.width = width;
-                this.nativeObject.setLayoutParams(layoutParam);
+                self.nativeObject.setLayoutParams(layoutParam);
             }
             else{
-                this.widthInitial = width;
+                self.widthInitial = width;
             }
         }
      });
 
     this.getPosition = function(){
         return  {
-            width: this.nativeObject.getWidth(), 
-            height: this.nativeObject.getHeight(), 
-            top: this.nativeObject.getTop(), 
-            left: this.nativeObject.getLeft()
+            width: self.nativeObject.getWidth(), 
+            height: self.nativeObject.getHeight(), 
+            top: self.nativeObject.getTop(), 
+            left: self.nativeObject.getLeft()
         }; 
     }
 
     this.setPosition = function(position){
-        if(this.nativeObject.getLayoutParams() != null){
+        if(self.nativeObject.getLayoutParams() != null){
             // Needs global layout param setter. Layout params can be number or %
-            var layoutParams = this.nativeObject.getLayoutParams();
+            var layoutParams = self.nativeObject.getLayoutParams();
             layoutParams.width = position.width;
             layoutParams.height = position.height;
             if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
                     layoutParams.top = position.top;
                     layoutParams.left = position.left;
             }
-            this.nativeObject.setLayoutParams(layoutParams);
+            self.nativeObject.setLayoutParams(layoutParams);
         }
         else{
             widthInitial = position.width;
@@ -149,36 +149,36 @@ function View(params) {
 
     Object.defineProperty(this, 'onTouch', {
         get: function() {
-            return this.onTouchCallback;
+            return self.onTouchCallback;
         },
         set: function(onTouch) {
-            this.onTouchCallback = onTouch;
-            if(!isOnTouchSet && this.touchEnabled){
-                setOnTouchListener(this);
+            self.onTouchCallback = onTouch;
+            if(!isOnTouchSet && self.touchEnabled){
+                setOnTouchListener();
             }
         }
     });
 
     Object.defineProperty(this, 'onTouchEnded', {
         get: function() {
-            return this.onTouchEndedCallback;
+            return self.onTouchEndedCallback;
         },
         set: function(onTouchEnded) {
-            this.onTouchEndedCallback = onTouchEnded;
-            if(!isOnTouchSet && this.touchEnabled){
-                setOnTouchListener(this);
+            self.onTouchEndedCallback = onTouchEnded;
+            if(!isOnTouchSet && self.touchEnabled){
+                setOnTouchListener();
             }
         }
     });
     
-    var setOnTouchListener = function(jsView){
+    var setOnTouchListener = function(){
         isOnTouchSet = true;
-        jsView.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
+        self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
             onTouch: function(view, event) {
                 if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                    jsView.onTouchEndedCallback && jsView.onTouchEndedCallback();
+                    self.onTouchEndedCallback && self.onTouchEndedCallback();
                 } else {
-                    jsView.onTouchCallback && jsView.onTouchCallback();
+                    self.onTouchCallback && self.onTouchCallback();
                 }
             }
         }));
@@ -191,25 +191,21 @@ function View(params) {
         },
         set: function(style) {
             styleInitial = style;
-            this.nativeObject.setBackgroundDrawable(null);
+            self.nativeObject.setBackgroundDrawable(null);
             var gd = new android.graphics.drawable.GradientDrawable();
             var borderColor = android.graphics.Color.parseColor(style.borderColor);
+            gd.setColor(android.graphics.Color.TRANSPARENT);
             gd.setStroke(style.borderWidth, borderColor);
-            this.nativeObject.setBackgroundDrawable(gd);
+            self.nativeObject.setBackgroundDrawable(gd);
             
             style.addChangeHandler(function(propertyName, value){
                 if(propertyName == "borderColor" || propertyName == "borderWidth"){
-                    if(propertyName == "borderColor"){
-                        styleInitial.borderColor = value;
-                    }
-                    else{
-                        styleInitial.borderWidth = value;
-                    }
-                    this.nativeObject.setBackgroundDrawable(null)
+                    self.nativeObject.setBackgroundDrawable(null);
                     var gd = new android.graphics.drawable.GradientDrawable();
                     var borderColor = android.graphics.Color.parseColor(style.borderColor);
+                    gd.setColor(android.graphics.Color.TRANSPARENT);
                     gd.setStroke(style.borderWidth, borderColor);
-                    this.nativeObject.setBackgroundDrawable(gd);
+                    self.nativeObject.setBackgroundDrawable(gd);
                 }
             });
         }

@@ -5,43 +5,44 @@ const Label = extend(View)(
         _super(this);
 
         this.nativeObject = new android.widget.TextView(Android.getActivity()); 
+        var self = this;
 
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                var editableText = this.nativeObject.getEditableText();
+                var editableText = self.nativeObject.getEditableText();
                 var htmlText = android.text.Html.toHtml(editableText)
                 return htmlText.toString();
             },
             set: function(htmlText) {
                 var htmlTextNative = android.text.Html.fromHtml(htmlText);
-                this.nativeObject.setText(htmlTextNative);
+                self.nativeObject.setText(htmlTextNative);
             }
         });
 
         Object.defineProperty(this, 'font', {
             get: function() {
-                return this.nativeObject.getTypeface();
+                return self.nativeObject.getTypeface();
             },
             set: function(font) {
-                this.nativeObject.setTypeface(font);
+                self.nativeObject.setTypeface(font);
             }
         });
 
         Object.defineProperty(this, 'multipleLine', {
             get: function() {
-                return this.nativeObject.getLineCount() != 1;
+                return self.nativeObject.getLineCount() != 1;
             },
             set: function(multipleLine) {
-                this.nativeObject.setSingleLine(!multipleLine);
+                self.nativeObject.setSingleLine(!multipleLine);
             }
         });
 
         Object.defineProperty(this, 'text', {
             get: function() {
-                return this.nativeObject.getText();
+                return self.nativeObject.getText();
             },
             set: function(text) {
-                this.nativeObject.setText(text);
+                self.nativeObject.setText(text);
             }
         });
 
@@ -82,26 +83,26 @@ const Label = extend(View)(
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT;
                         break;                   
                 }
-                this.nativeObject.setGravity(alignment);
+                self.nativeObject.setGravity(alignment);
             }
         });
 
         Object.defineProperty(this, 'color', {
             get: function() {
-                return this.nativeObject.getTextColor();
+                return self.nativeObject.getTextColor();
             },
             set: function(color) {
                 var colorParam = android.graphics.Color.parseColor(color);
-                this.nativeObject.setTextColor(colorParam);
+                self.nativeObject.setTextColor(colorParam);
             }
         });
 
         Object.defineProperty(this, 'showScrollBar', {
             get: function() {
-                return this.nativeObject.isHorizontalScrollBarEnabled();
+                return self.nativeObject.isHorizontalScrollBarEnabled();
             },
             set: function(showScrollBar) {
-                this.nativeObject.setHorizontalScrollBarEnabled(showScrollBar);
+                self.nativeObject.setHorizontalScrollBarEnabled(showScrollBar);
             }
         });
         
