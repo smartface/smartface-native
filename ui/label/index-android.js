@@ -1,7 +1,7 @@
 function Label (options) {
 
     const TextView = android.widget.TextView || require("core-modules/android-mock/android.widget.TextView");
-    this.inner = new TextView("Landroid/app/Activity"); 
+    this.inner = new TextView(Android.getActivity()); 
 
     Object.defineProperty(this, 'htmlText', {
         get: function() {
@@ -31,15 +31,28 @@ function Label (options) {
      });
 
     this.style = {};
+    var styleInitial;
+    Object.defineProperty(this, 'style', {
+        get: function() {
+            return styleInitial;
+        },
+        set: function(style) {
+            styleInitial = style;
+            var gd = new android.graphics.drawable.GradientDrawable();
+            gd.setStroke(style.borderWidth, android.graphics.Color.parseColor.parseColor(style.borderColor));
+            this.inner.setBackgroundDrawable(gd);
+        }
+     });
 
-     Object.defineProperty(this, 'text', {
+
+    Object.defineProperty(this, 'text', {
         get: function() {
             return this.inner.getText();
         },
         set: function(text) {
             this.inner.setText(text);
         }
-     });
+    });
 
     Object.defineProperty(this, 'textAlignment', {
         get: function() {
@@ -55,7 +68,7 @@ function Label (options) {
             return this.inner.getTextColor();
         },
         set: function(color) {
-            this.inner.setTextColor(Color.parseColor(color));
+            this.inner.setTextColor(android.graphics.Color.parseColor.parseColor(color));
         }
      });
     

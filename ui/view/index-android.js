@@ -8,7 +8,7 @@
 function View(params) {
 
     const View = android.widget.View || require("core-modules/android-mock/android.view.View");
-    this.inner = new View("Landroid/app/Activity"); 
+    this.inner = new View(Android.getActivity()); 
     
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -89,15 +89,6 @@ function View(params) {
         }
     });
 
-    Object.defineProperty(this, 'touchEnabled', {
-        get: function() {
-            return this.inner.getEnabled();
-        },
-        set: function(touchEnabled) {
-            this.inner.setEnabled(touchEnabled);            
-        }
-     });
-
     Object.defineProperty(this, 'width', {
         get: function() {
             return this.inner.getWidth();
@@ -125,7 +116,7 @@ function View(params) {
 
     this.setPosition = function(position){
         if(this.inner.getLayoutParams != null){
-            / Needs global layout param setter. Layout params can be number or %
+            // Needs global layout param setter. Layout params can be number or %
         }
         else{
             widthInitial = position.width;
@@ -135,14 +126,21 @@ function View(params) {
         }
     }
 
+    this.touchEnabled = false;
+
+    var isOnTouchSet = false
+
     Object.defineProperty(this, 'onTouch', {
         get: function() {
             return this.onTouchCallback;
         },
         set: function(top) {
             this.onTouchCallback = onTouch;
+            if(!isOnTouchSet && this.touchEnabled){
+                setOnTouchListener();
+            }
         }
-     });
+    });
 
     Object.defineProperty(this, 'onTouchEnded', {
         get: function() {
@@ -150,8 +148,24 @@ function View(params) {
         },
         set: function(top) {
             this.onTouchEndedCallback = onTouch;
+            if(!isOnTouchSet && this.touchEnabled){
+                setOnTouchListener();
+            }
         }
-     });
+    });
+    
+    var setOnTouchListener = function(){
+        isOnTouchSet = true;
+        this.inner.setOnTouchListener(android.view.View.OnTouchListener.implement({
+            onTouch: function(view, event) {
+                if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    this.onTouchEndedCallback && this.onTouchEndedCallback();
+                } else {
+                    this.onTouchCallback && this.onTouchCallback();
+                }
+            }
+        }));
+    }   
 }
 
 module.exports = View;
