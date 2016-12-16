@@ -30,7 +30,6 @@ function Label (options) {
         }
      });
 
-    this.style = {};
     var styleInitial;
     Object.defineProperty(this, 'style', {
         get: function() {
@@ -54,12 +53,43 @@ function Label (options) {
         }
     });
 
+    var textAlignmentInitial;
     Object.defineProperty(this, 'textAlignment', {
         get: function() {
-            return this.inner.getTextAlignment();
+            return textAlignmentInitial;
         },
         set: function(textAlignment) {
-            this.inner.setTextAlignment(textAlignment);
+            var alignment = Gravity.CENTER_HORIZONTAL | Gravity.LEFT;
+            swith(textAlignment){
+                case 0:
+                    alignment = Gravity.TOP | Gravity.LEFT;
+                    break;
+                case 1:
+                    talignment = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    break;
+                case 2:
+                    alignment = Gravity.TOP | Gravity.RIGHT;
+                    break;
+                case 3:
+                    alignment = Gravity.CENTER_HORIZONTAL | Gravity.LEFT;
+                    break;
+                case 4:
+                    alignment = Gravity.CENTER;
+                    break;
+                case 5:
+                    alignment = Gravity.CENTER_HORIZONTAL | Gravity.RIGHT;
+                    break;
+                case 6:
+                    alignment = Gravity.BOTTOM | Gravity.LEFT;
+                    break;
+                case 7:
+                    alignment = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                    break;
+                case 8:
+                    alignment = Gravity.BOTTOM | Gravity.RIGHT;
+                    break;                   
+            }
+            this.inner.setGravity(alignment);
         }
      });
 
