@@ -36,20 +36,6 @@ const Label = extend(View)(
             }
         });
 
-        var styleInitial;
-        Object.defineProperty(this, 'style', {
-            get: function() {
-                return styleInitial;
-            },
-            set: function(style) {
-                styleInitial = style;
-                var gd = new android.graphics.drawable.GradientDrawable();
-                var borderColor = android.graphics.Color.parseColor(style.borderColor);
-                gd.setStroke(style.borderWidth, borderColor);
-                this.nativeObject.setBackgroundDrawable(gd);
-            }
-        });
-
         Object.defineProperty(this, 'text', {
             get: function() {
                 return this.nativeObject.getText();
