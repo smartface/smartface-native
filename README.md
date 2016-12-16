@@ -33,6 +33,13 @@ git clone https://github.com/smartface/js-base
 ```
     git clone https://bitbucket.org/smartface-team/sf-core.git
 ```
+* You're ready to use sf-core library in your workspace
+```
+const Label = require('sf-core/ui/label');
+var label = new Label();
+label.text = "Hello World!";
+page.add(label);
+```
 ### What's Next? ###
 
 * Improvements for "installcoremodules" script.
