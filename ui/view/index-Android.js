@@ -1,6 +1,6 @@
 function View(params) {
 
-    this.nativeObject = new android.widget.View(Android.getActivity()); 
+    this.nativeObject = new android.view.View(Android.getActivity()); 
     
     Object.defineProperty(this, 'alpha', {
         get: function() {

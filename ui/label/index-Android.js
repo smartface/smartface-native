@@ -1,6 +1,5 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-
 const Label = extend(View)(
     function (_super, params) {
         _super(this);
@@ -62,34 +61,34 @@ const Label = extend(View)(
                 return textAlignmentInitial;
             },
             set: function(textAlignment) {
-                var alignment = Gravity.CENTER_HORIZONTAL | Gravity.LEFT;
+                var alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
                 switch(textAlignment){
                     case 0:
-                        alignment = Gravity.TOP | Gravity.LEFT;
+                        alignment = android.view.Gravity.TOP | android.view.Gravity.LEFT;
                         break;
                     case 1:
-                        talignment = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                        talignment = android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
                     case 2:
-                        alignment = Gravity.TOP | Gravity.RIGHT;
+                        alignment = android.view.Gravity.TOP | android.view.Gravity.RIGHT;
                         break;
                     case 3:
-                        alignment = Gravity.CENTER_HORIZONTAL | Gravity.LEFT;
+                        alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
                         break;
                     case 4:
-                        alignment = Gravity.CENTER;
+                        alignment = android.view.Gravity.CENTER;
                         break;
                     case 5:
-                        alignment = Gravity.CENTER_HORIZONTAL | Gravity.RIGHT;
+                        alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.RIGHT;
                         break;
                     case 6:
-                        alignment = Gravity.BOTTOM | Gravity.LEFT;
+                        alignment = android.view.Gravity.BOTTOM | android.view.Gravity.LEFT;
                         break;
                     case 7:
-                        alignment = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                        alignment = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
                     case 8:
-                        alignment = Gravity.BOTTOM | Gravity.RIGHT;
+                        alignment = android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT;
                         break;                   
                 }
                 this.nativeObject.setGravity(alignment);
