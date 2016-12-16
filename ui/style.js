@@ -21,7 +21,18 @@ function Style(params) {
      * 
      * @property {Color} borderColor Border color
      */
-    this.borderColor = "#000000";
+    var borderColor = "";
+    Object.defineProperty(this, 'borderColor', {
+        get: function() {
+            return borderColor;
+        },
+        set: function(value) {
+            borderColor = value;
+            changeHandlers.forEach(function(handler) {
+                handler('borderColor', value);
+            });
+        }
+    });
 
     /**
      * Sets/gets border thickness of bounded view. Accepts unsigned
@@ -29,7 +40,30 @@ function Style(params) {
      * 
      * @property {Number} borderWidth Border width
      */
-    this.borderWidth = 0;
+    var borderWidth = 0;
+    Object.defineProperty(this, 'borderWidth', {
+        get: function() {
+            return borderWidth;
+        },
+        set: function(value) {
+            borderWidth = value;
+            changeHandlers.forEach(function(handler) {
+                handler('borderWidth', value);
+            });
+        }
+    });
+
+    var changeHandlers = [];
+    this.addChangeHandler = function(handler) {
+        changeHandlers.push(handler);
+    }
+    this.removeChangeHandler = function(handler) {
+        for (var i = 0; i < changeHandlers.length; ++i) {
+            if (changeHandlers[i] == handler) {
+                changeHandlers.splice(i, 1);
+            }
+        }
+    }
 }
 
 module.exports = Style;
