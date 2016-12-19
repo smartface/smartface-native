@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/smartface-team/core-modules.git"
+    "url": "git+ssh://git@bitbucket.org/smartface-team/sf-core.git"
   },
   "keywords": [
     "smartface",
@@ -18,8 +18,8 @@
   "author": {
     "name": "Smartface",
     "email": "info@smartface.io",
-    "url": "http://smartface.io"
+    "url": "http://www.smartface.io"
   },
-  "license": "ISC",
-  "homepage": "http://bitbucket.org/smartface-team/core-modules#readme"
+  "license": "MIT",
+  "homepage": "http://bitbucket.org/smartface-team/sf-core#readme"
 }
