@@ -1,16 +1,16 @@
 /* globals */
 const SFTextAlignment = {
-        topLeft: 0,
-        topCenter: 1,
-        topRight: 2,
+        TOPLEFT: 0,
+        TOPCENTER: 1,
+        TOPRIGHT: 2,
         
-        midLeft: 3,
-        midCenter: 4,
-        midRight: 5,
+        MIDLEFT: 3,
+        MIDCENTER: 4,
+        MIDRIGHT: 5,
         
-        bottomLeft: 6,
-        bottomCenter: 7,
-        bottomRight: 8,
+        BOTTOMLEFT: 6,
+        BOTTOMCENTER: 7,
+        BOTTOMRIGHT: 8,
     }
 
 module.exports = SFTextAlignment;
