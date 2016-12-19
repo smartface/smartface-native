@@ -9,12 +9,12 @@ function View(params) {
         set: function(value) {
            _style = value;
            
-           self.nativeObject.layer.borderColor = UIColor.hexColor(value.borderColor);
+           self.nativeObject.layer.borderUIColor = UIColor.hexColor(value.borderColor);
            self.nativeObject.layer.borderWidth = value.borderWidth;
            
            _style.addChangeHandler(function(propertyName,value){
                if(propertyName == 'borderColor'){
-                   self.nativeObject.layer.borderColor = UIColor.hexColor(value);
+                   self.nativeObject.layer.borderUIColor = UIColor.hexColor(value);
                }else if(propertyName == 'borderWidth'){
                    self.nativeObject.layer.borderWidth = value;
                }
@@ -41,14 +41,6 @@ function View(params) {
             self.nativeObject.backgroundColor = UIColor.hexColor(value);
         }
     });
-
-    /**
-     * Gets/sets height of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} height Height of view
-     */
-    this.height = "0%";
         
     /**
      * Gets/sets id of view. Should be unique number for all objects
@@ -57,22 +49,6 @@ function View(params) {
      * @property {Number} id View identifier
      */
     this.id = 5421;
-
-    /**
-     * Gets/sets position X value of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} left Position X value of view
-     */
-    this.left = "0%";
-
-    /**
-     * Gets/sets position Y value of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} top Position Y value of view
-     */
-    this.top = "0%";
 
     Object.defineProperty(self, 'visible', {
         get: function() {
@@ -91,44 +67,58 @@ function View(params) {
             self.nativeObject.touchEnabled = value;
         }
     });
+    
 
-    /**
-     * Gets/sets width of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} width Width of view
-     */
-    this.width = "0%";
-
-    /**
-     * This method returns all position values in one object.
-     * 
-     * @return {Object} Object with properties:
-     * @return {Number} return.width Width value
-     * @return {Number} return.height Height value
-     * @return {Number} return.left Position X value
-     * @return {Number} return.top Position Y value
-     */
-   // this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
     this.getPosition = function(){
         
        return  {left : self.nativeObject.frame.x , top : self.nativeObject.frame.y , width : self.nativeObject.frame.width, height : self.nativeObject.frame.height};
     }
-    /**
-     * This method allows setting all position values within one function call.
-     * Using this method will be faster than setting all position values (width,
-     * height etc.) separately.
-     * 
-     * @param {Object} position Object describing position values
-     * @param {Number} [position.width] Width value
-     * @param {Number} [position.height] Height value
-     * @param {Number} [position.left] Position X value
-     * @param {Number} [position.top] Position Y value
-     * @method setPosition
-     */
+
+
     this.setPosition = function(position){
         self.nativeObject.frame = { x : position.left, y : position.top, width : position.width, height : position.height};
     }
+
+
+    Object.defineProperty(self, 'left', {
+        get: function() {
+            return self.nativeObject.frame.y;
+        },
+        set: function(value) {
+            var frame = this.getPosition();
+            self.nativeObject.frame = { x : value, y : frame.top, width : frame.width, height : frame.height};
+        }
+    });
+    
+    Object.defineProperty(self, 'top', {
+        get: function() {
+            return self.nativeObject.frame.y;
+        },
+        set: function(value) {
+            var frame = this.getPosition();
+            self.nativeObject.frame = { x : frame.left, y : value, width : frame.width, height : frame.height};
+        }
+    });
+    
+    Object.defineProperty(self, 'width', {
+        get: function() {
+            return self.nativeObject.frame.y;
+        },
+        set: function(value) {
+            var frame = this.getPosition();
+            self.nativeObject.frame = { x : frame.left, y : frame.top, width : value, height : frame.height};
+        }
+    });
+    
+    Object.defineProperty(self, 'height', {
+        get: function() {
+            return self.nativeObject.frame.y;
+        },
+        set: function(value) {
+            var frame = this.getPosition();
+            self.nativeObject.frame = { x : frame.left, y : frame.top, width : frame.width, height : value};
+        }
+    });
 
     Object.defineProperty(self, 'onTouch', {
         get: function() {

@@ -6,14 +6,14 @@ const Label = extend(View)(
         var self = this;
 
         // TODO Dogan Check params before using it
-        self.nativeObject = new SMFUITextView({
+        self.nativeObject = SMFUITextView.create({
             left: params.left,
             top: params.top,
             width: params.width,
             height: params.height
         });
 
-        self.nativeObject.setSelectable = false;
+        self.nativeObject.setSelectable = true;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
 	    
@@ -52,11 +52,11 @@ const Label = extend(View)(
             },
             set: function(value) {
             	if (value){
-            		self.nativeObject.numberOfLines = 0;
-    				self.nativeObject.lineBreakMode = 0;
+            		self.nativeObject.textContainer.maximumNumberOfLines = 0;
+    				self.nativeObject.textContainer.lineBreakMode = 0;
             	}else{
-            		self.nativeObject.numberOfLines = 1;
-    				self.nativeObject.lineBreakMode = 4;
+            		self.nativeObject.textContainer.maximumNumberOfLines = 1;
+    				self.nativeObject.textContainer.lineBreakMode = 4;
             	}
     			_multipleLine = value
             }
@@ -74,10 +74,10 @@ const Label = extend(View)(
 
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
-                return self.nativeObject.textAlignment;
+                return self.nativeObject.textAlignmentNumber;
             },
             set: function(value) {
-                self.nativeObject.textAlignment = value;
+                self.nativeObject.textAlignmentNumber = value;
             }
         });
         
