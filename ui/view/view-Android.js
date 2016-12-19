@@ -11,13 +11,18 @@ function View(params) {
         }
      });
     
+    
+    var backgroundColorInitial = android.graphics.Color.parseColor("#FFFFFFFF");
+    var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
+    backgroundColorDrawable.setChangingConfigurations(0);
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return self.nativeObject.getBackgroundColor();
+            return backgroundColorDrawable.getColor().toString(16);
         },
         set: function(backgroundColor) {
-            var colorParam = android.graphics.Color.parseColor(backgroundColor);
-            self.nativeObject.setBackgroundColor(colorParam);
+            backgroundColorInitial = android.graphics.Color.parseColor(backgroundColor);
+            backgroundColorDrawable.setColor(backgroundColorInitial);
+            setBackground(0);
         }
      });
 
@@ -146,31 +151,44 @@ function View(params) {
     }   
     
     var styleInitial;
+    //var borderDrawable = android.graphics.drawable.ShapeDrawable();
+    var borderDrawable = new android.graphics.drawable.GradientDrawable();
+    borderDrawable.setChangingConfigurations(1);
     Object.defineProperty(this, 'style', {
         get: function() {
             return styleInitial;
         },
         set: function(style) {
             styleInitial = style;
-            self.nativeObject.setBackgroundDrawable(null);
-            var gd = new android.graphics.drawable.GradientDrawable();
-            var borderColor = android.graphics.Color.parseColor(style.borderColor);
-            gd.setColor(android.graphics.Color.TRANSPARENT);
-            gd.setStroke(style.borderWidth, borderColor);
-            self.nativeObject.setBackgroundDrawable(gd);
-            
+            applyStyle();
             style.addChangeHandler(function(propertyName, value){
-                if(propertyName == "borderColor" || propertyName == "borderWidth"){
-                    self.nativeObject.setBackgroundDrawable(null);
-                    var gd = new android.graphics.drawable.GradientDrawable();
-                    var borderColor = android.graphics.Color.parseColor(style.borderColor);
-                    gd.setColor(android.graphics.Color.TRANSPARENT);
-                    gd.setStroke(style.borderWidth, borderColor);
-                    self.nativeObject.setBackgroundDrawable(gd);
-                }
+                applyStyle();
             });
         }
     });
+    
+    // @todo no ENUM support
+    function applyStyle(){
+        var borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);
+        //alert(borderColor + " - " + styleInitial.borderColor + " - " + styleInitial.borderWidth);
+        borderDrawable.setColor(android.graphics.Color.TRANSPARENT);
+        borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
+        // var strokePaint = borderDrawable.getPaint();
+        // strokePaint.setAntiAlias (true);
+
+        // if (styleInitial.borderWidth > 0) {
+        //     strokePaint.setStrokeWidth (styleInitial.borderWidth);
+        //     strokePaint.setColor (borderColor);
+        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
+
+        // } else {
+        //     var backgroundColorCurrent = self.backgroundColorDrawable.getColor();
+        //     strokePaint.setColor (backgroundColorCurrent);
+        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
+        //     strokePaint.setAlpha (0);
+        // }
+        setBackground(1);
+    } 
     
     function setLayoutParam(){
         // @todo this calculation must be implemented in container
@@ -184,6 +202,27 @@ function View(params) {
         self.nativeObject.setLayoutParams(layoutParams);
     }
     
+    // var drawable_backgroundColorDrawable = backgroundColorDrawable.getCurrent();
+    // var drawable_borderDrawable = borderDrawable.getCurrent();
+    // var array = [drawable_backgroundColorDrawable,drawable_borderDrawable];
+    // alert("@@@@@1 "+backgroundColorDrawable+" "+borderDrawable+" "+drawable_backgroundColorDrawable
+    //     +" "+drawable_borderDrawable+" "+array);
+    this.layerDrawable = new android.graphics.drawable.LayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
+    //alert("@@@@@2 "+self.layerDrawable.getNumberOfLayers());
+    //this.nativeObject.x(self.layerDrawable);
+    self.layerDrawable.setId(0,0);
+    self.layerDrawable.setId(1,1);
+    function setBackground(layerIndex){
+        //alert("@@@@@3 "+self.layerDrawable.getNumberOfLayers() + "  "+layerIndex);
+        switch (layerIndex){
+            case 0: 
+                self.layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
+                break;
+            case 1:
+                self.layerDrawable.setDrawableByLayerId(1,borderDrawable);
+        }
+        self.nativeObject.setBackground(self.layerDrawable);
+    }
     // @todo need this function for check value is number. Also shoul be implemented under "util" maybe?
     function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
