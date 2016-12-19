@@ -12,8 +12,10 @@ const Label = extend(View)(
                 var editableText = self.nativeObject.getEditableText();
                 var htmlText = android.text.Html.toHtml(editableText)
                 return htmlText.toString();
-            },
+            }, 
             set: function(htmlText) {
+                var linkMovement = android.text.method.LinkMovementMethod.getInstance();
+                self.nativeObject.setMovementMethod(linkMovement);
                 var htmlTextNative = android.text.Html.fromHtml(htmlText);
                 self.nativeObject.setText(htmlTextNative);
             }
@@ -34,6 +36,7 @@ const Label = extend(View)(
             },
             set: function(multipleLine) {
                 self.nativeObject.setSingleLine(!multipleLine);
+                self.nativeObject.setMaxLines (multipleLine ? java.lang.Integer.MAX_VALUE : 1);
             }
         });
 
@@ -43,6 +46,7 @@ const Label = extend(View)(
             },
             set: function(text) {
                 self.nativeObject.setText(text);
+                self.nativeObject.setAutoLinkMask (0);
             }
         });
 
@@ -59,19 +63,19 @@ const Label = extend(View)(
                         alignment = android.view.Gravity.TOP | android.view.Gravity.LEFT;
                         break;
                     case 1:
-                        talignment = android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL;
+                        alignment = android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
                     case 2:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.RIGHT;
                         break;
                     case 3:
-                        alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
+                        alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.LEFT;
                         break;
                     case 4:
                         alignment = android.view.Gravity.CENTER;
                         break;
                     case 5:
-                        alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.RIGHT;
+                        alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.RIGHT;
                         break;
                     case 6:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.LEFT;
@@ -99,10 +103,17 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'showScrollBar', {
             get: function() {
-                return self.nativeObject.isHorizontalScrollBarEnabled();
+                return self.nativeObject.isVerticalScrollBarEnabled();
             },
             set: function(showScrollBar) {
-                self.nativeObject.setHorizontalScrollBarEnabled(showScrollBar);
+                if(showScrollBar){
+                    self.nativeObject.setMovementMethod(new android.text.method.ScrollingMovementMethod());
+                }
+                else{
+                    self.nativeObject.setMovementMethod(null);
+                }
+                self.nativeObject.setScrollContainer (true)
+                self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
             }
         });
         

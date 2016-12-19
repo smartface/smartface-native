@@ -21,20 +21,14 @@ function View(params) {
         }
      });
 
+    this.heightInitial = 0;
     Object.defineProperty(this, 'height', {
         get: function() {
-            return self.nativeObject.getHeight();
+            return self.heightInitial;
         },
         set: function(height) {
-            if(self.nativeObject.getLayoutParams() != null){
-                // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = self.nativeObject.getLayoutParams();
-                layoutParams.height = height;
-                self.nativeObject.setLayoutParams(layoutParams);
-            }
-            else{
-                self.heightInitial = height;
-            }
+            self.heightInitial = height;
+            setLayoutParam();
         }
      });
         
@@ -47,41 +41,25 @@ function View(params) {
         }
      });
     
+    this.leftInitial = 0;
     Object.defineProperty(this, 'left', {
         get: function() {
-            return self.nativeObject.getLeft();
+            return self.leftInitial;
         },
         set: function(left) {
-            if(self.nativeObject.getLayoutParams() != null){
-                // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = self.nativeObject.getLayoutParams();
-                if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
-                    layoutParams.left = left;
-                    self.nativeObject.setLayoutParams(layoutParams);
-                }
-            }
-            else{
-                self.leftInitial = left;
-            }
+            self.leftInitial = left;
+            setLayoutParam();
         }
      });
 
+    this.topInitial = 0;
     Object.defineProperty(this, 'top', {
         get: function() {
-            return this.nativeObject.getTop();
+            return self.topInitial;
         },
         set: function(top) {
-            if(self.nativeObject.getLayoutParams() != null){
-                // Needs global layout param setter. Layout params can be number or %
-                var layoutParams = self.nativeObject.getLayoutParams();
-                if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
-                    layoutParams.top = top;
-                    self.nativeObject.setLayoutParams(layoutParams);
-                }
-            }
-            else{
-                self.topInitial = top;
-            }
+            self.topInitial = top;
+            setLayoutParam();
         }
      });
 
@@ -97,50 +75,32 @@ function View(params) {
         }
     });
 
+    this.widthInitial = 0;
     Object.defineProperty(this, 'width', {
         get: function() {
-            return self.nativeObject.getWidth();
+            return self.widthInitial;
         },
         set: function(width) {
-            if(self.nativeObject.getLayoutParams() != null){
-                // Needs global layout param setter. Layout params can be number or %
-                var layoutParam = self.nativeObject.getLayoutParams();
-                layoutParam.width = width;
-                self.nativeObject.setLayoutParams(layoutParam);
-            }
-            else{
-                self.widthInitial = width;
-            }
+            self.widthInitial = width;
+            setLayoutParam();
         }
      });
 
     this.getPosition = function(){
         return  {
-            width: self.nativeObject.getWidth(), 
-            height: self.nativeObject.getHeight(), 
-            top: self.nativeObject.getTop(), 
-            left: self.nativeObject.getLeft()
+            width: widthInitial, 
+            height: heightInitial, 
+            top: topInitial, 
+            left: leftInitial
         }; 
     }
 
     this.setPosition = function(position){
-        if(self.nativeObject.getLayoutParams() != null){
-            // Needs global layout param setter. Layout params can be number or %
-            var layoutParams = self.nativeObject.getLayoutParams();
-            layoutParams.width = position.width;
-            layoutParams.height = position.height;
-            if( layoutParams instanceof android.widget.AbsoluteLayout.LayoutParams){
-                    layoutParams.top = position.top;
-                    layoutParams.left = position.left;
-            }
-            self.nativeObject.setLayoutParams(layoutParams);
-        }
-        else{
-            widthInitial = position.width;
-            heightInitial = position.height;
-            topInitial = position.top;
-            leftInitial = position.left;
-        }
+        widthInitial = position.width;
+        heightInitial = position.height;
+        topInitial = position.top;
+        leftInitial = position.left;
+        setLayoutParam();
     }
 
     this.touchEnabled = false;
@@ -180,6 +140,7 @@ function View(params) {
                 } else {
                     self.onTouchCallback && self.onTouchCallback();
                 }
+                return true;
             }
         }));
     }   
@@ -210,6 +171,23 @@ function View(params) {
             });
         }
     });
+    
+    function setLayoutParam(){
+        // @todo this calculation must be implemented in container
+        var layoutDimens = [!isNumeric(self.widthInitial) ? Device.screenWidth * (parseInt(self.widthInitial.replace("%")))/100 : self.widthInitial ,
+                            !isNumeric(self.heightInitial) ? Device.screenHeight * (parseInt(self.heightInitial.replace("%")))/100 : self.heightInitial ,
+                            !isNumeric(self.leftInitial) ? Device.screenHeight * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
+                            !isNumeric(self.topInitial) ? Device.screenWidth * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
+        var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
+                            layoutDimens[0], layoutDimens[1], 
+                            layoutDimens[2], layoutDimens[3]);
+        self.nativeObject.setLayoutParams(layoutParams);
+    }
+    
+    // @todo need this function for check value is number. Also shoul be implemented under "util" maybe?
+    function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
 }
 
 module.exports = View;
