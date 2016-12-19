@@ -13,7 +13,7 @@ const Label = extend(View)(
             height: params.height
         });
 
-        self.nativeObject.setSelectable = true;
+        self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
 	    
