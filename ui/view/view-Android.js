@@ -170,7 +170,6 @@ function View(params) {
     // @todo no ENUM support
     function applyStyle(){
         var borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);
-        //alert(borderColor + " - " + styleInitial.borderColor + " - " + styleInitial.borderWidth);
         borderDrawable.setColor(android.graphics.Color.TRANSPARENT);
         borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
         // var strokePaint = borderDrawable.getPaint();
@@ -202,18 +201,10 @@ function View(params) {
         self.nativeObject.setLayoutParams(layoutParams);
     }
     
-    // var drawable_backgroundColorDrawable = backgroundColorDrawable.getCurrent();
-    // var drawable_borderDrawable = borderDrawable.getCurrent();
-    // var array = [drawable_backgroundColorDrawable,drawable_borderDrawable];
-    // alert("@@@@@1 "+backgroundColorDrawable+" "+borderDrawable+" "+drawable_backgroundColorDrawable
-    //     +" "+drawable_borderDrawable+" "+array);
     this.layerDrawable = new android.graphics.drawable.LayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
-    //alert("@@@@@2 "+self.layerDrawable.getNumberOfLayers());
-    //this.nativeObject.x(self.layerDrawable);
     self.layerDrawable.setId(0,0);
     self.layerDrawable.setId(1,1);
     function setBackground(layerIndex){
-        //alert("@@@@@3 "+self.layerDrawable.getNumberOfLayers() + "  "+layerIndex);
         switch (layerIndex){
             case 0: 
                 self.layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
