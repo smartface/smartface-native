@@ -93,7 +93,7 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'color', {
             get: function() {
-                return self.nativeObject.getTextColor();
+                return self.nativeObject.getTextColor().toString(16);
             },
             set: function(color) {
                 var colorParam = android.graphics.Color.parseColor(color);
