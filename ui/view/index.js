@@ -1,0 +1,1 @@
+module.exports = require('./view-' + Device.deviceOS + '.js');

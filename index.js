@@ -1,1 +1,3 @@
-module.exports = require("dist/" + deviceOS);
+module.exports = {
+    UI: require('./ui')
+}

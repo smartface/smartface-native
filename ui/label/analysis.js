@@ -1,106 +1,93 @@
+const View = require('../view');
+const extend = require('js-base/core/extend');
 /**
  * @class Label
- *
- *
+ * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
- *
- *
- *     @example
- *     var Label = require('sf/ui/label');
- *     var myLabel = Label({
- *         text: "This is my label",
- *         visible: true
- *     });
- *     myLabel.backgroundColor = "#00FFFFFF";
- *
- *
+ *      @example
+ *      const Label = require('sf-core/ui/label');
+ *      var myLabel = new Label({
+ *          text: "This is my label",
+ *          visible: true
+ *      });
+ *      myLabel.backgroundColor = "#00FFFFFF";
  */
-class Label {
-    /**
-     * Creates a Label instance with given options.
-     * 
-     * @constructor 
-     * @param {Object} options
-     *<strong>Style options</strong>
-     */
-    constructor(options) {
-        /** 
-         * Defines opacity of Label view. The value of this property is float number
-         * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
-         * represents view is completely opaque.
-         *
-         * @example
-         * var label = new Label();
-         * label.alpha = 0.5;
-         *
-         * @property {number} alpha Alpha value of Label object
-         */
-        this.alpha = 1.0;
+const Label = extend(View)(
+    function (_super, params) {
+        _super(this);
 
-        const UILabel = require("UILabel");
-        
-        Object.defineProperty(this, 'alpha', {
-            get: function() {
-                return 
-            }
-        })
-        
         /**
-         * Gets or sets HTML text value. This property helps user showing HTML
+         * Gets/sets HTML text value. This property helps user showing HTML
          * tagged texts in Label view.
          * 
-         * @example
-         * // In this example 'This link' text inside Label will shown blue and
-         * // underlined
-         * var label = new Label();
-         * label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
+         *      @example
+         *      // In this example 'This link' text inside Label will shown blue and
+         *      // underlined
+         *      var label = new Label();
+         *      label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
-         * @property {string} htmlText HTML text to display in object
+         * @property {String} htmlText HTML text to display in object
          */
         this.htmlText = "";
-        
+
         /**
-         * Gets or sets background color of label view. It allows setting background 
-         * color with string or SF.UI.Color properties.
+         * Gets/sets font of label view. When set to null label uses system font.
+         * It is set to null by default.
          * 
-         * @example
-         * var label = new Label();
-         * label.backgroundColor = "#00FFFFFF";
+         * @property {Font} font Font of label view.
+         */
+        this.font = null;
+
+        /**
+         * Gets/sets allowing multiple line for label view. If set to true
+         * and text is too long to show in single line label shows text as 
+         * multiline. 
          * 
-         * @property {Color} backgroundColor Background color
-         */ 
-        this.backgroundColor = "#00FFFFFF";
-        
-        this.textColor = SF.Color.BLACK;
-        
+         * @property {Boolean} multipleLine Show multiple line in label 
+         */
         this.multipleLine = true;
-        this.id = 5421;
+
+        /**
+         * Gets/sets text inside label view.
+         * 
+         * @property {String} text Text inside label
+         */
         this.text = "Text";
-        this.textAlignment = SF.TextAlignment.CENTER;
-        this.touchEnabled = true;
-        this.visible = true;
+
+        /**
+         * Gets/sets text alignment of label view. UI.TextAlignment constants
+         * can be used.
+         * 
+         *      @example
+         *      var label = new Label();
+         *      label.textAlignment = TextAlignment.CENTER;
+         * 
+         * @property {Number} textAlignment Text alignment
+         */
+        this.textAlignment = TextAlignment.CENTER;
+
+        /**
+         * Gets/sets text color of view.
+         * 
+         * @property {Color} textColor Text Color
+         */
+        this.textColor = "#000000";
+
+        /**
+         * Sets/gets showing scroll bar when text doesn't fit to label view.
+         * 
+         * @property {Boolean} showScrollBar
+         */
+        this.showScrollBar = true;
         
-        this.setPosition = function(positionObject){} // positionObject : {width: 3, height: 5, top: 7, left: 9}
-        this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
-        this.onTouch = function(){ }
-        this.onTouchEnded = function(){ }
-        
-        // Assign properties given in constructor
-        if (props) {
-            for (var prop in props) {
-                this[prop] = props[prop];
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
             }
         }
     }
-
-    get alpha() {
-        return androidView.getAlpha();
-    }
-
-    set alpha(value) {
-        androidView.setAlpha(value);
-    }
-}
+);
 
 module.exports = Label;
