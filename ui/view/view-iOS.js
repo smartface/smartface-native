@@ -85,6 +85,10 @@ function View(params) {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            if (typeof value === "string") {
+                value = convertPercentage(value, Device.screenWidth);
+                if (value < 0) return;
+            }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : value, y : frame.top, width : frame.width, height : frame.height};
         }
@@ -95,6 +99,10 @@ function View(params) {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            if (typeof value === "string") {
+                value = convertPercentage(value, Device.screenHeight);
+                if (value < 0) return;
+            }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : value, width : frame.width, height : frame.height};
         }
@@ -105,6 +113,10 @@ function View(params) {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            if (typeof value === "string") {
+                value = convertPercentage(value, Device.screenWidth);
+                if (value < 0) return;
+            }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : frame.top, width : value, height : frame.height};
         }
@@ -115,6 +127,10 @@ function View(params) {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            if (typeof value === "string") {
+                value = convertPercentage(value, Device.screenHeight);
+                if (value < 0) return;
+            }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : frame.top, width : frame.width, height : value};
         }
@@ -137,6 +153,17 @@ function View(params) {
             self.nativeObject.onTouchEnded = value;
         }
     });
+    
+    function convertPercentage(stringValue, baseValue) {
+        if (/^[0-9]+\%$/.test(stringValue)) {
+            var value = parseInt(stringValue, 10)
+            if (isNaN(value)) {
+                return -1;
+            }
+            return Math.round(baseValue * value / 100);
+        }
+        return -1;
+    }
 }
 
 module.exports = View;
