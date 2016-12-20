@@ -6,16 +6,12 @@ const Label = extend(View)(
         var self = this;
 
         // TODO Dogan Check params before using it
-        self.nativeObject = SMFUITextView.create({
-            left: params.left,
-            top: params.top,
-            width: params.width,
-            height: params.height
-        });
-
+        self.nativeObject = new SMFUITextView();
+        //Defaults
         self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
+	    self.nativeObject.textAlignmentNumber = 4;
 	    
         Object.defineProperty(self, 'htmlText', {
             get:function() {

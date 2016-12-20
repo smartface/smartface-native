@@ -76,7 +76,10 @@ function View(params) {
 
 
     this.setPosition = function(position){
-        self.nativeObject.frame = { x : position.left, y : position.top, width : position.width, height : position.height};
+        self.left = position.left;
+        self.top = position.top;
+        self.width = position.width;
+        self.height = position.height;
     }
 
 
