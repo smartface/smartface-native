@@ -2,10 +2,12 @@ var expect  = require("chai").expect;
 var assert  = require("chai").assert;
 
 const Label = require("sf-core/ui/label");
+const TextAlignment = require("sf-core/ui/textalignment");
+const Style = require("sf-core/ui/style");
 
 function getNewLabel(){
   return new Label({
-  	fillColor: "#00A1F1",
+  	backgroundColor: "#00A1F1",
   	fontColor: "#FFFFFFFF",
   	visible: true,
   	touchEnabled: true,
@@ -16,92 +18,110 @@ function getNewLabel(){
   });
 }
 
-//label.setPosition(-1, 300, 0, 0);
-
-
-describe("SF.UI.LABEL Tester", function() {
-  /*describe("Unit Test", function() {
-    it("property: attributedText", function() {
-      var label = getNewLabel();
-      label.attributedText = "Test Text";
-      assert.equal(label.attributedText,"Test Text");
-    });
-    it("property: alpha", function() {
-      var label = getNewLabel();
-      label.alpha = 0.755;
-      assert.equal(label.alpha,0.755);
-    });
-    it("property: backgroundTransparent", function() {
-      var label = getNewLabel();
-      label.backgroundTransparent = true;
-      assert.equal(label.backgroundTransparent,true);
-    });
-    it("property: text", function() {
-      var label = getNewLabel();
-      label.text = "Unit Test";
-      assert.equal(label.text,"Unit Test");
-    });
-    it("property: fillColor", function() {
-      var label = getNewLabel();
-      label.fillColor = "red";
-      assert.equal(label.fillColor,0xFFFF0000);
-    });
-    it("property: fontColor", function() {
-      var label = getNewLabel();
-      label.fontColor = "blue";
-      assert.equal(label.fontColor,0xFF0000FF);
-    });
-    it("property: multipleLine", function() {
-      var label = getNewLabel();
-      label.multipleLine = true;
-      // for mock TestView must be +25 chars to line count 1+
-      label.text = "qwertyuiopasdfghjklzxcvbnm"
-      assert.equal(label.multipleLine,true);
-    });
-    it("property: detectURLsInString", function() {
-      var label = getNewLabel();
-      label.detectURLsInString = true;
-      assert.equal(label.detectURLsInString,true);
-    });
-    it("property: z", function() {
-      var label = getNewLabel();
-      label.z = 10;
-      assert.equal(label.z,10);
-    });
-    it("property: visible", function() {
-      var label = getNewLabel();
-      label.visible = true;
-      assert.equal(label.visible,true);
-    });
-  });*/
-  
-  describe("Coverage Test", function() {
+describe("sf/ui/label Unit Test", function() {
+  it("property: htmlText", function() {
     var label = getNewLabel();
-    label.addGesture();
-    label.removeGesture();
-    label.focus()
-    label.animate();
-    label.clone();
-    label.gestures;
-    label.textAlignment = 1;
-    label.borderColor = 0;
-    label.strikeThrough = false;
-    label.borderWidth = -1;
-    label.autoSize = true;
-    label.horizontalGap = 10;
+    label.attributedText = "<p><a href='http://www.smartface.io'>Smartface Rocks!</a></p>";
+    assert.equal(label.attributedText,"<p><a href='http://www.smartface.io'>Smartface Rocks!</a></p>");
+  });
+  it("property: font", function() {
+    var label = getNewLabel();
+    label.font = "ROBOTO";
+    assert.equal(label.font,"ROBOTO");
+  });
+  it("property: multipleLine", function() {
+    var label = getNewLabel();
+    label.multipleLine = true;
+    // for mock TestView must be +25 chars to line count 1+
+    assert.equal(label.multipleLine,true);
+  });
+  it("property: text", function() {
+    var label = getNewLabel();
+    label.text = "Smartface Rocks!";
+    assert.equal(label.text,"Smartface Rocks!");
+  });
+  it("property: textAlignment", function() {
+    var label = getNewLabel();
+    label.textAlignment = TextAlignment.TOPCENTER;
+    assert.equal(label.textAlignment,TextAlignment.TOPCENTER);
+  });
+  it("property: color", function() {
+    var label = getNewLabel();
+    label.color = "#FFFFFFFF";
+    assert.equal(label.color,"#FFFFFFFF");
+  });
+  it("property: showScrollBar", function() {
+    var label = getNewLabel();
     label.showScrollBar = true;
-    label.adjustFontSizeToFit = false;
-    label.minimumFontSize = -1;
-    label.roundedEdge = -1;
-    label.font = null;
-    label.top = 0;
-    label.left = 0;
-    label.width = 0;
-    label.height = 0; 
+    assert.equal(label.showScrollBar, true);
+  });
+  it("property: alpha", function() {
+    var label = getNewLabel();
+    label.alpha = 0.755;
+    assert.equal(label.alpha,0.755);
+  });
+  it("property: backgroundColor", function() {
+    var label = getNewLabel();
+    label.backgroundColor = "#FFFFFFFF";
+    assert.equal(label.backgroundColor,true);
+  });
+  it("property: height", function() {
+    var label = getNewLabel();
+    label.height = "10%";
+    assert.equal(label.height,"10%");
+  });
+  it("property: id", function() {
+    var label = getNewLabel();
+    label.id = 1125813;
+    assert.equal(label.id,1125813);
+  });
+  it("property: left", function() {
+    var label = getNewLabel();
+    label.left = 40;
+    assert.equal(label.left,40);
+  });
+  it("property: top", function() {
+    var label = getNewLabel();
+    label.top = "11%";
+    assert.equal(label.top,"11%");
+  });
+  it("property: visible", function() {
+    var label = getNewLabel();
+    label.visible = true;
+    assert.equal(label.visible,true);
+  });
+  it("property: width", function() {
+    var label = getNewLabel();
+    label.width = 100;
+    assert.equal(label.width, 100);
+  });
+  it("function: getPosition", function() {
+    var label = getNewLabel();
+    label.width = 100;
+    label.top = "11%";
+    label.left = 40;
+    label.height = "10%";
+    assert.equal(label.getPosition(), { width: 100, height: "10%", top: "11%", left: 40 });
+  });
+  it("function: setPosition", function() {
+    var label = getNewLabel();
+    label.setPosition({ width: 100, height: "10%", top: "11%", left: 40 });
+    assert.equal(label.getPosition(), { width: 100, height: "10%", top: "11%", left: 40 });
+  });
+  it("property: touchEnabled", function() {
+    var label = getNewLabel();
     label.touchEnabled = true;
-    label.name = "";
-    label.onTouchEnded = null;
-    //label.onTouch = null;
-    label.setPosition(10,11,12,13);
+    assert.equal(label.touchEnabled,true);
+  });
+  it("property: style", function() {
+    var label = getNewLabel();
+    var style = new Style({
+          borderColor: "#FF000000",
+          borderWidth: 2
+    });
+    label.style = style;
+    assert.equal(label.style,style);
+    style.borderWidth = 10;
+    assert.equal(label.style.borderWidth,style.borderWidth);
   });
 });

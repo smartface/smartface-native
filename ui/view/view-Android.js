@@ -110,7 +110,7 @@ function View(params) {
 
     this.touchEnabled = false;
 
-    var isOnTouchSet = false
+    var isOnTouchSet = false;
 
     Object.defineProperty(this, 'onTouch', {
         get: function() {
@@ -193,8 +193,8 @@ function View(params) {
         // @todo this calculation must be implemented in container
         var layoutDimens = [!isNumeric(self.widthInitial) ? Device.screenWidth * (parseInt(self.widthInitial.replace("%")))/100 : self.widthInitial ,
                             !isNumeric(self.heightInitial) ? Device.screenHeight * (parseInt(self.heightInitial.replace("%")))/100 : self.heightInitial ,
-                            !isNumeric(self.leftInitial) ? Device.screenHeight * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
-                            !isNumeric(self.topInitial) ? Device.screenWidth * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
+                            !isNumeric(self.leftInitial) ? Device.screenWidth * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
+                            !isNumeric(self.topInitial) ? Device.screenHeight  * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
         var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
                             layoutDimens[0], layoutDimens[1], 
                             layoutDimens[2], layoutDimens[3]);

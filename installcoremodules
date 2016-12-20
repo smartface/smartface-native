@@ -1,4 +1,6 @@
+
+
 npm config set registry http://cd.smartface.io/nexus/content/repositories/test-npm
 npm config set _auth ZGVwbG95ZXI6M211bDR0MHIyMDE2
 npm config set always-auth true
-npm install core-modules@alpha
+npm install sf-core@alpha
