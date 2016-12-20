@@ -1,3 +1,5 @@
+const Label = require("sf-core/ui/label");
+
 function View(params) {
     var self = this;
     self.nativeObject = new android.view.View(Android.getActivity()); 
@@ -160,9 +162,18 @@ function View(params) {
         },
         set: function(style) {
             styleInitial = style;
+            self.font = style.font;
+            if(self.hasOwnProperty("font")){
+                self.font = style.font;
+            }
             applyStyle();
             style.addChangeHandler(function(propertyName, value){
-                applyStyle();
+                if(propertyName == "font" && self.hasOwnProperty("font")){
+                    self.font = style.font;
+                }
+                else{
+                    applyStyle();
+                }
             });
         }
     });
@@ -218,6 +229,7 @@ function View(params) {
     function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+    
 }
 
 module.exports = View;
