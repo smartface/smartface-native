@@ -33,9 +33,18 @@ Font.create = function(fontFamily, size, style) {
 }
 
 Font.createFromFile = function(path, size) { 
-    var typeface = path != undefined && path != null
-                    ? android.graphics.Typeface.createFromFile(path)
-                    : null;
+    var typeface = null;
+    if(path){
+        if(path.startsWith("assets://")){
+            var assets = Android.getActivity().getAssets();
+            var assetsPath = path.replace("assets://","");
+            typeface = android.graphics.Typeface.createFromAsset(assets,assetsPath);
+        }
+        else{
+             typeface = android.graphics.Typeface.createFromFile(path);
+        }
+    }
+
     return new Font({
         "nativeObject":typeface,
         "size":size

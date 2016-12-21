@@ -1,5 +1,3 @@
-const Label = require("sf-core/ui/label");
-
 function View(params) {
     var self = this;
     self.nativeObject = new android.view.View(Android.getActivity()); 
