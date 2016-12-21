@@ -5,15 +5,12 @@ const Label = extend(View)(
         _super(this);
 
         this.nativeObject = new android.widget.TextView(Android.getActivity()); 
-        
         var self = this;
-        var textAlignmentInitial = 0;
-        
         
         Object.defineProperty(this, 'htmlText', {
             get: function() {
                 var text = self.nativeObject.getText();
-                var htmlText = android.text.Html.toHtml(text)
+                var htmlText = android.text.Html.toHtml(text);
                 return htmlText.toString();
             }, 
             set: function(htmlText) {
@@ -30,7 +27,7 @@ const Label = extend(View)(
                 return self.nativeObject.getTypeface();
             },
             set: function(font) {
-                if(font != undefined){
+                if(font){
                     if(font.nativeObject != undefined && font.nativeObject != null)
                         self.nativeObject.setTypeface(font.nativeObject);
                     if(font.size != undefined && font.size != null)
@@ -62,7 +59,7 @@ const Label = extend(View)(
             enumerable: true
         });
 
-       
+        var textAlignmentInitial = 0;
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
@@ -104,12 +101,12 @@ const Label = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(this, 'color', {
+        Object.defineProperty(this, 'textColor', {
             get: function() {
                 return self.nativeObject.getCurrentTextColor();
             },
-            set: function(color) {
-                var colorParam = android.graphics.Color.parseColor(color);
+            set: function(textColor) {
+                var colorParam = android.graphics.Color.parseColor(textColor);
                 self.nativeObject.setTextColor(colorParam);
             },
             enumerable: true

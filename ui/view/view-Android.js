@@ -5,14 +5,7 @@ function View(params) {
     
     
     var backgroundColorInitial = android.graphics.Color.parseColor("#FFFFFFFF");
-    
-    // LayoutParams.WRAP_CONTENT = -2
-    var heightInitial = -2;
-    var leftInitial = 0;
-    var topInitial = 0;
-    var widthInitial = -2;
-    var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
-    
+
     var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
     //var borderDrawable = android.graphics.drawable.ShapeDrawable();
     var borderDrawable = new android.graphics.drawable.GradientDrawable();
@@ -46,6 +39,8 @@ function View(params) {
         enumerable: true
      });
 
+    // LayoutParams.WRAP_CONTENT = -2
+    var heightInitial = -2;
     Object.defineProperty(this, 'height', {
         get: function() {
             return self.nativeObject.getHeight();
@@ -67,6 +62,7 @@ function View(params) {
         enumerable: true
      });
     
+    var leftInitial = 0;
     Object.defineProperty(this, 'left', {
         get: function() {
             return self.nativeObject.getLeft();
@@ -78,6 +74,7 @@ function View(params) {
         enumerable: true
      });
 
+    var topInitial = 0;
     Object.defineProperty(this, 'top', {
         get: function() {
             return self.nativeObject.getTop();
@@ -105,6 +102,7 @@ function View(params) {
         enumerable: true
     });
 
+    var widthInitial = -2;
     Object.defineProperty(this, 'width', {
         get: function() {
             return self.nativeObject.getWidth();
@@ -169,6 +167,7 @@ function View(params) {
         }
     }));
       
+    var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
     Object.defineProperty(this, 'style', {
         get: function() {
             return styleInitial;
