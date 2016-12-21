@@ -162,18 +162,9 @@ function View(params) {
         },
         set: function(style) {
             styleInitial = style;
-            self.font = style.font;
-            if(self.hasOwnProperty("font")){
-                self.font = style.font;
-            }
             applyStyle();
             style.addChangeHandler(function(propertyName, value){
-                if(propertyName == "font" && self.hasOwnProperty("font")){
-                    self.font = style.font;
-                }
-                else{
-                    applyStyle();
-                }
+                applyStyle();
             });
         }
     });
