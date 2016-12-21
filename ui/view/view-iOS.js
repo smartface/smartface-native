@@ -19,7 +19,8 @@ function View(params) {
                    self.nativeObject.layer.borderWidth = value;
                }
            });
-        }
+        },
+        enumerable: true
     });
     
     Object.defineProperty(self, 'alpha', {
@@ -28,7 +29,8 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.alpha = value;
-        }
+        },
+        enumerable: true
     });
     
     var _backgroundColor;
@@ -39,7 +41,8 @@ function View(params) {
         set: function(value) {
             _backgroundColor = value;
             self.nativeObject.backgroundColor = UIColor.hexColor(value);
-        }
+        },
+        enumerable: true
     });
         
     /**
@@ -56,7 +59,8 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.visible = value;
-        }
+        },
+        enumerable: true
     });
 
     Object.defineProperty(self, 'touchEnabled', {
@@ -65,7 +69,8 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.touchEnabled = value;
-        }
+        },
+        enumerable: true
     });
     
 
@@ -94,7 +99,8 @@ function View(params) {
             }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : value, y : frame.top, width : frame.width, height : frame.height};
-        }
+        },
+        enumerable: true
     });
     
     Object.defineProperty(self, 'top', {
@@ -108,7 +114,8 @@ function View(params) {
             }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : value, width : frame.width, height : frame.height};
-        }
+        },
+        enumerable: true
     });
     
     Object.defineProperty(self, 'width', {
@@ -122,7 +129,8 @@ function View(params) {
             }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : frame.top, width : value, height : frame.height};
-        }
+        },
+        enumerable: true
     });
     
     Object.defineProperty(self, 'height', {
@@ -136,7 +144,8 @@ function View(params) {
             }
             var frame = this.getPosition();
             self.nativeObject.frame = { x : frame.left, y : frame.top, width : frame.width, height : value};
-        }
+        },
+        enumerable: true
     });
 
     Object.defineProperty(self, 'onTouch', {
@@ -145,7 +154,8 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.onTouch = value;
-        }
+        },
+        enumerable: true
     });
 
     Object.defineProperty(self, 'onTouchEnded', {
@@ -154,7 +164,8 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.onTouchEnded = value;
-        }
+        },
+        enumerable: true
     });
     
     function convertPercentage(stringValue, baseValue) {
