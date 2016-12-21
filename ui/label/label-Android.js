@@ -5,12 +5,15 @@ const Label = extend(View)(
         _super(this);
 
         this.nativeObject = new android.widget.TextView(Android.getActivity()); 
+        
         var self = this;
-
+        var textAlignmentInitial = 0;
+        
+        
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                var editableText = self.nativeObject.getEditableText();
-                var htmlText = android.text.Html.toHtml(editableText)
+                var text = self.nativeObject.getText();
+                var htmlText = android.text.Html.toHtml(text)
                 return htmlText.toString();
             }, 
             set: function(htmlText) {
@@ -18,7 +21,8 @@ const Label = extend(View)(
                 self.nativeObject.setMovementMethod(linkMovement);
                 var htmlTextNative = android.text.Html.fromHtml(htmlText);
                 self.nativeObject.setText(htmlTextNative);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'font', {
@@ -26,8 +30,14 @@ const Label = extend(View)(
                 return self.nativeObject.getTypeface();
             },
             set: function(font) {
-                self.nativeObject.setTypeface(font);
-            }
+                if(font != undefined){
+                    if(font.nativeObject != undefined && font.nativeObject != null)
+                        self.nativeObject.setTypeface(font.nativeObject);
+                    if(font.size != undefined && font.size != null)
+                        self.nativeObject.setTextSize(font.size);
+                }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'multipleLine', {
@@ -37,20 +47,22 @@ const Label = extend(View)(
             set: function(multipleLine) {
                 self.nativeObject.setSingleLine(!multipleLine);
                 self.nativeObject.setMaxLines (multipleLine ? java.lang.Integer.MAX_VALUE : 1);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'text', {
             get: function() {
-                return self.nativeObject.getText();
+                return self.nativeObject.getText().toString();
             },
             set: function(text) {
                 self.nativeObject.setText(text);
                 self.nativeObject.setAutoLinkMask (0);
-            }
+            },
+            enumerable: true
         });
 
-        var textAlignmentInitial;
+       
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
@@ -88,17 +100,19 @@ const Label = extend(View)(
                         break;                   
                 }
                 self.nativeObject.setGravity(alignment);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'color', {
             get: function() {
-                return self.nativeObject.getTextColor().toString(16);
+                return self.nativeObject.getCurrentTextColor();
             },
             set: function(color) {
                 var colorParam = android.graphics.Color.parseColor(color);
                 self.nativeObject.setTextColor(colorParam);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'showScrollBar', {
@@ -114,7 +128,8 @@ const Label = extend(View)(
                 }
                 self.nativeObject.setScrollContainer (true)
                 self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
-            }
+            },
+            enumerable: true
         });
         
         // Assign parameters given in constructor
