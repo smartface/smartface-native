@@ -53,19 +53,6 @@ function Style(params) {
         }
     });
 
-    var font = null;
-    Object.defineProperty(this, 'font', {
-        get: function() {
-            return font;
-        },
-        set: function(value) {
-            font = value;
-            changeHandlers && changeHandlers.forEach(function(handler) {
-                handler('font', value);
-            });
-        }
-    });
-
     if (params) {
         for (var param in params) {
             this[param] = params[param];
