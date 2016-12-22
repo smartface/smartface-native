@@ -1,1 +1,1 @@
-module.exports = require('./label-' + Device.deviceOS + '.js');
+module.exports = require('./color-' + Device.deviceOS + '.js');
