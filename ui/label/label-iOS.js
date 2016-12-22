@@ -89,7 +89,7 @@ const Label = extend(View)(
             },
             set: function(value) {
                 _textColor = value;
-                self.nativeObject.textColor = UIColor.hexColor(value);
+                self.nativeObject.textColor = value
             },
             enumerable: true
         });

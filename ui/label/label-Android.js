@@ -1,4 +1,6 @@
 const View = require('../view');
+const TextAlignment = require("sf-core/ui/textalignment");
+const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 const Label = extend(View)(
     function (_super, params) {
@@ -6,11 +8,11 @@ const Label = extend(View)(
 
         this.nativeObject = new android.widget.TextView(Android.getActivity()); 
         var self = this;
-
+        
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                var editableText = self.nativeObject.getEditableText();
-                var htmlText = android.text.Html.toHtml(editableText)
+                var text = self.nativeObject.getText();
+                var htmlText = android.text.Html.toHtml(text);
                 return htmlText.toString();
             }, 
             set: function(htmlText) {
@@ -18,7 +20,8 @@ const Label = extend(View)(
                 self.nativeObject.setMovementMethod(linkMovement);
                 var htmlTextNative = android.text.Html.fromHtml(htmlText);
                 self.nativeObject.setText(htmlTextNative);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'font', {
@@ -26,13 +29,14 @@ const Label = extend(View)(
                 return self.nativeObject.getTypeface();
             },
             set: function(font) {
-                if(font != undefined){
+                if(font){
                     if(font.nativeObject != undefined && font.nativeObject != null)
                         self.nativeObject.setTypeface(font.nativeObject);
-                    if(font.size != undefined && font.size != null)
+                    if(font.size != undefined && font.size != null && TypeUtil.isNumeric(font.size))
                         self.nativeObject.setTextSize(font.size);
                 }
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'multipleLine', {
@@ -42,20 +46,22 @@ const Label = extend(View)(
             set: function(multipleLine) {
                 self.nativeObject.setSingleLine(!multipleLine);
                 self.nativeObject.setMaxLines (multipleLine ? java.lang.Integer.MAX_VALUE : 1);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'text', {
             get: function() {
-                return self.nativeObject.getText();
+                return self.nativeObject.getText().toString();
             },
             set: function(text) {
                 self.nativeObject.setText(text);
                 self.nativeObject.setAutoLinkMask (0);
-            }
+            },
+            enumerable: true
         });
 
-        var textAlignmentInitial;
+        var textAlignmentInitial = 0;
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
@@ -64,46 +70,48 @@ const Label = extend(View)(
                 textAlignmentInitial = textAlignment;
                 var alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
                 switch(textAlignment){
-                    case 0:
+                    case TextAlignment.TOPLEFT:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.LEFT;
                         break;
-                    case 1:
+                    case TextAlignment.TOPCENTER:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
-                    case 2:
+                    case TextAlignment.TOPRIGHT:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.RIGHT;
                         break;
-                    case 3:
+                    case TextAlignment.MIDLEFT:
                         alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.LEFT;
                         break;
-                    case 4:
+                    case TextAlignment.MIDCENTER:
                         alignment = android.view.Gravity.CENTER;
                         break;
-                    case 5:
+                    case TextAlignment.MIDRIGHT:
                         alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.RIGHT;
                         break;
-                    case 6:
+                    case TextAlignment.BOTTOMLEFT:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.LEFT;
                         break;
-                    case 7:
+                    case TextAlignment.BOTTOMCENTER:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
-                    case 8:
+                    case TextAlignment.BOTTOMRIGHT:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT;
                         break;                   
                 }
                 self.nativeObject.setGravity(alignment);
-            }
+            },
+            enumerable: true
         });
 
-        Object.defineProperty(this, 'color', {
+        Object.defineProperty(this, 'textColor', {
             get: function() {
-                return self.nativeObject.getTextColor().toString(16);
+                return self.nativeObject.getCurrentTextColor();
             },
-            set: function(color) {
-                var colorParam = android.graphics.Color.parseColor(color);
+            set: function(textColor) {
+                var colorParam = android.graphics.Color.parseColor(textColor);
                 self.nativeObject.setTextColor(colorParam);
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(this, 'showScrollBar', {
@@ -119,7 +127,8 @@ const Label = extend(View)(
                 }
                 self.nativeObject.setScrollContainer (true)
                 self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
-            }
+            },
+            enumerable: true
         });
         
         // Assign parameters given in constructor
