@@ -65,6 +65,6 @@ Font.ITALIC = 4;
 /**
  * Represents bolditalic font style
  */
-Font.BOLDITALIC = 6;
+Font.BOLD_ITALIC = 6;
 
 module.exports = Font;
