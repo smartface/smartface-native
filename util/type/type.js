@@ -5,7 +5,7 @@ TypeUtil.isNumeric = function(param){
     return typeof(param) == "number";
 };
 
-TypeUtil.isBooleand = function(param){
+TypeUtil.isBoolean = function(param){
     return typeof(param) == 'boolean';
 };
 
