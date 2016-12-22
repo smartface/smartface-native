@@ -1,5 +1,3 @@
-const extend = require('js-base/core/extend');
-
 /**
 * @class Color
 * Color is a UI object to define methods for creating and converting color ints. 
