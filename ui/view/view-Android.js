@@ -218,6 +218,7 @@ function View(params) {
     function isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+    
 }
 
 module.exports = View;

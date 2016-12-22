@@ -26,7 +26,12 @@ const Label = extend(View)(
                 return self.nativeObject.getTypeface();
             },
             set: function(font) {
-                self.nativeObject.setTypeface(font);
+                if(font != undefined){
+                    if(font.nativeObject != undefined && font.nativeObject != null)
+                        self.nativeObject.setTypeface(font.nativeObject);
+                    if(font.size != undefined && font.size != null)
+                        self.nativeObject.setTextSize(font.size);
+                }
             }
         });
 
