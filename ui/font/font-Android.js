@@ -10,16 +10,16 @@ function Font(params) {
 Font.create = function(fontFamily, size, style) { 
     var fontStyle = 1;
     switch(style){
-        case 1:
+        case Font.NORMAL:
             fontStyle = android.graphics.Typeface.NORMAL;
             break;
-        case 2:
+        case Font.BOLD:
             fontStyle = android.graphics.Typeface.BOLD;
             break;
-        case 4:
+        case Font.ITALIC:
             fontStyle = android.graphics.Typeface.ITALIC;
             break;
-        case 6:
+        case Font.BOLD_ITALIC:
             fontStyle = android.graphics.Typeface.BOLD_ITALIC;
             break;
     }
@@ -55,6 +55,6 @@ Font.createFromFile = function(path, size) {
 Font.NORMAL = 1;
 Font.BOLD = 2;
 Font.ITALIC = 4;
-Font.BOLDITALIC = 6;
+Font.BOLD_ITALIC = 6;
 
 module.exports = Font;
