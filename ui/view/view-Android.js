@@ -1,11 +1,11 @@
+const TypeUtil = require("sf-core/util/type");
 const Style = require('sf-core/ui/style');
 function View(params) {
     var self = this;
     self.nativeObject = new android.view.View(Android.getActivity()); 
     
     
-    var backgroundColorInitial = android.graphics.Color.parseColor("#FFFFFFFF");
-
+    var backgroundColorInitial = 0xFFFFFFFF;
     var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
     //var borderDrawable = android.graphics.drawable.ShapeDrawable();
     var borderDrawable = new android.graphics.drawable.GradientDrawable();
@@ -32,8 +32,11 @@ function View(params) {
             return backgroundColorDrawable.getColor();
         },
         set: function(backgroundColor) {
-            backgroundColorInitial = android.graphics.Color.parseColor(backgroundColor);
-            backgroundColorDrawable.setColor(backgroundColorInitial);
+            var colorParam = backgroundColor;
+            if(!TypeUtil.isNumeric(backgroundColor)){
+                colorParam = android.graphics.Color.parseColor(backgroundColor);
+            }
+            backgroundColorDrawable.setColor(colorParam);
             setBackground(0);
         },
         enumerable: true
@@ -184,8 +187,12 @@ function View(params) {
     
     // @todo no ENUM support
     function applyStyle(){
-        var borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);
-        borderDrawable.setColor(android.graphics.Color.TRANSPARENT);
+        var borderColor = styleInitial.borderColor;
+        if(!TypeUtil.isNumeric(styleInitial.borderColor)){
+            borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);;
+        }
+        // android.graphics.Color.TRANSPARENT=0
+        borderDrawable.setColor(0);
         borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
         // var strokePaint = borderDrawable.getPaint();
         // strokePaint.setAntiAlias (true);
@@ -206,10 +213,10 @@ function View(params) {
     
     function setLayoutParam(){
         // @todo this calculation must be implemented in container
-        var layoutDimens = [!isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
-                            !isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
-                            !isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
-                            !isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
+        var layoutDimens = [!TypeUtil.isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
+                            !TypeUtil.isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
+                            !TypeUtil.isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
+                            !TypeUtil.isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
         var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
                             layoutDimens[0], layoutDimens[1], 
                             layoutDimens[2], layoutDimens[3]);
@@ -226,10 +233,6 @@ function View(params) {
                 layerDrawable.setDrawableByLayerId(1,borderDrawable);
         }
         self.nativeObject.setBackground(layerDrawable);
-    }
-    // @todo need this function for check value is number. Also shoul be implemented under "util" maybe?
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 }
 

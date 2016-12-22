@@ -1,4 +1,6 @@
 const View = require('../view');
+const TextAlignment = require("sf-core/ui/textalignment");
+const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 const Label = extend(View)(
     function (_super, params) {
@@ -30,7 +32,7 @@ const Label = extend(View)(
                 if(font){
                     if(font.nativeObject != undefined && font.nativeObject != null)
                         self.nativeObject.setTypeface(font.nativeObject);
-                    if(font.size != undefined && font.size != null)
+                    if(font.size != undefined && font.size != null && TypeUtil.isNumeric(font.size))
                         self.nativeObject.setTextSize(font.size);
                 }
             },
@@ -68,31 +70,31 @@ const Label = extend(View)(
                 textAlignmentInitial = textAlignment;
                 var alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
                 switch(textAlignment){
-                    case 0:
+                    case TextAlignment.TOPLEFT:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.LEFT;
                         break;
-                    case 1:
+                    case TextAlignment.TOPCENTER:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
-                    case 2:
+                    case TextAlignment.TOPRIGHT:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.RIGHT;
                         break;
-                    case 3:
+                    case TextAlignment.MIDLEFT:
                         alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.LEFT;
                         break;
-                    case 4:
+                    case TextAlignment.MIDCENTER:
                         alignment = android.view.Gravity.CENTER;
                         break;
-                    case 5:
+                    case TextAlignment.MIDRIGHT:
                         alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.RIGHT;
                         break;
-                    case 6:
+                    case TextAlignment.BOTTOMLEFT:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.LEFT;
                         break;
-                    case 7:
+                    case TextAlignment.BOTTOMCENTER:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
                         break;
-                    case 8:
+                    case TextAlignment.BOTTOMRIGHT:
                         alignment = android.view.Gravity.BOTTOM | android.view.Gravity.RIGHT;
                         break;                   
                 }
