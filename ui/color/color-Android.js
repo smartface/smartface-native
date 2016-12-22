@@ -2,18 +2,18 @@ const TypeUtil = require("sf-core/util/type");
 
 function Color () {}
 
-Color.BLACK = 0xFF000000;
-Color.BLUE = 0xFF0000FF;
-Color.CYAN = 0xFF00FFFF;
-Color.DARKGRAY = 0xFF444444;
-Color.GRAY = 0xFF888888;
-Color.GREEN = 0xFF00FF00;
-Color.LIGHTGRAY = 0xFFCCCCCC;
-Color.MAGENTA = 0xFFFF00FF;
-Color.RED = 0xFFFF0000;
-Color.TRANSPARENT = 0;
-Color.YELLOW = 0xFFFFFF00;
-Color.WHITE = 0xFFFFFFFF;
+Color.BLACK = android.graphics.Color.BLACK;
+Color.BLUE = android.graphics.Color.BLUE;
+Color.CYAN = android.graphics.Color.CYAN;
+Color.DARKGRAY = android.graphics.Color.DKGRAY;
+Color.GRAY = android.graphics.Color.GRAY;
+Color.GREEN = android.graphics.Color.GREEN;
+Color.LIGHTGRAY = android.graphics.Color.LTGRAY;
+Color.MAGENTA = android.graphics.Color.MAGENTA;
+Color.RED = android.graphics.Color.RED;
+Color.TRANSPARENT = android.graphics.Color.TRANSPARENT;
+Color.YELLOW = android.graphics.Color.YELLOW;
+Color.WHITE = android.graphics.Color.WHITE;
 
 Color.create = function(param1, param2, param3, param4){
     if (arguments.length == 1) {
