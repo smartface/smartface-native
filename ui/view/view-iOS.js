@@ -9,12 +9,12 @@ function View(params) {
         set: function(value) {
            _style = value;
            
-           self.nativeObject.layer.borderUIColor = UIColor.hexColor(value.borderColor);
+       //    self.nativeObject.layer.borderUIColor = value.borderColor;
            self.nativeObject.layer.borderWidth = value.borderWidth;
            
            _style.addChangeHandler(function(propertyName,value){
                if(propertyName == 'borderColor'){
-                   self.nativeObject.layer.borderUIColor = UIColor.hexColor(value);
+              //     self.nativeObject.layer.borderUIColor = value;
                }else if(propertyName == 'borderWidth'){
                    self.nativeObject.layer.borderWidth = value;
                }
@@ -38,7 +38,7 @@ function View(params) {
         },
         set: function(value) {
             _backgroundColor = value;
-            self.nativeObject.backgroundColor = UIColor.hexColor(value);
+            self.nativeObject.backgroundColor = value;
         }
     });
         
