@@ -234,6 +234,7 @@ function View(params) {
         }
         self.nativeObject.setBackground(layerDrawable);
     }
+    
 }
 
 module.exports = View;
