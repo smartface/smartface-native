@@ -9,7 +9,7 @@ Font.create = function(fontFamily, size, style) {
     }
     else if(style === this.ITALIC){
         return UIFont.fontWithNameSize(fontFamily,size).italic();
-    }else if(style === this.BOLDITALIC){
+    }else if(style === this.BOLD_ITALIC){
        return UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
     }
         
@@ -22,6 +22,6 @@ Font.createFromFile = function(path, size) {
 Font.NORMAL = 1;
 Font.BOLD = 2;
 Font.ITALIC = 4;
-Font.BOLDITALIC = 6;
+Font.BOLD_ITALIC = 6;
 
 module.exports = Font;
