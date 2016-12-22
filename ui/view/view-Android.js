@@ -1,3 +1,4 @@
+const TypeUtil = require("../../util/type");
 function View(params) {
     var self = this;
     self.nativeObject = new android.view.View(Android.getActivity()); 
@@ -191,10 +192,10 @@ function View(params) {
     
     function setLayoutParam(){
         // @todo this calculation must be implemented in container
-        var layoutDimens = [!isNumeric(self.widthInitial) ? Device.screenWidth * (parseInt(self.widthInitial.replace("%")))/100 : self.widthInitial ,
-                            !isNumeric(self.heightInitial) ? Device.screenHeight * (parseInt(self.heightInitial.replace("%")))/100 : self.heightInitial ,
-                            !isNumeric(self.leftInitial) ? Device.screenWidth * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
-                            !isNumeric(self.topInitial) ? Device.screenHeight  * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
+        var layoutDimens = [!TypeUtil.isNumeric(self.widthInitial) ? Device.screenWidth * (parseInt(self.widthInitial.replace("%")))/100 : self.widthInitial ,
+                            !TypeUtil.isNumeric(self.heightInitial) ? Device.screenHeight * (parseInt(self.heightInitial.replace("%")))/100 : self.heightInitial ,
+                            !TypeUtil.isNumeric(self.leftInitial) ? Device.screenWidth * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
+                            !TypeUtil.isNumeric(self.topInitial) ? Device.screenHeight  * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
         var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
                             layoutDimens[0], layoutDimens[1], 
                             layoutDimens[2], layoutDimens[3]);
@@ -213,10 +214,6 @@ function View(params) {
                 self.layerDrawable.setDrawableByLayerId(1,borderDrawable);
         }
         self.nativeObject.setBackground(self.layerDrawable);
-    }
-    // @todo need this function for check value is number. Also shoul be implemented under "util" maybe?
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
     }
 }
 
