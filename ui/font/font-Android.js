@@ -23,9 +23,10 @@ Font.create = function(fontFamily, size, style) {
             fontStyle = android.graphics.Typeface.BOLD_ITALIC;
             break;
     }
-    var typeface = fontFamily != undefined && fontFamily != null
-                    ? android.graphics.Typeface.create(fontFamily,fontStyle)
-                    : null;
+    var typeface = fontFamily != undefined && fontFamily != null && fontFamily != ""
+                    ? typeface = android.graphics.Typeface.create(fontFamily,fontStyle)
+                    : android.graphics.Typeface.defaultFromStyle(fontStyle);
+        
     return new Font({
         "nativeObject":typeface,
         "size":size
@@ -33,7 +34,7 @@ Font.create = function(fontFamily, size, style) {
 }
 
 Font.createFromFile = function(path, size) { 
-    var typeface = null;
+    var typeface = android.graphics.Typeface.DEFAULT;
     if(path){
         if(path.startsWith("assets://")){
             var assets = Android.getActivity().getAssets();
