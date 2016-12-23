@@ -10,4 +10,4 @@ npm config set always-auth true
 npm install sf-core@alpha
 
 # Recover npmrc
-cp ~/.npmrc.bak && rm ~/.npmrc.bak
+cp ~/.npmrc.bak ~/.npmrc && rm ~/.npmrc.bak
