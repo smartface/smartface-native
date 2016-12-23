@@ -5,13 +5,13 @@ const extend = require('js-base/core/extend');
  * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
- *      @example
- *      const Label = require('sf-core/ui/label');
- *      var myLabel = new Label({
- *          text: "This is my label",
- *          visible: true
- *      });
- *      myLabel.backgroundColor = "#00FFFFFF";
+ *     @example
+ *     const Label = require('sf-core/ui/label');
+ *     var myLabel = new Label({
+ *         text: "This is my label",
+ *         visible: true
+ *     });
+ *     myLabel.backgroundColor = "#00FFFFFF";
  */
 const Label = extend(View)(
     function (_super, params) {
@@ -21,11 +21,11 @@ const Label = extend(View)(
          * Gets/sets HTML text value. This property helps user showing HTML
          * tagged texts in Label view.
          * 
-         *      @example
-         *      // In this example 'This link' text inside Label will shown blue and
-         *      // underlined
-         *      var label = new Label();
-         *      label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
+         *     @example
+         *     // In this example 'This link' text inside Label will shown blue and
+         *     // underlined
+         *     var label = new Label();
+         *     label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
          * @property {String} htmlText HTML text to display in object
          */
@@ -58,14 +58,14 @@ const Label = extend(View)(
         /**
          * Gets/sets text alignment of label view. UI.TextAlignment constants
          * can be used.
-         * 
-         *      @example
-         *      var label = new Label();
-         *      label.textAlignment = TextAlignment.CENTER;
-         * 
+         *  
          * @property {Number} textAlignment Text alignment
+         * 
+         *     @example
+         *     var label = new Label();
+         *     label.textAlignment = TextAlignment.CENTER;   
          */
-        this.textAlignment = TextAlignment.CENTER;
+        textAlignment = TextAlignment.CENTER;
 
         /**
          * Gets/sets text color of view.
