@@ -1,16 +1,14 @@
+const View = require('../view');
+const extend = require('js-base/core/extend');
 
- function StateList(normalValue, disabledValue, highlightedValue, pressedValue, focusedValue) {
-     
-     this.normal = normalValue;
-     this.disabled = disabledValue;
-     this.highlighted = highlightedValue;
-     this.pressed = pressedValue;
-     this.focused = focusedValue
- } 
-
-var inheritFrom // depend on os
-
-const Button = extend(inheritFrom)(
+/**
+ * @class Button
+ *
+ * Button class represents an clickable object to user interface. 
+ * A button instance consists of text or an icon(or both of them).
+ *
+ */
+const Button = extend(View)(
     function (_super, params) {
         _super(this);
         /**
@@ -47,12 +45,50 @@ const Button = extend(inheritFrom)(
             Color.WHITE, Color.BLACK, Color.LIGHTGRAY, Color.DARKGRAY, Color.DARKGRAY
         );
 
+        /**
+         * Gets/sets color list of button background. 
+         * 
+         *     @example
+         *     const Button = require('sf-core/ui/button');
+         *     var button = new Button();
+         *     button.backgroundColors = new StateList(
+         *         Color.WHITE, Color.BLACK, Color.LIGHTGRAY, Color.DARKGRAY, Color.DARKGRAY
+         *     );   
+         */
         this.backgroundColors = new StateList(
             Color.WHITE, Color.BLACK, Color.LIGHTGRAY, Color.DARKGRAY, Color.DARKGRAY
         );
-
+        
+        /**
+         * Gets/sets background image list of button. 
+         * 
+         *     @example
+         *     const Button = require('sf-core/ui/button');
+         *     var button = new Button();
+         *     button.backgroundImages = new StateList(
+         *         "assets://normal.png"
+         *         "assets://disabled.png"
+         *         "assets://highlighted.png"
+         *         "assets://pressed.png"
+         *         "assets://focused.png"
+         *     );   
+         */
         this.backgroundImages = new StateList("", "", "", "", "");
-        // Usage : "assets://disabled.png"
-});
+
+        /**
+         * Gets/sets press event for view. This event fires when press started.
+         * 
+         * @event onPress
+         */
+        this.onPress = function onPress(){ }
+
+        /**
+         * Gets/sets long press event for view. This event fires when long press started.
+         * 
+         * @event onLongPress
+         */
+        this.onLongPress = function onLongPress(){ }
+    }
+);
 
 module.exports = Button;
