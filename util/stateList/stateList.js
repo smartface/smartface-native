@@ -13,7 +13,7 @@
  *     ); 
  *     var normalImage = myStateList.normal;
  */
- function StateList(normalValue, disabledValue, highlightedValue, pressedValue, focusedValue) {
+ function StateList(normalValue, disabledValue, selectedValue, pressedValue, focusedValue) {
      /**
      * Gets/sets normal state value of a button property. 
      * 
@@ -33,7 +33,7 @@
      * 
      * @property {Object} highlighted Property value of a button for highlighted state
      */
-     this.highlighted = highlightedValue;
+     this.selected = selectedValue;
 
      /**
      * Gets/sets pressed state value of a button property. 
