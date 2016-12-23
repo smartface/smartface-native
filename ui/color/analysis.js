@@ -5,14 +5,10 @@
 * Each component ranges between 0..255 with 0 meaning no contribution for that component,
 * and 255 meaning 100% contribution
 *
-*    @example
-*    const Color = require('sf-core/ui/color');
-*    var myColor = new Color({
-*        red: 0,
-*        green: 0,
-*        blue: 255,
-*    });
-*    var redValue = myColor.red();
+*     @example
+*     const Color = require('sf-core/ui/color');
+*     var redValue = Color.RED;
+*     var anotherColor = Color.create("#FFFFAACC");
 */
 function Color () {}
 
