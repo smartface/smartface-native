@@ -19,7 +19,8 @@ const Label = extend(View)(
             },
             set:function(value) {
                 self.nativeObject.htmlText = value;
-            }
+            },
+            enumerable: true
         });
         
         Object.defineProperty(self, 'showScrollBar', {
@@ -29,7 +30,8 @@ const Label = extend(View)(
             set:function(value) {
                 self.nativeObject.showsHorizontalScrollIndicator = value;
                 self.nativeObject.showsVerticalScrollIndicator = value;
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(self, 'font', {
@@ -38,7 +40,8 @@ const Label = extend(View)(
             },
             set:function(value) {
                 self.nativeObject.font = value;
-            }
+            },
+            enumerable: true
          });
 
         var _multipleLine;
@@ -55,8 +58,8 @@ const Label = extend(View)(
     				self.nativeObject.textContainer.lineBreakMode = 4;
             	}
     			_multipleLine = value
-            }
-            
+            },
+            enumerable: true
         });
 
         Object.defineProperty(self, 'text', {
@@ -65,7 +68,8 @@ const Label = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.text = value;
-            }
+            },
+            enumerable: true
         });
 
         Object.defineProperty(self, 'textAlignment', {
@@ -74,7 +78,8 @@ const Label = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.textAlignmentNumber = value;
-            }
+            },
+            enumerable: true
         });
         
         var textColor;
@@ -84,8 +89,9 @@ const Label = extend(View)(
             },
             set: function(value) {
                 _textColor = value;
-                self.nativeObject.textColor = UIColor.hexColor(value);
-            }
+                self.nativeObject.textColor = value
+            },
+            enumerable: true
         });
         
         if (params) {

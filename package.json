@@ -1,6 +1,6 @@
 {
   "name": "sf-core",
-  "version": "0.0.23",
+  "version": "0.0.30",
   "description": "Core Modules of Native Libraries..",
   "main": "index.js",
   "scripts": {
