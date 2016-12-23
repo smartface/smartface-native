@@ -108,7 +108,10 @@ const Label = extend(View)(
                 return self.nativeObject.getCurrentTextColor();
             },
             set: function(textColor) {
-                var colorParam = android.graphics.Color.parseColor(textColor);
+                var colorParam = textColor;
+                if(!TypeUtil.isNumeric(textColor)){
+                    colorParam = android.graphics.Color.parseColor(textColor);
+                }
                 self.nativeObject.setTextColor(colorParam);
             },
             enumerable: true
