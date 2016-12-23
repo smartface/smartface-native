@@ -12,7 +12,7 @@ const extend = require('js-base/core/extend');
  *         text: "This is my label",
  *         visible: true
  *     });
- *     myLabel.backgroundColor = "#00FFFFFF";
+ *     myLabel.backgroundColor = Color.create("#00FFFFFF");
  */
 const Label = extend(View)(
     function (_super, params) {

@@ -5,17 +5,15 @@
  * This class is useful when custom or styled font is needed. Created
  * font objects can be assigned to objects which shows text (Label, Button etc.).
  * 
- *     @example
- *     const Font = require('sf-core/ui/font');
+ *      @example
+ *      const Font = require('sf-core/ui/font');
+ *      var label = new Label();
+ *      label.font = Font.create("Arial", 16, Font.BOLD);
  * 
- *     var label = new Label();
- *     label.style = new Style();
- *     label.style.font = Font.create("Arial", 16, Font.BOLD);
- *
- *     var anotherLabel = new Label();
- *     anotherLabel.style = new Style({
- *         font: Font.createFromFile("assets://MyFont.ttf", 16);
- *     });
+ *      @example
+ *      var label = new Label({
+ *          font: Font.createFromFile("assets://MyFont.ttf", 16);
+ *      });
  */
 function Font() {}
 
@@ -25,8 +23,7 @@ function Font() {}
  * 
  *      @example
  *      var label = new Label();
- *      label.style = new Style();
- *      label.style.font = Font.create("Arial", 16, Font.NORMAL);
+ *      label.font = Font.create("Arial", 16, Font.NORMAL);
  * 
  * @param fontFamily Font family name
  * @param size Font size
@@ -42,7 +39,7 @@ Font.create = function(fontFamily, size, style) { }
  * correct font path.
  * 
  *      @example
- *      label.style.font = Font.createFromFile("assets://Arial.ttf", 16);
+ *      label.font = Font.createFromFile("assets://Arial.ttf", 16);
  * 
  * @param path Font file path
  * @param size Font size
