@@ -1,5 +1,6 @@
 /**
  * @class View
+ * @since 0.1
  *
  * View class represents a rectangular area drawable to user interface. This class
  * is base of all UI classes.
