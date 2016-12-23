@@ -101,6 +101,17 @@ function View(params) {
      * Using this method will be faster than setting all position values (width,
      * height etc.) separately.
      * 
+     *     @example
+     *     const View = require('sf-core/ui/view');
+     *     var myView = new View();
+     *     var position = {
+     *         width: "30%", 
+     *         height: "50%", 
+     *         top: "70%",
+     *         left: "90%"
+     *     }
+     *     myView.setPosition(position);
+     * 
      * @param {Object} position Object describing position values
      * @param {Number} [position.width] Width value
      * @param {Number} [position.height] Height value
