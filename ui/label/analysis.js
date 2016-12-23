@@ -2,6 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class Label
+ * @since 0.1
  * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *

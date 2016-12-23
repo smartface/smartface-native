@@ -1,5 +1,6 @@
 /**
  * @class Font
+ * @since 0.1
  * 
  * This class is useful when custom or styled font is needed. Created
  * font objects can be assigned to objects which shows text (Label, Button etc.).
