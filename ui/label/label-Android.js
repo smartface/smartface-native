@@ -4,16 +4,23 @@ const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 const Label = extend(View)(
     function (_super, params) {
+        var self = this;
+        if(!self.nativeObject){
+            self.nativeObject = new android.widget.TextView(Android.getActivity());
+        }
         _super(this);
 
-        this.nativeObject = new android.widget.TextView(Android.getActivity()); 
-        var self = this;
-        
         Object.defineProperty(this, 'htmlText', {
             get: function() {
                 var text = self.nativeObject.getText();
-                var htmlText = android.text.Html.toHtml(text);
-                return htmlText.toString();
+                if(text){
+                    var htmlText = android.text.Html.toHtml(text);
+                    return htmlText.toString();
+                }
+                else{
+                    return "";
+                }
+                
             }, 
             set: function(htmlText) {
                 var linkMovement = android.text.method.LinkMovementMethod.getInstance();
@@ -57,6 +64,7 @@ const Label = extend(View)(
             set: function(text) {
                 self.nativeObject.setText(text);
                 self.nativeObject.setAutoLinkMask (0);
+                self.nativeObject.requestLayout();
             },
             enumerable: true
         });

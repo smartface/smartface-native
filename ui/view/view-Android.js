@@ -2,8 +2,9 @@ const TypeUtil = require("sf-core/util/type");
 const Style = require('sf-core/ui/style');
 function View(params) {
     var self = this;
-    self.nativeObject = new android.view.View(Android.getActivity()); 
-    
+    if(!self.nativeObject){
+        self.nativeObject = new android.view.View(Android.getActivity());
+    }
     
     var backgroundColorInitial = 0xFFFFFFFF;
     var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
@@ -135,7 +136,6 @@ function View(params) {
     }
 
     this.touchEnabled = true;
-
     Object.defineProperty(this, 'onTouch', {
         get: function() {
             return self.onTouchCallback;
