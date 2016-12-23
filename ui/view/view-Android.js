@@ -1,6 +1,21 @@
+const TypeUtil = require("sf-core/util/type");
+const Style = require('sf-core/ui/style');
 function View(params) {
     var self = this;
     self.nativeObject = new android.view.View(Android.getActivity()); 
+    
+    
+    var backgroundColorInitial = 0xFFFFFFFF;
+    var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
+    //var borderDrawable = android.graphics.drawable.ShapeDrawable();
+    var borderDrawable = new android.graphics.drawable.GradientDrawable();
+
+    var layerDrawable = new android.graphics.drawable.LayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
+    layerDrawable.setId(0,0);
+    layerDrawable.setId(1,1);
+    layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
+    layerDrawable.setDrawableByLayerId(1,borderDrawable);
+    self.nativeObject.setBackground(layerDrawable);
     
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -8,33 +23,36 @@ function View(params) {
         },
         set: function(alpha) {
             self.nativeObject.setAlpha(alpha);
-        }
+        },
+        enumerable: true
      });
     
-    
-    var backgroundColorInitial = android.graphics.Color.parseColor("#FFFFFFFF");
-    var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
-    backgroundColorDrawable.setChangingConfigurations(0);
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return backgroundColorDrawable.getColor().toString(16);
+            return backgroundColorDrawable.getColor();
         },
         set: function(backgroundColor) {
-            backgroundColorInitial = android.graphics.Color.parseColor(backgroundColor);
-            backgroundColorDrawable.setColor(backgroundColorInitial);
+            var colorParam = backgroundColor;
+            if(!TypeUtil.isNumeric(backgroundColor)){
+                colorParam = android.graphics.Color.parseColor(backgroundColor);
+            }
+            backgroundColorDrawable.setColor(colorParam);
             setBackground(0);
-        }
+        },
+        enumerable: true
      });
 
-    this.heightInitial = 0;
+    // LayoutParams.WRAP_CONTENT = -2
+    var heightInitial = -2;
     Object.defineProperty(this, 'height', {
         get: function() {
-            return self.heightInitial;
+            return self.nativeObject.getHeight();
         },
         set: function(height) {
-            self.heightInitial = height;
+            heightInitial = height;
             setLayoutParam();
-        }
+        },
+        enumerable: true
      });
         
     Object.defineProperty(this, 'id', {
@@ -43,62 +61,70 @@ function View(params) {
         },
         set: function(id) {
             self.nativeObject.setId(id);
-        }
+        },
+        enumerable: true
      });
     
-    this.leftInitial = 0;
+    var leftInitial = 0;
     Object.defineProperty(this, 'left', {
         get: function() {
-            return self.leftInitial;
+            return self.nativeObject.getLeft();
         },
         set: function(left) {
-            self.leftInitial = left;
+            leftInitial = left;
             setLayoutParam();
-        }
+        },
+        enumerable: true
      });
 
-    this.topInitial = 0;
+    var topInitial = 0;
     Object.defineProperty(this, 'top', {
         get: function() {
-            return self.topInitial;
+            return self.nativeObject.getTop();
         },
         set: function(top) {
-            self.topInitial = top;
+            topInitial = top;
             setLayoutParam();
-        }
+        },
+        enumerable: true
      });
 
     Object.defineProperty(this, 'visible', {
         get: function() {
-            return self.nativeObject.getVisibility() == android.view.View.VISIBLE;
+            // View.VISIBLE is 0
+            return self.nativeObject.getVisibility() == 0;
         },
         set: function(visible) {
             if(visible)
-                self.nativeObject.setVisibility(android.view.View.VISIBLE);
+                // View.VISIBLE is 0
+                self.nativeObject.setVisibility(0);
             else
-                self.nativeObject.setVisibility(android.view.View.INVISIBLE);
-        }
+                // View.VISIBLE is 4
+                self.nativeObject.setVisibility(4);
+        },
+        enumerable: true
     });
 
-    this.widthInitial = 0;
+    var widthInitial = -2;
     Object.defineProperty(this, 'width', {
         get: function() {
-            return self.widthInitial;
+            return self.nativeObject.getWidth();
         },
         set: function(width) {
-            self.widthInitial = width;
+            widthInitial = width;
             setLayoutParam();
-        }
+        },
+        enumerable: true
      });
 
     this.getPosition = function(){
         return  {
-            width: widthInitial, 
-            height: heightInitial, 
-            top: topInitial, 
-            left: leftInitial
+            width: self.width, 
+            height: self.height, 
+            top: self.top, 
+            left: self.left
         }; 
-    }
+    };
 
     this.setPosition = function(position){
         widthInitial = position.width;
@@ -108,9 +134,7 @@ function View(params) {
         setLayoutParam();
     }
 
-    this.touchEnabled = false;
-
-    var isOnTouchSet = false;
+    this.touchEnabled = true;
 
     Object.defineProperty(this, 'onTouch', {
         get: function() {
@@ -118,10 +142,8 @@ function View(params) {
         },
         set: function(onTouch) {
             self.onTouchCallback = onTouch;
-            if(!isOnTouchSet && self.touchEnabled){
-                setOnTouchListener();
-            }
-        }
+        },
+        enumerable: true
     });
 
     Object.defineProperty(this, 'onTouchEnded', {
@@ -130,16 +152,13 @@ function View(params) {
         },
         set: function(onTouchEnded) {
             self.onTouchEndedCallback = onTouchEnded;
-            if(!isOnTouchSet && self.touchEnabled){
-                setOnTouchListener();
-            }
-        }
+        },
+        enumerable: true
     });
     
-    var setOnTouchListener = function(){
-        isOnTouchSet = true;
-        self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
-            onTouch: function(view, event) {
+    self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
+        onTouch: function(view, event) {
+            if(self.touchEnabled){
                 if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                     self.onTouchEndedCallback && self.onTouchEndedCallback();
                 } else {
@@ -147,13 +166,11 @@ function View(params) {
                 }
                 return true;
             }
-        }));
-    }   
-    
-    var styleInitial;
-    //var borderDrawable = android.graphics.drawable.ShapeDrawable();
-    var borderDrawable = new android.graphics.drawable.GradientDrawable();
-    borderDrawable.setChangingConfigurations(1);
+            return false;
+        }
+    }));
+      
+    var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
     Object.defineProperty(this, 'style', {
         get: function() {
             return styleInitial;
@@ -164,13 +181,18 @@ function View(params) {
             style.addChangeHandler(function(propertyName, value){
                 applyStyle();
             });
-        }
+        },
+        enumerable: true
     });
     
     // @todo no ENUM support
     function applyStyle(){
-        var borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);
-        borderDrawable.setColor(android.graphics.Color.TRANSPARENT);
+        var borderColor = styleInitial.borderColor;
+        if(!TypeUtil.isNumeric(styleInitial.borderColor)){
+            borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);;
+        }
+        // android.graphics.Color.TRANSPARENT=0
+        borderDrawable.setColor(0);
         borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
         // var strokePaint = borderDrawable.getPaint();
         // strokePaint.setAntiAlias (true);
@@ -191,33 +213,28 @@ function View(params) {
     
     function setLayoutParam(){
         // @todo this calculation must be implemented in container
-        var layoutDimens = [!isNumeric(self.widthInitial) ? Device.screenWidth * (parseInt(self.widthInitial.replace("%")))/100 : self.widthInitial ,
-                            !isNumeric(self.heightInitial) ? Device.screenHeight * (parseInt(self.heightInitial.replace("%")))/100 : self.heightInitial ,
-                            !isNumeric(self.leftInitial) ? Device.screenWidth * (parseInt(self.leftInitial.replace("%")))/100 : self.leftInitial ,
-                            !isNumeric(self.topInitial) ? Device.screenHeight  * (parseInt(self.topInitial.replace("%")))/100 : self.topInitial];
+        var layoutDimens = [!TypeUtil.isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
+                            !TypeUtil.isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
+                            !TypeUtil.isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
+                            !TypeUtil.isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
         var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
                             layoutDimens[0], layoutDimens[1], 
                             layoutDimens[2], layoutDimens[3]);
         self.nativeObject.setLayoutParams(layoutParams);
     }
     
-    this.layerDrawable = new android.graphics.drawable.LayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
-    self.layerDrawable.setId(0,0);
-    self.layerDrawable.setId(1,1);
+    
     function setBackground(layerIndex){
         switch (layerIndex){
             case 0: 
-                self.layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
+                layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
                 break;
             case 1:
-                self.layerDrawable.setDrawableByLayerId(1,borderDrawable);
+                layerDrawable.setDrawableByLayerId(1,borderDrawable);
         }
-        self.nativeObject.setBackground(self.layerDrawable);
+        self.nativeObject.setBackground(layerDrawable);
     }
-    // @todo need this function for check value is number. Also shoul be implemented under "util" maybe?
-    function isNumeric(n) {
-        return !isNaN(parseFloat(n)) && isFinite(n);
-    }
+    
 }
 
 module.exports = View;
