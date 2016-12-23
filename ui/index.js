@@ -4,5 +4,7 @@ module.exports = {
     Style: require('./style.js'),
     TextAlignment : require("./textalignment.js"),
     Font: require('./font'),
-    Color: require('./color')
+    Color: require('./color'),
+    Button : require("./button").Button,
+    StateList : require("./button").StateList
 };
