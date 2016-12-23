@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 
 /**
  * @class Button
+ * @since 0.1
  *
  * Button class represents an clickable object to user interface. 
  * A button instance consists of text or an icon(or both of them).

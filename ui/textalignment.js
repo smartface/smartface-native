@@ -1,5 +1,4 @@
-/* globals */
-const SFTextAlignment = {
+const TextAlignment = {
         TOPLEFT: 0,
         TOPCENTER: 1,
         TOPRIGHT: 2,
