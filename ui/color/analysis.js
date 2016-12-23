@@ -1,5 +1,6 @@
 /**
 * @class Color
+* @since 0.1
 * Color is a UI object to define methods for creating and converting color ints. 
 * Each component ranges between 0..255 with 0 meaning no contribution for that component,
 * and 255 meaning 100% contribution
