@@ -13,41 +13,41 @@
  *     ); 
  *     var normalImage = myStateList.normal;
  */
- function StateList(normalValue, disabledValue, selectedValue, pressedValue, focusedValue) {
+ function StateList(params) {
      /**
      * Gets/sets normal state value of a button property. 
      * 
      * @property {Object} normal Property value of a button for normal state
      */
-     this.normal = normalValue;
+     this.normal = params.normal;
 
      /**
      * Gets/sets disabled state value of a button property. 
      * 
      * @property {Object} disabled Property value of a button for disabled state
      */
-     this.disabled = disabledValue;
+     this.disabled = params.disabled;
 
      /**
      * Gets/sets highlighted state value of a button property. 
      * 
      * @property {Object} highlighted Property value of a button for highlighted state
      */
-     this.selected = selectedValue;
+     this.selected = params.selected;
 
      /**
      * Gets/sets pressed state value of a button property. 
      * 
      * @property {Object} pressed Property value of a button for pressed state
      */
-     this.pressed = pressedValue;
+     this.pressed = params.pressed;
 
      /**
      * Gets/sets focused state value of a button property. 
      * 
      * @property {Object} focused Property value of a button for focused state
      */
-     this.focused = focusedValue
+     this.focused = params.focused;
  } 
 
 module.exports = StateList;
