@@ -57,6 +57,7 @@ const Label = extend(View)(
             enumerable: true
         });
 
+        // @todo property returns CharSquence object not string. Caused by issue AND-2508
         Object.defineProperty(this, 'text', {
             get: function() {
                 return self.nativeObject.getText().toString();
@@ -64,6 +65,7 @@ const Label = extend(View)(
             set: function(text) {
                 self.nativeObject.setText(text);
                 self.nativeObject.setAutoLinkMask (0);
+                // @todo this will cause performace issues in feature. Must be replaced.
                 self.nativeObject.requestLayout();
             },
             enumerable: true
