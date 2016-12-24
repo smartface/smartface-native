@@ -130,14 +130,10 @@ const Label = extend(View)(
                 return self.nativeObject.isVerticalScrollBarEnabled();
             },
             set: function(showScrollBar) {
-                if(showScrollBar){
-                    self.nativeObject.setMovementMethod(new android.text.method.ScrollingMovementMethod());
-                }
-                else{
-                    self.nativeObject.setMovementMethod(null);
-                }
-                self.nativeObject.setScrollContainer (true)
+                self.nativeObject.setMovementMethod(showScrollBar ? new android.text.method.ScrollingMovementMethod() : null);
+                self.nativeObject.setScrollContainer (showScrollBar)
                 self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
+                self.nativeObject.setScrollBarStyle(android.view.View.SCROLLBARS_INSIDE_INSET)
             },
             enumerable: true
         });
