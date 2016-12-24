@@ -1,32 +1,28 @@
 const Label = require("sf-core/ui/label");
-const Color = require("sf-core/ui/color")
+const Color = require("sf-core/ui/color");
+const StateList = require("sf-core/util/statelist");
 const extend = require('js-base/core/extend');
-
-function StateList(normalValue, disabledValue, highlightedValue, pressedValue, focusedValue) {
-    this.normal = normalValue;
-    this.disabled = disabledValue;
-    this.highlighted = highlightedValue;
-    this.pressed = pressedValue;
-    this.focused = focusedValue
-} 
 
 const Button = extend(Label)(
     function (_super, params) {
+        var self = this;
+        if(!self.nativeObject){
+            self.nativeObject = new android.widget.Button(Android.getActivity());
+        }
         _super(this);
         
-        var self = this;
-        self.nativeObject = new android.widget.Button(Android.getActivity()); 
         
         var STATE_NORMAL =  [
             android.R.attr.state_enabled,
             -android.R.attr.state_pressed,
+            -android.R.attr.state_selected
         ];
         var STATE_DISABLED = [
             -android.R.attr.state_enabled,
         ];
-         var STATE_HIGHLIGTED = [
+         var STATE_SELECTED = [
             android.R.attr.state_enabled,
-            android.R.attr.state_focused
+            android.R.attr.state_selected
         ];
         var STATE_PRESSED = [
             android.R.attr.state_pressed,
@@ -38,7 +34,7 @@ const Button = extend(Label)(
         ];
         
         
-
+        // @todo property not working. Caused by issue AND-2427
         var textColorStateListDrawable;
         var textColorsInitial = new StateList(
             Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
@@ -148,22 +144,39 @@ const Button = extend(Label)(
             enumerable: true
         });
         
-        Object.defineProperty(this, 'onClick', {
+        var onPressCallback;
+        Object.defineProperty(this, 'onPress', {
             get: function() {
-                return self.onClickCallback;
+                return onPressCallback;
             },
-            set: function(onClick) {
-                self.onClickCallback = onClick;
+            set: function(onPress) {
+                onPressCallback = onPress;
+            },
+            enumerable: true
+        });
+        
+        var onLongPressCallback;
+        Object.defineProperty(this, 'onLongPress', {
+            get: function() {
+                return onLongPressCallback;
+            },
+            set: function(onLongPress) {
+                onLongPressCallback = onLongPress;
             },
             enumerable: true
         });
         
         self.nativeObject.setOnClickListener(android.view.View.OnClickListener.implement({
             onClick: function(view) {
-                self.onClickCallback && self.onClickCallback();
+                onPressCallback && onPressCallback();
             }
         }));
         
+        self.nativeObject.setOnLongClickListener(android.view.View.OnLongClickListener.implement({
+            onLongClick : function(view){
+                onLongPressCallback && onLongPressCallback();
+            }
+        }));
         
         // Assign parameters given in constructor
         if (params) {
@@ -173,4 +186,4 @@ const Button = extend(Label)(
         }
 });
 
-module.exports = {Button,StateList};
+module.exports = Button;
