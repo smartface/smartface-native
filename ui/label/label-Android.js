@@ -71,7 +71,8 @@ const Label = extend(View)(
             enumerable: true
         });
 
-        var textAlignmentInitial = 0;
+        var textAlignmentInitial = TextAlignment.MIDLEFT;
+        self.nativeObject.setGravity(android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT);
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
