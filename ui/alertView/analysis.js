@@ -1,3 +1,9 @@
+var AlertButton = {
+    POSITIVE: 0,
+    NEUTRAL: 1,
+    NEGATIVE: 2,
+};
+
 /**
  * @class AlertView
  *
@@ -26,7 +32,7 @@ function AlertView () {
      * 
      * @property {boolean} isShowing Alert view visibility
      */
-    this.isShowing; // read only
+    this.isShowing = false; // read only
 
     /**
      * This method displays an alert box with specified properties.
@@ -51,7 +57,7 @@ function AlertView () {
      *     const AlertView = require('sf-core/ui/alertView');
      *     var myAlertView = new AlertView();
      *     var params = {
-     *         index: 2, 
+     *         index: AlertButton.POSITIVE, 
      *         text: "Alert text", 
      *         onClick: function(){}
      *     };
@@ -75,3 +81,4 @@ function AlertView () {
 }
 
 module.exports = AlertView;
+module.exports = AlertButton;
