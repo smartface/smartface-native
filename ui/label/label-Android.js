@@ -127,6 +127,7 @@ const Label = extend(View)(
             enumerable: true
         });
 
+        // @todo not shows scrollbar exactly. AND-2501
         Object.defineProperty(this, 'showScrollBar', {
             get: function() {
                 return self.nativeObject.isVerticalScrollBarEnabled();
