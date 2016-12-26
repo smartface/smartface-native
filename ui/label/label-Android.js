@@ -4,16 +4,23 @@ const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 const Label = extend(View)(
     function (_super, params) {
+        var self = this;
+        if(!self.nativeObject){
+            self.nativeObject = new android.widget.TextView(Android.getActivity());
+        }
         _super(this);
 
-        this.nativeObject = new android.widget.TextView(Android.getActivity()); 
-        var self = this;
-        
         Object.defineProperty(this, 'htmlText', {
             get: function() {
                 var text = self.nativeObject.getText();
-                var htmlText = android.text.Html.toHtml(text);
-                return htmlText.toString();
+                if(text){
+                    var htmlText = android.text.Html.toHtml(text);
+                    return htmlText.toString();
+                }
+                else{
+                    return "";
+                }
+                
             }, 
             set: function(htmlText) {
                 var linkMovement = android.text.method.LinkMovementMethod.getInstance();
@@ -50,6 +57,7 @@ const Label = extend(View)(
             enumerable: true
         });
 
+        // @todo property returns CharSquence object not string. Caused by issue AND-2508
         Object.defineProperty(this, 'text', {
             get: function() {
                 return self.nativeObject.getText().toString();
@@ -57,6 +65,8 @@ const Label = extend(View)(
             set: function(text) {
                 self.nativeObject.setText(text);
                 self.nativeObject.setAutoLinkMask (0);
+                // @todo this will cause performace issues in feature. Must be replaced.
+                self.nativeObject.requestLayout();
             },
             enumerable: true
         });
@@ -117,19 +127,16 @@ const Label = extend(View)(
             enumerable: true
         });
 
+        // @todo not shows scrollbar exactly. AND-2501
         Object.defineProperty(this, 'showScrollBar', {
             get: function() {
                 return self.nativeObject.isVerticalScrollBarEnabled();
             },
             set: function(showScrollBar) {
-                if(showScrollBar){
-                    self.nativeObject.setMovementMethod(new android.text.method.ScrollingMovementMethod());
-                }
-                else{
-                    self.nativeObject.setMovementMethod(null);
-                }
-                self.nativeObject.setScrollContainer (true)
+                self.nativeObject.setMovementMethod(showScrollBar ? new android.text.method.ScrollingMovementMethod() : null);
+                self.nativeObject.setScrollContainer (showScrollBar)
                 self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
+                self.nativeObject.setScrollBarStyle(android.view.View.SCROLLBARS_INSIDE_INSET)
             },
             enumerable: true
         });
