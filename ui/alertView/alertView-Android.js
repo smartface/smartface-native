@@ -99,5 +99,4 @@ function AlertView () {
 }
 
 module.exports = AlertView;
-// seems wrong
 module.exports = AlertButton;
