@@ -156,19 +156,18 @@ function View(params) {
         enumerable: true
     });
     
-    // self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
-    //     onTouch: function(view, event) {
-    //         if(self.touchEnabled){
-    //             if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-    //                 self.onTouchEndedCallback && self.onTouchEndedCallback();
-    //             } else {
-    //                 self.onTouchCallback && self.onTouchCallback();
-    //             }
-    //             //return false;
-    //         }
-    //         return false;
-    //     }
-    // }));
+    self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
+        onTouch: function(view, event) {
+            if(self.touchEnabled){
+                if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                    self.onTouchEndedCallback && self.onTouchEndedCallback();
+                } else {
+                    self.onTouchCallback && self.onTouchCallback();
+                }
+            }
+            return false;
+        }
+    }));
       
     var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
     Object.defineProperty(this, 'style', {
