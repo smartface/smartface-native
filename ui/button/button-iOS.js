@@ -11,6 +11,18 @@ const ButtonState = {
         focused: 4 // #available(iOS 9.0, *)
     }
 
+const ControlEvent = {
+     touchDown : 0,
+     touchDownRepeat : 1,
+     touchDragInside : 2,
+     touchDragOutside : 3,
+     touchDragEnter : 4,
+     touchDragExit : 5,
+     touchUpInside : 6,
+     touchUpOutside : 7,
+     touchCancel : 8
+}
+
 const Button = extend(View)(
      function (_super, params) {
         _super(this);
@@ -61,9 +73,13 @@ const Button = extend(View)(
             enumerable: true
         });
     
-        var textColorsInitial = new StateList(
-            Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
-        );
+        var textColorsInitial = new StateList({
+    		normal: Color.BLACK,
+            disabled: Color.BLACK,
+            selected: Color.BLACK,
+            pressed: Color.BLACK,
+            focused: Color.BLACK
+    	});
         Object.defineProperty(this, 'textColors', {
             get: function() {
                 return textColorsInitial;
@@ -81,9 +97,13 @@ const Button = extend(View)(
             enumerable: true
         });
         
-        var backgroundColorsInitial = new StateList(
-            Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT
-        );
+        var backgroundColorsInitial = new StateList({
+    		normal: Color.TRANSPARENT,
+            disabled: Color.TRANSPARENT,
+            selected: Color.TRANSPARENT,
+            pressed: Color.TRANSPARENT,
+            focused: Color.TRANSPARENT
+    	});
         Object.defineProperty(this, 'backgroundColors', {
             get: function() {
                 return backgroundColorsInitial;
@@ -100,9 +120,13 @@ const Button = extend(View)(
             enumerable: true
         });
         
-        var backgroundImagesInitial = new StateList(
-            "", "", "", "", ""
-        );
+        var backgroundImagesInitial = new StateList({          
+            normal: "", 
+            disabled: "", 
+            selected: "", 
+            pressed: "", 
+            focused: ""
+        });
         Object.defineProperty(this, 'backgroundImages', {
             get: function() {
                 return backgroundImagesInitial;
@@ -119,6 +143,18 @@ const Button = extend(View)(
             enumerable: true
         });
         
+        var _onPressFunc;
+        Object.defineProperty(self, 'onPress', {
+            get: function() {
+                return _onPressFunc;
+            },
+            set: function(value) {
+                _onPressFunc = value;
+                self.nativeObject.addJSTarget(value,ControlEvent.touchUpInside);
+            },
+            enumerable: true
+         });
+    
          // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
