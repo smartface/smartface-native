@@ -1,4 +1,4 @@
-var AlertButton = {
+var AlertButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
@@ -57,7 +57,7 @@ function AlertView () {
      *     const AlertView = require('sf-core/ui/alertView');
      *     var myAlertView = new AlertView();
      *     var params = {
-     *         index: AlertButton.POSITIVE, 
+     *         index: AlertButtonType.POSITIVE, 
      *         text: "Alert text", 
      *         onClick: function(){}
      *     };
@@ -80,5 +80,4 @@ function AlertView () {
     this.onDismiss = function(AlertView) {};
 }
 
-module.exports = AlertView;
-module.exports = AlertButton;
+module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };
