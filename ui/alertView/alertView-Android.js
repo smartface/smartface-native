@@ -1,3 +1,9 @@
+var AlertButton = {
+    POSITIVE: 0,
+    NEUTRAL: 1,
+    NEGATIVE: 2,
+};
+
 function AlertView () {
     var self = this;
     self.nativeObject = new android.app.AlertDialog.Builder(Android.getActivity()).create();
@@ -46,13 +52,13 @@ function AlertView () {
         buttonCallbacks[params.index] = params.onClick;
         var nativeButtonIndex = -1;
         switch(params.index){
-            case 0:
+            case AlertButton.POSITIVE:
                 nativeButtonIndex = -1;
                 break;
-            case 1:
+            case AlertButton.NEGATIVE:
                 nativeButtonIndex = -2;
                 break;
-            case 2:
+            case AlertButton.NEUTRAL:
                 nativeButtonIndex = -3;
                 break;
         }
@@ -61,13 +67,13 @@ function AlertView () {
                    onClick: function(dialog,which){
                        switch(which){
                             case -1:
-                                buttonCallbacks[0] && buttonCallbacks[0]();
+                                buttonCallbacks[AlertButton.POSITIVE] && buttonCallbacks[AlertButton.POSITIVE]();
                                 break;
                             case -2:
-                                buttonCallbacks[1] && buttonCallbacks[1]();
+                                buttonCallbacks[AlertButton.NEGATIVE] && buttonCallbacks[AlertButton.NEGATIVE]();
                                 break;
                             case -3:
-                                buttonCallbacks[2] && buttonCallbacks[2]();
+                                buttonCallbacks[AlertButton.NEUTRAL] && buttonCallbacks[AlertButton.NEUTRAL]();
                                 break;
                        }
                    }
@@ -93,3 +99,5 @@ function AlertView () {
 }
 
 module.exports = AlertView;
+// seems wrong
+module.exports = AlertButton;
