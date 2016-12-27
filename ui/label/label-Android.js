@@ -71,15 +71,14 @@ const Label = extend(View)(
             enumerable: true
         });
 
-        var textAlignmentInitial = TextAlignment.MIDLEFT;
-        self.nativeObject.setGravity(android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT);
+        var textAlignmentInitial = 0;
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
             },
             set: function(textAlignment) {
                 textAlignmentInitial = textAlignment;
-                var alignment = android.view.Gravity.CENTER_HORIZONTAL | android.view.Gravity.LEFT;
+                var alignment = android.view.Gravity.CENTER_VERTICAL | android.view.Gravity.LEFT;
                 switch(textAlignment){
                     case TextAlignment.TOPLEFT:
                         alignment = android.view.Gravity.TOP | android.view.Gravity.LEFT;
