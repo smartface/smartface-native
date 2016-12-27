@@ -1,5 +1,4 @@
 const MethodNames = {
-        clickedButtonAtIndex: "clickedButtonAtIndex",
         didDismissWithButtonIndex: "didDismissWithButtonIndex"
     }
     
@@ -9,10 +8,10 @@ function AlertView () {
     
     var delegate = function (method){
         switch (method.name) {
-            case MethodNames.clickedButtonAtIndex:
-                _buttonArray[method.buttonIndex].onClick();
-                break; 
             case MethodNames.didDismissWithButtonIndex:
+                if (method.buttonIndex != -1){
+                _buttonArray[method.buttonIndex].onClick();
+                }
                 self.onDismiss(self);
                 break; 
             default: 
