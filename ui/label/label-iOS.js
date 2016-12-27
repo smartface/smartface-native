@@ -1,5 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
+const Color = require("sf-core/ui/color");
+
 const Label = extend(View)(
     function (_super, params) {
         _super(this);
@@ -82,7 +84,7 @@ const Label = extend(View)(
             enumerable: true
         });
         
-        var textColor;
+        var _textColor = Color.BLACK;
         Object.defineProperty(self, 'textColor', {
             get: function() {
                 return _textColor;
