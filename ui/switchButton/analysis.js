@@ -14,7 +14,7 @@
 function SwitchButton(params) {
 
     /**
-     * Gets/sets color of the thumb. 
+     * Gets/sets color of the thumb. It is set to light gray by default. 
      * 
      * @property {Color} thumbColor Color of the thumb.
      * @since 0.1
@@ -22,7 +22,8 @@ function SwitchButton(params) {
     this.thumbColor = COLOR.LIGHTGRAY; 
     
     /**
-     * Gets/sets color of the switch when it is checked.
+     * Gets/sets color of the switch when it is checked. It is set to 
+     * blue by default.
      * 
      * @property {Color} checkedColor Color of the switch when it is checked.
      * @since 0.1
@@ -31,7 +32,7 @@ function SwitchButton(params) {
 
     /**
      * Gets/sets checked value of a switch button. When the switch button is checked,
-     * The value of this property will be true.
+     * The value of this property will be true. It is set to false by default.
      * 
      * @property {Boolean} checked Check or not switch button. 
      * @since 0.1
