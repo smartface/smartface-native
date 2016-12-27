@@ -53,6 +53,7 @@ const Label = extend(View)(
             set: function(multipleLine) {
                 self.nativeObject.setSingleLine(!multipleLine);
                 self.nativeObject.setMaxLines (multipleLine ? java.lang.Integer.MAX_VALUE : 1);
+                self.nativeObject.setMovementMethod(multipleLine ? new android.text.method.ScrollingMovementMethod() : null);
             },
             enumerable: true
         });
@@ -133,10 +134,10 @@ const Label = extend(View)(
                 return self.nativeObject.isVerticalScrollBarEnabled();
             },
             set: function(showScrollBar) {
-                self.nativeObject.setMovementMethod(showScrollBar ? new android.text.method.ScrollingMovementMethod() : null);
                 self.nativeObject.setScrollContainer (showScrollBar)
                 self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
-                self.nativeObject.setScrollBarStyle(android.view.View.SCROLLBARS_INSIDE_INSET)
+                if(showScrollBar)
+                    self.nativeObject.setScrollBarStyle(android.view.View.SCROLLBARS_INSIDE_INSET);
             },
             enumerable: true
         });
