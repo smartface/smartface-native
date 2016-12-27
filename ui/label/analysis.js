@@ -75,7 +75,7 @@ const Label = extend(View)(
          *     var label = new Label();
          *     label.textAlignment = TextAlignment.CENTER;   
          */
-        textAlignment = TextAlignment.CENTER;
+        textAlignment = TextAlignment.MIDLEFT;
 
         /**
          * Gets/sets text color of view.
