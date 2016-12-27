@@ -24,19 +24,19 @@ function SwitchButton(params) {
     /**
      * Gets/sets color of the switch when it is checked.
      * 
-     * @property {Color} thumbColor Color of the switch when it is checked.
+     * @property {Color} checkedColor Color of the switch when it is checked.
      * @since 0.1
      */
     this.checkedColor = COLOR.BLUE;  
-    
+
     /**
      * Gets/sets checked value of a switch button. When the switch button is checked,
      * The value of this property will be true.
      * 
-     * @property {Boolean} checked Check or not switch button 
+     * @property {Boolean} checked Check or not switch button. 
      * @since 0.1
      */
-    this.checked = false; //toggle
+    this.checked = false; 
     
     // events  
     /**
