@@ -37,6 +37,15 @@ const Label = extend(View)(
          * It is set to null by default.
          * 
          * @property {Font} font Font of label view.
+         * 
+         *     @example 
+         *     const Label = require('sf-core/ui/label');
+         *     var myLabel = new Label({
+         *         text: "This is my label",
+         *         visible: true
+         *     });
+         *     const Font = require('sf-core/ui/font');
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);     
          */
         this.font = null;
 
