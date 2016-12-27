@@ -1,12 +1,14 @@
-var AlertButton = {
+var AlertButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
 };
 
-function AlertView () {
+function AlertView (params) {
     var self = this;
     self.nativeObject = new android.app.AlertDialog.Builder(Android.getActivity()).create();
+    self.nativeObject.setCancelable(false);
+    self.nativeObject.setCanceledOnTouchOutside(false);
 
     var titleInitial = "";
     Object.defineProperty(this, 'title', {
@@ -52,33 +54,33 @@ function AlertView () {
         buttonCallbacks[params.index] = params.onClick;
         var nativeButtonIndex = -1;
         switch(params.index){
-            case AlertButton.POSITIVE:
+            case AlertButtonType.POSITIVE:
                 nativeButtonIndex = -1;
                 break;
-            case AlertButton.NEGATIVE:
+            case AlertButtonType.NEGATIVE:
                 nativeButtonIndex = -2;
                 break;
-            case AlertButton.NEUTRAL:
+            case AlertButtonType.NEUTRAL:
                 nativeButtonIndex = -3;
                 break;
         }
         self.nativeObject.setButton(nativeButtonIndex,params.text,
-                new android.content.DialogInterface.OnClickListener.implement({
-                   onClick: function(dialog,which){
-                       switch(which){
-                            case -1:
-                                buttonCallbacks[AlertButton.POSITIVE] && buttonCallbacks[AlertButton.POSITIVE]();
-                                break;
-                            case -2:
-                                buttonCallbacks[AlertButton.NEGATIVE] && buttonCallbacks[AlertButton.NEGATIVE]();
-                                break;
-                            case -3:
-                                buttonCallbacks[AlertButton.NEUTRAL] && buttonCallbacks[AlertButton.NEUTRAL]();
-                                break;
-                       }
+            android.content.DialogInterface.OnClickListener.implement({
+               onClick: function(dialog,which){
+                   switch(which){
+                        case -1:
+                            buttonCallbacks[AlertButtonType.POSITIVE] && buttonCallbacks[AlertButtonType.POSITIVE]();
+                            break;
+                        case -2:
+                            buttonCallbacks[AlertButtonType.NEGATIVE] && buttonCallbacks[AlertButtonType.NEGATIVE]();
+                            break;
+                        case -3:
+                            buttonCallbacks[AlertButtonType.NEUTRAL] && buttonCallbacks[AlertButtonType.NEUTRAL]();
+                            break;
                    }
+               }
         }));
-    }
+    };
 
     var onDismissCallback;
     Object.defineProperty(this, 'onDismiss', {
@@ -91,12 +93,18 @@ function AlertView () {
         enumerable: true
     });
 
-    self.nativeObject.setOnDismissListener(new android.content.DialogInterface.OnDismissListener.implement({
+    self.nativeObject.setOnDismissListener(android.content.DialogInterface.OnDismissListener.implement({
         onDismiss: function(dialog){
             onDismissCallback && onDismissCallback(self);
         }
     }));
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
-module.exports = AlertView;
-module.exports = AlertButton;
+module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };
