@@ -5,7 +5,8 @@
 * TextAlignment aligns the text of a label instance.
 *
 *     @example
-*     var textAligment = TextAlignment.TOPLEFT; 
+*     const TextAlignment = require('sf-core/ui/textalignment');
+*     var textAlignment = TextAlignment.TOPLEFT; 
 */
 const TextAlignment = {// Constants
         /**
