@@ -2,13 +2,13 @@
  * @enum 
  * @since 0.1
  * 
- * ActivityIndicatorStyle is a enum. It includes types of activity indicator.
+ * ActivityIndicatorStyle is a enum. It includes types of activity indicator's style.
  * 
  *     @example
  *     const ActivityIndicatorStyle = require('sf-core/ui/activityIndicator').ActivityIndicatorStyle;
  *     var activityIndicatorStyle= ActivityIndicatorStyle.LARGE;
  */
-var ActivityIndicatorStyle = {
+const ActivityIndicatorStyle = {
     NORMAL: 0,
     LARGE: 1
 };
@@ -31,7 +31,7 @@ function ActivityIndicator(params) {
      * 
      * @property {Color} color Color of the activity indicator
      */
-    this.color = COLOR.GRAY;
+    this.color = Color.GRAY;
 
     /**
      * Gets/sets style of the activity indicator.
