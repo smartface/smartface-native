@@ -3,13 +3,13 @@
  * StateList is a class to display a text on the screen. StateList creates a specified values based on states.
  *
  *     @example
- *     const StateList = require('sf-core/ui/button');
+ *     const StateList = require('sf-core/util/statelist');
  *     var myStateList = new StateList(
- *         "assets://normal.png"
- *         "assets://disabled.png"
- *         "assets://highlighted.png"
- *         "assets://pressed.png"
- *         "assets://focused.png"
+ *         normal: "assets://normal.png"
+ *         disabled: "assets://disabled.png"
+ *         selected: "assets://selected.png"
+ *         pressed: "assets://pressed.png"
+ *         focused: "assets://focused.png"
  *     ); 
  *     var normalImage = myStateList.normal;
  */
