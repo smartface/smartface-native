@@ -74,8 +74,10 @@ const Label = extend(View)(
          * @property {Number} textAlignment Text alignment
          * 
          *     @example
+         *     const Label = require('sf-core/ui/label');
          *     var label = new Label();
-         *     label.textAlignment = TextAlignment.CENTER;   
+         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     label.textAlignment = TextAlignment.MIDCENTER;   
          */
         textAlignment = TextAlignment.MIDLEFT;
 
