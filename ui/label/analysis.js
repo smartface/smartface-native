@@ -2,6 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class Label
+ * @since 0.1
  * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
@@ -11,7 +12,7 @@ const extend = require('js-base/core/extend');
  *         text: "This is my label",
  *         visible: true
  *     });
- *     myLabel.backgroundColor = "#00FFFFFF";
+ *     myLabel.backgroundColor = Color.create("#00FFFFFF");
  */
 const Label = extend(View)(
     function (_super, params) {
@@ -36,6 +37,15 @@ const Label = extend(View)(
          * It is set to null by default.
          * 
          * @property {Font} font Font of label view.
+         * 
+         *     @example 
+         *     const Label = require('sf-core/ui/label');
+         *     var myLabel = new Label({
+         *         text: "This is my label",
+         *         visible: true
+         *     });
+         *     const Font = require('sf-core/ui/font');
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);     
          */
         this.font = null;
 
@@ -63,9 +73,9 @@ const Label = extend(View)(
          * 
          *     @example
          *     var label = new Label();
-         *     label.textAlignment = TextAlignment.CENTER;   
+         *     label.textAlignment = TextAlignment.MIDLEFT;   
          */
-        textAlignment = TextAlignment.CENTER;
+        textAlignment = TextAlignment.MIDLEFT;
 
         /**
          * Gets/sets text color of view.

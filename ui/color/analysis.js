@@ -5,14 +5,10 @@
 * Each component ranges between 0..255 with 0 meaning no contribution for that component,
 * and 255 meaning 100% contribution
 *
-*       @example
-*      const Color = require('sf-core/ui/color');
-*      var myColor = new Color({
-*          red: 0,
-*          green: 0,
-*          blue: 255,
-*      });
-*      var redValue = myColor.red();
+*     @example
+*     const Color = require('sf-core/ui/color');
+*     var redValue = Color.RED;
+*     var anotherColor = Color.create("#FFFFAACC");
 */
 function Color () {}
 
@@ -20,84 +16,84 @@ function Color () {}
 /**
 * Constant value for black color. 
 * 
-* @property {int} BLACK Constant integer value.
+* @property {Color} BLACK Constant color value.
 */
 Color.BLACK = (red, green, blue);
 
 /**
 * Constant value for blue color. 
 * 
-* @property {int} BLUE Constant integer value.
+* @property {Color} BLUE Constant color value.
 */
 Color.BLUE = (red, green, blue);
 
 /**
 * Constant value for cyan color.  
 * 
-* @property {int} CYAN Constant integer value.
+* @property {Color} CYAN Constant color value.
 */
 Color.CYAN = (red, green, blue);
 
 /**
 * Constant value for dark gray color.  
 * 
-* @property {int} DARKGRAY Constant integer value.
+* @property {Color} DARKGRAY Constant color value.
 */
 Color.DARKGRAY = (red, green, blue);
 
 /**
 * Constant value for gray color.  
 * 
-* @property {int} GRAY Constant integer value.
+* @property {Color} GRAY Constant color value.
 */
 Color.GRAY = (red, green, blue);
 
 /**
 * Constant value for green color.  
 * 
-* @property {int} GREEN Constant integer value.
+* @property {Color} GREEN Constant color value.
 */
 Color.GREEN = (red, green, blue);
 
 /**
 * Constant value for light gray color.  
 * 
-* @property {int} LIGHTGRAY Constant integer value.
+* @property {Color} LIGHTGRAY Constant color value.
 */
 Color.LIGHTGRAY = (red, green, blue);
 
 /**
 * Constant value for magenta color.  
 * 
-* @property {int} MAGENTA Constant integer value.
+* @property {Color} MAGENTA Constant color value.
 */
 Color.MAGENTA = (red, green, blue);
 
 /**
 * Constant value for red color. 
 * 
-* @property {int} RED Constant integer value.
+* @property {Color} RED Constant color value.
 */
 Color.RED = (red, green, blue);
 
 /**
 * Constant value for transparent color.  
 * 
-* @property {int} TRANSPARENT Constant integer value.
+* @property {Color} TRANSPARENT Constant color value.
 */
 Color.TRANSPARENT = (red, green, blue);
 
 /**
 * Constant value for yellow color.  
 * 
-* @property {int} YELLOW Constant integer value.
+* @property {Color} YELLOW Constant color value.
 */
 Color.YELLOW = (red, green, blue);
 
 /**
 * Constant value for white color.  
 * 
-* @property {int} WHITE Constant integer value.
+* @property {Color} WHITE Constant color value.
 */
 Color.WHITE = (red, green, blue);
 
@@ -113,10 +109,10 @@ Color.WHITE = (red, green, blue);
 *
 * @param {Object} params Object describing color values
 * @param {String} [params.hex] Hexadecimal value of the color
-* @param {int} [params.alpha] Alpha component [0..255] of the color
-* @param {int} [params.red] Red component [0..255] of the color
-* @param {int} [params.green] Green component [0..255] of the color
-* @param {int} [params.blue] Blue component [0..255] of the color
+* @param {Number} [params.alpha] Alpha component [0..255] of the color
+* @param {Number} [params.red] Red component [0..255] of the color
+* @param {Number} [params.green] Green component [0..255] of the color
+* @param {Number} [params.blue] Blue component [0..255] of the color
 * @static
 * @constructor
 *
@@ -128,7 +124,7 @@ Color.create = function(params){}
 * Return the red component of a color object. 
 * 
 * @param {Color} color Representation of a color object
-* @return {int} Return the red component of a color object.
+* @return {Number} Return the red component of a color object.
 * @static
 * @method red
 */
@@ -138,7 +134,7 @@ Color.red = function(color){ return color.red };
 * Return the green component of a color object. 
 * 
 * @param {Color} color Representation of a color object
-* @return {int} Return the green component of a color object.
+* @return {Number} Return the green component of a color object.
 * @static
 * @method green
 */
@@ -148,7 +144,7 @@ Color.green = function(color){ return color.green };
 * Return the blue component of a color object. 
 * 
 * @param {Color} color Representation of a color object
-* @return {int} Return the blue component of a color object.
+* @return {Number} Return the blue component of a color object.
 * @static
 * @method blue
 */
@@ -158,7 +154,7 @@ Color.blue = function(color){ return color.blue };
 * Return the alpha component of a color object. 
 * 
 * @param {Color} color Representation of a color object
-* @return {int} Return the alpha component of a color object.
+* @return {Number} Return the alpha component of a color object.
 * @static
 * @method alpha
 */

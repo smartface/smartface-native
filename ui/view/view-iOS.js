@@ -44,13 +44,7 @@ function View(params) {
         },
         enumerable: true
     });
-        
-    /**
-     * Gets/sets id of view. Should be unique number for all objects
-     * inside project.
-     * 
-     * @property {Number} id View identifier
-     */
+
     this.id = 5421;
 
     Object.defineProperty(self, 'visible', {
