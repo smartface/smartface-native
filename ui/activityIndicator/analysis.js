@@ -1,3 +1,13 @@
+/** 
+ * @enum 
+ * @since 0.1
+ * 
+ * ActivityIndicatorStyle is a enum. It includes types of activity indicator.
+ * 
+ *     @example
+ *     const ActivityIndicatorStyle = require('sf-core/ui/activityIndicator').ActivityIndicatorStyle;
+ *     var activityIndicatorStyle= ActivityIndicatorStyle.LARGE;
+ */
 var ActivityIndicatorStyle = {
     NORMAL: 0,
     LARGE: 1
@@ -10,7 +20,8 @@ var ActivityIndicatorStyle = {
  * ActivityIndicator class shows a progress of some background task.
  *
  *     @example
- *     const ActivityIndicator = require('sf-core/ui/activityIndicator');
+ *     const ActivityIndicator = require('sf-core/ui/activityIndicator').ActivityIndicator;
+ *     const ActivityIndicatorStyle = require('sf-core/ui/activityIndicator').ActivityIndicatorStyle;
  *     var myActivityIndicator = new ActivityIndicator();
  *     myActivityIndicator.style = ActivityIndicatorStyle.LARGE;
  */
@@ -28,7 +39,6 @@ function ActivityIndicator(params) {
      * @property {Number} style Style of the activity indicator
      */
     this.style =  ActivityIndicatorStyle.NORMAL;
-
 }
 
 module.exports = {ActivityIndicator: ActivityIndicator, ActivityIndicatorStyle: ActivityIndicatorStyle};
