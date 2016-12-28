@@ -1,4 +1,3 @@
-
 /**
  * @class SwitchButton
  * @since 0.1
@@ -9,7 +8,7 @@
  *     @example
  *     const SwitchButton = require('sf-core/ui/switchButton');
  *     var mySwitchButton = new SwitchButton();
- *     mySwitchButton.thumbColor = COLOR.WHITE;
+ *     mySwitchButton.thumbColor = Color.WHITE;
  */
 function SwitchButton(params) {
 
@@ -19,7 +18,7 @@ function SwitchButton(params) {
      * @property {Color} thumbColor Color of the thumb.
      * @since 0.1
      */
-    this.thumbColor = COLOR.LIGHTGRAY; 
+    this.thumbColor = Color.LIGHTGRAY; 
     
     /**
      * Gets/sets color of the switch when it is checked. It is set to 
@@ -28,7 +27,7 @@ function SwitchButton(params) {
      * @property {Color} checkedColor Color of the switch when it is checked.
      * @since 0.1
      */
-    this.checkedColor = COLOR.BLUE;  
+    this.checkedColor = Color.BLUE;  
 
     /**
      * Gets/sets checked value of a switch button. When the switch button is checked,
