@@ -5,6 +5,7 @@ module.exports = {
     TextAlignment : require("./textalignment.js"),
     Font: require('./font'),
     Color: require('./color'),
+    SwitchButton: require('./switchbutton'),
     Button : require("./button").Button,
     StateList : require("./button").StateList
 };
