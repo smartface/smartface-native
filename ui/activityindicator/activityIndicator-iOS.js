@@ -2,19 +2,13 @@ const View = require('../view');
 const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
 
-const ActivityIndicatorStyle = {
-    NORMAL: 1,
-    LARGE: 0
-};
-
-
 const ActivityIndicator = extend(View)(
     function (_super, params)  {
         
          _super(this);
         var self = this;
 
-       self.nativeObject = new UIActivityIndicatorView(ActivityIndicatorStyle.NORMAL);
+       self.nativeObject = new UIActivityIndicatorView(1);
        self.nativeObject.startAnimating();
 
         var _color = Color.WHITE;
@@ -28,18 +22,22 @@ const ActivityIndicator = extend(View)(
                 },
                 enumerable: true
             });
-    
-        var _progressStyle = ActivityIndicatorStyle.NORMAL;
-            Object.defineProperty(this, 'progressStyle', {
-                get: function() {
-                    return _progressStyle;
-                },
-                set: function(progressStyle) {
-                    _progressStyle = progressStyle;
-                    self.nativeObject.activityIndicatorViewStyle = progressStyle;
-                },
-                enumerable: true
-            });
+            
+            // var _visible = true;
+            // Object.defineProperty(self, 'visible', {
+            //     get: function() {
+            //         return _visible;
+            //     },
+            //     set: function(value) {
+            //         _visible = value;
+            //         if (value) {
+            //             self.nativeObject.startAnimating();
+            //         }else{
+            //             self.nativeObject.stopAnimating();
+            //         }
+            //     },
+            //     enumerable: true
+            // });
     
             // Assign parameters given in constructor
             if (params) {
@@ -51,4 +49,4 @@ const ActivityIndicator = extend(View)(
     }
 );
 
-module.exports = {ActivityIndicator: ActivityIndicator, ActivityIndicatorStyle: ActivityIndicatorStyle};
+module.exports = ActivityIndicator;
