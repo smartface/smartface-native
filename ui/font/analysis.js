@@ -21,7 +21,7 @@
 function Font() {}
 
 /**
- * @method
+ * @method create
  * Creates a font object with given family name.
  * 
  *      @example
@@ -39,7 +39,7 @@ function Font() {}
 Font.create = function(fontFamily, size, style) { }
 
 /**
- * @method
+ * @method createFromFile
  * Creates a font object from given file path. Path should be a
  * correct font path.
  * 
