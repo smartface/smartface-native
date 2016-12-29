@@ -1,0 +1,1 @@
+module.exports = require('./switchbutton-' + Device.deviceOS + '.js');
