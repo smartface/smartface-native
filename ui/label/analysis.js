@@ -73,7 +73,7 @@ const Label = extend(View)(
          * 
          *     @example
          *     var label = new Label();
-         *     label.textAlignment = TextAlignment.CENTER;   
+         *     label.textAlignment = TextAlignment.MIDLEFT;   
          */
         textAlignment = TextAlignment.MIDLEFT;
 
