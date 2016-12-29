@@ -1,1 +1,1 @@
-module.exports = require('./activityIndicator-' + Device.deviceOS + '.js');
+module.exports = require('./activityindicator-' + Device.deviceOS + '.js');

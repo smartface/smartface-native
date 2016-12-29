@@ -1,17 +1,5 @@
-/** 
- * @enum 
- * @since 0.1
- * 
- * ActivityIndicatorStyle is a enum. It includes types of activity indicator's style.
- * 
- *     @example
- *     const ActivityIndicatorStyle = require('sf-core/ui/activityIndicator').ActivityIndicatorStyle;
- *     var activityIndicatorStyle= ActivityIndicatorStyle.LARGE;
- */
-const ActivityIndicatorStyle = {
-    NORMAL: 0,
-    LARGE: 1
-};
+const extend = require('js-base/core/extend');
+const View = require('../view');
 
 /**
  * @class ActivityIndicator
@@ -20,25 +8,21 @@ const ActivityIndicatorStyle = {
  * ActivityIndicator class shows a progress of some background task.
  *
  *     @example
- *     const ActivityIndicator = require('sf-core/ui/activityIndicator').ActivityIndicator;
- *     const ActivityIndicatorStyle = require('sf-core/ui/activityIndicator').ActivityIndicatorStyle;
+ *     const ActivityIndicator = require('sf-core/ui/activityindicator');
+ *     const Color = require('sf-core/ui/color');
  *     var myActivityIndicator = new ActivityIndicator();
- *     myActivityIndicator.style = ActivityIndicatorStyle.LARGE;
+ *     myActivityIndicator.color = Color.BLUE;
  */
-function ActivityIndicator(params) {
-    /**
-     * Gets/sets color of the activity indicator.
-     * 
-     * @property {Color} color Color of the activity indicator
-     */
-    this.color = Color.GRAY;
+const ActivityIndicator = extend(View)(
+    function (_super, params) {
+        _super(this);
+        /**
+         * Gets/sets color of the activity indicator.
+         * 
+         * @property {Color} color Color of the activity indicator
+         */
+        this.color = Color.GRAY;
+    }
+);
 
-    /**
-     * Gets/sets style of the activity indicator.
-     * 
-     * @property {Number} style Style of the activity indicator
-     */
-    this.style =  ActivityIndicatorStyle.NORMAL;
-}
-
-module.exports = {ActivityIndicator: ActivityIndicator, ActivityIndicatorStyle: ActivityIndicatorStyle};
+module.exports = ActivityIndicator;
