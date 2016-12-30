@@ -35,6 +35,7 @@ const SwitchButton = extend(View)(
     switchCheckedTrackDrawable.setCornerRadius(50);
 
     var trackStates = new android.graphics.drawable.StateListDrawable();
+    setTrackDrawable();
 
     Object.defineProperty(this, 'thumbColor', {
         get: function() {
