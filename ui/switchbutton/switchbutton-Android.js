@@ -81,7 +81,6 @@ const SwitchButton = extend(View)(
         enumerable: true
     });
 
-    // @todo its crashing because of "Created a new instance of className android.widget.Switch"
     self.nativeObject.setOnCheckedChangeListener(android.widget.CompoundButton.OnCheckedChangeListener.implement({
         onCheckedChanged: function(buttonView, isChecked){
             onChangedCallback && onChangedCallback(isChecked);
