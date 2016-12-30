@@ -1,3 +1,4 @@
 module.exports = {
-    TypeUtil: require('./type')
+    TypeUtil: require('./type'),
+    StateList: require("./statelist.js")
 };
