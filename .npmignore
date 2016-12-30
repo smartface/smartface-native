@@ -1,0 +1,5 @@
+**/analysis.js
+generateDocs.sh
+install-sf-core.sh
+install-dev-dep.sh
+docs_resource
