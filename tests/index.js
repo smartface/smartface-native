@@ -1,1 +1,1 @@
-module.exports = require("./ui");;
+module.exports = require("./ui");
