@@ -80,8 +80,8 @@ const SwitchButton = extend(View)(
         enumerable: true
     });
 
-    // @todo check field not found error.
-    self.nativeObject.setOnCheckedChangeListener(android.widget.CompoundButton.OnCheckedChangeListener.implements({
+    // @todo its crashing because of "Created a new instance of className android.widget.Switch"
+    self.nativeObject.setOnCheckedChangeListener(android.widget.CompoundButton.OnCheckedChangeListener.implement({
         onCheckedChanged: function(buttonView, isChecked){
             onChangedCallback && onChangedCallback(isChecked);
         }
