@@ -8,63 +8,88 @@
 *     const TextAlignment = require('sf-core/ui/textalignment');
 *     var textAlignment = TextAlignment.TOPLEFT; 
 */
-const TextAlignment = {// Constants
-        /**
-        * Constant value for top left alignment 
-        * 
-        * @property {Number} TOPLEFT Constant number value.
-        */
-        TOPLEFT: 0, 
-        /**
-        * Constant value for top center alignment 
-        * 
-        * @property {Number} TOPCENTER Constant number value.
-        */
-        TOPCENTER: 1,
-        /**
-        * Constant value for top right alignment 
-        * 
-        * @property {Number} TOPRIGHT Constant number value.
-        */
-        TOPRIGHT: 2,
-        
-        /**
-        * Constant value for middle left alignment 
-        * 
-        * @property {Number} MIDLEFT Constant number value.
-        */
-        MIDLEFT: 3,
-        /**
-        * Constant value for top middle center alignment 
-        * 
-        * @property {Number} MIDCENTER Constant number value.
-        */
-        MIDCENTER: 4,
-        /**
-        * Constant value for top middle right alignment 
-        * 
-        * @property {Number} MIDRIGHT Constant number value.
-        */
-        MIDRIGHT: 5,
-        
-        /**
-        * Constant value for bottom left alignment 
-        * 
-        * @property {Number} BOTTOMLEFT Constant number value.
-        */
-        BOTTOMLEFT: 6,
-        /**
-        * Constant value for bottom center alignment 
-        * 
-        * @property {Number} BOTTOMCENTER Constant number value.
-        */
-        BOTTOMCENTER: 7,
-        /**
-        * Constant value for bottom right alignment 
-        * 
-        * @property {Number} BOTTOMRIGHT Constant number value.
-        */
-        BOTTOMRIGHT: 8,
-    }
+const TextAlignment = { }
+
+// Constants
+/**
+* Gets the text alignment to the top left. 
+* 
+* @property {Number} TOPLEFT Align the text to the top left. 
+* @since 0.1
+* @static
+*/
+TextAlignment.TOPLEFT = 0; 
+
+/**
+* Gets the text alignment to the top center. 
+* 
+* @property {Number} TOPCENTER Align the text to the top center. 
+* @since 0.1
+* @static
+*/
+TextAlignment.TOPCENTER = 1;
+
+/**
+* Gets the text alignment to the top right. 
+* 
+* @property {Number} TOPRIGHT Align the text to the top right. 
+* @since 0.1
+* @static
+*/
+TextAlignment.TOPRIGHT = 2;
+
+/**
+* Gets the text alignment to the middle left. 
+* 
+* @property {Number} MIDLEFT Align the text to the middle left.
+* @since 0.1
+* @static
+*/
+TextAlignment.MIDLEFT = 3;
+
+/**
+* Gets the text alignment to the middle center. 
+* 
+* @property {Number} MIDCENTER Align the text to the middle center. 
+* @since 0.1
+* @static
+*/
+TextAlignment.MIDCENTER = 4;
+
+/**
+* Gets the text alignment to the middle right. 
+* 
+* @property {Number} MIDRIGHT Align the text to the middle right. 
+* @since 0.1
+* @static
+*/
+TextAlignment.MIDRIGHT = 5;
+
+/**
+* Gets the text alignment to the bottom left. 
+* 
+* @property {Number} BOTTOMLEFT Align the text to the bottom left. 
+* @since 0.1
+* @static
+*/
+TextAlignment.BOTTOMLEFT = 6;
+
+/**
+* Gets the text alignment to the bottom center. 
+* 
+* @property {Number} BOTTOMCENTER Align the text to the bottom center. 
+* @since 0.1
+* @static
+*/
+TextAlignment.BOTTOMCENTER = 7;
+
+/**
+* Gets the text alignment to the bottom right. 
+* 
+* @property {Number} BOTTOMRIGHT Align the text to the bottom right. 
+* @since 0.1
+* @static
+*/
+TextAlignment.BOTTOMRIGHT = 8;
 
 module.exports = TextAlignment;
