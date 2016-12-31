@@ -9,20 +9,28 @@
 function Page(params) {
 
     /**
-    * Gets/sets background color of page. It allows setting background
-    * color with string or UI.Color properties.
+    * Gets/sets page enter animation.
+    *     @example
+    *     const Animation = require(sf-core/ui/animation);
+    *     const Page = require('sf-core/ui/page');
+    *     var myPage = new Page();
+    *     myPage.enterAnimation = Animation.LEFTTORIGHT;
     *
-    * @property {Color} backgroundColor Background color
+    * @property {Animation} enterAnimation Page show animation
     */
-    this.backgroundColor = Color.WHITE;
+    this.enterAnimation = Animation.LEFTTORIGHT;
 
     /**
-    * Gets/sets background image of page. It allows setting background
-    * image with string image path.
+    * Gets/sets page exit animation.
+    *     @example
+    *     const Animation = require(sf-core/ui/animation);
+    *     const Page = require('sf-core/ui/page');
+    *     var myPage = new Page();
+    *     myPage.exitAnimation = Animation.RIGHTTOLEFT;
     *
-    * @property {String} backgroundImage Background image
+    * @property {Animation} exitAnimation Page hide animation
     */
-    this.backgroundImage = "assets://smartface.png"
+    this.exitAnimation = Animation.RIGHTTOLEFT
 
     /**
     * Show page to the user. This method brings your page to top og the user interface.
@@ -31,35 +39,38 @@ function Page(params) {
     *     const Page = require('sf-core/ui/page');
     *     var myPage = new Page();
     *     myPage.show();
-
-    *     @example
-    *     const Animation = require(sf-core/ui/animation);
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.show(Animation.FADEIN);
     *
-    * @param {Animation} animation Page change animation, if empty page will shown without animation.
     * @method show
     */
-    this.show = function(animation){};
+    this.show = function(){};
 
     /**
-    * Gets/sets key press event for Page. This event fires when device key pressed.
+    * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
     *
     *     @example
-    *     const KeyEvent = require('sf-core/ui/keyevent');
     *     const Page = require('sf-core/ui/page');
     *     var myPage = new Page();
-    *     myPage.onKeyPress = function(keyEvent){
-    *          if(keyEvent == KeyEvent.VOLUMEUP){
-    *              alert("Device Volume Up Pressed");
-    *          }
+    *     myPage.onShow = function(){
+    *         alert("Page Showed!");
     *     }
     *
-    * @callback onKeyPress~onKeyPress
-    * @param {KeyEvent} device key code
+    * @callback Page~onShow
     */
-    this.onKeyPress = function onKeyPress(){};
+    this.onShow = function onShow(){};
+
+    /**
+    * Gets/sets key on hide event callback for Page. This event fires when page disappears from user interface.
+    *
+    *     @example
+    *     const Page = require('sf-core/ui/page');
+    *     var myPage = new Page();
+    *     myPage.onHide = function(){
+    *         alert("Page Hided!");
+    *     }
+    *
+    * @callback Page~onHide
+    */
+    this.onHide = function onHide(){};
 }
 
 module.exports = Page;

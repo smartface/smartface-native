@@ -12,42 +12,42 @@ const Animation = { }
 
 // Constants
 /**
-* Gets the animation to the fade in.
+* Gets the animation to the left to right.
 *
-* @property {Number} FADEIN Fade in animation.
+* @property {Number} LEFTTORIGHT Left to right animation.
 * @since 0.1
 * @static
 */
-Animation.FADEIN = 0;
+Animation.LEFTTORIGHT = 0;
 
 // Constants
 /**
-* Gets the animation to the fade out.
+* Gets the animation to the right to left.
 *
-* @property {Number} FADEOUT Fade out animation.
+* @property {Number} RIGHTTOLEFT Right to left animation.
 * @since 0.1
 * @static
 */
-Animation.FADEOUT = 1;
+Animation.RIGHTTOLEFT = 1;
 
 // Constants
 /**
-* Gets the animation to the slide in.
+* Gets the animation to the up to down.
 *
-* @property {Number} SLIDEIN Slide in animation.
+* @property {Number} UPTODOWN Up to down animation.
 * @since 0.1
 * @static
 */
-Animation.SLIDEIN = 2;
+Animation.UPTODOWN = 2;
 
 // Constants
 /**
-* Gets the animation to the slide out.
+* Gets the animation to the down to up.
 *
-* @property {Number} SLIDEOUT Slide out animation.
+* @property {Number} DOWNTOUP Down to up animation.
 * @since 0.1
 * @static
 */
-Animation.SLIDEOUT = 3;
+Animation.DOWNTOUP = 3;
 
 module.exports = Animation;
