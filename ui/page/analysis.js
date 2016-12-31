@@ -45,6 +45,20 @@ function Page(params) {
     this.show = function(){};
 
     /**
+    * Add view or container to the page.
+    *
+    *     @example
+    *     const Page = require('sf-core/ui/page');
+    *     const Label = require('sf-core/ui/label');
+    *     var myPage = new Page();
+    *     var myLabel = new Label();
+    *     myPage.add(myLabel);
+    *
+    * @method add
+    */
+    this.add = function(){};
+
+    /**
     * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
     *
     *     @example
