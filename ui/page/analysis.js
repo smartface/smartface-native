@@ -62,4 +62,4 @@ function Page(params) {
     this.onKeyPress = function onKeyPress(){};
 }
 
-module.exports = View;
+module.exports = Page;
