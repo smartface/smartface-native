@@ -7,5 +7,7 @@ module.exports = {
     Color: require('./color'),
     Button : require('./button').Button,
     StateList : require('./button').StateList,
-    ActivityIndicator: require('./activityindicator')
+    ActivityIndicator: require('./activityindicator'),
+    Page: require('./page'),
+    KeyEvent: require('./keyevent')
 };
