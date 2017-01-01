@@ -1,0 +1,1 @@
+module.exports = require('./activityindicator-' + Device.deviceOS + '.js');

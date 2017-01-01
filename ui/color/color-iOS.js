@@ -14,13 +14,13 @@ Color.TRANSPARENT = UIColor.clearColor();
 Color.YELLOW = UIColor.yellowColor();
 Color.WHITE = UIColor.whiteColor();
 
-Color.create = function (red, green, blue, alpha) {
+Color.create = function (alpha, red, green, blue) {
   if (arguments.length == 1) {
-     return UIColor.hexColor(red);
+     return UIColor.hexColor(alpha);
   } else if (arguments.length == 3) {
-     return new UIColor(red/255,green/255,blue/255,1);
+     return new UIColor(alpha/255,red/255,green/255,255/255);
   } else if (arguments.length == 4) {
-     return new UIColor(red/255,green/255,blue/255,alpha);
+     return new UIColor(red/255,green/255,blue/255,alpha/255);
   }
 }
 
@@ -37,7 +37,7 @@ Color.blue = function(color){
 };
 
 Color.alpha = function(color){ 
-    return color.components().alpha;
+    return Math.round(color.components().alpha*255);
 };
 
 module.exports = Color;
