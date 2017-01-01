@@ -15,9 +15,13 @@ const ViewGroup = extend(View)(
         * Adds a child view to container. View will be added on native decided index.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/linearcontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     myLinearContainer.addChild(myLabel);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChild(myLabel);
         *
         * @param {View} view The child view to add.
         * @method addChild
@@ -29,9 +33,13 @@ const ViewGroup = extend(View)(
         * Adds a child view at the specified position to the container.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/linearcontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     myLinearContainer.addChildAt(myLabel,1);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChildAt(myLabel,1);
         *
         * @param {View} view The child view to add.
         * @param {Number} index The position at which to add the child.
@@ -43,9 +51,14 @@ const ViewGroup = extend(View)(
         * Remove a child view from container. For removing view must be exists inside the container.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/linearcontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     myLinearContainer.removeChild(myLabel);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChild(myLabel);
+        *     myViewGroup.removeChild(myLabel);
         *
         * @param {View} view The child view to remove.
         * @method removeChild
@@ -56,9 +69,14 @@ const ViewGroup = extend(View)(
         * Remove a child view at the specified position from container. For removing view must be exists on this index.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/linearcontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     myLinearContainer.removeChildAt(2);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChildAt(myLabel,2);
+        *     myViewGroup.removeChildAt(2);
         *
         * @param {Number} index The position in the container of the view to remove
         * @method removeChildAt
@@ -69,9 +87,14 @@ const ViewGroup = extend(View)(
         * Removes all child views from the container.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/linearcontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     myLinearContainer.removeAll();
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChild(myLabel);
+        *     myViewGroup.removeAll();
         *
         * @method removeAll
         */
@@ -81,9 +104,14 @@ const ViewGroup = extend(View)(
         * Get the view position from container view hierarchy.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/absolutecontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     var position = myLinearContainer.getChildIndex(myLabel);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChild(myLabel);
+        *     var position = myViewGroup.getChildIndex(myLabel);
         *
         * @param {View} view The child view to get index.
         * @returns {Number} a positive number representing the position of the view in the container, or -1 if the view does not exist within the container
@@ -95,9 +123,14 @@ const ViewGroup = extend(View)(
         * Get a child view at the specified position from container .
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/absolutecontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     var childView = myLinearContainer.getChildIndex(1);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     myViewGroup.addChildAt(myLabel,1);
+        *     var childView = myViewGroup.getChildIndex(1);
         *
         * @param {Number} The position at which to get the view from.
         * @returns {View} Child view at the specified position from container, or null if the view does not exist within the container
@@ -109,9 +142,13 @@ const ViewGroup = extend(View)(
         * Get child view count from container.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/absolutecontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     var childViewCount = myLinearContainer.getChildCount();
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label"
+        *     });
+        *     var childViewCount = myViewGroup.getChildCount();
         *
         * @returns {Number} The number of children in the container, or 0 if there is no child exists within the container.
         * @method getChildCount
@@ -122,9 +159,14 @@ const ViewGroup = extend(View)(
         * Finds a child view with specified id within the container.
         *
         *     @example
-        *     const LinearContainer = require('sf-core/ui/absolutecontainer');
-        *     var myLinearContainer = new LinearContainer();
-        *     var childView = myLinearContainer.findChildById(11235);
+        *     const ViewGroup = require('sf-core/ui/viewgroup');
+        *     const Label = require('sf-core/ui/label');
+        *     var myViewGroup = new ViewGroup();
+        *     var myLabel = new Label({
+        *          text: "Smartface Label",
+        *          id: 11235
+        *     });
+        *     var childView = myViewGroup.findChildById(11235);
         *
         * @param {Number} id The specified id of the view.
         * @returns {View} Founded view within the container, or null if view does not exists within the container.
