@@ -9,20 +9,22 @@ const Label = extend(View)(
         if(!self.nativeObject){
             self.nativeObject = new android.widget.ScrollView(Android.getActivity());
             self.nativeInner = new android.widget.TextView(Android.getActivity());
+
+            // ViewGroup.LayoutParams.MATCH_PARENT = -1
+            var innerlayoutParams = new android.view.ViewGroup.LayoutParams(-1, -1);
+            self.nativeInner.setLayoutParams(innerlayoutParams);
+            self.nativeObject.addView(self.nativeInner);
+            self.nativeObject.setSmoothScrollingEnabled(true);
+            self.nativeObject.setHorizontalScrollBarEnabled(false);
+            self.nativeObject.setVerticalScrollBarEnabled(false);
         }
         _super(this);
 
-        // ViewGroup.LayoutParams.MATCH_PARENT = -1
-        var innerlayoutParams = new android.view.ViewGroup.LayoutParams(-1, -1);
-        self.nativeInner.setLayoutParams(innerlayoutParams);
-        self.nativeObject.addView(self.nativeInner);
-        self.nativeObject.setSmoothScrollingEnabled(true);
-        self.nativeObject.setHorizontalScrollBarEnabled(false);
-        self.nativeObject.setVerticalScrollBarEnabled(false);
+
 
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                var text = self.nativeInner.getText();
+                var text = (self.nativeInner ? self.nativeInner : self.nativeObject).getText();
                 if(text){
                     var htmlText = android.text.Html.toHtml(text);
                     return htmlText.toString();
@@ -34,33 +36,35 @@ const Label = extend(View)(
             }, 
             set: function(htmlText) {
                 var htmlTextNative = android.text.Html.fromHtml(htmlText);
-                self.nativeInner.setText(htmlTextNative);
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setText(htmlTextNative);
             },
             enumerable: true
         });
 
+        var fontInitial;
         Object.defineProperty(this, 'font', {
             get: function() {
-                return self.nativeInner.getTypeface();
+                return fontInitial;
             },
             set: function(font) {
                 if(font){
-                    if(font.nativeInner != undefined && font.nativeInner != null)
-                        self.nativeInner.setTypeface(font.nativeObject);
-                    if(font.size != undefined && font.size != null && TypeUtil.isNumeric(font.size))
-                        self.nativeInner.setTextSize(font.size);
-                }
+                    fontInitial = font;
+                    var nativeObject = self.nativeInner ? self.nativeInner : self.nativeObject;
+                    if(font.nativeInner)
+                        nativeObject.setTypeface(font.nativeObject);
+                    if(font.size && TypeUtil.isNumeric(font.size))
+                       nativeObject.setTextSize(font.size) ;
+                    }
             },
             enumerable: true
         });
 
         Object.defineProperty(this, 'multipleLine', {
             get: function() {
-                return self.nativeInner.getLineCount() != 1;
+                return (self.nativeInner ? self.nativeInner.getLineCount() : self.nativeObject.getLineCount() )!= 1;
             },
             set: function(multipleLine) {
-                self.nativeInner.setSingleLine(!multipleLine);
-                self.nativeInner.setMaxLines (multipleLine ? java.lang.Integer.MAX_VALUE : 1);
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multipleLine);
             },
             enumerable: true
         });
@@ -68,71 +72,81 @@ const Label = extend(View)(
         // @todo property returns CharSquence object not string. Caused by issue AND-2508
         Object.defineProperty(this, 'text', {
             get: function() {
-                return self.nativeInner.getText().toString();
+                return (self.nativeInner ? self.nativeInner : self.nativeObject).getText();
             },
             set: function(text) {
-                self.nativeInner.setText(text);
+                var nativeObject = self.nativeInner ? self.nativeInner : self.nativeObject;
+                nativeObject.setText(text);
                 // @todo this will cause performance issues in feature. Must be replaced.
-                self.nativeInner.requestLayout();
+                nativeObject.requestLayout();
             },
             enumerable: true
         });
 
-        // Gravity.CENTER_VERTICAL = 16, Gravity.CENTER_HORIZONTAL = 1, Gravity.CENTER = 17
-        // Gravity.BOTTOM = 80, Gravity.RIGHT = 5, Gravity.LEFT = 3, Gravity.TOP = 48
         var textAlignmentInitial = TextAlignment.MIDLEFT;
-        self.nativeInner.setGravity(16 | 3);
+        // Gravity.CENTER_VERTICAL | Gravity.LEFT
+        (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(16 | 3);
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
             },
             set: function(textAlignment) {
                 textAlignmentInitial = textAlignment;
+                // Gravity.CENTER_VERTICAL | Gravity.LEFT
                 var alignment = 16 | 3;
                 switch(textAlignment){
                     case TextAlignment.TOPLEFT:
+                        // Gravity.TOP | Gravity.LEFT
                         alignment = 48 | 3;
                         break;
                     case TextAlignment.TOPCENTER:
+                        // Gravity.TOP | Gravity.CENTER_HORIZONTAL
                         alignment = 48 | 1;
                         break;
                     case TextAlignment.TOPRIGHT:
+                        // Gravity.TOP | Gravity.RIGHT
                         alignment = 48 | 5;
                         break;
                     case TextAlignment.MIDLEFT:
+                        // Gravity.CENTER_VERTICAL | Gravity.LEFT
                         alignment = 16 | 3;
                         break;
                     case TextAlignment.MIDCENTER:
+                        // Gravity.CENTER
                         alignment = 17;
                         break;
                     case TextAlignment.MIDRIGHT:
+                        // Gravity.CENTER_VERTICAL | Gravity.RIGHT
                         alignment = 16 | 5;
                         break;
                     case TextAlignment.BOTTOMLEFT:
+                        // Gravity.BOTTOM | Gravity.LEFT
                         alignment = 80 | 3;
                         break;
                     case TextAlignment.BOTTOMCENTER:
+                        // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
                         alignment = 80 | 1;
                         break;
                     case TextAlignment.BOTTOMRIGHT:
+                        // Gravity.BOTTOM | Gravity.RIGHT
                         alignment = 80 | 5;
                         break;                   
                 }
-                self.nativeInner.setGravity(alignment);
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(alignment);
             },
             enumerable: true
         });
 
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return self.nativeInner.getCurrentTextColor();
+                return (self.nativeInner ? self.nativeInner : self.nativeObject).getCurrentTextColor();
             },
             set: function(textColor) {
                 var colorParam = textColor;
                 if(!TypeUtil.isNumeric(textColor)){
                     colorParam = android.graphics.Color.parseColor(textColor);
                 }
-                self.nativeInner.setTextColor(colorParam);
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setTextColor(colorParam);
             },
             enumerable: true
         });

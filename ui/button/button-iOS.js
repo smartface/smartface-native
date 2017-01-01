@@ -2,6 +2,7 @@ const View = require("sf-core/ui/view");
 const Color = require("sf-core/ui/color");
 const StateList = require("sf-core/util/statelist");
 const extend = require('js-base/core/extend');
+const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const ButtonState = {
         normal: 0,
@@ -10,18 +11,6 @@ const ButtonState = {
         pressed: 3,
         focused: 4 // #available(iOS 9.0, *)
     }
-
-const ControlEvent = {
-     touchDown : 0,
-     touchDownRepeat : 1,
-     touchDragInside : 2,
-     touchDragOutside : 3,
-     touchDragEnter : 4,
-     touchDragExit : 5,
-     touchUpInside : 6,
-     touchUpOutside : 7,
-     touchCancel : 8
-}
 
 const Button = extend(View)(
      function (_super, params) {
@@ -150,7 +139,7 @@ const Button = extend(View)(
             },
             set: function(value) {
                 _onPressFunc = value;
-                self.nativeObject.addJSTarget(value,ControlEvent.touchUpInside);
+                self.nativeObject.addJSTarget(value,UIControlEvents.touchUpInside);
             },
             enumerable: true
          });

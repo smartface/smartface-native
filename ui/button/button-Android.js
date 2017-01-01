@@ -36,9 +36,13 @@ const Button = extend(Label)(
         
         // @todo property not working. Caused by issue AND-2427
         var textColorStateListDrawable;
-        var textColorsInitial = new StateList(
-            Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK
-        );
+        var textColorsInitial = new StateList({
+            normal: Color.BLACK,
+            disabled: Color.BLACK,
+            selected: Color.BLACK,
+            pressed: Color.BLACK,
+            focused: Color.BLACK
+        });
         Object.defineProperty(this, 'textColors', {
             get: function() {
                 return textColorsInitial;
@@ -55,9 +59,9 @@ const Button = extend(Label)(
                     statesSet.push(STATE_DISABLED);
                     colorsSets.push(textColors.disabled);
                 }
-                if(textColors.highlighted){
-                    statesSet.push(STATE_HIGHLIGTED);
-                    colorsSets.push(textColors.highlighted);
+                if(textColors.selected){
+                    statesSet.push(STATE_SELECTED);
+                    colorsSets.push(textColors.selected);
                 }
                 if(textColors.pressed){
                     statesSet.push(STATE_PRESSED);
@@ -74,9 +78,13 @@ const Button = extend(Label)(
         });
         
         var stateListSet;
-        var backgroundColorsInitial = new StateList(
-            Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT
-        );
+        var backgroundColorsInitial = new StateList({
+            normal: Color.WHITE,
+            disabled: Color.WHITE,
+            selected: Color.WHITE,
+            pressed: Color.WHITE,
+            focused: Color.WHITE
+        });
         Object.defineProperty(this, 'backgroundColors', {
             get: function() {
                 return backgroundColorsInitial;
@@ -92,9 +100,9 @@ const Button = extend(Label)(
                     var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.disabled);
                     stateListSet.addState(STATE_DISABLED,stateDrawable);
                 }
-                if(backgroundColors.highlighted){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.highlighted);
-                    stateListSet.addState(STATE_HIGHLIGTED,stateDrawable);
+                if(backgroundColors.selected){
+                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.selected);
+                    stateListSet.addState(STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundColors.pressed){
                     var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.pressed);
@@ -110,7 +118,13 @@ const Button = extend(Label)(
         });
 
         
-        var backgroundImagesInitial = new StateList("", "", "", "", "");
+        var backgroundImagesInitial = new StateList({
+            normal: "",
+            disabled: "",
+            selected: "",
+            pressed: "",
+            focused: ""
+        });
         Object.defineProperty(this, 'backgroundImages', {
             get: function() {
                 return backgroundImagesInitial;
@@ -127,9 +141,9 @@ const Button = extend(Label)(
                     var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.disabled);
                     stateListSet.addState(STATE_DISABLED,stateDrawable);
                 }
-                if(backgroundImages.highlighted){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.highlighted);
-                    stateListSet.addState(STATE_HIGHLIGTED,stateDrawable);
+                if(backgroundImages.selected){
+                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.selected);
+                    stateListSet.addState(STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundImages.pressed){
                     var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.pressed);
