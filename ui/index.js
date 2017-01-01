@@ -6,7 +6,6 @@ module.exports = {
     Font: require('./font'),
     Color: require('./color'),
     Switch: require('./switch'),
-    Button : require("./button").Button,
-    StateList : require("./button").StateList,
+    Button : require('./button'),
     ActivityIndicator: require('./activityindicator')
 };
