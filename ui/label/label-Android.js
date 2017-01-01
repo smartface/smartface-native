@@ -85,7 +85,7 @@ const Label = extend(View)(
 
         var textAlignmentInitial = TextAlignment.MIDLEFT;
         // Gravity.CENTER_VERTICAL | Gravity.LEFT
-        self.nativeInner.setGravity(16 | 3);
+        (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(16 | 3);
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
