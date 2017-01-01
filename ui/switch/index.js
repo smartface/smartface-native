@@ -1,1 +1,1 @@
-module.exports = require('./switch' + Device.deviceOS + '.js');
+module.exports = require('./switch-' + Device.deviceOS + '.js');
