@@ -33,7 +33,7 @@ function Page(params) {
     this.exitAnimation = Animation.RIGHTTOLEFT
 
     /**
-    * Show page to the user. This method brings your page to top og the user interface.
+    * Show page to the user. This method brings your page to top of the user interface.
     *
     *     @example
     *     const Page = require('sf-core/ui/page');

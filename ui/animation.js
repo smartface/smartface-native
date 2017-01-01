@@ -5,8 +5,8 @@
 * Animate user interface components..
 *
 *     @example
-*     const KeyEvent = require('sf-core/ui/animation');
-*     var textAlignment = Animation.FADEIN;
+*     const Animation = require('sf-core/ui/animation');
+*     var animation = Animation.LEFTTORIGHT;
 */
 const Animation = { }
 
