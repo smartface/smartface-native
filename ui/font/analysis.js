@@ -7,10 +7,13 @@
  * 
  *      @example
  *      const Font = require('sf-core/ui/font');
+ *      const Label = require('sf-core/ui/label');
  *      var label = new Label();
  *      label.font = Font.create("Arial", 16, Font.BOLD);
  * 
  *      @example
+ *      const Font = require('sf-core/ui/font');
+ *      const Label = require('sf-core/ui/label');
  *      var label = new Label({
  *          font: Font.createFromFile("assets://MyFont.ttf", 16);
  *      });
@@ -18,10 +21,12 @@
 function Font() {}
 
 /**
- * @method
+ * @method create
  * Creates a font object with given family name.
  * 
  *      @example
+ *      const Font = require('sf-core/ui/font');
+ *      const Label = require('sf-core/ui/label');
  *      var label = new Label();
  *      label.font = Font.create("Arial", 16, Font.NORMAL);
  * 
@@ -34,11 +39,12 @@ function Font() {}
 Font.create = function(fontFamily, size, style) { }
 
 /**
- * @method
+ * @method createFromFile
  * Creates a font object from given file path. Path should be a
  * correct font path.
  * 
  *      @example
+ *      const Font = require('sf-core/ui/font');
  *      label.font = Font.createFromFile("assets://Arial.ttf", 16);
  * 
  * @param path Font file path

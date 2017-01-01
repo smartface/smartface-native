@@ -12,6 +12,7 @@ const extend = require('js-base/core/extend');
  *         text: "This is my label",
  *         visible: true
  *     });
+ *     const Color = require('sf-core/ui/color');
  *     myLabel.backgroundColor = Color.create("#00FFFFFF");
  */
 const Label = extend(View)(
@@ -25,6 +26,7 @@ const Label = extend(View)(
          *     @example
          *     // In this example 'This link' text inside Label will shown blue and
          *     // underlined
+         *     const Label = require('sf-core/ui/label');
          *     var label = new Label();
          *     label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
@@ -37,6 +39,15 @@ const Label = extend(View)(
          * It is set to null by default.
          * 
          * @property {Font} font Font of label view.
+         * 
+         *     @example 
+         *     const Label = require('sf-core/ui/label');
+         *     var myLabel = new Label({
+         *         text: "This is my label",
+         *         visible: true
+         *     });
+         *     const Font = require('sf-core/ui/font');
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);     
          */
         this.font = null;
 
@@ -63,10 +74,12 @@ const Label = extend(View)(
          * @property {Number} textAlignment Text alignment
          * 
          *     @example
+         *     const Label = require('sf-core/ui/label');
          *     var label = new Label();
-         *     label.textAlignment = TextAlignment.CENTER;   
+         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     label.textAlignment = TextAlignment.MIDCENTER;   
          */
-        textAlignment = TextAlignment.CENTER;
+        textAlignment = TextAlignment.MIDLEFT;
 
         /**
          * Gets/sets text color of view.
