@@ -1,5 +1,6 @@
 /**
 * @class Color
+* @since 0.1
 * Color is a UI object to allow creating colors.Each component 
 * ranges between 0..255.
 *
