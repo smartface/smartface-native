@@ -9,56 +9,6 @@
 function Page(params) {
 
     /**
-    * Gets/sets page enter animation.
-    *     @example
-    *     const Animation = require(sf-core/ui/animation);
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.enterAnimation = Animation.LEFTTORIGHT;
-    *
-    * @property {Animation} enterAnimation Page show animation
-    */
-    this.enterAnimation = Animation.LEFTTORIGHT;
-
-    /**
-    * Gets/sets page exit animation.
-    *     @example
-    *     const Animation = require(sf-core/ui/animation);
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.exitAnimation = Animation.RIGHTTOLEFT;
-    *
-    * @property {Animation} exitAnimation Page hide animation
-    */
-    this.exitAnimation = Animation.RIGHTTOLEFT
-
-    /**
-    * Show page to the user. This method brings your page to top of the user interface.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.show();
-    *
-    * @method show
-    */
-    this.show = function(){};
-
-    /**
-    * Add view or container to the page.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     const Label = require('sf-core/ui/label');
-    *     var myPage = new Page();
-    *     var myLabel = new Label();
-    *     myPage.add(myLabel);
-    *
-    * @method add
-    */
-    this.add = function(){};
-
-    /**
     * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
     *
     *     @example
@@ -85,6 +35,30 @@ function Page(params) {
     * @callback Page~onHide
     */
     this.onHide = function onHide(){};
+
+    /**
+     * Gets/sets back button effects on pages. If true previous page will be loaded on back button press.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var page = new Page();
+     *     label.android.backButtonEnabled = false;
+     *
+     * @property {Boolean} backButtonEnabled Back button effect status for pages.
+     */
+    this.android.backButtonEnabled = false;
+
+    /**
+     * Gets root container of page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var page = new Page();
+     *     var rootContainer = page.viewgroup;
+     *
+     * @property {ViewGroup} viewgroup Root container of page.
+     */
+    this.viewgroup = new ViewGroup();
 }
 
 module.exports = Page;
