@@ -47,17 +47,17 @@ const Button = extend(View)(
                     vertical = 2;
                 }
                 
-                var horizantal;
+                var horizontal;
                  if (value % 3 == 0) {
-                    horizantal = 1;
+                    horizontal = 1;
                 }else if (value % 3 == 1){
-                    horizantal = 0;
+                    horizontal = 0;
                 }else{
-                    horizantal = 2;
+                    horizontal = 2;
                 }
                 
                 self.nativeObject.contentVerticalAlignment = vertical;
-                self.nativeObject.contentHorizontalAlignment = horizantal;
+                self.nativeObject.contentHorizontalAlignment = horizontal;
             },
             enumerable: true
         });
