@@ -49,20 +49,33 @@ function Page(params) {
     this.android.backButtonEnabled = false;
 
     /**
-     * Gets root container of page.
-     *
-     *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
-     *     var myPage = new Page();
-     *     var myLabel = new Label({
-     *          text: "Smartface Label"
-     *     });
-     *     myPage.rootContainer.addChild(myLabel);
-     *
-     * @property {ViewGroup} viewgroup Root container of page.
-     */
-    this.viewgroup = new ViewGroup();
+    * Add view or container to the page.
+    *
+    *     @example
+    *     const Page = require('sf-core/ui/page');
+    *     const Label = require('sf-core/ui/label');
+    *     var myPage = new Page();
+    *     var myLabel = new Label();
+    *     myPage.addChild(myLabel);
+    *
+    * @method addChild
+    */
+    this.addChild = function(){};
+
+    /**
+    * Remove view or container to the page.
+    *
+    *     @example
+    *     const Page = require('sf-core/ui/page');
+    *     const Label = require('sf-core/ui/label');
+    *     var myPage = new Page();
+    *     var myLabel = new Label();
+    *     myPage.addChild(myLabel);
+    *     myPage.removeChild(myLabel);
+    *
+    * @method removeChild
+    */
+    this.removeChild = function(){};
 }
 
 module.exports = Page;
