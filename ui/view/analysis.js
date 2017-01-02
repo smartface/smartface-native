@@ -87,6 +87,47 @@ function View(params) {
     this.width = "0%";
 
     /**
+    * Gets/sets padding of view. Setting number as pixels.
+    *
+    *     @example
+    *     const View = require('sf-core/ui/view');
+    *     var myView = new View();
+    *     var padding = {
+    *         width: 15,
+    *         height: 10,
+    *         top: 15,
+    *         left: 10
+    *     };
+    *     myView.padding = padding;
+    *
+    * @property {Object} padding Object describing padding values
+    * @property {Number} [padding.left] Padding left value
+    * @property {Number} [padding.top] Padding top value
+    * @property {Number} [padding.right] Padding right value
+    * @property {Number} [padding.bottom] Padding bottom value
+    */
+    this.padding = function(padding){}
+
+    /**
+    * This method allows getting view to the front.
+    *
+    *     @example
+    *     const View = require('sf-core/ui/view');
+    *     var myView = new View();
+    *     myView.bringToFront();
+    *
+    * @method bringToFront
+    */
+    this.bringToFront = function(){}
+
+    /**
+    * Getter of this view's parent view.
+    *
+    * @return {View} Parent view of this view, or null if not exists.
+    */
+    this.getParent = function(){}
+
+    /**
      * This method returns all position values in one object.
      * 
      * @return {Object} Object with properties:
