@@ -8,6 +8,5 @@ module.exports = {
     Button: require('./button').Button,
     StateList: require('./button').StateList,
     ActivityIndicator: require('./activityindicator'),
-    Switch: require('./switch'),
-    ViewGroup: require('./viewgroup')
+    Switch: require('./switch')
 };
