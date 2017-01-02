@@ -17,6 +17,7 @@ const Label = extend(View)(
             self.nativeObject.setSmoothScrollingEnabled(true);
             self.nativeObject.setHorizontalScrollBarEnabled(false);
             self.nativeObject.setVerticalScrollBarEnabled(false);
+            self.nativeObject.setFillViewport(true);
         }
         _super(this);
 
@@ -50,7 +51,7 @@ const Label = extend(View)(
                 if(font){
                     fontInitial = font;
                     var nativeObject = self.nativeInner ? self.nativeInner : self.nativeObject;
-                    if(font.nativeInner)
+                    if(font.nativeObject)
                         nativeObject.setTypeface(font.nativeObject);
                     if(font.size && TypeUtil.isNumeric(font.size))
                        nativeObject.setTextSize(font.size) ;
