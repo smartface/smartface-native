@@ -53,8 +53,12 @@ function Page(params) {
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
-     *     var page = new Page();
-     *     var rootContainer = page.viewgroup;
+     *     const Label = require('sf-core/ui/label');
+     *     var myPage = new Page();
+     *     var myLabel = new Label({
+     *          text: "Smartface Label"
+     *     });
+     *     myPage.rootContainer.addChild(myLabel);
      *
      * @property {ViewGroup} viewgroup Root container of page.
      */

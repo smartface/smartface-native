@@ -9,6 +9,5 @@ module.exports = {
     StateList : require('./button').StateList,
     ActivityIndicator: require('./activityindicator'),
     Switch: require('./switch'),
-    Page: require('./page'),
-    Animation: require('./animation')
+    Page: require('./page')
 };
