@@ -1,15 +1,48 @@
-var AlertButtonType = {
-    POSITIVE: 0,
-    NEUTRAL: 1,
-    NEGATIVE: 2,
-};
+/** @enum {Number} UI.AlertView.AlertButtonType 
+ * AlertButtonType is an enum. It defines button types when they 
+ * display on an alert window. There are three types of action button.
+ * 
+ *     @example
+ *     const AlertButtonType = require('sf-core/ui/alertView').AlertButtonType;
+ *     var myAlertButtonType = AlertButtonType.NEUTRAL;
+ */
+var AlertButtonType = { };
 
 /**
- * @class AlertView
+ * @property {Number} POSITIVE
+ * Accept the action and continue.
+ */
+AlertButtonType.POSITIVE = 0;
+
+/**
+ * @property {Number} NEUTRAL
+ * Don't accept the action but don't cancel. 
+ * It can be used with the action of "Ask me later".
+ */
+AlertButtonType.NEUTRAL = 1;
+
+/**
+ * @property {Number} NEGATIVE
+ * Cancel the action.
+ */
+AlertButtonType.NEGATIVE = 2;
+
+/**
+ * @class UI.AlertView
  *
  * Alert view class represents an alert box with a specified 
  * properties(message, title, onClick attributes etc.).
- *
+ * 
+ *     @example
+ *     const AlertView = require('sf-core/ui/alertView').AlertView;
+ *     const AlertButtonType = require('sf-core/ui/alertView').AlertButtonType;
+ *     var myAlertView = new AlertView();
+ *     var params = {
+ *         index: AlertButtonType.POSITIVE, 
+ *         text: "Alert text", 
+ *         onClick: function(){}
+ *     };
+ *     myAlertView.addButton(params);
  */
 function AlertView () {
 
@@ -31,6 +64,7 @@ function AlertView () {
      * Gets the alert view is active or not. isShowing is a read only property.
      * 
      * @property {boolean} isShowing Alert view visibility
+     * @readonly
      */
     this.isShowing = false; // read only
 
@@ -54,7 +88,8 @@ function AlertView () {
      * text, onClick) separately.
      * 
      *     @example
-     *     const AlertView = require('sf-core/ui/alertView');
+     *     const AlertView = require('sf-core/ui/alertView').AlertView;
+     *     const AlertButtonType = require('sf-core/ui/alertView').AlertButtonType;
      *     var myAlertView = new AlertView();
      *     var params = {
      *         index: AlertButtonType.POSITIVE, 
