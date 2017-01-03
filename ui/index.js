@@ -7,5 +7,7 @@ module.exports = {
     Color: require('./color'),
     Switch: require('./switch'),
     Button : require('./button'),
-    ActivityIndicator: require('./activityindicator')
+    ActivityIndicator: require('./activityindicator'),
+    AlertView: require('./alertview').AlertView,
+    AlertButtonType: require('./alertview').AlertButtonType
 };
