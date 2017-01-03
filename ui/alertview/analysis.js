@@ -47,9 +47,11 @@ AlertButtonType.NEGATIVE = 2;
  *     var myAlertView = new AlertView();
  *     var params = {
  *         index: AlertButtonType.POSITIVE, 
- *         text: "Alert text", 
+ *         text: "OK", 
  *         onClick: function(){}
  *     };
+ *     myAlertView.title = "Alert Title";
+ *     myAlertView.message = "Alert message";
  *     myAlertView.addButton(params);
  */
 function AlertView () {
@@ -106,7 +108,7 @@ function AlertView () {
      *     var myAlertView = new AlertView();
      *     var params = {
      *         index: AlertButtonType.POSITIVE, 
-     *         text: "Alert text", 
+     *         text: "OK", 
      *         onClick: function(){}
      *     };
      *     myAlertView.addButton(params);
