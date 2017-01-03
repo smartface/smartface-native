@@ -1,6 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
+const SFTextAlignment = require("sf-core/ui/textalignment");
 
 const Label = extend(View)(
     function (_super, params) {
@@ -13,7 +14,7 @@ const Label = extend(View)(
         self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
-	    self.nativeObject.textAlignmentNumber = 3;
+	    self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
 	    
         Object.defineProperty(self, 'htmlText', {
             get:function() {
