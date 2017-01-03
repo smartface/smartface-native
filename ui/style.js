@@ -1,5 +1,6 @@
 /**
- * @class Style
+ * @class UI.Style
+ * @since 0.1
  * 
  * This class wraps common UI styling options. Instances of Style
  * class can be set to style property of any UI object. For same
@@ -11,9 +12,12 @@
  *         width: "80%",
  *         height: "10%"
  *     });
+ *     myLabel.text = "My label text";
+ * 
  *     const Style = require('sf-core/ui/style');
+ *     const Color = require('sf-core/ui/color');
  *     myLabel.style = new Style({
- *         borderColor: "#000000",
+ *         borderColor: Color.create("#000000"),
  *         borderWidth: 2
  *     });
  */
@@ -22,6 +26,7 @@ function Style(params) {
      * Sets/gets border color of bounded view.
      * 
      * @property {Color} borderColor 
+     * @since 0.1
      */
     var borderColor = "";
     Object.defineProperty(this, 'borderColor', {
@@ -41,6 +46,7 @@ function Style(params) {
      * numbers, 0 means no border.
      * 
      * @property {Number} borderWidth 
+     * @since 0.1
      */
     var borderWidth = 0;
     Object.defineProperty(this, 'borderWidth', {
