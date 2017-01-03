@@ -42,9 +42,9 @@ function Page(params) {
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var page = new Page();
-     *     label.android.backButtonEnabled = false;
+     *     page.android.backButtonEnabled = false;
      *
-     * @property {Boolean} backButtonEnabled Back button effect status for pages.
+     * @property {Boolean} backButtonEnabled. Back button effect status for pages.
      */
     this.android.backButtonEnabled = false;
 
@@ -56,11 +56,11 @@ function Page(params) {
     *     const Label = require('sf-core/ui/label');
     *     var myPage = new Page();
     *     var myLabel = new Label();
-    *     myPage.addChild(myLabel);
+    *     myPage.add(myLabel);
     *
-    * @method addChild
+    * @method add
     */
-    this.addChild = function(){};
+    this.add = function(){};
 
     /**
     * Remove view or container to the page.
@@ -70,12 +70,12 @@ function Page(params) {
     *     const Label = require('sf-core/ui/label');
     *     var myPage = new Page();
     *     var myLabel = new Label();
-    *     myPage.addChild(myLabel);
-    *     myPage.removeChild(myLabel);
+    *     myPage.add(myLabel);
+    *     myPage.remove(myLabel);
     *
-    * @method removeChild
+    * @method remove
     */
-    this.removeChild = function(){};
+    this.remove = function(){};
 }
 
 module.exports = Page;
