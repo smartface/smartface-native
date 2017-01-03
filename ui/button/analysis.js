@@ -47,21 +47,21 @@ const Button = extend(View)(
          *     const Color = require('sf-core/ui/color');
          *     var myButton = new Button();
          *     myButton.textColors = new StateList({  
-         *         normal: Color.WHITE, 
+         *         normal: Color.BLACK, 
          *         disabled: Color.BLACK, 
-         *         selected: Color.LIGHTGRAY,  
-         *         pressed: Color.DARKGRAY,
-         *         focused: Color.DARKGRAY  
+         *         selected: Color.BLACK,  
+         *         pressed: Color.BLACK,
+         *         focused: Color.BLACK  
          *     }); 
          * @since 0.1
          * @property {StateList} textColors 
          */
         this.textColors = new StateList( {
-            normal: Color.WHITE, 
+            normal: Color.BLACK, 
             disabled: Color.BLACK, 
-            selected: Color.LIGHTGRAY, 
-            pressed: Color.DARKGRAY, 
-            focused: Color.DARKGRAY       
+            selected: Color.BLACK, 
+            pressed: Color.BLACK, 
+            focused: Color.BLACK       
         } );
 
         /**
@@ -73,7 +73,7 @@ const Button = extend(View)(
          *     const Color = require('sf-core/ui/color');
          *     var myButton = new Button();
          *     myButton.backgroundColors = new StateList({  
-         *         normal: Color.WHITE, 
+         *         normal: Color.LIGHTGRAY, 
          *         disabled: Color.BLACK, 
          *         selected: Color.LIGHTGRAY,  
          *         pressed: Color.DARKGRAY,
@@ -83,7 +83,7 @@ const Button = extend(View)(
          * @property {StateList} backgroundColors 
          */
         this.backgroundColors = new StateList({          
-            normal: Color.WHITE, 
+            normal: Color.LIGHTGRAY, 
             disabled: Color.BLACK, 
             selected: Color.LIGHTGRAY, 
             pressed: Color.DARKGRAY, 
