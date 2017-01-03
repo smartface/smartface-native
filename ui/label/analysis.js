@@ -37,6 +37,7 @@ const Label = extend(View)(
          *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
          * @property {String} htmlText 
+         * @since 0.1
          */
         this.htmlText = "";
 
@@ -54,6 +55,7 @@ const Label = extend(View)(
          *     myLabel.font = Font.create("Arial", 16, Font.BOLD);   
          * 
          * @property {Font} font   
+         * @since 0.1
          */
         this.font = null;
 
@@ -63,6 +65,7 @@ const Label = extend(View)(
          * multiline. 
          * 
          * @property {Boolean} multipleLine 
+         * @since 0.1
          */
         this.multipleLine = true;
 
@@ -70,6 +73,7 @@ const Label = extend(View)(
          * Gets/sets text inside label view.
          * 
          * @property {String} text 
+         * @since 0.1
          */
         this.text = "Text";
 
@@ -84,6 +88,7 @@ const Label = extend(View)(
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
          * 
          * @property {Number} textAlignment  
+         * @since 0.1
          */
         textAlignment = TextAlignment.MIDLEFT;
 
@@ -91,6 +96,7 @@ const Label = extend(View)(
          * Gets/sets text color of view.
          * 
          * @property {Color} textColor 
+         * @since 0.1
          */
         this.textColor = "#000000";
 
@@ -98,6 +104,7 @@ const Label = extend(View)(
          * Sets/gets showing scroll bar when text doesn't fit to label view.
          * 
          * @property {Boolean} showScrollBar
+         * @since 0.1
          */
         this.showScrollBar = true;
         

@@ -15,6 +15,7 @@ function Font() {}
 
 /**
  * @method create
+ * @since 0.1
  * Creates a font object with given family name.
  * 
  *     @example
@@ -45,6 +46,7 @@ Font.create = function(fontFamily, size, style) { }
  * 
  * @param path Font file path
  * @param size Font size
+ * @since 0.1
  * 
  * @static
  */
@@ -55,6 +57,7 @@ Font.createFromFile = function(path, size) { }
  * 
  * @property {Number} NORMAL 
  * @static
+ * @since 0.1
  */
 Font.NORMAL = 1;
 
@@ -63,6 +66,7 @@ Font.NORMAL = 1;
  * 
  * @property {Number} BOLD 
  * @static
+ * @since 0.1
  */
 Font.BOLD = 2;
 
@@ -71,6 +75,7 @@ Font.BOLD = 2;
  * 
  * @property {Number} ITALIC 
  * @static
+ * @since 0.1
  */
 Font.ITALIC = 4;
 
@@ -79,6 +84,7 @@ Font.ITALIC = 4;
  * 
  * @property {Number} BOLD_ITALIC 
  * @static
+ * @since 0.1
  */
 Font.BOLD_ITALIC = 6;
 

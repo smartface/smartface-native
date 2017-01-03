@@ -18,6 +18,7 @@ function Color () {}
  * Constant value for black color. 
  * 
  * @property {Color} BLACK
+ * @since 0.1
  * @static
  */
 Color.BLACK = (red, green, blue);
@@ -26,6 +27,7 @@ Color.BLACK = (red, green, blue);
  * Constant value for blue color. 
  * 
  * @property {Color} BLUE 
+ * @since 0.1
  * @static
  */
 Color.BLUE = (red, green, blue);
@@ -34,6 +36,7 @@ Color.BLUE = (red, green, blue);
  * Constant value for cyan color.  
  * 
  * @property {Color} CYAN 
+ * @since 0.1
  * @static
  */
 Color.CYAN = (red, green, blue);
@@ -42,6 +45,7 @@ Color.CYAN = (red, green, blue);
  * Constant value for dark gray color.  
  * 
  * @property {Color} DARKGRAY 
+ * @since 0.1
  * @static
  */
 Color.DARKGRAY = (red, green, blue);
@@ -50,6 +54,7 @@ Color.DARKGRAY = (red, green, blue);
  * Constant value for gray color.  
  * 
  * @property {Color} GRAY 
+ * @since 0.1
  * @static
  */
 Color.GRAY = (red, green, blue);
@@ -58,6 +63,7 @@ Color.GRAY = (red, green, blue);
  * Constant value for green color.  
  * 
  * @property {Color} GREEN 
+ * @since 0.1
  * @static
  */
 Color.GREEN = (red, green, blue);
@@ -66,6 +72,7 @@ Color.GREEN = (red, green, blue);
  * Constant value for light gray color.  
  * 
  * @property {Color} LIGHTGRAY 
+ * @since 0.1
  * @static
  */
 Color.LIGHTGRAY = (red, green, blue);
@@ -74,6 +81,7 @@ Color.LIGHTGRAY = (red, green, blue);
  * Constant value for magenta color.  
  * 
  * @property {Color} MAGENTA 
+ * @since 0.1
  * @static
  */
 Color.MAGENTA = (red, green, blue);
@@ -82,6 +90,7 @@ Color.MAGENTA = (red, green, blue);
  * Constant value for red color. 
  * 
  * @property {Color} RED 
+ * @since 0.1
  * @static
  */
 Color.RED = (red, green, blue);
@@ -90,6 +99,7 @@ Color.RED = (red, green, blue);
  * Constant value for transparent color.  
  * 
  * @property {Color} TRANSPARENT 
+ * @since 0.1
  * @static
  */
 Color.TRANSPARENT = (red, green, blue);
@@ -98,6 +108,7 @@ Color.TRANSPARENT = (red, green, blue);
  * Constant value for yellow color.  
  * 
  * @property {Color} YELLOW 
+ * @since 0.1
  * @static
  */
 Color.YELLOW = (red, green, blue);
@@ -106,6 +117,7 @@ Color.YELLOW = (red, green, blue);
  * Constant value for white color.  
  * 
  * @property {Color} WHITE 
+ * @since 0.1
  * @static
  */
 Color.WHITE = (red, green, blue);
@@ -128,7 +140,7 @@ Color.WHITE = (red, green, blue);
  * @param {Number} [params.blue] Blue component [0..255] of the color
  * @static
  * @method create
- *
+ * @since 0.1
  */
 Color.create = function(params){}
 
@@ -140,6 +152,7 @@ Color.create = function(params){}
  * @return {Number} Return the red component of a color object.
  * @static
  * @method red
+ * @since 0.1
  */
 Color.red = function(color){ return color.red };
 
@@ -150,6 +163,7 @@ Color.red = function(color){ return color.red };
  * @return {Number} Return the green component of a color object.
  * @static
  * @method green
+ * @since 0.1
  */
 Color.green = function(color){ return color.green };
 
@@ -160,6 +174,7 @@ Color.green = function(color){ return color.green };
  * @return {Number} Return the blue component of a color object.
  * @static
  * @method blue
+ * @since 0.1
  */
 Color.blue = function(color){ return color.blue };
 
@@ -170,6 +185,7 @@ Color.blue = function(color){ return color.blue };
  * @return {Number} Return the alpha component of a color object.
  * @static
  * @method alpha
+ * @since 0.1
  */
 Color.alpha = function(color){ return color.alpha };
 
