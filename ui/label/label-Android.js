@@ -6,6 +6,9 @@ const extend = require('js-base/core/extend');
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
+        var textAlignmentInitial;
+        var viewNativeDefaultTextAlignment;
+        // Is Label Check
         if(!self.nativeObject){
             self.nativeObject = new android.widget.ScrollView(Android.getActivity());
             self.nativeInner = new android.widget.TextView(Android.getActivity());
@@ -18,10 +21,20 @@ const Label = extend(View)(
             self.nativeObject.setHorizontalScrollBarEnabled(false);
             self.nativeObject.setVerticalScrollBarEnabled(false);
             self.nativeObject.setFillViewport(true);
+            
+            textAlignmentInitial = TextAlignment.MIDLEFT;
+            // Gravity.CENTER_VERTICAL | Gravity.LEFT
+            (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(16 | 3);
+            viewNativeDefaultTextAlignment = 16 | 3;
+            
+        }
+        else{
+            textAlignmentInitial = TextAlignment.MIDCENTER;
+            // Gravity.CENTER
+            (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(17);
+            viewNativeDefaultTextAlignment = 17;
         }
         _super(this);
-
-
 
         Object.defineProperty(this, 'htmlText', {
             get: function() {
@@ -83,18 +96,15 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
-        var textAlignmentInitial = TextAlignment.MIDLEFT;
-        // Gravity.CENTER_VERTICAL | Gravity.LEFT
-        (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(16 | 3);
+        
+        
         Object.defineProperty(this, 'textAlignment', {
             get: function() {
                 return textAlignmentInitial;
             },
             set: function(textAlignment) {
                 textAlignmentInitial = textAlignment;
-                // Gravity.CENTER_VERTICAL | Gravity.LEFT
-                var alignment = 16 | 3;
+                var alignment = viewNativeDefaultTextAlignment;
                 switch(textAlignment){
                     case TextAlignment.TOPLEFT:
                         // Gravity.TOP | Gravity.LEFT
