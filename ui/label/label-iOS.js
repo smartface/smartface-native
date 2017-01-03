@@ -13,7 +13,7 @@ const Label = extend(View)(
         self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
-	    self.nativeObject.textAlignmentNumber = 4;
+	    self.nativeObject.textAlignmentNumber = 3;
 	    
         Object.defineProperty(self, 'htmlText', {
             get:function() {
