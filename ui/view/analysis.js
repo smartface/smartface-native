@@ -25,6 +25,7 @@ function View(params) {
      * represents view is completely opaque.
      *
      * @property {Number} alpha 
+     * @member UI.View
      * @since 0.1
      */
     this.alpha = 1.0;
@@ -34,6 +35,7 @@ function View(params) {
      * color with string or UI.Color properties.
      * 
      * @property {Color} backgroundColor 
+     * @member UI.View
      * @since 0.1
      */ 
     this.backgroundColor = "#FFFFFF";
@@ -43,6 +45,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} height 
+     * @member UI.View
      * @since 0.1
      */
     this.height = "0%";
@@ -52,6 +55,7 @@ function View(params) {
      * inside project.
      * 
      * @property {Number} id View identifier
+     * @member UI.View
      * @since 0.1
      */
     this.id = 5421;
@@ -61,6 +65,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} left 
+     * @member UI.View
      * @since 0.1
      */
     this.left = "0%";
@@ -69,6 +74,7 @@ function View(params) {
      * Gets/sets style of view. 
      * 
      * @property {Style} style
+     * @member UI.View
      * @since 0.1
      */
     this.style = {};
@@ -78,6 +84,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} top 
+     * @member UI.View
      * @since 0.1
      */
     this.top = "0%";
@@ -86,6 +93,7 @@ function View(params) {
      * Gets/sets visibility of view. It is set to true as default.
      * 
      * @property {Boolean} visible 
+     * @member UI.View
      * @since 0.1
      */
     this.visible = true;
@@ -95,6 +103,7 @@ function View(params) {
      * related to touches won't fire. It is set to true as default.
      * 
      * @property {Boolean} touchEnabled 
+     * @member UI.View
      * @since 0.1
      */
     this.touchEnabled = true;
@@ -104,6 +113,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} width 
+     * @member UI.View
      * @since 0.1
      */
     this.width = "0%";
@@ -116,6 +126,7 @@ function View(params) {
      * @return {Number} return.height Height value
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
+     * @member UI.View
      * @since 0.1
      */
     this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
@@ -142,6 +153,7 @@ function View(params) {
      * @param {Number} [position.left] Position X value
      * @param {Number} [position.top] Position Y value
      * @method setPosition
+     * @member UI.View
      * @since 0.1
      */
     this.setPosition = function(position){}
@@ -150,6 +162,7 @@ function View(params) {
      * Gets/sets touch event for view. This event fires when touch started.
      * 
      * @event onTouch
+     * @member UI.View
      * @since 0.1
      */
     this.onTouch = function onTouch(){ }
@@ -159,6 +172,7 @@ function View(params) {
      * finished.
      * 
      * @event onTouchEnded
+     * @member UI.View
      * @since 0.1
      */
     this.onTouchEnded = function onTouchEnded(){ }

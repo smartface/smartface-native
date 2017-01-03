@@ -3,6 +3,7 @@ const View = require('../view');
 
 /**
  * @class UI.ActivityIndicator
+ * @extends UI.View
  * @since 0.1
  * 
  * ActivityIndicator class shows a progress of some background task.

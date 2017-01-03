@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 
 /**
  * @class UI.Button
+ * @extends UI.View
  * @since 0.1
  *
  * Button class represents a clickable object to user interface. 
