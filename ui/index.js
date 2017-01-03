@@ -8,5 +8,7 @@ module.exports = {
     Button: require('./button').Button,
     StateList: require('./button').StateList,
     ActivityIndicator: require('./activityindicator'),
-    Switch: require('./switch')
+    Switch: require('./switch'),
+    AlertView: require('./alertview').AlertView,
+    AlertButtonType: require('./alertview').AlertButtonType
 };
