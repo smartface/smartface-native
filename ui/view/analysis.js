@@ -87,45 +87,67 @@ function View(params) {
     this.width = "0%";
 
     /**
-    * Gets/sets padding of view. Setting number as pixels.
-    *
-    *     @example
-    *     const View = require('sf-core/ui/view');
-    *     var myView = new View();
-    *     var padding = {
-    *         width: 15,
-    *         height: 10,
-    *         top: 15,
-    *         left: 10
-    *     };
-    *     myView.padding = padding;
-    *
-    * @property {Object} padding Object describing padding values
-    * @property {Number} [padding.left] Padding left value
-    * @property {Number} [padding.top] Padding top value
-    * @property {Number} [padding.right] Padding right value
-    * @property {Number} [padding.bottom] Padding bottom value
-    */
-    this.padding = function(padding){}
+     * Gets/sets padding of view. Setting number as pixels.
+     *
+     *     @example
+     *     const View = require('sf-core/ui/view');
+     *     var myView = new View();
+     *     var padding = {
+     *         left: 15,
+     *         top: 10,
+     *         right: 15,
+     *         bottom: 10
+     *     };
+     *     myView.padding = padding;
+     *
+     * @property {Object} padding Object describing padding values
+     * @param {Number} [padding.left] Padding left value
+     * @param {Number} [padding.top] Padding top value
+     * @param {Number} [padding.right] Padding right value
+     * @param {Number} [padding.bottom] Padding bottom value
+     */
+    this.padding = {left: 15, top: 10, right: 15, bottom:10};
 
     /**
-    * This method allows getting view to the front.
-    *
-    *     @example
-    *     const View = require('sf-core/ui/view');
-    *     var myView = new View();
-    *     myView.bringToFront();
-    *
-    * @method bringToFront
-    */
-    this.bringToFront = function(){}
+     * This method allows getting view to the front.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     var myLabelBehind = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "10%",
+     *         left: "15%",
+     *         text: "Label at behind",
+     *         backgroundColor: Color.BLUE,
+     *         textColor: Color.WHITE
+     *     });
+     *     var myLabelFront = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "15%",
+     *         left: "15%",
+     *         text: "Label at front"
+     *         backgroundColor: Color.BLACK,
+     *         textColor: Color.CYAN
+     *     });
+     *     myPage.add(myLabelBehind);
+     *     myPage.add(myLabelFront);
+     *     myLabelFront.bringToFront();
+     *
+     * @method bringToFront
+     */
+    this.bringToFront = function(){};
 
     /**
-    * Getter of this view's parent view.
-    *
-    * @return {View} Parent view of this view, or null if not exists.
-    */
-    this.getParent = function(){}
+     * Getter of this view's parent view.
+     *
+     * @return {View} Parent view of this view, or null if not exists.
+     */
+    this.getParent = function(){};
 
     /**
      * This method returns all position values in one object.
@@ -136,7 +158,7 @@ function View(params) {
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
      */
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
+    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; };
 
     /**
      * This method allows setting all position values within one function call.
@@ -161,14 +183,14 @@ function View(params) {
      * @param {Number} [position.top] Position Y value
      * @method setPosition
      */
-    this.setPosition = function(position){}
+    this.setPosition = function(position){};
 
     /**
      * Gets/sets touch event for view. This event fires when touch started.
      * 
      * @event onTouch
      */
-    this.onTouch = function onTouch(){ }
+    this.onTouch = function onTouch(){};
 
     /**
      * Gets/sets touch ended event for view. This event fires when touch
@@ -176,7 +198,7 @@ function View(params) {
      * 
      * @event onTouchEnded
      */
-    this.onTouchEnded = function onTouchEnded(){ }
+    this.onTouchEnded = function onTouchEnded(){};
 }
 
 module.exports = View;
