@@ -70,6 +70,7 @@ const Label = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.text = value;
+                self.nativeObject.textColor = _textColor;
             },
             enumerable: true
         });
