@@ -6,7 +6,7 @@
 *
 *     @example
 *     const TextAlignment = require('sf-core/ui/textalignment');
-*     var textAlignment = TextAlignment.TOPLEFT; 
+*     var textAlignment = TextAlignment.MIDCENTER; 
 */
 const TextAlignment = { }
 

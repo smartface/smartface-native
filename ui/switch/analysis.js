@@ -7,6 +7,7 @@
  * 
  *     @example
  *     const Switch = require('sf-core/ui/switch');
+ *     const Color = require('sf-core/ui/color');
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.WHITE;
  */
@@ -47,6 +48,7 @@ function Switch(params) {
      * @since 0.1
      *     @example
      *     const Switch = require('sf-core/ui/switch');
+     *     const Color = require('sf-core/ui/color');
      *     var mySwitch = new Switch();
      *     mySwitch.android.toggleOffColor = Color.DARKGRAY;
      */

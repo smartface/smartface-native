@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
- * @class Label
+ * @class UI.Label
  * @since 0.1
  * @extends View
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
@@ -12,8 +12,14 @@ const extend = require('js-base/core/extend');
  *         text: "This is my label",
  *         visible: true
  *     });
+ *     myLabel.setPosition({
+ *         width: "80%", 
+ *         height: "20%", 
+ *         top: "10%",
+ *         left: "20%"
+ *     });
  *     const Color = require('sf-core/ui/color');
- *     myLabel.backgroundColor = Color.create("#00FFFFFF");
+ *     myLabel.backgroundColor = Color.GRAY;
  */
 const Label = extend(View)(
     function (_super, params) {
@@ -27,18 +33,16 @@ const Label = extend(View)(
          *     // In this example 'This link' text inside Label will shown blue and
          *     // underlined
          *     const Label = require('sf-core/ui/label');
-         *     var label = new Label();
-         *     label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
+         *     var myLabel = new Label();
+         *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
-         * @property {String} htmlText HTML text to display in object
+         * @property {String} htmlText 
          */
         this.htmlText = "";
 
         /**
          * Gets/sets font of label view. When set to null label uses system font.
          * It is set to null by default.
-         * 
-         * @property {Font} font Font of label view.
          * 
          *     @example 
          *     const Label = require('sf-core/ui/label');
@@ -47,7 +51,9 @@ const Label = extend(View)(
          *         visible: true
          *     });
          *     const Font = require('sf-core/ui/font');
-         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);     
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);   
+         * 
+         * @property {Font} font   
          */
         this.font = null;
 
@@ -56,35 +62,35 @@ const Label = extend(View)(
          * and text is too long to show in single line label shows text as 
          * multiline. 
          * 
-         * @property {Boolean} multipleLine Show multiple line in label 
+         * @property {Boolean} multipleLine 
          */
         this.multipleLine = true;
 
         /**
          * Gets/sets text inside label view.
          * 
-         * @property {String} text Text inside label
+         * @property {String} text 
          */
         this.text = "Text";
 
         /**
          * Gets/sets text alignment of label view. UI.TextAlignment constants
-         * can be used.
-         *  
-         * @property {Number} textAlignment Text alignment
+         * can be used.  
          * 
          *     @example
          *     const Label = require('sf-core/ui/label');
-         *     var label = new Label();
+         *     var myLabel = new Label();
          *     const TextAlignment = require('sf-core/ui/textalignment');
-         *     label.textAlignment = TextAlignment.MIDCENTER;   
+         *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
+         * 
+         * @property {Number} textAlignment  
          */
         textAlignment = TextAlignment.MIDLEFT;
 
         /**
          * Gets/sets text color of view.
          * 
-         * @property {Color} textColor Text Color
+         * @property {Color} textColor 
          */
         this.textColor = "#000000";
 

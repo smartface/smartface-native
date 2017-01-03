@@ -4,7 +4,19 @@
  *
  * View class represents a rectangular area drawable to user interface. This class
  * is base of all UI classes.
- *
+ * 
+ *     @example
+ *     const View = require('sf-core/ui/view');
+ *     var myView = new View();
+ *     var position = {
+ *         width: "30%", 
+ *         height: "50%", 
+ *         top: "70%",
+ *         left: "90%"
+ *     }
+ *     myView.setPosition(position);
+ *     const Color = require('sf-core/ui/color');
+ *     myView.backgroundColor = Color.RED;
  */
 function View(params) {
     /** 
