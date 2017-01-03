@@ -11,7 +11,7 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const Button = require('sf-core/ui/button');
  *     var myButton = new Button();
- *     myButton.text = "Click me!"
+ *     myButton.text = "Click me!";
  */
 const Button = extend(View)(
     function (_super, params) {
