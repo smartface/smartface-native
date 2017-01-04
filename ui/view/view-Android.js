@@ -51,6 +51,7 @@ function View(params) {
         },
         set: function(height) {
             heightInitial = height;
+            setLayoutParam();
         },
         enumerable: true
      });
@@ -72,6 +73,7 @@ function View(params) {
         },
         set: function(left) {
             leftInitial = left;
+            setLayoutParam();
         },
         enumerable: true
      });
@@ -83,6 +85,7 @@ function View(params) {
         },
         set: function(top) {
             topInitial = top;
+            setLayoutParam();
         },
         enumerable: true
      });
@@ -110,6 +113,7 @@ function View(params) {
         },
         set: function(width) {
             widthInitial = width;
+            setLayoutParam();
         },
         enumerable: true
      });
@@ -212,7 +216,19 @@ function View(params) {
         //     strokePaint.setAlpha (0);
         // }
         setBackground(1);
-    } 
+    }
+
+    function setLayoutParam(){
+        // @todo this calculation must be implemented in container
+        var layoutDimens = [!TypeUtil.isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
+                            !TypeUtil.isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
+                            !TypeUtil.isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
+                            !TypeUtil.isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
+        var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
+                            layoutDimens[0], layoutDimens[1],
+                            layoutDimens[2], layoutDimens[3]);
+        self.nativeObject.setLayoutParams(layoutParams);
+    }
 
     function setBackground(layerIndex){
         switch (layerIndex){
@@ -224,6 +240,8 @@ function View(params) {
         }
         self.nativeObject.setBackground(layerDrawable);
     }
+
+
     
 }
 

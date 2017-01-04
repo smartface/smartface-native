@@ -2,10 +2,12 @@ const View = require('../view');
 const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 
-var LayoutType.ViewGroup = 0;
-var LayoutType.Linear = 1;
-var LayoutType.Relative = 2;
-var LayoutType.Absolute = 3;
+var LayoutType = {
+    ViewGroup: 0,
+    Linear: 1,
+    Relative: 2,
+    Absolute: 3
+}
 
 const ViewGroup = extend(View)(
     function (_super, params) {
@@ -18,13 +20,13 @@ const ViewGroup = extend(View)(
         }
         _super(this);
 
-        if(self.nativeObject.toString().contains("Relative")){
+        if(self.nativeObject.toString().indexOf("Relative") !== -1){
             layoutType = LayoutType.Relative;
         }
-        else if(self.nativeObject.toString().contains("Linear")){
+        else if(self.nativeObject.toString().indexOf("Linear") !== -1){
             layoutType = LayoutType.Linear;
         }
-        else if(self.nativeObject.toString().contains("Absolute"){
+        else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
             layoutType = LayoutType.Absolute;
         }
         else{
@@ -32,12 +34,14 @@ const ViewGroup = extend(View)(
         }
 
         this.addChild = function(view){
-            addChildAt(view,-1);
+            self.addChildAt(view,-1);
         };
 
 
         this.addChildAt = function(view, index){
+            alert('@@@@ view.getInitialPosition(): '+JSON.stringify(view.getInitialPosition()))
             var viewPosition = generateViewPosition(view.getInitialPosition());
+            alert("@@@@@ viewPosition: "+JSON.stringify(viewPosition))
             var layoutParams;
             if(layoutType == LayoutType.Linear){
                 // @todo change after implementation of LinearLayout
@@ -49,7 +53,7 @@ const ViewGroup = extend(View)(
                 layoutParams = new android.widget.RelativeLayout.LayoutParams(
                                             viewPosition.width, viewPosition.height);
             }
-            else if(layoutType == LayoutType.AbsoluteLayout){
+            else if(layoutType == LayoutType.Absolute){
                 layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
                                             viewPosition.width, viewPosition.height,
                                             viewPosition.left, viewPosition.top);
@@ -93,7 +97,6 @@ const ViewGroup = extend(View)(
         function generateViewPosition(paramViewPosition){
             // % values must handle here. Im searching for getting parent height.width
             var viewPosition = {};
-
             for(var positionKey in paramViewPosition){
                 if(paramViewPosition[positionKey]){
                     if(paramViewPosition[positionKey] < 0){
@@ -101,7 +104,7 @@ const ViewGroup = extend(View)(
                     }
                     else{
                         if(!TypeUtil.isNumeric(paramViewPosition[positionKey])){
-                            viewPosition[positionKey] = self[positionKey] * (parseInt(widthInitial.replace("%")))/100;
+                            viewPosition[positionKey] = self[positionKey] * (parseInt(paramViewPosition[positionKey].replace("%")))/100;
                         }
                         else{
                             viewPosition[positionKey] = paramViewPosition[positionKey];
