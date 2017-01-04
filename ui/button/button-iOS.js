@@ -14,9 +14,13 @@ const ButtonState = {
 
 const Button = extend(View)(
      function (_super, params) {
-        _super(this);
         var self = this;
-        self.nativeObject = new SMFUIButton();
+        
+        if(!self.nativeObject){
+            self.nativeObject = new SMFUIButton(); 
+        }
+          
+        _super(this);
         
         var _text;
         Object.defineProperty(self, 'text', {

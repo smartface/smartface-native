@@ -5,10 +5,14 @@ const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const Switch = extend(View)(
     function (_super, params)  {
-         _super(this);
-        var self = this;
-
-       self.nativeObject = new UISwitch();
+       var self = this;
+       
+       if(!self.nativeObject){
+           self.nativeObject = new UISwitch();            
+       }
+         
+       _super(this);
+       
        self.nativeObject.thumbTintColor = Color.GRAY; //thumbOffColor
        self.nativeObject.onTintColor = Color.GRAY; // toggleOnColor
        

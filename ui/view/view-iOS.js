@@ -1,6 +1,11 @@
 function View(params) {
     var self = this;
     
+    if(!self.nativeObject){
+        alert("View Init");
+        self.nativeObject = new SMFUIView();
+    }
+    
     var _style;
     Object.defineProperty(self, 'style', {
         get: function() {
