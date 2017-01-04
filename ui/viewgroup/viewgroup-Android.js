@@ -2,9 +2,10 @@ const View = require('../view');
 const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 
-var LayoutType.Linear = 0;
-var LayoutType.Relative = 1;
-var LayoutType.Absolute = 2;
+var LayoutType.ViewGroup = 0;
+var LayoutType.Linear = 1;
+var LayoutType.Relative = 2;
+var LayoutType.Absolute = 3;
 
 const ViewGroup = extend(View)(
     function (_super, params) {
@@ -16,16 +17,19 @@ const ViewGroup = extend(View)(
             return;
         }
         _super(this);
+
         if(self.nativeObject.toString().contains("Relative")){
             layoutType = LayoutType.Relative;
         }
         else if(self.nativeObject.toString().contains("Linear")){
             layoutType = LayoutType.Linear;
         }
-        else{
+        else if(self.nativeObject.toString().contains("Absolute"){
             layoutType = LayoutType.Absolute;
         }
-
+        else{
+            layoutType = LayoutType.ViewGroup;
+        }
 
         this.addChild = function(view){
             addChildAt(view,-1);
@@ -45,8 +49,13 @@ const ViewGroup = extend(View)(
                 layoutParams = new android.widget.RelativeLayout.LayoutParams(
                                             viewPosition.width, viewPosition.height);
             }
-            else{
+            else if(layoutType == LayoutType.AbsoluteLayout){
                 layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
+                                            viewPosition.width, viewPosition.height,
+                                            viewPosition.left, viewPosition.top);
+            }
+            else{
+                layoutParams = new android.view.ViewGroup.LayoutParams(
                                             viewPosition.width, viewPosition.height,
                                             viewPosition.left, viewPosition.top);
             }
@@ -81,8 +90,26 @@ const ViewGroup = extend(View)(
             return self.nativeObject.findViewById(id);
         };
 
-        function generateViewPosition(viewPosition){
+        function generateViewPosition(paramViewPosition){
             // % values must handle here. Im searching for getting parent height.width
+            var viewPosition = {};
+
+            for(var positionKey in paramViewPosition){
+                if(paramViewPosition[positionKey]){
+                    if(paramViewPosition[positionKey] < 0){
+                        viewPosition[positionKey] = paramViewPosition[positionKey]
+                    }
+                    else{
+                        if(!TypeUtil.isNumeric(paramViewPosition[positionKey])){
+                            viewPosition[positionKey] = self[positionKey] * (parseInt(widthInitial.replace("%")))/100;
+                        }
+                        else{
+                            viewPosition[positionKey] = paramViewPosition[positionKey];
+                        }
+                    }
+                }
+            }
+            return viewPosition;
         }
 
         // Assign parameters given in constructor
