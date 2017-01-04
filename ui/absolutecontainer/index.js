@@ -1,0 +1,1 @@
+module.exports = require('./absolutecontainer-' + Device.deviceOS + '.js');
