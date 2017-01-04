@@ -1,179 +1,84 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-/**
- * @class UI.ViewGroup
- * @since 0.1
- * @extends View
- * A ViewGroup is a special view that can contain other views (called children) like layouts and views.
- * ViewGroup is an abstract class. You can't create instance from it.
- */
+
+var LayoutType.Linear = 0;
+var LayoutType.Relative = 1;
+var LayoutType.Absolute = 2;
+
 const ViewGroup = extend(View)(
     function (_super, params) {
+        var self = this;
+        var layoutType;
+        var layoutParamConstructor;
+        if(!self.nativeObject){
+            throw "Can't create instance from ViewGroup. It is an abstract class."
+            return;
+        }
         _super(this);
-
-        /**
-        * Adds a child view to container. View will be added on native decided index.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChild(myLabel);
-        *
-        * @param {View} view The child view to add.
-        * @method addChild
-        */
-        this.addChild = function(view){};
+        if(self.nativeObject.toString().contains("Relative")){
+            layoutType = LayoutType.Relative;
+        }
+        else if(self.nativeObject.toString().contains("Linear")){
+            layoutType = LayoutType.Linear;
+        }
+        else{
+            layoutType = LayoutType.Absolute;
+        }
 
 
-        /**
-        * Adds a child view at the specified position to the container.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChildAt(myLabel,1);
-        *
-        * @param {View} view The child view to add.
-        * @param {Number} index The position at which to add the child.
-        * @method addChildAt
-        */
-        this.addChildAt = function(view, index){};
+        this.addChild = function(view){
+            addChildAt(view,-1);
+        };
 
-        /**
-        * Remove a child view from container. For removing view must be exists inside the container.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChild(myLabel);
-        *     myViewGroup.removeChild(myLabel);
-        *
-        * @param {View} view The child view to remove.
-        * @method removeChild
-        */
-        this.removeChild = function(view){};
 
-        /**
-        * Remove a child view at the specified position from container. For removing view must be exists on this index.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChildAt(myLabel,2);
-        *     myViewGroup.removeChildAt(2);
-        *
-        * @param {Number} index The position in the container of the view to remove
-        * @method removeChildAt
-        */
-        this.removeChildAt = function(index){};
+        this.addChildAt = function(view, index){
+            var viewPosition = view.getInitialPosition();
+            var layoutParams;
+            if(layoutType == LayoutType.Linear){
+                // @todo change after implementation of LinearLayout
+                layoutParams = new android.widget.LinearLayout.LayoutParams(
+                                            viewPosition.width, viewPosition.height);
+            }
+            else if(layoutType == LayoutType.Relative){
+                // @todo change after implementation of RelativeLayout
+                layoutParams = new android.widget.RelativeLayout.LayoutParams(
+                                            viewPosition.width, viewPosition.height);
+            }
+            else{
+                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
+                                            viewPosition.width, viewPosition.height,
+                                            viewPosition.left, viewPosition.top);
+            }
+            self.nativeObject.addView(view, index, layoutParams);
+        };
 
-        /**
-        * Removes all child views from the container.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChild(myLabel);
-        *     myViewGroup.removeAll();
-        *
-        * @method removeAll
-        */
-        this.removeAll = function(){};
+        this.removeChild = function(view){
+            self.nativeObject.removeView(view.nativeObject);
+        };
 
-        /**
-        * Get the view position from container view hierarchy.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChild(myLabel);
-        *     var position = myViewGroup.getChildIndex(myLabel);
-        *
-        * @param {View} view The child view to get index.
-        * @returns {Number} a positive number representing the position of the view in the container, or -1 if the view does not exist within the container
-        * @method getChildIndex
-        */
-        this.getChildIndex = function(view){};
+        this.removeChildAt = function(index){
+            self.nativeObject.removeViewAt(index);
+        };
 
-        /**
-        * Get a child view at the specified position from container .
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     myViewGroup.addChildAt(myLabel,1);
-        *     var childView = myViewGroup.getChildIndex(1);
-        *
-        * @param {Number} The position at which to get the view from.
-        * @returns {View} Child view at the specified position from container, or null if the view does not exist within the container
-        * @method getChildIndex
-        */
-        this.getChildAtIndex = function(index){};
+        this.removeAll = function(){
+            self.nativeObject.removeAllViews();
+        };
 
-        /**
-        * Get child view count from container.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label"
-        *     });
-        *     var childViewCount = myViewGroup.getChildCount();
-        *
-        * @returns {Number} The number of children in the container, or 0 if there is no child exists within the container.
-        * @method getChildCount
-        */
-        this.getChildCount = function(){};
+        this.getChildIndex = function(view){
+            return self.nativeObject.indexOfChild(view.nativeObject);
+        };
 
-        /**
-        * Finds a child view with specified id within the container.
-        *
-        *     @example
-        *     const ViewGroup = require('sf-core/ui/viewgroup');
-        *     const Label = require('sf-core/ui/label');
-        *     var myViewGroup = new ViewGroup();
-        *     var myLabel = new Label({
-        *          text: "Smartface Label",
-        *          id: 11235
-        *     });
-        *     var childView = myViewGroup.findChildById(11235);
-        *
-        * @param {Number} id The specified id of the view.
-        * @returns {View} Founded view within the container, or null if view does not exists within the container.
-        * @method findChildById
-        */
-        this.findChildById = function(id){};
+        this.getChildAtIndex = function(index){
+            return self.nativeObject.getChildAt(index);
+        };
 
+        this.getChildCount = function(){
+            return self.nativeObject.getChildCount();
+        };
+
+        this.findChildById = function(id){
+            return self.nativeObject.findViewById(id);
+        };
 
         // Assign parameters given in constructor
         if (params) {

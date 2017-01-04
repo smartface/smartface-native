@@ -127,6 +127,15 @@ function View(params) {
         }; 
     };
 
+    this.getInitialPosition = function(){
+        return  {
+            width: widthInitial,
+            height: heightInitial,
+            top: topInitial,
+            left: leftInitial
+        };
+    };
+
     this.setPosition = function(position){
         widthInitial = position.width;
         heightInitial = position.height;
