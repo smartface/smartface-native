@@ -26,18 +26,6 @@ function View(params) {
         },
         enumerable: true
     });
-    
-    var _id;
-    Object.defineProperty(this, 'id', {
-        get: function() {
-            return _id;
-        },
-        set: function(value) {
-            _id = value;
-            self.nativeObject.tag = value; 
-        },
-        enumerable: true
-    });
      
     Object.defineProperty(self, 'alpha', {
         get: function() {
