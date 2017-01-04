@@ -109,25 +109,23 @@ const Button = extend(View)(
             enumerable: true
         });
         
-        var backgroundImagesInitial = new StateList({          
-            normal: "", 
-            disabled: "", 
-            selected: "", 
-            pressed: "", 
-            focused: ""
-        });
+        var backgroundImagesInitial = new StateList({});
         Object.defineProperty(this, 'backgroundImages', {
             get: function() {
                 return backgroundImagesInitial;
             }, 
             set: function(bgImages) {
                 backgroundImagesInitial = bgImages;
-
-                self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal,ButtonState.normal);
-                self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled,ButtonState.disabled);
-                self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected,ButtonState.selected);
-                self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed,ButtonState.pressed);
-                self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused,ButtonState.focused);
+                if (backgroundImagesInitial.normal)
+                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.normal),ButtonState.normal);
+                if (backgroundImagesInitial.disabled)
+                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.disabled),ButtonState.disabled);
+                if (backgroundImagesInitial.selected)
+                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.selected),ButtonState.selected);
+                if (backgroundImagesInitial.pressed)
+                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.pressed),ButtonState.pressed);
+                if (backgroundImagesInitial.focused)
+                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.focused),ButtonState.focused);
             },
             enumerable: true
         });
