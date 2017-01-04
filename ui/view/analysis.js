@@ -130,13 +130,13 @@ function View(params) {
      *         height: "10%",
      *         top: "15%",
      *         left: "15%",
-     *         text: "Label at front"
+     *         text: "Label at front",
      *         backgroundColor: Color.BLACK,
      *         textColor: Color.CYAN
      *     });
      *     myPage.add(myLabelBehind);
      *     myPage.add(myLabelFront);
-     *     myLabelFront.bringToFront();
+     *     myLabelBehind.bringToFront();
      *
      * @method bringToFront
      */
