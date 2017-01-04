@@ -24,6 +24,6 @@
   "homepage": "http://bitbucket.org/smartface-team/core-modules#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "salep": "0.0.2"
+    "salep": "0.1.*"
   }
 }
