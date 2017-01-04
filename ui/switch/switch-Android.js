@@ -57,14 +57,15 @@ const Switch = extend(Button)(
                 return thumbOnColorInitial;
             },
             set: function(toggleOnColor) {
-                toggleOnColorInitial = thumbOnColor;
+                toggleOnColorInitial = toggleOnColor;
                 setTrackColor();
             },
             enumerable: true
         });
 
         var toggleOffColorInitial = initialColorUnchecked;
-        Object.defineProperty(this, 'android.toggleOffColor', {
+        this.android = {}
+        Object.defineProperty(this.android, 'toggleOffColor', {
             get: function() {
                 return thumbOnColorInitial;
             },
