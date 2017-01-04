@@ -1,8 +1,8 @@
 /**
  * @class UI.Color
  * @since 0.1
- * Color is a UI object to allow creating colors.A Color instance is created by giving
- * integer values(rgb or argb) or hexadecimal string.Each integer component ranges 
+ * Color is a UI object to allow creating colors. A Color instance is created by giving
+ * integer values(rgb or argb) or hexadecimal string. Each integer component ranges 
  * between 0..255.
  *
  *     @example

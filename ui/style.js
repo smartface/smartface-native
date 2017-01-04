@@ -2,8 +2,8 @@
  * @class UI.Style
  * @since 0.1
  * 
- * This class wraps common UI styling options.Instances of Style
- * class can be set to style property of any UI object.For same
+ * This class wraps common UI styling options. Instances of Style
+ * class can be set to style property of any UI object. For same
  * style object different UI objects can behave different. 
  * 
  *     @example
@@ -42,7 +42,7 @@ function Style(params) {
     });
 
     /**
-     * Sets/gets border thickness of bounded view.Accepts unsigned
+     * Sets/gets border thickness of bounded view. Accepts unsigned
      * numbers, 0 means no border.
      * 
      * @property {Number} borderWidth 

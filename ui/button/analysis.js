@@ -6,7 +6,7 @@ const extend = require('js-base/core/extend');
  * @extends UI.View
  * @since 0.1
  *
- * Button class represents a clickable object to user interface. 
+ * Button class represents a clickable object to user interface.  
  * A button instance consists of text or an icon(or both of them).
  * 
  *     @example
@@ -18,7 +18,7 @@ const Button = extend(View)(
     function (_super, params) {
         _super(this);
         /**
-         * Gets/sets text value.This property displayed in button.
+         * Gets/sets text value. This property displayed in button.
          * 
          * @property {String} text 
          * @since 0.1
@@ -26,7 +26,7 @@ const Button = extend(View)(
         this.text = "";
         
         /**
-         * Gets/sets text alignment of button.TextAlignment constants
+         * Gets/sets text alignment of button. TextAlignment constants
          * can be used.
          * 
          *     @example
@@ -119,7 +119,7 @@ const Button = extend(View)(
         });
 
         /**
-         * Gets/sets press event for view.This event fires when press started.
+         * Gets/sets press event for view. This event fires when press started.
          * 
          * @since 0.1
          * @event onPress
@@ -127,7 +127,7 @@ const Button = extend(View)(
         this.onPress = function onPress(){ }
 
         /**
-         * Gets/sets long press event for view.This event fires when long press started.
+         * Gets/sets long press event for view. This event fires when long press started.
          * 
          * @since 0.1
          * @event onLongPress

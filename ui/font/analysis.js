@@ -2,7 +2,7 @@
  * @class UI.Font
  * @since 0.1
  * 
- * This class is useful when custom or styled font is needed.Created font
+ * This class is useful when custom or styled font is needed. Created font
  * objects can be assigned to objects which shows text (Label, Button etc.).
  * 
  *     @example
@@ -36,7 +36,7 @@ Font.create = function(fontFamily, size, style) { }
 
 /**
  * @method createFromFile
- * Creates a font object from given file path.Path should be a
+ * Creates a font object from given file path. Path should be a
  * correct font path.
  * 
  *     @example 

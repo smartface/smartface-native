@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
  * @class UI.Label
  * @since 0.1
  * @extends UI.View
- * Label is a UI object to display a text on the screen.Label can contain only a single type font.
+ * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
  *     @example
  *     const Label = require('sf-core/ui/label');
@@ -26,7 +26,7 @@ const Label = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets HTML text value.This property helps user showing HTML
+         * Gets/sets HTML text value. This property helps user showing HTML
          * tagged texts in Label view.
          * 
          *     @example
@@ -42,7 +42,7 @@ const Label = extend(View)(
         this.htmlText = "";
 
         /**
-         * Gets/sets font of label view.When set to null label uses system font.
+         * Gets/sets font of label view. When set to null label uses system font.
          * It is set to null by default.
          * 
          *     @example 
@@ -60,7 +60,7 @@ const Label = extend(View)(
         this.font = null;
 
         /**
-         * Gets/sets allowing multiple line for label view.If set to true
+         * Gets/sets allowing multiple line for label view. If set to true
          * and text is too long to show in single line label shows text as 
          * multiline. 
          * 
@@ -78,7 +78,7 @@ const Label = extend(View)(
         this.text = "Text";
 
         /**
-         * Gets/sets text alignment of label view.UI.TextAlignment constants
+         * Gets/sets text alignment of label view. UI.TextAlignment constants
          * can be used.  
          * 
          *     @example
