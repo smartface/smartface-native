@@ -1,0 +1,1 @@
+module.exports = require('./absolutelayout-' + Device.deviceOS + '.js');
