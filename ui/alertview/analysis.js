@@ -1,7 +1,7 @@
 /** @enum {Number} UI.AlertView.AlertButtonType 
  * @since 0.1
- * AlertButtonType is an enum. It defines button types when they 
- * display on an alert window. There are three types of action button.
+ * AlertButtonType is an enum.It defines button types when they 
+ * display on an alert window.There are three types of action button.
  * 
  *     @example
  *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
@@ -53,6 +53,7 @@ AlertButtonType.NEGATIVE = 2;
  *     myAlertView.title = "Alert Title";
  *     myAlertView.message = "Alert message";
  *     myAlertView.addButton(params);
+ *     myAlertView.show();
  */
 function AlertView () {
 
@@ -73,7 +74,7 @@ function AlertView () {
     this.message = "";
      
     /**
-     * Gets the alert view is active or not. isShowing is a read only property.
+     * Gets the alert view is active or not.isShowing is a read only property.
      * 
      * @property {boolean} isShowing 
      * @since 0.1
@@ -112,6 +113,7 @@ function AlertView () {
      *         onClick: function(){}
      *     };
      *     myAlertView.addButton(params);
+     *     myAlertView.show();
      * 
      * @param {Object} params Object describing alert view properties
      * @param {Number} [params.index] Index value

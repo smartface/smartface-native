@@ -2,7 +2,7 @@
  * @class UI.Switch
  * @since 0.1
  * 
- * Switch is a two-state toggle button. A switch lets the user
+ * Switch is a two-state toggle button.A switch lets the user
  * can select between two options.
  * 
  *     @example
@@ -14,7 +14,7 @@
 function Switch(params) {
 
     /**
-     * Gets/sets color of the thumb when it is checked. It is set to green by default. 
+     * Gets/sets color of the thumb when it is checked.It is set to green by default. 
      * 
      * @property {Color} thumbOnColor 
      * @since 0.1
@@ -31,7 +31,7 @@ function Switch(params) {
     this.thumbOffColor = Color.GRAY;
 
     /**
-     * Gets/sets color of the switch when it is checked. It is set to 
+     * Gets/sets color of the switch when it is checked.It is set to 
      * gray by default.
      * 
      * @property {Color} toggleOnColor 
@@ -40,8 +40,8 @@ function Switch(params) {
     this.toggleOnColor = Color.GRAY;  
 
     /**
-     * Gets/sets color of the switch when it is not checked. It is set to gray
-     * by default. This property is an android specific property. You should 
+     * Gets/sets color of the switch when it is not checked.It is set to gray
+     * by default. This property is an android specific property.You should 
      * set it for only android devices.
      * 
      *     @example
@@ -58,8 +58,8 @@ function Switch(params) {
     };
 
     /**
-     * Gets/sets checked value of a switch button. When the switch is checked,
-     * The value of this property will be true. It is set to false by default.
+     * Gets/sets checked value of a switch button.When the switch is checked,
+     * The value of this property will be true.It is set to false by default.
      * 
      * @property {Boolean} toggle
      * @since 0.1
@@ -68,7 +68,7 @@ function Switch(params) {
     
     // events  
     /**
-     * Gets/sets an event for switch instance. This event fires when the state of switch changed.
+     * Gets/sets an event for switch instance.This event fires when the state of switch changed.
      * 
      * @event onToggleChanged
      * @since 0.1

@@ -2,7 +2,7 @@
  * @class UI.View
  * @since 0.1
  *
- * View class represents a rectangular area drawable to user interface. This class
+ * View class represents a rectangular area drawable to user interface.This class
  * is base of all UI classes.
  * 
  *     @example
@@ -31,7 +31,7 @@ function View(params) {
     this.alpha = 1.0;
     
     /**
-     * Gets/sets background color of view. It allows setting background 
+     * Gets/sets background color of view.It allows setting background 
      * color with string or UI.Color properties.
      * 
      * @property {Color} backgroundColor 
@@ -41,7 +41,7 @@ function View(params) {
     this.backgroundColor = "#FFFFFF";
 
     /**
-     * Gets/sets height of view. Setting number (as pixel) and string 
+     * Gets/sets height of view.Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
      * @property {Number} height 
@@ -51,17 +51,17 @@ function View(params) {
     this.height = "0%";
         
     /**
-     * Gets/sets id of view. Should be unique number for all objects
+     * Gets/sets id of view.Should be unique number for all objects
      * inside project.
      * 
-     * @property {Number} id View identifier
+     * @property {Number} id 
      * @member UI.View
      * @since 0.1
      */
     this.id = 5421;
 
     /**
-     * Gets/sets position X value of view. Setting number (as pixel) and string 
+     * Gets/sets position X value of view.Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
      * @property {Number} left 
@@ -80,7 +80,7 @@ function View(params) {
     this.style = {};
 
     /**
-     * Gets/sets position Y value of view. Setting number (as pixel) and string 
+     * Gets/sets position Y value of view.Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
      * @property {Number} top 
@@ -90,7 +90,7 @@ function View(params) {
     this.top = "0%";
 
     /**
-     * Gets/sets visibility of view. It is set to true as default.
+     * Gets/sets visibility of view.It is set to true as default.
      * 
      * @property {Boolean} visible 
      * @member UI.View
@@ -99,8 +99,8 @@ function View(params) {
     this.visible = true;
 
     /**
-     * Enables/disables touches to view. When set to false events
-     * related to touches won't fire. It is set to true as default.
+     * Enables/disables touches to view.When set to false events
+     * related to touches won't fire.It is set to true as default.
      * 
      * @property {Boolean} touchEnabled 
      * @member UI.View
@@ -109,7 +109,7 @@ function View(params) {
     this.touchEnabled = true;
 
     /**
-     * Gets/sets width of view. Setting number (as pixel) and string 
+     * Gets/sets width of view.Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
      * @property {Number} width 
@@ -159,7 +159,7 @@ function View(params) {
     this.setPosition = function(position){}
 
     /**
-     * Gets/sets touch event for view. This event fires when touch started.
+     * Gets/sets touch event for view.This event fires when touch started.
      * 
      * @event onTouch
      * @member UI.View
@@ -168,7 +168,7 @@ function View(params) {
     this.onTouch = function onTouch(){ }
 
     /**
-     * Gets/sets touch ended event for view. This event fires when touch
+     * Gets/sets touch ended event for view.This event fires when touch
      * finished.
      * 
      * @event onTouchEnded

@@ -18,7 +18,7 @@ const Button = extend(View)(
     function (_super, params) {
         _super(this);
         /**
-         * Gets/sets text value. This property displayed in button.
+         * Gets/sets text value.This property displayed in button.
          * 
          * @property {String} text 
          * @since 0.1
@@ -26,7 +26,7 @@ const Button = extend(View)(
         this.text = "";
         
         /**
-         * Gets/sets text alignment of button. TextAlignment constants
+         * Gets/sets text alignment of button.TextAlignment constants
          * can be used.
          * 
          *     @example
@@ -47,12 +47,13 @@ const Button = extend(View)(
          *     const StateList = require('sf-core/util/statelist');
          *     const Color = require('sf-core/ui/color');
          *     var myButton = new Button();
+         *     myButton.text = "Button text";
          *     myButton.textColors = new StateList({  
-         *         normal: Color.BLACK, 
-         *         disabled: Color.BLACK, 
-         *         selected: Color.BLACK,  
+         *         normal: Color.BLUE, 
+         *         disabled: Color.LIGHTGRAY, 
+         *         selected: Color.RED,  
          *         pressed: Color.BLACK,
-         *         focused: Color.BLACK  
+         *         focused: Color.GRAY  
          *     }); 
          * @since 0.1
          * @property {StateList} textColors 
@@ -118,7 +119,7 @@ const Button = extend(View)(
         });
 
         /**
-         * Gets/sets press event for view. This event fires when press started.
+         * Gets/sets press event for view.This event fires when press started.
          * 
          * @since 0.1
          * @event onPress
@@ -126,7 +127,7 @@ const Button = extend(View)(
         this.onPress = function onPress(){ }
 
         /**
-         * Gets/sets long press event for view. This event fires when long press started.
+         * Gets/sets long press event for view.This event fires when long press started.
          * 
          * @since 0.1
          * @event onLongPress
