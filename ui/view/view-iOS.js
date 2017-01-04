@@ -45,7 +45,18 @@ function View(params) {
         enumerable: true
     });
 
-    this.id = 5421;
+
+    var _id = 0;
+    Object.defineProperty(self, 'id', {
+        get: function() {
+            return _id;
+        },
+        set: function(value) {
+            _id = value;
+            self.nativeObject.tag = value;
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self, 'visible', {
         get: function() {
