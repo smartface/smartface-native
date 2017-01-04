@@ -1,4 +1,5 @@
 const View = require('../view');
+const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 
 var LayoutType.Linear = 0;
@@ -32,7 +33,7 @@ const ViewGroup = extend(View)(
 
 
         this.addChildAt = function(view, index){
-            var viewPosition = view.getInitialPosition();
+            var viewPosition = generateViewPosition(view.getInitialPosition());
             var layoutParams;
             if(layoutType == LayoutType.Linear){
                 // @todo change after implementation of LinearLayout
@@ -79,6 +80,10 @@ const ViewGroup = extend(View)(
         this.findChildById = function(id){
             return self.nativeObject.findViewById(id);
         };
+
+        function generateViewPosition(viewPosition){
+            // % values must handle here. Im searching for getting parent height.width
+        }
 
         // Assign parameters given in constructor
         if (params) {
