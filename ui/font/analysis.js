@@ -9,6 +9,7 @@
  *     const Font = require('sf-core/ui/font');
  *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label();
+ *     myLabel.text = "Label text";
  *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
  */
 function Font() {}
@@ -22,6 +23,7 @@ function Font() {}
  *     const Font = require('sf-core/ui/font');
  *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label();
+ *     myLabel.text = "Label text";
  *     myLabel.font = Font.create("Arial", 16, Font.NORMAL);
  * 
  * @param fontFamily Font family name
@@ -40,9 +42,10 @@ Font.create = function(fontFamily, size, style) { }
  *     @example 
  *     const Font = require('sf-core/ui/font');
  *     const Label = require('sf-core/ui/label');
- *     var label = new Label({
+ *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16);
  *     });
+ *     myLabel.text = "Label text";
  * 
  * @param path Font file path
  * @param size Font size

@@ -20,8 +20,8 @@
  */
 function View(params) {
     /** 
-     * Defines opacity of view. The value of this property is float number
-     * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
+     * Defines opacity of view.The value of this property is float number
+     * between 0.0 and 1.0.0 represents view is completely transparent and 1 
      * represents view is completely opaque.
      *
      * @property {Number} alpha 

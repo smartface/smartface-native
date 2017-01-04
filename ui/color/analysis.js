@@ -169,6 +169,11 @@ Color.green = function(color){ return color.green };
 
 /**
  * Return the blue component of a color object. 
+ *  
+ *     @example
+ *     const Color = require('sf-core/ui/color');
+ *     var myRGBColor = Color.create(0, 0, 155);
+ *     var blue = Color.blue(myRGBColor);
  * 
  * @param {Color} color Representation of a color object
  * @return {Number} Return the blue component of a color object.
@@ -180,6 +185,11 @@ Color.blue = function(color){ return color.blue };
 
 /**
  * Return the alpha component of a color object. 
+ *  
+ *     @example
+ *     const Color = require('sf-core/ui/color');
+ *     var myARGBColor = Color.create(0, 0, 0, 255);
+ *     var alpha = Color.alpha(myARGBColor);
  * 
  * @param {Color} color Representation of a color object
  * @return {Number} Return the alpha component of a color object.

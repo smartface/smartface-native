@@ -112,6 +112,8 @@ function AlertView () {
      *         text: "OK", 
      *         onClick: function(){}
      *     };
+     *     myAlertView.title = "Alert Title";
+     *     myAlertView.message = "Alert message";
      *     myAlertView.addButton(params);
      *     myAlertView.show();
      * 
