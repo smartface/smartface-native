@@ -122,11 +122,12 @@ function View(params) {
      *     };
      *     myView.padding = padding;
      *
-     * @property {Object} padding Object describing padding values
+     * @property {Object} padding
      * @param {Number} [padding.left] Padding left value
      * @param {Number} [padding.top] Padding top value
      * @param {Number} [padding.right] Padding right value
      * @param {Number} [padding.bottom] Padding bottom value
+     * @since 0.1
      */
     this.padding = {left: 15, top: 10, right: 15, bottom:10};
 
@@ -161,6 +162,7 @@ function View(params) {
      *     myLabelBehind.bringToFront();
      *
      * @method bringToFront
+     * @since 0.1
      */
     this.bringToFront = function(){};
 
@@ -168,6 +170,8 @@ function View(params) {
      * Getter of this view's parent view.
      *
      * @return {View} Parent view of this view, or null if not exists.
+     * @method getParent
+     * @since 0.1
      */
     this.getParent = function(){};
 
@@ -177,7 +181,7 @@ function View(params) {
      * @method invalidatePosition
      * @since 0.1
      */
-    this.invalidatePosition = function(){}
+    this.invalidatePosition = function(){};
 
     /**
      * This method returns all position values in one object.
@@ -189,7 +193,7 @@ function View(params) {
      * @return {Number} return.top Position Y value
      * @since 0.1
      */
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; };
+    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
 
     /**
      * This method allows setting all position values within one function call.
@@ -215,7 +219,7 @@ function View(params) {
      * @method setPosition
      * @since 0.1
      */
-    this.setPosition = function(position){};
+    this.setPosition = function(position){}
 
     /**
      * Gets/sets touch event for view. This event fires when touch started.
@@ -223,7 +227,7 @@ function View(params) {
      * @event onTouch
      * @since 0.1
      */
-    this.onTouch = function onTouch(){};
+    this.onTouch = function onTouch(){ }
 
     /**
      * Gets/sets touch ended event for view. This event fires when touch
@@ -232,7 +236,7 @@ function View(params) {
      * @event onTouchEnded
      * @since 0.1
      */
-    this.onTouchEnded = function onTouchEnded(){};
+    this.onTouchEnded = function onTouchEnded(){ }
 }
 
 module.exports = View;
