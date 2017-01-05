@@ -1,16 +1,14 @@
 @charset "UTF-8";
 
 #header-content {
-	background: url(../images/sas_logo.png) 0 0 no-repeat!important;
-	color: #00a1f1!important;
 	font-family: "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
 	line-height: 20px;
 	margin: 9px 0 0 8px!important;
-	padding-left: -320px!important;
+    padding-left: 210px;
+    padding-top: 1px;
 	font-size: 1.1em;
 	white-space: nowrap;
 	width: 350px;
-	text-indent: -9999px;
 }
 
 .x-btn * {
