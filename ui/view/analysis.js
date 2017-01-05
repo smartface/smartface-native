@@ -149,7 +149,6 @@ function View(params) {
      */
     this.getParent = function(){};
 
-
     /**
      * Recalculates layout position and bounds.
      *
