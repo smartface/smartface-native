@@ -1,19 +1,23 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
+const SFTextAlignment = require("sf-core/ui/textalignment");
 
 const Label = extend(View)(
     function (_super, params) {
-        _super(this);
         var self = this;
-
-        // TODO Dogan Check params before using it
-        self.nativeObject = new SMFUITextView();
+        
+        if(!self.nativeObject){
+            self.nativeObject = new SMFUITextView();
+        }
+        
+        _super(this);
+        
         //Defaults
         self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
-	    self.nativeObject.textAlignmentNumber = 4;
+	    self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
 	    
         Object.defineProperty(self, 'htmlText', {
             get:function() {
@@ -70,6 +74,7 @@ const Label = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.text = value;
+                self.nativeObject.textColor = _textColor;
             },
             enumerable: true
         });

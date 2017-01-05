@@ -1,10 +1,22 @@
 /**
- * @class View
+ * @class UI.View
  * @since 0.1
  *
  * View class represents a rectangular area drawable to user interface. This class
  * is base of all UI classes.
- *
+ * 
+ *     @example
+ *     const View = require('sf-core/ui/view');
+ *     var myView = new View();
+ *     var position = {
+ *         width: "30%", 
+ *         height: "50%", 
+ *         top: "40%",
+ *         left: "50%"
+ *     }
+ *     myView.setPosition(position);
+ *     const Color = require('sf-core/ui/color');
+ *     myView.backgroundColor = Color.RED;
  */
 function View(params) {
     /** 
@@ -12,7 +24,8 @@ function View(params) {
      * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
      * represents view is completely opaque.
      *
-     * @property {Number} alpha Alpha value of view
+     * @property {Number} alpha 
+     * @since 0.1
      */
     this.alpha = 1.0;
     
@@ -20,7 +33,8 @@ function View(params) {
      * Gets/sets background color of view. It allows setting background 
      * color with string or UI.Color properties.
      * 
-     * @property {Color} backgroundColor Background color
+     * @property {Color} backgroundColor 
+     * @since 0.1
      */ 
     this.backgroundColor = "#FFFFFF";
 
@@ -28,7 +42,8 @@ function View(params) {
      * Gets/sets height of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {Number} height Height of view
+     * @property {Number} height 
+     * @since 0.1
      */
     this.height = "0%";
         
@@ -37,6 +52,7 @@ function View(params) {
      * inside project.
      * 
      * @property {Number} id View identifier
+     * @since 0.1
      */
     this.id = 5421;
 
@@ -44,14 +60,16 @@ function View(params) {
      * Gets/sets position X value of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {Number} left Position X value of view
+     * @property {Number} left 
+     * @since 0.1
      */
     this.left = "0%";
 
     /**
      * Gets/sets style of view. 
      * 
-     * @property {Style} style Style of view
+     * @property {Style} style
+     * @since 0.1
      */
     this.style = {};
 
@@ -59,14 +77,16 @@ function View(params) {
      * Gets/sets position Y value of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {Number} top Position Y value of view
+     * @property {Number} top 
+     * @since 0.1
      */
     this.top = "0%";
 
     /**
      * Gets/sets visibility of view. It is set to true as default.
      * 
-     * @property {Boolean} visible View visibility
+     * @property {Boolean} visible 
+     * @since 0.1
      */
     this.visible = true;
 
@@ -74,7 +94,8 @@ function View(params) {
      * Enables/disables touches to view. When set to false events
      * related to touches won't fire. It is set to true as default.
      * 
-     * @property {Boolean} touchEnabled Touch enable
+     * @property {Boolean} touchEnabled 
+     * @since 0.1
      */
     this.touchEnabled = true;
 
@@ -82,7 +103,8 @@ function View(params) {
      * Gets/sets width of view. Setting number (as pixel) and string 
      * (as percentage) is allowed.
      * 
-     * @property {Number} width Width of view
+     * @property {Number} width 
+     * @since 0.1
      */
     this.width = "0%";
 
@@ -165,6 +187,7 @@ function View(params) {
      * @return {Number} return.height Height value
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
+     * @since 0.1
      */
     this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; };
 
@@ -178,9 +201,9 @@ function View(params) {
      *     var myView = new View();
      *     var position = {
      *         width: "30%", 
-     *         height: "50%", 
-     *         top: "70%",
-     *         left: "90%"
+     *         height: "30%", 
+     *         top: "30%",
+     *         left: "50%"
      *     }
      *     myView.setPosition(position);
      * 
@@ -190,6 +213,7 @@ function View(params) {
      * @param {Number} [position.left] Position X value
      * @param {Number} [position.top] Position Y value
      * @method setPosition
+     * @since 0.1
      */
     this.setPosition = function(position){};
 
@@ -197,6 +221,7 @@ function View(params) {
      * Gets/sets touch event for view. This event fires when touch started.
      * 
      * @event onTouch
+     * @since 0.1
      */
     this.onTouch = function onTouch(){};
 
@@ -205,6 +230,7 @@ function View(params) {
      * finished.
      * 
      * @event onTouchEnded
+     * @since 0.1
      */
     this.onTouchEnded = function onTouchEnded(){};
 }

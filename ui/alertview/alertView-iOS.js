@@ -1,3 +1,9 @@
+var AlertButtonType = {
+    POSITIVE: 0,
+    NEUTRAL: 1,
+    NEGATIVE: 2,
+};
+
 const MethodNames = {
         didDismissWithButtonIndex: "didDismissWithButtonIndex"
     }
@@ -68,4 +74,4 @@ function AlertView () {
     this.onDismiss = function(AlertView) {};
 }
 
-module.exports = AlertView;
+module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };
