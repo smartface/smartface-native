@@ -170,7 +170,7 @@ function View(params) {
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
      */
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; };
+    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
 
     /**
      * This method allows setting all position values within one function call.
@@ -195,14 +195,14 @@ function View(params) {
      * @param {Number} [position.top] Position Y value
      * @method setPosition
      */
-    this.setPosition = function(position){};
+    this.setPosition = function(position){}
 
     /**
      * Gets/sets touch event for view. This event fires when touch started.
      * 
      * @event onTouch
      */
-    this.onTouch = function onTouch(){};
+    this.onTouch = function onTouch(){ }
 
     /**
      * Gets/sets touch ended event for view. This event fires when touch
@@ -210,7 +210,7 @@ function View(params) {
      * 
      * @event onTouchEnded
      */
-    this.onTouchEnded = function onTouchEnded(){};
+    this.onTouchEnded = function onTouchEnded(){ }
 }
 
 module.exports = View;
