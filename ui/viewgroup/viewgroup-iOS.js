@@ -9,47 +9,33 @@ const extend = require('js-base/core/extend');
  */
 const ViewGroup = extend(View)(
     function (_super, params) {
+        var childs = [];
         
         var self = this;
         _super(this);
 
         this.addChild = function(view){
             self.nativeObject.addSubview(view.nativeObject);
-        };
-
-        this.addChildAt = function(view, index){
-            self.nativeObject.insertSubviewAtIndex(view.nativeObject,index);
+            view.parent = self;
+            childs.push(view);
         };
 
         this.removeChild = function(view){
-            view.nativeObject.removeFromSuperview();
+            var index = childs.indexOf(view);
+            if (index != -1) {
+                view.nativeObject.removeFromSuperview();  
+                childs.splice(index, 1);
+            }
         };
 
-         this.removeChildAt = function(index){
-             var subviews = self.nativeObject.subviews;
-             subviews[index].removeFromSuperview();
-         };
-
         this.removeAll = function(){
+            childs = [];
             var subviews = self.nativeObject.subviews;
             for (subview in subviews) { 
                  subviews[subview].removeFromSuperview();
             }
         };
 
-        this.getChildIndex = function(view){
-            var subviews = self.nativeObject.subviews;
-            for (i = 0; i < subviews.length; i++) {
-                if (subviews[i] == view.nativeObject) {
-                    return i;
-                }
-            }
-        };
-
-        this.getChildAtIndex = function(index){
-            var subviews = self.nativeObject.subviews;
-            return subviews[index];
-        };
 
         this.getChildCount = function(){
             var subviews = self.nativeObject.subviews;
@@ -58,7 +44,10 @@ const ViewGroup = extend(View)(
 
      
         this.findChildById = function(id){
-            return self.nativeObject.viewWithTag(id);
+            var view = childs.filter(function( child ) {
+                return child.id == id;
+            });
+            return view;
         };
 
         // Assign parameters given in constructor

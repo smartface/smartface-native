@@ -1,3 +1,5 @@
+const TypeUtil = require("sf-core/util/type");
+
 function View(params) {
     var self = this;
     
@@ -114,18 +116,22 @@ function View(params) {
     
     this.bringToFront = function(){
         var parent = self.getParent();
-        parent.bringSubviewToFront(self.nativeObject);
+        if (parent) {
+            parent.nativeObject.bringSubviewToFront(self.nativeObject);
+        }
     };
     
     this.getParent = function(){
-        return self.nativeObject.superview;
+        return self.parent ? self.parent : null;
     };
     
+    var _left;
     Object.defineProperty(self, 'left', {
         get: function() {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            _left = value;
             if (typeof value === "string") {
                 value = convertPercentage(value, Device.screenWidth);
                 if (value < 0) return;
@@ -135,12 +141,13 @@ function View(params) {
         },
         enumerable: true
     });
-    
+    var _top;
     Object.defineProperty(self, 'top', {
         get: function() {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            _top = value;
             if (typeof value === "string") {
                 value = convertPercentage(value, Device.screenHeight);
                 if (value < 0) return;
@@ -151,11 +158,13 @@ function View(params) {
         enumerable: true
     });
     
+    var _width;
     Object.defineProperty(self, 'width', {
         get: function() {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            _width = value;
             if (typeof value === "string") {
                 value = convertPercentage(value, Device.screenWidth);
                 if (value < 0) return;
@@ -166,11 +175,13 @@ function View(params) {
         enumerable: true
     });
     
+    var _height;
     Object.defineProperty(self, 'height', {
         get: function() {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
+            _height = value;
             if (typeof value === "string") {
                 value = convertPercentage(value, Device.screenHeight);
                 if (value < 0) return;
@@ -211,6 +222,35 @@ function View(params) {
         }
         return -1;
     }
+    
+    this.invalidatePosition = function(){
+        if( (TypeUtil.isNumeric(_left) && TypeUtil.isNumeric(_top) && TypeUtil.isNumeric(_width) && TypeUtil.isNumeric(_height)) || self.parent){
+            setLayoutParam();
+        }
+    };
+
+    function setLayoutParam(){
+        var left = 0;
+        var top = 0;
+        var height = 0;
+        var width = 0;
+     
+        if(self.parent){
+           left = !TypeUtil.isNumeric(_left) ? self.parent.width * (parseInt(_left.replace("%")))/100 : _left;
+           top = !TypeUtil.isNumeric(_top) ? self.parent.height * (parseInt(_top.replace("%")))/100 : _top;
+           height = !TypeUtil.isNumeric(_height) ? self.parent.height * (parseInt(_height.replace("%")))/100 : _height;
+           width = !TypeUtil.isNumeric(_width) ? self.parent.width * (parseInt(_width.replace("%")))/100 : _width;
+        }else{
+           left = _left;
+           top = _top;
+           height = _width;
+           width = _height;
+        }
+        
+        self.nativeObject.frame = { x : left, y : top, width : width, height : height};
+        
+    };
 }
+
 
 module.exports = View;
