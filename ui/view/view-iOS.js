@@ -96,7 +96,31 @@ function View(params) {
         self.height = position.height;
     }
 
-
+    this.padding = function(param){
+        alert('padd');
+        
+    };
+    
+    var _padding;
+    Object.defineProperty(self, 'padding', {
+        get: function() {
+            return _padding;
+        },
+        set: function(param) {
+            _padding = param;
+        },
+        enumerable: true
+    });
+    
+    this.bringToFront = function(){
+        var parent = self.getParent();
+        parent.bringSubviewToFront(self.nativeObject);
+    };
+    
+    this.getParent = function(){
+        return self.nativeObject.superview;
+    };
+    
     Object.defineProperty(self, 'left', {
         get: function() {
             return self.nativeObject.frame.y;
