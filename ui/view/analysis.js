@@ -149,6 +149,15 @@ function View(params) {
      */
     this.getParent = function(){};
 
+
+    /**
+     * Recalculates layout position and bounds.
+     *
+     * @method invalidatePosition
+     * @since 0.1
+     */
+    this.invalidatePosition = function(){}
+
     /**
      * This method returns all position values in one object.
      * 
