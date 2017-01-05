@@ -21,7 +21,7 @@ AlertButtonType.POSITIVE = 0;
  * @property {Number} NEUTRAL
  * @static
  * @since 0.1
- * Don't accept the action but don't cancel. 
+ * Don't accept the action but don't cancel.  
  * It can be used with the action of "Ask me later".
  */
 AlertButtonType.NEUTRAL = 1;
@@ -47,10 +47,13 @@ AlertButtonType.NEGATIVE = 2;
  *     var myAlertView = new AlertView();
  *     var params = {
  *         index: AlertButtonType.POSITIVE, 
- *         text: "Alert text", 
+ *         text: "OK", 
  *         onClick: function(){}
  *     };
+ *     myAlertView.title = "Alert Title";
+ *     myAlertView.message = "Alert message";
  *     myAlertView.addButton(params);
+ *     myAlertView.show();
  */
 function AlertView () {
 
@@ -96,7 +99,7 @@ function AlertView () {
     this.dismiss = function() {};
     
     /**
-     * This method allows setting all alert view button values within one function call.
+     * This method allows setting all alert view button values within one function call. 
      * Using this method will be faster than setting all alert view button values (index,
      * text, onClick) separately.
      * 
@@ -106,10 +109,13 @@ function AlertView () {
      *     var myAlertView = new AlertView();
      *     var params = {
      *         index: AlertButtonType.POSITIVE, 
-     *         text: "Alert text", 
+     *         text: "OK", 
      *         onClick: function(){}
      *     };
+     *     myAlertView.title = "Alert Title";
+     *     myAlertView.message = "Alert message";
      *     myAlertView.addButton(params);
+     *     myAlertView.show();
      * 
      * @param {Object} params Object describing alert view properties
      * @param {Number} [params.index] Index value
