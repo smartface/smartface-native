@@ -9,27 +9,28 @@ const extend = require('js-base/core/extend');
  */
 const ViewGroup = extend(View)(
     function (_super, params) {
-        var childs = [];
         
         var self = this;
-        _super(this);
 
+        self.childs = {};
+
+        _super(this);
+        
         this.addChild = function(view){
             self.nativeObject.addSubview(view.nativeObject);
             view.parent = self;
-            childs.push(view);
+            var uniqueId = view.uniqueId;
+            self.childs[uniqueId] = view;
+            self.invalidatePosition();
         };
 
         this.removeChild = function(view){
-            var index = childs.indexOf(view);
-            if (index != -1) {
-                view.nativeObject.removeFromSuperview();  
-                childs.splice(index, 1);
-            }
+            delete self.childs[view.uniqueId];
+            view.nativeObject.removeFromSuperview();  
         };
 
         this.removeAll = function(){
-            childs = [];
+            self.childs = {};
             var subviews = self.nativeObject.subviews;
             for (subview in subviews) { 
                  subviews[subview].removeFromSuperview();
@@ -38,18 +39,23 @@ const ViewGroup = extend(View)(
 
 
         this.getChildCount = function(){
-            var subviews = self.nativeObject.subviews;
-            return subviews.length;
+            return Object.keys(self.childs).length
         };
 
      
         this.findChildById = function(id){
-            var view = childs.filter(function( child ) {
-                return child.id == id;
-            });
-            return view;
+            return getKeyByValue(self.childs,id); 
         };
-
+        
+        function getKeyByValue(object,value){
+             for( var prop in object ) {
+                if( object.hasOwnProperty( prop ) ) {
+                     if( object[ prop ].id === value )
+                         return object[ prop ];
+                }
+            }
+        }
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
