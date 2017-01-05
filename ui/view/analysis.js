@@ -100,11 +100,12 @@ function View(params) {
      *     };
      *     myView.padding = padding;
      *
-     * @property {Object} padding Object describing padding values
+     * @property {Object} padding
      * @param {Number} [padding.left] Padding left value
      * @param {Number} [padding.top] Padding top value
      * @param {Number} [padding.right] Padding right value
      * @param {Number} [padding.bottom] Padding bottom value
+     * @since 0.1
      */
     this.padding = {left: 15, top: 10, right: 15, bottom:10};
 
@@ -139,6 +140,7 @@ function View(params) {
      *     myLabelBehind.bringToFront();
      *
      * @method bringToFront
+     * @since 0.1
      */
     this.bringToFront = function(){};
 
@@ -146,6 +148,8 @@ function View(params) {
      * Getter of this view's parent view.
      *
      * @return {View} Parent view of this view, or null if not exists.
+     * @method getParent
+     * @since 0.1
      */
     this.getParent = function(){};
 
@@ -155,7 +159,7 @@ function View(params) {
      * @method invalidatePosition
      * @since 0.1
      */
-    this.invalidatePosition = function(){}
+    this.invalidatePosition = function(){};
 
     /**
      * This method returns all position values in one object.

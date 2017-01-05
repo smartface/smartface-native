@@ -51,7 +51,7 @@ function View(params) {
         },
         set: function(height) {
             heightInitial = height;
-            setLayoutParam();
+            invalidatePosition();
         },
         enumerable: true
      });
@@ -73,7 +73,7 @@ function View(params) {
         },
         set: function(left) {
             leftInitial = left;
-            setLayoutParam();
+            invalidatePosition();
         },
         enumerable: true
      });
@@ -85,7 +85,7 @@ function View(params) {
         },
         set: function(top) {
             topInitial = top;
-            setLayoutParam();
+            invalidatePosition();
         },
         enumerable: true
      });
@@ -113,7 +113,7 @@ function View(params) {
         },
         set: function(width) {
             widthInitial = width;
-            setLayoutParam();
+            invalidatePosition();
         },
         enumerable: true
      });
@@ -183,7 +183,49 @@ function View(params) {
         },
         enumerable: true
     });
-    
+
+    Object.defineProperty(this, 'padding', {
+        get: function() {
+            return {
+                left: self.nativeObject.getPaddingLeft(),
+                top: self.nativeObject.getPaddingTop(),
+                right: self.nativeObject.getPaddingRight(),
+                bottom: self.nativeObject.getPaddingBottom() };
+        },
+        set: function(padding) {
+            var paddingLeft = padding.left ? padding.left : 0;
+            var paddingTop = padding.top ? padding.top : 0;
+            var paddingRight = padding.right ? padding.right : 0;
+            var paddingBottom = padding.bottom ? padding.bottom : 0;
+            self.nativeObject.setPadding(paddingLeft,paddingTop,paddingRight,paddingBottom);
+        },
+        enumerable: true
+    });
+
+    this.bringToFront = function(){
+        self.nativeObject.bringToFront();
+    };
+
+    this.getParent = function(){
+        return self.parent ? self.parent : null;
+    };
+
+    this.invalidatePosition = function(){
+        if( (TypeUtil.isNumeric(widthInitial) &&  TypeUtil.isNumeric(heightInitial) && TypeUtil.isNumeric(leftInitial) && TypeUtil.isNumeric(topInitial)) || self.parent){
+            setLayoutParam();
+        }
+    };
+
+    // Using from ViewGroup
+    this.getInitialPosition = function(){
+        return  {
+            width: widthInitial,
+            height: heightInitial,
+            top: topInitial,
+            left: leftInitial
+        };
+    };
+
     // @todo no ENUM support
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
@@ -211,18 +253,41 @@ function View(params) {
     } 
     
     function setLayoutParam(){
-        // @todo this calculation must be implemented in container
-        var layoutDimens = [!TypeUtil.isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
-                            !TypeUtil.isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
-                            !TypeUtil.isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
-                            !TypeUtil.isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
-        var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
-                            layoutDimens[0], layoutDimens[1], 
-                            layoutDimens[2], layoutDimens[3]);
+        // This method call is all layout params is number of view added to parent
+        var leftPosition = !TypeUtil.isNumeric(leftInitial) ? self.parent.width * (parseInt(leftInitial.replace("%")))/100 : leftInitial
+        var rightPosition = !TypeUtil.isNumeric(topInitial) ? self.parent.width  * (parseInt(topInitial.replace("%")))/100 : topInitial
+        var height = !TypeUtil.isNumeric(heightInitial) ? self.parent.width * (parseInt(heightInitial.replace("%")))/100 : heightInitial
+        var width = !TypeUtil.isNumeric(widthInitial) ? self.parent.width * (parseInt(widthInitial.replace("%")))/100 : widthInitial;
+        var layoutParams;
+        if(self.parent){
+            if(self.nativeObject.toString().indexOf("Relative") !== -1){
+                // Will change after implementation of RelativeLayout
+                layoutParams = new android.widget.RelativeLayout.LayoutParams(width,height);
+            }
+            else if(self.nativeObject.toString().indexOf("Linear") !== -1){
+                // Will change after implementation of LinearLayout. Default weight is %100 percentage
+                layoutParams = new android.widget.LinearLayout.LayoutParams(width,height,100);
+            }
+            else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
+                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,rightPosition);
+            }
+            else{
+                layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
+            }
+        }
+        else{
+            layoutParams = android.view.ViewGroup.LayoutParams(width,height);
+        }
         self.nativeObject.setLayoutParams(layoutParams);
+
+        // invalidating childs positions
+        if(self.childViews){
+            for(var childView in self.childViews){
+                childView.invalidatePosition();
+            }
+        }
     }
-    
-    
+
     function setBackground(layerIndex){
         switch (layerIndex){
             case 0: 
