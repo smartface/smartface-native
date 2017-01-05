@@ -11,5 +11,5 @@ module.exports = {
     Switch: require('./switch'),
     AlertView: require('./alertview').AlertView,
     AlertButtonType: require('./alertview').AlertButtonType,
-    AbsoluteContainer: require('./absolutecontainer')
+    AbsoluteLayout: require('./absolutelayout')
 };
