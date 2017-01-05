@@ -9,31 +9,31 @@
 function Page(params) {
 
     /**
-    * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.onShow = function(){
-    *         alert("Page Showed!");
-    *     }
-    *
-    * @callback Page~onShow
-    */
+     * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.onShow = function(){
+     *         alert("Page Showed!");
+     *     }
+     *
+     * @callback Page~onShow
+     */
     this.onShow = function onShow(){};
 
     /**
-    * Gets/sets key on hide event callback for Page. This event fires when page disappears from user interface.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     var myPage = new Page();
-    *     myPage.onHide = function(){
-    *         alert("Page Hided!");
-    *     }
-    *
-    * @callback Page~onHide
-    */
+     * Gets/sets key on hide event callback for Page. This event fires when page disappears from user interface.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.onHide = function(){
+     *         alert("Page Hided!");
+     *     }
+     *
+     * @callback Page~onHide
+     */
     this.onHide = function onHide(){};
 
     /**
@@ -49,32 +49,32 @@ function Page(params) {
     this.android.backButtonEnabled = false;
 
     /**
-    * Add view or container to the page.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     const Label = require('sf-core/ui/label');
-    *     var myPage = new Page();
-    *     var myLabel = new Label();
-    *     myPage.add(myLabel);
-    *
-    * @method add
-    */
+     * Add view or container to the page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *     var myPage = new Page();
+     *     var myLabel = new Label();
+     *     myPage.add(myLabel);
+     *
+     * @method add
+     */
     this.add = function(){};
 
     /**
-    * Remove view or container to the page.
-    *
-    *     @example
-    *     const Page = require('sf-core/ui/page');
-    *     const Label = require('sf-core/ui/label');
-    *     var myPage = new Page();
-    *     var myLabel = new Label();
-    *     myPage.add(myLabel);
-    *     myPage.remove(myLabel);
-    *
-    * @method remove
-    */
+     * Remove view or container to the page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *     var myPage = new Page();
+     *     var myLabel = new Label();
+     *     myPage.add(myLabel);
+     *     myPage.remove(myLabel);
+     *
+     * @method remove
+     */
     this.remove = function(){};
 }
 
