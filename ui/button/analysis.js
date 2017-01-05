@@ -2,12 +2,17 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 
 /**
- * @class Button
+ * @class UI.Button
+ * @extends UI.View
  * @since 0.1
  *
- * Button class represents an clickable object to user interface. 
+ * Button class represents a clickable object to user interface.  
  * A button instance consists of text or an icon(or both of them).
- *
+ * 
+ *     @example
+ *     const Button = require('sf-core/ui/button');
+ *     var myButton = new Button();
+ *     myButton.text = "Click me!";
  */
 const Button = extend(View)(
     function (_super, params) {
@@ -15,7 +20,7 @@ const Button = extend(View)(
         /**
          * Gets/sets text value. This property displayed in button.
          * 
-         * @property {String} text Text to display in button
+         * @property {String} text 
          * @since 0.1
          */
         this.text = "";
@@ -23,61 +28,64 @@ const Button = extend(View)(
         /**
          * Gets/sets text alignment of button. TextAlignment constants
          * can be used.
-         * @since 0.1        
-         * @property {Number} textAlignment Text alignment.
          * 
          *     @example
          *     const Button = require('sf-core/ui/button');
-         *     const TextAlignment = require('sf-core/ui');
-         *     var button = new Button();
-         *     button.textAlignment = TextAlignment.MIDCENTER;   
+         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     var myButton = new Button();
+         *     myButton.textAlignment = TextAlignment.MIDCENTER;  
+         * @since 0.1        
+         * @property {Number} textAlignment  
          */
         textAlignment = TextAlignment.MIDCENTER;
         
         /**
-         * Gets/sets text color list of button. 
-         * @since 0.1
-         * @property {StateList} textColors List of button colors based on states.
+         * Gets/sets text color list of button based on states.
          * 
          *     @example
          *     const Button = require('sf-core/ui/button');
          *     const StateList = require('sf-core/util/statelist');
-         *     var button = new Button();
-         *     button.textColors = new StateList({  
-         *         normal: Color.WHITE, 
-         *         disabled: Color.BLACK, 
-         *         selected: Color.LIGHTGRAY,  
-         *         pressed: Color.DARKGRAY,
-         *         focused: Color.DARKGRAY  
+         *     const Color = require('sf-core/ui/color');
+         *     var myButton = new Button();
+         *     myButton.text = "Button text";
+         *     myButton.textColors = new StateList({  
+         *         normal: Color.BLUE, 
+         *         disabled: Color.LIGHTGRAY, 
+         *         selected: Color.RED,  
+         *         pressed: Color.BLACK,
+         *         focused: Color.GRAY  
          *     }); 
+         * @since 0.1
+         * @property {StateList} textColors 
          */
         this.textColors = new StateList( {
-            normal: Color.WHITE, 
+            normal: Color.BLACK, 
             disabled: Color.BLACK, 
-            selected: Color.LIGHTGRAY, 
-            pressed: Color.DARKGRAY, 
-            focused: Color.DARKGRAY       
+            selected: Color.BLACK, 
+            pressed: Color.BLACK, 
+            focused: Color.BLACK       
         } );
 
         /**
-         * Gets/sets color list of button background.  
-         * @since 0.1
-         * @property {StateList} backgroundColors List of background colors based on states.
+         * Gets/sets color list of button background based on states.  
          * 
          *     @example
          *     const Button = require('sf-core/ui/button');
-         *     var button = new Button();
          *     const StateList = require('sf-core/util/statelist');
-         *     button.backgroundColors = new StateList({  
-         *         normal: Color.WHITE, 
+         *     const Color = require('sf-core/ui/color');
+         *     var myButton = new Button();
+         *     myButton.backgroundColors = new StateList({  
+         *         normal: Color.LIGHTGRAY, 
          *         disabled: Color.BLACK, 
          *         selected: Color.LIGHTGRAY,  
          *         pressed: Color.DARKGRAY,
          *         focused: Color.DARKGRAY  
          *     });
+         * @since 0.1
+         * @property {StateList} backgroundColors 
          */
         this.backgroundColors = new StateList({          
-            normal: Color.WHITE, 
+            normal: Color.LIGHTGRAY, 
             disabled: Color.BLACK, 
             selected: Color.LIGHTGRAY, 
             pressed: Color.DARKGRAY, 
@@ -85,21 +93,22 @@ const Button = extend(View)(
         });
         
         /**
-         * Gets/sets background image list of button. 
-         * @since 0.1
-         * @property {StateList} backgroundImages List of background images of button based on states.
+         * Gets/sets background image list of button based on states. 
          * 
          *     @example
          *     const Button = require('sf-core/ui/button');
-         *     var button = new Button();
          *     const StateList = require('sf-core/util/statelist');
-         *     button.backgroundImages = new StateList(
-         *         normal: "assets://normal.png"
-         *         disabled: "assets://disabled.png"
-         *         selected:"assets://selected.png"
-         *         pressed: "assets://pressed.png"
+         *     var myButton = new Button();
+         *     myButton.backgroundImages = new StateList({
+         *         normal: "assets://normal.png",
+         *         disabled: "assets://disabled.png",
+         *         selected:"assets://selected.png",
+         *         pressed: "assets://pressed.png",
          *         focused: "assets://focused.png"
-         *     );   
+         *     });   
+         *     myButton.text = "My button text";
+         * @since 0.1
+         * @property {StateList} backgroundImages 
          */
         this.backgroundImages = new StateList({          
             normal: "", 

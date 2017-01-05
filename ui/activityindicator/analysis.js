@@ -2,7 +2,8 @@ const extend = require('js-base/core/extend');
 const View = require('../view');
 
 /**
- * @class ActivityIndicator
+ * @class UI.ActivityIndicator
+ * @extends UI.View
  * @since 0.1
  * 
  * ActivityIndicator class shows a progress of some background task.
@@ -20,6 +21,7 @@ const ActivityIndicator = extend(View)(
          * Gets/sets color of the activity indicator.
          * 
          * @property {Color} color Color of the activity indicator
+         * @since 0.1
          */
         this.color = Color.GRAY;
     }
