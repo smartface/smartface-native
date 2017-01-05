@@ -1,5 +1,5 @@
 /**
- * @class StateList
+ * @class Util.StateList
  * StateList is a class to display a text on the screen. StateList creates a specified values based on states.
  *
  *     @example
@@ -12,40 +12,50 @@
  *         focused: "assets://focused.png"
  *     ); 
  *     var normalImage = myStateList.normal;
+ * 
+ *     const Color = require('sf-core/ui/color');
+ *     myStateList = new StateList({  
+ *         normal: Color.LIGHTGRAY, 
+ *         disabled: Color.BLACK, 
+ *         selected: Color.LIGHTGRAY,  
+ *         pressed: Color.DARKGRAY,
+ *         focused: Color.DARKGRAY  
+ *     });
+ *     var normalColor = myStateList.normal;
  */
  function StateList(params) {
      /**
      * Gets/sets normal state value of a button property. 
      * 
-     * @property {Object} normal Property value of a button for normal state
+     * @property {Object} normal 
      */
      this.normal = params.normal;
 
      /**
      * Gets/sets disabled state value of a button property. 
      * 
-     * @property {Object} disabled Property value of a button for disabled state
+     * @property {Object} disabled 
      */
      this.disabled = params.disabled;
 
      /**
      * Gets/sets highlighted state value of a button property. 
      * 
-     * @property {Object} highlighted Property value of a button for highlighted state
+     * @property {Object} highlighted 
      */
      this.selected = params.selected;
 
      /**
      * Gets/sets pressed state value of a button property. 
      * 
-     * @property {Object} pressed Property value of a button for pressed state
+     * @property {Object} pressed 
      */
      this.pressed = params.pressed;
 
      /**
      * Gets/sets focused state value of a button property. 
      * 
-     * @property {Object} focused Property value of a button for focused state
+     * @property {Object} focused 
      */
      this.focused = params.focused;
  } 
