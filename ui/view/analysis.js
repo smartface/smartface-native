@@ -162,14 +162,6 @@ function View(params) {
      * @since 0.1
      */
     this.onTouchEnded = function onTouchEnded(){ }
-
-    /**
-     * Recalculates layout position and bounds.
-     *
-     * @method invalidatePosition
-     * @since 0.1
-     */
-    this.invalidatePosition = function(){}
 }
 
 module.exports = View;
