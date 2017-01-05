@@ -4,11 +4,13 @@ const extend = require('js-base/core/extend');
 
 const ActivityIndicator = extend(View)(
     function (_super, params)  {
-        
-         _super(this);
         var self = this;
-
-       self.nativeObject = new UIActivityIndicatorView(1);
+        
+         if(!self.nativeObject){
+              self.nativeObject = new UIActivityIndicatorView(1);
+         }
+         _super(this);
+        
        self.nativeObject.startAnimating();
 
         var _color = Color.WHITE;
