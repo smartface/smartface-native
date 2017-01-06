@@ -119,6 +119,81 @@ function View(params) {
     this.width = "0%";
 
     /**
+     * Gets/sets padding of view. Setting number as pixels.
+     *
+     *     @example
+     *     const View = require('sf-core/ui/view');
+     *     var myView = new View();
+     *     var padding = {
+     *         left: 15,
+     *         top: 10,
+     *         right: 15,
+     *         bottom: 10
+     *     };
+     *     myView.padding = padding;
+     *
+     * @property {Object} padding
+     * @param {Number} [padding.left] Padding left value
+     * @param {Number} [padding.top] Padding top value
+     * @param {Number} [padding.right] Padding right value
+     * @param {Number} [padding.bottom] Padding bottom value
+     * @since 0.1
+     */
+    this.padding = {left: 15, top: 10, right: 15, bottom:10};
+
+    /**
+     * This method allows getting view to the front.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     var myLabelBehind = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "10%",
+     *         left: "15%",
+     *         text: "Label at behind",
+     *         backgroundColor: Color.BLUE,
+     *         textColor: Color.WHITE
+     *     });
+     *     var myLabelFront = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "15%",
+     *         left: "15%",
+     *         text: "Label at front",
+     *         backgroundColor: Color.BLACK,
+     *         textColor: Color.CYAN
+     *     });
+     *     myPage.add(myLabelBehind);
+     *     myPage.add(myLabelFront);
+     *     myLabelBehind.bringToFront();
+     *
+     * @method bringToFront
+     * @since 0.1
+     */
+    this.bringToFront = function(){};
+
+    /**
+     * Getter of this view's parent view.
+     *
+     * @return {View} Parent view of this view, or null if not exists.
+     * @method getParent
+     * @since 0.1
+     */
+    this.getParent = function(){};
+
+    /**
+     * Recalculates layout position and bounds.
+     *
+     * @method invalidatePosition
+     * @since 0.1
+     */
+    this.invalidatePosition = function(){};
+
+    /**
      * This method returns all position values in one object.
      * 
      * @return {Object} Object with properties:

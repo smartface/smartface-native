@@ -17,7 +17,7 @@ function View(params) {
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
     layerDrawable.setDrawableByLayerId(1,borderDrawable);
     self.nativeObject.setBackground(layerDrawable);
-    
+
     Object.defineProperty(this, 'alpha', {
         get: function() {
             return self.nativeObject.getAlpha();
@@ -26,7 +26,7 @@ function View(params) {
             self.nativeObject.setAlpha(alpha);
         },
         enumerable: true
-     });
+    });
     
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
@@ -51,11 +51,13 @@ function View(params) {
         },
         set: function(height) {
             heightInitial = height;
-            setLayoutParam();
+            self.invalidatePosition();
         },
         enumerable: true
-     });
-        
+    });
+
+    var idInitial = android.view.View.generateViewId();
+    self.nativeObject.setId(idInitial);
     Object.defineProperty(this, 'id', {
         get: function() {
             return self.nativeObject.getId();
@@ -73,7 +75,7 @@ function View(params) {
         },
         set: function(left) {
             leftInitial = left;
-            setLayoutParam();
+            self.invalidatePosition();
         },
         enumerable: true
      });
@@ -85,7 +87,7 @@ function View(params) {
         },
         set: function(top) {
             topInitial = top;
-            setLayoutParam();
+            self.invalidatePosition();
         },
         enumerable: true
      });
@@ -113,7 +115,7 @@ function View(params) {
         },
         set: function(width) {
             widthInitial = width;
-            setLayoutParam();
+            self.invalidatePosition();
         },
         enumerable: true
      });
@@ -127,12 +129,22 @@ function View(params) {
         }; 
     };
 
+    this.getInitialPosition = function(){
+        return  {
+            width: widthInitial,
+            height: heightInitial,
+            top: topInitial,
+            left: leftInitial
+        };
+    };
+
     this.setPosition = function(position){
-        widthInitial = position.width;
-        heightInitial = position.height;
-        topInitial = position.top;
-        leftInitial = position.left;
-        setLayoutParam();
+        widthInitial = position.width ? position.width : widthInitial;
+        heightInitial = position.height ? position.height : heightInitial;
+        topInitial = position.top ? position.top : topInitial;
+        leftInitial = position.left ? position.left : leftInitial;
+        self.invalidatePosition();
+
     }
 
     this.touchEnabled = true;
@@ -183,7 +195,49 @@ function View(params) {
         },
         enumerable: true
     });
-    
+
+    Object.defineProperty(this, 'padding', {
+        get: function() {
+            return {
+                left: self.nativeObject.getPaddingLeft(),
+                top: self.nativeObject.getPaddingTop(),
+                right: self.nativeObject.getPaddingRight(),
+                bottom: self.nativeObject.getPaddingBottom() };
+        },
+        set: function(padding) {
+            var paddingLeft = padding.left ? padding.left : 0;
+            var paddingTop = padding.top ? padding.top : 0;
+            var paddingRight = padding.right ? padding.right : 0;
+            var paddingBottom = padding.bottom ? padding.bottom : 0;
+            self.nativeObject.setPadding(paddingLeft,paddingTop,paddingRight,paddingBottom);
+        },
+        enumerable: true
+    });
+
+    this.bringToFront = function(){
+        self.nativeObject.bringToFront();
+    };
+
+    this.getParent = function(){
+        return self.parent ? self.parent : null;
+    };
+
+    this.invalidatePosition = function(parentWidth, parentHeight){
+        setLayoutParam(parentWidth, parentHeight);
+//        if( (TypeUtil.isNumeric(widthInitial) &&  TypeUtil.isNumeric(heightInitial) && TypeUtil.isNumeric(leftInitial) && TypeUtil.isNumeric(topInitial)) || self.parent){
+//        }
+    };
+
+    // Using from ViewGroup
+    this.getInitialPosition = function(){
+        return  {
+            width: widthInitial,
+            height: heightInitial,
+            top: topInitial,
+            left: leftInitial
+        };
+    };
+
     // @todo no ENUM support
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
@@ -208,21 +262,79 @@ function View(params) {
         //     strokePaint.setAlpha (0);
         // }
         setBackground(1);
-    } 
-    
-    function setLayoutParam(){
-        // @todo this calculation must be implemented in container
-        var layoutDimens = [!TypeUtil.isNumeric(widthInitial) ? Device.screenWidth * (parseInt(widthInitial.replace("%")))/100 : widthInitial ,
-                            !TypeUtil.isNumeric(heightInitial) ? Device.screenHeight * (parseInt(heightInitial.replace("%")))/100 : heightInitial ,
-                            !TypeUtil.isNumeric(leftInitial) ? Device.screenWidth * (parseInt(leftInitial.replace("%")))/100 : leftInitial ,
-                            !TypeUtil.isNumeric(topInitial) ? Device.screenHeight  * (parseInt(topInitial.replace("%")))/100 : topInitial];
-        var layoutParams = new android.widget.AbsoluteLayout.LayoutParams(
-                            layoutDimens[0], layoutDimens[1], 
-                            layoutDimens[2], layoutDimens[3]);
-        self.nativeObject.setLayoutParams(layoutParams);
     }
-    
-    
+
+    // @todo Need check for performance
+    function setLayoutParam(parentWidth, parentHeight){
+        // This method call is all layout params is number of view added to parent
+        var leftPosition;
+        var topPosition;
+        var height;
+        var width;
+
+        if(!TypeUtil.isNumeric(leftInitial)){
+            leftPosition = (parentWidth ? parentWidth : (self.parent ? self.parent.width : 0) )* (parseInt(leftInitial.replace("%")))/100
+        }
+        else{
+            leftPosition = leftInitial;
+        }
+
+        if(!TypeUtil.isNumeric(topInitial)){
+            topPosition = (parentHeight ? parentHeight : (self.parent ? self.parent.height : 0) )* (parseInt(topInitial.replace("%")))/100
+        }
+        else{
+            topPosition = topInitial;
+        }
+
+        if(!TypeUtil.isNumeric(heightInitial)){
+            height = (parentHeight ? parentHeight : (self.parent ? self.parent.height : 0) )* (parseInt(heightInitial.replace("%")))/100
+        }
+        else{
+            height = heightInitial;
+        }
+
+        if(!TypeUtil.isNumeric(widthInitial)){
+            width = (parentWidth ? parentWidth : (self.parent ? self.parent.width : 0) )* (parseInt(widthInitial.replace("%")))/100
+        }
+        else{
+            width = widthInitial;
+        }
+
+        var layoutParams;
+        if(self.parent){
+            if(self.nativeObject.toString().indexOf("Relative") !== -1){
+                // @todo Will change after implementation of RelativeLayout
+                layoutParams = new android.widget.RelativeLayout.LayoutParams(width,height);
+            }
+            else if(self.nativeObject.toString().indexOf("Linear") !== -1){
+                // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
+                layoutParams = new android.widget.LinearLayout.LayoutParams(width,height,100);
+            }
+            else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
+                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+            else{
+                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
+                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+        }
+        else{
+            // @todo must change as ViewGroup.LayoutParams after implementation of page
+            //layoutParams = android.view.ViewGroup.LayoutParams(width,height);
+            layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+        }
+        self.nativeObject.setLayoutParams(layoutParams);
+
+        // invalidating child positions
+        var id = self.id;
+        if(self.childViews){
+            for(var childViewKey in self.childViews){
+                // passing calculated height and width to child view
+                self.childViews[childViewKey].invalidatePosition(width, height);
+            }
+        }
+    }
+
     function setBackground(layerIndex){
         switch (layerIndex){
             case 0: 
@@ -233,6 +345,8 @@ function View(params) {
         }
         self.nativeObject.setBackground(layerDrawable);
     }
+
+
     
 }
 
