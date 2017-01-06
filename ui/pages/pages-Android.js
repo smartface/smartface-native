@@ -6,7 +6,7 @@ function Pages(params) {
     var absoluteLayout = new android.widget.AbsoluteLayout(activity);
     // android.view.ViewGroupLayoutParams.MATCH_PARENT
     var layoutparams = new android.widget.AbsoluteLayout.LayoutParams(-1,-1,0,0);
-    absoluteLayout.setBackgroundColor(android.graphics.Color.BLACK);
+    absoluteLayout.setBackgroundColor(android.graphics.Color.WHITE);
     absoluteLayout.setLayoutParams(layoutparams);
     absoluteLayout.setId(12345);
 
@@ -16,12 +16,21 @@ function Pages(params) {
     self.push = function(page, animated, tag){
         var fragmentManager = Android.getActivity().getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
-        if(animated)
-            fragmentTransaction.setCustomAnimations(io.smartface.SmartfaceDemo.R.anim.slide_left_enter,
-                                                    io.smartface.SmartfaceDemo.R.anim.slide_left_exit,
-                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_enter,
-                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_exit);
-        fragmentTransaction.addToBackStack(tag ? tag : "Page").replace(12345, page.nativeObject, tag ? tag : "Page");
+        if(animated){
+            var packageName = Android.getActivity().getPackageName();
+            var leftEnter = Android.getActivity().getResources().getIdentifier("slide_left_enter","anim",packageName)
+            var leftExit = Android.getActivity().getResources().getIdentifier("slide_left_exit","anim",packageName)
+            var rightEnter = Android.getActivity().getResources().getIdentifier("slide_right_enter","anim",packageName)
+            var rightExit = Android.getActivity().getResources().getIdentifier("slide_right_exit","anim",packageName)
+            if(leftEnter != 0 && leftExit != 0 && rightEnter != 0 && rightExit != 0){
+                fragmentTransaction.setCustomAnimations(leftEnter,leftExit,rightEnter,rightExit);
+            }
+        }
+//            fragmentTransaction.setCustomAnimations(io.smartface.SmartfaceDemo.R.anim.slide_left_enter,
+//                                                    io.smartface.SmartfaceDemo.R.anim.slide_left_exit,
+//                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_enter,
+//                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_exit);
+        fragmentTransaction.replace(12345, page.nativeObject, tag ? tag : "Page").addToBackStack(tag ? tag : "Page");
         fragmentTransaction.commit();
 //        fragmentTransaction.commitNow();
         fragmentManager.executePendingTransactions();
@@ -30,7 +39,7 @@ function Pages(params) {
     self.pop = function(animated){
         var fragmentManager = Android.getActivity().getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount()>0){
-                fragmentManager.popBackStack();
+                fragmentManager.popBackStackImmediate();
         }
         //fragmentManager.executePendingTransactions();
     }
