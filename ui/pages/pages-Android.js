@@ -55,7 +55,5 @@ function Pages(params) {
 
 }
 
-var pageRouter = new Pages();
 
-
-module.exports = pageRouter;
+module.exports = Pages;
