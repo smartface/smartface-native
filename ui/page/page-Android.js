@@ -27,8 +27,8 @@ function Page(params) {
                             onConfigurationChanged: function(newConfig){
                                 if(newConfig.orientation == 2){
                                     innerLayout.setPosition({width: Device.screenHeight, height:Device.screenWidth});
-                                    self.width: Device.screenHeight;
-                                    self.height:Device.screenWidth;
+                                    self.width= Device.screenHeight;
+                                    self.height=Device.screenWidth;
                                 }
                                 else{
                                     innerLayout.setPosition({width: Device.screenWidth, height:Device.screenHeight});
