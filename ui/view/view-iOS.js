@@ -10,6 +10,8 @@ function View(params) {
         self.nativeObject = new SMFUIView();
     }
 
+    self.nativeObject.setAllAutoresizingMask();
+    
     var _style;
     Object.defineProperty(self, 'style', {
         get: function() {
