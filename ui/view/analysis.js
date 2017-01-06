@@ -25,6 +25,7 @@ function View(params) {
      * represents view is completely opaque.
      *
      * @property {Number} alpha 
+     * @member UI.View
      * @since 0.1
      */
     this.alpha = 1.0;
@@ -34,6 +35,7 @@ function View(params) {
      * color with string or UI.Color properties.
      * 
      * @property {Color} backgroundColor 
+     * @member UI.View
      * @since 0.1
      */ 
     this.backgroundColor = "#FFFFFF";
@@ -43,6 +45,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} height 
+     * @member UI.View
      * @since 0.1
      */
     this.height = "0%";
@@ -51,7 +54,8 @@ function View(params) {
      * Gets/sets id of view. Should be unique number for all objects
      * inside project.
      * 
-     * @property {Number} id View identifier
+     * @property {Number} id 
+     * @member UI.View
      * @since 0.1
      */
     this.id = 5421;
@@ -61,6 +65,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} left 
+     * @member UI.View
      * @since 0.1
      */
     this.left = "0%";
@@ -69,6 +74,7 @@ function View(params) {
      * Gets/sets style of view. 
      * 
      * @property {Style} style
+     * @member UI.View
      * @since 0.1
      */
     this.style = {};
@@ -78,6 +84,7 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} top 
+     * @member UI.View
      * @since 0.1
      */
     this.top = "0%";
@@ -86,6 +93,7 @@ function View(params) {
      * Gets/sets visibility of view. It is set to true as default.
      * 
      * @property {Boolean} visible 
+     * @member UI.View
      * @since 0.1
      */
     this.visible = true;
@@ -95,6 +103,7 @@ function View(params) {
      * related to touches won't fire. It is set to true as default.
      * 
      * @property {Boolean} touchEnabled 
+     * @member UI.View
      * @since 0.1
      */
     this.touchEnabled = true;
@@ -104,9 +113,85 @@ function View(params) {
      * (as percentage) is allowed.
      * 
      * @property {Number} width 
+     * @member UI.View
      * @since 0.1
      */
     this.width = "0%";
+
+    /**
+     * Gets/sets padding of view. Setting number as pixels.
+     *
+     *     @example
+     *     const View = require('sf-core/ui/view');
+     *     var myView = new View();
+     *     var padding = {
+     *         left: 15,
+     *         top: 10,
+     *         right: 15,
+     *         bottom: 10
+     *     };
+     *     myView.padding = padding;
+     *
+     * @property {Object} padding
+     * @param {Number} [padding.left] Padding left value
+     * @param {Number} [padding.top] Padding top value
+     * @param {Number} [padding.right] Padding right value
+     * @param {Number} [padding.bottom] Padding bottom value
+     * @since 0.1
+     */
+    this.padding = {left: 15, top: 10, right: 15, bottom:10};
+
+    /**
+     * This method allows getting view to the front.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     var myLabelBehind = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "10%",
+     *         left: "15%",
+     *         text: "Label at behind",
+     *         backgroundColor: Color.BLUE,
+     *         textColor: Color.WHITE
+     *     });
+     *     var myLabelFront = new Label({
+     *         width: "70%",
+     *         height: "10%",
+     *         top: "15%",
+     *         left: "15%",
+     *         text: "Label at front",
+     *         backgroundColor: Color.BLACK,
+     *         textColor: Color.CYAN
+     *     });
+     *     myPage.add(myLabelBehind);
+     *     myPage.add(myLabelFront);
+     *     myLabelBehind.bringToFront();
+     *
+     * @method bringToFront
+     * @since 0.1
+     */
+    this.bringToFront = function(){};
+
+    /**
+     * Getter of this view's parent view.
+     *
+     * @return {View} Parent view of this view, or null if not exists.
+     * @method getParent
+     * @since 0.1
+     */
+    this.getParent = function(){};
+
+    /**
+     * Recalculates layout position and bounds.
+     *
+     * @method invalidatePosition
+     * @since 0.1
+     */
+    this.invalidatePosition = function(){};
 
     /**
      * This method returns all position values in one object.
@@ -116,12 +201,13 @@ function View(params) {
      * @return {Number} return.height Height value
      * @return {Number} return.left Position X value
      * @return {Number} return.top Position Y value
+     * @member UI.View
      * @since 0.1
      */
     this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
 
     /**
-     * This method allows setting all position values within one function call.
+     * This method allows setting all position values within one function call. 
      * Using this method will be faster than setting all position values (width,
      * height etc.) separately.
      * 
@@ -142,6 +228,7 @@ function View(params) {
      * @param {Number} [position.left] Position X value
      * @param {Number} [position.top] Position Y value
      * @method setPosition
+     * @member UI.View
      * @since 0.1
      */
     this.setPosition = function(position){}
@@ -150,6 +237,7 @@ function View(params) {
      * Gets/sets touch event for view. This event fires when touch started.
      * 
      * @event onTouch
+     * @member UI.View
      * @since 0.1
      */
     this.onTouch = function onTouch(){ }
@@ -159,6 +247,7 @@ function View(params) {
      * finished.
      * 
      * @event onTouchEnded
+     * @member UI.View
      * @since 0.1
      */
     this.onTouchEnded = function onTouchEnded(){ }

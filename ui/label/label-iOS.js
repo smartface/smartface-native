@@ -5,11 +5,14 @@ const SFTextAlignment = require("sf-core/ui/textalignment");
 
 const Label = extend(View)(
     function (_super, params) {
-        _super(this);
         var self = this;
-
-        // TODO Dogan Check params before using it
-        self.nativeObject = new SMFUITextView();
+        
+        if(!self.nativeObject){
+            self.nativeObject = new SMFUITextView();
+        }
+        
+        _super(this);
+        
         //Defaults
         self.nativeObject.setSelectable = false;
 		self.nativeObject.setEditable = false;	

@@ -9,7 +9,7 @@
  *     const Switch = require('sf-core/ui/switch');
  *     const Color = require('sf-core/ui/color');
  *     var mySwitch = new Switch();
- *     mySwitch.thumbOnColor = Color.WHITE;
+ *     mySwitch.thumbOnColor = Color.BLUE;
  */
 function Switch(params) {
 
@@ -22,7 +22,7 @@ function Switch(params) {
     this.thumbOnColor = Color.GREEN; 
     
     /**
-     * Gets/sets color of the thumb when it is not checked. 
+     * Gets/sets color of the thumb when it is not checked.  
      * It is set to gray by default. 
      * 
      * @property {Color} thumbOffColor 

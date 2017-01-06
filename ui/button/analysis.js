@@ -3,15 +3,16 @@ const extend = require('js-base/core/extend');
 
 /**
  * @class UI.Button
+ * @extends UI.View
  * @since 0.1
  *
- * Button class represents a clickable object to user interface. 
+ * Button class represents a clickable object to user interface.  
  * A button instance consists of text or an icon(or both of them).
  * 
  *     @example
  *     const Button = require('sf-core/ui/button');
  *     var myButton = new Button();
- *     myButton.text = "Click me!"
+ *     myButton.text = "Click me!";
  */
 const Button = extend(View)(
     function (_super, params) {
@@ -46,22 +47,23 @@ const Button = extend(View)(
          *     const StateList = require('sf-core/util/statelist');
          *     const Color = require('sf-core/ui/color');
          *     var myButton = new Button();
+         *     myButton.text = "Button text";
          *     myButton.textColors = new StateList({  
-         *         normal: Color.WHITE, 
-         *         disabled: Color.BLACK, 
-         *         selected: Color.LIGHTGRAY,  
-         *         pressed: Color.DARKGRAY,
-         *         focused: Color.DARKGRAY  
+         *         normal: Color.BLUE, 
+         *         disabled: Color.LIGHTGRAY, 
+         *         selected: Color.RED,  
+         *         pressed: Color.BLACK,
+         *         focused: Color.GRAY  
          *     }); 
          * @since 0.1
          * @property {StateList} textColors 
          */
         this.textColors = new StateList( {
-            normal: Color.WHITE, 
+            normal: Color.BLACK, 
             disabled: Color.BLACK, 
-            selected: Color.LIGHTGRAY, 
-            pressed: Color.DARKGRAY, 
-            focused: Color.DARKGRAY       
+            selected: Color.BLACK, 
+            pressed: Color.BLACK, 
+            focused: Color.BLACK       
         } );
 
         /**
@@ -73,7 +75,7 @@ const Button = extend(View)(
          *     const Color = require('sf-core/ui/color');
          *     var myButton = new Button();
          *     myButton.backgroundColors = new StateList({  
-         *         normal: Color.WHITE, 
+         *         normal: Color.LIGHTGRAY, 
          *         disabled: Color.BLACK, 
          *         selected: Color.LIGHTGRAY,  
          *         pressed: Color.DARKGRAY,
@@ -83,7 +85,7 @@ const Button = extend(View)(
          * @property {StateList} backgroundColors 
          */
         this.backgroundColors = new StateList({          
-            normal: Color.WHITE, 
+            normal: Color.LIGHTGRAY, 
             disabled: Color.BLACK, 
             selected: Color.LIGHTGRAY, 
             pressed: Color.DARKGRAY, 
