@@ -10,6 +10,8 @@ function View(params) {
         self.nativeObject = new SMFUIView();
     }
 
+    self.nativeObject.setAllAutoresizingMask();
+    
     var _style;
     Object.defineProperty(self, 'style', {
         get: function() {
@@ -225,9 +227,8 @@ function View(params) {
         var top = 0;
         var height = 0;
         var width = 0;
-     
+        
         if(self.parent){
-            
            left = !TypeUtil.isNumeric(_left) ? self.parent.width * (parseInt(_left.replace("%")))/100 : _left;
            top = !TypeUtil.isNumeric(_top) ? self.parent.height * (parseInt(_top.replace("%")))/100 : _top;
            height = !TypeUtil.isNumeric(_height) ? self.parent.height * (parseInt(_height.replace("%")))/100 : _height;
