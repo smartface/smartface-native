@@ -1,3 +1,6 @@
+const AbsoluteLayout = require("sf-core/ui/absolutelayout");
+const Color = require("sf-core/ui/color");
+
 function Page(params) {
     var self = this;
     var activity = Android.getActivity();
@@ -5,35 +8,34 @@ function Page(params) {
     self.height = Device.screenHeight;
     self.width = Device.screenWidth;
 
-    var layoutparams = new android.widget.AbsoluteLayout.LayoutParams(-1, -1,0,0);
-    innerAbsoluteLayout = new android.widget.AbsoluteLayout(activity);
-    innerAbsoluteLayout.setBackgroundColor(android.graphics.Color.WHITE);
-    innerAbsoluteLayout.setLayoutParams(layoutparams);
+    var innerLayout = new AbsoluteLayout({
+        height: Device.screenHeight,
+        width: Device.screenWidth,
+        backgroundColor:Color.WHITE
+    })
+    innerLayout.parent = self;
 
-    innerAbsoluteLayout.setOnKeyListener(android.view.View.OnKeyListener.implement({
-        onKey: function(v, keyCode, event){
-            // KeyEvent.KEYCODE_BACK
-            if(isBackButtonEnabled && keyCode == 4){
-                Android.getActivity().getFragmentManager().popBackStackImmediate();
-                fragmentManager.executePendingTransactions();
-            }
-        }
-    }));
 
     self.nativeObject = android.support.v4.app.Fragment.extend("SFFragment", {
                             onCreateView: function() {
-                                return innerAbsoluteLayout;
+                                return innerLayout.nativeObject;
                             },
                             onViewCreated: function(view, savedInstanceState){
-                                if(self.childViews){
-                                    for(var childView in self.childViews){
-                                        for(var childViewKey in self.childViews){
-                                            // passing calculated height and width to child view
-                                            self.childViews[childViewKey].invalidatePosition(self.width, self.height);
-                                        }
-                                    }
+                                innerLayout.invalidatePosition(self.width, self.height);
+                                onShowCallback && onShowCallback();
+                            },
+                            onConfigurationChanged: function(newConfig){
+                                if(newConfig.orientation == 2){
+                                    innerLayout.setPosition({width: Device.screenHeight, height:Device.screenWidth});
+                                    self.width: Device.screenHeight;
+                                    self.height:Device.screenWidth;
                                 }
-                                onShowCallback && onShowCallback;
+                                else{
+                                    innerLayout.setPosition({width: Device.screenWidth, height:Device.screenHeight});
+                                    self.height = Device.screenHeight;
+                                    self.width = Device.screenWidth;
+                                }
+
                             }
     }, null);
 
@@ -74,13 +76,11 @@ function Page(params) {
     self.childViews = {};
     this.add = function(view){
         view.parent = self;
-        self.childViews[view.id] = view;
-        innerAbsoluteLayout.addView(view.nativeObject)
+        innerLayout.addChild(view)
     };
 
     this.remove = function(view){
-          delete childViews[view.id];
-          innerAbsoluteLayout.removeView(view.nativeObject)
+        innerLayout.removeChild(view)
     };
 }
 

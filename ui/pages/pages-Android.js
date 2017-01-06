@@ -17,18 +17,27 @@ function Pages(params) {
         var fragmentManager = Android.getActivity().getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated)
-            fragmentTransaction.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
-        fragmentTransaction.addToBackStack(tag ? tag : "Page").add(12345, page.nativeObject, tag ? tag : "Page");
+            fragmentTransaction.setCustomAnimations(io.smartface.SmartfaceDemo.R.anim.slide_left_enter,
+                                                    io.smartface.SmartfaceDemo.R.anim.slide_left_exit,
+                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_enter,
+                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_exit);
+        fragmentTransaction.addToBackStack(tag ? tag : "Page").replace(12345, page.nativeObject, tag ? tag : "Page");
         fragmentTransaction.commit();
+//        fragmentTransaction.commitNow();
         fragmentManager.executePendingTransactions();
     }
 
     self.pop = function(animated){
         var fragmentManager = Android.getActivity().getSupportFragmentManager();
-        fragmentManager.popBackStackImmediate();
-        fragmentManager.executePendingTransactions();
+        if(fragmentManager.getBackStackEntryCount()>0){
+                fragmentManager.popBackStack();
+        }
+        //fragmentManager.executePendingTransactions();
     }
 
 }
 
-module.exports = Pages;
+var pageRouter = new Pages();
+
+
+module.exports = pageRouter;
