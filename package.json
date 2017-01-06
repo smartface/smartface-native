@@ -21,5 +21,9 @@
     "url": "http://smartface.io"
   },
   "license": "ISC",
-  "homepage": "http://bitbucket.org/smartface-team/core-modules#readme"
+  "homepage": "http://bitbucket.org/smartface-team/core-modules#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "salep": "0.2.*"
+  }
 }
