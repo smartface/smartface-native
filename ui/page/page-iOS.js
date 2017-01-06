@@ -1,10 +1,12 @@
+const AbsoluteContainer = require('sf-core/ui/absolutelayout');
+
 function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
-    
-    self.nativeObject.view.backgroundColor = UIColor.whiteColor();
 
+    self.nativeObject.view.backgroundColor = UIColor.whiteColor();
+        
     Object.defineProperty(self, 'onShow', {
         get: function() {
             return self.nativeObject.onShow;
@@ -25,8 +27,18 @@ function Page(params) {
         enumerable: true
     });
 
+    var pageView = new AbsoluteContainer();
+        pageView.setPosition({
+            left: self.nativeObject.view.frame.x,
+    	    top: self.nativeObject.view.frame.y,
+    	    width: self.nativeObject.view.frame.width,
+    	    height: self.nativeObject.view.frame.height,
+    });
+    
+    self.nativeObject.view.addSubview(pageView.nativeObject);
+    
     self.add = function(object){
-        self.nativeObject.view.addSubview(object.nativeObject);
+        pageView.addChild(object);
     }
 
     self.remove = function(object){
