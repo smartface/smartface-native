@@ -49,7 +49,7 @@ const Button = extend(Label)(
             }, 
             set: function(textColors) {
                 textColorsInitial = textColors;
-                var statesSet = [[]];
+                var statesSet = [];
                 var colorsSets = [];
                 if(textColors.normal){
                     statesSet.push(STATE_NORMAL);

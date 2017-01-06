@@ -1,1 +1,2 @@
 require("./label");
+require("./button");
