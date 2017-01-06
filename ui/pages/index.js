@@ -1,0 +1,1 @@
+module.exports = require('./pages-' + Device.deviceOS + '.js');
