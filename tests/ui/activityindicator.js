@@ -21,4 +21,12 @@ salep.test("sf-core/ui/activityindicator Unit Test", function () {
         assert.equal(myActivityIndicator.color, Color.GREEN, "color must be equal to Color.GREEN");
         assert.notEqual(myActivityIndicator.color, Color.RED, "color is not equal to Color.RED");
     });
+
+    this.case("[color] setter/getter.", function () {
+        var myActivityIndicator = new ActivityIndicator();
+        myActivityIndicator.color = Color.create(255, 0, 255, 0); // ARGB
+
+        assert.equal(myActivityIndicator.color, Color.create("#FF00FF00"), "color must be equal to Color.create('#FF00FF00')");
+        assert.notEqual(myActivityIndicator.color, Color.GREEN, "color is not equal to Color.GREEN");
+    });
 });
