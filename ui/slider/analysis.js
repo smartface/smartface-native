@@ -58,12 +58,12 @@ const Slider = extend(View)(
          *     const Slider = require('sf-core/ui/slider');
          *     var Color = require('sf-core/ui/color');
          *     var mySlider = new Slider();
-         *     mySlider.lowerColor = Color.BLUE;
+         *     mySlider.minTrackColor = Color.BLUE;
          *
-         * @property {Color} lowerColor
+         * @property {Color} minTrackColor
          * @since 0.1
          */
-        this.lowerColor = Color.DARKGRAY;
+        this.minTrackColor = Color.DARKGRAY;
 
         /**
          * Gets/sets color of the thumb's upper track
@@ -72,12 +72,12 @@ const Slider = extend(View)(
          *     const Slider = require('sf-core/ui/slider');
          *     var Color = require('sf-core/ui/color');
          *     var mySlider = new Slider();
-         *     mySlider.upperColor = Color.GREEN;
+         *     mySlider.maxTrackColor = Color.GREEN;
          *
-         * @property {Color} upperColor
+         * @property {Color} maxTrackColor
          * @since 0.1
          */
-        this.upperColor = Color.GREEN;
+        this.maxTrackColor = Color.GREEN;
 
         /**
          * Gets/sets value of the slider. This value should be less or equals to maxValue,
