@@ -18,13 +18,13 @@ salep.test("sf-core/ui/color Unit Test", function() {
     });
 
     this.case("[create] create a color instance with hexadecimal.", function() {
-        var myColor1 = Color.create("#00FF0000");
+        var myColor1 = Color.create("#00FF0000"); // ARGB(0, 255, 0, 0)
         assert.equal(0, Color.alpha(myColor1), "Alpha value must be 0.");
         assert.equal(255, Color.red(myColor1), "Red value must be 255.");
         assert.equal(0, Color.green(myColor1), "Green value must be 0.");
         assert.equal(0, Color.blue(myColor1) , "Blue value must be 0.");
         
-        var myColor2 = Color.create("#FF000000");
+        var myColor2 = Color.create("#FF000000"); // ARGB(255, 0, 0, 0)
         assert.notEqual(0, Color.alpha(myColor2), "Alpha value must not be 0.");
         assert.notEqual(255, Color.red(myColor2), "Red value must not be 255.");
         assert.notEqual(255, Color.green(myColor2), "Green value must not be 255.");
@@ -35,7 +35,7 @@ salep.test("sf-core/ui/color Unit Test", function() {
         var myColor1 = Color.create(0, 255, 255, 255);
         assert.equal(0, Color.alpha(myColor1), "Alpha value must be 0.");
         
-        var myColor2 = Color.create("#FF000000");
+        var myColor2 = Color.create("#FF000000"); // ARGB(255, 0, 0, 0)
         assert.notEqual(0, Color.alpha(myColor2), "Alpha value must not be 0.");
     });
 
