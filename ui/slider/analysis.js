@@ -86,7 +86,7 @@ const Slider = extend(View)(
          *     @example
          *     const Slider = require('sf-core/ui/slider');
          *     var mySlider = new Slider();
-         *     mySlider.value = 0;
+         *     mySlider.value = 30;
          *
          * @property {Number} value
          * @since 0.1
