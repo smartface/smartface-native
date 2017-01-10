@@ -79,6 +79,7 @@ salep.test("sf-core/ui/slider Unit Test", function () {
     });
 
     this.case("[minValue] setter/getter with assigned to 50.", function () {
+        var mySlider = new Slider();
         mySlider.minValue = 50;
 
         assert.equal(mySlider.minValue, 50, "minValue must be equal to 50");
