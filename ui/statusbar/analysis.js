@@ -14,6 +14,7 @@ var StatusBarStyle = { };
  * @property {Number} DEFAULT
  * Status bar dark theme.
  * @static
+ * @readonly
  * @since 0.1
  */
 StatusBarStyle.DEFAULT = 0;
@@ -22,6 +23,7 @@ StatusBarStyle.DEFAULT = 0;
  * @property {Number} LIGHTCONTENT
  * Status bar light theme.
  * @static
+ * @readonly
  * @since 0.1
  */
 StatusBarStyle.LIGHTCONTENT = 1;
@@ -51,8 +53,8 @@ function StatusBar(params) {};
  *     @example
  *     const StatusBar = require('sf-core/ui/statusbar').StatusBar;
  *     const Color = require('sf-core/ui/color');
- *     StatusBar.android.color = Color.RED; * @property {Color} color
- *
+ *     StatusBar.android.color = Color.RED;
+ * @property {Color} color
  * @static
  * @since 0.1
  */
@@ -84,9 +86,9 @@ StatusBar.ios = {
  *     var statusBarHeight = StatusBar.height;
  *
  * @property {Number} height
- * @since 0.1
  * @static
  * @readonly
+ * @since 0.1
  */
 StatusBar.height = 30; // read only
 
