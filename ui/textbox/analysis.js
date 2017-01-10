@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
 /** @enum {Number} UI.Textbox.KeyboardType
  * @since 0.1
  * KeyboardType is an enum. It defines keyboard appearance when user focused
- * to the TextBox. There are three types of keyboard appearance.
+ * to the TextBox.
  *
  *     @example
  *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
