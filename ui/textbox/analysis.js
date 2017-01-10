@@ -42,7 +42,7 @@ KeyboardType.NUMBER = 2;
  * @since 0.1
  * Decimal specific keyboard appearance
  */
-KeyboardType.NUMBER = 3;
+KeyboardType.DECIMAL = 3;
 
 /**
  * @property {Number} EMAILADDRESS
