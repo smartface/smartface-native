@@ -10,6 +10,7 @@ const extend = require('js-base/core/extend');
  * 
  *     @example
  *     const Slider = require('sf-core/ui/slider');
+ *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
  *     var Color = require('sf-core/ui/color');
  *     var mySlider = new Slider();
  *     mySlider.maxValue = 100;
@@ -17,6 +18,8 @@ const extend = require('js-base/core/extend');
  *     mySlider.value = 40;
  *     mySlider.minTrackColor = Color.RED;
  *     mySlider.thumbColor = Color.BLUE;
+ *     var myAbsoluteLayout = new AbsoluteLayout();
+ *     myAbsoluteLayout.addChild(mySlider);
  *
  */
 
@@ -127,7 +130,7 @@ const Slider = extend(View)(
          *     const Slider = require('sf-core/ui/slider');
          *     var Color = require('sf-core/ui/color');
          *     var mySlider = new Slider();
-         *     mySlider.onChange = function;
+         *     mySlider.onValueChange = function;
          *
          * @param {Number} value New value of Slider.
          * @event onValueChange
