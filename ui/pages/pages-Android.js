@@ -1,19 +1,24 @@
+const NativeView = requireClass("android.view.View");
+const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
+const NativeColor = requireClass("android.graphics.Color");
+
 function Pages(params) {
     var self = this;
     var activity = Android.getActivity();
-    var rootViewId = android.view.View.generateViewId();
+    var rootViewId = NativeView.generateViewId();
 
     // Creating root layout for fragments
-    var absoluteLayout = new android.widget.AbsoluteLayout(activity);
+    var absoluteLayout = new NativeAbsoluteLayout(activity);
     // android.view.ViewGroupLayoutParams.MATCH_PARENT
-    var layoutparams = new android.widget.AbsoluteLayout.LayoutParams(-1,-1,0,0);
-    absoluteLayout.setBackgroundColor(android.graphics.Color.WHITE);
+    var layoutparams = new NativeAbsoluteLayout.LayoutParams(-1,-1,0,0);
+    absoluteLayout.setBackgroundColor(NativeColor.WHITE);
     absoluteLayout.setLayoutParams(layoutparams);
     absoluteLayout.setId(rootViewId);
     activity.setContentView(absoluteLayout);
     
     var pagesStack = [];
     self.push = function(page, animated, tag){
+        alert(Android.getActivity().getFragmentManager());
         var fragmentManager = Android.getActivity().getFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated){
