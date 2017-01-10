@@ -13,5 +13,7 @@ module.exports = {
     AlertButtonType: require('./alertview').AlertButtonType,
     Page: require('./page'),
     Pages: require('./pages'),
-    AbsoluteLayout: require('./absolutelayout')
+    AbsoluteLayout: require('./absolutelayout'),
+    Image: require('./image').Image,
+    ImageFillType: require('./image').ImageFillType
 };
