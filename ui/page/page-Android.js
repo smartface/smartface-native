@@ -6,6 +6,7 @@ function Page(params) {
     var activity = Android.getActivity();
     
     // self.height and self.width for child views. It can get root layout dimensions from it.
+    // @todo must be replaced with native get dimension. Somehow its not working.
     var verticalDimention = self.height = Device.screenHeight;
     var horizontalDimention = self.width = Device.screenWidth;
     
@@ -18,43 +19,31 @@ function Page(params) {
 
     self.nativeObject = android.app.Fragment.extend("SFFragment", {
                             onCreateView: function() {
-                                console.log("onCreateView");
+                                onLoadCallback && onLoadCallback();
                                 return innerLayout.nativeObject;
                             },
                             onViewCreated: function(view, savedInstanceState){
-                                console.log("onViewCreated");
                                 self.invalidatePosition();
                                 onShowCallback && onShowCallback();
                             },
                             onConfigurationChanged: function(newConfig){
                                 self.invalidatePosition(newConfig.orientation);
+                            },
+                            onDestroy: function(isHidden){
+                                onHideCallback && onHideCallback();
                             }
-                            // not working for onHide. 
-                            // onDetach: function(){
-                            //     console.log("onDetach");
-                            //     onHideCallback && onHideCallback();
-                            // },
-                            // onHiddenChanged: function(isHidden){
-                            //     console.log("onHiddenChanged");
-                            //     onHideCallback && onHideCallback();
-                            // },
-                            // onPause: function(isHidden){
-                            //     console.log("onPause");
-                            //     onHideCallback && onHideCallback();
-                            // },
-                            // onStop: function(isHidden){
-                            //     console.log("onStop");
-                            //     onHideCallback && onHideCallback();
-                            // },
-                            // onDestroyView: function(isHidden){
-                            //     console.log("onDestroyView");
-                            //     onHideCallback && onHideCallback();
-                            // },
-                            // onDestroy: function(isHidden){
-                            //     console.log("onDestroy");
-                            //     onHideCallback && onHideCallback();
-                            // }
     }, null);
+    
+    var onLoadCallback;
+    Object.defineProperty(this, 'onLoad', {
+        get: function() {
+            return onLoadCallback;
+        },
+        set: function(onLoad) {
+            onLoadCallback = onLoad;
+        },
+        enumerable: true
+    });
 
     var onShowCallback;
     Object.defineProperty(this, 'onShow', {

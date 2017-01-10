@@ -40,7 +40,7 @@ function Pages(params) {
 //                                                    io.smartface.SmartfaceDemo.R.anim.slide_left_exit,
 //                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_enter,
 //                                                    io.smartface.SmartfaceDemo.R.anim.slide_right_exit);
-        fragmentTransaction.replace(rootViewId, page.nativeObject, tag ? tag : "Page").addToBackStack(tag ? tag : "Page");
+        fragmentTransaction.replace(rootViewId, page.nativeObject, (tag ? tag : "Page" )).addToBackStack(null);
         fragmentTransaction.commit();
         pagesStack.push(page);
         // fragmentTransaction.commitNow();
@@ -48,16 +48,15 @@ function Pages(params) {
     }
 
     self.pop = function(){
-        var fragmentManager = Android.getActivity().getFragmentManager();
+        var fragmentManager = activity.getFragmentManager();
         if(fragmentManager.getBackStackEntryCount()>0){
+            console.log("poping: " + fragmentManager.getBackStackEntryCount());
                 fragmentManager.popBackStackImmediate();
                 pagesStack.pop().invalidatePosition();
         }
     }
-    
-    
-
 }
+
 
 
 module.exports = Pages;
