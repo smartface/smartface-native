@@ -15,7 +15,7 @@ const extend = require('js-base/core/extend');
  *     mySlider.maxValue = 100;
  *     mySlider.minValue = 0;
  *     mySlider.value = 40;
- *     mySlider.lowerColor = Color.RED;
+ *     mySlider.minTrackColor = Color.RED;
  *     mySlider.thumbColor = Color.BLUE;
  *
  */
@@ -52,7 +52,7 @@ const Slider = extend(View)(
         this.thumbImage = "images://smartface.png";
 
         /**
-         * Gets/sets color of the thumb's lower track.
+         * Gets/sets color of the thumb's minimum track color.
          *
          *     @example
          *     const Slider = require('sf-core/ui/slider');
@@ -66,7 +66,7 @@ const Slider = extend(View)(
         this.minTrackColor = Color.DARKGRAY;
 
         /**
-         * Gets/sets color of the thumb's upper track
+         * Gets/sets color of the thumb's maximum track color.
          *
          *     @example
          *     const Slider = require('sf-core/ui/slider');
@@ -130,10 +130,10 @@ const Slider = extend(View)(
          *     mySlider.onChange = function;
          *
          * @param {Number} value New value of Slider.
-         * @event onChange
+         * @event onValueChange
          * @since 0.1
          */
-        this.onChange = function(value) {};
+        this.onValueChange = function(value) {};
     }
 );
 module.exports = Slider;
