@@ -22,6 +22,8 @@ const Button = extend(View)(
           
         _super(this);
         
+        self.nativeObject.setTitleColor(Color.BLACK,ButtonState.normal);
+        
         var _text;
         Object.defineProperty(self, 'text', {
             get: function() {
