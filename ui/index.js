@@ -14,6 +14,6 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
-    TextBox: require('./textbox').TextBox,
-    KeyboardType: require('./textbox').KeyboardType
+    TextBox: require('./textbox'),
+    KeyboardType: require('./keyboardtype')
 };

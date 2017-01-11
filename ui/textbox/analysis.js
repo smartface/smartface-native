@@ -1,63 +1,5 @@
-const Label = require('../label');
+const View = require('../view');
 const extend = require('js-base/core/extend');
-
-/** @enum {Number} UI.Textbox.KeyboardType
- s* @static
- * @since 0.1
- * KeyboardType is an enum. It defines keyboard appearance when user focused
- * to the TextBox.
- *
- *     @example
- *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
- *     var myKeyboardType = KeyboardType.DEFAULT;
- */
-var KeyboardType = { };
-
-/**
- * @property {Number} DEFAULT
- * Default keyboard appearance.
- * @static
- * @readonly
- * @since 0.1
- */
-KeyboardType.DEFAULT = 0;
-
-/**
- * @property {Number} DATE
- * Date specific keyboard appearance
- * @static
- * @readonly
- * @since 0.1
- */
-KeyboardType.DATE = 1;
-
-/**
- * @property {Number} NEGATIVE
- * Numeric specific keyboard appearance
- * @static
- * @readonly
- * @since 0.1
- */
-KeyboardType.NUMBER = 2;
-
-/**
- * @property {Number} DECIMAL
- * Decimal specific keyboard appearance
- * @static
- * @since 0.1
- * @readonly
- */
-KeyboardType.DECIMAL = 3;
-
-/**
- * @property {Number} EMAILADDRESS
- * Email address specific keyboard appearance
- * @static
- * @since 0.1
- * @readonly
- */
-KeyboardType.EMAILADDRESS = 4;
-
 
 /**
  * @class UI.TextBox
@@ -66,31 +8,78 @@ KeyboardType.EMAILADDRESS = 4;
  * TextBox is a UI object to get input from user.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox').TextBox;
- *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
+ *     const TextBox = require('sf-core/ui/textbox');
+ *     const KeyboardType = require('sf-core/ui/keyboardtype');
+ *     const Color = require('sf-core/ui/color');
  *     var myTextBox = new TextBox({
+ *         width: "80%",
+ *         height: "20%",
+ *         top: "10%",
+ *         left: "20%",
+ *         textColor: Color.GRAY,
  *         hint: "Smartface TextBox",
  *         keyboardType: KeyboardType.NUMERIC
  *     });
- *     myTextBox.setPosition({
- *         width: "80%", 
- *         height: "20%", 
- *         top: "10%",
- *         left: "20%"
- *     });
- *     const Color = require('sf-core/ui/color');
- *     myTextBox.textColor = Color.GRAY;
  *
  */
-const TextBox = extend(Label)(
+const TextBox = extend(View)(
     function (_super, params) {
         _super(this);
+
+        /**
+         * Gets/sets font of the TextBox. When set to null label uses system font.
+         * It is set to null by default.
+         *
+         *     @example
+         *     const Label = require('sf-core/ui/label');
+         *     var myLabel = new Label({
+         *         text: "This is my label",
+         *         visible: true
+         *     });
+         *     const Font = require('sf-core/ui/font');
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+         *
+         * @property {Font} font
+         * @since 0.1
+         */
+        this.font = null;
+
+        /**
+         * Gets/sets text inside label view.
+         *
+         * @property {String} text
+         * @since 0.1
+         */
+        this.text = "Text";
+
+        /**
+         * Gets/sets text alignment of label view. UI.TextAlignment constants
+         * can be used.
+         *
+         *     @example
+         *     const Label = require('sf-core/ui/label');
+         *     var myLabel = new Label();
+         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     myLabel.textAlignment = TextAlignment.MIDCENTER;
+         *
+         * @property {Number} textAlignment
+         * @since 0.1
+         */
+        this.textAlignment = TextAlignment.MIDLEFT;
+
+        /**
+         * Gets/sets text color of view.
+         *
+         * @property {Color} textColor
+         * @since 0.1
+         */
+        this.textColor = "#000000";
 
         /**
          * Gets/sets hint text hint that is displayed when the text of the TextBox is empty.
          * 
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox"
          *     });
@@ -104,7 +93,7 @@ const TextBox = extend(Label)(
          * Gets/sets the color of the hint text. This property will work only for Android.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     const Color = require('sf-core/ui/color')
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
@@ -124,7 +113,7 @@ const TextBox = extend(Label)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         ios: {
@@ -142,7 +131,7 @@ const TextBox = extend(Label)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         ios: {
@@ -156,13 +145,12 @@ const TextBox = extend(Label)(
          */
         this.ios.minimumFontSize = 7;
 
-
         /**
          * Gets/sets clear button state. If enabled, clear button will be shown
-         * right at the TextBox. It is set to false by default.
+         * right at the TextBox. This property will work only for iOS.
          * 
          *     @example 
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         clearButtonEnabled: true
@@ -171,13 +159,13 @@ const TextBox = extend(Label)(
          * @property {Boolean} clearButtonEnabled
          * @since 0.1
          */
-        this.clearButtonEnabled = false;
+        this.ios.clearButtonEnabled = false;
 
         /**
          * Gets/sets the content of the TextBox is password or not.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         isPassword: true
@@ -192,8 +180,8 @@ const TextBox = extend(Label)(
          * Gets/sets text inside label view.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
-         *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
+         *     const TextBox = require('sf-core/ui/textbox');
+         *     const KeyboardType = require('sf-core/ui/keyboardtype');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         keyboardType: KeyboardType.NUMERIC
@@ -213,13 +201,21 @@ const TextBox = extend(Label)(
          */
         this.showKeyboard = function(){};
 
+        /**
+         * This method hides keyboard manually.
+         *
+         * @method hideKeyboard
+         * @since 0.1
+         */
+        this.hideKeyboard = function(){};
+
         // events
         /**
          * Gets/sets text change event for TextBox. When user insert or delete character
          * to the TextBox, this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     const Label = require('sf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
@@ -229,17 +225,19 @@ const TextBox = extend(Label)(
          *         }
          *     });
          *
+         * @param insertedText The text that inserted into TextBox.
+         * @param location Index of inserted text.
          * @event onTextChanged
          * @since 0.1
          */
-        this.onTextChanged = function() {};
+        this.onTextChanged = function(insertedText, location) {};
 
         /**
          * Gets/sets on begin editing event for TextBox. When user starts to insert or delete character
          * to the TextBox this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     const Label = require('sf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
@@ -249,51 +247,49 @@ const TextBox = extend(Label)(
          *         }
          *     });
          *
-         * @event onBeginEditing
+         * @event onEditBegins
          * @since 0.1
          */
-        this.onBeginEditing = function() {};
+        this.onEditBegins = function() {};
 
         /**
-         * Gets/sets on end editing event for TextBox. When user finishes editing,
-         * the TextBox this event will fire.
+         * Gets/sets editing end event for TextBox. When user finishes editing by clicking return key
+         * or clicking outside of the TextBox, this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
+         *     const TextBox = require('sf-core/ui/textbox');
          *     const Label = require('sf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
-         *         onBeginEditing: function(){
+         *         onEditEnds: function(){
          *             myLabel.text = myTextBox.text;
          *         }
          *     });
          *
-         * @event onEndEditing
+         * @event onEditEnds
          * @since 0.1
          */
-        this.onEndEditing = function() {};
+        this.onEditEnds = function() {};
 
         /**
-         * Gets/sets on focus event for TextBox. When user clicks to the TextBox and when,
-         * TextBox gains focus this event will fire.
+         * Gets/sets on return key press event for TextBox. When user clicks return key on the keyboard
+         * this event will be fired.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox').TextBox;
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label();
+         *     const TextBox = require('sf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
-         *         onFocus: function(){
-         *             myLabel.text = "TextBox focused.";
+         *         onReturnKey: function(){
+         *             alert('onReturnKey pressed');
          *         }
          *     });
          *
-         * @event onFocus
+         * @event onReturnKey
          * @since 0.1
          */
-        this.onFocus = function() {};
+        this.onReturnKey = function() {};
     }
 );
 
-module.exports = { TextBox: TextBox, KeyboardType: KeyboardType };
+module.exports = TextBox;
