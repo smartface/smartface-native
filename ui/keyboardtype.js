@@ -1,12 +1,15 @@
-/** @enum {Number} UI.KeyboardType
- s* @static
+/**
+ * @enum {Number} UI.KeyboardType
+ * @static
  * @since 0.1
+ *
  * KeyboardType is an enum. It defines keyboard appearance when user focused
  * to the TextBox.
  *
  *     @example
  *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
  *     var myKeyboardType = KeyboardType.DEFAULT;
+ *
  */
 var KeyboardType = { };
 

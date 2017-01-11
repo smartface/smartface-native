@@ -162,6 +162,23 @@ const TextBox = extend(View)(
         this.ios.clearButtonEnabled = false;
 
         /**
+         * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
+         * This property will work only for iOS.
+         *
+         *     @example
+         *     const TextBox = require('sf-core/ui/textbox');
+         *     const KeyboardAppearance = require('sf-core/ui/keyboardappearance');
+         *     var myTextBox = new TextBox({
+         *         hint: "Smartface TextBox",
+         *         KeyboardAppearance: KeyboardAppearance.DARK
+         *     });
+         *
+         * @property {KeyboardAppearance} keyboardAppearance
+         * @since 0.1
+         */
+        this.ios.keyboardAppearance = KeyboardAppearance.DEFAULT;
+
+        /**
          * Gets/sets the content of the TextBox is password or not.
          *
          *     @example
@@ -191,7 +208,6 @@ const TextBox = extend(View)(
          * @since 0.1
          */
         this.keyboardType = KeyboardType.DEFAULT;
-
 
         /**
          * This method shows keyboard manually.
