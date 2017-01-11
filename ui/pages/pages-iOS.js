@@ -6,6 +6,7 @@ function Pages(params) {
     UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
 
     self.nativeObject = new UINavigationController(rootViewController);
+    self.nativeObject.setTranslucent(false);
     UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
     UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
     
@@ -14,7 +15,7 @@ function Pages(params) {
     }
 
     self.pop = function(animated){
-        self.nativeObject.popViewControllerAnimated(animated);
+        self.nativeObject.pop(animated);
     }
 }
 
