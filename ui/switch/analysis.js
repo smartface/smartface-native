@@ -59,7 +59,7 @@ function Switch(params) {
     };
 
     /**
-     * Gets/sets toggle value of Swıtch. When Swıtch is ON,
+     * Gets/sets toggle value of Switch. When Switch is ON,
      * the value of this property will be true. It is set to false by default.
      * 
      * @property {Boolean} toggle
@@ -69,7 +69,7 @@ function Switch(params) {
     
     // events  
     /**
-     * Change event for Swıtch. This event fires when the state of switch changes from ON to OFF or vice versa.
+     * Change event for Switch. This event fires when the state of switch changes from ON to OFF or vice versa.
      * 
      * @event onToggleChanged
      * @since 0.1
