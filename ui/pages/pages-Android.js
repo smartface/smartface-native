@@ -18,7 +18,6 @@ function Pages(params) {
     
     var pagesStack = [];
     self.push = function(page, animated, tag){
-        alert(Android.getActivity().getFragmentManager());
         var fragmentManager = Android.getActivity().getFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated){
