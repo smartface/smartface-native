@@ -21,7 +21,7 @@ salep.test("sf-core/ui/slider Unit Test", function () {
         assert.notEqual(mySlider.maxTrackColor, Color.BLUE, "maxTrackColor is not equal to Color.BLUE");
     
         // Test minTrackColor
-        assert.equal(mySlider.minTrackColor, Color.BLUE, "minTrackColor must be equal to Color.BLUE");
+        assert.equal(mySlider.minTrackColor, Color.DARKGRAY, "minTrackColor must be equal to Color.DARKGRAY");
         assert.notEqual(mySlider.minTrackColor, Color.RED, "minTrackColor is not equal to Color.RED");
     
         // Test maxValue
@@ -33,7 +33,7 @@ salep.test("sf-core/ui/slider Unit Test", function () {
         assert.notEqual(mySlider.minValue, 100, "minValue is not equal to 100");
 
         // Test value
-        assert.equal(mySlider.value, 30, "value must be equal to 30");
+        assert.equal(mySlider.value, 0, "value must be equal to 0");
         assert.notEqual(mySlider.value, 100, "value is not equal to 100");
     });
     
