@@ -1,5 +1,5 @@
 /**
- * @class Page
+ * @class UI.Page
  * @since 0.1
  *
  * Page class can used for different user interfaces. Every page stands for different native lifecycle.
@@ -7,6 +7,23 @@
  *
  */
 function Page(params) {
+    /**
+     * It is a load callback for Page. It is called when the page is first created.
+     * Below example creates a button inside the page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.onLoad = function(){            
+     *         const Button = require('sf-core/ui/button');
+     *         var myButton = new Button();
+     *         myButton.text = "Click me!";
+     *         myPage.add(myButton);
+     *     }
+     *
+     * @callback Page~onLoad
+     */
+    this.onLoad = function onLoad(){};
 
     /**
      * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
@@ -18,7 +35,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @callback Page~onShow
+     * @event Page~onShow
      */
     this.onShow = function onShow(){};
 
@@ -32,7 +49,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @callback Page~onHide
+     * @event Page~onHide
      */
     this.onHide = function onHide(){};
 
