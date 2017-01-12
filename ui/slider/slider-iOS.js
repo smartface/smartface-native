@@ -46,6 +46,7 @@ const Slider = extend(View)(
             set: function(image) {
                 _thumbImage = image;
                 self.nativeObject.setThumbImage(new UIImage(image),SliderState.normal);
+                 self.nativeObject.setThumbImage(new UIImage(image),SliderState.pressed);
             },
             enumerable: true
         });
