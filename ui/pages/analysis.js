@@ -6,14 +6,12 @@
  * is using one instance from it. 
  * Pages class should initialized with root page. 
  *
- * @example
- * 
+ *     @example
  *     const Pages = require('sf-core/ui/pages');
  *     const Page = require('sf-core/ui/page');
  *     const Label = require('sf-core/ui/label');
  *     const AbsoluteLayout = require("sf-core/ui/absolutelayout");
  *     const Color = require('sf-core/ui/color');
- *     
  *     var myLabel = new Label({
  *         text: "Smartface Label",
  *         width: "50%", 
@@ -26,15 +24,12 @@
  *         height: "100%",
  *         backgroundColor: Color.BLUE
  *     });
- *     
  *     myAbsoluteLayout.addChild(myLabel);
- *     
  *     var myPage = new Page({
  *         onLoad: function(){
  *             myPage.add(myAbsoluteLayout);
  *         }
  *     });
- * 
  *     // Must initialized with rootPage.
  *     var myPages = new Pages({
  *         rootPage: myPage
@@ -44,7 +39,7 @@
 function Pages(params) {
 
     /**
-     * Show page with psuhing to pages stack. 
+     * Show page with pushing to pages stack. 
      *
      *     @example
      *     const Pages = require('sf-core/ui/pages');
@@ -79,8 +74,8 @@ function Pages(params) {
      *     });
      *     myPage2.add(myButtonPage2);
      *     
-     * @param {Page} page. Page to show. Previous page will be stacked.
-     * @param {Boolean} animated. If true, page will showed with default animation, otherwise will showed without animation.  
+     * @param {Page} page Page to show. Previous page will be stacked.
+     * @param {Boolean} animated If true, page will showed with default animation, otherwise will showed without animation.  
      * @method push
      */
     this.push = function(page, animated){};
