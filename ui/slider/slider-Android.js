@@ -41,7 +41,8 @@ const Slider = extend(View)(
                 }
                 
                 self.nativeObject.setProgress(_currentValue - _minValue);
-            }
+            },
+            enumerable: true
         });
 
         var _minValue;
@@ -52,7 +53,8 @@ const Slider = extend(View)(
             set: function(value) {
                 _minValue = value;
                 self.nativeObject.setMax(_maxValue - _minValue);
-            }
+            },
+            enumerable: true
         });
 
         var _maxValue;
@@ -63,7 +65,8 @@ const Slider = extend(View)(
             set: function(value) {
                 _maxValue = value
                 self.nativeObject.setMax(_maxValue - _minValue);
-            }
+            },
+            enumerable: true
         });
 
         var _minTrackColor;
@@ -77,7 +80,8 @@ const Slider = extend(View)(
 
                     _layerDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
                 }
-            }
+            },
+            enumerable: true
         });
 
         var _maxTrackColor;
@@ -91,7 +95,8 @@ const Slider = extend(View)(
                     
                     _layerDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
                 }
-            }
+            },
+            enumerable: true
         });
 
         var _thumbImage;
@@ -107,7 +112,8 @@ const Slider = extend(View)(
                     var bitmapDrawable = new BitmapDrawable(imageBitmap);
                     self.nativeObject.setThumb(bitmapDrawable);
                 }
-            }
+            },
+            enumerable: true
         });
 
         var _thumbColor;
@@ -121,7 +127,8 @@ const Slider = extend(View)(
                     _defaultThumb.setColorFilter(color, PorterDuffMode);
                     self.nativeObject.setThumb(_defaultThumb);
                 }
-            }
+            },
+            enumerable: true
         });
         
         var _onValueChange;
@@ -131,7 +138,8 @@ const Slider = extend(View)(
             }, 
             set: function(callback) {
                 _onValueChange = callback;
-            }
+            },
+            enumerable: true
         });
         
         // SET DEFAULTS
