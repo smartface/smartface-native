@@ -84,7 +84,6 @@ function Pages(params) {
      * Show page with poping from pages stack.
      *
      *     @example
-     *     @example
      *     const Pages = require('sf-core/ui/pages');
      *     const Page = require('sf-core/ui/page');
      *     const Button = require('sf-core/ui/button');
