@@ -115,9 +115,9 @@ function Pages(params) {
      *             myPages.pop();
      *         }
      *     });
-     *     myPage2.add(myButtinPage2);
+     *     myPage2.add(myButtonPage2);
      *
-     * @method push
+     * @method pop
      */
     this.pop = function(){};
 }
