@@ -10,6 +10,7 @@ function View(params) {
         self.nativeObject = new SMFUIView();
     }
 
+    //defaults
     self.nativeObject.setAllAutoresizingMask();
     
     var _style;
@@ -100,7 +101,7 @@ function View(params) {
         self.width = position.width;
         self.height = position.height;
     }
-
+    
     this.padding = function(param){
         alert('padd');
         
@@ -128,7 +129,7 @@ function View(params) {
         return self.parent ? self.parent : null;
     };
     
-    var _left;
+    var _left = 0;
     Object.defineProperty(self, 'left', {
         get: function() {
             return self.nativeObject.frame.x;
@@ -145,7 +146,7 @@ function View(params) {
         enumerable: true
     });
     
-    var _top;
+    var _top = 0;
     Object.defineProperty(self, 'top', {
         get: function() {
             return self.nativeObject.frame.y;
@@ -161,7 +162,7 @@ function View(params) {
         enumerable: true
     });
     
-    var _width;
+    var _width = 100;
     Object.defineProperty(self, 'width', {
         get: function() {
             return self.nativeObject.frame.width;
@@ -173,7 +174,7 @@ function View(params) {
         enumerable: true
     });
     
-    var _height;
+    var _height = 100;
     Object.defineProperty(self, 'height', {
         get: function() {
             return self.nativeObject.frame.height;

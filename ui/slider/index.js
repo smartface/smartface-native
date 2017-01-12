@@ -1,0 +1,1 @@
+module.exports = require('./slider-' + Device.deviceOS + '.js');
