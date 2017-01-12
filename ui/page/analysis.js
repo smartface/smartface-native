@@ -31,7 +31,7 @@ function Page(params) {
      *         myPage.add(myButton);
      *     }
      *
-     * @callback Page~onLoad
+     * @method onLoad
      */
     this.onLoad = function onLoad(){};
 
@@ -45,7 +45,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @callback Page~onShow
+     * @method onShow
      */
     this.onShow = function onShow(){};
 
@@ -59,7 +59,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @callback Page~onHide
+     * @method onHide
      */
     this.onHide = function onHide(){};
 
