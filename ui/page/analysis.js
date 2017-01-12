@@ -1,5 +1,5 @@
 /**
- * @class Page
+ * @class UI.Page
  * @since 0.1
  *
  * Page class can used for different user interfaces. Every page stands for different native lifecycle.
@@ -35,7 +35,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @callback Page~onShow
+     * @event Page~onShow
      */
     this.onShow = function onShow(){};
 
@@ -49,7 +49,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @callback Page~onHide
+     * @event Page~onHide
      */
     this.onHide = function onHide(){};
 
