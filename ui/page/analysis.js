@@ -18,7 +18,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @callback Page~onShow
+     * @event Page~onShow
      */
     this.onShow = function onShow(){};
 
@@ -32,7 +32,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @callback Page~onHide
+     * @event Page~onHide
      */
     this.onHide = function onHide(){};
 
