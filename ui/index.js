@@ -17,5 +17,6 @@ module.exports = {
     Slider: require('./slider'),
     TextBox: require('./textbox'),
     KeyboardType: require('./keyboardtype'),
-    KeyboardAppearance: require('./keyboardappearance')
+    KeyboardAppearance: require('./keyboardappearance'),
+    ActionKeyType: require('./actionkeytype')
 };

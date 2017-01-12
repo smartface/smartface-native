@@ -18,12 +18,15 @@ var KeyboardAppearance = { };
 
 /**
  * @property {Number} DEFAULT
- * Default colored keyboard appearance.
+ * Default colored keyboard appearance. This constant corresponds to the light value.
  * @static
  * @readonly
  * @since 0.1
  */
-KeyboardAppearance.DEFAULT = 0;
+Object.defineProperty(KeyboardAppearance, 'DEFAULT', {
+  value: 0,
+  writable: false
+});
 
 /**
  * @property {Number} LIGHT
@@ -32,7 +35,10 @@ KeyboardAppearance.DEFAULT = 0;
  * @readonly
  * @since 0.1
  */
-KeyboardAppearance.LIGHT = 1;
+Object.defineProperty(KeyboardAppearance, 'LIGHT', {
+  value: 1,
+  writable: false
+});
 
 /**
  * @property {Number} DARK
@@ -41,4 +47,9 @@ KeyboardAppearance.LIGHT = 1;
  * @since 0.1
  * @readonly
  */
-KeyboardAppearance.DARK = 2;
+Object.defineProperty(KeyboardAppearance, 'DARK', {
+  value: 2,
+  writable: false
+});
+
+module.exports = KeyboardAppearance;

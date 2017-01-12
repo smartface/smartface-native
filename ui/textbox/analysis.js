@@ -39,7 +39,7 @@ const TextBox = extend(View)(
          *     const Font = require('sf-core/ui/font');
          *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
          *
-         * @property {Font} font
+         * @property {UI.Font} font
          * @since 0.1
          */
         this.font = null;
@@ -62,7 +62,7 @@ const TextBox = extend(View)(
          *     const TextAlignment = require('sf-core/ui/textalignment');
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;
          *
-         * @property {Number} textAlignment
+         * @property {UI.TextAlignment} textAlignment
          * @since 0.1
          */
         this.textAlignment = TextAlignment.MIDLEFT;
@@ -70,7 +70,7 @@ const TextBox = extend(View)(
         /**
          * Gets/sets text color of view.
          *
-         * @property {Color} textColor
+         * @property {UI.Color} textColor
          * @since 0.1
          */
         this.textColor = "#000000";
@@ -102,7 +102,7 @@ const TextBox = extend(View)(
          *         }
          *     });
          *
-         * @property {Color} hintTextColor
+         * @property {UI.Color} hintTextColor
          * @since 0.1
          */
         this.android.hintTextColor = Color.LIGHTGRAY;
@@ -173,7 +173,7 @@ const TextBox = extend(View)(
          *         KeyboardAppearance: KeyboardAppearance.DARK
          *     });
          *
-         * @property {KeyboardAppearance} keyboardAppearance
+         * @property {UI.KeyboardAppearance} keyboardAppearance
          * @since 0.1
          */
         this.ios.keyboardAppearance = KeyboardAppearance.DEFAULT;
@@ -194,7 +194,7 @@ const TextBox = extend(View)(
         this.isPassword = false;
 
         /**
-         * Gets/sets text inside label view.
+         * Gets/sets keyboard type for TextBox.
          *
          *     @example
          *     const TextBox = require('sf-core/ui/textbox');
@@ -204,10 +204,26 @@ const TextBox = extend(View)(
          *         keyboardType: KeyboardType.NUMERIC
          *     });
          *
-         * @property {KeyboardType} keyboardType
+         * @property {UI.KeyboardType} keyboardType
          * @since 0.1
          */
         this.keyboardType = KeyboardType.DEFAULT;
+
+        /**
+         * Gets/sets action key type for TextBox.
+         *
+         *     @example
+         *     const TextBox = require('sf-core/ui/textbox');
+         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
+         *     var myTextBox = new TextBox({
+         *         hint: "Smartface TextBox Password",
+         *         actionKeyType: ActionKeyType.NEXT
+         *     });
+         *
+         * @property {UI.ActionKeyType} actionKeyType
+         * @since 0.1
+         */
+        this.actionKeyType = UI.ActionKeyType.DEFAULT;
 
         /**
          * This method shows keyboard manually.
@@ -241,12 +257,13 @@ const TextBox = extend(View)(
          *         }
          *     });
          *
-         * @param insertedText The text that inserted into TextBox.
-         * @param location Index of inserted text.
+         * @param {Object} e Event arguments.
+         * @param {String} e.insertedText The text that inserted into TextBox.
+         * @param {Number} e.location Index of inserted text.
          * @event onTextChanged
          * @since 0.1
          */
-        this.onTextChanged = function(insertedText, location) {};
+        this.onTextChanged = function(e) {};
 
         /**
          * Gets/sets on begin editing event for TextBox. When user starts to insert or delete character
@@ -289,22 +306,26 @@ const TextBox = extend(View)(
         this.onEditEnds = function() {};
 
         /**
-         * Gets/sets on return key press event for TextBox. When user clicks return key on the keyboard
+         * Gets/sets on action key press event for TextBox. When user clicks action key on the keyboard
          * this event will be fired.
          *
          *     @example
          *     const TextBox = require('sf-core/ui/textbox');
+         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
-         *         onReturnKey: function(){
-         *             alert('onReturnKey pressed');
+         *         actionKeyType: ActionKeyType.NEXT,
+         *         onActionButtonPress: function(e){
+         *             alert('Action Button pressed');
          *         }
          *     });
          *
-         * @event onReturnKey
+         * @param {Object} e Event arguments.
+         * @param {UI.ActionKeyType} e.actionKeyType Pressed action key type.
+         * @event onActionButtonPress
          * @since 0.1
          */
-        this.onReturnKey = function() {};
+        this.onActionButtonPress = function(e) {};
     }
 );
 
