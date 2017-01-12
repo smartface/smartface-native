@@ -14,6 +14,5 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
-    StatusBar: require('./statusbar').StatusBar,
-    StatusBarStyle: require('./statusbar').StatusBarStyle
+    StatusBarStyle: require('./statusbarstyle')
 };
