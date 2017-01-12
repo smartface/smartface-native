@@ -58,7 +58,7 @@ function Pages(params) {
      *         top: "30%",
      *         left: "35%",
      *         onPress: function(){
-     *             myPages.push(myPage2,true,"Page2");
+     *             myPages.push(myPage2,true);
      *         }
      *     });
      *     myPage1.add(myButtonPage1);
@@ -77,14 +77,13 @@ function Pages(params) {
      *             myPages.pop();
      *         }
      *     });
-     *     myPage2.add(myButtinPage2);
+     *     myPage2.add(myButtonPage2);
      *     
      * @param {Page} page. Page to show. Previous page will be stacked.
      * @param {Boolean} animated. If true, page will showed with default animation, otherwise will showed without animation.  
-     * @param {String} tag. Page tag in page stack. Parameter is not required.
      * @method push
      */
-    this.push = function(page, animated, tag){};
+    this.push = function(page, animated){};
 
     /**
      * Show page with poping from pages stack.

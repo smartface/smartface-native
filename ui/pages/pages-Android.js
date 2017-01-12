@@ -15,7 +15,9 @@ function Pages(params) {
      
     
     self.push = function(page, animated, tag){
-        pagesStack[pagesStack.length-1] && pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+        if(pagesStack.length > 0){
+            pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+        }
         var fragmentManager = activity.getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated){
@@ -32,7 +34,7 @@ function Pages(params) {
                                                         rightExit);
             }
         }
-        fragmentTransaction.replace(rootViewId, page.nativeObject, (tag ? tag : "Page" )).addToBackStack(null);
+        fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
         pagesStack.push(page);
@@ -41,7 +43,9 @@ function Pages(params) {
     self.pop = function(){
         var fragmentManager = activity.getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount()>0){
-            pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+            if(pagesStack.length > 0){
+                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+            }
             fragmentManager.popBackStackImmediate();
             pagesStack.pop().invalidatePosition();
         }
