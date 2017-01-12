@@ -10,7 +10,7 @@
  *     const Pages = require('sf-core/ui/pages');
  *     const Page = require('sf-core/ui/page');
  *     const Label = require('sf-core/ui/label');
- *     const AbsoluteLayout = require("sf-core/ui/absolutelayout");
+ *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
  *     const Color = require('sf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "Smartface Label",
