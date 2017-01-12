@@ -14,6 +14,6 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
-    Image: require('./image').Image,
-    ImageFillType: require('./image').ImageFillType
+    Image: require('./image'),
+    ImageFillType: require('./imagefilltype')
 };
