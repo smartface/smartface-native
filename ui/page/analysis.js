@@ -1,5 +1,5 @@
 /**
- * @class IU.Page
+ * @class UI.Page
  * @since 0.1
  *
  * Page class can used for different user interfaces. Every page stands for different native lifecycle.
