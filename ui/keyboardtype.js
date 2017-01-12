@@ -13,6 +13,9 @@
  */
 var KeyboardType = { };
 
+KeyboardType.ios = { };
+
+KeyboardType.android = { };
 /**
  * @property {Number} DEFAULT
  * Default keyboard appearance.
@@ -210,3 +213,5 @@ KeyboardType.android.TIME = 20;
  * @readonly
  */
 KeyboardType.android.EMAILADDRESS = 21;
+
+module.exports = KeyboardType;
