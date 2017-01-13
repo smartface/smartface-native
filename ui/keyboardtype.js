@@ -143,7 +143,6 @@ Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTAUTOCOMPLETE = 10;
 Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
   value: 10,
   writable: false
@@ -280,3 +279,5 @@ Object.defineProperty(KeyboardType.android, 'EMAILADDRESS', {
   value: 21,
   writable: false
 });
+
+module.exports = KeyboardType;
