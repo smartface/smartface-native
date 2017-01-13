@@ -130,13 +130,17 @@ const Slider = extend(View)(
          *     const Slider = require('sf-core/ui/slider');
          *     var Color = require('sf-core/ui/color');
          *     var mySlider = new Slider();
-         *     mySlider.onValueChange = function;
+         *     mySlider.onValueChange = valueChanged;
+         *     mySlider.value = 40;
+         * 
+         *     function valueChanged() {
+         *         alert("Value changed");
+         *     }
          *
-         * @param {Number} value New value of Slider.
          * @event onValueChange
          * @since 0.1
          */
-        this.onValueChange = function(value) {};
+        this.onValueChange = function() {};
     }
 );
 module.exports = Slider;
