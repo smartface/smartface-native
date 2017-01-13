@@ -16,8 +16,7 @@ function Page(params) {
         backgroundColor:Color.WHITE
     });
     innerLayout.parent = self;
-
-    self.nativeObject = android.app.Fragment.extend("SFFragment", {
+    self.nativeObject = android.support.v4.app.Fragment.extend("SFFragment", {
                             onCreateView: function() {
                                 onLoadCallback && onLoadCallback();
                                 return innerLayout.nativeObject;
@@ -28,9 +27,6 @@ function Page(params) {
                             },
                             onConfigurationChanged: function(newConfig){
                                 self.invalidatePosition(newConfig.orientation);
-                            },
-                            onDestroy: function(isHidden){
-                                onHideCallback && onHideCallback();
                             }
     }, null);
     

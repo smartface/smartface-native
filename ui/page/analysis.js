@@ -45,7 +45,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @method onShow
+     * @event onShow
      */
     this.onShow = function onShow(){};
 
@@ -59,7 +59,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @method onHide
+     * @event onHide
      */
     this.onHide = function onHide(){};
 
