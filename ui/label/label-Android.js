@@ -83,8 +83,8 @@ const Label = extend(View)(
             get: function() {
                 return (self.nativeInner ? self.nativeInner.getLineCount() : self.nativeObject.getLineCount() )!= 1;
             },
-            set: function(multipleLine) {
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multipleLine);
+            set: function(multiLine) {
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multiLine);
             },
             enumerable: true
         });

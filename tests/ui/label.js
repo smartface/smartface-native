@@ -46,13 +46,13 @@ salep.test("sf-core/ui/label Unit Test", function() {
     assert.isFalse(myLabel.showScrollBar, "showScrollBar must be false");
   });
 
-  this.case("[multipleLine] setter/getter.", function() {
+  this.case("[multiLine] setter/getter.", function() {
     var myLabel = new Label();
-    var defaultValue = myLabel.multipleLine;
-    myLabel.multipleLine = false;
+    var defaultValue = myLabel.multiLine;
+    myLabel.multiLine = false;
     
     assert.isTrue (defaultValue, "default value must be true");
-    assert.isFalse(myLabel.multipleLine, "multipleLine must be false");
+    assert.isFalse(myLabel.multiLine, "multiLine must be false");
   });
   
   this.case("[font] setter/getter.", function() {
