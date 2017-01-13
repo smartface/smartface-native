@@ -249,7 +249,7 @@ const TextBox = extend(View)(
 
         // events
         /**
-         * Gets/sets text change event for TextBox. When user insert or delete character
+         * Gets/sets callback of text change event for the TextBox. When user insert or delete character
          * to the TextBox, this event will fire.
          *
          *     @example
@@ -258,8 +258,8 @@ const TextBox = extend(View)(
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
-         *         onTextChanged: function(newText){
-         *             myLabel.text = newText;
+         *         onTextChanged: function(e){
+         *             myLabel.text = e.insertedText;
          *         }
          *     });
          *
