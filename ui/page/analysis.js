@@ -31,7 +31,7 @@ function Page(params) {
      *         myPage.add(myButton);
      *     }
      *
-     * @method onLoad
+     * @event onLoad
      */
     this.onLoad = function onLoad(){};
 
