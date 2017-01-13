@@ -64,10 +64,10 @@ const Label = extend(View)(
          * and text is too long to show in single line label shows text as 
          * multiline. 
          * 
-         * @property {Boolean} multipleLine 
+         * @property {Boolean} multiLine
          * @since 0.1
          */
-        this.multipleLine = true;
+        this.multiLine = true;
 
         /**
          * Gets/sets text inside label view.
