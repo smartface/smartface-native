@@ -58,11 +58,15 @@ var NativeKeyEvent = {
     KEYCODE_ENTER: 66
 }
 
+const NativeEditText = requireClass("android.widget.EditText");
+const NativeTextWatcher = requireClass("android.text.TextWatcher");
+const NativeView = requireClass("android.view.View");
+
 const TextBox = extend(Label)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject){
-            self.nativeObject = new android.widget.EditText(Android.getActivity());
+            self.nativeObject = new NativeEditText(Android.getActivity());
         }
         _super(this);
 
@@ -158,7 +162,7 @@ const TextBox = extend(Label)(
             enumerable: true
         });
     
-        self.nativeObject.addTextChangedListener(android.text.TextWatcher.implement({
+        self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
             onTextChanged: function(charSequence, start, before, count){
                 _onTextChangedCallback && _onTextChangedCallback();
             },
@@ -172,7 +176,7 @@ const TextBox = extend(Label)(
             }
         }));
         
-        self.nativeObject.setOnKeyListener(android.view.View.OnKeyListener.implement({
+        self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
             onKey: function(view, keyCode, event){
                 if (keyCode == NativeKeyEvent.KEYCODE_ENTER)  {
                     _onReturnKeyCallback && _onReturnKeyCallback();
