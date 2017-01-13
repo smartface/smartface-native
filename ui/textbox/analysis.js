@@ -106,16 +106,9 @@ const TextBox = extend(View)(
         this.android.hintTextColor = UI.Color.LIGHTGRAY
 
         /**
-         * iOS specific properties.
-         *
-         * @property {Object} ios
-         * @since 0.1
-         */
-        this.android = {};
-
-        /**
-         * Gets/sets adjustment status of TextBox. If enabled text size will be adjusted by
-         * view's width and height. It must be greater than minimumFontSize.
+         * Gets/sets adjustment status of TextBox.If enabled text size will be adjusted
+         * by view's fixed width. If you change it to true,
+         * you should set minimum font size by changing the minimumFontSize property.
          * This property will work only for iOS.
          *
          *     @example
