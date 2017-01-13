@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
  * @class UI.AbsoluteLayout
  * @since 0.1
  * @extends UI.ViewGroup
- * AbsoluteContainer is a layout that lets you specify exact positioning(x/y coordinates) of its child views.
+ * AbsoluteLayout is a layout that lets you specify exact positioning(x/y coordinates) of its child views.
  * 
  *     @example
  *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
@@ -28,4 +28,4 @@ const AbsoluteLayout = extend(ViewGroup)(
     }
 );
 
-module.exports = AbsoluteContainer;
+module.exports = AbsoluteLayout;
