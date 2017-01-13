@@ -3,7 +3,7 @@ const extend = require('js-base/core/extend');
 
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 
-const AbsoluteContainer = extend(ViewGroup)(
+const AbsoluteLayout = extend(ViewGroup)(
     function (_super, params) {
         var self = this;
         self.nativeObject = new NativeAbsoluteLayout(Android.getActivity());
@@ -18,4 +18,4 @@ const AbsoluteContainer = extend(ViewGroup)(
     }
 );
 
-module.exports = AbsoluteContainer;
+module.exports = AbsoluteLayout;

@@ -1,7 +1,7 @@
 const AbsoluteLayout = require("sf-core/ui/absolutelayout");
 const Color = require("sf-core/ui/color");
 
-const NativeFragment = requireClass("android.app.Fragment");
+const NativeFragment = requireClass("android.support.v4.app.Fragment");
 
 function Page(params) {
     var self = this;
@@ -30,9 +30,6 @@ function Page(params) {
                             },
                             onConfigurationChanged: function(newConfig){
                                 self.invalidatePosition(newConfig.orientation);
-                            },
-                            onDestroy: function(isHidden){
-                                onHideCallback && onHideCallback();
                             }
     }, null);
     

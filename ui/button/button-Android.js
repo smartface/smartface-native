@@ -19,6 +19,7 @@ const Button = extend(Label)(
         }
         _super(this);
         
+        self.nativeObject.setAllCaps(false); // enable lowercase texts
         
         var STATE_NORMAL =  [
             NativeR.attr.state_enabled,

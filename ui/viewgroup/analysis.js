@@ -3,9 +3,18 @@ const extend = require('js-base/core/extend');
 /**
  * @class UI.ViewGroup
  * @since 0.1
- * @extends View
+ * @extends UI.View
  * A ViewGroup is a special view that can contain other views (called children) like layouts and views.
  * ViewGroup is parent class of all layouts. ViewGroup is an abstract class. You can't create instance from it.
+ * 
+ *     @example
+ *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
+ *     const Label = require('sf-core/ui/label');
+ *     var myAbsoluteLayout = new AbsoluteLayout();
+ *     var myLabel = new Label({
+ *          text: "Smartface Label"
+ *     });
+ *     myAbsoluteLayout.addChild(myLabel);
  */
 const ViewGroup = extend(View)(
     function (_super, params) {

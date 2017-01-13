@@ -1,10 +1,20 @@
 /**
- * @class Page
+ * @class UI.Page
  * @since 0.1
  *
  * Page class can used for different user interfaces. Every page stands for different native lifecycle.
  * Only one page could shown at once.
  *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *     myPage.onLoad = function(){            
+ *         const Button = require('sf-core/ui/button');
+ *         var myButton = new Button();
+ *         myButton.text = "Click me!";
+ *         myPage.add(myButton);
+ *     
+ *     }
  */
 function Page(params) {
     /**
@@ -21,7 +31,7 @@ function Page(params) {
      *         myPage.add(myButton);
      *     }
      *
-     * @callback Page~onLoad
+     * @event onLoad
      */
     this.onLoad = function onLoad(){};
 
@@ -35,7 +45,7 @@ function Page(params) {
      *         alert("Page Showed!");
      *     }
      *
-     * @callback Page~onShow
+     * @event onShow
      */
     this.onShow = function onShow(){};
 
@@ -49,7 +59,7 @@ function Page(params) {
      *         alert("Page Hided!");
      *     }
      *
-     * @callback Page~onHide
+     * @event onHide
      */
     this.onHide = function onHide(){};
 
