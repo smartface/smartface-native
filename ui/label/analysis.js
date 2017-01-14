@@ -87,7 +87,7 @@ const Label = extend(View)(
          *     const TextAlignment = require('sf-core/ui/textalignment');
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
          * 
-         * @property {UI.TextAlignment} textAlignment = UI.TextAlignment.MIDLEFT  
+         * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]  
          * @since 0.1
          */
         this.textAlignment = UI.TextAlignment.MIDLEFT;
