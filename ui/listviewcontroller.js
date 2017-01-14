@@ -3,16 +3,14 @@
  * @since 0.1
  * ListViewController is provide a binding from data set to views that are 
  * displayed within a ListView.
- *
- *     @example
- *     // @todo write example
+ * For example usage you can look {@link UI.ListView}.
  * 
  */
 function ListViewController(){
     
     /**
      * This event will be fired when the ListView created ListViewItem template. 
-     * You should return ListViewItem inside this event.
+     * This function should return ListViewItem instance.
      * 
      *     @example
      *     // @todo write example
