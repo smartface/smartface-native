@@ -36,7 +36,7 @@ const Label = extend(View)(
          *     var myLabel = new Label();
          *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
-         * @property {String} htmlText 
+         * @property {String} [htmlText = ""] 
          * @since 0.1
          */
         this.htmlText = "";
@@ -54,7 +54,7 @@ const Label = extend(View)(
          *     const Font = require('sf-core/ui/font');
          *     myLabel.font = Font.create("Arial", 16, Font.BOLD);   
          * 
-         * @property {Font} font   
+         * @property {UI.Font} [font = null]   
          * @since 0.1
          */
         this.font = null;
@@ -64,18 +64,18 @@ const Label = extend(View)(
          * and text is too long to show in single line label shows text as 
          * multiline. 
          * 
-         * @property {Boolean} multiLine
+         * @property {Boolean} [multiline = false]
          * @since 0.1
          */
-        this.multiLine = true;
+        this.multiline = false;
 
         /**
          * Gets/sets text inside label view.
          * 
-         * @property {String} text 
+         * @property {String} [text = ""] 
          * @since 0.1
          */
-        this.text = "Text";
+        this.text = "";
 
         /**
          * Gets/sets text alignment of label view. UI.TextAlignment constants
@@ -87,26 +87,26 @@ const Label = extend(View)(
          *     const TextAlignment = require('sf-core/ui/textalignment');
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
          * 
-         * @property {Number} textAlignment  
+         * @property {UI.TextAlignment} textAlignment = UI.TextAlignment.MIDLEFT  
          * @since 0.1
          */
-        textAlignment = TextAlignment.MIDLEFT;
+        this.textAlignment = UI.TextAlignment.MIDLEFT;
 
         /**
          * Gets/sets text color of view.
          * 
-         * @property {Color} textColor 
+         * @property {UI.Color} [textColor = UI.Color.BLACK] 
          * @since 0.1
          */
-        this.textColor = "#000000";
+        this.textColor = UI.Color.BLACK;
 
         /**
          * Sets/gets showing scroll bar when text doesn't fit to label view.
          * 
-         * @property {Boolean} showScrollBar
+         * @property {Boolean} [showScrollBar = false]
          * @since 0.1
          */
-        this.showScrollBar = true;
+        this.showScrollBar = false;
         
         // Assign parameters given in constructor
         if (params) {
