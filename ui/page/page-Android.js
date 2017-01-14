@@ -74,6 +74,56 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    this.statusBar = {};
+    var _visible = true;
+    Object.defineProperty(this.statusBar, 'visible',  {
+        get: function() {
+            return _visible;
+        },
+        set: function(visible) {
+            if(typeof(visible) === "boolean") {
+                _visible = visible;
+                if(visible) {
+                    var decorView = activity.getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
+                }
+                else {
+                    var decorView = activity.getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
+                }
+            }
+        },
+        enumerable: true
+    });
+    
+    this.statusBar.android = {};
+    var _color = Color.create("#FF757575");
+    Object.defineProperty(this.statusBar.android, 'color',  {
+        get: function() {
+            return _color;
+        },
+        set: function(color) {
+            _color = color;
+            var window = activity.getWindow();
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(color);
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(this.statusBar, 'height', {
+        get: function() {
+            var result = 0;
+            var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) { // else: no resources
+                result = activity.getResources().getDimensionPixelSize(resourceId);
+            }
+            return result;
+        },
+        enumerable: true    
+    });
 
     self.childViews = {};
     this.add = function(view){
