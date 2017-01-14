@@ -46,7 +46,7 @@ const ListView = extend(View)(
         
         /**
          * Gets/sets vertical scroll bar status of the ListView. If this is true, 
-         * The ListView can scroll vertically too.
+         * scroll bar will be shown otherwise scroll bar will be hidden.
          * 
          *     @example 
          *     const ListView = require('sf-core/ui/listview');
@@ -152,7 +152,8 @@ const ListView = extend(View)(
 
         /**
          * Gets/sets scroll event for ListView. This event fires when the ListView
-         * scrolls
+         * scrolls. For better performance, don't set any callback if does not 
+         * necessary
          * 
          *     @example
          *     // @todo write example

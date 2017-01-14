@@ -5,7 +5,7 @@ const extend = require('js-base/core/extend');
  * @since 0.1
  * @extends UI.ViewGroup
  * 
- * //@todo write explanation.
+ * ListViewItem class can used for a row layout of the ListView.
  *
  *     @example
  *     // @todo write example

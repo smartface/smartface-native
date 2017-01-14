@@ -1,8 +1,8 @@
-
 /**
  * @class UI.ListViewController
  * @since 0.1
- * //@todo write explanation.
+ * ListViewController is provide a binding from data set to views that are 
+ * displayed within a ListView.
  *
  *     @example
  *     // @todo write example
@@ -11,18 +11,21 @@
 function ListViewController(){
     
     /**
-     * //@todo write explanation.
+     * This event will be fired when the ListView created ListViewItem template. 
+     * You should return ListViewItem inside this event.
      * 
      *     @example
      *     // @todo write example
      * 
      * @event onRowCreate
+     * @return {UI.ListViewItem}
      * @since 0.1
      */
     this.onRowCreate = function onRowCreate(){};
     
     /**
-     * //@todo write explanation.
+     * This event will be fired when the ListView created row at specific index.
+     * You can customize the list view item inside this callback.
      * 
      *     @example
      *     // @todo write example
@@ -35,7 +38,7 @@ function ListViewController(){
     this.onRowBind = function onRowBind(listViewItem, index){};
     
     /**
-     * //@todo write explanation.
+     * This event will be fired when user clicks the row at specific index.
      * 
      *     @example
      *     // @todo write example
