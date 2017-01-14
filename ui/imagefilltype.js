@@ -9,6 +9,7 @@
  *     var myImage = new Image();
  *     myImage.imageSource = "images://smartface.png";
  *     myImage.imageFillType = ImageFillType.NORMAL;
+ * 
  */
 var ImageFillType = { };
 
@@ -19,7 +20,10 @@ var ImageFillType = { };
  * @readonly
  * @since 0.1
  */
-ImageFillType.NORMAL = 0;
+Object.defineProperty(ImageFillType, 'NORMAL', {
+    value: 0,
+    writable: false
+});
 
 /**
  * @property {Number} STRETCH
@@ -28,23 +32,20 @@ ImageFillType.NORMAL = 0;
  * @readonly
  * @since 0.1
  */
-ImageFillType.STRETCH  = 1;
+Object.defineProperty(ImageFillType, 'STRETCH', {
+    value: 1,
+    writable: false
+});
 
 /**
- * @property {Number} TILE
- * Tiles the image source into the Image.
- * @static
- * @readonly
- * @since 0.1
- */
-ImageFillType.TILE = 2;
-
-/**
- * @property {Number} ASPECT_FIT
+ * @property {Number} ASPECTFIT
  * Resizes the image source  until the whole image will fits within the Image.
  * @static
  * @readonly
  * @since 0.1
  */
-ImageFillType.ASPECT_FIT = 3;
+Object.defineProperty(ImageFillType, 'ASPECTFIT', {
+    value: 2,
+    writable: false
+});
 
