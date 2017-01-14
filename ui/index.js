@@ -14,5 +14,8 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
-    Slider: require('./slider')
+    Slider: require('./slider'),
+    ListView: require('./listview'),
+    ListViewController: require('./listviewcontroller'),
+    ListViewItem: require('./listviewitem')
 };
