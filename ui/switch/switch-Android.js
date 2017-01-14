@@ -2,28 +2,34 @@ const Button = require('sf-core/ui/button');
 const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
 
+const NativeSwitch = requireClass("android.widget.Switch");
+const NativeTypedValue = requireClass("android.util.TypedValue");
+const NativeR = requireClass("android.R");
+const NativeCompoundButton = requireClass("android.widget.CompoundButton");
+const NativePorterDuff = requireClass("android.graphics.PorterDuff");
+
 const Switch = extend(Button)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject){
-            self.nativeObject = new android.widget.Switch(Android.getActivity());
+            self.nativeObject = new NativeSwitch(Android.getActivity());
         }
         _super(this);
 
 
 //        var STATE_CHECKED = [
-//            android.R.attr.state_checked
+//            NativeR.attr.state_checked
 //        ];
 //        var STATE_NORMAL =  [
-//            -android.R.attr.state_enabled
+//            -NativeR.attr.state_enabled
 //        ];
 
          // Getting default background color. Its themes default colorAccent and colorControlNormal on native
-        var typedValue = new android.util.TypedValue();
-        var a = Android.getActivity().obtainStyledAttributes(typedValue.data, [android.R.attr.colorAccent]);
+        var typedValue = new NativeTypedValue();
+        var a = Android.getActivity().obtainStyledAttributes(typedValue.data, [NativeR.attr.colorAccent]);
         var colorTrackCheckedInitial = a.getColor(0, 0);
         var initialColorChecked = colorTrackCheckedInitial;
-        a = Android.getActivity().obtainStyledAttributes(typedValue.data, [android.R.attr.colorControlNormal]);
+        a = Android.getActivity().obtainStyledAttributes(typedValue.data, [NativeR.attr.colorControlNormal]);
         var initialColorUnchecked = a.getColor(0, 0);
         a.recycle();
 
@@ -97,7 +103,7 @@ const Switch = extend(Button)(
             enumerable: true
         });
 
-        self.nativeObject.setOnCheckedChangeListener(android.widget.CompoundButton.OnCheckedChangeListener.implement({
+        self.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
             onCheckedChanged: function(buttonView, isChecked){
                 setThumbColor();
                 setTrackColor();
@@ -107,19 +113,19 @@ const Switch = extend(Button)(
 
         function setThumbColor(){
             if(self.nativeObject.isChecked()){
-                self.nativeObject.getThumbDrawable().setColorFilter(thumbOnColorInitial,android.graphics.PorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getThumbDrawable().setColorFilter(thumbOnColorInitial,NativePorterDuff.Mode.SRC_ATOP);
             }
             else{
-                self.nativeObject.getThumbDrawable().setColorFilter(thumbOffColorInitial,android.graphics.PorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getThumbDrawable().setColorFilter(thumbOffColorInitial,NativePorterDuff.Mode.SRC_ATOP);
             }
         }
 
         function setTrackColor(){
             if(self.nativeObject.isChecked()){
-                self.nativeObject.getTrackDrawable().setColorFilter(toggleOnColorInitial,android.graphics.PorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getTrackDrawable().setColorFilter(toggleOnColorInitial,NativePorterDuff.Mode.SRC_ATOP);
             }
             else{
-                self.nativeObject.getTrackDrawable().setColorFilter(toggleOffColorInitial,android.graphics.PorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getTrackDrawable().setColorFilter(toggleOffColorInitial,NativePorterDuff.Mode.SRC_ATOP);
             }
         }
 

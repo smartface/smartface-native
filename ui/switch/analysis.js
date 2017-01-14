@@ -1,9 +1,10 @@
 /**
  * @class UI.Switch
  * @since 0.1
+ * @extends UI.View
  * 
- * Switch is a two-state toggle button. A switch lets the user
- * can select between two options.
+ * Switch is a two-state toggle button. Switch allows the user 
+ * to select between two options.
  * 
  *     @example
  *     const Switch = require('sf-core/ui/switch');
@@ -11,10 +12,13 @@
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
-function Switch(params) {
+const Switch = extend(View)(
+    function (_super, params) {
+        _super(this);
 
     /**
-     * Gets/sets color of the thumb when it is checked. It is set to green by default. 
+     * Gets/sets color of the thumb when Switch is ON. 
+     * It is set to green by default. 
      * 
      * @property {Color} thumbOnColor 
      * @since 0.1
@@ -22,7 +26,7 @@ function Switch(params) {
     this.thumbOnColor = Color.GREEN; 
     
     /**
-     * Gets/sets color of the thumb when it is not checked.  
+     * Gets/sets color of the thumb when Switch is OFF.  
      * It is set to gray by default. 
      * 
      * @property {Color} thumbOffColor 
@@ -31,8 +35,8 @@ function Switch(params) {
     this.thumbOffColor = Color.GRAY;
 
     /**
-     * Gets/sets color of the switch when it is checked. It is set to 
-     * gray by default.
+     * Gets/sets the background of the switch when it is ON. 
+     * It is set to gray by default.
      * 
      * @property {Color} toggleOnColor 
      * @since 0.1
@@ -40,9 +44,9 @@ function Switch(params) {
     this.toggleOnColor = Color.GRAY;  
 
     /**
-     * Gets/sets color of the switch when it is not checked. It is set to gray
+     * Gets/sets the background of the switch when it is OFF.  It is set to gray
      * by default. This property is an android specific property. You should 
-     * set it for only android devices.
+     * set it only for android devices.
      * 
      *     @example
      *     const Switch = require('sf-core/ui/switch');
@@ -58,8 +62,8 @@ function Switch(params) {
     };
 
     /**
-     * Gets/sets checked value of a switch button. When the switch is checked,
-     * The value of this property will be true. It is set to false by default.
+     * Gets/sets toggle value of Switch. When Switch is ON,
+     * the value of this property will be true. It is set to false by default.
      * 
      * @property {Boolean} toggle
      * @since 0.1
@@ -68,11 +72,12 @@ function Switch(params) {
     
     // events  
     /**
-     * Gets/sets an event for switch instance. This event fires when the state of switch changed.
+     * Change event for Switch. This event fires when the state of switch changes from ON to OFF or vice versa.
      * 
      * @event onToggleChanged
      * @since 0.1
      */
     this.onToggleChanged = function() {};
-}
+    }
+);
 module.exports = Switch;
