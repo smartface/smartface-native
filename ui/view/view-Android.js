@@ -1,17 +1,26 @@
 const TypeUtil = require("sf-core/util/type");
 const Style = require('sf-core/ui/style');
+
+const NativeView = requireClass("android.view.View");
+const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawable");
+const NativeColor = requireClass("android.graphics.Color");
+const NativeMotionEvent = requireClass("android.view.MotionEvent");
+const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
+
 function View(params) {
     var self = this;
     if(!self.nativeObject){
-        self.nativeObject = new android.view.View(Android.getActivity());
+        self.nativeObject = new NativeView(Android.getActivity());
     }
     
     var backgroundColorInitial = 0xFFFFFFFF;
-    var backgroundColorDrawable = new android.graphics.drawable.ColorDrawable(backgroundColorInitial);
+    var backgroundColorDrawable = new NativeColorDrawable(backgroundColorInitial);
     //var borderDrawable = android.graphics.drawable.ShapeDrawable();
-    var borderDrawable = new android.graphics.drawable.GradientDrawable();
+    var borderDrawable = new NativeGradientDrawable();
 
-    var layerDrawable = new android.graphics.drawable.LayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
+    var layerDrawable = new NativeLayerDrawable([backgroundColorDrawable,backgroundColorDrawable]);
     layerDrawable.setId(0,0);
     layerDrawable.setId(1,1);
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
@@ -35,7 +44,7 @@ function View(params) {
         set: function(backgroundColor) {
             var colorParam = backgroundColor;
             if(!TypeUtil.isNumeric(backgroundColor)){
-                colorParam = android.graphics.Color.parseColor(backgroundColor);
+                colorParam = NativeColor.parseColor(backgroundColor);
             }
             backgroundColorDrawable.setColor(colorParam);
             setBackground(0);
@@ -56,7 +65,7 @@ function View(params) {
         enumerable: true
     });
 
-    var idInitial = android.view.View.generateViewId();
+    var idInitial = NativeView.generateViewId();
     self.nativeObject.setId(idInitial);
     Object.defineProperty(this, 'id', {
         get: function() {
@@ -168,10 +177,10 @@ function View(params) {
         enumerable: true
     });
     
-    self.nativeObject.setOnTouchListener(android.view.View.OnTouchListener.implement({
+    self.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
             if(self.touchEnabled){
-                if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                if (event.getAction() == NativeMotionEvent.ACTION_UP) {
                     self.onTouchEndedCallback && self.onTouchEndedCallback();
                 } else {
                     self.onTouchCallback && self.onTouchCallback();
@@ -242,7 +251,7 @@ function View(params) {
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
         if(!TypeUtil.isNumeric(styleInitial.borderColor)){
-            borderColor = android.graphics.Color.parseColor(styleInitial.borderColor);;
+            borderColor = NativeColor.parseColor(styleInitial.borderColor);;
         }
         // android.graphics.Color.TRANSPARENT=0
         borderDrawable.setColor(0);
@@ -304,24 +313,26 @@ function View(params) {
         if(self.parent){
             if(self.nativeObject.toString().indexOf("Relative") !== -1){
                 // @todo Will change after implementation of RelativeLayout
-                layoutParams = new android.widget.RelativeLayout.LayoutParams(width,height);
+                const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+                layoutParams = new NativeRelativeLayout.LayoutParams(width,height);
             }
             else if(self.nativeObject.toString().indexOf("Linear") !== -1){
                 // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
-                layoutParams = new android.widget.LinearLayout.LayoutParams(width,height,100);
+                const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+                layoutParams = new NativeLinearLayout.LayoutParams(width,height,100);
             }
             else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
-                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
             else{
                 //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
-                layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
         }
         else{
             // @todo must change as ViewGroup.LayoutParams after implementation of page
             //layoutParams = android.view.ViewGroup.LayoutParams(width,height);
-            layoutParams = new android.widget.AbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
         }
         self.nativeObject.setLayoutParams(layoutParams);
 

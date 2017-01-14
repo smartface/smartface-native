@@ -1,7 +1,7 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 
-const AbsoluteContainer = extend(ViewGroup)(
+const AbsoluteLayout = extend(ViewGroup)(
     function (_super, params) {
         _super(this);
         
@@ -14,4 +14,4 @@ const AbsoluteContainer = extend(ViewGroup)(
     }
 );
 
-module.exports = AbsoluteContainer;
+module.exports = AbsoluteLayout;
