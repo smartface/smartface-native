@@ -20,7 +20,10 @@ var StatusBarStyle = { };
  * @readonly
  * @since 0.1
  */
-StatusBarStyle.DEFAULT = 0;
+Object.defineProperty(StatusBarStyle, 'DEFAULT', {
+    value: 0,
+    writable: false
+});
 
 /**
  * @property {Number} LIGHTCONTENT
@@ -29,4 +32,9 @@ StatusBarStyle.DEFAULT = 0;
  * @readonly
  * @since 0.1
  */
-StatusBarStyle.LIGHTCONTENT = 1;
+Object.defineProperty(StatusBarStyle, 'LIGHTCONTENT', {
+    value: 1,
+    writable: false
+});
+
+module.exports = StatusBarStyle;
