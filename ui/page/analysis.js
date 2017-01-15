@@ -103,6 +103,146 @@ function Page(params) {
      * @method remove
      */
     this.remove = function(){};
+    
+    /**
+     * Gets/sets background color of the actionbar bar. If not set, 
+     * will shown as default color depends on device's OS  and OS version. 
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.actionbar.backgroundColor = Color.RED;
+     *
+     * @property {UI.Color} backgroundColor
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.backgroundColor = UI.Color.LIGHTGRAY;
+    
+    /**
+     * Gets/sets background image of the actionbar bar.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Image = require('sf-core/ui/image');
+     *     var myPage = new Page();
+     *     var myImage = Image.createFromFile('images://smartface.png');
+     *     myPage.actionbar.backgroundImage = myImage;
+     *
+     * @property {UI.Image} [backgroundImage = null]
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.backgroundImage = null;
+    
+    /**
+     * Gets/sets the navigation indicator visiblity of the actionbar bar. 
+     * If false navigation indicator will not shown, otherwise will shown
+     * as back icon with home as up indicator image.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     var headerbarHeight = myPage.actionbar.height;
+     *
+     * @property {Boolean} [displayShowHomeEnabled = false]
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.displayShowHomeEnabled = false;
+    
+    /**
+     * Gets/sets the title visiblity of the actionbar bar. If false title will 
+     * not shown, otherwise title will shown.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     var headerbarHeight = myPage.actionbar.height;
+     *
+     * @property {Boolean} [displayShowTitleEnabled = false]
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.displayShowTitleEnabled = false;
+    
+    /**
+     * Gets the height of the actionbar bar. Height is a read only property. 
+     * Height value will change depends on device and screen density. 
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     var headerbarHeight = myPage.actionbar.height;
+     *
+     * @property {Number} height
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    this.actionbar.height = 30;
+    
+    /**
+     * Gets/sets home as up indicator image which will shown with home as up 
+     * indicator of the actionbar bar. If not set, the application icon will 
+     * shown.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Image = require('sf-core/ui/image');
+     *     var myPage = new Page();
+     *     var myImage = Image.createFromFile('images://smartface.png');
+     *     myPage.actionbar.homeAsUpIndicatorImage = myImage;
+     *
+     * @property {UI.Image} [homeAsUpIndicatorImage = null]
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.homeAsUpIndicatorImage = null;
+    
+    /**
+     * Gets/sets title of the actionbar bar. If not set, the application name will 
+     * shown.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.actionbar.title = 'Hello from Smartface Headerbar!';
+     *
+     * @property {String} title
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.title = '';
+    
+    /**
+     * Gets/sets subtitle of the actionbar bar. If not set, will not shown.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.actionbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
+     *
+     * @property {String} subtitle
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.subtitle = '';
+    
+    /**
+     * Gets/sets visibility of the actionbar bar.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.actionbar.visible = false;
+     *
+     * @property {Boolean} [visible = true]
+     * @static
+     * @since 0.1
+     */
+    this.actionbar.visible = true;
 }
 
 module.exports = Page;
