@@ -159,11 +159,10 @@ function Page(params) {
         console.log("visible = " + _visible);
         self.statusBar.visible = _visible;
         self.statusBar.color = _color;
-        
     }
     
     // Default values
-    //self.statusBar.visible = true;
+    self.statusBar.visible = true;
     // todo Add color default value after resolving COR-1153.
     
     // Assign parameters given in constructor
