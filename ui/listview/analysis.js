@@ -26,8 +26,6 @@ const extend = require('js-base/core/extend');
  *     var myImage3 = Image.createFromFile('assets://image3.png');
  *     var myImage4 = Image.createFromFile('assets://image4.png');
  *     var myImage5 = Image.createFromFile('assets://image5.png');
- *     var myImage6 = Image.createFromFile('assets://image6.png');
- *     var myImage7 = Image.createFromFile('assets://image7.png');
  *     
  *     var myListView = new ListView({
  *         height: '100%',
@@ -66,8 +64,8 @@ const extend = require('js-base/core/extend');
  *                             backgroundColor: Color.YELLOW,
  *                             action:function(){
  *                                 myDataSet.push({
- *                                     image: myImage7,
- *                                     title: 'Smartface Title 7', 
+ *                                     image: myImage5,
+ *                                     title: 'Smartface Title 5', 
  *                                     subTitle: 'Smartface New ListViewItem',
  *                                     backgroundColor: Color.BLUE,
  *                                     action: function(){
@@ -75,7 +73,7 @@ const extend = require('js-base/core/extend');
  *                                     }
  *                                 })
  *                                 myListView.itemCount = myDataSet.length;
- *                                 myListView.notifyDataSetChanged();
+ *                                 myListView.refreshData();
  *                             } 
  *                         },
  *                         { 
@@ -86,40 +84,13 @@ const extend = require('js-base/core/extend');
  *                             action:function(){
  *                                 myListView.scrollTo(2);
  *                             } 
- *                         },
- *                         { 
- *                             image: myImage5, 
- *                             title: 'Smartface Title 5', 
- *                             subTitle: 'Insert List View Item',
- *                             backgroundColor: Color.WHITE, 
- *                             action:function(){
- *                                 var myListViewItem = new ListViewItem();
- *                                 var myAbsoluteLayout = new AbsoluteLayout({
- *                                     id: 104,
- *                                     height: '100%',
- *                                     width: '100%'
- *                                 });
- *                                 myListViewItem.add(myAbsoluteLayout);
- *                                 myListView.insertListItem(myListViewItem);
- *                             } 
- *                         },
- *                         { 
- *                             image: myImage6, 
- *                             title: 'Smartface Title 6', 
- *                             subTitle: 'Remove List View Item',
- *                             backgroundColor: Color.RED, 
- *                             action:function(){
- *                                 myListView.removeListItem(4);
- *                             } 
- *                        }
- *                        
+ *                         }
  *                     ];
  *     
  *     
- *     var myListViewController = new ListViewController();
  *     var myFontTitle = Font.create("Arial",16,Font.BOLD);
  *     var myFontSubTitle = Font.create("Arial",14,Font.ITALIC);
- *     myListViewController.onRowCreate = function(){
+ *     myListView.onRowCreate = function(){
  *         var myListViewItem = new ListViewItem();
  *         var myAbsoluteLayout = new AbsoluteLayout({
  *             id: 100,
@@ -153,26 +124,42 @@ const extend = require('js-base/core/extend');
  *         myListViewItem.addChild(myAbsoluteLayout);
  *         return myListViewItem;
  *     };
- *     myListViewController.onRowBind = function(listViewItem,index){
+ *     myListView.onRowBind = function(listViewItem,index){
  *         var myAbsoluteLayout = listViewItem.findChildById(100);
  *         var myImageView = listViewItem.findChildById(101);
  *         var myLabelTitle = listViewItem.findChildById(102);
  *         var myLabelSubtitle = listViewItem.findChildById(103);
- *         myAbsoluteLayout.backgroundColor = 
- *         myImageView.imageSource = myDataSet[index].image;
- *         myLabelTitle.text = myDataSet[index].title;
- *         myLabelTitle.font = myFontTitle;
- *         myLabelSubtitle.text = myDataSet[index].subTitle;
- *         myLabelTitle.font = myFontSubTitle;
+ *         if(myAbsoluteLayout){
+ *                 myAbsoluteLayout.backgroundColor = Color.LIGHTGRAY;
+ *         }
+ *         if(myImageView){
+ *                 myImageView.imageSource = myDataSet[index].image;
+ *         }
+ *         if(myLabelTitle){
+ *                 myLabelTitle.text = myDataSet[index].title;
+ *                 myLabelTitle.font = myFontTitle;
+ *         }
+ *         if(myLabelSubtitle){     
+ *                 myLabelSubtitle.text = myDataSet[index].subTitle;
+ *                 myLabelSubtitle.font = myFontSubTitle;
+ *         }
  *     };
- *     myListViewController.onRowSelected = function(listViewItem,index){
+ *     myListView.onRowSelected = function(listViewItem,index){
  *         myDataSet[index].action();
  *     };
- *     
- *     myListView.controller = myListViewController;
  * 
  *     myListView.onPullRefresh = function(){
- *         alert('ListView refreshed!');
+ *         myDataSet.push({
+ *             image: myImage5,
+ *             title: 'Smartface Title '+myDataSet.length, 
+ *             subTitle: 'Smartface New ListViewItem',
+ *             backgroundColor: Color.RED,
+ *             action: function(){
+ *                 alert('Hello from NativeFace ListView!');
+ *             }
+ *         })
+ *         myListView.itemCount = myDataSet.length;
+ *         myListView.refreshData();
  *     }
  *     
  *     var myPage = new Page();
@@ -186,13 +173,33 @@ const ListView = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets controller of the ListView. ListView uses this controller for 
-         * list item callbacks. 
+         * This event will be fired when the ListView created ListViewItem template. 
+         * This function should return ListViewItem instance.
          * 
-         * @property {UI.ListViewController} [controller = null] 
+         * @event onRowCreate
+         * @return {UI.ListViewItem}
          * @since 0.1
          */
-        this.controller = null;
+        this.onRowCreate = function onRowCreate(){};
+    
+        /**
+         * This event will be fired when the ListView created row at specific index.
+         * You can customize the list view item inside this callback.
+         * 
+         * @param {UI.ListViewItem} listViewItem
+         * @param {Number} index
+         * @event onRowBind
+         * @since 0.1
+         */
+        this.onRowBind = function onRowBind(listViewItem, index){};
+        
+        /**
+         * This event will be fired when user clicks the row at specific index.
+         * 
+         * @event onRowSelected
+         * @since 0.1
+         */
+        this.onRowSelected = function onRowSelected(listViewItem, index){};
 
         /**
          * Gets/sets list item count of the ListView. This property defines how many list item will shown
@@ -215,10 +222,10 @@ const ListView = extend(View)(
         /**
          * Notify the ListView for data changes.
          * 
-         * @method notifyDataSetChanged
+         * @method refreshData
          * @since 0.1
          */
-        this.notifyDataSetChanged = function(){};
+        this.refreshData = function(){};
         
         /**
          * Set the colors used in the progress animation. The first color 
@@ -260,25 +267,6 @@ const ListView = extend(View)(
          * @since 0.1
          */
         this.lastVisibleIndex = function(){};
-        
-        /**
-         * Insert list view item to specific row index into the ListView.
-         * 
-         * @param {Number} index The new list view item's position.
-         * @param {UI.ListViewItem} listViewItem The new list view item to insert.
-         * @method insertListItem
-         * @since 0.1
-         */
-        this.insertListItem = function(index, listViewItem){};
-        
-        /**
-         * Remove list view item from specific row index of the ListView.
-         * 
-         * @param {Number} index The row index to remove list view item.
-         * @method removeListItem
-         * @since 0.1
-         */
-        this.removeListItem = function(index){};
 
         /**
          * Gets/sets scroll event for ListView. This event fires when the ListView
