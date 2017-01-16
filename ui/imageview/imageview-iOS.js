@@ -33,7 +33,7 @@ const ImageView = extend(View)(
           
         Object.defineProperty(self, 'image', {
             get: function() {
-                return 0;// Image Path or JS Image Object ?
+                return self.nativeObject.image;
             },
             set: function(value) {
                 self.nativeObject.image = value;
