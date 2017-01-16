@@ -1,6 +1,7 @@
 /**
  * @class UI.Switch
  * @since 0.1
+ * @extends UI.View
  * 
  * Switch is a two-state toggle button. Switch allows the user 
  * to select between two options.
@@ -11,7 +12,9 @@
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
-function Switch(params) {
+const Switch = extend(View)(
+    function (_super, params) {
+        _super(this);
 
     /**
      * Gets/sets color of the thumb when Switch is ON. 
@@ -75,5 +78,6 @@ function Switch(params) {
      * @since 0.1
      */
     this.onToggleChanged = function() {};
-}
+    }
+);
 module.exports = Switch;
