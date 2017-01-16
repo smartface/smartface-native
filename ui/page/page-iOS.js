@@ -34,6 +34,34 @@ function Page(params) {
     	    width: self.nativeObject.view.frame.width,
     	    height: self.nativeObject.view.frame.height,
     });
+        
+    this.statusBar = {};
+    Object.defineProperty(self.statusBar, 'height', {
+     value:  UIApplication.sharedApplication().statusBarFrame.height,
+     writable: false
+    });
+
+    Object.defineProperty(self.statusBar, 'visible', {
+        get: function() {
+            return self.nativeObject.statusBarHidden;
+        },
+        set: function(value) {
+            self.nativeObject.statusBarHidden = value;
+        },
+        enumerable: true
+    });
+    
+    this.statusBar.ios = {};
+    Object.defineProperty(self.statusBar.ios, 'style', {
+        get: function() {
+            return self.nativeObject.statusBarStyle;
+        },
+        set: function(value) {
+            console.log("denememee");
+            self.nativeObject.statusBarStyle = value;
+        },
+        enumerable: true
+    });
     
     self.nativeObject.view.addSubview(pageView.nativeObject);
     
