@@ -49,3 +49,4 @@ Object.defineProperty(ImageFillType, 'ASPECTFIT', {
     writable: false
 });
 
+module.exports = ImageFillType;
