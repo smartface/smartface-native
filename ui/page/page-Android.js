@@ -2,6 +2,7 @@ const AbsoluteLayout = require("sf-core/ui/absolutelayout");
 const Color = require("sf-core/ui/color");
 
 const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const NativeWindowManager = requireClass("android.view.WindowManager");
 
 function Page(params) {
     var self = this;
@@ -85,16 +86,13 @@ function Page(params) {
             return _visible;
         },
         set: function(visible) {
-            if(typeof(visible) === "boolean") {
-                _visible = visible;
-                if(visible) {
-                    var decorView = activity.getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
-                }
-                else {
-                    var decorView = activity.getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
-                }
+            _visible = visible;
+            var window = activity.getWindow();
+            if(visible == true) {
+                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
+             }
+            else {
+                window.addFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
             }
         },
         enumerable: true
@@ -108,9 +106,12 @@ function Page(params) {
         },
         set: function(color) {
             _color = color;
+            // // @todo setStatusBarColor doesn't work causing by issue COR-1153
+            // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
             var window = activity.getWindow();
-            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
+            window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(NativeWindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(color);
         },
         enumerable: true
@@ -120,7 +121,7 @@ function Page(params) {
         get: function() {
             var result = 0;
             var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) { // else: no resources
+            if (resourceId > 0) { 
                 result = activity.getResources().getDimensionPixelSize(resourceId);
             }
             return result;
@@ -153,6 +154,10 @@ function Page(params) {
             innerLayout.setPosition({width: Device.screenWidth, height:Device.screenHeight});
         }
     }
+    
+    // Default values
+    self.statusBar.visible = true;
+    // todo Add color default value after resolving COR-1153.
     
     // Assign parameters given in constructor
     if (params) {
