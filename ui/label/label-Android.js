@@ -3,6 +3,12 @@ const TextAlignment = require("sf-core/ui/textalignment");
 const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 
+const NativeScrollView = requireClass("android.widget.ScrollView");
+const NativeTextView = requireClass("android.widget.TextView");
+const NativeViewGroup = requireClass("android.view.ViewGroup");
+const NativeHtml = requireClass("android.text.Html");
+const NativeColor = requireClass("android.graphics.Color");
+
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
@@ -10,11 +16,11 @@ const Label = extend(View)(
         var viewNativeDefaultTextAlignment;
         // Is Label Check
         if(!self.nativeObject){
-            self.nativeObject = new android.widget.ScrollView(Android.getActivity());
-            self.nativeInner = new android.widget.TextView(Android.getActivity());
+            self.nativeObject = new NativeScrollView(Android.getActivity());
+            self.nativeInner = new NativeTextView(Android.getActivity());
 
             // ViewGroup.LayoutParams.MATCH_PARENT = -1
-            var innerlayoutParams = new android.view.ViewGroup.LayoutParams(-1, -1);
+            var innerlayoutParams = new NativeViewGroup.LayoutParams(-1, -1);
             self.nativeInner.setLayoutParams(innerlayoutParams);
             self.nativeObject.addView(self.nativeInner);
             self.nativeObject.setSmoothScrollingEnabled(true);
@@ -40,7 +46,7 @@ const Label = extend(View)(
             get: function() {
                 var text = (self.nativeInner ? self.nativeInner : self.nativeObject).getText();
                 if(text){
-                    var htmlText = android.text.Html.toHtml(text);
+                    var htmlText = NativeHtml.toHtml(text);
                     return htmlText.toString();
                 }
                 else{
@@ -49,7 +55,7 @@ const Label = extend(View)(
                 
             }, 
             set: function(htmlText) {
-                var htmlTextNative = android.text.Html.fromHtml(htmlText);
+                var htmlTextNative = NativeHtml.fromHtml(htmlText);
                 (self.nativeInner ? self.nativeInner : self.nativeObject).setText(htmlTextNative);
             },
             enumerable: true
@@ -155,7 +161,7 @@ const Label = extend(View)(
             set: function(textColor) {
                 var colorParam = textColor;
                 if(!TypeUtil.isNumeric(textColor)){
-                    colorParam = android.graphics.Color.parseColor(textColor);
+                    colorParam = NativeColor.parseColor(textColor);
                 }
                 (self.nativeInner ? self.nativeInner : self.nativeObject).setTextColor(colorParam);
             },
