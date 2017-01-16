@@ -33,7 +33,7 @@ const ImageView = extend(View)(
          * @property {UI.Image} [imageSource = null]
          * @since 0.1
          */
-        this.imageSource = null;
+        this.image = null;
 
         /**
          * Gets/sets image fill type. The source fills the Image base on this property.

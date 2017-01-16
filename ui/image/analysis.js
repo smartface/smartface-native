@@ -12,7 +12,7 @@
  *     myImageView.imageSource = myImage;
  *     
  */
-function Image() {}
+const Image = {}
 
 /**
  * Creates a image object from given file path. Path should be a

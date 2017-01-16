@@ -11,7 +11,7 @@
  *     myImage.imageFillType = ImageFillType.NORMAL;
  * 
  */
-var ImageFillType = { };
+const ImageFillType = { };
 
 /**
  * @property {Number} NORMAL
