@@ -39,7 +39,7 @@ Object.defineProperty(KeyboardAppearance, 'DARK', {
   value: 1,
   writable: false
 });
-LIGHT
+
 /**
  * @property {Number} LIGHT
  * Light colored keyboard appearance.
