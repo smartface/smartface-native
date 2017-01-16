@@ -23,7 +23,7 @@ KeyboardType.android = {};
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType, 'DEFAULT', {
+Object.defineProperty(KeyboardType, 'DEFAULT', {
   value: 0,
   writable: false
 });
@@ -35,7 +35,7 @@ Object.defineProperty(ActionKeyType, 'DEFAULT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType, 'NUMBER', {
+Object.defineProperty(KeyboardType, 'NUMBER', {
   value: 1,
   writable: false
 });
@@ -47,7 +47,7 @@ Object.defineProperty(ActionKeyType, 'NUMBER', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'DECIMAL', {
+Object.defineProperty(KeyboardType, 'DECIMAL', {
   value: 2,
   writable: false
 });
@@ -59,7 +59,7 @@ Object.defineProperty(ActionKeyType, 'DECIMAL', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'PHONE', {
+Object.defineProperty(KeyboardType, 'PHONE', {
   value: 3,
   writable: false
 });
@@ -71,7 +71,7 @@ Object.defineProperty(ActionKeyType, 'PHONE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'URL', {
+Object.defineProperty(KeyboardType, 'URL', {
   value: 4,
   writable: false
 });
@@ -83,7 +83,7 @@ Object.defineProperty(ActionKeyType, 'URL', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType.ios, 'TWITTER', {
+Object.defineProperty(KeyboardType.ios, 'TWITTER', {
   value: 5,
   writable: false
 });
@@ -95,7 +95,7 @@ Object.defineProperty(ActionKeyType.ios, 'TWITTER', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType.ios, 'WEBSEARCH', {
+Object.defineProperty(KeyboardType.ios, 'WEBSEARCH', {
   value: 6,
   writable: false
 });
@@ -107,7 +107,7 @@ Object.defineProperty(ActionKeyType.ios, 'WEBSEARCH', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType.android, 'DATETIME', {
+Object.defineProperty(KeyboardType.android, 'DATETIME', {
   value: 7,
   writable: false
 });
@@ -119,7 +119,7 @@ Object.defineProperty(ActionKeyType.android, 'DATETIME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'SIGNEDNUMBER', {
+Object.defineProperty(KeyboardType.android, 'SIGNEDNUMBER', {
   value: 8,
   writable: false
 });
@@ -131,7 +131,7 @@ Object.defineProperty(ActionKeyType.android, 'SIGNEDNUMBER', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'SIGNEDDECIMAL', {
+Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
   value: 9,
   writable: false
 });
@@ -143,8 +143,7 @@ Object.defineProperty(ActionKeyType.android, 'SIGNEDDECIMAL', {
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTAUTOCOMPLETE = 10;
-Object.defineProperty(ActionKeyType.android, 'TEXTAUTOCOMPLETE', {
+Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
   value: 10,
   writable: false
 });
@@ -156,7 +155,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTAUTOCOMPLETE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTAUTOCORRECT', {
+Object.defineProperty(KeyboardType.android, 'TEXTAUTOCORRECT', {
   value: 11,
   writable: false
 });
@@ -168,7 +167,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTAUTOCORRECT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTCAPCHARACTERS', {
+Object.defineProperty(KeyboardType.android, 'TEXTCAPCHARACTERS', {
   value: 12,
   writable: false
 });
@@ -180,7 +179,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTCAPCHARACTERS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTCAPSENTENCES', {
+Object.defineProperty(KeyboardType.android, 'TEXTCAPSENTENCES', {
   value: 13,
   writable: false
 });
@@ -192,7 +191,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTCAPSENTENCES', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTCAPWORDS', {
+Object.defineProperty(KeyboardType.android, 'TEXTCAPWORDS', {
   value: 14,
   writable: false
 });
@@ -204,7 +203,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTCAPWORDS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTEMAILSUBJECT', {
+Object.defineProperty(KeyboardType.android, 'TEXTEMAILSUBJECT', {
   value: 15,
   writable: false
 });
@@ -216,7 +215,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTEMAILSUBJECT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTLONGMESSAGE', {
+Object.defineProperty(KeyboardType.android, 'TEXTLONGMESSAGE', {
   value: 16,
   writable: false
 });
@@ -228,7 +227,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTLONGMESSAGE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTNOSUGGESTIONS', {
+Object.defineProperty(KeyboardType.android, 'TEXTNOSUGGESTIONS', {
   value: 17,
   writable: false
 });
@@ -240,7 +239,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTNOSUGGESTIONS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTPERSONNAME', {
+Object.defineProperty(KeyboardType.android, 'TEXTPERSONNAME', {
   value: 18,
   writable: false
 });
@@ -252,7 +251,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTPERSONNAME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TEXTSHORTMESSAGE', {
+Object.defineProperty(KeyboardType.android, 'TEXTSHORTMESSAGE', {
   value: 19,
   writable: false
 });
@@ -264,7 +263,7 @@ Object.defineProperty(ActionKeyType.android, 'TEXTSHORTMESSAGE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'TIME', {
+Object.defineProperty(KeyboardType.android, 'TIME', {
   value: 20,
   writable: false
 });
@@ -276,7 +275,9 @@ Object.defineProperty(ActionKeyType.android, 'TIME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType.android, 'EMAILADDRESS', {
+Object.defineProperty(KeyboardType.android, 'EMAILADDRESS', {
   value: 21,
   writable: false
 });
+
+module.exports = KeyboardType;
