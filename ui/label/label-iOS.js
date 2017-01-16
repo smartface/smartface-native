@@ -50,10 +50,10 @@ const Label = extend(View)(
             enumerable: true
          });
 
-        var _multipleLine;
-        Object.defineProperty(self, 'multipleLine', {
+        var _multiLine;
+        Object.defineProperty(self, 'multiLine', {
             get function() {
-                return _multipleLine;
+                return _multiLine;
             },
             set: function(value) {
             	if (value){
@@ -63,7 +63,7 @@ const Label = extend(View)(
             		self.nativeObject.textContainer.maximumNumberOfLines = 1;
     				self.nativeObject.textContainer.lineBreakMode = 4;
             	}
-    			_multipleLine = value
+    			_multiLine = value
             },
             enumerable: true
         });
