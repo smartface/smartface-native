@@ -11,7 +11,10 @@
  *     var myKeyboardType = KeyboardType.DEFAULT;
  *
  */
-var KeyboardType = { };
+
+var KeyboardType = {};
+KeyboardType.ios = {};
+KeyboardType.android = {};
 
 KeyboardType.ios = { };
 
@@ -23,7 +26,10 @@ KeyboardType.android = { };
  * @readonly
  * @since 0.1
  */
-KeyboardType.DEFAULT = 0;
+Object.defineProperty(KeyboardType, 'DEFAULT', {
+  value: 0,
+  writable: false
+});
 
 /**
  * @property {Number} NUMBER
@@ -32,7 +38,10 @@ KeyboardType.DEFAULT = 0;
  * @readonly
  * @since 0.1
  */
-KeyboardType.NUMBER = 1;
+Object.defineProperty(KeyboardType, 'NUMBER', {
+  value: 1,
+  writable: false
+});
 
 /**
  * @property {Number} DECIMAL
@@ -41,7 +50,10 @@ KeyboardType.NUMBER = 1;
  * @since 0.1
  * @readonly
  */
-KeyboardType.DECIMAL = 2;
+Object.defineProperty(KeyboardType, 'DECIMAL', {
+  value: 2,
+  writable: false
+});
 
 /**
  * @property {Number} PHONE
@@ -50,7 +62,10 @@ KeyboardType.DECIMAL = 2;
  * @since 0.1
  * @readonly
  */
-KeyboardType.PHONE = 3;
+Object.defineProperty(KeyboardType, 'PHONE', {
+  value: 3,
+  writable: false
+});
 
 /**
  * @property {Number} URL
@@ -59,7 +74,10 @@ KeyboardType.PHONE = 3;
  * @since 0.1
  * @readonly
  */
-KeyboardType.URL = 4;
+Object.defineProperty(KeyboardType, 'URL', {
+  value: 4,
+  writable: false
+});
 
 /**
  * @property {Number} TWITTER
@@ -68,7 +86,10 @@ KeyboardType.URL = 4;
  * @readonly
  * @since 0.1
  */
-KeyboardType.ios.TWITTER = 5;
+Object.defineProperty(KeyboardType.ios, 'TWITTER', {
+  value: 5,
+  writable: false
+});
 
 /**
  * @property {Number} WEBSEARCH
@@ -77,7 +98,10 @@ KeyboardType.ios.TWITTER = 5;
  * @readonly
  * @since 0.1
  */
-KeyboardType.ios.WEBSEARCH = 6;
+Object.defineProperty(KeyboardType.ios, 'WEBSEARCH', {
+  value: 6,
+  writable: false
+});
 
 /**
  * @property {Number} DATETIME
@@ -86,7 +110,10 @@ KeyboardType.ios.WEBSEARCH = 6;
  * @readonly
  * @since 0.1
  */
-KeyboardType.android.DATETIME = 7;
+Object.defineProperty(KeyboardType.android, 'DATETIME', {
+  value: 7,
+  writable: false
+});
 
 /**
  * @property {Number} SIGNEDNUMBER
@@ -95,7 +122,10 @@ KeyboardType.android.DATETIME = 7;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.SIGNEDNUMBER = 8;
+Object.defineProperty(KeyboardType.android, 'SIGNEDNUMBER', {
+  value: 8,
+  writable: false
+});
 
 /**
  * @property {Number} SIGNEDDECIMAL
@@ -104,7 +134,10 @@ KeyboardType.android.SIGNEDNUMBER = 8;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.SIGNEDDECIMAL = 9;
+Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
+  value: 9,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTAUTOCOMPLETE
@@ -113,7 +146,10 @@ KeyboardType.android.SIGNEDDECIMAL = 9;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTAUTOCOMPLETE = 10;
+Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
+  value: 10,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTAUTOCORRECT
@@ -122,7 +158,10 @@ KeyboardType.android.TEXTAUTOCOMPLETE = 10;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTAUTOCORRECT  = 11;
+Object.defineProperty(KeyboardType.android, 'TEXTAUTOCORRECT', {
+  value: 11,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTCAPCHARACTERS
@@ -131,7 +170,10 @@ KeyboardType.android.TEXTAUTOCORRECT  = 11;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTCAPCHARACTERS = 12;
+Object.defineProperty(KeyboardType.android, 'TEXTCAPCHARACTERS', {
+  value: 12,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTCAPSENTENCES
@@ -140,7 +182,10 @@ KeyboardType.android.TEXTCAPCHARACTERS = 12;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTCAPSENTENCES = 13;
+Object.defineProperty(KeyboardType.android, 'TEXTCAPSENTENCES', {
+  value: 13,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTCAPWORDS
@@ -149,7 +194,10 @@ KeyboardType.android.TEXTCAPSENTENCES = 13;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTCAPWORDS = 14;
+Object.defineProperty(KeyboardType.android, 'TEXTCAPWORDS', {
+  value: 14,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTEMAILSUBJECT
@@ -158,7 +206,10 @@ KeyboardType.android.TEXTCAPWORDS = 14;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTEMAILSUBJECT  = 15;
+Object.defineProperty(KeyboardType.android, 'TEXTEMAILSUBJECT', {
+  value: 15,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTLONGMESSAGE
@@ -167,7 +218,10 @@ KeyboardType.android.TEXTEMAILSUBJECT  = 15;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTLONGMESSAGE  = 16;
+Object.defineProperty(KeyboardType.android, 'TEXTLONGMESSAGE', {
+  value: 16,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTNOSUGGESTIONS
@@ -176,7 +230,10 @@ KeyboardType.android.TEXTLONGMESSAGE  = 16;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTNOSUGGESTIONS = 17;
+Object.defineProperty(KeyboardType.android, 'TEXTNOSUGGESTIONS', {
+  value: 17,
+  writable: false
+});
 
 /**
  * @property {Number} TEXTPERSONNAME
@@ -185,16 +242,22 @@ KeyboardType.android.TEXTNOSUGGESTIONS = 17;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTPERSONNAME = 18;
+Object.defineProperty(KeyboardType.android, 'TEXTPERSONNAME', {
+  value: 18,
+  writable: false
+});
 
 /**
- * @property {Number} EMAILADDRESS
+ * @property {Number} TEXTSHORTMESSAGE
  * Short message specific keyboard appearance. This keyboard type will work only for Android.
  * @static
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TEXTSHORTMESSAGE = 19;
+Object.defineProperty(KeyboardType.android, 'TEXTSHORTMESSAGE', {
+  value: 19,
+  writable: false
+});
 
 /**
  * @property {Number} TIME
@@ -203,7 +266,10 @@ KeyboardType.android.TEXTSHORTMESSAGE = 19;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.TIME = 20;
+Object.defineProperty(KeyboardType.android, 'TIME', {
+  value: 20,
+  writable: false
+});
 
 /**
  * @property {Number} EMAILADDRESS
@@ -212,6 +278,9 @@ KeyboardType.android.TIME = 20;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android.EMAILADDRESS = 21;
+Object.defineProperty(KeyboardType.android, 'EMAILADDRESS', {
+  value: 21,
+  writable: false
+});
 
 module.exports = KeyboardType;
