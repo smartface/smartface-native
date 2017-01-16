@@ -36,10 +36,10 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.thumbColor = Color.GRAY;
          *
-         * @property {Color} thumbColor
+         * @property {UI.Color} [thumbColor = UI.Color.GRAY]
          * @since 0.1
          */
-        this.thumbColor = Color.GRAY;
+        this.thumbColor = UI.Color.GRAY;
 
         /**
          * Gets/sets image path of the thumb.
@@ -49,10 +49,10 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.thumbImage = "images://smartface.png";
          *
-         * @property {String} thumbImage
+         * @property {String} [thumbImage = ""]
          * @since 0.1
          */
-        this.thumbImage = "images://smartface.png";
+        this.thumbImage = "";
 
         /**
          * Gets/sets color of the thumb's minimum track color.
@@ -63,10 +63,10 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.minTrackColor = Color.BLUE;
          *
-         * @property {Color} minTrackColor
+         * @property {UI.Color} [minTrackColor = UI.Color.DARKGRAY]
          * @since 0.1
          */
-        this.minTrackColor = Color.DARKGRAY;
+        this.minTrackColor = UI.Color.DARKGRAY;
 
         /**
          * Gets/sets color of the thumb's maximum track color.
@@ -77,10 +77,10 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.maxTrackColor = Color.GREEN;
          *
-         * @property {Color} maxTrackColor
+         * @property {UI.Color} [maxTrackColor = UI.Color.GREEN]
          * @since 0.1
          */
-        this.maxTrackColor = Color.GREEN;
+        this.maxTrackColor = UI.Color.GREEN;
 
         /**
          * Gets/sets value of the slider. This value should be less or equals to maxValue,
@@ -91,7 +91,7 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.value = 30;
          *
-         * @property {Number} value
+         * @property {Number} [value = 0]
          * @since 0.1
          */
         this.value = 0;
@@ -104,7 +104,7 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.minValue = 0;
          *
-         * @property {Number} minValue
+         * @property {Number} [minValue = 0]
          * @since 0.1
          */
         this.minValue = 0;
@@ -117,7 +117,7 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.maxValue = 100;
          *
-         * @property {Number} maxValue
+         * @property {Number} [maxValue = 100]
          * @since 0.1
          */
         this.maxValue = 100;
@@ -128,15 +128,16 @@ const Slider = extend(View)(
          *
          *     @example
          *     const Slider = require('sf-core/ui/slider');
-         *     var Color = require('sf-core/ui/color');
          *     var mySlider = new Slider();
-         *     mySlider.onValueChange = function;
+         *     mySlider.maxValue = 100;
+         *     mySlider.onValueChange = function(){
+         *         alert("New value is: " + mySlider.value);
+         *     };
          *
-         * @param {Number} value New value of Slider.
          * @event onValueChange
          * @since 0.1
          */
-        this.onValueChange = function(value) {};
+        this.onValueChange = function() {};
     }
 );
 module.exports = Slider;
