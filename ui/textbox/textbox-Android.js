@@ -4,6 +4,10 @@ const extend = require('js-base/core/extend');
 const KeyboardType = require('../keyboardtype');
 const ActionKeyType = require('../actionkeytype');
 
+const NativeActivity = requireClass("android.app.Activity");
+const NativeContext = requireClass("android.content.Context"); 
+const NativeInputMethodManager = requireClass("android.view.inputmethod.InputMethodManager");
+
 // InputType.TYPE_CLASS_TEXT = 1
 // InputType.TYPE_CLASS_NUMBER = 2 
 // InputType.TYPE_CLASS_PHONE = 3
@@ -66,6 +70,7 @@ var NativeKeyEvent  = {
 const TextBox = extend(Label)(
     function (_super, params) {
         var self = this;
+        var activity = Android.getActivity();
         if(!self.nativeObject){
             self.nativeObject = new android.widget.EditText(Android.getActivity());
         }
@@ -299,9 +304,9 @@ const TextBox = extend(Label)(
         this.showKeyboard = function(){
           //  self.nativeObject.requestFocus();
             self.nativeObject.requestFocus();
-            var context = android.app.Activity.getApplicationContext();
-            var inputMethodManager = context.getSystemService(android.app.Activity.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(android.view.inputmethod.InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            var context = activity.getApplicationContext();
+            var inputMethodManager = context.getSystemService(NativeActivity.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(NativeInputMethodManager.HIDE_IMPLICIT_ONLY, 0);
             
             // hideSoftKeyboard(editText, this.getApplicationContext());
             // mEtSearch.requestFocus();
@@ -311,8 +316,8 @@ const TextBox = extend(Label)(
         
         this.hideKeyboard = function(){
             self.nativeObject.clearFocus();
-            var context = android.app.Activity.getApplicationContext();
-            var inputMethodManager = context.getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+            var context = activity.getApplicationContext();
+            var inputMethodManager = context.getSystemService(NativeContext.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(self.nativeObject.getWindowToken(), 0); 
             
             // hideSoftKeyboard(editText, this.getApplicationContext());
