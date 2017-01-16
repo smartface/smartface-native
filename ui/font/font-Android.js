@@ -7,25 +7,27 @@ function Font(params) {
     }
 }
 
+const NativeTypeface = requireClass("android.graphics.Typeface");
+
 Font.create = function(fontFamily, size, style) { 
     var fontStyle = 1;
     switch(style){
         case Font.NORMAL:
-            fontStyle = android.graphics.Typeface.NORMAL;
+            fontStyle = NativeTypeface.NORMAL;
             break;
         case Font.BOLD:
-            fontStyle = android.graphics.Typeface.BOLD;
+            fontStyle = NativeTypeface.BOLD;
             break;
         case Font.ITALIC:
-            fontStyle = android.graphics.Typeface.ITALIC;
+            fontStyle = NativeTypeface.ITALIC;
             break;
         case Font.BOLD_ITALIC:
-            fontStyle = android.graphics.Typeface.BOLD_ITALIC;
+            fontStyle = NativeTypeface.BOLD_ITALIC;
             break;
     }
     var typeface = fontFamily != undefined && fontFamily != null && fontFamily != ""
-                    ? typeface = android.graphics.Typeface.create(fontFamily,fontStyle)
-                    : android.graphics.Typeface.defaultFromStyle(fontStyle);
+                    ? typeface = NativeTypeface.create(fontFamily,fontStyle)
+                    : NativeTypeface.defaultFromStyle(fontStyle);
         
     return new Font({
         "nativeObject":typeface,
@@ -34,15 +36,15 @@ Font.create = function(fontFamily, size, style) {
 }
 
 Font.createFromFile = function(path, size) { 
-    var typeface = android.graphics.Typeface.DEFAULT;
+    var typeface = NativeTypeface.DEFAULT;
     if(path){
         if(path.startsWith("assets://")){
             var assets = Android.getActivity().getAssets();
             var assetsPath = path.replace("assets://","");
-            typeface = android.graphics.Typeface.createFromAsset(assets,assetsPath);
+            typeface = NativeTypeface.createFromAsset(assets,assetsPath);
         }
         else{
-             typeface = android.graphics.Typeface.createFromFile(path);
+             typeface = NativeTypeface.createFromFile(path);
         }
     }
 

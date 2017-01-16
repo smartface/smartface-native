@@ -1,6 +1,8 @@
 const AbsoluteLayout = require("sf-core/ui/absolutelayout");
 const Color = require("sf-core/ui/color");
 
+const NativeFragment = requireClass("android.support.v4.app.Fragment");
+
 function Page(params) {
     var self = this;
     var activity = Android.getActivity();
@@ -17,7 +19,7 @@ function Page(params) {
     });
     innerLayout.parent = self;
 
-    self.nativeObject = android.app.Fragment.extend("SFFragment", {
+    self.nativeObject = NativeFragment.extend("SFFragment", {
                             onCreateView: function() {
                                 onLoadCallback && onLoadCallback();
                                 return innerLayout.nativeObject;
@@ -28,9 +30,6 @@ function Page(params) {
                             },
                             onConfigurationChanged: function(newConfig){
                                 self.invalidatePosition(newConfig.orientation);
-                            },
-                            onDestroy: function(isHidden){
-                                onHideCallback && onHideCallback();
                             }
     }, null);
     
