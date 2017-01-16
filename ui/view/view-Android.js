@@ -8,6 +8,8 @@ const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawabl
 const NativeColor = requireClass("android.graphics.Color");
 const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
+const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+const NativeLinearLayout = requireClass("android.widget.LinearLayout");
 
 function View(params) {
     var self = this;
@@ -311,27 +313,24 @@ function View(params) {
 
         var layoutParams;
         if(self.parent){
-            if(self.nativeObject.toString().indexOf("Relative") !== -1){
+            if(self.parent.nativeObject.toString().indexOf("Relative") !== -1){
                 // @todo Will change after implementation of RelativeLayout
-                const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
                 layoutParams = new NativeRelativeLayout.LayoutParams(width,height);
             }
-            else if(self.nativeObject.toString().indexOf("Linear") !== -1){
+            else if(self.parent.nativeObject.toString().indexOf("Linear") !== -1){
                 // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
-                const NativeLinearLayout = requireClass("android.widget.LinearLayout");
                 layoutParams = new NativeLinearLayout.LayoutParams(width,height,100);
             }
-            else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
+            else if(self.parent.nativeObject.toString().indexOf("Absolute") !== -1){
                 layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
             else{
-                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
+                // Our page's root layout is AbsoluteLayout.
                 layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
         }
         else{
-            // @todo must change as ViewGroup.LayoutParams after implementation of page
-            //layoutParams = android.view.ViewGroup.LayoutParams(width,height);
+            // Our page's root layout is AbsoluteLayout.
             layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
         }
         self.nativeObject.setLayoutParams(layoutParams);
