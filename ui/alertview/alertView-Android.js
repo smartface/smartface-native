@@ -4,9 +4,12 @@ var AlertButtonType = {
     NEGATIVE: 2,
 };
 
+const NativeAlertDialog = requireClass("android.app.AlertDialog");
+const NativeDialogInterface = requireClass("android.content.DialogInterface");
+
 function AlertView (params) {
     var self = this;
-    self.nativeObject = new android.app.AlertDialog.Builder(Android.getActivity()).create();
+    self.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
     self.nativeObject.setCancelable(false);
     self.nativeObject.setCanceledOnTouchOutside(false);
 
@@ -65,7 +68,7 @@ function AlertView (params) {
                 break;
         }
         self.nativeObject.setButton(nativeButtonIndex,params.text,
-            android.content.DialogInterface.OnClickListener.implement({
+            NativeDialogInterface.OnClickListener.implement({
                onClick: function(dialog,which){
                    switch(which){
                         case -1:
@@ -93,7 +96,7 @@ function AlertView (params) {
         enumerable: true
     });
 
-    self.nativeObject.setOnDismissListener(android.content.DialogInterface.OnDismissListener.implement({
+    self.nativeObject.setOnDismissListener(NativeDialogInterface.OnDismissListener.implement({
         onDismiss: function(dialog){
             onDismissCallback && onDismissCallback(self);
         }

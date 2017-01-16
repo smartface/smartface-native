@@ -1,67 +1,69 @@
 const TypeUtil = require("sf-core/util/type");
 
+const NativeColor = requireClass("android.graphics.Color");
+
 function Color () {}
 
-Color.BLACK = android.graphics.Color.BLACK;
-Color.BLUE = android.graphics.Color.BLUE;
-Color.CYAN = android.graphics.Color.CYAN;
-Color.DARKGRAY = android.graphics.Color.DKGRAY;
-Color.GRAY = android.graphics.Color.GRAY;
-Color.GREEN = android.graphics.Color.GREEN;
-Color.LIGHTGRAY = android.graphics.Color.LTGRAY;
-Color.MAGENTA = android.graphics.Color.MAGENTA;
-Color.RED = android.graphics.Color.RED;
-Color.TRANSPARENT = android.graphics.Color.TRANSPARENT;
-Color.YELLOW = android.graphics.Color.YELLOW;
-Color.WHITE = android.graphics.Color.WHITE;
+Color.BLACK = NativeColor.BLACK;
+Color.BLUE = NativeColor.BLUE;
+Color.CYAN = NativeColor.CYAN;
+Color.DARKGRAY = NativeColor.DKGRAY;
+Color.GRAY = NativeColor.GRAY;
+Color.GREEN = NativeColor.GREEN;
+Color.LIGHTGRAY = NativeColor.LTGRAY;
+Color.MAGENTA = NativeColor.MAGENTA;
+Color.RED = NativeColor.RED;
+Color.TRANSPARENT = NativeColor.TRANSPARENT;
+Color.YELLOW = NativeColor.YELLOW;
+Color.WHITE = NativeColor.WHITE;
 
 Color.create = function(param1, param2, param3, param4){
     if (arguments.length == 1) {
         if(!TypeUtil.isNumeric(param1)){
-            return android.graphics.Color.parseColor(param1);
+            return NativeColor.parseColor(param1);
         }
         else{
             return param1;
         }
     } 
     else if (arguments.length == 3) {
-        return android.graphics.Color.rgb(param1,param2,param3);
+        return NativeColor.rgb(param1,param2,param3);
     } 
     else if (arguments.length == 4) {
-        return android.graphics.Color.argb(param1,param2,param3,param4);
+        return NativeColor.argb(param1,param2,param3,param4);
     };
 }
 
 Color.red = function(color){ 
     var colorParam = color;
     if(!TypeUtil.isNumeric(color)){
-        colorParam = android.graphics.Color.parseColor(color);
+        colorParam = NativeColor.parseColor(color);
     }
-    return android.graphics.Color.red(colorParam);
+    return NativeColor.red(colorParam);
 };
 
 Color.green = function(color){ 
     var colorParam = color;
     if(!TypeUtil.isNumeric(color)){
-        colorParam = android.graphics.Color.parseColor(color);
+        colorParam = NativeColor.parseColor(color);
     }
-    return android.graphics.Color.green(colorParam);
+    return NativeColor.green(colorParam);
 };
 
 Color.blue = function(color){
     var colorParam = color;
     if(!TypeUtil.isNumeric(color)){
-        colorParam = android.graphics.Color.parseColor(color);
+        colorParam = NativeColor.parseColor(color);
     }
-    return android.graphics.Color.blue(colorParam);
+    return NativeColor.blue(colorParam);
 };
 
 Color.alpha = function(color){
     var colorParam = color;
     if(!TypeUtil.isNumeric(color)){
-        colorParam = android.graphics.Color.parseColor(color);
+        colorParam = NativeColor.parseColor(color);
     }
-    return android.graphics.Color.alpha(colorParam);
+    return NativeColor.alpha(colorParam);
 };
 
 // export module

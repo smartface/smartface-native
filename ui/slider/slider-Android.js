@@ -2,23 +2,25 @@ const extend = require('js-base/core/extend');
 const View   = require('sf-core/ui/view');
 const Color  = require('sf-core/ui/color');
 
-const SDK_VERSION    = android.os.Build.VERSION.SDK_INT;
-const PorterDuffMode = android.graphics.PorterDuff.Mode.SRC_IN;
-const BitmapFactory  = android.graphics.BitmapFactory;
-const BitmapDrawable = android.graphics.drawable.BitmapDrawable;
+const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
+const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
+const BitmapFactory  = requireClass("android.graphics.BitmapFactory");
+const BitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawable");
+const SeekBar        = requireClass("android.widget.SeekBar");
+const NativeR        = requireClass("android.R");
 
 const Slider = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject) {
-            self.nativeObject = new android.widget.SeekBar(Android.getActivity());
+            self.nativeObject = new SeekBar(Android.getActivity());
         };
         _super(self);
         
         var _layerDrawable = self.nativeObject.getProgressDrawable().getCurrent();
         var _defaultThumb  = self.nativeObject.getThumb();
 
-        self.nativeObject.setOnSeekBarChangeListener(android.widget.SeekBar.OnSeekBarChangeListener.implement({
+        self.nativeObject.setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener.implement({
             onProgressChanged: function(seekBar, actualValue, fromUser) {
                 _onValueChange && _onValueChange(actualValue + _minValue);
             },
@@ -78,7 +80,7 @@ const Slider = extend(View)(
                 if (color) {
                     _minTrackColor = color;
 
-                    _layerDrawable.findDrawableByLayerId(android.R.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
+                    _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
                 }
             },
             enumerable: true
@@ -93,7 +95,7 @@ const Slider = extend(View)(
                 if (color) {
                     _maxTrackColor = color;
                     
-                    _layerDrawable.findDrawableByLayerId(android.R.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
+                    _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
                 }
             },
             enumerable: true

@@ -3,35 +3,43 @@ const Color = require("sf-core/ui/color");
 const StateList = require("sf-core/util/statelist");
 const extend = require('js-base/core/extend');
 
+const NativeButton = requireClass("android.widget.Button");
+const NativeR = requireClass("android.R");
+const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
+const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
+const NativeView = requireClass("android.view.View");
+
 const Button = extend(Label)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject){
-            self.nativeObject = new android.widget.Button(Android.getActivity());
+            self.nativeObject = new NativeButton(Android.getActivity());
         }
         _super(this);
         
         self.nativeObject.setAllCaps(false); // enable lowercase texts
         
         var STATE_NORMAL =  [
-            android.R.attr.state_enabled,
-            -android.R.attr.state_pressed,
-            -android.R.attr.state_selected
+            NativeR.attr.state_enabled,
+            -NativeR.attr.state_pressed,
+            -NativeR.attr.state_selected
         ];
         var STATE_DISABLED = [
-            -android.R.attr.state_enabled,
+            -NativeR.attr.state_enabled,
         ];
          var STATE_SELECTED = [
-            android.R.attr.state_enabled,
-            android.R.attr.state_selected
+            NativeR.attr.state_enabled,
+            NativeR.attr.state_selected
         ];
         var STATE_PRESSED = [
-            android.R.attr.state_pressed,
-            android.R.attr.state_enabled,
+            NativeR.attr.state_pressed,
+            NativeR.attr.state_enabled,
         ];
         var STATE_FOCUSED = [
-            android.R.attr.state_focused,
-            android.R.attr.state_enabled,
+            NativeR.attr.state_focused,
+            NativeR.attr.state_enabled,
         ];
         
         
@@ -72,7 +80,7 @@ const Button = extend(Label)(
                     statesSet.push(STATE_FOCUSED);
                     colorsSets.push(textColors.focused);
                 }
-                textColorStateListDrawable = new android.content.res.ColorStateList (statesSet, colorsSets);
+                textColorStateListDrawable = new NativeColorStateList (statesSet, colorsSets);
                 self.nativeObject.setTextColor(textColorStateListDrawable);
             },
             enumerable: true
@@ -92,25 +100,25 @@ const Button = extend(Label)(
             }, 
             set: function(backgroundColors) {
                 backgroundColorsInitial = backgroundColors;
-                stateListSet = new android.graphics.drawable.StateListDrawable();
+                stateListSet = new NativeStateListDrawable();
                 if(backgroundColors.normal){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.normal);
+                    var stateDrawable = NativeColorDrawable(backgroundColors.normal);
                     stateListSet.addState(STATE_NORMAL,stateDrawable);
                 }
                 if(backgroundColors.disabled){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.disabled);
+                    var stateDrawable = NativeColorDrawable(backgroundColors.disabled);
                     stateListSet.addState(STATE_DISABLED,stateDrawable);
                 }
                 if(backgroundColors.selected){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.selected);
+                    var stateDrawable = NativeColorDrawable(backgroundColors.selected);
                     stateListSet.addState(STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundColors.pressed){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.pressed);
+                    var stateDrawable = NativeColorDrawable(backgroundColors.pressed);
                     stateListSet.addState(STATE_PRESSED,stateDrawable);
                 }
                 if(backgroundColors.focused){
-                    var stateDrawable = android.graphics.drawable.ColorDrawable(backgroundColors.focused);
+                    var stateDrawable = NativeColorDrawable(backgroundColors.focused);
                     stateListSet.addState(STATE_FOCUSED,stateDrawable);
                 }
                 self.nativeObject.setBackground(stateListSet);
@@ -133,25 +141,25 @@ const Button = extend(Label)(
             set: function(backgroundImages) {
                 // Assuming all paths are full path.
                 backgroundImagesInitial = backgroundImages;
-                stateListSet = new android.graphics.drawable.StateListDrawable();
+                stateListSet = new NativeStateListDrawable();
                 if(backgroundImages.normal){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.normal);
+                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.normal);
                     stateListSet.addState(STATE_NORMAL,stateDrawable);
                 }
                 if(backgroundImages.disabled){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.disabled);
+                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.disabled);
                     stateListSet.addState(STATE_DISABLED,stateDrawable);
                 }
                 if(backgroundImages.selected){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.selected);
+                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.selected);
                     stateListSet.addState(STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundImages.pressed){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.pressed);
+                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.pressed);
                     stateListSet.addState(STATE_PRESSED,stateDrawable);
                 }
                 if(backgroundImages.focused){
-                    var stateDrawable = android.graphics.drawable.Drawable.createFromPath(backgroundImages.focused);
+                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.focused);
                     stateListSet.addState(STATE_FOCUSED,stateDrawable);
                 }
                 self.nativeObject.setBackground(stateListSet);
@@ -181,13 +189,13 @@ const Button = extend(Label)(
             enumerable: true
         });
         
-        self.nativeObject.setOnClickListener(android.view.View.OnClickListener.implement({
+        self.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
             onClick: function(view) {
                 onPressCallback && onPressCallback();
             }
         }));
         
-        self.nativeObject.setOnLongClickListener(android.view.View.OnLongClickListener.implement({
+        self.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
             onLongClick : function(view){
                 onLongPressCallback && onLongPressCallback();
             }
