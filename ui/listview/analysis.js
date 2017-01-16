@@ -160,6 +160,7 @@ const extend = require('js-base/core/extend');
  *         })
  *         myListView.itemCount = myDataSet.length;
  *         myListView.refreshData();
+ *         myListView.stopRefresh();
  *     }
  *     
  *     var myPage = new Page();
@@ -219,6 +220,39 @@ const ListView = extend(View)(
          */
         this.verticalScrollBarEnabled = false;
 
+
+        /**
+         * This method return first visible list item's index which is visible at
+         * the top of the ListView.
+         *
+         * @return {Number} first visible list item's index.
+         * @method firstVisibleIndex
+         * @since 0.1
+         */
+        this.firstVisibleIndex = function(){};
+
+        /**
+         * This method return last visible list item's index which is visible at
+         * the bottom of the ListView.
+         *
+         * @return {Number} last visible list item's index.
+         * @method lastVisibleIndex
+         * @since 0.1
+         */
+        this.lastVisibleIndex = function(){};
+
+
+        /**
+         * Set the colors used in the progress animation. The first color
+         * will also be the color of the bar that grows in response to a
+         * user swipe gesture.
+         * This propert will works for only Android.
+         *
+         * @method setPullRefreshColors
+         * @since 0.1
+         */
+        this.android.setPullRefreshColors = function(colors){};
+
         /**
          * Notify the ListView for data changes.
          * 
@@ -226,18 +260,7 @@ const ListView = extend(View)(
          * @since 0.1
          */
         this.refreshData = function(){};
-        
-        /**
-         * Set the colors used in the progress animation. The first color 
-         * will also be the color of the bar that grows in response to a 
-         * user swipe gesture.
-         * This propert will works for only Android.
-         * 
-         * @method setPullRefreshColors
-         * @since 0.1
-         */
-        this.android.setPullRefreshColors = function(colors){};
-        
+
         /**
          * Scroll the ListView to specific index. The item on this index will 
          * shown on the top.
@@ -247,26 +270,15 @@ const ListView = extend(View)(
          * @since 0.1
          */
         this.scrollTo = function(index){};
-        
+
         /**
-         * This method return first visible list item's index which is visible at 
-         * the top of the ListView.
-         * 
-         * @return {Number} first visible list item's index.
-         * @method firstVisibleIndex
+         * This method cancels refresh indicator on the ListView. You should call this method after
+         * finishing event inside onPullRefresh otherwise refresh indicator will never stops.
+         *
+         * @method stopRefresh
          * @since 0.1
          */
-        this.firstVisibleIndex = function(){};
-        
-        /**
-         * This method return last visible list item's index which is visible at 
-         * the bottom of the ListView.
-         * 
-         * @return {Number} last visible list item's index.
-         * @method lastVisibleIndex
-         * @since 0.1
-         */
-        this.lastVisibleIndex = function(){};
+        this.stopRefresh = function(){};
 
         /**
          * Gets/sets scroll event for ListView. This event fires when the ListView
