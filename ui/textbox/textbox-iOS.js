@@ -1,6 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
+const ActionKeyType = require('sf-core/ui/actionkeytype');
 
 const IOSKeyboardTypes = {
     default : 0, // Default type for the current input method.
@@ -16,6 +17,21 @@ const IOSKeyboardTypes = {
     webSearch: 10, // @available(iOS 7.0, *) A default keyboard type with URL-oriented addition (shows space . prominently).
     asciiCapableNumberPad : 11 // @available(iOS 10.0, *) A number pad (0-9) that will always be ASCII digits.
     }
+    
+const IOSReturnKeyType = {
+    default : 0,
+    go : 1,
+    google : 2,
+    join : 3,
+    next : 4,
+    route : 5,
+    search : 6,
+    send : 7,
+    yahoo : 8,
+    done : 9,
+    emergencyCall : 10,
+    continue : 11 // @available(iOS 9.0, *)
+}
     
 const TextBox = extend(View)(
     function (_super, params) {
@@ -33,7 +49,7 @@ const TextBox = extend(View)(
            }else if (method.name == "textFieldShouldEndEditing"){
                self.onEditEnds();
            }else if(method.name == "textFieldShouldReturn"){
-               self.onReturnKey();
+               self.onActionButtonPress({ "actionKeyType" : self.actionKeyType});
            }else if(method.name == "shouldChangeCharactersIn:Range:ReplacementString"){
                self.onTextChanged(method.replacementString,method.range);
            }
@@ -41,7 +57,7 @@ const TextBox = extend(View)(
        
        self.onEditBegins = function() {};
        self.onEditEnds = function() {};
-       self.onReturnKey = function() {};
+       self.onActionButtonPress = function(e) {};
        this.onTextChanged = function(insertedText, location) {};
        
        Object.defineProperty(self, 'font', {
@@ -121,6 +137,54 @@ const TextBox = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.keyboardAppearance = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(this, 'actionKeyType', {
+            get: function() {
+                var returnValue = null; 
+                switch (self.nativeObject.returnKeyType) {
+                    case IOSReturnKeyType.default:
+                        returnValue =  ActionKeyType.DEFAULT
+                        break;
+                    case IOSReturnKeyType.next:
+                        returnValue =  ActionKeyType.NEXT
+                        break;
+                    case IOSReturnKeyType.go:
+                        returnValue =  ActionKeyType.GO
+                        break;
+                    case IOSReturnKeyType.search:
+                        returnValue =  ActionKeyType.SEARCH
+                        break;
+                    case IOSReturnKeyType.send:
+                        returnValue =  ActionKeyType.SEND
+                        break;
+                    default:
+                         returnValue =  null
+                }
+              return returnValue; 
+            },
+            set: function(value) {
+                switch (value) {
+                    case ActionKeyType.DEFAULT:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.default;
+                        break;
+                    case ActionKeyType.NEXT:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.next;
+                        break;
+                    case ActionKeyType.GO:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.go;
+                        break;
+                    case ActionKeyType.SEARCH:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.search;
+                        break;
+                    case ActionKeyType.SEND:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.send;
+                        break;
+                    default:
+                        self.nativeObject.returnKeyType = IOSReturnKeyType.default;
+                }
             },
             enumerable: true
         });
