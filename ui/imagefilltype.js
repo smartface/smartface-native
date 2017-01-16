@@ -48,3 +48,4 @@ ImageFillType.TILE = 2;
  */
 ImageFillType.ASPECT_FIT = 3;
 
+module.exports = ImageFillType;
