@@ -43,10 +43,11 @@ function Page(params) {
 
     Object.defineProperty(self.statusBar, 'visible', {
         get: function() {
-            return self.nativeObject.statusBarHidden;
+            return !self.nativeObject.statusBarHidden;
         },
         set: function(value) {
-            self.nativeObject.statusBarHidden = value;
+            self.nativeObject.statusBarHidden = !value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
         },
         enumerable: true
     });
@@ -57,8 +58,8 @@ function Page(params) {
             return self.nativeObject.statusBarStyle;
         },
         set: function(value) {
-            console.log("denememee");
             self.nativeObject.statusBarStyle = value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
         },
         enumerable: true
     });
