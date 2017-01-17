@@ -5,10 +5,12 @@
  *
  *     @example
  *     const ImageFillType = require('sf-core/ui/imagefilltype');
+ *     const ImageView = require('sf-core/ui/imageview');
  *     const Image = require('sf-core/ui/image');
- *     var myImage = new Image();
- *     myImage.imageSource = "images://smartface.png";
- *     myImage.imageFillType = ImageFillType.NORMAL;
+ *     var myImageView = new ImageView();
+ *     var myImage = Image.createFromFile("images://smartface.png")
+ *     myImageView.image = myImage;
+ *     myImageView.imageFillType = ImageFillType.NORMAL;
  * 
  */
 const ImageFillType = { };

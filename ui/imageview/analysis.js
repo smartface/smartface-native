@@ -9,11 +9,13 @@ const View = require('../view');
  * ImageView class is the way to show picture inside a rectangle area on UI.
  *
  *     @example
- *     const ImageView = require('sf-core/ui/imageview');
  *     const ImageFillType = require('sf-core/ui/imagefilltype');
- *     var myImage = new ImageView();
- *     myImage.imageSource = "images://smartface.png";
- *     myImage.imageFillType = ImageFillType.NORMAL;
+ *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('sf-core/ui/image');
+ *     var myImageView = new ImageView();
+ *     var myImage = Image.createFromFile("images://smartface.png")
+ *     myImageView.image = myImage;
+ *     myImageView.imageFillType = ImageFillType.NORMAL;
  *
  */
 const ImageView = extend(View)(
@@ -21,16 +23,16 @@ const ImageView = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets source of the Image. The source can be path or base64 string.
+         * Gets/sets source of the ImageView. The source must be an Image.
          * 
          *     @example
          *     const Image = require('sf-core/ui/image');
          *     const ImageView = require('sf-core/ui/imageView');
-         *     var myImage = Image.createFromFile("images://smartface.png")
-         *     var myImageView = new myImageView();
-         *     myImageView.imageSource = myImage;
+         *     var myImage = Image.createFromFile("images://smartface.png");
+         *     var myImageView = new ImageView();
+         *     myImageView.image = myImage;
          *
-         * @property {UI.Image} [imageSource = null]
+         * @property {UI.Image} [image = null]
          * @since 0.1
          */
         this.image = null;
@@ -41,8 +43,9 @@ const ImageView = extend(View)(
          *     @example
          *     const ImageView = require('sf-core/ui/imageview');
          *     const ImageFillType = require('sf-core/ui/imagefilltype');
+         *     var myImage = Image.createFromFile("images://smartface.png");
          *     var myImageView = new ImageView();
-         *     myImageView.imageSource = "images://smartface.png";
+         *     myImageView.image = myImage;
          *     myImageView.imageFillType = ImageFillType.STRETCH;
          *
          * @property {UI.ImageFillType} [imageFillType = UI.ImageFillType.NORMAL]
