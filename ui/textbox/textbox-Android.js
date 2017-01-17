@@ -149,17 +149,6 @@ const TextBox = extend(Label)(
             },
             enumerable: true
         });
-    
-        var _onReturnKeyCallback;
-        Object.defineProperty(this, 'onReturnKey', {
-            get: function() {
-                return _onReturnKeyCallback;
-            },
-            set: function(onReturnKey) {
-                _onReturnKeyCallback = onReturnKey;
-            },
-            enumerable: true
-        });
         
         var _onActionButtonCallback;
         Object.defineProperty(this, 'onActionButtonPress', {
@@ -173,11 +162,11 @@ const TextBox = extend(Label)(
         });
     
         self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
-            // todo: Control insertedText after resolving AND-2508 issue.
+            // todo: Control insertedText after resolving story/AND-2508 issue.
             onTextChanged: function(charSequence, start, before, count){
                 var index = Math.abs(start+before);
                 if(count > before){
-                    var insertedText = charSequence.toString().substring(start+before,start+count);
+                    var insertedText = charSequence.subSequence(start+before,start+count);
                     var e = {
                         location: index,
                         insertedText: insertedText
@@ -192,14 +181,6 @@ const TextBox = extend(Label)(
             
             afterTextChanged: function(editable){
                 _onEditEndsCallback && _onEditEndsCallback();
-            }
-        }));
-        
-        self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-            onKey: function(view, keyCode, event){
-                if (keyCode == NativeActionKeyType)  {
-                    _onReturnKeyCallback && _onReturnKeyCallback();
-                }
             }
         }));
         
