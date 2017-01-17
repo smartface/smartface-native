@@ -216,16 +216,11 @@ const TextBox = extend(Label)(
             self.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
             
             if(_isPassword){
-                console.log("ISNumberType " + NumberInputTypeIndex.indexOf(_keyboardType));
-                var inputType = self.nativeObject.getInputType();
-                
-                // self.nativeObject.setInputType(inputType | 16);
+                var inputType = NativeKeyboardType[_keyboardType];
                 if(NumberInputTypeIndex.indexOf(_keyboardType) >= 0) {
-                    console.log("setInputType " + inputType | NativePasswordType.NUMBER);
                     self.nativeObject.setInputType(inputType | NativePasswordType.NUMBER);
                 }
                 else {
-                    console.log("setInputType " + inputType | NativePasswordType.TEXT);
                     self.nativeObject.setInputType(inputType | NativePasswordType.TEXT);
                 }
             }
