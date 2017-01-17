@@ -13,7 +13,7 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const LinearLayout = require('sf-core/ui/linearlayout');
  *     const LayoutOrientation = require('sf-core/ui/layoutorientation');
- *     const LayoutAligment = require('sf-core/ui/layoutaligment');
+ *     const LayoutAligment = require('sf-core/ui/layoutalignment');
  *     const Label = require('sf-core/ui/label');
  *     var myLinearLayout = new LinearLayout();
  *     myLinearLayout.orientation = LayoutOrientation.VERTICAL;
