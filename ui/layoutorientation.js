@@ -9,7 +9,7 @@
  *     const LayoutOrientation = require('sf-core/ui/layoutorientation');
  *     var myLinearLayout = new LinearLayout({
  *         height: '100%',
- *         width: '100%'
+ *         width: '100%',
  *         orientation: LayoutOrientation.VERTICAL
  *     });
  *

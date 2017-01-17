@@ -34,7 +34,7 @@ const LinearLayout = extend(ViewGroup)(
 
         /**
          * Gets/sets layout orientation of the LinearLayout. 
-         * Use "horizontal" for a rows, "vertical" for a columns. 
+         * Use "horizontal" for rows, "vertical" for columns.
          *
          *     @example
          *     const LinearLayout = require('sf-core/ui/linearlayout');
@@ -58,11 +58,11 @@ const LinearLayout = extend(ViewGroup)(
 
         /**
          * Gets/sets aligments of view inside the LinearLayout. Aligment 
-         * describes how the child views are positioned inside the LinearLayout.
+         * describes how child views are positioned inside the LinearLayout.
          *
          *     @example
          *     const LinearLayout = require('sf-core/ui/linearlayout');
-         *     const LayoutAlignment = require('sf-core/ui/layoutaligment');
+         *     const LayoutAlignment = require('sf-core/ui/layoutalignment');
          *     const Label = require('sf-core/ui/label');
          *     var myLabel1 = new Label({
          *          text: "Smartface Label 1"
@@ -86,7 +86,7 @@ const LinearLayout = extend(ViewGroup)(
          *
          *     @example
          *     const LinearLayout = require('sf-core/ui/linearlayout');
-         *     const LayoutAlignment = require('sf-core/ui/layoutaligment');
+         *     const LayoutAlignment = require('sf-core/ui/layoutalignment');
          *     const LayoutOrientation = require('sf-core/ui/layoutorientation');
          *     const Label = require('sf-core/ui/label');
          *     var myLabel1 = new Label({

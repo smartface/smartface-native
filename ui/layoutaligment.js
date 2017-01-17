@@ -6,15 +6,16 @@
  * LayoutAlignment is an enum. It defines alignment of layout.
  *
  *     const LinearLayout = require('sf-core/ui/linearlayout');
- *     const LayoutAlignment = require('sf-core/ui/layoutaligment');
+ *     const LayoutAlignment = require('sf-core/ui/layoutalignment');
  *     var myLinearLayout = new LinearLayout({
  *         height: '100%',
- *         width: '100%'
- *         aligment: LayoutAlignment.LEFT
+ *         width: '100%',
+ *         alignment: LayoutAlignment.LEFT
  *     });
  *
  */
-var LayoutAlignment = { };
+var LayoutAlignment = {};
+LayoutAlignment.ios = {}
 
 /**
  * @property {Number} LEFT
