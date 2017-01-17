@@ -3,6 +3,9 @@ const Color = require("sf-core/ui/color");
 
 const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
+const NativeBuildVersion = requireClass("android.os.Build");
+
+const MINAPILEVEL_STATUSBARCOLOR = 21;
 
 function Page(params) {
     var self = this;
@@ -108,11 +111,13 @@ function Page(params) {
             _color = color;
             // // @todo setStatusBarColor doesn't work causing by issue COR-1153
             // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
-            var window = activity.getWindow();
-            window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
-            window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(NativeWindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(color);
+            if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+                var window = activity.getWindow();
+                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
+                window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(color);
+            }
         },
         enumerable: true
     });
@@ -156,9 +161,8 @@ function Page(params) {
     }
     
     this.invalidateStatusBar = function(){
-        console.log("visible = " + _visible);
         self.statusBar.visible = _visible;
-        self.statusBar.color = _color;
+        self.statusBar.android.color = _color;
     }
     
     // Default values
