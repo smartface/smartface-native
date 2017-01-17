@@ -105,8 +105,8 @@ function Page(params) {
     this.remove = function(){};
     
     /**
-     * Gets/sets background color of the actionbar bar. If not set, 
-     * will shown as default color depends on device's OS  and OS version. 
+     * Gets/sets background color of the actionbar. If not set, actionbar will have default
+     * background color depends on device's OS and OS version.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -115,7 +115,6 @@ function Page(params) {
      *     myPage.actionbar.backgroundColor = Color.RED;
      *
      * @property {UI.Color} backgroundColor
-     * @static
      * @since 0.1
      */
     this.actionbar.backgroundColor = UI.Color.LIGHTGRAY;
@@ -127,11 +126,9 @@ function Page(params) {
      *     const Page = require('sf-core/ui/page');
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
-     *     var myImage = Image.createFromFile('images://smartface.png');
-     *     myPage.actionbar.backgroundImage = myImage;
+     *     myPage.actionbar.backgroundImage = Image.createFromFile('images://smartface.png');
      *
      * @property {UI.Image} [backgroundImage = null]
-     * @static
      * @since 0.1
      */
     this.actionbar.backgroundImage = null;
@@ -147,7 +144,6 @@ function Page(params) {
      *     var headerbarHeight = myPage.actionbar.height;
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
-     * @static
      * @since 0.1
      */
     this.actionbar.displayShowHomeEnabled = false;
@@ -162,7 +158,6 @@ function Page(params) {
      *     var headerbarHeight = myPage.actionbar.height;
      *
      * @property {Boolean} [displayShowTitleEnabled = false]
-     * @static
      * @since 0.1
      */
     this.actionbar.displayShowTitleEnabled = false;
@@ -177,7 +172,6 @@ function Page(params) {
      *     var headerbarHeight = myPage.actionbar.height;
      *
      * @property {Number} height
-     * @static
      * @readonly
      * @since 0.1
      */
@@ -196,7 +190,6 @@ function Page(params) {
      *     myPage.actionbar.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
-     * @static
      * @since 0.1
      */
     this.actionbar.homeAsUpIndicatorImage = null;
@@ -211,7 +204,6 @@ function Page(params) {
      *     myPage.actionbar.title = 'Hello from Smartface Headerbar!';
      *
      * @property {String} title
-     * @static
      * @since 0.1
      */
     this.actionbar.title = '';
@@ -225,7 +217,6 @@ function Page(params) {
      *     myPage.actionbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
      *
      * @property {String} subtitle
-     * @static
      * @since 0.1
      */
     this.actionbar.subtitle = '';
@@ -239,7 +230,6 @@ function Page(params) {
      *     myPage.actionbar.visible = false;
      *
      * @property {Boolean} [visible = true]
-     * @static
      * @since 0.1
      */
     this.actionbar.visible = true;
