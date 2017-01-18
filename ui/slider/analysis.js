@@ -129,10 +129,12 @@ const Slider = extend(View)(
          *     @example
          *     const Slider = require('sf-core/ui/slider');
          *     var mySlider = new Slider();
-         *     mySlider.maxValue = 100;
-         *     mySlider.onValueChange = function(){
+         *     mySlider.onValueChange = valueChanged;
+         *     mySlider.value = 40;
+         * 
+         *     function valueChanged() {
          *         alert("New value is: " + mySlider.value);
-         *     };
+         *     }
          *
          * @event onValueChange
          * @since 0.1

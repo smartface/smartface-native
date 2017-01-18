@@ -204,28 +204,42 @@ function View(params) {
             style.addChangeHandler(function(propertyName, value){
                 applyStyle();
             });
+            updatePadding();
         },
         enumerable: true
     });
 
+    var _initialPadding = {
+        left  : self.nativeObject.getPaddingLeft(),
+        top   : self.nativeObject.getPaddingTop(),
+        right : self.nativeObject.getPaddingRight(),
+        bottom: self.nativeObject.getPaddingBottom()
+    };
     Object.defineProperty(this, 'padding', {
         get: function() {
-            return {
-                left: self.nativeObject.getPaddingLeft(),
-                top: self.nativeObject.getPaddingTop(),
-                right: self.nativeObject.getPaddingRight(),
-                bottom: self.nativeObject.getPaddingBottom() };
+            return _initialPadding;
         },
         set: function(padding) {
-            // @todo must be working with %
-            var paddingLeft = padding.left ? padding.left : 0;
-            var paddingTop = padding.top ? padding.top : 0;
-            var paddingRight = padding.right ? padding.right : 0;
-            var paddingBottom = padding.bottom ? padding.bottom : 0;
-            self.nativeObject.setPadding(paddingLeft,paddingTop,paddingRight,paddingBottom);
+            _initialPadding = {
+                left  : padding.left   ? padding.left   : 0,
+                top   : padding.top    ? padding.top    : 0,
+                right : padding.right  ? padding.right  : 0,
+                bottom: padding.bottom ? padding.bottom : 0
+            };
+
+            updatePadding();
         },
         enumerable: true
     });
+
+    function updatePadding() {
+        self.nativeObject.setPadding(
+            _initialPadding.left   + styleInitial.borderWidth,
+            _initialPadding.top    + styleInitial.borderWidth,
+            _initialPadding.right  + styleInitial.borderWidth,
+            _initialPadding.bottom + styleInitial.borderWidth
+        );
+    };
 
     this.bringToFront = function(){
         self.nativeObject.bringToFront();
@@ -245,7 +259,7 @@ function View(params) {
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
         if(!TypeUtil.isNumeric(styleInitial.borderColor)){
-            borderColor = NativeColor.parseColor(styleInitial.borderColor);;
+            borderColor = NativeColor.parseColor(styleInitial.borderColor);
         }
         // android.graphics.Color.TRANSPARENT=0
         borderDrawable.setColor(0);
