@@ -10,6 +10,7 @@ const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 
 function View(params) {
     var self = this;
@@ -216,6 +217,7 @@ function View(params) {
                 bottom: self.nativeObject.getPaddingBottom() };
         },
         set: function(padding) {
+            // @todo must be working with %
             var paddingLeft = padding.left ? padding.left : 0;
             var paddingTop = padding.top ? padding.top : 0;
             var paddingRight = padding.right ? padding.right : 0;
@@ -238,17 +240,7 @@ function View(params) {
 //        if( (TypeUtil.isNumeric(widthInitial) &&  TypeUtil.isNumeric(heightInitial) && TypeUtil.isNumeric(leftInitial) && TypeUtil.isNumeric(topInitial)) || self.parent){
 //        }
     };
-
-    // Using from ViewGroup
-    this.getInitialPosition = function(){
-        return  {
-            width: widthInitial,
-            height: heightInitial,
-            top: topInitial,
-            left: leftInitial
-        };
-    };
-
+    
     // @todo no ENUM support
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
@@ -324,13 +316,16 @@ function View(params) {
             else if(self.parent.nativeObject.toString().indexOf("Absolute") !== -1){
                 layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
+            else if(self.nativeObject.toString().indexOf("RecyclerView") !== -1){
+                layoutParams = new NativeSwipeRefreshLayout.LayoutParams(width,height);
+            }
             else{
-                // Our page's root layout is AbsoluteLayout.
+                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
                 layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
         }
         else{
-            // Our page's root layout is AbsoluteLayout.
+            // Our page's root layout is AbsoluteLayout
             layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
         }
         self.nativeObject.setLayoutParams(layoutParams);
@@ -355,9 +350,6 @@ function View(params) {
         }
         self.nativeObject.setBackground(layerDrawable);
     }
-
-
-    
 }
 
 module.exports = View;
