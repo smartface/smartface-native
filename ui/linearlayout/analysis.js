@@ -13,11 +13,11 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const LinearLayout = require('sf-core/ui/linearlayout');
  *     const LayoutOrientation = require('sf-core/ui/layoutorientation');
- *     const LayoutAligment = require('sf-core/ui/layoutalignment');
+ *     const LayoutAlignment = require('sf-core/ui/layoutalignment');
  *     const Label = require('sf-core/ui/label');
  *     var myLinearLayout = new LinearLayout();
  *     myLinearLayout.orientation = LayoutOrientation.VERTICAL;
- *     myLinearLayout.aligment = LayoutAligment.RIGHT;
+ *     myLinearLayout.alignment = LayoutAlignment.RIGHT;
  *     var myLabel1 = new Label({
  *          text: "Smartface Label 1"
  *     });
@@ -57,7 +57,7 @@ const LinearLayout = extend(ViewGroup)(
         this.orientation = UI.LayoutOrientation.HORIZONTAL;
 
         /**
-         * Gets/sets aligments of view inside the LinearLayout. Aligment 
+         * Gets/sets alignments of view inside the LinearLayout. Alignment 
          * describes how child views are positioned inside the LinearLayout.
          *
          *     @example

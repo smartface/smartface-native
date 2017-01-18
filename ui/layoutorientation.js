@@ -17,18 +17,6 @@
 var LayoutOrientation = { };
 
 /**
- * @property {Number} VERTICAL
- * Stacks all child views vertically.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(LayoutOrientation, 'VERTICAL', {
-  value: 0,
-  writable: false
-});
-
-/**
  * @property {Number} HORIZONTAL
  * Stacks all child views horizontally.
  * @static
@@ -36,6 +24,18 @@ Object.defineProperty(LayoutOrientation, 'VERTICAL', {
  * @since 0.1
  */
 Object.defineProperty(LayoutOrientation, 'HORIZONTAL', {
+  value: 0,
+  writable: false
+});
+
+/**
+ * @property {Number} VERTICAL
+ * Stacks all child views vertically.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(LayoutOrientation, 'VERTICAL', {
   value: 1,
   writable: false
 });
