@@ -16,6 +16,6 @@ module.exports = {
     AbsoluteLayout: require('./absolutelayout'),
     Slider: require('./slider'),
     LinearLayout: require('./linearlayout'),
-    LayoutAlignment: require('./layoutaligment'),
+    LayoutAlignment: require('./layoutalignment'),
     LayoutOrientation: require('./layoutorientation')
 };
