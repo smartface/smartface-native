@@ -44,8 +44,12 @@ const NativePasswordType = {
 };
 
 // NativeActionKeyType corresponds android action key type.
-// The values are taken from android.view.inputmethod.EditorInfo.
-const NativeActionKeyType = [6, 5, 2, 3, 4];
+const NativeActionKeyType = [6, // EditorInfo.IME_ACTION_DONE
+    5, // EditorInfo.IME_ACTION_NEXT
+    2, // EditorInfo.IME_ACTION_GO
+    3, // EditorInfo.IME_ACTION_SEARCH
+    4 // EditorInfo.IME_ACTION_SEND
+];
 
 const TextBox = extend(Label)(
     function (_super, params) {
@@ -56,27 +60,23 @@ const TextBox = extend(Label)(
         }
         _super(this);
 
-        var _hint = "";
         Object.defineProperty(this, 'hint', {
             get: function() {
-                return _hint;
+                return self.nativeObject.getHint();
             },
             set: function(hint) {
-                _hint = hint;
-                self.nativeObject.setHint(_hint);
+                self.nativeObject.setHint(hint);
             },
             enumerable: true
         });
         
-        var _hintTextColor = Color.LIGHTGRAY;
         this.android = {}
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return _hintTextColor;
+                return self.nativeObject.getHintTextColors().getDefaultColor();
             },
             set: function(hintTextColor) {
-                _hintTextColor = hintTextColor; 
-                self.nativeObject.setHintTextColor(_hintTextColor);
+                self.nativeObject.setHintTextColor(hintTextColor);
             },
             enumerable: true
         });
@@ -175,15 +175,22 @@ const TextBox = extend(Label)(
                 }
             },
             
-            beforeTextChanged: function(charSequence, start, count, after){
-                _onEditBeginsCallback && _onEditBeginsCallback();
-            },
+            beforeTextChanged: function(charSequence, start, count, after){},
             
-            afterTextChanged: function(editable){
-                _onEditEndsCallback && _onEditEndsCallback();
-            }
+            afterTextChanged: function(editable){}
         }));
         
+        self.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+            onFocusChange: function(view, hasFocus){
+                if (hasFocus)  {
+                    _onEditBeginsCallback && _onEditBeginsCallback();
+                }
+                else {
+                    _onEditEndsCallback && _onEditEndsCallback();
+                }
+            }
+        }));
+    
         self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
             onEditorAction: function(textView, actionId, event){
                 if (actionId == NativeActionKeyType[_actionKeyType])  {
@@ -208,8 +215,7 @@ const TextBox = extend(Label)(
         }
         
         this.showKeyboard = function(){
-            // todo: getSystemService doesn't work causing by issue COR-1153
-            // getSystemService added in api level 23.
+            // todo: toggleSoftInput doesn't work causing by issue AND-2566
             self.nativeObject.requestFocus();
             var context = activity.getApplicationContext();
             var inputMethodManager = context.getSystemService(NativeActivity.INPUT_METHOD_SERVICE);
@@ -217,8 +223,7 @@ const TextBox = extend(Label)(
         };
         
         this.hideKeyboard = function(){
-            // todo: getSystemService doesn't work causing by issue COR-1153
-            // getSystemService added in api level 23.
+            // todo: toggleSoftInput doesn't work causing by issue AND-2566
             self.nativeObject.clearFocus();
             var context = activity.getApplicationContext();
             var inputMethodManager = context.getSystemService(NativeContext.INPUT_METHOD_SERVICE);
@@ -227,6 +232,7 @@ const TextBox = extend(Label)(
         
         self.hint = "";
         self.multipleLine = false;
+        self.android.hintTextColor = Color.LIGHTGRAY;
         
         // Assign parameters given in constructor
         if (params) {
