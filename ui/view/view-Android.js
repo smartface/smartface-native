@@ -10,7 +10,7 @@ const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const NativeRecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
 
 function View(params) {
     var self = this;
@@ -330,8 +330,8 @@ function View(params) {
             else if(self.parent.nativeObject.toString().indexOf("Absolute") !== -1){
                 layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
             }
-            else if(self.nativeObject.toString().indexOf("RecyclerView") !== -1){
-                layoutParams = new NativeSwipeRefreshLayout.LayoutParams(width,height);
+            else if(self.nativeObject.toString().indexOf("SwipeRefresh") !== -1){
+                layoutParams = new NativeRecyclerView.LayoutParams(width,height);
             }
             else{
                 //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
@@ -344,14 +344,34 @@ function View(params) {
         }
         self.nativeObject.setLayoutParams(layoutParams);
 
+        // @todo must be work for percantage values
+        // var ViewTreeObserver = requireClass('android.view.ViewTreeObserver');
+        // var nativeViewTreeObserver = self.nativeObject.getViewTreeObserver();
+        // var listener = ViewTreeObserver.OnGlobalLayoutListener.implement({
+        //     onGlobalLayout: function(){
+        //         console.log("onGlobalLayout: Id: " + self.id);
+        //         nativeViewTreeObserver.removeOnGlobalLayoutListener(listener);
+        //         nativeViewTreeObserver.removeGlobalOnLayoutListener(listener);
+        //         console.log("onGlobalLayout removed");
+        //         // invalidating child positions
+        //         if(self.childViews){
+        //             for(var childViewKey in self.childViews){
+        //                 // passing calculated height and width to child view
+        //                 self.childViews[childViewKey].invalidatePosition(width, height);
+        //             }
+        //         }
+        //     }
+        // });
+        // nativeViewTreeObserver.addOnGlobalLayoutListener(listener);
+        
         // invalidating child positions
-        var id = self.id;
         if(self.childViews){
             for(var childViewKey in self.childViews){
                 // passing calculated height and width to child view
                 self.childViews[childViewKey].invalidatePosition(width, height);
             }
         }
+        
     }
 
     function setBackground(layerIndex){

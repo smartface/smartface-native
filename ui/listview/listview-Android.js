@@ -33,26 +33,34 @@ const ListView = extend(View)(
                             onCreateViewHolder: function(parent, viewType) {
                                 if(_onRowCreate){
                                     holderViewLayout = _onRowCreate();
+                                    holderViewLayout.parent = self;
+                                    holderViewLayout.height = dpFromPx(holderViewLayout.rowHeight);
+                                    holderViewLayout.width = -1;
                                 }
                                 if(!holderViewLayout){
                                     holderViewLayout = new ListViewItem({
-                                        width: "100%",
-                                        height: "25%",
+                                        width: -1,
+                                        height: 100,
                                         backgroundColor: Color.LIGHTGRAY
                                     });
                                 }
-                                holderViewLayout.parent = self;
+                                // console.log("holderViewLayout.height: " + holderViewLayout.height + " holderViewLayout.width: "+holderViewLayout.width);
+                                // console.log("holderViewLayout.parent: "+holderViewLayout.parent);
                                 holderViewLayout.invalidatePosition();
                                 return holderViewLayout.nativeInner; //RecyclerView.ViewHolder
                             },
                             onBindViewHolder: function(nativeHolderView, position){
                                 if(_onRowBind){
                                     // @todo make performance improvements
+                                    // console.log("onBindViewHolder height: " + holderViewLayout.height + " width: "+holderViewLayout.width);
+                                    // console.log("onBindViewHolder parent: "+holderViewLayout.parent);
+                                
+                                    //holderViewLayout.parent = self;
+                                    //holderViewLayout.invalidatePosition();
                                     createFromTemplate(holderViewLayout,nativeHolderView.itemView);
                                     _onRowBind(holderViewLayout,position);
-                                    //console.log('holderViewLayout.parent: ' + holderViewLayout.parent);
-                                    //holderViewLayout.parent = self;
-                                    holderViewLayout.invalidatePosition();
+                                   
+                                    
                                 }
                             },
                             getItemCount: function(){
@@ -207,6 +215,10 @@ const ListView = extend(View)(
             else if(jsView instanceof Label){
                 jsView.nativeInner = nativeView.getChildAt(0);
             }
+        }
+        
+        function dpFromPx(px){
+            return px * activity.getResources().getDisplayMetrics().density;
         }
         
         if (params) {
