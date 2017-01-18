@@ -120,7 +120,7 @@ function Page(params) {
     this.actionbar.backgroundColor = UI.Color.LIGHTGRAY;
     
     /**
-     * Gets/sets background image of the actionbar bar.
+     * Gets/sets background image of the actionbar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -134,7 +134,7 @@ function Page(params) {
     this.actionbar.backgroundImage = null;
     
     /**
-     * Gets/sets the navigation indicator visiblity of the actionbar bar. 
+     * Gets/sets the navigation indicator visibility of the actionbar.
      * If false navigation indicator will not shown, otherwise will shown
      * as back icon with home as up indicator image.
      *
@@ -149,7 +149,7 @@ function Page(params) {
     this.actionbar.displayShowHomeEnabled = false;
     
     /**
-     * Gets/sets the title visiblity of the actionbar bar. If false title will 
+     * Gets/sets the title visibility of the actionbar. If false title will
      * not shown, otherwise title will shown.
      *
      *     @example
@@ -163,8 +163,8 @@ function Page(params) {
     this.actionbar.displayShowTitleEnabled = false;
     
     /**
-     * Gets the height of the actionbar bar. Height is a read only property. 
-     * Height value will change depends on device and screen density. 
+     * Gets the height of the actionbar. Height is a read only property.
+     * Height value will change depends on device and screen density.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -179,7 +179,7 @@ function Page(params) {
     
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
-     * indicator of the actionbar bar. If not set, the application icon will 
+     * indicator of the actionbar. If not set, the application icon will
      * shown.
      *
      *     @example
@@ -195,7 +195,7 @@ function Page(params) {
     this.actionbar.homeAsUpIndicatorImage = null;
     
     /**
-     * Gets/sets title of the actionbar bar. If not set, the application name will 
+     * Gets/sets title of the actionbar. If not set, the application name will
      * shown.
      *
      *     @example
@@ -209,7 +209,7 @@ function Page(params) {
     this.actionbar.title = '';
     
     /**
-     * Gets/sets subtitle of the actionbar bar. If not set, will not shown.
+     * Gets/sets subtitle of the actionbar. If not set, will not shown.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -222,7 +222,7 @@ function Page(params) {
     this.actionbar.subtitle = '';
     
     /**
-     * Gets/sets visibility of the actionbar bar.
+     * Gets/sets visibility of the actionbar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
