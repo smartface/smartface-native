@@ -79,12 +79,12 @@ const Label = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(this, 'multipleLine', {
+        Object.defineProperty(this, 'multiline', {
             get: function() {
                 return (self.nativeInner ? self.nativeInner.getLineCount() : self.nativeObject.getLineCount() )!= 1;
             },
-            set: function(multipleLine) {
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multipleLine);
+            set: function(multiline) {
+                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multiline);
             },
             enumerable: true
         });
