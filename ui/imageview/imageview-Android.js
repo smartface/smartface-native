@@ -22,12 +22,12 @@ const ImageView = extend(View)(
         Object.defineProperty(this, 'image', {
             get: function() {
                 var image = new Image();
-                image.drawable = self.nativeObject.getDrawable();
+                image.nativeObject = self.nativeObject.getDrawable();
                 return image;
             },
             set: function(image) {
                 if (image instanceof Image) {
-                    self.nativeObject.setImageDrawable(image.drawable);
+                    self.nativeObject.setImageDrawable(image.nativeObject);
                 } else {
                     self.nativeObject.setImageDrawable(null);
                 }

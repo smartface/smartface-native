@@ -3,9 +3,7 @@ const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawa
 
 const TypeUtil = require("sf-core/util/type");
 
-function Image () {
-    this.drawable = null;
-}
+function Image () {}
 
 Image.createFromFile = function(path) {
     var image = new Image();
@@ -13,7 +11,7 @@ Image.createFromFile = function(path) {
     if (TypeUtil.isString(path)) {
         var androidResources = Android.getActivity().getResources();
         var bitmap = NativeBitmapFactory.decodeFile(path);
-        image.drawable = new NativeBitmapDrawable(androidResources, bitmap);
+        image.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
     }
 
     return image;
