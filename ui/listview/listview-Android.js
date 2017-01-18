@@ -1,12 +1,14 @@
 const View          = require('../view');
 const extend        = require('js-base/core/extend');
 const Color         = require('../color');
-const ListViewItem  = require('sf-core/ui/listviewitem');
+const Label         = require('../label');
+const ListViewItem  = require('../listviewitem');
 
 const SwipeRefreshLayout    = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const RecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
 const ViewHolder            = requireClass("android.support.v7.widget.RecyclerView.ViewHolder");
 const LinearLayoutManager   = requireClass("android.support.v7.widget.LinearLayoutManager");
+const OnScrollListener      = requireClass("android.support.v7.widget.RecyclerView.OnScrollListener")
 
 const ListView = extend(View)(
     function (_super, params) {
@@ -40,13 +42,16 @@ const ListView = extend(View)(
                                     });
                                 }
                                 holderViewLayout.parent = self;
+                                holderViewLayout.invalidatePosition();
                                 return holderViewLayout.nativeInner; //RecyclerView.ViewHolder
                             },
-                            onBindViewHolder: function(holder, position){
+                            onBindViewHolder: function(nativeHolderView, position){
                                 if(_onRowBind){
-                                    holderViewLayout.nativeObject = holder.itemView;
-                                    holderViewLayout.nativeInner = holder;
+                                    // @todo make performance improvements
+                                    createFromTemplate(holderViewLayout,nativeHolderView.itemView);
                                     _onRowBind(holderViewLayout,position);
+                                    //console.log('holderViewLayout.parent: ' + holderViewLayout.parent);
+                                    //holderViewLayout.parent = self;
                                     holderViewLayout.invalidatePosition();
                                 }
                             },
@@ -54,6 +59,8 @@ const ListView = extend(View)(
                                 return _itemCount;
                             }
         }, null);
+
+        
 
         self.nativeInner.setAdapter(dataAdapter);
         
@@ -123,9 +130,13 @@ const ListView = extend(View)(
         
         this.scrollTo = function(index){};
         
-        this.firstVisibleIndex = function(){};
-        
-        this.lastVisibleIndex = function(){};
+        this.firstVisibleIndex = function(){
+            return self.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
+        };
+
+        this.lastVisibleIndex = function(){
+            return self.nativeInner.getLayoutManager().findLastVisibleItemPosition();
+        };
 
         var _onScroll;
         // @todo crashing 
@@ -178,12 +189,32 @@ const ListView = extend(View)(
             })
         );
         
+        // var invalidatePosition = self.invalidatePosition;
+        // self.invalidatePosition = function(){
+        //     invalidatePosition();
+        //     // Force redraw recyclerview
+        //     self.nativeInner.getRecycledViewPool().clear();
+        // };
+        
+        function createFromTemplate(jsView, nativeView){
+            jsView.nativeObject = nativeView;
+            if(jsView.childViews){
+                for(var childViewKey in jsView.childViews){
+                    var childId = jsView.childViews[childViewKey].id;
+                    createFromTemplate(jsView.childViews[childViewKey],nativeView.findViewById(childId));
+                }
+            }
+            else if(jsView instanceof Label){
+                jsView.nativeInner = nativeView.getChildAt(0);
+            }
+        }
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
-            dataAdapter.notifyDataSetChanged();
         }
+        dataAdapter.notifyDataSetChanged();
     }
 );
 
