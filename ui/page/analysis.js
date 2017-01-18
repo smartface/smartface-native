@@ -35,6 +35,68 @@ function Page(params) {
      */
     this.onLoad = function onLoad(){};
 
+
+    /**
+     * Gets the height of the status bar. height is a read only property. Height value will change depends on
+     * device and screen density.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     var statusBarHeight = myPage.statusBar.height;
+     *
+     * @property {Number} height
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    this.statusBar.height;
+
+    /**
+     * Gets/sets visibility of the status bar.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     var myPage = new Page();
+     *     myPage.statusBar.visible = true;
+     *
+     * @property {Boolean} visible
+     * @static
+     * @since 0.1
+     */
+    this.statusBar.visible = true;
+
+    /**
+     * Gets/sets color of the status bar. This property will work only for Android
+     * KitKat (API 19) or above.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.statusBar.android.color = Color.RED;
+     *
+     * @property {Color} color
+     * @static
+     * @since 0.1
+     */
+    this.statusBar.android.color = Color.create("#FF757575");
+
+    /**
+     * Gets/sets status bar style. This property will work only for iOS
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+     *     var myPage = new Page();
+     *     myPage.statusBar.ios.style = StatusBarStyle.DEFAULT;
+     *
+     * @property {StatusBarStyle} style
+     * @static
+     * @since 0.1
+     */
+    this.statusBar.ios.style = StatusBarStyle.DEFAULT;
+
     /**
      * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
      *
