@@ -162,7 +162,7 @@ function Page(params) {
     
     this.invalidateStatusBar = function(){
         self.statusBar.visible = _visible;
-        self.statusBar.android.color = _color;
+       // self.statusBar.android.color = _color;
     }
     
     // Default values
