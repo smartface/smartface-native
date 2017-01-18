@@ -16,6 +16,9 @@ var KeyboardType = {};
 KeyboardType.ios = {};
 KeyboardType.android = {};
 
+KeyboardType.ios = { };
+
+KeyboardType.android = { };
 /**
  * @property {Number} DEFAULT
  * Default keyboard appearance.

@@ -32,18 +32,6 @@ Object.defineProperty(KeyboardAppearance, 'DEFAULT', {
 });
 
 /**
- * @property {Number} LIGHT
- * Light colored keyboard appearance.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(KeyboardAppearance, 'LIGHT', {
-  value: 1,
-  writable: false
-});
-
-/**
  * @property {Number} DARK
  * Dark colored keyboard appearance.
  * @static
@@ -51,6 +39,18 @@ Object.defineProperty(KeyboardAppearance, 'LIGHT', {
  * @readonly
  */
 Object.defineProperty(KeyboardAppearance, 'DARK', {
+  value: 1,
+  writable: false
+});
+
+/**
+ * @property {Number} LIGHT
+ * Light colored keyboard appearance.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(KeyboardAppearance, 'LIGHT', {
   value: 2,
   writable: false
 });
