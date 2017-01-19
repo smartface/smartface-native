@@ -46,7 +46,6 @@ function Page(params) {
      *     var statusBarHeight = myPage.statusBar.height;
      *
      * @property {Number} height
-     * @static
      * @readonly
      * @since 0.1
      */
@@ -61,7 +60,6 @@ function Page(params) {
      *     myPage.statusBar.visible = true;
      *
      * @property {Boolean} visible
-     * @static
      * @since 0.1
      */
     this.statusBar.visible = true;
@@ -77,7 +75,6 @@ function Page(params) {
      *     myPage.statusBar.android.color = Color.RED;
      *
      * @property {Color} color
-     * @static
      * @since 0.1
      */
     this.statusBar.android.color = Color.create("#FF757575");
@@ -92,7 +89,6 @@ function Page(params) {
      *     myPage.statusBar.ios.style = StatusBarStyle.DEFAULT;
      *
      * @property {StatusBarStyle} style
-     * @static
      * @since 0.1
      */
     this.statusBar.ios.style = StatusBarStyle.DEFAULT;
