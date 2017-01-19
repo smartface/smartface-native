@@ -3,7 +3,7 @@ function Pages(params) {
 
     var rootViewController = params.rootPage.nativeObject;
     
-    UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
+   // UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
 
     self.nativeObject = new UINavigationController(rootViewController);
     self.nativeObject.setTranslucent(false);
