@@ -162,6 +162,8 @@ function Page(params) {
     
     this.invalidateStatusBar = function(){
         self.statusBar.visible = _visible;
+        
+        // todo Set color value after resolving COR-1153.
        // self.statusBar.android.color = _color;
     }
     
