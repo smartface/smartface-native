@@ -3,6 +3,7 @@ const extend        = require('js-base/core/extend');
 const Color         = require('../color');
 const Label         = require('../label');
 const ListViewItem  = require('../listviewitem');
+const TypeUtil      = require("sf-core/util/type");
 
 const SwipeRefreshLayout    = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const RecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
@@ -42,7 +43,8 @@ const ListView = extend(View)(
                                         backgroundColor: Color.LIGHTGRAY
                                     });
                                 }
-                                return holderViewLayout.nativeInner; //RecyclerView.ViewHolder
+                                //RecyclerView.ViewHolder
+                                return holderViewLayout.nativeInner; 
                             },
                             onBindViewHolder: function(nativeHolderView, position){
                                 if(_onRowBind){
@@ -190,10 +192,22 @@ const ListView = extend(View)(
         var _invalidatePosition = self.invalidatePosition;
         this.invalidatePosition = function(parentWidth, parentHeight){
             _invalidatePosition(parentWidth, parentHeight);
-            listViewHeight = parentHeight;
-            listViewWidth = parentWidth;
+            var initialPosition = self.getInitialPosition();
             
-        }
+            if(!TypeUtil.isNumeric(initialPosition.height)){
+                listViewHeight = (parentHeight ? parentHeight : (self.parent ? self.parent.height : 0) ) * (parseInt(initialPosition.height.replace("%")))/100;
+            }
+            else{
+                listViewHeight = initialPosition.height;
+            }
+        
+            if(!TypeUtil.isNumeric(initialPosition.width)){
+                listViewWidth = (parentWidth ? parentWidth : (self.parent ? self.parent.width : 0) ) * (parseInt(initialPosition.width.replace("%")))/100;
+            }
+            else{
+                listViewWidth = initialPosition.width;
+            }
+        };
         
         function createFromTemplate(jsView, nativeView,parentJsView){
             jsView.nativeObject = nativeView;
