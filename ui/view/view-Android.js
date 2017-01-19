@@ -317,52 +317,7 @@ function View(params) {
             width = widthInitial;
         }
 
-        var layoutParams;
-        if(self.parent){
-            if(self.parent.nativeObject.toString().indexOf("Relative") !== -1){
-                // @todo Will change after implementation of RelativeLayout
-                layoutParams = new NativeRelativeLayout.LayoutParams(width,height);
-            }
-            else if(self.parent.nativeObject.toString().indexOf("Linear") !== -1){
-                // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
-                layoutParams = new NativeLinearLayout.LayoutParams(width,height,100);
-            }
-            else if(self.parent.nativeObject.toString().indexOf("Absolute") !== -1){
-                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-            }
-            else if(self.nativeObject.toString().indexOf("SwipeRefresh") !== -1){
-                layoutParams = new NativeRecyclerView.LayoutParams(width,height);
-            }
-            else{
-                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
-                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-            }
-        }
-        else{
-            // Our page's root layout is AbsoluteLayout
-            layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-        }
-        self.nativeObject.setLayoutParams(layoutParams);
-
-        // @todo must be work for percantage values
-        // var ViewTreeObserver = requireClass('android.view.ViewTreeObserver');
-        // var nativeViewTreeObserver = self.nativeObject.getViewTreeObserver();
-        // var listener = ViewTreeObserver.OnGlobalLayoutListener.implement({
-        //     onGlobalLayout: function(){
-        //         console.log("onGlobalLayout: Id: " + self.id);
-        //         nativeViewTreeObserver.removeOnGlobalLayoutListener(listener);
-        //         nativeViewTreeObserver.removeGlobalOnLayoutListener(listener);
-        //         console.log("onGlobalLayout removed");
-        //         // invalidating child positions
-        //         if(self.childViews){
-        //             for(var childViewKey in self.childViews){
-        //                 // passing calculated height and width to child view
-        //                 self.childViews[childViewKey].invalidatePosition(width, height);
-        //             }
-        //         }
-        //     }
-        // });
-        // nativeViewTreeObserver.addOnGlobalLayoutListener(listener);
+        self.nativeObject.setLayoutParams(generateLayoutParams(width, height, leftPosition, topPosition, self.parent));
         
         // invalidating child positions
         if(self.childViews){
@@ -383,6 +338,33 @@ function View(params) {
                 layerDrawable.setDrawableByLayerId(1,borderDrawable);
         }
         self.nativeObject.setBackground(layerDrawable);
+    }
+    
+    function generateLayoutParams(width, height, leftPosition, topPosition, parentView){
+        if(parentView){
+            if(parentView.nativeObject.toString().indexOf("Relative") !== -1){
+                // @todo Will change after implementation of RelativeLayout
+                return new NativeRelativeLayout.LayoutParams(width,height);
+            }
+            else if(parentView.nativeObject.toString().indexOf("Linear") !== -1){
+                // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
+                return new NativeLinearLayout.LayoutParams(width,height,100);
+            }
+            else if(parentView.nativeObject.toString().indexOf("Absolute") !== -1){
+                return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+            else if(parentView.toString().indexOf("SwipeRefresh") !== -1){
+                return new NativeRecyclerView.LayoutParams(width,height);
+            }
+            else{
+                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
+                return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+        }
+        else{
+            // Our page's root layout is AbsoluteLayout
+            return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+        }
     }
 }
 

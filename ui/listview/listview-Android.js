@@ -34,8 +34,9 @@ const ListView = extend(View)(
                                 if(_onRowCreate){
                                     holderViewLayout = _onRowCreate();
                                     holderViewLayout.parent = self;
-                                    holderViewLayout.height = dpFromPx(holderViewLayout.rowHeight);
-                                    holderViewLayout.width = -1;
+                                    
+                                    var height = dpFromPx(holderViewLayout.rowHeight);
+                                    holderViewLayout.setPosition({width:listViewWidth, height: height });
                                 }
                                 if(!holderViewLayout){
                                     holderViewLayout = new ListViewItem({
@@ -44,31 +45,19 @@ const ListView = extend(View)(
                                         backgroundColor: Color.LIGHTGRAY
                                     });
                                 }
-                                // console.log("holderViewLayout.height: " + holderViewLayout.height + " holderViewLayout.width: "+holderViewLayout.width);
-                                // console.log("holderViewLayout.parent: "+holderViewLayout.parent);
-                                holderViewLayout.invalidatePosition();
                                 return holderViewLayout.nativeInner; //RecyclerView.ViewHolder
                             },
                             onBindViewHolder: function(nativeHolderView, position){
                                 if(_onRowBind){
                                     // @todo make performance improvements
-                                    // console.log("onBindViewHolder height: " + holderViewLayout.height + " width: "+holderViewLayout.width);
-                                    // console.log("onBindViewHolder parent: "+holderViewLayout.parent);
-                                
-                                    //holderViewLayout.parent = self;
-                                    //holderViewLayout.invalidatePosition();
-                                    createFromTemplate(holderViewLayout,nativeHolderView.itemView);
+                                    createFromTemplate(holderViewLayout,nativeHolderView.itemView,self);
                                     _onRowBind(holderViewLayout,position);
-                                   
-                                    
                                 }
                             },
                             getItemCount: function(){
                                 return _itemCount;
                             }
         }, null);
-
-        
 
         self.nativeInner.setAdapter(dataAdapter);
         
@@ -197,19 +186,23 @@ const ListView = extend(View)(
             })
         );
         
-        // var invalidatePosition = self.invalidatePosition;
-        // self.invalidatePosition = function(){
-        //     invalidatePosition();
-        //     // Force redraw recyclerview
-        //     self.nativeInner.getRecycledViewPool().clear();
-        // };
+        var listViewHeight;
+        var listViewWidth;
+        var _invalidatePosition = self.invalidatePosition;
+        this.invalidatePosition = function(parentWidth, parentHeight){
+            _invalidatePosition(parentWidth, parentHeight);
+            listViewHeight = parentHeight;
+            listViewWidth = parentWidth;
+            
+        }
         
-        function createFromTemplate(jsView, nativeView){
+        function createFromTemplate(jsView, nativeView,parentJsView){
             jsView.nativeObject = nativeView;
+            jsView.parent = parentJsView;
             if(jsView.childViews){
                 for(var childViewKey in jsView.childViews){
                     var childId = jsView.childViews[childViewKey].id;
-                    createFromTemplate(jsView.childViews[childViewKey],nativeView.findViewById(childId));
+                    createFromTemplate(jsView.childViews[childViewKey],nativeView.findViewById(childId),jsView);
                 }
             }
             else if(jsView instanceof Label){
