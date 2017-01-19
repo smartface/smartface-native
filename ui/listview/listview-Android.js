@@ -8,7 +8,7 @@ const SwipeRefreshLayout    = requireClass("android.support.v4.widget.SwipeRefre
 const RecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
 const ViewHolder            = requireClass("android.support.v7.widget.RecyclerView.ViewHolder");
 const LinearLayoutManager   = requireClass("android.support.v7.widget.LinearLayoutManager");
-const OnScrollListener      = requireClass("android.support.v7.widget.RecyclerView.OnScrollListener")
+const OnScrollListener      = requireClass("android.support.v7.widget.RecyclerView.OnScrollListener");
 
 const ListView = extend(View)(
     function (_super, params) {
@@ -25,7 +25,6 @@ const ListView = extend(View)(
         _super(this);
         
         var holderViewLayout;
-        
         var dataAdapter = RecyclerView.Adapter.extend("SFAdapter",{
                             getItemId: function(position){
                                 return position;
@@ -33,8 +32,6 @@ const ListView = extend(View)(
                             onCreateViewHolder: function(parent, viewType) {
                                 if(_onRowCreate){
                                     holderViewLayout = _onRowCreate();
-                                    holderViewLayout.parent = self;
-                                    
                                     var height = dpFromPx(holderViewLayout.rowHeight);
                                     holderViewLayout.setPosition({width:listViewWidth, height: height });
                                 }
@@ -125,7 +122,9 @@ const ListView = extend(View)(
             self.nativeObject.setColorSchemeColors(colors);
         };
         
-        this.scrollTo = function(index){};
+        this.scrollTo = function(index){
+            self.nativeInner.scrollToPosition(index);
+        };
         
         this.firstVisibleIndex = function(){
             return self.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
@@ -219,7 +218,6 @@ const ListView = extend(View)(
                 this[param] = params[param];
             }
         }
-        dataAdapter.notifyDataSetChanged();
     }
 );
 
