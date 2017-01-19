@@ -231,7 +231,7 @@ const TextBox = extend(Label)(
         };
         
         self.hint = "";
-        self.multipleLine = false;
+        self.multiline = false;
         self.android.hintTextColor = Color.LIGHTGRAY;
         
         // Assign parameters given in constructor
