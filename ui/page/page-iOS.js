@@ -5,7 +5,21 @@ function Page(params) {
 
     self.nativeObject = new UIViewController();
 
-    self.nativeObject.view.backgroundColor = UIColor.whiteColor();
+    var pageView = new AbsoluteContainer();
+    self.nativeObject.onViewLoad  = function(){
+        pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        return pageView.nativeObject;
+    }
+
+    Object.defineProperty(self, 'onLoad', {
+        get: function() {
+            return self.nativeObject.onLoad;
+        },
+        set: function(value) {
+            self.nativeObject.onLoad = value;
+        },
+        enumerable: true
+    });
         
     Object.defineProperty(self, 'onShow', {
         get: function() {
@@ -26,17 +40,36 @@ function Page(params) {
         },
         enumerable: true
     });
+        
+    this.statusBar = {};
+    Object.defineProperty(self.statusBar, 'height', {
+     value:  UIApplication.sharedApplication().statusBarFrame.height,
+     writable: false
+    });
 
-    var pageView = new AbsoluteContainer();
-        pageView.setPosition({
-            left: self.nativeObject.view.frame.x,
-    	    top: self.nativeObject.view.frame.y,
-    	    width: self.nativeObject.view.frame.width,
-    	    height: self.nativeObject.view.frame.height,
+    Object.defineProperty(self.statusBar, 'visible', {
+        get: function() {
+            return !self.nativeObject.statusBarHidden;
+        },
+        set: function(value) {
+            self.nativeObject.statusBarHidden = !value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+        },
+        enumerable: true
     });
     
-    self.nativeObject.view.addSubview(pageView.nativeObject);
-    
+    this.statusBar.ios = {};
+    Object.defineProperty(self.statusBar.ios, 'style', {
+        get: function() {
+            return self.nativeObject.statusBarStyle;
+        },
+        set: function(value) {
+            self.nativeObject.statusBarStyle = value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+        },
+        enumerable: true
+    });
+        
     self.add = function(object){
         pageView.addChild(object);
     }
