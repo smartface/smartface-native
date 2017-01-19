@@ -20,7 +20,7 @@ const Button = extend(View)(
         /**
          * Gets/sets text value. This property displayed in button.
          * 
-         * @property {String} text 
+         * @property {String} [text = ""]  
          * @since 0.1
          */
         this.text = "";
