@@ -13,6 +13,8 @@ const ListView = extend(View)(
         _super(this);
 
 
+        self.rowHeight = 0;
+  
         self.itemCount = 0; 
         
         self.onRowCreate = function(){};
@@ -23,18 +25,14 @@ const ListView = extend(View)(
         self.listViewItems = {};
         
         self.nativeObject.itemCount = function(){
-            return self.itemCount
-        }
-        
-        self.nativeObject.itemHeight = function(){
-            return self.onRowCreate().height;
+            return self.itemCount;
         }
         
         self.nativeObject.cellForRowAt = function(e){
              var lisviewItem = self.onRowCreate();
 
              self.listViewItems[e.index] = lisviewItem;
-             self.onRowBind(self.listViewItems[e.index],e.index)
+             self.onRowBind(self.listViewItems[e.index],e.index);
              return lisviewItem.cell;
          }
           
@@ -42,6 +40,9 @@ const ListView = extend(View)(
            self.onRowSelected(self.listViewItems[e.index],e.index);
         }
 
+        self.nativeObject.tableRowHeight = function(e){
+            return self.rowHeight;
+        }
         
          if (params) {
             for (var param in params) {
