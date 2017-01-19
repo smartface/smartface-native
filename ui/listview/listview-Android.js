@@ -10,6 +10,7 @@ const RecyclerView          = requireClass("android.support.v7.widget.RecyclerVi
 const ViewHolder            = requireClass("android.support.v7.widget.RecyclerView.ViewHolder");
 const LinearLayoutManager   = requireClass("android.support.v7.widget.LinearLayoutManager");
 const OnScrollListener      = requireClass("android.support.v7.widget.RecyclerView.OnScrollListener");
+const NativeView            = requireClass("android.view.View");
 
 const ListView = extend(View)(
     function (_super, params) {
@@ -22,7 +23,7 @@ const ListView = extend(View)(
         var linearLayoutManager = new LinearLayoutManager(activity);
         self.nativeInner.setLayoutManager(linearLayoutManager);
         self.nativeObject.addView(self.nativeInner,swipeLayoutParams);
-
+        
         _super(this);
         
         var holderViewLayout;
@@ -51,6 +52,11 @@ const ListView = extend(View)(
                                     // @todo make performance improvements
                                     createFromTemplate(holderViewLayout,nativeHolderView.itemView,self);
                                     _onRowBind(holderViewLayout,position);
+                                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
+                                        onClick: function(view){
+                                            _onRowSelected && _onRowSelected(holderViewLayout, position);
+                                        }
+                                    }));
                                 }
                             },
                             getItemCount: function(){
@@ -207,6 +213,7 @@ const ListView = extend(View)(
             else{
                 listViewWidth = initialPosition.width;
             }
+            // @todo find a way to invalidate for orientation change. 
         };
         
         function createFromTemplate(jsView, nativeView,parentJsView){

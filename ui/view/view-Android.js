@@ -251,8 +251,6 @@ function View(params) {
 
     this.invalidatePosition = function(parentWidth, parentHeight){
         setLayoutParam(parentWidth, parentHeight);
-//        if( (TypeUtil.isNumeric(widthInitial) &&  TypeUtil.isNumeric(heightInitial) && TypeUtil.isNumeric(leftInitial) && TypeUtil.isNumeric(topInitial)) || self.parent){
-//        }
     };
     
     // @todo no ENUM support
@@ -317,7 +315,11 @@ function View(params) {
             width = widthInitial;
         }
 
-        self.nativeObject.setLayoutParams(generateLayoutParams(width, height, leftPosition, topPosition, self.parent));
+        self.nativeObject.setLayoutParams(self.generateLayoutParams(width, height, leftPosition, topPosition, self.parent));
+        if(self.nativeInner){
+            // @todo should set layout params to the nativeInner. Its crashing
+            //self.nativeInner.setLayoutParams(self.generateLayoutParams(width, height, leftPosition, topPosition, self));
+        }
         
         // invalidating child positions
         if(self.childViews){
@@ -340,7 +342,7 @@ function View(params) {
         self.nativeObject.setBackground(layerDrawable);
     }
     
-    function generateLayoutParams(width, height, leftPosition, topPosition, parentView){
+    self.generateLayoutParams = function(width, height, leftPosition, topPosition, parentView){
         if(parentView){
             if(parentView.nativeObject.toString().indexOf("Relative") !== -1){
                 // @todo Will change after implementation of RelativeLayout
