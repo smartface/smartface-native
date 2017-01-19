@@ -20,11 +20,35 @@ const Button = extend(View)(
         /**
          * Gets/sets text value. This property displayed in button.
          * 
-         * @property {String} text 
+         * @property {String} [text = ""]  
          * @since 0.1
          */
         this.text = "";
+
+         /**
+         * Gets/sets font of button view. When set to null button uses system font.
+         * It is set to null by default.
+         * 
+         *     @example 
+         *     const Button = require('sf-core/ui/button');
+         *     var myButton = new Button();
+         *     myButton.text = "Click me!";
+         *     const Font = require('sf-core/ui/font');
+         *     myButton.font = Font.create("Arial", 16, Font.BOLD);   
+         * 
+         * @property {UI.Font} [font = null]   
+         * @since 0.1
+         */
+        this.font = null;
         
+        /**
+         * Gets/sets text color of button.
+         * 
+         * @property {UI.Color} [textColor = UI.Color.BLACK] 
+         * @since 0.1
+         */
+        this.textColor = UI.Color.BLACK;
+
         /**
          * Gets/sets text alignment of button. TextAlignment constants
          * can be used.
