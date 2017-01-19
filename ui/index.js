@@ -17,5 +17,10 @@ module.exports = {
     Slider: require('./slider'),
     ImageView: require('./imageview'),
     Image: require('./image'),
-    ImageFillType: require('./imagefilltype')
+    ImageFillType: require('./imagefilltype'),
+    StatusBarStyle: require('./statusbarstyle'),
+    TextBox: require('./textbox'),
+    KeyboardType: require('./keyboardtype'),
+    KeyboardAppearance: require('./keyboardappearance'),
+    ActionKeyType: require('./actionkeytype')
 };
