@@ -34,7 +34,7 @@ const ListView = extend(View)(
                             onCreateViewHolder: function(parent, viewType) {
                                 if(_onRowCreate){
                                     holderViewLayout = _onRowCreate();
-                                    var height = dpFromPx(holderViewLayout.rowHeight);
+                                    var height = dpFromPx(_rowHeight);
                                     holderViewLayout.setPosition({width:listViewWidth, height: height });
                                 }
                                 if(!holderViewLayout){
@@ -117,6 +117,18 @@ const ListView = extend(View)(
             },
             set: function(verticalScrollBarEnabled) {
                 self.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+            },
+            enumerable: true
+        });
+        
+                
+        var _rowHeight = 0;
+        Object.defineProperty(this, 'rowHeight', {
+            get: function() {
+                return _rowHeight;
+            },
+            set: function(rowHeight) {
+                _rowHeight = rowHeight;
             },
             enumerable: true
         });

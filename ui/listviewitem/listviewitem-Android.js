@@ -11,18 +11,7 @@ const ListViewItem = extend(ViewGroup)(
         self.nativeInner = NativeRecyclerView.ViewHolder.extend("SFViewHolder",{},[self.nativeObject]);
         _super(this);
         self.nativeInner.itemView = self.nativeObject;
-        
-        var _rowHeight = 0;
-        Object.defineProperty(this, 'rowHeight', {
-            get: function() {
-                return _rowHeight;
-            },
-            set: function(rowHeight) {
-                _rowHeight = rowHeight;
-            },
-            enumerable: true
-        });
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
