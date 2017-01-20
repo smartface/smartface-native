@@ -163,81 +163,81 @@ function Page(params) {
     this.remove = function(){};
     
     /**
-     * Gets/sets background color of the actionbar. If not set, actionbar will have default
+     * Gets/sets background color of the headerbar. If not set, headerbar will have default
      * background color depends on device's OS and OS version.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     const Color = require('sf-core/ui/color');
      *     var myPage = new Page();
-     *     myPage.actionbar.backgroundColor = Color.RED;
+     *     myPage.headerbar.backgroundColor = Color.RED;
      *
      * @property {UI.Color} backgroundColor
      * @since 0.1
      */
-    this.actionbar.backgroundColor = UI.Color.LIGHTGRAY;
+    this.headerbar.backgroundColor = UI.Color.LIGHTGRAY;
     
     /**
-     * Gets/sets background image of the actionbar.
+     * Gets/sets background image of the headerbar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
-     *     myPage.actionbar.backgroundImage = Image.createFromFile('images://smartface.png');
+     *     myPage.headerbar.backgroundImage = Image.createFromFile('images://smartface.png');
      *
      * @property {UI.Image} [backgroundImage = null]
      * @since 0.1
      */
-    this.actionbar.backgroundImage = null;
+    this.headerbar.backgroundImage = null;
     
     /**
-     * Gets/sets the navigation indicator visibility of the actionbar.
+     * Gets/sets the navigation indicator visibility of the headerbar.
      * If false navigation indicator will not shown, otherwise will shown
      * as back icon with home as up indicator image.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
+     *     var headerbarHeight = myPage.headerbar.height;
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
      * @since 0.1
      */
-    this.actionbar.displayShowHomeEnabled = false;
+    this.headerbar.displayShowHomeEnabled = false;
     
     /**
-     * Gets/sets the title visibility of the actionbar. If false title will
+     * Gets/sets the title visibility of the headerbar. If false title will
      * not shown, otherwise title will shown.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
+     *     var headerbarHeight = myPage.headerbar.height;
      *
      * @property {Boolean} [displayShowTitleEnabled = false]
      * @since 0.1
      */
-    this.actionbar.displayShowTitleEnabled = false;
+    this.headerbar.displayShowTitleEnabled = false;
     
     /**
-     * Gets the height of the actionbar. Height is a read only property.
+     * Gets the height of the headerbar. Height is a read only property.
      * Height value will change depends on device and screen density.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
+     *     var headerbarHeight = myPage.headerbar.height;
      *
      * @property {Number} height
      * @readonly
      * @since 0.1
      */
-    this.actionbar.height = 30;
+    this.headerbar.height = 30;
     
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
-     * indicator of the actionbar. If not set, the application icon will
+     * indicator of the headerbar. If not set, the application icon will
      * shown.
      *
      *     @example
@@ -245,52 +245,52 @@ function Page(params) {
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://smartface.png');
-     *     myPage.actionbar.homeAsUpIndicatorImage = myImage;
+     *     myPage.headerbar.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
      * @since 0.1
      */
-    this.actionbar.homeAsUpIndicatorImage = null;
+    this.headerbar.homeAsUpIndicatorImage = null;
     
     /**
-     * Gets/sets title of the actionbar. If not set, the application name will
+     * Gets/sets title of the headerbar. If not set, the application name will
      * shown.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.title = 'Hello from Smartface Headerbar!';
+     *     myPage.headerbar.title = 'Hello from Smartface Headerbar!';
      *
      * @property {String} title
      * @since 0.1
      */
-    this.actionbar.title = '';
+    this.headerbar.title = '';
     
     /**
-     * Gets/sets subtitle of the actionbar. If not set, will not shown.
+     * Gets/sets subtitle of the headerbar. If not set, will not shown.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
+     *     myPage.headerbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
      *
      * @property {String} subtitle
      * @since 0.1
      */
-    this.actionbar.subtitle = '';
+    this.headerbar.subtitle = '';
     
     /**
-     * Gets/sets visibility of the actionbar.
+     * Gets/sets visibility of the headerbar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.visible = false;
+     *     myPage.headerbar.visible = false;
      *
      * @property {Boolean} [visible = true]
      * @since 0.1
      */
-    this.actionbar.visible = true;
+    this.headerbar.visible = true;
 }
 
 module.exports = Page;
