@@ -7,6 +7,7 @@ const NativeWindowManager = requireClass("android.view.WindowManager");
 const NativeBuildVersion  = requireClass("android.os.Build");
 const NativeAndroidR      = requireClass("android.R");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
+const NativeHtml          = requireClass("android.text.Html");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 
@@ -148,7 +149,7 @@ function Page(params) {
         enumerable: true    
     });
 
-    var _headerbarColor = Color.create(59, 191, 235);
+    var _headerbarColor = Color.create("#00A1F1"); // SmartfaceBlue
     Object.defineProperty(self.headerbar, 'backgroundColor', {
         get: function() {
             return _headerbarColor;
@@ -233,6 +234,19 @@ function Page(params) {
         enumerable: true
     });
 
+    var _headerbarTitleColor = Color.WHITE;
+    Object.defineProperty(self.headerbar, 'titleColor', {
+        get: function() {
+            return _headerbarTitleColor;
+        },
+        set: function(color) {
+            if (color) {
+                _headerbarTitleColor = color;
+            }
+        },
+        enumerable: true
+    });
+
     var _headerbarSubtitle = "";
     Object.defineProperty(self.headerbar.android, 'subtitle', {
         get: function() {
@@ -241,6 +255,19 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 _headerbarSubtitle = text;
+            }
+        },
+        enumerable: true
+    });
+
+    var _headerbarSubtitleColor = Color.WHITE;
+    Object.defineProperty(self.headerbar.android, 'subtitleColor', {
+        get: function() {
+            return _headerbarSubtitleColor;
+        },
+        set: function(color) {
+            if (color) {
+                _headerbarSubtitleColor = color;
             }
         },
         enumerable: true
@@ -277,9 +304,11 @@ function Page(params) {
     }
 
     this.invalidateHeaderBar = function() {
+        var spannedTitle = toSpanned(_headerbarTitle, _headerbarTitleColor);
+        var spannedSubtitle = toSpanned(_headerbarSubtitle, _headerbarSubtitleColor);
         var headerbarNative = activity.getSupportActionBar();
-        headerbarNative.setTitle(_headerbarTitle);
-        headerbarNative.setSubtitle(_headerbarSubtitle);
+        headerbarNative.setTitle(spannedTitle);
+        headerbarNative.setSubtitle(spannedSubtitle);
         headerbarNative.setDisplayHomeAsUpEnabled(_headerbarHomeEnabled);
         headerbarNative.setDisplayShowTitleEnabled(_headerbarTitleEnabled);
 
@@ -317,8 +346,18 @@ function Page(params) {
         }
     }
 
+    function toSpanned(text, color) {
+        color = '#'+ (color & 0xFFFFFF).toString(16); // int to hexString
+        if (NativeBuildVersion.VERSION.SDK_INT >= NativeBuildVersion.VERSION_CODES.N) {
+            return NativeHtml.fromHtml("<font color='" + color + "'>" + text + "</font>", NativeHtml.FROM_HTML_MODE_COMPACT);
+        } else {
+            return NativeHtml.fromHtml("<font color='" + color + "'>" + text + "</font>");
+        }
+    }
+
     // Default values
     self.statusBar.visible = true;
+    self.invalidateHeaderBar();
     // todo Add color default value after resolving COR-1153.
     
     // Assign parameters given in constructor
