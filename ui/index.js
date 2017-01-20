@@ -14,5 +14,13 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
-    Slider: require('./slider')
+    Slider: require('./slider'),
+    ImageView: require('./imageview'),
+    Image: require('./image'),
+    ImageFillType: require('./imagefilltype'),
+    StatusBarStyle: require('./statusbarstyle'),
+    TextBox: require('./textbox'),
+    KeyboardType: require('./keyboardtype'),
+    KeyboardAppearance: require('./keyboardappearance'),
+    ActionKeyType: require('./actionkeytype')
 };

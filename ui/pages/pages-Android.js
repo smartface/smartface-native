@@ -41,6 +41,8 @@ function Pages(params) {
         fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
+        page.invalidateStatusBar();
+        
         pagesStack.push(page);
     }
 
@@ -51,7 +53,11 @@ function Pages(params) {
                 pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
             }
             fragmentManager.popBackStackImmediate();
-            pagesStack.pop().invalidatePosition();
+            pagesStack.pop();
+            if(pagesStack.length > 0){
+                pagesStack[pagesStack.length-1].invalidateStatusBar();
+                pagesStack[pagesStack.length-1].invalidatePosition();
+            }
         }
     }
     
