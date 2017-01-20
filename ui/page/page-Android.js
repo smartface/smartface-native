@@ -49,6 +49,7 @@ function Page(params) {
     }, null);
     
     self.headerbar = {};
+    self.headerbar.android = {};
 
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
@@ -233,7 +234,7 @@ function Page(params) {
     });
 
     var _headerbarSubtitle = "";
-    Object.defineProperty(self.headerbar, 'subtitle', {
+    Object.defineProperty(self.headerbar.android, 'subtitle', {
         get: function() {
             return _headerbarSubtitle;
         },
