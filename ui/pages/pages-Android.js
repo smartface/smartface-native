@@ -1,6 +1,7 @@
-const NativeView = requireClass("android.view.View");
-const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
-const NativeColor = requireClass("android.graphics.Color");
+const NativeView            = requireClass("android.view.View");
+const NativeAbsoluteLayout  = requireClass("android.widget.AbsoluteLayout");
+const NativeColor           = requireClass("android.graphics.Color");
+const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 
 function Pages(params) {
     var self = this;
@@ -16,8 +17,31 @@ function Pages(params) {
     absoluteLayout.setLayoutParams(layoutparams);
     absoluteLayout.setId(rootViewId);
     activity.setContentView(absoluteLayout);
-     
     
+    activity.getSupportFragmentManager().addOnBackStackChangedListener(
+        NativeFragmentManager.OnBackStackChangedListener.implement({
+            onBackStackChanged: onBackStackChanged
+        })
+    );
+
+    function onBackStackChanged() {
+        var nativeStackCount = activity.getSupportFragmentManager().getBackStackEntryCount();
+        var pagesStackCount = pagesStack.length;
+
+        if (nativeStackCount < pagesStack) { // means poll
+            if(pagesStack.length > 0) {
+                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+                pagesStack.pop();
+
+                if(pagesStack.length > 0) {
+                    pagesStack[pagesStack.length-1].invalidateStatusBar();
+                    pagesStack[pagesStack.length-1].invalidateHeaderBar();
+                    pagesStack[pagesStack.length-1].invalidatePosition();
+                }
+            }
+        }
+    }
+
     self.push = function(page, animated, tag){
         if(pagesStack.length > 0){
             pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
@@ -42,22 +66,13 @@ function Pages(params) {
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
         page.invalidateStatusBar();
-        
         pagesStack.push(page);
     }
 
     self.pop = function(){
         var fragmentManager = activity.getSupportFragmentManager();
-        if(fragmentManager.getBackStackEntryCount()>0){
-            if(pagesStack.length > 0){
-                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-            }
+        if(fragmentManager.getBackStackEntryCount() > 0){
             fragmentManager.popBackStackImmediate();
-            pagesStack.pop();
-            if(pagesStack.length > 0){
-                pagesStack[pagesStack.length-1].invalidateStatusBar();
-                pagesStack[pagesStack.length-1].invalidatePosition();
-            }
         }
     }
     
