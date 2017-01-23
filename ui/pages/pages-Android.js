@@ -1,6 +1,7 @@
-const NativeView = requireClass("android.view.View");
-const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
-const NativeColor = requireClass("android.graphics.Color");
+const NativeView            = requireClass("android.view.View");
+const NativeAbsoluteLayout  = requireClass("android.widget.AbsoluteLayout");
+const NativeColor           = requireClass("android.graphics.Color");
+const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 
 function Pages(params) {
     var self = this;
@@ -16,11 +17,33 @@ function Pages(params) {
     absoluteLayout.setLayoutParams(layoutparams);
     absoluteLayout.setId(rootViewId);
     activity.setContentView(absoluteLayout);
-     
     
+    activity.getSupportFragmentManager().addOnBackStackChangedListener(
+        NativeFragmentManager.OnBackStackChangedListener.implement({
+            onBackStackChanged: onBackStackChanged
+        })
+    );
+
+    function onBackStackChanged() {
+        var nativeStackCount = activity.getSupportFragmentManager().getBackStackEntryCount();
+        if (nativeStackCount < pagesStack.length) { // means poll
+            if(pagesStack.length > 0) {
+                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+                pagesStack[pagesStack.length-1].isShowing = false;
+                pagesStack.pop();
+
+                if(pagesStack.length > 0) {
+                    pagesStack[pagesStack.length-1].isShowing = true;
+                    pagesStack[pagesStack.length-1].invalidate();
+                }
+            }
+        }
+    }
+
     self.push = function(page, animated, tag){
-        if(pagesStack.length > 0){
+        if(pagesStack.length > 0) {
             pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+            pagesStack[pagesStack.length-1].isShowing = false;
         }
         var fragmentManager = activity.getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
@@ -41,23 +64,15 @@ function Pages(params) {
         fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
-        page.invalidateStatusBar();
-        
+        page.isShowing = true;
+        page.invalidate();
         pagesStack.push(page);
     }
 
     self.pop = function(){
         var fragmentManager = activity.getSupportFragmentManager();
-        if(fragmentManager.getBackStackEntryCount()>0){
-            if(pagesStack.length > 0){
-                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-            }
+        if(fragmentManager.getBackStackEntryCount() > 0){
             fragmentManager.popBackStackImmediate();
-            pagesStack.pop();
-            if(pagesStack.length > 0){
-                pagesStack[pagesStack.length-1].invalidateStatusBar();
-                pagesStack[pagesStack.length-1].invalidatePosition();
-            }
         }
     }
     
