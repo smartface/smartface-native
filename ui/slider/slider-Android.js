@@ -31,7 +31,7 @@ const Slider = extend(View)(
         var _currentValue;
         Object.defineProperty(this, 'value', {
             get: function() {
-                return _currentValue;
+                return self.nativeObject.getProgress() + _minValue;
             }, 
             set: function(value) {
                 _currentValue = value;
