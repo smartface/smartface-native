@@ -2,9 +2,8 @@ const View = require('sf-core/ui/view');
 const extend = require('js-base/core/extend');
 
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
-const NativeTypedValue = requireClass("android.util.TypedValue");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-const NativeR = requireClass("android.R");
+const Color = require('sf-core/ui/color');
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {
@@ -15,12 +14,7 @@ const ActivityIndicator = extend(View)(
         _super(this);
         self.nativeObject.setIndeterminate(true);
 
-        // Getting default progressbar color. Its themes default colorAccent on native
-        var typedValue = new NativeTypedValue();
-        var a = Android.getActivity().obtainStyledAttributes(typedValue.data, [NativeR.attr.colorAccent]);
-        var colorInitial = a.getColor(0, 0);
-        a.recycle();
-
+        var colorInitial = null;
         Object.defineProperty(this, 'color', {
             get: function() {
                 return colorInitial;
@@ -34,6 +28,8 @@ const ActivityIndicator = extend(View)(
             enumerable: true
         });
 
+        self.color = Color.create("#00A1F1"); // SmartfaceBlue
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
