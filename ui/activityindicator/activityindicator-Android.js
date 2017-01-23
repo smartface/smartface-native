@@ -34,7 +34,7 @@ const ActivityIndicator = extend(View)(
                 this[param] = params[param];
             }
         }
-        self.color = Color.GREEN;
+        self.color = Color.create("#00A1F1"); // SmartfaceBlue
     }
 );
 
