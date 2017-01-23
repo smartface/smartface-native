@@ -172,10 +172,10 @@ function Page(params) {
      *     var myPage = new Page();
      *     myPage.headerbar.backgroundColor = Color.RED;
      *
-     * @property {UI.Color} backgroundColor
+     * @property {UI.Color} [backgroundColor = Color.create("#00A1F1")]
      * @since 0.1
      */
-    this.headerbar.backgroundColor = UI.Color.LIGHTGRAY;
+    this.headerbar.backgroundColor = Color.create("#00A1F1");
     
     /**
      * Gets/sets background image of the headerbar.
@@ -199,7 +199,7 @@ function Page(params) {
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.headerbar.height;
+     *     myPage.headerbar.displayShowHomeEnabled = false;
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
      * @since 0.1
@@ -207,22 +207,8 @@ function Page(params) {
     this.headerbar.displayShowHomeEnabled = false;
     
     /**
-     * Gets/sets the title visibility of the headerbar. If false title will
-     * not shown, otherwise title will shown.
-     *
-     *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     var myPage = new Page();
-     *     var headerbarHeight = myPage.headerbar.height;
-     *
-     * @property {Boolean} [displayShowTitleEnabled = false]
-     * @since 0.1
-     */
-    this.headerbar.displayShowTitleEnabled = false;
-    
-    /**
      * Gets the height of the headerbar. Height is a read only property.
-     * Height value will change depends on device and screen density.
+     * Height value may change depending on device and screen density.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -238,19 +224,19 @@ function Page(params) {
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
      * indicator of the headerbar. If not set, the application icon will
-     * shown.
+     * shown.This property will work only for Android.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://smartface.png');
-     *     myPage.headerbar.homeAsUpIndicatorImage = myImage;
+     *     myPage.headerbar.android.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
      * @since 0.1
      */
-    this.headerbar.homeAsUpIndicatorImage = null;
+    this.headerbar.android.homeAsUpIndicatorImage = null;
     
     /**
      * Gets/sets title of the headerbar. If not set, the application name will
@@ -267,7 +253,8 @@ function Page(params) {
     this.headerbar.title = '';
     
     /**
-     * Gets/sets subtitle of the headerbar. If not set, will not shown.
+     * Gets/sets subtitle of the headerbar. If not set, will not shown. This property
+     * will work only for Android.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
@@ -277,7 +264,7 @@ function Page(params) {
      * @property {String} subtitle
      * @since 0.1
      */
-    this.headerbar.subtitle = '';
+    this.headerbar.android.subtitle = '';
     
     /**
      * Gets/sets visibility of the headerbar.
