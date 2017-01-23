@@ -13,13 +13,15 @@ const ListViewItem = extend(ViewGroup)(
         var self = this;
         
         if(!self.nativeObject){
-            self.cell = new SMFUITableViewCell(0,"cell");
-            self.cell.selectionStyle = UITableViewCellSelectionStyle.none;
-            self.nativeObject = self.cell.contentView;
+           console.log("selam");
+           self.cell = new SMFUITableViewCell(0,"cell");    
+           self.cell.selectionStyle = UITableViewCellSelectionStyle.none;
+           self.nativeObject = self.cell.contentView;
+           console.log("Hi");
         }
         
         _super(this);
-        
+        console.log("Naber");
         // Assign parameters given in constructor
         
         if (params) {
