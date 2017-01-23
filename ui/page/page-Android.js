@@ -34,10 +34,7 @@ function Page(params) {
             onLoadCallback && onLoadCallback();
             return innerLayout.nativeObject;
         },
-        onViewCreated: function(view, savedInstanceState){
-            self.invalidateStatusBar();
-            self.invalidateHeaderBar();
-            self.invalidatePosition();
+        onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
         },
         onConfigurationChanged: function(newConfig){
@@ -53,6 +50,7 @@ function Page(params) {
     
     self.headerbar = {};
     self.headerbar.android = {};
+    self.isShowing = false;
 
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
@@ -159,6 +157,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerbarColor = color;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -172,6 +171,7 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerbarImage = image;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -185,6 +185,7 @@ function Page(params) {
         set: function(enabled) {
             if (TypeUtil.isBoolean(enabled)) {
                 _headerbarHomeEnabled = enabled;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -206,6 +207,7 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerbarHomeImage = image;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -222,6 +224,7 @@ function Page(params) {
             } else {
                 _headerbarTitle = "";
             }
+            self.invalidateHeaderBar();
         },
         enumerable: true
     });
@@ -234,6 +237,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerbarTitleColor = color;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -247,6 +251,7 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 _headerbarSubtitle = text;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -260,6 +265,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerbarSubtitleColor = color;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -273,6 +279,7 @@ function Page(params) {
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 _headerbarVisible = visible;
+                self.invalidateHeaderBar();
             }
         },
         enumerable: true
@@ -281,11 +288,11 @@ function Page(params) {
     self.childViews = {};
     this.add = function(view){
         view.parent = self;
-        innerLayout.addChild(view)
+        innerLayout.addChild(view);
     };
 
     this.remove = function(view){
-        innerLayout.removeChild(view)
+        innerLayout.removeChild(view);
     };
 
     this.invalidateStatusBar = function(){
@@ -296,28 +303,30 @@ function Page(params) {
     }
 
     this.invalidateHeaderBar = function() {
-        var spannedTitle = toSpanned(_headerbarTitle, _headerbarTitleColor);
-        var spannedSubtitle = toSpanned(_headerbarSubtitle, _headerbarSubtitleColor);
-        var headerbarNative = activity.getSupportActionBar();
-        headerbarNative.setTitle(spannedTitle);
-        headerbarNative.setSubtitle(spannedSubtitle);
-        headerbarNative.setDisplayHomeAsUpEnabled(_headerbarHomeEnabled);
+        if (self.isShowing) {
+            var spannedTitle = toSpanned(_headerbarTitle, _headerbarTitleColor);
+            var spannedSubtitle = toSpanned(_headerbarSubtitle, _headerbarSubtitleColor);
+            var headerbarNative = activity.getSupportActionBar();
+            headerbarNative.setTitle(spannedTitle);
+            headerbarNative.setSubtitle(spannedSubtitle);
+            headerbarNative.setDisplayHomeAsUpEnabled(_headerbarHomeEnabled);
 
-        if (_headerbarImage) {
-            headerbarNative.setBackgroundDrawable(_headerbarImage.nativeObject);
-        } else if (_headerbarColor) {
-            var headerbarColor = new NativeColorDrawable(_headerbarColor);
-            headerbarNative.setBackgroundDrawable(headerbarColor);
-        } // else is default color
+            if (_headerbarImage) {
+                headerbarNative.setBackgroundDrawable(_headerbarImage.nativeObject);
+            } else if (_headerbarColor) {
+                var headerbarColor = new NativeColorDrawable(_headerbarColor);
+                headerbarNative.setBackgroundDrawable(headerbarColor);
+            }
 
-        if (_headerbarHomeImage) {
-            headerbarNative.setHomeAsUpIndicator(_headerbarHomeImage);
-        }
+            if (_headerbarHomeImage) {
+                headerbarNative.setHomeAsUpIndicator(_headerbarHomeImage);
+            }
 
-        if (_headerbarVisible) {
-            headerbarNative.show();
-        } else {
-            headerbarNative.hide();
+            if (_headerbarVisible) {
+                headerbarNative.show();
+            } else {
+                headerbarNative.hide();
+            }
         }
     }
     
@@ -339,6 +348,12 @@ function Page(params) {
         }
     }
 
+    self.invalidate = function() {
+        self.invalidateStatusBar();
+        self.invalidateHeaderBar();
+        self.invalidatePosition();
+    }
+
     function toSpanned(text, color) {
         color = '#'+ (color & 0xFFFFFF).toString(16); // int to hexString
         if (NativeBuildVersion.VERSION.SDK_INT >= NativeBuildVersion.VERSION_CODES.N) {
@@ -350,9 +365,6 @@ function Page(params) {
 
     // Default values
     self.statusBar.visible = true;
-    self.invalidateStatusBar();
-    self.invalidateHeaderBar();
-    self.invalidatePosition();
     // todo Add color default value after resolving COR-1153.
     
     // Assign parameters given in constructor
