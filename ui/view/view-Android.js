@@ -62,8 +62,10 @@ function View(params) {
             return self.nativeObject.getHeight();
         },
         set: function(height) {
-            heightInitial = height;
-            self.invalidatePosition();
+            if (height !== undefined) {
+                heightInitial = height;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
     });
@@ -86,8 +88,10 @@ function View(params) {
             return self.nativeObject.getLeft();
         },
         set: function(left) {
-            leftInitial = left;
-            self.invalidatePosition();
+            if (left !== undefined) {
+                leftInitial = left;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -98,8 +102,10 @@ function View(params) {
             return self.nativeObject.getTop();
         },
         set: function(top) {
-            topInitial = top;
-            self.invalidatePosition();
+            if (top !== undefined) {
+                topInitial = top;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -126,8 +132,10 @@ function View(params) {
             return self.nativeObject.getWidth();
         },
         set: function(width) {
-            widthInitial = width;
-            self.invalidatePosition();
+            if (width !== undefined) {
+                widthInitial = width;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -199,12 +207,14 @@ function View(params) {
             return styleInitial;
         },
         set: function(style) {
-            styleInitial = style;
-            applyStyle();
-            style.addChangeHandler(function(propertyName, value){
+            if (style !== undefined) {
+                styleInitial = style;
                 applyStyle();
-            });
-            updatePadding();
+                style.addChangeHandler(function(propertyName, value){
+                    applyStyle();
+                });
+                updatePadding();
+            }
         },
         enumerable: true
     });
@@ -324,8 +334,10 @@ function View(params) {
         // invalidating child positions
         if(self.childViews){
             for(var childViewKey in self.childViews){
-                // passing calculated height and width to child view
-                self.childViews[childViewKey].invalidatePosition(width, height);
+                if (typeof self.childViews[childViewKey] !== "function") {
+                    // passing calculated height and width to child view
+                    self.childViews[childViewKey].invalidatePosition(width, height);
+                }
             }
         }
         

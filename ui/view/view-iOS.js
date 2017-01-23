@@ -19,18 +19,20 @@ function View(params) {
            return _style;
         },
         set: function(value) {
-           _style = value;
-           
-           self.nativeObject.layer.borderUIColor = value.borderColor;
-           self.nativeObject.layer.borderWidth = value.borderWidth;
-           
-           _style.addChangeHandler(function(propertyName,value){
-               if(propertyName == 'borderColor'){
-                   self.nativeObject.layer.borderUIColor = value;
-               }else if(propertyName == 'borderWidth'){
-                   self.nativeObject.layer.borderWidth = value;
-               }
-           });
+            if (value !== undefined) {
+                _style = value;
+                
+                self.nativeObject.layer.borderUIColor = value.borderColor;
+                self.nativeObject.layer.borderWidth = value.borderWidth;
+                
+                _style.addChangeHandler(function(propertyName,value){
+                    if(propertyName == 'borderColor'){
+                        self.nativeObject.layer.borderUIColor = value;
+                    }else if(propertyName == 'borderWidth'){
+                        self.nativeObject.layer.borderWidth = value;
+                    }
+                });
+            }
         },
         enumerable: true
     });
