@@ -6,6 +6,7 @@ const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
 const NativeBuildVersion  = requireClass("android.os.Build");
 const NativeAndroidR      = requireClass("android.R");
+const NativeSupportR      = requireClass("android.support.v7.appcompat.R");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeHtml          = requireClass("android.text.Html");
 
@@ -34,8 +35,9 @@ function Page(params) {
             return innerLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState){
-            self.invalidatePosition();
+            self.invalidateStatusBar();
             self.invalidateHeaderBar();
+            self.invalidatePosition();
             onShowCallback && onShowCallback();
         },
         onConfigurationChanged: function(newConfig){
@@ -188,7 +190,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarTitleEnabled = false;
+    var _headerbarTitleEnabled = true;
     Object.defineProperty(self.headerbar, 'displayShowTitleEnabled', {
         get: function() {
             return _headerbarTitleEnabled;
@@ -203,7 +205,8 @@ function Page(params) {
 
     Object.defineProperty(self.headerbar, 'height', {
         get: function() {
-            return activity.getSupportActionBar().getHeight();
+            var resources = activity.getResources();
+            return resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material);
         },
         enumerable: true
     });
@@ -221,7 +224,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarTitle = "";
+    var _headerbarTitle = "Smartface";
     Object.defineProperty(self.headerbar, 'title', {
         get: function() {
             return _headerbarTitle;
@@ -331,18 +334,20 @@ function Page(params) {
     }
     
     this.invalidatePosition = function(orientation){
+        var statusBarHeight = (self.statusBar.visible)? self.statusBar.height : 0;
+        var headerBarHeight = (self.headerbar.visible)? self.headerbar.height : 0;
+
         if(!orientation){
             orientation = activity.getResources().getConfiguration().orientation;
         }
-        if(orientation == 2){
+        if(orientation == 2) { // landscape
             self.width = Device.screenHeight;
-            self.height = Device.screenWidth;
-            innerLayout.setPosition({width: Device.screenHeight, height:Device.screenWidth});
-        }
-        else{
-            self.height = Device.screenHeight;
+            self.height = Device.screenWidth - statusBarHeight - headerBarHeight;
+            innerLayout.setPosition({width: self.width, height: self.height, top: statusBarHeight + headerBarHeight});
+        } else { // portrait
+            self.height = Device.screenHeight - statusBarHeight - headerBarHeight;
             self.width = Device.screenWidth;
-            innerLayout.setPosition({width: Device.screenWidth, height:Device.screenHeight});
+            innerLayout.setPosition({width: self.width, height:self.height, top: statusBarHeight + headerBarHeight});
         }
     }
 
@@ -357,7 +362,9 @@ function Page(params) {
 
     // Default values
     self.statusBar.visible = true;
+    self.invalidateStatusBar();
     self.invalidateHeaderBar();
+    self.invalidatePosition();
     // todo Add color default value after resolving COR-1153.
     
     // Assign parameters given in constructor
