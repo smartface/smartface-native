@@ -28,13 +28,14 @@ const ActivityIndicator = extend(View)(
             enumerable: true
         });
 
+        self.color = Color.create("#00A1F1"); // SmartfaceBlue
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-        self.color = Color.create("#00A1F1"); // SmartfaceBlue
     }
 );
 
