@@ -5,17 +5,17 @@ Core Modules of Native Libraries. sf-core has implementations of Android and iOS
 
 # Installation #
 
-1. Create workspace on Smartface Cloud
-2. Download sf-core installation script and Run it
+* Create workspace on Smartface Cloud
+* Download sf-core installation script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/400cce18f5c3cfbac203ac7829e2288994e38a46/files/snippet.txt \
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/89ffb3f9d3ad5705588aab8bd41527a974c1b785/files/snippet.txt \
         -o install-sf-core.sh
     chmod +x install-sf-core.sh
     ./install-sf-core.sh alpha
 ```
-3. Make sure you are using require properly
-4. You're ready to use sf-core library in your workspace
+* Make sure you are using require properly
+* You're ready to use sf-core library in your workspace
 ```
     const Label = require('sf-core/ui/label');
     var label = new Label();
@@ -25,18 +25,18 @@ Core Modules of Native Libraries. sf-core has implementations of Android and iOS
 
 # Contribution Guide
 
-1. Create workspace on Smartface Cloud
-2. Download sf-core contribution script and Run it
+* Create workspace on Smartface Cloud
+* Download sf-core contribution script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/00e0cb7bf607df7cd693b85fa5de4418a6223bc9/files/snippet.txt \
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/93f35eba57385cf6346090423319adb9814de60d/files/snippet.txt \
         -o install-dev-sf-core.sh
     chmod +x install-dev-sf-core.sh
     ./install-dev-sf-core.sh
 ```
-3. When script successfully ends you can go to ~/workspace/scripts/node_modules/sf-core and start coding
+* When script successfully ends you can go to ~/workspace/scripts/node_modules/sf-core and start coding
 ```
     cd ~/workspace/scripts/node_modules/sf-core
     git status
 ```
-4. Don't forget to follow git-flow strategy while coding :)
+* Don't forget to follow git-flow strategy while coding :)

@@ -30,8 +30,7 @@ const Label = extend(View)(
          * tagged texts in Label view.
          * 
          *     @example
-         *     // In this example 'This link' text inside Label will shown blue and
-         *     // underlined
+         *     // In this example 'This link' text inside Label will shown underlined.
          *     const Label = require('sf-core/ui/label');
          *     var myLabel = new Label();
          *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
