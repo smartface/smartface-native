@@ -111,7 +111,7 @@ const Switch = extend(View)(
         }
         
         self.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
-        self._thumbOffColor = Color.GRAY;
+        self.thumbOffColor = Color.GRAY;
         self.toggleOnColor = Color.GRAY;
         self.android.toggleOffColor = Color.GRAY;
     }
