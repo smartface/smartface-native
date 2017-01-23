@@ -66,6 +66,11 @@ const ListView = extend(View)(
             self.nativeObject.reloadData();
         };
         
+        self.android = {};
+        
+        self.android.setPullRefreshColors = function(){
+            
+        };
         
          if (params) {
             for (var param in params) {

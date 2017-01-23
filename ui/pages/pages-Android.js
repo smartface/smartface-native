@@ -40,7 +40,7 @@ function Pages(params) {
         }
         fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
-        fragmentManager.executePendingTransactions();
+        //fragmentManager.executePendingTransactions();
         page.invalidateStatusBar();
         
         pagesStack.push(page);

@@ -143,7 +143,7 @@ const Button = extend(View)(
             },
             set: function(value) {
                 _onPressFunc = value;
-                self.nativeObject.addJSTarget(value,UIControlEvents.touchUpInside);
+                self.nativeObject.addJSTarget(value.bind(self),UIControlEvents.touchUpInside);
             },
             enumerable: true
          });
