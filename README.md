@@ -9,7 +9,7 @@ Core Modules of Native Libraries. sf-core has implementations of Android and iOS
 * Download sf-core installation script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/90e70b95b091a2fafdfb1e1230390ec43d467768/files/snippet.txt \
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/7727a564f9e106fe2c2716d3b37c91fbed8ebafe/files/snippet.txt \
         -o install-sf-core.sh
     chmod +x install-sf-core.sh
     ./install-sf-core.sh alpha
