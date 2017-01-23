@@ -22,5 +22,7 @@ module.exports = {
     TextBox: require('./textbox'),
     KeyboardType: require('./keyboardtype'),
     KeyboardAppearance: require('./keyboardappearance'),
-    ActionKeyType: require('./actionkeytype')
+    ActionKeyType: require('./actionkeytype'),
+    ListView: require('./listview'),
+    ListViewItem: require('./listviewitem')
 };
