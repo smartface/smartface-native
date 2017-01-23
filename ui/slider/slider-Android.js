@@ -28,21 +28,18 @@ const Slider = extend(View)(
             onStopTrackingTouch: function(seekBar) {}
         }));
         
-        var _currentValue;
         Object.defineProperty(this, 'value', {
             get: function() {
                 return self.nativeObject.getProgress() + _minValue;
             }, 
             set: function(value) {
-                _currentValue = value;
-                
-                if (_currentValue < _minValue) {
-                    _currentValue = _minValue;
-                } else if (_currentValue > _maxValue) {
-                    _currentValue = _maxValue;
+                if (value < _minValue) {
+                    value = _minValue;
+                } else if (value > _maxValue) {
+                    value = _maxValue;
                 }
                 
-                self.nativeObject.setProgress(_currentValue - _minValue);
+                self.nativeObject.setProgress(value - _minValue);
             },
             enumerable: true
         });
