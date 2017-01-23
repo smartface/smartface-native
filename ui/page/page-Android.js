@@ -190,19 +190,6 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarTitleEnabled = true;
-    Object.defineProperty(self.headerbar, 'displayShowTitleEnabled', {
-        get: function() {
-            return _headerbarTitleEnabled;
-        },
-        set: function(enabled) {
-            if (TypeUtil.isBoolean(enabled)) {
-                _headerbarTitleEnabled = enabled;
-            }
-        },
-        enumerable: true
-    });
-
     Object.defineProperty(self.headerbar, 'height', {
         get: function() {
             var resources = activity.getResources();
@@ -232,6 +219,8 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 _headerbarTitle = text;
+            } else {
+                _headerbarTitle = "";
             }
         },
         enumerable: true
@@ -313,7 +302,6 @@ function Page(params) {
         headerbarNative.setTitle(spannedTitle);
         headerbarNative.setSubtitle(spannedSubtitle);
         headerbarNative.setDisplayHomeAsUpEnabled(_headerbarHomeEnabled);
-        headerbarNative.setDisplayShowTitleEnabled(_headerbarTitleEnabled);
 
         if (_headerbarImage) {
             headerbarNative.setBackgroundDrawable(_headerbarImage.nativeObject);
