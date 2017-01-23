@@ -23,7 +23,7 @@ const Button = extend(View)(
         _super(this);
         
         self.nativeObject.setTitleColor(Color.BLACK,ButtonState.normal);
-        
+
         var _text;
         Object.defineProperty(self, 'text', {
             get: function() {
@@ -147,7 +147,29 @@ const Button = extend(View)(
             },
             enumerable: true
          });
-    
+        
+        Object.defineProperty(self, 'font', {
+            get:function() {
+                
+                return self.nativeObject.titleLabel.font;
+            },
+            set:function(value) {
+                self.nativeObject.titleLabel.font = value;
+            },
+            enumerable: true
+         });
+         
+         var _textColor = Color.BLACK;
+        Object.defineProperty(self, 'textColor', {
+            get: function() {
+                return _textColor;
+            },
+            set: function(value) {
+                _textColor = value;
+                self.nativeObject.setTitleColor(value,ButtonState.normal);
+            },
+            enumerable: true
+        });
          // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

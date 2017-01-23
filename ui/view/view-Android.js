@@ -380,6 +380,12 @@ function View(params) {
             return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
         }
     }
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 module.exports = View;

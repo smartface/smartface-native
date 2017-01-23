@@ -261,6 +261,13 @@ function View(params) {
           return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
     };
+    
+     if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+    
 }
 
 

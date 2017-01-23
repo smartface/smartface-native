@@ -112,6 +112,12 @@ const Slider = extend(View)(
             },
             enumerable: true
          });
+         
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 });
      
 module.exports = Slider;
