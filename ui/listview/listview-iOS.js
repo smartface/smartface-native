@@ -37,7 +37,7 @@ const ListView = extend(View)(
             enumerable: true
           });
         
-        self.nativeObject.cellForRowAt = function(e){
+        self.nativeObject.cellForRowAt = function(e){   
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
          }
@@ -46,13 +46,14 @@ const ListView = extend(View)(
          self.nativeObject.onRowCreate =  function(e){
              var lisviewItem = self.onRowCreate();
              templateItem = lisviewItem;
-             return lisviewItem.cell;
+             return lisviewItem.nativeObject;
          }
          
          self.createTemplate = function(e){
             var tempTemplateItem = templateItem;
+            templateItem.nativeObject = e.contentView;
                 for (var template in templateItem.childs){
-                  tempTemplateItem.childs[template].nativeObject = e.cell.contentView.viewWithTag(tempTemplateItem.childs[template].id);
+                  tempTemplateItem.childs[template].nativeObject = e.contentView.viewWithTag(tempTemplateItem.childs[template].id);
                 }
             return tempTemplateItem;
          }
@@ -68,10 +69,7 @@ const ListView = extend(View)(
         
         self.android = {};
         
-        self.android.setPullRefreshColors = function(){
-            
-        };
-        
+        self.android.setPullRefreshColors = function(){}
          if (params) {
             for (var param in params) {
                 this[param] = params[param];
