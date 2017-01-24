@@ -1,6 +1,6 @@
-const AbsoluteLayout = require("sf-core/ui/absolutelayout");
-const Color          = require("sf-core/ui/color");
-const TypeUtil       = require("sf-core/util/type");
+const AbsoluteLayout = require("nf-core/ui/absolutelayout");
+const Color          = require("nf-core/ui/color");
+const TypeUtil       = require("nf-core/util/type");
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
