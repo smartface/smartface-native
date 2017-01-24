@@ -127,6 +127,31 @@ function View(params) {
         enumerable: true
     });
 
+    var _borderColor = null;
+    Object.defineProperty(this, 'borderColor', {
+        get: function() {
+            return _borderColor;
+        },
+        set: function(value) {
+            _borderColor = value;
+            applyStyle();
+        },
+        enumerable: true
+    });
+    
+    var _borderWidth = 0;
+    Object.defineProperty(this, 'borderWidth', {
+        get: function() {
+            return _borderWidth;
+        },
+        set: function(value) {
+            _borderWidth = value;
+            applyStyle();
+            updatePadding();
+        },
+        enumerable: true
+    });
+    
     var widthInitial = -2;
     Object.defineProperty(this, 'width', {
         get: function() {
@@ -200,30 +225,7 @@ function View(params) {
             }
             return false;
         }
-    }));
-      
-    var _borderColor = null;
-    Object.defineProperty(this, 'borderColor', {
-        get: function() {
-            return _borderColor;
-        },
-        set: function(value) {
-            _borderColor = value;
-            applyStyle();
-        }
-    });
-    
-    var _borderWidth = 0;
-    Object.defineProperty(this, 'borderWidth', {
-        get: function() {
-            return _borderWidth;
-        },
-        set: function(value) {
-            _borderWidth = value;
-            applyStyle();
-            updatePadding();
-        }
-    });
+    }));      
 
     var _initialPadding = {
         left  : self.nativeObject.getPaddingLeft(),
