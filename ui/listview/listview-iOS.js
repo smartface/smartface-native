@@ -1,6 +1,6 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-
+const UIControlEvents = require("sf-core/util").UIControlEvents;
  
 const ListView = extend(View)(
    function (_super, params) {
@@ -8,6 +8,8 @@ const ListView = extend(View)(
         
         if(!self.nativeObject){
             self.nativeObject = new SMFUITableView();
+            self.refreshControl = new UIRefreshControl();
+            self.nativeObject.addSubview(self.refreshControl);
         }
         
         _super(this);
@@ -17,6 +19,17 @@ const ListView = extend(View)(
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
         
+        self.stopRefresh = function(){
+            self.refreshControl.endRefreshing();
+        }
+        
+        Object.defineProperty(self, 'onPullRefresh', {
+            set: function(value) {
+                self.refreshControl.addJSTarget(value,UIControlEvents.valueChanged);
+            },
+            enumerable: true
+          });
+          
         Object.defineProperty(self, 'itemCount', {
             get: function() {
                 return self.nativeObject.itemCount;
@@ -37,7 +50,7 @@ const ListView = extend(View)(
             enumerable: true
           });
         
-        self.nativeObject.cellForRowAt = function(e){
+        self.nativeObject.cellForRowAt = function(e){   
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
          }
@@ -46,13 +59,14 @@ const ListView = extend(View)(
          self.nativeObject.onRowCreate =  function(e){
              var lisviewItem = self.onRowCreate();
              templateItem = lisviewItem;
-             return lisviewItem.cell;
+             return lisviewItem.nativeObject;
          }
          
          self.createTemplate = function(e){
             var tempTemplateItem = templateItem;
+            templateItem.nativeObject = e.contentView;
                 for (var template in templateItem.childs){
-                  tempTemplateItem.childs[template].nativeObject = e.cell.contentView.viewWithTag(tempTemplateItem.childs[template].id);
+                  tempTemplateItem.childs[template].nativeObject = e.contentView.viewWithTag(tempTemplateItem.childs[template].id);
                 }
             return tempTemplateItem;
          }
@@ -60,13 +74,39 @@ const ListView = extend(View)(
         self.nativeObject.didSelectRowAt = function(e){
            var listItem = self.createTemplate(e);
            self.onRowSelected(listItem,e.index);
-        }
+        };
         
-        this.refreshData = function(){
+        self.refreshData = function(){
             self.nativeObject.reloadData();
         };
         
+        self.firstVisibleIndex = function(){
+            var visibleIndexArray =  self.nativeObject.getVisibleIndexArray();
+            return visibleIndexArray[0];
+        };
         
+        this.lastVisibleIndex = function(){
+            var visibleIndexArray =  self.nativeObject.getVisibleIndexArray();
+            return visibleIndexArray[visibleIndexArray.length-1];
+        };
+        
+        this.scrollTo = function(index){
+            self.nativeObject.scrollTo(index);
+        };
+        
+        Object.defineProperty(self, 'verticalScrollBarEnabled', {
+            get:function() {
+                return self.nativeObject.showsVerticalScrollIndicator;
+            },
+            set:function(value) {
+                self.nativeObject.showsVerticalScrollIndicator = value;
+            },
+            enumerable: true
+        });
+        
+        self.android = {};
+
+        self.android.setPullRefreshColors = function(){}
          if (params) {
             for (var param in params) {
                 this[param] = params[param];
