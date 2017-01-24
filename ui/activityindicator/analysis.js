@@ -6,13 +6,16 @@ const View = require('../view');
  * @extends UI.View
  * @since 0.1
  * 
- * ActivityIndicator class shows a progress of some background task.
+ * ActivityIndicator can be used to indicate a background task.
  *
  *     @example
- *     const ActivityIndicator = require('sf-core/ui/activityindicator');
- *     const Color = require('sf-core/ui/color');
- *     var myActivityIndicator = new ActivityIndicator();
- *     myActivityIndicator.color = Color.BLUE;
+ *     const ActivityIndicator = require('nf-core/ui/activityindicator');
+ *     
+ *     var myActivityIndicator = new ActivityIndicator({
+ *         top:"45%", left:"45%"
+ *     });
+ *     
+ *     myPage.add(myActivityIndicator);
  */
 const ActivityIndicator = extend(View)(
     function (_super, params) {
@@ -20,7 +23,7 @@ const ActivityIndicator = extend(View)(
         /**
          * Gets/sets color of the activity indicator.
          * 
-         * @property {Color} color Color of the activity indicator
+         * @property {UI.Color} color
          * @since 0.1
          */
         this.color = Color.GRAY;
