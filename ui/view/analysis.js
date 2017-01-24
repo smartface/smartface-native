@@ -41,16 +41,6 @@ function View(params) {
     this.backgroundColor = "#FFFFFF";
 
     /**
-     * Gets/sets height of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} height 
-     * @member UI.View
-     * @since 0.1
-     */
-    this.height = "0%";
-        
-    /**
      * Gets/sets id of view. Should be unique number for all objects
      * inside project.
      * 
@@ -61,16 +51,6 @@ function View(params) {
     this.id = 5421;
 
     /**
-     * Gets/sets position X value of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} left 
-     * @member UI.View
-     * @since 0.1
-     */
-    this.left = "0%";
-
-    /**
      * Gets/sets style of view. 
      * 
      * @property {Style} style
@@ -78,17 +58,7 @@ function View(params) {
      * @since 0.1
      */
     this.style = {};
-
-    /**
-     * Gets/sets position Y value of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
-     * 
-     * @property {Number} top 
-     * @member UI.View
-     * @since 0.1
-     */
-    this.top = "0%";
-
+    
     /**
      * Gets/sets visibility of view. It is set to true as default.
      * 
@@ -107,16 +77,88 @@ function View(params) {
      * @since 0.1
      */
     this.touchEnabled = true;
-
+    
     /**
-     * Gets/sets width of view. Setting number (as pixel) and string 
-     * (as percentage) is allowed.
+     * Gets/sets position X value of view. This property will work only if 
+     * view added to {@link UI.AbsoluteLayout}.
      * 
-     * @property {Number} width 
-     * @member UI.View
+     * @property {Number} [left = 0] 
      * @since 0.1
      */
-    this.width = "0%";
+    this.left = 0;
+
+    /**
+     * Gets/sets position Y value of view. This property will work only if 
+     * view added to {@link UI.AbsoluteLayout}.
+     * 
+     * @property {Number} top 
+     * @since 0.1
+     */
+    this.top = 0;
+
+    /**
+     * Gets/sets height of view.
+     * 
+     * @property {Number} [height = 0] 
+     * @since 0.1
+     */
+    this.height = 0;
+        
+    /**
+     * Gets/sets width of view.
+     * 
+     * @property {Number} [width = 0] 
+     * @since 0.1
+     */
+    this.width = 0;
+    
+    /**
+     * // @todo add description. This property will work only if 
+     * view added to {@link UI.FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [minWidth = 0]   
+     * @since 0.1
+     */
+    this.minWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [minHeight = 0]   
+     * @since 0.1
+     */
+    this.minHeight = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [maxWidth = 0]   
+     * @since 0.1
+     */
+    this.maxWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [maxHeight = 0]   
+     * @since 0.1
+     */
+    this.maxHeight = 0;
 
     /**
      * Gets/sets padding of view. Setting number as pixels.
