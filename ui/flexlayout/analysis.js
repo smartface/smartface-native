@@ -45,7 +45,7 @@ const FlexLayout = extend(ViewGroup)(
          *     @example
          *     // @todo add example
          *
-         * @property {UI.FlexLayout.AlignContent} [alignContent = UI.FlexLayout.AlignContent.STRETCH]   
+         * @property {UI.FlexLayout.AlignContent} [alignContent = UI.FlexLayout.AlignContent.STRETCH]
          * @since 0.1
          */
         this.alignContent = UI.FlexLayout.AlignContent.STRETCH;
@@ -56,7 +56,7 @@ const FlexLayout = extend(ViewGroup)(
          *     @example
          *     // @todo add example
          *
-         * @property {UI.FlexLayout.AlignItems} [alignContent = UI.FlexLayout.AlignItems.STRETCH]   
+         * @property {UI.FlexLayout.AlignItems} [alignItems = UI.FlexLayout.AlignItems.STRETCH]
          * @since 0.1
          */
         this.alignItems = UI.FlexLayout.AlignItems.STRETCH;
@@ -67,7 +67,7 @@ const FlexLayout = extend(ViewGroup)(
          *     @example
          *     // @todo add example
          *
-         * @property {UI.FlexLayout.FlexWrap} [justifyContent = UI.FlexLayout.FlexWrap.NO_WRAP]   
+         * @property {UI.FlexLayout.FlexWrap} [flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP]
          * @since 0.1
          */
         this.flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP;
