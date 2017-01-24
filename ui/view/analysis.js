@@ -80,7 +80,7 @@ function View(params) {
     
     /**
      * Gets/sets position X value of view. This property will work only if 
-     * view added to {@link UI.AbsoluteLayout}.
+     * view added to {@link UI.AbsoluteLayout AbsoluteLayout}.
      * 
      * @property {Number} [left = 0] 
      * @since 0.1
@@ -89,9 +89,9 @@ function View(params) {
 
     /**
      * Gets/sets position Y value of view. This property will work only if 
-     * view added to {@link UI.AbsoluteLayout}.
+     * view added to {@link UI.AbsoluteLayout AbsoluteLayout}.
      * 
-     * @property {Number} top 
+     * @property {Number} [top = 0]
      * @since 0.1
      */
     this.top = 0;
@@ -113,8 +113,8 @@ function View(params) {
     this.width = 0;
     
     /**
-     * // @todo add description. This property will work only if 
-     * view added to {@link UI.FlexLayout}.
+     * // @todo add description. This property will work only if
+     * view added to {@link UI.FlexLayout FlexLayout}.
      * 
      *     @example
      *     // @todo add example
@@ -126,7 +126,7 @@ function View(params) {
     
     /**
      * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout}.
+     * view added to {@link UI.FlexLayout FlexLayout}.
      * 
      *     @example
      *     // @todo add example
@@ -138,7 +138,7 @@ function View(params) {
     
     /**
      * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout}.
+     * view added to {@link UI.FlexLayout FlexLayout}.
      * 
      *     @example
      *     // @todo add example
@@ -150,7 +150,7 @@ function View(params) {
     
     /**
      * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout}.
+     * view added to {@link UI.FlexLayout FlexLayout}.
      * 
      *     @example
      *     // @todo add example
