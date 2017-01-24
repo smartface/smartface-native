@@ -159,7 +159,152 @@ function View(params) {
      * @since 0.1
      */
     this.maxHeight = 0;
-
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingTop = 0]   
+     * @since 0.1
+     */
+    this.paddingTop = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingBottom = 0]   
+     * @since 0.1
+     */
+    this.paddingBottom = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingStart = 0]   
+     * @since 0.1
+     */
+    this.paddingStart = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingEnd = 0]   
+     * @since 0.1
+     */
+    this.paddingEnd = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginTop = 0]   
+     * @since 0.1
+     */
+    this.marginTop = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginBottom = 0]   
+     * @since 0.1
+     */
+    this.marginBottom = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginStart = 0]   
+     * @since 0.1
+     */
+    this.marginStart = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginEnd = 0]   
+     * @since 0.1
+     */
+    this.marginEnd = 0;
+    
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [flexGrow = 0]   
+     * @since 0.1
+     */
+    this.flexGrow = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [flexShrink = 1]   
+     * @since 0.1
+     */
+    this.flexShrink = 1;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [flexBasis = -1]   
+     * @since 0.1
+     */
+    this.flexBasis = -1;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {UI.FlexLayout.AlignSelf} [alignSelf = UI.FlexLayout.AlignSelf.AUTO]   
+     * @since 0.1
+     */
+    this.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
+    
     /**
      * Gets/sets padding of view. Setting number as pixels.
      *
@@ -175,13 +320,13 @@ function View(params) {
      *     myView.padding = padding;
      *
      * @property {Object} padding
-     * @param {Number} [padding.left] Padding left value
-     * @param {Number} [padding.top] Padding top value
-     * @param {Number} [padding.right] Padding right value
+     * @param {Number} [padding.left]
+     * @param {Number} [padding.top]
+     * @param {Number} [padding.start]
      * @param {Number} [padding.bottom] Padding bottom value
      * @since 0.1
      */
-    this.padding = {left: 15, top: 10, right: 15, bottom:10};
+    this.padding = {top: 0, bottom: 0, start: 0, end: 0, };
 
     /**
      * This method allows getting view to the front.

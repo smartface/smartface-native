@@ -376,5 +376,84 @@ Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
     writable: false
 });
 
+/**
+ * @enum {Number} UI.FlexLayout.AlignSelf
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.AlignSelf = {};
+/**
+ * @property {Number} AUTO
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
+    value: 0,
+    writable: false
+});
+/**
+ * @property {Number} FLEX_START
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
+    value: 1,
+    writable: false
+});
+/**
+ * @property {Number} FLEX_END
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
+    value: 2,
+    writable: false
+});
+/**
+ * @property {Number} CENTER
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
+    value: 3,
+    writable: false
+});
+/**
+ * @property {Number} BASELINE
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'BASELINE', {
+    value: 4,
+    writable: false
+});
+/**
+ * @property {Number} STRETCH
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
+    value: 5,
+    writable: false
+});
 
 module.exports = FlexLayout;
