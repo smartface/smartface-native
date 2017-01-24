@@ -86,6 +86,18 @@ const FlexLayout = extend(ViewGroup)(
     }
 );
 
+/**
+ * @enum {Number} UI.FlexLayout.FlexDirection
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
 FlexLayout.FlexDirection = {};
 /**
  * @property {Number} ROW
@@ -132,6 +144,18 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
     writable: false
 });
 
+/**
+ * @enum {Number} UI.FlexLayout.JustifyContent
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
 FlexLayout.JustifyContent = {};
 /**
  * @property {Number} FLEX_START
@@ -189,6 +213,18 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
     writable: false
 });
 
+/**
+ * @enum {Number} UI.FlexLayout.AlignContent
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
 FlexLayout.AlignContent = {};
 /**
  * @property {Number} FLEX_START
@@ -235,6 +271,18 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
     writable: false
 });
 
+/**
+ * @enum {Number} UI.FlexLayout.AlignItems
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
 FlexLayout.AlignItems = {};
 /**
  * @property {Number} FLEX_START
@@ -292,6 +340,18 @@ Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
     writable: false
 });
 
+/**
+ * @enum {Number} UI.FlexLayout.FlexWrap
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
 FlexLayout.FlexWrap = {};
 /**
  * @property {Number} NOWRAP
