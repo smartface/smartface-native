@@ -1,5 +1,5 @@
-const TypeUtil = require("sf-core/util/type");
-const Style = require('sf-core/ui/style');
+const TypeUtil = require("nf-core/util/type");
+const Style = require('nf-core/ui/style');
 
 const NativeView = requireClass("android.view.View");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");

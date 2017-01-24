@@ -1,5 +1,5 @@
 {
-  "name": "sf-core",
+  "name": "nf-core",
   "version": "0.0.99",
   "description": "Core Modules of Native Libraries..",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/smartface-team/core-modules.git"
+    "url": "git+ssh://git@bitbucket.org/smartface-team/nf-core.git"
   },
   "keywords": [
     "smartface",
@@ -21,7 +21,7 @@
     "url": "http://smartface.io"
   },
   "license": "ISC",
-  "homepage": "http://bitbucket.org/smartface-team/core-modules#readme",
+  "homepage": "http://bitbucket.org/smartface-team/nf-core#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "salep": "0.2.*"
