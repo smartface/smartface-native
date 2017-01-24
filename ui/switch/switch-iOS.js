@@ -1,7 +1,7 @@
 const View = require('../view');
-const Color = require("sf-core/ui/color");
+const Color = require("nf-core/ui/color");
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
+const UIControlEvents = require("nf-core/util").UIControlEvents;
 
 const Switch = extend(View)(
     function (_super, params)  {

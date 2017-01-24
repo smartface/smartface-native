@@ -1,23 +1,23 @@
-sf-core 
+nf-core 
 ===================
 
-Core Modules of Native Libraries. sf-core has implementations of Android and iOS native libraries with Smartface Expose Framework.
+Core Modules of Native Libraries. nf-core has implementations of Android and iOS native libraries with Smartface Expose Framework.
 
 # Installation #
 
-1. Create workspace on Smartface Cloud
-2. Download sf-core installation script and Run it
+* Create workspace on Smartface Cloud
+* Download nf-core installation script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/400cce18f5c3cfbac203ac7829e2288994e38a46/files/snippet.txt \
-        -o install-sf-core.sh
-    chmod +x install-sf-core.sh
-    ./install-sf-core.sh alpha
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/74Roe/80ee03e3cf8172216778a2ec7ef7f44a8037b40e/files/snippet.txt \
+        -o install-nf-core.sh
+    chmod +x install-nf-core.sh
+    ./install-nf-core.sh alpha
 ```
-3. Make sure you are using require properly
-4. You're ready to use sf-core library in your workspace
+* Make sure you are using require properly
+* You're ready to use nf-core library in your workspace
 ```
-    const Label = require('sf-core/ui/label');
+    const Label = require('nf-core/ui/label');
     var label = new Label();
     label.text = "Hello World!";
     page.add(label);
@@ -25,18 +25,18 @@ Core Modules of Native Libraries. sf-core has implementations of Android and iOS
 
 # Contribution Guide
 
-1. Create workspace on Smartface Cloud
-2. Download sf-core contribution script and Run it
+* Create workspace on Smartface Cloud
+* Download nf-core contribution script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/00e0cb7bf607df7cd693b85fa5de4418a6223bc9/files/snippet.txt \
-        -o install-dev-sf-core.sh
-    chmod +x install-dev-sf-core.sh
-    ./install-dev-sf-core.sh
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/35b359958b5c5817346f8d1c887b1949b93628d5/files/snippet.txt \
+        -o install-dev-nf-core.sh
+    chmod +x install-dev-nf-core.sh
+    ./install-dev-nf-core.sh
 ```
-3. When script successfully ends you can go to ~/workspace/scripts/node_modules/sf-core and start coding
+* When script successfully ends you can go to ~/workspace/scripts/node_modules/nf-core and start coding
 ```
-    cd ~/workspace/scripts/node_modules/sf-core
+    cd ~/workspace/scripts/node_modules/nf-core
     git status
 ```
-4. Don't forget to follow git-flow strategy while coding :)
+* Don't forget to follow git-flow strategy while coding :)

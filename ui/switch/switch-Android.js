@@ -1,14 +1,12 @@
-const Button = require('sf-core/ui/button');
-const Color = require("sf-core/ui/color");
+const View = require('nf-core/ui/view');
+const Color = require("nf-core/ui/color");
 const extend = require('js-base/core/extend');
 
 const NativeSwitch = requireClass("android.widget.Switch");
-const NativeTypedValue = requireClass("android.util.TypedValue");
-const NativeR = requireClass("android.R");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 
-const Switch = extend(Button)(
+const Switch = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject){
@@ -16,67 +14,50 @@ const Switch = extend(Button)(
         }
         _super(this);
 
-
-//        var STATE_CHECKED = [
-//            NativeR.attr.state_checked
-//        ];
-//        var STATE_NORMAL =  [
-//            -NativeR.attr.state_enabled
-//        ];
-
-         // Getting default background color. Its themes default colorAccent and colorControlNormal on native
-        var typedValue = new NativeTypedValue();
-        var a = Android.getActivity().obtainStyledAttributes(typedValue.data, [NativeR.attr.colorAccent]);
-        var colorTrackCheckedInitial = a.getColor(0, 0);
-        var initialColorChecked = colorTrackCheckedInitial;
-        a = Android.getActivity().obtainStyledAttributes(typedValue.data, [NativeR.attr.colorControlNormal]);
-        var initialColorUnchecked = a.getColor(0, 0);
-        a.recycle();
-
-        var thumbOnColorInitial = initialColorChecked;
+        var _thumbOnColor = null;
         Object.defineProperty(this, 'thumbOnColor', {
             get: function() {
-                return thumbOnColorInitial;
+                return _thumbOnColor;
             },
             set: function(thumbOnColor) {
-                thumbOnColorInitial = thumbOnColor;
+                _thumbOnColor = thumbOnColor;
                 setThumbColor();
             },
             enumerable: true
         });
 
-        var thumbOffColorInitial = initialColorUnchecked;
+        var _thumbOffColor = Color.GRAY;
         Object.defineProperty(this, 'thumbOffColor', {
             get: function() {
-                return thumbOffColorInitial;
+                return _thumbOffColor;
             },
             set: function(thumbOffColor) {
-                thumbOffColorInitial = thumbOffColor;
+                _thumbOffColor = thumbOffColor;
                 setThumbColor();
             },
             enumerable: true
         });
 
-        var toggleOnColorInitial = initialColorChecked;
+        var _toggleOnColor = Color.GRAY;
         Object.defineProperty(this, 'toggleOnColor', {
             get: function() {
-                return toggleOnColorInitial;
+                return _toggleOnColor;
             },
             set: function(toggleOnColor) {
-                toggleOnColorInitial = toggleOnColor;
+                _toggleOnColor = toggleOnColor;
                 setTrackColor();
             },
             enumerable: true
         });
 
-        var toggleOffColorInitial = initialColorUnchecked;
+        var _toggleOffColor = Color.GRAY;
         this.android = {}
         Object.defineProperty(this.android, 'toggleOffColor', {
             get: function() {
-                return toggleOffColorInitial;
+                return _toggleOffColor;
             },
             set: function(toggleOffColor) {
-                toggleOffColorInitial = toggleOffColor;
+                _toggleOffColor = toggleOffColor;
                 setTrackColor();
             },
             enumerable: true
@@ -113,23 +94,26 @@ const Switch = extend(Button)(
 
         function setThumbColor(){
             if(self.nativeObject.isChecked()){
-                self.nativeObject.getThumbDrawable().setColorFilter(thumbOnColorInitial,NativePorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getThumbDrawable().setColorFilter(_thumbOnColor,NativePorterDuff.Mode.SRC_ATOP);
             }
             else{
-                self.nativeObject.getThumbDrawable().setColorFilter(thumbOffColorInitial,NativePorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getThumbDrawable().setColorFilter(_thumbOffColor,NativePorterDuff.Mode.SRC_ATOP);
             }
         }
 
         function setTrackColor(){
             if(self.nativeObject.isChecked()){
-                self.nativeObject.getTrackDrawable().setColorFilter(toggleOnColorInitial,NativePorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getTrackDrawable().setColorFilter(_toggleOnColor,NativePorterDuff.Mode.SRC_ATOP);
             }
             else{
-                self.nativeObject.getTrackDrawable().setColorFilter(toggleOffColorInitial,NativePorterDuff.Mode.SRC_ATOP);
+                self.nativeObject.getTrackDrawable().setColorFilter(_toggleOffColor,NativePorterDuff.Mode.SRC_ATOP);
             }
         }
-
-
+        
+        self.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
+        self.thumbOffColor = Color.GRAY;
+        self.toggleOnColor = Color.GRAY;
+        self.android.toggleOffColor = Color.GRAY;
     }
 );
 

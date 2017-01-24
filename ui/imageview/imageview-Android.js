@@ -3,8 +3,8 @@ const NativeScaleType = NativeImageView.ScaleType;
 
 const extend         = require('js-base/core/extend');
 const View           = require('../view');
-const Image          = require("sf-core/ui/image");
-const ImageFillType  = require("sf-core/ui/imagefilltype");
+const Image          = require("nf-core/ui/image");
+const ImageFillType  = require("nf-core/ui/imagefilltype");
 
 const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageFillType.NORMAL]    = NativeScaleType.CENTER;

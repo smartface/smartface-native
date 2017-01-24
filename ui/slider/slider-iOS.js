@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
-const Color = require("sf-core/ui/color");
+const UIControlEvents = require("nf-core/util").UIControlEvents;
+const Color = require("nf-core/ui/color");
 
 const SliderState = {
         normal: 0,
@@ -112,6 +112,12 @@ const Slider = extend(View)(
             },
             enumerable: true
          });
+         
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 });
      
 module.exports = Slider;

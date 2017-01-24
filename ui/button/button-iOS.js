@@ -1,8 +1,8 @@
-const View = require("sf-core/ui/view");
-const Color = require("sf-core/ui/color");
-const StateList = require("sf-core/util/statelist");
+const View = require("nf-core/ui/view");
+const Color = require("nf-core/ui/color");
+const StateList = require("nf-core/util/statelist");
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("sf-core/util").UIControlEvents;
+const UIControlEvents = require("nf-core/util").UIControlEvents;
 
 const ButtonState = {
         normal: 0,
@@ -23,7 +23,7 @@ const Button = extend(View)(
         _super(this);
         
         self.nativeObject.setTitleColor(Color.BLACK,ButtonState.normal);
-        
+
         var _text;
         Object.defineProperty(self, 'text', {
             get: function() {
@@ -143,11 +143,33 @@ const Button = extend(View)(
             },
             set: function(value) {
                 _onPressFunc = value;
-                self.nativeObject.addJSTarget(value,UIControlEvents.touchUpInside);
+                self.nativeObject.addJSTarget(value.bind(self),UIControlEvents.touchUpInside);
             },
             enumerable: true
          });
-    
+        
+        Object.defineProperty(self, 'font', {
+            get:function() {
+                
+                return self.nativeObject.titleLabel.font;
+            },
+            set:function(value) {
+                self.nativeObject.titleLabel.font = value;
+            },
+            enumerable: true
+         });
+         
+         var _textColor = Color.BLACK;
+        Object.defineProperty(self, 'textColor', {
+            get: function() {
+                return _textColor;
+            },
+            set: function(value) {
+                _textColor = value;
+                self.nativeObject.setTitleColor(value,ButtonState.normal);
+            },
+            enumerable: true
+        });
          // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
