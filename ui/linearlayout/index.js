@@ -1,1 +1,0 @@
-module.exports = require('./linearlayout-' + Device.deviceOS + '.js');
