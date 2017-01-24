@@ -373,6 +373,13 @@ function View(params) {
     
     // Default values
     self.borderColor = Color.BLACK;
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 module.exports = View;
