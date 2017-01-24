@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
  * @class UI.AbsoluteLayout
  * @since 0.1
  * @extends UI.ViewGroup
- * UI.AbsoluteLayout is a layout that lets you specify the exact positions of its child views.
+ * AbsoluteLayout is a layout that lets you specify the exact positions of its child views.
  * 
  *     @example
  *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
