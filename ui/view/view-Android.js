@@ -1,5 +1,5 @@
 const TypeUtil = require("sf-core/util/type");
-const Style = require('sf-core/ui/style');
+const Color = require("sf-core/ui/color");
 
 const NativeView = requireClass("android.view.View");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
@@ -10,7 +10,7 @@ const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-const NativeRecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
+const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 
 function View(params) {
     var self = this;
@@ -29,6 +29,7 @@ function View(params) {
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
     layerDrawable.setDrawableByLayerId(1,borderDrawable);
     self.nativeObject.setBackground(layerDrawable);
+    
 
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -201,22 +202,27 @@ function View(params) {
         }
     }));
       
-    var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
-    Object.defineProperty(this, 'style', {
+    var _borderColor = null;
+    Object.defineProperty(this, 'borderColor', {
         get: function() {
-            return styleInitial;
+            return _borderColor;
         },
-        set: function(style) {
-            if (style !== undefined) {
-                styleInitial = style;
-                applyStyle();
-                style.addChangeHandler(function(propertyName, value){
-                    applyStyle();
-                });
-                updatePadding();
-            }
+        set: function(value) {
+            _borderColor = value;
+            applyStyle();
+        }
+    });
+    
+    var _borderWidth = 0;
+    Object.defineProperty(this, 'borderWidth', {
+        get: function() {
+            return _borderWidth;
         },
-        enumerable: true
+        set: function(value) {
+            _borderWidth = value;
+            applyStyle();
+            updatePadding();
+        }
     });
 
     var _initialPadding = {
@@ -244,10 +250,10 @@ function View(params) {
 
     function updatePadding() {
         self.nativeObject.setPadding(
-            _initialPadding.left   + styleInitial.borderWidth,
-            _initialPadding.top    + styleInitial.borderWidth,
-            _initialPadding.right  + styleInitial.borderWidth,
-            _initialPadding.bottom + styleInitial.borderWidth
+            _initialPadding.left   + _borderWidth,
+            _initialPadding.top    + _borderWidth,
+            _initialPadding.right  + _borderWidth,
+            _initialPadding.bottom + _borderWidth
         );
     };
 
@@ -265,27 +271,9 @@ function View(params) {
     
     // @todo no ENUM support
     function applyStyle(){
-        var borderColor = styleInitial.borderColor;
-        if(!TypeUtil.isNumeric(styleInitial.borderColor)){
-            borderColor = NativeColor.parseColor(styleInitial.borderColor);
-        }
-        // android.graphics.Color.TRANSPARENT=0
         borderDrawable.setColor(0);
-        borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
-        // var strokePaint = borderDrawable.getPaint();
-        // strokePaint.setAntiAlias (true);
-
-        // if (styleInitial.borderWidth > 0) {
-        //     strokePaint.setStrokeWidth (styleInitial.borderWidth);
-        //     strokePaint.setColor (borderColor);
-        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
-
-        // } else {
-        //     var backgroundColorCurrent = self.backgroundColorDrawable.getColor();
-        //     strokePaint.setColor (backgroundColorCurrent);
-        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
-        //     strokePaint.setAlpha (0);
-        // }
+        borderDrawable.setStroke(_borderWidth, _borderColor);
+        
         setBackground(1);
     }
 
@@ -380,12 +368,9 @@ function View(params) {
             return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
         }
     }
-    // Assign parameters given in constructor
-    if (params) {
-        for (var param in params) {
-            this[param] = params[param];
-        }
-    }
+    
+    // Default values
+    self.borderColor = Color.BLACK;
 }
 
 module.exports = View;

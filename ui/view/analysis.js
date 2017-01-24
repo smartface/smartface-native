@@ -39,6 +39,24 @@ function View(params) {
      * @since 0.1
      */ 
     this.backgroundColor = "#FFFFFF";
+    
+    /**
+     * Sets/gets border color of bounded view.
+     * 
+     * @property {Color} [borderColor = UI.Color.BLACK]
+     * @since 0.1
+     */
+    this.borderColor = UI.Color.BLACK;
+    
+    
+    /**
+     * Sets/gets border thickness of bounded view. Accepts unsigned
+     * numbers, 0 means no border.
+     * 
+     * @property {Number} borderWidth 
+     * @since 0.1
+     */
+    this.borderWidth = 0;
 
     /**
      * Gets/sets height of view. Setting number (as pixel) and string 
@@ -69,15 +87,6 @@ function View(params) {
      * @since 0.1
      */
     this.left = "0%";
-
-    /**
-     * Gets/sets style of view. 
-     * 
-     * @property {Style} style
-     * @member UI.View
-     * @since 0.1
-     */
-    this.style = {};
 
     /**
      * Gets/sets position Y value of view. Setting number (as pixel) and string 
