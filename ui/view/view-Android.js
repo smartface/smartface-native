@@ -8,6 +8,9 @@ const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawabl
 const NativeColor = requireClass("android.graphics.Color");
 const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
+const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+const NativeRecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
 
 function View(params) {
     var self = this;
@@ -59,8 +62,10 @@ function View(params) {
             return self.nativeObject.getHeight();
         },
         set: function(height) {
-            heightInitial = height;
-            self.invalidatePosition();
+            if (height !== undefined) {
+                heightInitial = height;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
     });
@@ -83,8 +88,10 @@ function View(params) {
             return self.nativeObject.getLeft();
         },
         set: function(left) {
-            leftInitial = left;
-            self.invalidatePosition();
+            if (left !== undefined) {
+                leftInitial = left;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -95,8 +102,10 @@ function View(params) {
             return self.nativeObject.getTop();
         },
         set: function(top) {
-            topInitial = top;
-            self.invalidatePosition();
+            if (top !== undefined) {
+                topInitial = top;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -123,8 +132,10 @@ function View(params) {
             return self.nativeObject.getWidth();
         },
         set: function(width) {
-            widthInitial = width;
-            self.invalidatePosition();
+            if (width !== undefined) {
+                widthInitial = width;
+                self.invalidatePosition();
+            }
         },
         enumerable: true
      });
@@ -196,12 +207,14 @@ function View(params) {
             return styleInitial;
         },
         set: function(style) {
-            styleInitial = style;
-            applyStyle();
-            style.addChangeHandler(function(propertyName, value){
+            if (style !== undefined) {
+                styleInitial = style;
                 applyStyle();
-            });
-            updatePadding();
+                style.addChangeHandler(function(propertyName, value){
+                    applyStyle();
+                });
+                updatePadding();
+            }
         },
         enumerable: true
     });
@@ -248,20 +261,8 @@ function View(params) {
 
     this.invalidatePosition = function(parentWidth, parentHeight){
         setLayoutParam(parentWidth, parentHeight);
-//        if( (TypeUtil.isNumeric(widthInitial) &&  TypeUtil.isNumeric(heightInitial) && TypeUtil.isNumeric(leftInitial) && TypeUtil.isNumeric(topInitial)) || self.parent){
-//        }
     };
-
-    // Using from ViewGroup
-    this.getInitialPosition = function(){
-        return  {
-            width: widthInitial,
-            height: heightInitial,
-            top: topInitial,
-            left: leftInitial
-        };
-    };
-
+    
     // @todo no ENUM support
     function applyStyle(){
         var borderColor = styleInitial.borderColor;
@@ -324,41 +325,22 @@ function View(params) {
             width = widthInitial;
         }
 
-        var layoutParams;
-        if(self.parent){
-            if(self.nativeObject.toString().indexOf("Relative") !== -1){
-                // @todo Will change after implementation of RelativeLayout
-                const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
-                layoutParams = new NativeRelativeLayout.LayoutParams(width,height);
-            }
-            else if(self.nativeObject.toString().indexOf("Linear") !== -1){
-                // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
-                const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-                layoutParams = new NativeLinearLayout.LayoutParams(width,height,100);
-            }
-            else if(self.nativeObject.toString().indexOf("Absolute") !== -1){
-                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-            }
-            else{
-                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
-                layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-            }
+        self.nativeObject.setLayoutParams(self.generateLayoutParams(width, height, leftPosition, topPosition, self.parent));
+        if(self.nativeInner){
+            // @todo should set layout params to the nativeInner. Its crashing
+            //self.nativeInner.setLayoutParams(self.generateLayoutParams(width, height, leftPosition, topPosition, self));
         }
-        else{
-            // @todo must change as ViewGroup.LayoutParams after implementation of page
-            //layoutParams = android.view.ViewGroup.LayoutParams(width,height);
-            layoutParams = new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
-        }
-        self.nativeObject.setLayoutParams(layoutParams);
-
+        
         // invalidating child positions
-        var id = self.id;
         if(self.childViews){
             for(var childViewKey in self.childViews){
-                // passing calculated height and width to child view
-                self.childViews[childViewKey].invalidatePosition(width, height);
+                if (typeof self.childViews[childViewKey] !== "function") {
+                    // passing calculated height and width to child view
+                    self.childViews[childViewKey].invalidatePosition(width, height);
+                }
             }
         }
+        
     }
 
     function setBackground(layerIndex){
@@ -370,6 +352,39 @@ function View(params) {
                 layerDrawable.setDrawableByLayerId(1,borderDrawable);
         }
         self.nativeObject.setBackground(layerDrawable);
+    }
+    
+    self.generateLayoutParams = function(width, height, leftPosition, topPosition, parentView){
+        if(parentView){
+            if(parentView.nativeObject.toString().indexOf("Relative") !== -1){
+                // @todo Will change after implementation of RelativeLayout
+                return new NativeRelativeLayout.LayoutParams(width,height);
+            }
+            else if(parentView.nativeObject.toString().indexOf("Linear") !== -1){
+                // @todo Will change after implementation of LinearLayout. Default weight is %100 percentage
+                return new NativeLinearLayout.LayoutParams(width,height,100);
+            }
+            else if(parentView.nativeObject.toString().indexOf("Absolute") !== -1){
+                return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+            else if(parentView.toString().indexOf("SwipeRefresh") !== -1){
+                return new NativeRecyclerView.LayoutParams(width,height);
+            }
+            else{
+                //layoutParams = new android.view.ViewGroup.LayoutParams(width,height);
+                return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+            }
+        }
+        else{
+            // Our page's root layout is AbsoluteLayout
+            return new NativeAbsoluteLayout.LayoutParams(width,height,leftPosition,topPosition);
+        }
+    }
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
     }
 }
 

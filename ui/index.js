@@ -15,8 +15,6 @@ module.exports = {
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
     Slider: require('./slider'),
-    ListView: require('./listview'),
-    ListViewItem: require('./listviewitem')
     ImageView: require('./imageview'),
     Image: require('./image'),
     ImageFillType: require('./imagefilltype'),
@@ -24,5 +22,7 @@ module.exports = {
     TextBox: require('./textbox'),
     KeyboardType: require('./keyboardtype'),
     KeyboardAppearance: require('./keyboardappearance'),
-    ActionKeyType: require('./actionkeytype')
+    ActionKeyType: require('./actionkeytype'),
+    ListView: require('./listview'),
+    ListViewItem: require('./listviewitem')
 };
