@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
-const ImageFillType = require('sf-core/ui/imagefilltype');
+const ImageFillType = require('nf-core/ui/imagefilltype');
 
 const UIViewContentMode = {
     scaleToFill : 0,

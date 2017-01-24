@@ -72,7 +72,7 @@ function AlertView (params) {
       });
 
     this.onDismiss = function(AlertView) {};
- 
+    // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];
