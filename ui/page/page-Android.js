@@ -271,7 +271,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarVisible = true;
+    var _headerbarVisible = false;
     Object.defineProperty(self.headerbar, 'visible', {
         get: function() {
             return activity.getSupportActionBar().isShowing();
