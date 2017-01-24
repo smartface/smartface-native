@@ -8,7 +8,7 @@ const MethodNames = {
         didDismissWithButtonIndex: "didDismissWithButtonIndex"
     }
     
-function AlertView () {
+function AlertView (params) {
 
     var self = this;
     
@@ -72,6 +72,12 @@ function AlertView () {
       });
 
     this.onDismiss = function(AlertView) {};
+ 
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };

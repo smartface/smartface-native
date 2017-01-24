@@ -18,7 +18,10 @@ const Label = extend(View)(
 		self.nativeObject.setEditable = false;	
 		self.nativeObject.setDelaysContentTouches = true;
 	    self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
-	    
+	    self.nativeObject.textContainer.maximumNumberOfLines = 0;
+    	self.nativeObject.textContainer.lineBreakMode = 0;
+    				
+    				
         Object.defineProperty(self, 'htmlText', {
             get:function() {
                 return self.nativeObject.htmlText;
@@ -45,15 +48,20 @@ const Label = extend(View)(
                 return self.nativeObject.font;
             },
             set:function(value) {
+                self.nativeObject.setEditable = true;
                 self.nativeObject.font = value;
+                self.nativeObject.setEditable = false;
             },
             enumerable: true
          });
 
-        var _multipleLine;
-        Object.defineProperty(self, 'multipleLine', {
-            get function() {
-                return _multipleLine;
+        Object.defineProperty(self, 'multiline', {
+            get: function() {
+               if(self.nativeObject.textContainer.maximumNumberOfLines == 0 && self.nativeObject.textContainer.lineBreakMode == 0){
+                    return true
+                }else{
+                    return false
+                }
             },
             set: function(value) {
             	if (value){
@@ -63,7 +71,6 @@ const Label = extend(View)(
             		self.nativeObject.textContainer.maximumNumberOfLines = 1;
     				self.nativeObject.textContainer.lineBreakMode = 4;
             	}
-    			_multipleLine = value
             },
             enumerable: true
         });
@@ -74,7 +81,9 @@ const Label = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.text = value;
+                self.nativeObject.setEditable = true;
                 self.nativeObject.textColor = _textColor;
+                self.nativeObject.setEditable = false;
             },
             enumerable: true
         });
@@ -84,7 +93,9 @@ const Label = extend(View)(
                 return self.nativeObject.textAlignmentNumber;
             },
             set: function(value) {
+                self.nativeObject.setEditable = true;
                 self.nativeObject.textAlignmentNumber = value;
+                self.nativeObject.setEditable = false;
             },
             enumerable: true
         });
@@ -96,7 +107,9 @@ const Label = extend(View)(
             },
             set: function(value) {
                 _textColor = value;
+                self.nativeObject.setEditable = true;
                 self.nativeObject.textColor = value
+                self.nativeObject.setEditable = false;
             },
             enumerable: true
         });

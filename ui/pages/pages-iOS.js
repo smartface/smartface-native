@@ -3,7 +3,7 @@ function Pages(params) {
 
     var rootViewController = params.rootPage.nativeObject;
     
-    UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
+   // UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
 
     self.nativeObject = new UINavigationController(rootViewController);
     self.nativeObject.setTranslucent(false);
@@ -15,7 +15,11 @@ function Pages(params) {
     }
 
     self.pop = function(animated){
-        self.nativeObject.pop(animated);
+          if (arguments.length == 0) {
+            self.nativeObject.pop(true);
+          } else if (arguments.length == 1) {
+            self.nativeObject.pop(animated);
+          }
     }
 }
 
