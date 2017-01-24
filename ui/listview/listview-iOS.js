@@ -19,10 +19,25 @@ const ListView = extend(View)(
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
         
+        self.createRowAction = function(title,action){
+            return UITableViewRowAction.create(title,action);
+        }
+        
         self.stopRefresh = function(){
             self.refreshControl.endRefreshing();
         }
         
+        Object.defineProperty(self, 'rowActions', {
+            get: function() {
+                return self.nativeObject.rowActions;
+            },
+            set: function(value) {
+                self.nativeObject.rowActions = value;
+            },
+            enumerable: true
+          });
+          
+          
         Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
                 self.refreshControl.addJSTarget(value,UIControlEvents.valueChanged);
