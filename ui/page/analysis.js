@@ -219,7 +219,7 @@ function Page(params) {
      * @readonly
      * @since 0.1
      */
-    this.headerbar.height = 30;
+    this.headerbar.height;
     
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
