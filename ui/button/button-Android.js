@@ -191,7 +191,7 @@ const Button = extend(Label)(
         
         self.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
             onClick: function(view) {
-                onPressCallback && onPressCallback();
+                    onPressCallback && onPressCallback.apply(self);
             }
         }));
         
