@@ -304,29 +304,6 @@ function View(params) {
      * @since 0.1
      */
     this.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
-    
-    /**
-     * Gets/sets padding of view. Setting number as pixels.
-     *
-     *     @example
-     *     const View = require('sf-core/ui/view');
-     *     var myView = new View();
-     *     var padding = {
-     *         left: 15,
-     *         top: 10,
-     *         right: 15,
-     *         bottom: 10
-     *     };
-     *     myView.padding = padding;
-     *
-     * @property {Object} padding
-     * @param {Number} [padding.left]
-     * @param {Number} [padding.top]
-     * @param {Number} [padding.start]
-     * @param {Number} [padding.bottom] Padding bottom value
-     * @since 0.1
-     */
-    this.padding = {top: 0, bottom: 0, start: 0, end: 0};
 
     /**
      * This method allows getting view to the front.
