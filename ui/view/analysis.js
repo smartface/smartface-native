@@ -3,7 +3,7 @@
  * @since 0.1
  *
  * View class represents a rectangular area drawable to user interface. This class
- * is base of all UI classes.
+ * is base of all UI classes. 
  * 
  *     @example
  *     const View = require('sf-core/ui/view');
@@ -32,13 +32,13 @@ function View(params) {
     
     /**
      * Gets/sets background color of view. It allows setting background 
-     * color with string or UI.Color properties.
+     * color with UI.Color instance or mapping from states to colors.
      * 
-     * @property {Color} backgroundColor 
+     * @property {Color} [backgroundColor = UI.Color.BLACK]
      * @member UI.View
      * @since 0.1
      */ 
-    this.backgroundColor = "#FFFFFF";
+    this.backgroundColor = UI.Color.BLACK;
 
     /**
      * Gets/sets height of view. Setting number (as pixel) and string 

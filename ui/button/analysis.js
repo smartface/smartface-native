@@ -42,7 +42,7 @@ const Button = extend(View)(
         this.font = null;
         
         /**
-         * Gets/sets text color of button. Assign a color or a list of button based on states.
+         * Gets/sets text color of button. Assign a color or a mapping from states to colors.
          * 
          * @property {UI.Color} [textColor = UI.Color.BLACK] 
          * @since 0.1
@@ -119,7 +119,7 @@ const Button = extend(View)(
         });
         
         /**
-         * Gets/sets background image. Assign an image or a list of button based on states. 
+         * Gets/sets background image. Assign an image or a mapping from states to images.
          * 
          *     @example
          *     const Button = require('sf-core/ui/button');
