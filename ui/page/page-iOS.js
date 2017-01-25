@@ -4,12 +4,17 @@ function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
-
+    
     var pageView = new AbsoluteContainer();
     self.nativeObject.onViewLoad  = function(){
         pageView.nativeObject.backgroundColor = UIColor.whiteColor();
         return pageView.nativeObject;
     }
+
+    Object.defineProperty(self, 'layout', {
+      value: pageView,
+      writable: false
+    });
 
     Object.defineProperty(self, 'onLoad', {
         get: function() {
@@ -70,11 +75,15 @@ function Page(params) {
         enumerable: true
     });
         
+    //Deprecated
     self.add = function(object){
+        console.log("Page add function deprecated");
         pageView.addChild(object);
     }
 
+    //Deprecated
     self.remove = function(object){
+        console.log("Page remove function deprecated");
         object.nativeObject.removeFromSuperview();
     }
 
