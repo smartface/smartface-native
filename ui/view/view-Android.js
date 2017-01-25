@@ -1,7 +1,6 @@
 const TypeUtil = require("nf-core/util/type");
 const Style = require('nf-core/ui/style');
-const AndroidUnitConverter = require("sf-core/util/Android/unitconverter.js");
-const AbsoluteLayout = require("sf-core/ui/absolutelayout");
+const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
 const NativeView = requireClass("android.view.View");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
@@ -163,22 +162,6 @@ function View(params) {
         bottom: 0
     };
     
-    Object.defineProperty(this, 'padding', {
-        get: function() {
-            return _initialPadding;
-        },
-        set: function(padding) {
-            _initialPadding = {
-                start : padding.start ? padding.start : _initialPadding.start,
-                end : padding.end ? padding.end : _initialPadding.end,
-                top : padding.top ? padding.top : _initialPadding.top,
-                bottom: padding.bottom ? padding.bottom : _initialPadding.bottom
-            };
-            updatePadding();
-        },
-        enumerable: true
-    });
-
     function updatePadding() {
         NativeViewCompat.setPaddingRelative(  self.nativeObject, 
             AndroidUnitConverter.dpToPixel(activity, _initialPadding.start + styleInitial.borderWidth), 
@@ -232,70 +215,82 @@ function View(params) {
         self.nativeObject.setBackground(layerDrawable);
     }
     
+    self.generateLayoutParams = function(){
+        setLayoutParam();
+    };
+    
     // @todo Need check for performance
     function setLayoutParam(changedKey){
         // This method call is all layout params is number of view added to parent
         var layoutParams = self.nativeObject.getLayoutParams();
         if(changedKey){
-            if(self.parent && (self.parent instanceof AbsoluteLayout)){
+            if(self.isRoot || (self.parent && (self.parent.nativeObject.toString().indexOf("AbsoluteLayout") != -1 ))){
                 if(!layoutParams){
-                    layoutParams = new NativeAbsoluteLayout.LayoutParams(0,0,0,0);
+                    layoutParams = new NativeAbsoluteLayout.LayoutParams(-2,-2,0,0);
                 }
                 switch (changedKey){
-                    case "width": layoutParams.width = _width; break;
-                    case "height": layoutParams.height = _height; break;
-                    case "top": layoutParams.top = _top; break;
-                    case "left": layoutParams.left = _left; break;
+                    case "width"    : layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); break;
+                    case "height"   : layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); break;
+                    case "top"      : layoutParams.y = AndroidUnitConverter.dpToPixel(activity, _top); break;
+                    case "left"     : layoutParams.x = AndroidUnitConverter.dpToPixel(activity, _left); break;
                 }
             }
             else{
                 if(!layoutParams){
-                    layoutParams = new NativeFlexboxLayout.LayoutParams(0,0);
+                    layoutParams = new NativeFlexboxLayout.LayoutParams(-2,-2);
                 }
                 switch (changedKey){
-                    case "order": layoutParams.order = _order; break;
-                    case "flexGrow": layoutParams.flexGrow = _flexGrow; break;
-                    case "flexShrink": layoutParams.flexShrink = _flexShrink; break;
-                    case "alignSelf": layoutParams.alignSelf = _alignSelf; break;
-                    case "flexBasisPercent": layoutParams.flexBasisPercent = _flexBasisPercent; break;
-                    case "width": layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); break;
-                    case "height": layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); break;
-                    case "topMargin": layoutParams.topMargin = AndroidUnitConverter.dpToPixel(activity, _topMargin); break;
-                    case "startMargin": NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, AndroidUnitConverter.dpToPixel(activity, _startMargin)); break;
-                    case "endMargin": NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, AndroidUnitConverter.dpToPixel(activity, _endMargin)); break;
-                    case "bottomMargin": layoutParams.bottomMargin = AndroidUnitConverter.dpToPixel(activity, _bottomMargin); break;
-                    case "minWidth": layoutParams.minWidth = AndroidUnitConverter.dpToPixel(activity, _minWidth); break;
-                    case "minHeight": layoutParams.minHeight = AndroidUnitConverter.dpToPixel(activity, _minHeight); break;
-                    case "maxWidth": layoutParams.maxWidth = AndroidUnitConverter.dpToPixel(activity, _maxWidth); break;
-                    case "maxHeight": layoutParams.maxHeight = AndroidUnitConverter.dpToPixel(activity, _maxHeight); break;
-                    case "wrapBefore": layoutParams.wrapBefore = _wrapBefore; break;
+                    case "order"        : layoutParams.order = _order; break;
+                    case "flexGrow"     : layoutParams.flexGrow = _flexGrow; break;
+                    case "flexShrink"   : layoutParams.flexShrink = _flexShrink; break;
+                    case "alignSelf"    : layoutParams.alignSelf = _alignSelf; break;
+                    case "flexBasis"    : layoutParams.flexBasisPercent = _flexBasis; break;
+                    case "width"        : if(_width){ layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width);} break;
+                    case "height"       : if(_height){ layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height);} break;
+                    case "topMargin"    : layoutParams.topMargin = AndroidUnitConverter.dpToPixel(activity, _topMargin); break;
+                    case "startMargin"  : NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, AndroidUnitConverter.dpToPixel(activity, _startMargin)); break;
+                    case "endMargin"    : NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, AndroidUnitConverter.dpToPixel(activity, _endMargin)); break;
+                    case "bottomMargin" : layoutParams.bottomMargin = AndroidUnitConverter.dpToPixel(activity, _bottomMargin); break;
+                    case "minWidth"     : layoutParams.minWidth = AndroidUnitConverter.dpToPixel(activity, _minWidth); break;
+                    case "minHeight"    : layoutParams.minHeight = AndroidUnitConverter.dpToPixel(activity, _minHeight); break;
+                    case "maxWidth"     : layoutParams.maxWidth = AndroidUnitConverter.dpToPixel(activity, _maxWidth); break;
+                    case "maxHeight"    : layoutParams.maxHeight = AndroidUnitConverter.dpToPixel(activity, _maxHeight); break;
+                    case "wrapBefore"   : layoutParams.wrapBefore = _wrapBefore; break;
                 }
             }
         }
         else{
-            if(self.parent && (self.parent instanceof AbsoluteLayout)){
-                if(!layoutParams || layoutParams.toString().indexOf("AbsoluteLayout") == -1){
-                    layoutParams = new NativeAbsoluteLayout.LayoutParams(0,0,0,0);
+            if(self.isRoot || (self.parent && (self.parent.nativeObject.toString().indexOf("AbsoluteLayout") != -1 ))){
+                if(!layoutParams || layoutParams.toString().indexOf("AbsoluteLayout") != -1){
+                    layoutParams = new NativeAbsoluteLayout.LayoutParams(-2,-2,0,0);
                 }
-                layoutParams.width = _width; 
-                layoutParams.height = _height; 
-                layoutParams.top = _top; 
-                layoutParams.left = _left;
+                if(_width)
+                    layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); 
+                if(_height)
+                    layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); 
+                if(_top)
+                    layoutParams.y = AndroidUnitConverter.dpToPixel(activity, _top); 
+                if(_left)
+                    layoutParams.x = AndroidUnitConverter.dpToPixel(activity,  _left);
             }
             else{
-                if(!layoutParams || layoutParams.toString().indexOf("Flexbox") == -1){
-                    layoutParams = new NativeFlexboxLayout.LayoutParams(0,0);
+                if(!layoutParams){
+                    layoutParams = new NativeFlexboxLayout.LayoutParams(-2,-2);
                 }
+ 
+                var dpStartMargin = AndroidUnitConverter.dpToPixel(activity, _startMargin);
+                var dpEndMargin = AndroidUnitConverter.dpToPixel(activity, _endMargin);
+                
                 layoutParams.order = _order; 
                 layoutParams.flexGrow = _flexGrow;
                 layoutParams.flexShrink = _flexShrink; 
                 layoutParams.alignSelf = _alignSelf; 
-                layoutParams.flexBasisPercent = _flexBasisPercent; 
+                layoutParams.flexBasisPercent = _flexBasis; 
                 layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); 
                 layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); 
                 layoutParams.topMargin = AndroidUnitConverter.dpToPixel(activity, _topMargin); 
-                NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, AndroidUnitConverter.dpToPixel(activity, _startMargin)); 
-                NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, AndroidUnitConverter.dpToPixel(activity, _endMargin)); 
+                NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, dpStartMargin); 
+                NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, dpEndMargin); 
                 layoutParams.bottomMargin = AndroidUnitConverter.dpToPixel(activity, _bottomMargin); 
                 layoutParams.minWidth = AndroidUnitConverter.dpToPixel(activity, _minWidth); 
                 layoutParams.minHeight = AndroidUnitConverter.dpToPixel(activity, _minHeight); 
@@ -307,7 +302,7 @@ function View(params) {
         self.nativeObject.setLayoutParams(layoutParams);
     }
     
-    var _order = 0;
+    var _order = 1;
     Object.defineProperty(this, 'order', {
         get: function() {
             return _order;
@@ -319,7 +314,7 @@ function View(params) {
         enumerable: true
     });
      
-    var _flexGrow = 0;
+    var _flexGrow = 0.0;
     Object.defineProperty(this, 'flexGrow', {
         get: function() {
             return _flexGrow;
@@ -331,7 +326,7 @@ function View(params) {
         enumerable: true
     });
      
-    var _flexShrink = 0;
+    var _flexShrink = 1.0;
     Object.defineProperty(this, 'flexShrink', {
         get: function() {
             return _flexShrink;
@@ -355,19 +350,19 @@ function View(params) {
         enumerable: true
     });
      
-    var _flexBasisPercent = -1;
-    Object.defineProperty(this, 'flexBasisPercent', {
+    var _flexBasis = -1;
+    Object.defineProperty(this, 'flexBasis', {
         get: function() {
-            return _flexBasisPercent;
+            return _flexBasis;
         },
-        set: function(flexBasisPercent) {
-            _flexBasisPercent = flexBasisPercent;
-            setLayoutParam("flexBasisPercent");
+        set: function(flexBasis) {
+            _flexBasis = flexBasis;
+            setLayoutParam("flexBasis");
         },
         enumerable: true
     });
      
-    var _width = 0;
+    var _width = 120;
     Object.defineProperty(this, 'width', {
         get: function() {
             return _width;
@@ -379,7 +374,7 @@ function View(params) {
         enumerable: true
     });
      
-    var _height = 0;
+    var _height = 80;
     Object.defineProperty(this, 'height', {
         get: function() {
             return _height;
@@ -535,7 +530,7 @@ function View(params) {
         enumerable: true
     });
      
-    var _maxWidth = 0;
+    var _maxWidth = 4793490;
     Object.defineProperty(this, 'maxWidth', {
         get: function() {
             return _maxWidth;
@@ -547,7 +542,7 @@ function View(params) {
         enumerable: true
     });
      
-    var _maxHeight = 0;
+    var _maxHeight = 4793490;
     Object.defineProperty(this, 'maxHeight', {
         get: function() {
             return _maxHeight;

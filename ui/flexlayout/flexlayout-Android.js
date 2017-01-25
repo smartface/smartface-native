@@ -3,12 +3,6 @@ const extend = require('js-base/core/extend');
 
 const NativeFlexboxLayout = requireClass("com.google.android.flexbox.FlexboxLayout");
 
-// AlignContent.FLEX_START : 0
-// AlignContent.ROW_REVERSE : 1
-// AlignContent.CENTER : 2
-// AlignContent.STRETCH : 5
-const AlignContentDictionary = [0, 1, 2, 5];
-
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
         var self = this;
@@ -40,11 +34,10 @@ const FlexLayout = extend(ViewGroup)(
         // alignContent values same as native
         Object.defineProperty(this, 'alignContent', {
             get: function() {
-                var _alignContent = self.nativeObject.getAlignContent();
-                return _alignContent == 5 ? 3 : _alignContent;
+                return self.nativeObject.getAlignContent();
             },
             set: function(alignContent) {
-                self.nativeObject.setAlignContent(AlignContentDictionary[alignContent]);
+                self.nativeObject.setAlignContent(alignContent);
             },
             enumerable: true
         });
@@ -77,7 +70,7 @@ const FlexLayout = extend(ViewGroup)(
         this.justifyContent = FlexLayout.JustifyContent.FLEX_START;
         this.alignContent = FlexLayout.AlignContent.STRETCH;
         this.alignItems = FlexLayout.AlignItems.STRETCH;
-        this.flexWrap = FlexLayout.FlexWrap.NO_WRAP;
+        this.flexWrap = FlexLayout.FlexWrap.NOWRAP;
         
         // Assign parameters given in constructor
         if (params) {
@@ -142,7 +135,7 @@ Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
     writable: false
 });
 Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
-    value: 3,
+    value: 5,
     writable: false
 });
 

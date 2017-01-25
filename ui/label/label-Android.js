@@ -2,7 +2,7 @@ const View = require('../view');
 const TextAlignment = require("nf-core/ui/textalignment");
 const TypeUtil = require("nf-core/util/type");
 const extend = require('js-base/core/extend');
-const AndroidUnitConverter = require("sf-core/util/Android/unitconverter.js");
+const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeHtml = requireClass("android.text.Html");
