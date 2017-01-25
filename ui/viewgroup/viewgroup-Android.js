@@ -1,5 +1,5 @@
 const View = require('../view');
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("nf-core/util/type");
 const extend = require('js-base/core/extend');
 
 const ViewGroup = extend(View)(

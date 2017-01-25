@@ -1,9 +1,9 @@
-const View = require('sf-core/ui/view');
+const View = require('nf-core/ui/view');
 const extend = require('js-base/core/extend');
 
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-const Color = require('sf-core/ui/color');
+const Color = require('nf-core/ui/color');
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {

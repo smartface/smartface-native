@@ -1,4 +1,4 @@
-const AbsoluteContainer = require('sf-core/ui/absolutelayout');
+const AbsoluteContainer = require('nf-core/ui/absolutelayout');
 
 function Page(params) {
     var self = this;

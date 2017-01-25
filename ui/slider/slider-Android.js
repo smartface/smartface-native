@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const View   = require('sf-core/ui/view');
-const Color  = require('sf-core/ui/color');
+const View   = require('nf-core/ui/view');
+const Color  = require('nf-core/ui/color');
 
 const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;

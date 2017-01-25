@@ -1,6 +1,6 @@
 const View = require('../view');
-const TextAlignment = require("sf-core/ui/textalignment");
-const TypeUtil = require("sf-core/util/type");
+const TextAlignment = require("nf-core/ui/textalignment");
+const TypeUtil = require("nf-core/util/type");
 const extend = require('js-base/core/extend');
 
 const NativeScrollView = requireClass("android.widget.ScrollView");

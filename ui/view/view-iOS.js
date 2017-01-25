@@ -1,4 +1,4 @@
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("nf-core/util/type");
 
 function View(params) {
     
