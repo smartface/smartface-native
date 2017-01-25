@@ -35,7 +35,7 @@ const FlexLayout = extend(ViewGroup)(
 
 // YG Enums are inherited from UIView
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.FlexDirection = {};
+FlexLayout.FlexDirection = {};
 
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
     get: function() {
@@ -62,7 +62,7 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
     writable: false
 });
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.JustifyContent = {};
+FlexLayout.JustifyContent = {};
 
 Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
     get: function() {
@@ -95,7 +95,7 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
     writable: false
 });
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.AlignContent = {};
+FlexLayout.AlignContent = {};
 
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
     get: function() {
@@ -122,7 +122,7 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
     writable: false
 });
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.AlignItems = {};
+FlexLayout.AlignItems = {};
 
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
     get: function() {
@@ -155,7 +155,7 @@ Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
     writable: false
 });
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.FlexWrap = {};
+FlexLayout.FlexWrap = {};
 
 Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
     get: function() {
@@ -170,7 +170,7 @@ Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
     writable: false
 });
 ////////////////////////////////////////////////////////////////////////
-const FlexLayout.AlignSelf = {};
+FlexLayout.AlignSelf = {};
 
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
     get: function() {
