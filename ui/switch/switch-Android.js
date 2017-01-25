@@ -1,5 +1,5 @@
-const View = require('sf-core/ui/view');
-const Color = require("sf-core/ui/color");
+const View = require('nf-core/ui/view');
+const Color = require("nf-core/ui/color");
 const extend = require('js-base/core/extend');
 
 const NativeSwitch = requireClass("android.widget.Switch");

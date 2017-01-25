@@ -3,7 +3,7 @@ const extend        = require('js-base/core/extend');
 const Color         = require('../color');
 const Label         = require('../label');
 const ListViewItem  = require('../listviewitem');
-const TypeUtil      = require("sf-core/util/type");
+const TypeUtil      = require("nf-core/util/type");
 
 const SwipeRefreshLayout    = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const RecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
