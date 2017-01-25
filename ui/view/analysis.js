@@ -39,6 +39,24 @@ function View(params) {
      * @since 0.1
      */ 
     this.backgroundColor = "#FFFFFF";
+    
+    /**
+     * Sets/gets border color of bounded view.
+     * 
+     * @property {Color} [borderColor = UI.Color.BLACK]
+     * @since 0.1
+     */
+    this.borderColor = UI.Color.BLACK;
+    
+    
+    /**
+     * Sets/gets border thickness of bounded view. Accepts unsigned
+     * numbers, 0 means no border.
+     * 
+     * @property {Number} borderWidth 
+     * @since 0.1
+     */
+    this.borderWidth = 0;
 
     /**
      * Gets/sets id of view. Should be unique number for all objects
@@ -50,15 +68,6 @@ function View(params) {
      */
     this.id = 5421;
 
-    /**
-     * Gets/sets style of view. 
-     * 
-     * @property {Style} style
-     * @member UI.View
-     * @since 0.1
-     */
-    this.style = {};
-    
     /**
      * Gets/sets visibility of view. It is set to true as default.
      * 
@@ -348,6 +357,16 @@ function View(params) {
      * @since 0.1
      */
     this.getParent = function(){};
+    
+    /**
+     * Gets/sets style of view. 
+     * 
+     * @property {Style} style
+     * @member UI.View
+     * @since 0.1
+     * @removed 0.1
+     */
+    this.style = {};
 
     /**
      * This method returns all position values in one object.

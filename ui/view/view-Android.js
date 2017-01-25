@@ -9,7 +9,7 @@ const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawabl
 const NativeColor = requireClass("android.graphics.Color");
 const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
-const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
+
 const NativeFlexboxLayout = requireClass("com.google.android.flexbox.FlexboxLayout");
 const NativeMarginLayoutParamsCompat = requireClass("android.support.v4.view.MarginLayoutParamsCompat");
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
@@ -32,6 +32,7 @@ function View(params) {
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
     layerDrawable.setDrawableByLayerId(1,borderDrawable);
     self.nativeObject.setBackground(layerDrawable);
+    
 
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -86,6 +87,31 @@ function View(params) {
         enumerable: true
     });
 
+    var _borderColor = null;
+    Object.defineProperty(this, 'borderColor', {
+        get: function() {
+            return _borderColor;
+        },
+        set: function(value) {
+            _borderColor = value;
+            applyStyle();
+        },
+        enumerable: true
+    });
+    
+    var _borderWidth = 0;
+    Object.defineProperty(this, 'borderWidth', {
+        get: function() {
+            return _borderWidth;
+        },
+        set: function(value) {
+            _borderWidth = value;
+            applyStyle();
+            updatePadding();
+        },
+        enumerable: true
+    });
+
     this.getPosition = function(){
         return  {
             width: AndroidUnitConverter.pixelToDp(activity, self.width), 
@@ -135,25 +161,7 @@ function View(params) {
             }
             return false;
         }
-    }));
-      
-    var styleInitial = new Style({borderColor:"#00000000",borderWidth:0});
-    Object.defineProperty(this, 'style', {
-        get: function() {
-            return styleInitial;
-        },
-        set: function(style) {
-            if (style !== undefined) {
-                styleInitial = style;
-                applyStyle();
-                style.addChangeHandler(function(propertyName, value){
-                    applyStyle();
-                });
-                updatePadding();
-            }
-        },
-        enumerable: true
-    });
+    }));      
 
     var _initialPadding = {
         start  : 0,
@@ -164,10 +172,10 @@ function View(params) {
     
     function updatePadding() {
         NativeViewCompat.setPaddingRelative(  self.nativeObject, 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.start + styleInitial.borderWidth), 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.end + styleInitial.borderWidth),
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.top + styleInitial.borderWidth), 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.bottom + styleInitial.borderWidth) );
+            AndroidUnitConverter.dpToPixel(activity, _initialPadding.start + _borderWidth), 
+            AndroidUnitConverter.dpToPixel(activity, _initialPadding.end + _borderWidth),
+            AndroidUnitConverter.dpToPixel(activity, _initialPadding.top + _borderWidth), 
+            AndroidUnitConverter.dpToPixel(activity, _initialPadding.bottom + _borderWidth) );
     };
 
     this.bringToFront = function(){
@@ -180,27 +188,9 @@ function View(params) {
     
     // @todo no ENUM support
     function applyStyle(){
-        var borderColor = styleInitial.borderColor;
-        if(!TypeUtil.isNumeric(styleInitial.borderColor)){
-            borderColor = NativeColor.parseColor(styleInitial.borderColor);
-        }
-        // android.graphics.Color.TRANSPARENT=0
         borderDrawable.setColor(0);
-        borderDrawable.setStroke(styleInitial.borderWidth, borderColor);
-        // var strokePaint = borderDrawable.getPaint();
-        // strokePaint.setAntiAlias (true);
-
-        // if (styleInitial.borderWidth > 0) {
-        //     strokePaint.setStrokeWidth (styleInitial.borderWidth);
-        //     strokePaint.setColor (borderColor);
-        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
-
-        // } else {
-        //     var backgroundColorCurrent = self.backgroundColorDrawable.getColor();
-        //     strokePaint.setColor (backgroundColorCurrent);
-        //     //strokePaint.setStyle (android.graphics.Paint.Style.STROKE);
-        //     strokePaint.setAlpha (0);
-        // }
+        borderDrawable.setStroke(_borderWidth, _borderColor);
+        
         setBackground(1);
     }
 
@@ -302,6 +292,9 @@ function View(params) {
         self.nativeObject.setLayoutParams(layoutParams);
     }
     
+    // Default values
+    self.borderColor = Color.BLACK;
+
     var _order = 1;
     Object.defineProperty(this, 'order', {
         get: function() {
