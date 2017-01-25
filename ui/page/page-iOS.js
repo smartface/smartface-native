@@ -4,7 +4,7 @@ function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
-
+    
     var pageView = new AbsoluteContainer();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
     self.nativeObject.onViewLoad  = function(){
@@ -78,11 +78,15 @@ function Page(params) {
         enumerable: true
     });
         
+    //Deprecated
     self.add = function(object){
+        console.log("Page add function deprecated");
         pageView.addChild(object);
     }
 
+    //Deprecated
     self.remove = function(object){
+        console.log("Page remove function deprecated");
         object.nativeObject.removeFromSuperview();
     }
 
