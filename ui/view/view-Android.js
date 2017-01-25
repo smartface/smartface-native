@@ -293,7 +293,7 @@ function View(params) {
     }
     
     // Default values
-    self.borderColor = Color.BLACK;
+    self.borderColor = NativeColor.BLACK;
 
     var _order = 1;
     Object.defineProperty(this, 'order', {
