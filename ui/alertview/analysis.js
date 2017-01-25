@@ -1,18 +1,36 @@
 /** @enum {Number} UI.AlertView.AlertButtonType 
  * @since 0.1
- * AlertButtonType is an enum. It defines button types when they 
- * display on an alert window. There are three types of action button.
+ * AlertButtonType is used to indicate the behaviors of buttons in a UI.AlertView visually.
  * 
  *     @example
- *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
- *     var myAlertButtonType = AlertButtonType.NEUTRAL;
+ *     const AlertView = require('nf-core/ui/alertview').AlertView;
+ *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
+ *     
+ *     var myAlertView = new AlertView({
+ *         title: "Alert Title",
+ *         message: "Alert Message"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertButtonType.NEUTRAL, 
+ *         text: "Ignore", 
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertButtonType.NEGATIVE, 
+ *         text: "Cancel"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertButtonType.POSITIVE, 
+ *         text: "Okay"
+ *     });
+ *     
+ *     myAlertView.show();
  */
 var AlertButtonType = { };
 
 /**
  * @property {Number} POSITIVE
- * Accept the action and continue.
  * @static
+ * @readonly
  * @since 0.1
  */
 AlertButtonType.POSITIVE = 0;
@@ -20,17 +38,16 @@ AlertButtonType.POSITIVE = 0;
 /**
  * @property {Number} NEUTRAL
  * @static
+ * @readonly
  * @since 0.1
- * Don't accept the action but don't cancel.  
- * It can be used with the action of "Ask me later".
  */
 AlertButtonType.NEUTRAL = 1;
 
 /**
  * @property {Number} NEGATIVE
  * @static
+ * @readonly
  * @since 0.1
- * Cancel the action.
  */
 AlertButtonType.NEGATIVE = 2;
 
@@ -118,7 +135,7 @@ function AlertView () {
      *     });
      * 
      * @param {Object} params Object describing alert view properties
-     * @param {Number} [params.index] Index value
+     * @param {UI.AlertView.AlertButtonType} [params.index] Alert view button type
      * @param {String} [params.text] Alert view text 
      * @param {Function} [params.onClick] Perform action on click
      * @method addButton
