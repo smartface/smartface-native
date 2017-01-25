@@ -42,7 +42,7 @@ const Button = extend(View)(
         this.font = null;
         
         /**
-         * Gets/sets text color of button.
+         * Gets/sets text color of button. Assign a color or a list of button based on states.
          * 
          * @property {UI.Color} [textColor = UI.Color.BLACK] 
          * @since 0.1
@@ -81,6 +81,7 @@ const Button = extend(View)(
          *     }); 
          * @since 0.1
          * @property {StateList} textColors 
+         * @deprecated 0.1 Use UI.Button#textColor instead.
          */
         this.textColors = new StateList( {
             normal: Color.BLACK, 
@@ -107,6 +108,7 @@ const Button = extend(View)(
          *     });
          * @since 0.1
          * @property {StateList} backgroundColors 
+         * @deprecated 0.1 Use UI.View#backgroundColor instead.
          */
         this.backgroundColors = new StateList({          
             normal: Color.LIGHTGRAY, 
@@ -115,6 +117,36 @@ const Button = extend(View)(
             pressed: Color.DARKGRAY, 
             focused: Color.DARKGRAY  
         });
+        
+        /**
+         * Gets/sets background image. Assign an image or a list of button based on states. 
+         * 
+         *     @example
+         *     const Button = require('sf-core/ui/button');
+         *     const StateList = require('sf-core/util/statelist');
+         *     var myButton = new Button();
+         *     myButton.backgroundImage = {
+         *         normal: "assets://normal.png",
+         *         disabled: "assets://disabled.png",
+         *         selected:"assets://selected.png",
+         *         pressed: "assets://pressed.png",
+         *         focused: "assets://focused.png"
+         *     };   
+         *     myButton.text = "First button text";
+         * 
+         *     var myButton2 = new Button();
+         *     myButton2.backgroundImage = "assets://normal.png";
+         *     myButton2.text = "Second button text";
+         * @since 0.1
+         * @property {Object} backgroundImage
+         */
+        this.backgroundImage = {          
+            normal: "", 
+            disabled: "", 
+            selected: "", 
+            pressed: "", 
+            focused: ""
+        };
         
         /**
          * Gets/sets background image list of button based on states. 
@@ -133,6 +165,7 @@ const Button = extend(View)(
          *     myButton.text = "My button text";
          * @since 0.1
          * @property {StateList} backgroundImages 
+         * @deprecated 0.1 Use UI.Button#backgroundImage instead.
          */
         this.backgroundImages = new StateList({          
             normal: "", 

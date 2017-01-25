@@ -1,6 +1,8 @@
 const View = require('../view');
+const Color = require("sf-core/ui/color");
 const TextAlignment = require("sf-core/ui/textalignment");
 const TypeUtil = require("sf-core/util/type");
+const State = require("sf-core/ui/state");
 const extend = require('js-base/core/extend');
 
 const NativeScrollView = requireClass("android.widget.ScrollView");
@@ -8,7 +10,11 @@ const NativeTextView = requireClass("android.widget.TextView");
 const NativeViewGroup = requireClass("android.view.ViewGroup");
 const NativeHtml = requireClass("android.text.Html");
 const NativeColor = requireClass("android.graphics.Color");
+const NativeR = requireClass("android.R");
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
+const DEFAULT_COLOR = Color.BLACK;
+        
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
@@ -156,14 +162,23 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return (self.nativeInner ? self.nativeInner : self.nativeObject).getCurrentTextColor();
+                var nativeObject = (self.nativeInner ? self.nativeInner : self.nativeObject);
+                if(typeof(self.textColor) === "number") {
+                    return nativeObject.getCurrentTextColor();
+                }
+                return createObjectFromColorStateList(nativeObject.getTextColors());
             },
             set: function(textColor) {
-                var colorParam = textColor;
-                if(!TypeUtil.isNumeric(textColor)){
-                    colorParam = NativeColor.parseColor(textColor);
+                var nativeObject = (self.nativeInner ? self.nativeInner : self.nativeObject);
+                console.log("typeof(textColor) === number " + (typeof(textColor) === "number"));
+                if(typeof(textColor) === "number") {
+                    nativeObject.setTextColor(textColor);
                 }
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setTextColor(colorParam);
+                else {
+                    console.log("textColor is a state list.");
+                    var textColorStateListDrawable = createColorStateList(textColor);
+                    (self.nativeInner ? self.nativeInner : self.nativeObject).setTextColor(textColorStateListDrawable);
+                }
             },
             enumerable: true
         });
@@ -177,6 +192,53 @@ const Label = extend(View)(
             },
             enumerable: true
         });
+        
+        function createObjectFromColorStateList(textColors) {
+            var colors = {};
+            console.log("Normal " + textColors.getColorForState(State.STATE_NORMAL, DEFAULT_COLOR));
+            colors.normal = textColors.getColorForState(State.STATE_NORMAL, DEFAULT_COLOR);
+            console.log("Disabled " + textColors.getColorForState(State.STATE_DISABLED, DEFAULT_COLOR));
+            colors.disabled = textColors.getColorForState(State.STATE_DISABLED, DEFAULT_COLOR);
+            console.log("Selected " + textColors.getColorForState(State.STATE_SELECTED, DEFAULT_COLOR));
+            colors.selected = textColors.getColorForState(State.STATE_SELECTED, DEFAULT_COLOR);
+            console.log("Pressed " + textColors.getColorForState(State.STATE_PRESSED, DEFAULT_COLOR));
+            colors.pressed = textColors.getColorForState(State.STATE_PRESSED, DEFAULT_COLOR);
+            console.log("Focused " + textColors.getColorForState(State.STATE_FOCUSED, DEFAULT_COLOR));
+            colors.focused = textColors.getColorForState(State.STATE_FOCUSED, DEFAULT_COLOR);
+            return colors;
+            // int [] normal = {
+            //         android.R.attr.State.STATE_enabled,
+            //         -android.R.attr.State.STATE_pressed,
+            //         -android.R.attr.State.STATE_selected
+            // };
+            // Log.i("ColorStateList", "" + thelist.getColorForState(normal, Color.CYAN));
+        }
+        
+        function createColorStateList(textColors) {
+            var statesSet = [];
+            var colorsSets = [];
+            if(textColors.normal){
+                statesSet.push(State.STATE_NORMAL);
+                colorsSets.push(textColors.normal);
+            }
+            if(textColors.disabled){
+                statesSet.push(State.STATE_DISABLED);
+                colorsSets.push(textColors.disabled);
+            }
+            if(textColors.selected){
+                statesSet.push(State.STATE_SELECTED);
+                colorsSets.push(textColors.selected);
+            }
+            if(textColors.pressed){
+                statesSet.push(State.STATE_PRESSED);
+                colorsSets.push(textColors.pressed);
+            }
+            if(textColors.focused){
+                statesSet.push(State.STATE_FOCUSED);
+                colorsSets.push(textColors.focused);
+            }
+            return (new NativeColorStateList (statesSet, colorsSets));
+        }
         
         // Assign parameters given in constructor
         if (params) {

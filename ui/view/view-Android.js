@@ -1,5 +1,7 @@
 const TypeUtil = require("sf-core/util/type");
 const Style = require('sf-core/ui/style');
+const State = require("sf-core/ui/state");
+const Color = require("sf-core/ui/color");
 
 const NativeView = requireClass("android.view.View");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
@@ -10,8 +12,10 @@ const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-const NativeRecyclerView          = requireClass("android.support.v7.widget.RecyclerView");
-
+const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
+const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeR = requireClass("android.R");
+     
 function View(params) {
     var self = this;
     if(!self.nativeObject){
@@ -40,17 +44,50 @@ function View(params) {
         enumerable: true
     });
     
+    var _backgroundColors = {
+        normal: Color.WHITE,
+        disabled: Color.WHITE,
+        selected: Color.WHITE,
+        pressed: Color.WHITE,
+        focused: Color.WHITE
+    };
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return backgroundColorDrawable.getColor();
+            if(typeof(self.backgroundColor) === "number") {
+                return backgroundColorDrawable.getColor();
+            }
+            return _backgroundColors;
         },
         set: function(backgroundColor) {
-            var colorParam = backgroundColor;
-            if(!TypeUtil.isNumeric(backgroundColor)){
-                colorParam = NativeColor.parseColor(backgroundColor);
+            if(typeof(backgroundColor) === "number") {
+                backgroundColorDrawable.setColor(backgroundColor);
+                setBackground(0);
             }
-            backgroundColorDrawable.setColor(colorParam);
-            setBackground(0);
+            else {
+                _backgroundColors = backgroundColor;
+                var stateListSet = new NativeStateListDrawable();
+                if(backgroundColor.normal){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.normal);
+                    stateListSet.addState(State.STATE_NORMAL,stateDrawable);
+                }
+                if(backgroundColor.disabled){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.disabled);
+                    stateListSet.addState(State.STATE_DISABLED,stateDrawable);
+                }
+                if(backgroundColor.selected){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.selected);
+                    stateListSet.addState(State.STATE_SELECTED,stateDrawable);
+                }
+                if(backgroundColor.pressed){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.pressed);
+                    stateListSet.addState(State.STATE_PRESSED,stateDrawable);
+                }
+                if(backgroundColor.focused){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.focused);
+                    stateListSet.addState(State.STATE_FOCUSED,stateDrawable);
+                }
+                self.nativeObject.setBackground(stateListSet);
+            }
         },
         enumerable: true
      });
