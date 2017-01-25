@@ -188,6 +188,43 @@ function View(params) {
     /**
      * This method returns all position values in one object.
      * 
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Button = require('sf-core/ui/button');
+     *     const Label = require('sf-core/ui/label');
+     *     const Switch = require('sf-core/ui/switch');
+     *    
+     *     var myPage1 = new Page();
+     *     var mySwitch = new Switch();
+     *     var myButton = new Button({
+     *         text: "Get Switch Position",
+     *         onPress: buttonPress
+     *     });
+     *     var myLabel = new Label({
+     *         height: "15%",
+     *         width: "80%",
+     *         top: "30%",
+     *         left: "35%"
+     *     });
+     *    
+     *     myPage1.add(myButton);
+     *     myPage1.add(myLabel);
+     *    
+     *     myPage1.statusBar.visible = false;
+     *     var position = {
+     *         height: "15%",
+     *         width: "30%",
+     *         top: "10%",
+     *         left: "35%"
+     *     };
+     *     mySwitch.setPosition(position);
+     *     myPage1.add(mySwitch);
+     *     
+     *     function buttonPress(){
+     *         var viewPosition = mySwitch.getPosition();
+     *         myLabel.text = "Pos = " + viewPosition.width + " "+ viewPosition.height + " "+ viewPosition.top + " "+ viewPosition.left;
+     *     }        
+     * 
      * @return {Object} Object with properties:
      * @return {Number} return.width Width value
      * @return {Number} return.height Height value
