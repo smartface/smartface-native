@@ -85,7 +85,7 @@ function View(params) {
     
 
     this.getPosition = function(){
-        return = {left : self.left , top : self.top , width : self.width, height : self.height};
+        return {left : self.left , top : self.top , width : self.width, height : self.height};
     }
 
     this.setPosition = function(position){
