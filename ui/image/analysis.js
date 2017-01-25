@@ -2,32 +2,34 @@
  * @class UI.Image
  * @since 0.1
  * 
- * This class represents images stored in file system. Instances of
- * Image class can be set to image property of an ImageView.
+ * Image is used to store the image data read from the filesystem.
+ * It can be set to UI objects' properties (e.g. UI.ImageView.image).
  * 
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
- *     var myImage = Image.createFromFile("images://smartface.png")
- *     var myImageView = new ImageView();
- *     myImageView.image = myImage;
+ *     const Image = require('nf-core/ui/image');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     
+ *     var myImage = Image.createFromFile("images://nativeface.png")
+ *     var myImageView = new ImageView({
+ *         image: myImage,
+ *         width:"50%", height: "50%"
+ *     });
+ *     
+ *     myPage.layout.addChild(myImageView);
  *     
  */
 const Image = {}
 
 /**
- * Creates an image object from given file path. Given path should be
- * full path of an existing image file on file system.
- * 
+ * Creates an Image instance from given file path.
+ *  
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
- *     var myImage = Image.createFromFile("images://smartface.png");
- *     var myImageView = new ImageView();
- *     myImageView.image = myImage;
+ *     const Image = require('nf-core/ui/image');
+ *     var myImage = Image.createFromFile("images://nativeface.png");
  * 
- * @param {String} [path=""] Image file path
+ * @param {String} path Image file path
  * @method createFromFile
+ * @return {UI.Image} An Image instance.
  * @static
  * @since 0.1
  */
