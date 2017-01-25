@@ -9,31 +9,27 @@ function View(params) {
     if(!self.nativeObject){
         self.nativeObject = new SMFUIView();
     }
-    
-    var _style;
-    Object.defineProperty(self, 'style', {
+     
+    Object.defineProperty(self, 'borderColor', {
         get: function() {
-           return _style;
+            return  self.nativeObject.layer.borderUIColor;
         },
         set: function(value) {
-            if (value !== undefined) {
-                _style = value;
-                
-                self.nativeObject.layer.borderUIColor = value.borderColor;
-                self.nativeObject.layer.borderWidth = value.borderWidth;
-                
-                _style.addChangeHandler(function(propertyName,value){
-                    if(propertyName == 'borderColor'){
-                        self.nativeObject.layer.borderUIColor = value;
-                    }else if(propertyName == 'borderWidth'){
-                        self.nativeObject.layer.borderWidth = value;
-                    }
-                });
-            }
+            self.nativeObject.layer.borderUIColor = value;
         },
         enumerable: true
     });
-     
+    
+    Object.defineProperty(self, 'borderWidth', {
+        get: function() {
+            return self.nativeObject.layer.borderWidth;
+        },
+        set: function(value) {
+            self.nativeObject.layer.borderWidth = value;
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self, 'alpha', {
         get: function() {
             return self.nativeObject.alpha;
