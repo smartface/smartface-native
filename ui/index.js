@@ -13,6 +13,7 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     AbsoluteLayout: require('./absolutelayout'),
+    FlexLayout: require('./flexlayout'),
     Slider: require('./slider'),
     ImageView: require('./imageview'),
     Image: require('./image'),

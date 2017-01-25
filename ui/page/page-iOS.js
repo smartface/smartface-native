@@ -6,10 +6,18 @@ function Page(params) {
     self.nativeObject = new UIViewController();
 
     var pageView = new AbsoluteContainer();
+    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
     self.nativeObject.onViewLoad  = function(){
         pageView.nativeObject.backgroundColor = UIColor.whiteColor();
         return pageView.nativeObject;
     }
+
+    Object.defineProperty(self, 'layout', {
+        get: function() {
+            return self.pageView;
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self, 'onLoad', {
         get: function() {
