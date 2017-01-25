@@ -107,7 +107,6 @@ FlexLayout.FlexDirection = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
-    value: 0,
     writable: false
 });
 /**
@@ -118,7 +117,6 @@ Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
-    value: 1,
     writable: false
 });
 /**
@@ -129,7 +127,6 @@ Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
-    value: 2,
     writable: false
 });
 /**
@@ -140,7 +137,6 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
-    value: 3,
     writable: false
 });
 
@@ -165,7 +161,6 @@ FlexLayout.JustifyContent = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
-    value: 0,
     writable: false
 });
 /**
@@ -176,7 +171,6 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
-    value: 1,
     writable: false
 });
 /**
@@ -187,7 +181,6 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
-    value: 2,
     writable: false
 });
 /**
@@ -198,7 +191,6 @@ Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_BETWEEN', {
-    value: 3,
     writable: false
 });
 /**
@@ -209,7 +201,6 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_BETWEEN', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
-    value: 4,
     writable: false
 });
 
@@ -234,7 +225,6 @@ FlexLayout.AlignContent = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
-    value: 0,
     writable: false
 });
 /**
@@ -245,7 +235,6 @@ Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
-    value: 1,
     writable: false
 });
 /**
@@ -256,7 +245,6 @@ Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
-    value: 2,
     writable: false
 });
 /**
@@ -267,7 +255,6 @@ Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
-    value: 3,
     writable: false
 });
 
@@ -292,7 +279,6 @@ FlexLayout.AlignItems = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
-    value: 0,
     writable: false
 });
 /**
@@ -303,7 +289,6 @@ Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
-    value: 1,
     writable: false
 });
 /**
@@ -314,7 +299,6 @@ Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
-    value: 2,
     writable: false
 });
 /**
@@ -325,7 +309,6 @@ Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignItems, 'BASELINE', {
-    value: 3,
     writable: false
 });
 /**
@@ -336,7 +319,6 @@ Object.defineProperty(FlexLayout.AlignItems, 'BASELINE', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
-    value: 4,
     writable: false
 });
 
@@ -361,7 +343,6 @@ FlexLayout.FlexWrap = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
-    value: 0,
     writable: false
 });
 /**
@@ -372,7 +353,6 @@ Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
-    value: 1,
     writable: false
 });
 
@@ -397,7 +377,6 @@ FlexLayout.AlignSelf = {};
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
-    value: 0,
     writable: false
 });
 /**
@@ -408,7 +387,6 @@ Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
-    value: 1,
     writable: false
 });
 /**
@@ -419,7 +397,6 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
-    value: 2,
     writable: false
 });
 /**
@@ -430,7 +407,6 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
-    value: 3,
     writable: false
 });
 /**
@@ -441,7 +417,6 @@ Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'BASELINE', {
-    value: 4,
     writable: false
 });
 /**
@@ -452,7 +427,6 @@ Object.defineProperty(FlexLayout.AlignSelf, 'BASELINE', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
-    value: 5,
     writable: false
 });
 
