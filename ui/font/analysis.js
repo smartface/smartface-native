@@ -10,8 +10,8 @@
  *     const Label = require('nf-core/ui/label');
  *     
  *     var myLabel = new Label();
- *     myLabel.text = "Bold and Italic Font";
- *     myLabel.font = Font.create("Arial", 16, Font.BOLD|Font.ITALIC);
+ *     myLabel.text = "Bold_Italic Font";
+ *     myLabel.font = Font.create("Arial", 16, Font.BOLD_ITALIC);
  *     myPage.layout.addChild(myLabel);
  */
 function Font() {}
