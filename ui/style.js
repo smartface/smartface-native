@@ -7,15 +7,15 @@
  * style object different UI objects can behave different. 
  * 
  *     @example
- *     const Label = require('sf-core/ui/label');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         width: "80%",
  *         height: "10%"
  *     });
  *     myLabel.text = "My label text";
  * 
- *     const Style = require('sf-core/ui/style');
- *     const Color = require('sf-core/ui/color');
+ *     const Style = require('nf-core/ui/style');
+ *     const Color = require('nf-core/ui/color');
  *     myLabel.style = new Style({
  *         borderColor: Color.create("#000000"),
  *         borderWidth: 2

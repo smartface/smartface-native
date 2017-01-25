@@ -3,7 +3,7 @@ var assert  = require("chai").assert;
 
 const Label = require("../../ui/label");
 
-salep.test("sf-core/ui/label Unit Test", function() {
+salep.test("nf-core/ui/label Unit Test", function() {
   this.case("[textColor] setter/getter.", function() {
     const Color = require('../../ui/color');
     var myLabel = new Label();

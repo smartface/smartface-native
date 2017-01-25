@@ -1,7 +1,7 @@
 const NativeBitmapFactory  = requireClass("android.graphics.BitmapFactory");
 const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawable");
 
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("nf-core/util/type");
 
 function Image () {}
 
