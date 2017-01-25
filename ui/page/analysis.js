@@ -35,6 +35,21 @@ function Page(params) {
      */
     this.onLoad = function onLoad(){};
 
+    /**
+     * Gets the height of the status bar. height is a read only property. Height value will change depends on
+     * device and screen density.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.layout.backgroundColor = Color.RED;
+     *
+     * @property {UI.FlexLayout} layout
+     * @readonly
+     * @since 0.1
+     */
+    this.layout;
 
     /**
      * Gets the height of the status bar. height is a read only property. Height value will change depends on
@@ -133,35 +148,7 @@ function Page(params) {
      */
     this.android.backButtonEnabled = false;
 
-    /**
-     * Add view or container to the page.
-     *
-     *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
-     *     var myPage = new Page();
-     *     var myLabel = new Label();
-     *     myPage.add(myLabel);
-     *
-     * @method add
-     */
-    this.add = function(){};
 
-    /**
-     * Remove view or container to the page.
-     *
-     *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
-     *     var myPage = new Page();
-     *     var myLabel = new Label();
-     *     myPage.add(myLabel);
-     *     myPage.remove(myLabel);
-     *
-     * @method remove
-     */
-    this.remove = function(){};
-    
     /**
      * Gets/sets background color of the actionbar. If not set, actionbar will have default
      * background color depends on device's OS and OS version.
