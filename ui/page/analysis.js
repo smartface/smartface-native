@@ -12,7 +12,7 @@
  *         const Button = require('sf-core/ui/button');
  *         var myButton = new Button();
  *         myButton.text = "Click me!";
- *         myPage.add(myButton);
+ *         myPage.layout.addChild(myButton);
  *     
  *     }
  */
@@ -28,7 +28,7 @@ function Page(params) {
      *         const Button = require('sf-core/ui/button');
      *         var myButton = new Button();
      *         myButton.text = "Click me!";
-     *         myPage.add(myButton);
+     *         myPage.layout.addChild(myButton);
      *     }
      *
      * @event onLoad

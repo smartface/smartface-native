@@ -167,8 +167,8 @@ function View(params) {
      *         backgroundColor: Color.BLACK,
      *         textColor: Color.CYAN
      *     });
-     *     myPage.add(myLabelBehind);
-     *     myPage.add(myLabelFront);
+     *     myPage.layout.addChild(myLabelBehind);
+     *     myPage.layout.addChild(myLabelFront);
      *     myLabelBehind.bringToFront();
      *
      * @method bringToFront

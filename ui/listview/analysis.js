@@ -164,7 +164,7 @@ const extend = require('js-base/core/extend');
  *     }
  *     
  *     var myPage = new Page();
- *     myPage.add(myListView);
+ *     myPage.layout.addChild(myListView);
  *     var myPages = new Pages({rootPage : myPage});
  * 
  */
