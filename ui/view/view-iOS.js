@@ -56,7 +56,8 @@ function View(params) {
             _backgroundColor = value;
             self.nativeObject.backgroundColor = value;
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
 
