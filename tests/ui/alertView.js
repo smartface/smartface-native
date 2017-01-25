@@ -1,8 +1,8 @@
 var expect = require("chai").expect;
 var assert = require("chai").assert;
 
-const AlertView       = require("sf-core/ui/alertView").AlertView;
-const AlertButtonType = require("sf-core/ui/alertView").AlertButtonType;
+const AlertView       = require("nf-core/ui/alertView").AlertView;
+const AlertButtonType = require("nf-core/ui/alertView").AlertButtonType;
 
 const buttonParameters = {
     index: AlertButtonType.POSITIVE,
@@ -10,7 +10,7 @@ const buttonParameters = {
     onClick: function(){}
 };
 
-salep.test("sf-core/ui/alertView Unit Test", function () {
+salep.test("nf-core/ui/alertView Unit Test", function () {
     this.case("[isShowing] test default.", function () {
         var myAlertView = new AlertView();
         assert.isFalse(myAlertView.isShowing, "Default value must be false.");

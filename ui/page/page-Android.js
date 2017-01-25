@@ -1,6 +1,6 @@
-const AbsoluteLayout = require("sf-core/ui/absolutelayout");
-const Color          = require("sf-core/ui/color");
-const TypeUtil       = require("sf-core/util/type");
+const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
+const Color         = require("nf-core/ui/color");
+const TypeUtil      = require("nf-core/util/type");
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -18,14 +18,14 @@ function Page(params) {
     
     // self.height and self.width for child views. It can get root layout dimensions from it.
     // @todo must be replaced with native get dimension. Somehow its not working.
-    var verticalDimention = self.height = Device.screenHeight;
-    var horizontalDimention = self.width = Device.screenWidth;
     
-    var innerLayout = new AbsoluteLayout({
-        height: verticalDimention,
-        width: horizontalDimention,
-        backgroundColor:Color.WHITE
+    var innerLayout = self.layout = new AbsoluteLayout({
+        height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
+        width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
+        backgroundColor:Color.RED,
+        isRoot : true
     });
+    
     innerLayout.parent = self;
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
@@ -36,9 +36,6 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
-        },
-        onConfigurationChanged: function(newConfig){
-            self.invalidatePosition(newConfig.orientation);
         },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
@@ -271,7 +268,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarVisible = true;
+    var _headerbarVisible = false;
     Object.defineProperty(self.headerbar, 'visible', {
         get: function() {
             return activity.getSupportActionBar().isShowing();
@@ -330,28 +327,9 @@ function Page(params) {
         }
     }
     
-    this.invalidatePosition = function(orientation){
-        var statusBarHeight = (self.statusBar.visible)? self.statusBar.height : 0;
-        var headerBarHeight = (self.headerbar.visible)? self.headerbar.height : 0;
-
-        if(!orientation){
-            orientation = activity.getResources().getConfiguration().orientation;
-        }
-        if(orientation == 2) { // landscape
-            self.width = Device.screenHeight;
-            self.height = Device.screenWidth - statusBarHeight - headerBarHeight;
-            innerLayout.setPosition({width: self.width, height: self.height, top: statusBarHeight + headerBarHeight});
-        } else { // portrait
-            self.height = Device.screenHeight - statusBarHeight - headerBarHeight;
-            self.width = Device.screenWidth;
-            innerLayout.setPosition({width: self.width, height:self.height, top: statusBarHeight + headerBarHeight});
-        }
-    }
-
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
-        self.invalidatePosition();
     }
 
     function toSpanned(text, color) {

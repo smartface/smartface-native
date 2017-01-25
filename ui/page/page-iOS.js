@@ -1,4 +1,4 @@
-const AbsoluteContainer = require('sf-core/ui/absolutelayout');
+const AbsoluteContainer = require('nf-core/ui/absolutelayout');
 
 function Page(params) {
     var self = this;
@@ -6,14 +6,17 @@ function Page(params) {
     self.nativeObject = new UIViewController();
     
     var pageView = new AbsoluteContainer();
+    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
     self.nativeObject.onViewLoad  = function(){
         pageView.nativeObject.backgroundColor = UIColor.whiteColor();
         return pageView.nativeObject;
     }
 
     Object.defineProperty(self, 'layout', {
-      value: pageView,
-      writable: false
+        get: function() {
+            return self.pageView;
+        },
+        enumerable: true
     });
 
     Object.defineProperty(self, 'onLoad', {
