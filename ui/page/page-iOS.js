@@ -78,6 +78,39 @@ function Page(params) {
         object.nativeObject.removeFromSuperview();
     }
 
+    self.headerbar = {}
+    
+    Object.defineProperty(self.headerbar, 'title', {
+        get: function() {
+            return self.nativeObject.title;
+        },
+        set: function(value) {
+            self.nativeObject.title = value;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerbar, 'titleColor', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.titleColor
+        },
+        set: function(value) {
+             self.nativeObject.navigationController.navigationBar.titleColor = value;
+        },
+        enumerable: true
+    });
+    
+    
+    Object.defineProperty(self.headerbar, 'backgroundColor', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.barTintColor;
+        },
+        set: function(value) {
+            self.nativeObject.navigationController.navigationBar.barTintColor = value;
+        },
+        enumerable: true
+    });
+    
     if (params) {
         for (var param in params) {
             this[param] = params[param];
