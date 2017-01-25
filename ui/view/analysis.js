@@ -178,6 +178,23 @@ function View(params) {
 
     /**
      * Getter of this view's parent view.
+     * 
+     *     @example
+     *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
+     *     const Page = require('sf-core/ui/page');
+     *     const Label = require('sf-core/ui/label');
+     *    
+     *     var myPage1 = new Page();
+     *     var myAbsoluteLayout = new AbsoluteLayout();
+     *     myAbsoluteLayout.id = 5432;
+     *    
+     *     var myLabel = new Label({
+     *          text: "Smartface Label"
+     *     });
+     *    
+     *     myAbsoluteLayout.addChild(myLabel);
+     *     myPage1.add(myAbsoluteLayout);
+     *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
      * @return {View} Parent view of this view, or null if not exists.
      * @method getParent
