@@ -193,6 +193,16 @@ function View(params) {
      * @since 0.1
      */
     this.getParent = function(){};
+    
+    /**
+     * Gets/sets style of view. 
+     * 
+     * @property {Style} style
+     * @member UI.View
+     * @since 0.1
+     * @removed 0.1
+     */
+    this.style = {};
 
     /**
      * This method returns all position values in one object.
