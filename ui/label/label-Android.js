@@ -1,13 +1,12 @@
 const View = require('../view');
-const Color = require("sf-core/ui/color");
-const TextAlignment = require("sf-core/ui/textalignment");
-const TypeUtil = require("sf-core/util/type");
-const State = require("sf-core/ui/state");
+const Color = require("nf-core/ui/color");
+const TextAlignment = require("nf-core/ui/textalignment");
+const TypeUtil = require("nf-core/util/type");
+const State = require("nf-core/ui/state");
 const extend = require('js-base/core/extend');
+const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
-const NativeScrollView = requireClass("android.widget.ScrollView");
 const NativeTextView = requireClass("android.widget.TextView");
-const NativeViewGroup = requireClass("android.view.ViewGroup");
 const NativeHtml = requireClass("android.text.Html");
 const NativeColor = requireClass("android.graphics.Color");
 const NativeR = requireClass("android.R");
@@ -20,37 +19,28 @@ const Label = extend(View)(
         var self = this;
         var textAlignmentInitial;
         var viewNativeDefaultTextAlignment;
+        var activity = Android.getActivity();
+        
         // Is Label Check
         if(!self.nativeObject){
-            self.nativeObject = new NativeScrollView(Android.getActivity());
-            self.nativeInner = new NativeTextView(Android.getActivity());
-
-            // ViewGroup.LayoutParams.MATCH_PARENT = -1
-            var innerlayoutParams = new NativeViewGroup.LayoutParams(-1, -1);
-            self.nativeInner.setLayoutParams(innerlayoutParams);
-            self.nativeObject.addView(self.nativeInner);
-            self.nativeObject.setSmoothScrollingEnabled(true);
-            self.nativeObject.setHorizontalScrollBarEnabled(false);
-            self.nativeObject.setVerticalScrollBarEnabled(false);
-            self.nativeObject.setFillViewport(true);
-            
+            self.nativeObject = new NativeTextView(activity);
             textAlignmentInitial = TextAlignment.MIDLEFT;
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
-            (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(16 | 3);
+            self.nativeObject.setGravity(16 | 3);
             viewNativeDefaultTextAlignment = 16 | 3;
             
         }
         else{
             textAlignmentInitial = TextAlignment.MIDCENTER;
             // Gravity.CENTER
-            (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(17);
+            self.nativeObject.setGravity(17);
             viewNativeDefaultTextAlignment = 17;
         }
         _super(this);
 
         Object.defineProperty(this, 'htmlText', {
             get: function() {
-                var text = (self.nativeInner ? self.nativeInner : self.nativeObject).getText();
+                var text = self.nativeObject.getText();
                 if(text){
                     var htmlText = NativeHtml.toHtml(text);
                     return htmlText.toString();
@@ -62,7 +52,7 @@ const Label = extend(View)(
             }, 
             set: function(htmlText) {
                 var htmlTextNative = NativeHtml.fromHtml(htmlText);
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setText(htmlTextNative);
+                self.nativeObject.setText(htmlTextNative);
             },
             enumerable: true
         });
@@ -75,11 +65,9 @@ const Label = extend(View)(
             set: function(font) {
                 if(font){
                     fontInitial = font;
-                    var nativeObject = self.nativeInner ? self.nativeInner : self.nativeObject;
-                    if(font.nativeObject)
-                        nativeObject.setTypeface(font.nativeObject);
+                    self.nativeObject.setTypeface(font.nativeObject);
                     if(font.size && TypeUtil.isNumeric(font.size))
-                       nativeObject.setTextSize(font.size) ;
+                       self.nativeObject.setTextSize(AndroidUnitConverter.dpToPixel(activity,font.size));
                     }
             },
             enumerable: true
@@ -87,10 +75,10 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'multiline', {
             get: function() {
-                return (self.nativeInner ? self.nativeInner.getLineCount() : self.nativeObject.getLineCount() )!= 1;
+                return self.nativeObject.getLineCount() != 1;
             },
             set: function(multiline) {
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setSingleLine(!multiline);
+                self.nativeObject.setSingleLine(!multiline);
             },
             enumerable: true
         });
@@ -98,13 +86,12 @@ const Label = extend(View)(
         // @todo property returns CharSquence object not string. Caused by issue AND-2508
         Object.defineProperty(this, 'text', {
             get: function() {
-                return (self.nativeInner ? self.nativeInner : self.nativeObject).getText();
+                return self.nativeObject.getText();
             },
             set: function(text) {
-                var nativeObject = self.nativeInner ? self.nativeInner : self.nativeObject;
-                nativeObject.setText(text);
+                self.nativeObject.setText(text);
                 // @todo this will cause performance issues in feature. Must be replaced.
-                nativeObject.requestLayout();
+                self.nativeObject.requestLayout();
             },
             enumerable: true
         });
@@ -155,29 +142,27 @@ const Label = extend(View)(
                         alignment = 80 | 5;
                         break;                   
                 }
-                (self.nativeInner ? self.nativeInner : self.nativeObject).setGravity(alignment);
+                self.nativeObject.setGravity(alignment);
             },
             enumerable: true
         });
 
+        var _textColor = Color.BLACK;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                var nativeObject = (self.nativeInner ? self.nativeInner : self.nativeObject);
-                if(typeof(self.textColor) === "number") {
-                    return nativeObject.getCurrentTextColor();
+                if(typeof(_textColor) === "number") {
+                    return self.nativeObject.getCurrentTextColor();
                 }
-                return createObjectFromColorStateList(nativeObject.getTextColors());
+                return _textColor;
             },
             set: function(textColor) {
-                var nativeObject = (self.nativeInner ? self.nativeInner : self.nativeObject);
-                console.log("typeof(textColor) === number " + (typeof(textColor) === "number"));
+                _textColor = textColor;
                 if(typeof(textColor) === "number") {
-                    nativeObject.setTextColor(textColor);
+                    self.nativeObject.setTextColor(textColor);
                 }
                 else {
-                    console.log("textColor is a state list.");
                     var textColorStateListDrawable = createColorStateList(textColor);
-                    (self.nativeInner ? self.nativeInner : self.nativeObject).setTextColor(textColorStateListDrawable);
+                    self.nativeObject.setTextColor(textColorStateListDrawable);
                 }
             },
             enumerable: true
@@ -192,27 +177,6 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-        
-        function createObjectFromColorStateList(textColors) {
-            var colors = {};
-            console.log("Normal " + textColors.getColorForState(State.STATE_NORMAL, DEFAULT_COLOR));
-            colors.normal = textColors.getColorForState(State.STATE_NORMAL, DEFAULT_COLOR);
-            console.log("Disabled " + textColors.getColorForState(State.STATE_DISABLED, DEFAULT_COLOR));
-            colors.disabled = textColors.getColorForState(State.STATE_DISABLED, DEFAULT_COLOR);
-            console.log("Selected " + textColors.getColorForState(State.STATE_SELECTED, DEFAULT_COLOR));
-            colors.selected = textColors.getColorForState(State.STATE_SELECTED, DEFAULT_COLOR);
-            console.log("Pressed " + textColors.getColorForState(State.STATE_PRESSED, DEFAULT_COLOR));
-            colors.pressed = textColors.getColorForState(State.STATE_PRESSED, DEFAULT_COLOR);
-            console.log("Focused " + textColors.getColorForState(State.STATE_FOCUSED, DEFAULT_COLOR));
-            colors.focused = textColors.getColorForState(State.STATE_FOCUSED, DEFAULT_COLOR);
-            return colors;
-            // int [] normal = {
-            //         android.R.attr.State.STATE_enabled,
-            //         -android.R.attr.State.STATE_pressed,
-            //         -android.R.attr.State.STATE_selected
-            // };
-            // Log.i("ColorStateList", "" + thelist.getColorForState(normal, Color.CYAN));
-        }
         
         function createColorStateList(textColors) {
             var statesSet = [];

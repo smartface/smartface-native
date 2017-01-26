@@ -1,5 +1,5 @@
 const View = require('../view');
-const TypeUtil = require("sf-core/util/type");
+const TypeUtil = require("nf-core/util/type");
 const extend = require('js-base/core/extend');
 
 const ViewGroup = extend(View)(
@@ -16,7 +16,7 @@ const ViewGroup = extend(View)(
             view.parent = self;
             self.childViews[view.id+''] = view;
             self.nativeObject.addView(view.nativeObject);
-            var id = view.id;
+            view.generateLayoutParams();
         };
 
         this.removeChild = function(view){

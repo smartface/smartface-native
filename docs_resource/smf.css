@@ -11,8 +11,7 @@
 	width: 350px;
 }
 
-.x-btn * {
-    cursor: pointer;
-    cursor: hand;  
+.doc-contents  > div .x-box-inner > div:first-child
+{
     display: none;
 }

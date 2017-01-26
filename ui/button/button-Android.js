@@ -1,7 +1,7 @@
-const Label = require("sf-core/ui/label");
-const Color = require("sf-core/ui/color");
-const StateList = require("sf-core/util/statelist");
-const State = require("sf-core/ui/state");
+const Label = require("nf-core/ui/label");
+const Color = require("nf-core/ui/color");
+const StateList = require("nf-core/util/statelist");
+const State = require("nf-core/ui/state");
 const extend = require('js-base/core/extend');
 
 const NativeButton = requireClass("android.widget.Button");
