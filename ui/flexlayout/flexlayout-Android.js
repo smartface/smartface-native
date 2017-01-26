@@ -10,6 +10,17 @@ const FlexLayout = extend(ViewGroup)(
         _super(this);
 
         // flexDirection values same as native
+        Object.defineProperty(this, 'direction', {
+            get: function() {
+                return self.nativeObject.getStyleDirection();
+            },
+            set: function(direction) {
+                self.nativeObject.setDirection(direction);
+            },
+            enumerable: true
+        });
+        
+        // flexDirection values same as native
         Object.defineProperty(this, 'flexDirection', {
             get: function() {
                 return self.nativeObject.getFlexDirection();
