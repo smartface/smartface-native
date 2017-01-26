@@ -21,7 +21,6 @@ const ViewGroup = extend(View)(
             view.parent = self;
             var uniqueId = view.uniqueId;
             self.childs[uniqueId] = view;
-            self.invalidatePosition();
         };
 
         this.removeChild = function(view){
