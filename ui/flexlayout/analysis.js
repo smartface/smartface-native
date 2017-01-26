@@ -16,6 +16,16 @@ const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
         _super(this);
 
+        /**
+         * // @todo add description.
+         * 
+         *     @example
+         *     // @todo add example
+         *
+         * @property {UI.FlexLayout.Direction} [direction = UI.FlexLayout.Direction.INHERIT]   
+         * @since 0.1
+         */
+        this.direction = UI.FlexLayout.Direction.INHERIT;
 
         /**
          * // @todo add description.
