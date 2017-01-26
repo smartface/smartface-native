@@ -63,6 +63,16 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
+        Object.defineProperty(this, 'overFlow', {
+            get: function() {
+                return self.nativeObject.getFlexWrap();
+            },
+            set: function(flexWrap) {
+                self.nativeObject.setFlexWrap(flexWrap);
+            },
+            enumerable: true
+        });
+        
         // Do nothing for Android
         this.applyLayout = function(){};
         
@@ -81,20 +91,34 @@ const FlexLayout = extend(ViewGroup)(
     }
 );
 
-FlexLayout.FlexDirection = {};
-Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
+FlexLayout.Direction = {};
+Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
     value: 0,
     writable: false
 });
-Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
     value: 1,
     writable: false
 });
-Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
+Object.defineProperty(FlexLayout.Direction, 'RTL', {
     value: 2,
     writable: false
 });
+
+FlexLayout.FlexDirection = {};
+Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
+    value: 0,
+    writable: false
+});
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
+    value: 1,
+    writable: false
+});
+Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
+    value: 2,
+    writable: false
+});
+Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
     value: 3,
     writable: false
 });
@@ -104,11 +128,11 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
     value: 0,
     writable: false
 });
-Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
+Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
     value: 1,
     writable: false
 });
-Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
+Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
     value: 2,
     writable: false
 });
@@ -122,11 +146,11 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
 });
 
 FlexLayout.AlignContent = {};
-Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
+Object.defineProperty(FlexLayout.AlignContent, 'AUTO', {
     value: 0,
     writable: false
 });
-Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
+Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
     value: 1,
     writable: false
 });
@@ -134,17 +158,45 @@ Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
     value: 2,
     writable: false
 });
+Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
+    value: 3,
+    writable: false
+});
 Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
-    value: 5,
+    value: 4,
+    writable: false
+});
+
+FlexLayout.FlexWrap = {};
+Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
+    value : 0,
+    writable: false
+});
+Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
+    value : 1,
+    writable: false
+});
+
+FlexLayout.Overflow = {};
+Object.defineProperty(FlexLayout.Overflow, 'VISIBLE', {
+    value : 0,
+    writable: false
+});
+Object.defineProperty(FlexLayout.Overflow, 'HIDDEN', {
+    value : 1,
+    writable: false
+});
+Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
+    value : 2,
     writable: false
 });
 
 FlexLayout.AlignItems = {};
-Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
+Object.defineProperty(FlexLayout.AlignItems, 'AUTO', {
     value: 0,
     writable: false
 });
-Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
+Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
     value: 1,
     writable: false
 });
@@ -152,48 +204,34 @@ Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
     value: 2,
     writable: false
 });
-Object.defineProperty(FlexLayout.AlignItems, 'BASELINE', {
+Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
     value: 3,
     writable: false
 });
-Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
+Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
     value: 4,
-    writable: false
-});
-
-FlexLayout.FlexWrap = {};
-Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
-    value: 0,
-    writable: false
-});
-Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
-    value: 1,
     writable: false
 });
 
 FlexLayout.AlignSelf = {};
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
-    value: 0,
+    value : 0,
     writable: false
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
-    value: 1,
-    writable: false
-});
-Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
-    value: 2,
+    value : 1,
     writable: false
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
-    value: 3,
+    value : 2,
     writable: false
 });
-Object.defineProperty(FlexLayout.AlignSelf, 'BASELINE', {
-    value: 4,
+Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
+    value : 3,
     writable: false
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
-    value: 5,
+    value : 4,
     writable: false
 });
 
