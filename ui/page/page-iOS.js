@@ -1,17 +1,25 @@
-const AbsoluteContainer = require('nf-core/ui/absolutelayout');
+const AbsoluteLayout = require('nf-core/ui/absolutelayout');
 
 function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
     
-    self.pageView = new AbsoluteContainer();
-    self.pageView.width = UIScreen.mainScreen().bounds.width;
-    self.pageView.height = UIScreen.mainScreen().bounds.height;
+    self.pageView = new AbsoluteLayout();
+    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
     
     self.nativeObject.onViewLoad  = function(){
         self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
         return self.pageView.nativeObject;
+    }
+    
+    self.nativeObject.onViewLayoutSubviews = function(){
+        self.pageView.left = self.pageView.nativeObject.frame.x;
+        self.pageView.top = self.pageView.nativeObject.frame.y;
+        self.pageView.width = self.pageView.nativeObject.frame.width;
+        self.pageView.height = self.pageView.nativeObject.frame.height;
+        
+        self.pageView.applyLayout();
     }
 
     Object.defineProperty(self, 'layout', {
