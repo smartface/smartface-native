@@ -6,7 +6,7 @@
  * is base of all UI classes.
  * 
  *     @example
- *     const View = require('sf-core/ui/view');
+ *     const View = require('nf-core/ui/view');
  *     var myView = new View();
  *     var position = {
  *         width: "30%", 
@@ -15,7 +15,7 @@
  *         left: "50%"
  *     }
  *     myView.setPosition(position);
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     myView.backgroundColor = Color.RED;
  */
 function View(params) {
@@ -122,7 +122,7 @@ function View(params) {
      * Gets/sets padding of view. Setting number as pixels.
      *
      *     @example
-     *     const View = require('sf-core/ui/view');
+     *     const View = require('nf-core/ui/view');
      *     var myView = new View();
      *     var padding = {
      *         left: 15,
@@ -145,9 +145,9 @@ function View(params) {
      * This method allows getting view to the front.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Label = require('nf-core/ui/label');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     var myLabelBehind = new Label({
      *         width: "70%",
@@ -180,9 +180,9 @@ function View(params) {
      * Getter of this view's parent view.
      * 
      *     @example
-     *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
+     *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+     *     const Page = require('nf-core/ui/page');
+     *     const Label = require('nf-core/ui/label');
      *    
      *     var myPage1 = new Page();
      *     var myAbsoluteLayout = new AbsoluteLayout();
@@ -206,10 +206,10 @@ function View(params) {
      * This method returns all position values in one object.
      * 
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Button = require('sf-core/ui/button');
-     *     const Label = require('sf-core/ui/label');
-     *     const Switch = require('sf-core/ui/switch');
+     *     const Page = require('nf-core/ui/page');
+     *     const Button = require('nf-core/ui/button');
+     *     const Label = require('nf-core/ui/label');
+     *     const Switch = require('nf-core/ui/switch');
      *    
      *     var myPage1 = new Page();
      *     var mySwitch = new Switch();
@@ -258,7 +258,7 @@ function View(params) {
      * height etc.) separately.
      * 
      *     @example
-     *     const View = require('sf-core/ui/view');
+     *     const View = require('nf-core/ui/view');
      *     var myView = new View();
      *     var position = {
      *         width: "30%", 
