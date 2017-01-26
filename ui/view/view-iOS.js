@@ -8,8 +8,10 @@ function View(params) {
     
     if(!self.nativeObject){
         self.nativeObject = new SMFUIView();
-        self.nativeObject.yoga.isEnabled = true;
     }
+
+    // Defaults
+    self.nativeObject.yoga.isEnabled = true;
      
     Object.defineProperty(self, 'borderColor', {
         get: function() {
