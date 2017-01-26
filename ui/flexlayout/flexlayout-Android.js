@@ -9,7 +9,7 @@ const FlexLayout = extend(ViewGroup)(
         self.nativeObject = new NativeFlexboxLayout(Android.getActivity());
         _super(this);
 
-        // flexDirection values same as native
+        // direction values same as native
         Object.defineProperty(this, 'direction', {
             get: function() {
                 return self.nativeObject.getStyleDirection();
@@ -64,6 +64,7 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
+        // flexWrap values same as native 
         Object.defineProperty(this, 'flexWrap', {
             get: function() {
                 return self.nativeObject.getFlexWrap();
@@ -74,6 +75,7 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
+        // overFlow values same as native 
         Object.defineProperty(this, 'overFlow', {
             get: function() {
                 return self.nativeObject.getFlexWrap();
@@ -84,14 +86,9 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
-        // Do nothing for Android
-        this.applyLayout = function(){};
-        
-        this.flexDirection = FlexLayout.FlexDirection.ROW;
-        this.justifyContent = FlexLayout.JustifyContent.FLEX_START;
-        this.alignContent = FlexLayout.AlignContent.STRETCH;
-        this.alignItems = FlexLayout.AlignItems.STRETCH;
-        this.flexWrap = FlexLayout.FlexWrap.NOWRAP;
+        this.applyLayout = function(){
+            self.nativeObject.calculateLayout();
+        };
         
         // Assign parameters given in constructor
         if (params) {
