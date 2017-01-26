@@ -292,6 +292,14 @@ function Page(params) {
         enumerable: true
     });
 
+    this.add = function(view){
+        self.layout.addChild(view);
+    };
+
+    this.remove = function(view){
+        self.layout.removeChild(view);
+    };
+
     this.invalidateStatusBar = function(){
         self.statusBar.visible = _visible;
 

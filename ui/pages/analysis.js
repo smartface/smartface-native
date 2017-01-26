@@ -27,7 +27,7 @@
  *     myAbsoluteLayout.addChild(myLabel);
  *     var myPage = new Page({
  *         onLoad: function(){
- *             myPage.layout.addChild(myAbsoluteLayout);
+ *             myPage.add(myAbsoluteLayout);
  *         }
  *     });
  *     // Must initialized with rootPage.
