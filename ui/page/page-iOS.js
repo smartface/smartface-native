@@ -92,10 +92,10 @@ function Page(params) {
     
     Object.defineProperty(self.headerbar, 'titleColor', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.titleColor
+            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
         },
         set: function(value) {
-             self.nativeObject.navigationController.navigationBar.titleColor = value;
+             self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value};
         },
         enumerable: true
     });
