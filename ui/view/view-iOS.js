@@ -718,7 +718,7 @@ function View(params) {
     /**
      Mark that a view's layout needs to be recalculated. Only works for leaf views.
      */
-    this.markDirty = function(){
+    this.dirty = function(){
         self.nativeObject.yoga.markDirty();
     }
     
