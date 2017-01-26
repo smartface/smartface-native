@@ -44,6 +44,13 @@ function Page(params) {
             return true;
         }
     }, null);
+
+    Object.defineProperty(this, 'layout', {
+        get: function() {
+            return innerLayout;
+        },
+        enumerable: true
+    });
     
     self.headerbar = {};
     self.headerbar.android = {};
@@ -282,14 +289,12 @@ function Page(params) {
         enumerable: true
     });
 
-    self.childViews = {};
     this.add = function(view){
-        view.parent = self;
-        innerLayout.addChild(view);
+        self.layout.addChild(view);
     };
 
     this.remove = function(view){
-        innerLayout.removeChild(view);
+        self.layout.removeChild(view);
     };
 
     this.invalidateStatusBar = function(){
