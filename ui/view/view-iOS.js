@@ -8,6 +8,7 @@ function View(params) {
     
     if(!self.nativeObject){
         self.nativeObject = new SMFUIView();
+        self.nativeObject.yoga.isEnabled = true;
     }
      
     Object.defineProperty(self, 'borderColor', {
@@ -16,16 +17,6 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.layer.borderUIColor = value;
-        },
-        enumerable: true
-    });
-    
-    Object.defineProperty(self, 'borderWidth', {
-        get: function() {
-            return self.nativeObject.layer.borderWidth;
-        },
-        set: function(value) {
-            self.nativeObject.layer.borderWidth = value;
         },
         enumerable: true
     });
@@ -105,110 +96,6 @@ function View(params) {
     this.getParent = function(){
         return self.parent ? self.parent : null;
     };
-    
-    var _left = 0;
-    Object.defineProperty(self, 'left', {
-        get: function() {
-            var retval;
-            if (this.flexEnabled) {
-                retval = self.nativeObject.yoga.left;
-            } else {
-                retval = self.nativeObject.frame.x;
-            }
-            return retval;
-        },
-        set: function(value) {
-            _left = value;
-            
-            if (self.parent) {
-                if (this.flexEnabled) {
-                    self.nativeObject.yoga.left = _left;
-                } else {
-                    var frame = this.getPosition();
-                    self.nativeObject.frame = { x : _left, y : frame.top, width : frame.width, height : frame.height};
-                }
-            }
-        },
-        enumerable: true
-    });
-    
-    var _top = 0;
-    Object.defineProperty(self, 'top', {
-        get: function() {
-            var retval;
-            if (this.flexEnabled) {
-                retval = self.nativeObject.yoga.top;
-            } else {
-                retval = self.nativeObject.frame.y;
-            }
-            return retval;
-        },
-        set: function(value) {
-            _top = value;
-            
-            if (self.parent) {
-                if (this.flexEnabled) {
-                    self.nativeObject.yoga.top = _top;
-                } else {
-                    var frame = this.getPosition();
-                    self.nativeObject.frame = { x : frame.left, y : _top, width : frame.width, height : frame.height};
-                }
-            }
-        },
-        enumerable: true
-    });
-    
-    var _width = 100;
-    Object.defineProperty(self, 'width', {
-        get: function() {
-            var retval;
-            if (this.flexEnabled) {
-                retval = self.nativeObject.yoga.width;
-            } else {
-                retval = self.nativeObject.frame.width;
-            }
-            return retval;
-        },
-        set: function(value) {
-            _width = value;
-            
-            if (self.parent) {
-                if (this.flexEnabled) {
-                    self.nativeObject.yoga.width = _width;
-                } else {
-                    var frame = this.getPosition();
-                    self.nativeObject.frame = { x : frame.left, y : frame.top, width : _width, height : frame.height};
-                }
-            }
-        },
-        enumerable: true
-    });
-    
-    var _height = 100;
-    Object.defineProperty(self, 'height', {
-        get: function() {
-            var retval;
-            if (this.flexEnabled) {
-                retval = self.nativeObject.yoga.height;
-            } else {
-                retval = self.nativeObject.frame.height;
-            }
-            return retval;
-        },
-        set: function(value) {
-            _height = value;
-            
-            if (self.parent) {
-                if (this.flexEnabled) {
-                    self.nativeObject.yoga.height = _height;
-                } else {
-                    var frame = this.getPosition();
-                    self.nativeObject.frame = { x : frame.left, y : frame.top, width : frame.width, height : _height};
-                }
-            }
-        },
-        enumerable: true
-    });
 
     Object.defineProperty(self, 'onTouch', {
         get: function() {
@@ -243,56 +130,6 @@ function View(params) {
     //////////////////////////////////////////////////////////////////////////
     // YOGA STUFF START
     //////////////////////////////////////////////////////////////////////////
-
-    /////////////////////////////////////////////////////////
-    // YOGA ENUMS
-    /////////////////////////////////////////////////////////
-    const YGDirection = {
-        Inherit : 0,
-        LTR : 1,
-        RTL : 2
-    };
-    
-    const YGFlexDirection = {
-        Column : 0,
-        ColumnReverse : 1,
-        Row : 2,
-        RowReverse : 3
-    };
-    
-    const YGJustify = {
-        FlexStart : 0,
-        Center : 1,
-        FlexEnd : 2,
-        SpaceBetween : 3,
-        SpaceAround : 4,
-    };
-    
-    const YGAlign = {
-        Auto : 0,
-        FlexStart : 1,
-        Center : 2,
-        FlexEnd : 3,
-        Stretch : 4,
-        Baseline : 5
-    };
-    
-    const YGPositionType = {
-        Relative : 0,
-        Absolute : 1
-    };
-    
-    const YGWrap = {
-        NoWrap : 0,
-        Wrap : 1
-    };
-    
-    const YGOverflow = {
-        Visible : 0,
-        Hidden : 1,
-        Scroll : 2
-    };
-    /////////////////////////////////////////////////////////
 
     /**
      The property that decides if we should include this view when calculating layout. Defaults to YES.
@@ -444,25 +281,25 @@ function View(params) {
     // Left and Top can delete or added after tests
     */
 
-    // Object.defineProperty(self, 'left', {
-    //     get: function() {
-    //         return self.nativeObject.yoga.left;
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.yoga.left = value;
-    //     },
-    //     enumerable: true
-    // });
+    Object.defineProperty(self, 'left', {
+        get: function() {
+            return self.nativeObject.yoga.left;
+        },
+        set: function(value) {
+            self.nativeObject.yoga.left = value;
+        },
+        enumerable: true
+    });
     
-    // Object.defineProperty(self, 'top', {
-    //     get: function() {
-    //         return self.nativeObject.yoga.top;
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.yoga.top = value;
-    //     },
-    //     enumerable: true
-    // });
+    Object.defineProperty(self, 'top', {
+        get: function() {
+            return self.nativeObject.yoga.top;
+        },
+        set: function(value) {
+            self.nativeObject.yoga.top = value;
+        },
+        enumerable: true
+    });
     
     Object.defineProperty(self, 'right', {
         get: function() {
@@ -758,25 +595,25 @@ function View(params) {
     // Width and Height can delete or added after tests
     */
 
-    // Object.defineProperty(self, 'width', {
-    //     get: function() {
-    //         return self.nativeObject.yoga.width;
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.yoga.width = value;
-    //     },
-    //     enumerable: true
-    // });
+    Object.defineProperty(self, 'width', {
+        get: function() {
+            return self.nativeObject.yoga.width;
+        },
+        set: function(value) {
+            self.nativeObject.yoga.width = value;
+        },
+        enumerable: true
+    });
     
-    // Object.defineProperty(self, 'height', {
-    //     get: function() {
-    //         return self.nativeObject.yoga.height;
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.yoga.height = value;
-    //     },
-    //     enumerable: true
-    // });
+    Object.defineProperty(self, 'height', {
+        get: function() {
+            return self.nativeObject.yoga.height;
+        },
+        set: function(value) {
+            self.nativeObject.yoga.height = value;
+        },
+        enumerable: true
+    });
     
     Object.defineProperty(self, 'minWidth', {
         get: function() {

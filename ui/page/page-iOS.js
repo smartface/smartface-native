@@ -5,11 +5,13 @@ function Page(params) {
 
     self.nativeObject = new UIViewController();
     
-    var pageView = new AbsoluteContainer();
-    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    self.pageView = new AbsoluteContainer();
+    self.pageView.width = UIScreen.mainScreen().bounds.width;
+    self.pageView.height = UIScreen.mainScreen().bounds.height;
+    
     self.nativeObject.onViewLoad  = function(){
-        pageView.nativeObject.backgroundColor = UIColor.whiteColor();
-        return pageView.nativeObject;
+        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        return self.pageView.nativeObject;
     }
 
     Object.defineProperty(self, 'layout', {
@@ -81,7 +83,7 @@ function Page(params) {
     //Deprecated
     self.add = function(object){
         console.log("Page add function deprecated");
-        pageView.addChild(object);
+        self.pageView.addChild(object);
     }
 
     //Deprecated
