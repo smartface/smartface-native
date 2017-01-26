@@ -26,6 +26,17 @@ const FlexLayout = extend(ViewGroup)(
          * @since 0.1
          */
         this.direction = UI.FlexLayout.Direction.INHERIT;
+        
+        /**
+         * // @todo add description.
+         * 
+         *     @example
+         *     // @todo add example
+         *
+         * @property {UI.FlexLayout.Position} [position = UI.FlexLayout.Position.RELATIVE]   
+         * @since 0.1
+         */
+        this.position = UI.FlexLayout.Position.RELATIVE;
 
         /**
          * // @todo add description.
@@ -567,6 +578,42 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
     value : 4,
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Position
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Position = {};
+/**
+ * @property {Number} RELATIVE
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'RELATIVE', {
+    value : 0,
+    writable: false
+});
+/**
+ * @property {Number} ABSOLUTE
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'ABSOLUTE', {
+    value : 1,
     writable: false
 });
 
