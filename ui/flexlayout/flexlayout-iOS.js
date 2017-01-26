@@ -17,6 +17,24 @@ const FlexLayout = extend(ViewGroup)(
 
 // YG Enums are inherited from UIView
 ////////////////////////////////////////////////////////////////////////
+FlexLayout.Direction = {};
+
+Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
+    get: function() {
+        return YogaEnums.YGDirection.Row;
+    },
+});
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
+    get: function() {
+        return YogaEnums.YGDirection.RowReverse;
+    },
+});
+Object.defineProperty(FlexLayout.Direction, 'RTL', {
+    get: function() {
+        return YogaEnums.YGDirection.Column;
+    },
+});
+////////////////////////////////////////////////////////////////////////
 FlexLayout.FlexDirection = {};
 
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
@@ -70,6 +88,11 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
 ////////////////////////////////////////////////////////////////////////
 FlexLayout.AlignContent = {};
 
+Object.defineProperty(FlexLayout.AlignContent, 'AUTO', {
+    get: function() {
+        return YogaEnums.YGAlign.Auto;
+    },
+});
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
     get: function() {
         return YogaEnums.YGAlign.FlexStart;
@@ -93,6 +116,11 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
 ////////////////////////////////////////////////////////////////////////
 FlexLayout.AlignItems = {};
 
+Object.defineProperty(FlexLayout.AlignItems, 'AUTO', {
+    get: function() {
+        return YogaEnums.YGAlign.Auto;
+    },
+});
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
     get: function() {
         return YogaEnums.YGAlign.FlexStart;
