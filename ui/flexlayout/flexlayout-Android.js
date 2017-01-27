@@ -1,21 +1,33 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 
-const NativeFlexboxLayout = requireClass("com.google.android.flexbox.FlexboxLayout");
+const NativeYogaNoda = requireClass("com.facebook.yoga.YogaNode");
 
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
         var self = this;
-        self.nativeObject = new NativeFlexboxLayout(Android.getActivity());
+        self.nativeObject = new NativeYogaLayout(Android.getActivity(),null);
         _super(this);
-
+        
+        
         // direction values same as native
         Object.defineProperty(this, 'direction', {
             get: function() {
-                return self.nativeObject.getStyleDirection();
+                return self.nativeObject.getNode().getStyleDirection();
             },
             set: function(direction) {
-                self.nativeObject.setDirection(direction);
+                self.nativeObject.getNode().setDirection(direction);
+            },
+            enumerable: true
+        });
+        
+        // direction values same as native
+        Object.defineProperty(this, 'position', {
+            get: function() {
+                return self.nativeObject.getNode().getPositionType();
+            },
+            set: function(position) {
+                self.nativeObject.getNode().setPositionType(position);
             },
             enumerable: true
         });
@@ -23,10 +35,10 @@ const FlexLayout = extend(ViewGroup)(
         // flexDirection values same as native
         Object.defineProperty(this, 'flexDirection', {
             get: function() {
-                return self.nativeObject.getFlexDirection();
+                return self.nativeObject.getNode().getFlexDirection();
             },
             set: function(flexDirection) {
-                self.nativeObject.setFlexDirection(flexDirection);
+                self.nativeObject.getNode().setFlexDirection(flexDirection);
             },
             enumerable: true
         });
@@ -34,10 +46,10 @@ const FlexLayout = extend(ViewGroup)(
         // justifyContent values same as native
         Object.defineProperty(this, 'justifyContent', {
             get: function() {
-                return self.nativeObject.getJustifyContent();
+                return self.nativeObject.getNode().getJustifyContent();
             },
             set: function(justifyContent) {
-                self.nativeObject.setJustifyContent(justifyContent);
+                self.nativeObject.getNode().setJustifyContent(justifyContent);
             },
             enumerable: true
         });
@@ -45,10 +57,10 @@ const FlexLayout = extend(ViewGroup)(
         // alignContent values same as native
         Object.defineProperty(this, 'alignContent', {
             get: function() {
-                return self.nativeObject.getAlignContent();
+                return self.nativeObject.getNode().getAlignContent();
             },
             set: function(alignContent) {
-                self.nativeObject.setAlignContent(alignContent);
+                self.nativeObject.getNode().setAlignContent(alignContent);
             },
             enumerable: true
         });
@@ -56,21 +68,23 @@ const FlexLayout = extend(ViewGroup)(
         // alignItems values same as native    
         Object.defineProperty(this, 'alignItems', {
             get: function() {
-                return self.nativeObject.getAlignItems();
+                return self.nativeObject.getNode().getAlignItems();
             },
             set: function(alignItems) {
-                self.nativeObject.setAlignItems(alignItems);
+                self.nativeObject.getNode().setAlignItems(alignItems);
             },
             enumerable: true
         });
         
         // flexWrap values same as native 
+        var _flexWrap;
         Object.defineProperty(this, 'flexWrap', {
             get: function() {
-                return self.nativeObject.getFlexWrap();
+                return _flexWrap;
             },
             set: function(flexWrap) {
-                self.nativeObject.setFlexWrap(flexWrap);
+                _flexWrap = flexWrap;
+                self.nativeObject.getNode().setWrap(flexWrap);
             },
             enumerable: true
         });
@@ -78,16 +92,22 @@ const FlexLayout = extend(ViewGroup)(
         // overFlow values same as native 
         Object.defineProperty(this, 'overFlow', {
             get: function() {
-                return self.nativeObject.getFlexWrap();
+                return self.nativeObject.getNode().getOverflow();
             },
             set: function(flexWrap) {
-                self.nativeObject.setFlexWrap(flexWrap);
+                self.nativeObject.getNode().setOverflow(flexWrap);
             },
             enumerable: true
         });
         
         this.applyLayout = function(){
-            self.nativeObject.calculateLayout();
+            if(self.childViews){
+                for(var childViewKey in self.childViews){
+                    // passing calculated height and width to child view
+                    self.childViews[childViewKey].generateLayoutParams();
+                }
+            }
+            self.nativeObject.getNode().calculateLayout();
         };
         
         // Assign parameters given in constructor
@@ -240,6 +260,42 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
     value : 4,
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Position
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Position = {};
+/**
+ * @property {Number} RELATIVE
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'RELATIVE', {
+    value : 0,
+    writable: false
+});
+/**
+ * @property {Number} ABSOLUTE
+ * // @todo add description.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'ABSOLUTE', {
+    value : 1,
     writable: false
 });
 

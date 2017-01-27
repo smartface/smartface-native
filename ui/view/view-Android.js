@@ -10,17 +10,20 @@ const NativeColor = requireClass("android.graphics.Color");
 const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
 
-const NativeFlexboxLayout = requireClass("com.google.android.flexbox.FlexboxLayout");
-const NativeMarginLayoutParamsCompat = requireClass("android.support.v4.view.MarginLayoutParamsCompat");
-const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+const NativeYogaLayout = requireClass('io.smartface.yoga.YogaLayout')
+
+
 
 function View(params) {
     var self = this;
-    if(!self.nativeObject){
-        self.nativeObject = new NativeView(Android.getActivity());
-    }
-    
     var activity = Android.getActivity();
+    if(!self.nativeObject){
+        self.nativeObject = new NativeView(activity);
+    }
+    var yogaLayoutParams = new NativeYogaLayout.LayoutParams(0,0);
+    self.nativeObject.setLayoutParams(yogaLayoutParams);
+    
+    
     var backgroundColorInitial = 0xFFFFFFFF;
     var backgroundColorDrawable = new NativeColorDrawable(backgroundColorInitial);
     //var borderDrawable = android.graphics.drawable.ShapeDrawable();
@@ -99,18 +102,18 @@ function View(params) {
         enumerable: true
     });
     
-    var _borderWidth = 0;
-    Object.defineProperty(this, 'borderWidth', {
-        get: function() {
-            return _borderWidth;
-        },
-        set: function(value) {
-            _borderWidth = value;
-            applyStyle();
-            updatePadding();
-        },
-        enumerable: true
-    });
+    // var _borderWidth = 0;
+    // Object.defineProperty(this, 'borderWidth', {
+    //     get: function() {
+    //         return _borderWidth;
+    //     },
+    //     set: function(value) {
+    //         _borderWidth = value;
+    //         applyStyle();
+    //         updatePadding();
+    //     },
+    //     enumerable: true
+    // });
 
     this.getPosition = function(){
         return  {
@@ -122,11 +125,10 @@ function View(params) {
     };
 
     this.setPosition = function(position){
-        _height = AndroidUnitConverter.dpToPixel(activity, position.width ? position.width : _height);
-        _width = AndroidUnitConverter.dpToPixel(activity, position.height ? position.height : _width);
-        _top = AndroidUnitConverter.dpToPixel(activity, position.top ? position.top : _top);
-        _left = AndroidUnitConverter.dpToPixel(activity, position.left ? position.left : _left);
-        setLayoutParam();
+        _height = position.width ? position.width : _height;
+        _width = position.height ? position.height : _width;
+        _top = activity, position.top ? position.top : _top;
+        _left = activity, position.left ? position.left : _left;
     };
 
     this.touchEnabled = true;
@@ -170,13 +172,13 @@ function View(params) {
         bottom: 0
     };
     
-    function updatePadding() {
-        NativeViewCompat.setPaddingRelative(  self.nativeObject, 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.start + _borderWidth), 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.end + _borderWidth),
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.top + _borderWidth), 
-            AndroidUnitConverter.dpToPixel(activity, _initialPadding.bottom + _borderWidth) );
-    };
+    // function updatePadding() {
+    //     NativeViewCompat.setPaddingRelative(  self.nativeObject, 
+    //         AndroidUnitConverter.dpToPixel(activity, _initialPadding.start + _borderWidth), 
+    //         AndroidUnitConverter.dpToPixel(activity, _initialPadding.end + _borderWidth),
+    //         AndroidUnitConverter.dpToPixel(activity, _initialPadding.top + _borderWidth), 
+    //         AndroidUnitConverter.dpToPixel(activity, _initialPadding.bottom + _borderWidth) );
+    // };
 
     this.bringToFront = function(){
         self.nativeObject.bringToFront();
@@ -206,358 +208,470 @@ function View(params) {
     }
     
     self.generateLayoutParams = function(){
-        setLayoutParam();
+        for(var propertyTmp in constsProperties){
+            actionList[propertyTmp](self[propertyTmp]);
+        }
+        self.nativeInner.setLayoutParams(layoutParams);
+        
     };
     
-    // @todo Need check for performance
-    function setLayoutParam(changedKey){
-        // This method call is all layout params is number of view added to parent
-        var layoutParams = self.nativeObject.getLayoutParams();
-        if(changedKey){
-            if(self.isRoot || (self.parent && (self.parent.nativeObject.toString().indexOf("AbsoluteLayout") != -1 ))){
-                if(!layoutParams){
-                    layoutParams = new NativeAbsoluteLayout.LayoutParams(-2,-2,0,0);
-                }
-                switch (changedKey){
-                    case "width"    : layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); break;
-                    case "height"   : layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); break;
-                    case "top"      : layoutParams.y = AndroidUnitConverter.dpToPixel(activity, _top); break;
-                    case "left"     : layoutParams.x = AndroidUnitConverter.dpToPixel(activity, _left); break;
-                }
-            }
-            else{
-                if(!layoutParams){
-                    layoutParams = new NativeFlexboxLayout.LayoutParams(-2,-2);
-                }
-                switch (changedKey){
-                    case "order"        : layoutParams.order = _order; break;
-                    case "flexGrow"     : layoutParams.flexGrow = _flexGrow; break;
-                    case "flexShrink"   : layoutParams.flexShrink = _flexShrink; break;
-                    case "alignSelf"    : layoutParams.alignSelf = _alignSelf; break;
-                    case "flexBasis"    : layoutParams.flexBasisPercent = _flexBasis; break;
-                    case "width"        : if(_width){ layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width);} break;
-                    case "height"       : if(_height){ layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height);} break;
-                    case "topMargin"    : layoutParams.topMargin = AndroidUnitConverter.dpToPixel(activity, _topMargin); break;
-                    case "startMargin"  : NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, AndroidUnitConverter.dpToPixel(activity, _startMargin)); break;
-                    case "endMargin"    : NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, AndroidUnitConverter.dpToPixel(activity, _endMargin)); break;
-                    case "bottomMargin" : layoutParams.bottomMargin = AndroidUnitConverter.dpToPixel(activity, _bottomMargin); break;
-                    case "minWidth"     : layoutParams.minWidth = AndroidUnitConverter.dpToPixel(activity, _minWidth); break;
-                    case "minHeight"    : layoutParams.minHeight = AndroidUnitConverter.dpToPixel(activity, _minHeight); break;
-                    case "maxWidth"     : layoutParams.maxWidth = AndroidUnitConverter.dpToPixel(activity, _maxWidth); break;
-                    case "maxHeight"    : layoutParams.maxHeight = AndroidUnitConverter.dpToPixel(activity, _maxHeight); break;
-                    case "wrapBefore"   : layoutParams.wrapBefore = _wrapBefore; break;
-                }
-            }
-        }
-        else{
-            if(self.isRoot || (self.parent && (self.parent.nativeObject.toString().indexOf("AbsoluteLayout") != -1 ))){
-                if(!layoutParams || layoutParams.toString().indexOf("AbsoluteLayout") != -1){
-                    layoutParams = new NativeAbsoluteLayout.LayoutParams(-2,-2,0,0);
-                }
-                if(_width)
-                    layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); 
-                if(_height)
-                    layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); 
-                if(_top)
-                    layoutParams.y = AndroidUnitConverter.dpToPixel(activity, _top); 
-                if(_left)
-                    layoutParams.x = AndroidUnitConverter.dpToPixel(activity,  _left);
-            }
-            else{
-                if(!layoutParams){
-                    layoutParams = new NativeFlexboxLayout.LayoutParams(-2,-2);
-                }
- 
-                var dpStartMargin = AndroidUnitConverter.dpToPixel(activity, _startMargin);
-                var dpEndMargin = AndroidUnitConverter.dpToPixel(activity, _endMargin);
-                
-                layoutParams.order = _order; 
-                layoutParams.flexGrow = _flexGrow;
-                layoutParams.flexShrink = _flexShrink; 
-                layoutParams.alignSelf = _alignSelf; 
-                layoutParams.flexBasisPercent = _flexBasis; 
-                layoutParams.width = AndroidUnitConverter.dpToPixel(activity, _width); 
-                layoutParams.height = AndroidUnitConverter.dpToPixel(activity, _height); 
-                layoutParams.topMargin = AndroidUnitConverter.dpToPixel(activity, _topMargin); 
-                NativeMarginLayoutParamsCompat.setMarginStart(layoutParams, dpStartMargin); 
-                NativeMarginLayoutParamsCompat.setMarginEnd(layoutParams, dpEndMargin); 
-                layoutParams.bottomMargin = AndroidUnitConverter.dpToPixel(activity, _bottomMargin); 
-                layoutParams.minWidth = AndroidUnitConverter.dpToPixel(activity, _minWidth); 
-                layoutParams.minHeight = AndroidUnitConverter.dpToPixel(activity, _minHeight); 
-                layoutParams.maxWidth = AndroidUnitConverter.dpToPixel(activity, _maxWidth); 
-                layoutParams.maxHeight = AndroidUnitConverter.dpToPixel(activity, _maxHeight); 
-                layoutParams.wrapBefore = _wrapBefore;
-            }
-        }
-        self.nativeObject.setLayoutParams(layoutParams);
-    }
-    
-    // Default values
-    self.borderColor = NativeColor.BLACK;
-
-    var _order = 1;
-    Object.defineProperty(this, 'order', {
-        get: function() {
-            return _order;
-        },
-        set: function(order) {
-            _order = order;
-            setLayoutParam("order");
-        },
-        enumerable: true
-    });
-     
-    var _flexGrow = 0.0;
-    Object.defineProperty(this, 'flexGrow', {
-        get: function() {
-            return _flexGrow;
-        },
-        set: function(flexGrow) {
-            _flexGrow = flexGrow;
-            setLayoutParam("flexGrow");
-        },
-        enumerable: true
-    });
-     
-    var _flexShrink = 1.0;
-    Object.defineProperty(this, 'flexShrink', {
-        get: function() {
-            return _flexShrink;
-        },
-        set: function(flexShrink) {
-            _flexShrink = flexShrink;
-            setLayoutParam("flexShrink");
-        },
-        enumerable: true
-    });
-     
-    var _alignSelf = 0;
-    Object.defineProperty(this, 'alignSelf', {
-        get: function() {
-            return _alignSelf;
-        },
-        set: function(alignSelf) {
-            _alignSelf = alignSelf;
-            setLayoutParam("alignSelf");
-        },
-        enumerable: true
-    });
-     
-    var _flexBasis = -1;
-    Object.defineProperty(this, 'flexBasis', {
-        get: function() {
-            return _flexBasis;
-        },
-        set: function(flexBasis) {
-            _flexBasis = flexBasis;
-            setLayoutParam("flexBasis");
-        },
-        enumerable: true
-    });
-     
-    var _width = 120;
-    Object.defineProperty(this, 'width', {
-        get: function() {
-            return _width;
-        },
-        set: function(width) {
-            _width = width
-            setLayoutParam("width");
-        },
-        enumerable: true
-    });
-     
-    var _height = 80;
-    Object.defineProperty(this, 'height', {
-        get: function() {
-            return _height;
-        },
-        set: function(height) {
-            _height = height
-            setLayoutParam("height");
-        },
-        enumerable: true
-    });
-    
-    var _left = 0;
+    var _left;
     Object.defineProperty(this, 'left', {
         get: function() {
             return _left;
         },
         set: function(left) {
             _left = left;
-            setLayoutParam("left");
         },
         enumerable: true
     });
      
-    var _top = 0;
+    var _top;
     Object.defineProperty(this, 'top', {
         get: function() {
             return _top;
         },
         set: function(top) {
             _top = top;
-            setLayoutParam("top");
         },
         enumerable: true
     });
-     
-    var _topMargin = 0;
-    Object.defineProperty(this, 'topMargin', {
+    
+    var _right;
+    Object.defineProperty(this, 'right', {
         get: function() {
-            return _topMargin;
+            return _right;
         },
-        set: function(topMargin) {
-            _topMargin = topMargin;
-            setLayoutParam("topMargin");
+        set: function(right) {
+            _right = right;
         },
         enumerable: true
     });
-     
-    var _startMargin = 0;
-    Object.defineProperty(this, 'startMargin', {
+    
+    var _bottom;
+    Object.defineProperty(this, 'bottom', {
         get: function() {
-            return _startMargin;
+            return _bottom;
         },
-        set: function(startMargin) {
-            _startMargin = startMargin;
-            setLayoutParam("startMargin");
+        set: function(bottom) {
+            _bottom = bottom;
         },
         enumerable: true
     });
-     
-    var _endMargin = 0;
-    Object.defineProperty(this, 'endMargin', {
+    
+    var _start;
+    Object.defineProperty(this, 'start', {
         get: function() {
-            return _endMargin;
+            return _start;
         },
-        set: function(endMargin) {
-            _endMargin = endMargin;
-            setLayoutParam("endMargin");
+        set: function(start) {
+            _start = start;
         },
         enumerable: true
     });
-     
-    var _bottomMargin = 0;
-    Object.defineProperty(this, 'bottomMargin', {
+    
+    var _end;
+    Object.defineProperty(this, 'end', {
         get: function() {
-            return _bottomMargin;
+            return _end;
         },
-        set: function(bottomMargin) {
-            _bottomMargin = bottomMargin;
-            setLayoutParam("bottomMargin");
+        set: function(end) {
+            _end = end;
         },
         enumerable: true
     });
-     
-    var _paddingTop = 0;
-    Object.defineProperty(this, 'paddingTop', {
+    
+    var _height;
+    Object.defineProperty(this, 'height', {
         get: function() {
-            return _paddingTop;
+            return _height;
         },
-        set: function(paddingTop) {
-            _paddingTop = paddingTop;
-            updatePadding();
+        set: function(height) {
+            _height = height
         },
         enumerable: true
     });
-     
-    var _paddingStart = 0;
-    Object.defineProperty(this, 'paddingStart', {
+    
+    var _width;
+    Object.defineProperty(this, 'width', {
         get: function() {
-            return _paddingStart;
+            return _width;
         },
-        set: function(paddingStart) {
-            _paddingStart = paddingStart;
-            updatePadding();
-        },
-        enumerable: true
-    });
-     
-    var _paddingEnd = 0;
-    Object.defineProperty(this, 'paddingEnd', {
-        get: function() {
-            return _paddingEnd;
-        },
-        set: function(paddingEnd) {
-            _paddingEnd = paddingEnd;
-            updatePadding();
+        set: function(width) {
+            _width = width
         },
         enumerable: true
     });
      
-    var _paddingBottom = 0;
-    Object.defineProperty(this, 'paddingBottom', {
-        get: function() {
-            return _paddingBottom;
-        },
-        set: function(paddingBottom) {
-            _paddingBottom = paddingBottom;
-            updatePadding();
-        },
-        enumerable: true
-    });
-     
-    var _minWidth = 0;
+    var _minWidth;
     Object.defineProperty(this, 'minWidth', {
         get: function() {
             return _minWidth;
         },
         set: function(minWidth) {
             _minWidth = minWidth;
-            setLayoutParam("minWidth");
         },
         enumerable: true
     });
      
-    var _minHeight = 0;
+    var _minHeight;
     Object.defineProperty(this, 'minHeight', {
         get: function() {
             return _minHeight
         },
         set: function(minHeight) {
             _minHeight = minHeight;
-            setLayoutParam("minHeight");
         },
         enumerable: true
     });
      
-    var _maxWidth = 4793490;
+    var _maxWidth;
     Object.defineProperty(this, 'maxWidth', {
         get: function() {
             return _maxWidth;
         },
         set: function(maxWidth) {
             _maxWidth = maxWidth;
-            setLayoutParam("maxWidth");
         },
         enumerable: true
     });
      
-    var _maxHeight = 4793490;
+    var _maxHeight;
     Object.defineProperty(this, 'maxHeight', {
         get: function() {
             return _maxHeight;
         },
         set: function(maxHeight) {
             _maxHeight = maxHeight;
-            setLayoutParam("maxHeight");
         },
         enumerable: true
     });
     
-    var _wrapBefore = 0;
-    Object.defineProperty(this, 'wrapBefore', {
+    var _paddingTop;
+    Object.defineProperty(this, 'paddingTop', {
         get: function() {
-            return _wrapBefore;
+            return _paddingTop;
         },
-        set: function(wrapBefore) {
-            _wrapBefore = wrapBefore;
-            setLayoutParam("wrapBefore");
+        set: function(paddingTop) {
+            _paddingTop = paddingTop;
         },
         enumerable: true
     });
+     
+    var _paddingBottom;
+    Object.defineProperty(this, 'paddingBottom', {
+        get: function() {
+            return _paddingBottom;
+        },
+        set: function(paddingBottom) {
+            _paddingBottom = paddingBottom;
+        },
+        enumerable: true
+    }); 
+    
+    var _paddingStart;
+    Object.defineProperty(this, 'paddingStart', {
+        get: function() {
+            return _paddingStart;
+        },
+        set: function(paddingStart) {
+            _paddingStart = paddingStart;
+        },
+        enumerable: true
+    });
+     
+    var _paddingEnd;
+    Object.defineProperty(this, 'paddingEnd', {
+        get: function() {
+            return _paddingEnd;
+        },
+        set: function(paddingEnd) {
+            _paddingEnd = paddingEnd;
+        },
+        enumerable: true
+    });
+    
+    var _paddingLeft;
+    Object.defineProperty(this, 'paddingLeft', {
+        get: function() {
+            return _paddingLeft;
+        },
+        set: function(paddingLeft) {
+            _paddingLeft = paddingLeft;
+        },
+        enumerable: true
+    });
+     
+    var _paddingRight;
+    Object.defineProperty(this, 'paddingRight', {
+        get: function() {
+            return _paddingRight;
+        },
+        set: function(paddingRight) {
+            _paddingRight = paddingRight;
+        },
+        enumerable: true
+    });
+    
+    var _paddingHorizontal;
+    Object.defineProperty(this, 'paddingHorizontal', {
+        get: function() {
+            return _paddingHorizontal;
+        },
+        set: function(paddingHorizontal) {
+            _paddingHorizontal = paddingHorizontal;
+        },
+        enumerable: true
+    });
+     
+    var _paddingVertical;
+    Object.defineProperty(this, 'paddingVertical', {
+        get: function() {
+            return _paddingVertical;
+        },
+        set: function(paddingVertical) {
+            _paddingVertical = paddingVertical;
+        },
+        enumerable: true
+    });
+    
+    var _padding;
+    Object.defineProperty(this, 'padding', {
+        get: function() {
+            return _padding;
+        },
+        set: function(padding) {
+            _padding = padding;
+        },
+        enumerable: true
+    });
+    
+    var _marginTop;
+    Object.defineProperty(this, 'marginTop', {
+        get: function() {
+            return _marginTop;
+        },
+        set: function(marginTop) {
+            _marginTop = marginTop;
+        },
+        enumerable: true
+    });
+    
+    var _marginBottom;
+    Object.defineProperty(this, 'marginBottom', {
+        get: function() {
+            return _marginBottom;
+        },
+        set: function(marginBottom) {
+            _marginBottom = marginBottom;
+        },
+        enumerable: true
+    });
+    
+    var _marginStart;
+    Object.defineProperty(this, 'marginStart', {
+        get: function() {
+            return _marginStart;
+        },
+        set: function(marginStart) {
+            _marginStart = marginStart;
+        },
+        enumerable: true
+    });
+    
+    var _marginEnd;
+    Object.defineProperty(this, 'marginEnd', {
+        get: function() {
+            return _marginEnd;
+        },
+        set: function(marginEnd) {
+            _marginEnd = marginEnd;
+        },
+        enumerable: true
+    });
+    
+    var _marginLeft;
+    Object.defineProperty(this, 'marginLeft', {
+        get: function() {
+            return _marginLeft;
+        },
+        set: function(marginLeft) {
+            _marginLeft = marginLeft;
+        },
+        enumerable: true
+    });
+    
+    var _marginRight;
+    Object.defineProperty(this, 'marginRight', {
+        get: function() {
+            return _marginRight;
+        },
+        set: function(marginRight) {
+            _marginRight = marginRight;
+        },
+        enumerable: true
+    });
+    
+    var _marginHorizontal;
+    Object.defineProperty(this, 'marginHorizontal', {
+        get: function() {
+            return _marginHorizontal;
+        },
+        set: function(marginHorizontal) {
+            _marginHorizontal = marginHorizontal;
+        },
+        enumerable: true
+    });
+    
+    var _marginVertical;
+    Object.defineProperty(this, 'marginVertical', {
+        get: function() {
+            return _marginVertical;
+        },
+        set: function(marginVertical) {
+            _marginVertical = marginVertical;
+        },
+        enumerable: true
+    });
+    
+    var _margin;
+    Object.defineProperty(this, 'margin', {
+        get: function() {
+            return _margin;
+        },
+        set: function(margin) {
+            _margin = margin;
+        },
+        enumerable: true
+    });
+    
+    var _borderTopWidth;
+    Object.defineProperty(this, 'borderTopWidth', {
+        get: function() {
+            return _borderTopWidth;
+        },
+        set: function(borderTopWidth) {
+            _borderTopWidth = borderTopWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderBottomWidth;
+    Object.defineProperty(this, 'borderBottomWidth', {
+        get: function() {
+            return _borderBottomWidth;
+        },
+        set: function(borderBottomWidth) {
+            _borderBottomWidth = borderBottomWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderStartWidth;
+    Object.defineProperty(this, 'borderStartWidth', {
+        get: function() {
+            return _borderStartWidth;
+        },
+        set: function(borderStartWidth) {
+            _borderStartWidth = borderStartWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderEndWidth;
+    Object.defineProperty(this, 'borderEndWidth', {
+        get: function() {
+            return _borderEndWidth;
+        },
+        set: function(borderEndWidth) {
+            _borderEndWidth = borderEndWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderLeftWidth;
+    Object.defineProperty(this, 'borderLeftWidth', {
+        get: function() {
+            return _borderLeftWidth;
+        },
+        set: function(borderLeftWidth) {
+            _borderLeftWidth = borderLeftWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderRightWidth;
+    Object.defineProperty(this, 'borderRightWidth', {
+        get: function() {
+            return _borderRightWidth;
+        },
+        set: function(borderRightWidth) {
+            _borderRightWidth = borderRightWidth;
+        },
+        enumerable: true
+    });
+    
+    var _borderWidth;
+    Object.defineProperty(this, 'borderWidth', {
+        get: function() {
+            return _borderWidth;
+        },
+        set: function(borderWidth) {
+            _borderWidth = borderWidth;
+        },
+        enumerable: true
+    });
+    
+    var _flexGrow;
+    Object.defineProperty(this, 'flexGrow', {
+        get: function() {
+            return _flexGrow;
+        },
+        set: function(flexGrow) {
+            _flexGrow = flexGrow;
+        },
+        enumerable: true
+    });
+    
+    var _flexShrink;
+    Object.defineProperty(this, 'flexShrink', {
+        get: function() {
+            return _flexShrink;
+        },
+        set: function(flexShrink) {
+            _flexShrink = flexShrink;
+        },
+        enumerable: true
+    });
+     
+    var _flexBasis;
+    Object.defineProperty(this, 'flexBasis', {
+        get: function() {
+            return _flexBasis;
+        },
+        set: function(flexBasis) {
+            _flexBasis = flexBasis;
+        },
+        enumerable: true
+    });
+
+    var _alignSelf;
+    Object.defineProperty(this, 'alignSelf', {
+        get: function() {
+            return _alignSelf;
+        },
+        set: function(alignSelf) {
+            _alignSelf = alignSelf;
+        },
+        enumerable: true
+    });
+    
+    this.dirty = function(){
+        self.nativeInner.dirty();
+    };
+    
+    // Default values
+    self.borderColor = NativeColor.BLACK;
     
     // Assign parameters given in constructor
     if (params) {
@@ -567,4 +681,67 @@ function View(params) {
     }
 }
 
+var YogaEdge = {
+    "left" : 0,
+    "top" : 1,
+    "right" : 2,
+    "bottom" : 3,
+    "start" : 4,
+    "end" : 5,
+    "horizontal" : 6,
+    "vertical" : 7,
+    "all" : 8
+};
+
+var constsProperties = ['left', 'top', 'right', 'bottom', 'start', 'end', 'height', 'width', 'minWidth', 'minHeight', 'maxWidth', 'maxHeight', 
+            'paddingTop', 'paddingBottom', 'paddingStart', 'paddingEnd', 'paddingLeft', 'paddingRight', 'paddingHorizontal', 'paddingVertical', 'padding', 
+            'marginTop', 'marginBottom', 'marginStart', 'marginEnd', 'marginLeft', 'marginRight', 'marginHorizontal', 'marginVertical', 'margin', 
+            'borderTopWidth', 'borderBottomWidth', 'borderStartWidth', 'borderEndWidth', 'borderLeftWidth', 'borderRightWidth', 'borderWidth', 
+            'flexGrow', 'flexShrink', 'flexBasis', 'alignSelf']
+
+var actionList = {
+    'left'              : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['left'], _valDp)},
+    'top'               : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['top'], _valDp)},
+    'right'             : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['right'], _valDp)},
+    'bottom'            : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['bottom'], _valDp)},
+    'start'             : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['start'], _valDp)},
+    'end'               : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['end'], _valDp)},
+    'height'            : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setHeight(_valDp)},
+    'width'             : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setWidth(_valDp)},
+    'minWidth'          : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMinWidth(_valDp)},
+    'minHeight'         : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMinHeight(_valDp)},
+    'maxWidth'          : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMaxWidth(_valDp)},
+    'maxHeight'         : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMaxHeight(_valDp)},
+    'paddingTop'        : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['top'], _valDp)},
+    'paddingBottom'     : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['bottom'], _valDp)},
+    'paddingStart'      : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['start'], _valDp)},
+    'paddingEnd'        : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['end'], _valDp)},
+    'paddingLeft'       : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['left'], _valDp)},
+    'paddingRight'      : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['right'], _valDp)},
+    'paddingHorizontal' : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['horizontal'], _valDp)},
+    'paddingVertical'   : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['vertical'], _valDp)},
+    'padding'           : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPadding(YogaEdge['all'], _valDp)},
+    'marginTop'         : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['top'], _valDp)},
+    'marginBottom'      : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['bottom'], _valDp)},
+    'marginStart'       : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['start'], _valDp)},
+    'marginEnd'         : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['end'], _valDp)},
+    'marginLeft'        : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['left'], _valDp)},
+    'marginRight'       : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['right'], _valDp)},
+    'marginHorizontal'  : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['horizontal'], _valDp)},
+    'marginVertical'    : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['vertical'], _valDp)},
+    'margin'            : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setMargin(YogaEdge['all'], _valDp)},
+    'borderTopWidth'    : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['top'], _valDp)},
+    'borderBottomWidth' : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['bottom'], _valDp)},
+    'borderStartWidth'  : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['start'], _valDp)},
+    'borderEndWidth'    : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['end'], _valDp)},
+    'borderLeftWidth'   : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['left'], _valDp)},
+    'borderRightWidth'  : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['right'], _valDp)},
+    'borderWidth'       : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['all'], _valDp)},
+    'flexGrow'          : function(val){yogaLayoutParams.(val)},
+    'flexShrink'        : function(val){yogaLayoutParams.(val)},
+    'flexBasis'         : function(val){yogaLayoutParams.(val)},
+    'alignSelf'         : function(val){yogaLayoutParams.(val)}
+}
+
 module.exports = View;
+
