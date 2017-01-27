@@ -588,6 +588,9 @@ function View(params) {
             return self.nativeObject.yoga.borderWidth;
         },
         set: function(value) {
+            // Native object's layer must be updated!
+            // Yoga's borderWidth property only effects positioning of its child view.
+            self.nativeObject.layer.borderWidth = value;
             self.nativeObject.yoga.borderWidth = value;
         },
         enumerable: true
