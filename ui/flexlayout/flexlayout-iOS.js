@@ -21,17 +21,17 @@ FlexLayout.Direction = {};
 
 Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
     get: function() {
-        return YogaEnums.YGDirection.Row;
+        return YogaEnums.YGDirection.Inherit;
     },
 });
 Object.defineProperty(FlexLayout.Direction, 'LTR', {
     get: function() {
-        return YogaEnums.YGDirection.RowReverse;
+        return YogaEnums.YGDirection.LTR;
     },
 });
 Object.defineProperty(FlexLayout.Direction, 'RTL', {
     get: function() {
-        return YogaEnums.YGDirection.Column;
+        return YogaEnums.YGDirection.RTL;
     },
 });
 ////////////////////////////////////////////////////////////////////////
