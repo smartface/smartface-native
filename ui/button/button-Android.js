@@ -1,7 +1,7 @@
 const Label = require("nf-core/ui/label");
 const Color = require("nf-core/ui/color");
 const StateList = require("nf-core/util/statelist");
-const State = require("nf-core/ui/state");
+const View = require("nf-core/ui/view");
 const extend = require('js-base/core/extend');
 
 const NativeButton = requireClass("android.widget.Button");
@@ -40,23 +40,23 @@ const Button = extend(Label)(
                 var statesSet = [];
                 var colorsSets = [];
                 if(textColors.normal){
-                    statesSet.push(State.STATE_NORMAL);
+                    statesSet.push(View.State.STATE_NORMAL);
                     colorsSets.push(textColors.normal);
                 }
                 if(textColors.disabled){
-                    statesSet.push(State.STATE_DISABLED);
+                    statesSet.push(View.State.STATE_DISABLED);
                     colorsSets.push(textColors.disabled);
                 }
                 if(textColors.selected){
-                    statesSet.push(State.STATE_SELECTED);
+                    statesSet.push(View.State.STATE_SELECTED);
                     colorsSets.push(textColors.selected);
                 }
                 if(textColors.pressed){
-                    statesSet.push(State.STATE_PRESSED);
+                    statesSet.push(View.State.STATE_PRESSED);
                     colorsSets.push(textColors.pressed);
                 }
                 if(textColors.focused){
-                    statesSet.push(State.STATE_FOCUSED);
+                    statesSet.push(View.State.STATE_FOCUSED);
                     colorsSets.push(textColors.focused);
                 }
                 textColorStateListDrawable = new NativeColorStateList (statesSet, colorsSets);
@@ -82,23 +82,23 @@ const Button = extend(Label)(
                 stateListSet = new NativeStateListDrawable();
                 if(backgroundColors.normal){
                     var stateDrawable = NativeColorDrawable(backgroundColors.normal);
-                    stateListSet.addState(State.STATE_NORMAL,stateDrawable);
+                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
                 }
                 if(backgroundColors.disabled){
                     var stateDrawable = NativeColorDrawable(backgroundColors.disabled);
-                    stateListSet.addState(State.STATE_DISABLED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
                 }
                 if(backgroundColors.selected){
                     var stateDrawable = NativeColorDrawable(backgroundColors.selected);
-                    stateListSet.addState(State.STATE_SELECTED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundColors.pressed){
                     var stateDrawable = NativeColorDrawable(backgroundColors.pressed);
-                    stateListSet.addState(State.STATE_PRESSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
                 }
                 if(backgroundColors.focused){
                     var stateDrawable = NativeColorDrawable(backgroundColors.focused);
-                    stateListSet.addState(State.STATE_FOCUSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
                 }
                 self.nativeObject.setBackground(stateListSet);
             },
@@ -128,23 +128,23 @@ const Button = extend(Label)(
                     stateListSet = new NativeStateListDrawable();
                     if(_backgroundImages.normal){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.normal);
-                        stateListSet.addState(State.STATE_NORMAL,stateDrawable);
+                        stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
                     }
                     if(_backgroundImages.disabled){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.disabled);
-                        stateListSet.addState(State.STATE_DISABLED,stateDrawable);
+                        stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
                     }
                     if(_backgroundImages.selected){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.selected);
-                        stateListSet.addState(State.STATE_SELECTED,stateDrawable);
+                        stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
                     }
                     if(_backgroundImages.pressed){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.pressed);
-                        stateListSet.addState(State.STATE_PRESSED,stateDrawable);
+                        stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
                     }
                     if(_backgroundImages.focused){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.focused);
-                        stateListSet.addState(State.STATE_FOCUSED,stateDrawable);
+                        stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
                     }
                     self.nativeObject.setBackground(stateListSet);
                 }
@@ -169,23 +169,23 @@ const Button = extend(Label)(
                 stateListSet = new NativeStateListDrawable();
                 if(backgroundImages.normal){
                     var stateDrawable = NativeDrawable.createFromPath(backgroundImages.normal);
-                    stateListSet.addState(State.STATE_NORMAL,stateDrawable);
+                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
                 }
                 if(backgroundImages.disabled){
                     var stateDrawable = NativeDrawable.createFromPath(backgroundImages.disabled);
-                    stateListSet.addState(State.STATE_DISABLED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
                 }
                 if(backgroundImages.selected){
                     var stateDrawable = NativeDrawable.createFromPath(backgroundImages.selected);
-                    stateListSet.addState(State.STATE_SELECTED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundImages.pressed){
                     var stateDrawable = NativeDrawable.createFromPath(backgroundImages.pressed);
-                    stateListSet.addState(State.STATE_PRESSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
                 }
                 if(backgroundImages.focused){
                     var stateDrawable = NativeDrawable.createFromPath(backgroundImages.focused);
-                    stateListSet.addState(State.STATE_FOCUSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
                 }
                 self.nativeObject.setBackground(stateListSet);
             },

@@ -1,6 +1,5 @@
 const TypeUtil = require("nf-core/util/type");
 const Style = require('nf-core/ui/style');
-const State = require("nf-core/ui/state");
 const Color = require("nf-core/ui/color");
 const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
@@ -25,7 +24,6 @@ function View(params) {
     if(!self.nativeObject){
         self.nativeObject = new NativeView(Android.getActivity());
     }
-    
     var activity = Android.getActivity();
     var backgroundColorInitial = 0xFFFFFFFF;
     var backgroundColorDrawable = new NativeColorDrawable(backgroundColorInitial);
@@ -38,7 +36,6 @@ function View(params) {
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
     layerDrawable.setDrawableByLayerId(1,borderDrawable);
     self.nativeObject.setBackground(layerDrawable);
-    
 
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -74,23 +71,23 @@ function View(params) {
                 var stateListSet = new NativeStateListDrawable();
                 if(backgroundColor.normal){
                     var stateDrawable = NativeColorDrawable(backgroundColor.normal);
-                    stateListSet.addState(State.STATE_NORMAL,stateDrawable);
+                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
                 }
                 if(backgroundColor.disabled){
                     var stateDrawable = NativeColorDrawable(backgroundColor.disabled);
-                    stateListSet.addState(State.STATE_DISABLED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
                 }
                 if(backgroundColor.selected){
                     var stateDrawable = NativeColorDrawable(backgroundColor.selected);
-                    stateListSet.addState(State.STATE_SELECTED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
                 }
                 if(backgroundColor.pressed){
                     var stateDrawable = NativeColorDrawable(backgroundColor.pressed);
-                    stateListSet.addState(State.STATE_PRESSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
                 }
                 if(backgroundColor.focused){
                     var stateDrawable = NativeColorDrawable(backgroundColor.focused);
-                    stateListSet.addState(State.STATE_FOCUSED,stateDrawable);
+                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
                 }
                 self.nativeObject.setBackground(stateListSet);
             }
@@ -605,5 +602,28 @@ function View(params) {
         }
     }
 }
+
+View.State = {};
+
+View.State.STATE_NORMAL =  [
+    NativeR.attr.state_enabled,
+    -NativeR.attr.state_pressed,
+    -NativeR.attr.state_selected
+];
+View.State.STATE_DISABLED = [
+    -NativeR.attr.state_enabled,
+];
+View.State.STATE_SELECTED = [
+    NativeR.attr.state_enabled,
+    NativeR.attr.state_selected
+];
+View.State.STATE_PRESSED = [
+    NativeR.attr.state_pressed,
+    NativeR.attr.state_enabled,
+];
+View.State.STATE_FOCUSED = [
+    NativeR.attr.state_focused,
+    NativeR.attr.state_enabled,
+];
 
 module.exports = View;

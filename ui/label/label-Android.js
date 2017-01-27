@@ -2,7 +2,6 @@ const View = require('../view');
 const Color = require("nf-core/ui/color");
 const TextAlignment = require("nf-core/ui/textalignment");
 const TypeUtil = require("nf-core/util/type");
-const State = require("nf-core/ui/state");
 const extend = require('js-base/core/extend');
 const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
@@ -182,23 +181,23 @@ const Label = extend(View)(
             var statesSet = [];
             var colorsSets = [];
             if(textColors.normal){
-                statesSet.push(State.STATE_NORMAL);
+                statesSet.push(View.State.STATE_NORMAL);
                 colorsSets.push(textColors.normal);
             }
             if(textColors.disabled){
-                statesSet.push(State.STATE_DISABLED);
+                statesSet.push(View.State.STATE_DISABLED);
                 colorsSets.push(textColors.disabled);
             }
             if(textColors.selected){
-                statesSet.push(State.STATE_SELECTED);
+                statesSet.push(View.State.STATE_SELECTED);
                 colorsSets.push(textColors.selected);
             }
             if(textColors.pressed){
-                statesSet.push(State.STATE_PRESSED);
+                statesSet.push(View.State.STATE_PRESSED);
                 colorsSets.push(textColors.pressed);
             }
             if(textColors.focused){
-                statesSet.push(State.STATE_FOCUSED);
+                statesSet.push(View.State.STATE_FOCUSED);
                 colorsSets.push(textColors.focused);
             }
             return (new NativeColorStateList (statesSet, colorsSets));
