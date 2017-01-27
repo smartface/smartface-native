@@ -10,7 +10,7 @@ const extend = require('js-base/core/extend');
  * A button instance consists of text or an icon(or both of them).
  * 
  *     @example
- *     const Button = require('sf-core/ui/button');
+ *     const Button = require('nf-core/ui/button');
  *     var myButton = new Button();
  *     myButton.text = "Click me!";
  */
@@ -30,10 +30,10 @@ const Button = extend(View)(
          * It is set to null by default.
          * 
          *     @example 
-         *     const Button = require('sf-core/ui/button');
+         *     const Button = require('nf-core/ui/button');
          *     var myButton = new Button();
          *     myButton.text = "Click me!";
-         *     const Font = require('sf-core/ui/font');
+         *     const Font = require('nf-core/ui/font');
          *     myButton.font = Font.create("Arial", 16, Font.BOLD);   
          * 
          * @property {UI.Font} [font = null]   
@@ -54,8 +54,8 @@ const Button = extend(View)(
          * can be used.
          * 
          *     @example
-         *     const Button = require('sf-core/ui/button');
-         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     const Button = require('nf-core/ui/button');
+         *     const TextAlignment = require('nf-core/ui/textalignment');
          *     var myButton = new Button();
          *     myButton.textAlignment = TextAlignment.MIDCENTER;  
          * @since 0.1        
@@ -67,9 +67,9 @@ const Button = extend(View)(
          * Gets/sets text color list of button based on states.
          * 
          *     @example
-         *     const Button = require('sf-core/ui/button');
-         *     const StateList = require('sf-core/util/statelist');
-         *     const Color = require('sf-core/ui/color');
+         *     const Button = require('nf-core/ui/button');
+         *     const StateList = require('nf-core/util/statelist');
+         *     const Color = require('nf-core/ui/color');
          *     var myButton = new Button();
          *     myButton.text = "Button text";
          *     myButton.textColors = new StateList({  
@@ -95,9 +95,9 @@ const Button = extend(View)(
          * Gets/sets color list of button background based on states.  
          * 
          *     @example
-         *     const Button = require('sf-core/ui/button');
-         *     const StateList = require('sf-core/util/statelist');
-         *     const Color = require('sf-core/ui/color');
+         *     const Button = require('nf-core/ui/button');
+         *     const StateList = require('nf-core/util/statelist');
+         *     const Color = require('nf-core/ui/color');
          *     var myButton = new Button();
          *     myButton.backgroundColors = new StateList({  
          *         normal: Color.LIGHTGRAY, 
@@ -122,8 +122,8 @@ const Button = extend(View)(
          * Gets/sets background image. Assign an image or a mapping from states to images.
          * 
          *     @example
-         *     const Button = require('sf-core/ui/button');
-         *     const StateList = require('sf-core/util/statelist');
+         *     const Button = require('nf-core/ui/button');
+         *     const StateList = require('nf-core/util/statelist');
          *     var myButton = new Button();
          *     myButton.backgroundImage = {
          *         normal: "assets://normal.png",
@@ -152,8 +152,8 @@ const Button = extend(View)(
          * Gets/sets background image list of button based on states. 
          * 
          *     @example
-         *     const Button = require('sf-core/ui/button');
-         *     const StateList = require('sf-core/util/statelist');
+         *     const Button = require('nf-core/ui/button');
+         *     const StateList = require('nf-core/util/statelist');
          *     var myButton = new Button();
          *     myButton.backgroundImages = new StateList({
          *         normal: "assets://normal.png",
