@@ -24,7 +24,7 @@ Screen.orientation = null;
  * @static
  * @since 0.1
  */
-Screen.touchSupported = false;
+Screen.touchSupported;
 
 /**
  *
@@ -75,6 +75,16 @@ Screen.touchX = -1;
  * @since 0.1
  */
 Screen.touchY = -1;
+
+/**
+ *
+ * TODO: type definition
+ * @property {Boolean} touchForceAvaliable
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Screen.touchForceAvaliable;
 
 /**
  * TODO: type definition
