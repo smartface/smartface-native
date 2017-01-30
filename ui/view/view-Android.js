@@ -209,16 +209,22 @@ function View(params) {
     
     self.generateLayoutParams = function(){
         for(var propertyTmp in constsProperties){
-            actionList[propertyTmp](self[propertyTmp]);
+            if(self[propertyTmp]){
+                actionListSets[propertyTmp](self[propertyTmp])();
+            }
         }
-        self.nativeInner.setLayoutParams(layoutParams);
+        self.nativeObject.setLayoutParams(layoutParams);
         
     };
+    
+    function getPropertyFromNativeYoga(propertyName){
+        return actionListGets[propertyName]();
+    }
     
     var _left;
     Object.defineProperty(this, 'left', {
         get: function() {
-            return _left;
+            return getPropertyFromNativeYoga('left');
         },
         set: function(left) {
             _left = left;
@@ -229,7 +235,7 @@ function View(params) {
     var _top;
     Object.defineProperty(this, 'top', {
         get: function() {
-            return _top;
+            return getPropertyFromNativeYoga('top');
         },
         set: function(top) {
             _top = top;
@@ -240,7 +246,7 @@ function View(params) {
     var _right;
     Object.defineProperty(this, 'right', {
         get: function() {
-            return _right;
+            return getPropertyFromNativeYoga('right');
         },
         set: function(right) {
             _right = right;
@@ -251,7 +257,7 @@ function View(params) {
     var _bottom;
     Object.defineProperty(this, 'bottom', {
         get: function() {
-            return _bottom;
+            return getPropertyFromNativeYoga('bottom');
         },
         set: function(bottom) {
             _bottom = bottom;
@@ -262,7 +268,7 @@ function View(params) {
     var _start;
     Object.defineProperty(this, 'start', {
         get: function() {
-            return _start;
+            return getPropertyFromNativeYoga('start');
         },
         set: function(start) {
             _start = start;
@@ -273,7 +279,7 @@ function View(params) {
     var _end;
     Object.defineProperty(this, 'end', {
         get: function() {
-            return _end;
+            return getPropertyFromNativeYoga('end');
         },
         set: function(end) {
             _end = end;
@@ -284,7 +290,7 @@ function View(params) {
     var _height;
     Object.defineProperty(this, 'height', {
         get: function() {
-            return _height;
+            return getPropertyFromNativeYoga('height');
         },
         set: function(height) {
             _height = height
@@ -295,7 +301,7 @@ function View(params) {
     var _width;
     Object.defineProperty(this, 'width', {
         get: function() {
-            return _width;
+            return getPropertyFromNativeYoga('width');
         },
         set: function(width) {
             _width = width
@@ -306,7 +312,7 @@ function View(params) {
     var _minWidth;
     Object.defineProperty(this, 'minWidth', {
         get: function() {
-            return _minWidth;
+            return getPropertyFromNativeYoga('minWidth');
         },
         set: function(minWidth) {
             _minWidth = minWidth;
@@ -317,7 +323,7 @@ function View(params) {
     var _minHeight;
     Object.defineProperty(this, 'minHeight', {
         get: function() {
-            return _minHeight
+            return getPropertyFromNativeYoga('minHeight');
         },
         set: function(minHeight) {
             _minHeight = minHeight;
@@ -328,7 +334,7 @@ function View(params) {
     var _maxWidth;
     Object.defineProperty(this, 'maxWidth', {
         get: function() {
-            return _maxWidth;
+            return getPropertyFromNativeYoga('maxWidth');
         },
         set: function(maxWidth) {
             _maxWidth = maxWidth;
@@ -339,7 +345,7 @@ function View(params) {
     var _maxHeight;
     Object.defineProperty(this, 'maxHeight', {
         get: function() {
-            return _maxHeight;
+            return getPropertyFromNativeYoga('maxHeight');
         },
         set: function(maxHeight) {
             _maxHeight = maxHeight;
@@ -350,7 +356,7 @@ function View(params) {
     var _paddingTop;
     Object.defineProperty(this, 'paddingTop', {
         get: function() {
-            return _paddingTop;
+            return getPropertyFromNativeYoga('paddingTop');
         },
         set: function(paddingTop) {
             _paddingTop = paddingTop;
@@ -361,7 +367,7 @@ function View(params) {
     var _paddingBottom;
     Object.defineProperty(this, 'paddingBottom', {
         get: function() {
-            return _paddingBottom;
+            return getPropertyFromNativeYoga('paddingBottom');
         },
         set: function(paddingBottom) {
             _paddingBottom = paddingBottom;
@@ -372,7 +378,7 @@ function View(params) {
     var _paddingStart;
     Object.defineProperty(this, 'paddingStart', {
         get: function() {
-            return _paddingStart;
+            return getPropertyFromNativeYoga('paddingStart');
         },
         set: function(paddingStart) {
             _paddingStart = paddingStart;
@@ -383,7 +389,7 @@ function View(params) {
     var _paddingEnd;
     Object.defineProperty(this, 'paddingEnd', {
         get: function() {
-            return _paddingEnd;
+            return getPropertyFromNativeYoga('paddingEnd');
         },
         set: function(paddingEnd) {
             _paddingEnd = paddingEnd;
@@ -394,7 +400,7 @@ function View(params) {
     var _paddingLeft;
     Object.defineProperty(this, 'paddingLeft', {
         get: function() {
-            return _paddingLeft;
+            return getPropertyFromNativeYoga('paddingLeft');
         },
         set: function(paddingLeft) {
             _paddingLeft = paddingLeft;
@@ -405,7 +411,7 @@ function View(params) {
     var _paddingRight;
     Object.defineProperty(this, 'paddingRight', {
         get: function() {
-            return _paddingRight;
+            return getPropertyFromNativeYoga('paddingRight');
         },
         set: function(paddingRight) {
             _paddingRight = paddingRight;
@@ -416,7 +422,7 @@ function View(params) {
     var _paddingHorizontal;
     Object.defineProperty(this, 'paddingHorizontal', {
         get: function() {
-            return _paddingHorizontal;
+            return getPropertyFromNativeYoga('paddingHorizontal');
         },
         set: function(paddingHorizontal) {
             _paddingHorizontal = paddingHorizontal;
@@ -427,7 +433,7 @@ function View(params) {
     var _paddingVertical;
     Object.defineProperty(this, 'paddingVertical', {
         get: function() {
-            return _paddingVertical;
+            return getPropertyFromNativeYoga('paddingVertical');
         },
         set: function(paddingVertical) {
             _paddingVertical = paddingVertical;
@@ -438,7 +444,7 @@ function View(params) {
     var _padding;
     Object.defineProperty(this, 'padding', {
         get: function() {
-            return _padding;
+            return getPropertyFromNativeYoga('padding');
         },
         set: function(padding) {
             _padding = padding;
@@ -449,7 +455,7 @@ function View(params) {
     var _marginTop;
     Object.defineProperty(this, 'marginTop', {
         get: function() {
-            return _marginTop;
+            return getPropertyFromNativeYoga('marginTop');
         },
         set: function(marginTop) {
             _marginTop = marginTop;
@@ -460,7 +466,7 @@ function View(params) {
     var _marginBottom;
     Object.defineProperty(this, 'marginBottom', {
         get: function() {
-            return _marginBottom;
+            return getPropertyFromNativeYoga('marginBottom');
         },
         set: function(marginBottom) {
             _marginBottom = marginBottom;
@@ -471,7 +477,7 @@ function View(params) {
     var _marginStart;
     Object.defineProperty(this, 'marginStart', {
         get: function() {
-            return _marginStart;
+            return getPropertyFromNativeYoga('marginStart');
         },
         set: function(marginStart) {
             _marginStart = marginStart;
@@ -482,7 +488,7 @@ function View(params) {
     var _marginEnd;
     Object.defineProperty(this, 'marginEnd', {
         get: function() {
-            return _marginEnd;
+            return getPropertyFromNativeYoga('marginEnd');
         },
         set: function(marginEnd) {
             _marginEnd = marginEnd;
@@ -493,7 +499,7 @@ function View(params) {
     var _marginLeft;
     Object.defineProperty(this, 'marginLeft', {
         get: function() {
-            return _marginLeft;
+            return getPropertyFromNativeYoga('marginLeft');
         },
         set: function(marginLeft) {
             _marginLeft = marginLeft;
@@ -504,7 +510,7 @@ function View(params) {
     var _marginRight;
     Object.defineProperty(this, 'marginRight', {
         get: function() {
-            return _marginRight;
+            return getPropertyFromNativeYoga('marginRight');
         },
         set: function(marginRight) {
             _marginRight = marginRight;
@@ -515,7 +521,7 @@ function View(params) {
     var _marginHorizontal;
     Object.defineProperty(this, 'marginHorizontal', {
         get: function() {
-            return _marginHorizontal;
+            return getPropertyFromNativeYoga('marginHorizontal');
         },
         set: function(marginHorizontal) {
             _marginHorizontal = marginHorizontal;
@@ -526,7 +532,7 @@ function View(params) {
     var _marginVertical;
     Object.defineProperty(this, 'marginVertical', {
         get: function() {
-            return _marginVertical;
+            return getPropertyFromNativeYoga('marginVertical');
         },
         set: function(marginVertical) {
             _marginVertical = marginVertical;
@@ -537,7 +543,7 @@ function View(params) {
     var _margin;
     Object.defineProperty(this, 'margin', {
         get: function() {
-            return _margin;
+            return getPropertyFromNativeYoga('margin');
         },
         set: function(margin) {
             _margin = margin;
@@ -548,7 +554,7 @@ function View(params) {
     var _borderTopWidth;
     Object.defineProperty(this, 'borderTopWidth', {
         get: function() {
-            return _borderTopWidth;
+            return getPropertyFromNativeYoga('borderTopWidth');
         },
         set: function(borderTopWidth) {
             _borderTopWidth = borderTopWidth;
@@ -559,7 +565,7 @@ function View(params) {
     var _borderBottomWidth;
     Object.defineProperty(this, 'borderBottomWidth', {
         get: function() {
-            return _borderBottomWidth;
+            return getPropertyFromNativeYoga('borderBottomWidth');
         },
         set: function(borderBottomWidth) {
             _borderBottomWidth = borderBottomWidth;
@@ -570,7 +576,7 @@ function View(params) {
     var _borderStartWidth;
     Object.defineProperty(this, 'borderStartWidth', {
         get: function() {
-            return _borderStartWidth;
+            return getPropertyFromNativeYoga('borderStartWidth');
         },
         set: function(borderStartWidth) {
             _borderStartWidth = borderStartWidth;
@@ -581,7 +587,7 @@ function View(params) {
     var _borderEndWidth;
     Object.defineProperty(this, 'borderEndWidth', {
         get: function() {
-            return _borderEndWidth;
+            return getPropertyFromNativeYoga('borderEndWidth');
         },
         set: function(borderEndWidth) {
             _borderEndWidth = borderEndWidth;
@@ -592,7 +598,7 @@ function View(params) {
     var _borderLeftWidth;
     Object.defineProperty(this, 'borderLeftWidth', {
         get: function() {
-            return _borderLeftWidth;
+            return getPropertyFromNativeYoga('borderLeftWidth');
         },
         set: function(borderLeftWidth) {
             _borderLeftWidth = borderLeftWidth;
@@ -603,7 +609,7 @@ function View(params) {
     var _borderRightWidth;
     Object.defineProperty(this, 'borderRightWidth', {
         get: function() {
-            return _borderRightWidth;
+            return getPropertyFromNativeYoga('borderRightWidth');
         },
         set: function(borderRightWidth) {
             _borderRightWidth = borderRightWidth;
@@ -614,7 +620,7 @@ function View(params) {
     var _borderWidth;
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return _borderWidth;
+            return getPropertyFromNativeYoga('borderWidth');
         },
         set: function(borderWidth) {
             _borderWidth = borderWidth;
@@ -625,7 +631,7 @@ function View(params) {
     var _flexGrow;
     Object.defineProperty(this, 'flexGrow', {
         get: function() {
-            return _flexGrow;
+            return getPropertyFromNativeYoga('flexGrow');
         },
         set: function(flexGrow) {
             _flexGrow = flexGrow;
@@ -636,7 +642,7 @@ function View(params) {
     var _flexShrink;
     Object.defineProperty(this, 'flexShrink', {
         get: function() {
-            return _flexShrink;
+            return getPropertyFromNativeYoga('flexShrink');
         },
         set: function(flexShrink) {
             _flexShrink = flexShrink;
@@ -647,7 +653,7 @@ function View(params) {
     var _flexBasis;
     Object.defineProperty(this, 'flexBasis', {
         get: function() {
-            return _flexBasis;
+            return getPropertyFromNativeYoga('flexBasis');
         },
         set: function(flexBasis) {
             _flexBasis = flexBasis;
@@ -658,7 +664,7 @@ function View(params) {
     var _alignSelf;
     Object.defineProperty(this, 'alignSelf', {
         get: function() {
-            return _alignSelf;
+            return getPropertyFromNativeYoga('alignSelf');
         },
         set: function(alignSelf) {
             _alignSelf = alignSelf;
@@ -699,7 +705,7 @@ var constsProperties = ['left', 'top', 'right', 'bottom', 'start', 'end', 'heigh
             'borderTopWidth', 'borderBottomWidth', 'borderStartWidth', 'borderEndWidth', 'borderLeftWidth', 'borderRightWidth', 'borderWidth', 
             'flexGrow', 'flexShrink', 'flexBasis', 'alignSelf']
 
-var actionList = {
+var actionListSets = {
     'left'              : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['left'], _valDp)},
     'top'               : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['top'], _valDp)},
     'right'             : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setPosition(YogaEdge['right'], _valDp)},
@@ -737,10 +743,54 @@ var actionList = {
     'borderLeftWidth'   : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['left'], _valDp)},
     'borderRightWidth'  : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['right'], _valDp)},
     'borderWidth'       : function(val){ var _valDp = AndroidUnitConverter.dpToPixel(activity,val); yogaLayoutParams.setBorder(YogaEdge['all'], _valDp)},
-    'flexGrow'          : function(val){yogaLayoutParams.(val)},
-    'flexShrink'        : function(val){yogaLayoutParams.(val)},
-    'flexBasis'         : function(val){yogaLayoutParams.(val)},
-    'alignSelf'         : function(val){yogaLayoutParams.(val)}
+    'flexGrow'          : function(val){yogaLayoutParams.setFlexGrow(val)},
+    'flexShrink'        : function(val){yogaLayoutParams.setFlexShrink(val)},
+    'flexBasis'         : function(val){yogaLayoutParams.setFlexBasis(val)},
+    'alignSelf'         : function(val){yogaLayoutParams.setAlignSelf(val)}
+}
+
+var actionListGets = {
+    'left'              : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['left']),
+    'top'               : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['top']),
+    'right'             : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['right']),
+    'bottom'            : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['bottom']),
+    'start'             : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['start']),
+    'end'               : function(){ return self.nativeObject.getLayoutParams().node.getPosition(YogaEdge['end']),
+    'height'            : function(){ return self.nativeObject.getLayoutParams().node.getHeight(),
+    'width'             : function(){ return self.nativeObject.getLayoutParams().node.getWidth(),
+    'minWidth'          : function(){ return self.nativeObject.getLayoutParams().node.getMinWidth(),
+    'minHeight'         : function(){ return self.nativeObject.getLayoutParams().node.getMinHeight(),
+    'maxWidth'          : function(){ return self.nativeObject.getLayoutParams().node.getMaxWidth(),
+    'maxHeight'         : function(){ return self.nativeObject.getLayoutParams().node.getMaxHeight(),
+    'paddingTop'        : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['top']),
+    'paddingBottom'     : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['bottom']),
+    'paddingStart'      : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['start']),
+    'paddingEnd'        : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['end']),
+    'paddingLeft'       : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['left']),
+    'paddingRight'      : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['right']),
+    'paddingHorizontal' : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['horizontal']),
+    'paddingVertical'   : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['vertical']),
+    'padding'           : function(){ return self.nativeObject.getLayoutParams().node.getPadding(YogaEdge['all']),
+    'marginTop'         : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['top']),
+    'marginBottom'      : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['bottom']),
+    'marginStart'       : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['start']),
+    'marginEnd'         : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['end']),
+    'marginLeft'        : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['left']),
+    'marginRight'       : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['right']),
+    'marginHorizontal'  : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['horizontal']),
+    'marginVertical'    : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['vertical']),
+    'margin'            : function(){ return self.nativeObject.getLayoutParams().node.getMargin(YogaEdge['all']),
+    'borderTopWidth'    : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['top']),
+    'borderBottomWidth' : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['bottom']),
+    'borderStartWidth'  : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['start']),
+    'borderEndWidth'    : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['end']),
+    'borderLeftWidth'   : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['left']),
+    'borderRightWidth'  : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['right']),
+    'borderWidth'       : function(){ return self.nativeObject.getLayoutParams().node.getBorder(YogaEdge['all'])
+    'flexGrow'          : function(){ return self.nativeObject.getLayoutParams().node.getFlexGrow()},
+    'flexShrink'        : function(){ return self.nativeObject.getLayoutParams().node.getFlexShrink()},
+    'flexBasis'         : function(){ return self.nativeObject.getLayoutParams().node.getFlexBasis()},
+    'alignSelf'         : function(){ return self.nativeObject.getLayoutParams().node.getAlignSelf()}
 }
 
 module.exports = View;
