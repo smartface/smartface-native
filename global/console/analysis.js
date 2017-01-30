@@ -16,7 +16,7 @@ function console() {
      *     var number = 5432;
      *     console.log(number);
      * 
-     *     const Label = require('sf-core/ui/label');
+     *     const Label = require('nf-core/ui/label');
      *     var myLabel = new Label({
      *         text: "This is my label"
      *     }); 
