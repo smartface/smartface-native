@@ -1,5 +1,6 @@
 const TypeUtil = require("nf-core/util/type");
 const Style = require('nf-core/ui/style');
+const Color = require("nf-core/ui/color");
 const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
 const NativeView = requireClass("android.view.View");
@@ -9,7 +10,11 @@ const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawabl
 const NativeColor = requireClass("android.graphics.Color");
 const NativeMotionEvent = requireClass("android.view.MotionEvent");
 const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
-
+const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
+const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeR = requireClass("android.R");
 const NativeFlexboxLayout = requireClass("com.google.android.flexbox.FlexboxLayout");
 const NativeMarginLayoutParamsCompat = requireClass("android.support.v4.view.MarginLayoutParamsCompat");
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
@@ -19,7 +24,6 @@ function View(params) {
     if(!self.nativeObject){
         self.nativeObject = new NativeView(Android.getActivity());
     }
-    
     var activity = Android.getActivity();
     var backgroundColorInitial = 0xFFFFFFFF;
     var backgroundColorDrawable = new NativeColorDrawable(backgroundColorInitial);
@@ -32,7 +36,6 @@ function View(params) {
     layerDrawable.setDrawableByLayerId(0,backgroundColorDrawable);
     layerDrawable.setDrawableByLayerId(1,borderDrawable);
     self.nativeObject.setBackground(layerDrawable);
-    
 
     Object.defineProperty(this, 'alpha', {
         get: function() {
@@ -44,17 +47,50 @@ function View(params) {
         enumerable: true
     });
     
+    var _backgroundColors = {
+        normal: Color.WHITE,
+        disabled: Color.WHITE,
+        selected: Color.WHITE,
+        pressed: Color.WHITE,
+        focused: Color.WHITE
+    };
     Object.defineProperty(this, 'backgroundColor', {
         get: function() {
-            return backgroundColorDrawable.getColor();
+            if(typeof(self.backgroundColor) === "number") {
+                return backgroundColorDrawable.getColor();
+            }
+            return _backgroundColors;
         },
         set: function(backgroundColor) {
-            var colorParam = backgroundColor;
-            if(!TypeUtil.isNumeric(backgroundColor)){
-                colorParam = NativeColor.parseColor(backgroundColor);
+            if(typeof(backgroundColor) === "number") {
+                backgroundColorDrawable.setColor(backgroundColor);
+                setBackground(0);
             }
-            backgroundColorDrawable.setColor(colorParam);
-            setBackground(0);
+            else {
+                _backgroundColors = backgroundColor;
+                var stateListSet = new NativeStateListDrawable();
+                if(backgroundColor.normal){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.normal);
+                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
+                }
+                if(backgroundColor.disabled){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.disabled);
+                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
+                }
+                if(backgroundColor.selected){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.selected);
+                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
+                }
+                if(backgroundColor.pressed){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.pressed);
+                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
+                }
+                if(backgroundColor.focused){
+                    var stateDrawable = NativeColorDrawable(backgroundColor.focused);
+                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
+                }
+                self.nativeObject.setBackground(stateListSet);
+            }
         },
         enumerable: true
      });
@@ -566,5 +602,28 @@ function View(params) {
         }
     }
 }
+
+View.State = {};
+
+View.State.STATE_NORMAL =  [
+    NativeR.attr.state_enabled,
+    -NativeR.attr.state_pressed,
+    -NativeR.attr.state_selected
+];
+View.State.STATE_DISABLED = [
+    -NativeR.attr.state_enabled,
+];
+View.State.STATE_SELECTED = [
+    NativeR.attr.state_enabled,
+    NativeR.attr.state_selected
+];
+View.State.STATE_PRESSED = [
+    NativeR.attr.state_pressed,
+    NativeR.attr.state_enabled,
+];
+View.State.STATE_FOCUSED = [
+    NativeR.attr.state_focused,
+    NativeR.attr.state_enabled,
+];
 
 module.exports = View;
