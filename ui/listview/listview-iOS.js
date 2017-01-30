@@ -19,7 +19,9 @@ const ListView = extend(View)(
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
         
-        self.createRowAction = function(title,action){
+        self.ios = {}
+        
+        self.ios.swipeItem = function(title,action){
             return UITableViewRowAction.create(title,action);
         }
         
@@ -27,7 +29,7 @@ const ListView = extend(View)(
             self.refreshControl.endRefreshing();
         }
         
-        Object.defineProperty(self, 'rowActions', {
+        Object.defineProperty(self.ios, 'swipeItems', {
             get: function() {
                 return self.nativeObject.rowActions;
             },
