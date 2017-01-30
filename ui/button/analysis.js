@@ -123,7 +123,6 @@ const Button = extend(View)(
          * 
          *     @example
          *     const Button = require('nf-core/ui/button');
-         *     const StateList = require('nf-core/util/statelist');
          *     var myButton = new Button();
          *     myButton.backgroundImage = {
          *         normal: "assets://normal.png",

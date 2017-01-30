@@ -7,7 +7,6 @@ const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeHtml = requireClass("android.text.Html");
-const NativeColor = requireClass("android.graphics.Color");
 const NativeR = requireClass("android.R");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
