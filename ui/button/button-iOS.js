@@ -84,11 +84,22 @@ const Button = extend(View)(
                 if (textColor.constructor.name != "Object") {
                     self.nativeObject.setTitleColor(textColor,ButtonState.normal);
                 }else{
-                    self.nativeObject.setTitleColor(textColor.normal,ButtonState.normal);
-                    self.nativeObject.setTitleColor(textColor.disabled,ButtonState.disabled);
-                    self.nativeObject.setTitleColor(textColor.selected,ButtonState.selected);
-                    self.nativeObject.setTitleColor(textColor.pressed,ButtonState.pressed);
-                    self.nativeObject.setTitleColor(textColor.focused,ButtonState.focused);
+                    if (typeof textColor.normal != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.normal,ButtonState.normal);
+                    }
+                    if (typeof textColor.disabled != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.disabled,ButtonState.disabled);
+                    }
+                    if (typeof textColor.selected != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.selected,ButtonState.selected);
+                    }
+                    if (typeof textColor.pressed != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.pressed,ButtonState.pressed);
+                    }
+                    if (typeof textColor.focused != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.focused,ButtonState.focused);
+                    }
+                    
                 } 
             },
             enumerable: true
@@ -111,11 +122,22 @@ const Button = extend(View)(
                  if (bgColors.constructor.name != "Object") {
                      self.nativeObject.setBackgroundColor(backgroundColorsInitial,ButtonState.normal);
                  }else{
-                    self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal,ButtonState.normal);
-                    self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled,ButtonState.disabled);
-                    self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected,ButtonState.selected);
-                    self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed,ButtonState.pressed);
-                    self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused,ButtonState.focused);
+                     if (typeof backgroundColorsInitial.normal != 'undefined') {
+                        self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal,ButtonState.normal);
+                     }
+                     if (typeof backgroundColorsInitial.disabled != 'undefined') {
+                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled,ButtonState.disabled);
+                     }
+                     if (typeof backgroundColorsInitial.selected != 'undefined') {
+                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected,ButtonState.selected);
+                     }
+                     if (typeof backgroundColorsInitial.pressed != 'undefined') {
+                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed,ButtonState.pressed);
+                     }
+                     if (typeof backgroundColorsInitial.focused != 'undefined') {
+                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused,ButtonState.focused);
+                     }
+                    
                  }
             },
             enumerable: true
