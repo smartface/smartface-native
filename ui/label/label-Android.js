@@ -9,8 +9,6 @@ const NativeTextView = requireClass("android.widget.TextView");
 const NativeHtml = requireClass("android.text.Html");
 const NativeR = requireClass("android.R");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-
-const DEFAULT_COLOR = Color.BLACK;
         
 const Label = extend(View)(
     function (_super, params) {
