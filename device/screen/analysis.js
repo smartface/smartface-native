@@ -9,6 +9,16 @@ function Screen() {}
 /**
  *
  * TODO: type definition
+ * @property {String} orientation 'portrait', 'upsideDownPortrait', 'landscapeLeft', 'landscapeRight'.
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Screen.orientation = null;
+
+/**
+ *
+ * TODO: type definition
  * @property {Boolean} touchSupported 
  * @readonly
  * @static
