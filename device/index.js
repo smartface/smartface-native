@@ -1,4 +1,5 @@
 module.exports = {
     Screen: require('./screen'),
-    System: require('./system')
+    System: require('./system'),
+    Network: require('./network')
 };
