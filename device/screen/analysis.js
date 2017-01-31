@@ -9,7 +9,7 @@ function Screen() {}
 /**
  *
  * TODO: type definition
- * @property {String} orientation 'portrait', 'upsideDownPortrait', 'landscapeLeft', 'landscapeRight'.
+ * @property {Device.Screen.OrientationType} orientation
  * @readonly
  * @static
  * @since 0.1
