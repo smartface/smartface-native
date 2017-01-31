@@ -6,6 +6,39 @@
  */
 function System() {}
 
+System.BatteryState.CHARGING = 0;
+System.BatteryState.ONBATTERY = 1;
+
+/**
+ *
+ * TODO: type definition
+ * @property {String} language
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+System.language;
+
+/**
+ *
+ * TODO: type definition
+ * @property {Number} batteryLevel
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+System.batteryLevel;
+
+/**
+ *
+ * TODO: type definition
+ * @property {Number} batteryState
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+System.batteryState;
+
 /**
  *
  * TODO: type definition
@@ -98,7 +131,7 @@ System.android.secureID;
  *         }
  *     });
  * 
- * @method getPackageVersion
+ * @method android.getPackageVersion
  * @param {String} packageName
  * @param {Function} onSuccess
  * @param {Function} onError
