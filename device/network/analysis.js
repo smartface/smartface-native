@@ -73,7 +73,7 @@ Network.connectionType = Network.ConnectionType.WIFI;
 /**
  *
  * TODO: type definition
- * @property {Boolean} connectionIP
+ * @property {Boolean} roamingEnabled
  * @readonly
  * @static
  * @since 0.1
