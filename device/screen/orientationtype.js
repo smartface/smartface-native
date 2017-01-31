@@ -51,4 +51,4 @@ Object.defineProperty(OrientationType, 'LANDSCAPERIGHT', {
   writable: false
 });
 
-module.exports = KeyboardType;
+module.exports = OrientationType;
