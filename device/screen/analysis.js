@@ -14,7 +14,7 @@ function Screen() {}
  * @static
  * @since 0.1
  */
-Screen.orientation = null;
+Screen.orientation;
 
 /**
  *
@@ -34,7 +34,7 @@ Screen.touchSupported;
  * @static
  * @since 0.1
  */
-Screen.dpi = -1;
+Screen.dpi;
 
 /**
  *
@@ -44,7 +44,7 @@ Screen.dpi = -1;
  * @static
  * @since 0.1
  */
-Screen.height = -1;
+Screen.height;
 
 /**
  *
@@ -54,7 +54,7 @@ Screen.height = -1;
  * @static
  * @since 0.1
  */
-Screen.width = -1;
+Screen.width;
 
 /**
  *
@@ -64,7 +64,7 @@ Screen.width = -1;
  * @static
  * @since 0.1
  */
-Screen.touchX = -1;
+Screen.touchX;
 
 /**
  *
@@ -74,7 +74,7 @@ Screen.touchX = -1;
  * @static
  * @since 0.1
  */
-Screen.touchY = -1;
+Screen.touchY;
 
 /**
  *
