@@ -48,10 +48,12 @@ const Image = function (params) {
          * @method resize
          * @param {Number} width Width of the new bitmap.
          * @param {Number} height Height of the new bitmap.
+         * @param {Function} onSuccess Callback for success situation.
+         * @param {Function} onFail Callback for fail situation.
          * @return UI.Image
          * @since 0.1
          */
-        this.resize = function(width, height) {}
+        this.resize = function(width, height, onSuccess, onFail) {}
         
         /**
          * Returns a cropped image from existing image with specified rectangle.
@@ -61,10 +63,12 @@ const Image = function (params) {
          * @param {Number} y The y value of the rectangle top-left corner.
          * @param {Number} width Width of the new bitmap.
          * @param {Number} height Height of the new bitmap.
+         * @param {Function} onSuccess Callback for success situation.
+         * @param {Function} onFail Callback for fail situation.
          * @return UI.Image
          * @since 0.1
          */
-        this.crop = function(x, y, width, height) {}
+        this.crop = function(x, y, width, height, onSuccess, onFail) {}
         
         /**
          * Returns a compressed blob from existing image with given quality.
@@ -73,20 +77,24 @@ const Image = function (params) {
          * @param {UI.ImageFormat} format Image format.
          * @param {Number} quality Image quality.
          * @param {UI.Blob} blob Image datas.
+         * @param {Function} onSuccess Callback for success situation.
+         * @param {Function} onFail Callback for fail situation.
          * @return UI.Image
          * @since 0.1
          */
-        this.compress = function(format, quality, blob) {}
+        this.compress = function(format, quality, blob, onSuccess, onFail) {}
         
         /**
          * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
          *
          * @method rotate
          * @param {Number} angle The angle value of the rectangle top-left corner.
+         * @param {Function} onSuccess Callback for success situation.
+         * @param {Function} onFail Callback for fail situation.
          * @return UI.Image
          * @since 0.1
          */
-        this.rotate = function(angle) {}
+        this.rotate = function(angle, onSuccess, onFail) {}
 };
 
 /**
