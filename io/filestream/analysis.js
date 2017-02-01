@@ -1,5 +1,5 @@
 /**
- * @class IO.File
+ * @class IO.FileStream
  * @since 0.1
  *
  * // @todo add description

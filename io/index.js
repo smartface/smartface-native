@@ -1,4 +1,5 @@
 module.exports = {
     File: require("./file"),
-    FileStream: require('./filestream')
+    FileStream: require('./filestream'),
+    Path: require('./path')
 };
