@@ -163,67 +163,67 @@ function Page(params) {
     this.remove = function(){};
     
     /**
-     * Gets/sets background color of the headerbar. If not set, headerbar will have default
+     * Gets/sets background color of the headerBar. If not set, headerBar will have default
      * background color depends on device's OS and OS version.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     const Color = require('sf-core/ui/color');
      *     var myPage = new Page();
-     *     myPage.headerbar.backgroundColor = Color.RED;
+     *     myPage.headerBar.backgroundColor = Color.RED;
      *
      * @property {UI.Color} [backgroundColor = Color.create("#00A1F1")]
      * @since 0.1
      */
-    this.headerbar.backgroundColor = Color.create("#00A1F1");
+    this.headerBar.backgroundColor = Color.create("#00A1F1");
     
     /**
-     * Gets/sets background image of the headerbar.
+     * Gets/sets background image of the headerBar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
-     *     myPage.headerbar.backgroundImage = Image.createFromFile('images://smartface.png');
+     *     myPage.headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
      *
      * @property {UI.Image} [backgroundImage = null]
      * @since 0.1
      */
-    this.headerbar.backgroundImage = null;
+    this.headerBar.backgroundImage = null;
     
     /**
-     * Gets/sets the navigation indicator visibility of the headerbar.
+     * Gets/sets the navigation indicator visibility of the headerBar.
      * If false navigation indicator will not shown, otherwise will shown
      * as back icon with home as up indicator image.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.headerbar.displayShowHomeEnabled = false;
+     *     myPage.headerBar.displayShowHomeEnabled = false;
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
      * @since 0.1
      */
-    this.headerbar.displayShowHomeEnabled = false;
+    this.headerBar.displayShowHomeEnabled = false;
     
     /**
-     * Gets the height of the headerbar. Height is a read only property.
+     * Gets the height of the headerBar. Height is a read only property.
      * Height value may change depending on device and screen density.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.headerbar.height;
+     *     var headerBarHeight = myPage.headerBar.height;
      *
      * @property {Number} height
      * @readonly
      * @since 0.1
      */
-    this.headerbar.height;
+    this.headerBar.height;
     
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
-     * indicator of the headerbar. If not set, the application icon will
+     * indicator of the headerBar. If not set, the application icon will
      * shown.This property will work only for Android.
      *
      *     @example
@@ -231,53 +231,53 @@ function Page(params) {
      *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://smartface.png');
-     *     myPage.headerbar.android.homeAsUpIndicatorImage = myImage;
+     *     myPage.headerBar.android.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
      * @since 0.1
      */
-    this.headerbar.android.homeAsUpIndicatorImage = null;
+    this.headerBar.android.homeAsUpIndicatorImage = null;
     
     /**
-     * Gets/sets title of the headerbar. If not set, the application name will
+     * Gets/sets title of the headerBar. If not set, the application name will
      * shown.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.headerbar.title = 'Hello from Smartface Headerbar!';
+     *     myPage.headerBar.title = 'Hello from Smartface Headerbar!';
      *
      * @property {String} title
      * @since 0.1
      */
-    this.headerbar.title = '';
+    this.headerBar.title = '';
     
     /**
-     * Gets/sets subtitle of the headerbar. If not set, will not shown. This property
+     * Gets/sets subtitle of the headerBar. If not set, will not shown. This property
      * will work only for Android.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.headerbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
+     *     myPage.headerBar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
      *
      * @property {String} subtitle
      * @since 0.1
      */
-    this.headerbar.android.subtitle = '';
+    this.headerBar.android.subtitle = '';
     
     /**
-     * Gets/sets visibility of the headerbar.
+     * Gets/sets visibility of the headerBar.
      *
      *     @example
      *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.headerbar.visible = false;
+     *     myPage.headerBar.visible = false;
      *
      * @property {Boolean} [visible = true]
      * @since 0.1
      */
-    this.headerbar.visible = true;
+    this.headerBar.visible = true;
 }
 
 module.exports = Page;

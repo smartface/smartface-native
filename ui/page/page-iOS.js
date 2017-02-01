@@ -78,9 +78,9 @@ function Page(params) {
         object.nativeObject.removeFromSuperview();
     }
 
-    self.headerbar = {}
+    self.headerBar = {}
     
-    Object.defineProperty(self.headerbar, 'title', {
+    Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return self.nativeObject.title;
         },
@@ -90,7 +90,7 @@ function Page(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self.headerbar, 'titleColor', {
+    Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
         },
@@ -101,7 +101,7 @@ function Page(params) {
     });
     
     var _visible = true;
-    Object.defineProperty(self.headerbar, 'visible', {
+    Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             return _visible;
         },
@@ -112,7 +112,7 @@ function Page(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self.headerbar, 'backgroundColor', {
+    Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.barTintColor;
         },
@@ -122,7 +122,7 @@ function Page(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self.headerbar, 'backgroundImage', {
+    Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
             self.nativeObject.navigationController.navigationBar.backgroundImage;
         },
@@ -132,7 +132,7 @@ function Page(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self.headerbar, 'displayShowHomeEnabled', {
+    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
         get: function() {
             self.nativeObject.navigationItem.hidesBackButton;
         },
@@ -142,7 +142,7 @@ function Page(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self.headerbar, 'height', {
+    Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.frame.height
         },
