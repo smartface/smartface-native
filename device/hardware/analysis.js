@@ -10,6 +10,8 @@ function Hardware() {}
  *
  * TODO: type definition
  * @property {String} UID
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -20,16 +22,19 @@ Hardware.UID;
  *
  * TODO: type definition
  * @property {String} IMEI
+ * @android
  * @readonly
  * @static
  * @since 0.1
  */
-Hardware.IMEI;
+Hardware.android.IMEI;
 
 /**
  *
  * TODO: type definition
  * @property {String} brandModel
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -40,6 +45,8 @@ Hardware.brandModel;
  *
  * TODO: type definition
  * @property {String} brandName
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -50,10 +57,11 @@ Hardware.brandName;
  *
  * TODO: type definition
  * @property {Number} vendorID
+ * @android
  * @readonly
  * @static
  * @since 0.1
  */
-Hardware.vendorID;
+Hardware.android.vendorID;
 
 module.exports = Hardware;
