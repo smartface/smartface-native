@@ -72,14 +72,13 @@ System.OSVersion;
 /**
  *
  * TODO: type definition
- * @property {String} firmwareVersion
+ * @property {String} apiLevel
  * @readonly
  * @android
- * @ios
  * @static
  * @since 0.1
  */
-System.firmwareVersion;
+System.android.apiLevel;
 
 /**
  *
