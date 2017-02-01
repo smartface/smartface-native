@@ -21,6 +21,7 @@ function Page(params) {
         height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
         width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
         isRoot : true,
+        backgroundColor: Color.WHITE
     });
     
     innerLayout.parent = self;
