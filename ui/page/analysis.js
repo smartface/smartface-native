@@ -307,6 +307,8 @@ function Page(params) {
      * @since 0.1
      */
     this.actionbar.visible = true;
+
+    this.headerbar.items = [];
 }
 
 module.exports = Page;
