@@ -13,6 +13,36 @@ Network.ConnectionType.WIFI   = 2;
 /**
  *
  * TODO: type definition
+ * @property {String} carrier
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Network.carrier;
+
+/**
+ *
+ * TODO: type definition
+ * @property {String} SMSEnabled
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Network.SMSEnabled;
+
+/**
+ *
+ * TODO: type definition
+ * @property {String} IMSI
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Network.IMSI;
+
+/**
+ *
+ * TODO: type definition
  * @property {String} bluetoothMacAddress
  * @readonly
  * @static
@@ -43,7 +73,7 @@ Network.connectionType = Network.ConnectionType.WIFI;
 /**
  *
  * TODO: type definition
- * @property {Boolean} connectionIP
+ * @property {Boolean} roamingEnabled
  * @readonly
  * @static
  * @since 0.1

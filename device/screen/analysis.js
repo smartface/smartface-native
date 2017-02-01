@@ -9,16 +9,20 @@ function Screen() {}
 /**
  *
  * TODO: type definition
- * @property {String} orientation 'portrait', 'upsideDownPortrait', 'landscapeLeft', 'landscapeRight'.
+ * @android
+ * @ios
+ * @property {Device.Screen.OrientationType} orientation
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.orientation = null;
+Screen.orientation;
 
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Boolean} touchSupported 
  * @readonly
  * @static
@@ -29,65 +33,54 @@ Screen.touchSupported;
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} dpi 
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.dpi = -1;
+Screen.dpi;
 
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} height 
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.height = -1;
+Screen.height;
 
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} width 
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.width = -1;
+Screen.width;
 
 /**
  *
  * TODO: type definition
- * @property {Number} touchX 
- * @readonly
- * @static
- * @since 0.1
- */
-Screen.touchX = -1;
-
-/**
- *
- * TODO: type definition
- * @property {Number} touchY 
- * @readonly
- * @static
- * @since 0.1
- */
-Screen.touchY = -1;
-
-/**
- *
- * TODO: type definition
+ * @ios
  * @property {Boolean} touchForceAvaliable
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.touchForceAvaliable;
+Screen.ios.touchForceAvaliable;
 
 /**
  * TODO: type definition
+ * @android
+ * @ios
  * @method capture
  * @return {UI.Image} captured image.
  * @since 0.1

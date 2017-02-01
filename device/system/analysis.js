@@ -6,11 +6,52 @@
  */
 function System() {}
 
+System.BatteryState.CHARGING = 0;
+System.BatteryState.ONBATTERY = 1;
+
+/**
+ *
+ * TODO: type definition
+ * @property {String} language
+ * @readonly
+ * @static
+ * @android
+ * @ios
+ * @since 0.1
+ */
+System.language;
+
+/**
+ *
+ * TODO: type definition
+ * @property {Number} batteryLevel
+ * @readonly
+ * @static
+ * @android
+ * @ios
+ * @since 0.1
+ */
+System.batteryLevel;
+
+/**
+ *
+ * TODO: type definition
+ * @property {Number} batteryState
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+System.batteryState;
+
 /**
  *
  * TODO: type definition
  * @property {String} OS
  * @readonly
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
@@ -21,6 +62,8 @@ System.OS;
  * TODO: type definition
  * @property {String} OSVersion
  * @readonly
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
@@ -31,6 +74,8 @@ System.OSVersion;
  * TODO: type definition
  * @property {String} firmwareVersion
  * @readonly
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
@@ -41,6 +86,8 @@ System.firmwareVersion;
  * TODO: SET / GET, type definition
  * @property {Boolean} accelerometerEnabled
  * @static
+ * @android
+ * @ios
  * @since 0.1
  */
 System.accelerometerEnabled;
@@ -51,6 +98,8 @@ System.accelerometerEnabled;
  * @property {Boolean} menuKeyAvaliable
  * @readonly
  * @static
+ * @android
+ * @ios
  * @since 0.1
  */
 System.menuKeyAvaliable;
@@ -60,6 +109,8 @@ System.menuKeyAvaliable;
  * TODO: type definition
  * @property {Boolean} fingerPrintAvaliable
  * @readonly
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
@@ -69,6 +120,8 @@ System.fingerPrintAvaliable;
  *
  * TODO: type definition
  * @property {String} clipboard
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
@@ -80,6 +133,7 @@ System.clipboard;
  * @property {String} secureID
  * @readonly
  * @static
+ * @android
  * @since 0.1
  */
 System.android.secureID;
@@ -102,6 +156,7 @@ System.android.secureID;
  * @param {String} packageName
  * @param {Function} onSuccess
  * @param {Function} onError
+ * @android
  * @since 0.1
  */
 System.android.getPackageVersion ({
@@ -125,6 +180,8 @@ System.android.getPackageVersion ({
  * @method validateFingerPrint
  * @param {Function} onSuccess
  * @param {Function} onError
+ * @android
+ * @ios
  * @since 0.1
  */
 System.validateFingerPrint ({
@@ -136,6 +193,8 @@ System.validateFingerPrint ({
  * TODO: type definition
  * @method vibrate
  * @param {Number} milliseconds
+ * @android
+ * @ios
  * @since 0.1
  */
 System.vibrate = function(milliseconds) {};
@@ -144,6 +203,8 @@ System.vibrate = function(milliseconds) {};
  * TODO: type definition
  * @method isApplicationInstalled
  * @param {String} packageName | schemaName
+ * @android
+ * @ios
  * @since 0.1
  */
 System.isApplicationInstalled = function(packageName) {};
@@ -156,6 +217,8 @@ System.isApplicationInstalled = function(packageName) {};
  * @param {Number} x
  * @param {Number} y
  * @param {Number} z
+ * @android
+ * @ios
  */
 System.onAccelerate = function onAccelerate(x, y, z){ }
 
