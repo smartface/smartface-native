@@ -1,7 +1,6 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 
-const NativeYogaNoda            = requireClass("com.facebook.yoga.YogaNode");
 const NativeYogaLayout          = requireClass('io.smartface.yoga.YogaLayout');
 const NativeYogaDirection       = requireClass('com.facebook.yoga.YogaDirection');
 const NativeYogaFlexDirection   = requireClass('com.facebook.yoga.YogaFlexDirection');
@@ -10,8 +9,6 @@ const NativeYogaAlign           = requireClass('com.facebook.yoga.YogaAlign');
 const NativeYogaWrap            = requireClass('com.facebook.yoga.YogaWrap');
 const NativeYogaOverflow        = requireClass('com.facebook.yoga.YogaOverflow');
 const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionType');
-
-
 
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
@@ -92,8 +89,8 @@ const FlexLayout = extend(ViewGroup)(
             get: function() {
                 return self.nativeObject.getNode().getOverflow();
             },
-            set: function(flexWrap) {
-                self.nativeObject.getNode().setOverflow(flexWrap);
+            set: function(overFlow) {
+                self.nativeObject.getNode().setOverflow(overFlow);
             },
             enumerable: true
         });

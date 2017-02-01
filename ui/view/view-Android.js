@@ -1,5 +1,3 @@
-const TypeUtil                  = require("nf-core/util/type");
-const Style                     = require('nf-core/ui/style');
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
 const ViewGroup                 = require('nf-core/ui/viewgroup');
 
@@ -10,7 +8,6 @@ const NativeGradientDrawable    = requireClass("android.graphics.drawable.Gradie
 const NativeLayerDrawable       = requireClass("android.graphics.drawable.LayerDrawable");
 const NativeColor               = requireClass("android.graphics.Color");
 const NativeMotionEvent         = requireClass("android.view.MotionEvent");
-const NativeAbsoluteLayout      = requireClass("android.widget.AbsoluteLayout");
 const NativeYogaLayout          = requireClass('io.smartface.yoga.YogaLayout');
 const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
 const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
@@ -38,7 +35,8 @@ function View(params) {
         layoutParams = new NativeYogaLayout.LayoutParams(0,0);
         yogaNode = layoutParams.node;
     }
-    else{
+    else 
+    {
         layoutParams = self.nativeObject.getLayoutParams();
         if(self.nativeObject.toString().indexOf("YogaLayout") !== -1){
             yogaNode = self.nativeObject.getNode();
@@ -52,13 +50,6 @@ function View(params) {
     }
 
     var _backgroundColor = 0;
-    // var _backgroundColors = {
-    //     normal: backgroundColorInitial,
-    //     disabled: backgroundColorInitial,
-    //     selected: backgroundColorInitial,
-    //     pressed: backgroundColorInitial,
-    //     focused: backgroundColorInitial
-    // };
     var backgroundDrawable = new NativeColorDrawable(_backgroundColor);
     //var borderDrawable = android.graphics.drawable.ShapeDrawable();
     var borderDrawable = new NativeGradientDrawable();
@@ -178,7 +169,7 @@ function View(params) {
                 // View.VISIBLE is 0
                 self.nativeObject.setVisibility(0);
             else
-                // View.VISIBLE is 4
+                // View.INVISIBLE is 4
                 self.nativeObject.setVisibility(4);
         },
         enumerable: true
