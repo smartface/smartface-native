@@ -3,14 +3,13 @@
  * @static
  * @since 0.1
  *
- * //todo Add description
+ * Specifies image compression type.
  *
  */
 
 var ImageFormat = {};
 /**
  * @property {Number} JPEG
- * //todo Add description
  * @static
  * @readonly
  * @since 0.1
@@ -22,7 +21,6 @@ Object.defineProperty(ImageFormat, 'JPEG', {
 
 /**
  * @property {Number} PNG
- * //todo Add description
  * @static
  * @readonly
  * @since 0.1
