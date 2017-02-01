@@ -129,7 +129,7 @@ function Page(params) {
      *     var page = new Page();
      *     page.android.backButtonEnabled = false;
      *
-     * @property {Boolean} backButtonEnabled. Back button effect status for pages.
+     * @property {Boolean} backButtonEnabled
      */
     this.android.backButtonEnabled = false;
 
