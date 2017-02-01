@@ -310,7 +310,17 @@ function Page(params) {
      */
     this.headerBar.visible = true;
 
-    this.headerBar.items = [];
+    /**
+     * This function allows you to set header bar items to page's headerBar.
+     * Given items should be instance of UI.HeaderBarItem class. Items will be
+     * added to header bar in given array order starting from right of headerBar.
+     * First item in the array will be leftmost item in the header bar.
+     * 
+     * @method setItems
+     * @param {Array} [items] Array of HeaderBarItem objects to add
+     * @since 0.1
+     */
+    this.headerBar.setItems = function(items) {};
 }
 
 module.exports = Page;
