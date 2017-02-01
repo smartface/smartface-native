@@ -183,8 +183,8 @@ function Page(params) {
      * background color depends on device's OS and OS version.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     myPage.headerBar.backgroundColor = Color.RED;
      *
@@ -197,8 +197,8 @@ function Page(params) {
      * Gets/sets background image of the headerBar.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Image = require('sf-core/ui/image');
+     *     const Page = require('nf-core/ui/page');
+     *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
      *     myPage.headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
      *
@@ -213,7 +213,7 @@ function Page(params) {
      * as back icon with home as up indicator image.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.headerBar.displayShowHomeEnabled = false;
      *
@@ -227,7 +227,7 @@ function Page(params) {
      * Height value may change depending on device and screen density.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     var headerBarHeight = myPage.headerBar.height;
      *
@@ -243,8 +243,8 @@ function Page(params) {
      * shown.This property will work only for Android.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Image = require('sf-core/ui/image');
+     *     const Page = require('nf-core/ui/page');
+     *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://smartface.png');
      *     myPage.headerBar.android.homeAsUpIndicatorImage = myImage;
@@ -259,7 +259,7 @@ function Page(params) {
      * shown.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.headerBar.title = 'Hello from Smartface Headerbar!';
      *
@@ -267,13 +267,28 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar.title = '';
+
+    /**
+     * Gets/sets title color of the headerBar. It is set to UI.Color.BLACK by default.
+     * 
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.headerBar.title = 'Smartface';
+     *     myPage.headerBar.titleColor = Color.WHITE;
+     * 
+     * @property {UI.Color} [titleColor = Color.BLACK]
+     * @since 0.1
+     */
+    this.headerBar.titleColor = Color.BLACK;
     
     /**
      * Gets/sets subtitle of the headerBar. If not set, will not shown. This property
      * will work only for Android.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.headerBar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
      *
@@ -286,7 +301,7 @@ function Page(params) {
      * Gets/sets visibility of the headerBar.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.headerBar.visible = false;
      *
