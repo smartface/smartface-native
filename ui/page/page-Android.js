@@ -40,7 +40,7 @@ function Page(params) {
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
             if (_headerBarItems.length > 0) {
-                self.headerBar.items = _headerBarItems;
+                self.headerBar.setItems(_headerBarItems);
             }
             return true;
         },
@@ -302,41 +302,35 @@ function Page(params) {
     });
     
     var _headerBarItems = [];
-    Object.defineProperty(self.headerBar, 'items', {
-        get: function() {
-            return _headerBarItems;
-        },
-        set: function(items) {
-            if (!(items instanceof Array)) {
-                return;
-            }
-            
-            if (optionsMenu == null) {
-                _headerBarItems = items;
-                return;
-            }
-            
-            optionsMenu.clear();
-            _headerBarItems = [];
+    self.headerBar.setItems = function(items) {
+        if (!(items instanceof Array)) {
+            return;
+        }
 
-            var uId = 1;
-            const HeaderBarItem = require("../headerbaritem");
-            const NativeMenuItem = requireClass("android.view.MenuItem");
-            items.forEach(function(item) {
-                if (!(item instanceof HeaderBarItem)) {
-                    return;
-                }
-                
-                var menuItem = optionsMenu.add(0, uId, 0, item.title);
-                item.image && menuItem.setIcon(item.image.nativeObject);
-                menuItem.setEnabled(item.enabled);
-                menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            
-                _headerBarItems[uId++] = item;
-            });
-        },
-        enumerable: true
-    });
+        if (optionsMenu == null) {
+            _headerBarItems = items;
+            return;
+        }
+
+        optionsMenu.clear();
+        _headerBarItems = [];
+
+        var uId = 1;
+        const HeaderBarItem = require("../headerbaritem");
+        const NativeMenuItem = requireClass("android.view.MenuItem");
+        items.forEach(function(item) {
+            if (!(item instanceof HeaderBarItem)) {
+                return;
+            }
+
+            var menuItem = optionsMenu.add(0, uId, 0, item.title);
+            item.image && menuItem.setIcon(item.image.nativeObject);
+            menuItem.setEnabled(item.enabled);
+            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+
+            _headerBarItems[uId++] = item;
+        });
+    };
 
     // Deprecated since 0.1
     this.add = function(view){
