@@ -27,7 +27,7 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-                if (value instanceof UI.Image) {
+                if (value) {
                     _image = value;
                     if (this.nativeObject) {
                         this.nativeObject.setIcon(_image.nativeObject);

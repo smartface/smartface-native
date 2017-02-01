@@ -39,6 +39,9 @@ function Page(params) {
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
+            if (_headerBarItems.length > 0) {
+                self.headerBar.items = _headerBarItems;
+            }
             return true;
         },
         onOptionsItemSelected: function(menuItem){
@@ -308,7 +311,11 @@ function Page(params) {
                 return;
             }
             
-            // Clear old data
+            if (optionsMenu == null) {
+                _headerBarItems = items;
+                return;
+            }
+            
             optionsMenu.clear();
             _headerBarItems = [];
 
@@ -321,7 +328,7 @@ function Page(params) {
                 }
                 
                 var menuItem = optionsMenu.add(0, uId, 0, item.title);
-                item.image && menuItem.setIcon(item.image);
+                item.image && menuItem.setIcon(item.image.nativeObject);
                 menuItem.setEnabled(item.enabled);
                 menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
             
