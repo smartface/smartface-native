@@ -1,14 +1,17 @@
-const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
+const extend                    = require('js-base/core/extend');
+const FlexLayout                = require('../flexlayout');
 
-const NativeAbsoluteLayout = requireClass("android.widget.AbsoluteLayout");
-
-const AbsoluteLayout = extend(ViewGroup)(
+const AbsoluteLayout = extend(FlexLayout)(
     function (_super, params) {
         var self = this;
-        self.nativeObject = new NativeAbsoluteLayout(Android.getActivity());
         _super(this);
 
+        this.addChild = function(view){
+            view.parent = self;
+            self.childViews[view.id+''] = view;
+            self.nativeObject.addView(view.nativeObject);
+            view.position = FlexLayout.Position.ABSOLUTE;
+        };
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
