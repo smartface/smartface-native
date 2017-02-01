@@ -118,53 +118,6 @@ const FlexLayout = extend(ViewGroup)(
 );
 
 /**
- * @enum {Number} UI.FlexLayout.Direction
- * @static
- * @readonly
- * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
- *
- */
-FlexLayout.Direction = {};
-/**
- * @property {Number} INHERIT
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
-    writable: false
-});
-/**
- * @property {Number} LTR
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.Direction, 'LTR', {
-    writable: false
-});
-/**
- * @property {Number} RTL
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.Direction, 'RTL', {
-    writable: false
-});
-
-/**
  * @enum {Number} UI.FlexLayout.FlexDirection
  * @static
  * @readonly
@@ -531,6 +484,53 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Direction
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Direction = {};
+/**
+ * @property {Number} INHERIT
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
+    writable: false
+});
+/**
+ * @property {Number} LTR
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
+    writable: false
+});
+/**
+ * @property {Number} RTL
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'RTL', {
     writable: false
 });
 
