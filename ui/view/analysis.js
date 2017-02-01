@@ -3,10 +3,10 @@
  * @since 0.1
  *
  * View class represents a rectangular area drawable to user interface. This class
- * is base of all UI classes.
+ * is base of all UI classes. 
  * 
  *     @example
- *     const View = require('sf-core/ui/view');
+ *     const View = require('nf-core/ui/view');
  *     var myView = new View();
  *     var position = {
  *         width: "30%", 
@@ -15,7 +15,7 @@
  *         left: "50%"
  *     }
  *     myView.setPosition(position);
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     myView.backgroundColor = Color.RED;
  */
 function View(params) {
@@ -32,14 +32,14 @@ function View(params) {
     
     /**
      * Gets/sets background color of view. It allows setting background 
-     * color with string or UI.Color properties.
+     * color with UI.Color instance or mapping from states to colors.
      * 
-     * @property {Color} backgroundColor 
+     * @property {Color} [backgroundColor = UI.Color.WHITE]
      * @member UI.View
      * @since 0.1
      */ 
-    this.backgroundColor = "#FFFFFF";
-    
+    this.backgroundColor = UI.Color.WHITE;
+
     /**
      * Sets/gets border color of bounded view.
      * 
@@ -575,9 +575,9 @@ function View(params) {
      * This method allows getting view to the front.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Label = require('nf-core/ui/label');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     var myLabelBehind = new Label({
      *         width: "70%",
@@ -644,7 +644,7 @@ function View(params) {
      * height etc.) separately.
      * 
      *     @example
-     *     const View = require('sf-core/ui/view');
+     *     const View = require('nf-core/ui/view');
      *     var myView = new View();
      *     var position = {
      *         width: "30%", 

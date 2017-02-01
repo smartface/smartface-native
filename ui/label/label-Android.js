@@ -1,4 +1,5 @@
 const View = require('../view');
+const Color = require("nf-core/ui/color");
 const TextAlignment = require("nf-core/ui/textalignment");
 const TypeUtil = require("nf-core/util/type");
 const extend = require('js-base/core/extend');
@@ -6,7 +7,9 @@ const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeHtml = requireClass("android.text.Html");
-
+const NativeR = requireClass("android.R");
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+        
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
@@ -140,12 +143,23 @@ const Label = extend(View)(
             enumerable: true
         });
 
+        var _textColor = Color.BLACK;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return self.nativeObject.getCurrentTextColor();
+                if(typeof(_textColor) === "number") {
+                    return self.nativeObject.getCurrentTextColor();
+                }
+                return _textColor;
             },
             set: function(textColor) {
-                self.nativeObject.setTextColor(textColor);
+                _textColor = textColor;
+                if(typeof(textColor) === "number") {
+                    self.nativeObject.setTextColor(textColor);
+                }
+                else {
+                    var textColorStateListDrawable = createColorStateList(textColor);
+                    self.nativeObject.setTextColor(textColorStateListDrawable);
+                }
             },
             enumerable: true
         });
@@ -159,6 +173,32 @@ const Label = extend(View)(
             },
             enumerable: true
         });
+        
+        function createColorStateList(textColors) {
+            var statesSet = [];
+            var colorsSets = [];
+            if(textColors.normal){
+                statesSet.push(View.State.STATE_NORMAL);
+                colorsSets.push(textColors.normal);
+            }
+            if(textColors.disabled){
+                statesSet.push(View.State.STATE_DISABLED);
+                colorsSets.push(textColors.disabled);
+            }
+            if(textColors.selected){
+                statesSet.push(View.State.STATE_SELECTED);
+                colorsSets.push(textColors.selected);
+            }
+            if(textColors.pressed){
+                statesSet.push(View.State.STATE_PRESSED);
+                colorsSets.push(textColors.pressed);
+            }
+            if(textColors.focused){
+                statesSet.push(View.State.STATE_FOCUSED);
+                colorsSets.push(textColors.focused);
+            }
+            return (new NativeColorStateList (statesSet, colorsSets));
+        }
         
         // Assign parameters given in constructor
         if (params) {
