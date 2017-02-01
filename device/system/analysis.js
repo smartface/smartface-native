@@ -16,7 +16,7 @@ System.BatteryState.ONBATTERY = 1;
  * @readonly
  * @static
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.language;
@@ -28,7 +28,7 @@ System.language;
  * @readonly
  * @static
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.batteryLevel;
@@ -39,7 +39,7 @@ System.batteryLevel;
  * @property {Number} batteryState
  * @readonly
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -51,7 +51,7 @@ System.batteryState;
  * @property {String} OS
  * @readonly
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -63,7 +63,7 @@ System.OS;
  * @property {String} OSVersion
  * @readonly
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -75,7 +75,7 @@ System.OSVersion;
  * @property {String} firmwareVersion
  * @readonly
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -87,7 +87,7 @@ System.firmwareVersion;
  * @property {Boolean} accelerometerEnabled
  * @static
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.accelerometerEnabled;
@@ -99,7 +99,7 @@ System.accelerometerEnabled;
  * @readonly
  * @static
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.menuKeyAvaliable;
@@ -110,7 +110,7 @@ System.menuKeyAvaliable;
  * @property {Boolean} fingerPrintAvaliable
  * @readonly
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -121,7 +121,7 @@ System.fingerPrintAvaliable;
  * TODO: type definition
  * @property {String} clipboard
  * @android
- * @iOS
+ * @ios
  * @static
  * @since 0.1
  */
@@ -181,7 +181,7 @@ System.android.getPackageVersion ({
  * @param {Function} onSuccess
  * @param {Function} onError
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.validateFingerPrint ({
@@ -194,7 +194,7 @@ System.validateFingerPrint ({
  * @method vibrate
  * @param {Number} milliseconds
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.vibrate = function(milliseconds) {};
@@ -204,7 +204,7 @@ System.vibrate = function(milliseconds) {};
  * @method isApplicationInstalled
  * @param {String} packageName | schemaName
  * @android
- * @iOS
+ * @ios
  * @since 0.1
  */
 System.isApplicationInstalled = function(packageName) {};
@@ -218,7 +218,7 @@ System.isApplicationInstalled = function(packageName) {};
  * @param {Number} y
  * @param {Number} z
  * @android
- * @iOS
+ * @ios
  */
 System.onAccelerate = function onAccelerate(x, y, z){ }
 

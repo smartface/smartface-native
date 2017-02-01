@@ -9,6 +9,8 @@ function Screen() {}
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Device.Screen.OrientationType} orientation
  * @readonly
  * @static
@@ -19,6 +21,8 @@ Screen.orientation;
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Boolean} touchSupported 
  * @readonly
  * @static
@@ -29,6 +33,8 @@ Screen.touchSupported;
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} dpi 
  * @readonly
  * @static
@@ -39,6 +45,8 @@ Screen.dpi;
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} height 
  * @readonly
  * @static
@@ -49,6 +57,8 @@ Screen.height;
 /**
  *
  * TODO: type definition
+ * @android
+ * @ios
  * @property {Number} width 
  * @readonly
  * @static
@@ -59,35 +69,18 @@ Screen.width;
 /**
  *
  * TODO: type definition
- * @property {Number} touchX 
- * @readonly
- * @static
- * @since 0.1
- */
-Screen.touchX;
-
-/**
- *
- * TODO: type definition
- * @property {Number} touchY 
- * @readonly
- * @static
- * @since 0.1
- */
-Screen.touchY;
-
-/**
- *
- * TODO: type definition
+ * @ios
  * @property {Boolean} touchForceAvaliable
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.touchForceAvaliable;
+Screen.ios.touchForceAvaliable;
 
 /**
  * TODO: type definition
+ * @android
+ * @ios
  * @method capture
  * @return {UI.Image} captured image.
  * @since 0.1
