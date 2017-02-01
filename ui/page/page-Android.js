@@ -28,6 +28,7 @@ function Page(params) {
     
     innerLayout.parent = self;
 
+    var optionsMenu = null;
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -37,9 +38,18 @@ function Page(params) {
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
         },
+        onCreateOptionsMenu: function(menu) {
+            optionsMenu = menu;
+            return true;
+        },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
                 activity.getSupportFragmentManager().popBackStackImmediate();
+            } else if (_headerBarItems[menuItem.getItemId()]) {
+                var item = _headerBarItems[menuItem.getItemId()];
+                if (item.onPress instanceof Function) {
+                    item.onPress();
+                }
             }
             return true;
         }
@@ -285,6 +295,39 @@ function Page(params) {
                 _headerBarVisible = visible;
                 self.invalidateHeaderBar();
             }
+        },
+        enumerable: true
+    });
+    
+    var _headerBarItems = [];
+    Object.defineProperty(self.headerBar, 'items', {
+        get: function() {
+            return _headerBarItems;
+        },
+        set: function(items) {
+            if (!(items instanceof Array)) {
+                return;
+            }
+            
+            // Clear old data
+            optionsMenu.clear();
+            _headerBarItems = [];
+
+            var uId = 1;
+            const HeaderBarItem = require("../headerbaritem");
+            const NativeMenuItem = requireClass("android.view.MenuItem");
+            items.forEach(function(item) {
+                if (!(item instanceof HeaderBarItem)) {
+                    return;
+                }
+                
+                var menuItem = optionsMenu.add(0, uId, 0, item.title);
+                item.image && menuItem.setIcon(item.image);
+                menuItem.setEnabled(item.enabled);
+                menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+            
+                _headerBarItems[uId++] = item;
+            });
         },
         enumerable: true
     });
