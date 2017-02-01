@@ -1,15 +1,33 @@
-const AbsoluteContainer = require('nf-core/ui/absolutelayout');
+const AbsoluteLayout = require('nf-core/ui/absolutelayout');
 
 function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
-
-    var pageView = new AbsoluteContainer();
+    
+    self.pageView = new AbsoluteLayout();
+    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    
     self.nativeObject.onViewLoad  = function(){
-        pageView.nativeObject.backgroundColor = UIColor.whiteColor();
-        return pageView.nativeObject;
+        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        return self.pageView.nativeObject;
     }
+    
+    self.nativeObject.onViewLayoutSubviews = function(){
+        self.pageView.left = self.pageView.nativeObject.frame.x;
+        self.pageView.top = self.pageView.nativeObject.frame.y;
+        self.pageView.width = self.pageView.nativeObject.frame.width;
+        self.pageView.height = self.pageView.nativeObject.frame.height;
+        
+        self.pageView.applyLayout();
+    }
+
+    Object.defineProperty(self, 'layout', {
+        get: function() {
+            return self.pageView;
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self, 'onLoad', {
         get: function() {
@@ -70,11 +88,15 @@ function Page(params) {
         enumerable: true
     });
         
+    //Deprecated
     self.add = function(object){
-        pageView.addChild(object);
+        console.log("Page add function deprecated");
+        self.pageView.addChild(object);
     }
 
+    //Deprecated
     self.remove = function(object){
+        console.log("Page remove function deprecated");
         object.nativeObject.removeFromSuperview();
     }
 

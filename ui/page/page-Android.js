@@ -1,6 +1,6 @@
-const AbsoluteLayout = require("nf-core/ui/absolutelayout");
-const Color          = require("nf-core/ui/color");
-const TypeUtil       = require("nf-core/util/type");
+const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
+const Color         = require("nf-core/ui/color");
+const TypeUtil      = require("nf-core/util/type");
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -18,14 +18,14 @@ function Page(params) {
     
     // self.height and self.width for child views. It can get root layout dimensions from it.
     // @todo must be replaced with native get dimension. Somehow its not working.
-    var verticalDimention = self.height = Device.screenHeight;
-    var horizontalDimention = self.width = Device.screenWidth;
     
-    var innerLayout = new AbsoluteLayout({
-        height: verticalDimention,
-        width: horizontalDimention,
-        backgroundColor:Color.WHITE
+    var innerLayout = self.layout = new AbsoluteLayout({
+        height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
+        width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
+        backgroundColor:Color.RED,
+        isRoot : true
     });
+    
     innerLayout.parent = self;
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
@@ -37,9 +37,6 @@ function Page(params) {
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
         },
-        onConfigurationChanged: function(newConfig){
-            self.invalidatePosition(newConfig.orientation);
-        },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
                 activity.getSupportFragmentManager().popBackStackImmediate();
@@ -47,6 +44,13 @@ function Page(params) {
             return true;
         }
     }, null);
+
+    Object.defineProperty(this, 'layout', {
+        get: function() {
+            return innerLayout;
+        },
+        enumerable: true
+    });
     
     self.headerBar = {};
     self.headerBar.android = {};
@@ -285,14 +289,12 @@ function Page(params) {
         enumerable: true
     });
 
-    self.childViews = {};
     this.add = function(view){
-        view.parent = self;
-        innerLayout.addChild(view);
+        self.layout.addChild(view);
     };
 
     this.remove = function(view){
-        innerLayout.removeChild(view);
+        self.layout.removeChild(view);
     };
 
     this.invalidateStatusBar = function(){
@@ -351,7 +353,6 @@ function Page(params) {
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
-        self.invalidatePosition();
     }
 
     function toSpanned(text, color) {

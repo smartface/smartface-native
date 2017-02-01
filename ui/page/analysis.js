@@ -35,6 +35,20 @@ function Page(params) {
      */
     this.onLoad = function onLoad(){};
 
+    /**
+     * Gets the main layout of Page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.layout.backgroundColor = Color.RED;
+     *
+     * @property {UI.AbsoluteLayout} layout
+     * @readonly
+     * @since 0.1
+     */
+    this.layout;
 
     /**
      * Gets the height of the status bar. height is a read only property. Height value will change depends on
@@ -144,6 +158,7 @@ function Page(params) {
      *     myPage.add(myLabel);
      *
      * @method add
+     * @deprecated 0.1 Use UI.Page#layout instead.
      */
     this.add = function(){};
 
@@ -159,9 +174,10 @@ function Page(params) {
      *     myPage.remove(myLabel);
      *
      * @method remove
+     * @deprecated 0.1 Use UI.Page#layout instead.
      */
     this.remove = function(){};
-    
+
     /**
      * Gets/sets background color of the headerBar. If not set, headerBar will have default
      * background color depends on device's OS and OS version.
