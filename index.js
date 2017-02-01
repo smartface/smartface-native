@@ -1,3 +1,4 @@
 module.exports = {
-    UI: require('./ui')
+    UI: require('./ui'),
+    IO: require('./io')
 }
