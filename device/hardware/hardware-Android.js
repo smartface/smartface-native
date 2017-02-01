@@ -4,7 +4,9 @@ const NativeBuild    = requireClass('android.os.Build');
 
 const Hardware = {};
 
-Object.defineProperty(Hardware, 'IMEI', {
+Hardware.android = {};
+
+Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
         var activity = Android.getActivity();
         var telephonyManager = activity.getSystemService(NativeContext.TELEPHONY_SERVICE);
@@ -37,7 +39,7 @@ Object.defineProperty(Hardware, 'brandModel', {
     configurable: false
 });
 
-Object.defineProperty(Hardware, 'vendorID', {
+Object.defineProperty(Hardware.android, 'vendorID', {
     get: function () {
         return NativeBuild.SERIAL;
     },
