@@ -1,5 +1,4 @@
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-const ViewGroup                 = require('nf-core/ui/viewgroup');
 
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
@@ -209,15 +208,8 @@ function View(params) {
     
     this.applyLayout = function(){
         yogaNode.calculateLayout();
-        if(self.childViews){
-            for(var childViewKey in self.childViews){
-                if(self.childViews[childViewKey] instanceof ViewGroup){
-                    self.childViews[childViewKey].applyLayout();
-                }
-                else{
-                    self.childViews[childViewKey].applyLayout();
-                }
-            }
+        for(var childViewKey in self.childViews){
+            self.childViews[childViewKey].applyLayout();
         }
     };
     
