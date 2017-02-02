@@ -1,4 +1,5 @@
 const TypeUtil = require("nf-core/util/type");
+const Blob = require('nf-core/global/blob');
 
 function Image(params) {
     var self = this;
@@ -8,7 +9,7 @@ function Image(params) {
     }else if (params.name){
         self.nativeObject = new UIImage.createName(params.name);
     }else if (params.blob){
-        console.log("Blob");
+        self.nativeObject = UIImage.createNSData(params.blob.nativeObject);
     }else if (params.image){
         self.nativeObject = params.image;
     }
@@ -80,11 +81,11 @@ function Image(params) {
     Object.defineProperty(self, 'compress', {
       value: function(format, quality, onSuccess, onFailure){
           if (TypeUtil.isNumeric(quality)){
-              var resizeImage = new Image.createFromImage(self.nativeObject.compress(format,quality/100));
+              var blob = new Blob(self.nativeObject.compress(format,quality/100));
               if (onSuccess) {
-                  onSuccess({"image" : resizeImage});
+                  onSuccess({"blob" : blob});
               }
-              return resizeImage;
+              return blob;
           }
           
           if (onFailure) {
