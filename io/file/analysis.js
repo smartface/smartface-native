@@ -112,7 +112,7 @@ function File(params) {
      *     @example
      *     // @todo add example
      *
-     * @property {String} path
+     * @property {String} [path = param.path]
      * @readonly
      * @since 0.1
      */
