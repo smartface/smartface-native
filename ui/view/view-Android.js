@@ -233,7 +233,7 @@ function View(params) {
                     _onTouch && _onTouch();
                 }
             }
-            return false;
+            return true;
         }
     })); 
      
@@ -305,7 +305,8 @@ function View(params) {
         set: function(height) {
             yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'width', {
@@ -315,7 +316,8 @@ function View(params) {
         set: function(width) {
             yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'minWidth', {

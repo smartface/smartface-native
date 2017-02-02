@@ -63,7 +63,7 @@ const Label = extend(View)(
                     fontInitial = font;
                     self.nativeObject.setTypeface(font.nativeObject);
                     if(font.size && TypeUtil.isNumeric(font.size))
-                       self.nativeObject.setTextSize(AndroidUnitConverter.dpToPixel(activity,font.size));
+                       self.nativeObject.setTextSize(font.size);
                     }
             },
             enumerable: true
@@ -199,6 +199,30 @@ const Label = extend(View)(
             }
             return (new NativeColorStateList (statesSet, colorsSets));
         }
+
+        // Added due to problem in vertical alignment inside YogaLayout for TextView
+        Object.defineProperty(this, 'height', {
+            get: function() {
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight());
+            },
+            set: function(height) {
+                self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(height));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        
+        // Added due to problem in vertical alignment inside YogaLayout for TextView
+        Object.defineProperty(this, 'width', {
+            get: function() {
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth());
+            },
+            set: function(width) {
+                self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(width))
+            },
+            enumerable: true,
+            configurable: true
+        });
         
         // Assign parameters given in constructor
         if (params) {
