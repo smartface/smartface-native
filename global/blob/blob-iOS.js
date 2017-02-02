@@ -3,6 +3,11 @@ function Blob(parts, properties) {
         if(!self.nativeObject){
             self.nativeObject = parts;
         }
+        
+        Object.defineProperty(self, 'size', {
+          value: self.nativeObject.length,
+          writable: false
+        });
 }
 
 module.exports = Blob;
