@@ -123,15 +123,15 @@ const Button = extend(View)(
             set: function(bgImages) {
                 backgroundImagesInitial = bgImages;
                 if (backgroundImagesInitial.normal)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.normal),ButtonState.normal);
+                  self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal.nativeObject,ButtonState.normal);
                 if (backgroundImagesInitial.disabled)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.disabled),ButtonState.disabled);
+                  self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled.nativeObject,ButtonState.disabled);
                 if (backgroundImagesInitial.selected)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.selected),ButtonState.selected);
+                  self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected.nativeObject,ButtonState.selected);
                 if (backgroundImagesInitial.pressed)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.pressed),ButtonState.pressed);
+                  self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed.nativeObject,ButtonState.pressed);
                 if (backgroundImagesInitial.focused)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.focused),ButtonState.focused);
+                  self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused.nativeObject,ButtonState.focused);
             },
             enumerable: true
         });
