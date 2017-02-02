@@ -2,17 +2,15 @@ const File                  = require("nf-core/io/file");
 const AndroidConfig         = require("nf-core/util/Android/androidconfig");
 const TypeUtil              = require("nf-core/util/type");
 
-const NativeFile            = requireClass("java.io.File");
-const NativeEnvironment     = requireClass("android.os.Environment");
-const NativeConfiguration   = requireClass("android.content.res.Configuration");
-const NativeDisplayMetrics  = requireClass("android.util.DisplayMetrics")
-
 const storages = {};
 const resolvedPaths = {};
-const emulatorPath = NativeEnvironment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/" + Android.getActivity().getPackageName() +  "/cache";
+const emulatorPath = Android.getActivity().getCacheDir();
 
-var desiredDrawableSize;
-var desiredDrawableDensity;
+var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
+var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
+var desiredDrawableSizeIndex;
+var desiredDrawableDensityIndex;
+
 setScreenConfigs();
 
 function Path() {}
@@ -55,19 +53,19 @@ Object.defineProperty(Path.android, 'storages', {
             storages = {'internal': null, 'external': null, 'usb': null};
             var filesDir = Android.getActivity().getFilesDir();
             if(filesDir){
-                storages['internal'] = File.createFromNativeObject(filesDir);
+                storages['internal'] = new File({ path: filesDir.getAbsolutePath() });
             }
             
             // @todo test for more devices
-            var externalStorage = new NativeFile('/storage/sdcard1/');
-            if(externalStorage.exists() && externalStorage.listFiles() != null){
-                storages['external'] = File.createFromNativeObject(externalStorage);
+            var externalStorage = new File({ path: '/storage/sdcard1/' });
+            if(externalStorage.exists && externalStorage.getFiles() != null){
+                storages['external'] = externalStorage;
             }
             
             // @todo test for more devices
-            var usbStorage = new NativeFile('/storage/usbdisk/');
-            if(usbStorage.exists() && usbStorage.listFiles() != null){
-                storages['usb'] = File.createFromNativeObject(usbStorage);
+            var usbStorage = new File({ path:'/storage/usbdisk/'});
+            if(usbStorage.exists && usbStorage.getFiles() != null){
+                storages['usb'] = usbStorage;
             }
         }
         return storages;
@@ -77,54 +75,65 @@ Object.defineProperty(Path.android, 'storages', {
 
 Path.resolve = function(path){
     if(TypeUtil.isString(path)){
-        // checking if assets
-        if(AndroidConfig.isEmulator){
-            return getEmulatorAssetsPath(path);
-        }
-        else{
-            return path;
-        }
+        return getResolvedPath(path);
     }
     return null;
-}
+};
 
-function getEmulatorPath(path){
+function getResolvedPath(path){
     if(resolvedPaths[path]){
         return resolvedPaths[path];
     }
+    
     if(path.startsWith('assets://')){
+        // assets://smartface.png to smartface.png
         var fileName = path.slice(9);
-        
-        resolvedPaths[path] = getRauAssetsPath() + "/" + fileName;
-        var fileAssetRau = new File({
-            path: resolvedPaths[path]
-        });
-        
-        if(!fileAssetRau.exists){
+        if(AndroidConfig.isEmulator){
+            // This is emulator. Check file system
             resolvedPaths[path] = getEmulatorAssetsPath() + "/" + fileName;
         }
-        return resolvedPaths[path];
+        else{
+            // This is player. Check RAU
+            resolvedPaths[path] = getRauAssetsPath() + "/" + fileName;
+            // if assets not exists in rau
+            if(!checkFileExistsInPath(resolvedPaths[path])){
+                resolvedPaths[path] = path;
+            }
+        }
     }
     else if (path.startsWith('images://')){
-        // keep latest / for not adding again
+        // images://smartface.png to smartface.png
         var fileName = path.slice(9);
         if(fileName.endsWith(".png")){
+            // we need file name without extension. We should check fileName.png and fileName.9.png for 9Path drawable.
+            // images://smartface.png to smartface
             fileName = fileName.substring(fileName.lastIndexOf(".png"),fileName.length);
         }
-        
-        resolvedPaths[path] = findDrawableAtDirectory(getRauDrawablePath(), fileName) || findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
-        return resolvedPaths[path];
+        if(AndroidConfig.isEmulator){
+            // This is emulator. Check file system
+            resolvedPaths[path] = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
+        }
+        else{
+            // This is player. Check RAU
+            resolvedPaths[path] = findDrawableAtDirectory(getRauDrawablePath(), fileName);
+            if(!resolvedPaths[path]){
+                // drawable not exists in RAU get it from apk
+                resolvedPaths[path] = path;
+            }
+        }
     }
     else{
-        return path;
+        // cache normal path too for performance. We dont want to check more.
+        resolvedPaths[path] = path;
     }
+    return resolvedPaths[path];
 }
 
 function getEmulatorAssetsPath(){
     return emulatorPath + "/assets";
 }
 function getEmulatorDrawablePath(){
-    return emulatorPath + "/assets/res";
+    return emulatorPath + "/res";
 }
 function getRauAssetsPath(){
     return emulatorPath + "/system/rau/assets/";
@@ -134,59 +143,119 @@ function getRauDrawablePath(){
 }
 
 function findDrawableAtDirectory(path,drawableName){
-    // assuming js developer enter path with extension.
-    var targetPath = path + "/drawable-" + desiredDrawableSize + "-" + desiredDrawableDensity + "/" + drawableName + ".png";
-    var fileDrawable = new File({
-        path: targetPath
-    });
-    if(fileDrawable.exists){
+    // searching drawable on device density and screen size
+    var targetPath = checkDrawableVariations(path, drawableSizes[desiredDrawableSizeIndex], drawableDensities[desiredDrawableDensityIndex], drawableName);
+    if(targetPath){
         return targetPath;
     }
     
-    var targetPath9Path = path + "/drawable-" + desiredDrawableSize + "-" + desiredDrawableDensity + "/" + drawableName + ".9.png";
-    var fileDrawable9Path = new File({
-        path: targetPath9Path
-    });
-    if(fileDrawable9Path.exists){
-        return targetPath9Path;
+    // searching drawable on densities and screen size which are over the device density and screen size
+    for(var i = desiredDrawableDensityIndex; i<drawableDensities.length; i++){
+        for(var j = desiredDrawableSizeIndex; j<drawableSizes.length; j++){
+            targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
+            if(targetPath){
+                return targetPath;
+            }
+        }
     }
+    
+    // searching drawable on densities and screen size which are below the device density and screen size
+    for(var i = drawableDensities.length; i>=0; i--){
+        for(var j = drawableSizes.length; j>=0; j--){
+            targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
+            if(targetPath){
+                return targetPath;
+            }
+        }
+    }
+    
+    
+    
     
 }
 
+function checkDrawableVariations(path, drawableSize, drawableDensity, drawableName){
+    var targetPath = path + "/drawable-" + drawableDensity + "/" + drawableName + ".png";
+    if(checkFileExistsInPath(targetPath)){
+        return targetPath;
+    }
+
+    var targetPath9Path = path + "/drawable-" + drawableDensity + "/" + drawableName + ".9.png";
+    if(checkFileExistsInPath(targetPath9Path)){
+        return targetPath9Path;
+    }
+    
+    targetPath = path + "/drawable-" + drawableSize + "/" + drawableName + ".png";
+    if(checkFileExistsInPath(targetPath)){
+        return targetPath;
+    }
+
+    targetPath9Path = path + "/drawable-" + drawableSize + "/" + drawableName + ".9.png";
+    if(checkFileExistsInPath(targetPath9Path)){
+        return targetPath9Path;
+    }
+    
+    targetPath = path + "/drawable-" + drawableSize + "-" + drawableDensity + "/" + drawableName + ".png";
+    if(checkFileExistsInPath(targetPath)){
+        return targetPath;
+    }
+
+    targetPath9Path = path + "/drawable-" + drawableSize + "-" + drawableDensity + "/" + drawableName + ".9.png";
+    if(checkFileExistsInPath(targetPath9Path)){
+        return targetPath9Path;
+    }
+    
+    return null;
+}
+
+function checkFileExistsInPath(path){
+    // for preventing loop between File and Path, one of them must use native.
+    const NativeFile = requireClass('java.io.File');
+    
+    var fileInPath = new NativeFile(path);
+    return fileInPath.exists();
+}
+
 function setScreenConfigs(){
+    const NativeDisplayMetrics  = requireClass("android.util.DisplayMetrics")
+    const NativeConfiguration   = requireClass("android.content.res.Configuration");
+
     var configuration = Android.getActivity().getResources().getConfiguration();
     if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
-        desiredDrawableSize = "small";
+        desiredDrawableSizeIndex = 0;
     } 
     else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_NORMAL) {
-        desiredDrawableSize = "normal";
+        desiredDrawableSizeIndex = 1;
     } 
     else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_LARGE) {
-        desiredDrawableSize = "large";
+        desiredDrawableSizeIndex = 2;
     } 
     else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_XLARGE) {
-        desiredDrawableSize = "large";
+        desiredDrawableSizeIndex = 3;
     } 
     else {
-        desiredDrawableSize = "normal";
+        desiredDrawableSizeIndex = 1;
     }
     
     var metrics = Android.getActivity().getResources().getDisplayMetrics();
     
     if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_LOW) {
-        desiredDrawableDensity = "ldpi";
+        desiredDrawableDensityIndex = 0;
     } 
     else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_MEDIUM) {
-        desiredDrawableDensity = "mdpi";
+        desiredDrawableDensityIndex = 1;
     } 
     else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_HIGH) {
-        desiredDrawableDensity = "hdpi";
+        desiredDrawableDensityIndex = 2;
     } 
     else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_XHIGH) {
-        desiredDrawableDensity = "xhdpi";
+        desiredDrawableDensityIndex = 3;
     } 
+    else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_XXHIGH) {
+        desiredDrawableDensityIndex = 4;
+    }
     else {
-        desiredDrawableDensity = "xxhdpi";
+        desiredDrawableDensityIndex = 5;
     }
     
 }
