@@ -6,9 +6,6 @@
  */
 function System() {}
 
-System.BatteryState.CHARGING = 0;
-System.BatteryState.ONBATTERY = 1;
-
 /**
  *
  * TODO: type definition
@@ -36,14 +33,14 @@ System.batteryLevel;
 /**
  *
  * TODO: type definition
- * @property {Number} batteryState
+ * @property {Boolean} isBatteryCharged
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-System.batteryState;
+System.isBatteryCharged;
 
 /**
  *
@@ -72,14 +69,13 @@ System.OSVersion;
 /**
  *
  * TODO: type definition
- * @property {String} firmwareVersion
+ * @property {String} apiLevel
  * @readonly
  * @android
- * @ios
  * @static
  * @since 0.1
  */
-System.firmwareVersion;
+System.android.apiLevel;
 
 /**
  *
