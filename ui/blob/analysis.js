@@ -1,13 +1,18 @@
 
 /**
- * @class UI.Blob
+ * @class Blob
  * @since 0.1
  * 
  * Blob is a binary large object.
- *
- *     // todo Add example
+ * 
+ *     @example
+ *     const Image = require('sf-core/ui/image');
+ *     const ImageFormat = require('sf-core/ui/imageformat');
+ *     var myImage = Image.createFromFile("images://smartface.png")
+ *     var blob = myImage.compress(ImageFormat.JPEG, 100); 
+ *     var blobSize = blob.size, blobType = blob.type;
  */
-function Blob(params) {
+function Blob(parts, properties) {
     
     /**
      * Returns the type of Blob data.
@@ -34,15 +39,4 @@ function Blob(params) {
      * @since 0.1
      */
     this.slice = function(start, end, type) {};
-    
-    /**
-     * Creates a new Blob object with given parameters.
-     *
-     * @method Blob
-     * @param {Array} content Content of the Blob data.
-     * @param {Object} properties Values of the Blob properties.
-     * @return {UI.Blob} 
-     * @since 0.1
-     */
-    this.Blob = function(parts, properties) {};
 }
