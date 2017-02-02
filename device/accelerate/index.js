@@ -1,0 +1,1 @@
+module.exports = require('./accelerate-' + Device.deviceOS + '.js');
