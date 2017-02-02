@@ -80,7 +80,7 @@ function Image(params) {
     Object.defineProperty(self, 'compress', {
       value: function(format, quality, onSuccess, onFailure){
           if (TypeUtil.isNumeric(quality)){
-              var resizeImage = new Image.createFromImage(self.nativeObject.compress(quality/100));
+              var resizeImage = new Image.createFromImage(self.nativeObject.compress(format,quality/100));
               if (onSuccess) {
                   onSuccess({"image" : resizeImage});
               }
