@@ -11,7 +11,7 @@ Accelerate.stop = function(){
       Accelerate.monitonManager.stopAccelerometerUpdates();
 }
 
-Object.defineProperty(Accelerate, 'callback', {
+Object.defineProperty(Accelerate, 'onAccelerate', {
     set : function(value){
     Accelerate.monitonManager.callback = value;
   },
