@@ -16,6 +16,27 @@ const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
         _super(this);
 
+        /**
+         * // @todo add description.
+         * 
+         *     @example
+         *     // @todo add example
+         *
+         * @property {UI.FlexLayout.Direction} [direction = UI.FlexLayout.Direction.INHERIT]   
+         * @since 0.1
+         */
+        this.direction = UI.FlexLayout.Direction.INHERIT;
+        
+        /**
+         * // @todo add description.
+         * 
+         *     @example
+         *     // @todo add example
+         *
+         * @property {UI.FlexLayout.Position} [position = UI.FlexLayout.Position.RELATIVE]   
+         * @since 0.1
+         */
+        this.position = UI.FlexLayout.Position.RELATIVE;
 
         /**
          * // @todo add description.
@@ -72,6 +93,16 @@ const FlexLayout = extend(ViewGroup)(
          */
         this.flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP;
         
+        /**
+         * // @todo add description.
+         * 
+         *     @example
+         *     // @todo add example
+         *
+         * @property {UI.FlexLayout.Overflow} [overFlow = UI.FlexLayout.Overflow.VISIBLE]
+         * @since 0.1
+         */
+        this.overFlow = UI.FlexLayout.Overflow.VISIBLE;
             
         /**
          * // @todo add description.
@@ -100,28 +131,9 @@ const FlexLayout = extend(ViewGroup)(
  */
 FlexLayout.FlexDirection = {};
 /**
- * @property {Number} ROW
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
-    writable: false
-});
-/**
- * @property {Number} ROW_REVERSE
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
-    writable: false
-});
-/**
  * @property {Number} COLUMN
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -132,11 +144,34 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
 /**
  * @property {Number} COLUMN_REVERSE
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
+    writable: false
+});
+/**
+ * @property {Number} ROW
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
+    writable: false
+});
+/**
+ * @property {Number} ROW_REVERSE
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
     writable: false
 });
 
@@ -156,6 +191,7 @@ FlexLayout.JustifyContent = {};
 /**
  * @property {Number} FLEX_START
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -164,18 +200,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
     writable: false
 });
 /**
- * @property {Number} FLEX_END
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
-    writable: false
-});
-/**
  * @property {Number} CENTER
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -184,8 +211,20 @@ Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
     writable: false
 });
 /**
+ * @property {Number} FLEX_END
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
+    writable: false
+});
+/**
  * @property {Number} SPACE_BETWEEN
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -196,6 +235,7 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_BETWEEN', {
 /**
  * @property {Number} SPACE_AROUND
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -218,8 +258,20 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
  */
 FlexLayout.AlignContent = {};
 /**
+ * @property {Number} AUTO
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignContent, 'AUTO', {
+    writable: false
+});
+/**
  * @property {Number} FLEX_START
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -228,18 +280,9 @@ Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
     writable: false
 });
 /**
- * @property {Number} FLEX_END
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
-    writable: false
-});
-/**
  * @property {Number} CENTER
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -248,77 +291,25 @@ Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
     writable: false
 });
 /**
+ * @property {Number} FLEX_END
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
+    writable: false
+});
+/**
  * @property {Number} STRETCH
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
-    writable: false
-});
-
-/**
- * @enum {Number} UI.FlexLayout.AlignItems
- * @static
- * @readonly
- * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
- *
- */
-FlexLayout.AlignItems = {};
-/**
- * @property {Number} FLEX_START
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
-    writable: false
-});
-/**
- * @property {Number} FLEX_END
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
-    writable: false
-});
-/**
- * @property {Number} CENTER
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
-    writable: false
-});
-/**
- * @property {Number} BASELINE
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignItems, 'BASELINE', {
-    writable: false
-});
-/**
- * @property {Number} STRETCH
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
     writable: false
 });
 
@@ -338,6 +329,7 @@ FlexLayout.FlexWrap = {};
 /**
  * @property {Number} NOWRAP
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -348,11 +340,81 @@ Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
 /**
  * @property {Number} WRAP
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.AlignItems
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.AlignItems = {};
+/**
+ * @property {Number} AUTO
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignItems, 'AUTO', {
+    writable: false
+});
+/**
+ * @property {Number} FLEX_START
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
+    writable: false
+});
+/**
+ * @property {Number} CENTER
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
+    writable: false
+});
+/**
+ * @property {Number} FLEX_END
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
+    writable: false
+});
+/**
+ * @property {Number} STRETCH
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
     writable: false
 });
 
@@ -372,6 +434,7 @@ FlexLayout.AlignSelf = {};
 /**
  * @property {Number} AUTO
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -382,6 +445,7 @@ Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
 /**
  * @property {Number} FLEX_START
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -390,18 +454,9 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
     writable: false
 });
 /**
- * @property {Number} FLEX_END
- * // @todo add description.
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
-    writable: false
-});
-/**
  * @property {Number} CENTER
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
@@ -410,23 +465,155 @@ Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
     writable: false
 });
 /**
- * @property {Number} BASELINE
+ * @property {Number} FLEX_END
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(FlexLayout.AlignSelf, 'BASELINE', {
+Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
     writable: false
 });
 /**
  * @property {Number} STRETCH
  * // @todo add description.
+ * 
  * @static
  * @readonly
  * @since 0.1
  */
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Direction
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Direction = {};
+/**
+ * @property {Number} INHERIT
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
+    writable: false
+});
+/**
+ * @property {Number} LTR
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
+    writable: false
+});
+/**
+ * @property {Number} RTL
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Direction, 'RTL', {
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Overflow
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Overflow = {};
+/**
+ * @property {Number} VISIBLE
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Overflow, 'VISIBLE', {
+    writable: false
+});
+
+/**
+ * @property {Number} HIDDEN
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Overflow, 'HIDDEN', {
+    writable: false
+});
+/**
+ * @property {Number} SCROLL
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.FlexLayout.Position
+ * @static
+ * @readonly
+ * @since 0.1
+ *
+ * // @todo add description.
+ *
+ *     @example
+ *     // @todo add example
+ *
+ */
+FlexLayout.Position = {};
+/**
+ * @property {Number} RELATIVE
+ * // @todo add description.
+ * 
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'RELATIVE', {
+    writable: false
+});
+/**
+ * @property {Number} ABSOLUTE
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.Position, 'ABSOLUTE', {
     writable: false
 });
 

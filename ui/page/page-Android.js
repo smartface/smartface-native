@@ -16,18 +16,16 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    // self.height and self.width for child views. It can get root layout dimensions from it.
-    // @todo must be replaced with native get dimension. Somehow its not working.
     
     var innerLayout = self.layout = new AbsoluteLayout({
         height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
         width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
-        backgroundColor:Color.RED,
-        isRoot : true
+        isRoot : true,
+        backgroundColor: Color.WHITE
     });
     
     innerLayout.parent = self;
-
+    
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -35,6 +33,7 @@ function Page(params) {
             return innerLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
+            innerLayout.applyLayout();
             onShowCallback && onShowCallback();
         },
         onOptionsItemSelected: function(menuItem){
@@ -289,10 +288,12 @@ function Page(params) {
         enumerable: true
     });
 
+    // Deprecated since 0.1
     this.add = function(view){
         self.layout.addChild(view);
     };
 
+    // Deprecated since 0.1
     this.remove = function(view){
         self.layout.removeChild(view);
     };
