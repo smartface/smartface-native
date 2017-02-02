@@ -11,10 +11,9 @@ const CompressFormat = [
 ];
 
 function Image (params) {
-    console.log("params " + params);
     var self = this;
     var androidResources = Android.getActivity().getResources();
-    if (params != undefined) {
+    if (params) {
         if(params.length == 1) {
             var bitmap = NativeBitmapFactory.decodeFile(params[0]);
             self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
