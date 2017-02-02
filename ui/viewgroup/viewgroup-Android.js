@@ -16,7 +16,6 @@ const ViewGroup = extend(View)(
             view.parent = self;
             self.childViews[view.id+''] = view;
             self.nativeObject.addView(view.nativeObject);
-            view.generateLayoutParams();
         };
 
         this.removeChild = function(view){
