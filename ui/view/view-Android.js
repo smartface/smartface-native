@@ -135,7 +135,7 @@ function View(params) {
         enumerable: true
     });
     
-    this.touchEnabled = true;
+    this.touchEnabled = false;
     
     var _onTouch;
     Object.defineProperty(this, 'onTouch', {
@@ -236,12 +236,18 @@ function View(params) {
         onTouch: function(view, event) {
             if(self.touchEnabled){
                 if (event.getAction() == NativeMotionEvent.ACTION_UP) {
-                    _onTouchEnded && _onTouchEnded();
+                    if(_onTouchEnded){
+                        _onTouchEnded();
+                        return true;
+                    }
                 } else {
-                    _onTouch && _onTouch();
+                    if(_onTouch){
+                        _onTouch();
+                        return true;
+                    }
                 }
             }
-            return true;
+            return false;
         }
     })); 
      
@@ -450,10 +456,20 @@ function View(params) {
     
     Object.defineProperty(this, 'padding', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.TOP).value);
         },
         set: function(padding) {
-            yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(padding));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_padding = AndroidUnitConverter.dpToPixel(padding);
+            yogaNode.setPadding(YogaEdge.TOP, db_padding);
+            yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
+            yogaNode.setPadding(YogaEdge.LEFT, db_padding);
+            yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
+            yogaNode.setPadding(YogaEdge.START, db_padding);
+            yogaNode.setPadding(YogaEdge.END, db_padding);
+            yogaNode.setPadding(YogaEdge.HORIZONTAL, db_padding);
+            yogaNode.setPadding(YogaEdge.VERTICAL, db_padding);
         },
         enumerable: true
     });
@@ -540,10 +556,20 @@ function View(params) {
     
     Object.defineProperty(this, 'margin', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.TOP).value);
         },
         set: function(margin) {
-            yogaNode.setMargin(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(margin));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_margin = AndroidUnitConverter.dpToPixel(margin);
+            yogaNode.setMargin(YogaEdge.TOP, db_margin);
+            yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
+            yogaNode.setMargin(YogaEdge.LEFT, db_margin);
+            yogaNode.setMargin(YogaEdge.RIGHT, db_margin);
+            yogaNode.setMargin(YogaEdge.START, db_margin);
+            yogaNode.setMargin(YogaEdge.END, db_margin);
+            yogaNode.setMargin(YogaEdge.HORIZONTAL, db_margin);
+            yogaNode.setMargin(YogaEdge.VERTICAL, db_margin);
         },
         enumerable: true
     });
@@ -610,10 +636,18 @@ function View(params) {
     
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getBorder(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getBorder(YogaEdge.TOP));;
         },
         set: function(borderWidth) {
-            yogaNode.setBorder(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(borderWidth));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var dp_borderwidth = AndroidUnitConverter.dpToPixel(borderWidth);
+            yogaNode.setBorder(YogaEdge.LEFT, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.RIGHT, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.TOP, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.START, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.END, dp_borderwidth);
         },
         enumerable: true
     });
