@@ -63,7 +63,6 @@ const Label = extend(View)(
                     fontInitial = font;
                     self.nativeObject.setTypeface(font.nativeObject);
                     if(font.size && TypeUtil.isNumeric(font.size))
-                       //self.nativeObject.setTextSize(AndroidUnitConverter.dpToPixel(font.size));
                        self.nativeObject.setTextSize(font.size);
                     }
             },
