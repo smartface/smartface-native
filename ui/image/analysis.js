@@ -16,15 +16,6 @@
 function Image(params) {
         
         /**
-         * Returns a blob object contains image datas. 
-         *
-         * @property {UI.Blob} blob
-         * @readonly
-         * @since 0.1
-         */
-        this.blob = null;
-        
-        /**
          * Gets the height of image. 
          *
          * @property {Number} height
