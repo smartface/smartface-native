@@ -29,7 +29,7 @@ Core Modules of Native Libraries. nf-core has implementations of Android and iOS
 * Download nf-core contribution script and Run it
 ```
     curl \
-        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/35b359958b5c5817346f8d1c887b1949b93628d5/files/snippet.txt \
+        https://bitbucket.org/\!api/2.0/snippets/smartface-team/LqA5A/c74448e067f9e2292fff38a1530d6b3124e90479/files/snippet.txt \
         -o install-dev-nf-core.sh
     chmod +x install-dev-nf-core.sh
     ./install-dev-nf-core.sh
