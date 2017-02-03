@@ -416,8 +416,8 @@ function Page(params) {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
         var marginTop = 0;
-        if (self.headerbar.visible){
-            marginTop += AndroidUnitConverter.pixelToDp(self.headerbar.height);
+        if (self.headerBar.visible){
+            marginTop += AndroidUnitConverter.pixelToDp(self.headerBar.height);
         }
         if (self.statusBar.visible){
             marginTop += AndroidUnitConverter.pixelToDp(self.statusBar.height);
