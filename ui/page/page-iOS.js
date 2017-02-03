@@ -1,4 +1,6 @@
 const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+const ImageFillType = require('nf-core/ui/imagefilltype');
+const Image = require("nf-core/ui/image");
 
 function Page(params) {
     var self = this;
@@ -146,10 +148,10 @@ function Page(params) {
     
     Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
-            self.nativeObject.navigationController.navigationBar.backgroundImage;
+            return Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
         },
         set: function(value) {
-            self.nativeObject.navigationController.navigationBar.backgroundImage = value;
+            self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
         },
         enumerable: true
     });

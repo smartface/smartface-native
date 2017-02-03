@@ -152,18 +152,18 @@ const Button = extend(View)(
                 backgroundImagesInitial = bgImages;
 
                 if (bgImages.constructor.name != "Object") {
-                     self.nativeObject.setBackgroundImage(backgroundImagesInitial,ButtonState.normal);
+                     self.nativeObject.setBackgroundImage(backgroundImagesInitial.nativeObject,ButtonState.normal);
                 }else{
                     if (backgroundImagesInitial.normal)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal,ButtonState.normal);
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal.nativeObject,ButtonState.normal);
                     if (backgroundImagesInitial.disabled)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled,ButtonState.disabled);
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled.nativeObject,ButtonState.disabled);
                     if (backgroundImagesInitial.selected)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected,ButtonState.selected);
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected.nativeObject,ButtonState.selected);
                     if (backgroundImagesInitial.pressed)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed,ButtonState.pressed);
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed.nativeObject,ButtonState.pressed);
                     if (backgroundImagesInitial.focused)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused,ButtonState.focused);
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused.nativeObject,ButtonState.focused);
                 }
             },
             enumerable: true
