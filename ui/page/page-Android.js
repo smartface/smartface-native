@@ -1,6 +1,7 @@
 const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
+const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -17,14 +18,27 @@ function Page(params) {
     var activity = Android.getActivity();
     
     
-    var innerLayout = self.layout = new AbsoluteLayout({
-        height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
-        width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
+    var innerLayout = new AbsoluteLayout({
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
         isRoot : true,
         backgroundColor: Color.WHITE
     });
     
-    innerLayout.parent = self;
+    var rootLayout = new AbsoluteLayout({
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        isRoot : true,
+        backgroundColor: Color.WHITE
+    });
+    
+    rootLayout.addChild(innerLayout);
+    rootLayout.parent = self;
+    innerLayout.parent = rootLayout;
     var isCreated = false;
     
     self.nativeObject = NativeFragment.extend("SFFragment", {
@@ -34,7 +48,7 @@ function Page(params) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
-            return innerLayout.nativeObject;
+            return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
@@ -330,8 +344,10 @@ function Page(params) {
 
             if (_headerbarVisible) {
                 headerbarNative.show();
+                
             } else {
                 headerbarNative.hide();
+                
             }
         }
     }
@@ -339,6 +355,14 @@ function Page(params) {
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
+        var marginTop = 0;
+        if (self.headerbar.visible){
+            marginTop += AndroidUnitConverter.pixelToDp(self.headerbar.height);
+        }
+        if (self.statusBar.visible){
+            marginTop += AndroidUnitConverter.pixelToDp(self.statusBar.height);
+        }
+        innerLayout.marginTop = marginTop;
     }
 
     function toSpanned(text, color) {

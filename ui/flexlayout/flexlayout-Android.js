@@ -95,9 +95,6 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
-        
-        self.position = FlexLayout.Position.RELATIVE;
-        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
