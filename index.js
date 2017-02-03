@@ -1,4 +1,5 @@
 module.exports = {
     UI: require('./ui'),
-    Device: require('./device')
+    Device: require('./device'),
+    Blob: require('./global/blob')
 }
