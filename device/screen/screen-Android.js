@@ -1,5 +1,6 @@
-const UnitConverter = require('nf-core/util/Android/unitconverter');
-const Image         = require('nf-core/ui/image');
+const UnitConverter   = require('nf-core/util/Android/unitconverter');
+const Image           = require('nf-core/ui/image');
+const OrientationType = require('nf-core/device/screen/orientationtype');
 
 const NativeContext        = requireClass('android.content.Context');
 const NativeBitmap         = requireClass('android.graphics.Bitmap');
@@ -7,6 +8,13 @@ const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawa
 const NativeR              = requireClass('android.R');
 
 const Screen = {};
+
+const orientationArray = [
+    OrientationType.PORTRAIT,
+    OrientationType.LANDSCAPERIGHT,
+    OrientationType.UPSIDEDOWN,
+    OrientationType.LANDSCAPELEFT,
+];
 
 Object.defineProperty(Screen, 'dpi', {
     get: function () {
@@ -49,8 +57,8 @@ Object.defineProperty(Screen, 'orientation', {
         var activity = Android.getActivity();
         var windowManager = activity.getSystemService(NativeContext.WINDOW_SERVICE);
         var display = windowManager.getDefaultDisplay();
-        
-        return display.getRotation();
+
+        return orientationArray[display.getRotation()];
     },
     configurable: false
 });
