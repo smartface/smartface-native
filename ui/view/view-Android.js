@@ -214,9 +214,12 @@ function View(params) {
         switch (layerIndex){
             case 0: 
                 layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
+                layerDrawable.invalidateDrawable(backgroundDrawable);
                 break;
             case 1:
                 layerDrawable.setDrawableByLayerId(1,borderDrawable);
+                layerDrawable.invalidateDrawable(borderDrawable);
+                break;
         }
         self.nativeObject.setBackground(layerDrawable);
     }
@@ -637,6 +640,7 @@ function View(params) {
             yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
             yogaNode.setBorder(YogaEdge.START, dp_borderwidth);
             yogaNode.setBorder(YogaEdge.END, dp_borderwidth);
+            applyStyle();
         },
         enumerable: true
     });
