@@ -164,6 +164,16 @@ function Page(params) {
         enumerable: true
     });
     
+    self.headerBar.setItems = function(value){
+        var nativeObjectArray = [];
+        
+        for (i = 0; i < value.length; i++) { 
+            nativeObjectArray.push(value[i].nativeObject);
+        }
+        
+        self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
+    }
+    
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.frame.height
