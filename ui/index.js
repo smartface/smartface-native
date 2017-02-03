@@ -12,6 +12,7 @@ module.exports = {
     AlertButtonType: require('./alertview').AlertButtonType,
     Page: require('./page'),
     Pages: require('./pages'),
+    HeaderBarItem: require('./headerbaritem'),
     AbsoluteLayout: require('./absolutelayout'),
     FlexLayout: require('./flexlayout'),
     Slider: require('./slider'),
