@@ -26,8 +26,6 @@ function Page(params) {
         isRoot : true,
         backgroundColor: Color.WHITE
     });
-    
-<<<<<<< HEAD
     var rootLayout = new AbsoluteLayout({
         top: 0,
         left: 0,
@@ -41,12 +39,9 @@ function Page(params) {
     rootLayout.parent = self;
     innerLayout.parent = rootLayout;
     var isCreated = false;
-    
-=======
-    innerLayout.parent = self;
 
     var optionsMenu = null;
->>>>>>> develop
+
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
