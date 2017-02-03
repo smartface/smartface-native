@@ -74,8 +74,8 @@ const Label = extend(View)(
             set: function(multiline) {
                 self.nativeObject.setSingleLine(!multiline);
                 // Integer.MAX_VALUE
-                const NativeInteger = requireClass("java.lang.Integer");
-                self.nativeObject.setMaxLines (multiline ? NativeInteger.MAX_VALUE : 1);
+                // const NativeInteger = requireClass("java.lang.Integer");
+                self.nativeObject.setMaxLines (multiline ? 1000 : 1);
                 if(multiline){
                     const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
                     var movementMethod = new NativeScrollingMovementMethod();
@@ -88,7 +88,7 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
+ 
         // @todo property returns CharSquence object not string. Caused by issue AND-2508
         Object.defineProperty(this, 'text', {
             get: function() {
