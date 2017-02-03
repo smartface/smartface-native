@@ -3,8 +3,6 @@
 function File(params) {
     var self = this;
     
-    self.nativeObject = SMFFile.create();
-    
     Object.defineProperties(Path, {
         'creationDate': {
             get: function(){
