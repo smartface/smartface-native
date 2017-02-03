@@ -25,7 +25,8 @@ function Page(params) {
     });
     
     innerLayout.parent = self;
-    
+
+    var optionsMenu = null;
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -36,9 +37,21 @@ function Page(params) {
             innerLayout.applyLayout();
             onShowCallback && onShowCallback();
         },
+        onCreateOptionsMenu: function(menu) {
+            optionsMenu = menu;
+            if (_headerBarItems.length > 0) {
+                self.headerBar.setItems(_headerBarItems);
+            }
+            return true;
+        },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
                 activity.getSupportFragmentManager().popBackStackImmediate();
+            } else if (_headerBarItems[menuItem.getItemId()]) {
+                var item = _headerBarItems[menuItem.getItemId()];
+                if (item.onPress instanceof Function) {
+                    item.onPress();
+                }
             }
             return true;
         }
@@ -287,6 +300,37 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    var _headerBarItems = [];
+    self.headerBar.setItems = function(items) {
+        if (!(items instanceof Array)) {
+            return;
+        }
+
+        if (optionsMenu == null) {
+            _headerBarItems = items;
+            return;
+        }
+
+        optionsMenu.clear();
+        _headerBarItems = [];
+
+        var uId = 1;
+        const HeaderBarItem = require("../headerbaritem");
+        const NativeMenuItem = requireClass("android.view.MenuItem");
+        items.forEach(function(item) {
+            if (!(item instanceof HeaderBarItem)) {
+                return;
+            }
+
+            var menuItem = optionsMenu.add(0, uId, 0, item.title);
+            item.image && menuItem.setIcon(item.image.nativeObject);
+            menuItem.setEnabled(item.enabled);
+            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+
+            _headerBarItems[uId++] = item;
+        });
+    };
 
     // Deprecated since 0.1
     this.add = function(view){
