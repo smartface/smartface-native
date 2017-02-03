@@ -5,6 +5,8 @@ const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 const NativeByteArrayInputStream = requireClass("java.io.ByteArrayInputStream");
 
+const Blob = require('nf-core/global/blob');
+
 const CompressFormat = [
     NativeBitmap.CompressFormat.JPEG,
     NativeBitmap.CompressFormat.PNG
@@ -22,15 +24,6 @@ function Image (params) {
             self.nativeObject = new NativeBitmapDrawable(androidResources, params[1]);
         }
     }
-    
-    // todo Return UI.Blob after Blob implementation 
-    var _blob = null;
-    Object.defineProperty(this, 'blob', {
-        get: function() {
-            return _blob;
-        }, 
-        enumerable: true
-    });
     
     Object.defineProperty(this, 'height', {
         get: function() {
@@ -119,8 +112,6 @@ function Image (params) {
             var bitmap = self.nativeObject.getBitmap();
             bitmap.compress(CompressFormat[format], quality, out);
             var byteArray = out.toByteArray();
-            var inputStream = new NativeByteArrayInputStream(byteArray);
-            var newBitmap = NativeBitmapFactory.decodeStream(inputStream);
         }
         catch(err) {
             success = false;
@@ -130,12 +121,11 @@ function Image (params) {
                 return null;
         }
         if(success) {
-            if(onSuccess)
-                onSuccess.call(this, {image: new Image(["-compress", newBitmap])});
-            else
-                return (new Image(["-compress", newBitmap]));
+            if(onSuccess) 
+                onSuccess.call(this, {image: new Blob(byteArray, {type:"image"})});
+            else 
+                return (new Blob(byteArray, {type:"image"}));
         }
-        // todo Return Blob instance after blob implementation
     };
 }
 
@@ -144,7 +134,10 @@ Image.createFromFile = function(path) {
 };
 
 Image.createFromBlob = function(blob) {
-    // todo Implement this method after Blob implementation 
+    var byteArray = blob.nativeObject.toByteArray();
+    var size = blob.nativeObject.size();
+    var newBitmap = NativeBitmapFactory.decodeByteArray(byteArray, 0, size);
+    return (new Image(["-create", newBitmap]));
 };
 
 module.exports = Image;
