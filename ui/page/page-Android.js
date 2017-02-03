@@ -25,15 +25,18 @@ function Page(params) {
     });
     
     innerLayout.parent = self;
+    var isCreated = false;
     
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
-            onLoadCallback && onLoadCallback();
+            if(!isCreated){
+                onLoadCallback && onLoadCallback();
+                isCreated = true;
+            }
             return innerLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
-            innerLayout.applyLayout();
             onShowCallback && onShowCallback();
         },
         onOptionsItemSelected: function(menuItem){

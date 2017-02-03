@@ -25,12 +25,15 @@ function Pages(params) {
     );
 
     function onBackStackChanged() {
-        var nativeStackCount = activity.getSupportFragmentManager().getBackStackEntryCount();
+        var supportFragmentManager = activity.getSupportFragmentManager();
+        var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
         if (nativeStackCount < pagesStack.length) { // means poll
             if(pagesStack.length > 0) {
                 pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
                 pagesStack[pagesStack.length-1].isShowing = false;
-                pagesStack.pop();
+                var oldPage = pagesStack.pop();
+                var fragmentTransaction = supportFragmentManager.beginTransaction();
+                fragmentTransaction.remove(oldPage.nativeObject).commit();
 
                 if(pagesStack.length > 0) {
                     pagesStack[pagesStack.length-1].isShowing = true;
