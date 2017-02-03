@@ -208,9 +208,6 @@ function View(params) {
     
     this.applyLayout = function(){
         yogaNode.calculateLayout();
-        for(var childViewKey in self.childViews){
-            self.childViews[childViewKey].applyLayout();
-        }
     };
     
     function setBackground(layerIndex){
