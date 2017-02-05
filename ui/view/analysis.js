@@ -609,22 +609,18 @@ function View(params) {
      * 
      *     @example
      *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
-     *     const Page = require('nf-core/ui/page');
      *     const Label = require('nf-core/ui/label');
      *    
-     *     var myPage1 = new Page();
      *     var myAbsoluteLayout = new AbsoluteLayout();
      *     myAbsoluteLayout.id = 5432;
      *    
      *     var myLabel = new Label({
      *          text: "Smartface Label"
      *     });
-     *    
      *     myAbsoluteLayout.addChild(myLabel);
-     *     myPage1.add(myAbsoluteLayout);
      *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
-     * @return {View} Parent view of this view, or null if not exists.
+     * @return {View} Parent view of this view, null if not exists.
      * @method getParent
      * @since 0.1
      */
