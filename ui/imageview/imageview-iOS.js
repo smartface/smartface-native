@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const ImageFillType = require('nf-core/ui/imagefilltype');
+const Image = require("nf-core/ui/image");
 
 const UIViewContentMode = {
     scaleToFill : 0,
@@ -33,10 +34,10 @@ const ImageView = extend(View)(
           
         Object.defineProperty(self, 'image', {
             get: function() {
-                return self.nativeObject.image;
+                return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                self.nativeObject.loadImage(value);
+                self.nativeObject.loadImage(value.nativeObject);
             },
             enumerable: true
         });

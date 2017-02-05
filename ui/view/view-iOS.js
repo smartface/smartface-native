@@ -42,7 +42,8 @@ function View(params) {
             _backgroundColor = value;
             self.nativeObject.backgroundColor = value;
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
 
@@ -133,7 +134,7 @@ function View(params) {
     // YOGA STUFF START
     //////////////////////////////////////////////////////////////////////////
 
-    /**
+    /*
      The property that decides if we should include this view when calculating layout. Defaults to YES.
      */
     Object.defineProperty(self, 'isIncludedInLayout', {
@@ -146,7 +147,7 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      The property that decides during layout/sizing whether or not styling properties should be applied. Defaults to NO.
      */
     Object.defineProperty(self, 'flexEnabled', {
@@ -671,7 +672,7 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      Get the resolved direction of this node. This won't be YGDirectionInherit
      */
     Object.defineProperty(self, 'resolvedDirection', {
@@ -681,14 +682,14 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      Perform a layout calculation and update the frames of the views in the hierarchy with the results
      */
     this.applyLayout = function(){
         self.nativeObject.yoga.applyLayout();
     }
     
-    /**
+    /*
      Returns the size of the view if no constraints were given. This could equivalent to calling [self sizeThatFits:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)];
      */
     Object.defineProperty(self, 'intrinsicSize', {
@@ -698,7 +699,7 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      Returns the number of children that are using Flexbox.
      */
     Object.defineProperty(self, 'numberOfChildren', {
@@ -708,7 +709,7 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      Return a BOOL indiciating whether or not we this node contains any subviews that are included in Yoga's layout.
      */
     Object.defineProperty(self, 'isLeaf', {
@@ -718,7 +719,7 @@ function View(params) {
         enumerable: true
     });
     
-    /**
+    /*
      Mark that a view's layout needs to be recalculated. Only works for leaf views.
      */
     this.dirty = function(){
