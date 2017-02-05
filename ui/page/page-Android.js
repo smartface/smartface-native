@@ -1,6 +1,7 @@
 const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
+const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -16,37 +17,72 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    // self.height and self.width for child views. It can get root layout dimensions from it.
-    // @todo must be replaced with native get dimension. Somehow its not working.
     
-    var innerLayout = self.layout = new AbsoluteLayout({
-        height: -1, //ViewGroup.LayoutParam.MATCH_PARENT
-        width: -1, //ViewGroup.LayoutParam.MATCH_PARENT
-        backgroundColor:Color.RED,
-        isRoot : true
+    var innerLayout = new AbsoluteLayout({
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        isRoot : true,
+        backgroundColor: Color.WHITE
+    });
+    var rootLayout = new AbsoluteLayout({
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        isRoot : true,
+        backgroundColor: Color.WHITE
     });
     
-    innerLayout.parent = self;
+    rootLayout.addChild(innerLayout);
+    rootLayout.parent = self;
+    innerLayout.parent = rootLayout;
+    var isCreated = false;
+
+    var optionsMenu = null;
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
-            onLoadCallback && onLoadCallback();
-            return innerLayout.nativeObject;
+            if(!isCreated){
+                onLoadCallback && onLoadCallback();
+                isCreated = true;
+            }
+            return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
         },
+        onCreateOptionsMenu: function(menu) {
+            optionsMenu = menu;
+            if (_headerBarItems.length > 0) {
+                self.headerBar.setItems(_headerBarItems);
+            }
+            return true;
+        },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
                 activity.getSupportFragmentManager().popBackStackImmediate();
+            } else if (_headerBarItems[menuItem.getItemId()]) {
+                var item = _headerBarItems[menuItem.getItemId()];
+                if (item.onPress instanceof Function) {
+                    item.onPress();
+                }
             }
             return true;
         }
     }, null);
+
+    Object.defineProperty(this, 'layout', {
+        get: function() {
+            return innerLayout;
+        },
+        enumerable: true
+    });
     
-    self.headerbar = {};
-    self.headerbar.android = {};
+    self.headerBar = {};
+    self.headerBar.android = {};
     self.isShowing = false;
 
     var onLoadCallback;
@@ -146,49 +182,49 @@ function Page(params) {
         enumerable: true    
     });
 
-    var _headerbarColor = Color.create("#00A1F1"); // SmartfaceBlue
-    Object.defineProperty(self.headerbar, 'backgroundColor', {
+    var _headerBarColor = Color.create("#00A1F1"); // SmartfaceBlue
+    Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
-            return _headerbarColor;
+            return _headerBarColor;
         },
         set: function(color) {
             if (color) {
-                _headerbarColor = color;
+                _headerBarColor = color;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarImage;
-    Object.defineProperty(self.headerbar, 'backgroundImage', {
+    var _headerBarImage;
+    Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
-            return _headerbarImage;
+            return _headerBarImage;
         },
         set: function(image) {
             if (image) {
-                _headerbarImage = image;
+                _headerBarImage = image;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarHomeEnabled = false;
-    Object.defineProperty(self.headerbar, 'displayShowHomeEnabled', {
+    var _headerBarHomeEnabled = false;
+    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
         get: function() {
-            return _headerbarHomeEnabled;
+            return _headerBarHomeEnabled;
         },
         set: function(enabled) {
             if (TypeUtil.isBoolean(enabled)) {
-                _headerbarHomeEnabled = enabled;
+                _headerBarHomeEnabled = enabled;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    Object.defineProperty(self.headerbar, 'height', {
+    Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
             return resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material);
@@ -196,100 +232,131 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerbarHomeImage;
-    Object.defineProperty(self.headerbar, 'homeAsUpIndicatorImage', {
+    var _headerBarHomeImage;
+    Object.defineProperty(self.headerBar, 'homeAsUpIndicatorImage', {
         get: function() {
-            return _headerbarHomeImage;
+            return _headerBarHomeImage;
         },
         set: function(image) {
             if (image) {
-                _headerbarHomeImage = image;
+                _headerBarHomeImage = image;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarTitle = "Smartface";
-    Object.defineProperty(self.headerbar, 'title', {
+    var _headerBarTitle = "Smartface";
+    Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return _headerbarTitle;
+            return _headerBarTitle;
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                _headerbarTitle = text;
+                _headerBarTitle = text;
             } else {
-                _headerbarTitle = "";
+                _headerBarTitle = "";
             }
             self.invalidateHeaderBar();
         },
         enumerable: true
     });
 
-    var _headerbarTitleColor = Color.WHITE;
-    Object.defineProperty(self.headerbar, 'titleColor', {
+    var _headerBarTitleColor = Color.WHITE;
+    Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
-            return _headerbarTitleColor;
+            return _headerBarTitleColor;
         },
         set: function(color) {
             if (color) {
-                _headerbarTitleColor = color;
+                _headerBarTitleColor = color;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarSubtitle = "";
-    Object.defineProperty(self.headerbar.android, 'subtitle', {
+    var _headerBarSubtitle = "";
+    Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return _headerbarSubtitle;
+            return _headerBarSubtitle;
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                _headerbarSubtitle = text;
+                _headerBarSubtitle = text;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarSubtitleColor = Color.WHITE;
-    Object.defineProperty(self.headerbar.android, 'subtitleColor', {
+    var _headerBarSubtitleColor = Color.WHITE;
+    Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
-            return _headerbarSubtitleColor;
+            return _headerBarSubtitleColor;
         },
         set: function(color) {
             if (color) {
-                _headerbarSubtitleColor = color;
+                _headerBarSubtitleColor = color;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
 
-    var _headerbarVisible = false;
-    Object.defineProperty(self.headerbar, 'visible', {
+    var _headerBarVisible = true;
+    Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             return activity.getSupportActionBar().isShowing();
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
-                _headerbarVisible = visible;
+                _headerBarVisible = visible;
                 self.invalidateHeaderBar();
             }
         },
         enumerable: true
     });
+    
+    var _headerBarItems = [];
+    self.headerBar.setItems = function(items) {
+        if (!(items instanceof Array)) {
+            return;
+        }
 
-    self.childViews = {};
-    this.add = function(view){
-        view.parent = self;
-        innerLayout.addChild(view);
+        if (optionsMenu == null) {
+            _headerBarItems = items;
+            return;
+        }
+
+        optionsMenu.clear();
+        _headerBarItems = [];
+
+        var uId = 1;
+        const HeaderBarItem = require("../headerbaritem");
+        const NativeMenuItem = requireClass("android.view.MenuItem");
+        items.forEach(function(item) {
+            if (!(item instanceof HeaderBarItem)) {
+                return;
+            }
+
+            var menuItem = optionsMenu.add(0, uId, 0, item.title);
+            item.image && menuItem.setIcon(item.image.nativeObject);
+            menuItem.setEnabled(item.enabled);
+            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+
+            _headerBarItems[uId++] = item;
+        });
     };
 
+    // Deprecated since 0.1
+    this.add = function(view){
+        self.layout.addChild(view);
+    };
+
+    // Deprecated since 0.1
     this.remove = function(view){
-        innerLayout.removeChild(view);
+        self.layout.removeChild(view);
     };
 
     this.invalidateStatusBar = function(){
@@ -301,35 +368,61 @@ function Page(params) {
 
     this.invalidateHeaderBar = function() {
         if (self.isShowing) {
-            var spannedTitle = toSpanned(_headerbarTitle, _headerbarTitleColor);
-            var spannedSubtitle = toSpanned(_headerbarSubtitle, _headerbarSubtitleColor);
-            var headerbarNative = activity.getSupportActionBar();
-            headerbarNative.setTitle(spannedTitle);
-            headerbarNative.setSubtitle(spannedSubtitle);
-            headerbarNative.setDisplayHomeAsUpEnabled(_headerbarHomeEnabled);
+            var spannedTitle = toSpanned(_headerBarTitle, _headerBarTitleColor);
+            var spannedSubtitle = toSpanned(_headerBarSubtitle, _headerBarSubtitleColor);
+            var headerBarNative = activity.getSupportActionBar();
+            headerBarNative.setTitle(spannedTitle);
+            headerBarNative.setSubtitle(spannedSubtitle);
+            headerBarNative.setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
 
-            if (_headerbarImage) {
-                headerbarNative.setBackgroundDrawable(_headerbarImage.nativeObject);
-            } else if (_headerbarColor) {
-                var headerbarColor = new NativeColorDrawable(_headerbarColor);
-                headerbarNative.setBackgroundDrawable(headerbarColor);
+            if (_headerBarImage) {
+                headerBarNative.setBackgroundDrawable(_headerBarImage.nativeObject);
+            } else if (_headerBarColor) {
+                var headerBarColor = new NativeColorDrawable(_headerBarColor);
+                headerBarNative.setBackgroundDrawable(headerBarColor);
             }
 
-            if (_headerbarHomeImage) {
-                headerbarNative.setHomeAsUpIndicator(_headerbarHomeImage);
+            if (_headerBarHomeImage) {
+                headerBarNative.setHomeAsUpIndicator(_headerBarHomeImage);
             }
 
-            if (_headerbarVisible) {
-                headerbarNative.show();
+            if (_headerBarVisible) {
+                headerBarNative.show();
             } else {
-                headerbarNative.hide();
+                headerBarNative.hide();
             }
         }
     }
     
+    this.invalidatePosition = function(orientation){
+        var statusBarHeight = (self.statusBar.visible)? self.statusBar.height : 0;
+        var headerBarHeight = (self.headerBar.visible)? self.headerBar.height : 0;
+
+        if(!orientation){
+            orientation = activity.getResources().getConfiguration().orientation;
+        }
+        if(orientation == 2) { // landscape
+            self.width = Device.screenHeight;
+            self.height = Device.screenWidth - statusBarHeight - headerBarHeight;
+            innerLayout.setPosition({width: self.width, height: self.height, top: statusBarHeight + headerBarHeight});
+        } else { // portrait
+            self.height = Device.screenHeight - statusBarHeight - headerBarHeight;
+            self.width = Device.screenWidth;
+            innerLayout.setPosition({width: self.width, height:self.height, top: statusBarHeight + headerBarHeight});
+        }
+    }
+
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
+        var marginTop = 0;
+        if (self.headerBar.visible){
+            marginTop += AndroidUnitConverter.pixelToDp(self.headerBar.height);
+        }
+        if (self.statusBar.visible){
+            marginTop += AndroidUnitConverter.pixelToDp(self.statusBar.height);
+        }
+        innerLayout.marginTop = marginTop;
     }
 
     function toSpanned(text, color) {

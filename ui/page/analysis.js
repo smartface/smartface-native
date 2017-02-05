@@ -35,6 +35,20 @@ function Page(params) {
      */
     this.onLoad = function onLoad(){};
 
+    /**
+     * Gets the main layout of Page.
+     *
+     *     @example
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.layout.backgroundColor = Color.RED;
+     *
+     * @property {UI.AbsoluteLayout} layout
+     * @readonly
+     * @since 0.1
+     */
+    this.layout;
 
     /**
      * Gets the height of the status bar. height is a read only property. Height value will change depends on
@@ -129,7 +143,7 @@ function Page(params) {
      *     var page = new Page();
      *     page.android.backButtonEnabled = false;
      *
-     * @property {Boolean} backButtonEnabled. Back button effect status for pages.
+     * @property {Boolean} backButtonEnabled
      */
     this.android.backButtonEnabled = false;
 
@@ -144,6 +158,7 @@ function Page(params) {
      *     myPage.add(myLabel);
      *
      * @method add
+     * @deprecated 0.1 Use UI.Page#layout instead.
      */
     this.add = function(){};
 
@@ -159,138 +174,153 @@ function Page(params) {
      *     myPage.remove(myLabel);
      *
      * @method remove
+     * @deprecated 0.1 Use UI.Page#layout instead.
      */
     this.remove = function(){};
-    
+
     /**
-     * Gets/sets background color of the actionbar. If not set, actionbar will have default
+     * Gets/sets background color of the headerBar. If not set, headerBar will have default
      * background color depends on device's OS and OS version.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
-     *     myPage.actionbar.backgroundColor = Color.RED;
+     *     myPage.headerBar.backgroundColor = Color.RED;
      *
-     * @property {UI.Color} backgroundColor
+     * @property {UI.Color} [backgroundColor = Color.create("#00A1F1")]
      * @since 0.1
      */
-    this.actionbar.backgroundColor = UI.Color.LIGHTGRAY;
+    this.headerBar.backgroundColor = Color.create("#00A1F1");
     
     /**
-     * Gets/sets background image of the actionbar.
+     * Gets/sets background image of the headerBar.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Image = require('sf-core/ui/image');
+     *     const Page = require('nf-core/ui/page');
+     *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
-     *     myPage.actionbar.backgroundImage = Image.createFromFile('images://smartface.png');
+     *     myPage.headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
      *
      * @property {UI.Image} [backgroundImage = null]
      * @since 0.1
      */
-    this.actionbar.backgroundImage = null;
+    this.headerBar.backgroundImage = null;
     
     /**
-     * Gets/sets the navigation indicator visibility of the actionbar.
+     * Gets/sets the navigation indicator visibility of the headerBar.
      * If false navigation indicator will not shown, otherwise will shown
      * as back icon with home as up indicator image.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
+     *     myPage.headerBar.displayShowHomeEnabled = false;
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
      * @since 0.1
      */
-    this.actionbar.displayShowHomeEnabled = false;
+    this.headerBar.displayShowHomeEnabled = false;
     
     /**
-     * Gets/sets the title visibility of the actionbar. If false title will
-     * not shown, otherwise title will shown.
+     * Gets the height of the headerBar. Height is a read only property.
+     * Height value may change depending on device and screen density.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
-     *
-     * @property {Boolean} [displayShowTitleEnabled = false]
-     * @since 0.1
-     */
-    this.actionbar.displayShowTitleEnabled = false;
-    
-    /**
-     * Gets the height of the actionbar. Height is a read only property.
-     * Height value will change depends on device and screen density.
-     *
-     *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     var myPage = new Page();
-     *     var headerbarHeight = myPage.actionbar.height;
+     *     var headerBarHeight = myPage.headerBar.height;
      *
      * @property {Number} height
      * @readonly
      * @since 0.1
      */
-    this.actionbar.height = 30;
+    this.headerBar.height;
     
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
-     * indicator of the actionbar. If not set, the application icon will
-     * shown.
+     * indicator of the headerBar. If not set, the application icon will
+     * shown.This property will work only for Android.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Image = require('sf-core/ui/image');
+     *     const Page = require('nf-core/ui/page');
+     *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://smartface.png');
-     *     myPage.actionbar.homeAsUpIndicatorImage = myImage;
+     *     myPage.headerBar.android.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
      * @since 0.1
      */
-    this.actionbar.homeAsUpIndicatorImage = null;
+    this.headerBar.android.homeAsUpIndicatorImage = null;
     
     /**
-     * Gets/sets title of the actionbar. If not set, the application name will
+     * Gets/sets title of the headerBar. If not set, the application name will
      * shown.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.title = 'Hello from Smartface Headerbar!';
+     *     myPage.headerBar.title = 'Hello from Smartface Headerbar!';
      *
      * @property {String} title
      * @since 0.1
      */
-    this.actionbar.title = '';
+    this.headerBar.title = '';
+
+    /**
+     * Gets/sets title color of the headerBar. It is set to UI.Color.BLACK by default.
+     * 
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
+     *     var myPage = new Page();
+     *     myPage.headerBar.title = 'Smartface';
+     *     myPage.headerBar.titleColor = Color.WHITE;
+     * 
+     * @property {UI.Color} [titleColor = Color.BLACK]
+     * @since 0.1
+     */
+    this.headerBar.titleColor = Color.BLACK;
     
     /**
-     * Gets/sets subtitle of the actionbar. If not set, will not shown.
+     * Gets/sets subtitle of the headerBar. If not set, will not shown. This property
+     * will work only for Android.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
+     *     myPage.headerBar.subtitle = 'Hello from Smartface Headerbar Subtitle!';
      *
      * @property {String} subtitle
      * @since 0.1
      */
-    this.actionbar.subtitle = '';
+    this.headerBar.android.subtitle = '';
     
     /**
-     * Gets/sets visibility of the actionbar.
+     * Gets/sets visibility of the headerBar.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
-     *     myPage.actionbar.visible = false;
+     *     myPage.headerBar.visible = false;
      *
      * @property {Boolean} [visible = true]
      * @since 0.1
      */
-    this.actionbar.visible = true;
+    this.headerBar.visible = true;
+
+    /**
+     * This function allows you to set header bar items to page's headerBar.
+     * Given items should be instance of UI.HeaderBarItem class. Items will be
+     * added to header bar in given array order starting from right of headerBar.
+     * First item in the array will be leftmost item in the header bar.
+     * 
+     * @method setItems
+     * @param {Array} [items] Array of HeaderBarItem objects to add
+     * @since 0.1
+     */
+    this.headerBar.setItems = function(items) {};
 }
 
 module.exports = Page;

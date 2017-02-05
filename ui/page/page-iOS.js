@@ -1,15 +1,27 @@
-const AbsoluteContainer = require('nf-core/ui/absolutelayout');
+const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+const ImageFillType = require('nf-core/ui/imagefilltype');
+const Image = require("nf-core/ui/image");
 
 function Page(params) {
     var self = this;
 
     self.nativeObject = new UIViewController();
     
-    var pageView = new AbsoluteContainer();
+    self.pageView = new AbsoluteLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    
     self.nativeObject.onViewLoad  = function(){
-        pageView.nativeObject.backgroundColor = UIColor.whiteColor();
-        return pageView.nativeObject;
+        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        return self.pageView.nativeObject;
+    }
+    
+    self.nativeObject.onViewLayoutSubviews = function(){
+        self.pageView.left = self.pageView.nativeObject.frame.x;
+        self.pageView.top = self.pageView.nativeObject.frame.y;
+        self.pageView.width = self.pageView.nativeObject.frame.width;
+        self.pageView.height = self.pageView.nativeObject.frame.height;
+        
+        self.pageView.applyLayout();
     }
 
     Object.defineProperty(self, 'layout', {
@@ -81,7 +93,7 @@ function Page(params) {
     //Deprecated
     self.add = function(object){
         console.log("Page add function deprecated");
-        pageView.addChild(object);
+        self.pageView.addChild(object);
     }
 
     //Deprecated
@@ -90,6 +102,87 @@ function Page(params) {
         object.nativeObject.removeFromSuperview();
     }
 
+    self.headerBar = {}
+    
+    Object.defineProperty(self.headerBar, 'title', {
+        get: function() {
+            return self.nativeObject.title;
+        },
+        set: function(value) {
+            self.nativeObject.title = value;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar, 'titleColor', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
+        },
+        set: function(value) {
+             self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value};
+        },
+        enumerable: true
+    });
+    
+    var _visible = true;
+    Object.defineProperty(self.headerBar, 'visible', {
+        get: function() {
+            return _visible;
+        },
+        set: function(value) {
+            _visible = value;
+            self.nativeObject.navigationController.setNavigationBarHiddenAnimated(!value,true);
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar, 'backgroundColor', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.barTintColor;
+        },
+        set: function(value) {
+            self.nativeObject.navigationController.navigationBar.barTintColor = value;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar, 'backgroundImage', {
+        get: function() {
+            return Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
+        },
+        set: function(value) {
+            self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+        get: function() {
+            self.nativeObject.navigationItem.hidesBackButton;
+        },
+        set: function(value) {
+            self.nativeObject.navigationItem.hidesBackButton = !value;
+        },
+        enumerable: true
+    });
+    
+    self.headerBar.setItems = function(value){
+        var nativeObjectArray = [];
+        
+        for (i = 0; i < value.length; i++) { 
+            nativeObjectArray.push(value[i].nativeObject);
+        }
+        
+        self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
+    }
+    
+    Object.defineProperty(self.headerBar, 'height', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.frame.height
+        },
+        enumerable: true
+    });
+    
     if (params) {
         for (var param in params) {
             this[param] = params[param];

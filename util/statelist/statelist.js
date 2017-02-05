@@ -22,6 +22,7 @@
  *         focused: Color.DARKGRAY  
  *     });
  *     var normalColor = myStateList.normal;
+ * @deprecated 0.1
  */
  function StateList(params) {
      /**
