@@ -15,7 +15,11 @@ function Pages(params) {
     }
 
     self.pop = function(animated){
-        self.nativeObject.pop(animated);
+          if (arguments.length == 0) {
+            self.nativeObject.pop(true);
+          } else if (arguments.length == 1) {
+            self.nativeObject.pop(animated);
+          }
     }
 }
 

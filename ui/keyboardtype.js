@@ -7,7 +7,7 @@
  * to the TextBox.
  *
  *     @example
- *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
+ *     const KeyboardType = require('nf-core/ui/textbox').KeyboardType;
  *     var myKeyboardType = KeyboardType.DEFAULT;
  *
  */

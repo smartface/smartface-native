@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const KeyboardType = require('sf-core/ui/keyboardtype');
-const ActionKeyType = require('sf-core/ui/actionkeytype');
+const KeyboardType = require('nf-core/ui/keyboardtype');
+const ActionKeyType = require('nf-core/ui/actionkeytype');
 
 const IOSKeyboardTypes = {
     default : 0, // Default type for the current input method.
@@ -197,6 +197,9 @@ const TextBox = extend(View)(
                     case IOSKeyboardTypes.default:
                         returnValue =  KeyboardType.DEFAULT
                         break;
+                    case IOSKeyboardTypes.decimalPad:
+                        returnValue =  KeyboardType.DECIMAL;
+                        break;
                     case IOSKeyboardTypes.numberPad:
                         returnValue =  KeyboardType.NUMBER
                         break;
@@ -221,6 +224,9 @@ const TextBox = extend(View)(
                 switch (value) {
                     case KeyboardType.DEFAULT:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
+                        break;
+                    case KeyboardType.DECIMAL:
+                        self.nativeObject.keyboardType = IOSKeyboardTypes.decimalPad;
                         break;
                     case KeyboardType.NUMBER:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.numberPad;
