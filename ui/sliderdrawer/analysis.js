@@ -24,10 +24,10 @@ const SliderDrawer = extend(ViewGroup)(
          *     mySliderDrawer.position = SliderDrawer.Position.LEFT;
          *     myPage.sliderDrawer = mySliderDrawer;
          *
-         * @property {UI.SliderDrawer.Position} [position = UI.SliderDrawer.Position.LEFT]
+         * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
          * @since 0.1
          */
-        this.position = UI.SliderDrawer.Position.LEFT
+        this.drawerPosition = UI.SliderDrawer.Position.LEFT
         
         /**
          * This function allows you to show SliderDrawer on it's own position if it assigned to the Page.
