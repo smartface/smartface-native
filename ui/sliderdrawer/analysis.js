@@ -45,7 +45,6 @@ const SliderDrawer = extend(ViewGroup)(
          */
         this.hide = function(){};
         
-        
         /**
          * Gets/sets callback for show event. This callback will fire when show
          * called or user opens the SliderDrawer.
@@ -76,6 +75,7 @@ const SliderDrawer = extend(ViewGroup)(
  *
  */
 SliderDrawer.Position = {};
+
 /**
  * @property {Number} LEFT
  * 
@@ -89,6 +89,7 @@ Object.defineProperty(SliderDrawer.Position, 'LEFT', {
     value: 0,
     writable: false
 });
+
 /**
  * @property {Number} RIGHT
  *
