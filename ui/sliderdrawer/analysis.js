@@ -67,7 +67,7 @@ const SliderDrawer = extend(ViewGroup)(
 );
 
 /**
- * @enum {Number} UI.SliderDrawer.FlexDirection
+ * @enum {Number} UI.SliderDrawer.Position
  * @static
  * @readonly
  * @since 0.1
