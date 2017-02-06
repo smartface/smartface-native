@@ -21,7 +21,7 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Page = require('nf-core/ui/page');
          *     var myPage = new Page();
          *     var mySliderDrawer = new SliderDrawer();
-         *     mySliderDrawer.position = SliderDrawer.Position.LEFT;
+         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
          *     myPage.sliderDrawer = mySliderDrawer;
          *
          * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
