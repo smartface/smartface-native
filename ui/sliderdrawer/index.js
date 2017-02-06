@@ -1,0 +1,1 @@
+module.exports = require('./sliderdrawer-' + Device.deviceOS + '.js');
