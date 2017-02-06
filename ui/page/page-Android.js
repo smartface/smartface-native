@@ -2,6 +2,7 @@ const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
+const SliderDrawer = require('nf-core/ui/sliderdrawer');
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -10,6 +11,7 @@ const NativeAndroidR      = requireClass("android.R");
 const NativeSupportR      = requireClass("android.support.v7.appcompat.R");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeHtml          = requireClass("android.text.Html");
+const NativeDrawerLayout = requireClass('android.support.v4.widget.DrawerLayout');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 
@@ -17,6 +19,9 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
+    self.drawerLayout = new NativeDrawerLayout(activity);
+    var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
+    self.drawerLayout.setLayoutParams(drawerLayoutParams);
     
     var innerLayout = new AbsoluteLayout({
         top: 0,
@@ -38,6 +43,7 @@ function Page(params) {
     rootLayout.addChild(innerLayout);
     rootLayout.parent = self;
     innerLayout.parent = rootLayout;
+    self.drawerLayout.addView(rootLayout.nativeObject);
     var isCreated = false;
 
     var optionsMenu = null;
@@ -49,7 +55,7 @@ function Page(params) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
-            return rootLayout.nativeObject;
+            return self.drawerLayout;
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
@@ -351,6 +357,22 @@ function Page(params) {
             _headerBarItems[uId++] = item;
         });
     };
+
+    var _sliderDrawer = null;
+    Object.defineProperty(this, 'sliderDrawer', {
+        get: function() {
+            return _sliderDrawer;
+        },
+        set: function(sliderDrawer) {
+            if (sliderDrawer instanceof SliderDrawer) {
+                _sliderDrawer = sliderDrawer
+                sliderDrawer.page = self;
+                self.drawerLayout.addView(sliderDrawer.nativeObject,1);
+                sliderDrawer.onAttachPage();
+            }
+        },
+        enumerable: true
+    });
 
     // Deprecated since 0.1
     this.add = function(view){
