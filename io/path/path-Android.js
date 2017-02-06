@@ -16,35 +16,32 @@ setScreenConfigs();
 function Path() {}
 
 
-Object.defineProperty(Path, 'ImagesUriScheme', {
-    value: 'images://',
-    writable: false
-});
-
-
-Object.defineProperty(Path, 'AssetsUriScheme', {
-    value: 'assets://',
-    writable: false
-});
-
-Object.defineProperty(Path, 'Separator', {
-    value: "/",
-    writable: false
-});
-
-Object.defineProperty(Path, 'DataDirectory', {
-    get: function(){
-        var filesDir = Android.getActivity().getFilesDir();
-        if(filesDir){
-            return File.createFromNativeObject(filesDir);
-        }
-        else{
-            return null;
-        }
+Object.defineProperties(Path, {
+    'ImagesUriScheme': {
+        value: 'images://',
+        writable: false
     },
-    writable: false
+    'AssetsUriScheme': {
+        value: 'assets://',
+        writable: false
+    },
+    'Separator': {
+        value: "/",
+        writable: false
+    },
+    'DataDirectory': {
+        get: function(){
+            var filesDir = Android.getActivity().getFilesDir();
+            if(filesDir){
+                return File.createFromNativeObject(filesDir);
+            }
+            else{
+                return null;
+            }
+        },
+        writable: false
+    }
 });
-
 
 Path.android = {};
 Object.defineProperty(Path.android, 'storages', {
@@ -85,19 +82,26 @@ function getResolvedPath(path){
         return resolvedPaths[path];
     }
     
+    resolvedPaths[path] = {};
+    
     if(path.startsWith('assets://')){
         // assets://smartface.png to smartface.png
         var fileName = path.slice(9);
         if(AndroidConfig.isEmulator){
             // This is emulator. Check file system
-            resolvedPaths[path] = getEmulatorAssetsPath() + "/" + fileName;
+            resolvedPaths[path].name = fileName;
+            resolvedPaths[path].type = Path.FILE_TYPE.EMULATOR_ASSETS;
+            resolvedPaths[path].path = getEmulatorAssetsPath() + "/" + fileName;
         }
         else{
             // This is player. Check RAU
-            resolvedPaths[path] = getRauAssetsPath() + "/" + fileName;
+            resolvedPaths[path].type = Path.FILE_TYPE.RAU_ASSETS;
+            resolvedPaths[path].path = getRauAssetsPath() + "/" + fileName;
             // if assets not exists in rau
             if(!checkFileExistsInPath(resolvedPaths[path])){
-                resolvedPaths[path] = path;
+                resolvedPaths[path].name = fileName;
+                resolvedPaths[path].type = Path.FILE_TYPE.ASSET;
+                resolvedPaths[path].path = path;
             }
         }
     }
@@ -111,20 +115,26 @@ function getResolvedPath(path){
         }
         if(AndroidConfig.isEmulator){
             // This is emulator. Check file system
-            resolvedPaths[path] = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
+            resolvedPaths[path].name = fileName;
+            resolvedPaths[path].type = Path.FILE_TYPE.EMULATOR_DRAWABLE;
+            resolvedPaths[path].path = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
         }
         else{
             // This is player. Check RAU
-            resolvedPaths[path] = findDrawableAtDirectory(getRauDrawablePath(), fileName);
+            resolvedPaths[path].type = Path.FILE_TYPE.RAU_DRAWABLE;
+            resolvedPaths[path].path = findDrawableAtDirectory(getRauDrawablePath(), fileName);
             if(!resolvedPaths[path]){
                 // drawable not exists in RAU get it from apk
-                resolvedPaths[path] = path;
+                resolvedPaths[path].name = fileName;
+                resolvedPaths[path].type = Path.FILE_TYPE.DRAWABLE;
+                resolvedPaths[path].path = path;
             }
         }
     }
     else{
         // cache normal path too for performance. We dont want to check more.
-        resolvedPaths[path] = path;
+        resolvedPaths[path].type = Path.FILE_TYPE.FILE;
+        resolvedPaths[path].path = path;
     }
     return resolvedPaths[path];
 }
@@ -257,9 +267,15 @@ function setScreenConfigs(){
     else {
         desiredDrawableDensityIndex = 5;
     }
-    
 }
 
-
+Path.FILE_TYPE = {};
+Path.FILE_TYPE.FILE = 0, 
+Path.FILE_TYPE.ASSET = 1, 
+Path.FILE_TYPE.DRAWABLE = 2, 
+Path.FILE_TYPE.EMULATOR_ASSETS = 3, 
+Path.FILE_TYPE.EMULATOR_DRAWABLE = 4, 
+Path.FILE_TYPE.RAU_ASSETS = 5;
+Path.FILE_TYPE.RAU_DRAWABLE = 6;
 
 module.exports = Path;
