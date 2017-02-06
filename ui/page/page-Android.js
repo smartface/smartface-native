@@ -61,6 +61,9 @@ function Page(params) {
             }
             return true;
         },
+        onConfigurationChanged: function(newConfig){
+             self.invalidate();                   
+        },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
                 activity.getSupportFragmentManager().popBackStackImmediate();

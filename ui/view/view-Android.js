@@ -207,7 +207,8 @@ function View(params) {
     }
     
     this.applyLayout = function(){
-        yogaNode.calculateLayout();
+        // not necessary for Android. For prevent wrong calculations do not call calculateLayout()
+        //yogaNode.calculateLayout();
     };
     
     function setBackground(layerIndex){
