@@ -26,5 +26,6 @@ module.exports = {
     KeyboardAppearance: require('./keyboardappearance'),
     ActionKeyType: require('./actionkeytype'),
     ListView: require('./listview'),
-    ListViewItem: require('./listviewitem')
+    ListViewItem: require('./listviewitem'),
+    MapView: require('./mapview')
 };
