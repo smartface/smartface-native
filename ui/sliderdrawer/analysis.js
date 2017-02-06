@@ -40,7 +40,7 @@ const SliderDrawer = extend(ViewGroup)(
         /**
          * This function allows you to hide SliderDrawer if it assigned to the Page.
          * 
-         * @method show
+         * @method hide
          * @since 0.1
          */
         this.hide = function(){};
@@ -50,7 +50,7 @@ const SliderDrawer = extend(ViewGroup)(
          * Gets/sets callback for show event. This callback will fire when show
          * called or user opens the SliderDrawer.
          *
-         * @event
+         * @event onShow
          * @since 0.1
          */
         this.onShow = null;
@@ -59,7 +59,7 @@ const SliderDrawer = extend(ViewGroup)(
          * Gets/sets callback for hide event. This callback will fire when hide
          * called or user closes the SliderDrawer.
          *
-         * @event
+         * @event onHide
          * @since 0.1
          */
         this.onHide = null;
