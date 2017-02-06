@@ -19,10 +19,6 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    self.drawerLayout = new NativeDrawerLayout(activity);
-    var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
-    self.drawerLayout.setLayoutParams(drawerLayoutParams);
-    
     var innerLayout = new AbsoluteLayout({
         top: 0,
         left: 0,
@@ -43,7 +39,6 @@ function Page(params) {
     rootLayout.addChild(innerLayout);
     rootLayout.parent = self;
     innerLayout.parent = rootLayout;
-    self.drawerLayout.addView(rootLayout.nativeObject);
     var isCreated = false;
 
     var optionsMenu = null;
@@ -55,7 +50,7 @@ function Page(params) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
-            return self.drawerLayout;
+            return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
@@ -366,9 +361,8 @@ function Page(params) {
         set: function(sliderDrawer) {
             if (sliderDrawer instanceof SliderDrawer) {
                 _sliderDrawer = sliderDrawer
-                sliderDrawer.page = self;
-                self.drawerLayout.addView(sliderDrawer.nativeObject,1);
-                sliderDrawer.onAttachPage();
+                _sliderDrawer.page = self;
+                self.invalidateSliderDrawer();
             }
         },
         enumerable: true
@@ -389,6 +383,19 @@ function Page(params) {
 
         // todo Set color value after resolving COR-1153.
        // self.statusBar.android.color = _color;
+    }
+    
+    this.invalidateSliderDrawer = function(){
+        if(_sliderDrawer && self.pages){
+            var sliderDrawerId = _sliderDrawer.nativeObject.getId();
+            var isExists = self.pages.drawerLayout.findViewById(sliderDrawerId);
+            if(!isExists){
+                var viewCount = self.pages.drawerLayout.getChildCount();
+                if(viewCount > 0) self.pages.drawerLayout.removeAllViews();
+                self.pages.drawerLayout.addView(_sliderDrawer.nativeObject,0);
+                _sliderDrawer.onAttachPage();
+            }
+        }
     }
 
     this.invalidateHeaderBar = function() {
@@ -440,6 +447,7 @@ function Page(params) {
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
+        self.invalidateSliderDrawer();
         var marginTop = 0;
         if (self.headerBar.visible){
             marginTop += AndroidUnitConverter.pixelToDp(self.headerBar.height);

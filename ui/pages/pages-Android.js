@@ -2,6 +2,7 @@ const NativeView            = requireClass("android.view.View");
 const NativeAbsoluteLayout  = requireClass("android.widget.AbsoluteLayout");
 const NativeColor           = requireClass("android.graphics.Color");
 const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
+const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 function Pages(params) {
     var self = this;
@@ -10,13 +11,14 @@ function Pages(params) {
     var rootViewId = NativeView.generateViewId();
 
     // Creating root layout for fragments
-    var absoluteLayout = new NativeAbsoluteLayout(activity);
+    self.drawerLayout = new NativeDrawerLayout(activity);
     // android.view.ViewGroupLayoutParams.MATCH_PARENT
-    var layoutparams = new NativeAbsoluteLayout.LayoutParams(-1,-1,0,0);
-    absoluteLayout.setBackgroundColor(NativeColor.WHITE);
-    absoluteLayout.setLayoutParams(layoutparams);
-    absoluteLayout.setId(rootViewId);
-    activity.setContentView(absoluteLayout);
+    var layoutparams = new NativeDrawerLayout.LayoutParams(-1,-1);
+    self.drawerLayout.setBackgroundColor(NativeColor.WHITE);
+    self.drawerLayout.setLayoutParams(layoutparams);
+    self.drawerLayout.setId(rootViewId);
+    self.drawerLayout.setFitsSystemWindows(true);
+    activity.setContentView(self.drawerLayout);
     
     activity.getSupportFragmentManager().addOnBackStackChangedListener(
         NativeFragmentManager.OnBackStackChangedListener.implement({
@@ -34,7 +36,8 @@ function Pages(params) {
                 var oldPage = pagesStack.pop();
                 var fragmentTransaction = supportFragmentManager.beginTransaction();
                 fragmentTransaction.remove(oldPage.nativeObject).commit();
-
+                self.removeDrawerListener();
+                
                 if(pagesStack.length > 0) {
                     pagesStack[pagesStack.length-1].isShowing = true;
                     pagesStack[pagesStack.length-1].invalidate();
@@ -68,6 +71,8 @@ function Pages(params) {
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
         page.isShowing = true;
+        page.pages = self;
+        self.removeDrawerListener();
         page.invalidate();
         pagesStack.push(page);
     }
@@ -78,6 +83,18 @@ function Pages(params) {
             fragmentManager.popBackStackImmediate();
         }
     }
+    
+    var _drawerListener;
+    // Will be called from sliderdrawer throught the page
+    self.attachDrawerListener = function(drawerListener){
+        _drawerListener = drawerListener;
+        self.drawerLayout.addDrawerListener(drawerListener);
+    };
+    // Will be called from self.
+    self.removeDrawerListener = function(){
+        if(_drawerListener)
+            self.drawerLayout.removeDrawerListener(_drawerListener);
+    };
     
     self.push(params.rootPage);
 }

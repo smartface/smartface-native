@@ -1,8 +1,10 @@
-const AbsoluteLayout = require('../absolutelayout');
-const extend = require('js-base/core/extend');
+const AbsoluteLayout        = require('../absolutelayout');
+const extend                = require('js-base/core/extend');
+const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
 
-const NativeDrawerLayout = requireClass('android.support.v4.widget.DrawerLayout');
-const NativeGravity = requireClass('android.view.Gravity');
+const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
+const NativeGravity         = requireClass('android.view.Gravity');
+
 
 const SliderDrawer = extend(AbsoluteLayout)(
     function (_super, params) {
@@ -86,13 +88,34 @@ const SliderDrawer = extend(AbsoluteLayout)(
             // inner method called from page when attaching.
             'onAttachPage' : {
                 value: function(){
-                    if(self.page){
+                    if(self.page && self.page.pages){
                         // do something on page add
-                        self.page.drawerLayout.addDrawerListener(drawerListener);
+                        self.page.pages.attachDrawerListener(drawerListener);
                     }
                 },
                 writable: false
-                
+            },
+            // Added due to using DrawerLayout as a parent
+            'height': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.height);
+                },
+                set: function(height) {
+                    drawerLayoutParams.height = AndroidUnitConverter.dpToPixel(height);
+                },
+                enumerable: true,
+                configurable: true
+            },
+            // Added due to using DrawerLayout as a parent
+            'width': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.width);
+                },
+                set: function(width) {
+                    drawerLayoutParams.width = AndroidUnitConverter.dpToPixel(width);
+                },
+                enumerable: true,
+                configurable: true
             }
         });
         
@@ -113,6 +136,7 @@ const SliderDrawer = extend(AbsoluteLayout)(
         
         // setting default values
         this.drawerPosition = SliderDrawer.Position.LEFT;
+        this.width = 200;
         
         // Assign parameters given in constructor
         if (params) {
