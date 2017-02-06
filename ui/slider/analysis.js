@@ -9,9 +9,9 @@ const extend = require('js-base/core/extend');
  * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
  * 
  *     @example
- *     const Slider = require('sf-core/ui/slider');
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     var Color = require('sf-core/ui/color');
+ *     const Slider = require('nf-core/ui/slider');
+ *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     var Color = require('nf-core/ui/color');
  *     var mySlider = new Slider();
  *     mySlider.maxValue = 100;
  *     mySlider.minValue = 0;
@@ -31,8 +31,8 @@ const Slider = extend(View)(
          * Gets/sets color of the thumb.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
-         *     var Color = require('sf-core/ui/color');
+         *     const Slider = require('nf-core/ui/slider');
+         *     var Color = require('nf-core/ui/color');
          *     var mySlider = new Slider();
          *     mySlider.thumbColor = Color.GRAY;
          *
@@ -45,7 +45,7 @@ const Slider = extend(View)(
          * Gets/sets image path of the thumb.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
+         *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.thumbImage = "images://smartface.png";
          *
@@ -58,8 +58,8 @@ const Slider = extend(View)(
          * Gets/sets color of the thumb's minimum track color.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
-         *     var Color = require('sf-core/ui/color');
+         *     const Slider = require('nf-core/ui/slider');
+         *     var Color = require('nf-core/ui/color');
          *     var mySlider = new Slider();
          *     mySlider.minTrackColor = Color.BLUE;
          *
@@ -72,8 +72,8 @@ const Slider = extend(View)(
          * Gets/sets color of the thumb's maximum track color.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
-         *     var Color = require('sf-core/ui/color');
+         *     const Slider = require('nf-core/ui/slider');
+         *     var Color = require('nf-core/ui/color');
          *     var mySlider = new Slider();
          *     mySlider.maxTrackColor = Color.GREEN;
          *
@@ -87,7 +87,7 @@ const Slider = extend(View)(
          * greater or equals to minValue.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
+         *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.value = 30;
          *
@@ -100,7 +100,7 @@ const Slider = extend(View)(
          * Gets/sets minimum value of the slider.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
+         *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.minValue = 0;
          *
@@ -113,7 +113,7 @@ const Slider = extend(View)(
          * Gets/sets maximum value of the slider.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
+         *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.maxValue = 100;
          *
@@ -127,7 +127,7 @@ const Slider = extend(View)(
          * Gets/sets value change event for slider instance. This event fires when slider value changed.
          *
          *     @example
-         *     const Slider = require('sf-core/ui/slider');
+         *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.onValueChange = valueChanged;
          *     mySlider.value = 40;

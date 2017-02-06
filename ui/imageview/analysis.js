@@ -9,9 +9,9 @@ const View = require('../view');
  * ImageView class is the way to show picture inside a rectangle area on UI.
  *
  *     @example
- *     const ImageFillType = require('sf-core/ui/imagefilltype');
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
+ *     const ImageFillType = require('nf-core/ui/imagefilltype');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     const Image = require('nf-core/ui/image');
  *     var myImageView = new ImageView();
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     myImageView.image = myImage;
@@ -26,8 +26,8 @@ const ImageView = extend(View)(
          * Gets/sets source of the ImageView. The source must be an Image.
          * 
          *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageView');
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageView');
          *     var myImage = Image.createFromFile("images://smartface.png");
          *     var myImageView = new ImageView();
          *     myImageView.image = myImage;
@@ -41,8 +41,8 @@ const ImageView = extend(View)(
          * Gets/sets image fill type. The source fills the Image base on this property.
          *
          *     @example
-         *     const ImageView = require('sf-core/ui/imageview');
-         *     const ImageFillType = require('sf-core/ui/imagefilltype');
+         *     const ImageView = require('nf-core/ui/imageview');
+         *     const ImageFillType = require('nf-core/ui/imagefilltype');
          *     var myImage = Image.createFromFile("images://smartface.png");
          *     var myImageView = new ImageView();
          *     myImageView.image = myImage;

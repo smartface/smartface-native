@@ -6,7 +6,7 @@
  * between 0..255.
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myRedColor = Color.create(255, 0, 0);
  *     var myBlueColor = Color.create(0, 0, 255);
  *     var myAnotherColor = Color.create("#FFFFAACC");
@@ -127,7 +127,7 @@ Color.WHITE = (red, green, blue);
  * Create a new color with the specified red, green, blue and alpha values.
  * 
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myARGBColor = Color.create(0, 0, 0, 255);
  *     var myRGBColor = Color.create(255, 255, 255);
  *     var myHexColor = Color.create("#ff0000");
@@ -171,7 +171,7 @@ Color.green = function(color){ return color.green };
  * Return the blue component of a color object. 
  *  
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myRGBColor = Color.create(0, 0, 155);
  *     var blue = Color.blue(myRGBColor);
  * 
@@ -187,7 +187,7 @@ Color.blue = function(color){ return color.blue };
  * Return the alpha component of a color object. 
  *  
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myARGBColor = Color.create(0, 0, 0, 255);
  *     var alpha = Color.alpha(myARGBColor);
  * 

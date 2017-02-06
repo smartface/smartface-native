@@ -6,8 +6,8 @@
  * ActionKeyType is an enum. It defines soft keyboard action key (return key) type.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
- *     const ActionKeyType = require('sf-core/ui/actionkeytype');
+ *     const TextBox = require('nf-core/ui/textbox');
+ *     const ActionKeyType = require('nf-core/ui/actionkeytype');
  *     var myTextBox = new TextBox({
  *         hint: "Smartface TextBox",
  *         actionKeyType: ActionKeyType.DEFAULT

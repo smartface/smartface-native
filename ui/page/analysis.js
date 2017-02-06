@@ -6,10 +6,10 @@
  * Only one page could shown at once.
  *
  *     @example
- *     const Page = require('sf-core/ui/page');
+ *     const Page = require('nf-core/ui/page');
  *     var myPage = new Page();
  *     myPage.onLoad = function(){            
- *         const Button = require('sf-core/ui/button');
+ *         const Button = require('nf-core/ui/button');
  *         var myButton = new Button();
  *         myButton.text = "Click me!";
  *         myPage.add(myButton);
@@ -22,10 +22,10 @@ function Page(params) {
      * Below example creates a button inside the page.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.onLoad = function(){            
-     *         const Button = require('sf-core/ui/button');
+     *         const Button = require('nf-core/ui/button');
      *         var myButton = new Button();
      *         myButton.text = "Click me!";
      *         myPage.add(myButton);
@@ -39,8 +39,8 @@ function Page(params) {
      * Gets the main layout of Page.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     myPage.layout.backgroundColor = Color.RED;
      *
@@ -55,7 +55,7 @@ function Page(params) {
      * device and screen density.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     var statusBarHeight = myPage.statusBar.height;
      *
@@ -69,7 +69,7 @@ function Page(params) {
      * Gets/sets visibility of the status bar.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.statusBar.visible = true;
      *
@@ -83,8 +83,8 @@ function Page(params) {
      * KitKat (API 19) or above.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Color = require('sf-core/ui/color');
+     *     const Page = require('nf-core/ui/page');
+     *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     myPage.statusBar.android.color = Color.RED;
      *
@@ -97,8 +97,8 @@ function Page(params) {
      * Gets/sets status bar style. This property will work only for iOS
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+     *     const Page = require('nf-core/ui/page');
+     *     const StatusBarStyle = require('nf-core/ui/statusbarstyle');
      *     var myPage = new Page();
      *     myPage.statusBar.ios.style = StatusBarStyle.DEFAULT;
      *
@@ -111,7 +111,7 @@ function Page(params) {
      * Gets/sets key on show event callback for Page. This event fires when page appears from user interface.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.onShow = function(){
      *         alert("Page Showed!");
@@ -125,7 +125,7 @@ function Page(params) {
      * Gets/sets key on hide event callback for Page. This event fires when page disappears from user interface.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.onHide = function(){
      *         alert("Page Hided!");
@@ -139,7 +139,7 @@ function Page(params) {
      * Gets/sets back button effects on pages. If true previous page will be loaded on back button press.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
+     *     const Page = require('nf-core/ui/page');
      *     var page = new Page();
      *     page.android.backButtonEnabled = false;
      *
@@ -151,8 +151,8 @@ function Page(params) {
      * Add view or container to the page.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
+     *     const Page = require('nf-core/ui/page');
+     *     const Label = require('nf-core/ui/label');
      *     var myPage = new Page();
      *     var myLabel = new Label();
      *     myPage.add(myLabel);
@@ -166,8 +166,8 @@ function Page(params) {
      * Remove view or container to the page.
      *
      *     @example
-     *     const Page = require('sf-core/ui/page');
-     *     const Label = require('sf-core/ui/label');
+     *     const Page = require('nf-core/ui/page');
+     *     const Label = require('nf-core/ui/label');
      *     var myPage = new Page();
      *     var myLabel = new Label();
      *     myPage.add(myLabel);

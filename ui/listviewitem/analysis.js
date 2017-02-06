@@ -17,7 +17,7 @@ const ListViewItem = extend(ViewGroup)(
          * Gets/sets row height of the list view item.
          *
          *     @example
-         *     const ListViewItem = require('sf-core/ui/listviewitem');
+         *     const ListViewItem = require('nf-core/ui/listviewitem');
          *     var myListViewItem = new ListViewItem();
          *     myListViewItem.rowHeight = 30;
          *

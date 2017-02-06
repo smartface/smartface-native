@@ -6,8 +6,8 @@
  * objects can be assigned to objects which shows text (Label, Button etc.).
  * 
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label();
  *     myLabel.text = "Label text";
  *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
@@ -20,8 +20,8 @@ function Font() {}
  * Creates a font object with given family name.
  * 
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label();
  *     myLabel.text = "Label text";
  *     myLabel.font = Font.create("Arial", 16, Font.NORMAL);
@@ -40,8 +40,8 @@ Font.create = function(fontFamily, size, style) { }
  * correct font path.
  * 
  *     @example 
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16);
  *     });

@@ -7,8 +7,8 @@ const extend = require('js-base/core/extend');
  * AbsoluteLayout is a layout that lets you specify exact positioning(x/y coordinates) of its child views.
  * 
  *     @example
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     const Label = require('sf-core/ui/label');
+ *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     const Label = require('nf-core/ui/label');
  *     var myAbsoluteLayout = new AbsoluteLayout();
  *     var myLabel = new Label({
  *          text: "Smartface Label"

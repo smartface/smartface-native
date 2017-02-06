@@ -9,8 +9,8 @@ const View = require('../view');
  * ActivityIndicator class shows a progress of some background task.
  *
  *     @example
- *     const ActivityIndicator = require('sf-core/ui/activityindicator');
- *     const Color = require('sf-core/ui/color');
+ *     const ActivityIndicator = require('nf-core/ui/activityindicator');
+ *     const Color = require('nf-core/ui/color');
  *     var myActivityIndicator = new ActivityIndicator();
  *     myActivityIndicator.color = Color.BLUE;
  */

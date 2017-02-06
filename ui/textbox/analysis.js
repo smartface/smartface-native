@@ -8,9 +8,9 @@ const extend = require('js-base/core/extend');
  * TextBox is a UI object to get input from user.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
- *     const KeyboardType = require('sf-core/ui/keyboardtype');
- *     const Color = require('sf-core/ui/color');
+ *     const TextBox = require('nf-core/ui/textbox');
+ *     const KeyboardType = require('nf-core/ui/keyboardtype');
+ *     const Color = require('nf-core/ui/color');
  *     var myTextBox = new TextBox({
  *         width: "80%",
  *         height: "20%",
@@ -30,12 +30,12 @@ const TextBox = extend(View)(
          * Gets/sets font of the TextBox.
          *
          *     @example
-         *     const Label = require('sf-core/ui/label');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label({
          *         text: "This is my label",
          *         visible: true
          *     });
-         *     const Font = require('sf-core/ui/font');
+         *     const Font = require('nf-core/ui/font');
          *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
          *
          * @property {UI.Font} [font = null]
@@ -55,9 +55,9 @@ const TextBox = extend(View)(
          * Gets/sets text alignment of the TextBox.
          *
          *     @example
-         *     const Label = require('sf-core/ui/label');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
-         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     const TextAlignment = require('nf-core/ui/textalignment');
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;
          *
          * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
@@ -77,7 +77,7 @@ const TextBox = extend(View)(
          * Gets/sets hint text hint that is displayed when the text of the TextBox is empty.
          * 
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
+         *     const TextBox = require('nf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox"
          *     });
@@ -91,8 +91,8 @@ const TextBox = extend(View)(
          * Gets/sets the color of the hint text. This property will work only for Android.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Color = require('sf-core/ui/color')
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const Color = require('nf-core/ui/color')
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         android: {
@@ -112,7 +112,7 @@ const TextBox = extend(View)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
+         *     const TextBox = require('nf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         ios: {
@@ -130,7 +130,7 @@ const TextBox = extend(View)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
+         *     const TextBox = require('nf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         ios: {
@@ -149,7 +149,7 @@ const TextBox = extend(View)(
          * right at the TextBox. This property will work only for iOS.
          * 
          *     @example 
-         *     const TextBox = require('sf-core/ui/textbox');
+         *     const TextBox = require('nf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         clearButtonEnabled: true
@@ -165,8 +165,8 @@ const TextBox = extend(View)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const KeyboardAppearance = require('sf-core/ui/keyboardappearance');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox",
          *         KeyboardAppearance: KeyboardAppearance.DARK
@@ -181,7 +181,7 @@ const TextBox = extend(View)(
          * Gets/sets the content of the TextBox is password or not.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
+         *     const TextBox = require('nf-core/ui/textbox');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         isPassword: true
@@ -196,8 +196,8 @@ const TextBox = extend(View)(
          * Gets/sets keyboard type for TextBox.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const KeyboardType = require('sf-core/ui/keyboardtype');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const KeyboardType = require('nf-core/ui/keyboardtype');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         keyboardType: KeyboardType.NUMERIC
@@ -212,8 +212,8 @@ const TextBox = extend(View)(
          * Gets/sets action key type for TextBox.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const ActionKeyType = require('nf-core/ui/actionkeytype');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         actionKeyType: ActionKeyType.NEXT
@@ -246,8 +246,8 @@ const TextBox = extend(View)(
          * to the TextBox, this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
@@ -269,8 +269,8 @@ const TextBox = extend(View)(
          * to the TextBox this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
@@ -289,8 +289,8 @@ const TextBox = extend(View)(
          * or clicking outside of the TextBox, this event will fire.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
@@ -309,8 +309,8 @@ const TextBox = extend(View)(
          * this event will be fired.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
+         *     const TextBox = require('nf-core/ui/textbox');
+         *     const ActionKeyType = require('nf-core/ui/actionkeytype');
          *     var myTextBox = new TextBox({
          *         hint: "Smartface TextBox Password",
          *         actionKeyType: ActionKeyType.NEXT,

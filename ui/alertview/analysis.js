@@ -4,7 +4,7 @@
  * display on an alert window. There are three types of action button.
  * 
  *     @example
- *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
+ *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
  *     var myAlertButtonType = AlertButtonType.NEUTRAL;
  */
 var AlertButtonType = { };
@@ -42,8 +42,8 @@ AlertButtonType.NEGATIVE = 2;
  * properties(message, title, onClick attributes etc.).
  * 
  *     @example
- *     const AlertView = require('sf-core/ui/alertview').AlertView;
- *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
+ *     const AlertView = require('nf-core/ui/alertview').AlertView;
+ *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
  *     var myAlertView = new AlertView();
  *     var params = {
  *         index: AlertButtonType.POSITIVE, 
@@ -104,8 +104,8 @@ function AlertView () {
      * text, onClick) separately.
      * 
      *     @example
-     *     const AlertView = require('sf-core/ui/alertview').AlertView;
-     *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
+     *     const AlertView = require('nf-core/ui/alertview').AlertView;
+     *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
      *     var myAlertView = new AlertView();
      *     var params = {
      *         index: AlertButtonType.POSITIVE, 

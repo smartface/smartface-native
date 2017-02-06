@@ -4,9 +4,9 @@
  * ImageFillType is an enum. It defines fill type of image source.
  *
  *     @example
- *     const ImageFillType = require('sf-core/ui/imagefilltype');
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
+ *     const ImageFillType = require('nf-core/ui/imagefilltype');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     const Image = require('nf-core/ui/image');
  *     var myImageView = new ImageView();
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     myImageView.image = myImage;
