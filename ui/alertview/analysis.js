@@ -59,19 +59,18 @@ ButtonType.NEGATIVE = 2;
  * AlertView is an alert box with buttons having custom behaviors.
  * 
  *     @example
- *     const AlertView = require('nf-core/ui/alertview').AlertView;
- *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
+ *     const AlertView = require('nf-core/ui/alertview');
  *    
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",
  *         message: "Alert Message"
  *     });
  *     myAlertView.addButton({
- *         index: AlertButtonType.NEGATIVE, 
+ *         index: AlertView.ButtonType.NEGATIVE, 
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
- *         index: AlertButtonType.POSITIVE, 
+ *         index: AlertView.ButtonType.POSITIVE, 
  *         text: "Okay", 
  *         onClick: function() {
  *             console.log("Okay clicked.");
