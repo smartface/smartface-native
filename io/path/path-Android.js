@@ -1,10 +1,12 @@
 const File                  = require("nf-core/io/file");
 const AndroidConfig         = require("nf-core/util/Android/androidconfig");
 const TypeUtil              = require("nf-core/util/type");
+const NativeFile            = requireClass('java.io.File');
 
-const storages = {};
+const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
-const emulatorPath = Android.getActivity().getCacheDir();
+const emulatorPath = Android.getActivity().getExternalCacheDir().getAbsolutePath();
+
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
 var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
@@ -13,32 +15,44 @@ var desiredDrawableDensityIndex;
 
 setScreenConfigs();
 
-function Path() {}
-
+const Path = function(){};
 
 Object.defineProperties(Path, {
     'ImagesUriScheme': {
         value: 'images://',
-        writable: false
+        writable: false,
+        enumarable: true
     },
     'AssetsUriScheme': {
         value: 'assets://',
-        writable: false
+        writable: false,
+        enumerable: true
     },
     'Separator': {
         value: "/",
-        writable: false
+        writable: false,
+        enumerable: true
     },
     'DataDirectory': {
         get: function(){
             var filesDir = Android.getActivity().getFilesDir();
             if(filesDir){
-                return File.createFromNativeObject(filesDir);
+                return filesDir.getAbsolutePath();
             }
             else{
                 return null;
             }
         },
+        enumerable: true
+    },
+    'resolve': {
+        value: function(path){
+            if(TypeUtil.isString(path)){
+                return getResolvedPath(path);
+            }
+            return null;
+        },
+        enumerable: false,
         writable: false
     }
 });
@@ -46,36 +60,30 @@ Object.defineProperties(Path, {
 Path.android = {};
 Object.defineProperty(Path.android, 'storages', {
     get: function(){
-        if(!storages){
-            storages = {'internal': null, 'external': null, 'usb': null};
+        if(!storages.isResolved){
             var filesDir = Android.getActivity().getFilesDir();
             if(filesDir){
-                storages['internal'] = new File({ path: filesDir.getAbsolutePath() });
+                storages['internal'] = filesDir.getAbsolutePath();
             }
             
             // @todo test for more devices
-            var externalStorage = new File({ path: '/storage/sdcard1/' });
-            if(externalStorage.exists && externalStorage.getFiles() != null){
-                storages['external'] = externalStorage;
+            var externalStorage = new NativeFile('/storage/sdcard1/');
+            if(externalStorage.exists() && externalStorage.list() != null){
+                storages['external'] = '/storage/sdcard1/';
             }
             
             // @todo test for more devices
-            var usbStorage = new File({ path:'/storage/usbdisk/'});
-            if(usbStorage.exists && usbStorage.getFiles() != null){
-                storages['usb'] = usbStorage;
+            var usbStorage = new NativeFile('/storage/usbdisk/');
+            if(usbStorage.exists() && usbStorage.list() != null){
+                storages['usb'] = '/storage/usbdisk/';
             }
+            storages.isResolved = true;
         }
         return storages;
     },
-    writable: false
+    enumerable: true
 });
 
-Path.resolve = function(path){
-    if(TypeUtil.isString(path)){
-        return getResolvedPath(path);
-    }
-    return null;
-};
 
 function getResolvedPath(path){
     if(resolvedPaths[path]){
@@ -111,7 +119,7 @@ function getResolvedPath(path){
         if(fileName.endsWith(".png")){
             // we need file name without extension. We should check fileName.png and fileName.9.png for 9Path drawable.
             // images://smartface.png to smartface
-            fileName = fileName.substring(fileName.lastIndexOf(".png"),fileName.length);
+            fileName = fileName.substring(0, fileName.lastIndexOf(".png"));
         }
         if(AndroidConfig.isEmulator){
             // This is emulator. Check file system
@@ -160,8 +168,8 @@ function findDrawableAtDirectory(path,drawableName){
     }
     
     // searching drawable on densities and screen size which are over the device density and screen size
-    for(var i = desiredDrawableDensityIndex; i<drawableDensities.length; i++){
-        for(var j = desiredDrawableSizeIndex; j<drawableSizes.length; j++){
+    for(var i = desiredDrawableDensityIndex+1; i<drawableDensities.length; i++){
+        for(var j = desiredDrawableSizeIndex+1; j<drawableSizes.length; j++){
             targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
             if(targetPath){
                 return targetPath;
@@ -170,18 +178,15 @@ function findDrawableAtDirectory(path,drawableName){
     }
     
     // searching drawable on densities and screen size which are below the device density and screen size
-    for(var i = drawableDensities.length; i>=0; i--){
-        for(var j = drawableSizes.length; j>=0; j--){
+    for(var i = desiredDrawableDensityIndex-1; i>=0; i--){
+        for(var j = desiredDrawableSizeIndex-1; j>=0; j--){
             targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
             if(targetPath){
                 return targetPath;
             }
         }
     }
-    
-    
-    
-    
+    return null;
 }
 
 function checkDrawableVariations(path, drawableSize, drawableDensity, drawableName){
@@ -214,14 +219,11 @@ function checkDrawableVariations(path, drawableSize, drawableDensity, drawableNa
     if(checkFileExistsInPath(targetPath9Path)){
         return targetPath9Path;
     }
-    
     return null;
 }
 
 function checkFileExistsInPath(path){
     // for preventing loop between File and Path, one of them must use native.
-    const NativeFile = requireClass('java.io.File');
-    
     var fileInPath = new NativeFile(path);
     return fileInPath.exists();
 }
