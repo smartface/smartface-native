@@ -10,15 +10,27 @@ const extend = require('js-base/core/extend');
  * A button instance consists of text or an icon(or both of them).
  * 
  *     @example
+ *     const Color = require('nf-core/ui/color');
  *     const Button = require('nf-core/ui/button');
- *     var myButton = new Button();
- *     myButton.text = "Click me!";
+ *     var myButton = new Button({
+ *         width: 100,
+ *         height: 80,
+ *         backgroundColor: {
+ *             normal: Color.BLUE,
+ *             pressed: Color.CYAN
+ *         },
+ *         text: "Click Me!",
+ *         onPress: function() {
+ *             console.log("Button pressed");
+ *         }
+ *     });
+ * 
  */
 const Button = extend(View)(
     function (_super, params) {
         _super(this);
         /**
-         * Gets/sets text value. This property displayed in button.
+         * Gets/sets text of button view.
          * 
          * @property {String} [text = ""]  
          * @since 0.1
@@ -31,8 +43,9 @@ const Button = extend(View)(
          * 
          *     @example 
          *     const Button = require('nf-core/ui/button');
-         *     var myButton = new Button();
-         *     myButton.text = "Click me!";
+         *     var myButton = new Button({
+         *         text: "Click me!"
+         *     });
          *     const Font = require('nf-core/ui/font');
          *     myButton.font = Font.create("Arial", 16, Font.BOLD);   
          * 
@@ -64,61 +77,6 @@ const Button = extend(View)(
         textAlignment = TextAlignment.MIDCENTER;
         
         /**
-         * Gets/sets text color list of button based on states.
-         * 
-         *     @example
-         *     const Button = require('nf-core/ui/button');
-         *     const StateList = require('nf-core/util/statelist');
-         *     const Color = require('nf-core/ui/color');
-         *     var myButton = new Button();
-         *     myButton.text = "Button text";
-         *     myButton.textColors = new StateList({  
-         *         normal: Color.BLUE, 
-         *         disabled: Color.LIGHTGRAY, 
-         *         selected: Color.RED,  
-         *         pressed: Color.BLACK,
-         *         focused: Color.GRAY  
-         *     }); 
-         * @since 0.1
-         * @property {StateList} textColors 
-         * @deprecated 0.1 Use UI.Button#textColor instead.
-         */
-        this.textColors = new StateList( {
-            normal: Color.BLACK, 
-            disabled: Color.BLACK, 
-            selected: Color.BLACK, 
-            pressed: Color.BLACK, 
-            focused: Color.BLACK       
-        } );
-
-        /**
-         * Gets/sets color list of button background based on states.  
-         * 
-         *     @example
-         *     const Button = require('nf-core/ui/button');
-         *     const StateList = require('nf-core/util/statelist');
-         *     const Color = require('nf-core/ui/color');
-         *     var myButton = new Button();
-         *     myButton.backgroundColors = new StateList({  
-         *         normal: Color.LIGHTGRAY, 
-         *         disabled: Color.BLACK, 
-         *         selected: Color.LIGHTGRAY,  
-         *         pressed: Color.DARKGRAY,
-         *         focused: Color.DARKGRAY  
-         *     });
-         * @since 0.1
-         * @property {StateList} backgroundColors 
-         * @deprecated 0.1 Use UI.View#backgroundColor instead.
-         */
-        this.backgroundColors = new StateList({          
-            normal: Color.LIGHTGRAY, 
-            disabled: Color.BLACK, 
-            selected: Color.LIGHTGRAY, 
-            pressed: Color.DARKGRAY, 
-            focused: Color.DARKGRAY  
-        });
-        
-        /**
          * Gets/sets background image. Assign an image or a mapping from states to images.
          * 
          *     @example
@@ -146,36 +104,9 @@ const Button = extend(View)(
             pressed: "", 
             focused: ""
         };
-        
-        /**
-         * Gets/sets background image list of button based on states. 
-         * 
-         *     @example
-         *     const Button = require('nf-core/ui/button');
-         *     const StateList = require('nf-core/util/statelist');
-         *     var myButton = new Button();
-         *     myButton.backgroundImages = new StateList({
-         *         normal: "assets://normal.png",
-         *         disabled: "assets://disabled.png",
-         *         selected:"assets://selected.png",
-         *         pressed: "assets://pressed.png",
-         *         focused: "assets://focused.png"
-         *     });   
-         *     myButton.text = "My button text";
-         * @since 0.1
-         * @property {StateList} backgroundImages 
-         * @deprecated 0.1 Use UI.Button#backgroundImage instead.
-         */
-        this.backgroundImages = new StateList({          
-            normal: "", 
-            disabled: "", 
-            selected: "", 
-            pressed: "", 
-            focused: ""
-        });
 
         /**
-         * Gets/sets press event for view. This event fires when press started.
+         * Gets/sets press event callback for button.
          * 
          * @since 0.1
          * @event onPress
@@ -183,7 +114,7 @@ const Button = extend(View)(
         this.onPress = function onPress(){ }
 
         /**
-         * Gets/sets long press event for view. This event fires when long press started.
+         * Gets/sets long press event callback for button.
          * 
          * @since 0.1
          * @event onLongPress
