@@ -1,5 +1,6 @@
 const Label = require("nf-core/ui/label");
 const Color = require("nf-core/ui/color");
+const Font = require("nf-core/ui/font");
 const StateList = require("nf-core/util/statelist");
 const View = require("nf-core/ui/view");
 const extend = require('js-base/core/extend');
@@ -226,6 +227,16 @@ const Button = extend(Label)(
             }
         }));
         
+        // Set defaults same as iOS
+        if (!params) params = {};
+        !params.text && (params.text = "Button");
+        !params.backgroundColor && (params.backgroundColor = {
+            normal: Color.create("#00A1F1"),
+            pressed: Color.create("#016a9e")
+        });
+        !params.font && (params.font = Font.create(null, 16, Font.NORMAL));
+        !params.textColor && (params.textColor = Color.WHITE);
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
