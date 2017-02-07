@@ -96,7 +96,7 @@ function AlertView (params) {
             return onDismissCallback;
         },
         set: function(onDismiss) {
-            onDismissCallback = onDismiss;
+            onDismissCallback = onDismiss.bind(this);
         },
         enumerable: true
     });

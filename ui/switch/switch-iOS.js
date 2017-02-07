@@ -69,11 +69,11 @@ const Switch = extend(View)(
                 return _onToggleChanged;
             },
             set: function(value) {
-                _onToggleChanged = value;
-                var functionWithListener = function(){
-                    value();
+                _onToggleChanged = value.bind(this);
+                var functionWithListener = (function(){
+                    _onToggleChanged();
                     self.changeThumbTint();
-                }
+                }).bind(this);
                 self.nativeObject.addJSTarget(functionWithListener,UIControlEvents.valueChanged);
             },
             enumerable: true

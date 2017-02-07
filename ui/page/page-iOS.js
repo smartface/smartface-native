@@ -36,7 +36,7 @@ function Page(params) {
             return self.nativeObject.onLoad;
         },
         set: function(value) {
-            self.nativeObject.onLoad = value;
+            self.nativeObject.onLoad = value.bind(this);
         },
         enumerable: true
     });
@@ -46,7 +46,7 @@ function Page(params) {
             return self.nativeObject.onShow;
         },
         set: function(value) {
-            self.nativeObject.onShow = value;
+            self.nativeObject.onShow = value.bind(this);
         },
         enumerable: true
     });
@@ -56,7 +56,7 @@ function Page(params) {
             return self.nativeObject.onHide;
         },
         set: function(value) {
-            self.nativeObject.onHide = value;
+            self.nativeObject.onHide = value.bind(this);
         },
         enumerable: true
     });

@@ -94,7 +94,7 @@ function Page(params) {
             return onLoadCallback;
         },
         set: function(onLoad) {
-            onLoadCallback = onLoad;
+            onLoadCallback = onLoad.bind(this);
         },
         enumerable: true
     });
@@ -105,7 +105,7 @@ function Page(params) {
             return onShowCallback;
         },
         set: function(onShow) {
-            onShowCallback = onShow;
+            onShowCallback = onShow.bind(this);
         },
         enumerable: true
     });
@@ -116,7 +116,7 @@ function Page(params) {
             return onHideCallback;
         },
         set: function(onHide) {
-            onHideCallback = onHide;
+            onHideCallback = onHide.bind(this);
         },
         enumerable: true
     });

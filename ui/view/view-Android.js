@@ -142,7 +142,7 @@ function View(params) {
             return _onTouch;
         },
         set: function(onTouch) {
-            _onTouch = onTouch;
+            _onTouch = onTouch.bind(this);
         },
         enumerable: true
     });
@@ -153,7 +153,7 @@ function View(params) {
             return _onTouchEnded;
         },
         set: function(onTouchEnded) {
-            _onTouchEnded = onTouchEnded;
+            _onTouchEnded = onTouchEnded.bind(this);
         },
         enumerable: true
     });

@@ -105,7 +105,7 @@ function View(params) {
             return self.nativeObject.onTouch;
         },
         set: function(value) {
-            self.nativeObject.onTouch = value;
+            self.nativeObject.onTouch = value.bind(this);
         },
         enumerable: true
     });
@@ -115,7 +115,7 @@ function View(params) {
             return self.nativeObject.onTouchEnded;
         },
         set: function(value) {
-            self.nativeObject.onTouchEnded = value;
+            self.nativeObject.onTouchEnded = value.bind(this);
         },
         enumerable: true
     });
