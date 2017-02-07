@@ -244,7 +244,7 @@ function View(params) {
         }
     })); 
      
-    /** YOGA PROPERTIES */
+    // YOGA PROPERTIES
     Object.defineProperty(this, 'left', {
         get: function() {
             return AndroidUnitConverter.pixelToDp(yogaNode.getPosition(YogaEdge.LEFT).value);
@@ -686,8 +686,8 @@ function View(params) {
         enumerable: true
     });
     
-    /** Applied from AbsoluteLayout
-        direction values same as native **/
+    /* Applied from AbsoluteLayout
+        direction values same as native */
     Object.defineProperty(this, 'position', {
         get: function() {
             return yogaNode.getPositionType();
@@ -698,7 +698,7 @@ function View(params) {
         enumerable: true
     });
 
-    /** Yoga Methods */
+    /* Yoga Methods */
     this.dirty = function(){
         self.nativeInner.dirty();
     };
