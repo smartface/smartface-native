@@ -5,7 +5,7 @@
  * TextAlignment aligns the text of a label instance.
  *
  *     @example
- *     const TextAlignment = require('sf-core/ui/textalignment');
+ *     const TextAlignment = require('nf-core/ui/textalignment');
  *     var myTextAlignment = TextAlignment.MIDCENTER; 
  */
 const TextAlignment = { }

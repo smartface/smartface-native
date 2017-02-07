@@ -60,6 +60,7 @@ AlertButtonType.NEGATIVE = 2;
  *     @example
  *     const AlertView = require('nf-core/ui/alertview').AlertView;
  *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
+<<<<<<< HEAD
  *     
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",
@@ -70,6 +71,10 @@ AlertButtonType.NEGATIVE = 2;
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
+=======
+ *     var myAlertView = new AlertView();
+ *     var params = {
+>>>>>>> develop
  *         index: AlertButtonType.POSITIVE, 
  *         text: "Okay", 
  *         onClick: function() {
@@ -126,7 +131,14 @@ function AlertView () {
      * Allows you to set all alert view button values within one function call.
      * 
      *     @example
+<<<<<<< HEAD
      *     myAlertView.addButton({
+=======
+     *     const AlertView = require('nf-core/ui/alertview').AlertView;
+     *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
+     *     var myAlertView = new AlertView();
+     *     var params = {
+>>>>>>> develop
      *         index: AlertButtonType.POSITIVE, 
      *         text: "Okay", 
      *         onClick: function() {

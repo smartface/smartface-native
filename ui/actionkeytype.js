@@ -13,12 +13,12 @@
  *     
  *     var myTextBox = new TextBox({
  *         hint: "hint",
- *         width: "50%",
+ *         width: 100,
  *         backgroundColor: Color.create("#7fd0ff"),
  *         actionKeyType: ActionKeyType.DEFAULT
  *     });
  *     
- *     myPage.add(myTextBox);
+ *     myPage.layout.addChild(myTextBox);
  *
  */
 var ActionKeyType = { };

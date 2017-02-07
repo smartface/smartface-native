@@ -12,7 +12,7 @@ const extend = require('js-base/core/extend');
  *     const Color = require('nf-core/ui/color');
  *     
  *     var myAbsoluteLayout = new AbsoluteLayout({
- *         top:"0%", left:"0%", width:"100%", height:"100%" 
+ *         top: 0, left: 0, right: 0, bottom: 0 
  *     });
  *     var myLabel1 = new Label({
  *         text: "Back",

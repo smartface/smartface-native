@@ -9,9 +9,9 @@
  *     const Color = require('nf-core/ui/color');
  *     const TextBox = require('nf-core/ui/textbox');
  *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
- *     
+ * 
  *     var myTextBox = new TextBox({
- *         top:"10%", left:"5%", width:"50%",
+ *         top: 50, left:50, width: 100, height: 80,
  *         hint: "hint",
  *         backgroundColor: Color.create("#67fcaa"),
  *         ios: {

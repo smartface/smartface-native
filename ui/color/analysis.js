@@ -5,7 +5,7 @@
  * passing RGB-ARGB values or hexadecimal string. There are constant and predefined colors as well.
  *
  *     @example
- *      Color = require('nf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myRedColor = Color.create(255, 0, 0);
  *     var myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
  *     var myHEXColor = Color.create("#FFAACC");
@@ -186,7 +186,7 @@ Color.blue = function(color){ return color.blue };
  *     const Color = require('nf-core/ui/color');
  *     var myARGBColor = Color.create(42, 0, 0, 255);
  *     var alpha = Color.alpha(myARGBColor);
- *     alert(alpha);
+ *     console.log(alpha);
  * 
  * @param {UI.Color} color A color instance.
  * @return {Number} An integer between 0-255.

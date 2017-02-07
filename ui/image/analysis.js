@@ -12,7 +12,7 @@
  *     var myImage = Image.createFromFile("images://nativeface.png")
  *     var myImageView = new ImageView({
  *         image: myImage,
- *         width:"50%", height: "50%"
+ *         width: 200, height: 200
  *     });
  *     
  *     myPage.layout.addChild(myImageView);
@@ -43,15 +43,15 @@ function Image(params) {
          * onSuccess and onFailure are optional parameters.
          * 
          *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageview');
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImageView.image = myImage.resize(myImage.width/2, myImage.height/2); // resize example without callback
          * 
          *     
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageview');
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImage.resize(myImage.width/2, myImage.height/2, onSuccess); 

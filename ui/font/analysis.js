@@ -8,7 +8,7 @@
  *     @example
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
- *     
+ * 
  *     var myLabel = new Label();
  *     myLabel.text = "Bold_Italic Font";
  *     myLabel.font = Font.create("Arial", 16, Font.BOLD_ITALIC);
@@ -23,7 +23,9 @@ function Font() {}
  * 
  *     @example
  *     const Font = require('nf-core/ui/font');
- *     var myFont = Font.create("Arial", 16, Font.NORMAL);
+ *     const Label = require('nf-core/ui/label');
+ *     var myLabel = new Label();
+ *     myLabel.font = myFont;
  * 
  * @param {String} fontFamily Font family name
  * @param {Number} size Font size
@@ -39,7 +41,11 @@ Font.create = function(fontFamily, size, style) { }
  * 
  *     @example 
  *     const Font = require('nf-core/ui/font');
- *     var myFont = Font.createFromFile("assets://MyFont.ttf", 16);
+ *     const Label = require('nf-core/ui/label');
+ *     var myLabel = new Label({
+ *         font: Font.createFromFile("assets://MyFont.ttf", 16);
+ *     });
+ *     myLabel.text = "Label text";
  * 
  * @param {String} path Font file path
  * @param {Number} size Font size

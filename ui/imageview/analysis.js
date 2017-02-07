@@ -15,7 +15,7 @@ const View = require('../view');
  *     var myImage = Image.createFromFile("images://nativeface.png")
  *     var myImageView = new ImageView({
  *         image: myImage,
- *         width:"50%", height: "50%"
+ *         left: 0, width: 300, height: 400
  *     });
  *     
  *     myPage.layout.addChild(myImageView);
@@ -34,7 +34,7 @@ const ImageView = extend(View)(
          * 
          *     var myImage = Image.createFromFile("images://nativeface.png");
          *     var myImageView = new ImageView({
-         *         width:"50%", height: "50%"
+         *         width: 200, height: 200
          *     });
          *     myImageView.image = myImage;
          *     
@@ -55,7 +55,7 @@ const ImageView = extend(View)(
          *     var myImage = Image.createFromFile("images://nativeface.png")
          *     var myImageView = new ImageView({
          *         image: myImage,
-         *         width:"50%", height: "50%"
+         *         width: 200, height: 200
          *     });
          *     myImageView.imageFillType = ImageFillType.STRETCH;
          *
