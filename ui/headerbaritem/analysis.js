@@ -16,7 +16,7 @@
  *             console.log("Smartface item pressed!");
  *         }
  *     });
- *     myPage.headerBar.items = [myItem];
+ *     myPage.headerBar.setItems([myItem]);
  */
 function HeaderBarItem(params) {
     /**
