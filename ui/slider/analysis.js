@@ -9,17 +9,19 @@ const extend = require('js-base/core/extend');
  * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
  * 
  *     @example
- *     const Slider = require('nf-core/ui/slider');
- *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
  *     var Color = require('nf-core/ui/color');
- *     var mySlider = new Slider();
- *     mySlider.maxValue = 100;
- *     mySlider.minValue = 0;
- *     mySlider.value = 40;
- *     mySlider.minTrackColor = Color.RED;
- *     mySlider.thumbColor = Color.BLUE;
- *     var myAbsoluteLayout = new AbsoluteLayout();
- *     myAbsoluteLayout.addChild(mySlider);
+ *     const Slider = require('nf-core/ui/slider');
+ *     var mySlider = new Slider({
+ *         width: 200,
+ *         maxValue: 100,
+ *         minValue: 0,
+ *         value: 40,
+ *         minTrackColor: Color.RED,
+ *         thumbColor: Color.BLUE,
+ *         onValueChange: function() {
+ *             console.log("Slider's value: " + mySlider.value);
+ *         }
+ *     });
  *
  */
 
@@ -42,17 +44,17 @@ const Slider = extend(View)(
         this.thumbColor = UI.Color.GRAY;
 
         /**
-         * Gets/sets image path of the thumb.
+         * Gets/sets image of the thumb.
          *
          *     @example
          *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
-         *     mySlider.thumbImage = "images://smartface.png";
+         *     mySlider.thumbImage = Image.createFromFile("images://smartface.png");
          *
-         * @property {String} [thumbImage = ""]
+         * @property {String}
          * @since 0.1
          */
-        this.thumbImage = "";
+        this.thumbImage = null;
 
         /**
          * Gets/sets color of the thumb's minimum track color.
