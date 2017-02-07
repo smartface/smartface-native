@@ -1,4 +1,4 @@
-var AlertButtonType = {
+var ButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
@@ -9,9 +9,9 @@ const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 function AlertView (params) {
     var self = this;
-    self.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
-    self.nativeObject.setCancelable(false);
-    self.nativeObject.setCanceledOnTouchOutside(false);
+    this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
+    this.nativeObject.setCancelable(false);
+    this.nativeObject.setCanceledOnTouchOutside(false);
 
     var titleInitial = "";
     Object.defineProperty(this, 'title', {
@@ -56,29 +56,30 @@ function AlertView (params) {
     this.addButton = function(params){
         buttonCallbacks[params.index] = params.onClick;
         var nativeButtonIndex = -1;
-        switch(params.index){
-            case AlertButtonType.POSITIVE:
+        switch(params.index) {
+            case ButtonType.POSITIVE:
                 nativeButtonIndex = -1;
                 break;
-            case AlertButtonType.NEGATIVE:
+            case ButtonType.NEGATIVE:
                 nativeButtonIndex = -2;
                 break;
-            case AlertButtonType.NEUTRAL:
+            case ButtonType.NEUTRAL:
                 nativeButtonIndex = -3;
                 break;
         }
+
         self.nativeObject.setButton(nativeButtonIndex,params.text,
             NativeDialogInterface.OnClickListener.implement({
                onClick: function(dialog,which){
                    switch(which){
                         case -1:
-                            buttonCallbacks[AlertButtonType.POSITIVE] && buttonCallbacks[AlertButtonType.POSITIVE]();
+                            buttonCallbacks[ButtonType.POSITIVE] && buttonCallbacks[ButtonType.POSITIVE]();
                             break;
                         case -2:
-                            buttonCallbacks[AlertButtonType.NEGATIVE] && buttonCallbacks[AlertButtonType.NEGATIVE]();
+                            buttonCallbacks[ButtonType.NEGATIVE] && buttonCallbacks[ButtonType.NEGATIVE]();
                             break;
                         case -3:
-                            buttonCallbacks[AlertButtonType.NEUTRAL] && buttonCallbacks[AlertButtonType.NEUTRAL]();
+                            buttonCallbacks[ButtonType.NEUTRAL] && buttonCallbacks[ButtonType.NEUTRAL]();
                             break;
                    }
                }
@@ -110,4 +111,10 @@ function AlertView (params) {
     }
 }
 
-module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };
+Object.defineProperty(AlertView, 'ButtonType', {
+    value: ButtonType,
+    writable: false,
+    enumerable: true
+});
+
+module.exports = AlertView;
