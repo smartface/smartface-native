@@ -1,24 +1,31 @@
 /**
  * @enum {Number} UI.ActionKeyType
  * @static
+ * @readonly
  * @since 0.1
  *
  * ActionKeyType is an enum. It defines soft keyboard action key (return key) type.
  *
  *     @example
+ *     const Color = require('nf-core/ui/color');
  *     const TextBox = require('nf-core/ui/textbox');
  *     const ActionKeyType = require('nf-core/ui/actionkeytype');
+ *     
  *     var myTextBox = new TextBox({
- *         hint: "Smartface TextBox",
+ *         hint: "hint",
+ *         width: 100,
+ *         backgroundColor: Color.create("#7fd0ff"),
  *         actionKeyType: ActionKeyType.DEFAULT
  *     });
+ *     
+ *     myPage.layout.addChild(myTextBox);
  *
  */
 var ActionKeyType = { };
 
 /**
  * @property {Number} DEFAULT
- * Default colored keyboard appearance. This constant corresponds to the done action.
+ * Done action for soft keyboard.
  * @static
  * @readonly
  * @since 0.1

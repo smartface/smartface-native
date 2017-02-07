@@ -1,5 +1,5 @@
 /**
- * @class HeaderBarItem
+ * @class UI.HeaderBarItem
  * @since 0.1
  *
  * HeaderBarItem is a button object that can be shown in header bar of a page.
