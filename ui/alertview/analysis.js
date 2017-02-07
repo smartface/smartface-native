@@ -60,8 +60,7 @@ AlertButtonType.NEGATIVE = 2;
  *     @example
  *     const AlertView = require('nf-core/ui/alertview').AlertView;
  *     const AlertButtonType = require('nf-core/ui/alertview').AlertButtonType;
-<<<<<<< HEAD
- *     
+ *    
  *     var myAlertView = new AlertView({
  *         title: "Alert Title",
  *         message: "Alert Message"
@@ -71,10 +70,6 @@ AlertButtonType.NEGATIVE = 2;
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
-=======
- *     var myAlertView = new AlertView();
- *     var params = {
->>>>>>> develop
  *         index: AlertButtonType.POSITIVE, 
  *         text: "Okay", 
  *         onClick: function() {
