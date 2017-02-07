@@ -2,7 +2,9 @@
  * @enum {Number} UI.AlertView.ButtonType 
  * @since 0.1
  * 
- * ButtonType is used to indicate the behaviors of buttons in a UI.AlertView visually.
+ * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
+ * You can specify a button have negative, positive or neutral user experience.
+ * According to operating system button appearance or positions may change.
  * 
  *     @example
  *     const AlertView = require('nf-core/ui/alertview');
@@ -56,7 +58,9 @@ ButtonType.NEGATIVE = 2;
  * @class UI.AlertView
  * @since 0.1
  *
- * AlertView is an alert box with buttons having custom behaviors.
+ * AlertView is an alert box with buttons having custom behaviors. You can 
+ * use AlertView for informing user or asking for confirmations. AlertView
+ * has buttons with callbacks that you can take action for each of them separately.
  * 
  *     @example
  *     const AlertView = require('nf-core/ui/alertview');
@@ -82,7 +86,7 @@ ButtonType.NEGATIVE = 2;
 function AlertView () {
 
     /**
-     * Gets/sets title inside alert view.
+     * Gets/sets title of AlertView.
      * 
      * @property {String} title 
      * @since 0.1
@@ -90,7 +94,7 @@ function AlertView () {
     this.title = "";
     
     /**
-     * Gets/sets message inside alert view.
+     * Gets/sets message of AlertView.
      * 
      * @property {String} message 
      * @since 0.1
@@ -98,7 +102,8 @@ function AlertView () {
     this.message = "";
      
     /**
-     * Read-Only property indicating if the alert view is visible or not.
+     * Gets showing status of AlertView. It is set to true if AlertView is
+     * currently displayed in screen, false otherwise.
      * 
      * @property {boolean} isShowing 
      * @since 0.1
@@ -107,7 +112,8 @@ function AlertView () {
     this.isShowing = false; // read only
 
     /**
-     * Makes the alert view visible.
+     * Shows AlertView on screen with specified properties, isShowing property
+     * set to true after this operation.
      * 
      * @method show
      * @since 0.1
@@ -115,7 +121,8 @@ function AlertView () {
     this.show = function() {};    
     
     /**
-     * Dismisses the alert view.
+     * Dismisses the AlertView, isShowing property set to false after this
+     * operation.
      * 
      * @method dismiss
      * @since 0.1
@@ -123,7 +130,8 @@ function AlertView () {
     this.dismiss = function() {};
     
     /**
-     * Allows you to set all alert view button values within one function call.
+     * Allows you to add button to AlertView. You can add maximum 3 buttons 
+     * on Android platform, on iOS there is no limitation.
      * 
      *     @example
      *     myAlertView.addButton({
@@ -134,10 +142,11 @@ function AlertView () {
      *         }
      *     });
      * 
-     * @param {Object} params Object describing alert view properties
-     * @param {UI.AlertView.ButtonType} [params.index] Alert view button type
-     * @param {String} [params.text] Alert view text 
-     * @param {Function} [params.onClick] Perform action on click
+     * @param {Object} params Object describing button properties
+     * @param {UI.AlertView.ButtonType} params.index Button type, it is set to
+     *                                      UI.AlertView.ButtonType.NEUTRAL as default
+     * @param {String} params.text Button text
+     * @param {Function} [params.onClick] Callback for button click action
      * @method addButton
      * @since 0.1
      */
@@ -145,17 +154,18 @@ function AlertView () {
 
     // events  
     /**
-     * Gets/sets dismiss callback function. 
+     * Gets/sets dismiss callback function.
      * 
      *     @example
-     *     myAlertView.onDismiss = function() {
-     *         console.log("dismissed.");
+     *     myAlertView.onDismiss = function(alertView) {
+     *         console.log("Dismissed alert view with title: " + alertView.title);
      *     };
      * 
      * @event onDismiss
+     * @param {UI.AlertView} alertView Dismissed AlertView object
      * @since 0.1
      */
-    this.onDismiss = function() {};
+    this.onDismiss = function(alertView) {};
 }
 
 Object.defineProperty(AlertView, 'ButtonType', {
