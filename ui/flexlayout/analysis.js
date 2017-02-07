@@ -5,11 +5,37 @@ const extend = require('js-base/core/extend');
  * @since 0.1
  * @extends UI.ViewGroup
  * 
- * // @todo add description.
+ * FlexLayout is a layout type which has behaviour like CSS Flexbox 
+ * on web. You can add views to FlexLayout and it ensures objects will
+ * be located same on all devices.
  * 
  *     @example
- *     // @todo add example
+ *     const FlexLayout = require('nf-core/ui/flexlayout');
+ *     var myFlexLayout = new FlexLayout({
+ *         top: 0,
+ *         bottom: 0,
+ *         left: 0,
+ *         right: 0
+ *     });
  * 
+ *     const Label = require('nf-core/ui/label');
+ *     const Color = require('nf-core/ui/color');
+ *     var myLabel1 = new UI.Label({
+ *         width: 100,
+ *         height: 50,
+ *         text: "First label",
+ *         backgroundColor: Color.RED
+ *     });
+ *     myFlexLayout.addChild(myLabel1);
+ *     var myLabel2 = new UI.Label({
+ *         width: 100,
+ *         height: 50,
+ *         text: "First label",
+ *         backgroundColor: Color.CYAN
+ *     });
+ *     myFlexLayout.addChild(myLabel2);
+ * 
+ *     page.layout.addChild(myFlexLayout);
  * 
  */
 const FlexLayout = extend(ViewGroup)(
@@ -17,10 +43,18 @@ const FlexLayout = extend(ViewGroup)(
         _super(this);
 
         /**
-         * // @todo add description.
+         * Gets/sets direction of FlexLayout. You can specify positioning direction of
+         * FlexLayout with this property.
          * 
          *     @example
-         *     // @todo add example
+         *     const FlexLayout = require('nf-core/ui/flexlayout');
+         *     var myFlexLayout = new FlexLayout({
+         *         top: 0,
+         *         bottom: 0,
+         *         left: 0,
+         *         right: 0,
+         *         direction: FlexLayout.Direction.RTL
+         *     });
          *
          * @property {UI.FlexLayout.Direction} [direction = UI.FlexLayout.Direction.INHERIT]   
          * @since 0.1
