@@ -174,6 +174,14 @@ function Page(params) {
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
     }
     
+    self.headerBar.setLeftItem = function(value){
+        if(value){
+            self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+        } else {
+            self.nativeObject.navigationItem.leftBarButtonItem = null;
+        }
+    }
+    
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.frame.height

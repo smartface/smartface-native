@@ -311,6 +311,24 @@ function Page(params) {
     this.headerBar.visible = true;
 
     this.headerBar.items = [];
+    
+    /**
+     * Adds left item to headerBar.
+     *
+     *     @example
+     *      const Page = require('nf-core/ui/page');
+     *      const HeaderBarItem = require('nf-core/ui/headerbaritem');
+     *      var myPage = new Page();
+     *      myPage.onLoad = function(e){
+     *          var leftItem = new HeaderBarItem();
+     *          leftItem.title = "Left Item";
+     *          myPage.headerBar.setLeftItem(leftItem);
+     *      }
+     * 
+     * @method setLeftItem
+     * @param {HeaderBarItem} item HeaderBarItem to add.
+     */
+    this.headerBar.setLeftItem = function(item){};
 }
 
 module.exports = Page;
