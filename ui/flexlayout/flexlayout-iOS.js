@@ -1,6 +1,6 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
-const YogaEnums = require("nf-core/util").YogaEnums;
+const YogaEnums = require('nf-core/util').YogaEnums;
 
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {

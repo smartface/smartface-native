@@ -1,56 +1,51 @@
-
+const FileStream = require('nf-core/io/filestream');
 
 function File(params) {
     var self = this;
     
-    Object.defineProperties(Path, {
+    Object.defineProperties(this, {
         'creationDate': {
             get: function(){
                 return self.nativeObject.getCreationDate();
             },
-            writable: false
         },
         'exists': {
             get: function(){
                 return self.nativeObject.exist();
             },
-            writable: false
         },
         'extension': {
             get: function(){
                 return self.nativeObject.getExtension();
             },
-            writable: false
         },
         'isDirectory': {
             get: function(){
                 return self.nativeObject.isDirectory();
             },
-            writable: false
         },
         'isFile': {
             get: function(){
                 return self.nativeObject.isFile();
             },
-            writable: false
         },
         'modifiedDate': {
             get: function(){
                 return self.nativeObject.getModifiedDate();
             },
-            writable: false
         },
         'name': {
             get: function(){
                 return self.nativeObject.getName();
             },
-            writable: false
         },
         'parent': {
             get: function(){
-                return self.nativeObject.getParent();
+                var parentNativeObject = self.nativeObject.getParent();
+                var parent = new File();
+                parent.nativeObject = parentNativeObject;
+                return parent;
             },
-            writable: false
         },
         'path': {
             get: function(){
@@ -64,34 +59,62 @@ function File(params) {
             get: function(){
                 return self.nativeObject.getSize();
             },
-            writable: false
         },
         'writable': {
             get: function(){
                 return self.nativeObject.isWritable();
             },
-            writable: false
         },
-    };
+    });
     
     this.copy = function(destination){
         return self.nativeObject.copy(destination);
     }
     
     this.createDirectory = function(withParents){
-        return self.nativeObject.createDirectory(withParents);
+        var value = true;
+        if(typeof withParents === 'boolean'){
+            value = withParents;
+        }
+        return self.nativeObject.createDirectory(value);
     };
     
     this.createFile = function(createParents){
-        return self.nativeObject.createFile(createParents);
+        var value = true;
+        if(typeof createParents === 'boolean'){
+            value = createParents;
+        }
+        return self.nativeObject.createFile(value);
     };
     
     this.remove = function(withChilds){
-        return self.nativeObject.remove(withChilds);
+        var value = true;
+        if(typeof withChilds === 'boolean'){
+            value = withChilds;
+        }
+        return self.nativeObject.remove(value);
     };
     
     this.getFiles = function(nameFilter, typeFilter){
-        return self.nativeObject.getFiles(nameFilter, typeFilter);
+        var filterValue = "";
+        if(typeof nameFilter === 'string'){
+            filterValue = nameFilter;
+        }
+        
+        var typeValue = 0;
+        if(typeof typeFilter === 'number'){
+            typeValue = typeFilter;
+        }
+        
+        var fileObjectArray = [];
+        var nativeObjectArray = self.nativeObject.getFiles(filterValue, typeValue);
+        nativeObjectArray.forEach(function(item){
+            var file = new File();
+            file.nativeObject = item;
+            fileObjectArray.push(file);
+        });
+        
+        return fileObjectArray;
     };
     
     this.move = function(destination){
@@ -103,7 +126,7 @@ function File(params) {
     };
     
     this.openStream = function(mode){
-        // ?????????????????????????
+        return FileStream.create(self.nativeObject.getActualPath(), mode);
     };
     
  // Assign parameters given in constructor
@@ -112,6 +135,10 @@ function File(params) {
             this[param] = params[param];
         }
     }
+};
+
+File.getDocumentsDirectory = function(){
+    return SMFFile.getDocumentsDirectory();
 }
 
 module.exports = File;
