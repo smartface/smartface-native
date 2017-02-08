@@ -95,10 +95,7 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
-        
-        self.position = FlexLayout.Position.RELATIVE;
-        self.alignItems = FlexLayout.AlignItems.FLEX_START;
-        //self.flexDirection = FlexLayout.FlexDirection.ROW;
+        this.alignItems = FlexLayout.AlignItems.FLEX_START;
         
         // Assign parameters given in constructor
         if (params) {

@@ -123,7 +123,7 @@ const TextBox = extend(Label)(
                 return _onTextChangedCallback;
             },
             set: function(onTextChanged) {
-                _onTextChangedCallback = onTextChanged;
+                _onTextChangedCallback = onTextChanged.bind(this);
             },
             enumerable: true
         });
@@ -134,7 +134,7 @@ const TextBox = extend(Label)(
                 return _onEditBeginsCallback;
             },
             set: function(onEditBegins) {
-                _onEditBeginsCallback = onEditBegins;
+                _onEditBeginsCallback = onEditBegins.bind(this);
             },
             enumerable: true
         });
@@ -145,7 +145,7 @@ const TextBox = extend(Label)(
                 return _onEditEndsCallback;
             },
             set: function(onEditEnds) {
-                _onEditEndsCallback = onEditEnds;
+                _onEditEndsCallback = onEditEnds.bind(this);
             },
             enumerable: true
         });
@@ -156,7 +156,7 @@ const TextBox = extend(Label)(
                 return _onActionButtonCallback;
             },
             set: function(onActionButtonPress) {
-                _onActionButtonCallback = onActionButtonPress;
+                _onActionButtonCallback = onActionButtonPress.bind(this);
             },
             enumerable: true
         });
@@ -164,14 +164,16 @@ const TextBox = extend(Label)(
         self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
             // todo: Control insertedText after resolving story/AND-2508 issue.
             onTextChanged: function(charSequence, start, before, count){
-                var index = Math.abs(start+before);
-                if(count > before){
-                    var insertedText = charSequence.subSequence(start+before,start+count);
-                    var e = {
-                        location: index,
-                        insertedText: insertedText
+                if(_onTextChangedCallback){
+                    var index = Math.abs(start+before);
+                    if(count > before){
+                        var insertedText = charSequence.subSequence(start+before,start+count);
+                        var e = {
+                            location: index,
+                            insertedText: insertedText
+                        }
+                        _onTextChangedCallback(e);
                     }
-                    _onTextChangedCallback && _onTextChangedCallback(e);
                 }
             },
             

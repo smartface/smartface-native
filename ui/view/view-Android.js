@@ -1,5 +1,4 @@
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-const ViewGroup                 = require('nf-core/ui/viewgroup');
 
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
@@ -11,6 +10,11 @@ const NativeMotionEvent         = requireClass("android.view.MotionEvent");
 const NativeYogaLayout          = requireClass('io.smartface.yoga.YogaLayout');
 const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
 const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
+const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
+const NativeRectF               = requireClass("android.graphics.RectF");
+
+const Color = require("nf-core/ui/color");
 
 const YogaEdge = {
     "LEFT"          : NativeYogaEdge.LEFT,
@@ -50,15 +54,19 @@ function View(params) {
     }
 
     var _backgroundColor = 0;
-    var backgroundDrawable = new NativeColorDrawable(_backgroundColor);
-    //var borderDrawable = android.graphics.drawable.ShapeDrawable();
-    var borderDrawable = new NativeGradientDrawable();
-
+    var backgroundDrawable = new NativeGradientDrawable();
+    
+    var radii = [0, 0, 0, 0, 0, 0, 0, 0];
+    var rectF = new NativeRectF(0, 0, 0, 0);
+    var roundRect = new NativeRoundRectShape(radii, rectF, radii);
+    var borderShapeDrawable = new NativeShapeDrawable();
+    borderShapeDrawable.getPaint().setColor(Color.TRANSPARENT);
+    
     var layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
     layerDrawable.setId(0,0);
     layerDrawable.setId(1,1);
     layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-    layerDrawable.setDrawableByLayerId(1,borderDrawable);
+    layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
     self.nativeObject.setBackground(layerDrawable);
 
     Object.defineProperty(this, 'alpha', {
@@ -90,52 +98,37 @@ function View(params) {
         },
         set: function(backgroundColor) {
             _backgroundColor = backgroundColor;
-            if(typeof(_backgroundColor) === "number") {
-                backgroundDrawable = new NativeColorDrawable(_backgroundColor); 
-            }
-            else {
-                _backgroundColor = backgroundColor;
-                backgroundDrawable = new NativeStateListDrawable();
-                var stateDrawable;
-                if(backgroundColor.normal){
-                    stateDrawable = NativeColorDrawable(backgroundColor.normal);
-                    backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
-                }
-                if(backgroundColor.disabled){
-                    stateDrawable = NativeColorDrawable(backgroundColor.disabled);
-                    backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
-                }
-                if(backgroundColor.selected){
-                    stateDrawable = NativeColorDrawable(backgroundColor.selected);
-                    backgroundDrawable.addState(View.State.STATE_SELECTED,stateDrawable);
-                }
-                if(backgroundColor.pressed){
-                    stateDrawable = NativeColorDrawable(backgroundColor.pressed);
-                    backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
-                }
-                if(backgroundColor.focused){
-                    stateDrawable = NativeColorDrawable(backgroundColor.focused);
-                    backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
-                }
-            }
-            setBackground(0);
+            setBackgroundColor(_backgroundColor);
         },
         enumerable: true
      });
     
-    var _borderColor = 0;
+    var _borderColor = Color.BLACK;
     Object.defineProperty(this, 'borderColor', {
         get: function() {
             return _borderColor;
         },
         set: function(value) {
             _borderColor = value;
-            applyStyle();
+            setBorder();
         },
         enumerable: true
     });
     
-    this.touchEnabled = true;
+    
+    var _borderRadius = AndroidUnitConverter.dpToPixel(0);
+    Object.defineProperty(this, 'borderRadius', {
+        get: function() {
+            return _borderRadius;
+        },
+        set: function(borderRadius) {
+            _borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
+            setBorder();
+        },
+        enumerable: true
+    });
+    
+    this.touchEnabled = false;
     
     var _onTouch;
     Object.defineProperty(this, 'onTouch', {
@@ -143,7 +136,7 @@ function View(params) {
             return _onTouch;
         },
         set: function(onTouch) {
-            _onTouch = onTouch;
+            _onTouch = onTouch.bind(this);
         },
         enumerable: true
     });
@@ -154,7 +147,7 @@ function View(params) {
             return _onTouchEnded;
         },
         set: function(onTouchEnded) {
-            _onTouchEnded = onTouchEnded;
+            _onTouchEnded = onTouchEnded.bind(this);
         },
         enumerable: true
     });
@@ -193,41 +186,116 @@ function View(params) {
     };
     
     this.setPosition = function(position){
-        self.width = position.width ? position.width : self.width;
-        self.height = position.height ? position.height : self.height;
-        self.top = position.top ? position.top : self.top;
-        self.left = position.left ? position.left : self.left;
+        position.top    && (self.top    = position.top);
+        position.left   && (self.left   = position.left);
+        position.width  && (self.width  = position.width);
+        position.height && (self.height = position.height);
     };
     
-    // @todo no ENUM support
-    function applyStyle(){
-        borderDrawable.setColor(0);
+    function setBackgroundColor(backgroundColor) {
+        if(typeof(backgroundColor) === "number") {
+            backgroundDrawable = new NativeGradientDrawable(); 
+            backgroundDrawable.setCornerRadius(_borderRadius);
+            backgroundDrawable.setColor(backgroundColor);
+        }
+        else if(backgroundColor.isGradient) {
+            var orientation = backgroundColor.nativeObject.getOrientation();
+            var colors = backgroundColor.colors;
+            backgroundDrawable = new NativeGradientDrawable(orientation, colors); 
+            backgroundDrawable.setCornerRadius(_borderRadius);
+        }
+        else {
+            var stateDrawable;
+            backgroundDrawable = new NativeStateListDrawable();
+            if(backgroundColor.normal){
+                if(backgroundColor.normal.isGradient) {
+                    stateDrawable = backgroundColor.normal.nativeObject;
+                }
+                else {
+                    stateDrawable = new NativeGradientDrawable(); 
+                    stateDrawable.setColor(backgroundColor.normal);
+                }
+                stateDrawable.setCornerRadius(_borderRadius);
+                backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
+            }
+            if(backgroundColor.disabled){
+                if(backgroundColor.disabled.isGradient) {
+                    stateDrawable = backgroundColor.disabled.nativeObject;
+                }
+                else {
+                    stateDrawable = new NativeGradientDrawable(); 
+                    stateDrawable.setColor(backgroundColor.disabled);
+                }
+                stateDrawable.setCornerRadius(_borderRadius);
+                backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+            }
+            if(backgroundColor.selected){
+                if(backgroundColor.selected.isGradient) {
+                    stateDrawable = backgroundColor.selected.nativeObject;
+                }
+                else {
+                    stateDrawable = new NativeGradientDrawable(); 
+                    stateDrawable.setColor(backgroundColor.selected);
+                }
+                stateDrawable.setCornerRadius(_borderRadius);
+                backgroundDrawable.addState(View.State.STATE_SELECTED,stateDrawable);
+            }
+            if(backgroundColor.pressed){
+                if(backgroundColor.pressed.isGradient) {
+                    stateDrawable = backgroundColor.pressed.nativeObject;
+                }
+                else {
+                    stateDrawable = new NativeGradientDrawable(); 
+                    stateDrawable.setColor(backgroundColor.pressed);
+                }
+                stateDrawable.setCornerRadius(_borderRadius);
+                backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
+            }
+            if(backgroundColor.focused){
+                if(backgroundColor.focused.isGradient) {
+                    stateDrawable = backgroundColor.focused.nativeObject;
+                }
+                else {
+                    stateDrawable = new NativeGradientDrawable(); 
+                    stateDrawable.setColor(backgroundColor.focused);
+                }
+                stateDrawable.setCornerRadius(_borderRadius);
+                backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+            }
+        }
+        setBackground(0);
+    }
+    
+    function setBorder(){
         var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
-        borderDrawable.setStroke(dp_borderWidth, _borderColor);
-        setBackground(1);
+        if(dp_borderWidth > 0)  {
+            radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
+                     _borderRadius,_borderRadius,_borderRadius,_borderRadius];
+            rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
+            roundRect = new NativeRoundRectShape(radii, rectF, radii);
+            borderShapeDrawable = new NativeShapeDrawable(roundRect);
+            borderShapeDrawable.getPaint().setColor(_borderColor);
+            setBackground(1);
+            
+            setBackgroundColor(_backgroundColor);
+        }
     }
     
     this.applyLayout = function(){
-        yogaNode.calculateLayout();
-        if(self.childViews){
-            for(var childViewKey in self.childViews){
-                if(self.childViews[childViewKey] instanceof ViewGroup){
-                    self.childViews[childViewKey].applyLayout();
-                }
-                else{
-                    self.childViews[childViewKey].applyLayout();
-                }
-            }
-        }
+        // not necessary for Android. For prevent wrong calculations do not call calculateLayout()
+        //yogaNode.calculateLayout();
     };
     
     function setBackground(layerIndex){
         switch (layerIndex){
             case 0: 
                 layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
+                layerDrawable.invalidateDrawable(backgroundDrawable);
                 break;
             case 1:
-                layerDrawable.setDrawableByLayerId(1,borderDrawable);
+                layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+                layerDrawable.invalidateDrawable(borderShapeDrawable);
+                break;
         }
         self.nativeObject.setBackground(layerDrawable);
     }
@@ -236,16 +304,22 @@ function View(params) {
         onTouch: function(view, event) {
             if(self.touchEnabled){
                 if (event.getAction() == NativeMotionEvent.ACTION_UP) {
-                    _onTouchEnded && _onTouchEnded();
+                    if(_onTouchEnded){
+                        _onTouchEnded();
+                        return true;
+                    }
                 } else {
-                    _onTouch && _onTouch();
+                    if(_onTouch){
+                        _onTouch();
+                        return true;
+                    }
                 }
             }
             return false;
         }
     })); 
      
-    /** YOGA PROPERTIES */
+    // YOGA PROPERTIES 
     Object.defineProperty(this, 'left', {
         get: function() {
             return AndroidUnitConverter.pixelToDp(yogaNode.getPosition(YogaEdge.LEFT).value);
@@ -313,7 +387,8 @@ function View(params) {
         set: function(height) {
             yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'width', {
@@ -323,7 +398,8 @@ function View(params) {
         set: function(width) {
             yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'minWidth', {
@@ -448,10 +524,20 @@ function View(params) {
     
     Object.defineProperty(this, 'padding', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.TOP).value);
         },
         set: function(padding) {
-            yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(padding));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_padding = AndroidUnitConverter.dpToPixel(padding);
+            yogaNode.setPadding(YogaEdge.TOP, db_padding);
+            yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
+            yogaNode.setPadding(YogaEdge.LEFT, db_padding);
+            yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
+            yogaNode.setPadding(YogaEdge.START, db_padding);
+            yogaNode.setPadding(YogaEdge.END, db_padding);
+            yogaNode.setPadding(YogaEdge.HORIZONTAL, db_padding);
+            yogaNode.setPadding(YogaEdge.VERTICAL, db_padding);
         },
         enumerable: true
     });
@@ -538,10 +624,20 @@ function View(params) {
     
     Object.defineProperty(this, 'margin', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.TOP).value);
         },
         set: function(margin) {
-            yogaNode.setMargin(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(margin));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_margin = AndroidUnitConverter.dpToPixel(margin);
+            yogaNode.setMargin(YogaEdge.TOP, db_margin);
+            yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
+            yogaNode.setMargin(YogaEdge.LEFT, db_margin);
+            yogaNode.setMargin(YogaEdge.RIGHT, db_margin);
+            yogaNode.setMargin(YogaEdge.START, db_margin);
+            yogaNode.setMargin(YogaEdge.END, db_margin);
+            yogaNode.setMargin(YogaEdge.HORIZONTAL, db_margin);
+            yogaNode.setMargin(YogaEdge.VERTICAL, db_margin);
         },
         enumerable: true
     });
@@ -605,13 +701,14 @@ function View(params) {
         },
         enumerable: true
     });
-    
+    var _borderWidth = 0;
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getBorder(YogaEdge.ALL).value);
+            return _borderWidth;
         },
         set: function(borderWidth) {
-            yogaNode.setBorder(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(borderWidth));
+            _borderWidth = borderWidth;
+            setBorder();
         },
         enumerable: true
     });
@@ -656,8 +753,8 @@ function View(params) {
         enumerable: true
     });
     
-    /** Applied from AbsoluteLayout
-        direction values same as native **/
+    /* Applied from AbsoluteLayout
+        direction values same as native */
     Object.defineProperty(this, 'position', {
         get: function() {
             return yogaNode.getPositionType();
@@ -668,7 +765,7 @@ function View(params) {
         enumerable: true
     });
 
-    /** Yoga Methods */
+    // Yoga Methods 
     this.dirty = function(){
         self.nativeInner.dirty();
     };

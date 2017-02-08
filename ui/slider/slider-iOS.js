@@ -28,6 +28,16 @@ const Slider = extend(View)(
          self.nativeObject.minimumValue = 0;
          self.nativeObject.maximumValue = 100;
          
+         Object.defineProperty(self, 'enabled', {
+            get: function() {
+                return self.nativeObject.setEnabled;
+            },
+            set: function(value) {
+                self.nativeObject.setEnabled = value;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'thumbColor', {
             get: function() {
                 return self.nativeObject.thumbTintColor;
@@ -45,8 +55,8 @@ const Slider = extend(View)(
             }, 
             set: function(image) {
                 _thumbImage = image;
-                self.nativeObject.setThumbImage(new UIImage(image),SliderState.normal);
-                 self.nativeObject.setThumbImage(new UIImage(image),SliderState.pressed);
+                self.nativeObject.setThumbImage(image.nativeObject,SliderState.normal);
+                self.nativeObject.setThumbImage(image.nativeObject,SliderState.pressed);
             },
             enumerable: true
         });
@@ -91,6 +101,7 @@ const Slider = extend(View)(
             enumerable: true
         });
         
+        
         Object.defineProperty(self, 'value', {
             get: function() {
                 return self.nativeObject.value;
@@ -107,17 +118,27 @@ const Slider = extend(View)(
                 return _onValueChange;
             },
             set: function(value) {
-                _onValueChange = value;
-                self.nativeObject.addJSTarget(value,UIControlEvents.valueChanged);
+                _onValueChange = value.bind(this);
+                self.nativeObject.addJSTarget(handleValueChange,UIControlEvents.valueChanged);
             },
             enumerable: true
          });
          
-    if (params) {
-        for (var param in params) {
-            this[param] = params[param];
+         var _value = 0;
+         function handleValueChange(){
+             var intValue = Math.round(self.value);
+             self.nativeObject.setValueAnimated(intValue,true);
+             if (_value != intValue){
+                 _value = intValue;
+                 self.onValueChange();
+             }
+         }
+         
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
         }
-    }
 });
      
 module.exports = Slider;
