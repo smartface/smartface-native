@@ -1,64 +1,92 @@
-/** @enum {Number} UI.AlertView.AlertButtonType 
+/** 
+ * @enum {Number} UI.AlertView.ButtonType 
  * @since 0.1
- * AlertButtonType is an enum. It defines button types when they 
- * display on an alert window. There are three types of action button.
+ * 
+ * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
+ * You can specify a button have negative, positive or neutral user experience.
+ * According to operating system button appearance or positions may change.
  * 
  *     @example
- *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
- *     var myAlertButtonType = AlertButtonType.NEUTRAL;
+ *     const AlertView = require('nf-core/ui/alertview');
+ *     
+ *     var myAlertView = new AlertView({
+ *         title: "Alert Title",
+ *         message: "Alert Message"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.ButtonType.NEUTRAL, 
+ *         text: "Ignore", 
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.ButtonType.NEGATIVE, 
+ *         text: "Cancel"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.ButtonType.POSITIVE, 
+ *         text: "Okay"
+ *     });
+ *     
+ *     myAlertView.show();
  */
-var AlertButtonType = { };
+var ButtonType = { };
 
 /**
  * @property {Number} POSITIVE
- * Accept the action and continue.
  * @static
+ * @readonly
  * @since 0.1
  */
-AlertButtonType.POSITIVE = 0;
+ButtonType.POSITIVE = 0;
 
 /**
  * @property {Number} NEUTRAL
  * @static
+ * @readonly
  * @since 0.1
- * Don't accept the action but don't cancel.  
- * It can be used with the action of "Ask me later".
  */
-AlertButtonType.NEUTRAL = 1;
+ButtonType.NEUTRAL = 1;
 
 /**
  * @property {Number} NEGATIVE
  * @static
+ * @readonly
  * @since 0.1
- * Cancel the action.
  */
-AlertButtonType.NEGATIVE = 2;
+ButtonType.NEGATIVE = 2;
 
 /**
  * @class UI.AlertView
  * @since 0.1
  *
- * Alert view class represents an alert box with a specified 
- * properties(message, title, onClick attributes etc.).
+ * AlertView is an alert box with buttons having custom behaviors. You can 
+ * use AlertView for informing user or asking for confirmations. AlertView
+ * has buttons with callbacks that you can take action for each of them separately.
  * 
  *     @example
- *     const AlertView = require('sf-core/ui/alertview').AlertView;
- *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
- *     var myAlertView = new AlertView();
- *     var params = {
- *         index: AlertButtonType.POSITIVE, 
- *         text: "OK", 
- *         onClick: function(){}
- *     };
- *     myAlertView.title = "Alert Title";
- *     myAlertView.message = "Alert message";
- *     myAlertView.addButton(params);
+ *     const AlertView = require('nf-core/ui/alertview');
+ *    
+ *     var myAlertView = new AlertView({
+ *         title: "Alert Title",
+ *         message: "Alert Message"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.ButtonType.NEGATIVE, 
+ *         text: "Cancel"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.ButtonType.POSITIVE, 
+ *         text: "Okay", 
+ *         onClick: function() {
+ *             console.log("Okay clicked.");
+ *         }
+ *     });
+ *     
  *     myAlertView.show();
  */
 function AlertView () {
 
     /**
-     * Gets/sets title inside alert view.
+     * Gets/sets title of AlertView.
      * 
      * @property {String} title 
      * @since 0.1
@@ -66,7 +94,7 @@ function AlertView () {
     this.title = "";
     
     /**
-     * Gets/sets message inside alert view.
+     * Gets/sets message of AlertView.
      * 
      * @property {String} message 
      * @since 0.1
@@ -74,7 +102,8 @@ function AlertView () {
     this.message = "";
      
     /**
-     * Gets the alert view is active or not. isShowing is a read only property.
+     * Gets showing status of AlertView. It is set to true if AlertView is
+     * currently displayed in screen, false otherwise.
      * 
      * @property {boolean} isShowing 
      * @since 0.1
@@ -83,7 +112,8 @@ function AlertView () {
     this.isShowing = false; // read only
 
     /**
-     * This method displays an alert box with specified properties.
+     * Shows AlertView on screen with specified properties, isShowing property
+     * set to true after this operation.
      * 
      * @method show
      * @since 0.1
@@ -91,7 +121,8 @@ function AlertView () {
     this.show = function() {};    
     
     /**
-     * This method dismiss the alert view.
+     * Dismisses the AlertView, isShowing property set to false after this
+     * operation.
      * 
      * @method dismiss
      * @since 0.1
@@ -99,28 +130,23 @@ function AlertView () {
     this.dismiss = function() {};
     
     /**
-     * This method allows setting all alert view button values within one function call. 
-     * Using this method will be faster than setting all alert view button values (index,
-     * text, onClick) separately.
+     * Allows you to add button to AlertView. You can add maximum 3 buttons 
+     * on Android platform, on iOS there is no limitation.
      * 
      *     @example
-     *     const AlertView = require('sf-core/ui/alertview').AlertView;
-     *     const AlertButtonType = require('sf-core/ui/alertview').AlertButtonType;
-     *     var myAlertView = new AlertView();
-     *     var params = {
-     *         index: AlertButtonType.POSITIVE, 
-     *         text: "OK", 
-     *         onClick: function(){}
-     *     };
-     *     myAlertView.title = "Alert Title";
-     *     myAlertView.message = "Alert message";
-     *     myAlertView.addButton(params);
-     *     myAlertView.show();
+     *     myAlertView.addButton({
+     *         index: AlertView.ButtonType.POSITIVE, 
+     *         text: "Okay", 
+     *         onClick: function() {
+     *             console.log("Okay clicked.");
+     *         }
+     *     });
      * 
-     * @param {Object} params Object describing alert view properties
-     * @param {Number} [params.index] Index value
-     * @param {String} [params.text] Alert view text 
-     * @param {Function} [params.onClick] Perform action on click
+     * @param {Object} params Object describing button properties
+     * @param {UI.AlertView.ButtonType} params.index Button type, it is set to
+     *                                      UI.AlertView.ButtonType.NEUTRAL as default
+     * @param {String} params.text Button text
+     * @param {Function} [params.onClick] Callback for button click action
      * @method addButton
      * @since 0.1
      */
@@ -128,12 +154,24 @@ function AlertView () {
 
     // events  
     /**
-     * Gets/sets dismiss event for alert view. 
+     * Gets/sets dismiss callback function.
+     * 
+     *     @example
+     *     myAlertView.onDismiss = function(alertView) {
+     *         console.log("Dismissed alert view with title: " + alertView.title);
+     *     };
      * 
      * @event onDismiss
+     * @param {UI.AlertView} alertView Dismissed AlertView object
      * @since 0.1
      */
-    this.onDismiss = function(AlertView) {};
+    this.onDismiss = function(alertView) {};
 }
 
-module.exports = { AlertView: AlertView, AlertButtonType: AlertButtonType };
+Object.defineProperty(AlertView, 'ButtonType', {
+    value: ButtonType,
+    writable: false,
+    enumerable: true
+});
+
+module.exports = AlertView;

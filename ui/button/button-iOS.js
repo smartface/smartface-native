@@ -1,6 +1,5 @@
 const View = require("nf-core/ui/view");
 const Color = require("nf-core/ui/color");
-const StateList = require("nf-core/util/statelist");
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("nf-core/util").UIControlEvents;
 
@@ -68,70 +67,104 @@ const Button = extend(View)(
             enumerable: true
         });
     
-        var textColorsInitial = new StateList({
+        var textColorsInitial = {
     		normal: Color.BLACK,
             disabled: Color.BLACK,
             selected: Color.BLACK,
             pressed: Color.BLACK,
             focused: Color.BLACK
-    	});
-        Object.defineProperty(this, 'textColors', {
+    	}
+    	
+        Object.defineProperty(this, 'textColor', {
             get: function() {
                 return textColorsInitial;
             }, 
-            set: function(textColors) {
-                textColorsInitial = textColors;
-
-                self.nativeObject.setTitleColor(textColorsInitial.normal,ButtonState.normal);
-                self.nativeObject.setTitleColor(textColorsInitial.disabled,ButtonState.disabled);
-                self.nativeObject.setTitleColor(textColorsInitial.selected,ButtonState.selected);
-                self.nativeObject.setTitleColor(textColorsInitial.pressed,ButtonState.pressed);
-                self.nativeObject.setTitleColor(textColorsInitial.focused,ButtonState.focused);
-                
+            set: function(textColor) {
+                textColorsInitial = textColor;
+                if (textColor.constructor.name != "Object") {
+                    self.nativeObject.setTitleColor(textColor,ButtonState.normal);
+                }else{
+                    if (typeof textColor.normal != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.normal,ButtonState.normal);
+                    }
+                    if (typeof textColor.disabled != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.disabled,ButtonState.disabled);
+                    }
+                    if (typeof textColor.selected != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.selected,ButtonState.selected);
+                    }
+                    if (typeof textColor.pressed != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.pressed,ButtonState.pressed);
+                    }
+                    if (typeof textColor.focused != 'undefined') {
+                        self.nativeObject.setTitleColor(textColor.focused,ButtonState.focused);
+                    }
+                    
+                } 
             },
             enumerable: true
         });
         
-        var backgroundColorsInitial = new StateList({
+        var backgroundColorsInitial = {
     		normal: Color.TRANSPARENT,
             disabled: Color.TRANSPARENT,
             selected: Color.TRANSPARENT,
             pressed: Color.TRANSPARENT,
             focused: Color.TRANSPARENT
-    	});
-        Object.defineProperty(this, 'backgroundColors', {
+    	};
+    	
+        Object.defineProperty(this, 'backgroundColor', {
             get: function() {
                 return backgroundColorsInitial;
             }, 
             set: function(bgColors) {
                 backgroundColorsInitial = bgColors;
-
-                self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal,ButtonState.normal);
-                self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled,ButtonState.disabled);
-                self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected,ButtonState.selected);
-                self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed,ButtonState.pressed);
-                self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused,ButtonState.focused);
+                 if (bgColors.constructor.name != "Object") {
+                     self.nativeObject.setBackgroundColor(backgroundColorsInitial,ButtonState.normal);
+                 }else{
+                     if (typeof backgroundColorsInitial.normal != 'undefined') {
+                        self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal,ButtonState.normal);
+                     }
+                     if (typeof backgroundColorsInitial.disabled != 'undefined') {
+                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled,ButtonState.disabled);
+                     }
+                     if (typeof backgroundColorsInitial.selected != 'undefined') {
+                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected,ButtonState.selected);
+                     }
+                     if (typeof backgroundColorsInitial.pressed != 'undefined') {
+                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed,ButtonState.pressed);
+                     }
+                     if (typeof backgroundColorsInitial.focused != 'undefined') {
+                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused,ButtonState.focused);
+                     }
+                    
+                 }
             },
             enumerable: true
         });
         
-        var backgroundImagesInitial = new StateList({});
-        Object.defineProperty(this, 'backgroundImages', {
+        var backgroundImagesInitial = {};
+        Object.defineProperty(this, 'backgroundImage', {
             get: function() {
                 return backgroundImagesInitial;
             }, 
             set: function(bgImages) {
                 backgroundImagesInitial = bgImages;
-                if (backgroundImagesInitial.normal)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.normal),ButtonState.normal);
-                if (backgroundImagesInitial.disabled)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.disabled),ButtonState.disabled);
-                if (backgroundImagesInitial.selected)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.selected),ButtonState.selected);
-                if (backgroundImagesInitial.pressed)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.pressed),ButtonState.pressed);
-                if (backgroundImagesInitial.focused)
-                  self.nativeObject.setBackgroundImage(new UIImage(backgroundImagesInitial.focused),ButtonState.focused);
+
+                if (bgImages.constructor.name != "Object") {
+                     self.nativeObject.setBackgroundImage(backgroundImagesInitial.nativeObject,ButtonState.normal);
+                }else{
+                    if (backgroundImagesInitial.normal)
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal.nativeObject,ButtonState.normal);
+                    if (backgroundImagesInitial.disabled)
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled.nativeObject,ButtonState.disabled);
+                    if (backgroundImagesInitial.selected)
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected.nativeObject,ButtonState.selected);
+                    if (backgroundImagesInitial.pressed)
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed.nativeObject,ButtonState.pressed);
+                    if (backgroundImagesInitial.focused)
+                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused.nativeObject,ButtonState.focused);
+                }
             },
             enumerable: true
         });
@@ -158,18 +191,7 @@ const Button = extend(View)(
             },
             enumerable: true
          });
-         
-         var _textColor = Color.BLACK;
-        Object.defineProperty(self, 'textColor', {
-            get: function() {
-                return _textColor;
-            },
-            set: function(value) {
-                _textColor = value;
-                self.nativeObject.setTitleColor(value,ButtonState.normal);
-            },
-            enumerable: true
-        });
+    
          // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

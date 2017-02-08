@@ -12,7 +12,8 @@ function View(params) {
 
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
-     
+    self.nativeObject.layer.masksToBounds = true;
+    
     Object.defineProperty(self, 'borderColor', {
         get: function() {
             return  self.nativeObject.layer.borderUIColor;
@@ -33,16 +34,31 @@ function View(params) {
         enumerable: true
     });
     
-    var _backgroundColor;
-    Object.defineProperty(self, 'backgroundColor', {
+    Object.defineProperty(self, 'borderRadius', {
         get: function() {
-            return _backgroundColor;
+            return self.nativeObject.layer.cornerRadius;
         },
         set: function(value) {
-            _backgroundColor = value;
-            self.nativeObject.backgroundColor = value;
+            self.nativeObject.layer.cornerRadius = value;
         },
         enumerable: true
+    });
+    
+    Object.defineProperty(self, 'backgroundColor', {
+        get: function() {
+            return self.nativeObject.backgroundColor;
+        },
+        set: function(value) {
+            if (value.constructor.name === "CAGradientLayer"){
+                self.applyLayout();
+                value.frame = self.nativeObject.frame;
+                self.nativeObject.backgroundColor = value.layerToColor();
+            }else{
+                self.nativeObject.backgroundColor = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
     });
 
 

@@ -2,53 +2,54 @@
  * @class UI.Font
  * @since 0.1
  * 
- * This class is useful when custom or styled font is needed. Created font
- * objects can be assigned to objects which shows text (Label, Button etc.).
+ * Font is useful when custom fonts are needed. It can be assigned
+ * to UI objects holding text property (UI.Label, UI.Button etc).
  * 
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
+ * 
  *     var myLabel = new Label();
- *     myLabel.text = "Label text";
- *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+ *     myLabel.text = "Bold_Italic Font";
+ *     myLabel.font = Font.create("Arial", 16, Font.BOLD_ITALIC);
+ *     myPage.layout.addChild(myLabel);
  */
 function Font() {}
 
 /**
  * @method create
  * @since 0.1
- * Creates a font object with given family name.
+ * Creates a font instance with the given family name, size and style.
  * 
  *     @example
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label();
- *     myLabel.text = "Label text";
- *     myLabel.font = Font.create("Arial", 16, Font.NORMAL);
+ *     myLabel.font = myFont;
  * 
- * @param fontFamily Font family name
- * @param size Font size
- * @param style Font style (NORMAL, BOLD etc.)
- * 
+ * @param {String} fontFamily Font family name
+ * @param {Number} size Font size
+ * @param {Number} style Font style (UI.Font.NORMAL, UI.Font.BOLD etc.)
+ * @return {UI.Font} A Font instance.
  * @static
  */
 Font.create = function(fontFamily, size, style) { }
 
 /**
  * @method createFromFile
- * Creates a font object from given file path. Path should be a
- * correct font path.
+ * Creates a font instance with the given file path and size.
  * 
  *     @example 
- *     const Font = require('sf-core/ui/font');
- *     const Label = require('sf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16);
  *     });
  *     myLabel.text = "Label text";
  * 
- * @param path Font file path
- * @param size Font size
+ * @param {String} path Font file path
+ * @param {Number} size Font size
+ * @return {UI.Font} A Font instance.
  * @since 0.1
  * 
  * @static
@@ -59,6 +60,7 @@ Font.createFromFile = function(path, size) { }
  * Represents normal font style
  * 
  * @property {Number} NORMAL 
+ * @readonly
  * @static
  * @since 0.1
  */
@@ -68,6 +70,7 @@ Font.NORMAL = 1;
  * Represents bold font style
  * 
  * @property {Number} BOLD 
+ * @readonly
  * @static
  * @since 0.1
  */
@@ -77,15 +80,17 @@ Font.BOLD = 2;
  * Represents italic font style
  * 
  * @property {Number} ITALIC 
+ * @readonly
  * @static
  * @since 0.1
  */
 Font.ITALIC = 4;
 
 /**
- * Represents bold italic font style
+ * Represents both bold and italic font style
  * 
  * @property {Number} BOLD_ITALIC 
+ * @readonly
  * @static
  * @since 0.1
  */

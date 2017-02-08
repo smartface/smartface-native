@@ -164,14 +164,16 @@ const TextBox = extend(Label)(
         self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
             // todo: Control insertedText after resolving story/AND-2508 issue.
             onTextChanged: function(charSequence, start, before, count){
-                var index = Math.abs(start+before);
-                if(count > before){
-                    var insertedText = charSequence.subSequence(start+before,start+count);
-                    var e = {
-                        location: index,
-                        insertedText: insertedText
+                if(_onTextChangedCallback){
+                    var index = Math.abs(start+before);
+                    if(count > before){
+                        var insertedText = charSequence.subSequence(start+before,start+count);
+                        var e = {
+                            location: index,
+                            insertedText: insertedText
+                        }
+                        _onTextChangedCallback(e);
                     }
-                    _onTextChangedCallback && _onTextChangedCallback(e);
                 }
             },
             

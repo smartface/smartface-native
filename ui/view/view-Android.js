@@ -1,5 +1,4 @@
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-const ViewGroup                 = require('nf-core/ui/viewgroup');
 
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
@@ -135,7 +134,7 @@ function View(params) {
         enumerable: true
     });
     
-    this.touchEnabled = true;
+    this.touchEnabled = false;
     
     var _onTouch;
     Object.defineProperty(this, 'onTouch', {
@@ -192,11 +191,11 @@ function View(params) {
         }; 
     };
     
-    this.setPosition = function(position){
-        self.width = position.width ? position.width : self.width;
-        self.height = position.height ? position.height : self.height;
-        self.top = position.top ? position.top : self.top;
-        self.left = position.left ? position.left : self.left;
+    self.setPosition = function(position){
+        position.top    && (self.top    = position.top);
+        position.left   && (self.left   = position.left);
+        position.width  && (self.width  = position.width);
+        position.height && (self.height = position.height);
     };
     
     // @todo no ENUM support
@@ -208,26 +207,20 @@ function View(params) {
     }
     
     this.applyLayout = function(){
-        yogaNode.calculateLayout();
-        if(self.childViews){
-            for(var childViewKey in self.childViews){
-                if(self.childViews[childViewKey] instanceof ViewGroup){
-                    self.childViews[childViewKey].applyLayout();
-                }
-                else{
-                    self.childViews[childViewKey].applyLayout();
-                }
-            }
-        }
+        // not necessary for Android. For prevent wrong calculations do not call calculateLayout()
+        //yogaNode.calculateLayout();
     };
     
     function setBackground(layerIndex){
         switch (layerIndex){
             case 0: 
                 layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
+                layerDrawable.invalidateDrawable(backgroundDrawable);
                 break;
             case 1:
                 layerDrawable.setDrawableByLayerId(1,borderDrawable);
+                layerDrawable.invalidateDrawable(borderDrawable);
+                break;
         }
         self.nativeObject.setBackground(layerDrawable);
     }
@@ -236,16 +229,22 @@ function View(params) {
         onTouch: function(view, event) {
             if(self.touchEnabled){
                 if (event.getAction() == NativeMotionEvent.ACTION_UP) {
-                    _onTouchEnded && _onTouchEnded();
+                    if(_onTouchEnded){
+                        _onTouchEnded();
+                        return true;
+                    }
                 } else {
-                    _onTouch && _onTouch();
+                    if(_onTouch){
+                        _onTouch();
+                        return true;
+                    }
                 }
             }
             return false;
         }
     })); 
      
-    /** YOGA PROPERTIES */
+    // YOGA PROPERTIES
     Object.defineProperty(this, 'left', {
         get: function() {
             return AndroidUnitConverter.pixelToDp(yogaNode.getPosition(YogaEdge.LEFT).value);
@@ -313,7 +312,8 @@ function View(params) {
         set: function(height) {
             yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'width', {
@@ -323,7 +323,8 @@ function View(params) {
         set: function(width) {
             yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     
     Object.defineProperty(this, 'minWidth', {
@@ -448,10 +449,20 @@ function View(params) {
     
     Object.defineProperty(this, 'padding', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getPadding(YogaEdge.TOP).value);
         },
         set: function(padding) {
-            yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(padding));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_padding = AndroidUnitConverter.dpToPixel(padding);
+            yogaNode.setPadding(YogaEdge.TOP, db_padding);
+            yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
+            yogaNode.setPadding(YogaEdge.LEFT, db_padding);
+            yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
+            yogaNode.setPadding(YogaEdge.START, db_padding);
+            yogaNode.setPadding(YogaEdge.END, db_padding);
+            yogaNode.setPadding(YogaEdge.HORIZONTAL, db_padding);
+            yogaNode.setPadding(YogaEdge.VERTICAL, db_padding);
         },
         enumerable: true
     });
@@ -538,10 +549,20 @@ function View(params) {
     
     Object.defineProperty(this, 'margin', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getMargin(YogaEdge.TOP).value);
         },
         set: function(margin) {
-            yogaNode.setMargin(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(margin));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var db_margin = AndroidUnitConverter.dpToPixel(margin);
+            yogaNode.setMargin(YogaEdge.TOP, db_margin);
+            yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
+            yogaNode.setMargin(YogaEdge.LEFT, db_margin);
+            yogaNode.setMargin(YogaEdge.RIGHT, db_margin);
+            yogaNode.setMargin(YogaEdge.START, db_margin);
+            yogaNode.setMargin(YogaEdge.END, db_margin);
+            yogaNode.setMargin(YogaEdge.HORIZONTAL, db_margin);
+            yogaNode.setMargin(YogaEdge.VERTICAL, db_margin);
         },
         enumerable: true
     });
@@ -608,10 +629,19 @@ function View(params) {
     
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return AndroidUnitConverter.pixelToDp(yogaNode.getBorder(YogaEdge.ALL).value);
+            // YogaEdge.ALL not working on YogaCore. We are getting what we set.
+            return AndroidUnitConverter.pixelToDp(yogaNode.getBorder(YogaEdge.TOP));;
         },
         set: function(borderWidth) {
-            yogaNode.setBorder(YogaEdge.ALL, AndroidUnitConverter.dpToPixel(borderWidth));
+            // YogaEdge.ALL not working on YogaCore. We are setting border to all.
+            var dp_borderwidth = AndroidUnitConverter.dpToPixel(borderWidth);
+            yogaNode.setBorder(YogaEdge.LEFT, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.RIGHT, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.TOP, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.START, dp_borderwidth);
+            yogaNode.setBorder(YogaEdge.END, dp_borderwidth);
+            applyStyle();
         },
         enumerable: true
     });
@@ -656,8 +686,8 @@ function View(params) {
         enumerable: true
     });
     
-    /** Applied from AbsoluteLayout
-        direction values same as native **/
+    /* Applied from AbsoluteLayout
+        direction values same as native */
     Object.defineProperty(this, 'position', {
         get: function() {
             return yogaNode.getPositionType();
@@ -668,7 +698,7 @@ function View(params) {
         enumerable: true
     });
 
-    /** Yoga Methods */
+    /* Yoga Methods */
     this.dirty = function(){
         self.nativeInner.dirty();
     };

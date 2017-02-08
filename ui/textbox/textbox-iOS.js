@@ -197,6 +197,9 @@ const TextBox = extend(View)(
                     case IOSKeyboardTypes.default:
                         returnValue =  KeyboardType.DEFAULT
                         break;
+                    case IOSKeyboardTypes.decimalPad:
+                        returnValue =  KeyboardType.DECIMAL;
+                        break;
                     case IOSKeyboardTypes.numberPad:
                         returnValue =  KeyboardType.NUMBER
                         break;
@@ -221,6 +224,9 @@ const TextBox = extend(View)(
                 switch (value) {
                     case KeyboardType.DEFAULT:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
+                        break;
+                    case KeyboardType.DECIMAL:
+                        self.nativeObject.keyboardType = IOSKeyboardTypes.decimalPad;
                         break;
                     case KeyboardType.NUMBER:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.numberPad;
