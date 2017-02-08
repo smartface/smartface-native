@@ -191,11 +191,11 @@ function View(params) {
         }; 
     };
     
-    this.setPosition = function(position){
-        self.width = position.width ? position.width : self.width;
-        self.height = position.height ? position.height : self.height;
-        self.top = position.top ? position.top : self.top;
-        self.left = position.left ? position.left : self.left;
+    self.setPosition = function(position){
+        position.top    && (self.top    = position.top);
+        position.left   && (self.left   = position.left);
+        position.width  && (self.width  = position.width);
+        position.height && (self.height = position.height);
     };
     
     // @todo no ENUM support
