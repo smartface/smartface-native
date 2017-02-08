@@ -1,4 +1,3 @@
-const File                  = require("nf-core/io/file");
 const AndroidConfig         = require("nf-core/util/Android/androidconfig");
 const TypeUtil              = require("nf-core/util/type");
 const NativeFile            = requireClass('java.io.File');
@@ -61,7 +60,7 @@ Path.android = {};
 Object.defineProperty(Path.android, 'storages', {
     get: function(){
         if(!storages.isResolved){
-            var filesDir = Android.getActivity().getFilesDir();
+            var filesDir = Android.getActivity().getExternalFilesDir(null);
             if(filesDir){
                 storages['internal'] = filesDir.getAbsolutePath();
             }
@@ -91,25 +90,27 @@ function getResolvedPath(path){
     }
     
     resolvedPaths[path] = {};
+    resolvedPaths[path].path = path;
     
     if(path.startsWith('assets://')){
         // assets://smartface.png to smartface.png
         var fileName = path.slice(9);
+        resolvedPaths[path].name = fileName;
+        
         if(AndroidConfig.isEmulator){
             // This is emulator. Check file system
-            resolvedPaths[path].name = fileName;
             resolvedPaths[path].type = Path.FILE_TYPE.EMULATOR_ASSETS;
-            resolvedPaths[path].path = getEmulatorAssetsPath() + "/" + fileName;
+            resolvedPaths[path].fullPath = getEmulatorAssetsPath() + "/" + fileName;
         }
         else{
             // This is player. Check RAU
             resolvedPaths[path].type = Path.FILE_TYPE.RAU_ASSETS;
-            resolvedPaths[path].path = getRauAssetsPath() + "/" + fileName;
+            resolvedPaths[path].fullPath = getRauAssetsPath() + "/" + fileName;
             // if assets not exists in rau
             if(!checkFileExistsInPath(resolvedPaths[path])){
-                resolvedPaths[path].name = fileName;
                 resolvedPaths[path].type = Path.FILE_TYPE.ASSET;
-                resolvedPaths[path].path = path;
+                resolvedPaths[path].fullPath = path;
+                
             }
         }
     }
@@ -121,28 +122,29 @@ function getResolvedPath(path){
             // images://smartface.png to smartface
             fileName = fileName.substring(0, fileName.lastIndexOf(".png"));
         }
+        resolvedPaths[path].name = fileName;
+        
         if(AndroidConfig.isEmulator){
             // This is emulator. Check file system
-            resolvedPaths[path].name = fileName;
             resolvedPaths[path].type = Path.FILE_TYPE.EMULATOR_DRAWABLE;
-            resolvedPaths[path].path = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
+            resolvedPaths[path].fullPath = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
         }
         else{
             // This is player. Check RAU
             resolvedPaths[path].type = Path.FILE_TYPE.RAU_DRAWABLE;
-            resolvedPaths[path].path = findDrawableAtDirectory(getRauDrawablePath(), fileName);
+            resolvedPaths[path].fullPath = findDrawableAtDirectory(getRauDrawablePath(), fileName);
             if(!resolvedPaths[path]){
                 // drawable not exists in RAU get it from apk
-                resolvedPaths[path].name = fileName;
                 resolvedPaths[path].type = Path.FILE_TYPE.DRAWABLE;
-                resolvedPaths[path].path = path;
+                resolvedPaths[path].fullPath = path;
             }
         }
     }
     else{
         // cache normal path too for performance. We dont want to check more.
         resolvedPaths[path].type = Path.FILE_TYPE.FILE;
-        resolvedPaths[path].path = path;
+        resolvedPaths[path].name = path.substring(path.lastIndexOf("/")+1, path.length);
+        resolvedPaths[path].fullPath = path;
     }
     return resolvedPaths[path];
 }
