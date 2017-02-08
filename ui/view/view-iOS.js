@@ -12,7 +12,8 @@ function View(params) {
 
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
-     
+    self.nativeObject.layer.masksToBounds = true;
+    
     Object.defineProperty(self, 'borderColor', {
         get: function() {
             return  self.nativeObject.layer.borderUIColor;

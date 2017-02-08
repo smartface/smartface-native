@@ -70,6 +70,7 @@ const ListView = extend(View)(
         self.nativeObject.cellForRowAt = function(e){   
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
+             listItem.applyLayout();
          }
          
          var templateItem;

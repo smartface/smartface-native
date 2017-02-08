@@ -91,6 +91,7 @@ const Slider = extend(View)(
             enumerable: true
         });
         
+        
         Object.defineProperty(self, 'value', {
             get: function() {
                 return self.nativeObject.value;
@@ -108,16 +109,26 @@ const Slider = extend(View)(
             },
             set: function(value) {
                 _onValueChange = value;
-                self.nativeObject.addJSTarget(value,UIControlEvents.valueChanged);
+                self.nativeObject.addJSTarget(handleValueChange,UIControlEvents.valueChanged);
             },
             enumerable: true
          });
          
-    if (params) {
-        for (var param in params) {
-            this[param] = params[param];
+         var _value = 0;
+         function handleValueChange(){
+             var intValue = Math.round(self.value);
+             self.nativeObject.setValueAnimated(intValue,true);
+             if (_value != intValue){
+                 _value = intValue;
+                 self.onValueChange();
+             }
+         }
+         
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
         }
-    }
 });
      
 module.exports = Slider;
