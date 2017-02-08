@@ -67,7 +67,11 @@ function Page(params) {
         },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
-                activity.getSupportFragmentManager().popBackStackImmediate();
+                if (_headerBarLeftItem) {
+                    _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
+                } else {
+                    activity.getSupportFragmentManager().popBackStackImmediate();
+                }
             } else if (_headerBarItems[menuItem.getItemId()]) {
                 var item = _headerBarItems[menuItem.getItemId()];
                 if (item.onPress instanceof Function) {
@@ -215,7 +219,7 @@ function Page(params) {
     });
 
     var _headerBarHomeEnabled = false;
-    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+    Object.defineProperty(self.headerBar.android, 'displayShowHomeEnabled', {
         get: function() {
             return _headerBarHomeEnabled;
         },
@@ -242,10 +246,8 @@ function Page(params) {
             return _headerBarHomeImage;
         },
         set: function(image) {
-            if (image) {
-                _headerBarHomeImage = image;
-                self.invalidateHeaderBar();
-            }
+            _headerBarHomeImage = image;
+            self.invalidateHeaderBar();
         },
         enumerable: true
     });
@@ -353,6 +355,21 @@ function Page(params) {
         });
     };
 
+    var _headerBarLeftItem = null;
+    self.headerBar.setLeftItem = function (leftItem) {
+        const HeaderBarItem = require("../headerbaritem");
+
+        if (leftItem instanceof HeaderBarItem && leftItem.image) {
+            _headerBarLeftItem = leftItem;
+            self.headerBar.homeAsUpIndicatorImage = _headerBarLeftItem.image;
+            self.headerBar.android.displayShowHomeEnabled = true;
+        } else {
+            _headerBarLeftItem = null;
+            self.headerBar.homeAsUpIndicatorImage = null;
+        }
+        self.invalidateHeaderBar();
+    };
+
     // Deprecated since 0.1
     this.add = function(view){
         self.layout.addChild(view);
@@ -386,14 +403,16 @@ function Page(params) {
                 headerBarNative.setBackgroundDrawable(headerBarColor);
             }
 
-            if (_headerBarHomeImage) {
-                headerBarNative.setHomeAsUpIndicator(_headerBarHomeImage);
-            }
-
             if (_headerBarVisible) {
                 headerBarNative.show();
             } else {
                 headerBarNative.hide();
+            }
+
+            if (_headerBarHomeImage && _headerBarHomeImage.nativeObject) {
+                headerBarNative.setHomeAsUpIndicator(_headerBarHomeImage.nativeObject);
+            } else {
+                headerBarNative.setHomeAsUpIndicator(null);
             }
         }
     }
