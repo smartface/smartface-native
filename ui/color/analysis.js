@@ -109,7 +109,6 @@ Color.YELLOW = (red, green, blue);
  */
 Color.WHITE = (red, green, blue);
 
-// Constructor
 /**
  * Creates a new color with RGB-ARGB or hexadecimal parameters
  * 
@@ -126,6 +125,21 @@ Color.WHITE = (red, green, blue);
  * @since 0.1
  */
 Color.create = function(params){}
+
+/**
+ * @method createGradient
+ *
+ * Creates a gradient color that can be assigned to view's backgroundColor. You
+ * can specify start-end colors and direction of gradient.
+ * 
+ * @param {Object} params
+ * @param {UI.Color.GradientDirection} params.direction Direction of gradient
+ * @param {UI.Color} params.startColor Start color of gradient
+ * @param {UI.Color} params.endColor End color of gradient
+ * @static
+ * @since 0.1
+ */
+Color.createGradient = function(params) {}
 
 // Methods
 /**
@@ -195,6 +209,68 @@ Color.blue = function(color){ return color.blue };
  * @since 0.1
  */
 Color.alpha = function(color){ return color.alpha };
+
+/**
+ * @enum UI.Color.GradientDirection
+ * 
+ * This enumeration describes allowed direction types for gradient color.
+ */
+Color.GradientDirection = {};
+
+Object.defineProperties(Color.GradientDirection, {
+    /**
+     * Indicates gradient color will start from top point with startColor and
+     * will end at bottom point with endColor.
+     * 
+     * @property {UI.Color.GradientDirection} [VERTICAL = 0]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'VERTICAL': {
+        value: 0,
+        writable: false
+    },
+    /**
+     * Indicates gradient color will start from left point with startColor and
+     * will end at right point with endColor.
+     * 
+     * @property {UI.Color.GradientDirection} [HORIZONTAL = 1]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'HORIZONTAL': {
+        value: 1,
+        writable: false
+    },
+    /**
+     * Indicates gradient color will start from top-left point with startColor and
+     * will end at bottom-right point with endColor.
+     * 
+     * @property {UI.Color.GradientDirection} [DIAGONAL_LEFT = 2]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'DIAGONAL_LEFT': {
+        value: 2,
+        writable: false
+    },
+    /**
+     * Indicates gradient color will start from top-right point with startColor and
+     * will end at bottom-left point with endColor.
+     * 
+     * @property {UI.Color.GradientDirection} [DIAGONAL_RIGHT = 3]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'DIAGONAL_RIGHT': {
+        value: 3,
+        writable: false
+    }
+});
 
 // export module
 module.exports = Color;
