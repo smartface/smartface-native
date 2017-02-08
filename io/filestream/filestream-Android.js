@@ -1,7 +1,7 @@
 const File                  = require("nf-core/io/file");
 const Path                  = require("nf-core/io/path");
 const TypeUtil              = require("nf-core/util/type");
-const AndroidConfig         = require("nf-core/util/Android/androidconfig");
+const Blob                  = require('nf-core/global/blob');
 
 function FileStream(params) {
     const NativeBufferedReader = requireClass("java.io.BufferedReader");
@@ -114,8 +114,11 @@ function FileStream(params) {
         },
         'readBlob' : {
             value: function(param){
-                // @todo implement
-                return null
+                const NativeString = requireClass('java.lang.String');
+                var fileContent = this.readToEnd();
+                var byteArray = new NativeString(fileContent).getBytes();
+                // var byteArray = fileContent.getBytes();
+                return new Blob(byteArray, {type:"file"});
             },
             enumarable: true
         },

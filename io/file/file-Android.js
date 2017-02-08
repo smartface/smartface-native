@@ -14,6 +14,7 @@ function File(params) {
     this.nativeObject;
     var resolvedPath = Path.resolve(params.path);
     this.type = resolvedPath.type;
+    this.fullPath = resolvedPath.fullPath;
     
     switch(resolvedPath.type){
         case Path.FILE_TYPE.ASSET:
