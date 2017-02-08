@@ -178,8 +178,7 @@ function View(params) {
     /**
      * // @todo add description.This property will work only if 
      * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
+     *     
      *     // @todo add example
      *
      * @property {Number} [minHeight = 0]   
@@ -569,7 +568,6 @@ function View(params) {
      * @method dirty
      */
     this.dirty = function(){};
-        
 
     /**
      * This method allows getting view to the front.
@@ -608,25 +606,65 @@ function View(params) {
 
     /**
      * Getter of this view's parent view.
+     * 
+     *     @example
+     *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+     *     const Label = require('nf-core/ui/label');
+     *    
+     *     var myAbsoluteLayout = new AbsoluteLayout();
+     *     myAbsoluteLayout.id = 5432;
+     *    
+     *     var myLabel = new Label({
+     *          text: "Smartface Label"
+     *     });
+     *     myAbsoluteLayout.addChild(myLabel);
+     *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
-     * @return {View} Parent view of this view, or null if not exists.
+     * @return {View} Parent view of this view, null if not exists.
      * @method getParent
      * @since 0.1
      */
     this.getParent = function(){};
-    
-    /**
-     * Gets/sets style of view. 
-     * 
-     * @property {Style} style
-     * @member UI.View
-     * @since 0.1
-     * @removed 0.1
-     */
-    this.style = {};
 
     /**
      * This method returns all position values in one object.
+     * 
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     const Button = require('nf-core/ui/button');
+     *     const Label = require('nf-core/ui/label');
+     *     const Switch = require('nf-core/ui/switch');
+     *    
+     *     var myPage1 = new Page();
+     *     var mySwitch = new Switch();
+     *     var myButton = new Button({
+     *         text: "Get Switch Position",
+     *         onPress: buttonPress
+     *     });
+     *     var myLabel = new Label({
+     *         height: "15%",
+     *         width: "80%",
+     *         top: "30%",
+     *         left: "35%"
+     *     });
+     *    
+     *     myPage1.add(myButton);
+     *     myPage1.add(myLabel);
+     *    
+     *     myPage1.statusBar.visible = false;
+     *     var position = {
+     *         height: "15%",
+     *         width: "30%",
+     *         top: "10%",
+     *         left: "35%"
+     *     };
+     *     mySwitch.setPosition(position);
+     *     myPage1.add(mySwitch);
+     *     
+     *     function buttonPress(){
+     *         var viewPosition = mySwitch.getPosition();
+     *         myLabel.text = "Pos = " + viewPosition.width + " "+ viewPosition.height + " "+ viewPosition.top + " "+ viewPosition.left;
+     *     }        
      * 
      * @return {Object} Object with properties:
      * @return {Number} return.width Width value

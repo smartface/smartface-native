@@ -1,122 +1,109 @@
 /**
  * @class UI.Color
  * @since 0.1
- * Color is a UI object to allow creating colors. A Color instance is created by giving
- * integer values(rgb or argb) or hexadecimal string. Each integer component ranges 
- * between 0..255.
+ * Color is used to color UI objects and its elements. A Color instance is created by
+ * passing RGB-ARGB values or hexadecimal string. There are constant and predefined colors as well.
  *
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myRedColor = Color.create(255, 0, 0);
- *     var myBlueColor = Color.create(0, 0, 255);
- *     var myAnotherColor = Color.create("#FFFFAACC");
+ *     var myBlueColorWithAlpha = Color.create(100, 0, 0, 255);
+ *     var myHEXColor = Color.create("#FFAACC");
  */
 function Color () {}
 
 // Constants
 /**
- * Constant value for black color. 
- * 
- * @property {Color} BLACK
+ * @property {UI.Color} BLACK
  * @since 0.1
+ * @readonly
  * @static
  */
 Color.BLACK = (red, green, blue);
 
 /**
- * Constant value for blue color. 
- * 
- * @property {Color} BLUE 
+ * @property {UI.Color} BLUE 
  * @since 0.1
+ * @readonly
  * @static
  */
 Color.BLUE = (red, green, blue);
 
 /**
- * Constant value for cyan color.  
- * 
- * @property {Color} CYAN 
+ * @property {UI.Color} CYAN
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.CYAN = (red, green, blue);
 
 /**
- * Constant value for dark gray color.  
- * 
- * @property {Color} DARKGRAY 
+ * @property {UI.Color} DARKGRAY 
  * @since 0.1
+ * @readonly
  * @static
  */
 Color.DARKGRAY = (red, green, blue);
 
 /**
- * Constant value for gray color.  
- * 
- * @property {Color} GRAY 
+ * @property {UI.Color} GRAY 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.GRAY = (red, green, blue);
 
 /**
- * Constant value for green color.  
- * 
- * @property {Color} GREEN 
+ * @property {UI.Color} GREEN 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.GREEN = (red, green, blue);
 
 /**
- * Constant value for light gray color.  
- * 
- * @property {Color} LIGHTGRAY 
+ * @property {UI.Color} LIGHTGRAY 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.LIGHTGRAY = (red, green, blue);
 
 /**
- * Constant value for magenta color.  
- * 
- * @property {Color} MAGENTA 
+ * @property {UI.Color} MAGENTA 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.MAGENTA = (red, green, blue);
 
 /**
- * Constant value for red color. 
- * 
- * @property {Color} RED 
+ * @property {UI.Color} RED 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.RED = (red, green, blue);
 
 /**
- * Constant value for transparent color.  
- * 
- * @property {Color} TRANSPARENT 
+ * @property {UI.Color} TRANSPARENT
+ * @readonly 
  * @since 0.1
  * @static
  */
 Color.TRANSPARENT = (red, green, blue);
 
 /**
- * Constant value for yellow color.  
- * 
- * @property {Color} YELLOW 
+ * @property {UI.Color} YELLOW 
+ * @readonly
  * @since 0.1
  * @static
  */
 Color.YELLOW = (red, green, blue);
 
 /**
- * Constant value for white color.  
- * 
- * @property {Color} WHITE 
+ * @property {UI.Color} WHITE 
+ * @readonly
  * @since 0.1
  * @static
  */
@@ -124,20 +111,16 @@ Color.WHITE = (red, green, blue);
 
 // Constructor
 /**
- * Create a new color with the specified red, green, blue and alpha values.
+ * Creates a new color with RGB-ARGB or hexadecimal parameters
  * 
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myARGBColor = Color.create(0, 0, 0, 255);
  *     var myRGBColor = Color.create(255, 255, 255);
  *     var myHexColor = Color.create("#ff0000");
  *
- * @param {Object} params Object describing color values
- * @param {String} [params.hex] Hexadecimal value of the color
- * @param {Number} [params.alpha] Alpha component [0..255] of the color
- * @param {Number} [params.red] Red component [0..255] of the color
- * @param {Number} [params.green] Green component [0..255] of the color
- * @param {Number} [params.blue] Blue component [0..255] of the color
+ * @param {...} parameters RGB-ARGB sequence or Hexadecimal string
+ * @return {UI.Color} A color instance.
  * @static
  * @method create
  * @since 0.1
@@ -146,10 +129,16 @@ Color.create = function(params){}
 
 // Methods
 /**
- * Return the red component of a color object. 
+ * Returns the red value of a color instance.
  * 
- * @param {Color} color Representation of a color object
- * @return {Number} Return the red component of a color object.
+ *     @example
+ *     const Color = require('nf-core/ui/color');
+ *     var myRGBColor = Color.create(99, 0, 0);
+ *     var red = Color.red(myRGBColor);
+ *     alert(red);
+ * 
+ * @param {UI.Color} color A color instance.
+ * @return {Number} An integer between 0-255.
  * @static
  * @method red
  * @since 0.1
@@ -157,10 +146,16 @@ Color.create = function(params){}
 Color.red = function(color){ return color.red };
 
 /**
- * Return the green component of a color object. 
+ * Returns the green value of a color instance.
  * 
- * @param {Color} color Representation of a color object
- * @return {Number} Return the green component of a color object.
+ *     @example
+ *     const Color = require('nf-core/ui/color');
+ *     var myRGBColor = Color.create(0, 171, 0);
+ *     var green = Color.green(myRGBColor);
+ *     alert(green);
+ * 
+ * @param {UI.Color} color A color instance.
+ * @return {Number} An integer between 0-255.
  * @static
  * @method green
  * @since 0.1
@@ -168,15 +163,16 @@ Color.red = function(color){ return color.red };
 Color.green = function(color){ return color.green };
 
 /**
- * Return the blue component of a color object. 
+ * Returns the blue value of a color instance.
  *  
  *     @example
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     var myRGBColor = Color.create(0, 0, 155);
  *     var blue = Color.blue(myRGBColor);
+ *     alert(blue);
  * 
- * @param {Color} color Representation of a color object
- * @return {Number} Return the blue component of a color object.
+ * @param {UI.Color} color A color instance.
+ * @return {Number} An integer between 0-255.
  * @static
  * @method blue
  * @since 0.1
@@ -184,15 +180,16 @@ Color.green = function(color){ return color.green };
 Color.blue = function(color){ return color.blue };
 
 /**
- * Return the alpha component of a color object. 
+ * Returns the alpha value of a color instance.
  *  
  *     @example
- *     const Color = require('sf-core/ui/color');
- *     var myARGBColor = Color.create(0, 0, 0, 255);
+ *     const Color = require('nf-core/ui/color');
+ *     var myARGBColor = Color.create(42, 0, 0, 255);
  *     var alpha = Color.alpha(myARGBColor);
+ *     console.log(alpha);
  * 
- * @param {Color} color Representation of a color object
- * @return {Number} Return the alpha component of a color object.
+ * @param {UI.Color} color A color instance.
+ * @return {Number} An integer between 0-255.
  * @static
  * @method alpha
  * @since 0.1
