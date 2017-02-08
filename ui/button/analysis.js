@@ -80,20 +80,20 @@ const Button = extend(View)(
          * Gets/sets background image. Assign an image or a mapping from states to images.
          * 
          *     @example
+         *     const Image = require('nf-core/ui/image');
          *     const Button = require('nf-core/ui/button');
          *     var myButton = new Button();
          *     myButton.backgroundImage = {
-         *         normal: "assets://normal.png",
-         *         disabled: "assets://disabled.png",
-         *         selected:"assets://selected.png",
-         *         pressed: "assets://pressed.png",
-         *         focused: "assets://focused.png"
+         *         normal: Image.createFromFile("assets://normal.png"),
+         *         disabled: Image.createFromFile("assets://disabled.png"),
+         *         pressed: Image.createFromFile("assets://pressed.png"),
          *     };   
          *     myButton.text = "First button text";
          * 
          *     var myButton2 = new Button();
-         *     myButton2.backgroundImage = "assets://normal.png";
+         *     myButton2.backgroundImage = Image.createFromFile("assets://normal.png");
          *     myButton2.text = "Second button text";
+         *
          * @since 0.1
          * @property {Object} backgroundImage
          */
