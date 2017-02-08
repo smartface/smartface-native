@@ -81,13 +81,18 @@ const ListView = extend(View)(
              return lisviewItem.nativeObject;
          }
          
-         self.createTemplate = function(e){
+        self.createTemplate = function(e){
             var tempTemplateItem = templateItem;
             templateItem.nativeObject = e.contentView;
-                for (var template in templateItem.childs){
-                  tempTemplateItem.childs[template].nativeObject = e.contentView.viewWithTag(tempTemplateItem.childs[template].id);
-                }
+            setAllChilds(templateItem);
             return tempTemplateItem;
+         }
+         
+        function setAllChilds(item){
+             for (var child in item.childs){
+                item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
+                setAllChilds(item.childs[child]);
+             }
          }
          
         self.nativeObject.didSelectRowAt = function(e){
