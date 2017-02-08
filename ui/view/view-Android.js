@@ -266,7 +266,6 @@ function View(params) {
         setBackground(0);
     }
     
-    // @todo no ENUM support
     function setBorder(){
         var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
         if(dp_borderWidth > 0)  {
