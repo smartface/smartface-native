@@ -82,11 +82,10 @@ const ListView = extend(View)(
          }
          
         self.createTemplate = function(e){
-            var tempTemplateItem = templateItem;
             templateItem.nativeObject = e.contentView;
             setAllChilds(templateItem);
-            return tempTemplateItem;
-         }
+            return templateItem;
+        }
          
         function setAllChilds(item){
              for (var child in item.childs){
