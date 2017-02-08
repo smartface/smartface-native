@@ -365,7 +365,6 @@ function Page(params) {
         } else {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
-            self.headerBar.android.displayShowHomeEnabled = false;
         }
         self.invalidateHeaderBar();
     };
