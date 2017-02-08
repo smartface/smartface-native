@@ -30,6 +30,22 @@ const ListView = extend(View)(
             self.refreshControl.endRefreshing();
         }
         
+        var _refreshEnabled = true;
+        Object.defineProperty(self, 'refreshEnabled', {
+            get: function() {
+                return _refreshEnabled;
+            },
+            set: function(value) {
+                _refreshEnabled = value;
+                if (value){
+                    self.nativeObject.addSubview(self.refreshControl);
+                }else{
+                    self.refreshControl.removeFromSuperview();
+                }
+            },
+            enumerable: true
+         });
+          
         Object.defineProperty(self.ios, 'swipeItems', {
             get: function() {
                 return self.nativeObject.rowActions;
