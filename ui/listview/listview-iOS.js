@@ -10,6 +10,7 @@ const ListView = extend(View)(
             self.nativeObject = new SMFUITableView();
             self.refreshControl = new UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
+            self.nativeObject.separatorStyle = 0;
         }
         
         _super(this);

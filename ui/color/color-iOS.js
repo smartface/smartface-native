@@ -40,4 +40,17 @@ Color.alpha = function(color){
     return Math.round(color.components().alpha*255);
 };
 
+Color.createGradient = function(params){
+    if (params.direction == 0){ //topToBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 0, y: 1});
+    }else if (params.direction == 1){ //leftToRight
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 1, y: 0});
+    }
+    else if (params.direction == 2){ //topLeftToRightBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 1, y: 1});
+    }else{ //topRightToLeftBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 1, y: 0}, {x: 0, y: 1});
+    }
+}
+
 module.exports = Color;
