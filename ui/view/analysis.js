@@ -59,6 +59,14 @@ function View(params) {
     this.borderWidth = 0;
 
     /**
+     * Sets/gets border radius of bounded view.
+     * 
+     * @property {Number} borderRadius
+     * @since 0.1
+     */
+    this.borderRadius = 0;
+
+    /**
      * Gets/sets id of view. Should be unique number for all objects
      * inside project.
      * 
@@ -498,18 +506,6 @@ function View(params) {
      * @since 0.1
      */
     this.borderRightWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderWidth = 0]   
-     * @since 0.1
-     */
-    this.borderWidth = 0;
     
     /**
      * // @todo add description.This property will work only if 
