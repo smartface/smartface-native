@@ -161,44 +161,19 @@ function FileStream(params) {
  *
  */
 FileStream.StreamType = {};
-
-/**
- * @property {Number} APPEND
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FileStream.StreamType, 'APPEND', {
-    value: 0,
-    writable: false
-});
-
-/**
- * @property {Number} READ
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FileStream.StreamType, 'READ', {
-    value: 1,
-    writable: false
-});
-
-/**
- * @property {Number} WRITE
- * // @todo add description.
- * 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FileStream.StreamType, 'WRITE', {
-    value: 2,
-    writable: false
+Object.defineProperties(FileStream.StreamType, {
+    'APPEND': {
+        value: 0,
+        writable: false
+    },
+    'READ': {
+        value: 1,
+        writable: false
+    },
+    'WRITE': {
+        value: 2,
+        writable: false
+    }
 });
 
 
