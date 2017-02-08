@@ -103,7 +103,7 @@ function Page(params) {
      * @since 0.1
      */
     this.statusBar;
-    
+
     /**
      * Gets header bar object for page. This property is readonly, you can not
      * set header bar to a page but you can change properties of page's header bar.

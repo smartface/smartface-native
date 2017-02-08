@@ -157,4 +157,22 @@ function HeaderBar() {
      * @since 0.1
      */
     this.setItems = function(items) {};
+
+    /**
+     * Sets left item of header bar to given item.
+     *
+     *     @example
+     *      const Page = require('nf-core/ui/page');
+     *      const HeaderBarItem = require('nf-core/ui/headerbaritem');
+     *      var myPage = new Page();
+     *      myPage.onLoad = function(e){
+     *          var leftItem = new HeaderBarItem();
+     *          leftItem.title = "Left Item";
+     *          myPage.headerBar.setLeftItem(leftItem);
+     *      }
+     * 
+     * @method setLeftItem
+     * @param {UI.HeaderBarItem} item HeaderBarItem to add.
+     */
+    this.setLeftItem = function(item){};
 }
