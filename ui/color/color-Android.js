@@ -5,9 +5,9 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 
 Color.GradientDirection = {};
 Color.GradientDirection.VERTICAL = 0;
-Color.GradientDirection.HORIZONTAL = 0;
-Color.GradientDirection.DIAGONAL_LEFT = 0;
-Color.GradientDirection.DIAGONAL_RIGHT = 0;
+Color.GradientDirection.HORIZONTAL = 1;
+Color.GradientDirection.DIAGONAL_LEFT = 2;
+Color.GradientDirection.DIAGONAL_RIGHT = 3;
 
 const GradientDrawableDirection = [
     NativeGradientDrawable.Orientation.TOP_BOTTOM,
