@@ -95,6 +95,8 @@ const FlexLayout = extend(ViewGroup)(
             enumerable: true
         });
         
+        this.alignItems = FlexLayout.AlignItems.FLEX_START;
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

@@ -59,7 +59,7 @@ const ListView = extend(View)(
           
         Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
-                self.refreshControl.addJSTarget(value,UIControlEvents.valueChanged);
+                self.refreshControl.addJSTarget(value.bind(this),UIControlEvents.valueChanged);
             },
             enumerable: true
           });

@@ -79,7 +79,7 @@ const Switch = extend(View)(
                 return onToggleChangedCallback;
             },
             set: function(onToggleChanged) {
-                onToggleChangedCallback = onToggleChanged;
+                onToggleChangedCallback = onToggleChanged.bind(this);
             },
             enumerable: true
         });

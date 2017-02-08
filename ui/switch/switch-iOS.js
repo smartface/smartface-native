@@ -64,17 +64,12 @@ const Switch = extend(View)(
                 return _onToggleChanged;
             },
             set: function(value) {
-                _onToggleChanged = value;
-                var functionWithListener = function(){
-                    value();
-                }
-                self.nativeObject.addJSTarget(functionWithListener,UIControlEvents.valueChanged);
+                _onToggleChanged = value.bind(this);
+                self.nativeObject.addJSTarget(_onToggleChanged,UIControlEvents.valueChanged);
             },
             enumerable: true
-         });
-        
-        self.onToggleChanged = function(){};
-        
+        });
+                
         self.android = {};
         // Assign parameters given in constructor
         if (params) {

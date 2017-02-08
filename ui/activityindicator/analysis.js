@@ -12,7 +12,8 @@ const View = require('../view');
  *     const ActivityIndicator = require('nf-core/ui/activityindicator');
  *     
  *     var myActivityIndicator = new ActivityIndicator({
- *         top: 100, left: 50
+ *         top: 100,
+ *         left: 50
  *     });
  *     
  *     myPage.layout.addChild(myActivityIndicator);
