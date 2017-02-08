@@ -48,7 +48,7 @@ function View(params) {
             return self.nativeObject.backgroundColor;
         },
         set: function(value) {
-            if (value.constructor.name == "CAGradientLayer"){
+            if (value.constructor.name === "CAGradientLayer"){
                 self.applyLayout();
                 value.frame = self.nativeObject.frame;
                 self.nativeObject.backgroundColor = value.layerToColor();
