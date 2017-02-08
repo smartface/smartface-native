@@ -52,7 +52,7 @@ function HeaderBar() {
      * @property {UI.Color} [backgroundColor = Color.create("#00A1F1")]
      * @since 0.1
      */
-    this.headerBar.backgroundColor = Color.create("#00A1F1");
+    this.backgroundColor = Color.create("#00A1F1");
 
     /**
      * Gets/sets background image of the headerBar.
@@ -69,7 +69,7 @@ function HeaderBar() {
      * @property {UI.Image} [backgroundImage = null]
      * @since 0.1
      */
-    this.headerBar.backgroundImage = null;
+    this.backgroundImage = null;
 
     /**
      * Gets/sets the navigation indicator visibility of the headerBar.
@@ -79,7 +79,7 @@ function HeaderBar() {
      * @property {Boolean} [displayShowHomeEnabled = false]
      * @since 0.1
      */
-    this.headerBar.displayShowHomeEnabled = false;
+    this.displayShowHomeEnabled = false;
 
     /**
      * Gets the height of the header bar. Height is a read only property and
@@ -89,7 +89,7 @@ function HeaderBar() {
      * @readonly
      * @since 0.1
      */
-    this.headerBar.height;
+    this.height;
 
     /**
      * Gets/sets home as up indicator image which will shown with home as up 
@@ -106,7 +106,7 @@ function HeaderBar() {
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
      * @since 0.1
      */
-    this.headerBar.android.homeAsUpIndicatorImage = null;
+    this.android.homeAsUpIndicatorImage = null;
 
     /**
      * Gets/sets subtitle of the header bar. If not set subtitle will not show.
@@ -120,7 +120,7 @@ function HeaderBar() {
      * @property {String} subtitle
      * @since 0.1
      */
-    this.headerBar.android.subtitle = '';
+    this.android.subtitle = '';
 
     /**
      * Gets/sets title of the header bar.
@@ -128,7 +128,7 @@ function HeaderBar() {
      * @property {String} title
      * @since 0.1
      */
-    this.headerBar.title = '';
+    this.title = '';
 
     /**
      * Gets/sets title color of the header bar.
@@ -136,7 +136,7 @@ function HeaderBar() {
      * @property {UI.Color} [titleColor = Color.BLACK]
      * @since 0.1
      */
-    this.headerBar.titleColor = Color.BLACK;
+    this.titleColor = Color.BLACK;
 
     /**
      * Gets/sets visibility of the header bar.
@@ -144,7 +144,7 @@ function HeaderBar() {
      * @property {boolean} [visible = true]
      * @since 0.1
      */
-    this.headerBar.visible = true;
+    this.visible = true;
 
     /**
      * This function allows you to set header bar items to page's headerBar.
@@ -156,5 +156,5 @@ function HeaderBar() {
      * @param {Array<UI.HeaderBarItem>} items Array of HeaderBarItem objects to add
      * @since 0.1
      */
-    this.headerBar.setItems = function(items) {};
+    this.setItems = function(items) {};
 }

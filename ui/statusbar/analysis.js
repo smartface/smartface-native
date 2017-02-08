@@ -53,7 +53,7 @@ function StatusBar(parentPage) {
      * @property {UI.Color} color
      * @since 0.1
      */
-    this.statusBar.android.color = Color.create("#FF757575");
+    this.android.color = Color.create("#FF757575");
 
     /**
      * Gets/sets status bar style. This property will work only for iOS
@@ -70,5 +70,5 @@ function StatusBar(parentPage) {
      * @property {UI.StatusBarStyle} style
      * @since 0.1
      */
-    this.statusBar.ios.style = StatusBarStyle.DEFAULT;
+    this.ios.style = StatusBarStyle.DEFAULT;
 }
