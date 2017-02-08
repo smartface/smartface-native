@@ -222,7 +222,7 @@ const Button = extend(Label)(
         
         self.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
             onLongClick : function(view){
-                onLongPressCallback && onLongPressCallback();
+                onLongPressCallback && onLongPressCallback.apply(self);
             }
         }));
         

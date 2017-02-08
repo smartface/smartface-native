@@ -123,7 +123,7 @@ const TextBox = extend(Label)(
                 return _onTextChangedCallback;
             },
             set: function(onTextChanged) {
-                _onTextChangedCallback = onTextChanged;
+                _onTextChangedCallback = onTextChanged.bind(this);
             },
             enumerable: true
         });
@@ -134,7 +134,7 @@ const TextBox = extend(Label)(
                 return _onEditBeginsCallback;
             },
             set: function(onEditBegins) {
-                _onEditBeginsCallback = onEditBegins;
+                _onEditBeginsCallback = onEditBegins.bind(this);
             },
             enumerable: true
         });
@@ -145,7 +145,7 @@ const TextBox = extend(Label)(
                 return _onEditEndsCallback;
             },
             set: function(onEditEnds) {
-                _onEditEndsCallback = onEditEnds;
+                _onEditEndsCallback = onEditEnds.bind(this);
             },
             enumerable: true
         });
@@ -156,7 +156,7 @@ const TextBox = extend(Label)(
                 return _onActionButtonCallback;
             },
             set: function(onActionButtonPress) {
-                _onActionButtonCallback = onActionButtonPress;
+                _onActionButtonCallback = onActionButtonPress.bind(this);
             },
             enumerable: true
         });

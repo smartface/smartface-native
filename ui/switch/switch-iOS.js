@@ -13,29 +13,25 @@ const Switch = extend(View)(
          
        _super(this);
        
-       self.nativeObject.thumbTintColor = Color.GRAY; //thumbOffColor
+       self.nativeObject.thumbTintColor = Color.GREEN; //thumbOffColor
        self.nativeObject.onTintColor = Color.GRAY; // toggleOnColor
        
-       var _thumbOnColor = Color.GREEN;
-       Object.defineProperty(self, 'thumbOnColor', {
+       Object.defineProperty(self, 'enabled', {
             get: function() {
-                return _thumbOnColor;
+                return self.nativeObject.setEnabled;
             },
             set: function(value) {
-                _thumbOnColor = value;
-                self.changeThumbTint();
+                self.nativeObject.setEnabled = value;
             },
             enumerable: true
-         });
-         
-       var _thumbOffColor = Color.GRAY;
-       Object.defineProperty(self, 'thumbOffColor', {
+        });
+        
+       Object.defineProperty(self, 'thumbOnColor', {
             get: function() {
-                return _thumbOffColor;
+                return self.nativeObject.thumbTintColor;
             },
             set: function(value) {
-                _thumbOffColor = value;
-                self.changeThumbTint();
+               self.nativeObject.thumbTintColor = value;
             },
             enumerable: true
          });
@@ -58,7 +54,6 @@ const Switch = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.setOnAnimated(value,true);
-                self.changeThumbTint();
             },
             enumerable: true
          });
@@ -69,26 +64,13 @@ const Switch = extend(View)(
                 return _onToggleChanged;
             },
             set: function(value) {
-                _onToggleChanged = value;
-                var functionWithListener = function(){
-                    value();
-                    self.changeThumbTint();
-                }
-                self.nativeObject.addJSTarget(functionWithListener,UIControlEvents.valueChanged);
+                _onToggleChanged = value.bind(this);
+                self.nativeObject.addJSTarget(_onToggleChanged,UIControlEvents.valueChanged);
             },
             enumerable: true
-         });
-        
-        self.changeThumbTint = function(){
-            if (self.toggle) {
-                self.nativeObject.thumbTintColor = self.thumbOnColor;
-            }else{
-                self.nativeObject.thumbTintColor = self.thumbOffColor;
-            }
-        };
-        
-        self.onToggleChanged = function(){};
-        
+        });
+                
+        self.android = {};
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

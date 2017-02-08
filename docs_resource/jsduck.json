@@ -10,6 +10,5 @@
           "ga('create', 'UA-40954643-6', 'auto');",
           "ga('send', 'pageview');",
         "</script>"
-    ],
-    "--welcome": "welcome.html"
+    ]
 }

@@ -79,7 +79,7 @@ const Switch = extend(View)(
                 return onToggleChangedCallback;
             },
             set: function(onToggleChanged) {
-                onToggleChangedCallback = onToggleChanged;
+                onToggleChangedCallback = onToggleChanged.bind(this);
             },
             enumerable: true
         });
@@ -114,6 +114,13 @@ const Switch = extend(View)(
         self.thumbOffColor = Color.GRAY;
         self.toggleOnColor = Color.GRAY;
         self.android.toggleOffColor = Color.GRAY;
+
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
     }
 );
 

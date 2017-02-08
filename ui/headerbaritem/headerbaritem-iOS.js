@@ -14,7 +14,7 @@ function HeaderBarItem(params) {
     Object.defineProperties(this, {
         'title': {
             get: function() {
-                self.nativeObject.title;
+                return self.nativeObject.title;
             },
             set: function(value) {
                 if (typeof(value) !== "string") {
@@ -53,7 +53,7 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if (value instanceof Function) {
-                    _onPress = value;
+                    _onPress = value.bind(this);
                     self.nativeObject.addJSAction(_onPress);
                 }
             },

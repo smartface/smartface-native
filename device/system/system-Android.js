@@ -5,20 +5,18 @@ const NativeBatteryManager = requireClass('android.os.BatteryManager');
 const NativeContext        = requireClass('android.content.Context');
 const NativeClipData       = requireClass('android.content.ClipData');
 const NativeViewConfig     = requireClass('android.view.ViewConfiguration');
-// const NativeLocale         = requireClass('java.util.Locale'); // TODO: open after fixing [AND-2592]
+const NativeLocale         = requireClass('java.util.Locale');
 
 const System = {};
 System.android = {};
 
 Object.defineProperties(System, {
-    // TODO: open after fixing [AND-2592]
-    // 'language': {
-    //     get: function() {
-    //         return NativeLocale.getDefault().getDisplayLanguage();
-    //     },
-    //     configurable: false
-    // }
-
+    'language': {
+        get: function() {
+            return NativeLocale.getDefault().getDisplayLanguage();
+        },
+        configurable: false
+    },
     'OS': {
         get: function() {
             return "Android";
