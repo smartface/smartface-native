@@ -28,6 +28,16 @@ const Slider = extend(View)(
          self.nativeObject.minimumValue = 0;
          self.nativeObject.maximumValue = 100;
          
+         Object.defineProperty(self, 'enabled', {
+            get: function() {
+                return self.nativeObject.setEnabled;
+            },
+            set: function(value) {
+                self.nativeObject.setEnabled = value;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'thumbColor', {
             get: function() {
                 return self.nativeObject.thumbTintColor;
