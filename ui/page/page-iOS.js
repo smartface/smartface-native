@@ -89,6 +89,9 @@ function Page(params) {
         },
         enumerable: true
     });
+
+    // Prevent undefined is not an object error
+    this.statusBar.android = {};
         
     //Deprecated
     self.add = function(object){
