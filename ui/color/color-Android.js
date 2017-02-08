@@ -21,11 +21,12 @@ function Color (params) {
     self.isGradient = false;
     if(params) {
         var colors = [params.startColor, params.endColor];
-        var index = params.direction;
-        if(!self.nativeObject){
-            self.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], colors);
-            self.isGradient = true;
-        }
+        var index = 0;
+        if(params.direction)
+            index = params.direction;
+        self.colors = colors;
+        self.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], colors);
+        self.isGradient = true;
     }
 }
 
