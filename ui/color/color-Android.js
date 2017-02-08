@@ -1,8 +1,34 @@
 const TypeUtil = require("nf-core/util/type");
 
 const NativeColor = requireClass("android.graphics.Color");
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 
-function Color () {}
+Color.GradientDirection = {};
+Color.GradientDirection.VERTICAL = 0;
+Color.GradientDirection.HORIZONTAL = 1;
+Color.GradientDirection.DIAGONAL_LEFT = 2;
+Color.GradientDirection.DIAGONAL_RIGHT = 3;
+
+const GradientDrawableDirection = [
+    NativeGradientDrawable.Orientation.TOP_BOTTOM,
+    NativeGradientDrawable.Orientation.LEFT_RIGHT,
+    NativeGradientDrawable.Orientation.TL_BR,
+    NativeGradientDrawable.Orientation.TR_BL
+];
+
+function Color (params) {
+    var self = this;
+    self.isGradient = false;
+    if(params) {
+        var colors = [params.startColor, params.endColor];
+        var index = 0;
+        if(params.direction)
+            index = params.direction;
+        self.colors = colors;
+        self.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], colors);
+        self.isGradient = true;
+    }
+}
 
 Color.BLACK = NativeColor.BLACK;
 Color.BLUE = NativeColor.BLUE;
@@ -16,6 +42,10 @@ Color.RED = NativeColor.RED;
 Color.TRANSPARENT = NativeColor.TRANSPARENT;
 Color.YELLOW = NativeColor.YELLOW;
 Color.WHITE = NativeColor.WHITE;
+
+Color.createGradient = function(e){
+    return (new Color(e));
+};
 
 Color.create = function(param1, param2, param3, param4){
     if (arguments.length == 1) {

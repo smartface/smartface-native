@@ -53,6 +53,7 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
+            setListenButtonBack();
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
@@ -436,6 +437,24 @@ function Page(params) {
             return NativeHtml.fromHtml("<font color='" + color + "'>" + text + "</font>");
         }
     }
+
+    function setListenButtonBack() {
+        const NativeView = requireClass('android.view.View');
+        self.nativeObject.getView().setFocusableInTouchMode(true);
+        self.nativeObject.getView().requestFocus();
+        self.nativeObject.getView().setOnKeyListener(NativeView.OnKeyListener.implement({
+            onKey: function( view, keyCode, keyEvent) {
+                if (self.isShowing && isBackButtonEnabled) {
+                    const NativeKeyEvent = requireClass('android.view.KeyEvent');
+                    if( keyCode === NativeKeyEvent.KEYCODE_BACK
+                     && keyEvent.getAction() === NativeKeyEvent.ACTION_DOWN) {
+                        activity.getSupportFragmentManager().popBackStackImmediate();
+                    }
+                }
+                return true;
+            }
+        }));
+    };
 
     // Default values
     self.statusBar.visible = true;

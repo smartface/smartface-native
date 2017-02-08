@@ -30,6 +30,22 @@ const ListView = extend(View)(
             self.refreshControl.endRefreshing();
         }
         
+        var _refreshEnabled = true;
+        Object.defineProperty(self, 'refreshEnabled', {
+            get: function() {
+                return _refreshEnabled;
+            },
+            set: function(value) {
+                _refreshEnabled = value;
+                if (value){
+                    self.nativeObject.addSubview(self.refreshControl);
+                }else{
+                    self.refreshControl.removeFromSuperview();
+                }
+            },
+            enumerable: true
+         });
+          
         Object.defineProperty(self.ios, 'swipeItems', {
             get: function() {
                 return self.nativeObject.rowActions;
@@ -71,6 +87,7 @@ const ListView = extend(View)(
         self.nativeObject.cellForRowAt = function(e){   
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
+             listItem.applyLayout();
          }
          
          var templateItem;
@@ -80,13 +97,17 @@ const ListView = extend(View)(
              return lisviewItem.nativeObject;
          }
          
-         self.createTemplate = function(e){
-            var tempTemplateItem = templateItem;
+        self.createTemplate = function(e){
             templateItem.nativeObject = e.contentView;
-                for (var template in templateItem.childs){
-                  tempTemplateItem.childs[template].nativeObject = e.contentView.viewWithTag(tempTemplateItem.childs[template].id);
-                }
-            return tempTemplateItem;
+            setAllChilds(templateItem);
+            return templateItem;
+        }
+         
+        function setAllChilds(item){
+             for (var child in item.childs){
+                item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
+                setAllChilds(item.childs[child]);
+             }
          }
          
         self.nativeObject.didSelectRowAt = function(e){

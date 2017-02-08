@@ -55,4 +55,112 @@ Object.defineProperty(ImageFillType, 'ASPECTFIT', {
     writable: false
 });
 
+/**
+ * @property {Number} TOPLEFT
+ * The source image position will be top center.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'TOPLEFT', {
+    value: 3,
+    writable: false
+});
+
+/**
+ * @property {Number} TOPCENTER
+ * The source image position will be top center.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'TOPCENTER', {
+    value: 4,
+    writable: false
+});
+
+/**
+ * @property {Number} TOPRIGHT
+ * The source image position will be top right.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'TOPRIGHT', {
+    value: 5,
+    writable: false
+});
+
+/**
+ * @property {Number} MIDLEFT
+ * The source image position will be mid left.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'MIDLEFT', {
+    value: 6,
+    writable: false
+});
+
+/**
+ * @property {Number} MIDCENTER
+ * The source image position will be mid center.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'MIDCENTER', {
+    value: 7,
+    writable: false
+});
+
+/**
+ * @property {Number} MIDRIGHT
+ * The source image position will be mid right.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'MIDRIGHT', {
+    value: 8,
+    writable: false
+});
+
+/**
+ * @property {Number} BOTTOMLEFT
+ * The source image position will be bottom left.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'BOTTOMLEFT', {
+    value: 9,
+    writable: false
+});
+
+/**
+ * @property {Number} BOTTOMCENTER
+ * The source image position will be bottom center.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'BOTTOMCENTER', {
+    value: 10,
+    writable: false
+});
+
+/**
+ * @property {Number} BOTTOMRIGHT
+ * The source image position will be bottom right.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(ImageFillType, 'BOTTOMRIGHT', {
+    value: 11,
+    writable: false
+});
+
 module.exports = ImageFillType;

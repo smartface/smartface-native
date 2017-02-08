@@ -12,7 +12,8 @@ function View(params) {
 
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
-     
+    self.nativeObject.layer.masksToBounds = true;
+    
     Object.defineProperty(self, 'borderColor', {
         get: function() {
             return  self.nativeObject.layer.borderUIColor;
@@ -606,7 +607,7 @@ function View(params) {
             // Native object's layer must be updated!
             // Yoga's borderWidth property only effects positioning of its child view.
             self.nativeObject.layer.borderWidth = value;
-            self.nativeObject.yoga.borderWidth = value;
+            //self.nativeObject.yoga.borderWidth = value;
         },
         enumerable: true
     });
