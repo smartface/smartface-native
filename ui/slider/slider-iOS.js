@@ -118,7 +118,7 @@ const Slider = extend(View)(
                 return _onValueChange;
             },
             set: function(value) {
-                _onValueChange = value;
+                _onValueChange = value.bind(this);
                 self.nativeObject.addJSTarget(handleValueChange,UIControlEvents.valueChanged);
             },
             enumerable: true

@@ -67,7 +67,7 @@ const ListView = extend(View)(
                     return _onRowCreate;
                 },
                 set: function(onRowCreate) {
-                    _onRowCreate = onRowCreate;
+                    _onRowCreate = onRowCreate.bind(this);
                 },
                 enumerable: true
             }, 
@@ -76,7 +76,7 @@ const ListView = extend(View)(
                     return _onRowBind;
                 },
                 set: function(onRowBind) {
-                    _onRowBind = onRowBind;
+                    _onRowBind = onRowBind.bind(this);
                 },
                 enumerable: true
             },
@@ -94,7 +94,7 @@ const ListView = extend(View)(
                     return _onRowSelected;
                 },
                 set: function(onRowSelected) {
-                    _onRowSelected = onRowSelected;
+                    _onRowSelected = onRowSelected.bind(this);
                 },
                 enumerable: true
             },
@@ -122,7 +122,7 @@ const ListView = extend(View)(
                     return _onScroll;
                 },
                 set: function(onScroll) {
-                    _onScroll = onScroll;
+                    _onScroll = onScroll.bind(this);
                     if(onScroll){
                         self.nativeObject.setOnScrollListener(onScrollListener);
                     }
