@@ -3,25 +3,30 @@
  * @static
  * @since 0.1
  *
- * KeyboardAppearance is an enum. It defines keyboard appearance theme.
- * KeyboardAppearance works only for iOS
+ * KeyboardAppearance is an enum. It defines keyboard appearance theme on iOS devices only.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
- *     const KeyboardAppearance = require('sf-core/ui/keyboardappearance');
+ *     const Color = require('nf-core/ui/color');
+ *     const TextBox = require('nf-core/ui/textbox');
+ *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
+ * 
  *     var myTextBox = new TextBox({
- *         hint: "Smartface TextBox",
+ *         top: 50, left:50, width: 100, height: 80,
+ *         hint: "hint",
+ *         backgroundColor: Color.create("#67fcaa"),
  *         ios: {
  *             KeyboardAppearance: KeyboardAppearance.DARK
  *         }
  *     });
+ * 
+ *     myPage.layout.addChild(myTextBox);
  *
  */
 var KeyboardAppearance = { };
 
 /**
  * @property {Number} DEFAULT
- * Default colored keyboard appearance. This constant corresponds to the light value.
+ * Default colored keyboard appearance. This constant corresponds to UI.KeyboardAppearance.LIGHT.
  * @static
  * @readonly
  * @since 0.1

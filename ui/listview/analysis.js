@@ -8,18 +8,18 @@ const extend = require('js-base/core/extend');
  * The UI.ListViewController is used for managing ListView.
  *
  *     @example
- *     const Pages = require('sf-core/ui/pages');
- *     const Page = require('sf-core/ui/page');
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     const Color = require('sf-core/ui/color');
- *     const ListView = require('sf-core/ui/listview');
- *     const ListViewItem = require('sf-core/ui/listviewitem');
- *     const ListViewController = require('sf-core/ui/listviewcontroller');
- *     const Label = require('sf-core/ui/label');
- *     const Font = require('sf-core/ui/font');
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
- *     const ImageFillType = require('sf-core/ui/imagefilltype');
+ *     const Pages = require('nf-core/ui/pages');
+ *     const Page = require('nf-core/ui/page');
+ *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     const Color = require('nf-core/ui/color');
+ *     const ListView = require('nf-core/ui/listview');
+ *     const ListViewItem = require('nf-core/ui/listviewitem');
+ *     const ListViewController = require('nf-core/ui/listviewcontroller');
+ *     const Label = require('nf-core/ui/label');
+ *     const Font = require('nf-core/ui/font');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     const Image = require('nf-core/ui/image');
+ *     const ImageFillType = require('nf-core/ui/imagefilltype');
  *     
  *     var myImage1 = Image.createFromFile('assets://image1.png');
  *     var myImage2 = Image.createFromFile('assets://image2.png');

@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const ImageFillType = require('nf-core/ui/imagefilltype');
+const Image = require("nf-core/ui/image");
 
 const UIViewContentMode = {
     scaleToFill : 0,
@@ -33,10 +34,10 @@ const ImageView = extend(View)(
           
         Object.defineProperty(self, 'image', {
             get: function() {
-                return self.nativeObject.image;
+                return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                self.nativeObject.loadImage(value);
+                self.nativeObject.loadImage(value.nativeObject);
             },
             enumerable: true
         });
@@ -55,6 +56,33 @@ const ImageView = extend(View)(
                     case UIViewContentMode.scaleAspectFit:
                         returnValue = ImageFillType.ASPECTFIT;
                     break;
+                    case UIViewContentMode.topLeft:
+                        returnValue = ImageFillType.TOPLEFT;
+                    break;
+                    case UIViewContentMode.top:
+                        returnValue = ImageFillType.TOPCENTER;
+                    break;
+                    case UIViewContentMode.topRight:
+                        returnValue = ImageFillType.TOPRIGHT;
+                    break;
+                    case UIViewContentMode.left:
+                        returnValue = ImageFillType.MIDLEFT;
+                    break;
+                    case UIViewContentMode.center:
+                        returnValue = ImageFillType.MIDCENTER;
+                    break;
+                    case UIViewContentMode.right:
+                        returnValue = ImageFillType.MIDRIGHT;
+                    break;
+                    case UIViewContentMode.bottomLeft:
+                        returnValue = ImageFillType.BOTTOMLEFT;
+                    break;
+                    case UIViewContentMode.bottom:
+                        returnValue = ImageFillType.BOTTOMCENTER;
+                    break;
+                    case UIViewContentMode.bottomRight:
+                        returnValue = ImageFillType.BOTTOMRIGHT;
+                    break;
                     default:
                         returnValue = null;
                 }
@@ -70,6 +98,33 @@ const ImageView = extend(View)(
                         break;
                     case ImageFillType.ASPECTFIT:
                         self.nativeObject.contentMode = UIViewContentMode.scaleAspectFit;
+                        break;
+                    case ImageFillType.TOPLEFT:
+                        self.nativeObject.contentMode = UIViewContentMode.topLeft;
+                    break;
+                    case ImageFillType.TOPCENTER:
+                        self.nativeObject.contentMode = UIViewContentMode.top;
+                    break;
+                    case ImageFillType.TOPRIGHT:
+                        self.nativeObject.contentMode = UIViewContentMode.topRight;
+                    break;
+                    case ImageFillType.MIDLEFT:
+                        self.nativeObject.contentMode = UIViewContentMode.left;
+                    break;
+                    case ImageFillType.MIDCENTER:
+                        self.nativeObject.contentMode = UIViewContentMode.center;
+                    break;
+                    case ImageFillType.MIDRIGHT:
+                        self.nativeObject.contentMode = UIViewContentMode.right;
+                    break;
+                    case ImageFillType.BOTTOMLEFT:
+                        self.nativeObject.contentMode = UIViewContentMode.bottomLeft;
+                    break;
+                    case ImageFillType.BOTTOMCENTER:
+                        self.nativeObject.contentMode = UIViewContentMode.bottom;
+                    break;
+                    case ImageFillType.BOTTOMRIGHT:
+                        self.nativeObject.contentMode = UIViewContentMode.bottomRight;
                     break;
                     default:
                         self.nativeObject.contentMode = UIViewContentMode.center;

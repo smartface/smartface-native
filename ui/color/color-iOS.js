@@ -40,4 +40,38 @@ Color.alpha = function(color){
     return Math.round(color.components().alpha*255);
 };
 
+Color.createGradient = function(params){
+    if (params.direction === Color.GradientDirection.VERTICAL){ //topToBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 0, y: 1});
+    }else if (params.direction === Color.GradientDirection.HORIZONTAL){ //leftToRight
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 1, y: 0});
+    }
+    else if (params.direction === Color.GradientDirection.DIAGONAL_LEFT){ //topLeftToRightBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 0, y: 0}, {x: 1, y: 1});
+    }else if (params.direction === Color.GradientDirection.DIAGONAL_RIGHT) { //topRightToLeftBottom
+        return CAGradientLayer.createGradient(params.startColor, params.endColor, {x: 1, y: 0}, {x: 0, y: 1});
+    }
+}
+
+Color.GradientDirection = {};
+
+Object.defineProperties(Color.GradientDirection, {
+    'VERTICAL': {
+        value: 0,
+        writable: false
+    },
+    'HORIZONTAL': {
+        value: 1,
+        writable: false
+    },
+    'DIAGONAL_LEFT': {
+        value: 2,
+        writable: false
+    },
+    'DIAGONAL_RIGHT': {
+        value: 3,
+        writable: false
+    }
+});
+
 module.exports = Color;

@@ -59,6 +59,14 @@ function View(params) {
     this.borderWidth = 0;
 
     /**
+     * Sets/gets border radius of bounded view.
+     * 
+     * @property {Number} borderRadius
+     * @since 0.1
+     */
+    this.borderRadius = 0;
+
+    /**
      * Gets/sets id of view. Should be unique number for all objects
      * inside project.
      * 
@@ -88,8 +96,7 @@ function View(params) {
     this.touchEnabled = true;
     
     /**
-     * Gets/sets position X value of view. This property will work only if 
-     * view added to {@link UI.AbsoluteLayout AbsoluteLayout}.
+     * Gets/sets position X value of view.
      * 
      * @property {Number} [left = 0] 
      * @since 0.1
@@ -97,13 +104,56 @@ function View(params) {
     this.left = 0;
 
     /**
-     * Gets/sets position Y value of view. This property will work only if 
-     * view added to {@link UI.AbsoluteLayout AbsoluteLayout}.
+     * Gets/sets position Y value of view. 
      * 
      * @property {Number} [top = 0]
      * @since 0.1
      */
     this.top = 0;
+    
+    /**
+     * // @todo add description.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [right = 0]   
+     * @since 0.1
+     */
+    this.right = 0;
+    
+    /**
+     * // @todo add description.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [bottom = 0]   
+     * @since 0.1
+     */
+    this.bottom = 0;
+    
+    /**
+     * // @todo add description.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [start = 0]   
+     * @since 0.1
+     */
+    this.start = 0;
+    
+    /**
+     * // @todo add description.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [end = 0]   
+     * @since 0.1
+     */
+    this.end = 0;
 
     /**
      * Gets/sets height of view.
@@ -136,8 +186,7 @@ function View(params) {
     /**
      * // @todo add description.This property will work only if 
      * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
+     *     
      *     // @todo add example
      *
      * @property {Number} [minHeight = 0]   
@@ -224,6 +273,66 @@ function View(params) {
      *     @example
      *     // @todo add example
      *
+     * @property {Number} [paddingLeft = 0]   
+     * @since 0.1
+     */
+    this.paddingLeft = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingRight = 0]   
+     * @since 0.1
+     */
+    this.paddingRight = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingHorizontal = 0]   
+     * @since 0.1
+     */
+    this.paddingHorizontal = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [paddingVertical = 0]   
+     * @since 0.1
+     */
+    this.paddingVertical = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [padding = 0]   
+     * @since 0.1
+     */
+    this.padding = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
      * @property {Number} [marginTop = 0]   
      * @since 0.1
      */
@@ -265,6 +374,138 @@ function View(params) {
      */
     this.marginEnd = 0;
     
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginLeft = 0]   
+     * @since 0.1
+     */
+    this.marginLeft = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginRight = 0]   
+     * @since 0.1
+     */
+    this.marginRight = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginHorizontal = 0]   
+     * @since 0.1
+     */
+    this.marginHorizontal = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [marginVertical = 0]   
+     * @since 0.1
+     */
+    this.marginVertical = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [margin = 0]   
+     * @since 0.1
+     */
+    this.margin = 0;
+    
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderTopWidth = 0]   
+     * @since 0.1
+     */
+    this.borderTopWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderBottomWidth = 0]   
+     * @since 0.1
+     */
+    this.borderBottomWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderStartWidth = 0]   
+     * @since 0.1
+     */
+    this.borderStartWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderEndWidth = 0]   
+     * @since 0.1
+     */
+    this.borderEndWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderLeftWidth = 0]   
+     * @since 0.1
+     */
+    this.borderLeftWidth = 0;
+    
+    /**
+     * // @todo add description.This property will work only if 
+     * view added to {@link UI.FlexLayout FlexLayout}.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {Number} [borderRightWidth = 0]   
+     * @since 0.1
+     */
+    this.borderRightWidth = 0;
     
     /**
      * // @todo add description.This property will work only if 
@@ -313,6 +554,16 @@ function View(params) {
      * @since 0.1
      */
     this.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
+    
+    /**
+     * // @todo add description.
+     *
+     *     @example
+     *     // @todo add example
+     *
+     * @method dirty
+     */
+    this.dirty = function(){};
 
     /**
      * This method allows getting view to the front.
@@ -351,25 +602,65 @@ function View(params) {
 
     /**
      * Getter of this view's parent view.
+     * 
+     *     @example
+     *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+     *     const Label = require('nf-core/ui/label');
+     *    
+     *     var myAbsoluteLayout = new AbsoluteLayout();
+     *     myAbsoluteLayout.id = 5432;
+     *    
+     *     var myLabel = new Label({
+     *          text: "Smartface Label"
+     *     });
+     *     myAbsoluteLayout.addChild(myLabel);
+     *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
-     * @return {View} Parent view of this view, or null if not exists.
+     * @return {View} Parent view of this view, null if not exists.
      * @method getParent
      * @since 0.1
      */
     this.getParent = function(){};
-    
-    /**
-     * Gets/sets style of view. 
-     * 
-     * @property {Style} style
-     * @member UI.View
-     * @since 0.1
-     * @removed 0.1
-     */
-    this.style = {};
 
     /**
      * This method returns all position values in one object.
+     * 
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     const Button = require('nf-core/ui/button');
+     *     const Label = require('nf-core/ui/label');
+     *     const Switch = require('nf-core/ui/switch');
+     *    
+     *     var myPage1 = new Page();
+     *     var mySwitch = new Switch();
+     *     var myButton = new Button({
+     *         text: "Get Switch Position",
+     *         onPress: buttonPress
+     *     });
+     *     var myLabel = new Label({
+     *         height: "15%",
+     *         width: "80%",
+     *         top: "30%",
+     *         left: "35%"
+     *     });
+     *    
+     *     myPage1.add(myButton);
+     *     myPage1.add(myLabel);
+     *    
+     *     myPage1.statusBar.visible = false;
+     *     var position = {
+     *         height: "15%",
+     *         width: "30%",
+     *         top: "10%",
+     *         left: "35%"
+     *     };
+     *     mySwitch.setPosition(position);
+     *     myPage1.add(mySwitch);
+     *     
+     *     function buttonPress(){
+     *         var viewPosition = mySwitch.getPosition();
+     *         myLabel.text = "Pos = " + viewPosition.width + " "+ viewPosition.height + " "+ viewPosition.top + " "+ viewPosition.left;
+     *     }        
      * 
      * @return {Object} Object with properties:
      * @return {Number} return.width Width value
