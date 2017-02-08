@@ -22,6 +22,8 @@ function HeaderBarItem(params) {
     /**
      * Gets/sets title of header bar item. If image is not set, title will be
      * shown in the header bar.
+     * 
+     * Title won't show if item is set as left item to header bar.
      *
      * @property {String} title
      * @since 0.1
