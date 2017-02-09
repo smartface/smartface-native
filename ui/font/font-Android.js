@@ -42,7 +42,14 @@ Font.create = function(fontFamily, size, style) {
             return Font.createFromFile(fontFile.fullPath, size);
         }
         else{
-            typeface = NativeTypeface.create(fontFamily,fontStyle);
+            convertedFontName = fontFamily.replace(' ','.') + fontSuffix + ".otf";
+            fontFile = new File({path: "assets://" + convertedFontName});
+            if(fontFile.exists){
+                return Font.createFromFile(fontFile.fullPath, size);
+            }
+            else{
+                typeface = NativeTypeface.create(fontFamily,fontStyle);
+            }
         }
     }
     else{
@@ -62,6 +69,7 @@ Font.createFromFile = function(path, size) {
         if(fontFile.nativeObject){
             var bitmap;
             if(fontFile.type == Path.FILE_TYPE.ASSET){
+
                 var assets = Android.getActivity().getAssets();
                 typeface = NativeTypeface.createFromAsset(assets,fontFile.name);
             }

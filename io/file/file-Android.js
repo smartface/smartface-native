@@ -19,7 +19,12 @@ function File(params) {
     switch(resolvedPath.type){
         case Path.FILE_TYPE.ASSET:
                 // this.nativeObject is AssetFileDescriptor
-                this.nativeObject = Android.getActivity().getAssets().openFd(resolvedPath.name);
+                try{
+                    this.nativeObject = Android.getActivity().getAssets().openFd(resolvedPath.name);
+                }
+                catch(e){
+                    this.nativeObject = null;
+                }
             break;
         case Path.FILE_TYPE.DRAWABLE:
                 // this.nativeObject is Bitmap
