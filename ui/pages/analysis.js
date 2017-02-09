@@ -74,7 +74,7 @@ function Pages(params) {
      *     });
      *     myPage2.add(myButtonPage2);
      *     
-     * @param {Page} page Page to show. Previous page will be stacked.
+     * @param {UI.Page} page Page to show. Previous page will be stacked.
      * @param {Boolean} animated If true, page will showed with default animation, otherwise will showed without animation.  
      * @method push
      */

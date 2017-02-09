@@ -240,7 +240,7 @@ function File(params) {
      *
      * @param {String} [newName]
      * @return {Boolean} // @todo add description
-     * @method copy
+     * @method rename
      * @since 0.1
      */
     this.rename = function(newName){};

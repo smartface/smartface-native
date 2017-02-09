@@ -87,7 +87,7 @@ function FileStream(params) {
      *     @example
      *     // @todo add example
      *
-     * @return {IO.Blob} // @todo add description
+     * @return {Blob} // @todo add description
      * @method readBlob
      * @since 0.1
      */

@@ -90,12 +90,12 @@ function Image(params) {
          * Returns a compressed blob from existing image with given quality.
          * onSuccess and onFailure are optional parameters.
          *
-         * @method crop
+         * @method compress
          * @param {UI.ImageFormat} format Image format.
          * @param {Number} quality Image quality is between 0 and 100.
          * @param {Function} onSuccess Callback for success situation.
          * @param {Function} onFailure Callback for failure situation.
-         * @return UI.Blob
+         * @return Blob
          * @since 0.1
          * //todo Add example after blob implementation
          */
@@ -118,7 +118,7 @@ function Image(params) {
 /**
  * Creates an image object from given a blob. 
  *
- * @param {UI.Blob} blob Contains image datas.
+ * @param {Blob} blob Contains image datas.
  * @method createFromBlob
  * @return UI.Image
  * @static

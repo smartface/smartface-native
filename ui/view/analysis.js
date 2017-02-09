@@ -34,7 +34,7 @@ function View(params) {
      * Gets/sets background color of view. It allows setting background 
      * color with UI.Color instance or mapping from states to colors.
      * 
-     * @property {Color} [backgroundColor = UI.Color.WHITE]
+     * @property {UI.Color} [backgroundColor = UI.Color.WHITE]
      * @member UI.View
      * @since 0.1
      */ 
@@ -43,7 +43,7 @@ function View(params) {
     /**
      * Sets/gets border color of bounded view.
      * 
-     * @property {Color} [borderColor = UI.Color.BLACK]
+     * @property {UI.Color} [borderColor = UI.Color.BLACK]
      * @since 0.1
      */
     this.borderColor = UI.Color.BLACK;
@@ -616,7 +616,7 @@ function View(params) {
      *     myAbsoluteLayout.addChild(myLabel);
      *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
-     * @return {View} Parent view of this view, null if not exists.
+     * @return {UI.View} Parent view of this view, null if not exists.
      * @method getParent
      * @since 0.1
      */

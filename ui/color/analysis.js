@@ -118,7 +118,7 @@ Color.WHITE = (red, green, blue);
  *     var myRGBColor = Color.create(255, 255, 255);
  *     var myHexColor = Color.create("#ff0000");
  *
- * @param {...} parameters RGB-ARGB sequence or Hexadecimal string
+ * @param {Mixed} parameters RGB-ARGB sequence or Hexadecimal string
  * @return {UI.Color} A color instance.
  * @static
  * @method create

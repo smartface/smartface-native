@@ -87,6 +87,7 @@ Object.defineProperty(Path.android, 'externalStorages', {
  * @method resolve
  * @static
  * @since 0.1
+ * @hide
  */
 Path.resolve = function(path){
     
