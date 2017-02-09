@@ -27,9 +27,7 @@ function Image(params) {
 
     Object.defineProperty(self, 'resize', {
       value: function(width, height, onSuccess, onFailure){
-          console.log("deneee");
           if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)){
-              console.log("tessss");
               var resizeImage = new Image.createFromImage(self.nativeObject.resizeImage({width : width, height : height}));
               if (onSuccess) {
                   onSuccess({"image" : resizeImage});
@@ -103,7 +101,7 @@ function Image(params) {
 
 Image.createFromFile = function(path) { 
     var imageFile = new File({path:path});
-    return new UIImage(imageFile.nativeObject.getActualPath());
+    return new Image({"path": imageFile.nativeObject.getActualPath()});
 }
 
 Image.createFromName = function(name) { 

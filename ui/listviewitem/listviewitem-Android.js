@@ -1,9 +1,9 @@
 const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
-const AbsoluteLayout        = require('nf-core/ui/absolutelayout');
+const FlexLayout            = require('nf-core/ui/flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
 
-const ListViewItem = extend(AbsoluteLayout)(
+const ListViewItem = extend(FlexLayout)(
     function (_super, params) {
         var self = this;
         _super(this);

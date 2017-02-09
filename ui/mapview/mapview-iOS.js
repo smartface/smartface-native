@@ -1,6 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const MapType = require('nf-core/ui/mapview/maptype');
+const Image = require("nf-core/ui/image");
 /**
  * @class UI.MapView
  * @since 0.1
@@ -29,9 +30,20 @@ const MapView = extend(View)(
         
         if(!self.nativeObject){
             self.nativeObject = new SMFMKMapView();
+            
         }
         
         _super(this);
+        
+        var _isFirstRender = 1;
+        function mapRender(){
+            if (_isFirstRender){
+                _isFirstRender = 0;
+                self.onCreate();
+            }
+        }
+        
+        self.nativeObject.mapViewFinishRender = mapRender;
         
         Object.defineProperty(self, 'type', {
             get: function() {
@@ -98,7 +110,15 @@ const MapView = extend(View)(
         
         Object.defineProperty(self, 'addPin', {
             value: function(value){
+                value.parentMapView = self;
                 self.nativeObject.addAnnotation(value.nativeObject);
+            },
+            configurable: false
+        });
+        
+        Object.defineProperty(self, 'removePin', {
+            value: function(value){
+                self.nativeObject.removeAnnotation(value.nativeObject);
             },
             configurable: false
         });
@@ -122,7 +142,7 @@ function Pin(params) {
     if(!self.nativeObject){
         self.nativeObject = Annotation.createAnnotation();
     }
-    
+
     Object.defineProperty(self, 'location', {
             get: function() {
                 return self.nativeObject.setCoordinate;
@@ -153,7 +173,7 @@ function Pin(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'color', {
+    Object.defineProperty(self, 'color', { //cant set after added mapview
             get: function() {
                 return self.nativeObject.color;
             },
@@ -163,19 +183,19 @@ function Pin(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'image', {
+    Object.defineProperty(self, 'image', { //cant set after added mapview
             get: function() {
-                return self.nativeObject.image;
+                return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                self.nativeObject.image = value;
+                self.nativeObject.image = value.nativeObject;
             },
             enumerable: true
     });
     
-    Object.defineProperty(self, 'visible', {
+    Object.defineProperty(self, 'visible', { //cant set after added mapview
             get: function() {
-                return self.nativeObject.visible;
+                return !self.nativeObject.visible;
             },
             set: function(value) {
                 self.nativeObject.visible = value;
@@ -191,5 +211,23 @@ function Pin(params) {
     
 };
 
+MapView.MapType = {}
+
+Object.defineProperties(MapView.MapType, {
+    'NORMAL': {
+        value: 0,
+        configurable: false
+    },
+
+    'SATELLITE': {
+        value: 1,
+        configurable: false
+    },
+
+    'HYBRID': {
+        value: 2,
+        configurable: false
+    }
+});
 
 module.exports = MapView;
