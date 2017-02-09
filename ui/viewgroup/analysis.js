@@ -8,8 +8,8 @@ const extend = require('js-base/core/extend');
  * ViewGroup is parent class of all layouts. ViewGroup is an abstract class. You can't create instance from it.
  * 
  *     @example
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     const Label = require('sf-core/ui/label');
+ *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     const Label = require('nf-core/ui/label');
  *     var myAbsoluteLayout = new AbsoluteLayout();
  *     var myLabel = new Label({
  *          text: "Smartface Label"
@@ -24,15 +24,15 @@ const ViewGroup = extend(View)(
          * Adds a child view to layout. View will be added on native decided index.
          *
          *     @example
-         *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-         *     const Label = require('sf-core/ui/label');
+         *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+         *     const Label = require('nf-core/ui/label');
          *     var myAbsoluteLayout = new AbsoluteLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label"
          *     });
          *     myAbsoluteLayout.addChild(myLabel);
          *
-         * @param {View} view The child view to add.
+         * @param {UI.View} view The child view to add.
          * @method addChild
          */
         this.addChild = function(view){};
@@ -41,8 +41,8 @@ const ViewGroup = extend(View)(
          * Remove a child view from layout. For removing view must be exists inside the layout.
          *
          *     @example
-         *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-         *     const Label = require('sf-core/ui/label');
+         *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+         *     const Label = require('nf-core/ui/label');
          *     var myAbsoluteLayout = new AbsoluteLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label"
@@ -50,7 +50,7 @@ const ViewGroup = extend(View)(
          *     myAbsoluteLayout.addChild(myLabel);
          *     myAbsoluteLayout.removeChild(myLabel);
          *
-         * @param {View} view The child view to remove.
+         * @param {UI.View} view The child view to remove.
          * @method removeChild
          */
         this.removeChild = function(view){};
@@ -59,8 +59,8 @@ const ViewGroup = extend(View)(
          * Removes all child views from the layout.
          *
          *     @example
-         *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-         *     const Label = require('sf-core/ui/label');
+         *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+         *     const Label = require('nf-core/ui/label');
          *     var myAbsoluteLayout = new AbsoluteLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label"
@@ -76,8 +76,8 @@ const ViewGroup = extend(View)(
          * Get child view count from layout.
          *
          *     @example
-         *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-         *     const Label = require('sf-core/ui/label');
+         *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+         *     const Label = require('nf-core/ui/label');
          *     var myAbsoluteLayout = new AbsoluteLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label"
@@ -93,8 +93,8 @@ const ViewGroup = extend(View)(
          * Finds a child view with specified id within the layout.
          *
          *     @example
-         *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
-         *     const Label = require('sf-core/ui/label');
+         *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+         *     const Label = require('nf-core/ui/label');
          *     var myAbsoluteLayout = new AbsoluteLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label",
@@ -104,7 +104,7 @@ const ViewGroup = extend(View)(
          *     var childView = myAbsoluteLayout.findChildById(11235);
          *
          * @param {Number} id The specified id of the view.
-         * @returns {View} Founded view within the layout, or null if view does not exists within the layout.
+         * @returns {UI.View} Founded view within the layout, or null if view does not exists within the layout.
          * @method findChildById
          */
         this.findChildById = function(id){};

@@ -1,1 +1,1 @@
-module.exports = require('./alertView-' + Device.deviceOS + '.js');
+module.exports = require('./alertview-' + Device.deviceOS + '.js');

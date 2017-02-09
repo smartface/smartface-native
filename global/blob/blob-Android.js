@@ -2,14 +2,18 @@ const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream"
 
 function Blob (parts, properties) {
     var self = this;
-    if(parts) {
-        if(properties.type == "image") {
-            self.nativeObject = new NativeByteArrayOutputStream();
-            self.nativeObject.write(parts, 0, parts.length);
-        }
+    var _type = null;
+    var _parts = [];
+    if(parts && properties.type) {
+        _parts = parts;
+        _type = properties.type;
+        self.nativeObject = new NativeByteArrayOutputStream();
+        self.nativeObject.write(parts, 0, parts.length);
+    }
+    else{
+        throw "Part and Type can not be empty for Blob!";
     }
     
-    var _type = null;
     Object.defineProperty(this, 'type', {
         get: function() {
             return _type;
@@ -20,7 +24,7 @@ function Blob (parts, properties) {
     var _size = 0;
     Object.defineProperty(this, 'size', {
         get: function() {
-            return _size;
+            return self.nativeObject && self.nativeObject.toByteArray().length;
         },
         enumerable: true
     });

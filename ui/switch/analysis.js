@@ -7,8 +7,8 @@
  * to select between two options.
  * 
  *     @example
- *     const Switch = require('sf-core/ui/switch');
- *     const Color = require('sf-core/ui/color');
+ *     const Switch = require('nf-core/ui/switch');
+ *     const Color = require('nf-core/ui/color');
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
@@ -20,7 +20,7 @@ const Switch = extend(View)(
      * Gets/sets color of the thumb when Switch is ON. 
      * It is set to green by default. 
      * 
-     * @property {Color} thumbOnColor 
+     * @property {UI.Color} thumbOnColor
      * @since 0.1
      */
     this.thumbOnColor = Color.GREEN; 
@@ -29,7 +29,7 @@ const Switch = extend(View)(
      * Gets/sets color of the thumb when Switch is OFF.  
      * It is set to gray by default. 
      * 
-     * @property {Color} thumbOffColor 
+     * @property {UI.Color} thumbOffColor
      * @since 0.1
      */
     this.thumbOffColor = Color.GRAY;
@@ -38,7 +38,7 @@ const Switch = extend(View)(
      * Gets/sets the background of the switch when it is ON. 
      * It is set to gray by default.
      * 
-     * @property {Color} toggleOnColor 
+     * @property {UI.Color} toggleOnColor
      * @since 0.1
      */
     this.toggleOnColor = Color.GRAY;  
@@ -49,12 +49,12 @@ const Switch = extend(View)(
      * set it only for android devices.
      * 
      *     @example
-     *     const Switch = require('sf-core/ui/switch');
-     *     const Color = require('sf-core/ui/color');
+     *     const Switch = require('nf-core/ui/switch');
+     *     const Color = require('nf-core/ui/color');
      *     var mySwitch = new Switch();
      *     mySwitch.android.toggleOffColor = Color.DARKGRAY;
      * 
-     * @property {Color} toggleOffColor 
+     * @property {UI.Color} toggleOffColor
      * @since 0.1
      */
     this.android = {

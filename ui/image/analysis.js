@@ -2,15 +2,20 @@
  * @class UI.Image
  * @since 0.1
  * 
- * This class represents images stored in file system. Instances of
- * Image class can be set to image property of an ImageView.
+ * Image is used to store the image data read from the filesystem.
+ * It can be set to UI objects' properties (e.g. UI.ImageView.image).
  * 
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
- *     var myImage = Image.createFromFile("images://smartface.png")
- *     var myImageView = new ImageView();
- *     myImageView.image = myImage;
+ *     const Image = require('nf-core/ui/image');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     
+ *     var myImage = Image.createFromFile("images://nativeface.png")
+ *     var myImageView = new ImageView({
+ *         image: myImage,
+ *         width: 200, height: 200
+ *     });
+ *     
+ *     myPage.layout.addChild(myImageView);
  *     
  */
 function Image(params) {
@@ -38,15 +43,15 @@ function Image(params) {
          * onSuccess and onFailure are optional parameters.
          * 
          *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageview');
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImageView.image = myImage.resize(myImage.width/2, myImage.height/2); // resize example without callback
          * 
          *     
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageview');
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImage.resize(myImage.width/2, myImage.height/2, onSuccess); 
@@ -85,12 +90,12 @@ function Image(params) {
          * Returns a compressed blob from existing image with given quality.
          * onSuccess and onFailure are optional parameters.
          *
-         * @method crop
+         * @method compress
          * @param {UI.ImageFormat} format Image format.
          * @param {Number} quality Image quality is between 0 and 100.
          * @param {Function} onSuccess Callback for success situation.
          * @param {Function} onFailure Callback for failure situation.
-         * @return UI.Blob
+         * @return Blob
          * @since 0.1
          * //todo Add example after blob implementation
          */
@@ -113,7 +118,7 @@ function Image(params) {
 /**
  * Creates an image object from given a blob. 
  *
- * @param {UI.Blob} blob Contains image datas.
+ * @param {Blob} blob Contains image datas.
  * @method createFromBlob
  * @return UI.Image
  * @static
@@ -122,19 +127,15 @@ function Image(params) {
 Image.createFromBlob = function(blob) { }
 
 /**
- * Creates an image object from given file path. Given path should be
- * full path of an existing image file on file system.
- * 
+ * Creates an Image instance from given file path.
+ *  
  *     @example
- *     const Image = require('sf-core/ui/image');
- *     const ImageView = require('sf-core/ui/imageview');
- *     var myImage = Image.createFromFile("images://smartface.png");
- *     var myImageView = new ImageView();
- *     myImageView.image = myImage;
+ *     const Image = require('nf-core/ui/image');
+ *     var myImage = Image.createFromFile("images://nativeface.png");
  * 
  * @param {String} path Image file path
  * @method createFromFile
- * @return UI.Image
+ * @return {UI.Image} An Image instance.
  * @static
  * @since 0.1
  */
