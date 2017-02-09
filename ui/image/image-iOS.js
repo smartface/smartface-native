@@ -101,7 +101,7 @@ function Image(params) {
 
 Image.createFromFile = function(path) { 
     var imageFile = new File({path:path});
-    return new UIImage(imageFile.nativeObject.getActualPath());
+    return new Image({"path": imageFile.nativeObject.getActualPath()});
 }
 
 Image.createFromName = function(name) { 
