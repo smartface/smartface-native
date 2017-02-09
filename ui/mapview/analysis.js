@@ -224,35 +224,37 @@ Object.defineProperty(MapView, 'Pin', {
  *
  */
 MapView.Type={};
-
-/**
- * @property NORMAL 
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(MapView.Type,"NORMAL" ,{
-    writable:false
-});
-
-/**
- * @property SATELLITE
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(MapView.Type,"SATELLITE" ,{
-    writable:false
-});
-
-/**
- * @property HYBRID
- * @static
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(MapView.Type,"HYBRID" ,{
-    writable:false
+Object.defineProperties(MapType, {
+    /**
+     * @property {Number} [NORMAL = 0] 
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'NORMAL': {
+        value: 0,
+        configurable: false
+    },
+    /**
+     * @property {Number} [SATELLITE = 1]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'SATELLITE': {
+        value: 1,
+        configurable: false
+    },
+    /**
+     * @property {Number} [HYBRID = 2]
+     * @static
+     * @readonly
+     * @since 0.1
+     */
+    'HYBRID': {
+        value: 2,
+        configurable: false
+    }
 });
 
 module.exports = MapView;
