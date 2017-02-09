@@ -107,7 +107,7 @@ function getResolvedPath(path){
             resolvedPaths[path].type = Path.FILE_TYPE.RAU_ASSETS;
             resolvedPaths[path].fullPath = getRauAssetsPath() + "/" + fileName;
             // if assets not exists in rau
-            if(!checkFileExistsInPath(resolvedPaths[path])){
+            if(!checkFileExistsInPath(resolvedPaths[path].fullPath)){
                 resolvedPaths[path].type = Path.FILE_TYPE.ASSET;
                 resolvedPaths[path].fullPath = path;
                 
