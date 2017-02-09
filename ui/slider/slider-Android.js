@@ -136,7 +136,7 @@ const Slider = extend(View)(
                 return _onValueChange;
             }, 
             set: function(callback) {
-                _onValueChange = callback;
+                _onValueChange = callback.bind(this);
             },
             enumerable: true
         });

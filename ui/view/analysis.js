@@ -34,7 +34,7 @@ function View(params) {
      * Gets/sets background color of view. It allows setting background 
      * color with UI.Color instance or mapping from states to colors.
      * 
-     * @property {Color} [backgroundColor = UI.Color.WHITE]
+     * @property {UI.Color} [backgroundColor = UI.Color.WHITE]
      * @member UI.View
      * @since 0.1
      */ 
@@ -43,7 +43,7 @@ function View(params) {
     /**
      * Sets/gets border color of bounded view.
      * 
-     * @property {Color} [borderColor = UI.Color.BLACK]
+     * @property {UI.Color} [borderColor = UI.Color.BLACK]
      * @since 0.1
      */
     this.borderColor = UI.Color.BLACK;
@@ -57,6 +57,14 @@ function View(params) {
      * @since 0.1
      */
     this.borderWidth = 0;
+
+    /**
+     * Sets/gets border radius of bounded view.
+     * 
+     * @property {Number} borderRadius
+     * @since 0.1
+     */
+    this.borderRadius = 0;
 
     /**
      * Gets/sets id of view. Should be unique number for all objects
@@ -506,18 +514,6 @@ function View(params) {
      *     @example
      *     // @todo add example
      *
-     * @property {Number} [borderWidth = 0]   
-     * @since 0.1
-     */
-    this.borderWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Number} [flexGrow = 0]   
      * @since 0.1
      */
@@ -620,21 +616,11 @@ function View(params) {
      *     myAbsoluteLayout.addChild(myLabel);
      *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
      *
-     * @return {View} Parent view of this view, null if not exists.
+     * @return {UI.View} Parent view of this view, null if not exists.
      * @method getParent
      * @since 0.1
      */
     this.getParent = function(){};
-    
-    /**
-     * Gets/sets style of view. 
-     * 
-     * @property {Style} style
-     * @member UI.View
-     * @since 0.1
-     * @removed 0.1
-     */
-    this.style = {};
 
     /**
      * This method returns all position values in one object.

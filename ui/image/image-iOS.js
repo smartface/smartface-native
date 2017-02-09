@@ -1,3 +1,4 @@
+const File = require('nf-core/io/file');
 const TypeUtil = require("nf-core/util/type");
 const Blob = require('nf-core/global/blob');
 
@@ -99,7 +100,8 @@ function Image(params) {
 }
 
 Image.createFromFile = function(path) { 
-    return new Image({"path": path});
+    var imageFile = new File({path:path});
+    return new Image({"path": imageFile.nativeObject.getActualPath()});
 }
 
 Image.createFromName = function(name) { 

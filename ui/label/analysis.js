@@ -7,7 +7,7 @@ const extend = require('js-base/core/extend');
  * Label is a UI object to display a text on the screen. Label can contain only a single type font.
  *
  *     @example
- *     const Label = require('sf-core/ui/label');
+ *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
@@ -18,7 +18,7 @@ const extend = require('js-base/core/extend');
  *         top: "10%",
  *         left: "20%"
  *     });
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     myLabel.backgroundColor = Color.GRAY;
  */
 const Label = extend(View)(
@@ -31,7 +31,7 @@ const Label = extend(View)(
          * 
          *     @example
          *     // In this example 'This link' text inside Label will shown underlined.
-         *     const Label = require('sf-core/ui/label');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
          *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
          * 
@@ -45,12 +45,12 @@ const Label = extend(View)(
          * It is set to null by default.
          * 
          *     @example 
-         *     const Label = require('sf-core/ui/label');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label({
          *         text: "This is my label",
          *         visible: true
          *     });
-         *     const Font = require('sf-core/ui/font');
+         *     const Font = require('nf-core/ui/font');
          *     myLabel.font = Font.create("Arial", 16, Font.BOLD);   
          * 
          * @property {UI.Font} [font = null]   
@@ -81,9 +81,9 @@ const Label = extend(View)(
          * can be used.  
          * 
          *     @example
-         *     const Label = require('sf-core/ui/label');
+         *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
-         *     const TextAlignment = require('sf-core/ui/textalignment');
+         *     const TextAlignment = require('nf-core/ui/textalignment');
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
          * 
          * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]  
