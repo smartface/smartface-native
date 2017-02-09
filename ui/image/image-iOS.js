@@ -27,7 +27,9 @@ function Image(params) {
 
     Object.defineProperty(self, 'resize', {
       value: function(width, height, onSuccess, onFailure){
+          console.log("deneee");
           if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)){
+              console.log("tessss");
               var resizeImage = new Image.createFromImage(self.nativeObject.resizeImage({width : width, height : height}));
               if (onSuccess) {
                   onSuccess({"image" : resizeImage});
