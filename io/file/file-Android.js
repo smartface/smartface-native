@@ -23,6 +23,7 @@ function File(params) {
                     this.nativeObject = Android.getActivity().getAssets().openFd(resolvedPath.name);
                 }
                 catch(e){
+                    // font not exists
                     this.nativeObject = null;
                 }
             break;
