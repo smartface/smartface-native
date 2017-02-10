@@ -32,7 +32,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value) {
                     _image = value;
-                    self.nativeObject.image = _image;
+                    self.nativeObject.image = _image.nativeObject;
                 }
             },
             enumerable: true
