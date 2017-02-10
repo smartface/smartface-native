@@ -6,6 +6,8 @@ const AndroidConfig         = require("nf-core/util/Android/androidconfig");
 const NativeFile            = requireClass('java.io.File');
 const NativeBitmapFactory   = requireClass('android.graphics.BitmapFactory');
 
+var nativeAssetsList;
+
 function File(params) {
     if(!TypeUtil.isString(params.path)){
         throw "File path must be string";
@@ -18,26 +20,31 @@ function File(params) {
     
     switch(resolvedPath.type){
         case Path.FILE_TYPE.ASSET:
-                // this.nativeObject is AssetFileDescriptor
-                try{
-                    this.nativeObject = Android.getActivity().getAssets().openFd(resolvedPath.name);
-                }
-                catch(e){
-                    // font not exists
-                    this.nativeObject = null;
-                }
+            // this.nativeObject will be String for performance
+            // Checking assets list loaded.
+            if(!nativeAssetsList){
+                nativeAssetsList = Android.getActivity().getAssets().list("");
+            }
+
+            if(nativeAssetsList.indexOf(resolvedPath.name) != -1){
+                this.nativeObject = resolvedPath.name;
+            }
+            else{
+                this.nativeObject = null;
+            }
             break;
         case Path.FILE_TYPE.DRAWABLE:
-                // this.nativeObject is Bitmap
-                var resources = Android.getActivity().getResources();
-                var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
-                this.nativeObject = drawableResourceId != 0 ? NativeBitmapFactory.decodeResource(resources, drawableResourceId) : null;
+            // this.nativeObject will be Bitmap
+            var resources = Android.getActivity().getResources();
+            var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
+            this.nativeObject = drawableResourceId != 0 ? NativeBitmapFactory.decodeResource(resources, drawableResourceId) : null;
             break;
         case Path.FILE_TYPE.RAU_ASSETS:
         case Path.FILE_TYPE.RAU_DRAWABLE:
         case Path.FILE_TYPE.EMULATOR_ASSETS:
         case Path.FILE_TYPE.EMULATOR_DRAWABLE:
-        case Path.FILE_TYPE.FILE: 
+        case Path.FILE_TYPE.FILE:
+            // this.nativeObject will be File
             this.nativeObject = resolvedPath.fullPath ? new NativeFile(resolvedPath.fullPath) : null;
             break;
         
@@ -74,13 +81,13 @@ function File(params) {
         },
         'isDirectory': {
             get: function(){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.isDirectory() : false);
+                return (this.nativeObject ? (resolvedPath.type == Path.FILE_TYPE.FILE ? this.nativeObject.isDirectory() : false) : false);
             },
             enumerable: true
         },
         'isFile': {
             get: function(){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.isFile() : true);
+                return (this.nativeObject ? (resolvedPath.type == Path.FILE_TYPE.FILE ? this.nativeObject.isFile() : true) : false);
             },
             enumerable: true
         },
@@ -109,17 +116,22 @@ function File(params) {
         },
         'size': {
             get: function(){
-                switch (resolvedPath.type){
-                    case Path.FILE_TYPE.ASSET:
-                        return ( (this.nativeObject ? this.nativeObject.getLength() : -1) );
-                    case Path.FILE_TYPE.DRAWABLE:
-                        return ( (this.nativeObject ? this.nativeObject.getByteCount() : -1) );
-                    case Path.FILE_TYPE.FILE:
-                    case Path.FILE_TYPE.EMULATOR_ASSETS:
-                    case Path.FILE_TYPE.EMULATOR_DRAWABLE:
-                    case Path.FILE_TYPE.RAU_ASSETS:
-                    case Path.FILE_TYPE.RAU_DRAWABLE:
-                        return ( (this.nativeObject ? this.nativeObject.length() : -1) );
+                if(this.nativeObject){
+                    switch (resolvedPath.type){
+                        case Path.FILE_TYPE.ASSET:
+                            var assetsInputStream = Android.getActivity().getAssets().open(this.nativeObject);
+                            var size = assetsInputStream.available();
+                            assetsInputStream.close();
+                            return size;
+                        case Path.FILE_TYPE.DRAWABLE:
+                            return this.nativeObject.getByteCount();
+                        case Path.FILE_TYPE.FILE:
+                        case Path.FILE_TYPE.EMULATOR_ASSETS:
+                        case Path.FILE_TYPE.EMULATOR_DRAWABLE:
+                        case Path.FILE_TYPE.RAU_ASSETS:
+                        case Path.FILE_TYPE.RAU_DRAWABLE:
+                            return this.nativeObject.length();
+                    }
                 }
                 return -1;
             },
@@ -159,11 +171,14 @@ function File(params) {
                             }
                             if(destinationFile.createFile(true)){
                                 const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
-                                var sourceFileStream = this.nativeObject.createInputStream();
+                                const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
+                                var assetsInputStream = Android.getActivity().getAssets().open(this.nativeObject);
+                                var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
                                 var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
-                                copyStream(sourceFileStream,destinationFileStream);
+                                copyStream(assetsBufferedInputStream,destinationFileStream);
                                 destinationFileStream.flush();
-                                sourceFileStream.close();
+                                assetsBufferedInputStream.close();
+                                assetsInputStream.close();
                                 destinationFileStream.close();
                                 return true;
                             }
@@ -322,11 +337,12 @@ function File(params) {
     });
     
     function copyStream(sourceFileStream, destinationFileStream) {
-        // Buffered copy is not working
-        var sourceChannel = sourceFileStream.getChannel();
-        var destChannel = destinationFileStream.getChannel();
-        var sourceChannelSize = sourceChannel.size();
-        destChannel.transferFrom(sourceChannel, 0, sourceChannelSize);
+        var buffer = new Array(1024);
+        var len = sourceFileStream.read(buffer);
+        while(len > 0){
+            destinationFileStream.write(buffer, 0, len);
+            len = sourceFileStream.read(buffer);
+        }
     }
     
     function copyFile(sourceFile, destinationFile){

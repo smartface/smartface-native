@@ -133,7 +133,7 @@ function getResolvedPath(path){
             // This is player. Check RAU
             resolvedPaths[path].type = Path.FILE_TYPE.RAU_DRAWABLE;
             resolvedPaths[path].fullPath = findDrawableAtDirectory(getRauDrawablePath(), fileName);
-            if(!resolvedPaths[path]){
+            if(!resolvedPaths[path].fullPath){
                 // drawable not exists in RAU get it from apk
                 resolvedPaths[path].type = Path.FILE_TYPE.DRAWABLE;
                 resolvedPaths[path].fullPath = path;
