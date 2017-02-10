@@ -37,6 +37,17 @@ function HeaderBarItem(params) {
             },
             enumerable: true
         },
+        'color': {
+            get: function() {
+                return self.nativeObject.tintColor;
+            },
+            set: function(value) {
+                if (value) {
+                    self.nativeObject.tintColor = value;
+                }
+            },
+            enumerable: true
+        },
         'enabled': {
             get: function() {
                 return _enabled;

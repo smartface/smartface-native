@@ -22,8 +22,8 @@ const ListView = extend(View)(
         
         self.ios = {}
         
-        self.ios.swipeItem = function(title,action){
-            return UITableViewRowAction.create(title,action);
+        self.ios.swipeItem = function(title,color,padding,action){
+            return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
         
         self.stopRefresh = function(){
@@ -46,16 +46,25 @@ const ListView = extend(View)(
             enumerable: true
          });
           
-        Object.defineProperty(self.ios, 'swipeItems', {
+        Object.defineProperty(self.ios, 'leftSwipeItems', {
             get: function() {
-                return self.nativeObject.rowActions;
+                return self.nativeObject.leftRowActions;
             },
             set: function(value) {
-                self.nativeObject.rowActions = value;
+                self.nativeObject.leftRowActions = value;
             },
             enumerable: true
           });
           
+          Object.defineProperty(self.ios, 'rightSwipeItems', {
+            get: function() {
+                return self.nativeObject.rightRowActions;
+            },
+            set: function(value) {
+                self.nativeObject.rightRowActions = value;
+            },
+            enumerable: true
+          });
           
         Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
@@ -145,7 +154,17 @@ const ListView = extend(View)(
         
         self.android = {};
 
-        self.android.setPullRefreshColors = function(){}
+        self.setPullRefreshColors = function(param){
+            if( Object.prototype.toString.call( param ) === '[object Array]' ) {
+                self.refreshControl.tintColor = param[0];
+            }else{
+                self.refreshControl.tintColor = param;
+            }
+            
+        }
+        
+       // self.android.setPullRefreshColors = function(){}
+       
          if (params) {
             for (var param in params) {
                 this[param] = params[param];
