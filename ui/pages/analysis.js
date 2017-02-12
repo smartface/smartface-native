@@ -119,6 +119,23 @@ function Pages(params) {
      * @method pop
      */
     this.pop = function(){};
+    
+    /**
+     * Gets/sets sliderDrawer of the Pages.
+     *
+     *     @example
+     *     const Pages = require('nf-core/ui/pages');
+     *     const Page = require('nf-core/ui/page');
+     *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+     *     var mySliderDrawer = new SliderDrawer();
+     *     var myPage = new Page();
+     *     var myPages = new Pages({rootPage: myPage});
+     *     myPages.sliderDrawer = mySliderDrawer;
+     *
+     * @property {UI.SliderDrawer} [sliderDrawer = null]
+     * @since 0.1
+     */
+    this.sliderDrawer = null;
 }
 
 module.exports = Pages;

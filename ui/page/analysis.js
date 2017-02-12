@@ -104,8 +104,6 @@ function Page(params) {
      */
     this.statusBar;
 
-    this.headerBar;
-    
     /**
      * Gets header bar object for page. This property is readonly, you can not
      * set header bar to a page but you can change properties of page's header bar.
@@ -114,22 +112,8 @@ function Page(params) {
      * @readonly
      * @since 0.1
      */
-    this.headerBar.setItems = function(items) {};
+    this.headerBar;
     
-    /**
-     * Gets/sets sliderDrawer of the Page.
-     *
-     *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-     *     var mySliderDrawer = new SliderDrawer();
-     *     var myPage = new Page();
-     *     myPage.sliderDrawer = mySliderDrawer;
-     *
-     * @property {UI.SliderDrawer} [sliderDrawer = null]
-     * @since 0.1
-     */
-    this.sliderDrawer = null;
 }
 
 module.exports = Page;
