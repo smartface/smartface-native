@@ -113,9 +113,7 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
-    this.headerBar.setItems = function(items) {};
-    
-    
+
     /**
      * Gets/sets sliderDrawer of the Page.
      *
