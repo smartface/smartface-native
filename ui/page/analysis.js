@@ -113,21 +113,7 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
-
-    /**
-     * Gets/sets sliderDrawer of the Page.
-     *
-     *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-     *     var mySliderDrawer = new SliderDrawer();
-     *     var myPage = new Page();
-     *     myPage.sliderDrawer = mySliderDrawer;
-     *
-     * @property {UI.SliderDrawer} [sliderDrawer = null]
-     * @since 0.1
-     */
-    this.sliderDrawer = null;
+    
 }
 
 module.exports = Page;
