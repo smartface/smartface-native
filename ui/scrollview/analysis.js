@@ -15,7 +15,7 @@ const ScrollView = extend(ViewGroup)(
         this.showVerticalScrollBar = false;
         
         // this.enableZoom = false;
-        this.declerationRate = 0.5;
+        this.decelerationRate = 0.5;
         
         this.onScrollBegin = function(){};
         this.onScrollEnd = function(){};
