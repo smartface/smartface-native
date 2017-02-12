@@ -47,6 +47,7 @@ function Pages(params) {
     }
 
     self.push = function(page, animated, tag){
+        self.detachSliderDrawer();
         if(pagesStack.length > 0) {
             pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
             pagesStack[pagesStack.length-1].isShowing = false;
@@ -72,7 +73,6 @@ function Pages(params) {
         fragmentManager.executePendingTransactions();
         page.isShowing = true;
         page.pages = self;
-        self.removeDrawerListener();
         page.invalidate();
         pagesStack.push(page);
     }
@@ -84,17 +84,41 @@ function Pages(params) {
         }
     }
     
-    var _drawerListener;
-    // Will be called from sliderdrawer throught the page
-    self.attachDrawerListener = function(drawerListener){
-        _drawerListener = drawerListener;
-        self.drawerLayout.addDrawerListener(drawerListener);
+
+    // Will be called from self
+    function attachSliderDrawer(){
+        var sliderDrawerId = _sliderDrawer.nativeObject.getId();
+        var isExists = self.drawerLayout.findViewById(sliderDrawerId);
+        if(isExists){
+            self.drawerLayout.removeView(isExists);
+        }
+        self.drawerLayout.addView(_sliderDrawer.nativeObject);
+        self.drawerLayout.bringToFront();
+        if(_sliderDrawer.drawerListener){
+            self.drawerLayout.addDrawerListener(_sliderDrawer.drawerListener);
+        }
     };
+    
     // Will be called from self.
-    self.removeDrawerListener = function(){
-        if(_drawerListener)
-            self.drawerLayout.removeDrawerListener(_drawerListener);
+    self.detachSliderDrawer = function(){
+        if(_sliderDrawer){
+            self.drawerLayout.removeView(_sliderDrawer.nativeObject);
+            if(_sliderDrawer.drawerListener){
+                self.drawerLayout.addDrawerListener(_sliderDrawer.drawerListener);
+            }
+        }
     };
+    
+    var _sliderDrawer;
+    Object.defineProperty(self, "sliderDrawer", {
+        get: function(){
+            _sliderDrawer;
+        },
+        set: function(slideDrawer){
+            _sliderDrawer = slideDrawer;
+            attachSliderDrawer();
+        }
+    })
     
     self.push(params.rootPage);
 }

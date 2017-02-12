@@ -356,7 +356,6 @@ function Page(params) {
         });
     };
 
-<<<<<<< HEAD
     var _sliderDrawer = null;
     Object.defineProperty(this, 'sliderDrawer', {
         get: function() {
@@ -371,7 +370,7 @@ function Page(params) {
         },
         enumerable: true
     });
-=======
+
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function (leftItem) {
         const HeaderBarItem = require("../headerbaritem");
@@ -386,7 +385,7 @@ function Page(params) {
         }
         self.invalidateHeaderBar();
     };
->>>>>>> develop
+
 
     // Deprecated since 0.1
     this.add = function(view){
@@ -406,15 +405,8 @@ function Page(params) {
     }
     
     this.invalidateSliderDrawer = function(){
-        if(_sliderDrawer && self.pages){
-            var sliderDrawerId = _sliderDrawer.nativeObject.getId();
-            var isExists = self.pages.drawerLayout.findViewById(sliderDrawerId);
-            if(!isExists){
-                var viewCount = self.pages.drawerLayout.getChildCount();
-                if(viewCount > 0) self.pages.drawerLayout.removeAllViews();
-                self.pages.drawerLayout.addView(_sliderDrawer.nativeObject,0);
-                _sliderDrawer.onAttachPage();
-            }
+        if(_sliderDrawer && self.isShowing){
+            self.pages.sliderDrawer = _sliderDrawer;
         }
     }
 

@@ -85,16 +85,6 @@ const SliderDrawer = extend(AbsoluteLayout)(
                 },
                 enumerable: true
             },
-            // inner method called from page when attaching.
-            'onAttachPage' : {
-                value: function(){
-                    if(self.page && self.page.pages){
-                        // do something on page add
-                        self.page.pages.attachDrawerListener(drawerListener);
-                    }
-                },
-                writable: false
-            },
             // Added due to using DrawerLayout as a parent
             'height': {
                 get: function() {
@@ -119,7 +109,7 @@ const SliderDrawer = extend(AbsoluteLayout)(
             }
         });
         
-        var drawerListener = NativeDrawerLayout.DrawerListener.implement({
+        this.drawerListener = NativeDrawerLayout.DrawerListener.implement({
             onDrawerClosed: function(drawerView){
                 _onHide && _onHide();
             },
