@@ -8,8 +8,8 @@ const ScrollView = extend(ViewGroup)(
         this.contentHeight = 0;
         this.contentWidth = 0;
         
-        this.scrollX = 0;
-        this.scrollY = 0;
+        this.contentX = 0;
+        this.contentY = 0;
         
         this.showHorizontalScrollBar = false;
         this.showVerticalScrollBar = false;
@@ -19,6 +19,9 @@ const ScrollView = extend(ViewGroup)(
         
         this.onScrollBegin = function(){};
         this.onScrollEnd = function(){};
+        this.onScrollBeginDecelerating = function() {};
+        this.onScrollEndDecelerating = function() {};
+
     }
 );
 

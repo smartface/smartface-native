@@ -61,7 +61,7 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
          });
          
-         Object.defineProperty(self, 'scrollX', {
+         Object.defineProperty(self, 'contentX', {
             get: function() {
                 return self.nativeObject.contentOffset.x;
             },
@@ -71,7 +71,7 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
          });
          
-         Object.defineProperty(self, 'scrollY', {
+         Object.defineProperty(self, 'contentY', {
             get: function() {
                 return self.nativeObject.contentOffset.y;
             },
@@ -83,11 +83,19 @@ const ScrollView = extend(ViewGroup)(
           
         self.nativeObject.onScrollBegin = function(){
               self.onScrollBegin();
-         }
+        }
           
         self.nativeObject.onScrollEnd = function(){
               self.onScrollEnd();
-         }
+        }
+        
+        self.nativeObject.onScrollBeginDecelerating = function(){
+              self.onScrollBeginDecelerating();
+        }
+        
+        self.nativeObject.onScrollEndDecelerating = function(){
+              self.onScrollEndDecelerating();
+        }
          
         if (params) {
             for (var param in params) {
