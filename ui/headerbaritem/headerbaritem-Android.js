@@ -54,7 +54,7 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if (value instanceof Function) {
-                    _onPress = value;
+                    _onPress = value.bind(this);
                 }
             },
             enumerable: true

@@ -23,6 +23,16 @@ const Button = extend(View)(
         
         self.nativeObject.setTitleColor(Color.BLACK,ButtonState.normal);
 
+        Object.defineProperty(self, 'enabled', {
+            get: function() {
+                return self.nativeObject.setEnabled;
+            },
+            set: function(value) {
+                self.nativeObject.setEnabled = value;
+            },
+            enumerable: true
+        });
+        
         var _text;
         Object.defineProperty(self, 'text', {
             get: function() {

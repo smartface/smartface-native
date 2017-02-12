@@ -1,3 +1,4 @@
+const File = require('nf-core/io/file');
 const TypeUtil = require("nf-core/util/type");
 const Blob = require('nf-core/global/blob');
 
@@ -5,7 +6,15 @@ function Image(params) {
     var self = this;
     
     if (params.path){
+      if (params.path.includes(".app")) {
+        // Publish project image caching. 
+        // For using [UIImage imageNamed:] function.
+        var array = params.path.split("/");
+        var fileName = array.pop();
+        self.nativeObject = new UIImage.createName(fileName);
+      } else {
         self.nativeObject = new UIImage(params.path);
+      }        
     }else if (params.name){
         self.nativeObject = new UIImage.createName(params.name);
     }else if (params.blob){
@@ -99,7 +108,8 @@ function Image(params) {
 }
 
 Image.createFromFile = function(path) { 
-    return new Image({"path": path});
+    var imageFile = new File({path:path});
+    return new Image({"path": imageFile.nativeObject.getActualPath()});
 }
 
 Image.createFromName = function(name) { 

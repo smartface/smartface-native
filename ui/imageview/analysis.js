@@ -6,16 +6,19 @@ const View = require('../view');
  * @extends UI.View
  * @since 0.1
  * 
- * ImageView class is the way to show picture inside a rectangle area on UI.
+ * ImageView is simply an image container where UI.Image is displayed inside.
  *
  *     @example
- *     const ImageFillType = require('sf-core/ui/imagefilltype');
- *     const ImageView = require('sf-core/ui/imageview');
- *     const Image = require('sf-core/ui/image');
- *     var myImageView = new ImageView();
- *     var myImage = Image.createFromFile("images://smartface.png")
- *     myImageView.image = myImage;
- *     myImageView.imageFillType = ImageFillType.NORMAL;
+ *     const Image = require('nf-core/ui/image');
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     
+ *     var myImage = Image.createFromFile("images://nativeface.png")
+ *     var myImageView = new ImageView({
+ *         image: myImage,
+ *         left: 0, width: 300, height: 400
+ *     });
+ *     
+ *     myPage.layout.addChild(myImageView);
  *
  */
 const ImageView = extend(View)(
@@ -23,14 +26,19 @@ const ImageView = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets source of the ImageView. The source must be an Image.
+         * Gets/sets the image set.
          * 
          *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageView');
-         *     var myImage = Image.createFromFile("images://smartface.png");
-         *     var myImageView = new ImageView();
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageView');
+         * 
+         *     var myImage = Image.createFromFile("images://nativeface.png");
+         *     var myImageView = new ImageView({
+         *         width: 200, height: 200
+         *     });
          *     myImageView.image = myImage;
+         *     
+         *     myPage.layout.addChild(myImageView);
          *
          * @property {UI.Image} [image = null]
          * @since 0.1
@@ -38,15 +46,20 @@ const ImageView = extend(View)(
         this.image = null;
 
         /**
-         * Gets/sets image fill type. The source fills the Image base on this property.
+         * Gets/sets image fill type.
          *
          *     @example
-         *     const ImageView = require('sf-core/ui/imageview');
-         *     const ImageFillType = require('sf-core/ui/imagefilltype');
-         *     var myImage = Image.createFromFile("images://smartface.png");
-         *     var myImageView = new ImageView();
-         *     myImageView.image = myImage;
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageView = require('nf-core/ui/imageview');
+         *     
+         *     var myImage = Image.createFromFile("images://nativeface.png")
+         *     var myImageView = new ImageView({
+         *         image: myImage,
+         *         width: 200, height: 200
+         *     });
          *     myImageView.imageFillType = ImageFillType.STRETCH;
+         *
+         *     myPage.layout.addChild(myImageView);
          *
          * @property {UI.ImageFillType} [imageFillType = UI.ImageFillType.NORMAL]
          * @since 0.1

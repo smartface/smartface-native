@@ -2,12 +2,13 @@
  * @class console
  * @since 0.1
  *
- * Outputs a message to the debugging console.
+ * console class represents debugging console of application.
+ * You can access debugging console from Smartface Cloud IDE.
  */
 function console() {}
    
 /**
- * Logs a message to the debugging console.
+ * Logs message to the debugging console.
  * 
  *     @example
  *     var text = "Some text";
@@ -22,9 +23,9 @@ function console() {}
  *     }); 
  *     console.log(myLabel.text); 
  * 
- * @param {Object} msg Object to output in the console.
+ * @param {Object} message Object to output to the console.
  * @method log
  * @static
  * @since 0.1
  */
-console.log = function(msg){}
+console.log = function(message){}

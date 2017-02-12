@@ -5,21 +5,16 @@ const extend = require('js-base/core/extend');
  * @class UI.TextBox
  * @since 0.1
  * @extends UI.View
- * TextBox is a UI object to get input from user.
+ * TextBox is where users can type in via soft keyboard.
  *
  *     @example
- *     const TextBox = require('sf-core/ui/textbox');
- *     const KeyboardType = require('sf-core/ui/keyboardtype');
- *     const Color = require('sf-core/ui/color');
+ *     const TextBox = require('nf-core/ui/textbox');
  *     var myTextBox = new TextBox({
- *         width: "80%",
- *         height: "20%",
- *         top: "10%",
- *         left: "20%",
- *         textColor: Color.GRAY,
- *         hint: "Smartface TextBox",
- *         keyboardType: KeyboardType.NUMERIC
+ *         left:10, top:10, width:200, height:65,
+ *         hint: "hint",
+ *         borderWidth: 1
  *     });
+ *     myPage.layout.addChild(myTextBox);
  *
  */
 const TextBox = extend(View)(
@@ -28,16 +23,6 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets font of the TextBox.
-         *
-         *     @example
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label({
-         *         text: "This is my label",
-         *         visible: true
-         *     });
-         *     const Font = require('sf-core/ui/font');
-         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
-         *
          * @property {UI.Font} [font = null]
          * @since 0.1
          */
@@ -45,7 +30,6 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets text of the TextBox.
-         *
          * @property {String} [text = ""]
          * @since 0.1
          */
@@ -53,13 +37,6 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets text alignment of the TextBox.
-         *
-         *     @example
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label();
-         *     const TextAlignment = require('sf-core/ui/textalignment');
-         *     myLabel.textAlignment = TextAlignment.MIDCENTER;
-         *
          * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
          * @since 0.1
          */
@@ -74,13 +51,7 @@ const TextBox = extend(View)(
         this.textColor = UI.Color.BLACK;
 
         /**
-         * Gets/sets hint text hint that is displayed when the text of the TextBox is empty.
-         * 
-         *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox"
-         *     });
+         * Gets/sets hint text displayed when TextBox is empty.
          * 
          * @property {String} [hint = ""]
          * @since 0.1
@@ -91,14 +62,8 @@ const TextBox = extend(View)(
          * Gets/sets the color of the hint text. This property will work only for Android.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Color = require('sf-core/ui/color')
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox",
-         *         android: {
-         *             hintTextColor: Color.RED
-         *         }
-         *     });
+         *     const Color = require('nf-core/ui/color');
+         *     myTextBox.android.hintTextColor = Color.RED;
          *
          * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
          * @since 0.1
@@ -107,18 +72,12 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets adjustment status of TextBox.If enabled text size will be adjusted
-         * by view's fixed width. If you change it to true,
+         * by view's fixed width. If you set it true,
          * you should set minimum font size by changing the minimumFontSize property.
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox",
-         *         ios: {
-         *             adjustFontSizeToFit: true
-         *         }
-         *     });
+         *     myTextBox.ios.adjustFontSizeToFit = true;
          *
          * @property {Boolean} [adjustFontSizeToFit = false]
          * @since 0.1
@@ -130,14 +89,8 @@ const TextBox = extend(View)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox",
-         *         ios: {
-         *             adjustFontSizeToFit: true,
-         *             minimumFontSize:15
-         *         }
-         *     });
+         *     myTextBox.ios.adjustFontSizeToFit = true;
+         *     myTextBox.ios.minimumFontSize = 15;
          *
          * @property {Number} [minimumFontSize = 7]
          * @since 0.1
@@ -146,15 +99,8 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets clear button state. If enabled, clear button will be shown
-         * right at the TextBox. This property will work only for iOS.
+         * at right of the TextBox. This property will work for iOS only.
          * 
-         *     @example 
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox",
-         *         clearButtonEnabled: true
-         *     });
-         *
          * @property {Boolean} [clearButtonEnabled = false]
          * @since 0.1
          */
@@ -165,12 +111,8 @@ const TextBox = extend(View)(
          * This property will work only for iOS.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const KeyboardAppearance = require('sf-core/ui/keyboardappearance');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox",
-         *         KeyboardAppearance: KeyboardAppearance.DARK
-         *     });
+         *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
+         *     myTextBox.ios.keyboardAppearance = KeyboardAppearance.DARK;
          *
          * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
          * @since 0.1
@@ -180,13 +122,6 @@ const TextBox = extend(View)(
         /**
          * Gets/sets the content of the TextBox is password or not.
          *
-         *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         isPassword: true
-         *     });
-         *
          * @property {Boolean} [isPassword = false]
          * @since 0.1
          */
@@ -194,14 +129,6 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets keyboard type for TextBox.
-         *
-         *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const KeyboardType = require('sf-core/ui/keyboardtype');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         keyboardType: KeyboardType.NUMERIC
-         *     });
          *
          * @property {UI.KeyboardType} [keyboardType = UI.KeyboardType.DEFAULT]
          * @since 0.1
@@ -212,12 +139,8 @@ const TextBox = extend(View)(
          * Gets/sets action key type for TextBox.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         actionKeyType: ActionKeyType.NEXT
-         *     });
+         *     const ActionKeyType = require('nf-core/ui/actionkeytype');
+         *     myTextBox.actionKeyType = ActionKeyType.NEXT;
          *
          * @property {UI.ActionKeyType} [actionKeyType = UI.ActionKeyType.DEFAULT]
          * @since 0.1
@@ -225,7 +148,7 @@ const TextBox = extend(View)(
         this.actionKeyType = UI.ActionKeyType.DEFAULT;
 
         /**
-         * This method shows keyboard manually.
+         * Shows keyboard.
          *
          * @method showKeyboard
          * @since 0.1
@@ -233,7 +156,7 @@ const TextBox = extend(View)(
         this.showKeyboard = function(){};
 
         /**
-         * This method hides keyboard manually.
+         * Hides keyboard.
          *
          * @method hideKeyboard
          * @since 0.1
@@ -242,19 +165,13 @@ const TextBox = extend(View)(
 
         // events
         /**
-         * Gets/sets callback of text change event for the TextBox. When user insert or delete character
-         * to the TextBox, this event will fire.
+         * Gets/sets callback of text change events for TextBox. When user inserts or removes a character
+         * to TextBox, this event will be fired.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label();
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         onTextChanged: function(e){
-         *             myLabel.text = e.insertedText;
-         *         }
-         *     });
+         *     myTextBox.onTextChanged: function(e) {
+         *         console.log(e.insertedText);
+         *     };
          *
          * @param {Object} e Event arguments.
          * @param {String} e.insertedText The text that inserted into TextBox.
@@ -265,19 +182,12 @@ const TextBox = extend(View)(
         this.onTextChanged = function(e) {};
 
         /**
-         * Gets/sets on begin editing event for TextBox. When user starts to insert or delete character
-         * to the TextBox this event will fire.
-         *
+         * Gets/sets editing begin event for TextBox. Triggered when user focused on 
+         * the textbox by selecting it.
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label();
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         onBeginEditing: function(){
-         *             myLabel.text = myTextBox.text;
-         *         }
-         *     });
+         *     myTextBox.onEditBegins = function() {
+         *         console.log(Begin to type.);
+         *     };
          *
          * @event onEditBegins
          * @since 0.1
@@ -285,19 +195,13 @@ const TextBox = extend(View)(
         this.onEditBegins = function() {};
 
         /**
-         * Gets/sets editing end event for TextBox. When user finishes editing by clicking return key
-         * or clicking outside of the TextBox, this event will fire.
+         * Gets/sets editing end event for TextBox. Triggered when user finishes editing by clicking return key
+         * or clicking outside of the TextBox, this event will be fired.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const Label = require('sf-core/ui/label');
-         *     var myLabel = new Label();
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         onEditEnds: function(){
-         *             myLabel.text = myTextBox.text;
-         *         }
-         *     });
+         *     myTextBox.onEditEnds = function() {
+         *         console.log(Typing Ended.);
+         *     };
          *
          * @event onEditEnds
          * @since 0.1
@@ -309,14 +213,8 @@ const TextBox = extend(View)(
          * this event will be fired.
          *
          *     @example
-         *     const TextBox = require('sf-core/ui/textbox');
-         *     const ActionKeyType = require('sf-core/ui/actionkeytype');
-         *     var myTextBox = new TextBox({
-         *         hint: "Smartface TextBox Password",
-         *         actionKeyType: ActionKeyType.NEXT,
-         *         onActionButtonPress: function(e){
+         *     myTextBox.onActionButtonPress = function(e) {
          *             alert('Action Button pressed');
-         *         }
          *     });
          *
          * @param {Object} e Event arguments.
@@ -324,7 +222,7 @@ const TextBox = extend(View)(
          * @event onActionButtonPress
          * @since 0.1
          */
-        this.onActionButtonPress = function(e) {};
+         this.onActionButtonPress = function(e) {};
     }
 );
 
