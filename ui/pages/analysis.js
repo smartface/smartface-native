@@ -7,11 +7,11 @@
  * Pages class should initialized with root page. 
  *
  *     @example
- *     const Pages = require('sf-core/ui/pages');
- *     const Page = require('sf-core/ui/page');
- *     const Label = require('sf-core/ui/label');
- *     const AbsoluteLayout = require('sf-core/ui/absolutelayout');
- *     const Color = require('sf-core/ui/color');
+ *     const Pages = require('nf-core/ui/pages');
+ *     const Page = require('nf-core/ui/page');
+ *     const Label = require('nf-core/ui/label');
+ *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     const Color = require('nf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "Smartface Label",
  *         width: "50%", 
@@ -42,9 +42,9 @@ function Pages(params) {
      * Show page with pushing to pages stack. 
      *
      *     @example
-     *     const Pages = require('sf-core/ui/pages');
-     *     const Page = require('sf-core/ui/page');
-     *     const Button = require('sf-core/ui/button');
+     *     const Pages = require('nf-core/ui/pages');
+     *     const Page = require('nf-core/ui/page');
+     *     const Button = require('nf-core/ui/button');
      *     var myPage1 = new Page();
      *     var myButtonPage1 = new Button({
      *         text: "Go to Page 2",
@@ -74,7 +74,7 @@ function Pages(params) {
      *     });
      *     myPage2.add(myButtonPage2);
      *     
-     * @param {Page} page Page to show. Previous page will be stacked.
+     * @param {UI.Page} page Page to show. Previous page will be stacked.
      * @param {Boolean} animated If true, page will showed with default animation, otherwise will showed without animation.  
      * @method push
      */
@@ -84,9 +84,9 @@ function Pages(params) {
      * Show page with poping from pages stack.
      *
      *     @example
-     *     const Pages = require('sf-core/ui/pages');
-     *     const Page = require('sf-core/ui/page');
-     *     const Button = require('sf-core/ui/button');
+     *     const Pages = require('nf-core/ui/pages');
+     *     const Page = require('nf-core/ui/page');
+     *     const Button = require('nf-core/ui/button');
      *     var myPage1 = new Page();
      *     var myButtonPage1 = new Button({
      *         text: "Go to Page 2",

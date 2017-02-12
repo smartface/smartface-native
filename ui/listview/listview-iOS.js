@@ -10,6 +10,7 @@ const ListView = extend(View)(
             self.nativeObject = new SMFUITableView();
             self.refreshControl = new UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
+            self.nativeObject.separatorStyle = 0;
         }
         
         _super(this);
@@ -21,28 +22,53 @@ const ListView = extend(View)(
         
         self.ios = {}
         
-        self.ios.swipeItem = function(title,action){
-            return UITableViewRowAction.create(title,action);
+        self.ios.swipeItem = function(title,color,padding,action){
+            return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
         
         self.stopRefresh = function(){
             self.refreshControl.endRefreshing();
         }
         
-        Object.defineProperty(self.ios, 'swipeItems', {
+        var _refreshEnabled = true;
+        Object.defineProperty(self, 'refreshEnabled', {
             get: function() {
-                return self.nativeObject.rowActions;
+                return _refreshEnabled;
             },
             set: function(value) {
-                self.nativeObject.rowActions = value;
+                _refreshEnabled = value;
+                if (value){
+                    self.nativeObject.addSubview(self.refreshControl);
+                }else{
+                    self.refreshControl.removeFromSuperview();
+                }
+            },
+            enumerable: true
+         });
+          
+        Object.defineProperty(self.ios, 'leftSwipeItems', {
+            get: function() {
+                return self.nativeObject.leftRowActions;
+            },
+            set: function(value) {
+                self.nativeObject.leftRowActions = value;
             },
             enumerable: true
           });
           
+          Object.defineProperty(self.ios, 'rightSwipeItems', {
+            get: function() {
+                return self.nativeObject.rightRowActions;
+            },
+            set: function(value) {
+                self.nativeObject.rightRowActions = value;
+            },
+            enumerable: true
+          });
           
         Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
-                self.refreshControl.addJSTarget(value,UIControlEvents.valueChanged);
+                self.refreshControl.addJSTarget(value.bind(this),UIControlEvents.valueChanged);
             },
             enumerable: true
           });
@@ -70,6 +96,7 @@ const ListView = extend(View)(
         self.nativeObject.cellForRowAt = function(e){   
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
+             listItem.applyLayout();
          }
          
          var templateItem;
@@ -79,13 +106,17 @@ const ListView = extend(View)(
              return lisviewItem.nativeObject;
          }
          
-         self.createTemplate = function(e){
-            var tempTemplateItem = templateItem;
+        self.createTemplate = function(e){
             templateItem.nativeObject = e.contentView;
-                for (var template in templateItem.childs){
-                  tempTemplateItem.childs[template].nativeObject = e.contentView.viewWithTag(tempTemplateItem.childs[template].id);
-                }
-            return tempTemplateItem;
+            setAllChilds(templateItem);
+            return templateItem;
+        }
+         
+        function setAllChilds(item){
+             for (var child in item.childs){
+                item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
+                setAllChilds(item.childs[child]);
+             }
          }
          
         self.nativeObject.didSelectRowAt = function(e){
@@ -123,7 +154,17 @@ const ListView = extend(View)(
         
         self.android = {};
 
-        self.android.setPullRefreshColors = function(){}
+        self.setPullRefreshColors = function(param){
+            if( Object.prototype.toString.call( param ) === '[object Array]' ) {
+                self.refreshControl.tintColor = param[0];
+            }else{
+                self.refreshControl.tintColor = param;
+            }
+            
+        }
+        
+       // self.android.setPullRefreshColors = function(){}
+       
          if (params) {
             for (var param in params) {
                 this[param] = params[param];

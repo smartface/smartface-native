@@ -14,7 +14,7 @@ function HeaderBarItem(params) {
     Object.defineProperties(this, {
         'title': {
             get: function() {
-                self.nativeObject.title;
+                return self.nativeObject.title;
             },
             set: function(value) {
                 if (typeof(value) !== "string") {
@@ -32,7 +32,18 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value) {
                     _image = value;
-                    self.nativeObject.image = _image;
+                    self.nativeObject.image = _image.nativeObject;
+                }
+            },
+            enumerable: true
+        },
+        'color': {
+            get: function() {
+                return self.nativeObject.tintColor;
+            },
+            set: function(value) {
+                if (value) {
+                    self.nativeObject.tintColor = value;
                 }
             },
             enumerable: true
@@ -53,7 +64,7 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if (value instanceof Function) {
-                    _onPress = value;
+                    _onPress = value.bind(this);
                     self.nativeObject.addJSAction(_onPress);
                 }
             },

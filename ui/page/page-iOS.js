@@ -36,7 +36,7 @@ function Page(params) {
             return self.nativeObject.onLoad;
         },
         set: function(value) {
-            self.nativeObject.onLoad = value;
+            self.nativeObject.onLoad = value.bind(this);
         },
         enumerable: true
     });
@@ -46,7 +46,7 @@ function Page(params) {
             return self.nativeObject.onShow;
         },
         set: function(value) {
-            self.nativeObject.onShow = value;
+            self.nativeObject.onShow = value.bind(this);
         },
         enumerable: true
     });
@@ -56,7 +56,7 @@ function Page(params) {
             return self.nativeObject.onHide;
         },
         set: function(value) {
-            self.nativeObject.onHide = value;
+            self.nativeObject.onHide = value.bind(this);
         },
         enumerable: true
     });
@@ -89,6 +89,9 @@ function Page(params) {
         },
         enumerable: true
     });
+
+    // Prevent undefined is not an object error
+    this.statusBar.android = {};
         
     //Deprecated
     self.add = function(object){
@@ -174,6 +177,14 @@ function Page(params) {
         }
         
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
+    }
+    
+    self.headerBar.setLeftItem = function(value){
+        if(value){
+            self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+        } else {
+            self.nativeObject.navigationItem.leftBarButtonItem = null;
+        }
     }
     
     Object.defineProperty(self.headerBar, 'height', {
