@@ -139,6 +139,16 @@ function Page(params) {
         enumerable: true
     });
     
+    Object.defineProperty(self.headerBar, 'itemColor', {
+        get: function() {
+            return self.nativeObject.navigationController.navigationBar.tintColor;
+        },
+        set: function(value) {
+            self.nativeObject.navigationController.navigationBar.tintColor = value;
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.barTintColor;
