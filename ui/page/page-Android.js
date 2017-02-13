@@ -330,7 +330,6 @@ function Page(params) {
 
         var uId = 1;
         const HeaderBarItem = require("../headerbaritem");
-        const NativeMenuItem = requireClass("android.view.MenuItem");
         items.forEach(function(item) {
             if (!(item instanceof HeaderBarItem)) {
                 return;
@@ -339,7 +338,8 @@ function Page(params) {
             var menuItem = optionsMenu.add(0, uId, 0, item.title);
             item.image && menuItem.setIcon(item.image.nativeObject);
             menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+            // MenuItem.SHOW_AS_ACTION_ALWAYS 
+            menuItem.setShowAsAction(2);
 
             _headerBarItems[uId++] = item;
         });
@@ -375,23 +375,7 @@ function Page(params) {
         
     }
 
-    function setListenButtonBack() {
-        const NativeView = requireClass('android.view.View');
-        self.nativeObject.getView().setFocusableInTouchMode(true);
-        self.nativeObject.getView().requestFocus();
-        self.nativeObject.getView().setOnKeyListener(NativeView.OnKeyListener.implement({
-            onKey: function( view, keyCode, keyEvent) {
-                if (self.isShowing && isBackButtonEnabled) {
-                    const NativeKeyEvent = requireClass('android.view.KeyEvent');
-                    if( keyCode === NativeKeyEvent.KEYCODE_BACK
-                     && keyEvent.getAction() === NativeKeyEvent.ACTION_DOWN) {
-                        activity.getSupportFragmentManager().popBackStackImmediate();
-                    }
-                }
-                return true;
-            }
-        }));
-    };
+    
 
     // Default values
     self.statusBar.visible = true;

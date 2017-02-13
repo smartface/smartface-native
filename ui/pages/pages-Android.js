@@ -21,6 +21,20 @@ const Pages = function(params) {
         })
     );
     
+    Pages.drawerLayout.setFocusableInTouchMode(true);
+    Pages.drawerLayout.requestFocus();
+    Pages.drawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
+            onKey: function( view, keyCode, keyEvent) {
+                if (pagesStack[pagesStack.length-1].android.backButtonEnabled) {
+                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                    if( keyCode === 4 && keyEvent.getAction() === 0) {
+                        activity.getSupportFragmentManager().popBackStackImmediate();
+                    }
+                }
+                return true;
+            }
+        }));
+    
     function onBackStackChanged() {
         var supportFragmentManager = activity.getSupportFragmentManager();
         var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
@@ -47,6 +61,8 @@ const Pages = function(params) {
             pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
             pagesStack[pagesStack.length-1].isShowing = false;
         }
+        page.isShowing = true;
+        page.pages = self;
         var fragmentManager = activity.getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated){
@@ -66,8 +82,6 @@ const Pages = function(params) {
         fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
-        page.isShowing = true;
-        page.pages = self;
         page.invalidate();
         pagesStack.push(page);
     }
