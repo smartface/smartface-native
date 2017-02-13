@@ -2,7 +2,6 @@ const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-const SliderDrawer = require('nf-core/ui/sliderdrawer');
 
 const NativeFragment      = requireClass("android.support.v4.app.Fragment");
 const NativeWindowManager = requireClass("android.view.WindowManager");
@@ -190,7 +189,6 @@ function Page(params) {
         },
         enumerable: true    
     });
-
     var _headerBarColor = Color.create("#00A1F1"); // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
@@ -356,21 +354,6 @@ function Page(params) {
         });
     };
 
-    var _sliderDrawer = null;
-    Object.defineProperty(this, 'sliderDrawer', {
-        get: function() {
-            return _sliderDrawer;
-        },
-        set: function(sliderDrawer) {
-            if (sliderDrawer instanceof SliderDrawer) {
-                _sliderDrawer = sliderDrawer
-                _sliderDrawer.page = self;
-                self.invalidateSliderDrawer();
-            }
-        },
-        enumerable: true
-    });
-
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function (leftItem) {
         const HeaderBarItem = require("../headerbaritem");
@@ -402,12 +385,6 @@ function Page(params) {
 
         // todo Set color value after resolving COR-1153.
        // self.statusBar.android.color = _color;
-    }
-    
-    this.invalidateSliderDrawer = function(){
-        if(_sliderDrawer && self.isShowing){
-            self.pages.sliderDrawer = _sliderDrawer;
-        }
     }
 
     this.invalidateHeaderBar = function() {
@@ -461,7 +438,6 @@ function Page(params) {
     self.invalidate = function() {
         self.invalidateStatusBar();
         self.invalidateHeaderBar();
-        self.invalidateSliderDrawer();
         var marginTop = 0;
         if (self.headerBar.visible){
             marginTop += AndroidUnitConverter.pixelToDp(self.headerBar.height);

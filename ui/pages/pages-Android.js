@@ -1,24 +1,26 @@
 const NativeView            = requireClass("android.view.View");
-const NativeAbsoluteLayout  = requireClass("android.widget.AbsoluteLayout");
 const NativeColor           = requireClass("android.graphics.Color");
 const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
+const NativeGravity         = requireClass('android.view.Gravity');
 
-function Pages(params) {
+const SliderDrawer          = require('nf-core/ui/sliderdrawer');
+
+const Pages = function(params) {
     var self = this;
     var pagesStack = [];
     var activity = Android.getActivity();
     var rootViewId = NativeView.generateViewId();
 
     // Creating root layout for fragments
-    self.drawerLayout = new NativeDrawerLayout(activity);
+    var drawerLayout = Pages.drawerLayout = new NativeDrawerLayout(activity);
     // android.view.ViewGroupLayoutParams.MATCH_PARENT
     var layoutparams = new NativeDrawerLayout.LayoutParams(-1,-1);
-    self.drawerLayout.setBackgroundColor(NativeColor.WHITE);
-    self.drawerLayout.setLayoutParams(layoutparams);
-    self.drawerLayout.setId(rootViewId);
-    self.drawerLayout.setFitsSystemWindows(true);
-    activity.setContentView(self.drawerLayout);
+    drawerLayout.setBackgroundColor(NativeColor.WHITE);
+    drawerLayout.setLayoutParams(layoutparams);
+    drawerLayout.setId(rootViewId);
+    drawerLayout.setFitsSystemWindows(true);
+    activity.setContentView(drawerLayout);
     
     activity.getSupportFragmentManager().addOnBackStackChangedListener(
         NativeFragmentManager.OnBackStackChangedListener.implement({
@@ -47,7 +49,7 @@ function Pages(params) {
     }
 
     self.push = function(page, animated, tag){
-        self.detachSliderDrawer();
+        detachSliderDrawer(_sliderDrawer);
         if(pagesStack.length > 0) {
             pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
             pagesStack[pagesStack.length-1].isShowing = false;
@@ -78,50 +80,87 @@ function Pages(params) {
     }
 
     self.pop = function(){
+         detachSliderDrawer(_sliderDrawer);
         var fragmentManager = activity.getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount() > 0){
             fragmentManager.popBackStackImmediate();
         }
     }
     
+    self.push(params.rootPage);
+};
 
-    // Will be called from self
-    function attachSliderDrawer(){
-        var sliderDrawerId = _sliderDrawer.nativeObject.getId();
-        var isExists = self.drawerLayout.findViewById(sliderDrawerId);
-        if(isExists){
-            self.drawerLayout.removeView(isExists);
-        }
-        self.drawerLayout.addView(_sliderDrawer.nativeObject);
-        self.drawerLayout.bringToFront();
-        if(_sliderDrawer.drawerListener){
-            self.drawerLayout.addDrawerListener(_sliderDrawer.drawerListener);
-        }
-    };
-    
-    // Will be called from self.
-    self.detachSliderDrawer = function(){
-        if(_sliderDrawer){
-            self.drawerLayout.removeView(_sliderDrawer.nativeObject);
-            if(_sliderDrawer.drawerListener){
-                self.drawerLayout.addDrawerListener(_sliderDrawer.drawerListener);
+var _sliderDrawer = null;
+Object.defineProperties(Pages, {
+    'sliderDrawer': {
+        get: function() {
+            return _sliderDrawer;
+        },
+        set: function(sliderDrawer) {
+            detachSliderDrawer(_sliderDrawer);
+            _sliderDrawer = sliderDrawer;
+            if(sliderDrawer){
+                attachSliderDrawer( _sliderDrawer);
+            }
+        },
+        enumerable: true
+    },
+    // using from outside
+    'showSliderDrawer' : {
+        value: function(){
+            if(_sliderDrawer){
+                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+                    Pages.drawerLayout.openDrawer(NativeGravity.RIGHT);
+                }
+                else{
+                    Pages.drawerLayout.openDrawer(NativeGravity.LEFT);
+                }
+            }
+        },
+        writable: false
+    },
+    // using from outside
+    'hideSliderDrawer' : {
+        value: function(){
+            if(_sliderDrawer){
+                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+                    Pages.drawerLayout.closeDrawer(NativeGravity.RIGHT);
+                }
+                else{
+                    Pages.drawerLayout.closeDrawer(NativeGravity.LEFT);
+                }
+            }
+        },
+        writable: false
+    },
+});
+
+
+
+// Will be called from self
+function attachSliderDrawer(sliderDrawer){
+    if(sliderDrawer){
+        var sliderDrawerId = sliderDrawer.nativeObject.getId();
+        var isExists = Pages.drawerLayout.findViewById(sliderDrawerId);
+        if(!isExists){
+            Pages.drawerLayout.addView(sliderDrawer.nativeObject);
+            Pages.drawerLayout.bringToFront();
+            if(sliderDrawer.drawerListener){
+                Pages.drawerLayout.addDrawerListener(sliderDrawer.drawerListener);
             }
         }
-    };
-    
-    var _sliderDrawer;
-    Object.defineProperty(self, "sliderDrawer", {
-        get: function(){
-            _sliderDrawer;
-        },
-        set: function(slideDrawer){
-            _sliderDrawer = slideDrawer;
-            attachSliderDrawer();
+    }
+};
+
+// Will be called from self.
+function detachSliderDrawer(sliderDrawer){
+    if(sliderDrawer){
+        Pages.drawerLayout.removeView(sliderDrawer.nativeObject);
+        if(sliderDrawer.drawerListener){
+            Pages.drawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
         }
-    })
-    
-    self.push(params.rootPage);
-}
+    }
+};
 
 
 

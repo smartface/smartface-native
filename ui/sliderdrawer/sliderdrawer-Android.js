@@ -1,6 +1,7 @@
 const AbsoluteLayout        = require('../absolutelayout');
 const extend                = require('js-base/core/extend');
-const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
+const AndroidUnitConverter  = require('nf-core/util/Android/unitconverter.js');
+const Pages                 = require('nf-core/ui/pages');
 
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 const NativeGravity         = requireClass('android.view.Gravity');
@@ -37,29 +38,13 @@ const SliderDrawer = extend(AbsoluteLayout)(
             },
             'show': {
                 value: function(){
-                    if(self.page){
-                        if(_position == SliderDrawer.Position.RIGHT){
-                            self.page.drawerLayout.openDrawer(NativeGravity.RIGHT);
-                        }
-                        else{
-                            self.page.drawerLayout.openDrawer(NativeGravity.LEFT);
-                        }
-                       
-                    }
+                    Pages.showSliderDrawer();
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    if(self.page){
-                        if(_position == SliderDrawer.Position.RIGHT){
-                            self.page.drawerLayout.closeDrawer(NativeGravity.RIGHT);
-                        }
-                        else{
-                            self.page.drawerLayout.closeDrawer(NativeGravity.LEFT);
-                        }
-                       
-                    }
+                    Pages.hideSliderDrawer();
                 },
                 writable: false
             },
