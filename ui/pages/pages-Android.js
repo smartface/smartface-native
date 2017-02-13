@@ -2,18 +2,17 @@ const SliderDrawer          = require('nf-core/ui/sliderdrawer');
 const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 
 const NativeView            = requireClass("android.view.View");
-const NativeColor           = requireClass("android.graphics.Color");
 const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
-const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
-const NativeGravity         = requireClass('android.view.Gravity');
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
+var activity = Android.getActivity();
 var pageAnimationsCache;
+var drawerLayout = activity.findViewById(NativeR.id.layout_root);
+var toolbar = activity.findViewById(NativeR.id.toolbar);
 
 const Pages = function(params) {
     var self = this;
     var pagesStack = [];
-    var activity = Android.getActivity();
     var rootViewId = NativeR.id.layout_container;
     
     activity.getSupportFragmentManager().addOnBackStackChangedListener(
@@ -54,48 +53,18 @@ const Pages = function(params) {
             }
         }));
     
-    self.push = function(page, animated, tag){
-        detachSliderDrawer(_sliderDrawer);
-        if(pagesStack.length > 0) {
-            pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-            pagesStack[pagesStack.length-1].isShowing = false;
-        }
-        page.isShowing = true;
-        page.pages = self;
-        var fragmentManager = activity.getSupportFragmentManager();
-        var fragmentTransaction = fragmentManager.beginTransaction();
-        if(animated){
-            if(!pageAnimationsCache){
-                pageAnimationsCache = {};
-                var packageName = activity.getPackageName();
-                var resources =  activity.getResources();
-                pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName);
-                pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit","anim",packageName);
-                pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName);
-                pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
+    Object.defineProperties(self,{
+        'push': {
+            value: function(page, animated){
+                push(self, rootViewId, page, animated, pagesStack);
             }
-            
-            if(pageAnimationsCache.leftEnter != 0 && pageAnimationsCache.leftExit != 0 
-                    && pageAnimationsCache.rightEnter != 0 && pageAnimationsCache.rightExit != 0){
-                fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
-                                                        pageAnimationsCache.leftExit,
-                                                        pageAnimationsCache.rightEnter,
-                                                        pageAnimationsCache.rightExit);
+        },
+        'pop': {
+            value: function(){
+                pop();
             }
-        }
-        fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
-        fragmentTransaction.commit();
-        fragmentManager.executePendingTransactions();
-        pagesStack.push(page);
-    }
-
-    self.pop = function(){
-         detachSliderDrawer(_sliderDrawer);
-        var fragmentManager = activity.getSupportFragmentManager();
-        if(fragmentManager.getBackStackEntryCount() > 0){
-            fragmentManager.popBackStackImmediate();
-        }
-    }
+        },
+    });
     
     self.push(params.rootPage);
 };
@@ -112,56 +81,87 @@ Object.defineProperties(Pages, {
             if(sliderDrawer){
                 attachSliderDrawer( _sliderDrawer);
             }
-        },
-        enumerable: true
+        }
     },
-    // using from outside
     'showSliderDrawer' : {
         value: function(){
             if(_sliderDrawer){
                 if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
-                    Pages.drawerLayout.openDrawer(NativeGravity.RIGHT);
+                    // Gravity.RIGHT 
+                    Pages.drawerLayout.openDrawer(5);
                 }
                 else{
-                    Pages.drawerLayout.openDrawer(NativeGravity.LEFT);
+                    // Gravity.LEFT
+                    Pages.drawerLayout.openDrawer(3);
                 }
             }
-        },
-        writable: false
+        }
     },
-    // using from outside
     'hideSliderDrawer' : {
         value: function(){
             if(_sliderDrawer){
                 if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
-                    Pages.drawerLayout.closeDrawer(NativeGravity.RIGHT);
+                    // Gravity.RIGHT
+                    Pages.drawerLayout.closeDrawer(5);
                 }
                 else{
-                    Pages.drawerLayout.closeDrawer(NativeGravity.LEFT);
+                    // Gravity.LEFT
+                    Pages.drawerLayout.closeDrawer(3);
                 }
             }
-        },
-        writable: false
+        }
     },
     'drawerLayout':{
-        // value: Android.getActivity().findViewById(NativeR.id.layout_root),
-        get: function(){
-            return Android.getActivity().findViewById(NativeR.id.layout_root);
-        }
-        // writable: false
+        value: drawerLayout
     },
     'toolbar':{
-        // value: Android.getActivity().findViewById(NativeR.id.toolbar),
-        get: function(){
-            return Android.getActivity().findViewById(NativeR.id.toolbar);
-        }
-        // writable: false
+        value: toolbar
     }
 });
 
+function push(self, rootViewId, page, animated, pagesStack){
+    detachSliderDrawer(_sliderDrawer);
+    if(pagesStack.length > 0) {
+        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+        pagesStack[pagesStack.length-1].isShowing = false;
+    }
+    page.isShowing = true;
+    page.pages = self;
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    if(animated){
+        if(!pageAnimationsCache){
+            pageAnimationsCache = {};
+            var packageName = activity.getPackageName();
+            var resources =  activity.getResources();
+            pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName);
+            pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit","anim",packageName);
+            pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName);
+            pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
+        }
+        
+        if(pageAnimationsCache.leftEnter != 0 && pageAnimationsCache.leftExit != 0 
+                && pageAnimationsCache.rightEnter != 0 && pageAnimationsCache.rightExit != 0){
+            fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
+                                                    pageAnimationsCache.leftExit,
+                                                    pageAnimationsCache.rightEnter,
+                                                    pageAnimationsCache.rightExit);
+        }
+    }
+    fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
+    fragmentTransaction.commit();
+    fragmentManager.executePendingTransactions();
+    pagesStack.push(page);
+}
 
+function pop(){
+    detachSliderDrawer(_sliderDrawer);
+    var fragmentManager = activity.getSupportFragmentManager();
+    if(fragmentManager.getBackStackEntryCount() > 0){
+        fragmentManager.popBackStackImmediate();
+    }
+}
 
-// Will be called from self
 function attachSliderDrawer(sliderDrawer){
     if(sliderDrawer){
         var sliderDrawerId = sliderDrawer.nativeObject.getId();
@@ -174,9 +174,8 @@ function attachSliderDrawer(sliderDrawer){
             }
         }
     }
-};
+}
 
-// Will be called from self.
 function detachSliderDrawer(sliderDrawer){
     if(sliderDrawer){
         Pages.drawerLayout.removeView(sliderDrawer.nativeObject);
@@ -184,8 +183,6 @@ function detachSliderDrawer(sliderDrawer){
             Pages.drawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
         }
     }
-};
-
-
+}
 
 module.exports = Pages;
