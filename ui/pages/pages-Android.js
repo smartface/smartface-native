@@ -8,6 +8,7 @@ const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayo
 const NativeGravity         = requireClass('android.view.Gravity');
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
+var pageAnimationsCache;
 
 const Pages = function(params) {
     var self = this;
@@ -17,7 +18,25 @@ const Pages = function(params) {
     
     activity.getSupportFragmentManager().addOnBackStackChangedListener(
         NativeFragmentManager.OnBackStackChangedListener.implement({
-            onBackStackChanged: onBackStackChanged
+            onBackStackChanged: function(){
+                var supportFragmentManager = activity.getSupportFragmentManager();
+                var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
+                if (nativeStackCount < pagesStack.length) { // means poll
+                    if(pagesStack.length > 0) {
+                        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+                        pagesStack[pagesStack.length-1].isShowing = false;
+                        var oldPage = pagesStack.pop();
+                        var fragmentTransaction = supportFragmentManager.beginTransaction();
+                        fragmentTransaction.remove(oldPage.nativeObject).commit();
+                        self.removeDrawerListener();
+                        
+                        if(pagesStack.length > 0) {
+                            pagesStack[pagesStack.length-1].isShowing = true;
+                            pagesStack[pagesStack.length-1].invalidate();
+                        }
+                    }
+                }
+            }
         })
     );
     
@@ -35,26 +54,6 @@ const Pages = function(params) {
             }
         }));
     
-    function onBackStackChanged() {
-        var supportFragmentManager = activity.getSupportFragmentManager();
-        var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
-        if (nativeStackCount < pagesStack.length) { // means poll
-            if(pagesStack.length > 0) {
-                pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-                pagesStack[pagesStack.length-1].isShowing = false;
-                var oldPage = pagesStack.pop();
-                var fragmentTransaction = supportFragmentManager.beginTransaction();
-                fragmentTransaction.remove(oldPage.nativeObject).commit();
-                self.removeDrawerListener();
-                
-                if(pagesStack.length > 0) {
-                    pagesStack[pagesStack.length-1].isShowing = true;
-                    pagesStack[pagesStack.length-1].invalidate();
-                }
-            }
-        }
-    }
-
     self.push = function(page, animated, tag){
         detachSliderDrawer(_sliderDrawer);
         if(pagesStack.length > 0) {
@@ -66,23 +65,27 @@ const Pages = function(params) {
         var fragmentManager = activity.getSupportFragmentManager();
         var fragmentTransaction = fragmentManager.beginTransaction();
         if(animated){
-            var packageName = activity.getPackageName();
-            var resources =  activity.getResources();
-            var leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName)
-            var leftExit = resources.getIdentifier("slide_left_exit","anim",packageName)
-            var rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName)
-            var rightExit = resources.getIdentifier("slide_right_exit","anim",packageName)
-            if(leftEnter != 0 && leftExit != 0 && rightEnter != 0 && rightExit != 0){
-                fragmentTransaction.setCustomAnimations(leftEnter,
-                                                        leftExit,
-                                                        rightEnter,
-                                                        rightExit);
+            if(!pageAnimationsCache){
+                pageAnimationsCache = {};
+                var packageName = activity.getPackageName();
+                var resources =  activity.getResources();
+                pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName);
+                pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit","anim",packageName);
+                pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName);
+                pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
+            }
+            
+            if(pageAnimationsCache.leftEnter != 0 && pageAnimationsCache.leftExit != 0 
+                    && pageAnimationsCache.rightEnter != 0 && pageAnimationsCache.rightExit != 0){
+                fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
+                                                        pageAnimationsCache.leftExit,
+                                                        pageAnimationsCache.rightEnter,
+                                                        pageAnimationsCache.rightExit);
             }
         }
         fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
         fragmentTransaction.commit();
         fragmentManager.executePendingTransactions();
-        page.invalidate();
         pagesStack.push(page);
     }
 

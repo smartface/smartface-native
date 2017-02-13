@@ -44,7 +44,6 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             onShowCallback && onShowCallback();
-            setListenButtonBack();
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
@@ -118,7 +117,7 @@ function Page(params) {
     });
 
     this.android = {};
-    var isBackButtonEnabled = false;
+    var isBackButtonEnabled;
     Object.defineProperty(this.android, 'backButtonEnabled', {
         get: function() {
             return isBackButtonEnabled;
@@ -130,7 +129,7 @@ function Page(params) {
     });
     
     this.statusBar = {};
-    var _visible = true;
+    var _visible;
     Object.defineProperty(this.statusBar, 'visible',  {
         get: function() {
             return _visible;
@@ -149,7 +148,7 @@ function Page(params) {
     });
     
     this.statusBar.android = {};
-    var _color = Color.TRANSPARENT;
+    var _color;
     Object.defineProperty(this.statusBar.android, 'color',  {
         get: function() {
             return _color;
@@ -179,7 +178,7 @@ function Page(params) {
         enumerable: true    
     });
     
-    var _headerBarColor = Color.create("#00A1F1"); // SmartfaceBlue
+    var _headerBarColor; // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return _headerBarColor;
@@ -206,7 +205,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarHomeEnabled = false;
+    var _headerBarHomeEnabled;
     Object.defineProperty(self.headerBar.android, 'displayShowHomeEnabled', {
         get: function() {
             return _headerBarHomeEnabled;
@@ -256,7 +255,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarTitleColor = Color.WHITE;
+    var _headerBarTitleColor;
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
             return _headerBarTitleColor;
@@ -284,7 +283,7 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarSubtitleColor = Color.WHITE;
+    var _headerBarSubtitleColor;
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
             return _headerBarSubtitleColor;
@@ -371,15 +370,16 @@ function Page(params) {
         self.layout.removeChild(view);
     };
 
-    self.invalidate = function() {
-        
-    }
-
-    
-
     // Default values
     self.statusBar.visible = true;
+    self.isBackButtonEnabled = false;
     // todo Add color default value after resolving COR-1153.
+    // self.statusBar.color = Color.TRANSPARENT;
+    self.headerBar.backgroundColor = Color.create("#00A1F1");
+    self.headerBar.android.displayShowHomeEnabled = false;
+    self.headerBar.titleColor = Color.WHITE;
+    self.headerBar.subtitleColor = Color.WHITE;
+    self.headerBar.visible = true;
     
     // Assign parameters given in constructor
     if (params) {
