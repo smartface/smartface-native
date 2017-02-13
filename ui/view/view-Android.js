@@ -13,7 +13,7 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
-const NativeYogaAlign           = requireClass('com.facebook.yoga.YogaAlign');
+const NativeYogaAlign           = requireClass("com.facebook.yoga.YogaAlign");
 
 const Color = require("nf-core/ui/color");
 
