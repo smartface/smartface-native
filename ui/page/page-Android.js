@@ -1,16 +1,17 @@
-const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
-const Color         = require("nf-core/ui/color");
-const TypeUtil      = require("nf-core/util/type");
-const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
+const AbsoluteLayout        = require("nf-core/ui/absolutelayout");
+const Color                 = require("nf-core/ui/color");
+const TypeUtil              = require("nf-core/util/type");
+const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
+const Pages                 = require("nf-core/ui/pages");
 
-const NativeFragment      = requireClass("android.support.v4.app.Fragment");
-const NativeWindowManager = requireClass("android.view.WindowManager");
-const NativeBuildVersion  = requireClass("android.os.Build");
-const NativeAndroidR      = requireClass("android.R");
-const NativeSupportR      = requireClass("android.support.v7.appcompat.R");
-const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-const NativeHtml          = requireClass("android.text.Html");
-const NativeDrawerLayout = requireClass('android.support.v4.widget.DrawerLayout');
+const NativeFragment        = requireClass("android.support.v4.app.Fragment");
+const NativeWindowManager   = requireClass("android.view.WindowManager");
+const NativeBuildVersion    = requireClass("android.os.Build");
+const NativeAndroidR        = requireClass("android.R");
+const NativeSupportR        = requireClass("android.support.v7.appcompat.R");
+const NativeColorDrawable   = requireClass("android.graphics.drawable.ColorDrawable");
+const NativeHtml            = requireClass("android.text.Html");
+const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 
@@ -18,14 +19,6 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    var innerLayout = new AbsoluteLayout({
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        isRoot : true,
-        backgroundColor: Color.WHITE
-    });
     var rootLayout = new AbsoluteLayout({
         top: 0,
         left: 0,
@@ -35,9 +28,7 @@ function Page(params) {
         backgroundColor: Color.WHITE
     });
     
-    rootLayout.addChild(innerLayout);
     rootLayout.parent = self;
-    innerLayout.parent = rootLayout;
     var isCreated = false;
 
     var optionsMenu = null;
@@ -63,7 +54,7 @@ function Page(params) {
             return true;
         },
         onConfigurationChanged: function(newConfig){
-             self.invalidate();                   
+            // implemented for onRotationChange event for js developer                 
         },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
@@ -84,7 +75,7 @@ function Page(params) {
 
     Object.defineProperty(this, 'layout', {
         get: function() {
-            return innerLayout;
+            return rootLayout;
         },
         enumerable: true
     });
@@ -147,7 +138,7 @@ function Page(params) {
         set: function(visible) {
             _visible = visible;
             var window = activity.getWindow();
-            if(visible == true) {
+            if(visible) {
                 window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
              }
             else {
@@ -158,7 +149,7 @@ function Page(params) {
     });
     
     this.statusBar.android = {};
-    var _color = Color.create("#FF757575");
+    var _color = Color.TRANSPARENT;
     Object.defineProperty(this.statusBar.android, 'color',  {
         get: function() {
             return _color;
@@ -167,13 +158,11 @@ function Page(params) {
             _color = color;
             // // @todo setStatusBarColor doesn't work causing by issue COR-1153
             // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
-            if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-                var window = activity.getWindow();
-                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
-                window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                window.setStatusBarColor(color);
-            }
+            // if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+            //     var window = activity.getWindow();
+            //     window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //     window.setStatusBarColor(color);
+            // }
         },
         enumerable: true
     });
@@ -189,6 +178,7 @@ function Page(params) {
         },
         enumerable: true    
     });
+    
     var _headerBarColor = Color.create("#00A1F1"); // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
@@ -196,14 +186,13 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                _headerBarColor = color;
-                self.invalidateHeaderBar();
+                Pages.toolbar.setBackgroundColor(color);
             }
         },
         enumerable: true
     });
 
-    var _headerBarImage;
+    var _headerBarImage = null;
     Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
             return _headerBarImage;
@@ -211,7 +200,7 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerBarImage = image;
-                self.invalidateHeaderBar();
+                Pages.toolbar.setBackground(image.nativeObject);
             }
         },
         enumerable: true
@@ -225,7 +214,7 @@ function Page(params) {
         set: function(enabled) {
             if (TypeUtil.isBoolean(enabled)) {
                 _headerBarHomeEnabled = enabled;
-                self.invalidateHeaderBar();
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
             }
         },
         enumerable: true
@@ -239,30 +228,30 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarHomeImage;
+    var _headerBarHomeImage = null;
     Object.defineProperty(self.headerBar, 'homeAsUpIndicatorImage', {
         get: function() {
             return _headerBarHomeImage;
         },
         set: function(image) {
-            _headerBarHomeImage = image;
-            self.invalidateHeaderBar();
+            if(image){
+                _headerBarHomeImage = image;
+                activity.getSupportActionBar().setHomeAsUpIndicator(_headerBarHomeImage.nativeObject);
+            }
         },
         enumerable: true
     });
 
-    var _headerBarTitle = "Smartface";
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return _headerBarTitle;
+            return Page.toolbar.getTitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                _headerBarTitle = text;
+                Page.toolbar.setTitle(text);
             } else {
-                _headerBarTitle = "";
+                Page.toolbar.setTitle("");
             }
-            self.invalidateHeaderBar();
         },
         enumerable: true
     });
@@ -275,21 +264,21 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                self.invalidateHeaderBar();
+                Pages.toolbar.setTitleTextColor(color);
             }
         },
         enumerable: true
     });
 
-    var _headerBarSubtitle = "";
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return _headerBarSubtitle;
+            return Page.toolbar.getSubtitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                _headerBarSubtitle = text;
-                self.invalidateHeaderBar();
+                Page.toolbar.setSubtitle(text);
+            } else {
+                Page.toolbar.setSubtitle("");
             }
         },
         enumerable: true
@@ -302,22 +291,24 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                _headerBarSubtitleColor = color;
-                self.invalidateHeaderBar();
+                Pages.toolbar.setSubtitleTextColor(color);
             }
         },
         enumerable: true
     });
 
-    var _headerBarVisible = true;
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
-            return activity.getSupportActionBar().isShowing();
+            return Pages.toolbar.getVisibility() ==  0; // View.VISIBLE
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
-                _headerBarVisible = visible;
-                self.invalidateHeaderBar();
+                if(visible){
+                    Pages.toolbar.setVisibility(0); // View.VISIBLE
+                }
+                else{
+                    Pages.toolbar.setVisibility(8); // View.GONE
+                }
             }
         },
         enumerable: true
@@ -380,81 +371,8 @@ function Page(params) {
         self.layout.removeChild(view);
     };
 
-    this.invalidateStatusBar = function(){
-        self.statusBar.visible = _visible;
-
-        // todo Set color value after resolving COR-1153.
-       // self.statusBar.android.color = _color;
-    }
-
-    this.invalidateHeaderBar = function() {
-        if (self.isShowing) {
-            var spannedTitle = toSpanned(_headerBarTitle, _headerBarTitleColor);
-            var spannedSubtitle = toSpanned(_headerBarSubtitle, _headerBarSubtitleColor);
-            var headerBarNative = activity.getSupportActionBar();
-            headerBarNative.setTitle(spannedTitle);
-            headerBarNative.setSubtitle(spannedSubtitle);
-            headerBarNative.setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
-
-            if (_headerBarImage) {
-                headerBarNative.setBackgroundDrawable(_headerBarImage.nativeObject);
-            } else if (_headerBarColor) {
-                var headerBarColor = new NativeColorDrawable(_headerBarColor);
-                headerBarNative.setBackgroundDrawable(headerBarColor);
-            }
-
-            if (_headerBarVisible) {
-                headerBarNative.show();
-            } else {
-                headerBarNative.hide();
-            }
-
-            if (_headerBarHomeImage && _headerBarHomeImage.nativeObject) {
-                headerBarNative.setHomeAsUpIndicator(_headerBarHomeImage.nativeObject);
-            } else {
-                headerBarNative.setHomeAsUpIndicator(null);
-            }
-        }
-    }
-    
-    this.invalidatePosition = function(orientation){
-        var statusBarHeight = (self.statusBar.visible)? self.statusBar.height : 0;
-        var headerBarHeight = (self.headerBar.visible)? self.headerBar.height : 0;
-
-        if(!orientation){
-            orientation = activity.getResources().getConfiguration().orientation;
-        }
-        if(orientation == 2) { // landscape
-            self.width = Device.screenHeight;
-            self.height = Device.screenWidth - statusBarHeight - headerBarHeight;
-            innerLayout.setPosition({width: self.width, height: self.height, top: statusBarHeight + headerBarHeight});
-        } else { // portrait
-            self.height = Device.screenHeight - statusBarHeight - headerBarHeight;
-            self.width = Device.screenWidth;
-            innerLayout.setPosition({width: self.width, height:self.height, top: statusBarHeight + headerBarHeight});
-        }
-    }
-
     self.invalidate = function() {
-        self.invalidateStatusBar();
-        self.invalidateHeaderBar();
-        var marginTop = 0;
-        if (self.headerBar.visible){
-            marginTop += AndroidUnitConverter.pixelToDp(self.headerBar.height);
-        }
-        if (self.statusBar.visible){
-            marginTop += AndroidUnitConverter.pixelToDp(self.statusBar.height);
-        }
-        innerLayout.marginTop = marginTop;
-    }
-
-    function toSpanned(text, color) {
-        color = '#'+ (color & 0xFFFFFF).toString(16); // int to hexString
-        if (NativeBuildVersion.VERSION.SDK_INT >= NativeBuildVersion.VERSION_CODES.N) {
-            return NativeHtml.fromHtml("<font color='" + color + "'>" + text + "</font>", NativeHtml.FROM_HTML_MODE_COMPACT);
-        } else {
-            return NativeHtml.fromHtml("<font color='" + color + "'>" + text + "</font>");
-        }
+        
     }
 
     function setListenButtonBack() {

@@ -1,33 +1,26 @@
+const SliderDrawer          = require('nf-core/ui/sliderdrawer');
+const AndroidConfig         = require('nf-core/util/Android/androidconfig');
+
 const NativeView            = requireClass("android.view.View");
 const NativeColor           = requireClass("android.graphics.Color");
 const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 const NativeGravity         = requireClass('android.view.Gravity');
+const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
-const SliderDrawer          = require('nf-core/ui/sliderdrawer');
 
 const Pages = function(params) {
     var self = this;
     var pagesStack = [];
     var activity = Android.getActivity();
-    var rootViewId = NativeView.generateViewId();
-
-    // Creating root layout for fragments
-    var drawerLayout = Pages.drawerLayout = new NativeDrawerLayout(activity);
-    // android.view.ViewGroupLayoutParams.MATCH_PARENT
-    var layoutparams = new NativeDrawerLayout.LayoutParams(-1,-1);
-    drawerLayout.setBackgroundColor(NativeColor.WHITE);
-    drawerLayout.setLayoutParams(layoutparams);
-    drawerLayout.setId(rootViewId);
-    drawerLayout.setFitsSystemWindows(true);
-    activity.setContentView(drawerLayout);
+    var rootViewId = NativeR.id.layout_container;
     
     activity.getSupportFragmentManager().addOnBackStackChangedListener(
         NativeFragmentManager.OnBackStackChangedListener.implement({
             onBackStackChanged: onBackStackChanged
         })
     );
-
+    
     function onBackStackChanged() {
         var supportFragmentManager = activity.getSupportFragmentManager();
         var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
@@ -133,6 +126,20 @@ Object.defineProperties(Pages, {
         },
         writable: false
     },
+    'drawerLayout':{
+        // value: Android.getActivity().findViewById(NativeR.id.layout_root),
+        get: function(){
+            return Android.getActivity().findViewById(NativeR.id.layout_root);
+        }
+        // writable: false
+    },
+    'toolbar':{
+        // value: Android.getActivity().findViewById(NativeR.id.toolbar),
+        get: function(){
+            return Android.getActivity().findViewById(NativeR.id.toolbar);
+        }
+        // writable: false
+    }
 });
 
 
