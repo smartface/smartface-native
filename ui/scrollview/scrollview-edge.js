@@ -1,5 +1,5 @@
 /**
-* @enum UI.ScrollView.Position
+* @enum UI.ScrollView.Edge
 * @static
 * @readonly
 * @since 0.1
@@ -7,9 +7,9 @@
 * Indicates where to scroll.
 *
 */
-const ScrollViewPosition = {};
+const ScrollViewEdge = {};
 
-Object.defineProperties(ScrollViewPosition, {
+Object.defineProperties(ScrollViewEdge, {
    /**
     * @property {String} [LEFT = 'left'] 
     * @static
@@ -56,4 +56,4 @@ Object.defineProperties(ScrollViewPosition, {
     }
 });
 
-module.exports = ScrollViewPosition;
+module.exports = ScrollViewEdge;
