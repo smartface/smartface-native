@@ -10,26 +10,6 @@ const ScrollView = extend(ViewGroup)(
         }
     
         _super(this);
-        
-        Object.defineProperty(self, 'contentWidth', {
-            get: function() {
-                return self.nativeObject.contentSize.width;
-            },
-            set: function(value) {
-                self.nativeObject.contentSize = { width : value, height : self.contentHeight};
-            },
-            enumerable: true
-         });
-         
-        Object.defineProperty(self, 'contentHeight', {
-            get: function() {
-                return self.nativeObject.contentSize.height;
-            },
-            set: function(value) {
-                self.nativeObject.contentSize = { width : self.contentWidth, height : value};
-            },
-            enumerable: true
-         });
          
         Object.defineProperty(self, 'showHorizontalScrollBar', {
             get: function() {
@@ -61,7 +41,7 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
          });
          
-         Object.defineProperty(self, 'contentX', {
+         Object.defineProperty(self, 'scrollX', {
             get: function() {
                 return self.nativeObject.contentOffset.x;
             },
@@ -71,7 +51,7 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
          });
          
-         Object.defineProperty(self, 'contentY', {
+         Object.defineProperty(self, 'scrollY', {
             get: function() {
                 return self.nativeObject.contentOffset.y;
             },
@@ -96,7 +76,25 @@ const ScrollView = extend(ViewGroup)(
         self.nativeObject.onScrollEndDecelerating = function(){
               self.onScrollEndDecelerating();
         }
-         
+        
+        self.autoSize = function(){
+            self.applyLayout();
+            self.nativeObject.autoContentSize(1);
+        }
+        
+        self.scrollToTop = function(){
+            self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
+        }
+        
+        self.scrollToLeft = function(){
+            self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
+        }
+        
+        
+        self.scrollToBottom = function(){
+            self.nativeObject.scrollToBottom;
+        }
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
