@@ -1,6 +1,13 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
- 
+const ScrollViewAlign = require("nf-core/ui/scrollview/scrollview-align");
+const ScrollViewEdge = require("nf-core/ui/scrollview/scrollview-edge");
+
+const ScrollType = {
+    vertical : 0,
+    horizontal : 1
+}
+
 const ScrollView = extend(ViewGroup)(
    function (_super, params) {
         var self = this;
@@ -10,93 +17,68 @@ const ScrollView = extend(ViewGroup)(
         }
     
         _super(this);
-        
-        Object.defineProperty(self, 'contentWidth', {
-            get: function() {
-                return self.nativeObject.contentSize.width;
-            },
-            set: function(value) {
-                self.nativeObject.contentSize = { width : value, height : self.contentHeight};
-            },
-            enumerable: true
-         });
          
-        Object.defineProperty(self, 'contentHeight', {
-            get: function() {
-                return self.nativeObject.contentSize.height;
-            },
-            set: function(value) {
-                self.nativeObject.contentSize = { width : self.contentWidth, height : value};
-            },
-            enumerable: true
-         });
-         
-        Object.defineProperty(self, 'showHorizontalScrollBar', {
+        Object.defineProperty(self, 'scrollBarEnabled', {
             get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
             },
             set: function(value) {
                 self.nativeObject.showsHorizontalScrollIndicator = value;
-            },
-            enumerable: true
-         });
-         
-        Object.defineProperty(self, 'showVerticalScrollBar', {
-            get: function() {
-                return self.nativeObject.showsVerticalScrollIndicator;
-            },
-            set: function(value) {
                 self.nativeObject.showsVerticalScrollIndicator = value;
             },
             enumerable: true
          });
          
-         Object.defineProperty(self, 'declerationRate', {
+         var _align = ScrollType.vertical;
+         Object.defineProperty(self, 'align', {
             get: function() {
-                return self.nativeObject.decelerationRate;
+                if (_align == ScrollType.horizontal){
+                    return ScrollViewAlign.HORIZONTAL;
+                }else{
+                    return ScrollViewAlign.VERTICAL;
+                }
+                
             },
             set: function(value) {
-                self.nativeObject.decelerationRate = value;
+                if (value == ScrollViewAlign.HORIZONTAL) {
+                    _align = ScrollType.horizontal;
+                }else{
+                    _align = ScrollType.vertical;
+                }
+                self.autoSize();
             },
             enumerable: true
          });
          
-         Object.defineProperty(self, 'contentX', {
-            get: function() {
-                return self.nativeObject.contentOffset.x;
-            },
-            set: function(value) {
-                self.nativeObject.setContentOffsetAnimated({x : value,y : self.nativeObject.contentOffset.y},true);
-            },
-            enumerable: true
-         });
-         
-         Object.defineProperty(self, 'contentY', {
-            get: function() {
-                return self.nativeObject.contentOffset.y;
-            },
-            set: function(value) {
-                self.nativeObject.setContentOffsetAnimated({x : self.nativeObject.contentOffset.x,y : value},true);
-            },
-            enumerable: true
-         });
-          
-        self.nativeObject.onScrollBegin = function(){
-              self.onScrollBegin();
+        self.scrollToEdge = function(edge){
+             if (_align == ScrollType.horizontal){
+                 if (edge == ScrollViewEdge.LEFT){
+                    self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
+                 }else if(edge == ScrollViewEdge.RIGHT){
+                     self.nativeObject.scrollToRight();
+                 }
+             }else if (_align == ScrollType.vertical){
+                 if (edge == ScrollViewEdge.TOP){
+                     self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
+                 }else if(edge == ScrollViewEdge.BOTTOM){
+                     self.nativeObject.scrollToBottom();
+                 }
+             }
         }
-          
-        self.nativeObject.onScrollEnd = function(){
-              self.onScrollEnd();
+         
+        self.scrollToCoordinate = function(coordinate){
+             if (_align == ScrollType.horizontal){
+                 self.nativeObject.setContentOffsetAnimated({x : coordinate,y : 0},true);
+             }else if (_align == ScrollType.vertical){
+                 self.nativeObject.setContentOffsetAnimated({x : 0,y : coordinate},true);
+             }
+        }
+    
+        self.autoSize = function(){
+            self.applyLayout();
+            self.nativeObject.autoContentSize(_align);
         }
         
-        self.nativeObject.onScrollBeginDecelerating = function(){
-              self.onScrollBeginDecelerating();
-        }
-        
-        self.nativeObject.onScrollEndDecelerating = function(){
-              self.onScrollEndDecelerating();
-        }
-         
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
