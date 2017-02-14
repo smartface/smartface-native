@@ -17,7 +17,6 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    
     var innerLayout = new AbsoluteLayout({
         top: 0,
         left: 0,
@@ -41,9 +40,11 @@ function Page(params) {
     var isCreated = false;
 
     var optionsMenu = null;
+    var contextMenus = [];
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
+            console.log("onCreateView");
             self.nativeObject.setHasOptionsMenu(true);
             if(!isCreated){
                 onLoadCallback && onLoadCallback();
@@ -79,7 +80,57 @@ function Page(params) {
                 }
             }
             return true;
+        },
+        onCreateContextMenu: function(menu, view, menuInfo) {
+            
+            console.log("onCreateContextMenu");
+            var id = view.getId();
+            var index = getMenuIndexByViewId(id);
+            console.log("index = " + index);
+            var contextMenu = contextMenus[index].menu;
+            var items = contextMenu.items;
+            var headerTitle = contextMenu.headerTitle;
+            console.log("headerTitle " + headerTitle);
+            if(contextMenu.headerTitle != "") {
+                menu.setHeaderTitle(headerTitle);
+            }
+            
+            console.log("items " + items);
+            var i;
+            for(i = 0; i < items.length; i++) {
+                console.log("Item title = " + items[i].title);
+                menu.add(0, id, 0, items[i].title);//groupId, itemId, order, title
+            }
+            
+            console.log("Menu items added.");
+        },
+        onContextItemSelected: function(item){
+            var id = item.getItemId();
+            var index = getMenuIndexByViewId(id);
+            
+            if(index >= 0) {
+                console.log("Index " + index);
+                // var i = 0;
+                var items = contextMenus[index].menu.items;
+                console.log("Items " + items);
+                var itemIndex = 0;
+                
+                // for(i = 0; i < items.length; i++) {
+                //     if(item.getTitle() == items[i].title) {
+                //         itemIndex = i;
+                //         break;
+                //     }
+                // }
+                if(itemIndex >= 0) {
+                    items[itemIndex].onSelected();
+                    console.log("Item = " + item);
+                    console.log("getGroupId() " + item.getGroupId());    
+                    var title = item.getTitle();
+                    console.log("Item title = " + title);
+                }
+            }
         }
+    
     }, null);
 
     Object.defineProperty(this, 'layout', {
@@ -369,6 +420,33 @@ function Page(params) {
         }
         self.invalidateHeaderBar();
     };
+
+    this.registerContextMenu = function(contextMenu) {
+        console.log("contextMenu " + contextMenu);
+        if(contextMenu.view && contextMenu.menu) {
+            var nativeObject = self.nativeObject; 
+            console.log("nativeObject " + nativeObject);
+            var view = contextMenu.view;
+            console.log("view " + view.id);
+            var viewNativeObject = view.nativeObject;
+            nativeObject.registerForContextMenu(viewNativeObject);   
+            
+            contextMenus.push(contextMenu);
+        }
+    }
+    
+    function getMenuIndexByViewId(id) {
+        var i;
+        console.log("contextMenus.length " + contextMenus.length);
+        for(i = 0; i < contextMenus.length; i++) {
+            var view = contextMenus[i].view;
+            console.log("   Id " + id + " -- viewID " + view.id);
+            if(id == (view.id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     // Deprecated since 0.1
     this.add = function(view){

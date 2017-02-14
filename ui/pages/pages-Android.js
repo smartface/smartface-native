@@ -70,7 +70,7 @@ function Pages(params) {
         page.isShowing = true;
         page.invalidate();
         pagesStack.push(page);
-    }
+    };
 
     self.pop = function(){
         var fragmentManager = activity.getSupportFragmentManager();
@@ -81,7 +81,5 @@ function Pages(params) {
     
     self.push(params.rootPage);
 }
-
-
 
 module.exports = Pages;
