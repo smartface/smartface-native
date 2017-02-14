@@ -69,6 +69,7 @@ function Pages(params) {
         fragmentManager.executePendingTransactions();
         page.isShowing = true;
         page.invalidate();
+        Pages.currentPage = page;
         pagesStack.push(page);
     }
 
@@ -82,6 +83,6 @@ function Pages(params) {
     self.push(params.rootPage);
 }
 
-
+Pages.currentPage = null;
 
 module.exports = Pages;
