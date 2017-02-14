@@ -57,14 +57,14 @@ Object.defineProperties(ScrollView, {
         configurable: false
     },
     /**
-     * Immediately scrolls to the position set.
+     * Immediately scrolls to the edge set.
      *
-     * @method scrollToPosition
-     * @param {UI.ScrollView.Position} position
+     * @method scrollToEdge
+     * @param {UI.ScrollView.Edge} edge
      * @since 0.1
      */
-    'scrollToPosition': {
-        value: function(position) {},
+    'scrollToEdge': {
+        value: function(edge) {},
         configurable: false
     },
     /**
