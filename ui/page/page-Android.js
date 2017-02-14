@@ -82,51 +82,37 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
-            
-            console.log("onCreateContextMenu");
             var id = view.getId();
             var index = getMenuIndexByViewId(id);
-            console.log("index = " + index);
             var contextMenu = contextMenus[index].menu;
             var items = contextMenu.items;
             var headerTitle = contextMenu.headerTitle;
-            console.log("headerTitle " + headerTitle);
             if(contextMenu.headerTitle != "") {
                 menu.setHeaderTitle(headerTitle);
             }
             
-            console.log("items " + items);
             var i;
             for(i = 0; i < items.length; i++) {
-                console.log("Item title = " + items[i].title);
-                menu.add(0, id, 0, items[i].title);//groupId, itemId, order, title
+                menu.add(0, id, 0, items[i].title);
             }
-            
-            console.log("Menu items added.");
         },
         onContextItemSelected: function(item){
             var id = item.getItemId();
             var index = getMenuIndexByViewId(id);
             
             if(index >= 0) {
-                console.log("Index " + index);
-                // var i = 0;
                 var items = contextMenus[index].menu.items;
-                console.log("Items " + items);
-                var itemIndex = 0;
+                var itemIndex = -1;
+                var i = 0;
                 
-                // for(i = 0; i < items.length; i++) {
-                //     if(item.getTitle() == items[i].title) {
-                //         itemIndex = i;
-                //         break;
-                //     }
-                // }
+                for(i = 0; i < items.length; i++) {
+                    if(item.getTitle() == items[i].title) {
+                        itemIndex = i;
+                        break;
+                    }
+                }
                 if(itemIndex >= 0) {
                     items[itemIndex].onSelected();
-                    console.log("Item = " + item);
-                    console.log("getGroupId() " + item.getGroupId());    
-                    var title = item.getTitle();
-                    console.log("Item title = " + title);
                 }
             }
         }
@@ -422,18 +408,15 @@ function Page(params) {
     };
 
     this.registerContextMenu = function(contextMenu) {
-        console.log("contextMenu " + contextMenu);
         if(contextMenu.view && contextMenu.menu) {
             var nativeObject = self.nativeObject; 
-            console.log("nativeObject " + nativeObject);
             var view = contextMenu.view;
-            console.log("view " + view.id);
             var viewNativeObject = view.nativeObject;
             nativeObject.registerForContextMenu(viewNativeObject);   
             
             contextMenus.push(contextMenu);
         }
-    }
+    };
     
     function getMenuIndexByViewId(id) {
         var i;
