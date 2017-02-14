@@ -102,7 +102,7 @@ function Page(params) {
             if(index >= 0) {
                 var items = contextMenus[index].menu.items;
                 var itemIndex = -1;
-                var i = 0;
+                var i;
                 
                 for(i = 0; i < items.length; i++) {
                     if(item.getTitle() == items[i].title) {
