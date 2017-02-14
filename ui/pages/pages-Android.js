@@ -15,43 +15,8 @@ const Pages = function(params) {
     var pagesStack = [];
     var rootViewId = NativeR.id.layout_container;
     
-    activity.getSupportFragmentManager().addOnBackStackChangedListener(
-        NativeFragmentManager.OnBackStackChangedListener.implement({
-            onBackStackChanged: function(){
-                var supportFragmentManager = activity.getSupportFragmentManager();
-                var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
-                if (nativeStackCount < pagesStack.length) { // means poll
-                    if(pagesStack.length > 0) {
-                        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-                        pagesStack[pagesStack.length-1].isShowing = false;
-                        var oldPage = pagesStack.pop();
-                        var fragmentTransaction = supportFragmentManager.beginTransaction();
-                        fragmentTransaction.remove(oldPage.nativeObject).commit();
-                        self.removeDrawerListener();
-                        
-                        if(pagesStack.length > 0) {
-                            pagesStack[pagesStack.length-1].isShowing = true;
-                            pagesStack[pagesStack.length-1].invalidate();
-                        }
-                    }
-                }
-            }
-        })
-    );
-    
-    Pages.drawerLayout.setFocusableInTouchMode(true);
-    Pages.drawerLayout.requestFocus();
-    Pages.drawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
-            onKey: function( view, keyCode, keyEvent) {
-                if (pagesStack[pagesStack.length-1].android.backButtonEnabled) {
-                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if( keyCode === 4 && keyEvent.getAction() === 0) {
-                        activity.getSupportFragmentManager().popBackStackImmediate();
-                    }
-                }
-                return true;
-            }
-        }));
+    registerOnBackStackChanged(self, pagesStack);
+    registerOnBackKeyPressed(pagesStack);
     
     Object.defineProperties(self,{
         'push': {
@@ -60,9 +25,8 @@ const Pages = function(params) {
             }
         },
         'pop': {
-            value: function(){
-                pop();
-            }
+            value: pop()
+            
         },
     });
     
@@ -160,6 +124,48 @@ function pop(){
     if(fragmentManager.getBackStackEntryCount() > 0){
         fragmentManager.popBackStackImmediate();
     }
+}
+
+function registerOnBackStackChanged(self, pagesStack){
+    activity.getSupportFragmentManager().addOnBackStackChangedListener(
+        NativeFragmentManager.OnBackStackChangedListener.implement({
+            onBackStackChanged: function(){
+                var supportFragmentManager = activity.getSupportFragmentManager();
+                var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
+                if (nativeStackCount < pagesStack.length) { // means poll
+                    if(pagesStack.length > 0) {
+                        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+                        pagesStack[pagesStack.length-1].isShowing = false;
+                        var oldPage = pagesStack.pop();
+                        var fragmentTransaction = supportFragmentManager.beginTransaction();
+                        fragmentTransaction.remove(oldPage.nativeObject).commit();
+                        self.removeDrawerListener();
+                        
+                        if(pagesStack.length > 0) {
+                            pagesStack[pagesStack.length-1].isShowing = true;
+                            pagesStack[pagesStack.length-1].invalidate();
+                        }
+                    }
+                }
+            }
+        })
+    );
+}
+
+function registerOnBackKeyPressed(pagesStack){
+    Pages.drawerLayout.setFocusableInTouchMode(true);
+    Pages.drawerLayout.requestFocus();
+    Pages.drawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function( view, keyCode, keyEvent) {
+            if (pagesStack[pagesStack.length-1].android.backButtonEnabled) {
+                // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                if( keyCode === 4 && keyEvent.getAction() === 0) {
+                    activity.getSupportFragmentManager().popBackStackImmediate();
+                }
+            }
+            return true;
+        }
+    }));
 }
 
 function attachSliderDrawer(sliderDrawer){

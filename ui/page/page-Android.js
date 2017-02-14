@@ -120,6 +120,7 @@ function Page(params) {
     var isBackButtonEnabled;
     Object.defineProperty(this.android, 'backButtonEnabled', {
         get: function() {
+            // will be handling from Pages
             return isBackButtonEnabled;
         },
         set: function(backButtonEnabled) {
@@ -155,8 +156,9 @@ function Page(params) {
         },
         set: function(color) {
             _color = color;
-            // // @todo setStatusBarColor doesn't work causing by issue COR-1153
+            // @todo setStatusBarColor doesn't work causing by issue COR-1153
             // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
+            // console.log(NativeBuildVersion.VERSION.SDK_INT + " - " + MINAPILEVEL_STATUSBARCOLOR);
             // if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
             //     var window = activity.getWindow();
             //     window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
