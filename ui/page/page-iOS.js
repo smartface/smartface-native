@@ -1,4 +1,4 @@
-const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+const FlexLayout = require('nf-core/ui/flexlayout');
 const ImageFillType = require('nf-core/ui/imagefilltype');
 const Image = require("nf-core/ui/image");
 
@@ -7,7 +7,7 @@ function Page(params) {
 
     self.nativeObject = new UIViewController();
     
-    self.pageView = new AbsoluteLayout();
+    self.pageView = new FlexLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
     
     self.nativeObject.onViewLoad  = function(){
