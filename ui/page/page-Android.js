@@ -40,7 +40,8 @@ function Page(params) {
     var isCreated = false;
 
     var optionsMenu = null;
-    var contextMenus = [];
+    var contextMenu = {};
+    var menuItems = [];
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
@@ -81,9 +82,8 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
+            console.log("onCreateContextMenu");
             var id = view.getId();
-            var index = getMenuIndexByViewId(id);
-            var contextMenu = contextMenus[index].menu;
             var items = contextMenu.items;
             var headerTitle = contextMenu.headerTitle;
             if(contextMenu.headerTitle != "") {
@@ -100,7 +100,7 @@ function Page(params) {
             var index = getMenuIndexByViewId(id);
             
             if(index >= 0) {
-                var items = contextMenus[index].menu.items;
+                var items = contextMenu.items;
                 var itemIndex = -1;
                 var i;
                 
@@ -406,25 +406,25 @@ function Page(params) {
         self.invalidateHeaderBar();
     };
 
-    this.registerContextMenu = function(contextMenu) {
+    function registerContextMenu(contextMenu) {
         if(contextMenu.view && contextMenu.menu) {
             var nativeObject = self.nativeObject; 
             var view = contextMenu.view;
             var viewNativeObject = view.nativeObject;
             nativeObject.registerForContextMenu(viewNativeObject);   
             
-            contextMenus.push(contextMenu);
+            // contextMenus.push(contextMenu);
         }
     };
     
     function getMenuIndexByViewId(id) {
         var i;
-        for(i = 0; i < contextMenus.length; i++) {
-            var view = contextMenus[i].view;
-            if(id == (view.id)) {
-                return i;
-            }
-        }
+        // for(i = 0; i < contextMenus.length; i++) {
+        //     var view = contextMenus[i].view;
+        //     if(id == (view.id)) {
+        //         return i;
+        //     }
+        // }
         return -1;
     }
 
