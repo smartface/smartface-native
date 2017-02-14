@@ -44,7 +44,6 @@ function Page(params) {
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
-            console.log("onCreateView");
             self.nativeObject.setHasOptionsMenu(true);
             if(!isCreated){
                 onLoadCallback && onLoadCallback();
@@ -420,10 +419,8 @@ function Page(params) {
     
     function getMenuIndexByViewId(id) {
         var i;
-        console.log("contextMenus.length " + contextMenus.length);
         for(i = 0; i < contextMenus.length; i++) {
             var view = contextMenus[i].view;
-            console.log("   Id " + id + " -- viewID " + view.id);
             if(id == (view.id)) {
                 return i;
             }
