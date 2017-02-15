@@ -1,7 +1,6 @@
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
 const AndroidUnitConverter  = require('nf-core/util/Android/unitconverter.js');
-const Pages                 = require('nf-core/ui/pages');
 
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 const NativeGravity         = requireClass('android.view.Gravity');
@@ -19,6 +18,7 @@ const SliderDrawer = extend(FlexLayout)(
         var _position;
         var _onShow;
         var _onHide;
+        var _enabled = true;
         Object.defineProperties(this,{
             'drawerPosition' : {
                 get: function(){
@@ -36,14 +36,27 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 enumerable: true
             },
+            'enabled': {
+                get: function(){
+                    return _enabled;
+                },
+                set: function(enabled){
+                    _enabled = enabled;
+                    const Pages = require('nf-core/ui/pages');
+                    Pages.setDrawerLocked(!enabled);
+                },
+                enumerable: true
+            },
             'show': {
                 value: function(){
+                    const Pages = require('nf-core/ui/pages');
                     Pages.showSliderDrawer();
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
+                    const Pages = require('nf-core/ui/pages');
                     Pages.hideSliderDrawer();
                 },
                 writable: false

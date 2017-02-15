@@ -18,16 +18,39 @@ const SliderDrawer = extend(ViewGroup)(
          *
          *     @example
          *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-         *     const Page = require('nf-core/ui/page');
+         *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
+         *     var myPages = new Pages({
+         *         rootLayout: myPage 
+         *     });
          *     var mySliderDrawer = new SliderDrawer();
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
-         *     myPage.sliderDrawer = mySliderDrawer;
+         *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
          * @since 0.1
          */
         this.drawerPosition = UI.SliderDrawer.Position.LEFT
+        
+        /**
+         * Enable/disable the SliderDrawer.
+         *
+         *     @example
+         *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+         *     const Pages = require('nf-core/ui/pages');
+         *     var myPage = new Page();
+         *     var myPages = new Pages({
+         *         rootLayout: myPage 
+         *     });
+         *     var mySliderDrawer = new SliderDrawer();
+         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
+         *     mySliderDrawer.enabled = false;
+         *     myPages.sliderDrawer = mySliderDrawer;
+         *
+         * @property {Boolean} [enabled = true]
+         * @since 0.1
+         */
+        this.enabled = true
         
         /**
          * This function allows you to show SliderDrawer on it's own position if it assigned to the Page.

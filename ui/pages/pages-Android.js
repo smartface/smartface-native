@@ -1,4 +1,3 @@
-const SliderDrawer          = require('nf-core/ui/sliderdrawer');
 const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 
 const NativeView            = requireClass("android.view.View");
@@ -45,10 +44,12 @@ Object.defineProperties(Pages, {
             if(sliderDrawer){
                 attachSliderDrawer( _sliderDrawer);
             }
-        }
+        },
+        enumerable: true
     },
     'showSliderDrawer' : {
         value: function(){
+            const SliderDrawer = require('nf-core/ui/sliderdrawer');
             if(_sliderDrawer){
                 if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
                     // Gravity.RIGHT 
@@ -75,6 +76,20 @@ Object.defineProperties(Pages, {
             }
         }
     },
+    'setDrawerLocked' : {
+        value: function(isLocked){
+            if(_sliderDrawer){
+                if(isLocked){
+                    // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+                    drawerLayout.setDrawerLockMode(1);
+                }
+                else{
+                    // DrawerLayout.LOCK_MODE_UNLOCKED
+                    drawerLayout.setDrawerLockMode(0);
+                }
+            }
+        }
+    },
     'drawerLayout':{
         value: drawerLayout
     },
@@ -82,9 +97,7 @@ Object.defineProperties(Pages, {
         value: toolbar
     }
 });
-
 function push(self, rootViewId, page, animated, pagesStack){
-    detachSliderDrawer(_sliderDrawer);
     if(pagesStack.length > 0) {
         pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
         pagesStack[pagesStack.length-1].isShowing = false;
@@ -119,7 +132,6 @@ function push(self, rootViewId, page, animated, pagesStack){
 }
 
 function pop(){
-    detachSliderDrawer(_sliderDrawer);
     var fragmentManager = activity.getSupportFragmentManager();
     if(fragmentManager.getBackStackEntryCount() > 0){
         fragmentManager.popBackStackImmediate();
