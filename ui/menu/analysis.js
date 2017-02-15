@@ -4,34 +4,7 @@
  * 
  * // todo Add description
  * 
- *     @example
- *     const Page = require("nf-core/ui/page");
- *     const Menu = require("nf-core/ui/menu");
- *     const MenuItem = require("nf-core/ui/menuitem");
- * 
- *     var myPage = new Page();
  *     
- *     var item1 = new MenuItem( {
- *         title: "Reply"
- *     });
- * 
- *     var item2 = new MenuItem( {
- *         title: "Reply All"
- *     });
- * 
- *     var items = [item1, item2];
- *     var myMenu = new Menu();
- *     myMenu.items = items;
- * 
- *     var myButton = new Button({
- *         text: "Show Menu"
- *     });
- *     
- *     var myContextMenu = { 
- *         view: myButton,
- *         menu: myMenu
- *     }
- *     myPage.registerContextMenu(myContextMenu);
  */
 function Menu(params) {
     /** 
@@ -50,6 +23,15 @@ function Menu(params) {
      * @since 0.1
      */
     this.items = null;
+    
+    /**
+     * Shows menu on the page.
+     * 
+     * @param {UI.Page} page 
+     * @method show
+     * @since 0.1
+     */
+    this.show = function(e) {};
 }
 
 module.exports = Menu;

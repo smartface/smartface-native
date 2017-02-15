@@ -21,26 +21,24 @@ function Menu(params) {
         },
         enumerable: true
     });
+   
+    this.show = function(page) {
+        var layout = page.layout;
+        var layoutNativeObject = layout.nativeObject;
+        var pageNativeObject = page.nativeObject;
+        
+        pageNativeObject.registerForContextMenu(layoutNativeObject);
+        page.contextMenu = this;
+        layoutNativeObject.showContextMenu();
+    };
     
-     // Assign parameters given in constructor
+    // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
     }
     
-    this.show = function(page) {
-        var layout = page.layout;
-        var layoutNativeObject = layout.nativeObject;
-        console.log("layoutNativeObject " + layoutNativeObject);
-        var pageNativeObject = page.nativeObject;
-        
-        console.log("pageNativeObject " + pageNativeObject);
-        pageNativeObject.registerForContextMenu(layoutNativeObject);
-        page.contextMenu = this;
-        console.log("Menu Items " + page.contextMenu.items);
-        layoutNativeObject.showContextMenu();
-    };
 }
 
 module.exports = Menu;

@@ -41,7 +41,6 @@ function Page(params) {
 
     var optionsMenu = null;
     var contextMenu = {};
-    var menuItems = [];
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
@@ -82,8 +81,6 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
-            console.log("onCreateContextMenu");
-            var id = view.getId();
             var items = contextMenu.items;
             var headerTitle = contextMenu.headerTitle;
             if(contextMenu.headerTitle != "") {
@@ -92,31 +89,28 @@ function Page(params) {
             
             var i;
             for(i = 0; i < items.length; i++) {
-                menu.add(0, id, 0, items[i].title);
+                menu.add(0, i, 0, items[i].title);
             }
         },
         onContextItemSelected: function(item){
-            var id = item.getItemId();
-            var index = getMenuIndexByViewId(id);
-            
-            if(index >= 0) {
-                var items = contextMenu.items;
-                var itemIndex = -1;
-                var i;
-                
-                for(i = 0; i < items.length; i++) {
-                    if(item.getTitle() == items[i].title) {
-                        itemIndex = i;
-                        break;
-                    }
-                }
-                if(itemIndex >= 0) {
-                    items[itemIndex].onSelected();
-                }
+            var itemId = item.getItemId();
+            var items = contextMenu.items;
+            if(itemId >= 0) {
+                items[itemId].onSelected();
             }
         }
     
     }, null);
+    
+    Object.defineProperty(this, 'contextMenu', {
+        get: function() {
+            return contextMenu;
+        },
+        set: function(menu) {
+            contextMenu = menu;
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(this, 'layout', {
         get: function() {

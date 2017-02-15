@@ -113,18 +113,6 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
-    
-    
-    /**
-     * This method registers a menu to given view.
-     * 
-     * @param {Object} params Object contains menu and view
-     * @param {UI.Menu} [params.menu] Menu object
-     * @param {UI.View} [params.view] View object
-     * @method registerContextMenu
-     * @since 0.1
-     */
-    this.registerContextMenu = function(params){}
 }
 
 module.exports = Page;
