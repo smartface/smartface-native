@@ -400,28 +400,6 @@ function Page(params) {
         self.invalidateHeaderBar();
     };
 
-    function registerContextMenu(contextMenu) {
-        if(contextMenu.view && contextMenu.menu) {
-            var nativeObject = self.nativeObject; 
-            var view = contextMenu.view;
-            var viewNativeObject = view.nativeObject;
-            nativeObject.registerForContextMenu(viewNativeObject);   
-            
-            // contextMenus.push(contextMenu);
-        }
-    };
-    
-    function getMenuIndexByViewId(id) {
-        var i;
-        // for(i = 0; i < contextMenus.length; i++) {
-        //     var view = contextMenus[i].view;
-        //     if(id == (view.id)) {
-        //         return i;
-        //     }
-        // }
-        return -1;
-    }
-
     // Deprecated since 0.1
     this.add = function(view){
         self.layout.addChild(view);
