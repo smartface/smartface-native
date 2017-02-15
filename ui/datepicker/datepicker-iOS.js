@@ -6,8 +6,8 @@ function DatePicker (params) {
         self.calendar = NSCalendar.currentCalendar();
     }
     
-    self.onDateSelectedListener = function(e){
-        self.onDateSelected({"date" : e.date});
+    self.onDateSelectedListener = function(date){
+        self.onDateSelected(date);
     }
     
     self.nativeObject.onSelected = self.onDateSelectedListener;
