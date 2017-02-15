@@ -46,7 +46,7 @@ function FileStream(params) {
     else if(_mode == FileStream.StreamType.READ){
         if(fileObject.nativeObject){
             if(fileObject.type == Path.FILE_TYPE.ASSET){
-                var assetsStreamObject = fileObject.nativeObject;
+                var assetsStreamObject = Android.getActivity().getAssets().open(fileObject.nativeObject);
                 streamObject = new NativeInputStreamReader(assetsStreamObject);
                 intermediaryStreamObjects.push(assetsStreamObject);
             }

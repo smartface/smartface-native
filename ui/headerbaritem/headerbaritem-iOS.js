@@ -32,7 +32,18 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value) {
                     _image = value;
-                    self.nativeObject.image = _image;
+                    self.nativeObject.image = _image.nativeObject;
+                }
+            },
+            enumerable: true
+        },
+        'color': {
+            get: function() {
+                return self.nativeObject.tintColor;
+            },
+            set: function(value) {
+                if (value) {
+                    self.nativeObject.tintColor = value;
                 }
             },
             enumerable: true

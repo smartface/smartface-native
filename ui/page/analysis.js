@@ -113,6 +113,7 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
+    
 }
 
 module.exports = Page;

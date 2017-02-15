@@ -54,5 +54,14 @@ function HeaderBarItem(params) {
      * @property {Function} onPress
      * @since 0.1
      */
-    this.onPress = null
+    this.onPress = null;
+
+    /**
+     * Gets/sets color of the item's text/image.
+     *
+     * @property {UI.Color} color
+     * @since 0.1
+     */
+    this.color = null;
+
 }

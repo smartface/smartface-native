@@ -617,7 +617,7 @@ Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
 });
 
 /**
- * @enum {Number} UI.FlexLayout.Position
+ * @enum UI.FlexLayout.PositionType
  * @static
  * @readonly
  * @since 0.1
@@ -628,26 +628,27 @@ Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
  *     // @todo add example
  *
  */
-FlexLayout.Position = {};
+FlexLayout.PositionType = {};
 /**
- * @property {Number} RELATIVE
- * // @todo add description.
- * 
- * @readonly
- * @since 0.1
- */
-Object.defineProperty(FlexLayout.Position, 'RELATIVE', {
-    writable: false
-});
-/**
- * @property {Number} ABSOLUTE
+ * @property RELATIVE
  * // @todo add description.
  * 
  * @static
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(FlexLayout.Position, 'ABSOLUTE', {
+Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
+    writable: false
+});
+/**
+ * @property ABSOLUTE
+ * // @todo add description.
+ * 
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(FlexLayout.PositionType, 'ABSOLUTE', {
     writable: false
 });
 

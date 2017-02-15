@@ -235,7 +235,7 @@ function View(params) {
         enumerable: true
     });
     
-    Object.defineProperty(self, 'position', {
+    Object.defineProperty(self, 'positionType', {
         get: function() {
             return self.nativeObject.yoga.position;
         },
