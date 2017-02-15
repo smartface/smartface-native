@@ -19,18 +19,6 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-<<<<<<< HEAD
-    var innerLayout = new FlexLayout({
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        isRoot : true,
-        positionType: FlexLayout.PositionType.ABSOLUTE,
-        backgroundColor: Color.WHITE
-    });
-=======
->>>>>>> develop
     var rootLayout = new FlexLayout({
         top: 0,
         left: 0,
@@ -45,7 +33,6 @@ function Page(params) {
     var isCreated = false;
 
     var optionsMenu = null;
-    var contextMenu = {};
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
@@ -84,37 +71,12 @@ function Page(params) {
             }
             return true;
         },
-        onCreateContextMenu: function(menu, view, menuInfo) {
-            var items = contextMenu.items;
-            var headerTitle = contextMenu.headerTitle;
-            if(contextMenu.headerTitle != "") {
-                menu.setHeaderTitle(headerTitle);
-            }
-            
-            var i;
-            for(i = 0; i < items.length; i++) {
-                menu.add(0, i, 0, items[i].title);
-            }
-        },
-        onContextItemSelected: function(item){
-            var itemId = item.getItemId();
-            var items = contextMenu.items;
-            if(itemId >= 0) {
-                items[itemId].onSelected();
-            }
+        onActivityResult: function(requestCode, resultCode, data) {
+            const Contacts = require("nf-core/device/contacts");
+            Contacts.onActivityResult(requestCode, resultCode, data);
         }
-    
+        
     }, null);
-    
-    Object.defineProperty(this, 'contextMenu', {
-        get: function() {
-            return contextMenu;
-        },
-        set: function(menu) {
-            contextMenu = menu;
-        },
-        enumerable: true
-    });
 
     Object.defineProperty(this, 'layout', {
         get: function() {
