@@ -12,7 +12,6 @@ var MIMETYPE = NativeContactsContract.DataColumns.MIMETYPE;
 var CONTENT_ITEM_TYPE = NativeContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 var DISPLAY_NAME = NativeContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
 
-
 var _onSuccess;
 var _onFailure;
 
@@ -51,7 +50,6 @@ Contacts.addContact = function(params) {
     
         var AUTHORITY = NativeContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
-        console.log("---");
     } 
     catch(msg) {
         success = false;
@@ -60,7 +58,6 @@ Contacts.addContact = function(params) {
         else
             throw msg;
     }
-    console.log("success " + success);
     if(success) {
         if(_onSuccess)
             _onSuccess.call(this);
@@ -74,20 +71,23 @@ Contacts.pick = function(params) {
     }
     var activity = Android.getActivity();
     
-    var actionPick = NativeIntent.ACTION_PICK;
-    var uri = NativeContactsContract.Contacts.CONTENT_URI;
-    var intent = new NativeIntent(actionPick, uri);
-    const PICK_REQUEST_CODE = 1001;
-    var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
-    intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
-    
     try {
+        var actionPick = NativeIntent.ACTION_PICK;
+        var uri = NativeContactsContract.Contacts.CONTENT_URI;
+        var intent = new NativeIntent(actionPick, uri);
+        const PICK_REQUEST_CODE = 1001;
+        var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+        intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
+        
         var currentPage = Pages.currentPage;
         var nativeObject = currentPage.nativeObject;
         nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
     }
     catch(err) {
-        throw err;
+        if(_onFailure)
+            _onFailure.call(this);
+        else
+            throw err;
     }
 };
 
