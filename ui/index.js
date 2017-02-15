@@ -27,5 +27,6 @@ module.exports = {
     ListView: require('./listview'),
     ListViewItem: require('./listviewitem'),
     Menu: require('./menu'),
-    MenuItem: require('./menuitem')
+    MenuItem: require('./menuitem'),
+    SliderDrawer: require('./sliderdrawer')
 };
