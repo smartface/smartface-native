@@ -26,5 +26,7 @@ module.exports = {
     ActionKeyType: require('./actionkeytype'),
     ListView: require('./listview'),
     ListViewItem: require('./listviewitem'),
+    Menu: require('./menu'),
+    MenuItem: require('./menuitem'),
     SliderDrawer: require('./sliderdrawer')
 };
