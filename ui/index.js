@@ -26,5 +26,6 @@ module.exports = {
     ActionKeyType: require('./actionkeytype'),
     ListView: require('./listview'),
     ListViewItem: require('./listviewitem'),
-    DatePicker: require('./datepicker')
+    DatePicker: require('./datepicker'),
+    SliderDrawer: require('./sliderdrawer')
 };
