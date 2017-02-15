@@ -8,11 +8,7 @@ function DatePicker(params) {
     var today = new Date();
     self.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
         onDateSet: function(datePicker, year, month, day) {
-            self.onDateSelected && self.onDateSelected({
-                day: day,
-                month: month + 1,
-                year: year
-            });
+            self.onDateSelected && self.onDateSelected(new Date(year, month, day));
         }
     }), today.getFullYear(), today.getMonth(), today.getDate());
     
@@ -23,33 +19,40 @@ function DatePicker(params) {
             }
         },
         'setMinDate': {
-            value: function(day, month, year) {
-                if ( TypeUtil.isNumeric(day) && TypeUtil.isNumeric(month) && TypeUtil.isNumeric(year)) {
+            value: function(date) {
+                if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
+                    var milliTime = date.getTime();
+
                     var nativeDatePicker = self.nativeObject.getDatePicker();
-                    var minDate = new Date(year, month - 1, day);
-                    var milliTime = minDate.getTime();
                     nativeDatePicker.setMinDate(milliTime);
                 }
             }
         },
         'setMaxDate': {
-            value: function(day, month, year) {
-                if ( TypeUtil.isNumeric(day) && TypeUtil.isNumeric(month) && TypeUtil.isNumeric(year)) {
+            value: function(date) {
+                if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
+                    var milliTime = date.getTime();
+
                     var nativeDatePicker = self.nativeObject.getDatePicker();
-                    var maxDate = new Date(year, month - 1, day);
-                    var milliTime = maxDate.getTime();
                     nativeDatePicker.setMaxDate(milliTime);
                 }
             }
         },
         'setDate': {
-            value: function(day, month, year) {
-                if ( TypeUtil.isNumeric(day) && TypeUtil.isNumeric(month) && TypeUtil.isNumeric(year)) {
-                    self.nativeObject.updateDate(year, month - 1, day);
+            value: function(date) {
+                if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
+                    self.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
                 }
             }
         }
     });
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 };
 
 module.exports = DatePicker;
