@@ -3,5 +3,6 @@ module.exports = {
     System: require('./system'),
     Network: require('./network'),
     Hardware: require('./hardware'),
-    Location: require('./location')
+    Location: require('./location'),
+    Contacts: require('./contacts')
 };
