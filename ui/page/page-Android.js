@@ -1,4 +1,4 @@
-const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
+const FlexLayout    = require("nf-core/ui/flexlayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
@@ -18,15 +18,16 @@ function Page(params) {
     var activity = Android.getActivity();
     
     
-    var innerLayout = new AbsoluteLayout({
+    var innerLayout = new FlexLayout({
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
         isRoot : true,
+        positionType: FlexLayout.PositionType.ABSOLUTE,
         backgroundColor: Color.WHITE
     });
-    var rootLayout = new AbsoluteLayout({
+    var rootLayout = new FlexLayout({
         top: 0,
         left: 0,
         bottom: 0,

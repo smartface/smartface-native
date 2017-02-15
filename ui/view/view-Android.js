@@ -13,6 +13,8 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
+const NativeYogaAlign           = requireClass("com.facebook.yoga.YogaAlign");
+const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionType');
 
 const Color = require("nf-core/ui/color");
 
@@ -752,10 +754,8 @@ function View(params) {
         },
         enumerable: true
     });
-    
-    /* Applied from AbsoluteLayout
-        direction values same as native */
-    Object.defineProperty(this, 'position', {
+
+    Object.defineProperty(this, 'positionType', {
         get: function() {
             return yogaNode.getPositionType();
         },
@@ -773,6 +773,10 @@ function View(params) {
     this.getYogaNode = function(){
         return yogaNode;
     };
+
+    // Assign defaults
+    self.alignSelf = NativeYogaAlign.STRETCH;
+    self.positionType = NativeYogaPositionType.RELATIVE;
     
     // Assign parameters given in constructor
     if (params) {
