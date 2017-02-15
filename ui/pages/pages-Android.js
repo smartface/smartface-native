@@ -128,6 +128,7 @@ function push(self, rootViewId, page, animated, pagesStack){
     fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
     fragmentTransaction.commit();
     fragmentManager.executePendingTransactions();
+    Pages.currentPage = page;
     pagesStack.push(page);
 }
 
@@ -202,5 +203,7 @@ function detachSliderDrawer(sliderDrawer){
         }
     }
 }
+
+Pages.currentPage = null;
 
 module.exports = Pages;
