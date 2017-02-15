@@ -7,8 +7,8 @@
  *     @example
  *     const DatePicker = require('nf-core/ui/datepicker');
  *     var myDatePicker = new DatePicker();
- *     myDatePicker.onDateSelected = function(day, month, year) {
- *         alert('Year: ' + year + ' Month: ' + month + ' Day' + day);
+ *     myDatePicker.onDateSelected = function(date) {
+ *         alert('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
  *     };
  *     myDatePicker.show();
  *
@@ -16,55 +16,34 @@
 function DatePicker () {
     Object.defineProperties(DatePicker, {
        /**
-        * Sets the initial day shown on the picker.
+        * Sets the initial date avaliable on the picker.
         * 
-        * @property {Number} [day = currentDay]  
+        * @method setDate
+        * @param {Date} date
         * @since 0.1
         */
-        'day': {
-            set: function(day) {}
-        },
-       /**
-        * Sets the initial month shown on the picker.
-        * 
-        * @property {Number} [month = currentMonth]  
-        * @since 0.1
-        */
-        'month': {
-            set: function(month) {}
-        },
-       /**
-        * Sets the initial year shown on the picker.
-        * 
-        * @property {Number} [year = currentYear]  
-        * @since 0.1
-        */
-        'year': {
-            set: function(year) {}
+        'setDate': {
+            value: function(date) {}
         },
        /**
         * Sets the minimum date avaliable on the picker.
         * 
         * @method setMinDate
-        * @param {Number} day
-        * @param {Number} month
-        * @param {Number} year
+        * @param {Date} minDate
         * @since 0.1
         */
         'setMinDate': {
-            value: function(day, month, year) {}
+            value: function(date) {}
         },
        /**
         * Sets the maximum date avaliable on the picker.
         * 
         * @method setMaxDate
-        * @param {Number} day
-        * @param {Number} month
-        * @param {Number} year
+        * @param {Date} maxDate
         * @since 0.1
         */
         'setMaxDate': {
-            value: function(day, month, year) {}
+            value: function(date) {}
         },
        /**
         * Makes the picker appear on the screen.
@@ -79,14 +58,12 @@ function DatePicker () {
         * Triggered when a date is selected on the picker.
         * 
         * @since 0.1
-        * @param {Number} day
-        * @param {Number} month
-        * @param {Number} year
+        * @param {Date} date
         * @event onDateSelected
         */
         'onDateSelected': {
             get: function() {},
-            set: function(callback) {} // callback(day, month, year)       
+            set: function(callback) {} // callback(date)       
         }
     });
 };
