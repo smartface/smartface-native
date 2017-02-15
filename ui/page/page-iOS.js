@@ -5,7 +5,9 @@ const Image = require("nf-core/ui/image");
 function Page(params) {
     var self = this;
 
-    self.nativeObject = new UIViewController();
+    if(!self.nativeObject){
+        self.nativeObject = new UIViewController();
+    }
     
     self.pageView = new FlexLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;

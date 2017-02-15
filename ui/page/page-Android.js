@@ -70,7 +70,12 @@ function Page(params) {
                 }
             }
             return true;
+        },
+        onActivityResult: function(requestCode, resultCode, data) {
+            const Contacts = require("nf-core/device/contacts");
+            Contacts.onActivityResult(requestCode, resultCode, data);
         }
+        
     }, null);
 
     Object.defineProperty(this, 'layout', {
