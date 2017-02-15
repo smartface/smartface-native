@@ -26,6 +26,7 @@ module.exports = {
     ActionKeyType: require('./actionkeytype'),
     ListView: require('./listview'),
     ListViewItem: require('./listviewitem'),
+    MapView: require('./mapview'),
     DatePicker: require('./datepicker'),
     Menu: require('./menu'),
     MenuItem: require('./menuitem'),

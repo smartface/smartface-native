@@ -1,0 +1,1 @@
+module.exports = require('./mapview-' + Device.deviceOS + '.js');
