@@ -1,4 +1,4 @@
-const AbsoluteLayout        = require('../absolutelayout');
+const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
 const AndroidUnitConverter  = require('nf-core/util/Android/unitconverter.js');
 const Pages                 = require('nf-core/ui/pages');
@@ -7,7 +7,7 @@ const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayo
 const NativeGravity         = requireClass('android.view.Gravity');
 
 
-const SliderDrawer = extend(AbsoluteLayout)(
+const SliderDrawer = extend(FlexLayout)(
     function (_super, params) {
         var self = this;
         _super(this);
