@@ -115,6 +115,7 @@ function push(self, rootViewId, page, animated, pagesStack){
     fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
     fragmentTransaction.commit();
     fragmentManager.executePendingTransactions();
+    Pages.currentPage = page;
     pagesStack.push(page);
 }
 
@@ -179,14 +180,6 @@ function attachSliderDrawer(sliderDrawer){
                 Pages.drawerLayout.addDrawerListener(sliderDrawer.drawerListener);
             }
         }
-        
-        fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
-        fragmentTransaction.commit();
-        fragmentManager.executePendingTransactions();
-        page.isShowing = true;
-        page.invalidate();
-        Pages.currentPage = page;
-        pagesStack.push(page);
     }
 }
 

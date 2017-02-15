@@ -11,42 +11,67 @@ var RAW_CONTACT_ID = "raw_contact_id";//NativeContactsContract.DataColumns.RAW_C
 var MIMETYPE = NativeContactsContract.DataColumns.MIMETYPE;
 var CONTENT_ITEM_TYPE = NativeContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 var DISPLAY_NAME = NativeContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
-    
+
+
+var _onSuccess;
+var _onFailure;
+
 function Contacts () { }
 
-Contacts.addContact = function(contact) {
+Contacts.addContact = function(params) {
+    var contact = {};
+    if(params) {
+        contact = params.contact; 
+        _onSuccess = params.onSuccess;
+        _onFailure = params.onFailure;
+    }
     var activity = Android.getActivity();
     var context = activity.getApplicationContext();
     var contentResolver = activity.getContentResolver();
+    var success = true;
     
-    contentProviderOperation = new NativeArrayList();
-    var ACCOUNT_NAME = NativeContactsContract.SyncColumns.ACCOUNT_NAME;
-    var ACCOUNT_TYPE = NativeContactsContract.SyncColumns.ACCOUNT_TYPE;
-    uri = NativeContactsContract.RawContacts.CONTENT_URI;
-    
-    var newContent = NativeContentProviderOperation.newInsert(uri);
-    newContent = newContent.withValue(ACCOUNT_TYPE, null);
-    newContent = newContent.withValue(ACCOUNT_NAME, null);
-    var content = newContent.build();
-    contentProviderOperation.add(content);
-    
-    uri = NativeContactsContract.Data.CONTENT_URI;
-    addContactName(contact.displayName);
-    addContactNumber(contact.phoneNumber);
-    addContactEmail(contact.email);
-    addContactUrl(contact.urlAddress);
-    addContactAddress(contact.address);
-    
-    var AUTHORITY = NativeContactsContract.AUTHORITY;
     try {
+        contentProviderOperation = new NativeArrayList();
+        var ACCOUNT_NAME = NativeContactsContract.SyncColumns.ACCOUNT_NAME;
+        var ACCOUNT_TYPE = NativeContactsContract.SyncColumns.ACCOUNT_TYPE;
+        uri = NativeContactsContract.RawContacts.CONTENT_URI;
+    
+        var newContent = NativeContentProviderOperation.newInsert(uri);
+        newContent = newContent.withValue(ACCOUNT_TYPE, null);
+        newContent = newContent.withValue(ACCOUNT_NAME, null);
+        var content = newContent.build();
+        contentProviderOperation.add(content);
+        
+        uri = NativeContactsContract.Data.CONTENT_URI;
+        addContactName(contact.displayName);
+        addContactNumber(contact.phoneNumber);
+        addContactEmail(contact.email);
+        addContactUrl(contact.urlAddress);
+        addContactAddress(contact.address);
+    
+        var AUTHORITY = NativeContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
+        console.log("---");
     } 
     catch(msg) {
-        throw msg;
+        success = false;
+        if(_onFailure)
+            _onFailure.call(this, msg);
+        else
+            throw msg;
+    }
+    console.log("success " + success);
+    if(success) {
+        if(_onSuccess)
+            _onSuccess.call(this);
     }
 };
 
-Contacts.pick = function(onSuccess, onError) {
+Contacts.pick = function(params) {
+    if(params) {
+        _onSuccess = params.onSuccess;
+        _onFailure = params.onFailure;
+    }
     var activity = Android.getActivity();
     
     var actionPick = NativeIntent.ACTION_PICK;
@@ -70,9 +95,23 @@ Contacts.onActivityResult = function(requestCode, resultCode, data) {
     var contactUri = data.getData();
     
     var contact = {};
-    contact.phoneNumber = getContactPhoneNumber(contactUri);
-    contact.displayName = getContactDisplayName(contactUri); 
-    return contact;
+    var success = true;
+    try {
+        contact.phoneNumber = getContactPhoneNumber(contactUri);
+        contact.displayName = getContactDisplayName(contactUri); 
+    }
+    catch(err) {
+        success = false;
+        if(_onFailure)
+            _onFailure.call(this);
+        else
+            throw err;
+    }
+    
+    if(success) {
+        if(_onSuccess)
+            _onSuccess.call(this, contact);
+    }
 };
 
 function getContactDisplayName(contactUri) {
