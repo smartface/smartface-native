@@ -159,7 +159,6 @@ function Page(params) {
             _color = color;
             // @todo setStatusBarColor doesn't work causing by issue COR-1153
             // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
-            // console.log(NativeBuildVersion.VERSION.SDK_INT + " - " + MINAPILEVEL_STATUSBARCOLOR);
             // if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
             //     var window = activity.getWindow();
             //     window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -322,8 +321,8 @@ function Page(params) {
             return;
         }
 
+        _headerBarItems = items;
         if (optionsMenu == null) {
-            _headerBarItems = items;
             return;
         }
         
@@ -334,14 +333,9 @@ function Page(params) {
         const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
 
         optionsMenu.clear();
-        _headerBarItems = [];
-        
-        const HeaderBarItem = require("../headerbaritem");
+
         var itemID = 1;
         items.forEach(function(item) {
-            if (!(item instanceof HeaderBarItem)) {
-                return;
-            }
             var button;
             if (item.image && item.image.nativeObject) {
                 var imageCopy = item.image.nativeObject.mutate();
