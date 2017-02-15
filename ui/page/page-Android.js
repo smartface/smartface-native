@@ -1,4 +1,4 @@
-const AbsoluteLayout    = require("nf-core/ui/absolutelayout");
+const FlexLayout    = require("nf-core/ui/flexlayout");
 const Color         = require("nf-core/ui/color");
 const TypeUtil      = require("nf-core/util/type");
 const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
@@ -17,15 +17,16 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    var innerLayout = new AbsoluteLayout({
+    var innerLayout = new FlexLayout({
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
         isRoot : true,
+        positionType: FlexLayout.PositionType.ABSOLUTE,
         backgroundColor: Color.WHITE
     });
-    var rootLayout = new AbsoluteLayout({
+    var rootLayout = new FlexLayout({
         top: 0,
         left: 0,
         bottom: 0,
@@ -57,9 +58,7 @@ function Page(params) {
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
-            if (_headerBarItems.length > 0) {
-                self.headerBar.setItems(_headerBarItems);
-            }
+            self.invalidateHeaderBar();
             return true;
         },
         onConfigurationChanged: function(newConfig){
@@ -71,11 +70,6 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 } else {
                     activity.getSupportFragmentManager().popBackStackImmediate();
-                }
-            } else if (_headerBarItems[menuItem.getItemId()]) {
-                var item = _headerBarItems[menuItem.getItemId()];
-                if (item.onPress instanceof Function) {
-                    item.onPress();
                 }
             }
             return true;
@@ -367,21 +361,10 @@ function Page(params) {
 
         optionsMenu.clear();
         _headerBarItems = [];
-
-        var uId = 1;
+        
         const HeaderBarItem = require("../headerbaritem");
-        const NativeMenuItem = requireClass("android.view.MenuItem");
         items.forEach(function(item) {
-            if (!(item instanceof HeaderBarItem)) {
-                return;
-            }
-
-            var menuItem = optionsMenu.add(0, uId, 0, item.title);
-            item.image && menuItem.setIcon(item.image.nativeObject);
-            menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-
-            _headerBarItems[uId++] = item;
+            item && _headerBarItems.push(item);
         });
     };
 
@@ -443,6 +426,40 @@ function Page(params) {
                 headerBarNative.setHomeAsUpIndicator(_headerBarHomeImage.nativeObject);
             } else {
                 headerBarNative.setHomeAsUpIndicator(null);
+            }
+
+            if (optionsMenu) {
+                const NativeMenuItem    = requireClass("android.view.MenuItem");
+                const NativeImageButton = requireClass('android.widget.ImageButton');
+                const NativeTextButton  = requireClass('android.widget.Button');
+                const NativeView        = requireClass('android.view.View');
+                const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
+                
+                var itemID = 1;
+                _headerBarItems.forEach(function(item) {
+                    var button;
+                    if (item.image && item.image.nativeObject) {
+                        var imageCopy = item.image.nativeObject.mutate();
+                        item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
+                        button = new NativeImageButton(activity);
+                        button.setImageDrawable(imageCopy);
+                    } else {
+                        button = new NativeTextButton(activity);
+                        item.color && button.setTextColor(item.color);
+                        button.setText(item.title);
+                    }
+                    button.setBackgroundColor(Color.TRANSPARENT);
+                    button.setOnClickListener(NativeView.OnClickListener.implement({
+                        onClick: function(view) {
+                            item.onPress && item.onPress();
+                        }
+                    }));
+        
+                    var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                    menuItem.setEnabled(item.enabled);
+                    menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                    menuItem.setActionView(button);
+                });
             }
         }
     }

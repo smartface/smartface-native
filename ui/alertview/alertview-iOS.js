@@ -15,7 +15,9 @@ function AlertView (params) {
         switch (method.name) {
             case MethodNames.didDismissWithButtonIndex:
                 if (method.buttonIndex != -1){
-                    _buttonArray[method.buttonIndex].onClick();
+                   if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
+                        _buttonArray[method.buttonIndex].onClick();
+                    }
                 }
                 self.onDismiss(self);
                 break; 
