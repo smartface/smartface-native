@@ -1,4 +1,4 @@
-const AbsoluteLayout        = require("nf-core/ui/absolutelayout");
+const FlexLayout            = require("nf-core/ui/flexlayout");
 const Color                 = require("nf-core/ui/color");
 const TypeUtil              = require("nf-core/util/type");
 const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
@@ -19,12 +19,13 @@ function Page(params) {
     var self = this;
     var activity = Android.getActivity();
     
-    var rootLayout = new AbsoluteLayout({
+    var rootLayout = new FlexLayout({
         top: 0,
         left: 0,
         bottom: 0,
         right: 0,
         isRoot : true,
+        positionType: FlexLayout.PositionType.ABSOLUTE,
         backgroundColor: Color.WHITE
     });
     
@@ -245,13 +246,13 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return Page.toolbar.getTitle();
+            return Pages.toolbar.getTitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Page.toolbar.setTitle(text);
+                Pages.toolbar.setTitle(text);
             } else {
-                Page.toolbar.setTitle("");
+                Pages.toolbar.setTitle("");
             }
         },
         enumerable: true
@@ -273,13 +274,13 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return Page.toolbar.getSubtitle();
+            return Pages.toolbar.getSubtitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Page.toolbar.setSubtitle(text);
+                Pages.toolbar.setSubtitle(text);
             } else {
-                Page.toolbar.setSubtitle("");
+                Pages.toolbar.setSubtitle("");
             }
         },
         enumerable: true
@@ -325,24 +326,45 @@ function Page(params) {
             _headerBarItems = items;
             return;
         }
+        
+        const NativeMenuItem    = requireClass("android.view.MenuItem");
+        const NativeImageButton = requireClass('android.widget.ImageButton');
+        const NativeTextButton  = requireClass('android.widget.Button');
+        const NativeView        = requireClass('android.view.View');
+        const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
 
         optionsMenu.clear();
         _headerBarItems = [];
-
-        var uId = 1;
+        
         const HeaderBarItem = require("../headerbaritem");
+        var itemID = 1;
         items.forEach(function(item) {
             if (!(item instanceof HeaderBarItem)) {
                 return;
             }
+            var button;
+            if (item.image && item.image.nativeObject) {
+                var imageCopy = item.image.nativeObject.mutate();
+                item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
+                button = new NativeImageButton(activity);
+                button.setImageDrawable(imageCopy);
+            } else {
+                button = new NativeTextButton(activity);
+                item.color && button.setTextColor(item.color);
+                button.setText(item.title);
+            }
+            button.setBackgroundColor(Color.TRANSPARENT);
+            button.setOnClickListener(NativeView.OnClickListener.implement({
+                onClick: function(view) {
+                    item.onPress && item.onPress();
+                }
+            }));
 
-            var menuItem = optionsMenu.add(0, uId, 0, item.title);
-            item.image && menuItem.setIcon(item.image.nativeObject);
+            var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
             menuItem.setEnabled(item.enabled);
-            // MenuItem.SHOW_AS_ACTION_ALWAYS 
-            menuItem.setShowAsAction(2);
+            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+            menuItem.setActionView(button);
 
-            _headerBarItems[uId++] = item;
         });
     };
 
@@ -358,9 +380,7 @@ function Page(params) {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
         }
-        self.invalidateHeaderBar();
     };
-
 
     // Deprecated since 0.1
     this.add = function(view){
@@ -371,7 +391,7 @@ function Page(params) {
     this.remove = function(view){
         self.layout.removeChild(view);
     };
-
+    
     // Default values
     self.statusBar.visible = true;
     self.isBackButtonEnabled = false;

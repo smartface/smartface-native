@@ -508,6 +508,17 @@ function View(params) {
     this.borderRightWidth = 0;
     
     /**
+     * // @todo add description.
+     * 
+     *     @example
+     *     // @todo add example
+     *
+     * @property {UI.FlexLayout.PositionType} [positionType = UI.FlexLayout.PositionType.RELATIVE]   
+     * @since 0.1
+     */
+    this.positionType;
+
+    /**
      * // @todo add description.This property will work only if 
      * view added to {@link UI.FlexLayout FlexLayout}.
      * 
