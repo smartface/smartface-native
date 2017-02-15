@@ -211,9 +211,9 @@ function Pin(params) {
     
 };
 
-MapView.MapType = {}
+MapView.Type = {}
 
-Object.defineProperties(MapView.MapType, {
+Object.defineProperties(MapView.Type, {
     'NORMAL': {
         value: 0,
         configurable: false
