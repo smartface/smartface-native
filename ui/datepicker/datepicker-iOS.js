@@ -3,7 +3,6 @@ function DatePicker (params) {
         
     if(!self.nativeObject){
         self.nativeObject = new SMFUIDatePicker();
-        self.calendar = NSCalendar.currentCalendar();
     }
     
     self.onDateSelectedListener = function(e){
