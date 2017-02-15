@@ -15,6 +15,8 @@ const SliderDrawer = extend(Page)(
 
         if(!self.nativeObject){
             self.nativeObject = SMFSliderDrawer.new();
+            self.nativeObject.position = _position;
+            self.nativeObject.enabled = _enabled;
         }
         
         _super(self);
