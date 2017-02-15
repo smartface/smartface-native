@@ -13,15 +13,36 @@ function DatePicker (params) {
     self.nativeObject.onSelected = self.onDateSelectedListener;
     
     self.setDate = function(date){
-        self.nativeObject.defaultDate = date;
+        if ( Object.prototype.toString.call(date) === "[object Date]" ) {
+          if ( isNaN( date.getTime() ) ) {
+
+          }
+          else {
+            self.nativeObject.defaultDate = date;
+          }
+        }
     }
     
     self.setMinDate = function(date){
-        self.nativeObject.minimumDate = date;
+        if ( Object.prototype.toString.call(date) === "[object Date]" ) {
+          if ( isNaN( date.getTime() ) ) {
+
+          }
+          else {
+            self.nativeObject.minimumDate = date;
+          }
+        }
     }
     
     self.setMaxDate = function(date){
-        self.nativeObject.maximumDate = date;
+        if ( Object.prototype.toString.call(date) === "[object Date]" ) {
+          if ( isNaN( date.getTime() ) ) {
+
+          }
+          else {
+            self.nativeObject.maximumDate = date;
+          }
+        }
     }
     
     self.show = function(){
