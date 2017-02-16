@@ -21,7 +21,7 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootLayout: myPage 
+         *         rootPage: myPage 
          *     });
          *     var mySliderDrawer = new SliderDrawer();
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
@@ -41,7 +41,7 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootLayout: myPage 
+         *         rootPage: myPage 
          *     });
          *     var mySliderDrawer = new SliderDrawer({
          *         onLoad: function(){
@@ -71,7 +71,7 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootLayout: myPage 
+         *         rootPage: myPage 
          *     });
          *     var mySliderDrawer = new SliderDrawer();
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
