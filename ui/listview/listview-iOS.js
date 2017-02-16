@@ -1,7 +1,21 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("nf-core/util").UIControlEvents;
- 
+const Color = require('nf-core/ui/color');
+const Direction = require('nf-core/ui/listview/direction');
+
+const UITableViewRowAnimation = {
+    fade : 0,
+    right : 1,// slide in from right (or out to right)
+    left : 2,
+    top : 3,
+    bottom : 4,
+    none : 5, // available in iOS 3.0
+    middle : 6, // available in iOS 3.2.  attempts to keep cell centered in the space it will/did occupy
+    automatic : 7 // available in iOS 5.0.  chooses an appropriate animation style for you
+}
+
+
 const ListView = extend(View)(
    function (_super, params) {
         var self = this;
@@ -19,13 +33,18 @@ const ListView = extend(View)(
     
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
+        self.onRowSwiped = function(direction){};
         
         self.ios = {}
         
-        self.ios.swipeItem = function(title,action){
-            return UITableViewRowAction.create(title,action);
+        self.ios.swipeItem = function(title,color,padding,action){
+            return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
         
+        self.nativeObject.onRowSwiped = function(e){
+            return self.onRowSwiped(e.direction,e.expansionSettings);
+        }
+          
         self.stopRefresh = function(){
             self.refreshControl.endRefreshing();
         }
@@ -46,18 +65,7 @@ const ListView = extend(View)(
             enumerable: true
          });
           
-        Object.defineProperty(self.ios, 'swipeItems', {
-            get: function() {
-                return self.nativeObject.rowActions;
-            },
-            set: function(value) {
-                self.nativeObject.rowActions = value;
-            },
-            enumerable: true
-          });
-          
-          
-        Object.defineProperty(self, 'onPullRefresh', {
+         Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
                 self.refreshControl.addJSTarget(value.bind(this),UIControlEvents.valueChanged);
             },
@@ -119,6 +127,10 @@ const ListView = extend(View)(
             self.nativeObject.reloadData();
         };
         
+        self.deleteRow = function(index){
+            self.nativeObject.deleteRowIndexAnimation(index,UITableViewRowAnimation.left);
+        }
+        
         self.firstVisibleIndex = function(){
             var visibleIndexArray =  self.nativeObject.getVisibleIndexArray();
             return visibleIndexArray[0];
@@ -145,8 +157,15 @@ const ListView = extend(View)(
         
         self.android = {};
 
-        self.android.setPullRefreshColors = function(){}
-         if (params) {
+        self.setPullRefreshColors = function(param){
+            if( Object.prototype.toString.call( param ) === '[object Array]' ) {
+                self.refreshControl.tintColor = param[0];
+            }else{
+                self.refreshControl.tintColor = param;
+            }
+        }
+
+        if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }

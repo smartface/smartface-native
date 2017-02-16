@@ -1,12 +1,20 @@
-const UI = require("../");
-
 function HeaderBarItem(params) {
     var _title = "";
     var _image = null;
     var _enabled = true;
     var _onPress = null;
+    var _color = null;
     
     Object.defineProperties(this, {
+        'color': {
+            get: function() {
+                return _color;
+            },
+            set: function(value) {
+                _color = value;
+            },
+            enumerable: true
+        },
         'title': {
             get: function() {
                 return _title;

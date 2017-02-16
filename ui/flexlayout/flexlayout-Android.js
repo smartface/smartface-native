@@ -250,12 +250,12 @@ Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
     writable: false
 });
 
-FlexLayout.Position = {};
-Object.defineProperty(FlexLayout.Position, 'RELATIVE', {
+FlexLayout.PositionType = {};
+Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
     value : NativeYogaPositionType.RELATIVE,
     writable: false
 });
-Object.defineProperty(FlexLayout.Position, 'ABSOLUTE', {
+Object.defineProperty(FlexLayout.PositionType, 'ABSOLUTE', {
     value : NativeYogaPositionType.ABSOLUTE,
     writable: false
 });

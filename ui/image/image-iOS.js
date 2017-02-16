@@ -6,7 +6,15 @@ function Image(params) {
     var self = this;
     
     if (params.path){
+      if (params.path.includes(".app")) {
+        // Publish project image caching. 
+        // For using [UIImage imageNamed:] function.
+        var array = params.path.split("/");
+        var fileName = array.pop();
+        self.nativeObject = UIImage.createName(fileName);
+      } else {
         self.nativeObject = new UIImage(params.path);
+      }        
     }else if (params.name){
         self.nativeObject = new UIImage.createName(params.name);
     }else if (params.blob){
@@ -101,7 +109,7 @@ function Image(params) {
 
 Image.createFromFile = function(path) { 
     var imageFile = new File({path:path});
-    return new UIImage(imageFile.nativeObject.getActualPath());
+    return new Image({"path": imageFile.nativeObject.getActualPath()});
 }
 
 Image.createFromName = function(name) { 
