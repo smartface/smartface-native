@@ -87,4 +87,15 @@ const ScrollView = extend(ViewGroup)(
     }
 );
 
+Object.defineProperties(ScrollView, {
+    'Align': {
+        value: require('./scrollview-align'),
+        enumarable: true
+    },
+    'Edge': {
+        value: require('./scrollview-edge'),
+        enumarable: true
+    }
+});
+
 module.exports = ScrollView;
