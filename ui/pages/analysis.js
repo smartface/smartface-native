@@ -37,6 +37,26 @@
  * 
  */
 function Pages(params) {
+    
+    /**
+     * Gets/sets sliderDrawer of the Pages.
+     *
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     const Pages = require('nf-core/ui/pages');
+     *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+     *     var mySliderDrawer = new SliderDrawer();
+     *     myPage = new Page();
+     *     myPages = new Pages({rootPage: myPage});
+     *     myPages.sliderDrawer = mySliderDrawer;
+     *
+     * @property {UI.SliderDrawer} [sliderDrawer = null]
+     * @static
+     * @since 0.1
+     */
+    Object.defineProperty(this, 'sliderDrawer', {
+        value: null
+    });
 
     /**
      * Show page with pushing to pages stack. 
@@ -121,21 +141,6 @@ function Pages(params) {
     this.pop = function(){};
 }
 
-/**
- * Gets/sets sliderDrawer of the Pages.
- *
- *     @example
- *     const Pages = require('nf-core/ui/pages');
- *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
- *     var mySliderDrawer = new SliderDrawer();
- *     Pages.sliderDrawer = mySliderDrawer;
- *
- * @property {UI.SliderDrawer} [sliderDrawer = null]
- * @static
- * @since 0.1
- */
-Object.defineProperty(Pages, 'sliderDrawer', {
-    value: null
-});
+
 
 module.exports = Pages;

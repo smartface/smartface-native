@@ -11,7 +11,7 @@ function Image(params) {
         // For using [UIImage imageNamed:] function.
         var array = params.path.split("/");
         var fileName = array.pop();
-        self.nativeObject = new UIImage.createName(fileName);
+        self.nativeObject = UIImage.createName(fileName);
       } else {
         self.nativeObject = new UIImage(params.path);
       }        
