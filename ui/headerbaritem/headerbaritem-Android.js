@@ -1,5 +1,3 @@
-const UI = require("../");
-
 function HeaderBarItem(params) {
     var _title = "";
     var _image = null;

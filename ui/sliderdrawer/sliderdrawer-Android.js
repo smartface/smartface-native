@@ -18,6 +18,8 @@ const SliderDrawer = extend(FlexLayout)(
         var _position;
         var _onShow;
         var _onHide;
+        var _onLoad;
+        self.attachedPages = null;
         var _enabled = true;
         Object.defineProperties(this,{
             'drawerPosition' : {
@@ -42,22 +44,29 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 set: function(enabled){
                     _enabled = enabled;
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.setDrawerLocked(!enabled);
+                    if(self.attachedPages){
+                        self.attachedPages.setDrawerLocked(!enabled);
+                    }
                 },
                 enumerable: true
             },
+            'layout': {
+                value: self,
+                writable: false
+            },
             'show': {
                 value: function(){
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.showSliderDrawer();
+                    if(self.attachedPages){
+                        self.attachedPages.showSliderDrawer();
+                    }
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.hideSliderDrawer();
+                    if(self.attachedPages){
+                        self.attachedPages.hideSliderDrawer();
+                    }
                 },
                 writable: false
             },
@@ -79,6 +88,17 @@ const SliderDrawer = extend(FlexLayout)(
                 set: function(onHide){
                     if(onHide instanceof Function){
                         _onHide = onHide;
+                    }
+                },
+                enumerable: true
+            },
+            'onLoad': {
+                get: function(){
+                    return _onLoad;
+                },
+                set: function(onLoad){
+                    if(onLoad instanceof Function){
+                        _onLoad = onLoad;
                     }
                 },
                 enumerable: true
