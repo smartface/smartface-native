@@ -19,6 +19,7 @@ const SliderDrawer = extend(FlexLayout)(
         var _onShow;
         var _onHide;
         var _onLoad;
+        self.attachedPages = null;
         var _enabled = true;
         Object.defineProperties(this,{
             'drawerPosition' : {
@@ -43,8 +44,9 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 set: function(enabled){
                     _enabled = enabled;
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.setDrawerLocked(!enabled);
+                    if(self.attachedPages){
+                        self.attachedPages.setDrawerLocked(!enabled);
+                    }
                 },
                 enumerable: true
             },
@@ -54,15 +56,17 @@ const SliderDrawer = extend(FlexLayout)(
             },
             'show': {
                 value: function(){
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.showSliderDrawer();
+                    if(self.attachedPages){
+                        self.attachedPages.showSliderDrawer();
+                    }
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    const Pages = require('nf-core/ui/pages');
-                    Pages.hideSliderDrawer();
+                    if(self.attachedPages){
+                        self.attachedPages.hideSliderDrawer();
+                    }
                 },
                 writable: false
             },

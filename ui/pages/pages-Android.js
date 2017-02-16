@@ -6,12 +6,14 @@ const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
 var activity = Android.getActivity();
 var pageAnimationsCache;
-var drawerLayout = activity.findViewById(NativeR.id.layout_root);
-var toolbar = activity.findViewById(NativeR.id.toolbar);
 
 const Pages = function(params) {
     var self = this;
+    var _sliderDrawer = null;
+
     var pagesStack = [];
+    var drawerLayout = Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
+    var toolbar = Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
     var rootViewId = NativeR.id.layout_container;
     
     registerOnBackStackChanged(self, pagesStack);
@@ -24,98 +26,119 @@ const Pages = function(params) {
             }
         },
         'pop': {
-            value: pop()
-            
+            value: function(){
+                pop();
+            }
         },
+        'sliderDrawer': {
+            get: function() {
+                return _sliderDrawer;
+            },
+            set: function(sliderDrawer) {
+                detachSliderDrawer(_sliderDrawer);
+                
+                _sliderDrawer = sliderDrawer;
+                if(sliderDrawer){
+                    sliderDrawer.attachedPages = self;
+                    attachSliderDrawer( _sliderDrawer);
+                }
+            },
+            enumerable: true
+        },
+        // internal call properties
+        'showSliderDrawer' : {
+            value: function(){
+                showSliderDrawer(_sliderDrawer, drawerLayout);
+            }
+        },
+        'hideSliderDrawer' : {
+            value: function(){
+                hideSliderDrawer(_sliderDrawer, drawerLayout);
+            }
+        },
+        'setDrawerLocked' : {
+            value: function(isLocked){
+                setDrawerLocked(_sliderDrawer, isLocked, drawerLayout);
+            }
+        },
+        'isSliderDrawerOpen' : {
+            value: function(){
+                return isSliderDrawerOpen(_sliderDrawer, drawerLayout);
+            }
+        },
+        'drawerLayout':{
+            value: drawerLayout
+        },
+        'toolbar':{
+            value: Pages.toolbar
+        }
     });
     
     self.push(params.rootPage);
 };
 
-var _sliderDrawer = null;
-Object.defineProperties(Pages, {
-    'sliderDrawer': {
-        get: function() {
-            return _sliderDrawer;
-        },
-        set: function(sliderDrawer) {
-            detachSliderDrawer(_sliderDrawer);
-            _sliderDrawer = sliderDrawer;
-            if(sliderDrawer){
-                attachSliderDrawer( _sliderDrawer);
-            }
-        },
-        enumerable: true
-    },
-    'showSliderDrawer' : {
-        value: function(){
-            if(_sliderDrawer && _sliderDrawer.enabled){
-                const SliderDrawer = require('nf-core/ui/sliderdrawer');
-                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
-                    // Gravity.RIGHT 
-                    Pages.drawerLayout.openDrawer(5);
-                }
-                else{
-                    // Gravity.LEFT
-                    Pages.drawerLayout.openDrawer(3);
-                }
-            }
+Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
+Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
+
+function showSliderDrawer(_sliderDrawer, drawerLayout){
+    if(_sliderDrawer && _sliderDrawer.enabled){
+        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+            // Gravity.RIGHT 
+            drawerLayout.openDrawer(5);
         }
-    },
-    'hideSliderDrawer' : {
-        value: function(){
-            if(_sliderDrawer){
-                const SliderDrawer = require('nf-core/ui/sliderdrawer');
-                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
-                    // Gravity.RIGHT
-                    Pages.drawerLayout.closeDrawer(5);
-                }
-                else{
-                    // Gravity.LEFT
-                    Pages.drawerLayout.closeDrawer(3);
-                }
-            }
+        else{
+            // Gravity.LEFT
+            drawerLayout.openDrawer(3);
         }
-    },
-    'setDrawerLocked' : {
-        value: function(isLocked){
-            if(_sliderDrawer){
-                if(isLocked){
-                    // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-                    drawerLayout.setDrawerLockMode(1);
-                    if(Pages.isSliderDrawerOpen){
-                        Pages.hideSliderDrawer();
-                    }
-                }
-                else{
-                    // DrawerLayout.LOCK_MODE_UNLOCKED
-                    drawerLayout.setDrawerLockMode(0);
-                }
-            }
-        }
-    },
-    'isSliderDrawerOpen' : {
-        value: function(){
-            if(_sliderDrawer){
-                const SliderDrawer = require('nf-core/ui/sliderdrawer');
-                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
-                    // Gravity.RIGHT
-                    return Pages.drawerLayout.isDrawerOpen(5);
-                }
-                else{
-                    // Gravity.LEFT
-                    return Pages.drawerLayout.isDrawerOpen(3);
-                }
-            }
-        }
-    },
-    'drawerLayout':{
-        value: drawerLayout
-    },
-    'toolbar':{
-        value: toolbar
     }
-});
+}
+
+function hideSliderDrawer(_sliderDrawer, drawerLayout) {
+   if(_sliderDrawer){
+        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+            // Gravity.RIGHT
+            drawerLayout.closeDrawer(5);
+        }
+        else{
+            // Gravity.LEFT
+            drawerLayout.closeDrawer(3);
+        }
+    }
+}
+
+function setDrawerLocked(_sliderDrawer, isLocked, drawerLayout) {
+    if(_sliderDrawer){
+        if(isLocked){
+            // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            drawerLayout.setDrawerLockMode(1);
+            if(Pages.isSliderDrawerOpen){
+                Pages.hideSliderDrawer();
+            }
+        }
+        else{
+            // DrawerLayout.LOCK_MODE_UNLOCKED
+            drawerLayout.setDrawerLockMode(0);
+        }
+    }
+}
+
+function isSliderDrawerOpen(_sliderDrawer, drawerLayout) {
+    if(_sliderDrawer){
+        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+            // Gravity.RIGHT
+            return drawerLayout.isDrawerOpen(5);
+        }
+        else{
+            // Gravity.LEFT
+            return drawerLayout.isDrawerOpen(3);
+        }
+    }
+    return false;
+}
+
 function push(self, rootViewId, page, animated, pagesStack){
     if(pagesStack.length > 0) {
         pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
@@ -217,6 +240,7 @@ function attachSliderDrawer(sliderDrawer){
 
 function detachSliderDrawer(sliderDrawer){
     if(sliderDrawer){
+        sliderDrawer.attachedPages = null;
         Pages.drawerLayout.removeView(sliderDrawer.nativeObject);
         if(sliderDrawer.drawerListener){
             Pages.drawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
