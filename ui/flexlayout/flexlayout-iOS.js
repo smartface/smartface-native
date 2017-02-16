@@ -35,6 +35,19 @@ Object.defineProperty(FlexLayout.Direction, 'RTL', {
     },
 });
 ////////////////////////////////////////////////////////////////////////
+FlexLayout.PositionType = {};
+
+Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
+    get: function() {
+        return YogaEnums.YGPositionType.Relative;
+    },
+});
+Object.defineProperty(FlexLayout.PositionType, 'ABSOLUTE', {
+    get: function() {
+        return YogaEnums.YGPositionType.Absolute;
+    },
+});
+////////////////////////////////////////////////////////////////////////
 FlexLayout.FlexDirection = {};
 
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
