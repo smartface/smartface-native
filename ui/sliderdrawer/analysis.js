@@ -30,7 +30,38 @@ const SliderDrawer = extend(ViewGroup)(
          * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
          * @since 0.1
          */
-        this.drawerPosition = UI.SliderDrawer.Position.LEFT
+        this.drawerPosition = UI.SliderDrawer.Position.LEFT;
+        
+        /**
+         * Gets/sets layout of the SliderDrawer.
+         *
+         *     @example
+         *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+         *     const Button = require('nf-core/ui/button');
+         *     const Pages = require('nf-core/ui/pages');
+         *     var myPage = new Page();
+         *     var myPages = new Pages({
+         *         rootLayout: myPage 
+         *     });
+         *     var mySliderDrawer = new SliderDrawer({
+         *         onLoad: function(){
+         *            mySliderDrawer.layout.addChild(myButton);
+         *         }
+         *     });
+         *     var myButton = new Button({
+         *         height: 40, 
+         *         width: 50, 
+         *         left: 50,
+         *         text: "Smartface Button" 
+         *     });
+         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
+         *     myPages.sliderDrawer = mySliderDrawer;
+         *
+         * @property {UI.FlexLayout} [layout = null]
+         * @readonly
+         * @since 0.1
+         */
+        this.layout = null;
         
         /**
          * Enable/disable the SliderDrawer.
@@ -50,7 +81,7 @@ const SliderDrawer = extend(ViewGroup)(
          * @property {Boolean} [enabled = true]
          * @since 0.1
          */
-        this.enabled = true
+        this.enabled = true;
         
         /**
          * This function allows you to show SliderDrawer on it's own position if it assigned to the Page.
@@ -85,6 +116,15 @@ const SliderDrawer = extend(ViewGroup)(
          * @since 0.1
          */
         this.onHide = null;
+        
+        /**
+         * Gets/sets callback for load event. This callback will fire when Slider Drawer
+         * begins load.
+         *
+         * @event onLoad
+         * @since 0.1
+         */
+        this.onLoad = null;
     }
 );
 

@@ -18,6 +18,7 @@ const SliderDrawer = extend(FlexLayout)(
         var _position;
         var _onShow;
         var _onHide;
+        var _onLoad;
         var _enabled = true;
         Object.defineProperties(this,{
             'drawerPosition' : {
@@ -46,6 +47,10 @@ const SliderDrawer = extend(FlexLayout)(
                     Pages.setDrawerLocked(!enabled);
                 },
                 enumerable: true
+            },
+            'layout': {
+                value: self,
+                writable: false
             },
             'show': {
                 value: function(){
@@ -79,6 +84,17 @@ const SliderDrawer = extend(FlexLayout)(
                 set: function(onHide){
                     if(onHide instanceof Function){
                         _onHide = onHide;
+                    }
+                },
+                enumerable: true
+            },
+            'onLoad': {
+                get: function(){
+                    return _onLoad;
+                },
+                set: function(onLoad){
+                    if(onLoad instanceof Function){
+                        _onLoad = onLoad;
                     }
                 },
                 enumerable: true

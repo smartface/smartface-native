@@ -49,8 +49,8 @@ Object.defineProperties(Pages, {
     },
     'showSliderDrawer' : {
         value: function(){
-            const SliderDrawer = require('nf-core/ui/sliderdrawer');
-            if(_sliderDrawer){
+            if(_sliderDrawer && _sliderDrawer.enabled){
+                const SliderDrawer = require('nf-core/ui/sliderdrawer');
                 if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
                     // Gravity.RIGHT 
                     Pages.drawerLayout.openDrawer(5);
@@ -65,6 +65,7 @@ Object.defineProperties(Pages, {
     'hideSliderDrawer' : {
         value: function(){
             if(_sliderDrawer){
+                const SliderDrawer = require('nf-core/ui/sliderdrawer');
                 if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
                     // Gravity.RIGHT
                     Pages.drawerLayout.closeDrawer(5);
@@ -82,10 +83,28 @@ Object.defineProperties(Pages, {
                 if(isLocked){
                     // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
                     drawerLayout.setDrawerLockMode(1);
+                    if(Pages.isSliderDrawerOpen){
+                        Pages.hideSliderDrawer();
+                    }
                 }
                 else{
                     // DrawerLayout.LOCK_MODE_UNLOCKED
                     drawerLayout.setDrawerLockMode(0);
+                }
+            }
+        }
+    },
+    'isSliderDrawerOpen' : {
+        value: function(){
+            if(_sliderDrawer){
+                const SliderDrawer = require('nf-core/ui/sliderdrawer');
+                if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+                    // Gravity.RIGHT
+                    return Pages.drawerLayout.isDrawerOpen(5);
+                }
+                else{
+                    // Gravity.LEFT
+                    return Pages.drawerLayout.isDrawerOpen(3);
                 }
             }
         }
@@ -192,6 +211,7 @@ function attachSliderDrawer(sliderDrawer){
                 Pages.drawerLayout.addDrawerListener(sliderDrawer.drawerListener);
             }
         }
+        sliderDrawer.onLoad && sliderDrawer.onLoad();
     }
 }
 
