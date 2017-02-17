@@ -146,6 +146,7 @@ function push(self, rootViewId, page, animated, pagesStack){
     }
     page.isShowing = true;
     page.pages = self;
+    self.hideSliderDrawer();
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
     if(animated){
@@ -194,7 +195,7 @@ function registerOnBackStackChanged(self, pagesStack){
                         var oldPage = pagesStack.pop();
                         var fragmentTransaction = supportFragmentManager.beginTransaction();
                         fragmentTransaction.remove(oldPage.nativeObject).commit();
-                        self.removeDrawerListener();
+                        self.hideSliderDrawer();
                         
                         if(pagesStack.length > 0) {
                             pagesStack[pagesStack.length-1].isShowing = true;

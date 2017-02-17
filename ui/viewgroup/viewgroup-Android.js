@@ -14,7 +14,7 @@ const ViewGroup = extend(View)(
 
         this.addChild = function(view){
             view.parent = self;
-            self.childViews[view.id+''] = view;
+            self.childViews[view.id] = view;
             self.nativeObject.addView(view.nativeObject);
         };
 
@@ -35,7 +35,7 @@ const ViewGroup = extend(View)(
         };
 
         this.findChildById = function(id){
-            return self.childViews[id] ? self.childViews[id] : null;
+            return self.childViews[''+id] ? self.childViews[id] : null;
         };
 
         // Assign parameters given in constructor
