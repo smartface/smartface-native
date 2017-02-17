@@ -29,7 +29,7 @@ const VideoView = extend(View)(
                 value: function(url) {}
             },
             'loadFile': {
-                value: function(path) {}
+                value: function(file) {}
             },
             'onReady': {
                 get: function() {},
