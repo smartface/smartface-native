@@ -35,7 +35,7 @@ const ViewGroup = extend(View)(
         };
 
         this.findChildById = function(id){
-            return self.childViews[''+id] ? self.childViews[id] : null;
+            return self.childViews[id] ? self.childViews[id] : null;
         };
 
         // Assign parameters given in constructor
