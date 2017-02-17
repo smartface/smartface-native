@@ -1,6 +1,3 @@
-const Image = require('nf-core/ui/image');
-const File = require('nf-core/io/file');
-
 var http = {};
 
 http.getFile = function(url, fileName, onLoad, onError) {
@@ -8,6 +5,7 @@ http.getFile = function(url, fileName, onLoad, onError) {
         url,
         fileName,
         function(e){
+            const File = require('nf-core/io/file');
             var file = new File({path:e});
             onLoad(file);
         },
@@ -21,6 +19,7 @@ http.getImage = function(url, onLoad, onError) {
     SMFHttp.getImageFrom(
         url,
         function(e){
+            const Image = require('nf-core/ui/image');
             var image = Image.createFromImage(e);
             onLoad(image);
         },
