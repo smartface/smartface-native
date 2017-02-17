@@ -7,7 +7,7 @@ const VideoView = extend(View)(
         _super(this);
 
         Object.defineProperties(VideoView, {
-            'start': {
+            'play': {
                 value: function() {}
             },
             'pause': {
