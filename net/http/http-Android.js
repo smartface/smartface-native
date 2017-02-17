@@ -8,18 +8,12 @@ http.getString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
-                if(onLoad)
-                    onLoad(response);
-                else
-                    return response;
+                onLoad(response);
             }
         });
         var responseErrorListener = Response.ErrorListener.implement({
             onErrorResponse: function(error) {
-                if(onError)
-                    onError(error);
-                else
-                    return null;
+                onError(error);
             }
         });
         
@@ -41,29 +35,22 @@ http.getImage = function(url, onLoad, onError) {
             onResponse: function(response) {
                 const Image = require("nf-core/ui/image");
                 var image = new Image({bitmap: response});
-                if(onLoad)
-                    onLoad(image);
-                else 
-                    return image;
+                onLoad(image);
             }
         });
         var responseErrorListener = Response.ErrorListener.implement({
             onErrorResponse: function(error) {
-                if(onError)
-                    onError(error);
-                else 
-                    return null;
+                onError(error);
             }
         });
         
         const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
         var myRequest = new ImageRequest(url,responseListener, 
             0, 0, null, null,responseErrorListener);
-        console.log("myRequest");
+            
         var requestQueue = Volley.newRequestQueue(Android.getActivity());
         requestQueue.add(myRequest);
     } catch(e) {
-        console.log("There is exception");
         onError(e);
     }
 };
@@ -75,8 +62,6 @@ http.getJSON = function(url, onLoad, onError) {
                 // onLoad(responseJSON);        // response is java.lang.String.
                 if(onLoad)
                     onLoad(response);
-                else
-                    return response;
             } catch (e) {
                 if(onError)
                     onError(e);
@@ -93,7 +78,6 @@ http.getFile = function(url, fileName, onLoad, onError) {
                     filePath = url.substring(url.lastIndexOf('/'));
                 filePath = fileName;
                 var file = new IO.File({path: filePath});
-                console.log("filePath " + filePath);
                 var stream = file.openStream(IO.FileStream.StreamType.WRITE);
                 stream.write(response);
                 stream.close();
@@ -116,42 +100,32 @@ http.request = function(params, onLoad, onError) {
         }
     });
     
-    const NativeInteger = requireClass("java.lang.Integer");
-    var intVal = new NativeInteger(1);
-    console.log("int " + intVal);
-    const NativeString = requireClass("java.lang.String");
-    var str = new NativeString("http://requestb.in/1in5fqo1");
-    
-    var parameters = [intVal, str,
+    var parameters = [params.method, params.url,
         responseListener, responseErrorListener];
-    console.log("parameters " + parameters);
+    var body = params.body;
     var request = {};
-    console.log("request " + request);
-    var body = new NativeString(params.body);
-    console.log("body " + body);
     
     try {
         const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
         request.nativeObject = StringRequest.extend("SFStringRequest", {
             getBody: function() {
-                console.log("body " + body);
                 if(!body)
                     return null;
                     
-                // console.log("NativeString " + NativeString);
-                // var bodyStr = new NativeString(body);
-                // console.log("bodyStr " + bodyStr);
+                const NativeString = requireClass("java.lang.String");
+                var bodyStr = new NativeString(body);
+                console.log("bodyStr " + bodyStr);
                 return body.getBytes();
             }
         }, parameters);
     }
     catch(err) {
-        alert("Msg " + err);
+        if(onError)
+            onError(err);
     }
     
-    // var requestQueue = Volley.newRequestQueue(Android.getActivity());
-    // console.log("requestQueue " + requestQueue);
-    // requestQueue.add(self.nativeObject);
+    var requestQueue = Volley.newRequestQueue(Android.getActivity());
+    requestQueue.add(request.nativeObject);
 };
 
 module.exports = http;
