@@ -19,9 +19,6 @@ const VideoView = extend(View)(
             'isPlaying': {
                 value: function() {return true | false}
             },
-            'setControllerEnabled': {
-                value: function(enabled) {}
-            },
             'setLoopEnabled': {
                 value: function(enabled) {}
             },
@@ -41,6 +38,12 @@ const VideoView = extend(View)(
             },
             'seekTo': {
                 value: function(milliseconds) {}
+            },
+            'totalDuration': {
+                get: function() {return milliseconds}
+            },
+            'currentDuration': {
+                get: function() {return milliseconds}
             }
         });
 
