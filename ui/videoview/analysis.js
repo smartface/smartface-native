@@ -38,6 +38,9 @@ const VideoView = extend(View)(
             'onFinish': {
                 get: function() {},
                 set: function(callback) {}
+            },
+            'seekTo': {
+                value: function(milliseconds) {}
             }
         });
 
