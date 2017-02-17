@@ -44,6 +44,9 @@ const VideoView = extend(View)(
             },
             'currentDuration': {
                 get: function() {return milliseconds}
+            },
+            'setVolume': {
+                value: function(volume) {}
             }
         });
 
