@@ -50,6 +50,9 @@ const VideoView = extend(View)(
             },
             'setVolume': {
                 value: function(volume) {}
+            },
+            'setControllerEnabled': {
+                value: function(enabled) {}
             }
         });
 
