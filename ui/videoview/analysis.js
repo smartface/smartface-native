@@ -6,7 +6,10 @@ const VideoView = extend(View)(
         var self = this;
         _super(this);
 
-        Object.defineProperties(VideoView, {
+        self.ios = {};
+
+        // cross-platform properties
+        Object.defineProperties(self, {
             'play': {
                 value: function() {}
             },
@@ -47,6 +50,14 @@ const VideoView = extend(View)(
             },
             'setVolume': {
                 value: function(volume) {}
+            }
+        });
+
+        // platform specific properties
+        Object.defineProperties(self.ios, {
+            'page': {
+                get: function() {return page},
+                set: function(page) {}
             }
         });
 
