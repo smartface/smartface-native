@@ -402,6 +402,10 @@ function Page(params) {
     self.headerBar.subtitleColor = Color.WHITE;
     self.headerBar.visible = true;
     
+    //Handling ios value
+    self.statusBar.ios = {};
+    self.statusBar.ios.style = null;
+    
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

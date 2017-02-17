@@ -13,7 +13,7 @@ ImageFillTypeDic[ImageFillType.ASPECTFIT] = NativeScaleType.FIT_CENTER;
 
 const ImageView = extend(View)(
     function (_super, params) {
-        self = this;
+        var self = this;
         if (!self.nativeObject) {
             self.nativeObject = new NativeImageView(Android.getActivity());
         }
