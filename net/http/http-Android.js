@@ -1,21 +1,25 @@
-var html = {};
-
 const Volley = requireClass("com.android.volley.toolbox.Volley");
 const Request = requireClass("com.android.volley.Request");
 const Response = requireClass("com.android.volley.Response");
-// const requestQueue = Volley.newRequestQueue(Android.getActivity());
 
-html.getString = function(url, onLoad, onError) {
+var http = {};
+
+http.getString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
-                console.log(response);
-                onLoad(response);
+                if(onLoad)
+                    onLoad(response);
+                else
+                    return response;
             }
         });
         var responseErrorListener = Response.ErrorListener.implement({
             onErrorResponse: function(error) {
-                onError(error);
+                if(onError)
+                    onError(error);
+                else
+                    return null;
             }
         });
         
@@ -26,57 +30,70 @@ html.getString = function(url, onLoad, onError) {
         var requestQueue = Volley.newRequestQueue(Android.getActivity());
         requestQueue.add(myRequest);
     } catch(e) {
-        console.log(e);
-        onError(e);
+        if(onError)
+            onError(e);
     }
-}
+};
 
-html.getImage = function(url, onLoad, onError) {
+http.getImage = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
-                console.log("got image");
-                const Image = require("../../ui/image");
-                onLoad(new Image({bitmap: response}));
+                const Image = require("nf-core/ui/image");
+                var image = new Image({bitmap: response});
+                if(onLoad)
+                    onLoad(image);
+                else 
+                    return image;
             }
         });
         var responseErrorListener = Response.ErrorListener.implement({
             onErrorResponse: function(error) {
-                console.log("got image error");
-                onError(error);
+                if(onError)
+                    onError(error);
+                else 
+                    return null;
             }
         });
         
-        const ScaleType = requireClass("android.widget.ImageView").ScaleType;
         const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-        const Config = requireClass("android.graphics.Bitmap").Config;
-        var myRequest = new ImageRequest(Request.Method.GET, url,
-                responseListener, 0, 0, ScaleType.FIT_XY, Config.ARGB_8888,
-                responseErrorListener);
+        var myRequest = new ImageRequest(url,responseListener, 
+            0, 0, null, null,responseErrorListener);
+        console.log("myRequest");
+        var requestQueue = Volley.newRequestQueue(Android.getActivity());
         requestQueue.add(myRequest);
     } catch(e) {
         console.log("There is exception");
         onError(e);
     }
-}
+};
 
 http.getJSON = function(url, onLoad, onError) {
     http.getString(url, function(response) {
             try {
-                onLoad(JSON.parse(response));
+                // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
+                // onLoad(responseJSON);        // response is java.lang.String.
+                if(onLoad)
+                    onLoad(response);
+                else
+                    return response;
             } catch (e) {
-                onError(e);
+                if(onError)
+                    onError(e);
             }
-        }, onError);
-}
+    }, onError);
+};
 
-http.getFile = function(url, onLoad, onError) {
+http.getFile = function(url, fileName, onLoad, onError) {
     http.getString(url, function(response){
             try {
                 const IO = require("../../io");
-                var filePath = IO.Path.DataDirectory + "/" +
-                        url.substring(url.lastIndexOf('/'));
+                var filePath;
+                if(!fileName)
+                    filePath = url.substring(url.lastIndexOf('/'));
+                filePath = fileName;
                 var file = new IO.File({path: filePath});
+                console.log("filePath " + filePath);
                 var stream = file.openStream(IO.FileStream.StreamType.WRITE);
                 stream.write(response);
                 stream.close();
@@ -85,6 +102,56 @@ http.getFile = function(url, onLoad, onError) {
                 onError(e);
             }
         }, onError);
-}
+};
 
-module.exports = html;
+http.request = function(params, onLoad, onError) {
+    var responseListener = Response.Listener.implement({
+            onResponse: function(response) {
+                onLoad(response);
+            }
+        });
+    var responseErrorListener = Response.ErrorListener.implement({
+        onErrorResponse: function(error) {
+            onError(error);
+        }
+    });
+    
+    const NativeInteger = requireClass("java.lang.Integer");
+    var intVal = new NativeInteger(1);
+    console.log("int " + intVal);
+    const NativeString = requireClass("java.lang.String");
+    var str = new NativeString("http://requestb.in/1in5fqo1");
+    
+    var parameters = [intVal, str,
+        responseListener, responseErrorListener];
+    console.log("parameters " + parameters);
+    var request = {};
+    console.log("request " + request);
+    var body = new NativeString(params.body);
+    console.log("body " + body);
+    
+    try {
+        const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
+        request.nativeObject = StringRequest.extend("SFStringRequest", {
+            getBody: function() {
+                console.log("body " + body);
+                if(!body)
+                    return null;
+                    
+                // console.log("NativeString " + NativeString);
+                // var bodyStr = new NativeString(body);
+                // console.log("bodyStr " + bodyStr);
+                return body.getBytes();
+            }
+        }, parameters);
+    }
+    catch(err) {
+        alert("Msg " + err);
+    }
+    
+    // var requestQueue = Volley.newRequestQueue(Android.getActivity());
+    // console.log("requestQueue " + requestQueue);
+    // requestQueue.add(self.nativeObject);
+};
+
+module.exports = http;

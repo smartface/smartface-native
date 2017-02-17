@@ -13,11 +13,13 @@ var http = {};
  * onLoad callback will be called with received File object.
  * 
  * @param {String} url URL of file
+ * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @return UI.File
  * @since 0.2
  */
-http.getFile = function(url, onLoad, onError) {}
+http.getFile = function(url, fileName, onLoad, onError) {}
 
 /**
  * @method getImage
@@ -28,6 +30,7 @@ http.getFile = function(url, onLoad, onError) {}
  * @param {String} url URL of Image
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @return UI.Image
  * @since 0.2
  */
 http.getImage = function(url, onLoad, onError) {}
@@ -41,6 +44,7 @@ http.getImage = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @return String
  * @since 0.2
  */
 http.getString = function(url, onLoad, onError) {}
@@ -54,6 +58,7 @@ http.getString = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @return String
  * @since 0.2
  */
 http.getJSON = function(url, onLoad, onError) {}
@@ -72,3 +77,5 @@ http.getJSON = function(url, onLoad, onError) {}
  * @since 0.2
  */
 http.request = function(params, onLoad, onError) {}
+
+module.exports = http;
