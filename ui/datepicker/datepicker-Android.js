@@ -1,7 +1,7 @@
 const TypeUtil = require('nf-core/util/type');
 
 function DatePicker(params) {
-    self = this;
+    var self = this;
     var activity = Android.getActivity();
 
     const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
