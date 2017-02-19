@@ -140,7 +140,6 @@ const MapView = extend(View)(
                     value: function(pin) {
                         if (pin && !pin.nativeObject) {
                             const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
-    
                             var marker = new NativeMarkerOptions();
                             pin.title    && marker.title(pin.title);
                             pin.subtitle && marker.snippet(pin.subtitle);
@@ -244,6 +243,13 @@ function Pin(params) {
             }
         }
     });
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 };
 
 Object.defineProperties(MapView, {
