@@ -213,7 +213,7 @@ function Page(params) {
     });
 
     var _headerBarHomeEnabled;
-    Object.defineProperty(self.headerBar.android, 'displayShowHomeEnabled', {
+    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
         get: function() {
             return _headerBarHomeEnabled;
         },
@@ -374,7 +374,7 @@ function Page(params) {
         if (leftItem instanceof HeaderBarItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             self.headerBar.homeAsUpIndicatorImage = _headerBarLeftItem.image;
-            self.headerBar.android.displayShowHomeEnabled = true;
+            self.android.displayShowHomeEnabled = true;
         } else {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
@@ -397,10 +397,14 @@ function Page(params) {
     // todo Add color default value after resolving COR-1153.
     // self.statusBar.color = Color.TRANSPARENT;
     self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.android.displayShowHomeEnabled = false;
+    self.headerBar.displayShowHomeEnabled = false;
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
     self.headerBar.visible = true;
+    
+    //Handling ios value
+    self.statusBar.ios = {};
+    self.statusBar.ios.style = null;
     
     // Assign parameters given in constructor
     if (params) {

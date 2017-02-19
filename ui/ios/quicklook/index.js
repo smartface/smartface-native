@@ -1,0 +1,1 @@
+module.exports = require('./quicklook-' + Device.deviceOS + '.js');
