@@ -176,7 +176,8 @@ const VideoView = extend(View)(
             /**
              * Gets/Sets the page where the videoview is put.
              *
-             * @property page
+             * @property {UI.Page} page
+             * @ios
              * @since 0.1
              */
             'page': {
