@@ -5,7 +5,8 @@ const View = require('nf-core/ui/view');
  * @class UI.VideoView
  * @since 0.1
  * @extends UI.View
- * VideoView is a video holder where a video clip is played inside.
+ * VideoView is a video holder where a video clip is played inside. 
+ * Supported formats for both platforms are 3GPP (.3gp) and MPEG-4 (.mp4).
  *
  *     @example
  *     const Flex      = require('nf-core/ui/flexlayout');
