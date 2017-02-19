@@ -15,7 +15,7 @@ const View = require('nf-core/ui/view');
  *         left:10, top:10, height:250, width:250,
  *         positionType: Flex.PositionType.ABSOLUTE,
  *         onReady: function() {
- *             myVideoView.start();
+ *             myVideoView.play();
  *         }
  *     });
  *     myVideoView.loadURL('url-to-videoclip');
