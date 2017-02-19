@@ -73,7 +73,7 @@ const VideoView = extend(View)(
              * Puts the video clip in loop.
              *
              * @method setLoopEnabled
-             * 
+             * @param {Boolean} enabled
              * @since 0.1
              */
             'setLoopEnabled': {
@@ -83,7 +83,7 @@ const VideoView = extend(View)(
              * Loads the video clip from the URL.
              *
              * @method loadURL
-             * 
+             * @param {String} url
              * @since 0.1
              */
             'loadURL': {
@@ -93,7 +93,7 @@ const VideoView = extend(View)(
              * Loads the video clip from the local file.
              *
              * @method loadFile
-             * 
+             * @param {IO.File} file
              * @since 0.1
              */
             'loadFile': {
@@ -134,7 +134,7 @@ const VideoView = extend(View)(
             /**
              * Returns the total duration of the video.
              *
-             * @property {Number} milliseconds
+             * @property {Number} totalDuration
              * @since 0.1
              */
             'totalDuration': {
@@ -143,7 +143,7 @@ const VideoView = extend(View)(
             /**
              * Returns the current duration of the video.
              *
-             * @property {Number} milliseconds
+             * @property {Number} currentDuration
              * @since 0.1
              */
             'currentDuration': {
