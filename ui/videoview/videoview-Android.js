@@ -63,6 +63,7 @@ const VideoView = extend(View)(
             },
             'loadFile': {
                 value: function(file) {
+                    // TODO: handle inner paths.
                     self.nativeObject.setVideoPath(file.path);
                 }
             },
