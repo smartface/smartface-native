@@ -13,8 +13,9 @@ const VideoView = extend(View)(
         const NativeMediaPlayer = requireClass('android.media.MediaPlayer');        
         self.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
             onPrepared: function(mediaPlayer) {
-                _callbackOnReady && _callbackOnReady();
                 _nativeMediaPlayer = mediaPlayer;
+
+                _callbackOnReady && _callbackOnReady();
             }
         }));
         
