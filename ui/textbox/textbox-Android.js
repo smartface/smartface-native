@@ -233,6 +233,9 @@ const TextBox = extend(Label)(
             inputMethodManager.hideSoftInputFromWindow(self.nativeObject.getWindowToken(), 0); 
         };
         
+        // Handling ios specific properties
+        self.ios = {};
+        
         self.hint = "";
         self.multiline = false;
         self.android.hintTextColor = Color.LIGHTGRAY;

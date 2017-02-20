@@ -7,7 +7,8 @@ const NativeGradientDrawable    = requireClass("android.graphics.drawable.Gradie
 const NativeLayerDrawable       = requireClass("android.graphics.drawable.LayerDrawable");
 const NativeColor               = requireClass("android.graphics.Color");
 const NativeMotionEvent         = requireClass("android.view.MotionEvent");
-const NativeYogaLayout          = requireClass('io.smartface.yoga.YogaLayout');
+const NativeYogaLayout          = requireClass('com.facebook.yoga.android.YogaLayout');
+const NativeYogaNode            = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
 const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
@@ -34,23 +35,23 @@ function View(params) {
     var self = this;
     var activity = Android.getActivity();
     var yogaNode = null;
-    var layoutParams = null;
-    
+
     if(!self.nativeObject){
         self.nativeObject = new NativeView(activity);
-        layoutParams = new NativeYogaLayout.LayoutParams(0,0);
-        yogaNode = layoutParams.node;
+        var layoutParams = new NativeYogaLayout.LayoutParams(-2,-2);
+        self.nativeObject.setLayoutParams(layoutParams);
+        yogaNode = new NativeYogaNode();
     }
     else 
     {
-        layoutParams = self.nativeObject.getLayoutParams();
         if(self.nativeObject.toString().indexOf("YogaLayout") !== -1){
-            yogaNode = self.nativeObject.getNode();
-            layoutParams = self.nativeObject.getLayoutParams();
+            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
+            yogaNode = self.nativeObject.getYogaNode();
+            self.nativeObject.setLayoutParams(layoutParams);
         }
         else{
-            layoutParams = new NativeYogaLayout.LayoutParams(0,0);
-            yogaNode = layoutParams.node;
+            var layoutParams = new NativeYogaLayout.LayoutParams(-2,-2);
+            yogaNode = new NativeYogaNode();
             self.nativeObject.setLayoutParams(layoutParams);
         }
     }
@@ -767,7 +768,7 @@ function View(params) {
 
     // Yoga Methods 
     this.dirty = function(){
-        self.nativeInner.dirty();
+        yogaNode.dirty();
     };
     
     this.getYogaNode = function(){
@@ -775,8 +776,6 @@ function View(params) {
     };
 
     // Assign defaults
-    self.alignSelf = NativeYogaAlign.STRETCH;
-    self.positionType = NativeYogaPositionType.RELATIVE;
     
     // Assign parameters given in constructor
     if (params) {

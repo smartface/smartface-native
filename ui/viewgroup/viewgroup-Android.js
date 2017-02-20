@@ -15,7 +15,7 @@ const ViewGroup = extend(View)(
         this.addChild = function(view){
             view.parent = self;
             self.childViews[view.id] = view;
-            self.nativeObject.addView(view.nativeObject);
+            self.nativeObject.addView(view.nativeObject, view.getYogaNode());
         };
 
         this.removeChild = function(view){
