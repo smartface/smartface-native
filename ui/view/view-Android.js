@@ -55,6 +55,8 @@ function View(params) {
             self.nativeObject.setLayoutParams(layoutParams);
         }
     }
+    // Passing click event from child to parent due to z-index
+    self.nativeObject.setDuplicateParentStateEnabled(true);
 
     var _backgroundColor = 0;
     var backgroundDrawable = new NativeGradientDrawable();
