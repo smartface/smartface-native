@@ -1,5 +1,5 @@
-const extend                    = require('js-base/core/extend');
-const FlexLayout                = require('../flexlayout');
+const extend     = require('js-base/core/extend');
+const FlexLayout = require('../flexlayout');
 
 const AbsoluteLayout = extend(FlexLayout)(
     function (_super, params) {
