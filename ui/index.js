@@ -31,5 +31,6 @@ module.exports = {
     DatePicker: require('./datepicker'),
     Menu: require('./menu'),
     MenuItem: require('./menuitem'),
-    SliderDrawer: require('./sliderdrawer')
+    SliderDrawer: require('./sliderdrawer'),
+    Quicklook: require('./quicklook')
 };
