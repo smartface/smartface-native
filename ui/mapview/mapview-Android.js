@@ -169,6 +169,7 @@ const MapView = extend(View)(
                     value: function(pin) {
                         if (pin && pin.nativeObject) {
                             pin.nativeObject.remove();
+                            pin.nativeObject = null;
                         }
                     }
                 }
