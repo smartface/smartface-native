@@ -30,18 +30,38 @@ Contacts.add = function(params) {
             }
         }
         
-        var saveRequest = CNSaveRequest.new();
-        saveRequest.addContact(contact);
-        
-        var retval = store.executeSave(saveRequest);
-        
-        if (retval) {
-            if (typeof params.onSuccess === 'function') {
-                params.onSuccess();
-            }
+        if (typeof params.page === 'object') {
+            var contactViewController = CNContactViewController.viewControllerForNewContact(contact);
+            contactViewController.contactStore = store;
+            contactViewController.allowsActions = false;
+            var contactViewControllerDelegate = new SMFCNContactViewControllerDelegate();
+            contactViewControllerDelegate.didCompleteWithContact = function(contact){
+                if (contact) {
+                    if (typeof params.onSuccess === 'function') {
+                        params.onSuccess();
+                    }
+                } else {
+                    if (typeof params.onFailure === 'function') {
+                        params.onFailure();
+                    }
+                }
+            };
+            contactViewController.delegate = contactViewControllerDelegate;
+            var navigationalcontactViewController = new UINavigationController(contactViewController);
+            params.page.nativeObject.presentViewController(navigationalcontactViewController);
         } else {
-            if (typeof params.onFailure === 'function') {
-                params.onFailure();
+            var saveRequest = CNSaveRequest.new();
+            saveRequest.addContact(contact);
+            var retval = store.executeSave(saveRequest);
+            
+            if (retval) {
+                if (typeof params.onSuccess === 'function') {
+                    params.onSuccess();
+                }
+            } else {
+                if (typeof params.onFailure === 'function') {
+                    params.onFailure();
+                }
             }
         }
     }, function(e){
