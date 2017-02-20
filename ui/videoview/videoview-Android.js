@@ -102,6 +102,9 @@ const VideoView = extend(View)(
                 }
             }
         });
+        
+        // Handling ios specific properties
+        self.ios = {};
 
         // Assign parameters given in constructor
         if (params) {

@@ -216,6 +216,9 @@ function Page(params) {
             if (TypeUtil.isBoolean(enabled)) {
                 _headerBarHomeEnabled = enabled;
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
+                if(!_headerBarLeftItem){
+                    activity.getSupportActionBar().setHomeAsUpIndicator(null);
+                }
             }
         },
         enumerable: true
