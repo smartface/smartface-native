@@ -152,7 +152,9 @@ const MapView = extend(View)(
                             }
 
                             if (pin.image) {
-                                // TODO: find a way
+                                var iconBitmap = pin.image.nativeObject.getBitmap();
+                                var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
+                                marker.icon(icon);
                             } else if (pin.color) {
                                 var colorHUE = hueDic[pin.color];
                                 var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
