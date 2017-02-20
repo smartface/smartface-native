@@ -3,6 +3,7 @@ const Color = require('../color');
 const extend = require('js-base/core/extend');
 const KeyboardType = require('../keyboardtype');
 const ActionKeyType = require('../actionkeytype');
+const TextAlignment = require('nf-core/ui/textalignment')
 
 const NativeActivity = requireClass("android.app.Activity");
 const NativeContext = requireClass("android.content.Context"); 
@@ -232,9 +233,13 @@ const TextBox = extend(Label)(
             inputMethodManager.hideSoftInputFromWindow(self.nativeObject.getWindowToken(), 0); 
         };
         
+        // Handling ios specific properties
+        self.ios = {};
+        
         self.hint = "";
         self.multiline = false;
         self.android.hintTextColor = Color.LIGHTGRAY;
+        self.textAlignment = TextAlignment.MIDLEFT;
         
         // Assign parameters given in constructor
         if (params) {

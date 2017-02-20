@@ -15,9 +15,9 @@ const ScrollView = extend(ViewGroup)(
         if(!self.nativeObject){
             self.nativeObject = new SMFUIScrollView();
         }
-    
+        
         _super(this);
-         
+        self.flexBasis = 1; 
         Object.defineProperty(self, 'scrollBarEnabled', {
             get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;

@@ -24,6 +24,10 @@ const ViewGroup = extend(View)(
             if(self.nativeObject.constructor.name == "Emu_Dev.SMFUIScrollView"){
                 self.autoSize();
             }
+            
+            if (view.nativeObject.constructor.name == "Emu_Dev.SMFUIScrollView"){
+                view.autoSize();
+            }
         };
 
         this.removeChild = function(view){
