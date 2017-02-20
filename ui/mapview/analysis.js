@@ -10,18 +10,26 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const MapView = require('nf-core/ui/mapview');
  *     var myMapView = new MapView({
- *         left:0, top:0, right:0, bottom:0,
- *         scrollEnabled: true,
- *         rotateEnabled: true,
- *         zoomEnabled: true,
- *         compassEnabled: true,
- *         type: MapView.Type.NORMAL,
- *         centerLocation: {
- *             latitude: 41.0209078,
- *             longitude: 29.0039533
- *         }
+ *         top:10, left:10, right:10, bottom:150,
+ *         onCreate: function() {
+ *             myMapView.centerLocation = {
+ *                 latitude: 41.0209078,
+ *                 longitude: 29.0039533
+ *             };
+ *             var myPin = new MapView.Pin({
+ *                 location: {
+ *                     latitude: 40.9768982,
+ *                     longitude: 28.8146
+ *                  },
+ *                  title: 'Ataturk Airport',
+ *                  subtitle: 'LTBA',
+ *                  color: Color.CYAN
+ *             });
+ *             myMapView.addPin(myPin);
+ *        }
  *     });
  *     myPage.layout.addChild(myMapView);
+ * 
  */
 const MapView = extend(View)(
     function (_super, params) {
