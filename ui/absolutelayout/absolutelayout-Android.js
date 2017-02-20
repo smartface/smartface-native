@@ -6,10 +6,9 @@ const AbsoluteLayout = extend(FlexLayout)(
         var self = this;
         _super(this);
 
+        var superAddChild = this.addChild;
         this.addChild = function(view){
-            view.parent = self;
-            self.childViews[view.id+''] = view;
-            self.nativeObject.addView(view.nativeObject);
+            superAddChild();
             view.positionType = FlexLayout.PositionType.ABSOLUTE;
         };
         // Assign parameters given in constructor

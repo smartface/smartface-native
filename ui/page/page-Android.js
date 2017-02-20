@@ -20,12 +20,7 @@ function Page(params) {
     var activity = Android.getActivity();
     
     var rootLayout = new FlexLayout({
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
         isRoot : true,
-        positionType: FlexLayout.PositionType.ABSOLUTE,
         backgroundColor: Color.WHITE
     });
     
