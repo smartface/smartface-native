@@ -60,14 +60,10 @@ const WebView = extend(View)(
             *
             * @method loadURL
             * @param {String} url
-            * @param {Object} [callbackParams]
-            * @param {Function} [callbackParams.onLoad]
-            * @param {Function} [callbackParams.onShow]
-            * @param {Function} [callbackParams.onError]
             * @since 0.1
             */
             'loadURL': {
-                value: function(url, callbackParams) {}
+                value: function(url) {}
             },
            /**
             *
@@ -94,6 +90,36 @@ const WebView = extend(View)(
             * @since 0.1
             */
             'onChangedURL': {
+                get: function() {},
+                set: function(callback) {}
+            },
+           /**
+            *
+            * @event onLoad
+            * @param {Function} callback
+            * @since 0.1
+            */
+            'onLoad': {
+                get: function() {},
+                set: function(callback) {}
+            },
+           /**
+            *
+            * @event onError
+            * @param {Function} callback
+            * @since 0.1
+            */
+            'onError': {
+                get: function() {},
+                set: function(callback) {}
+            },
+           /**
+            *
+            * @event onShow
+            * @param {Function} callback
+            * @since 0.1
+            */
+            'onShow': {
                 get: function() {},
                 set: function(callback) {}
             }
