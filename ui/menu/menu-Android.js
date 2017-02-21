@@ -23,12 +23,13 @@ function Menu(params) {
     });
    
     this.show = function(page) {
+        
         var layout = page.layout;
         var layoutNativeObject = layout.nativeObject;
         var pageNativeObject = page.nativeObject;
         
         pageNativeObject.registerForContextMenu(layoutNativeObject);
-        page.contextMenu = this;
+        page.contextMenu = {items: _items, headerTitle: _headerTitle};
         layoutNativeObject.showContextMenu();
     };
     
