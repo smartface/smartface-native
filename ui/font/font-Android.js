@@ -14,7 +14,7 @@ const NativeTypeface = requireClass("android.graphics.Typeface");
 
 Font.create = function(fontFamily, size, style) { 
     var fontStyle = 1;
-    var fontSuffix = "-n";
+    var fontSuffix = "_n";
     switch(style){
         case Font.NORMAL:
             fontStyle = NativeTypeface.NORMAL;
