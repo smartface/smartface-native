@@ -33,6 +33,7 @@ function Page(params) {
     var isCreated = false;
 
     var optionsMenu = null;
+    self.contextMenu = {};
 
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
@@ -70,6 +71,25 @@ function Page(params) {
                 }
             }
             return true;
+        },
+        onCreateContextMenu: function(menu, view, menuInfo) {
+            var items = self.contextMenu.items;
+            var headerTitle = self.contextMenu.headerTitle;
+            if(self.contextMenu.headerTitle != "") {
+                menu.setHeaderTitle(headerTitle);
+            }
+            
+            var i;
+            for(i = 0; i < items.length; i++) {
+                menu.add(0, i, 0, items[i].title);
+            }
+        },
+        onContextItemSelected: function(item){
+            var itemId = item.getItemId();
+            var items = self.contextMenu.items;
+            if(itemId >= 0) {
+                items[itemId].onSelected();
+            }
         },
         onActivityResult: function(requestCode, resultCode, data) {
             const Contacts = require("nf-core/device/contacts");
