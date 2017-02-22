@@ -33,5 +33,6 @@ module.exports = {
     MenuItem: require('./menuitem'),
     SliderDrawer: require('./sliderdrawer'),
     VideoView: require('./videoview'),
-    Quicklook: require('./quicklook')
+    Quicklook: require('./quicklook'),
+    Picker: require('./picker')
 };
