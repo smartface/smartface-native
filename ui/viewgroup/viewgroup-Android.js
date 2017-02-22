@@ -15,7 +15,12 @@ const ViewGroup = extend(View)(
         this.addChild = function(view){
             view.parent = self;
             self.childViews[view.id] = view;
-            self.nativeObject.addView(view.nativeObject, view.getYogaNode());
+            if(self instanceof require("nf-core/ui/flexlayout")){
+                self.nativeObject.addView(view.nativeObject, view.yogaNode);
+            }
+            else{
+                self.nativeObject.addView(view.nativeObject);
+            }
         };
 
         this.removeChild = function(view){

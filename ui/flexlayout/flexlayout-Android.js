@@ -21,10 +21,10 @@ const FlexLayout = extend(ViewGroup)(
         // direction values same as native
         Object.defineProperty(this, 'direction', {
             get: function() {
-                return self.getYogaNode().getStyleDirection();
+                return self.yogaNode.getStyleDirection();
             },
             set: function(direction) {
-                self.getYogaNode().setDirection(direction);
+                self.yogaNode.setDirection(direction);
             },
             enumerable: true
         });
@@ -32,10 +32,10 @@ const FlexLayout = extend(ViewGroup)(
         // flexDirection values same as native
         Object.defineProperty(this, 'flexDirection', {
             get: function() {
-                return self.getYogaNode().getFlexDirection();
+                return self.yogaNode.getFlexDirection();
             },
             set: function(flexDirection) {
-                self.getYogaNode().setFlexDirection(flexDirection);
+                self.yogaNode.setFlexDirection(flexDirection);
             },
             enumerable: true
         });
@@ -43,10 +43,10 @@ const FlexLayout = extend(ViewGroup)(
         // justifyContent values same as native
         Object.defineProperty(this, 'justifyContent', {
             get: function() {
-                return self.getYogaNode().getJustifyContent();
+                return self.yogaNode.getJustifyContent();
             },
             set: function(justifyContent) {
-                self.getYogaNode().setJustifyContent(justifyContent);
+                self.yogaNode.setJustifyContent(justifyContent);
             },
             enumerable: true
         });
@@ -54,10 +54,10 @@ const FlexLayout = extend(ViewGroup)(
         // alignContent values same as native
         Object.defineProperty(this, 'alignContent', {
             get: function() {
-                return self.getYogaNode().getAlignContent();
+                return self.yogaNode.getAlignContent();
             },
             set: function(alignContent) {
-                self.getYogaNode().setAlignContent(alignContent);
+                self.yogaNode.setAlignContent(alignContent);
             },
             enumerable: true
         });
@@ -65,10 +65,10 @@ const FlexLayout = extend(ViewGroup)(
         // alignItems values same as native    
         Object.defineProperty(this, 'alignItems', {
             get: function() {
-                return self.getYogaNode().getAlignItems();
+                return self.yogaNode.getAlignItems();
             },
             set: function(alignItems) {
-                self.getYogaNode().setAlignItems(alignItems);
+                self.yogaNode.setAlignItems(alignItems);
             },
             enumerable: true
         });
@@ -81,7 +81,7 @@ const FlexLayout = extend(ViewGroup)(
             },
             set: function(flexWrap) {
                 _flexWrap = flexWrap;
-                self.getYogaNode().setWrap(flexWrap);
+                self.yogaNode.setWrap(flexWrap);
             },
             enumerable: true
         });
@@ -89,10 +89,10 @@ const FlexLayout = extend(ViewGroup)(
         // overFlow values same as native 
         Object.defineProperty(this, 'overFlow', {
             get: function() {
-                return self.getYogaNode().getOverflow();
+                return self.yogaNode.getOverflow();
             },
             set: function(overFlow) {
-                self.getYogaNode().setOverflow(overFlow);
+                self.yogaNode.setOverflow(overFlow);
             },
             enumerable: true
         });
