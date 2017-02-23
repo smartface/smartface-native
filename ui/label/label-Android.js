@@ -45,7 +45,7 @@ const Label = extend(View)(
             }, 
             set: function(htmlText) {
                 const NativeHtml = requireClass("android.text.Html");
-                var htmlTextNative = NativeHtml.fromHtml(htmlText);
+                var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
                 self.nativeObject.setText(htmlTextNative);
             },
             enumerable: true
@@ -95,7 +95,7 @@ const Label = extend(View)(
                 return self.nativeObject.getText();
             },
             set: function(text) {
-                self.nativeObject.setText(text);
+                self.nativeObject.setText("" + text);
                 // @todo this will cause performance issues in feature. Must be replaced.
                 self.nativeObject.requestLayout();
             },
