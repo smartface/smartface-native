@@ -23,9 +23,6 @@ const ListView = extend(View)(
             onCreateViewHolder: function(parent,viewType){
                 holderViewLayout = _onRowCreate();
                 holderViewLayout.height = self.rowHeight;
-                holderViewLayout.top = 0;
-                holderViewLayout.left = 0;
-                holderViewLayout.right = 0;
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView,position){

@@ -2,6 +2,8 @@ const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
 const FlexLayout            = require('nf-core/ui/flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
+// due to performance this must required here. 
+const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout'); 
 
 const ListViewItem = extend(FlexLayout)(
     function (_super, params) {
@@ -9,6 +11,9 @@ const ListViewItem = extend(FlexLayout)(
         _super(this);
         self.nativeInner = NativeRecyclerView.ViewHolder.extend("SFViewHolder",{},[self.nativeObject]);
         self.nativeInner.itemView = self.nativeObject;
+        
+        var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
+        self.nativeObject.setLayoutParams(layoutParams);
         
         // Added due to problem in row height for RecyclerView
         Object.defineProperty(this, 'height', {
