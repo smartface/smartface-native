@@ -121,7 +121,7 @@ function View(params) {
         enumerable: true
     });
     
-    this.touchEnabled = false;
+    this.touchEnabled = true;
     
     var _onTouch;
     Object.defineProperty(this, 'onTouch', {
