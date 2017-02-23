@@ -2,20 +2,15 @@ const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js
 
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
-const NativeColorDrawable       = requireClass("android.graphics.drawable.ColorDrawable");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
 const NativeLayerDrawable       = requireClass("android.graphics.drawable.LayerDrawable");
-const NativeColor               = requireClass("android.graphics.Color");
 const NativeMotionEvent         = requireClass("android.view.MotionEvent");
-const NativeYogaLayout          = requireClass('com.facebook.yoga.android.YogaLayout');
 const NativeYogaNode            = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
 const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
-const NativeYogaAlign           = requireClass("com.facebook.yoga.YogaAlign");
-const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionType');
 
 const Color = require("nf-core/ui/color");
 
@@ -38,21 +33,14 @@ function View(params) {
 
     if(!self.nativeObject){
         self.nativeObject = new NativeView(activity);
-        var layoutParams = new NativeYogaLayout.LayoutParams(-2,-2);
-        self.nativeObject.setLayoutParams(layoutParams);
         self.yogaNode = new NativeYogaNode();
     }
-    else 
-    {
+    else {
         if(self.nativeObject.toString().indexOf("YogaLayout") !== -1){
-            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
             self.yogaNode = self.nativeObject.getYogaNode();
-            self.nativeObject.setLayoutParams(layoutParams);
         }
         else{
-            var layoutParams = new NativeYogaLayout.LayoutParams(-2,-2);
             self.yogaNode = new NativeYogaNode();
-            self.nativeObject.setLayoutParams(layoutParams);
         }
     }
     // Passing click event from child to parent due to z-index
@@ -121,7 +109,7 @@ function View(params) {
     });
     
     
-    var _borderRadius = AndroidUnitConverter.dpToPixel(0);
+    var _borderRadius = 0;
     Object.defineProperty(this, 'borderRadius', {
         get: function() {
             return _borderRadius;
@@ -288,7 +276,9 @@ function View(params) {
     
     this.applyLayout = function(){
         // not necessary for Android. For prevent wrong calculations do not call calculateLayout()
-        //self.yogaNode.calculateLayout();
+        var height = self.height;
+        var width = self.width;
+        self.yogaNode.calculateLayout(width, height);
     };
     
     function setBackground(layerIndex){
