@@ -18,14 +18,22 @@ function Page(params) {
     }
     
     self.nativeObject.onViewLayoutSubviews = function(){
+        self.calculatePosition();
+    }
+
+    self.nativeObject.viewDidAppear = function(){
+       self.calculatePosition();
+    }
+    
+    self.calculatePosition = function(){
         self.pageView.left = self.pageView.nativeObject.frame.x;
         self.pageView.top = self.pageView.nativeObject.frame.y;
         self.pageView.width = self.pageView.nativeObject.frame.width;
         self.pageView.height = self.pageView.nativeObject.frame.height;
-        
+
         self.pageView.applyLayout();
     }
-
+    
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.pageView;
