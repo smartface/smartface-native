@@ -4,21 +4,19 @@ const extend = require('js-base/core/extend');
  * @class UI.Label
  * @since 0.1
  * @extends UI.View
- * Label is a UI object to display a text on the screen. Label can contain only a single type font.
+ * Label is a view that displays read-only text on the screen.
  *
  *     @example
  *     const Label = require('nf-core/ui/label');
+ *     const Color = require('nf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
  *     });
- *     myLabel.setPosition({
- *         width: "80%", 
- *         height: "20%", 
- *         top: "10%",
- *         left: "20%"
- *     });
- *     const Color = require('nf-core/ui/color');
+ *     myLabel.width = "200",
+ *     myLabel.height = "50",
+ *     myLabel.top = "10",
+ *     myLabel.left = "20",
  *     myLabel.backgroundColor = Color.GRAY;
  */
 const Label = extend(View)(
@@ -26,87 +24,100 @@ const Label = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets HTML text value. This property helps user showing HTML
-         * tagged texts in Label view.
-         * 
+         * Gets/sets HTML text value of Label. This property helps user showing HTML
+         * texts on the screen.
+         *
          *     @example
          *     // In this example 'This link' text inside Label will shown underlined.
          *     const Label = require('nf-core/ui/label');
          *     var myLabel = new Label();
-         *     myLabel.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
-         * 
-         * @property {String} [htmlText = ""] 
+         *     myLabel.htmlText = "<a href='http://www.smartface.io'>This link</a> will redirect you to Smartface website.";
+         *
+         * @property {String} [htmlText = ""]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.htmlText = "";
 
         /**
-         * Gets/sets font of label view. When set to null label uses system font.
+         * Gets/sets font of a Label. When set to null label uses system font.
          * It is set to null by default.
-         * 
-         *     @example 
+         *
+         *     @example
          *     const Label = require('nf-core/ui/label');
+         *     const Font = require('nf-core/ui/font')
          *     var myLabel = new Label({
          *         text: "This is my label",
          *         visible: true
          *     });
-         *     const Font = require('nf-core/ui/font');
-         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);   
-         * 
-         * @property {UI.Font} [font = null]   
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+         *
+         * @property {UI.Font} [font = null]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.font = null;
 
         /**
-         * Gets/sets allowing multiple line for label view. If set to true
-         * and text is too long to show in single line label shows text as 
-         * multiline. 
-         * 
+         * Enables/disables multiple line property of a Label. If set to true
+         * and the text is long enough, text will be shown in multiline.
+         *
          * @property {Boolean} [multiline = false]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.multiline = false;
 
         /**
-         * Gets/sets text inside label view.
-         * 
-         * @property {String} [text = ""] 
+         * Gets/sets text on Label.
+         *
+         * @property {String} [text = ""]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.text = "";
 
         /**
-         * Gets/sets text alignment of label view. UI.TextAlignment constants
-         * can be used.  
-         * 
+         * Gets/sets text alignment of a Label. UI.TextAlignment constants
+         * can be used.
+         *
          *     @example
          *     const Label = require('nf-core/ui/label');
-         *     var myLabel = new Label();
          *     const TextAlignment = require('nf-core/ui/textalignment');
-         *     myLabel.textAlignment = TextAlignment.MIDCENTER;  
-         * 
-         * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]  
+         *     var myLabel = new Label();
+         *     myLabel.textAlignment = TextAlignment.MIDCENTER;
+         *
+         * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.textAlignment = UI.TextAlignment.MIDLEFT;
 
         /**
-         * Gets/sets text color of view.
-         * 
-         * @property {UI.Color} [textColor = UI.Color.BLACK] 
+         * Gets/sets text color of Label.
+         *
+         * @property {UI.Color} [textColor = UI.Color.BLACK]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.textColor = UI.Color.BLACK;
 
         /**
-         * Sets/gets showing scroll bar when text doesn't fit to label view.
-         * 
+         * Sets/gets visibiliy of scroll bar when text is too long.
+         *
          * @property {Boolean} [showScrollBar = false]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.showScrollBar = false;
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
