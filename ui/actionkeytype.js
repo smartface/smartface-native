@@ -10,14 +10,14 @@
  *     const Color = require('nf-core/ui/color');
  *     const TextBox = require('nf-core/ui/textbox');
  *     const ActionKeyType = require('nf-core/ui/actionkeytype');
- *     
+ *
  *     var myTextBox = new TextBox({
  *         hint: "hint",
  *         width: 100,
  *         backgroundColor: Color.create("#7fd0ff"),
  *         actionKeyType: ActionKeyType.DEFAULT
  *     });
- *     
+ *
  *     myPage.layout.addChild(myTextBox);
  *
  */
@@ -25,6 +25,8 @@ var ActionKeyType = { };
 
 /**
  * @property {Number} DEFAULT
+ * @android
+ * @ios
  * Done action for soft keyboard.
  * @static
  * @readonly
@@ -37,6 +39,8 @@ Object.defineProperty(ActionKeyType, 'DEFAULT', {
 
 /**
  * @property {Number} NEXT
+ * @android
+ * @ios
  * Next action for soft keyboard.
  * @static
  * @readonly
@@ -49,6 +53,8 @@ Object.defineProperty(ActionKeyType, 'NEXT', {
 
 /**
  * @property {Number} GO
+ * @android
+ * @ios
  * Go action for soft keyboard.
  * @static
  * @since 0.1
@@ -61,6 +67,8 @@ Object.defineProperty(ActionKeyType, 'GO', {
 
 /**
  * @property {Number} SEARCH
+ * @android
+ * @ios
  * Search action for soft keyboard.
  * @static
  * @since 0.1
@@ -73,6 +81,8 @@ Object.defineProperty(ActionKeyType, 'SEARCH', {
 
 /**
  * @property {Number} SEND
+ * @android
+ * @ios
  * Send action for soft keyboard.
  * @static
  * @since 0.1

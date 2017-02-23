@@ -9,7 +9,7 @@
  *     const Color = require('nf-core/ui/color');
  *     const TextBox = require('nf-core/ui/textbox');
  *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
- * 
+ *
  *     var myTextBox = new TextBox({
  *         top: 50, left:50, width: 100, height: 80,
  *         hint: "hint",
@@ -18,7 +18,7 @@
  *             KeyboardAppearance: KeyboardAppearance.DARK
  *         }
  *     });
- * 
+ *
  *     myPage.layout.addChild(myTextBox);
  *
  */
@@ -26,6 +26,7 @@ var KeyboardAppearance = { };
 
 /**
  * @property {Number} DEFAULT
+ * @ios
  * Default colored keyboard appearance. This constant corresponds to UI.KeyboardAppearance.LIGHT.
  * @static
  * @readonly
@@ -38,6 +39,7 @@ Object.defineProperty(KeyboardAppearance, 'DEFAULT', {
 
 /**
  * @property {Number} DARK
+ * @ios
  * Dark colored keyboard appearance.
  * @static
  * @since 0.1
@@ -50,6 +52,7 @@ Object.defineProperty(KeyboardAppearance, 'DARK', {
 
 /**
  * @property {Number} LIGHT
+ * @ios
  * Light colored keyboard appearance.
  * @static
  * @readonly

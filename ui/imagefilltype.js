@@ -7,7 +7,7 @@
  *     const ImageFillType = require('nf-core/ui/imagefilltype');
  *     const ImageView = require('nf-core/ui/imageview');
  *     const Image = require('nf-core/ui/image');
- *     
+ *
  *     var myImage = Image.createFromFile("images://nativeface.png")
  *     var myImageView = new ImageView({
  *         image: myImage,
@@ -15,12 +15,14 @@
  *         width:200, height: 200
  *     });
  *     myPage.layout.addChild(myImageView);
- * 
+ *
  */
 const ImageFillType = { };
 
 /**
  * @property {Number} NORMAL
+ * @android
+ * @ios
  * The source image will be displayed in its normal dimensions inside the parent.
  * @static
  * @readonly
@@ -33,6 +35,8 @@ Object.defineProperty(ImageFillType, 'NORMAL', {
 
 /**
  * @property {Number} STRETCH
+ * @android
+ * @ios
  * The source image will be stretched to the size of the parent.
  * @static
  * @readonly
@@ -45,6 +49,8 @@ Object.defineProperty(ImageFillType, 'STRETCH', {
 
 /**
  * @property {Number} ASPECTFIT
+ * @android
+ * @ios
  * The source image will grow by saving its aspect ratio until the image is at its max size inside the parent.
  * @static
  * @readonly
@@ -57,6 +63,8 @@ Object.defineProperty(ImageFillType, 'ASPECTFIT', {
 
 /**
  * @property {Number} TOPLEFT
+ * @android
+ * @ios
  * The source image position will be top center.
  * @static
  * @readonly
@@ -69,6 +77,8 @@ Object.defineProperty(ImageFillType, 'TOPLEFT', {
 
 /**
  * @property {Number} TOPCENTER
+ * @android
+ * @ios
  * The source image position will be top center.
  * @static
  * @readonly
@@ -81,6 +91,8 @@ Object.defineProperty(ImageFillType, 'TOPCENTER', {
 
 /**
  * @property {Number} TOPRIGHT
+ * @android
+ * @ios
  * The source image position will be top right.
  * @static
  * @readonly
@@ -93,6 +105,8 @@ Object.defineProperty(ImageFillType, 'TOPRIGHT', {
 
 /**
  * @property {Number} MIDLEFT
+ * @android
+ * @ios
  * The source image position will be mid left.
  * @static
  * @readonly
@@ -105,6 +119,8 @@ Object.defineProperty(ImageFillType, 'MIDLEFT', {
 
 /**
  * @property {Number} MIDCENTER
+ * @android
+ * @ios
  * The source image position will be mid center.
  * @static
  * @readonly
@@ -117,6 +133,8 @@ Object.defineProperty(ImageFillType, 'MIDCENTER', {
 
 /**
  * @property {Number} MIDRIGHT
+ * @android
+ * @ios
  * The source image position will be mid right.
  * @static
  * @readonly
@@ -129,6 +147,8 @@ Object.defineProperty(ImageFillType, 'MIDRIGHT', {
 
 /**
  * @property {Number} BOTTOMLEFT
+ * @android
+ * @ios
  * The source image position will be bottom left.
  * @static
  * @readonly
@@ -141,6 +161,8 @@ Object.defineProperty(ImageFillType, 'BOTTOMLEFT', {
 
 /**
  * @property {Number} BOTTOMCENTER
+ * @android
+ * @ios
  * The source image position will be bottom center.
  * @static
  * @readonly
@@ -153,6 +175,8 @@ Object.defineProperty(ImageFillType, 'BOTTOMCENTER', {
 
 /**
  * @property {Number} BOTTOMRIGHT
+ * @android
+ * @ios
  * The source image position will be bottom right.
  * @static
  * @readonly
