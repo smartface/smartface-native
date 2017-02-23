@@ -5,7 +5,6 @@ const ScrollView = extend(ViewGroup)(
     function (_super, params) {
         const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
         var activity = Android.getActivity();
-
         var self = this;
         
         if (!self.nativeObject) {
@@ -65,7 +64,6 @@ const ScrollView = extend(ViewGroup)(
                 configurable: true
             }
         });
-        
 
         // Assign parameters given in constructor
         if (params) {
