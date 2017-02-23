@@ -22,10 +22,12 @@ function HeaderBarItem(params) {
     /**
      * Gets/sets title of header bar item. If image is not set, title will be
      * shown in the header bar.
-     * 
+     *
      * Title won't show if item is set as left item to header bar.
      *
      * @property {String} title
+     * @android
+     * @ios
      * @since 0.1
      */
     this.title = "";
@@ -34,15 +36,19 @@ function HeaderBarItem(params) {
      * Gets/sets image of header bar item. Image is set to null as default.
      *
      * @property {UI.Image} image
+     * @android
+     * @ios
      * @since 0.1
      */
     this.image = null;
 
     /**
-     * Gets/sets enabled status of header bar item. Enabled is set to true as 
+     * Gets/sets enabled status of header bar item. Enabled is set to true as
      * default.
      *
      * @property {Boolean} enabled
+     * @android
+     * @ios
      * @since 0.1
      */
     this.enabled = true;
@@ -52,6 +58,8 @@ function HeaderBarItem(params) {
      * press callback won't be called.
      *
      * @property {Function} onPress
+     * @android
+     * @ios
      * @since 0.1
      */
     this.onPress = null;
@@ -60,6 +68,8 @@ function HeaderBarItem(params) {
      * Gets/sets color of the item's text/image.
      *
      * @property {UI.Color} color
+     * @android
+     * @ios
      * @since 0.1
      */
     this.color = null;
