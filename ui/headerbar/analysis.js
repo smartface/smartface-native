@@ -1,26 +1,26 @@
 /**
  * @class UI.HeaderBar
- * 
+ *
  * HeaderBar class represents Navigation Bar for iOS and Action Bar for Android. It is a bar
  * shown on top of page under statusBar object. You can manage application navigation by setting
  * buttons and you can show title of page on HeaderBar.
- * 
+ *
  * Creating instance of HeaderBar class is not valid. You can access header bar of page
  * via UI.Page.headerBar property.
- * 
+ *
  * On iOS you should work with header bar in scope of onLoad and onShow callbacks, otherwise
  * behaviour is undefined.
- * 
+ *
  *     @example
  *     const Page = require('nf-core/ui/page');
  *     const Color = require('nf-core/ui/color');
  *     const HeaderBarItem = require('nf-core/ui/headerbaritem');
- * 
+ *
  *     var myPage = new Page({
  *         onLoad: function() {
  *             this.headerBar.backgroundColor = Color.MAGENTA;
  *             this.headerBar.title = "Header Bar";
- * 
+ *
  *             var myItem = new HeaderBarItem({
  *                 title: "Done",
  *                 onPress: function() {
@@ -33,7 +33,7 @@
  *             this.headerBar.visible = true;
  *         }
  *     });
- *     
+ *
  */
 function HeaderBar() {
     /**
@@ -50,12 +50,14 @@ function HeaderBar() {
      *     });
      *
      * @property {UI.Color} [backgroundColor = Color.create("#00A1F1")]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.backgroundColor = Color.create("#00A1F1");
 
     /**
-     * Gets/sets background image of the headerBar.
+     * Gets/sets background image of the HeaderBar.
      *
      *     @example
      *     const Page = require('nf-core/ui/page');
@@ -67,6 +69,8 @@ function HeaderBar() {
      *     });
      *
      * @property {UI.Image} [backgroundImage = null]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.backgroundImage = null;
@@ -77,6 +81,8 @@ function HeaderBar() {
      * as back icon with home as up indicator image.
      *
      * @property {Boolean} [displayShowHomeEnabled = false]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.displayShowHomeEnabled = false;
@@ -86,13 +92,15 @@ function HeaderBar() {
      * its value may change depending on device and screen density.
      *
      * @property {Number} height
+     * @android
+     * @ios
      * @readonly
      * @since 0.1
      */
     this.height;
 
     /**
-     * Gets/sets home as up indicator image which will shown with home as up 
+     * Gets/sets home as up indicator image which will shown with home as up
      * indicator of the headerBar. If not set, the application icon will
      * shown. This property will work only for Android.
      *
@@ -104,6 +112,7 @@ function HeaderBar() {
      *     myPage.headerBar.android.homeAsUpIndicatorImage = myImage;
      *
      * @property {UI.Image} [homeAsUpIndicatorImage = null]
+     * @android
      * @since 0.1
      */
     this.android.homeAsUpIndicatorImage = null;
@@ -118,6 +127,7 @@ function HeaderBar() {
      *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
      *
      * @property {String} subtitle
+     * @android
      * @since 0.1
      */
     this.android.subtitle = '';
@@ -126,14 +136,18 @@ function HeaderBar() {
      * Gets/sets title of the header bar.
      *
      * @property {String} title
+     * @android
+     * @ios
      * @since 0.1
      */
     this.title = '';
 
     /**
      * Gets/sets title color of the header bar.
-     * 
+     *
      * @property {UI.Color} [titleColor = Color.BLACK]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.titleColor = Color.BLACK;
@@ -142,16 +156,17 @@ function HeaderBar() {
      * Gets/sets visibility of the header bar.
      *
      * @property {boolean} [visible = true]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.visible = true;
 
     /**
-     * This function allows you to set header bar items to page's headerBar.
+     * This function allows you to set header bar items to the right of page's headerBar.
      * Given items should be instance of UI.HeaderBarItem class. Items will be
      * added to header bar in given array order starting from right of header bar.
-     * First item in the array will be leftmost item in the header bar.
-     * 
+     *
      * @method setItems
      * @param {Array<UI.HeaderBarItem>} items Array of HeaderBarItem objects to add
      * @since 0.1
@@ -170,7 +185,7 @@ function HeaderBar() {
      *          leftItem.title = "Left Item";
      *          myPage.headerBar.setLeftItem(leftItem);
      *      }
-     * 
+     *
      * @method setLeftItem
      * @param {UI.HeaderBarItem} item HeaderBarItem to add.
      */
