@@ -12,7 +12,7 @@ const WebView = extend(View)(
         _super(this);
     
         Object.defineProperty(self, 'loadURL', {
-            set: function(value) {
+            value: function(value) {
                 var nsURL = NSURL.URLWithString(value);
                 var nsURLRequest = NSURLRequest.requestWithURL(nsURL);
                 self.nativeObject.load(nsURLRequest);
@@ -21,7 +21,7 @@ const WebView = extend(View)(
          });
         
         Object.defineProperty(self, 'loadHTML', {
-            set: function(value) {
+            value: function(value) {
                 self.nativeObject.loadHTMLStringBaseURL(value,undefined);
             },
             enumerable: true
