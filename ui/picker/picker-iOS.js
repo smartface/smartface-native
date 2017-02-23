@@ -22,27 +22,18 @@ const Picker = extend(View)(
             enumerable: true
         });
         
-        var _valueIndex;
+        var _valueIndex = 0;
         Object.defineProperty(this, 'valueIndex', {
             get: function() {
                 return _valueIndex;
             },
             set: function(valueIndex) {
                 _valueIndex = valueIndex;
-                self.nativeObject.selectRowInComponentAnimated(_valueIndex, _component, true);
+                var defaultComponentIndex = 0; // nf-core does not support multi components.
+                self.nativeObject.selectRowInComponentAnimated(_valueIndex, defaultComponentIndex, true);
             },
             enumerable: true
         });
-        
-        // Object.defineProperty(this, 'enabled', {
-        //     get: function() {
-        //         return self.nativeObject.isEnabled();
-        //     },
-        //     set: function(enabled) {
-        //         self.nativeObject.setEnabled(enabled);
-        //     },
-        //     enumerable: true
-        // });
         
         var _onSelectedCallback;
         Object.defineProperty(this, 'onSelected', {
@@ -58,26 +49,26 @@ const Picker = extend(View)(
         //////////////////////////////////////////////////////
         // UIPickerViewDataSource
         var _component = 1;
-        var pickerDataSource = new SMFUIPickerViewDataSource();
-        pickerDataSource.numberOfComponents = function(){
+        self.pickerDataSource = new SMFUIPickerViewDataSource();
+        self.pickerDataSource.numberOfComponents = function(){
             return _component;
         };
-        pickerDataSource.numberOfRowsInComponent = function(component){
+        self.pickerDataSource.numberOfRowsInComponent = function(component){
             return _items.length;
         };
-        self.nativeObject.dataSource = pickerDataSource;
+        self.nativeObject.dataSource = self.pickerDataSource;
         
         //////////////////////////////////////////////////////
         // UIPickerViewDelegate
-        var pickerDelegate = new SMFUIPickerViewDelegate();
-        pickerDelegate.titleForRow = function(e){
+        self.pickerDelegate = new SMFUIPickerViewDelegate();
+        self.pickerDelegate.titleForRow = function(e){
             return _items[e.row];
         };
-        pickerDelegate.didSelectRow = function(e){
+        self.pickerDelegate.didSelectRow = function(e){
             _valueIndex = e.row;
             _onSelectedCallback(e.row);
         };
-        self.nativeObject.delegate = pickerDelegate;
+        self.nativeObject.delegate = self.pickerDelegate;
         
         // Assign parameters given in constructor
         if (params) {
