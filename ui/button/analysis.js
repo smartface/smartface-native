@@ -6,9 +6,9 @@ const extend = require('js-base/core/extend');
  * @extends UI.View
  * @since 0.1
  *
- * Button class represents a clickable object to user interface.  
+ * Button represents a clickable object on the screen.
  * A button instance consists of text or an icon(or both of them).
- * 
+ *
  *     @example
  *     const Color = require('nf-core/ui/color');
  *     const Button = require('nf-core/ui/button');
@@ -24,100 +24,114 @@ const extend = require('js-base/core/extend');
  *             console.log("Button pressed");
  *         }
  *     });
- * 
+ *
  */
 const Button = extend(View)(
     function (_super, params) {
         _super(this);
         /**
          * Gets/sets text of button view.
-         * 
-         * @property {String} [text = ""]  
+         *
+         * @property {String} [text = ""]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.text = "";
 
          /**
-         * Gets/sets font of button view. When set to null button uses system font.
+         * Gets/sets font of a Button. When set to null button uses system font.
          * It is set to null by default.
-         * 
-         *     @example 
+         *
+         *     @example
          *     const Button = require('nf-core/ui/button');
+         *     const Font = require('nf-core/ui/font');
          *     var myButton = new Button({
          *         text: "Click me!"
          *     });
-         *     const Font = require('nf-core/ui/font');
-         *     myButton.font = Font.create("Arial", 16, Font.BOLD);   
-         * 
-         * @property {UI.Font} [font = null]   
+         *     myButton.font = Font.create("Arial", 16, Font.BOLD);
+         *
+         * @property {UI.Font} [font = null]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.font = null;
-        
+
         /**
-         * Gets/sets text color of button. Assign a color or a mapping from states to colors.
-         * 
-         * @property {UI.Color} [textColor = UI.Color.BLACK] 
+         * Gets/sets text color of a Button.
+         *
+         * @property {UI.Color} [textColor = UI.Color.BLACK]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.textColor = UI.Color.BLACK;
 
         /**
-         * Gets/sets text alignment of button. TextAlignment constants
+         * Gets/sets text alignment of a Button. TextAlignment constants
          * can be used.
-         * 
+         *
          *     @example
          *     const Button = require('nf-core/ui/button');
          *     const TextAlignment = require('nf-core/ui/textalignment');
          *     var myButton = new Button();
-         *     myButton.textAlignment = TextAlignment.MIDCENTER;  
-         * @since 0.1        
-         * @property {Number} textAlignment  
+         *     myButton.textAlignment = TextAlignment.MIDCENTER;
+         * @since 0.1
+         * @property {Number} textAlignment
+         * @android
+         * @ios
          */
         textAlignment = TextAlignment.MIDCENTER;
-        
+
         /**
-         * Gets/sets background image. Assign an image or a mapping from states to images.
-         * 
+         * Gets/sets background imageof a Button.
+         *
          *     @example
          *     const Image = require('nf-core/ui/image');
          *     const Button = require('nf-core/ui/button');
          *     var myButton = new Button();
          *     myButton.backgroundImage = {
-         *         normal: Image.createFromFile("assets://normal.png"),
-         *         disabled: Image.createFromFile("assets://disabled.png"),
-         *         pressed: Image.createFromFile("assets://pressed.png"),
-         *     };   
+         *         normal: Image.createFromFile("images://normal.png"),
+         *         disabled: Image.createFromFile("images://disabled.png"),
+         *         pressed: Image.createFromFile("images://pressed.png"),
+         *     };
          *     myButton.text = "First button text";
-         * 
+         *
          *     var myButton2 = new Button();
-         *     myButton2.backgroundImage = Image.createFromFile("assets://normal.png");
+         *     myButton2.backgroundImage = Image.createFromFile("images://normal.png");
          *     myButton2.text = "Second button text";
          *
          * @since 0.1
          * @property {Object} backgroundImage
+         * @android
+         * @ios
          */
-        this.backgroundImage = {          
-            normal: "", 
-            disabled: "", 
-            selected: "", 
-            pressed: "", 
+        this.backgroundImage = {
+            normal: "",
+            disabled: "",
+            selected: "",
+            pressed: "",
             focused: ""
         };
 
         /**
-         * Gets/sets press event callback for button.
-         * 
+         * Gets/sets press event callback for a Button.
+         *
          * @since 0.1
          * @event onPress
+         * @android
+         * @ios
          */
         this.onPress = function onPress(){ }
 
         /**
-         * Gets/sets long press event callback for button.
-         * 
+         * Gets/sets long press event callback for a Button. This property only
+         * works for Android devices.
+         *
          * @since 0.1
          * @event onLongPress
+         * @android
          */
         this.onLongPress = function onLongPress(){ }
     }
