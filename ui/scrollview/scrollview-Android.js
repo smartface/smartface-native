@@ -3,15 +3,12 @@ const extend = require('js-base/core/extend');
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
+        const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
         var activity = Android.getActivity();
-
         var self = this;
         
-        var _align = ScrollView.Align.VERTICAL;
         if (!self.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
-                _align = ScrollView.Align.HORIZONTAL;
-                
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
                 self.nativeObject = new NativeHorizontalScroll(activity);
             } else {
@@ -54,6 +51,17 @@ const ScrollView = extend(ViewGroup)(
                         (ScrollView.Edge.RIGHT  === edge) && self.nativeObject.fullScroll(NativeView.FOCUS_RIGHT);
                     }
                 }
+            },
+            // Overrided from View for make content measurements inside ScrollView calculated.
+            'width': {
+                get: function() {
+                    return self.maxWidth;
+                },
+                set: function(width) {
+                    self.maxWidth = width;
+                },
+                enumerable: true,
+                configurable: true
             }
         });
 
