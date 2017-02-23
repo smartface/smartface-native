@@ -1,9 +1,9 @@
 /**
  * @class UI.DatePicker
  * @since 0.1
- * 
+ *
  * DatePicker is a dialog where users are able to pick a date on.
- * 
+ *
  *     @example
  *     const DatePicker = require('nf-core/ui/datepicker');
  *     var myDatePicker = new DatePicker();
@@ -17,8 +17,10 @@ function DatePicker () {
     Object.defineProperties(DatePicker, {
        /**
         * Sets the initial date avaliable on the picker.
-        * 
+        *
         * @method setDate
+        * @android
+        * @ios
         * @param {Date} date
         * @since 0.1
         */
@@ -27,8 +29,10 @@ function DatePicker () {
         },
        /**
         * Sets the minimum date avaliable on the picker.
-        * 
+        *
         * @method setMinDate
+        * @android
+        * @ios
         * @param {Date} minDate
         * @since 0.1
         */
@@ -37,8 +41,10 @@ function DatePicker () {
         },
        /**
         * Sets the maximum date avaliable on the picker.
-        * 
+        *
         * @method setMaxDate
+        * @android
+        * @ios
         * @param {Date} maxDate
         * @since 0.1
         */
@@ -47,8 +53,10 @@ function DatePicker () {
         },
        /**
         * Makes the picker appear on the screen.
-        * 
+        *
         * @method show
+        * @android
+        * @ios
         * @since 0.1
         */
         'show': {
@@ -56,14 +64,16 @@ function DatePicker () {
         },
        /**
         * Triggered when a date is selected on the picker.
-        * 
+        *
         * @since 0.1
         * @param {Date} date
         * @event onDateSelected
+        * @android
+        * @ios
         */
         'onDateSelected': {
             get: function() {},
-            set: function(callback) {} // callback(date)       
+            set: function(callback) {} // callback(date)
         }
     });
 };
