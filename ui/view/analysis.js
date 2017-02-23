@@ -2,75 +2,83 @@
  * @class UI.View
  * @since 0.1
  *
- * View class represents a rectangular area drawable to user interface. This class
- * is base of all UI classes. 
- * 
+ * View class represents a rectangular area on the screen and it is responsible
+ * for event handling. View is the base of all UI classes.
  *     @example
  *     const View = require('nf-core/ui/view');
- *     var myView = new View();
- *     var position = {
- *         width: "30%", 
- *         height: "50%", 
- *         top: "40%",
- *         left: "50%"
- *     }
- *     myView.setPosition(position);
  *     const Color = require('nf-core/ui/color');
+ *     var myView = new View();
+ *     myView.width = 300;
+ *     myView.height = 500;
+ *     myView.top = 50;
+ *     myView.left = 50;
  *     myView.backgroundColor = Color.RED;
  */
 function View(params) {
-    /** 
-     * Defines opacity of view. The value of this property is float number
-     * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
+    /**
+     * Defines the opacity of a view. The value of this property is a float number
+     * between 0.0 and 1.0. 0 represents view is completely transparent and 1
      * represents view is completely opaque.
      *
-     * @property {Number} alpha 
+     * @property {Number} alpha
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
     this.alpha = 1.0;
-    
+
     /**
-     * Gets/sets background color of view. It allows setting background 
-     * color with UI.Color instance or mapping from states to colors.
-     * 
+     * Gets/sets background color of a view. It allows setting background
+     * color with UI.Color instance.
+     *
      * @property {UI.Color} [backgroundColor = UI.Color.WHITE]
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
-     */ 
+     */
     this.backgroundColor = UI.Color.WHITE;
 
     /**
      * Sets/gets border color of bounded view.
-     * 
+     *
      * @property {UI.Color} [borderColor = UI.Color.BLACK]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.borderColor = UI.Color.BLACK;
-    
-    
+
+
     /**
      * Sets/gets border thickness of bounded view. Accepts unsigned
      * numbers, 0 means no border.
-     * 
-     * @property {Number} borderWidth 
+     *
+     * @property {Number} borderWidth
+     * @android
+     * @ios
      * @since 0.1
      */
     this.borderWidth = 0;
 
     /**
-     * Sets/gets border radius of bounded view.
-     * 
+     * Sets/gets corner radius of a view.
+     *
      * @property {Number} borderRadius
+     * @android
+     * @ios
      * @since 0.1
      */
     this.borderRadius = 0;
 
     /**
-     * Gets/sets id of view. Should be unique number for all objects
-     * inside project.
-     * 
-     * @property {Number} id 
+     * Gets/sets id of a view. It should be unique number for each object
+     * inside page.
+     *
+     * @property {Number} id
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
@@ -78,8 +86,10 @@ function View(params) {
 
     /**
      * Gets/sets visibility of view. It is set to true as default.
-     * 
-     * @property {Boolean} visible 
+     *
+     * @property {Boolean} visible
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
@@ -88,642 +98,355 @@ function View(params) {
     /**
      * Enables/disables touches to view. When set to false events
      * related to touches won't fire. It is set to true as default.
-     * 
-     * @property {Boolean} touchEnabled 
+     *
+     * @property {Boolean} touchEnabled
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
     this.touchEnabled = true;
-    
+
     /**
-     * Gets/sets position X value of view.
-     * 
-     * @property {Number} [left = 0] 
+     * Gets/sets left position of a view relative to its parent.
+     *
+     * @property {Number} [left = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.left = 0;
 
     /**
-     * Gets/sets position Y value of view. 
-     * 
+     * Gets/sets top position of a view relative to its parent.
+     *
      * @property {Number} [top = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.top = 0;
-    
+
     /**
-     * // @todo add description.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/sets right position of a view relative to its parent. This property works only if
+     * view's positionType is {@link UI.FlexLayout.PositionType.ABSOLUTE FlexLayout.PositionType.ABSOLUTE}.
      *
-     * @property {Number} [right = 0]   
+     * @property {Number} [right = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.right = 0;
-    
+
     /**
-     * // @todo add description.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/sets bottom position of a view relative to its parent. This property works only if
+     * view's positionType is {@link UI.FlexLayout.PositionType.ABSOLUTE FlexLayout.PositionType.ABSOLUTE}.
      *
-     * @property {Number} [bottom = 0]   
+     * @property {Number} [bottom = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.bottom = 0;
-    
-    /**
-     * // @todo add description.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [start = 0]   
-     * @since 0.1
-     */
-    this.start = 0;
-    
-    /**
-     * // @todo add description.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [end = 0]   
-     * @since 0.1
-     */
-    this.end = 0;
+
 
     /**
-     * Gets/sets height of view.
-     * 
-     * @property {Number} [height = 0] 
+     * Gets/sets height of a view.
+     *
+     * @property {Number} [height = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.height = 0;
-        
+
     /**
-     * Gets/sets width of view.
-     * 
-     * @property {Number} [width = 0] 
+     * Gets/sets width of a view.
+     *
+     * @property {Number} [width = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.width = 0;
-    
+
     /**
-     * // @todo add description. This property will work only if
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/sets minimum width of a view.
      *
-     * @property {Number} [minWidth = 0]   
+     * @property {Number} [minWidth = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.minWidth = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     *     
-     *     // @todo add example
+     * Gets/sets minimum height of a view.
      *
-     * @property {Number} [minHeight = 0]   
+     * @property {Number} [minHeight = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.minHeight = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/sets maximum width of a view.
      *
-     * @property {Number} [maxWidth = 0]   
+     * @property {Number} [maxWidth = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.maxWidth = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/sets maximum height of a view.
      *
-     * @property {Number} [maxHeight = 0]   
+     * @property {Number} [maxHeight = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.maxHeight = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the padding space on the top side of a view.
      *
-     * @property {Number} [paddingTop = 0]   
+     * @property {Number} [paddingTop = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.paddingTop = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the padding space on the bottom side of a view.
      *
-     * @property {Number} [paddingBottom = 0]   
+     * @property {Number} [paddingBottom = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.paddingBottom = 0;
-    
+
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the padding space on the left side of a view.
      *
-     * @property {Number} [paddingStart = 0]   
-     * @since 0.1
-     */
-    this.paddingStart = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [paddingEnd = 0]   
-     * @since 0.1
-     */
-    this.paddingEnd = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [paddingLeft = 0]   
+     * @property {Number} [paddingLeft = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.paddingLeft = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the padding space on the right side of a view.
      *
-     * @property {Number} [paddingRight = 0]   
+     * @property {Number} [paddingRight = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.paddingRight = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the padding space on the all sides of a view.
      *
-     * @property {Number} [paddingHorizontal = 0]   
-     * @since 0.1
-     */
-    this.paddingHorizontal = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [paddingVertical = 0]   
-     * @since 0.1
-     */
-    this.paddingVertical = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [padding = 0]   
+     * @property {Number} [padding = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.padding = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the margin space on the top side of a view.
      *
-     * @property {Number} [marginTop = 0]   
+     * @property {Number} [marginTop = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.marginTop = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the margin space on the bottom side of a view.
      *
-     * @property {Number} [marginBottom = 0]   
+     * @property {Number} [marginBottom = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.marginBottom = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the margin space on the left side of a view.
      *
-     * @property {Number} [marginStart = 0]   
-     * @since 0.1
-     */
-    this.marginStart = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [marginEnd = 0]   
-     * @since 0.1
-     */
-    this.marginEnd = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [marginLeft = 0]   
+     * @property {Number} [marginLeft = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.marginLeft = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the margin space required on the right side of a view.
      *
-     * @property {Number} [marginRight = 0]   
+     * @property {Number} [marginRight = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.marginRight = 0;
-    
+
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets/Sets the margin space required on the all sides of a view.
      *
-     * @property {Number} [marginHorizontal = 0]   
-     * @since 0.1
-     */
-    this.marginHorizontal = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [marginVertical = 0]   
-     * @since 0.1
-     */
-    this.marginVertical = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [margin = 0]   
+     * @property {Number} [margin = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.margin = 0;
-    
-    
+
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * This property specifies the type of positioning method used for a view.
+     * To position a view relative to its parent with top,left,right and bottom
+     * properties you must set the position type to absolute.
      *
-     * @property {Number} [borderTopWidth = 0]   
-     * @since 0.1
-     */
-    this.borderTopWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderBottomWidth = 0]   
-     * @since 0.1
-     */
-    this.borderBottomWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderStartWidth = 0]   
-     * @since 0.1
-     */
-    this.borderStartWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderEndWidth = 0]   
-     * @since 0.1
-     */
-    this.borderEndWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderLeftWidth = 0]   
-     * @since 0.1
-     */
-    this.borderLeftWidth = 0;
-    
-    /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {Number} [borderRightWidth = 0]   
-     * @since 0.1
-     */
-    this.borderRightWidth = 0;
-    
-    /**
-     * // @todo add description.
-     * 
-     *     @example
-     *     // @todo add example
-     *
-     * @property {UI.FlexLayout.PositionType} [positionType = UI.FlexLayout.PositionType.RELATIVE]   
+     * @property {UI.FlexLayout.PositionType} [positionType = UI.FlexLayout.PositionType.RELATIVE]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.positionType;
 
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * This property specifies how much a view will grow relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.
      *
-     * @property {Number} [flexGrow = 0]   
+     * @property {Number} [flexGrow = 0]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.flexGrow = 0;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * This property specifies how much a view will shrink relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.
      *
-     * @property {Number} [flexShrink = 1]   
+     * @property {Number} [flexShrink = 1]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.flexShrink = 1;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * This property specifies the initial length of a view in a {@link UI.FlexLayout FlexLayout}.
      *
-     * @property {Number} [flexBasis = -1]   
+     * @property {Number} [flexBasis = -1]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.flexBasis = -1;
-    
+
     /**
-     * // @todo add description.This property will work only if 
-     * view added to {@link UI.FlexLayout FlexLayout}.
-     * 
-     *     @example
-     *     // @todo add example
+     * This property specifies how a child view aligns in the cross-axis.
+     * It overrides the {@link UI.FlexLayout.AlignItems FlexLayout.AlignItems} property of the parent.
      *
-     * @property {UI.FlexLayout.AlignSelf} [alignSelf = UI.FlexLayout.AlignSelf.AUTO]   
+     * @property {UI.FlexLayout.AlignSelf} [alignSelf = UI.FlexLayout.AlignSelf.AUTO]
+     * @android
+     * @ios
      * @since 0.1
      */
     this.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
-    
-    /**
-     * // @todo add description.
-     *
-     *     @example
-     *     // @todo add example
-     *
-     * @method dirty
-     */
-    this.dirty = function(){};
 
     /**
-     * This method allows getting view to the front.
+     * This method put a view to the top of other views in z-direction.
      *
      *     @example
      *     const Page = require('nf-core/ui/page');
+     *     const FlexLayout = require('nf-core/ui/flexlayout')
      *     const Label = require('nf-core/ui/label');
      *     const Color = require('nf-core/ui/color');
      *     var myPage = new Page();
      *     var myLabelBehind = new Label({
-     *         width: "70%",
-     *         height: "10%",
-     *         top: "10%",
-     *         left: "15%",
+     *         width: "300",
+     *         height: "50",
+     *         top: "10",
+     *         left: "15",
      *         text: "Label at behind",
      *         backgroundColor: Color.BLUE,
-     *         textColor: Color.WHITE
+     *         textColor: Color.WHITE,
+     *         positionType: FlexLayout.PositionType.ABSOLUTE
      *     });
      *     var myLabelFront = new Label({
-     *         width: "70%",
-     *         height: "10%",
-     *         top: "15%",
-     *         left: "15%",
+     *         width: "300",
+     *         height: "50",
+     *         top: "10",
+     *         left: "15",
      *         text: "Label at front",
      *         backgroundColor: Color.BLACK,
-     *         textColor: Color.CYAN
+     *         textColor: Color.CYAN,
+     *         positionType: FlexLayout.PositionType.ABSOLUTE
      *     });
-     *     myPage.add(myLabelBehind);
-     *     myPage.add(myLabelFront);
+     *     myPage.layout.add(myLabelBehind);
+     *     myPage.layout.add(myLabelFront);
      *     myLabelBehind.bringToFront();
      *
      * @method bringToFront
+     * @android
+     * @ios
      * @since 0.1
      */
     this.bringToFront = function(){};
 
     /**
-     * Getter of this view's parent view.
-     * 
+     * Gets the parent view of a view.
+     *
      *     @example
-     *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+     *     const FlexLayout = require('nf-core/ui/flexlayout');
      *     const Label = require('nf-core/ui/label');
-     *    
-     *     var myAbsoluteLayout = new AbsoluteLayout();
+     *
+     *     var myFlexLayout = new FlexLayout();
      *     myAbsoluteLayout.id = 5432;
-     *    
+     *
      *     var myLabel = new Label({
      *          text: "Smartface Label"
      *     });
-     *     myAbsoluteLayout.addChild(myLabel);
-     *     var parentId = myLabel.getParent().id; // parentId must be equal to 5432.
+     *     myFlexLayout.addChild(myLabel);
+     *     var parentId = myLabel.getParent().id; //is equal to 5432.
      *
-     * @return {UI.View} Parent view of this view, null if not exists.
+     * @return {UI.View} Parent view of a view, null if not exists.
      * @method getParent
+     * @android
+     * @ios
      * @since 0.1
      */
     this.getParent = function(){};
 
     /**
-     * This method returns all position values in one object.
-     * 
-     *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const Button = require('nf-core/ui/button');
-     *     const Label = require('nf-core/ui/label');
-     *     const Switch = require('nf-core/ui/switch');
-     *    
-     *     var myPage1 = new Page();
-     *     var mySwitch = new Switch();
-     *     var myButton = new Button({
-     *         text: "Get Switch Position",
-     *         onPress: buttonPress
-     *     });
-     *     var myLabel = new Label({
-     *         height: "15%",
-     *         width: "80%",
-     *         top: "30%",
-     *         left: "35%"
-     *     });
-     *    
-     *     myPage1.add(myButton);
-     *     myPage1.add(myLabel);
-     *    
-     *     myPage1.statusBar.visible = false;
-     *     var position = {
-     *         height: "15%",
-     *         width: "30%",
-     *         top: "10%",
-     *         left: "35%"
-     *     };
-     *     mySwitch.setPosition(position);
-     *     myPage1.add(mySwitch);
-     *     
-     *     function buttonPress(){
-     *         var viewPosition = mySwitch.getPosition();
-     *         myLabel.text = "Pos = " + viewPosition.width + " "+ viewPosition.height + " "+ viewPosition.top + " "+ viewPosition.left;
-     *     }        
-     * 
-     * @return {Object} Object with properties:
-     * @return {Number} return.width Width value
-     * @return {Number} return.height Height value
-     * @return {Number} return.left Position X value
-     * @return {Number} return.top Position Y value
-     * @member UI.View
-     * @since 0.1
-     */
-    this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
-
-    /**
-     * This method allows setting all position values within one function call. 
-     * Using this method will be faster than setting all position values (width,
-     * height etc.) separately.
-     * 
-     *     @example
-     *     const View = require('nf-core/ui/view');
-     *     var myView = new View();
-     *     var position = {
-     *         width: "30%", 
-     *         height: "30%", 
-     *         top: "30%",
-     *         left: "50%"
-     *     }
-     *     myView.setPosition(position);
-     * 
-     * @param {Object} position Object describing position values
-     * @param {Number} [position.width] Width value
-     * @param {Number} [position.height] Height value
-     * @param {Number} [position.left] Position X value
-     * @param {Number} [position.top] Position Y value
-     * @method setPosition
-     * @member UI.View
-     * @since 0.1
-     */
-    this.setPosition = function(position){}
-
-    /**
-     * Gets/sets touch event for view. This event fires when touch started.
-     * 
+     * This event is called when a touch screen motion event starts.
+     *
      * @event onTouch
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
     this.onTouch = function onTouch(){ }
 
     /**
-     * Gets/sets touch ended event for view. This event fires when touch
-     * finished.
-     * 
+     * This event is called when a touch screen motion event ends.
+     *
      * @event onTouchEnded
+     * @android
+     * @ios
      * @member UI.View
      * @since 0.1
      */
