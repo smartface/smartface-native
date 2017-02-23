@@ -1,14 +1,14 @@
 /**
  * @class UI.Font
  * @since 0.1
- * 
+ *
  * Font is useful when custom fonts are needed. It can be assigned
  * to UI objects holding text property (UI.Label, UI.Button etc).
- * 
+ *
  *     @example
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
- * 
+ *
  *     var myLabel = new Label();
  *     myLabel.text = "Bold_Italic Font";
  *     myLabel.font = Font.create("Arial", 16, Font.BOLD_ITALIC);
@@ -18,15 +18,17 @@ function Font() {}
 
 /**
  * @method create
+ * @android
+ * @ios
  * @since 0.1
  * Creates a font instance with the given family name, size and style.
- * 
+ *
  *     @example
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label();
  *     myLabel.font = myFont;
- * 
+ *
  * @param {String} fontFamily Font family name
  * @param {Number} size Font size
  * @param {Number} style Font style (UI.Font.NORMAL, UI.Font.BOLD etc.)
@@ -37,29 +39,33 @@ Font.create = function(fontFamily, size, style) { }
 
 /**
  * @method createFromFile
+ * @android
+ * @ios
  * Creates a font instance with the given file path and size.
- * 
- *     @example 
+ *
+ *     @example
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16);
  *     });
  *     myLabel.text = "Label text";
- * 
+ *
  * @param {String} path Font file path
  * @param {Number} size Font size
  * @return {UI.Font} A Font instance.
  * @since 0.1
- * 
+ *
  * @static
  */
 Font.createFromFile = function(path, size) { }
 
 /**
  * Represents normal font style
- * 
- * @property {Number} NORMAL 
+ *
+ * @property {Number} NORMAL
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -68,8 +74,10 @@ Font.NORMAL = 1;
 
 /**
  * Represents bold font style
- * 
- * @property {Number} BOLD 
+ *
+ * @property {Number} BOLD
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -78,8 +86,10 @@ Font.BOLD = 2;
 
 /**
  * Represents italic font style
- * 
- * @property {Number} ITALIC 
+ *
+ * @property {Number} ITALIC
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
@@ -88,8 +98,10 @@ Font.ITALIC = 4;
 
 /**
  * Represents both bold and italic font style
- * 
- * @property {Number} BOLD_ITALIC 
+ *
+ * @property {Number} BOLD_ITALIC
+ * @android
+ * @ios
  * @readonly
  * @static
  * @since 0.1
