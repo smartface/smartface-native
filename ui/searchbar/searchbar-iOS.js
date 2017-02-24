@@ -1,0 +1,247 @@
+const extend = require('js-base/core/extend');
+const View = require('nf-core/ui/view');
+const Image = require('nf-core/ui/image');
+const KeyboardType = require('nf-core/ui/keyboardtype');
+
+const IOSKeyboardTypes = {
+    default : 0,
+    asciiCapable : 1,
+    numbersAndPunctuation : 2,
+    URL : 3,
+    numberPad : 4,
+    phonePad : 5,
+    namePhonePad : 6,
+    emailAddress : 7,
+    decimalPad : 8,
+    twitter : 9,
+    webSearch: 10,
+    asciiCapableNumberPad : 11
+}
+
+const UISearchBarStyle = {
+    default : 0,
+    prominent : 1,
+    minimal: 2
+}
+
+const UISearchBarIcon = {
+    search : 0,
+    clear : 1,
+    bookmark: 2,
+    resultsList: 3
+}
+
+const SearchBar = extend(View)(
+    function (_super, params) {
+        var self = this;
+        
+        if(!self.nativeObject) {
+            self.nativeObject = new UISearchBar();
+        }
+        
+        _super(this);
+        
+        var _text = "";
+        Object.defineProperty(this, 'text', {
+            get: function() {
+                return _text;
+            },
+            set: function(text) {
+                _text = text;
+                self.nativeObject.text = _text;
+            },
+            enumerable: true
+        });
+        
+        var _hint = "";
+        Object.defineProperty(this, 'hint', {
+            get: function() {
+                return _hint;
+            },
+            set: function(hint) {
+                _hint = hint;
+                self.nativeObject.placeholder = _hint;
+            },
+            enumerable: true
+        });
+        
+        var _textColor = self.nativeObject.textColor;
+        Object.defineProperty(this, 'textColor', {
+            get: function() {
+                return _textColor;
+            },
+            set: function(textColor) {
+                _textColor = textColor;
+                self.nativeObject.textColor = _textColor;
+            },
+            enumerable: true
+        });
+        
+        var _backgroundColor = self.nativeObject.barTintColor;
+        Object.defineProperty(this, 'backgroundColor', {
+            get: function() {
+                return _backgroundColor;
+            },
+            set: function(backgroundColor) {
+                _backgroundColor = backgroundColor;
+                self.nativeObject.barTintColor = _backgroundColor;
+            },
+            enumerable: true
+        });
+        
+        var _backgroundImage;
+        Object.defineProperty(this, 'backgroundImage', {
+            get: function() {
+                return _backgroundImage;
+            },
+            set: function(backgroundImage) {
+                _backgroundImage = backgroundImage;
+                self.nativeObject.backgroundImage = _backgroundImage.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        this.addToHeaderBar = function(page){
+            page.nativeObject.navigationItem.titleView = self.nativeObject;
+        };
+        
+        this.removeFromHeaderBar = function(page){
+            page.nativeObject.navigationItem.titleView = undefined;
+        };
+        
+        this.showKeyboard = function(){
+            self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.hideKeyboard = function(){
+            self.nativeObject.resignFirstResponder();
+        };
+        
+        this.ios = {};
+        var _searchBarStyle = UISearchBarStyle.default;
+        Object.defineProperty(this.ios, 'searchBarStyle', {
+            get: function() {
+                return _searchBarStyle;
+            },
+            set: function(searchBarStyle) {
+                _searchBarStyle = searchBarStyle;
+                self.nativeObject.searchBarStyle = _searchBarStyle;
+            },
+            enumerable: true
+        });
+        
+        var _showsCancelButton = self.nativeObject.showsCancelButton;
+        Object.defineProperty(this.ios, 'showsCancelButton', {
+            get: function() {
+                return _showsCancelButton;
+            },
+            set: function(showsCancelButton) {
+                _showsCancelButton = showsCancelButton;
+                self.nativeObject.showsCancelButton = _showsCancelButton;
+            },
+            enumerable: true
+        });
+        
+        var _onCancelButtonClicked;
+        Object.defineProperty(this.ios, 'onCancelButtonClicked', {
+            get: function() {
+                return _onCancelButtonClicked;
+            },
+            set: function(onCancelButtonClicked) {
+                _onCancelButtonClicked = onCancelButtonClicked;
+            },
+            enumerable: true
+        });
+
+        var _onSearchBegin;
+        Object.defineProperty(this, 'onSearchBegin', {
+            get: function() {
+                return _onSearchBegin;
+            },
+            set: function(onSearchBegin) {
+                _onSearchBegin = onSearchBegin;
+            },
+            enumerable: true
+        });
+        
+        var _onSearchEnd;
+        Object.defineProperty(this, 'onSearchEnd', {
+            get: function() {
+                return _onSearchEnd;
+            },
+            set: function(onSearchEnd) {
+                _onSearchEnd = onSearchEnd;
+            },
+            enumerable: true
+        });
+        
+        var _onTextChanged;
+        Object.defineProperty(this, 'onTextChanged', {
+            get: function() {
+                return _onTextChanged;
+            },
+            set: function(onTextChanged) {
+                _onTextChanged = onTextChanged;
+            },
+            enumerable: true
+        });
+        
+        var _onSearchButtonClicked;
+        Object.defineProperty(this, 'onSearchButtonClicked', {
+            get: function() {
+                return _onSearchButtonClicked;
+            },
+            set: function(onSearchButtonClicked) {
+                _onSearchButtonClicked = onSearchButtonClicked;
+            },
+            enumerable: true
+        });
+        
+        //////////////////////////////////////////////////////
+        // UISearchBarDelegate
+        self.searchBarDelegate = new SMFUISearchBarDelegate();
+        self.searchBarDelegate.cancelButtonClicked = function(e){
+            _onCancelButtonClicked();
+        };
+        self.searchBarDelegate.didBeginEditing = function(){
+            _onSearchBegin();
+        };
+        self.searchBarDelegate.didEndEditing = function(){
+            _onSearchEnd();
+        };
+        self.searchBarDelegate.textDidChange = function(searchText){
+            _onTextChanged(searchText);
+        };
+        self.searchBarDelegate.searchButtonClicked = function(){
+            _onSearchButtonClicked();
+        };
+        self.nativeObject.delegate = self.searchBarDelegate;
+        
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    }
+);
+
+SearchBar.iOS = {};
+SearchBar.iOS.Style = {};
+Object.defineProperty(SearchBar.iOS.Style, 'DEFAULT', {
+    get: function() {
+        return UISearchBarStyle.default;
+    },
+});
+Object.defineProperty(SearchBar.iOS.Style, 'PROMINENT', {
+    get: function() {
+        return UISearchBarStyle.prominent;
+    },
+});
+Object.defineProperty(SearchBar.iOS.Style, 'MINIMAL', {
+    get: function() {
+        return UISearchBarStyle.minimal;
+    },
+});
+
+module.exports = SearchBar;

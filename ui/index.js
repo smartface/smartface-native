@@ -34,5 +34,6 @@ module.exports = {
     SliderDrawer: require('./sliderdrawer'),
     VideoView: require('./videoview'),
     Quicklook: require('./quicklook'),
-    Picker: require('./picker')
+    Picker: require('./picker'),
+    SearchBar: require('./searchbar')
 };
