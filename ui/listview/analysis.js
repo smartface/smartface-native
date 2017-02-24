@@ -122,6 +122,17 @@ const ListView = extend(View)(
         this.itemCount = 0;
 
         /**
+         * Gets/sets height of a row in a ListView.
+         *
+         *
+         * @property {Number} rowHeight
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.rowHeight = 0;
+
+        /**
          * Gets/sets the visibility of vertical scroll bar of ListView.
          * If set to true, scroll bar will be shown otherwise
          * scroll bar will be hidden.
