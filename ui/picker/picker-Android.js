@@ -58,8 +58,6 @@ const Picker = extend(View)(
             enumerable: true
         });
         
-        var _scrollState = -1;
-        
         function setNumberPicker() {
             if(_items.length > 0) {
                 self.nativeObject.setDisplayedValues(null);
@@ -75,23 +73,11 @@ const Picker = extend(View)(
             onScrollStateChange: function(picker, scrollState) {
                 _scrollState = scrollState;
                 if(scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
-                    fireOnSelectedCallback();
+                    if(_onSelectedCallback) 
+                        _onSelectedCallback(self.valueIndex);
                 }
             }
         }));
-                
-        self.nativeObject.setOnValueChangedListener(NativeNumberPicker.OnValueChangeListener.implement({
-            onValueChange: function(picker, oldVal, newVal) {
-                if(_scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
-                    fireOnSelectedCallback();
-                }
-            }
-        }));
-        
-        function fireOnSelectedCallback() {
-            if(_onSelectedCallback) 
-                _onSelectedCallback(self.valueIndex);
-        }
         
         // Assign parameters given in constructor
         if (params) {
