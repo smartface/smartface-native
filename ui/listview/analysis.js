@@ -4,297 +4,240 @@ const extend = require('js-base/core/extend');
  * @class UI.ListView
  * @since 0.1
  * @extends UI.View
- * ListView is a UI object to display a views as rows. ListView displays UI.ListViewItem as row. 
- * The UI.ListViewController is used for managing ListView.
+ * ListView is a View that displays given items as a one-column vertical list.
  *
  *     @example
- *     const Pages = require('nf-core/ui/pages');
- *     const Page = require('nf-core/ui/page');
- *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
  *     const Color = require('nf-core/ui/color');
  *     const ListView = require('nf-core/ui/listview');
  *     const ListViewItem = require('nf-core/ui/listviewitem');
- *     const ListViewController = require('nf-core/ui/listviewcontroller');
  *     const Label = require('nf-core/ui/label');
- *     const Font = require('nf-core/ui/font');
- *     const ImageView = require('nf-core/ui/imageview');
- *     const Image = require('nf-core/ui/image');
- *     const ImageFillType = require('nf-core/ui/imagefilltype');
- *     
- *     var myImage1 = Image.createFromFile('assets://image1.png');
- *     var myImage2 = Image.createFromFile('assets://image2.png');
- *     var myImage3 = Image.createFromFile('assets://image3.png');
- *     var myImage4 = Image.createFromFile('assets://image4.png');
- *     var myImage5 = Image.createFromFile('assets://image5.png');
- *     
+ *     const FlexLayout = require('nf-core/ui/flexlayout');
+ *
  *     var myListView = new ListView({
- *         height: '100%',
- *         width: '100%',
+ *         flexGrow:1,
+ *         rowHeight: 60,
  *         backgroundColor: Color.LIGHTGRAY,
  *         itemCount: myDataSet.length,
- *         android: {
- *             setPullRefreshColors: [Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.YELLOW]
- *         },
- *         verticalScrollBarEnabled: false
  *     });
- *     
+ *
  *     var myDataSet = [
- *                         { 
- *                             image: myImage1, 
- *                             title: 'Smartface Title 1', 
- *                             subTitle: 'Show first visible index', 
- *                             backgroundColor: Color.RED,
- *                             action:function(){
- *                                 alert(myListView.firstVisibleIndex)
- *                             }
+ *                         {
+ *                             title: 'Smartface Title 1',
+ *                             backgroundColor: Color.RED
  *                         },
- *                         { 
- *                             image: myImage2, 
- *                             title: 'Smartface Title 2', 
- *                             subTitle: 'Show last visible index', 
- *                             backgroundColor: Color.CYAN,
- *                             action:function(){
- *                                 alert(myListView.lastVisibleIndex);
- *                             } 
+ *                         {
+ *                             title: 'Smartface Title 2',
+ *                             backgroundColor: Color.CYAN
  *                         },
- *                         { 
- *                             image: myImage3, 
- *                             title: 'Smartface Title 3', 
- *                             subTitle: 'Change data set', 
- *                             backgroundColor: Color.YELLOW,
- *                             action:function(){
- *                                 myDataSet.push({
- *                                     image: myImage5,
- *                                     title: 'Smartface Title 5', 
- *                                     subTitle: 'Smartface New ListViewItem',
- *                                     backgroundColor: Color.BLUE,
- *                                     action: function(){
- *                                         alert('Hello from NativeFace ListView!');
- *                                     }
- *                                 })
- *                                 myListView.itemCount = myDataSet.length;
- *                                 myListView.refreshData();
- *                             } 
+ *                         {
+ *                             title: 'Smartface Title 3',
+ *                             backgroundColor: Color.YELLOW
  *                         },
- *                         { 
- *                             image: myImage4, 
- *                             title: 'Smartface Title 4', 
- *                             subTitle: 'Change data set', 
- *                             backgroundColor: Color.GRAY,
- *                             action:function(){
- *                                 myListView.scrollTo(2);
- *                             } 
+ *                         {
+ *                             title: 'Smartface Title 4',
+ *                             backgroundColor: Color.GRAY
  *                         }
  *                     ];
- *     
- *     
- *     var myFontTitle = Font.create("Arial",16,Font.BOLD);
- *     var myFontSubTitle = Font.create("Arial",14,Font.ITALIC);
+ *
  *     myListView.onRowCreate = function(){
  *         var myListViewItem = new ListViewItem();
- *         var myAbsoluteLayout = new AbsoluteLayout({
- *             id: 100,
- *             height: '100%',
- *             width: '100%'
- *         });
- *         var myImageView = new ImageView({
- *             id: 101,
- *             height: '80%',
- *             width: '10%',
- *             top: '10%',
- *             left: '10%'
- *         });
  *         var myLabelTitle = new Label({
  *             id: 102,
- *             height: '40%',
- *             width: '50%',
- *             top: '10%',
- *             left: '40%'
+ *             height: '40',
+ *             width: '100',
+ *             alignSelf: FlexLayout.AlignSelf.CENTER
  *         });
- *         var myLabelSubtitle = new Label({
- *             id: 103,
- *             height: '30%',
- *             width: '50%',
- *             top: '60%',
- *             left: '40%'
- *         });
- *         myAbsoluteLayout.addChild(myImageView);
- *         myAbsoluteLayout.addChild(myLabelTitle);
- *         myAbsoluteLayout.addChild(myLabelSubtitle);
- *         myListViewItem.addChild(myAbsoluteLayout);
+ *         myListViewItem.addChild(myLabelTitle);
  *         return myListViewItem;
  *     };
  *     myListView.onRowBind = function(listViewItem,index){
- *         var myAbsoluteLayout = listViewItem.findChildById(100);
- *         var myImageView = listViewItem.findChildById(101);
  *         var myLabelTitle = listViewItem.findChildById(102);
- *         var myLabelSubtitle = listViewItem.findChildById(103);
- *         if(myAbsoluteLayout){
- *                 myAbsoluteLayout.backgroundColor = Color.LIGHTGRAY;
- *         }
- *         if(myImageView){
- *                 myImageView.imageSource = myDataSet[index].image;
- *         }
- *         if(myLabelTitle){
- *                 myLabelTitle.text = myDataSet[index].title;
- *                 myLabelTitle.font = myFontTitle;
- *         }
- *         if(myLabelSubtitle){     
- *                 myLabelSubtitle.text = myDataSet[index].subTitle;
- *                 myLabelSubtitle.font = myFontSubTitle;
- *         }
+ *         myLabelTitle.text = myDataSet[index].title;
+ *         myLabelTitle.backgroundColor = myDataSet[index].backgroundColor;
  *     };
  *     myListView.onRowSelected = function(listViewItem,index){
- *         myDataSet[index].action();
+ *         console.log("selected index = " + index)
  *     };
- * 
+ *
  *     myListView.onPullRefresh = function(){
  *         myDataSet.push({
- *             image: myImage5,
- *             title: 'Smartface Title '+myDataSet.length, 
- *             subTitle: 'Smartface New ListViewItem',
+ *             title: 'Smartface Title '+myDataSet.length,
  *             backgroundColor: Color.RED,
- *             action: function(){
- *                 alert('Hello from NativeFace ListView!');
- *             }
  *         })
  *         myListView.itemCount = myDataSet.length;
  *         myListView.refreshData();
  *         myListView.stopRefresh();
  *     }
- *     
- *     var myPage = new Page();
- *     myPage.add(myListView);
- *     var myPages = new Pages({rootPage : myPage});
- * 
+ *
  */
- 
+
 const ListView = extend(View)(
     function (_super, params) {
         _super(this);
 
         /**
-         * This event will be fired when the ListView created ListViewItem template. 
-         * This function should return ListViewItem instance.
-         * 
+         * This event is called when a ListView starts to create a ListViewItem.
+         * You can customize your UI(not data-binding) inside this callback.
+         *
          * @event onRowCreate
+         * @android
+         * @ios
          * @return {UI.ListViewItem}
          * @since 0.1
          */
         this.onRowCreate = function onRowCreate(){};
-    
+
         /**
-         * This event will be fired when the ListView created row at specific index.
-         * You can customize the list view item inside this callback.
-         * 
+         * This event is called when a UI.ListViewItem created at specified row index.
+         * You can bind your data to row items inside this callback.
+         *
          * @param {UI.ListViewItem} listViewItem
          * @param {Number} index
          * @event onRowBind
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onRowBind = function onRowBind(listViewItem, index){};
-        
+
         /**
-         * This event will be fired when user clicks the row at specific index.
-         * 
+         * This event is called when user selects a row at specific index.
+         *
          * @event onRowSelected
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onRowSelected = function onRowSelected(listViewItem, index){};
 
         /**
-         * Gets/sets list item count of the ListView. This property defines how many list item will shown
-         * in the ListView. 
-         * 
-         * @property {Number} [itemCount = 0]   
+         * Gets/sets the number of rows that will be shown in a ListView.
+         * You should update this property after each data operation.
+         *
+         * @property {Number} [itemCount = 0]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.itemCount = 0;
-        
+
         /**
-         * Gets/sets vertical scroll bar status of the ListView. If this is true, 
-         * scroll bar will be shown otherwise scroll bar will be hidden.
-         * 
-         * @property {Number} [verticalScrollBarEnabled = false]   
+         * Gets/sets the visibility of vertical scroll bar of ListView.
+         * If set to true, scroll bar will be shown otherwise
+         * scroll bar will be hidden.
+         *
+         * @property {Boolean} [verticalScrollBarEnabled = false]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.verticalScrollBarEnabled = false;
 
 
         /**
-         * This method return first visible list item's index which is visible at
-         * the top of the ListView.
+         * Enables/disables the refresh function of ListView. If set to false
+         * onPullRefresh events will not be called.
          *
-         * @return {Number} first visible list item's index.
+         * @property {Boolean} [refreshEnabled = true]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.refreshEnabled = true;
+
+
+        /**
+         * This method returns the index of row which is visible at
+         * the top of a ListView at a given time.
+         *
+         * @return {Number}
          * @method firstVisibleIndex
+         * @android
+         * @ios
          * @since 0.1
          */
-        this.firstVisibleIndex = function(){};
+        this.getFirstVisibleIndex = function(){};
 
         /**
-         * This method return last visible list item's index which is visible at
-         * the bottom of the ListView.
+         * This method returns the index of row which is visible at
+         * the bottom of a ListView at a given time.
          *
-         * @return {Number} last visible list item's index.
+         * @return {Number}
          * @method lastVisibleIndex
+         * @android
+         * @ios
          * @since 0.1
          */
-        this.lastVisibleIndex = function(){};
+        this.getLastVisibleIndex = function(){};
 
 
         /**
-         * Set the colors used in the progress animation. The first color
+         * Sets the colors used in the refresh animation. On Android the first color
          * will also be the color of the bar that grows in response to a
-         * user swipe gesture.
-         * This propert will works for only Android.
+         * user swipe gesture. iOS uses only the first color of the array.
          *
          * @method setPullRefreshColors
+         * @android
+         * @ios
          * @since 0.1
          */
         this.android.setPullRefreshColors = function(colors){};
 
         /**
-         * Notify the ListView for data changes.
-         * 
+         * This method notify ListView for data changes. After this method is called
+         * ListView refreshes itself and recreates the rows. Do not forget to
+         * update itemCount property after data changes.
+         *
          * @method refreshData
+         * @android
+         * @ios
          * @since 0.1
          */
         this.refreshData = function(){};
 
         /**
-         * Scroll the ListView to specific index. The item on this index will 
-         * shown on the top.
-         * 
+         * This method scrolls ListView to a specific index.
+         *
          * @param {Number} index
          * @method scrollTo
+         * @android
+         * @ios
          * @since 0.1
          */
         this.scrollTo = function(index){};
 
         /**
-         * This method cancels refresh indicator on the ListView. You should call this method after
-         * finishing event inside onPullRefresh otherwise refresh indicator will never stops.
+         * This method cancels refresh operation and stops the refresh
+         * indicator on a ListView. You should call this method after
+         * finishing event inside onPullRefresh otherwise refresh indicator
+         * never stops.
          *
          * @method stopRefresh
+         * @android
+         * @ios
          * @since 0.1
          */
         this.stopRefresh = function(){};
 
         /**
-         * Gets/sets scroll event for ListView. This event fires when the ListView
-         * scrolls. For better performance, don't set any callback if does not 
+         * This event is called when a ListView is scrolling.
+         * For better performance, don't set any callback if does not
          * necessary
-         * 
+         *
          * @event onScroll
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onScroll = function onScroll(){ }
-        
+
         /**
-         * Gets/sets pull to refresh event for view. This event fires when user swipes
-         * and releases the ListView's top.
-         * 
+         * This event is called when user pulls down and releases a ListView
+         * when scroll position is on the top.
+         *
          * @event onPullRefresh
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onPullRefresh = function onPullRefresh(){}

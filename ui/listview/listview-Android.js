@@ -8,16 +8,16 @@ const NativeLinearLayoutManager     = requireClass("android.support.v7.widget.Li
 
 const ListView = extend(View)(
     function (_super, params) {
-        
+
         var self = this;
         var activity = Android.getActivity();
-        
+
         self.nativeObject = new NativeRecyclerView(activity);
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
         self.nativeObject.setLayoutManager(linearLayoutManager);
-        
+
         _super(this);
-        
+
         var holderViewLayout
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
             onCreateViewHolder: function(parent,viewType){
@@ -44,9 +44,9 @@ const ListView = extend(View)(
                 return _itemCount;
             }
         },null);
-        
+
         self.nativeObject.setAdapter(dataAdapter);
-        
+
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
                     _onScroll && _onScroll();
@@ -54,14 +54,14 @@ const ListView = extend(View)(
             onScrollStateChanged: function(recyclerView, newState){
             },
         },null);
-        
+
         var _onScroll;
         var _rowHeight = 0;
         var _onRowCreate;
         var _onRowSelected;
         var _onRowBind;
         var _itemCount = 0;
-        Object.defineProperties(this, { 
+        Object.defineProperties(this, {
             'onRowCreate': {
                 get: function() {
                     return _onRowCreate;
@@ -70,7 +70,7 @@ const ListView = extend(View)(
                     _onRowCreate = onRowCreate.bind(this);
                 },
                 enumerable: true
-            }, 
+            },
             'onRowBind': {
                 get: function() {
                     return _onRowBind;
@@ -137,19 +137,19 @@ const ListView = extend(View)(
         this.refreshData = function(){
             dataAdapter.notifyDataSetChanged();
         };
-        
+
         this.scrollTo = function(index){
             self.nativeObject.smoothScrollToPosition(index);
         };
-       
-        this.firstVisibleIndex = function(){
+
+        this.getFirstVisibleIndex = function(){
             return self.nativeObject.getLayoutManager().findFirstVisibleItemPosition();
         };
 
-        this.lastVisibleIndex = function(){
+        this.getLastVisibleIndex = function(){
             return self.nativeObject.getLayoutManager().findLastVisibleItemPosition();
         };
-        
+
         function createFromTemplate(jsView, nativeView,parentJsView){
             jsView.nativeObject = nativeView;
             jsView.parent = parentJsView;
@@ -160,16 +160,18 @@ const ListView = extend(View)(
                 }
             }
         }
-        
+
         // ios-only properties
         this.ios = {};
         this.ios.swipeItems = {};
         this.ios.swipeItem = function(title,action){
             return {};
         };
-        
+
         // @todo should remove these. Current we are not supporting this.
         this.android = {};
+        this.stopRefresh = {};
+        this.refreshEnabled = {};
         this.android.setPullRefreshColors = function(params){};
 
         if (params) {

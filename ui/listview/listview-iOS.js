@@ -19,38 +19,38 @@ const UITableViewRowAnimation = {
 const ListView = extend(View)(
    function (_super, params) {
         var self = this;
-        
+
         if(!self.nativeObject){
             self.nativeObject = new SMFUITableView();
             self.refreshControl = new UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
             self.nativeObject.separatorStyle = 0;
         }
-        
+
         _super(this);
-        
+
         self.onRowCreate = function(){};
-    
+
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
         self.onRowSwiped = function(direction){};
-        
+
         self.ios = {}
-        
+
         self.ios.swipeItem = function(title,color,padding,action){
             return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
-        
+
         self.nativeObject.onRowSwiped = function(e){
             return self.onRowSwiped(e.direction,e.expansionSettings);
         }
-          
+
         self.stopRefresh = function(){
             self.refreshControl.endRefreshing();
         }
-        
+
         var _refreshEnabled = true;
-        Object.defineProperty(self, 'refreshEnabled', {
+        Object.defineProperty(self.ios, 'refreshEnabled', {
             get: function() {
                 return _refreshEnabled;
             },
@@ -64,14 +64,14 @@ const ListView = extend(View)(
             },
             enumerable: true
          });
-          
+
          Object.defineProperty(self, 'onPullRefresh', {
             set: function(value) {
                 self.refreshControl.addJSTarget(value.bind(this),UIControlEvents.valueChanged);
             },
             enumerable: true
           });
-          
+
         Object.defineProperty(self, 'itemCount', {
             get: function() {
                 return self.nativeObject.itemCount;
@@ -81,7 +81,7 @@ const ListView = extend(View)(
             },
             enumerable: true
           });
-    
+
         Object.defineProperty(self, 'rowHeight', {
             get: function() {
                 return self.nativeObject.tableRowHeight;
@@ -91,60 +91,60 @@ const ListView = extend(View)(
             },
             enumerable: true
           });
-        
-        self.nativeObject.cellForRowAt = function(e){   
+
+        self.nativeObject.cellForRowAt = function(e){
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
              listItem.applyLayout();
          }
-         
+
          var templateItem;
          self.nativeObject.onRowCreate =  function(e){
              var lisviewItem = self.onRowCreate();
              templateItem = lisviewItem;
              return lisviewItem.nativeObject;
          }
-         
+
         self.createTemplate = function(e){
             templateItem.nativeObject = e.contentView;
             setAllChilds(templateItem);
             return templateItem;
         }
-         
+
         function setAllChilds(item){
              for (var child in item.childs){
                 item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
                 setAllChilds(item.childs[child]);
              }
          }
-         
+
         self.nativeObject.didSelectRowAt = function(e){
            var listItem = self.createTemplate(e);
            self.onRowSelected(listItem,e.index);
         };
-        
+
         self.refreshData = function(){
             self.nativeObject.reloadData();
         };
-        
+
         self.deleteRow = function(index){
             self.nativeObject.deleteRowIndexAnimation(index,UITableViewRowAnimation.left);
         }
-        
-        self.firstVisibleIndex = function(){
+
+        self.getFirstVisibleIndex = function(){
             var visibleIndexArray =  self.nativeObject.getVisibleIndexArray();
             return visibleIndexArray[0];
         };
-        
-        this.lastVisibleIndex = function(){
+
+        this.getLastVisibleIndex = function(){
             var visibleIndexArray =  self.nativeObject.getVisibleIndexArray();
             return visibleIndexArray[visibleIndexArray.length-1];
         };
-        
+
         this.scrollTo = function(index){
             self.nativeObject.scrollTo(index);
         };
-        
+
         Object.defineProperty(self, 'verticalScrollBarEnabled', {
             get:function() {
                 return self.nativeObject.showsVerticalScrollIndicator;
@@ -154,7 +154,7 @@ const ListView = extend(View)(
             },
             enumerable: true
         });
-        
+
         self.android = {};
 
         self.setPullRefreshColors = function(param){

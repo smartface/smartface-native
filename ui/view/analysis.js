@@ -4,6 +4,7 @@
  *
  * View class represents a rectangular area on the screen and it is responsible
  * for event handling. View is the base of all UI classes.
+ *
  *     @example
  *     const View = require('nf-core/ui/view');
  *     const Color = require('nf-core/ui/color');
