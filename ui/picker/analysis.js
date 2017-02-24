@@ -31,14 +31,6 @@ function Picker() {
     this.items = [];
     
     /** 
-     * Gets/sets enabled state of the picker.
-     *
-     * @property {Boolean} enabled 
-     * @since 0.1
-     */
-    this.enabled = true;
-    
-    /** 
      * Gets/sets current value index of the picker.
      *
      * @property {Number} valueIndex 
