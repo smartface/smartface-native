@@ -63,9 +63,8 @@ Object.defineProperty(ImageFillType, 'ASPECTFIT', {
 
 /**
  * @property {Number} TOPLEFT
- * @android
  * @ios
- * The source image position will be top center.
+ * The source image position will be top center. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -77,9 +76,8 @@ Object.defineProperty(ImageFillType, 'TOPLEFT', {
 
 /**
  * @property {Number} TOPCENTER
- * @android
  * @ios
- * The source image position will be top center.
+ * The source image position will be top center. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -91,9 +89,8 @@ Object.defineProperty(ImageFillType, 'TOPCENTER', {
 
 /**
  * @property {Number} TOPRIGHT
- * @android
  * @ios
- * The source image position will be top right.
+ * The source image position will be top right. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -105,9 +102,8 @@ Object.defineProperty(ImageFillType, 'TOPRIGHT', {
 
 /**
  * @property {Number} MIDLEFT
- * @android
  * @ios
- * The source image position will be mid left.
+ * The source image position will be mid left. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -119,9 +115,8 @@ Object.defineProperty(ImageFillType, 'MIDLEFT', {
 
 /**
  * @property {Number} MIDCENTER
- * @android
  * @ios
- * The source image position will be mid center.
+ * The source image position will be mid center. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -133,9 +128,8 @@ Object.defineProperty(ImageFillType, 'MIDCENTER', {
 
 /**
  * @property {Number} MIDRIGHT
- * @android
  * @ios
- * The source image position will be mid right.
+ * The source image position will be mid right. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -147,9 +141,8 @@ Object.defineProperty(ImageFillType, 'MIDRIGHT', {
 
 /**
  * @property {Number} BOTTOMLEFT
- * @android
  * @ios
- * The source image position will be bottom left.
+ * The source image position will be bottom left. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -161,9 +154,8 @@ Object.defineProperty(ImageFillType, 'BOTTOMLEFT', {
 
 /**
  * @property {Number} BOTTOMCENTER
- * @android
  * @ios
- * The source image position will be bottom center.
+ * The source image position will be bottom center. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
@@ -175,9 +167,8 @@ Object.defineProperty(ImageFillType, 'BOTTOMCENTER', {
 
 /**
  * @property {Number} BOTTOMRIGHT
- * @android
  * @ios
- * The source image position will be bottom right.
+ * The source image position will be bottom right. Only works for iOS.
  * @static
  * @readonly
  * @since 0.1
