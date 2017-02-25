@@ -22,6 +22,8 @@
  *         myView.height = 65;
  *         myView.right  = 10;
  *         myView.bottom = 10;
+ *     }).complete(function() {
+ *         alert("Animation complete.");
  *     });
  *
  */
