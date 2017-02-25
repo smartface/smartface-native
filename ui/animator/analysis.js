@@ -26,18 +26,25 @@
  *
  */
 function Animator() {
-    Object.defineProperty(this, 'then', {
-        value: function(duration, animFunction) {
-            doStuff();
-            return new Animator();
+    Object.defineProperties(this, {
+        'then': {
+            value: function(duration, animFunction) {
+                // do stuff
+                return new Animator();
+            }
+        },
+        'complete': {
+            value: function(completeFunction) {
+                // do stuff
+            }
         }
     });
 };
 
 Object.defineProperty(Animator, 'animate', {
    value: function(rootLayout, duration, animFunction) {
-       doStuff();
-       return new Animator();
+        // do stuff
+        return new Animator();
    }
 });
 
