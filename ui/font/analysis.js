@@ -61,6 +61,18 @@ Font.create = function(fontFamily, size, style) { }
 Font.createFromFile = function(path, size) { }
 
 /**
+ * Default system font. This might be different for Android and iOS.
+ *
+ * @property {UI.Font} DEFAULT
+ * @android
+ * @ios
+ * @readonly
+ * @static
+ * @since 0.1
+ */
+Font.DEFAULT;
+
+/**
  * Represents normal font style
  *
  * @property {Number} NORMAL

@@ -1,5 +1,6 @@
 /**
  * @class UI.SearchView
+ * @extends UI.View
  * @since 0.1
  *
  * SearchView provides text-based searches.
@@ -42,16 +43,6 @@ function SearchView () {
      * @since 0.1
     */
     this.textColor;
-    
-    /**
-     * Gets/sets background color of SearchView.
-     *
-     * @property {UI.Color} backgroundColor
-     * @android
-     * @ios
-     * @since 0.1
-    */
-    this.backgroundColor;
     
     /**
      * Gets/sets background image of SearchView.
@@ -128,6 +119,42 @@ function SearchView () {
      * @since 0.1
     */
     this.ios.showsCancelButton;
+    
+    /**
+     * Gets/sets the color of the hint text. This property will work only for Android.
+     *
+     * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
+     * @android
+     * @since 0.1
+     */
+    this.android.hintTextColor = UI.Color.LIGHTGRAY
+    
+    /**
+     * Gets/sets font of the SearchView.
+     * 
+     * @property {UI.Font} [font = UI.Font.DEFAULT]
+     * @android
+     * @since 0.1
+     */
+    this.android.font = UI.Font.DEFAULT
+    
+    /**
+     * Gets/sets text alignment of the SearchView.
+     * 
+     * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
+     * @android
+     * @since 0.1
+     */
+    this.android.textAlignment = UI.TextAlignment.MIDLEFT;
+    
+    /**
+     * Gets/sets close button image of SearchView.
+     *
+     * @property {UI.Image} [closeImage = null]
+     * @android
+     * @since 0.1
+    */
+    this.android.closeImage = null;
     
     /**
      * Gets/sets cancel button event for SearchView.
