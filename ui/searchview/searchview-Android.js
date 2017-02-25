@@ -66,12 +66,8 @@ const SearchView = extend(View)(
         self.nativeObject = new NativeSearchView(activity);
         self.nativeObject.onActionViewExpanded();
         var mSearchSrcTextView = self.nativeObject.findViewById(NativeSupportR.id.search_src_text);
-        var mCloseButton = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
-        var mButton = self.nativeObject.findViewById(NativeSupportR.id.search_button);
+
         _super(this);
-        
-        // View.VISIBLE
-        mCloseButton.setVisibility(0);
 
         var _onTextChangedCallback;
         var _onEditBeginsCallback;
@@ -82,6 +78,7 @@ const SearchView = extend(View)(
         var _textalignment = TextAlignment.MIDLEFT;
         var _textColor = Color.BLACK;
         var _icon = null;
+        var _hint = "";
         Object.defineProperties(this, 
         {
             'font' : {
@@ -99,10 +96,13 @@ const SearchView = extend(View)(
             },
             'hint' : {
                 get: function() {
-                    return self.nativeObject.getQueryHint();
+                    return _hint;
                 },
                 set: function(hint) {
-                    self.nativeObject.setQueryHint("" + hint);
+                    if(hint){
+                        _hint = hint;
+                        updateQueryHint(self, mSearchSrcTextView, _icon, _hint);
+                    }
                 },
                 enumerable: true
             },
@@ -147,8 +147,9 @@ const SearchView = extend(View)(
                     return _icon;
                 },
                 set: function(icon) {
-                    if(icon instanceof require("nf-core/ui/image")){
-                        mButton.setImageDrawable(icon.nativeObject);
+                    if(icon == null || icon instanceof require("nf-core/ui/image")){
+                        _icon = icon;
+                        updateQueryHint(self, mSearchSrcTextView, _icon, _hint);
                     }
                 },
                 enumerable: true
@@ -167,7 +168,7 @@ const SearchView = extend(View)(
             // Set width to max min until Facebook fix issue
             'width': {
                 get: function() {
-                    return self.minWidth;
+                    return self.maxWidth;
                 },
                 set: function(width) {
                     self.maxWidth = width;
@@ -247,7 +248,6 @@ const SearchView = extend(View)(
         });
         
         this.android = {}
-        var _closeIcon = null;
         Object.defineProperties(this.android, 
         {
             'hintTextColor': {
@@ -256,17 +256,6 @@ const SearchView = extend(View)(
                 },
                 set: function(hintTextColor) {
                     mSearchSrcTextView.setHintTextColor(hintTextColor);
-                },
-                enumerable: true
-            },
-            "closeIcon": {
-                get: function() {
-                    return _closeIcon;
-                },
-                set: function(closeIcon) {
-                    if(closeIcon instanceof require("nf-core/ui/image")){
-                        mCloseButton.setImageDrawable(closeIcon.nativeObject);
-                    }
                 },
                 enumerable: true
             }
@@ -308,6 +297,25 @@ const SearchView = extend(View)(
         }
     }
 );
+
+function updateQueryHint(self, mSearchSrcTextView, icon, hint){
+    if(icon && icon.nativeObject){
+        const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder")
+        const NativeImageSpan = requireClass("android.text.style.ImageSpan")
+        var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
+        icon.nativeObject.setBounds(0, 0, textSize, textSize);
+        var ssb = new NativeSpannableStringBuilder("   ");
+        var imageSpan = new NativeImageSpan(icon.nativeObject);
+        // Spannable.SPAN_EXCLUSIVE_EXCLUSIVE = 33
+        ssb.setSpan(imageSpan, 1, 2, 33);
+        ssb.append(hint);
+        mSearchSrcTextView.setHint(ssb);
+    }
+    else{
+        self.nativeObject.setQueryHint(hint);
+    }
+    
+}
 
 function createColorStateList(textColors) {
     const NativeColorStateList = requireClass("android.content.res.ColorStateList");
