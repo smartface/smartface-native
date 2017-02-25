@@ -72,7 +72,6 @@ Font.createFromFile = function(path, size) { }
  */
 Font.DEFAULT;
 
-
 /**
  * Represents normal font style
  *

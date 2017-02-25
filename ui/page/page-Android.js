@@ -25,8 +25,6 @@ function Page(params) {
     });
     rootLayout.nativeObject.setFocusable(true);
     
-
-    
     rootLayout.parent = self;
     var isCreated = false;
 
