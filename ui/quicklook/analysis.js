@@ -1,10 +1,32 @@
 const StatusBarStyle = require('nf-core/ui/statusbarstyle');
 const Color = require("nf-core/ui/color");
 
+/**
+ * @class UI.QuickLook
+ * @since 0.1
+ * @extends UI.View
+ *
+ * Quick Look lets people preview Keynote, Numbers, Pages, and PDF documents,
+ * as well as images and other types of files, even if your app doesn't support those file formats.
+ * For further information: https://developer.apple.com/ios/human-interface-guidelines/features/quick-look/
+ * This class works only for IOS.
+ *
+ *     @example
+ *     const QuickLook = require('nf-core/ui/quicklook');
+ *     var quickLook = new QuickLook();
+ *     var testPDF = "assets://test.pdf";
+ *     var testImage = "images://test.png";
+ *     quickLook.document = [testPDF,testImage];
+ *     quickLook.barColor = Color.create("#9D1B55");
+ *     quickLook.itemColor = Color.WHITE;
+ *     quickLook.show(myPage);
+ *
+ */
+
 function QuickLook(params) {
-        
+
         /**
-         * Gets/sets barColor on QuickLook.
+         * Gets/sets array of documents(paths) that will be shown on QuickLook.
          *
          *     @example
          *     const QuickLook = require('nf-core/ui/quicklook');
@@ -12,12 +34,13 @@ function QuickLook(params) {
          *     quicklook.document = ["images://.png","assests://.pdf"];
          *
          * @property {[String]} document
+         * @ios
          * @since 0.1
          */
         this.document = [];
-        
+
         /**
-         * Gets/sets barColor on QuickLook.
+         * Gets/sets headerBar color of QuickLook View.
          *
          *     @example
          *     const QuickLook = require('nf-core/ui/quicklook');
@@ -25,12 +48,13 @@ function QuickLook(params) {
          *     quicklook.barColor = UI.Color.BLACK;
          *
          * @property {UI.Color} barColor
+         * @ios
          * @since 0.1
          */
         this.barColor = false;
-        
+
         /**
-         * Gets/sets itemColor on QuickLook.
+         * Gets/sets color of items on header & footer of QuickLook view.
          *
          *     @example
          *     const QuickLook = require('nf-core/ui/quicklook');
@@ -38,12 +62,13 @@ function QuickLook(params) {
          *     quicklook.itemColor = UI.Color.BLACK;
          *
          * @property {UI.Color} itemColor
+         * @ios
          * @since 0.1
          */
         this.itemColor = UI.Color.BLACK;
-    
+
         /**
-         * Gets/sets statusBar visible status on QuickLook.
+         * Gets/sets visibility of status bar on QuickLook view.
          *
          *     @example
          *     const QuickLook = require('nf-core/ui/quicklook');
@@ -54,9 +79,9 @@ function QuickLook(params) {
          * @since 0.1
          */
         this.statusBar.visible = false;
-        
+
         /**
-         * Gets/sets statusBar style on QuickLook.
+         * Gets/sets statusBar style of QuickLook View.
          *
          *     @example
          *     const QuickLook = require('nf-core/ui/quicklook');
@@ -64,11 +89,19 @@ function QuickLook(params) {
          *     quicklook.statusBar.style = false;
          *
          * @property {UI.StatusBarStyle} statusBar.style
+         * @ios
          * @since 0.1
          */
         this.statusBar.style = UI.StatusBarStyle.DEFAULT;
-        
-        
+
+        /**
+         * This function shows QuickLook on the given UI.Page.
+         *
+         * @param {UI.Page} page This is the page that QuickLook will be shown.
+         * @ios
+         * @method show
+         * @since 0.1
+         */
         this.show = function(Page) {};
 }
 

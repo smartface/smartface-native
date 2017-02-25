@@ -12,9 +12,9 @@ const Picker = extend(View)(
             var pageNativeObject = page.nativeObject;
             var fragmentActivity = pageNativeObject.getActivity();
             self.nativeObject = new NativeNumberPicker(fragmentActivity);
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+        }
         _super(this);
-        
+
         var _items = [];
         Object.defineProperty(this, 'items', {
             get: function() {
@@ -26,17 +26,17 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
-        Object.defineProperty(this, 'valueIndex', {
+
+        Object.defineProperty(this, 'currentIndex', {
             get: function() {
                 return self.nativeObject.getValue();
             },
-            set: function(valueIndex) {
-                self.nativeObject.setValue(valueIndex);
+            set: function(currentIndex) {
+                self.nativeObject.setValue(currentIndex);
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(this, 'enabled', {
             get: function() {
                 return self.nativeObject.isEnabled();
@@ -46,7 +46,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _onSelectedCallback;
         Object.defineProperty(this, 'onSelected', {
             get: function() {
@@ -57,7 +57,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         function setNumberPicker() {
             if(_items.length > 0) {
                 self.nativeObject.setDisplayedValues(null);
@@ -68,17 +68,17 @@ const Picker = extend(View)(
                 self.nativeObject.setWrapSelectorWheel(true);
             }
         }
-                
+
         self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
             onScrollStateChange: function(picker, scrollState) {
                 _scrollState = scrollState;
                 if(scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
-                    if(_onSelectedCallback) 
-                        _onSelectedCallback(self.valueIndex);
+                    if(_onSelectedCallback)
+                        _onSelectedCallback(self.currentIndex);
                 }
             }
         }));
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

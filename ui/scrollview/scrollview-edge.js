@@ -11,7 +11,9 @@ const ScrollViewEdge = {};
 
 Object.defineProperties(ScrollViewEdge, {
    /**
-    * @property {String} [LEFT = 'left'] 
+    * @property {String} [LEFT = 'left']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
@@ -22,7 +24,9 @@ Object.defineProperties(ScrollViewEdge, {
         enumerable: true
     },
    /**
-    * @property {String} [TOP = 'top'] 
+    * @property {String} [TOP = 'top']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
@@ -33,18 +37,22 @@ Object.defineProperties(ScrollViewEdge, {
         enumerable: true
     },
    /**
-    * @property {String} [RIGHT = 'right'] 
+    * @property {String} [RIGHT = 'right']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
-    */ 
+    */
     'RIGHT': {
         value: 'right',
         configurable:false,
         enumerable: true
     },
    /**
-    * @property {String} [BOTTOM = 'bottom'] 
+    * @property {String} [BOTTOM = 'bottom']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
