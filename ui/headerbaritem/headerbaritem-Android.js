@@ -4,6 +4,7 @@ function HeaderBarItem(params) {
     var _enabled = true;
     var _onPress = null;
     var _color = null;
+    var _searchView = null;
     
     Object.defineProperties(this, {
         'color': {
@@ -43,6 +44,21 @@ function HeaderBarItem(params) {
                 }
             },
             enumerable: true
+        },
+        // Searchview only property
+        'searchView': {
+            get: function() {
+                return _searchView;
+            },
+            set: function(searchView) {
+                if (searchView) {
+                    _searchView = searchView;
+                    if (this.nativeObject) {
+                        this.nativeObject.setActionView(_searchView.nativeObject);
+                    }
+                }
+            },
+            enumerable: false
         },
         'enabled': {
             get: function() {
