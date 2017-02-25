@@ -3,21 +3,6 @@ const View = require('nf-core/ui/view');
 const Image = require('nf-core/ui/image');
 const KeyboardType = require('nf-core/ui/keyboardtype');
 
-const IOSKeyboardTypes = {
-    default : 0,
-    asciiCapable : 1,
-    numbersAndPunctuation : 2,
-    URL : 3,
-    numberPad : 4,
-    phonePad : 5,
-    namePhonePad : 6,
-    emailAddress : 7,
-    decimalPad : 8,
-    twitter : 9,
-    webSearch: 10,
-    asciiCapableNumberPad : 11
-}
-
 const UISearchBarStyle = {
     default : 0,
     prominent : 1,
@@ -31,7 +16,7 @@ const UISearchBarIcon = {
     resultsList: 3
 }
 
-const SearchBar = extend(View)(
+const SearchView = extend(View)(
     function (_super, params) {
         var self = this;
         
@@ -101,6 +86,18 @@ const SearchBar = extend(View)(
             enumerable: true
         });
         
+        var _iconImage;
+        Object.defineProperty(this, 'iconImage', {
+            get: function() {
+                return _iconImage;
+            },
+            set: function(iconImage) {
+                _iconImage = iconImage;
+                self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, UIControlStateNormal);
+            },
+            enumerable: true
+        });
+        
         this.addToHeaderBar = function(page){
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         };
@@ -118,14 +115,14 @@ const SearchBar = extend(View)(
         };
         
         this.ios = {};
-        var _searchBarStyle = UISearchBarStyle.default;
-        Object.defineProperty(this.ios, 'searchBarStyle', {
+        var _searchViewStyle = UISearchBarStyle.default;
+        Object.defineProperty(this.ios, 'searchViewStyle', {
             get: function() {
-                return _searchBarStyle;
+                return _searchViewStyle;
             },
-            set: function(searchBarStyle) {
-                _searchBarStyle = searchBarStyle;
-                self.nativeObject.searchBarStyle = _searchBarStyle;
+            set: function(searchViewStyle) {
+                _searchViewStyle = searchViewStyle;
+                self.nativeObject.searchBarStyle = _searchViewStyle;
             },
             enumerable: true
         });
@@ -226,22 +223,22 @@ const SearchBar = extend(View)(
     }
 );
 
-SearchBar.iOS = {};
-SearchBar.iOS.Style = {};
-Object.defineProperty(SearchBar.iOS.Style, 'DEFAULT', {
+SearchView.iOS = {};
+SearchView.iOS.Style = {};
+Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
     get: function() {
         return UISearchBarStyle.default;
     },
 });
-Object.defineProperty(SearchBar.iOS.Style, 'PROMINENT', {
+Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
     get: function() {
         return UISearchBarStyle.prominent;
     },
 });
-Object.defineProperty(SearchBar.iOS.Style, 'MINIMAL', {
+Object.defineProperty(SearchView.iOS.Style, 'MINIMAL', {
     get: function() {
         return UISearchBarStyle.minimal;
     },
 });
 
-module.exports = SearchBar;
+module.exports = SearchView;

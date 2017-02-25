@@ -35,5 +35,5 @@ module.exports = {
     VideoView: require('./videoview'),
     Quicklook: require('./quicklook'),
     Picker: require('./picker'),
-    SearchBar: require('./searchbar')
+    SearchView: require('./searchview')
 };
