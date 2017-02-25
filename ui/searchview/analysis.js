@@ -140,8 +140,8 @@ function SearchView () {
     this.ios.onCancelButtonClicked = function() {};
     
     /**
-     * Gets/sets editing begin event for SearchView. Triggered when user focused on 
-     * the search view by selecting it.
+     * Gets/sets editing begin event for SearchView. 
+     * Triggered when user focused on the search view by selecting it.
      *
      * @ios
      * @android
@@ -151,8 +151,8 @@ function SearchView () {
     this.onSearchBegin = function() {};
     
     /**
-     * Gets/sets editing end event for SearchView. Triggered when user finishes editing by clicking search key
-     * or clicking outside of the SearchView, this event will be fired.
+     * Gets/sets editing end event for SearchView. 
+     * Triggered when user finishes editing by clicking search key or clicking outside of the SearchView, this event will be fired.
      *
      * @ios
      * @android
