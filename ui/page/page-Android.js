@@ -23,6 +23,9 @@ function Page(params) {
         isRoot : true,
         backgroundColor: Color.WHITE
     });
+    rootLayout.nativeObject.setFocusable(true);
+    
+
     
     rootLayout.parent = self;
     var isCreated = false;
@@ -40,6 +43,7 @@ function Page(params) {
             return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
+            rootLayout.nativeObject.requestFocus();
             onShowCallback && onShowCallback();
         },
         onCreateOptionsMenu: function(menu) {
