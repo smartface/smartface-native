@@ -275,10 +275,8 @@ function View(params) {
     }
     
     this.applyLayout = function(){
-        // not necessary for Android. For prevent wrong calculations do not call calculateLayout()
-        var height = self.height;
-        var width = self.width;
-        self.yogaNode.calculateLayout(width, height);
+        self.nativeObject.requestLayout();
+        self.nativeObject.invalidate();
     };
     
     function setBackground(layerIndex){
