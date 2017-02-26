@@ -2,7 +2,7 @@
  * @class UI.Picker
  * @since 0.1
  *
- * Picker allows you to create a list which you can pick an item.
+ * Picker allows you to create a list which you can pick only one of them.
  *
  *     @example
  *     const Picker = require("nf-core/ui/picker");

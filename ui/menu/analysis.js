@@ -1,11 +1,11 @@
 /**
  * @class UI.Menu
  * @since 0.1
- *
  * Menu is a dialog UI that presents a set of alternatives to the user for how to
  * proceed with a given task.
  *
- *    @example
+ *
+ * @example
  *    const Menu    = require('nf-core/ui/menu');
  *    const MenuItem    = require('nf-core/ui/menuitem');
  *
@@ -23,7 +23,6 @@
  *
  *    menu.items = [menuItem1,menuItem2];
  *    menu.show(myPage);
- *
  */
 function Menu(params) {
     /**

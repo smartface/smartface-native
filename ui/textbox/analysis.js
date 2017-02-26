@@ -5,13 +5,13 @@ const extend = require('js-base/core/extend');
  * @class UI.TextBox
  * @since 0.1
  * @extends UI.View
- * TextBox is where users can type in via soft keyboard.
+ * TextBox is a UI which users can edit the text.
  *
  *     @example
  *     const TextBox = require('nf-core/ui/textbox');
  *     var myTextBox = new TextBox({
  *         left:10, top:10, width:200, height:65,
- *         hint: "hint",
+ *         hint: "Your hint text",
  *         borderWidth: 1
  *     });
  *     myPage.layout.addChild(myTextBox);
@@ -22,99 +22,113 @@ const TextBox = extend(View)(
         _super(this);
 
         /**
-         * Gets/sets font of the TextBox.
+         * Gets/sets the font of the TextBox.
          * @property {UI.Font} [font = null]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.font = null;
 
         /**
-         * Gets/sets text of the TextBox.
+         * Gets/sets the text of the TextBox.
          * @property {String} [text = ""]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.text = "";
 
         /**
-         * Gets/sets text alignment of the TextBox.
+         * Gets/sets the text alignment of the TextBox.
          * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.textAlignment = UI.TextAlignment.MIDLEFT;
 
         /**
-         * Gets/sets text color of view.
+         * Gets/sets the text color of TextBox.
          *
          * @property {UI.Color} [textColor = UI.Color.BLACK]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.textColor = UI.Color.BLACK;
 
         /**
-         * Gets/sets hint text displayed when TextBox is empty.
-         * 
+         * Gets/sets hint text that will be displayed when TextBox is empty.
+         *
          * @property {String} [hint = ""]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.hint = "";
 
         /**
-         * Gets/sets the color of the hint text. This property will work only for Android.
+         * Gets/sets the color of the hint text. This property works only for Android.
          *
          *     @example
          *     const Color = require('nf-core/ui/color');
          *     myTextBox.android.hintTextColor = Color.RED;
          *
          * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
+         * @android
          * @since 0.1
          */
         this.android.hintTextColor = UI.Color.LIGHTGRAY
 
         /**
-         * Gets/sets adjustment status of TextBox.If enabled text size will be adjusted
-         * by view's fixed width. If you set it true,
+         * This property adjusts font size according to view's fixed width. If you set it true,
          * you should set minimum font size by changing the minimumFontSize property.
-         * This property will work only for iOS.
+         * This property works only for iOS.
          *
          *     @example
          *     myTextBox.ios.adjustFontSizeToFit = true;
          *
          * @property {Boolean} [adjustFontSizeToFit = false]
+         * @ios
          * @since 0.1
          */
         this.ios.adjustFontSizeToFit = false;
 
         /**
          * Gets/sets minimum font size of TextBox.
-         * This property will work only for iOS.
+         * This property works only for iOS.
          *
          *     @example
          *     myTextBox.ios.adjustFontSizeToFit = true;
          *     myTextBox.ios.minimumFontSize = 15;
          *
          * @property {Number} [minimumFontSize = 7]
+         * @ios
          * @since 0.1
          */
         this.ios.minimumFontSize = 7;
 
         /**
-         * Gets/sets clear button state. If enabled, clear button will be shown
-         * at right of the TextBox. This property will work for iOS only.
-         * 
+         * Gets/sets the visibility of clear button. If enabled, clear button will be shown
+         * at right of the TextBox. This property works only for iOS only.
+         *
          * @property {Boolean} [clearButtonEnabled = false]
+         * @ios
          * @since 0.1
          */
         this.ios.clearButtonEnabled = false;
 
         /**
          * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
-         * This property will work only for iOS.
+         * This property works only for iOS.
          *
          *     @example
          *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
          *     myTextBox.ios.keyboardAppearance = KeyboardAppearance.DARK;
          *
          * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
+         * @ios
          * @since 0.1
          */
         this.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
@@ -123,6 +137,8 @@ const TextBox = extend(View)(
          * Gets/sets the content of the TextBox is password or not.
          *
          * @property {Boolean} [isPassword = false]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.isPassword = false;
@@ -131,6 +147,8 @@ const TextBox = extend(View)(
          * Gets/sets keyboard type for TextBox.
          *
          * @property {UI.KeyboardType} [keyboardType = UI.KeyboardType.DEFAULT]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.keyboardType = UI.KeyboardType.DEFAULT;
@@ -143,30 +161,35 @@ const TextBox = extend(View)(
          *     myTextBox.actionKeyType = ActionKeyType.NEXT;
          *
          * @property {UI.ActionKeyType} [actionKeyType = UI.ActionKeyType.DEFAULT]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.actionKeyType = UI.ActionKeyType.DEFAULT;
 
         /**
-         * Shows keyboard.
+         * This function shows keyboard.
          *
          * @method showKeyboard
+         * @android
+         * @ios
          * @since 0.1
          */
         this.showKeyboard = function(){};
 
         /**
-         * Hides keyboard.
+         * This function hides keyboard.
          *
          * @method hideKeyboard
+         * @android
+         * @ios
          * @since 0.1
          */
         this.hideKeyboard = function(){};
 
         // events
         /**
-         * Gets/sets callback of text change events for TextBox. When user inserts or removes a character
-         * to TextBox, this event will be fired.
+         * This event is called when user inserts or removes a character from TextBox.
          *
          *     @example
          *     myTextBox.onTextChanged: function(e) {
@@ -177,26 +200,30 @@ const TextBox = extend(View)(
          * @param {String} e.insertedText The text that inserted into TextBox.
          * @param {Number} e.location Index of inserted text.
          * @event onTextChanged
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onTextChanged = function(e) {};
 
         /**
-         * Gets/sets editing begin event for TextBox. Triggered when user focused on 
-         * the textbox by selecting it.
+         * This event is called when user focus on the textbox by selecting it.
+         *
          *     @example
          *     myTextBox.onEditBegins = function() {
          *         console.log(Begin to type.);
          *     };
          *
          * @event onEditBegins
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onEditBegins = function() {};
 
         /**
-         * Gets/sets editing end event for TextBox. Triggered when user finishes editing by clicking return key
-         * or clicking outside of the TextBox, this event will be fired.
+         * This event is called when user finishes editing by clicking return key
+         * or clicking outside of the TextBox.
          *
          *     @example
          *     myTextBox.onEditEnds = function() {
@@ -204,13 +231,14 @@ const TextBox = extend(View)(
          *     };
          *
          * @event onEditEnds
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onEditEnds = function() {};
 
         /**
-         * Gets/sets on action key press event for TextBox. When user clicks action key on the keyboard
-         * this event will be fired.
+         * This event is called when user clicks action key on the keyboard.
          *
          *     @example
          *     myTextBox.onActionButtonPress = function(e) {
@@ -220,6 +248,8 @@ const TextBox = extend(View)(
          * @param {Object} e Event arguments.
          * @param {UI.ActionKeyType} e.actionKeyType Pressed action key type.
          * @event onActionButtonPress
+         * @android
+         * @ios
          * @since 0.1
          */
          this.onActionButtonPress = function(e) {};

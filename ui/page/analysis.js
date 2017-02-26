@@ -90,7 +90,7 @@ function Page(params) {
 
     /**
      * Gets/sets back button enabled status on page. If it is set to true previous page will be
-     * loaded when back button pressed. This property only works on Android
+     * loaded when back button pressed. This property works only on Android.
      *
      *     @example
      *     const Page = require('nf-core/ui/page');

@@ -3,7 +3,7 @@
  * @extends UI.View
  * @since 0.1
  *
- * SearchView provides text-based searches.
+ * SearchView is a UI which user can enter a search query and submit a request to search provider.
  *
  *     @example
  *     const SearchView = require('nf-core/ui/searchview');
@@ -23,9 +23,9 @@ function SearchView () {
      * @since 0.1
      */
     this.text = "";
-    
+
     /**
-     * Gets/sets hint of SearchView.
+     * Gets/sets hint text of SearchView.
      *
      * @property {String} hint
      * @android
@@ -33,7 +33,7 @@ function SearchView () {
      * @since 0.1
      */
     this.hint = "";
-    
+
     /**
      * Gets/sets text color of SearchView.
      *
@@ -43,7 +43,7 @@ function SearchView () {
      * @since 0.1
     */
     this.textColor;
-    
+
     /**
      * Gets/sets background image of SearchView.
      *
@@ -53,9 +53,9 @@ function SearchView () {
      * @since 0.1
     */
     this.backgroundImage;
-    
+
     /**
-     * Gets/sets icon image of SearchView.
+     * Gets/sets search icon image of SearchView.
      *
      * @property {UI.Image} iconImage
      * @android
@@ -65,7 +65,7 @@ function SearchView () {
     this.iconImage;
 
     /**
-     * Adds page's headerBar view.
+     * Adds SearchView to UI.Page's headerBar view.
      *
      * @method addToHeaderBar
      * @param {UI.Page} page.
@@ -74,9 +74,9 @@ function SearchView () {
      * @since 0.1
      */
     this.addToHeaderBar = function(page){};
-    
+
     /**
-     * Removes from page's headerBar view.
+     * Removes SearchView from UI.Page's headerBar view.
      *
      * @method removeFromHeaderBar
      * @param {UI.Page} page.
@@ -85,68 +85,72 @@ function SearchView () {
      * @since 0.1
      */
     this.removeFromHeaderBar = function(page){};
-    
+
     /**
-     * Shows keyboard.
+     * This function shows keyboard.
      *
      * @method showKeyboard
+     * @android
+     * @ios
      * @since 0.1
      */
     this.showKeyboard = function(){};
 
     /**
-     * Hides keyboard.
+     * This function hides keyboard.
      *
      * @method hideKeyboard
+     * @android
+     * @ios
      * @since 0.1
      */
     this.hideKeyboard = function(){};
-    
+
     /**
-     * Gets/sets the search view’s appearance.
+     * Gets/sets the search view’s style. This property works only for IOS.
      *
      * @property {SearchView.iOS.Style} searchViewStyle
      * @ios
      * @since 0.1
     */
     this.ios.searchViewStyle;
-    
+
     /**
-     * Gets/sets cancel button displaying.
+     * Gets/sets visibility of cancel button. This property works only for IOS.
      *
      * @property {boolean} showsCancelButton
      * @ios
      * @since 0.1
     */
     this.ios.showsCancelButton;
-    
+
     /**
-     * Gets/sets the color of the hint text. This property will work only for Android.
+     * Gets/sets the color of the hint text. This property works only for Android.
      *
      * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
      * @android
      * @since 0.1
      */
     this.android.hintTextColor = UI.Color.LIGHTGRAY
-    
+
     /**
-     * Gets/sets font of the SearchView.
-     * 
+     * Gets/sets the font of the SearchView. This property works only for Android.
+     *
      * @property {UI.Font} [font = UI.Font.DEFAULT]
      * @android
      * @since 0.1
      */
     this.android.font = UI.Font.DEFAULT
-    
+
     /**
-     * Gets/sets text alignment of the SearchView.
-     * 
+     * Gets/sets text alignment of the SearchView. This property works only for Android.
+     *
      * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
      * @android
      * @since 0.1
      */
     this.android.textAlignment = UI.TextAlignment.MIDLEFT;
-    
+
     /**
      * Gets/sets close button image of SearchView.
      *
@@ -155,58 +159,53 @@ function SearchView () {
      * @since 0.1
     */
     this.android.closeImage = null;
-    
+
     /**
-     * Gets/sets cancel button event for SearchView.
-     * Triggers the object that the cancel button was tapped.
+     * This event is called when user clicks the cancel button.
      *
      * @ios
      * @event onCancelButtonClicked
      * @since 0.1
      */
     this.ios.onCancelButtonClicked = function() {};
-    
+
     /**
-     * Gets/sets editing begin event for SearchView. 
-     * Triggered when user focused on the search view by selecting it.
+     * This event is called when user focus on the search view by selecting it.
      *
-     * @ios
-     * @android
      * @event onSearchBegin
+     * @android
+     * @ios
      * @since 0.1
      */
     this.onSearchBegin = function() {};
-    
+
     /**
-     * Gets/sets editing end event for SearchView. 
-     * Triggered when user finishes editing by clicking search key or clicking outside of the SearchView, this event will be fired.
+     * This event is called when user finishes editing by clicking search key or clicking outside of the SearchView.
      *
-     * @ios
-     * @android
      * @event onSearchEnd
+     * @android
+     * @ios
      * @since 0.1
      */
     this.onSearchEnd = function() {};
-    
+
     /**
-     * Gets/sets callback of text change events for SearchView.
-     * When user changes the search text this event will be fired.
+     * This event is called when user changes the search text.
      *
-     * @ios
+     * @param {String} searchText The current text in the search text view.
      * @android
-     * @param {String} searchText The current text in the search text field.
+     * @ios
      * @event onTextChanged
      * @since 0.1
      */
     this.onTextChanged = function(searchText) {};
-    
+
     /**
-     * Gets/sets on search button press event for SearchView. 
-     * When user clicks search button on the keyboard this event will be fired.
+     * This event is called when user clicks search button on the keyboard.
      *
-     * @ios
-     * @android
      * @event onSearchButtonClicked
+     * @android
+     * @ios
      * @since 0.1
      */
      this.onSearchButtonClicked = function() {};
@@ -217,7 +216,6 @@ SearchView.iOS.Style = {};
 
 /**
  * @property DEFAULT
- * 
  * @ios
  * @readonly
  * @since 0.1
@@ -228,7 +226,6 @@ Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
 
 /**
  * @property PROMINENT
- * 
  * @ios
  * @readonly
  * @since 0.1
@@ -239,7 +236,6 @@ Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
 
 /**
  * @property MINIMAL
- * 
  * @ios
  * @readonly
  * @since 0.1

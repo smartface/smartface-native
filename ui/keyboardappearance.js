@@ -12,7 +12,7 @@
  *
  *     var myTextBox = new TextBox({
  *         top: 50, left:50, width: 100, height: 80,
- *         hint: "hint",
+ *         hint: "your hint text",
  *         backgroundColor: Color.create("#67fcaa"),
  *         ios: {
  *             KeyboardAppearance: KeyboardAppearance.DARK
