@@ -213,6 +213,9 @@ const SearchView = extend(View)(
         };
         self.nativeObject.delegate = self.searchBarDelegate;
         
+        // Handling android specific properties
+        self.android = {};
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
