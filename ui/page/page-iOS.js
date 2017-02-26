@@ -11,6 +11,16 @@ function Page(params) {
 
     self.pageView = new FlexLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    
+    self.calculatePosition = function(){
+        self.pageView.left = self.pageView.nativeObject.frame.x;
+        self.pageView.top = self.pageView.nativeObject.frame.y;
+        self.pageView.width = self.pageView.nativeObject.frame.width;
+        self.pageView.height = self.pageView.nativeObject.frame.height;
+
+        self.pageView.applyLayout();
+    }
+    self.calculatePosition();
 
     self.nativeObject.onViewLoad  = function(){
         self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
@@ -23,15 +33,6 @@ function Page(params) {
 
     self.nativeObject.viewDidAppear = function(){
        self.calculatePosition();
-    }
-
-    self.calculatePosition = function(){
-        self.pageView.left = self.pageView.nativeObject.frame.x;
-        self.pageView.top = self.pageView.nativeObject.frame.y;
-        self.pageView.width = self.pageView.nativeObject.frame.width;
-        self.pageView.height = self.pageView.nativeObject.frame.height;
-
-        self.pageView.applyLayout();
     }
 
     Object.defineProperty(self, 'layout', {
