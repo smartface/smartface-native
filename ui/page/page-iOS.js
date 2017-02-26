@@ -103,7 +103,7 @@ function Page(params) {
     // Prevent undefined is not an object error
     this.statusBar.android = {};
     // Prevent undefined is not an object error
-    this.android.backButtonEnabled = {};
+    this.android = {};
 
     //Deprecated
     self.add = function(object){
