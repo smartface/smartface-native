@@ -205,7 +205,8 @@ function registerOnBackKeyPressed(pagesStack){
     Pages.drawerLayout.requestFocus();
     Pages.drawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function( view, keyCode, keyEvent) {
-            if (pagesStack[pagesStack.length-1].android.backButtonEnabled) {
+            if (pagesStack[pagesStack.length-1] && 
+                    pagesStack[pagesStack.length-1].android.backButtonEnabled) {
                 // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
                 if( keyCode === 4 && keyEvent.getAction() === 0) {
                     activity.getSupportFragmentManager().popBackStackImmediate();
