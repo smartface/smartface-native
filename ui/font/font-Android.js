@@ -90,4 +90,7 @@ Font.BOLD = 2;
 Font.ITALIC = 4;
 Font.BOLD_ITALIC = 6;
 
+//Default Font
+Font.DEFAULT = Font.createFromFile(null,14);
+
 module.exports = Font;

@@ -23,6 +23,7 @@ function Page(params) {
         isRoot : true,
         backgroundColor: Color.WHITE
     });
+    rootLayout.nativeObject.setFocusable(true);
     
     rootLayout.parent = self;
     var isCreated = false;
@@ -40,6 +41,7 @@ function Page(params) {
             return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
+            rootLayout.nativeObject.requestFocus();
             onShowCallback && onShowCallback();
         },
         onCreateOptionsMenu: function(menu) {
@@ -343,6 +345,10 @@ function Page(params) {
         if (!(items instanceof Array)) {
             return;
         }
+        else if(items == null){
+            optionsMenu.clear();
+            return;
+        }
 
         _headerBarItems = items;
         if (optionsMenu == null) {
@@ -359,31 +365,42 @@ function Page(params) {
 
         var itemID = 1;
         items.forEach(function(item) {
-            var button;
-            if (item.image && item.image.nativeObject) {
-                var imageCopy = item.image.nativeObject.mutate();
-                item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
-                button = new NativeImageButton(activity);
-                button.setImageDrawable(imageCopy);
-            } else {
-                button = new NativeTextButton(activity);
-                item.color && button.setTextColor(item.color);
-                button.setText(item.title);
+            var itemView;
+            if(item.searchView){
+                itemView = item.searchView.nativeObject;
             }
-            button.setBackgroundColor(Color.TRANSPARENT);
-            button.setOnClickListener(NativeView.OnClickListener.implement({
-                onClick: function(view) {
-                    item.onPress && item.onPress();
+            else {
+                if (item.image && item.image.nativeObject) {
+                    var imageCopy = item.image.nativeObject.mutate();
+                    item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
+                    itemView = new NativeImageButton(activity);
+                    itemView.setImageDrawable(imageCopy);
+                } else {
+                    itemView = new NativeTextButton(activity);
+                    item.color && itemView.setTextColor(item.color);
+                    itemView.setText(item.title);
                 }
-            }));
+                
+                itemView.setOnClickListener(NativeView.OnClickListener.implement({
+                    onClick: function(view) {
+                        item.onPress && item.onPress();
+                    }
+                }));
+            }
+            itemView.setBackgroundColor(Color.TRANSPARENT);
 
             var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
             menuItem.setEnabled(item.enabled);
             menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            menuItem.setActionView(button);
+            menuItem.setActionView(itemView);
 
         });
     };
+    
+    // internal call only.
+    self.headerBar.getItems = function(){
+        return _headerBarItems;
+    }
 
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function (leftItem) {

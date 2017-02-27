@@ -1,9 +1,9 @@
 /**
  * @class UI.StatusBar
- * 
+ *
  * This class represents status bar object. Creating instance of
  * StatusBar is not valid since you can't use in anywhere. If you
- * want to access status bar object you can access via 
+ * want to access status bar object you can access via
  * UI.Page.statusBar property of your page.
  *
  *     @example
@@ -24,6 +24,8 @@ function StatusBar(parentPage) {
      * OS and screen density.
      *
      * @property {Number} height
+     * @android
+     * @ios
      * @readonly
      * @since 0.1
      */
@@ -33,12 +35,14 @@ function StatusBar(parentPage) {
      * Gets/sets visibility of the status bar.
      *
      * @property {Boolean} visible
+     * @android
+     * @ios
      * @since 0.1
      */
     this.visible = true;
 
     /**
-     * Gets/sets color of the status bar. This property will work only for Android
+     * Gets/sets color of the status bar. This property works only for Android
      * version KitKat (API 19) or above.
      *
      *     @example
@@ -51,12 +55,13 @@ function StatusBar(parentPage) {
      *     });
      *
      * @property {UI.Color} color
+     * @android
      * @since 0.1
      */
     this.android.color = Color.create("#FF757575");
 
     /**
-     * Gets/sets status bar style. This property will work only for iOS
+     * Gets/sets status bar style. This property works only for iOS
      *
      *     @example
      *     const Page = require('nf-core/ui/page');
@@ -68,6 +73,7 @@ function StatusBar(parentPage) {
      *     });
      *
      * @property {UI.StatusBarStyle} style
+     * @ios
      * @since 0.1
      */
     this.ios.style = StatusBarStyle.DEFAULT;

@@ -10,6 +10,8 @@
 var ImageFormat = {};
 /**
  * @property {Number} JPEG
+ * @android
+ * @ios
  * @static
  * @readonly
  * @since 0.1
@@ -21,6 +23,8 @@ Object.defineProperty(ImageFormat, 'JPEG', {
 
 /**
  * @property {Number} PNG
+ * @android
+ * @ios
  * @static
  * @readonly
  * @since 0.1

@@ -37,7 +37,9 @@ const ImageView = extend(View)(
                 return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                self.nativeObject.loadImage(value.nativeObject);
+                if (value) {
+                    self.nativeObject.loadImage(value.nativeObject);
+                }
             },
             enumerable: true
         });

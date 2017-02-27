@@ -5,13 +5,13 @@ const View = require('nf-core/ui/view');
  * @class UI.VideoView
  * @since 0.1
  * @extends UI.View
- * VideoView is a video holder where a video clip is played inside. 
+ * VideoView is a video holder where a video clip is played inside.
  * Supported formats for both platforms are 3GPP (.3gp) and MPEG-4 (.mp4).
  *
  *     @example
  *     const Flex      = require('nf-core/ui/flexlayout');
  *     const VideoView = require('nf-core/ui/videoview');
- *     
+ *
  *     var myVideoView = new VideoView({
  *         left:10, top:10, height:250, width:250,
  *         positionType: Flex.PositionType.ABSOLUTE,
@@ -20,9 +20,9 @@ const View = require('nf-core/ui/view');
  *         }
  *     });
  *     myVideoView.loadURL('url-to-videoclip');
- *     
+ *
  *     myPage.layout.addChild(myVideoView);
- * 
+ *
  */
 const VideoView = extend(View)(
     function (_super, params) {
@@ -34,46 +34,55 @@ const VideoView = extend(View)(
         // cross-platform properties
         Object.defineProperties(self, {
             /**
-             * Plays the loaded video clip.
+             * This function plays the loaded video clip.
              *
              * @method play
+             * @android
+             * @ios
              * @since 0.1
              */
             'play': {
                 value: function() {}
             },
             /**
-             * Pauses the video clip.
+             * This function pauses the video clip.
              *
              * @method play
+             * @android
+             * @ios
              * @since 0.1
              */
             'pause': {
                 value: function() {}
             },
             /**
-             * Stops the video clip by seeking to the initial position of the video. 
+             * This function stops the video clip by seeking to the initial position of the video.
              *
              * @method play
+             * @android
+             * @ios
              * @since 0.1
              */
             'stop': {
                 value: function() {}
             },
             /**
-             * Returns status of the video, if the video clip is played or not.
+             * This function returns status of the video, if the video clip is played or not.
              *
              * @method isPlaying
-             * 
+             * @android
+             * @ios
              * @since 0.1
              */
             'isPlaying': {
                 value: function() {return true | false}
             },
             /**
-             * Puts the video clip in loop.
+             * This function puts the video clip in loop.
              *
              * @method setLoopEnabled
+             * @android
+             * @ios
              * @param {Boolean} enabled
              * @since 0.1
              */
@@ -81,9 +90,11 @@ const VideoView = extend(View)(
                 value: function(enabled) {}
             },
             /**
-             * Loads the video clip from the URL.
+             * This function loads the video clip from the given URL.
              *
              * @method loadURL
+             * @android
+             * @ios
              * @param {String} url
              * @since 0.1
              */
@@ -91,9 +102,11 @@ const VideoView = extend(View)(
                 value: function(url) {}
             },
             /**
-             * Loads the video clip from the local file.
+             * This function loads the video clip from the local file.
              *
              * @method loadFile
+             * @android
+             * @ios
              * @param {IO.File} file
              * @since 0.1
              */
@@ -101,9 +114,11 @@ const VideoView = extend(View)(
                 value: function(file) {}
             },
             /**
-             * Triggered when the video clip is ready to be played.
+             * This event is called when the video clip is ready to be played.
              *
              * @event onReady
+             * @android
+             * @ios
              * @param {Function} callback
              * @since 0.1
              */
@@ -112,9 +127,11 @@ const VideoView = extend(View)(
                 set: function(callback) {}
             },
             /**
-             * Triggered when the video clip complited playing.
+             * This event is called when the video clip completed playing.
              *
              * @event onFinish
+             * @android
+             * @ios
              * @param {Function} callback
              * @since 0.1
              */
@@ -123,9 +140,11 @@ const VideoView = extend(View)(
                 set: function(callback) {}
             },
             /**
-             * Skips to desired position of the video.
+             * This function seeks to desired position of the video.
              *
              * @method seekTo
+             * @android
+             * @ios
              * @param {Number} milliseconds
              * @since 0.1
              */
@@ -133,27 +152,33 @@ const VideoView = extend(View)(
                 value: function(milliseconds) {}
             },
             /**
-             * Returns the total duration of the video.
+             * This function returns the total duration of the video.
              *
              * @property {Number} totalDuration
+             * @android
+             * @ios
              * @since 0.1
              */
             'totalDuration': {
                 get: function() {return milliseconds}
             },
             /**
-             * Returns the current duration of the video.
+             * This function returns the current duration of the video.
              *
              * @property {Number} currentDuration
+             * @android
+             * @ios
              * @since 0.1
              */
             'currentDuration': {
                 get: function() {return milliseconds}
             },
             /**
-             * Sets the volume of the video clip. The range is between {0.0, 1.0}
+             * This function sets the volume of the video clip. The range is between {0.0, 1.0}
              *
              * @method setVolume
+             * @android
+             * @ios
              * @param {Number} volume
              * @since 0.1
              */
@@ -161,9 +186,11 @@ const VideoView = extend(View)(
                 value: function(volume) {}
             },
             /**
-             * Sets the video controller visible or not.
+             * This function sets the visibility of video controller
              *
              * @method setControllerEnabled
+             * @android
+             * @ios
              * @param {Boolean} enabled
              * @since 0.1
              */

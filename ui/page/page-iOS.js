@@ -8,22 +8,9 @@ function Page(params) {
     if(!self.nativeObject){
         self.nativeObject = new UIViewController();
     }
-    
+
     self.pageView = new FlexLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
-    
-    self.nativeObject.onViewLoad  = function(){
-        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
-        return self.pageView.nativeObject;
-    }
-    
-    self.nativeObject.onViewLayoutSubviews = function(){
-        self.calculatePosition();
-    }
-
-    self.nativeObject.viewDidAppear = function(){
-       self.calculatePosition();
-    }
     
     self.calculatePosition = function(){
         self.pageView.left = self.pageView.nativeObject.frame.x;
@@ -33,7 +20,21 @@ function Page(params) {
 
         self.pageView.applyLayout();
     }
-    
+    self.calculatePosition();
+
+    self.nativeObject.onViewLoad  = function(){
+        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        return self.pageView.nativeObject;
+    }
+
+    self.nativeObject.onViewLayoutSubviews = function(){
+        self.calculatePosition();
+    }
+
+    self.nativeObject.viewDidAppear = function(){
+       self.calculatePosition();
+    }
+
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.pageView;
@@ -50,7 +51,7 @@ function Page(params) {
         },
         enumerable: true
     });
-        
+
     Object.defineProperty(self, 'onShow', {
         get: function() {
             return self.nativeObject.onShow;
@@ -70,7 +71,7 @@ function Page(params) {
         },
         enumerable: true
     });
-        
+
     this.statusBar = {};
     Object.defineProperty(self.statusBar, 'height', {
      value:  UIApplication.sharedApplication().statusBarFrame.height,
@@ -87,7 +88,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     this.statusBar.ios = {};
     Object.defineProperty(self.statusBar.ios, 'style', {
         get: function() {
@@ -102,7 +103,9 @@ function Page(params) {
 
     // Prevent undefined is not an object error
     this.statusBar.android = {};
-        
+    // Prevent undefined is not an object error
+    this.android = {};
+
     //Deprecated
     self.add = function(object){
         console.log("Page add function deprecated");
@@ -116,7 +119,7 @@ function Page(params) {
     }
 
     self.headerBar = {}
-    
+
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return self.nativeObject.title;
@@ -126,7 +129,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
@@ -136,7 +139,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     var _visible = true;
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
@@ -148,7 +151,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.headerBar, 'itemColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.tintColor;
@@ -158,7 +161,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.barTintColor;
@@ -168,7 +171,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
             return Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
@@ -178,7 +181,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
         get: function() {
             self.nativeObject.navigationItem.hidesBackButton;
@@ -188,17 +191,17 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     self.headerBar.setItems = function(value){
         var nativeObjectArray = [];
-        
-        for (i = 0; i < value.length; i++) { 
+
+        for (i = 0; i < value.length; i++) {
             nativeObjectArray.push(value[i].nativeObject);
         }
-        
+
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
     }
-    
+
     self.headerBar.setLeftItem = function(value){
         if(value){
             self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
@@ -206,14 +209,14 @@ function Page(params) {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
     }
-    
+
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             return self.nativeObject.navigationController.navigationBar.frame.height
         },
         enumerable: true
     });
-    
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];

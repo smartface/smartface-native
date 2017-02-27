@@ -2,24 +2,28 @@
  * @class UI.MenuItem
  * @since 0.1
  *
- * 
- * // todo Add description
+ * MenuItem is used to add row and action to the UI.Menu 
+ *
  */
 function MenuItem(params) {
-    
-    /** 
-    * Gets/sets title of the menu item.
+
+    /**
+    * Gets/sets the title of a menu item.
     *
-    * @property {String} title 
+    * @property {String} title
+    * @android
+    * @ios
     * @since 0.1
     */
     this.title = "";
-    
+
     /**
-     * Gets/sets selected event callback for menu item.
-     * 
+     * This event is called when user selects a menu item.
+     *
      * @since 0.1
-     * @event onLongPress
+     * @event onSelected
+     * @android
+     * @ios
      */
     this.onSelected = function onSelected(){ };
 }
