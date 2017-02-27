@@ -79,16 +79,15 @@ Object.defineProperties(System.android, {
     }
 });
 
-// TODO: open after fixing [AND-2592]
-// System.android.isApplicationInstalled = function(packageName) {
-//     var packageList = Android.getActivity().getPackageManager().getInstalledApplications(0);
-//     for (var i = 0; i < packageList.size(); i++) {
-//         if(packageList.get(i).packageName.equals(packageName)) {
-//             return true;
-//         }
-//     }
-//     return false;
-// };
+System.android.isApplicationInstalled = function(packageName) {
+    var packageList = Android.getActivity().getPackageManager().getInstalledApplications(0);
+    for (var i = 0; i < packageList.size(); i++) {
+        if(packageList.get(i).packageName === packageName) {
+            return true;
+        }
+    }
+    return false;
+};
 
 System.vibrate = function() {
     var vibrator = Android.getActivity().getSystemService(NativeContext.VIBRATOR_SERVICE);
