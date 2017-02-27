@@ -26,12 +26,6 @@ function Font() {}
  *     @example
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
- *     var myLabel = new Label();
- *     myLabel.font = myFont;
- * 
- *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL)
  *     });
