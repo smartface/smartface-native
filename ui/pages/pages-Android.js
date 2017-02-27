@@ -142,9 +142,7 @@ function isSliderDrawerOpen(_sliderDrawer, drawerLayout) {
 function push(self, rootViewId, page, animated, pagesStack){
     if(pagesStack.length > 0) {
         pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-        pagesStack[pagesStack.length-1].isShowing = false;
     }
-    page.isShowing = true;
     page.pages = self;
     self.hideSliderDrawer();
     var fragmentManager = activity.getSupportFragmentManager();
@@ -191,16 +189,10 @@ function registerOnBackStackChanged(self, pagesStack){
                 if (nativeStackCount < pagesStack.length) { // means poll
                     if(pagesStack.length > 0) {
                         pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-                        pagesStack[pagesStack.length-1].isShowing = false;
                         var oldPage = pagesStack.pop();
                         var fragmentTransaction = supportFragmentManager.beginTransaction();
                         fragmentTransaction.remove(oldPage.nativeObject).commit();
                         self.hideSliderDrawer();
-                        
-                        if(pagesStack.length > 0) {
-                            pagesStack[pagesStack.length-1].isShowing = true;
-                            pagesStack[pagesStack.length-1].invalidate();
-                        }
                     }
                 }
             }
