@@ -1,3 +1,4 @@
 module.exports = {
-    Blob: require('./blob')
+    Blob: require('./blob'),
+    Share: require('./share')
 };
