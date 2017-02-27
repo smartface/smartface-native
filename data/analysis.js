@@ -7,27 +7,148 @@
 function Data(){}
 
 /**
- * Get stored variable. If variable is not exists, will return null
+ * Get stored string type variable. If variable is not exists, will return null.
  * 
- * @method getVariable
+ * @method getStringVariable
  * @param {String} key
+ * @return {String}
  * @android
  * @ios
  * @since 0.1
  */
-Data.getVariable = function(key) {};
+Data.getStringVariable = function(key) {};
 
 /**
- * Store variable. 
+ * Get stored boolean type variable. If variable is not exists, will return null.
  * 
- * @method setVariable
+ * @method getBooleanVariable
  * @param {String} key
- * @param {Number|Boolean|String|String[]} value
+ * @return {Boolean}
  * @android
  * @ios
  * @since 0.1
  */
-Data.setVariable = function(key, value) {};
+Data.getBooleanVariable = function(key) {};
+
+/**
+ * Get stored integer type variable. If variable is not exists, will return null
+ * 
+ * @method getIntVariable
+ * @param {String} key
+ * @return {Number}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.getIntVariable = function(key) {};
+
+/**
+ * Get stored float type variable. If variable is not exists, will return null
+ * 
+ * @method getFloatVariable
+ * @param {String} key
+ * @return {Number}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.getFloatVariable = function(key) {};
+
+/**
+ * Get stored double type variable. If variable is not exists, will return null
+ * 
+ * @method getDoubleVariable
+ * @param {String} key
+ * @return {Number}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.getDoubleVariable = function(key) {};
+
+/**
+ * Get stored long type variable. If variable is not exists, will return null
+ * 
+ * @method getLongVariable
+ * @param {String} key
+ * @return {Number}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.getLongVariable = function(key) {};
+
+/**
+ * Store string type variable
+ * 
+ * @method setStringVariable
+ * @param {String} key
+ * @param {String} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setStringVariable = function(key, value) {};
+
+/**
+ * Store boolean type variable
+ * 
+ * @method setBooleanVariable
+ * @param {String} key
+ * @param {Boolean} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setBooleanVariable = function(key, value) {};
+
+/**
+ * Store integer type variable
+ * 
+ * @method setIntVariable
+ * @param {String} key
+ * @param {Number} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setIntVariable = function(key, value) {};
+
+/**
+ * Store float type variable
+ * 
+ * @method setFloatVariable
+ * @param {String} key
+ * @param {Number} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setFloatVariable = function(key, value) {};
+
+/**
+ * Store double type variable
+ * 
+ * @method setDoubleVariable
+ * @param {String} key
+ * @param {Number} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setDoubleVariable = function(key, value) {};
+
+/**
+ * Store long type variable
+ * 
+ * @method setLongVariable
+ * @param {String} key
+ * @param {Number} value
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.setLongVariable = function(key, value) {};
 
 /**
  * Remove variable.
