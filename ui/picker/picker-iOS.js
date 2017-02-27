@@ -4,13 +4,13 @@ const View = require('nf-core/ui/view');
 const Picker = extend(View)(
     function (_super, params) {
         var self = this;
-        
+
         if(!self.nativeObject) {
             self.nativeObject = new UIPickerView();
         }
-        
+
         _super(this);
-        
+
         var _items = [];
         Object.defineProperty(this, 'items', {
             get: function() {
@@ -21,20 +21,20 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
-        var _valueIndex = 0;
-        Object.defineProperty(this, 'valueIndex', {
+
+        var _currentIndex = 0;
+        Object.defineProperty(this, 'currentIndex', {
             get: function() {
-                return _valueIndex;
+                return _currentIndex;
             },
-            set: function(valueIndex) {
-                _valueIndex = valueIndex;
+            set: function(currentIndex) {
+                _currentIndex = currentIndex;
                 var defaultComponentIndex = 0; // nf-core does not support multi components.
-                self.nativeObject.selectRowInComponentAnimated(_valueIndex, defaultComponentIndex, true);
+                self.nativeObject.selectRowInComponentAnimated(_currentIndex, defaultComponentIndex, true);
             },
             enumerable: true
         });
-        
+
         var _onSelectedCallback;
         Object.defineProperty(this, 'onSelected', {
             get: function() {
@@ -45,7 +45,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         //////////////////////////////////////////////////////
         // UIPickerViewDataSource
         var _component = 1;
@@ -57,7 +57,7 @@ const Picker = extend(View)(
             return _items.length;
         };
         self.nativeObject.dataSource = self.pickerDataSource;
-        
+
         //////////////////////////////////////////////////////
         // UIPickerViewDelegate
         self.pickerDelegate = new SMFUIPickerViewDelegate();
@@ -65,11 +65,11 @@ const Picker = extend(View)(
             return _items[e.row];
         };
         self.pickerDelegate.didSelectRow = function(e){
-            _valueIndex = e.row;
+            _currentIndex = e.row;
             _onSelectedCallback(e.row);
         };
         self.nativeObject.delegate = self.pickerDelegate;
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

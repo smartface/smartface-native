@@ -2,42 +2,41 @@
  * @class UI.Pages
  * @since 0.1
  *
- * Pages class can used for navigating between pages. The best practise for Pages class
- * is using one instance from it. 
- * Pages class should initialized with root page. 
+ * Pages class can used for navigating between pages. The best practice for Pages class
+ * is using one instance from it.
+ * Pages class should be initialized with a root page.
  *
  *     @example
  *     const Pages = require('nf-core/ui/pages');
  *     const Page = require('nf-core/ui/page');
  *     const Label = require('nf-core/ui/label');
- *     const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+ *     const FlexLayout = require('nf-core/ui/flexlayout');
  *     const Color = require('nf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "Smartface Label",
- *         width: "50%", 
- *         height: "10%",
- *         left: "25%",
+ *         width: "100",
+ *         height: "30",
  *         textColor: Color.WHITE
  *     });
- *     var myAbsoluteLayout = new AbsoluteLayout({
- *         width: "100%", 
- *         height: "100%",
+ *     var myFlexlayout = new FlexLayout({
+ *         width: "200",
+ *         height: "50",
  *         backgroundColor: Color.BLUE
  *     });
- *     myAbsoluteLayout.addChild(myLabel);
+ *     myFlexlayout.addChild(myLabel);
  *     var myPage = new Page({
  *         onLoad: function(){
- *             myPage.add(myAbsoluteLayout);
+ *             myPage.layout.add(myFlexlayout);
  *         }
  *     });
- *     // Must initialized with rootPage.
+ *     // Pages must be initialized with rootPage.
  *     var myPages = new Pages({
  *         rootPage: myPage
  *     });
- * 
+ *
  */
 function Pages(params) {
-    
+
     /**
      * Gets/sets sliderDrawer of the Pages.
      *
@@ -51,6 +50,8 @@ function Pages(params) {
      *     myPages.sliderDrawer = mySliderDrawer;
      *
      * @property {UI.SliderDrawer} [sliderDrawer = null]
+     * @android
+     * @ios
      * @static
      * @since 0.1
      */
@@ -59,84 +60,74 @@ function Pages(params) {
     });
 
     /**
-     * Show page with pushing to pages stack. 
+     * This function shows a page by pushing it to the UI.Pages.
      *
      *     @example
      *     const Pages = require('nf-core/ui/pages');
      *     const Page = require('nf-core/ui/page');
      *     const Button = require('nf-core/ui/button');
      *     var myPage1 = new Page();
-     *     var myButtonPage1 = new Button({
+     *     var myPage2 = new Page();
+     *
+     *     var myButton = new Button({
      *         text: "Go to Page 2",
-     *         height: "15%",
-     *         width: "30%",
-     *         top: "30%",
-     *         left: "35%",
+     *         height: "30",
+     *         width: "100",
      *         onPress: function(){
      *             myPages.push(myPage2,true);
      *         }
      *     });
-     *     myPage1.add(myButtonPage1);
+     *     myPage1.layout.add(myButton);
      *     var myPages = new Pages({
-     *          rootPage: myPage1  
+     *          rootPage: myPage1
      *     });
-     * 
-     *     var myPage2 = new Page();
-     *     var myButtonPage2 = new Button({
-     *         text: "Back to Page 1",
-     *         height: "15%",
-     *         width: "30%",
-     *         top: "30%",
-     *         left: "35%",
-     *         onPress: function(){
-     *             myPages.pop();
-     *         }
-     *     });
-     *     myPage2.add(myButtonPage2);
-     *     
+     *
+     *
+     *
      * @param {UI.Page} page Page to show. Previous page will be stacked.
-     * @param {Boolean} animated If true, page will showed with default animation, otherwise will showed without animation.  
+     * @param {Boolean} animated If true, page will be showed with default animation, otherwise there will be no animation.
      * @method push
+     * @android
+     * @ios
      */
     this.push = function(page, animated){};
 
     /**
-     * Show page with poping from pages stack.
+     * This function returns to previous page in UI.Pages stack.
      *
      *     @example
      *     const Pages = require('nf-core/ui/pages');
      *     const Page = require('nf-core/ui/page');
      *     const Button = require('nf-core/ui/button');
      *     var myPage1 = new Page();
-     *     var myButtonPage1 = new Button({
+     *     var myPage2 = new Page();
+     *
+     *     var myButton = new Button({
      *         text: "Go to Page 2",
-     *         height: "15%",
-     *         width: "30%",
-     *         top: "30%",
-     *         left: "35%",
+     *         height: "30",
+     *         width: "100",
      *         onPress: function(){
-     *             myPages.push(myPage2,true,"Page2");
+     *             myPages.push(myPage2,true);
      *         }
      *     });
-     *     myPage1.add(myButtonPage1);
+     *     myPage1.layout.add(myButton);
      *     var myPages = new Pages({
-     *          rootPage: myPage1  
+     *          rootPage: myPage1
      *     });
-     * 
-     *     var myPage2 = new Page();
+     *
      *     var myButtonPage2 = new Button({
      *         text: "Back to Page 1",
-     *         height: "15%",
-     *         width: "30%",
-     *         top: "30%",
-     *         left: "35%",
+     *         height: "10",
+     *         width: "100",
      *         onPress: function(){
      *             myPages.pop();
      *         }
      *     });
-     *     myPage2.add(myButtonPage2);
+     *     myPage2.layout.add(myButtonPage2);
      *
      * @method pop
+     * @android
+     * @ios
      */
     this.pop = function(){};
 }

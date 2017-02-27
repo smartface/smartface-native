@@ -5,9 +5,9 @@ const extend = require('js-base/core/extend');
  * @class UI.Slider
  * @since 0.1
  * @extends UI.View
- * 
+ *
  * Slider can be used to select a value from a range of values by moving the slider thumb along the track.
- * 
+ *
  *     @example
  *     var Color = require('nf-core/ui/color');
  *     const Slider = require('nf-core/ui/slider');
@@ -39,6 +39,8 @@ const Slider = extend(View)(
          *     mySlider.thumbColor = Color.GRAY;
          *
          * @property {UI.Color} [thumbColor = UI.Color.GRAY]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.thumbColor = UI.Color.GRAY;
@@ -52,6 +54,8 @@ const Slider = extend(View)(
          *     mySlider.thumbImage = Image.createFromFile("images://smartface.png");
          *
          * @property {String}
+         * @android
+         * @ios
          * @since 0.1
          */
         this.thumbImage = null;
@@ -66,6 +70,8 @@ const Slider = extend(View)(
          *     mySlider.minTrackColor = Color.BLUE;
          *
          * @property {UI.Color} [minTrackColor = UI.Color.DARKGRAY]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.minTrackColor = UI.Color.DARKGRAY;
@@ -80,6 +86,8 @@ const Slider = extend(View)(
          *     mySlider.maxTrackColor = Color.GREEN;
          *
          * @property {UI.Color} [maxTrackColor = UI.Color.GREEN]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.maxTrackColor = UI.Color.GREEN;
@@ -94,6 +102,8 @@ const Slider = extend(View)(
          *     mySlider.value = 30;
          *
          * @property {Number} [value = 0]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.value = 0;
@@ -107,6 +117,8 @@ const Slider = extend(View)(
          *     mySlider.minValue = 0;
          *
          * @property {Number} [minValue = 0]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.minValue = 0;
@@ -120,25 +132,29 @@ const Slider = extend(View)(
          *     mySlider.maxValue = 100;
          *
          * @property {Number} [maxValue = 100]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.maxValue = 100;
 
         // events
         /**
-         * Gets/sets value change event for slider instance. This event fires when slider value changed.
+         * This event is called when slider value changes.
          *
          *     @example
          *     const Slider = require('nf-core/ui/slider');
          *     var mySlider = new Slider();
          *     mySlider.onValueChange = valueChanged;
          *     mySlider.value = 40;
-         * 
+         *
          *     function valueChanged() {
          *         alert("New value is: " + mySlider.value);
          *     }
          *
          * @event onValueChange
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onValueChange = function() {};

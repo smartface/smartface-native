@@ -1,0 +1,1 @@
+module.exports = require('./searchview-' + Device.deviceOS + '.js');

@@ -107,9 +107,15 @@ function Image(params) {
     
 }
 
-Image.createFromFile = function(path) { 
-    var imageFile = new File({path:path});
-    return new Image({"path": imageFile.nativeObject.getActualPath()});
+Image.createFromFile = function(path) {
+  var imageFile = new File({path:path});
+  var retval;
+  if (typeof imageFile.nativeObject.getActualPath() === 'undefined') {
+    retval = null;
+  } else {
+    retval = new Image({"path": imageFile.nativeObject.getActualPath()});
+  }
+  return retval;
 }
 
 Image.createFromName = function(name) { 

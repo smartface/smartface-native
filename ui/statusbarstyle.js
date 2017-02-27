@@ -16,6 +16,7 @@ var StatusBarStyle = { };
 /**
  * @property {Number} DEFAULT
  * Status bar default dark theme.
+ * @ios
  * @static
  * @readonly
  * @since 0.1
@@ -28,6 +29,7 @@ Object.defineProperty(StatusBarStyle, 'DEFAULT', {
 /**
  * @property {Number} LIGHTCONTENT
  * Status bar light theme.
+ * @ios
  * @static
  * @readonly
  * @since 0.1

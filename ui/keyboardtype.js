@@ -23,6 +23,8 @@ KeyboardType.android = { };
  * @property {Number} DEFAULT
  * Default keyboard appearance.
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -35,6 +37,8 @@ Object.defineProperty(KeyboardType, 'DEFAULT', {
  * @property {Number} NUMBER
  * Numeric specific keyboard appearance.
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -47,6 +51,8 @@ Object.defineProperty(KeyboardType, 'NUMBER', {
  * @property {Number} DECIMAL
  * Decimal specific keyboard appearance.
  * @static
+ * @android
+ * @ios
  * @since 0.1
  * @readonly
  */
@@ -59,6 +65,8 @@ Object.defineProperty(KeyboardType, 'DECIMAL', {
  * @property {Number} PHONE
  * Phone number specific keyboard appearance.
  * @static
+ * @android
+ * @ios
  * @since 0.1
  * @readonly
  */
@@ -71,6 +79,8 @@ Object.defineProperty(KeyboardType, 'PHONE', {
  * @property {Number} URL
  * URL address specific keyboard appearance
  * @static
+ * @android
+ * @ios
  * @since 0.1
  * @readonly
  */
@@ -81,8 +91,9 @@ Object.defineProperty(KeyboardType, 'URL', {
 
 /**
  * @property {Number} TWITTER
- * Twitter specific keyboard appearance. This keyboard type will work only for iOS.
+ * Twitter specific keyboard appearance. This keyboard type works only for iOS.
  * @static
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -93,8 +104,9 @@ Object.defineProperty(KeyboardType.ios, 'TWITTER', {
 
 /**
  * @property {Number} WEBSEARCH
- * Web search specific keyboard appearance. This keyboard type will work only for iOS.
+ * Web search specific keyboard appearance. This keyboard type works only for iOS.
  * @static
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -105,8 +117,9 @@ Object.defineProperty(KeyboardType.ios, 'WEBSEARCH', {
 
 /**
  * @property {Number} DATETIME
- * Date and time specific keyboard appearance. This keyboard type will work only for Android.
+ * Date and time specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @readonly
  * @since 0.1
  */
@@ -117,8 +130,9 @@ Object.defineProperty(KeyboardType.android, 'DATETIME', {
 
 /**
  * @property {Number} SIGNEDNUMBER
- * Signed number specific keyboard appearance. This keyboard type will work only for Android.
+ * Signed number specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -129,8 +143,9 @@ Object.defineProperty(KeyboardType.android, 'SIGNEDNUMBER', {
 
 /**
  * @property {Number} SIGNEDDECIMAL
- * Signed decimal specific keyboard appearance. This keyboard type will work only for Android.
+ * Signed decimal specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -141,8 +156,9 @@ Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
 
 /**
  * @property {Number} TEXTAUTOCOMPLETE
- * Auto complete text specific keyboard appearance. This keyboard type will work only for Android.
+ * Auto complete text specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -153,8 +169,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
 
 /**
  * @property {Number} TEXTAUTOCORRECT
- * Auto correct text specific keyboard appearance. This keyboard type will work only for Android.
+ * Auto correct text specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -165,8 +182,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTAUTOCORRECT', {
 
 /**
  * @property {Number} TEXTCAPCHARACTERS
- * Auto capitalized characters specific keyboard appearance. This keyboard type will work only for Android.
+ * Auto capitalized characters specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -177,8 +195,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPCHARACTERS', {
 
 /**
  * @property {Number} TEXTCAPSENTENCES
- * Auto capitalized sentences specific keyboard appearance. This keyboard type will work only for Android.
+ * Auto capitalized sentences specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -189,8 +208,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPSENTENCES', {
 
 /**
  * @property {Number} TEXTCAPWORDS
- * Auto capitalized word specific keyboard appearance. This keyboard type will work only for Android.
+ * Auto capitalized word specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -201,8 +221,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPWORDS', {
 
 /**
  * @property {Number} TEXTEMAILSUBJECT
- * Email subject specific keyboard appearance. This keyboard type will work only for Android.
+ * Email subject specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -213,8 +234,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTEMAILSUBJECT', {
 
 /**
  * @property {Number} TEXTLONGMESSAGE
- * Long message specific keyboard appearance. This keyboard type will work only for Android.
+ * Long message specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -225,8 +247,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTLONGMESSAGE', {
 
 /**
  * @property {Number} TEXTNOSUGGESTIONS
- * Text with no suggestion keyboard appearance. This keyboard type will work only for Android.
+ * Text with no suggestion keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -237,8 +260,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTNOSUGGESTIONS', {
 
 /**
  * @property {Number} TEXTPERSONNAME
- * Person name specific keyboard appearance. This keyboard type will work only for Android.
+ * Person name specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -249,8 +273,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTPERSONNAME', {
 
 /**
  * @property {Number} TEXTSHORTMESSAGE
- * Short message specific keyboard appearance. This keyboard type will work only for Android.
+ * Short message specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -261,8 +286,9 @@ Object.defineProperty(KeyboardType.android, 'TEXTSHORTMESSAGE', {
 
 /**
  * @property {Number} TIME
- * Time specific keyboard appearance. This keyboard type will work only for Android.
+ * Time specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */
@@ -273,8 +299,9 @@ Object.defineProperty(KeyboardType.android, 'TIME', {
 
 /**
  * @property {Number} EMAILADDRESS
- * Email address specific keyboard appearance. This keyboard type will work only for Android.
+ * Email address specific keyboard appearance. This keyboard type works only for Android.
  * @static
+ * @android
  * @since 0.1
  * @readonly
  */

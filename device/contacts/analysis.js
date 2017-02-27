@@ -1,9 +1,9 @@
 /**
- * @class UI.Page
+ * @class Device.Contacts
  * @since 0.1
- * 
- * It allows user to add or pick a contact.
- * 
+ *
+ * This class allows user to add a contact to contact list or to select a contact from list.
+ *
  *     @example
  *     const Contacts = require("nf-core/device/contacts");
  *     var result = Application.checkPermission("READ_CONTACTS");
@@ -17,18 +17,34 @@
  *             onSuccess: getContact
  *         });
  *     }
- * 
+ *
  *     function getContact(e) {
  *         var displayName = e.displayName;
  *         var phoneNumber = e.phoneNumber;
  *     }
- * 
+ *
  */
 function Contacts() {}
 
 /**
- * Add a contact with specified properties.
- * 
+ * This function adds a contact to contact list with specified properties.
+ *
+ *
+ * @example
+ *      const Contacts = require("nf-core/device/contacts");
+ *      Contacts.add({
+ *        	    	displayName : "Smartface Team",
+ *        	    	phoneNumber : "xxx-xxx-xxx-x",
+ *        	    	email		: "info@smartface.io",
+ *        	    	address		: "347 N Canon Dr Beverly Hills, CA 90210",
+ *        	    	onSuccess : function(){
+ *        	    		console.log("Success");
+ *        	    	},
+ *        	    	onFailure : function(){
+ *        	    		console.log("Failure");
+ *        	    	}
+ *
+ *
  * @param {Object} params Object describing properties
  * @param {Object} params.contact Object describing contact properties
  * @param {String} params.contact.displayName Contact display name
@@ -36,20 +52,36 @@ function Contacts() {}
  * @param {String} params.contact.email Contact email
  * @param {String} params.contact.urlAddress Contact website
  * @param {String} params.contact.address Contact address
- * @param {Function} [params.onSuccess] Callback for successful adding contact
- * @param {Function} [params.onFailure] Callback for unsuccessful adding contact
+ * @param {Function} [params.onSuccess] This event is called after adding contact successfully.
+ * @param {Function} [params.onFailure] This event is called after adding contact fails.
  * @method add
+ * @android
+ * @ios
  * @since 0.1
  */
 Contacts.add = function(params) {};
 
 /**
- * It shows contact list. It allows pick a data from the list.
- * 
+ * This function shows contact list. It allows user to pick a data from the list.
+ *
+ *
+ * @example
+ *      const Contacts = require("nf-core/device/contacts");
+ *      Contacts.pick({
+ *        	    	page : myPage,
+ *        	    	onSuccess : function(contact){
+ *        	    		console.log("Successfully picked");
+ *        	    	},
+ *        	    	onFailure : function(){
+ *        	    		console.log("Something went wrong");
+ *        	    	}
+ *
  * @param {Object} params Object describing callbacks
- * @param {Function} [params.onSuccess] Callback for successful picking a contact
- * @param {Function} [params.onFailure] Callback for unsuccessful picking a contact
- * @method add
+ * @param {Function} [params.onSuccess] This event is called after getting contact successfully.
+ * @param {Function} [params.onFailure] This event is called after getting contact fails.
+ * @method pick
+ * @android
+ * @ios
  * @since 0.1
  */
 Contacts.pick = function(params) {};

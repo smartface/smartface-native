@@ -4,15 +4,15 @@ const extend = require('js-base/core/extend');
  * @class UI.SliderDrawer
  * @since 0.1
  * @extends UI.ViewGroup
- * 
- * The navigation drawer is a layout object that displays the app’s main navigation options as a panel on the left or right edge of the screen. 
- * It is hidden most of the time, when the user swipes a finger from the left or right edge of the screen it will appear.
- * 
+ *
+ * SliderDrawer is an object that displays a custom UI as a panel on the left or right edge of the screen.
+ * It is hidden most of the time, when user swipes a finger from the left or right edge of the screen it will appear.
+ *
  */
 const SliderDrawer = extend(ViewGroup)(
     function (_super, params) {
         _super(this);
-        
+
         /**
          * Gets/sets position of the SliderDrawer.
          *
@@ -21,17 +21,19 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootPage: myPage 
+         *         rootPage: myPage
          *     });
          *     var mySliderDrawer = new SliderDrawer();
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
          *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.drawerPosition = UI.SliderDrawer.Position.LEFT;
-        
+
         /**
          * Gets/sets layout of the SliderDrawer.
          *
@@ -41,7 +43,7 @@ const SliderDrawer = extend(ViewGroup)(
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootPage: myPage 
+         *         rootPage: myPage
          *     });
          *     var mySliderDrawer = new SliderDrawer({
          *         onLoad: function(){
@@ -49,29 +51,31 @@ const SliderDrawer = extend(ViewGroup)(
          *         }
          *     });
          *     var myButton = new Button({
-         *         height: 40, 
-         *         width: 50, 
+         *         height: 40,
+         *         width: 50,
          *         left: 50,
-         *         text: "Smartface Button" 
+         *         text: "Smartface Button"
          *     });
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
          *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {UI.FlexLayout} [layout = null]
+         * @android
+         * @ios
          * @readonly
          * @since 0.1
          */
         this.layout = null;
-        
+
         /**
-         * Enable/disable the SliderDrawer.
+         * Enables/disables the SliderDrawer.
          *
          *     @example
          *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
          *     const Pages = require('nf-core/ui/pages');
          *     var myPage = new Page();
          *     var myPages = new Pages({
-         *         rootPage: myPage 
+         *         rootPage: myPage
          *     });
          *     var mySliderDrawer = new SliderDrawer();
          *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
@@ -79,49 +83,58 @@ const SliderDrawer = extend(ViewGroup)(
          *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {Boolean} [enabled = true]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.enabled = true;
-        
+
         /**
-         * This function allows you to show SliderDrawer on it's own position if it assigned to the Page.
-         * 
+         * This function allows you to show SliderDrawer on the screen.
+         *
          * @method show
+         * @android
+         * @ios
          * @since 0.1
          */
         this.show = function(){};
-        
+
         /**
-         * This function allows you to hide SliderDrawer if it assigned to the Page.
-         * 
+         * This function allows you to hide SliderDrawer if it is on the screen.
+         *
          * @method hide
+         * @android
+         * @ios
          * @since 0.1
          */
         this.hide = function(){};
-        
+
         /**
-         * Gets/sets callback for show event. This callback will fire when show
-         * called or user opens the SliderDrawer.
+         * This event is called user opens the SliderDrawer.
          *
          * @event onShow
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onShow = null;
-        
+
         /**
-         * Gets/sets callback for hide event. This callback will fire when hide
-         * called or user closes the SliderDrawer.
+         * This event is called when user closes the SliderDrawer.
          *
          * @event onHide
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onHide = null;
-        
+
         /**
-         * Gets/sets callback for load event. This callback will fire when Slider Drawer
-         * begins load.
+         * This event is called when SliderDrawer begins to load.
          *
          * @event onLoad
+         * @android
+         * @ios
          * @since 0.1
          */
         this.onLoad = null;
@@ -141,10 +154,12 @@ SliderDrawer.Position = {};
 
 /**
  * @property {Number} LEFT
- * 
- * Position the SliderDrawer to left.  
- * 
+ *
+ * Position the SliderDrawer to left.
+ *
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -157,8 +172,10 @@ Object.defineProperty(SliderDrawer.Position, 'LEFT', {
  * @property {Number} RIGHT
  *
  * Position the SliderDrawer to right.
- * 
+ *
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */

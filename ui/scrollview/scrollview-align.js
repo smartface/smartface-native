@@ -11,7 +11,9 @@ const ScrollViewAlign = {};
 
 Object.defineProperties(ScrollViewAlign, {
    /**
-    * @property {String} [HORIZONTAL = 'horizontal'] 
+    * @property {String} [HORIZONTAL = 'horizontal']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
@@ -22,7 +24,9 @@ Object.defineProperties(ScrollViewAlign, {
         enumerable: true
     },
    /**
-    * @property {String} [VERTICAL = 'vertical'] 
+    * @property {String} [VERTICAL = 'vertical']
+    * @android
+    * @ios
     * @static
     * @readonly
     * @since 0.1
