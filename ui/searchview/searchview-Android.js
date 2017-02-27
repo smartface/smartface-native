@@ -343,8 +343,7 @@ const SearchView = extend(View)(
         // Assign default values
         self.textColor = _textColor;
         self.android.hintTextColor = _hintTextColor;
-        self.hideKeyboard();
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
