@@ -104,7 +104,6 @@ function Page(params) {
     
     self.headerBar = {};
     self.headerBar.android = {};
-    self.isShowing = false;
 
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
