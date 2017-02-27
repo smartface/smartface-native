@@ -52,14 +52,6 @@ Font.create = function(fontFamily, size, style) { }
  *         font: Font.createFromFile("assets://MyFont.ttf", 16)
  *     });
  *     myLabel.text = "Label text";
- * 
- *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
- *     var myLabel = new Label({
- *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL);
- *     });
- *     myLabel.text = "Label text";
  *
  * @param {String} path Font file path
  * @param {Number} size Font size
