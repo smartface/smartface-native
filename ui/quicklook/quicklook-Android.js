@@ -9,7 +9,8 @@ function QuickLook (params) {
     self.itemColor = null;
     self.visible = null;
     self.document = null;
-    self.style = null;
+    self.style = {};
+    self.statusBar = {};
     self.show = function(Page){};
 
     // Assign parameters given in constructor
