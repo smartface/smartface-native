@@ -10,7 +10,8 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const MapView = require('nf-core/ui/mapview');
  *     var myMapView = new MapView({
- *         top:10, left:10, right:10, bottom:150,
+ *         flexGrow :1,
+           alignSelf : FlexLayout.AlignSelf.STRETCH,
  *         onCreate: function() {
  *             myMapView.centerLocation = {
  *                 latitude: 41.0209078,
