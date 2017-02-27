@@ -14,11 +14,12 @@ Object.defineProperties(Share, {
     *
     * @method shareText
     * @param {String} text
+    * @param {UI.Page} page    
     * @param {Array} [blacklist]
     * @since 0.1
     */
     'shareText': {
-        value: function(text, blacklist) {
+        value: function(text, page, blacklist) {
 
         }
     },
@@ -26,11 +27,12 @@ Object.defineProperties(Share, {
     *
     * @method shareImage
     * @param {UI.Image} image
+    * @param {UI.Page} page
     * @param {Array} [blacklist]
     * @since 0.1
     */
     'shareImage': {
-        value: function(image, blacklist) {
+        value: function(image, page, blacklist) {
 
         }
     },
@@ -38,11 +40,12 @@ Object.defineProperties(Share, {
     *
     * @method shareFile
     * @param {IO.File} file
+    * @param {UI.Page} page
     * @param {Array} [blacklist]
     * @since 0.1
     */
     'shareFile': {
-        value: function(file, blacklist) {
+        value: function(file, page, blacklist) {
 
         }
     },
