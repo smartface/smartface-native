@@ -169,6 +169,12 @@ function findDrawableAtDirectory(path,drawableName){
         return targetPath;
     }
     
+    // searching on drawable folder
+    var targetPath = path + "/drawable/" + drawableName + ".png";
+    if(checkFileExistsInPath(targetPath)){
+        return targetPath;
+    }
+    
     // searching drawable on densities and screen size which are over the device density and screen size
     for(var i = desiredDrawableDensityIndex+1; i<drawableDensities.length; i++){
         for(var j = desiredDrawableSizeIndex+1; j<drawableSizes.length; j++){

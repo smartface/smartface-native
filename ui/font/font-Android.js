@@ -34,7 +34,7 @@ Font.create = function(fontFamily, size, style) {
             break;
     }
     var typeface;
-    if(fontFamily && fontFamily.length > 0 && fontFamily != Font.DEFAULT) {
+    if(fontFamily && fontFamily.length > 0 && fontFamily !== Font.DEFAULT) {
         // Searching font on assets:
         var convertedFontName = fontFamily.replace(' ','.') + fontSuffix + ".ttf";
         var fontFile = new File({path: "assets://" + convertedFontName});
