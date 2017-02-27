@@ -245,7 +245,3 @@ Object.defineProperty(SearchView.iOS.Style, 'MINIMAL', {
 });
 
 module.exports = SearchView;
-
-
-
-
