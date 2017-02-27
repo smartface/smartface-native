@@ -90,7 +90,23 @@ function Page(params) {
         },
         onActivityResult: function(requestCode, resultCode, data) {
             const Contacts = require("nf-core/device/contacts");
-            Contacts.onActivityResult(requestCode, resultCode, data);
+            const Multimedia = require("nf-core/device/multimedia");
+            const Sound = require("nf-core/device/sound");
+            
+            // todo: Define a method to register request and its callback 
+            // for better performance. Remove if statement.
+            if(Contacts.PICK_REQUEST_CODE == requestCode) {
+                Contacts.onActivityResult(requestCode, resultCode, data);
+            }
+            else if(Multimedia.CAMERA_REQUEST == requestCode) {
+                Multimedia.onActivityResult(requestCode, resultCode, data);
+            }
+            else if(requestCode == Multimedia.PICK_FROM_GALLERY) {
+                Multimedia.onActivityResult(requestCode, resultCode, data);   
+            }
+            else if(requestCode == Sound.PICK_SOUND) {
+                Sound.onActivityResult(requestCode, resultCode, data);   
+            }
         }
         
     }, null);
