@@ -82,7 +82,7 @@ Object.defineProperties(System.android, {
 System.android.isApplicationInstalled = function(packageName) {
     var packageList = Android.getActivity().getPackageManager().getInstalledApplications(0);
     for (var i = 0; i < packageList.size(); i++) {
-        if(packageList.get(i).packageName == packageName) {
+        if(packageList.get(i).packageName === packageName) {
             return true;
         }
     }
