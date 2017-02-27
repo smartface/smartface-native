@@ -136,11 +136,11 @@ function SearchView () {
     /**
      * Gets/sets the font of the SearchView. This property works only for Android.
      *
-     * @property {UI.Font} [font = UI.Font.DEFAULT]
+     * @property {UI.Font} [font = null]
      * @android
      * @since 0.1
      */
-    this.android.font = UI.Font.DEFAULT
+    this.android.font = null
 
     /**
      * Gets/sets text alignment of the SearchView. This property works only for Android.
