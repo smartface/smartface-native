@@ -217,6 +217,7 @@ const Label = extend(View)(
                 return AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight());
             },
             set: function(height) {
+                self.minHeight = height;
                 self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(height));
             },
             enumerable: true,
@@ -229,6 +230,7 @@ const Label = extend(View)(
                 return AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth());
             },
             set: function(width) {
+                self.minWidth = width;
                 self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(width))
             },
             enumerable: true,
