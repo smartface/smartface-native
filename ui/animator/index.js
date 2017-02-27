@@ -1,0 +1,1 @@
+module.exports = require('./animator-' + Device.deviceOS + '.js');
