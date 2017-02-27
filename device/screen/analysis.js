@@ -2,13 +2,14 @@
  * @class Device.Screen
  * @since 0.1
  * 
- * TODO: type definition
+ * This class helps you to get device's screen properties like size, orientation, force touch
+ * enabled etc. Also you can capture screen with Device.Screen.capture function.
  */
 function Screen() {}
 
 /**
+ * Gets current device screen orientation.
  *
- * TODO: type definition
  * @android
  * @ios
  * @property {Device.Screen.OrientationType} orientation
@@ -19,8 +20,8 @@ function Screen() {}
 Screen.orientation;
 
 /**
+ * Gets if device screen has feature support for touching.
  *
- * TODO: type definition
  * @android
  * @ios
  * @property {Boolean} touchSupported 
@@ -31,8 +32,8 @@ Screen.orientation;
 Screen.touchSupported;
 
 /**
+ * Gets dpi of device screen.
  *
- * TODO: type definition
  * @android
  * @ios
  * @property {Number} dpi 
@@ -43,8 +44,8 @@ Screen.touchSupported;
 Screen.dpi;
 
 /**
+ * Gets height of device screen.
  *
- * TODO: type definition
  * @android
  * @ios
  * @property {Number} height 
@@ -55,8 +56,8 @@ Screen.dpi;
 Screen.height;
 
 /**
+ * Gets width of device screen.
  *
- * TODO: type definition
  * @android
  * @ios
  * @property {Number} width 
@@ -67,18 +68,19 @@ Screen.height;
 Screen.width;
 
 /**
+ * Gets if device screen has support for force touch feature.
  *
- * TODO: type definition
  * @ios
- * @property {Boolean} touchForceAvaliable
+ * @property {Boolean} forceTouchAvaliable
  * @readonly
  * @static
  * @since 0.1
  */
-Screen.ios.touchForceAvaliable;
+Screen.ios.forceTouchAvaliable;
 
 /**
- * TODO: type definition
+ * Captures screen and returns result image.
+ * 
  * @android
  * @ios
  * @method capture

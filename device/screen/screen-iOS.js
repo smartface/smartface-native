@@ -33,8 +33,8 @@ Object.defineProperty(Screen, 'touchSupported', {
   enumerable: true
 });
 
-Object.defineProperty(Screen, 'touchForceAvaliable', {
-  value: UIDevice.touchForceAvaliable(),  
+Object.defineProperty(Screen, 'forceTouchAvaliable', {
+  value: UIDevice.forceTouchAvaliable(),  
   writable: false,
   enumerable: true
 });
