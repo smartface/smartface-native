@@ -2,7 +2,10 @@ function Application() {}
 
 var activity = Android.getActivity();
 var projectJsonObject;
-
+// Intent.ACTION_VIEW
+var ACTION_VIEW = "android.intent.action.VIEW";
+// Intent.FLAG_ACTIVITY_NEW_TASK
+var FLAG_ACTIVITY_NEW_TASK = 268435456;
 Application.android = {};
 
 
@@ -73,20 +76,36 @@ Object.defineProperties(Application, {
     
     // methods
     'call': {
-        value: function(){
+        value: function(uriScheme, data){
+            var NativeIntent = requireClass("android.content.Intent");
+            var NativeUri = requireClass("android.net.Uri");
             
+            var intent = new NativeIntent(ACTION_VIEW);
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            
+            if(data){
+                var params = Object.keys(data).map(function(k) {
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+                }).join('&')
+                var uri = uriScheme + "?" + params;
+                var uriObject = NativeUri.parse(uri);
+                intent.setData(uriObject);
+            }
+            activity.startActivity(intent);
         },
         enumerable: true
     },
     'exit': {
         value: function(){
-            
+            activity.finish();
         },
         enumerable: true
     },
     'restart': {
         value: function(){
-            
+            var spratIntent = activity.getIntent();
+            activity.finish();
+            activity.startActivity(spratIntent);
         },
         enumerable: true
     },
