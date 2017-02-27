@@ -28,6 +28,14 @@ function Font() {}
  *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label();
  *     myLabel.font = myFont;
+ * 
+ *     @example
+ *     const Font = require('nf-core/ui/font');
+ *     const Label = require('nf-core/ui/label');
+ *     var myLabel = new Label({
+ *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL)
+ *     });
+ *     myLabel.text = "Label text";
  *
  * @param {String} fontFamily Font family name
  * @param {Number} size Font size
@@ -47,15 +55,7 @@ Font.create = function(fontFamily, size, style) { }
  *     const Font = require('nf-core/ui/font');
  *     const Label = require('nf-core/ui/label');
  *     var myLabel = new Label({
- *         font: Font.createFromFile("assets://MyFont.ttf", 16);
- *     });
- *     myLabel.text = "Label text";
- * 
- *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
- *     var myLabel = new Label({
- *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL);
+ *         font: Font.createFromFile("assets://MyFont.ttf", 16)
  *     });
  *     myLabel.text = "Label text";
  *
