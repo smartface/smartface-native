@@ -1,5 +1,6 @@
 /**
  * @class Device.Multimedia
+ * @since 0.1
  * 
  * Multimedia manages camera, video and image.
  * 
@@ -38,14 +39,6 @@ Multimedia.startCamera = function(e) { };
  * 
  * Allows pick item from gallery.
  * 
- * @param {Object} params Object describing parameters for the function.
- * @param {Device.Multimedia.Type} [params.type] Data type.
- * @param {Function} [params.onSuccess] Callback for success situation.
- * @param {Function} [params.onCancel] Callback for cancellation situation.
- * @param {Function} [params.onFailure] Callback for failure situation.
- * @return IO.File
- * @since 0.1
- * 
  *     @example
  *     const Image = require("nf-core/ui/image");
  *     const Multimedia = require("nf-core/device/multimedia");
@@ -59,6 +52,14 @@ Multimedia.startCamera = function(e) { };
  *             var image = new Image.createFromFile(picked.file.path);
  *         }
  *     }
+ * 
+ * @param {Object} params Object describing parameters for the function.
+ * @param {Device.Multimedia.Type} [params.type] Data type.
+ * @param {Function} [params.onSuccess] Callback for success situation.
+ * @param {Function} [params.onCancel] Callback for cancellation situation.
+ * @param {Function} [params.onFailure] Callback for failure situation.
+ * @return IO.File
+ * @since 0.1
  */
 Multimedia.pickFromGallery = function(e) { };
 
