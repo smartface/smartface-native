@@ -55,18 +55,6 @@ Data.getIntVariable = function(key) {};
 Data.getFloatVariable = function(key) {};
 
 /**
- * Get stored double type variable. If variable is not exists, will return null
- * 
- * @method getDoubleVariable
- * @param {String} key
- * @return {Number}
- * @android
- * @ios
- * @since 0.1
- */
-Data.getDoubleVariable = function(key) {};
-
-/**
  * Get stored long type variable. If variable is not exists, will return null
  * 
  * @method getLongVariable
@@ -127,18 +115,6 @@ Data.setIntVariable = function(key, value) {};
 Data.setFloatVariable = function(key, value) {};
 
 /**
- * Store double type variable
- * 
- * @method setDoubleVariable
- * @param {String} key
- * @param {Number} value
- * @android
- * @ios
- * @since 0.1
- */
-Data.setDoubleVariable = function(key, value) {};
-
-/**
  * Store long type variable
  * 
  * @method setLongVariable
@@ -149,6 +125,18 @@ Data.setDoubleVariable = function(key, value) {};
  * @since 0.1
  */
 Data.setLongVariable = function(key, value) {};
+
+/**
+ * Check variable exist within storaged variables.
+ * 
+ * @method containsVariable
+ * @param {String} key
+ * @return {Boolean}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Data.containsVariable = function(key) {};
 
 /**
  * Remove variable.
