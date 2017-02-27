@@ -252,7 +252,7 @@ const SearchView = extend(View)(
         this.android = {};
         var _hintTextColor = Color.LIGHTGRAY;
         var _keyboardType = KeyboardType.DEFAULT;
-        var _font = Font.DEFAULT;
+        var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
         var _closeImage = null;
         Object.defineProperties(this.android, 

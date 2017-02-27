@@ -12,7 +12,7 @@ function Font(params) {
 
 const NativeTypeface = requireClass("android.graphics.Typeface");
 
-Font.create = function(fontFamily, size, style) { 
+Font.create = function(fontFamily, size, style) {
     var fontStyle = 1;
     var fontSuffix = "_n";
     switch(style){
@@ -34,7 +34,7 @@ Font.create = function(fontFamily, size, style) {
             break;
     }
     var typeface;
-    if(fontFamily && fontFamily.length > 0) {
+    if(fontFamily && fontFamily.length > 0 && fontFamily != Font.DEFAULT) {
         // Searching font on assets:
         var convertedFontName = fontFamily.replace(' ','.') + fontSuffix + ".ttf";
         var fontFile = new File({path: "assets://" + convertedFontName});
@@ -85,12 +85,12 @@ Font.createFromFile = function(path, size) {
     });
 }
 
+//Default Font
+Font.DEFAULT = "DEFAULT";
+
 Font.NORMAL = 1;
 Font.BOLD = 2;
 Font.ITALIC = 4;
 Font.BOLD_ITALIC = 6;
-
-//Default Font
-Font.DEFAULT = Font.createFromFile(null,14);
 
 module.exports = Font;
