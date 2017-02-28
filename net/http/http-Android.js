@@ -1,10 +1,12 @@
 const Volley = requireClass("com.android.volley.toolbox.Volley");
 const Request = requireClass("com.android.volley.Request");
 const Response = requireClass("com.android.volley.Response");
+const NativeInteger = requireClass("java.lang.Integer");
+const NativeString = requireClass("java.lang.String");
 
 var http = {};
 
-http.getString = function(url, onLoad, onError) {
+http.requestString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
@@ -29,7 +31,7 @@ http.getString = function(url, onLoad, onError) {
     }
 };
 
-http.getImage = function(url, onLoad, onError) {
+http.requestImage = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
@@ -55,7 +57,7 @@ http.getImage = function(url, onLoad, onError) {
     }
 };
 
-http.getJSON = function(url, onLoad, onError) {
+http.requestJSON = function(url, onLoad, onError) {
     http.getString(url, function(response) {
             try {
                 // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
@@ -69,7 +71,7 @@ http.getJSON = function(url, onLoad, onError) {
     }, onError);
 };
 
-http.getFile = function(url, fileName, onLoad, onError) {
+http.requestFile = function(url, fileName, onLoad, onError) {
     http.getString(url, function(response){
             try {
                 const IO = require("../../io");
@@ -89,6 +91,7 @@ http.getFile = function(url, fileName, onLoad, onError) {
 };
 
 http.request = function(params, onLoad, onError) {
+    console.log("request method");
     var responseListener = Response.Listener.implement({
             onResponse: function(response) {
                 onLoad(response);
@@ -100,9 +103,13 @@ http.request = function(params, onLoad, onError) {
         }
     });
     
-    var parameters = [params.method, params.url,
+    var method = new NativeInteger(params.method);
+    var url = new NativeString(params.url);
+    var parameters = [method, url,
         responseListener, responseErrorListener];
-    var body = params.body;
+    var body = null;
+    if(params.body)
+        body = new NativeString(params.body);
     var request = {};
     
     try {
@@ -110,12 +117,11 @@ http.request = function(params, onLoad, onError) {
         request.nativeObject = StringRequest.extend("SFStringRequest", {
             getBody: function() {
                 if(!body)
-                    return null;
-                    
-                const NativeString = requireClass("java.lang.String");
-                var bodyStr = new NativeString(body);
-                console.log("bodyStr " + bodyStr);
+                    return [];
                 return body.getBytes();
+            },
+            getHeaders: function() {
+                return getHeaderHashMap(params);
             }
         }, parameters);
     }
@@ -123,9 +129,33 @@ http.request = function(params, onLoad, onError) {
         if(onError)
             onError(err);
     }
-    
     var requestQueue = Volley.newRequestQueue(Android.getActivity());
     requestQueue.add(request.nativeObject);
 };
+
+
+function getHeaderHashMap(params) {
+    const NativeHashMap = requireClass("java.util.HashMap");
+    var headers = new NativeHashMap();
+    var credentials = "";
+    if(params.username && params.password)
+        credentials = params.username + ":" + params.password;
+    const NativeBase64 = requireClass("android.util.Base64");
+    var bytes = new NativeString(credentials).getBytes();
+    var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
+    var auth = "Basic " + encodedString;
+    headers.put("Authorization", auth);
+    
+    if(params.headers) {
+        var i;
+        var keys = Object.keys(params.headers);
+        for(i = 0; i < keys.length; i++) {
+            var value = params.headers[keys[i]];
+            if(typeof(keys[i]) == "string" && typeof(value) == "string")
+                headers.put(keys[i], value);
+        }
+    }
+    return headers;
+}
 
 module.exports = http;
