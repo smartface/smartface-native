@@ -195,7 +195,7 @@ function Page(params) {
     self.headerBar.setItems = function(value){
         var nativeObjectArray = [];
 
-        for (i = 0; i < value.length; i++) {
+        for (var i = 0; i < value.length; i++) {
             nativeObjectArray.push(value[i].nativeObject);
         }
 
