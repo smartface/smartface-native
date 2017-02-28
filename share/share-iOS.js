@@ -44,16 +44,18 @@ Object.defineProperties(Share, {
     },
 });
 
-Share.Facebook = UIActivityType.postToFacebook;
+Share.ios = {};
 
-Share.Twitter = UIActivityType.postToTwitter;
+Share.ios.Facebook = UIActivityType.postToFacebook;
 
-Share.Flickr = UIActivityType.postToFlickr;
+Share.ios.Twitter = UIActivityType.postToTwitter;
 
-Share.Message = UIActivityType.message;
+Share.ios.Flickr = UIActivityType.postToFlickr;
 
-Share.Mail = UIActivityType.mail;
+Share.ios.Message = UIActivityType.message;
 
-Share.Vimeo = UIActivityType.postToVimeo;
+Share.ios.Mail = UIActivityType.mail;
+
+Share.ios.Vimeo = UIActivityType.postToVimeo;
 
 module.exports = Share;
