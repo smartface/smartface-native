@@ -52,6 +52,19 @@ function Picker() {
      * @since 0.1
      */
     this.onSelected = function onSelected(index){ };
+    
+     /**
+     * Shows the picker.
+     *
+     * @param {Function} ok Callback for selected case
+     * @param {Function} cancel Callback for cancelled case
+     * @event show
+     * @android
+     * @ios
+     * @return {Object} 
+     * @since 0.1
+     */
+    this.show = function(ok, cancel){};
 
 }
 
