@@ -91,7 +91,6 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 };
 
 http.request = function(params, onLoad, onError) {
-    console.log("request method");
     var responseListener = Response.Listener.implement({
             onResponse: function(response) {
                 onLoad(response);
