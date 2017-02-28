@@ -104,8 +104,7 @@ http.request = function(params, onLoad, onError) {
     
     var method = new NativeInteger(params.method);
     var url = new NativeString(params.url);
-    var parameters = [method, url,
-        responseListener, responseErrorListener];
+    var parameters = [method, url, responseListener, responseErrorListener];
     var body = null;
     if(params.body)
         body = new NativeString(params.body);
@@ -138,7 +137,7 @@ function getHeaderHashMap(params) {
     var headers = new NativeHashMap();
     var credentials = "";
     if(params.user && params.password)
-        credentials = params.username + ":" + params.password;
+        credentials = params.user + ":" + params.password;
     const NativeBase64 = requireClass("android.util.Base64");
     var bytes = new NativeString(credentials).getBytes();
     var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
