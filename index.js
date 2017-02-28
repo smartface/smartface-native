@@ -3,5 +3,5 @@ module.exports = {
     Device: require('./device'),
     IO: require('./io'),
     Blob: require('./global/blob'),
-    Share: require('./global/share')
+    Share: require('./share')
 }
