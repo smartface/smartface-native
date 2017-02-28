@@ -19,9 +19,9 @@ http.Request = function Request(nativeObject) {
     };
 };
 
-http.getFile = function(url, fileName, onLoad, onError) {
+http.requestFile = function(url, fileName, onLoad, onError) {
     return new http.Request(
-            SMFHttp.getFileFrom(
+            SMFHttp.requestFileFrom(
                 url,
                 fileName,
                 function(e){
@@ -36,9 +36,9 @@ http.getFile = function(url, fileName, onLoad, onError) {
         );
 };
 
-http.getImage = function(url, onLoad, onError) {
+http.requestImage = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.getImageFrom(
+            SMFHttp.requestImageFrom(
                 url,
                 function(e){
                     const Image = require('nf-core/ui/image');
@@ -52,9 +52,9 @@ http.getImage = function(url, onLoad, onError) {
         );
 };
 
-http.getString = function(url, onLoad, onError) {
+http.requestString = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.getStringFrom(
+            SMFHttp.requestStringFrom(
                 url,
                 function(e){
                     onLoad(e);
@@ -66,9 +66,9 @@ http.getString = function(url, onLoad, onError) {
         );
 };
 
-http.getJSON = function(url, onLoad, onError) {
+http.requestJSON = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.getJSONFrom(
+            SMFHttp.requestJSONFrom(
                 url,
                 function(e){
                     onLoad(e);
