@@ -93,7 +93,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 http.request = function(params, onLoad, onError) {
     var responseListener = Response.Listener.implement({
             onResponse: function(response) {
-                onLoad(response);
+                onLoad({body: response, headers: {}});
             }
         });
     var responseErrorListener = Response.ErrorListener.implement({
@@ -137,7 +137,7 @@ function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
     var credentials = "";
-    if(params.username && params.password)
+    if(params.user && params.password)
         credentials = params.username + ":" + params.password;
     const NativeBase64 = requireClass("android.util.Base64");
     var bytes = new NativeString(credentials).getBytes();
