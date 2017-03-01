@@ -1,7 +1,6 @@
 const NativeNotificationCompat = requireClass("android.support.v4.app.NotificationCompat");
 const NativeNotificationBuilder = NativeNotificationCompat.Builder;
-const NativeContext = requireClass("android.content.Context");
-const NOTIFICATION_SERVICE = NativeContext.NOTIFICATION_SERVICE;
+const NOTIFICATION_SERVICE = "notification"; // android.content.Context.NOTIFICATION_SERVICE;
 
 var Priority = {
     MIN: -2,
@@ -124,7 +123,7 @@ Object.defineProperty(Notifications, 'Priority', {
 });
 
 // ios spesific methods
-Notifications.setBadgeNumber = function(e){};
-Notifications.getBadgeNumber = function(){};
+Notifications.ios.setBadgeNumber = function(e){};
+Notifications.ios.getBadgeNumber = function(e){};
 
 module.exports = Notifications;

@@ -98,6 +98,7 @@ function Notifications() {}
  * @param {Boolean} [params.hasAction] Sets whether the notification shows or hides the alert action. 
  * @param {String} [params.alertAction] The title of the alert button
  * @since 0.1
+ * @static
  */
 Notifications.create = function(params) {};
 
@@ -107,6 +108,7 @@ Notifications.create = function(params) {};
  * Cancels the spesific notification.
  * 
  * @param {Number} id Notification id.
+ * @static
  * @since 0.1
  */
 Notifications.cancel = function(id) {};
@@ -117,6 +119,7 @@ Notifications.cancel = function(id) {};
  * Cancels all notifications.
  * 
  * @since 0.1
+ * @static
  */
 Notifications.cancelAll = function() {};
 
@@ -124,11 +127,14 @@ Notifications.cancelAll = function() {};
  * @method getBadgeNumber
  * 
  * Gets badge number of a spesific notification.
+ * 
  * @return Number
+ * @param id Notification id
  * @ios
  * @since 0.1
+ * @static
  */
-Notifications.getBadgeNumber = function(){};
+Notifications.ios.getBadgeNumber = function(id){};
 
 /**
  * @method setBadgeNumber
@@ -137,9 +143,10 @@ Notifications.getBadgeNumber = function(){};
  * @param number Badge number
  * 
  * @ios
+ * @static
  * @since 0.1
  */
-Notifications.setBadgeNumber = function(e){};
+Notifications.ios.setBadgeNumber = function(e){};
 
 /**
  * @method show
