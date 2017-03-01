@@ -4,6 +4,17 @@
  * 
  * This class helps you to get device's screen properties like size, orientation, force touch
  * enabled etc. Also you can capture screen with Device.Screen.capture function.
+ * 
+ *     @example
+ *     const Screen = require('nf-core/device/screen');
+ *     console.log("Device.Screen.dpi: "            + Screen.dpi);
+ *     console.log("Device.Screen.width: "          + Screen.width);
+ *     console.log("Device.Screen.height: "         + Screen.height);
+ *     console.log("Device.Screen.touchSupported: " + Screen.touchSupported);
+ *     console.log("Device.Screen.orientation: "    + Screen.orientation);
+ *     console.log("Device.Screen.capture(): "      + Screen.capture());
+ * 
+ * 
  */
 function Screen() {}
 

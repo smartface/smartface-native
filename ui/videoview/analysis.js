@@ -58,7 +58,7 @@ const VideoView = extend(View)(
             /**
              * This function stops the video clip by seeking to the initial position of the video.
              *
-             * @method play
+             * @method stop
              * @android
              * @ios
              * @since 0.1

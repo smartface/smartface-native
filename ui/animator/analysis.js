@@ -5,32 +5,36 @@
  * Animator is used to change the appearance of the UI objects with animation.
  *
  *     @example
- *     const Color = require('nf-core/ui/color');
- *     const Flex = require('nf-core/ui/flexlayout');
- *     const Animator = require('nf-core/ui/animator');
+ *     const Color      = require('nf-core/ui/color');
+ *     const View       = require('nf-core/ui/view');
+ *     const Button     = require('nf-core/ui/button');
+ *     const Animator   = require('nf-core/ui/animator');
+ *     const FlexLayout = require('nf-core/ui/flexlayout');
  * 
+ *     var myView = new View({
+ *         left: 10, top: 10, right: 10, height: 100,
+ *         positionType: FlexLayout.PositionType.ABSOLUTE,
+ *         backgroundColor: Color.GREEN
+ *     });
  *     var myButton = new Button({
- *         text: 'animate',
- *         left: 10, top: 10, width: 150, height: 65,
- *         positionType: Flex.PositionType.ABSOLUTE,
- *         backgroundColor: Color.GREEN,
+ *         text: 'Animate',
+ *         left: 10, top: 150, right: 10, height: 65,
+ *         positionType: FlexLayout.PositionType.ABSOLUTE,
+ *         backgroundColor: Color.GRAY,
  *         onPress: function() {
- *             Animator.animate(myPage.layout, 5000, function() {
- *                 myButton.width = Number.NaN;
- *                 myButton.height = Number.NaN;
- *                 myButton.right = 10
- *                 myButton.bottom = 10;
+ *             myView.backgroundColor = Color.RED;
+ *             Animator.animate(self.layout, 5000, function() {
+ *                 myView.left = 150;
+ *                 myView.right = 150;
  *             }).then(2500, function() {
- *                 myButton.top = Number.NaN;
- *                 myButton.left = Number.NaN;
- *                 myButton.width = 150;
- *                 myButton.height = 65;
+ *                 myView.left = 10;
+ *                 myView.right = 10;
  *             }).complete(function() {
- *                 alert("Animation complete.");
+ *                 myView.backgroundColor = Color.GREEN;
  *             });
  *         }
  *     });
- * 
+ *     myPage.layout.addChild(myView);		        
  *     myPage.layout.addChild(myButton);
  *
  */
