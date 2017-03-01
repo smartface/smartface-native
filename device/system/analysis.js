@@ -2,13 +2,27 @@
  * @class Device.System
  * @since 0.1
  * 
- * TODO: type definition
+ * System provides operating system specific information of the device.
+ * 
+ *     @example
+ *     const System = require('nf-core/device/system');
+ *     console.log("Device.System.OS: "                             + System.OS);
+ *     console.log("Device.System.OSVersion: "                      + System.OSVersion);
+ *     console.log("Device.System.android.apiLevel: "               + System.android.apiLevel);
+ *     console.log("Device.System.batteryLevel: "                   + System.batteryLevel);
+ *     console.log("Device.System.isBatteryCharged: "               + System.isBatteryCharged);
+ *     console.log("Device.System.clipboard: "                      + System.clipboard);
+ *     console.log("Device.System.language: "                       + System.language);
+ *     console.log("Device.System.android.isApplicationInstalled: " + System.android.isApplicationInstalled('io.smartface.SmartfaceApp'));
+ *     console.log("Device.System.vibrate(): "                      + System.vibrate());
+ *     console.log("Device.System.android.menuKeyAvaliable: "       + System.android.menuKeyAvaliable);
+ * 
  */
 function System() {}
 
 /**
  *
- * TODO: type definition
+ * Returns the device's current language set.
  * @property {String} language
  * @readonly
  * @static
@@ -20,7 +34,7 @@ System.language;
 
 /**
  *
- * TODO: type definition
+ * Returns the battery level of the device in percentage.
  * @property {Number} batteryLevel
  * @readonly
  * @static
@@ -32,7 +46,7 @@ System.batteryLevel;
 
 /**
  *
- * TODO: type definition
+ * Indicates whether the device is charged or not.
  * @property {Boolean} isBatteryCharged
  * @readonly
  * @android
@@ -44,7 +58,7 @@ System.isBatteryCharged;
 
 /**
  *
- * TODO: type definition
+ * Returns the name of the operating system on the device.
  * @property {String} OS
  * @readonly
  * @android
@@ -56,7 +70,7 @@ System.OS;
 
 /**
  *
- * TODO: type definition
+ * Returns the operating system version of the device.
  * @property {String} OSVersion
  * @readonly
  * @android
@@ -68,7 +82,7 @@ System.OSVersion;
 
 /**
  *
- * TODO: type definition
+ * Returns the api level of the Android system.
  * @property {String} apiLevel
  * @readonly
  * @android
@@ -79,33 +93,20 @@ System.android.apiLevel;
 
 /**
  *
- * TODO: SET / GET, type definition
- * @property {Boolean} accelerometerEnabled
- * @static
- * @android
- * @ios
- * @since 0.1
- */
-System.accelerometerEnabled;
-
-/**
- *
- * TODO: type definition
+ * Indicates whether there is the menu key or not on the device.
  * @property {Boolean} menuKeyAvaliable
  * @readonly
  * @static
  * @android
- * @ios
  * @since 0.1
  */
-System.menuKeyAvaliable;
+System.android.menuKeyAvaliable;
 
 /**
  *
- * TODO: type definition
+ * Indicates whether finger print operations can be used or not.
  * @property {Boolean} fingerPrintAvaliable
  * @readonly
- * @android
  * @ios
  * @static
  * @since 0.1
@@ -114,7 +115,7 @@ System.fingerPrintAvaliable;
 
 /**
  *
- * TODO: type definition
+ * clipboard can be used to set a text to the device's clipboard or get a text from it.
  * @property {String} clipboard
  * @android
  * @ios
@@ -124,18 +125,7 @@ System.fingerPrintAvaliable;
 System.clipboard;
 
 /**
- *
- * TODO: type definition
- * @property {String} secureID
- * @readonly
- * @static
- * @android
- * @since 0.1
- */
-System.android.secureID;
-
-/**
- * TODO: type definition
+ * Returns the package version of an app on the device.
  *     
  *     @example
  *     System.android.getPackageVersion({
@@ -152,6 +142,7 @@ System.android.secureID;
  * @param {String} packageName
  * @param {Function} onSuccess
  * @param {Function} onError
+ * @static
  * @android
  * @since 0.1
  */
@@ -162,7 +153,7 @@ System.android.getPackageVersion ({
 });
 
 /**
- * TODO: type definition
+ * Checks if the provided finger print matches with the system's finger print.
  * 
  *     @example
  *     System.validateFingerPrint({
@@ -176,7 +167,7 @@ System.android.getPackageVersion ({
  * @method validateFingerPrint
  * @param {Function} onSuccess
  * @param {Function} onError
- * @android
+ * @static
  * @ios
  * @since 0.1
  */
@@ -186,36 +177,25 @@ System.validateFingerPrint ({
 });
 
 /**
- * TODO: type definition
+ * Vibrates the device for a while.
+ * 
  * @method vibrate
- * @param {Number} milliseconds
  * @android
  * @ios
+ * @static
  * @since 0.1
  */
-System.vibrate = function(milliseconds) {};
+System.vibrate = function() {};
 
 /**
- * TODO: type definition
+ * Checks if an app is installed or not.
  * @method isApplicationInstalled
  * @param {String} packageName | schemaName
  * @android
  * @ios
+ * @static
  * @since 0.1
  */
 System.isApplicationInstalled = function(packageName) {};
-
-/**
- * TODO: type definition
- * 
- * @since 0.1
- * @event onAccelerate
- * @param {Number} x
- * @param {Number} y
- * @param {Number} z
- * @android
- * @ios
- */
-System.onAccelerate = function onAccelerate(x, y, z){ }
 
 module.exports = System;
