@@ -170,10 +170,6 @@ const SearchView = extend(View)(
                 value: function(page){
                     if(page){
                         page.headerBar.addViewToHeaderBar(self);
-                        // const HeaderBarItem = require("nf-core/ui/headerbaritem");
-                        // var headerbarItems = page.headerBar.getItems();
-                        // headerbarItems.push(new HeaderBarItem({searchView : self, title: "Search"}));
-                        // page.headerBar.setItems(headerbarItems);
                     }
                 },
                 enumerable: true
@@ -181,16 +177,7 @@ const SearchView = extend(View)(
             'removeFromHeaderBar': {
                 value: function(page){
                     if(page){
-                        // the only way to remove SearchView from Toolbar.
                         page.headerBar.removeViewFromHeaderBar(self);
-                        // var headerbarItems = page.headerBar.getItems();
-                        // for(var i = 0; i < headerbarItems.length ; i++){
-                        //     if(headerbarItems[i].searchView && headerbarItems[i].searchView.id == self.id){
-                        //         delete headerbarItems[i];
-                        //         break;
-                        //     }
-                        // }
-                        // page.headerBar.setItems(headerbarItems);
                     }
                 },
                 enumerable: true
