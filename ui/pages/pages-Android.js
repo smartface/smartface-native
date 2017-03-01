@@ -10,7 +10,7 @@ const Pages = function(params) {
     var self = this;
     var _sliderDrawer = null;
 
-    var pagesStack = history;
+    var pagesStack = [];
     var drawerLayout = Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
     var toolbar = Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
     var rootViewId = NativeR.id.layout_container;
@@ -78,6 +78,11 @@ const Pages = function(params) {
         },
         'toolbar':{
             value: Pages.toolbar
+        },
+        'setHistory': {
+            value: function(history) {
+                pagesStack = history;
+            }
         }
     });
     
@@ -235,82 +240,5 @@ function detachSliderDrawer(sliderDrawer){
 }
 
 Pages.currentPage = null;
-
-// Router Implementation
-var pagesInstance = null;
-var routes = {};
-var history = [];
-
-Pages.add = function(to, page, isSingleton) {
-    if (typeof(to) !== "string") {
-        throw TypeError("add takes string and Page as parameters");
-    }
-    
-    if (!routes[to]) {
-        routes[to] = {
-            pageClass: page,
-            isSingleton: !!isSingleton,
-            pageObject: null
-        }
-    }
-}
-
-Pages.go = function(to, parameters, animated) {
-    if (arguments.length < 3) {
-        animated = true;
-    }
-
-    var toPage = getRoute(to);
-    if (pagesInstance === null) {
-        pagesInstance = new Pages({
-            rootPage: toPage,
-            tag: to
-        });
-    } else {
-        pagesInstance.push(toPage, animated, to);
-    }
-    
-    var current = history[history.length-1];
-    current && current.onHide && current.onHide();
-    history.push(to);
-}
-
-Pages.goBack = function(to) {
-    if (!pagesInstance || history.length <= 1) {
-        return false;
-    }
-    
-    var current = history[history.length-1];
-    if (to && history.lastIndexOf(to) !== -1) {
-        if (pagesInstance.popTo(to)) {
-            current && current.onHide && current.onHide();
-            history.splice(history.indexOf(to)+1);
-            return true;
-        }
-    } else {
-        if (pagesInstance.pop()) {
-            current && current.onHide && current.onHide();
-            history.pop();
-            return true;
-        }
-    }
-    return false;
-}
-
-function getRoute(to) {
-    if (!routes[to]) {
-        throw Error(to + " is not in routes");
-    }
-    if (routes[to].isSingleton && history.indexOf(to) !== -1) {
-        throw Error(to + " is set as singleton and exists in history");
-    }
-
-    if (routes[to].isSingleton) {
-        return routes[to].pageObject ||
-                (routes[to].pageObject = new (routes[to].pageClass)());
-    } else {
-        return new (routes[to].pageClass)();
-    }
-}
 
 module.exports = Pages;
