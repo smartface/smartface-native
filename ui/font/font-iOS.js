@@ -1,23 +1,44 @@
-/* globals */
+const File = require("nf-core/io/file");
+
 function Font () {}
 
 Font.create = function(fontFamily, size, style) {
     if (style === this.NORMAL) {
-        return UIFont.fontWithNameSize(fontFamily,size);
+        if (fontFamily === Font.DEFAULT){
+            return UIFont.systemFontOfSize(size);
+        }else{
+            return UIFont.fontWithNameSize(fontFamily,size);
+        }
     }else if(style === this.BOLD){
-        return UIFont.fontWithNameSize(fontFamily,size).bold();
+        if (fontFamily === Font.DEFAULT){
+            return UIFont.boldSystemFontOfSize(size);
+        }else{
+            return UIFont.fontWithNameSize(fontFamily,size).bold();
+        }
     }
     else if(style === this.ITALIC){
-        return UIFont.fontWithNameSize(fontFamily,size).italic();
+        if (fontFamily === Font.DEFAULT){
+            return UIFont.italicSystemFontOfSize(size);
+        }else{
+            return UIFont.fontWithNameSize(fontFamily,size).italic();
+        }
     }else if(style === this.BOLD_ITALIC){
-       return UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
+        if (fontFamily === Font.DEFAULT){
+            return UIFont.systemFontOfSize(size).boldItalic();
+        }else{
+            return UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
+        }
     }
         
 }
     
 Font.createFromFile = function(path, size) {
-    return  UIFont.createFromFileWithFilenameStringSize(path, size);
+    var filePath = new File({path:path});
+    var actualPath = filePath.nativeObject.getActualPath();
+    return  UIFont.createFromFileWithFilenameStringSize(actualPath, size);
 }
+
+Font.DEFAULT = "iOS-System-Font";
 
 Font.NORMAL = 1;
 Font.BOLD = 2;
