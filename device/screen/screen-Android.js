@@ -65,8 +65,7 @@ Object.defineProperty(Screen, 'orientation', {
 
 Screen.capture = function() {
     var activity = Android.getActivity();
-    var resources = activity.getResources();
-    
+
     var content = NativeR.id.content;
     var rootView = activity.findViewById(content).getRootView();
     rootView.setDrawingCacheEnabled(true);
@@ -74,9 +73,9 @@ Screen.capture = function() {
     var bitmap = NativeBitmap.createBitmap(cachedBitmap);
     rootView.setDrawingCacheEnabled(false);
 
-    var image = new Image();
-    image.nativeObject = new NativeBitmapDrawable(resources, bitmap);
-    return image;
+    return new Image({
+        bitmap: bitmap
+    });
 };
 
 module.exports = Screen;
