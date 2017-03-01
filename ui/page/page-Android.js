@@ -339,6 +339,21 @@ function Page(params) {
         enumerable: true
     });
     
+    // Implemented for just SearchView
+    self.headerBar.addViewToHeaderBar = function(view){
+        const HeaderBarItem = require("nf-core/ui/headerbaritem");
+        view.nativeObject.onActionViewCollapsed();
+        _headerBarItems.unshift(new HeaderBarItem({searchView : view, title: "Search"}));
+        self.headerBar.setItems(_headerBarItems);
+    };
+    // Implemented for just SearchView
+    self.headerBar.removeViewFromHeaderBar = function(view){
+        if(_headerBarItems.length > 0 && _headerBarItems[0].searchView){
+            _headerBarItems = _headerBarItems.splice(1,_headerBarItems.length);
+            self.headerBar.setItems(_headerBarItems);
+        }
+    };
+    
     var _headerBarItems = [];
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
