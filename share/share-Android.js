@@ -4,7 +4,7 @@ const NativeIntent = requireClass('android.content.Intent');
 const Share = {};
 Object.defineProperties(Share, {
     'shareText': {
-        value: function(text, page = null, blacklist = []) {
+        value: function(text, page, blacklist) {
             var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(NativeIntent.EXTRA_TEXT, text);
@@ -12,7 +12,7 @@ Object.defineProperties(Share, {
         }
     },
     'shareImage': {
-        value: function(image, page = null, blacklist = []) {
+        value: function(image, page, blacklist) {
             const NativeURI = requireClass('android.net.Uri');
             var tempFile = writeImageToFile(image);
             var uri = NativeURI.fromFile(tempFile);
@@ -25,7 +25,7 @@ Object.defineProperties(Share, {
         }
     },
     'shareFile': {
-        value: function(file, page = null, blacklist = []) {
+        value: function(file, page, blacklist) {
             const NativeURI  = requireClass('android.net.Uri');
             const NativeFile = requireClass('java.io.File');
 
