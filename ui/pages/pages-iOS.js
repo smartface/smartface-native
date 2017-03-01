@@ -42,31 +42,36 @@ function Pages(params) {
     }
 
     self.pop = function(animated){
-          if (arguments.length == 0) {
+        if (arguments.length == 0) {
             self.nativeObject.pop(true);
-          } else if (arguments.length == 1) {
+        } else if (arguments.length == 1) {
             self.nativeObject.pop(animated);
-          }
+        }
+        return true;
     }
     
     self.popToRoot = function(animated){
-          if (arguments.length == 0) {
+        if (arguments.length == 0) {
             self.nativeObject.popToRoot(true);
-          } else if (arguments.length == 1) {
+        } else if (arguments.length == 1) {
             self.nativeObject.popToRoot(animated);
-          }
-    }
-    
-    self.popToPage = function(page, animated){
-        if(page.nativeObject) {
-          if (arguments.length == 1) {
-            self.nativeObject.popToPage(page.nativeObject, true);
-          } else if (arguments.length == 2) {
-            self.nativeObject.popToPage(page.nativeObject, animated);
-          }
         }
+        return true;
     }
     
+    self.popTo = function(tag, page, animated){
+        if(page.nativeObject) {
+            if (arguments.length == 2) {
+                self.nativeObject.popToPage(page.nativeObject, true);
+            } else if (arguments.length == 3) {
+                self.nativeObject.popToPage(page.nativeObject, animated);
+            }
+        }
+        return true;
+    }
+
+    self.setHistory = function(history) { }
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];

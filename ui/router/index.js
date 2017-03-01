@@ -1,1 +1,0 @@
-module.exports = require('./router-' + Device.deviceOS + '.js');

@@ -1,4 +1,4 @@
-const Pages = require("../pages");
+const Pages = require("./pages");
 
 function Router(){};
 
@@ -37,8 +37,8 @@ Router.go = function(to, parameters, animated) {
     }
     
     var current = history[history.length-1];
-    current && current.onHide && current.onHide();
-    history.push(to);
+    current && current.page.onHide && current.page.onHide();
+    history.push({path: to, page: toPage});
 }
 
 Router.goBack = function(to) {
@@ -47,15 +47,16 @@ Router.goBack = function(to) {
     }
     
     var current = history[history.length-1];
-    if (to && history.lastIndexOf(to) !== -1) {
-        if (pagesInstance.popTo(to)) {
-            current && current.onHide && current.onHide();
-            history.splice(history.indexOf(to)+1);
+    if (to && isPathExistsInHistory(to)) {
+        var item = getLastOccurenceFromHistory(to);
+        if (pagesInstance.popTo(item.path, item.page)) {
+            current && current.page.onHide && current.page.onHide();
+            history.splice(history.indexOf(item)+1);
             return true;
         }
     } else {
         if (pagesInstance.pop()) {
-            current && current.onHide && current.onHide();
+            current && current.page.onHide && current.page.onHide();
             history.pop();
             return true;
         }
@@ -67,7 +68,7 @@ function getRoute(to) {
     if (!routes[to]) {
         throw Error(to + " is not in routes");
     }
-    if (routes[to].isSingleton && history.indexOf(to) !== -1) {
+    if (routes[to].isSingleton && isPathExistsInHistory(to)) {
         throw Error(to + " is set as singleton and exists in history");
     }
 
@@ -77,6 +78,15 @@ function getRoute(to) {
     } else {
         return new (routes[to].pageClass)();
     }
+}
+
+function isPathExistsInHistory(path) {
+    return history.filter((value) => {return value.path === path}).length > 0;
+}
+
+function getLastOccurenceFromHistory(path) {
+    if (!isPathExistsInHistory(path)) return null;
+    return history.filter((value) => {return value.path === path}).pop();
 }
 
 module.exports = Router;
