@@ -29,7 +29,7 @@ Object.defineProperty(Screen, 'height', {
     get: function () {
         var activity = Android.getActivity();
         var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(activity, metrics.heightPixels);
+        return UnitConverter.pixelToDp(metrics.heightPixels);
     },
     configurable: false
 });
@@ -38,7 +38,7 @@ Object.defineProperty(Screen, 'width', {
     get: function () {
         var activity = Android.getActivity();
         var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(activity, metrics.widthPixels);
+        return UnitConverter.pixelToDp(metrics.widthPixels);
     },
     configurable: false
 });
