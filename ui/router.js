@@ -64,6 +64,10 @@ Router.goBack = function(to) {
     return false;
 }
 
+Router.getCurrent = function() {
+    return history[history.length-1].path;
+}
+
 function getRoute(to) {
     if (!routes[to]) {
         throw Error(to + " is not in routes");
