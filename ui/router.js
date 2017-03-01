@@ -26,6 +26,7 @@ Router.go = function(to, parameters, animated) {
     }
 
     var toPage = getRoute(to);
+    toPage.__pendingParameters = parameters;
     if (pagesInstance === null) {
         pagesInstance = new Pages({
             rootPage: toPage,
