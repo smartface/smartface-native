@@ -20,7 +20,7 @@ Object.defineProperties(Share, {
     * @method shareText
     * @param {String} text
     * @param {UI.Page} page
-    * @param {Array} [blacklist]
+    * @param {Array} blacklist
     * @ios
     * @android
     * @since 0.1
@@ -38,12 +38,12 @@ Object.defineProperties(Share, {
     *     const Image = require('nf-core/ui/image');
     *    
     *     var image = Image.createFromFile('path to the image');
-    *     Share.shareImage(image, myPage);
+    *     Share.shareImage(image, myPage, []);
     *
     * @method shareImage
     * @param {UI.Image} image
     * @param {UI.Page} page
-    * @param {Array} [blacklist]
+    * @param {Array} blacklist
     * @android
     * @ios
     * @since 0.1
@@ -61,12 +61,12 @@ Object.defineProperties(Share, {
     *     const File = require('nf-core/io/file');
     *    
     *     var file = new File({path: 'path to the file'});
-    *     Share.shareFile(file, myPage);
+    *     Share.shareFile(file, myPage, []);
     *
     * @method shareFile
     * @param {IO.File} file
     * @param {UI.Page} page
-    * @param {Array} [blacklist]
+    * @param {Array} blacklist
     * @ios
     * @android
     * @since 0.1
