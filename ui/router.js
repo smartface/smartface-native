@@ -1,7 +1,7 @@
 const Pages = require("./pages");
 
 /**
- * @class Router
+ * @class UI.Router
  * @since 0.1
  * 
  * Router is used for navigating between pages with given paths and parameters.
@@ -53,7 +53,7 @@ Router.add = function(to, page, isSingleton) {
             pageObject: null
         }
     }
-}
+};
 
 /**
  * Navigates to given route path. If route path is not defined an exception will
@@ -90,7 +90,7 @@ Router.go = function(to, parameters, animated) {
     var current = history[history.length-1];
     current && current.page.onHide && current.page.onHide();
     history.push({path: to, page: toPage});
-}
+};
 
 /**
  * Navigates back to a page in history. If no route path is given to function
@@ -125,7 +125,7 @@ Router.goBack = function(to, animated) {
         }
     }
     return false;
-}
+};
 
 /**
  * Gets current route path.
@@ -137,7 +137,7 @@ Router.goBack = function(to, animated) {
  */
 Router.getCurrent = function() {
     return history[history.length-1].path;
-}
+};
 
 function getRoute(to) {
     if (!routes[to]) {
@@ -156,12 +156,19 @@ function getRoute(to) {
 }
 
 function isPathExistsInHistory(path) {
-    return history.filter((value) => {return value.path === path}).length > 0;
+    function historyFilter(value) {
+        return value.path === path;
+    }
+    return history.filter(historyFilter).length > 0;
 }
 
 function getLastOccurenceFromHistory(path) {
     if (!isPathExistsInHistory(path)) return null;
-    return history.filter((value) => {return value.path === path}).pop();
+
+    function historyFilter(value) {
+        return value.path === path;
+    }
+    return history.filter(historyFilter).pop();
 }
 
 module.exports = Router;
