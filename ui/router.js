@@ -1,11 +1,46 @@
 const Pages = require("./pages");
 
+/**
+ * @class Router
+ * @since 0.1
+ * 
+ * Router is used for navigating between pages with given paths and parameters.
+ * Simply define a route to a page, then from other pages go to that page with
+ * predefined route without loading page again. While navigation from one page
+ * to another you can also give parameters which will be available in onShow
+ * callback of page to be shown.
+ * 
+ *     @example
+ *     var Router = require('nf-core/ui/router');
+ *     Router.add('login', require('pages/pgLogin'));
+ *     Router.add('dashboard', require('pages/pgDashboard'));
+ *     Router.go('login');
+ *     ...
+ *     // When user logins you can pass information to dashboard page
+ *     Router.go('dashboard', {
+ *         userId: loginInfo.userId,
+ *         userName: loginInfo.userName
+ *     });
+ */
 function Router(){};
 
 var pagesInstance = null;
 var routes = {};
 var history = [];
 
+/**
+ * Adds given page class to routes by matching it with given route path. You
+ * can define if page instance will be singleton object or a new instance 
+ * created everytime when UI.Router.go called.
+ * 
+ * @param {String} to Route path to page class
+ * @param {UI.Page} page Page class to be used for creating and showing instances
+ * @param {Boolean} isSingleton If given as true, single instance will be created
+ *                              and everytime that instance will be shown
+ * @static
+ * @android
+ * @ios
+ */
 Router.add = function(to, page, isSingleton) {
     if (typeof(to) !== "string") {
         throw TypeError("add takes string and Page as parameters");
@@ -20,6 +55,21 @@ Router.add = function(to, page, isSingleton) {
     }
 }
 
+/**
+ * Navigates to given route path. If route path is not defined an exception will
+ * be thrown. Also if route path defined as singleton object and it exists in
+ * page history an exception will be thrown. For singleton pages you should
+ * use UI.Router.goBack to navigate them if they're in the history.
+ * 
+ * @param {String} to Route path to go
+ * @param {Object} parameters Parameters to be passed onShow callback of
+ *                            navigated page 
+ * @param {Boolean} animated Navigate with animation, if not given it is set to
+ *                           true as default
+ * @static
+ * @android
+ * @ios
+ */
 Router.go = function(to, parameters, animated) {
     if (arguments.length < 3) {
         animated = true;
@@ -42,7 +92,19 @@ Router.go = function(to, parameters, animated) {
     history.push({path: to, page: toPage});
 }
 
-Router.goBack = function(to) {
+/**
+ * Navigates back to a page in history. If no route path is given to function
+ * it will navigate to last page in history.
+ * 
+ * @param {String} to Optional, route path to navigate back
+ * @param {Boolean} animated Navigate with animation, if not given it is set to
+ *                           true as default
+ * @return {Boolean} True if navigated successfully, false otherwise
+ * @static
+ * @android
+ * @ios
+ */
+Router.goBack = function(to, animated) {
     if (!pagesInstance || history.length <= 1) {
         return false;
     }
@@ -65,6 +127,14 @@ Router.goBack = function(to) {
     return false;
 }
 
+/**
+ * Gets current route path.
+ * 
+ * @return {String} Current route path
+ * @static
+ * @android
+ * @ios
+ */
 Router.getCurrent = function() {
     return history[history.length-1].path;
 }
