@@ -49,6 +49,24 @@ function Pages(params) {
           }
     }
     
+    self.popToRoot = function(animated){
+          if (arguments.length == 0) {
+            self.nativeObject.popToRoot(true);
+          } else if (arguments.length == 1) {
+            self.nativeObject.popToRoot(animated);
+          }
+    }
+    
+    self.popToPage = function(page, animated){
+        if(page.nativeObject) {
+          if (arguments.length == 1) {
+            self.nativeObject.popToPage(page.nativeObject, true);
+          } else if (arguments.length == 2) {
+            self.nativeObject.popToPage(page.nativeObject, animated);
+          }
+        }
+    }
+    
     if (params) {
         for (var param in params) {
             this[param] = params[param];
