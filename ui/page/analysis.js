@@ -139,7 +139,7 @@ function Page(params) {
      *          orientation: Page.Orientation.LANDSCAPELEFT
      *     });
      * 
-     * @property {UI.Page.Orientation} orientation
+     * @property {UI.Page.Orientation} [orientation = UI.Page.Orientation.PORTRAIT]
      * @android
      * @ios
      * @since 0.1
