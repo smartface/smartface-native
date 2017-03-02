@@ -1,5 +1,4 @@
 const AndroidConfig         = require('nf-core/util/Android/androidconfig');
-
 const NativeView            = requireClass("android.view.View");
 const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
@@ -16,18 +15,26 @@ const Pages = function(params) {
     var toolbar = Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
     var rootViewId = NativeR.id.layout_container;
     
-    registerOnBackStackChanged(self, pagesStack);
     registerOnBackKeyPressed(pagesStack);
     
     Object.defineProperties(self,{
         'push': {
-            value: function(page, animated){
-                push(self, rootViewId, page, animated, pagesStack);
+            value: function(page, animated, tag){
+                push(self, rootViewId, page, animated, pagesStack, tag);
             }
         },
         'pop': {
             value: function(){
-                pop();
+                return pop();
+            }
+        },
+        'popTo': {
+            value: function(tag) {
+                var fragmentManager = activity.getSupportFragmentManager();
+                if(fragmentManager.getBackStackEntryCount() > 0){
+                    return fragmentManager.popBackStackImmediate(tag, 0);
+                }
+                return false;
             }
         },
         'sliderDrawer': {
@@ -71,10 +78,15 @@ const Pages = function(params) {
         },
         'toolbar':{
             value: Pages.toolbar
+        },
+        'setHistory': {
+            value: function(history) {
+                pagesStack = history;
+            }
         }
     });
     
-    self.push(params.rootPage);
+    self.push(params.rootPage, false, params.tag);
 };
 
 Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
@@ -139,10 +151,15 @@ function isSliderDrawerOpen(_sliderDrawer, drawerLayout) {
     return false;
 }
 
-function push(self, rootViewId, page, animated, pagesStack){
+function push(self, rootViewId, page, animated, pagesStack, tag){
     if(pagesStack.length > 0) {
-        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+        pagesStack[pagesStack.length-1].onHide && 
+                pagesStack[pagesStack.length-1].onHide();
     }
+    if (!tag) {
+        tag = "Page" + pagesStack.length;
+    }
+
     page.pages = self;
     self.hideSliderDrawer();
     var fragmentManager = activity.getSupportFragmentManager();
@@ -166,38 +183,18 @@ function push(self, rootViewId, page, animated, pagesStack){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    fragmentTransaction.replace(rootViewId, page.nativeObject, ("Page" + pagesStack.length )).addToBackStack(null);
+    fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
     fragmentTransaction.commit();
     fragmentManager.executePendingTransactions();
     Pages.currentPage = page;
-    pagesStack.push(page);
 }
 
 function pop(){
     var fragmentManager = activity.getSupportFragmentManager();
     if(fragmentManager.getBackStackEntryCount() > 0){
-        fragmentManager.popBackStackImmediate();
+        return fragmentManager.popBackStackImmediate();
     }
-}
-
-function registerOnBackStackChanged(self, pagesStack){
-    activity.getSupportFragmentManager().addOnBackStackChangedListener(
-        NativeFragmentManager.OnBackStackChangedListener.implement({
-            onBackStackChanged: function(){
-                var supportFragmentManager = activity.getSupportFragmentManager();
-                var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
-                if (nativeStackCount < pagesStack.length) { // means poll
-                    if(pagesStack.length > 0) {
-                        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
-                        var oldPage = pagesStack.pop();
-                        var fragmentTransaction = supportFragmentManager.beginTransaction();
-                        fragmentTransaction.remove(oldPage.nativeObject).commit();
-                        self.hideSliderDrawer();
-                    }
-                }
-            }
-        })
-    );
+    return false;
 }
 
 function registerOnBackKeyPressed(pagesStack){
@@ -209,7 +206,7 @@ function registerOnBackKeyPressed(pagesStack){
                     pagesStack[pagesStack.length-1].android.backButtonEnabled) {
                 // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
                 if( keyCode === 4 && keyEvent.getAction() === 0) {
-                    activity.getSupportFragmentManager().popBackStackImmediate();
+                    Pages.goBack();
                 }
             }
             return true;

@@ -125,7 +125,12 @@ function Page(params) {
             return onShowCallback;
         },
         set: function(onShow) {
-            onShowCallback = onShow.bind(this);
+            onShowCallback = (function() {
+                if (onShow instanceof Function) {
+                    onShow.call(this, this.__pendingParameters);
+                    delete this.__pendingParameters;
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -340,6 +345,21 @@ function Page(params) {
         enumerable: true
     });
     
+    // Implemented for just SearchView
+    self.headerBar.addViewToHeaderBar = function(view){
+        const HeaderBarItem = require("nf-core/ui/headerbaritem");
+        view.nativeObject.onActionViewCollapsed();
+        _headerBarItems.unshift(new HeaderBarItem({searchView : view, title: "Search"}));
+        self.headerBar.setItems(_headerBarItems);
+    };
+    // Implemented for just SearchView
+    self.headerBar.removeViewFromHeaderBar = function(view){
+        if(_headerBarItems.length > 0 && _headerBarItems[0].searchView){
+            _headerBarItems = _headerBarItems.splice(1,_headerBarItems.length);
+            self.headerBar.setItems(_headerBarItems);
+        }
+    };
+    
     var _headerBarItems = [];
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
@@ -414,16 +434,6 @@ function Page(params) {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
         }
-    };
-
-    // Deprecated since 0.1
-    this.add = function(view){
-        self.layout.addChild(view);
-    };
-
-    // Deprecated since 0.1
-    this.remove = function(view){
-        self.layout.removeChild(view);
     };
     
     // Default values
