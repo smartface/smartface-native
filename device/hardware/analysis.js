@@ -2,13 +2,22 @@
  * @class Device.Hardware
  * @since 0.1
  * 
- * TODO: type definition
+ * Hardware is used to retrieve hardware specific information of the device.
+ * 
+ *     @example
+ *     const Hardware = require('nf-core/device/hardware');
+ *     console.log("Device.Hardware.IMEI: "       + Hardware.android.IMEI);
+ *     console.log("Device.Hardware.UID: "        + Hardware.UID);
+ *     console.log("Device.Hardware.brandName: "  + Hardware.brandName);
+ *     console.log("Device.Hardware.brandModel: " + Hardware.brandModel);
+ *     console.log("Device.Hardware.vendorID: "   + Hardware.android.vendorID);
+ * 
  */
 function Hardware() {}
 
 /**
  *
- * TODO: type definition
+ * Returns the unique id of the device. The value may change if the device is formatted.
  * @property {String} UID
  * @android
  * @ios
@@ -20,7 +29,7 @@ Hardware.UID;
 
 /**
  *
- * TODO: type definition
+ * Returns 'International Mobile Equipment Identity' of the device.
  * @property {String} IMEI
  * @android
  * @readonly
@@ -31,7 +40,7 @@ Hardware.android.IMEI;
 
 /**
  *
- * TODO: type definition
+ * Returns the model name of the device.
  * @property {String} brandModel
  * @android
  * @ios
@@ -43,7 +52,7 @@ Hardware.brandModel;
 
 /**
  *
- * TODO: type definition
+ * Returns the brand name of the device.
  * @property {String} brandName
  * @android
  * @ios
@@ -55,7 +64,7 @@ Hardware.brandName;
 
 /**
  *
- * TODO: type definition
+ * Returns the vendor id of the device.
  * @property {Number} vendorID
  * @android
  * @readonly

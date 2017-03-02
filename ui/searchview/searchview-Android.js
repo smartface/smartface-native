@@ -62,6 +62,11 @@ const SearchView = extend(View)(
         self.nativeObject.onActionViewExpanded();
         var mSearchSrcTextView = self.nativeObject.findViewById(NativeSupportR.id.search_src_text);
         var mCloseButton = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+        var  mSearchButton = self.nativeObject.findViewById(NativeSupportR.id.search_button);
+        
+        const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
+        mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+        mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
 
 
         _super(this);
@@ -164,10 +169,7 @@ const SearchView = extend(View)(
             'addToHeaderBar': {
                 value: function(page){
                     if(page){
-                        const HeaderBarItem = require("nf-core/ui/headerbaritem");
-                        var headerbarItems = page.headerBar.getItems();
-                        headerbarItems.push(new HeaderBarItem({searchView : self, title: "Search"}));
-                        page.headerBar.setItems(headerbarItems);
+                        page.headerBar.addViewToHeaderBar(self);
                     }
                 },
                 enumerable: true
@@ -175,15 +177,7 @@ const SearchView = extend(View)(
             'removeFromHeaderBar': {
                 value: function(page){
                     if(page){
-                        // the only way to remove SearchView from Toolbar.
-                        var headerbarItems = page.headerBar.getItems();
-                        for(var i = 0; i < headerbarItems.length ; i++){
-                            if(headerbarItems[i].searchView && headerbarItems[i].searchView.id == self.id){
-                                delete headerbarItems[i];
-                                break;
-                            }
-                        }
-                        page.headerBar.setItems(headerbarItems);
+                        page.headerBar.removeViewFromHeaderBar(self);
                     }
                 },
                 enumerable: true
@@ -341,10 +335,7 @@ const SearchView = extend(View)(
         self.ios = {};
         
         // Assign default values
-        self.textColor = _textColor;
-        self.android.hintTextColor = _hintTextColor;
-        self.hideKeyboard();
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

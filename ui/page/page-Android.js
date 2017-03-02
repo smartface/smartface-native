@@ -5,7 +5,6 @@ const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
 const Pages                 = require("nf-core/ui/pages");
 
 const NativeFragment        = requireClass("android.support.v4.app.Fragment");
-const NativeWindowManager   = requireClass("android.view.WindowManager");
 const NativeBuildVersion    = requireClass("android.os.Build");
 const NativeAndroidR        = requireClass("android.R");
 const NativeSupportR        = requireClass("android.support.v7.appcompat.R");
@@ -14,6 +13,10 @@ const NativeHtml            = requireClass("android.text.Html");
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
+// WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
+// WindowManager.LayoutParams.FLAG_FULLSCREEN
+const FLAG_FULLSCREEN = 1024;
 
 function Page(params) {
     var self = this;
@@ -138,7 +141,12 @@ function Page(params) {
             return onShowCallback;
         },
         set: function(onShow) {
-            onShowCallback = onShow.bind(this);
+            onShowCallback = (function() {
+                if (onShow instanceof Function) {
+                    onShow.call(this, this.__pendingParameters);
+                    delete this.__pendingParameters;
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -177,10 +185,10 @@ function Page(params) {
             _visible = visible;
             var window = activity.getWindow();
             if(visible) {
-                window.clearFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
+                window.clearFlags(FLAG_FULLSCREEN);
              }
             else {
-                window.addFlags(NativeWindowManager.LayoutParams.FLAG_FULLSCREEN);
+                window.addFlags(FLAG_FULLSCREEN);
             }
         },
         enumerable: true
@@ -194,13 +202,11 @@ function Page(params) {
         },
         set: function(color) {
             _color = color;
-            // @todo setStatusBarColor doesn't work causing by issue COR-1153
-            // FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS doesn't exist android-17 metadata 
-            // if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-            //     var window = activity.getWindow();
-            //     window.addFlags(NativeWindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            //     window.setStatusBarColor(color);
-            // }
+            if(NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+                var window = activity.getWindow();
+                window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(color);
+            }
         },
         enumerable: true
     });
@@ -355,6 +361,21 @@ function Page(params) {
         enumerable: true
     });
     
+    // Implemented for just SearchView
+    self.headerBar.addViewToHeaderBar = function(view){
+        const HeaderBarItem = require("nf-core/ui/headerbaritem");
+        view.nativeObject.onActionViewCollapsed();
+        _headerBarItems.unshift(new HeaderBarItem({searchView : view, title: "Search"}));
+        self.headerBar.setItems(_headerBarItems);
+    };
+    // Implemented for just SearchView
+    self.headerBar.removeViewFromHeaderBar = function(view){
+        if(_headerBarItems.length > 0 && _headerBarItems[0].searchView){
+            _headerBarItems = _headerBarItems.splice(1,_headerBarItems.length);
+            self.headerBar.setItems(_headerBarItems);
+        }
+    };
+    
     var _headerBarItems = [];
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
@@ -429,16 +450,6 @@ function Page(params) {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
         }
-    };
-
-    // Deprecated since 0.1
-    this.add = function(view){
-        self.layout.addChild(view);
-    };
-
-    // Deprecated since 0.1
-    this.remove = function(view){
-        self.layout.removeChild(view);
     };
     
     // Default values

@@ -74,10 +74,11 @@ function Page(params) {
      *     });
      *
      * @event onShow
+     * @param {Object} parameters Parameters passed from UI.Router.go function
      * @android
      * @ios
      */
-    this.onShow = function (){};
+    this.onShow = function (parameters){};
 
     /**
      * This event is called when a page disappears from the screen.

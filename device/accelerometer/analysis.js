@@ -2,13 +2,25 @@
  * @class Device.Accelerometer
  * @since 0.1
  * 
- * TODO: type definition
+ * Device.Accelerometer allows capturing accelerometer events on the device.
+ * 
+ *     @example
+ *     const Accelerometer = require('nf-core/device/accelerometer');
+ *     Accelerometer.start();
+ *     Accelerometer.onAccelerate = function(event) {
+ *         console.log("x: " + event.x + "  y : " + event.y + "  z : " + event.z);
+ *   
+ *         if (event.z > 9) {
+ *             Accelerometer.stop();
+ *         }
+ *     };
+ * 
  */
 const Accelerometer = {};
 
 
 /**
- * TODO: type definition
+ * Starts capturing.
  * 
  * @method start
  * @android
@@ -19,7 +31,7 @@ Accelerometer.start = function() {}
 
 
 /**
- * TODO: type definition
+ * Stops capturing.
  * 
  * @method stop
  * @android
@@ -29,16 +41,17 @@ Accelerometer.start = function() {}
 Accelerometer.stop = function() {}
 
 /**
- * TODO: type definition
+ * Callback to capture accelerometer events.
  * 
  * @since 0.1
  * @event onAccelerate
- * @param {Number} x
- * @param {Number} y
- * @param {Number} z
+ * @param {Object} event
+ * @param {Number} event.x
+ * @param {Number} event.y
+ * @param {Number} event.z
  * @android
  * @ios
  */
-Accelerometer.onAccelerate = function(x, y, z) {}
+Accelerometer.onAccelerate = function(event) {}
 
 module.exports = Accelerometer;

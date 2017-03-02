@@ -1,6 +1,6 @@
 const File = require('nf-core/io/file');
 
-Path = {};
+var Path = {};
 
 Object.defineProperties(Path, {
     'ImagesUriScheme': {

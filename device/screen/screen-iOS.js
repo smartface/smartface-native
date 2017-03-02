@@ -1,3 +1,5 @@
+const Image = require("nf-core/ui/image");
+
 function Screen() {}
 
 /*
@@ -33,15 +35,15 @@ Object.defineProperty(Screen, 'touchSupported', {
   enumerable: true
 });
 
-Object.defineProperty(Screen, 'touchForceAvaliable', {
-  value: UIDevice.touchForceAvaliable(),  
+Object.defineProperty(Screen, 'forceTouchAvaliable', {
+  value: UIDevice.forceTouchAvaliable(),  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(Screen, 'capture', {
   value: function(){
-    return UIDevice.takeSnapShot();
+    return Image.createFromImage(UIDevice.takeSnapShot());
   },  
   writable: false,
   enumerable: true
