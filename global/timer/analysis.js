@@ -56,7 +56,7 @@ Timer.setTimeout = function(params) {};
 Timer.setInterval = function(params) {};
 
 /**
- * @method clearTimeout
+ * @method clearTimer
  * 
  * Clears a spesified Timer instance.
  * 
