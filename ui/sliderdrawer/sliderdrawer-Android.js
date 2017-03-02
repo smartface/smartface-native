@@ -1,10 +1,7 @@
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
 const AndroidUnitConverter  = require('nf-core/util/Android/unitconverter.js');
-
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
-const NativeGravity         = requireClass('android.view.Gravity');
-
 
 const SliderDrawer = extend(FlexLayout)(
     function (_super, params) {
@@ -31,10 +28,12 @@ const SliderDrawer = extend(FlexLayout)(
                 set: function(position){
                     _position = position;
                     if(position == SliderDrawer.Position.RIGHT){
-                        drawerLayoutParams.gravity = NativeGravity.RIGHT;
+                        // Gravity.RIGHT
+                        drawerLayoutParams.gravity = 5;
                     }
                     else{
-                        drawerLayoutParams.gravity = NativeGravity.LEFT;
+                        // Gravity.LEFT
+                        drawerLayoutParams.gravity = 3;
                     }
                     self.nativeObject.setLayoutParams (drawerLayoutParams);
                 },
@@ -145,7 +144,6 @@ const SliderDrawer = extend(FlexLayout)(
         });
         
         // setting default values
-        this.drawerPosition = SliderDrawer.Position.LEFT;
         this.width = 200;
         
         // Assign parameters given in constructor
