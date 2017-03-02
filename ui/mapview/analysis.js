@@ -182,7 +182,7 @@ const MapView = extend(View)(
 const Pin = function() {
 
         /**
-         * Pin location on the map.
+         * Pin location on the map. 
          *
          *     @example
          *     const MapView = require('nf-core/ui/mapview');
