@@ -12,8 +12,10 @@ const SliderDrawer = extend(FlexLayout)(
         _super(this);
         
         var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
-        drawerLayoutParams.gravity = NativeGravity.RIGHT;
+        // Gravity.LEFT
+        drawerLayoutParams.gravity = 3;
         self.nativeObject.setLayoutParams (drawerLayoutParams);
+        self.nativeObject.setFitsSystemWindows(true);
         
         var _position;
         var _onShow;
