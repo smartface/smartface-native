@@ -80,7 +80,7 @@ function Page(params) {
             return true;
         },
         onConfigurationChanged: function(newConfig){
-            // implemented for onRotationChange event for js developer                 
+            _onOrientationChange && _onOrientationChange();
         },
         onOptionsItemSelected: function(menuItem){
             if (menuItem.getItemId() == NativeAndroidR.id.home) {
@@ -170,6 +170,18 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    var _onOrientationChange;
+    Object.defineProperty(this, 'onOrientationChange', {
+        get: function() {
+            return _onOrientationChange;
+        },
+        set: function(onOrientationChange) {
+            _onOrientationChange = onOrientationChange.bind(this);
+        },
+        enumerable: true
+    });
+    
     
     var _orientation = Page.Orientation.PORTRAIT;
     Object.defineProperty(this, 'orientation', {
@@ -482,7 +494,6 @@ function Page(params) {
 
     // todo Add color default value after resolving COR-1153.
     // self.statusBar.color = Color.TRANSPARENT;
-    self.headerBar.backgroundColor = Color.create("#00A1F1");
     self.headerBar.displayShowHomeEnabled = false;
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
