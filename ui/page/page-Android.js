@@ -29,6 +29,13 @@ function Page(params) {
     rootLayout.nativeObject.setFocusable(true);
     
     rootLayout.parent = self;
+    const NativeRunnable = requireClass('java.lang.Runnable');
+    rootLayout.nativeObject.post(NativeRunnable.implement({
+        run: function() {
+            onShowCallback && onShowCallback();
+        }
+    }));
+
     var isCreated = false;
 
     var optionsMenu = null;
@@ -45,7 +52,6 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             rootLayout.nativeObject.requestFocus();
-            onShowCallback && onShowCallback();
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
