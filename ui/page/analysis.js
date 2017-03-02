@@ -230,7 +230,7 @@ Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
 /**
  * Enum corresponding all orientation controlled by sensor.
  * 
- * @property SENSORPORTRAIT
+ * @property AUTO
  * @android 
  * @ios
  * @readonly
