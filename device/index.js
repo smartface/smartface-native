@@ -4,5 +4,7 @@ module.exports = {
     Network: require('./network'),
     Hardware: require('./hardware'),
     Location: require('./location'),
-    Contacts: require('./contacts')
+    Contacts: require('./contacts'),
+    Sound: require('./sound'),
+    Multimedia: require('./multimedia')
 };
