@@ -144,7 +144,7 @@ function Page(params) {
      * @ios
      * @since 0.1
     */
-    this.orientation;
+    this.orientation = UI.Page.Orientation.PORTRAIT;
 }
 
 Page.Orientation = {};
