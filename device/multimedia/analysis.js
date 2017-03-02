@@ -13,7 +13,7 @@
  *     });
  * 
  *     function capturedImage(picked) { 
- *         var filePath = picked.file.path;
+ *         var image = picked.image;
  *     }
  * 
  */
@@ -47,9 +47,9 @@ Multimedia.startCamera = function(e) { };
  *         onSuccess: onSuccess
  *     });
  * 
- *     function onSuccess(picked) {
- *         if(picked.type == Multimedia.Type.IMAGE) {
- *             var image = new Image.createFromFile(picked.file.path);
+ *     function onSuccess(e) {
+ *         if(e.image) {
+ *             var image = e.image;
  *         }
  *     }
  * 
