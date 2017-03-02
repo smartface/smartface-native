@@ -29,6 +29,13 @@ function Page(params) {
     rootLayout.nativeObject.setFocusable(true);
     
     rootLayout.parent = self;
+    const NativeRunnable = requireClass('java.lang.Runnable');
+    rootLayout.nativeObject.post(NativeRunnable.implement({
+        run: function() {
+            onShowCallback && onShowCallback();
+        }
+    }));
+
     var isCreated = false;
 
     var optionsMenu = null;
@@ -45,23 +52,6 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             rootLayout.nativeObject.requestFocus();
-
-            const NativeTimer = requireClass('java.util.Timer');
-            const NativeRunnable = requireClass('java.lang.Runnable');
-            const NativeTimerTask = requireClass('java.util.TimerTask');
-            var timer = new NativeTimer();
-            timer.scheduleAtFixedRate(NativeTimerTask.extend("NFVisibilityTimer", {
-                run: function() {
-                    if (self.nativeObject.isVisible()) {
-                        timer.cancel();
-                        activity.runOnUiThread(NativeRunnable.implement({
-                            run: function() {
-                                onShowCallback && onShowCallback();
-                            }
-                        }));
-                    }
-                }
-            }, null), 0, 10);
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
