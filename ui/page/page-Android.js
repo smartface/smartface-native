@@ -18,6 +18,24 @@ const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
 // WindowManager.LayoutParams.FLAG_FULLSCREEN
 const FLAG_FULLSCREEN = 1024;
 
+const OrientationDictionary = {
+    // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    1: 1,
+    // Page.Orientation.UPSIDEDOWN: ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+    2: 9,
+    // Page.Orientation.AUTOPORTRAIT: ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+    3: 7,
+    // Page.Orientation.LANDSCAPELEFT: ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    4: 0,
+    // Page.Orientation.LANDSCAPERIGHT: ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+    8: 8,
+    // Page.Orientation.AUTOLANDSCAPE: ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+    12: 6,
+    // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_SENSOR
+    15: 4
+};
+
+
 function Page(params) {
     var self = this;
     var activity = Android.getActivity();
@@ -48,6 +66,7 @@ function Page(params) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
+            self.orientation = _orientation;
             return rootLayout.nativeObject;
         },
         onViewCreated: function(view, savedInstanceState) {
@@ -148,6 +167,21 @@ function Page(params) {
         },
         set: function(onHide) {
             onHideCallback = onHide.bind(this);
+        },
+        enumerable: true
+    });
+    
+    var _orientation = Page.Orientation.PORTRAIT;
+    Object.defineProperty(this, 'orientation', {
+        get: function() {
+            return _orientation;
+        },
+        set: function(orientation) {
+            _orientation = orientation;
+            if(typeof OrientationDictionary[_orientation] !== "number"){
+                _orientation = Page.Orientation.PORTRAIT;
+            }
+            activity.setRequestedOrientation(OrientationDictionary[_orientation]);
         },
         enumerable: true
     });
@@ -445,6 +479,7 @@ function Page(params) {
     // Default values
     self.statusBar.visible = true;
     self.isBackButtonEnabled = false;
+
     // todo Add color default value after resolving COR-1153.
     // self.statusBar.color = Color.TRANSPARENT;
     self.headerBar.backgroundColor = Color.create("#00A1F1");
@@ -464,5 +499,29 @@ function Page(params) {
         }
     }
 }
+
+Page.Orientation = {};
+Object.defineProperty(Page.Orientation,"PORTRAIT",{
+    value: 1
+});
+Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
+    value: 2
+});
+Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
+    value: 3
+});
+Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
+    value: 4
+});
+Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
+    value: 8
+});
+Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
+    value: 12
+});
+Object.defineProperty(Page.Orientation,"AUTO",{
+    value: 15
+});
+
 
 module.exports = Page;
