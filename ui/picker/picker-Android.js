@@ -3,6 +3,9 @@ const View = require('nf-core/ui/view');
 const Pages = require('nf-core/ui/pages');
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
+const NativeFrameLayout = requireClass("android.widget.FrameLayout");
+const NativeAlertDialog = requireClass("android.app.AlertDialog");
+const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 const Picker = extend(View)(
     function (_super, params) {
@@ -71,13 +74,50 @@ const Picker = extend(View)(
 
         self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
             onScrollStateChange: function(picker, scrollState) {
-                _scrollState = scrollState;
                 if(scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     if(_onSelectedCallback)
                         _onSelectedCallback(self.currentIndex);
                 }
             }
         }));
+        
+        self.show = function(done, cancel) {
+            var layout = addViewToLayout();
+            
+            var cancelListener = NativeDialogInterface.OnClickListener.implement({
+                onClick: function(dialogInterface, i) {
+                    if(cancel)
+                        cancel();
+                }
+            });
+            
+            var doneListener = NativeDialogInterface.OnClickListener.implement({
+                onClick: function(dialogInterface, i) {
+                    if(done)
+                        done({index: self.currentIndex});
+                }
+            });
+            
+            const NativeRString = requireClass("android.R").string;
+            var builder = new NativeAlertDialog.Builder(Android.getActivity());
+            builder = builder.setView(layout);
+            builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
+            builder = builder.setPositiveButton(NativeRString.ok, doneListener);
+            builder.show();
+        };
+        
+        function addViewToLayout() {
+            var layout = new NativeFrameLayout(Android.getActivity());
+            var parent = self.nativeObject.getParent();
+            if(parent) {
+                parent.removeView(self.nativeObject);
+            }
+            layout.addView(self.nativeObject, new NativeFrameLayout.LayoutParams(
+                -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+                -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+                17)); // Gravity.CENTER
+            return layout;
+        }
 
         // Assign parameters given in constructor
         if (params) {

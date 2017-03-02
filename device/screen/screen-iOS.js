@@ -1,3 +1,5 @@
+const Image = require("nf-core/ui/image");
+
 function Screen() {}
 
 /*
@@ -41,7 +43,7 @@ Object.defineProperty(Screen, 'forceTouchAvaliable', {
 
 Object.defineProperty(Screen, 'capture', {
   value: function(){
-    return UIDevice.takeSnapShot();
+    return Image.createFromImage(UIDevice.takeSnapShot());
   },  
   writable: false,
   enumerable: true
