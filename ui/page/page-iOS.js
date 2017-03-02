@@ -57,7 +57,12 @@ function Page(params) {
             return self.nativeObject.onShow;
         },
         set: function(value) {
-            self.nativeObject.onShow = value.bind(this);
+            self.nativeObject.onShow = (function() {
+                if (value instanceof Function) {
+                    value.call(this, this.__pendingParameters);
+                    delete this.__pendingParameters;
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -105,18 +110,6 @@ function Page(params) {
     this.statusBar.android = {};
     // Prevent undefined is not an object error
     this.android = {};
-
-    //Deprecated
-    self.add = function(object){
-        console.log("Page add function deprecated");
-        self.pageView.addChild(object);
-    }
-
-    //Deprecated
-    self.remove = function(object){
-        console.log("Page remove function deprecated");
-        object.nativeObject.removeFromSuperview();
-    }
 
     self.headerBar = {}
 

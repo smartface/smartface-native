@@ -122,7 +122,12 @@ function Page(params) {
             return onShowCallback;
         },
         set: function(onShow) {
-            onShowCallback = onShow.bind(this);
+            onShowCallback = (function() {
+                if (onShow instanceof Function) {
+                    onShow.call(this, this.__pendingParameters);
+                    delete this.__pendingParameters;
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -428,16 +433,6 @@ function Page(params) {
             _headerBarLeftItem = null;
             self.headerBar.homeAsUpIndicatorImage = null;
         }
-    };
-
-    // Deprecated since 0.1
-    this.add = function(view){
-        self.layout.addChild(view);
-    };
-
-    // Deprecated since 0.1
-    this.remove = function(view){
-        self.layout.removeChild(view);
     };
     
     // Default values
