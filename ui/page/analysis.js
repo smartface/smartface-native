@@ -129,8 +129,8 @@ function Page(params) {
     this.headerBar;
     
     /**
-     * Gets/sets the orientation of the Page. Orientation must be set as constructor parameter. 
-     * The Orientations constants can use with bitwise or operator. The default value is the 
+     * Gets/sets the orientation of the Page. This property must be set as constructor parameter. 
+     * {@link UI.Page.Orientation Orientation} constants can use with bitwise or operator. The default value of the 
      * orientation defined in project.json.
      *     
      *     @example
