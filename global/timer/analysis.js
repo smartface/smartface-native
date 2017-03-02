@@ -12,7 +12,7 @@
  *     });
  * 
  *     function setTimer() {     
- *         var myTimerID = Timer.setTimeout({
+ *         var myTimer = Timer.setTimeout({
  *             task: changeBackgroundColor,
  *             delay: 3000 
  *         });
@@ -35,7 +35,7 @@ function Timer() {}
  * @param {Object} params Parameters
  * @param {Function} params.task Function to be called
  * @param {Number} params.delay Time elapsed in millisecond
- * @return {Number} id
+ * @return {Timer} 
  * @static
  * @since 0.1
  */
@@ -49,32 +49,22 @@ Timer.setTimeout = function(params) {};
  * @param {Object} params Parameters
  * @param {Function} params.task Function to be called
  * @param {Number} params.delay Time elapsed in millisecond
- * @return {Number} id
+ * @return {Timer} 
  * @static
  * @since 0.1
  */
 Timer.setInterval = function(params) {};
 
 /**
- * @method clearTimeout
+ * @method clearTimer
  * 
- * Clears a spesified delay which creates by Timer.setTimeout. 
+ * Clears a spesified Timer instance.
  * 
- * @param {Number} id
+ * @param {Timer} timer
  * @static
  * @since 0.1
  */
-Timer.clearTimeout = function(id) {};
+Timer.clearTimer = function(timer) {};
 
-/**
- * @method clearInterval
- * 
- * Clears a spesified repeatedly delay which creates by Timer.setInterval. 
- * 
- * @param {Number} id
- * @static
- * @since 0.1
- */
-Timer.clearInterval = function(id) {};
 
 module.exports = Timer;
