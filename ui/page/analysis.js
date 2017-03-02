@@ -145,6 +145,15 @@ function Page(params) {
      * @since 0.1
     */
     this.orientation = UI.Page.Orientation.PORTRAIT;
+    
+    /**
+     * This event will be called when orientation of the Page changes.
+     *
+     * @event onOrientationChange
+     * @android
+     * @ios
+     */
+    this.onOrientationChange = function (){};
 }
 
 Page.Orientation = {};
