@@ -66,5 +66,15 @@ Timer.setInterval = function(params) {};
  */
 Timer.clearTimer = function(timer) {};
 
+/**
+ * @method clearAllTimer
+ * 
+ * Clears all Timer instance.
+ * 
+ * @static
+ * @since 0.1
+ */
+Timer.clearAllTimer = function() {};
+
 
 module.exports = Timer;

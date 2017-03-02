@@ -1,8 +1,6 @@
 const NativeHandler = requireClass("android.os.Handler");
 const NativeRunnable = requireClass("java.lang.Runnable");
 
-var handler = new NativeHandler();
-
 const NUMBER = "number";
     
 function Timer(params) {
@@ -15,13 +13,15 @@ function Timer(params) {
             run: function() {
                 params.task();
                 if(params.repeat) {
-                    handler.postDelayed(self.nativeObject, delay);
+                    Timer.handler.postDelayed(self.nativeObject, delay);
                 }
             }
         }); 
-        handler.postDelayed(self.nativeObject, delay);
+        Timer.handler.postDelayed(self.nativeObject, delay);
     }
 }
+
+Timer.handler = new NativeHandler();
 
 Timer.setTimeout = function(params){
     params.repeat = false;
@@ -35,9 +35,13 @@ Timer.setInterval = function(params){
 
 Timer.clearTimer = function(timer) {
     if(timer && timer.nativeObject)
-        handler.removeCallbacks(timer.nativeObject, null);
+        Timer.handler.removeCallbacks(timer.nativeObject, null);
     else 
         throw new Error("Not found given timer.");
+};
+
+Timer.clearAllTimer = function() {
+    Timer.handler.removeCallbacksAndMessages(null);
 };
 
 module.exports = Timer;
