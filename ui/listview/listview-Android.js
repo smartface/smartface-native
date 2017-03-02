@@ -169,7 +169,7 @@ const ListView = extend(View)(
         this.android = {};
         this.stopRefresh = {};
         this.refreshEnabled = {};
-        this.android.setPullRefreshColors = function(params){};
+        this.setPullRefreshColors = function(params){};
 
         if (params) {
             for (var param in params) {

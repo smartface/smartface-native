@@ -188,11 +188,12 @@ const ListView = extend(View)(
          * user swipe gesture. iOS uses only the first color of the array.
          *
          * @method setPullRefreshColors
+         * @param {[UI.Color]} colors
          * @android
          * @ios
          * @since 0.1
          */
-        this.android.setPullRefreshColors = function(colors){};
+        this.setPullRefreshColors = function(colors){};
 
         /**
          * This method notify ListView for data changes. After this method is called
