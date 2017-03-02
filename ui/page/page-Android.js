@@ -45,7 +45,23 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             rootLayout.nativeObject.requestFocus();
-            onShowCallback && onShowCallback();
+
+            const NativeTimer = requireClass('java.util.Timer');
+            const NativeRunnable = requireClass('java.lang.Runnable');
+            const NativeTimerTask = requireClass('java.util.TimerTask');
+            var timer = new NativeTimer();
+            timer.scheduleAtFixedRate(NativeTimerTask.extend("NFVisibilityTimer", {
+                run: function() {
+                    if (self.nativeObject.isVisible()) {
+                        timer.cancel();
+                        activity.runOnUiThread(NativeRunnable.implement({
+                            run: function() {
+                                onShowCallback && onShowCallback();
+                            }
+                        }));
+                    }
+                }
+            }, null), 0, 10);
         },
         onCreateOptionsMenu: function(menu) {
             optionsMenu = menu;
