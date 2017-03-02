@@ -2,6 +2,7 @@ const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 
 const File = require("nf-core/io/file");
+const Image = require("nf-core/ui/image");
 
 const Type = {
     IMAGE: 0,
@@ -73,14 +74,22 @@ Multimedia.getAllGalleryItems = function(params) {
         if((params.type == undefined) || (params.type == Multimedia.Type.VIDEO || 
             params.type == Multimedia.Type.ALL)) {
             uri = NativeMediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            var videos = getAllMediaFromUri(uri, projection);  
+            var videos = getAllMediaFromUri({
+                uri: uri, 
+                projection: projection, 
+                type: "video"
+            });  
             result.videos = videos;
         }
         
         if((params.type == undefined) || (params.type == Multimedia.Type.IMAGE || 
             params.type == Multimedia.Type.ALL)) {
             uri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            var images = getAllMediaFromUri(uri, projection); 
+            var images = getAllMediaFromUri({
+                uri: uri, 
+                projection: projection, 
+                type: "image"
+            });  
             result.images = images;
         }
         if(params && params.onSuccess) {
@@ -111,15 +120,13 @@ function pickFromGallery(resultCode, data) {
             var realPath = getRealPathFromURI(uri);
             if(_pickParams.onSuccess) {
                 var uriStr = uri.getPath(); 
-                var type;
                 if (uriStr.includes("images")) {
-                    type = Type.IMAGE;
+                    var image = new Image.createFromFile(realPath);
+                    _pickParams.onSuccess({image: image});
                 } else if (uriStr.includes("video")) {
-                    type = Type.VIDEO;
+                    var file = new File({path: realPath});
+                    _pickParams.onSuccess({video: file});
                 }
-                
-                var file = new File({path: realPath});
-                _pickParams.onSuccess({file: file, type: type});
             }
         }
         catch (err) {
@@ -156,13 +163,16 @@ function getCameraData(resultCode, data) {
         try {
             var uri = data.getData();
             if(_captureParams.onSuccess) {
-                var file = new File({path: getRealPathFromURI(uri)});
                 var type;
-                if(_action == NativeAction[0])
-                    type = Type.IMAGE;
-                else 
-                    type = Type.VIDEO;
-                _captureParams.onSuccess({file: file, type: type});
+                if(_action == NativeAction[0]) {
+                    var realPath = getRealPathFromURI(uri);
+                    var image = new Image.createFromFile(realPath);
+                    _captureParams.onSuccess({image: image});
+                }
+                else {
+                    var file = new File({path: getRealPathFromURI(uri)});
+                    _captureParams.onSuccess({video: file});
+                }
             }
         } catch(err) {
             if(_captureParams.onFailure)
@@ -175,16 +185,22 @@ function getCameraData(resultCode, data) {
     }
 }
 
-function getAllMediaFromUri(uri, projection) {
+function getAllMediaFromUri(params) {
     var activity = getCurrentPageFragment().getActivity();
     var contentResolver = activity.getContentResolver();
-    var cursor = contentResolver.query(uri, projection, null, null, null);
+    var cursor = contentResolver.query(params.uri, params.projection, null, null, null);
     var files = [];
     if (cursor) {
         while (cursor.moveToNext()) {
             var path = cursor.getString(0);
-            var file = new File({path: path});
-            files.push(file);
+            if(params.type == "image") {
+                var image = new Image.createFromFile(path);
+                files.push(image);
+            }
+            else if(params.type == "video") {
+                var file = new File({path: path});
+                files.push(file);
+            }
         }
         cursor.close();
     }
