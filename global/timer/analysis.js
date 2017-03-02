@@ -13,9 +13,9 @@
  * 
  *     function setTimer() {     
  *         var myTimerID = Timer.setTimeout({
- *                             task: changeBackgroundColor,
- *                             time: 3000
- *                         });
+ *             task: changeBackgroundColor,
+ *             delay: 3000 
+ *         });
  *     }
  * 
  *     const Color = require("nf-core/ui/color");
