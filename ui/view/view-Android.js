@@ -4,7 +4,6 @@ const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
 const NativeLayerDrawable       = requireClass("android.graphics.drawable.LayerDrawable");
-const NativeMotionEvent         = requireClass("android.view.MotionEvent");
 const NativeYogaNode            = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
 const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
@@ -13,6 +12,11 @@ const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes
 const NativeRectF               = requireClass("android.graphics.RectF");
 
 const Color = require("nf-core/ui/color");
+
+// MotionEvent.ACTION_UP
+const ACTION_UP = 1;
+// MotionEvent.ACTION_DOWN
+const ACTION_DOWN = 0;
 
 const YogaEdge = {
     "LEFT"          : NativeYogaEdge.LEFT,
@@ -296,16 +300,12 @@ function View(params) {
     self.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
             if(self.touchEnabled){
-                if (event.getAction() == NativeMotionEvent.ACTION_UP) {
-                    if(_onTouchEnded){
-                        _onTouchEnded();
-                        return true;
-                    }
-                } else {
-                    if(_onTouch){
-                        _onTouch();
-                        return true;
-                    }
+                if (event.getAction() === ACTION_UP && _onTouchEnded) {
+                    _onTouchEnded();
+                    return true;
+                } else if(event.getAction() === ACTION_DOWN && _onTouch) {
+                    _onTouch();
+                    return true;
                 }
             }
             return false;
