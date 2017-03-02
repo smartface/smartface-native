@@ -42,15 +42,25 @@ Multimedia.startCamera = function(e) { };
  *     @example
  *     const Image = require("nf-core/ui/image");
  *     const Multimedia = require("nf-core/device/multimedia");
- *     Multimedia.pickFromGallery({
- *         type: Multimedia.Type.ALL,
- *         onSuccess: onSuccess
- *     });
+ *     
+ *     if(readExternalStoragePermission())  {
+ *         Multimedia.pickFromGallery({
+ *             type: Multimedia.Type.IMAGE,
+ *             onSuccess: onSuccess
+ *         });
+ *     }
  * 
  *     function onSuccess(e) {
- *         if(e.image) {
- *             var image = e.image;
+ *         var image = e.image;
+ *     }
+ * 
+ *     function readExternalStoragePermission() {
+ *         var result = Application.checkPermission("READ_EXTERNAL_STORAGE");
+ *         if(!result) {
+ *             var permissionCode = 1003;
+ *             Application.requestPermissions(permissionCode, "READ_EXTERNAL_STORAGE");
  *         }
+ *         return Application.checkPermission("READ_EXTERNAL_STORAGE");
  *     }
  * 
  * @param {Object} params Object describing parameters for the function.

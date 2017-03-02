@@ -162,15 +162,14 @@ function getCameraData(resultCode, data) {
     if (resultCode == fragmentActivity.RESULT_OK) {
         try {
             var uri = data.getData();
+            var realPath = getRealPathFromURI(uri);
             if(_captureParams.onSuccess) {
-                var type;
                 if(_action == NativeAction[0]) {
-                    var realPath = getRealPathFromURI(uri);
                     var image = new Image.createFromFile(realPath);
                     _captureParams.onSuccess({image: image});
                 }
                 else {
-                    var file = new File({path: getRealPathFromURI(uri)});
+                    var file = new File({path: realPath});
                     _captureParams.onSuccess({video: file});
                 }
             }
