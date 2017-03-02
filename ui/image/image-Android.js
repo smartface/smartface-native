@@ -140,6 +140,7 @@ function Image (params) {
 Image.createFromFile = function(path) {
     var imageFile = new File({path:path});
     if(imageFile.nativeObject){
+        var bitmap;
         if(imageFile.type == Path.FILE_TYPE.ASSET){
             var assetsInputStream = Android.getActivity().getAssets().open(imageFile.nativeObject);
             bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
