@@ -93,7 +93,7 @@ const VideoView = extend(View)(
         Object.defineProperty(self, 'totalDuration', {
             get: function() {
                 
-                return self.avPlayer.duration();
+                return self.avPlayer.duration() * 1000;
             },
             enumerable: true
         });
@@ -101,7 +101,7 @@ const VideoView = extend(View)(
         Object.defineProperty(self, 'currentDuration', {
             get: function() {
                 
-                return self.avPlayer.getCurrentTime();
+                return self.avPlayer.getCurrentTime() * 1000;
             },
             enumerable: true
         });
