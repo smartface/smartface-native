@@ -158,13 +158,12 @@ function getRealPathFromURI(uri) {
 
 function getCameraData(resultCode, data) {
     var fragmentActivity = getCurrentPageFragment().getActivity();
-    
     if (resultCode == fragmentActivity.RESULT_OK) {
         try {
             var uri = data.getData();
             var realPath = getRealPathFromURI(uri);
             if(_captureParams.onSuccess) {
-                if(_action == NativeAction[0]) {
+                if(_action == ActionType.IMAGE_CAPTURE) {
                     var image = new Image.createFromFile(realPath);
                     _captureParams.onSuccess({image: image});
                 }
