@@ -1,5 +1,5 @@
 var Data = {};
-var Data.ios = {};
+Data.ios = {};
 
 Data.ios.getNativeObject = function(){
     var _identifier = "NF_USER_DEFAULTS";
