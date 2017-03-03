@@ -13,7 +13,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'string') {
                 self.nativeObject.alertBody = value;
-                console.log("alertBody did set");
             }
         },
         enumerable: true
@@ -26,7 +25,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'string') {
                 self.nativeObject.alertAction = value;
-                console.log("alertAction did set");
             }
         },
         enumerable: true
@@ -39,7 +37,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'string') {
                 self.nativeObject.soundName = value;
-                console.log("sound did set");
             }
         },
         enumerable: true
@@ -52,7 +49,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'string') {
                 self.nativeObject.alertLaunchImage = value;
-                console.log("launchImage did set");
             }
         },
         enumerable: true
@@ -64,7 +60,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         set: function(value) {
             self.nativeObject.fireDate = value;
-            console.log("fireDate did set");
         },
         enumerable: true
     });
@@ -76,7 +71,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'number') {
                 self.nativeObject.repeatInterval = value;
-                console.log("repeatInterval did set");
             }
         },
         enumerable: true
@@ -90,7 +84,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'number') {
                 self.nativeObject.applicationIconBadgeNumber = value;
-                console.log("applicationIconBadgeNumber did set");
             }
         },
         enumerable: true
@@ -103,7 +96,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'boolean') {
                 self.nativeObject.hasAction = value;
-                console.log("hasAction did set");
             }
         },
         enumerable: true
@@ -116,7 +108,6 @@ Notifications.LocalNotification = function LocalNotification(params) {
         set: function(value) {
             if (typeof value === 'object') {
                 self.nativeObject.userInfo = value;
-                console.log("userInfo did set");
             }
         },
         enumerable: true
@@ -124,17 +115,14 @@ Notifications.LocalNotification = function LocalNotification(params) {
     
     this.schedule = function() {
         UIApplication.sharedApplication().scheduleLocalNotification(self.nativeObject);
-        console.log("schedule called");
     };
     
     this.present = function() {
         UIApplication.sharedApplication().presentLocalNotificationNow(self.nativeObject);
-        console.log("present called");
     };
     
     this.cancel = function() {
         UIApplication.sharedApplication().cancelLocalNotification(self.nativeObject);
-        console.log("cancel called");
     };
     
     // Assign parameters given in constructor
@@ -177,5 +165,23 @@ Object.defineProperty(Notifications.ios, 'applicationIconBadgeNumber', {
     },
     enumerable: true
 });
+
+// PUSH NOTIFICATIONS
+Application.ios = {};
+Application.ios.registeredRemoteWithSuccessCallback = null;
+Application.ios.registeredRemoteWithFailureCallback = null;
+
+Notifications.registerForPushNotifications = function(onSuccess, onFailure){
+    Application.ios.registeredRemoteWithSuccessCallback = onSuccess;
+    Application.ios.registeredRemoteWithFailureCallback = onFailure;
+    
+    var userNotificationSettings = UIUserNotificationSettings.settingsForTypesCategories((UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge), undefined);
+    UIApplication.sharedApplication().registerUserNotificationSettings(userNotificationSettings);
+    UIApplication.sharedApplication().registerForRemoteNotifications();
+};
+
+Notifications.unregisterForPushNotifications = function(){
+    UIApplication.sharedApplication().unregisterForRemoteNotifications();
+}
 
 module.exports = Notifications;
