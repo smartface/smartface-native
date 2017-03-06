@@ -3,7 +3,7 @@ const View = require('nf-core/ui/view');
 
 const WebView = extend(View)(
     function (_super, params) {
-        const NativeBuildVersion = requireClass('android.os.Build.VERSION');
+        const NativeBuildVersion = requireClass('android.os.Build').VERSION;
         var activity = Android.getActivity();
         
         var self = this;
