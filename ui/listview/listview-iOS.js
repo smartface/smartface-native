@@ -112,11 +112,13 @@ const ListView = extend(View)(
         }
 
         function setAllChilds(item){
-             for (var child in item.childs){
-                item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
-                setAllChilds(item.childs[child]);
-             }
-         }
+            for (var child in item.childs){
+                 if (item.childs[child].id){
+                    item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
+                    setAllChilds(item.childs[child]);
+                 }
+            }
+        }
 
         self.nativeObject.didSelectRowAt = function(e){
            var listItem = self.createTemplate(e);
