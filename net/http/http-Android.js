@@ -6,6 +6,17 @@ const NativeString = requireClass("java.lang.String");
 
 var http = {};
 
+const methods = {
+    "GET": 0,
+    "POST" : 1,
+    "PUT" : 2,
+    "DELETE" : 3,
+    "HEAD" : 4,
+    "OPTIONS" : 5,
+    "TRACE" : 6,
+    "PATCH" : 7
+};
+
 http.requestString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
@@ -102,7 +113,7 @@ http.request = function(params, onLoad, onError) {
         }
     });
     
-    var method = new NativeInteger(params.method);
+    var method = new NativeInteger(methods[params.method]);
     var url = new NativeString(params.url);
     var parameters = [method, url, responseListener, responseErrorListener];
     var body = null;
