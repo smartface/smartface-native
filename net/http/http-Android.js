@@ -121,6 +121,11 @@ http.request = function(params, onLoad, onError) {
         body = new NativeString(params.body);
     var request = {};
     
+    var contentType = "text/plain";
+    if (params.headers && params.headers["Content-Type"]) {
+        contentType = params.headers["Content-Type"];
+    }
+
     try {
         const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
         request.nativeObject = StringRequest.extend("SFStringRequest", {
@@ -131,6 +136,9 @@ http.request = function(params, onLoad, onError) {
             },
             getHeaders: function() {
                 return getHeaderHashMap(params);
+            },
+            getBodyContentType: function() {
+                return contentType;
             }
         }, parameters);
     }
