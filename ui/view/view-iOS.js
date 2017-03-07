@@ -29,7 +29,9 @@ function View(params) {
             return self.nativeObject.alpha;
         },
         set: function(value) {
-            self.nativeObject.alpha = value;
+            if (typeof value === "number"){
+                self.nativeObject.alpha = value;
+            }
         },
         enumerable: true
     });
