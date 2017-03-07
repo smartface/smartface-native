@@ -122,7 +122,8 @@ const ListView = extend(View)(
         this.itemCount = 0;
 
         /**
-         * Gets/sets height of a row in a ListView.
+         * Gets/sets height of a row in a ListView. Once you created the ListView, 
+         * you can't change row height.
          *
          *
          * @property {Number} rowHeight
