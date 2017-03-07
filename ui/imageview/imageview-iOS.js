@@ -30,8 +30,9 @@ const ImageView = extend(View)(
         _super(this);
              
         //defaults
-         self.nativeObject.contentMode = UIViewContentMode.center;
-          
+        self.nativeObject.contentMode = UIViewContentMode.center;
+        self.touchEnabled = true;
+         
         Object.defineProperty(self, 'image', {
             get: function() {
                 return Image.createFromImage(self.nativeObject.image);
