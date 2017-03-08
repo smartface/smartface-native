@@ -1,4 +1,5 @@
 const TypeUtil = require("nf-core/util/type");
+const Exception = require("nf-core/util").Exception;
 
 function View(params) {
 
@@ -31,6 +32,8 @@ function View(params) {
         set: function(value) {
             if (typeof value === "number"){
                 self.nativeObject.alpha = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
         enumerable: true
@@ -306,7 +309,11 @@ function View(params) {
             return self.nativeObject.yoga.left;
         },
         set: function(value) {
-            self.nativeObject.yoga.left = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.left = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -316,7 +323,11 @@ function View(params) {
             return self.nativeObject.yoga.top;
         },
         set: function(value) {
-            self.nativeObject.yoga.top = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.top = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -326,7 +337,11 @@ function View(params) {
             return self.nativeObject.yoga.right;
         },
         set: function(value) {
-            self.nativeObject.yoga.right = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.right = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -336,7 +351,11 @@ function View(params) {
             return self.nativeObject.yoga.bottom;
         },
         set: function(value) {
-            self.nativeObject.yoga.bottom = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.bottom = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -366,7 +385,11 @@ function View(params) {
             return self.nativeObject.yoga.marginLeft;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginLeft = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginLeft = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -376,7 +399,11 @@ function View(params) {
             return self.nativeObject.yoga.marginTop;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginTop = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginTop = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -386,7 +413,11 @@ function View(params) {
             return self.nativeObject.yoga.marginRight;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginRight = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginRight = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -396,7 +427,11 @@ function View(params) {
             return self.nativeObject.yoga.marginBottom;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginBottom = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginBottom = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -406,7 +441,11 @@ function View(params) {
             return self.nativeObject.yoga.marginStart;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginStart = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginStart = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -416,7 +455,11 @@ function View(params) {
             return self.nativeObject.yoga.marginEnd;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginEnd = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginEnd = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -426,7 +469,11 @@ function View(params) {
             return self.nativeObject.yoga.marginHorizontal;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginHorizontal = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginHorizontal = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -436,7 +483,11 @@ function View(params) {
             return self.nativeObject.yoga.marginVertical;
         },
         set: function(value) {
-            self.nativeObject.yoga.marginVertical = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.marginVertical = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -446,7 +497,11 @@ function View(params) {
             return self.nativeObject.yoga.margin;
         },
         set: function(value) {
-            self.nativeObject.yoga.margin = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.margin = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -623,7 +678,11 @@ function View(params) {
             return self.nativeObject.yoga.width;
         },
         set: function(value) {
-            self.nativeObject.yoga.width = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.width = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -633,7 +692,11 @@ function View(params) {
             return self.nativeObject.yoga.height;
         },
         set: function(value) {
-            self.nativeObject.yoga.height = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.height = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -643,7 +706,11 @@ function View(params) {
             return self.nativeObject.yoga.minWidth;
         },
         set: function(value) {
-            self.nativeObject.yoga.minWidth = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.minWidth = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -653,7 +720,11 @@ function View(params) {
             return self.nativeObject.yoga.minHeight;
         },
         set: function(value) {
-            self.nativeObject.yoga.minHeight = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.minHeight = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -663,7 +734,11 @@ function View(params) {
             return self.nativeObject.yoga.maxWidth;
         },
         set: function(value) {
-            self.nativeObject.yoga.maxWidth = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.maxWidth = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
@@ -673,7 +748,11 @@ function View(params) {
             return self.nativeObject.yoga.maxHeight;
         },
         set: function(value) {
-            self.nativeObject.yoga.maxHeight = value;
+            if (typeof value === "number"){
+                self.nativeObject.yoga.maxHeight = value;
+            }else{
+                throw new TypeError(Exception.TypeError.NUMBER);
+            }
         },
         enumerable: true
     });
