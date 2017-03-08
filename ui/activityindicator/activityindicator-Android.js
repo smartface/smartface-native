@@ -30,6 +30,9 @@ const ActivityIndicator = extend(View)(
 
         self.color = Color.create("#00A1F1"); // SmartfaceBlue
         
+        // Handling ios specific properties.
+        self.ios = {}; 
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
