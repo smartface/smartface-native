@@ -71,9 +71,10 @@ function Picker() {
      *
      * @param {Function} ok This event is called when user clicks ok button.
      * @param {Function} cancel This event is called when user clicks cancel button.
-     * @method show
+     * @event show
      * @android
      * @ios
+     * @return {Object}
      * @since 0.1
      */
     this.show = function(ok, cancel){};
