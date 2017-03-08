@@ -11,7 +11,7 @@ const Picker = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject) {
-            var page = Pages.currentPage;
+            var page = Pages.getCurrentPage();
             var pageNativeObject = page.nativeObject;
             var fragmentActivity = pageNativeObject.getActivity();
             self.nativeObject = new NativeNumberPicker(fragmentActivity);

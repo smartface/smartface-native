@@ -200,7 +200,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
 
 function getCurrentPageFragment() {
     const Pages = require("nf-core/ui/pages");
-    var currentPage = Pages.currentPage;
+    var currentPage = Pages.getCurrentPage();
     return currentPage.nativeObject;
 }
 

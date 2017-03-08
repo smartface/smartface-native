@@ -235,7 +235,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                Pages.toolbar.setBackgroundColor(color);
+                Pages.getToolbar().setBackgroundColor(color);
             }
         },
         enumerable: true
@@ -249,24 +249,21 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerBarImage = image;
-                Pages.toolbar.setBackground(image.nativeObject);
+                Pages.getToolbar().setBackground(image.nativeObject);
             }
         },
         enumerable: true
     });
 
-    var _headerBarHomeEnabled;
-    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+    var _leftItemEnabled;
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
-            return _headerBarHomeEnabled;
+            return _leftItemEnabled;
         },
-        set: function(enabled) {
-            if (TypeUtil.isBoolean(enabled)) {
-                _headerBarHomeEnabled = enabled;
-                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
-                if(!_headerBarLeftItem){
-                    activity.getSupportActionBar().setHomeAsUpIndicator(null);
-                }
+        set: function(leftItemEnabled) {
+            if (TypeUtil.isBoolean(leftItemEnabled)) {
+                _leftItemEnabled = leftItemEnabled;
+                Pages.getActionBar().setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true
@@ -280,29 +277,15 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarHomeImage = null;
-    Object.defineProperty(self.headerBar, 'homeAsUpIndicatorImage', {
-        get: function() {
-            return _headerBarHomeImage;
-        },
-        set: function(image) {
-            if(image){
-                _headerBarHomeImage = image;
-                activity.getSupportActionBar().setHomeAsUpIndicator(_headerBarHomeImage.nativeObject);
-            }
-        },
-        enumerable: true
-    });
-
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return Pages.toolbar.getTitle();
+            return Pages.getToolbar().getTitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Pages.toolbar.setTitle(text);
+                Pages.getToolbar().setTitle(text);
             } else {
-                Pages.toolbar.setTitle("");
+                Pages.getToolbar().setTitle("");
             }
         },
         enumerable: true
@@ -316,7 +299,24 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                Pages.toolbar.setTitleTextColor(color);
+                Pages.getToolbar().setTitleTextColor(color);
+            }
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar, 'visible', {
+        get: function() {
+            return Pages.getToolbar().getVisibility() ==  0; // View.VISIBLE
+        },
+        set: function(visible) {
+            if (TypeUtil.isBoolean(visible)) {
+                if(visible){
+                    Pages.getToolbar().setVisibility(0); // View.VISIBLE
+                }
+                else{
+                    Pages.getToolbar().setVisibility(8); // View.GONE
+                }
             }
         },
         enumerable: true
@@ -324,13 +324,13 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return Pages.toolbar.getSubtitle();
+            return Pages.getToolbar().getSubtitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Pages.toolbar.setSubtitle(text);
+                Pages.getToolbar().setSubtitle(text);
             } else {
-                Pages.toolbar.setSubtitle("");
+                Pages.getToolbar().setSubtitle("");
             }
         },
         enumerable: true
@@ -343,24 +343,36 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                Pages.toolbar.setSubtitleTextColor(color);
+                Pages.getToolbar().setSubtitleTextColor(color);
             }
         },
         enumerable: true
     });
-
-    Object.defineProperty(self.headerBar, 'visible', {
+    
+    var _headerBarLogo = null;
+    Object.defineProperty(self.headerBar.android, 'logo', {
         get: function() {
-            return Pages.toolbar.getVisibility() ==  0; // View.VISIBLE
+            return _headerBarLogo;
         },
-        set: function(visible) {
-            if (TypeUtil.isBoolean(visible)) {
-                if(visible){
-                    Pages.toolbar.setVisibility(0); // View.VISIBLE
-                }
-                else{
-                    Pages.toolbar.setVisibility(8); // View.GONE
-                }
+        set: function(image) {
+            const Image = require("nf-core/ui/image");
+            if(image instanceof Image){
+                _headerBarLogo = image;
+                Pages.getActionBar().setLogo(_headerBarLogo.nativeObject);
+            }
+        },
+        enumerable: true
+    });
+    
+    var _headerBarLogoEnabled = false;
+    Object.defineProperty(self.headerBar.android, 'logoEnabled', {
+        get: function() {
+            return _headerBarLogoEnabled;
+        },
+        set: function(logoEnabled) {
+            if(TypeUtil.isBoolean(logoEnabled)){
+                _headerBarLogoEnabled = logoEnabled;
+                Pages.getActionBar().setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
         enumerable: true
@@ -437,33 +449,27 @@ function Page(params) {
 
         });
     };
-    
-    // internal call only.
-    self.headerBar.getItems = function(){
-        return _headerBarItems;
-    }
 
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function (leftItem) {
         const HeaderBarItem = require("../headerbaritem");
-
+        
         if (leftItem instanceof HeaderBarItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
-            self.headerBar.homeAsUpIndicatorImage = _headerBarLeftItem.image;
-            self.android.displayShowHomeEnabled = true;
+            Pages.getActionBar().setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
         } else {
             _headerBarLeftItem = null;
-            self.headerBar.homeAsUpIndicatorImage = null;
+            Pages.getActionBar().setHomeAsUpIndicator(null);
         }
     };
     
     // Default values
     self.statusBar.visible = true;
     self.isBackButtonEnabled = false;
-    // todo Add color default value after resolving COR-1153.
-    // self.statusBar.color = Color.TRANSPARENT;
+    self.statusBar.color = Color.TRANSPARENT;
     self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.displayShowHomeEnabled = false;
+    self.headerBar.leftItemEnabled = false;
+    self.headerBar.android.logoEnabled = false;
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
     self.headerBar.visible = true;

@@ -79,7 +79,7 @@ Contacts.pick = function(params) {
         var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
         intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
         
-        var currentPage = Pages.currentPage;
+        var currentPage = Pages.getCurrentPage();
         var nativeObject = currentPage.nativeObject;
         nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
     }
