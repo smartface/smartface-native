@@ -21,7 +21,9 @@ const Button = extend(View)(
           
         _super(this);
         
-        self.nativeObject.setTitleColor(Color.BLACK,ButtonState.normal);
+        //defaults
+        self.nativeObject.setTitleColor(Color.WHITE,ButtonState.normal);
+        self.nativeObject.setBackgroundColor(Color.create("#00A1F1"),ButtonState.normal);
 
         Object.defineProperty(self, 'enabled', {
             get: function() {
