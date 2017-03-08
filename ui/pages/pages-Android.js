@@ -4,6 +4,9 @@ const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManag
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
 var activity = Android.getActivity();
+var mToolbar = activity.findViewById(NativeR.id.toolbar);
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
+var mSupportActionBar = activity.getSupportActionBar();
 var pageAnimationsCache;
 
 const Pages = function(params) {
@@ -11,8 +14,6 @@ const Pages = function(params) {
     var _sliderDrawer = null;
 
     var pagesStack = [];
-    var drawerLayout = Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
-    var toolbar = Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
     var rootViewId = NativeR.id.layout_container;
     
     registerOnBackKeyPressed(pagesStack);
@@ -55,29 +56,23 @@ const Pages = function(params) {
         // internal call properties
         'showSliderDrawer' : {
             value: function(){
-                showSliderDrawer(_sliderDrawer, drawerLayout);
+                showSliderDrawer(_sliderDrawer);
             }
         },
         'hideSliderDrawer' : {
             value: function(){
-                hideSliderDrawer(_sliderDrawer, drawerLayout);
+                hideSliderDrawer(_sliderDrawer);
             }
         },
         'setDrawerLocked' : {
             value: function(isLocked){
-                setDrawerLocked(_sliderDrawer, isLocked, drawerLayout);
+                setDrawerLocked(_sliderDrawer, isLocked);
             }
         },
         'isSliderDrawerOpen' : {
             value: function(){
-                return isSliderDrawerOpen(_sliderDrawer, drawerLayout);
+                return isSliderDrawerOpen(_sliderDrawer);
             }
-        },
-        'drawerLayout':{
-            value: drawerLayout
-        },
-        'toolbar':{
-            value: Pages.toolbar
         },
         'setHistory': {
             value: function(history) {
@@ -89,63 +84,78 @@ const Pages = function(params) {
     self.push(params.rootPage, false, params.tag);
 };
 
-Pages.toolbar = activity.findViewById(NativeR.id.toolbar);
-Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
+Object.defineProperties(Pages,{
+    'getToolbar': {
+        value: function(){
+            return mToolbar;  
+        }
+    },
+    'getDrawerLayout': {
+        value: function(){
+            return mDrawerLayout;  
+        }
+    },
+    'getActionBar': {
+        value: function(){
+            return mSupportActionBar;  
+        }
+    }
+});
 
-function showSliderDrawer(_sliderDrawer, drawerLayout){
+function showSliderDrawer(_sliderDrawer){
     if(_sliderDrawer && _sliderDrawer.enabled){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
         if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT 
-            drawerLayout.openDrawer(5);
+            mDrawerLayout.openDrawer(5);
         }
         else{
             // Gravity.LEFT
-            drawerLayout.openDrawer(3);
+            mDrawerLayout.openDrawer(3);
         }
     }
 }
 
-function hideSliderDrawer(_sliderDrawer, drawerLayout) {
+function hideSliderDrawer(_sliderDrawer) {
    if(_sliderDrawer){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
         if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
-            drawerLayout.closeDrawer(5);
+            mDrawerLayout.closeDrawer(5);
         }
         else{
             // Gravity.LEFT
-            drawerLayout.closeDrawer(3);
+            mDrawerLayout.closeDrawer(3);
         }
     }
 }
 
-function setDrawerLocked(_sliderDrawer, isLocked, drawerLayout) {
+function setDrawerLocked(_sliderDrawer, isLocked) {
     if(_sliderDrawer){
         if(isLocked){
             // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            drawerLayout.setDrawerLockMode(1);
+            mDrawerLayout.setDrawerLockMode(1);
             if(Pages.isSliderDrawerOpen){
                 Pages.hideSliderDrawer();
             }
         }
         else{
             // DrawerLayout.LOCK_MODE_UNLOCKED
-            drawerLayout.setDrawerLockMode(0);
+            mDrawerLayout.setDrawerLockMode(0);
         }
     }
 }
 
-function isSliderDrawerOpen(_sliderDrawer, drawerLayout) {
+function isSliderDrawerOpen(_sliderDrawer) {
     if(_sliderDrawer){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
         if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
-            return drawerLayout.isDrawerOpen(5);
+            return mDrawerLayout.isDrawerOpen(5);
         }
         else{
             // Gravity.LEFT
-            return drawerLayout.isDrawerOpen(3);
+            return mDrawerLayout.isDrawerOpen(3);
         }
     }
     return false;
@@ -198,9 +208,9 @@ function pop(){
 }
 
 function registerOnBackKeyPressed(pagesStack){
-    Pages.drawerLayout.setFocusableInTouchMode(true);
-    Pages.drawerLayout.requestFocus();
-    Pages.drawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
+    mDrawerLayout.setFocusableInTouchMode(true);
+    mDrawerLayout.requestFocus();
+    mDrawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function( view, keyCode, keyEvent) {
             if (pagesStack[pagesStack.length-1] && 
                     pagesStack[pagesStack.length-1].android.backButtonEnabled) {
@@ -217,12 +227,12 @@ function registerOnBackKeyPressed(pagesStack){
 function attachSliderDrawer(sliderDrawer){
     if(sliderDrawer){
         var sliderDrawerId = sliderDrawer.nativeObject.getId();
-        var isExists = Pages.drawerLayout.findViewById(sliderDrawerId);
+        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
         if(!isExists){
-            Pages.drawerLayout.addView(sliderDrawer.nativeObject);
-            Pages.drawerLayout.bringToFront();
+            mDrawerLayout.addView(sliderDrawer.nativeObject);
+            mDrawerLayout.bringToFront();
             if(sliderDrawer.drawerListener){
-                Pages.drawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
             }
         }
         sliderDrawer.onLoad && sliderDrawer.onLoad();
@@ -232,9 +242,9 @@ function attachSliderDrawer(sliderDrawer){
 function detachSliderDrawer(sliderDrawer){
     if(sliderDrawer){
         sliderDrawer.attachedPages = null;
-        Pages.drawerLayout.removeView(sliderDrawer.nativeObject);
+        mDrawerLayout.removeView(sliderDrawer.nativeObject);
         if(sliderDrawer.drawerListener){
-            Pages.drawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
         }
     }
 }
