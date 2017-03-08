@@ -112,13 +112,6 @@ Type.IMAGE = 0;
  */
 Type.VIDEO = 1;
 
-/**
- * @property {Number} ALL
- * @static
- * @readonly
- * @since 0.1
- */
-Type.ALL = 2;
 
 /**
  * @enum {Number} Device.Multimedia.ActionType
