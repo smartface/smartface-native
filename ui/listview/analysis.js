@@ -72,8 +72,8 @@ const extend = require('js-base/core/extend');
  * 
  *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
  *            if (direction == Direction.RIGHTTOLEFT){
- *               expansionSettings.fillOnTrigger = true;
- *               expansionSettings.threshold = 1.5;
+ *               expansionSettings.fillOnTrigger = true;  //if true the button fills the cell on trigger, else it bounces back to its initial position
+ *               expansionSettings.threshold = 1.5;  //Size proportional threshold to trigger the expansion button. Default value 1.5
  *               var deleteAction = new myListView.ios.swipeItem("Delete",Color.RED,15,function(e) { 
  *                   console.log("Delete Action Index = " + e.index);
  *                });
