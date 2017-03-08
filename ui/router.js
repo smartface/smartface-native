@@ -11,7 +11,7 @@ const Pages = require("./pages");
  * callback of page to be shown.
  * 
  *     @example
- *     var Router = require('nf-core/ui/router');
+ *     const Router = require('nf-core/ui/router');
  *     Router.add('login', require('pages/pgLogin'));
  *     Router.add('dashboard', require('pages/pgDashboard'));
  *     Router.go('login');
