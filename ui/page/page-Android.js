@@ -255,18 +255,15 @@ function Page(params) {
         enumerable: true
     });
 
-    var _headerBarHomeEnabled;
-    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+    var _leftItemEnabled;
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
-            return _headerBarHomeEnabled;
+            return _leftItemEnabled;
         },
-        set: function(enabled) {
-            if (TypeUtil.isBoolean(enabled)) {
-                _headerBarHomeEnabled = enabled;
-                Pages.getActionBar().setDisplayHomeAsUpEnabled(_headerBarHomeEnabled);
-                if(!_headerBarLeftItem){
-                    Pages.getActionBar().setHomeAsUpIndicator(null);
-                }
+        set: function(leftItemEnabled) {
+            if (TypeUtil.isBoolean(leftItemEnabled)) {
+                _leftItemEnabled = leftItemEnabled;
+                Pages.getActionBar().setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true
@@ -469,10 +466,10 @@ function Page(params) {
     // Default values
     self.statusBar.visible = true;
     self.isBackButtonEnabled = false;
-    // todo Add color default value after resolving COR-1153.
-    // self.statusBar.color = Color.TRANSPARENT;
+    self.statusBar.color = Color.TRANSPARENT;
     self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.displayShowHomeEnabled = false;
+    self.headerBar.leftItemEnabled = false;
+    self.headerBar.android.logoEnabled = false;
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
     self.headerBar.visible = true;
