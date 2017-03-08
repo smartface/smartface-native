@@ -30,6 +30,15 @@ const ActivityIndicator = extend(View)(
          * @since 0.1
          */
         this.color = Color.GRAY;
+        
+        /**
+         * Gets/sets type of the activity indicator.
+         *
+         * @property {UI.ActivityIndicatorType} type
+         * @ios
+         * @since 0.1
+         */
+        this.ios.type = ActivityIndicatorType.WHITE;
     }
 );
 
