@@ -123,7 +123,6 @@ function HeaderBar() {
      * Gets/sets the logo visibility of the HeaderBar. If logo is disable, 
      * logo image will newer shown. This property will work only for Android.
      *
-     *
      * @property {Boolean} [logoEnabled = false]
      * @android
      * @since 0.1
