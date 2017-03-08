@@ -22,7 +22,7 @@ const ActivityIndicator = extend(View)(
          }
          _super(this);
         
-       self.nativeObject.startAnimating();
+        self.nativeObject.startAnimating();
 
         var _color = Color.WHITE;
         Object.defineProperty(this, 'color', {
@@ -49,28 +49,28 @@ const ActivityIndicator = extend(View)(
                 enumerable: true
         });
         
-            // var _visible = true;
-            // Object.defineProperty(self, 'visible', {
-            //     get: function() {
-            //         return _visible;
-            //     },
-            //     set: function(value) {
-            //         _visible = value;
-            //         if (value) {
-            //             self.nativeObject.startAnimating();
-            //         }else{
-            //             self.nativeObject.stopAnimating();
-            //         }
-            //     },
-            //     enumerable: true
-            // });
-    
-            // Assign parameters given in constructor
-            if (params) {
-                for (var param in params) {
-                    this[param] = params[param];
-                }
+        // var _visible = true;
+        // Object.defineProperty(self, 'visible', {
+        //     get: function() {
+        //         return _visible;
+        //     },
+        //     set: function(value) {
+        //         _visible = value;
+        //         if (value) {
+        //             self.nativeObject.startAnimating();
+        //         }else{
+        //             self.nativeObject.stopAnimating();
+        //         }
+        //     },
+        //     enumerable: true
+        // });
+
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
             }
+        }
     
     }
 );
