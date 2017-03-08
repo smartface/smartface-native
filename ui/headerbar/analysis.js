@@ -110,7 +110,7 @@ function HeaderBar() {
      *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://icon.png');
-     *     myPage.headerBar.android.logoEnable = true;
+     *     myPage.headerBar.android.logoEnabled = true;
      *     myPage.headerBar.android.logo = myImage;
      *
      * @property {UI.Image} [logo = null]
@@ -124,11 +124,11 @@ function HeaderBar() {
      * logo image will newer shown. This property will work only for Android.
      *
      *
-     * @property {Boolean} [logoEnable = false]
+     * @property {Boolean} [logoEnabled = false]
      * @android
      * @since 0.1
      */
-    this.android.logoEnable = null;
+    this.android.logoEnabled = null;
 
     /**
      * Gets/sets subtitle of the header bar. If not set subtitle will not show.
