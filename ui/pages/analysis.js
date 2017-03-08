@@ -1,4 +1,5 @@
 /**
+ * @ignore
  * @class UI.Pages
  * @since 0.1
  *
