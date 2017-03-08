@@ -37,7 +37,7 @@ function setIntent(notificationBuilder) {
     const NativeTaskStackBuilder = requireClass("android.app.TaskStackBuilder");
     const NativePendingIntent = requireClass("android.app.PendingIntent");
     
-    var page = Pages.currentPage;
+    var page = Pages.getCurrentPage();
     var nativeObject = page.nativeObject;
     var activity = nativeObject.getActivity();
     var mainActivity = Android.getActivity();

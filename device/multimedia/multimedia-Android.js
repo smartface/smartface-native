@@ -207,7 +207,7 @@ function getAllMediaFromUri(params) {
 
 function getCurrentPageFragment() {
     const Pages = require("nf-core/ui/pages");
-    var currentPage = Pages.currentPage;
+    var currentPage = Pages.getCurrentPage();
     return currentPage.nativeObject;
 }
 

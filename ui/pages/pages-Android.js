@@ -8,6 +8,7 @@ var mToolbar = activity.findViewById(NativeR.id.toolbar);
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 var mSupportActionBar = activity.getSupportActionBar();
 var pageAnimationsCache;
+var currentPage;
 
 const Pages = function(params) {
     var self = this;
@@ -16,6 +17,7 @@ const Pages = function(params) {
     var pagesStack = [];
     var rootViewId = NativeR.id.layout_container;
     
+    registerOnBackStackChanged(self, pagesStack);
     registerOnBackKeyPressed(pagesStack);
     
     Object.defineProperties(self,{
@@ -99,7 +101,12 @@ Object.defineProperties(Pages,{
         value: function(){
             return mSupportActionBar;  
         }
-    }
+    },
+    'getCurrentPage': {
+        value: function(){
+            return currentPage;  
+        }
+    },
 });
 
 function showSliderDrawer(_sliderDrawer){
@@ -196,7 +203,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
     fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
     fragmentTransaction.commit();
     fragmentManager.executePendingTransactions();
-    Pages.currentPage = page;
+    currentPage = page;
 }
 
 function pop(){
@@ -205,6 +212,26 @@ function pop(){
         return fragmentManager.popBackStackImmediate();
     }
     return false;
+}
+
+function registerOnBackStackChanged(self, pagesStack){
+    activity.getSupportFragmentManager().addOnBackStackChangedListener(
+        NativeFragmentManager.OnBackStackChangedListener.implement({
+            onBackStackChanged: function(){
+                var supportFragmentManager = activity.getSupportFragmentManager();
+                var nativeStackCount = supportFragmentManager.getBackStackEntryCount();
+                if (nativeStackCount < pagesStack.length) { // means poll
+                    if(pagesStack.length > 0) {
+                        pagesStack[pagesStack.length-1].onHide && pagesStack[pagesStack.length-1].onHide();
+                        currentPage = pagesStack.pop();
+                        var fragmentTransaction = supportFragmentManager.beginTransaction();
+                        fragmentTransaction.remove(currentPage.nativeObject).commit();
+                        self.hideSliderDrawer();
+                    }
+                }
+            }
+        })
+    );
 }
 
 function registerOnBackKeyPressed(pagesStack){
@@ -216,7 +243,7 @@ function registerOnBackKeyPressed(pagesStack){
                     pagesStack[pagesStack.length-1].android.backButtonEnabled) {
                 // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
                 if( keyCode === 4 && keyEvent.getAction() === 0) {
-                    Pages.goBack();
+                    Pages.pop();
                 }
             }
             return true;
@@ -248,7 +275,5 @@ function detachSliderDrawer(sliderDrawer){
         }
     }
 }
-
-Pages.currentPage = null;
 
 module.exports = Pages;
