@@ -14,10 +14,7 @@ const ListView = extend(View)(
         var activity = Android.getActivity();
         
         self.nativeObject = new NativeSwipeRefreshLayout(activity);
-        var recyclerViewLayoutParams = new NativeSwipeRefreshLayout.LayoutParams(-2,-2);
-        
         self.nativeInner = new NativeRecyclerView(activity); 
-        self.nativeInner.setLayoutParams(recyclerViewLayoutParams);
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
         self.nativeInner.setLayoutManager(linearLayoutManager);
         self.nativeObject.addView(self.nativeInner);
