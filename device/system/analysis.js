@@ -157,14 +157,16 @@ System.android.getPackageVersion ({
  * 
  *     @example
  *     System.validateFingerPrint({
- *         onSuccess: function() {
- *             alert("valid finger");
- *         },
- *         onError: function() {
- *             alert("invalid finger");
- *         }
- *     });
+ *            message : "Message",
+ *            onSuccess : function(){
+ *                  console.log("Success");
+ *            },
+ *            onError : function(){
+ *                  console.log("Error");
+ *            }
+ *      });
  * @method validateFingerPrint
+ * @param {String} message
  * @param {Function} onSuccess
  * @param {Function} onError
  * @static

@@ -100,4 +100,12 @@ function getBatteryIntent() {
     return Android.getActivity().registerReceiver(null, intentFilter);
 };
 
+// iOS specifics
+System.ios = {};
+Object.defineProperties(System.ios, {
+    'validateFingerPrint': {
+        value: function(onSuccess, onError) {}
+    }
+});
+
 module.exports = System;
