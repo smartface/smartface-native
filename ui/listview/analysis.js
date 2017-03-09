@@ -12,6 +12,7 @@ const extend = require('js-base/core/extend');
  *     const ListViewItem = require('nf-core/ui/listviewitem');
  *     const Label = require('nf-core/ui/label');
  *     const FlexLayout = require('nf-core/ui/flexlayout');
+ *     const Direction = require('nf-core/ui/listview/direction');
  *
  *     var myDataSet = [
  *         {
@@ -68,6 +69,24 @@ const extend = require('js-base/core/extend');
  *         myListView.refreshData();
  *         myListView.stopRefresh();
  *     }
+ * 
+ *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *            if (direction == Direction.RIGHTTOLEFT){
+ *               expansionSettings.fillOnTrigger = true;  //if true the button fills the cell on trigger, else it bounces back to its initial position
+ *               expansionSettings.threshold = 1.5;  //Size proportional threshold to trigger the expansion button. Default value 1.5
+ *               var deleteAction = new myListView.ios.swipeItem("Delete",Color.RED,15,function(e) { 
+ *                   console.log("Delete Action Index = " + e.index);
+ *                });
+ *                
+ *                return [deleteAction];
+ *            }else if (direction == Direction.LEFTTORIGHT){
+ *                var moreAction = new myListView.ios.swipeItem("More",Color.GRAY,15,function(e){
+ *                   console.log("More Action Index = " + e.index);
+ *                });
+ *                return [moreAction];
+ *            }
+ *       };
+ * 
  *
  */
 
@@ -254,6 +273,28 @@ const ListView = extend(View)(
          * @since 0.1
          */
         this.onPullRefresh = function onPullRefresh(){}
+        
+        /**
+         * @param {String} title
+         * @param {UI.Color} color
+         * @param {Integer} padding
+         * @param {Function} action Callback for button click action
+         * This method is create swipe item
+         *
+         * @method swipeItem
+         * @ios
+         * @since 0.1
+         */
+        this.ios.swipeItem = function(title,color,padding,action){}
+        
+        /**
+         * This event is called when user swipe listview row
+         *
+         * @event onRowSwiped
+         * @ios
+         * @since 0.1
+         */
+        this.ios.onRowSwiped  = function(direction){}
     }
 );
 
