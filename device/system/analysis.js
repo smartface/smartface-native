@@ -156,7 +156,7 @@ System.android.getPackageVersion ({
  * Checks if the provided finger print matches with the system's finger print.
  * 
  *     @example
- *     System.validateFingerPrint({
+ *     System.ios.validateFingerPrint({
  *            message : "Message",
  *            onSuccess : function(){
  *                  console.log("Success");
