@@ -45,6 +45,14 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
+        self.loadFromUrl = function(url, placeHolder){
+            if (placeHolder){
+                self.nativeObject.loadFromURL(NSURL.URLWithString(url),placeHolder.nativeObject);
+            }else{
+                self.nativeObject.loadFromURL(NSURL.URLWithString(url));
+            }
+        }
+        
         Object.defineProperty(self, 'imageFillType', {
             get: function() {
                var returnValue = null;
