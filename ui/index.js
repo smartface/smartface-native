@@ -36,6 +36,5 @@ module.exports = {
     Quicklook: require('./quicklook'),
     Picker: require('./picker'),
     SearchView: require('./searchview'),
-    Animator: require('./animator'),
-    ActivityIndicatorType : require('./activityindicatortype.js')
+    Animator: require('./animator')
 };

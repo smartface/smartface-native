@@ -42,4 +42,8 @@ const ActivityIndicator = extend(View)(
     }
 );
 
+ActivityIndicator.iOS = {};
+
+ActivityIndicator.iOS.Type = {};
+
 module.exports = ActivityIndicator;

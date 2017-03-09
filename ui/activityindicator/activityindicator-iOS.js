@@ -1,7 +1,6 @@
 const View = require('../view');
 const Color = require("nf-core/ui/color");
 const extend = require('js-base/core/extend');
-const ActivityIndicatorType = require('nf-core/ui/activityindicatortype');
 
 const ActivityIndicator = extend(View)(
     function (_super, params)  {
@@ -14,10 +13,10 @@ const ActivityIndicator = extend(View)(
                   if (typeof params.ios.type === "number" && params.ios.type >= 0 && params.ios.type < 3){
                       self.nativeObject = new UIActivityIndicatorView(params.ios.type);
                   }else{
-                       self.nativeObject = new UIActivityIndicatorView(ActivityIndicatorType.WHITE);
+                       self.nativeObject = new UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
                   }
               }else{
-                   self.nativeObject = new UIActivityIndicatorView(ActivityIndicatorType.WHITE);
+                   self.nativeObject = new UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
               }
          }
          _super(this);
@@ -38,7 +37,7 @@ const ActivityIndicator = extend(View)(
            
         self.ios = {};
          
-        var _type = ActivityIndicatorType.WHITE;
+        var _type = ActivityIndicator.iOS.Type.WHITE;
         Object.defineProperty(self.ios, 'type', {
                 get: function() {
                     return _type;
@@ -75,5 +74,24 @@ const ActivityIndicator = extend(View)(
     }
 );
 
+ActivityIndicator.iOS = {};
+
+ActivityIndicator.iOS.Type = {};
+
+Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITELARGE', {
+    value: 0,
+    writable: false
+});
+
+Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITE', {
+    value: 1,
+    writable: false
+});
+
+
+Object.defineProperty(ActivityIndicator.iOS.Type, 'GRAY', {
+    value: 2,
+    writable: false
+});
 
 module.exports = ActivityIndicator;
