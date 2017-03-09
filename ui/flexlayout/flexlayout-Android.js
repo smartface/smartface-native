@@ -184,7 +184,7 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
 
 FlexLayout.FlexWrap = {};
 Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
-    value : NativeYogaWrap.NOWRAP,
+    value : NativeYogaWrap.NO_WRAP,
     writable: false
 });
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {

@@ -13,31 +13,31 @@ const extend = require('js-base/core/extend');
  *     const Label = require('nf-core/ui/label');
  *     const FlexLayout = require('nf-core/ui/flexlayout');
  *
+ *     var myDataSet = [
+ *         {
+ *             title: 'Smartface Title 1',
+ *             backgroundColor: Color.RED
+ *         },
+ *         {
+ *             title: 'Smartface Title 2',
+ *             backgroundColor: Color.CYAN
+ *         },
+ *         {
+ *             title: 'Smartface Title 3',
+ *             backgroundColor: Color.YELLOW
+ *         },
+ *         {
+ *             title: 'Smartface Title 4',
+ *             backgroundColor: Color.GRAY
+ *         }
+ *     ];
+ * 
  *     var myListView = new ListView({
  *         flexGrow:1,
  *         rowHeight: 60,
  *         backgroundColor: Color.LIGHTGRAY,
  *         itemCount: myDataSet.length,
  *     });
- *
- *     var myDataSet = [
- *                         {
- *                             title: 'Smartface Title 1',
- *                             backgroundColor: Color.RED
- *                         },
- *                         {
- *                             title: 'Smartface Title 2',
- *                             backgroundColor: Color.CYAN
- *                         },
- *                         {
- *                             title: 'Smartface Title 3',
- *                             backgroundColor: Color.YELLOW
- *                         },
- *                         {
- *                             title: 'Smartface Title 4',
- *                             backgroundColor: Color.GRAY
- *                         }
- *                     ];
  *
  *     myListView.onRowCreate = function(){
  *         var myListViewItem = new ListViewItem();
