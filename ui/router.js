@@ -28,6 +28,34 @@ var pagesInstance = null;
 var routes = {};
 var history = [];
 
+Object.defineProperty(Router, 'sliderDrawer', {
+    get: function() 
+    {
+        var retval = null;
+        if (pagesInstance) 
+        {
+            retval = pagesInstance.sliderDrawer;
+        }
+        return retval;
+    },
+    set: function(sliderDrawerValue) 
+    {
+        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        if (sliderDrawerValue instanceof SliderDrawer) 
+        {
+            if (pagesInstance) 
+            {
+                pagesInstance.sliderDrawer = sliderDrawerValue;
+            }
+        } 
+        else 
+        {
+            throw TypeError("Object must be SliderDrawer instance");
+        }
+    },
+    enumerable: true
+});
+
 /**
  * Adds given page class to routes by matching it with given route path. You
  * can define if page instance will be singleton object or a new instance 
