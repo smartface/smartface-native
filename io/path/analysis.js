@@ -2,20 +2,38 @@
  * @class IO.Path
  * @since 0.1
  *
- * // @todo add description
+ * Path allows you to use Smartface URI scheme and operation system common paths.
  * 
  *     @example
- *     // @todo add example
+ *     const File = require('nf-core/ui/file');
+ *     const Path = require('nf-core/ui/path');
+ * 
+ *     var myImage = new File({
+ *         path: Path.ImagesUriScheme + 'smartface.png'
+ *     });
+ * 
+ *     if(Path.android.externalStorages.external){
+ *         var destinationPath = Path.android.externalStorages.external + Path.Separator + 'myDirectory';
+ *         var destinationDirectory = new File({
+ *             path: destinationPath
+ *         });
+ *         if(!destinationDirectory.exists){
+ *             destinationDirectory.createDirectory();
+ *         }
+ *         myImage.copy(destinationPath);
+ *     };
  * 
  */
 function Path() {}
 
 /**
- * @property {String} ImagesUriSheme
- * // @todo add description.
+ * Gets URI scheme for files under images folder.
  * 
+ * @property {String} ImagesUriSheme
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(Path, 'ImagesUriScheme', {
@@ -24,11 +42,13 @@ Object.defineProperty(Path, 'ImagesUriScheme', {
 });
 
 /**
- * @property {String} AssetsUriSheme
- * // @todo add description.
+ * Gets URI scheme for files under assets folder.
  * 
+ * @property {String} AssetsUriSheme
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(Path, 'AssetsUriScheme', {
@@ -37,11 +57,13 @@ Object.defineProperty(Path, 'AssetsUriScheme', {
 });
 
 /**
- * @property {String} Separator
- * // @todo add description.
+ * Gets path separator for the running environment.
  * 
+ * @property {String} Separator
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(Path, 'Separator', {
@@ -50,48 +72,34 @@ Object.defineProperty(Path, 'Separator', {
 });
 
 /**
- * @property {IO.File} DataDirectory
- * // @todo add description.
+ * Gets data directory path of the application.
  * 
+ * @property {IO.File} DataDirectory
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(Path, 'DataDirectory', {
     writable: false
 });
 
-
-Path.android = {};
-
 /**
- * @property {IO.File[]} externalStorages
- * // @todo add description.
+ * Gets external storage paths for Android.
  * 
+ * @property {Object} externalStorages
+ * @property {String} externalStorages.internal
+ * @property {String} externalStorages.external
+ * @property {String} externalStorages.usb
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(Path.android, 'externalStorages', {
     writable: false
 });
-
-/**
- * // @todo add description
- * 
- *     @example
- *     // @todo add example
- * 
- * @param {String} [path=""]
- * @return {String} resolved path.
- * @method resolve
- * @static
- * @since 0.1
- * @hide
- */
-Path.resolve = function(path){
-    
-}
-
 
 module.exports = Path;
