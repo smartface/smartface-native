@@ -2,245 +2,234 @@
  * @class IO.File
  * @since 0.1
  *
- * // @todo add description
+ * An interface of accessing operating system's filesystem. 
+ * 'path' is required property for construction the File object.
  * 
  *     @example
- *     // @todo add example
- * 
+ *     const File = require('nf-core/ui/file');
+ *     const Path = require('nf-core/ui/path');
+ *     var myImage = new File({
+ *         path: 'images://smartface.png'
+ *     });
+ *     if(myImage.exists){
+ *         myImage.copy(Path.DataDirectory + '/myImage.png');
+ *     }
+ *     
  */
 function File(params) {
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets creation date of the File. If file or directory not exists or path is not refer a file or directory returns -1.
      *
      * @property {Number} creationDate
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.creationDate;
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Check file or directory exists in given path. 
      *
      * @property {Boolean} exists
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.exists;
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets the extension of the File. 
      *
      * @property {String} extension
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.extension;
     
     /**
-     * // @todo add description
+     * Check the File object is directory or not. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Boolean} isDirectory
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isDirectory;
     
     /**
-     * // @todo add description
+     * Check the File object is file or not. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Boolean} isFile
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isFile;
     
     /**
-     * // @todo add description
+     * Gets last modified date of the File. If file or directory not exists or path is not refer a file or directory returns -1. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Number} modifiedDate
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.modifiedDate;
     
     /**
-     * // @todo add description
+     * Gets the name of the file or directory.
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {String} name
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.name;
     
     /**
-     * // @todo add description
+     * Gets the parent directory of the file or directory. If file or directory not exists or path is not refer a file or directory returns null. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {IO.File} parent
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.parent;
     
     /**
-     * // @todo add description
+     * Gets the path given on constructor. This property required for creating the File object. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {String} [path = param.path]
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.path;
     
     /**
-     * // @todo add description
+     * Gets the size of the file or directory. If file or directory not exists or path is not refer a file or directory returns -1. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Number} size
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.size;
     
     /**
-     * // @todo add description
+     * Check the File object can writable.
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Boolean} writable
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.writable;
     
     /**
-     * // @todo add description
+     * Copy file or directory to given path.
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {IO.File|String} [destination] // @todo add description
-     * @return {Boolean} // @todo add description
+     * @param {String} [destination]
+     * @return {Boolean}
      * @method copy
+     * @android
+     * @ios
      * @since 0.1
      */
     this.copy = function(destination){};
     
     /**
-     * // @todo add description
+     * Creates the directory named by this pathname.
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {Boolean} [withParents = false]
-     * @return {Boolean} // @todo add description
+     * @param {Boolean} [withParents = false] If true, directory will created with any necessary parent directories.
+     * @return {Boolean}
      * @method createDirectory
+     * @android
+     * @ios
      * @since 0.1
      */
     this.createDirectory = function(withParents){};
     
     /**
-     * // @todo add description
+     * Creates the file named by this pathname.
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {Boolean} [createParents = false]
-     * @return {Boolean} // @todo add description
+     * @param {Boolean} [createParents = false] If true, file will created with any necessary parent directories.
+     * @return {Boolean}
      * @method createFile
+     * @android
+     * @ios
      * @since 0.1
      */
     this.createFile = function(createParents){};
     
     /**
-     * // @todo add description
+     * Deletes the file or directory.
      * 
-     *     @example
-     *     // @todo add example
-     * 
-     * @param {Boolean} [withChilds = false]
-     * @return {Boolean} // @todo add description
+     * @param {Boolean} [withChilds = false] If true and the File object is a directory, all child files and directories will be removed.
+     * @return {Boolean}
      * @method remove
+     * @android
+     * @ios
      * @since 0.1
      */
     this.remove = function(withChilds){};
     
     /**
-     * // @todo add description
+     * Returns the list of file and directories that exist in this director. If directory not exists or path is not refer a directory returns null. 
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @return {IO.File[]} // @todo add description
+     * @return {IO.File[]}
      * @method getFiles
+     * @android
+     * @ios
      * @since 0.1
      */
     this.getFiles = function(){};
     
     /**
-     * // @todo add description
+     * Move the current file or directory to destination path.
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {IO.File|String} [destination]
-     * @return {Boolean} // @todo add description
+     * @param {String} destination
+     * @return {Boolean}
      * @method move
+     * @android
+     * @ios
      * @since 0.1
      */
     this.move = function(destination){};
     
     /**
-     * // @todo add description
+     * Open a IO.FileStream object from this object. If file or directory not exists or path is not refer a directory returns null. 
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {IO.FileStream.StreamType} [mode] // @todo add description
-     * @return {IO.FileStream} // @todo add description
+     * @param {IO.FileStream.StreamType} mode
+     * @return {IO.FileStream}
      * @method openStream
+     * @android
+     * @ios
      * @since 0.1
      */
     this.openStream = function(mode){};
     
     /**
-     * // @todo add description
+     * Rename the current file or directory to given name.
      * 
-     *     @example
-     *     // @todo add example
-     *
-     * @param {String} [newName]
-     * @return {Boolean} // @todo add description
+     * @param {String} newName
+     * @return {Boolean}
      * @method rename
+     * @android
+     * @ios
      * @since 0.1
      */
     this.rename = function(newName){};
