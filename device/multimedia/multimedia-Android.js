@@ -69,7 +69,7 @@ Multimedia.startCamera = function(params) {
 };
 
 function startCameraWithExtraField() {
-    var activity = getCurrentPageFragment().getActivity();
+    var activity = Android.getActivity();
     var takePictureIntent = new NativeIntent(NativeAction[_action]);
     var packageManager = activity.getPackageManager();
     
@@ -151,8 +151,8 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function pickFromGallery(resultCode, data) {
-    var fragmentActivity = getCurrentPageFragment().getActivity();
-    if (resultCode == fragmentActivity.RESULT_OK) {
+    var activity = Android.getActivity();
+    if (resultCode == activity.RESULT_OK) {
         try {
             var uri = data.getData();
             var realPath;
@@ -224,7 +224,7 @@ function getRealPathFromURI(uri) {
     var projection = [
         "_data" //NativeMediaStore.MediaColumns.DATA
     ];
-    var contentResolver = getCurrentPageFragment().getActivity().getContentResolver();
+    var contentResolver = Android.getActivity().getContentResolver();
     var cursor = contentResolver.query(uri, projection, null, null, null);
     if (cursor == null) { 
         return uri.getPath();
@@ -238,8 +238,8 @@ function getRealPathFromURI(uri) {
 }
 
 function getCameraData(resultCode, data) {
-    var fragmentActivity = getCurrentPageFragment().getActivity();
-    if (resultCode == fragmentActivity.RESULT_OK) {
+    var activity = Android.getActivity();
+    if (resultCode == activity.RESULT_OK) {
         try {
             var uri;
             if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
@@ -251,7 +251,6 @@ function getCameraData(resultCode, data) {
             
             if(_captureParams.onSuccess) {
                 if(_action == ActionType.IMAGE_CAPTURE) {
-                    var activity = Android.getActivity();
                     
                     var inputStream = activity.getContentResolver().openInputStream(uri);
                     var bitmap = NativeBitmapFactory.decodeStream(inputStream);
@@ -276,7 +275,7 @@ function getCameraData(resultCode, data) {
 }
 
 function getAllMediaFromUri(params) {
-    var activity = getCurrentPageFragment().getActivity();
+    var activity = Android.getActivity();
     var contentResolver = activity.getContentResolver();
     var cursor = contentResolver.query(params.uri, params.projection, null, null, null);
     var files = [];
