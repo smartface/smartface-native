@@ -112,11 +112,10 @@ const Label = extend(View)(
          * Sets/gets visibiliy of scroll bar when text is too long.
          *
          * @property {Boolean} [showScrollBar = false]
-         * @android
          * @ios
          * @since 0.1
          */
-        this.showScrollBar = false;
+        this.ios.showScrollBar = false;
 
         // Assign parameters given in constructor
         if (params) {
