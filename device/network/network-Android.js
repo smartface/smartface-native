@@ -9,6 +9,8 @@ Network.ConnectionType.None   = 0;
 Network.ConnectionType.Mobile = 1;
 Network.ConnectionType.WIFI   = 2;
 
+const MARSHMALLOW = 23;
+
 Object.defineProperties(Network, {
     'IMSI': {
         get: function() {
@@ -85,7 +87,7 @@ function getActiveInternet() {
     var connectivityManager;
     var activity = Android.getActivity();
     const NativeBuild = requireClass("android.os.Build");
-    if (NativeBuild.VERSION.SDK_INT < 23) {
+    if (NativeBuild.VERSION.SDK_INT < MARSHMALLOW) {
         connectivityManager = activity.getSystemService(NativeContext.CONNECTIVITY_SERVICE);
     } else {
         const NativeClass = requireClass('java.lang.Class');
