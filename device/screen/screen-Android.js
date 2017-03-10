@@ -9,6 +9,8 @@ const NativeR              = requireClass('android.R');
 
 const Screen = {};
 
+Screen.ios = {};
+
 const orientationArray = [
     OrientationType.PORTRAIT,
     OrientationType.LANDSCAPERIGHT,
