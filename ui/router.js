@@ -29,6 +29,51 @@ var routes = {};
 var history = [];
 
 /**
+ * Gets/sets sliderDrawer of the Router.
+ *
+ *     @example
+ *     const Router = require('nf-core/ui/router');
+ *     Router.add('login', require('pages/pgLogin'));
+ *     Router.go('login');
+ *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+ *     var mySliderDrawer = new SliderDrawer();
+ *     Router.sliderDrawer = mySliderDrawer;
+ *
+ * @property {UI.SliderDrawer} [sliderDrawer = null]
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+Object.defineProperty(Router, 'sliderDrawer', {
+    get: function() 
+    {
+        var retval = null;
+        if (pagesInstance) 
+        {
+            retval = pagesInstance.sliderDrawer;
+        }
+        return retval;
+    },
+    set: function(sliderDrawerValue) 
+    {
+        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        if (sliderDrawerValue instanceof SliderDrawer) 
+        {
+            if (pagesInstance) 
+            {
+                pagesInstance.sliderDrawer = sliderDrawerValue;
+            }
+        } 
+        else 
+        {
+            throw TypeError("Object must be SliderDrawer instance");
+        }
+    },
+    enumerable: true
+});
+
+/**
  * Adds given page class to routes by matching it with given route path. You
  * can define if page instance will be singleton object or a new instance 
  * created everytime when UI.Router.go called.
