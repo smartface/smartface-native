@@ -17,6 +17,8 @@ function File(params) {
     var resolvedPath = Path.resolve(params.path);
     this.type = resolvedPath.type;
     this.fullPath = resolvedPath.fullPath;
+    // If file is Drawable we need to use drawableResourceId on notification etc.
+    this.drawableResourceId = -1;
     
     switch(resolvedPath.type){
         case Path.FILE_TYPE.ASSET:
@@ -36,8 +38,8 @@ function File(params) {
         case Path.FILE_TYPE.DRAWABLE:
             // this.nativeObject will be Bitmap
             var resources = Android.getActivity().getResources();
-            var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
-            this.nativeObject = drawableResourceId != 0 ? NativeBitmapFactory.decodeResource(resources, drawableResourceId) : null;
+            this.drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
+            this.nativeObject = this.drawableResourceId != 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
             break;
         case Path.FILE_TYPE.RAU_ASSETS:
         case Path.FILE_TYPE.RAU_DRAWABLE:
