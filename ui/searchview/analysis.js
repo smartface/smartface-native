@@ -215,6 +215,7 @@ SearchView.iOS = {};
 SearchView.iOS.Style = {};
 
 /**
+ * Default is prominent.
  * @property DEFAULT
  * @ios
  * @readonly
@@ -225,6 +226,7 @@ Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
 });
 
 /**
+ * The search bar has a transparent background.
  * @property PROMINENT
  * @ios
  * @readonly
@@ -235,6 +237,7 @@ Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
 });
 
 /**
+ * The search bar has no background.
  * @property MINIMAL
  * @ios
  * @readonly
