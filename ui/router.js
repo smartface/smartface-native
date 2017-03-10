@@ -29,7 +29,7 @@ var routes = {};
 var history = [];
 
 /**
- * Gets/sets sliderDrawer of the Pages.
+ * Gets/sets sliderDrawer of the Router.
  *
  *     @example
  *     const Router = require('nf-core/ui/router');
