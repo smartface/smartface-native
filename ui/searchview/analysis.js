@@ -217,8 +217,8 @@ function SearchView () {
  */
 SearchView.iOS = {};
 /**
- * @class UI.SearchView.iOS.Style
  * Bar style that specifies the search bar’s appearance.
+ * @class UI.SearchView.iOS.Style
  */
 SearchView.iOS.Style = {};
 
