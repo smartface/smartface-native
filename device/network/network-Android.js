@@ -82,7 +82,16 @@ Object.defineProperties(Network, {
 });
 
 function getActiveInternet() {
-    var connectivityManager = Android.getActivity().getSystemService(NativeContext.CONNECTIVITY_SERVICE);
+    var connectivityManager;
+    var activity = Android.getActivity();
+    const NativeBuild = requireClass("android.os.Build");
+    if (NativeBuild.VERSION.SDK_INT < 23) {
+        connectivityManager = activity.getSystemService(NativeContext.CONNECTIVITY_SERVICE);
+    } else {
+        const NativeClass = requireClass('java.lang.Class');
+        const NativeConnectivityManagerClass = NativeClass.forName('android.net.ConnectivityManager');
+        connectivityManager = activity.getSystemService(NativeConnectivityManagerClass);
+    }
     return connectivityManager.getActiveNetworkInfo();
 }
 
