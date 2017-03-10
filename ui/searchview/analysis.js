@@ -211,11 +211,20 @@ function SearchView () {
      this.onSearchButtonClicked = function() {};
 };
 
+/**
+ * iOS Specific Properties.
+ * @class UI.SearchView.iOS
+ */
 SearchView.iOS = {};
+/**
+ * @class UI.SearchView.iOS.Style
+ * Bar style that specifies the search bar’s appearance.
+ */
 SearchView.iOS.Style = {};
 
 /**
  * Default is prominent.
+ * @memberof UI.SearchView.iOS.Style
  * @property DEFAULT
  * @ios
  * @readonly
