@@ -2,10 +2,18 @@
  * @class IO.FileStream
  * @since 0.1
  *
- * // @todo add description
+ * FileStream is a class which allows you to making IO operations. 
  * 
  *     @example
- *     // @todo add example
+ *     const File = require('nf-core/io/file');
+ *     const Path = require('nf-core/io/path');
+ *     const FileStream = require('nf-core/ioui/filestream');
+ *     var myFile = new File({
+ *         path: Path.DataDirectory + '/myFile.txt'
+ *     });
+ *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE);
+ *     myFileStream.write('NativeFace');
+ *     myFileStream.close();
  * 
  */
 function FileStream(params) {

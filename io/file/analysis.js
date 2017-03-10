@@ -6,8 +6,8 @@
  * 'path' is required property for construction the File object.
  * 
  *     @example
- *     const File = require('nf-core/ui/file');
- *     const Path = require('nf-core/ui/path');
+ *     const File = require('nf-core/io/file');
+ *     const Path = require('nf-core/io/path');
  *     var myImage = new File({
  *         path: 'images://smartface.png'
  *     });
@@ -211,7 +211,7 @@ function File(params) {
     this.move = function(destination){};
     
     /**
-     * Open a IO.FileStream object from this object. If file or directory not exists or path is not refer a directory returns null. 
+     * Open a IO.FileStream object from this object. If path is refer a directory returns null. 
      * 
      * @param {IO.FileStream.StreamType} mode
      * @return {IO.FileStream}

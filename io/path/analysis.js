@@ -5,8 +5,8 @@
  * Path allows you to use Smartface URI scheme and operation system common paths.
  * 
  *     @example
- *     const File = require('nf-core/ui/file');
- *     const Path = require('nf-core/ui/path');
+ *     const File = require('nf-core/io/file');
+ *     const Path = require('nf-core/io/path');
  * 
  *     var myImage = new File({
  *         path: Path.ImagesUriScheme + 'smartface.png'
