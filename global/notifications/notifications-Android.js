@@ -10,120 +10,155 @@ var Priority = {
     MAX: 2
 };
 
-function Notifications() { }
-
-Notifications.notificationBuilder = [];
-
-Notifications.create = function(params) {
-    console.log("create");
+function Notifications(params) { 
     var activity = Android.getActivity();
-    var context = activity.getApplicationContext();
+    var self = this;
+    if(!self.nativeObject) {
+        self.nativeObject = new NativeNotificationBuilder(activity);
+        const AndroidConfig = require("nf-core/util/Android/androidconfig");
+        const NativeR = requireClass(AndroidConfig.packageName + '.R');
+        var smallIcon = NativeR.drawable.icon;
+        
+        self.nativeObject = self.nativeObject.setSmallIcon(smallIcon);
+        self.android = {};
+        self.ios = {};
+        if(params.android && params.android.id)
+            self.android.id = params.android.id;
+    }
+    var _alertBody = "";
+    Object.defineProperty(this, 'alertBody', {
+        get: function() {
+            return _alertBody;
+        },
+        set: function(value) {
+            if (typeof value === 'string') {
+                _alertBody = value;
+                self.nativeObject = self.nativeObject.setContentText(value);
+            }
+        },
+        enumerable: true
+    });
     
-    var notificationBuilder = new NativeNotificationBuilder(context);
-    notificationBuilder = notificationBuilder.setSmallIcon(params.smallIcon);
-    notificationBuilder = notificationBuilder.setContentTitle(params.title);
-    notificationBuilder = notificationBuilder.setContentText(params.text);
-    console.log("before setOptionalParameters");
-    setOptionalParameters(notificationBuilder, params);
-    setIntent(notificationBuilder);
-    notificationBuilder = notificationBuilder.build();
+    var _alertAction = "";
+    Object.defineProperty(this, 'alertAction', {
+        get: function() {
+            return _alertAction;
+        },
+        set: function(value) {
+            if (typeof value === 'string') {
+                _alertAction = value;
+                self.nativeObject = self.nativeObject.setContentTitle(value);
+            }
+        },
+        enumerable: true
+    });
     
-    Notifications.notificationBuilder.push({id: params.id, builder: notificationBuilder});
-};
+    var _soundName = "";
+    Object.defineProperty(this, 'sound', {
+        get: function() {
+            return _soundName;
+        },
+        set: function(value) {
+            if (typeof value === 'string') {
+                _soundName = value;
+                // todo sound setting doesn't work causing by issue CLI-175.
+                // self.nativeObject = self.nativeObject.setSound(uri);
+            }
+        },
+        enumerable: true
+    });
 
-function setIntent(notificationBuilder) {
-    const Pages = require("nf-core/ui/pages");
-    const NativeIntent = requireClass("android.content.Intent");
-    const NativeTaskStackBuilder = requireClass("android.app.TaskStackBuilder");
-    const NativePendingIntent = requireClass("android.app.PendingIntent");
+    Object.defineProperty(this, 'fireDate', {
+        get: function() {
+            return null;
+        },
+        set: function(value) {
+            console.log("fireDate did set");
+        },
+        enumerable: true
+    });
     
-    var page = Pages.currentPage;
-    var nativeObject = page.nativeObject;
-    var activity = nativeObject.getActivity();
-    var mainActivity = Android.getActivity();
-    var resultIntent = new NativeIntent(activity, activity.getClass());
-    var stackBuilder = NativeTaskStackBuilder.create(activity);
-    var mainClass = mainActivity.getClass();
-    stackBuilder.addParentStack(mainClass);
-    stackBuilder.addNextIntent(resultIntent);
-    var flag = NativePendingIntent.FLAG_UPDATE_CURRENT;
-    var resultPendingIntent = stackBuilder.getPendingIntent(0, flag);
-
-    notificationBuilder.setContentIntent(resultPendingIntent);    
-}
-
-function setOptionalParameters(notificationBuilder, params) {
-    if(params.autoCancel != undefined)
-        notificationBuilder = notificationBuilder.setAutoCancel(params.autoCancel);
-    if(params.onGoing != undefined)
-        notificationBuilder = notificationBuilder.setOngoing(params.onGoing);
-    if(params.color != undefined)
-        notificationBuilder = notificationBuilder.setColor(params.color);
-    if(params.progress) {
-        var progress = params.progress;
-        notificationBuilder = notificationBuilder.setProgress(progress.max,
+    Object.defineProperty(this, 'repeatInterval', {
+        get: function() {
+            return null;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+            }
+        },
+        enumerable: true
+    });
+    
+    this.android.setColor = function(color) {
+        self.nativeObject = self.nativeObject.setColor(color);
+    };
+    
+    this.android.setProgress = function(progress) {
+        self.nativeObject = self.nativeObject.setProgress(progress.max,
             progress.progress, progress.indeterminate);
-    }
-    if(params.ticker)
-        notificationBuilder = notificationBuilder.setTicker(params.ticker);
-    if(params.vibrate)
-        notificationBuilder = notificationBuilder.setVibrate(params.vibrate);
-    if(params.number)
-        notificationBuilder = notificationBuilder.setNumber(params.number);
-    if(params.priority)
-        notificationBuilder = notificationBuilder.setPriority(params.priority);
-    if(params.subText)
-        notificationBuilder = notificationBuilder.setSubText(params.subText);
-    if(params.sound) {
-        // todo sound setting doesn't work causing by issue CLI-175.
-        // notificationBuilder = notificationBuilder.setSound(uri);
-    }
-    if(params.when) {
-        notificationBuilder = notificationBuilder.setShowWhen(true);
-        notificationBuilder = notificationBuilder.setWhen(params.when);
+    };
+    
+    this.android.setTicker = function(ticker) {
+        self.nativeObject = self.nativeObject.setTicker(ticker);
+    };
+    
+    this.android.setVibrate = function(vibrate) {
+        self.nativeObject = self.nativeObject.setVibrate(vibrate);
+    };
+    
+    this.android.setNumber = function(number) {
+        self.nativeObject = self.nativeObject.setNumber(number);
+    };
+    
+    this.android.setPriority = function(priority) {
+        self.nativeObject = self.nativeObject.setPriority(priority);
+    };
+    
+    this.android.setSubText = function(subText) {
+        self.nativeObject = self.nativeObject.setSubText(subText);
+    };
+    
+    this.android.setWhen = function(when) {
+        self.nativeObject = self.nativeObject.setShowWhen(true);
+        self.nativeObject = self.nativeObject.setWhen(params.when);
+    };
+    
+    this.schedule = function() {
+    };
+    
+    this.present = function() {
+        var activity = Android.getActivity();
+        var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
+        var notification = self.nativeObject.build();
+        notificationManager.notify(self.android.id, notification);
+    };
+    
+    this.cancel = function() {
+        var activity = Android.getActivity();
+        var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(self.android.id);
+    };
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
     }
 }
 
-Notifications.show = function(id) {
-    var activity = Android.getActivity();
-    var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
-    var index = getNotificationIndexByID(id);
-    if(index != -1) {
-        var notificationBuilder = (Notifications.notificationBuilder[index]).builder;
-        notificationManager.notify(id, notificationBuilder);
-    }
+Notifications.LocalNotification = function(params) {
+    return new Notifications(params);
 };
 
-function getNotificationIndexByID(id) {
-    var i = 0;
-    for(i = 0; i < Notifications.notificationBuilder.length; i++) {
-        if(id == (Notifications.notificationBuilder[i]).id)
-            return i;
-    }
-    return -1;
-}
-
-Notifications.cancel = function(id) {
-    var activity = Android.getActivity();
-    var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.cancel(id);
-};
-
-Notifications.cancelAll = function(id) {
-    var activity = Android.getActivity();
-    var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.cancelAll();
+Notifications.cancelAllLocalNotifications = function(params) {
+    return new Notifications(params);
 };
 
 
-Object.defineProperty(Notifications, 'Priority', {
-    value: Priority,
-    writable: false,
-    enumerable: true
-});
+Notifications.registerForPushNotifications = function(onSuccess, onFailure){
+    
+};
 
-// ios spesific methods
-Notifications.ios.setBadgeNumber = function(e){};
-Notifications.ios.getBadgeNumber = function(e){};
 
 module.exports = Notifications;
