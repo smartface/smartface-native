@@ -63,7 +63,6 @@ http.requestImage = function(url, onLoad, onError) {
             }
         });
         if(checkInternet()) {
-            console.log("internet");
             const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
             var myRequest = new ImageRequest(url,responseListener, 
                 0, 0, null, null,responseErrorListener);
@@ -72,7 +71,7 @@ http.requestImage = function(url, onLoad, onError) {
             requestQueue.add(myRequest);
         }
         else {
-            alert("No network connection");
+            onError("No network connection");
         }
     } catch(e) {
         onError(e);
