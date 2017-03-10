@@ -19,134 +19,127 @@
 function FileStream(params) {
     
     /**
-     * // @todo add description
+     * Gets the mode of the FileStream. The mode determines what you can do with this FileStream.
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {IO.FileStream.StreamType} mode
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.mode;
     
     /**
-     * // @todo add description
+     * Checks the stream is readable.
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Boolean} isReadable
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isReadable;
     
     /**
-     * // @todo add description
+     * Checks the stream is writable.
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {Boolean} isWritable
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isWritable;
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets name of the File object that the FileStream object created with. 
      *
      * @property {String} name
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.name;
     
     /**
-     * // @todo add description
+     * Gets path of the File object that the FileStream object created with. 
      * 
-     *     @example
-     *     // @todo add example
-     *
      * @property {String} path
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.path;
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Closes the FileStream object. FileStream have to be closed when its job is done.
      *
      * @method close
+     * @android
+     * @ios
      * @since 0.1
      */
     this.close = function(){};
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets the {@link Blob} object from FileStream.
      *
-     * @return {Blob} // @todo add description
+     * @return {Blob}
      * @method readBlob
+     * @android
+     * @ios
      * @since 0.1
      */
     this.readBlob = function(){};
     
     /**
-     * // @todo add description
-     * 
-     *     @example
-     *     // @todo add example
+     * Gets all characters from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType.READ} mode,
+     * will return null.
      *
-     * @return {String} // @todo add description
+     * @return {String}
      * @method readToEnd
+     * @android
+     * @ios
      * @since 0.1
      */
     this.readToEnd = function(){};
     
     /**
-     * // @todo add description
+     * Writes all characters into the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType.WRITE} 
+     * or {@link IO.FileStream.StreamType.APPEND} mode, will writes nothing.
      * 
-     *     @example
-     *     // @todo add example
-     * 
-     * @param {String} [text] // @todo add description
-     * @return {Boolean} // @todo add description
+     * @param {String} text
+     * @return {Boolean}
      * @method write
+     * @android
+     * @ios
      * @since 0.1
      */
     this.write = function(text){};
 }
 
 /**
+ * The StreamType determines what you can do with this FileStream.
+ * 
  * @enum {Number} IO.FileStream.StreamType
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
- *
  */
 FileStream.StreamType = {};
 
 /**
- * @property {Number} APPEND
- * // @todo add description.
+ * Keep existing file and append inside of it.
  * 
+ * @property {Number} APPEND
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(FileStream.StreamType, 'APPEND', {
@@ -155,11 +148,13 @@ Object.defineProperty(FileStream.StreamType, 'APPEND', {
 });
 
 /**
- * @property {Number} READ
- * // @todo add description.
+ * Read existing file.
  * 
+ * @property {Number} READ
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(FileStream.StreamType, 'READ', {
@@ -168,17 +163,18 @@ Object.defineProperty(FileStream.StreamType, 'READ', {
 });
 
 /**
- * @property {Number} WRITE
- * // @todo add description.
+ * Delete file if exists and write inside of it.
  * 
+ * @property {Number} WRITE
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Object.defineProperty(FileStream.StreamType, 'WRITE', {
     value: 2,
     writable: false
 });
-
 
 module.exports = FileStream;
