@@ -13,28 +13,33 @@
  * See also {@link UI.Pages} to see how to show a created page on screen.
  *
  *     @example
- *     const Pages = require('nf-core/ui/pages');
+ *     const extend = require("js-base/core/extend");
+ *     const Router = require('nf-core/ui/router');
  *     const Page = require('nf-core/ui/page');
- *     var myPage = new Page({
- *         onLoad: function() {
- *             const Button = require('nf-core/ui/button');
- *             var myButton = new Button({
- *                 width: 150,
- *                 height: 80,
- *                 text: "Click me!"
+ *     var page1 = new extend(Page)(
+ *         function(_super,params)
+ *         {
+ *             var self = this;
+ *             _super(this,{
+ *                 onShow: function() {
+ *                     this.headerBar.visible = true;
+ *                     this.headerBar.title = "Smartface Page";
+ *                 },
+ *                 onLoad: function(){
+ *                     const Button = require('nf-core/ui/button');
+ *                     var myButton = new Button({
+ *                         width: 150,
+ *                         height: 80,
+ *                         text: "Smartface Button"
+ *                     });
+ *                     this.layout.addChild(myButton);
+ *                 }
  *             });
- *             this.layout.addChild(myButton);
- *         },
- *         onShow: function() {
- *             this.headerBar.visible = true;
- *             this.headerBar.title = "Page Example";
  *         }
- *     });
+ *     );
  *
- *     // After next expression created page will be shown on screen
- *     global.Router = new Pages({
- *         rootPage: myPage
- *     });
+ *     Router.add('myPage',page1);
+ *     Router.go('myPage');
  *
  */
 function Page(params) {
