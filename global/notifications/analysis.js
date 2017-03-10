@@ -51,7 +51,7 @@ Priority.MAX = 2;
  * @class Notifications
  * 
  * Notification is a message belongs to an application.
- * A notification includes some datas such as text, title, icon etc.
+ * A notification includes some data such as text, title, icon etc.
  * 
  * 
  *     @example
@@ -73,7 +73,7 @@ function Notifications() {}
 /**
  * @method create
  * 
- * Creates notification instance with spesified parameters. 
+ * Creates notification instance with specified parameters.
  * The user must set title, text and smallIcon. Other properties are optional.
  * 
  * 
@@ -121,7 +121,7 @@ Notifications.cancel = function(id) {};
  * @since 0.1
  * @static
  */
-Notifications.cancelAll = function() {};
+Notifications.cancelAllLocalNotifications = function() {};
 
 /**
  * @method getBadgeNumber

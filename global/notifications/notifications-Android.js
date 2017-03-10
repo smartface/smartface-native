@@ -1,6 +1,7 @@
-const NativeNotificationCompat = requireClass("android.support.v4.app.NotificationCompat");
-const NativeNotificationBuilder = NativeNotificationCompat.Builder;
-const NOTIFICATION_SERVICE = "notification"; // android.content.Context.NOTIFICATION_SERVICE;
+const AndroidConfig             = require("nf-core/util/Android/androidconfig");
+const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
+const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
+const NOTIFICATION_SERVICE      = "notification"; // android.content.Context.NOTIFICATION_SERVICE;
 
 var Priority = {
     MIN: -2,
@@ -10,21 +11,18 @@ var Priority = {
     MAX: 2
 };
 
-function Notifications(params) { 
+function Notifications(){};
+
+Notifications.LocalNotification = function Notifications(params) {
     var activity = Android.getActivity();
     var self = this;
-    if(!self.nativeObject) {
-        self.nativeObject = new NativeNotificationBuilder(activity);
-        const AndroidConfig = require("nf-core/util/Android/androidconfig");
-        const NativeR = requireClass(AndroidConfig.packageName + '.R');
-        var smallIcon = NativeR.drawable.icon;
-        
-        self.nativeObject = self.nativeObject.setSmallIcon(smallIcon);
-        self.android = {};
-        self.ios = {};
-        if(params.android && params.android.id)
-            self.android.id = params.android.id;
-    }
+    self.android = {};
+    self.ios = {};
+
+    self.nativeObject = new NativeNotificationCompat.Builder(activity);
+    self.nativeObject = self.nativeObject.setSmallIcon(smallIcon);
+    self.android.id = params.android.id;
+
     var _alertBody = "";
     Object.defineProperty(this, 'alertBody', {
         get: function() {
@@ -147,10 +145,6 @@ function Notifications(params) {
     }
 }
 
-Notifications.LocalNotification = function(params) {
-    return new Notifications(params);
-};
-
 Notifications.cancelAllLocalNotifications = function(params) {
     return new Notifications(params);
 };
@@ -160,5 +154,8 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){
     
 };
 
+Notifications.unregisterForPushNotifications = function(){
+    UIApplication.sharedApplication().unregisterForRemoteNotifications();
+}
 
 module.exports = Notifications;
