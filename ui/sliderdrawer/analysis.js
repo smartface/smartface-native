@@ -7,6 +7,30 @@ const extend = require('js-base/core/extend');
  *
  * SliderDrawer is an object that displays a custom UI as a panel on the left or right edge of the screen.
  * It is hidden most of the time, when user swipes a finger from the left or right edge of the screen it will appear.
+ * 
+ * 
+ *    @example
+ *    const SliderDrawer = require('nf-core/ui/sliderdrawer');
+ *    const Button = require('nf-core/ui/button');
+ *    const Router = require('nf-core/ui/router');
+ *    
+ *    Router.add('login', require('pages/pgLogin'));
+ *    Router.go('login');
+ *    var mySliderDrawer = new SliderDrawer({
+ *        width: 200,
+ *        onLoad: function(){
+ *           mySliderDrawer.layout.addChild(myButton);
+ *        }
+ *    });
+ *    var myButton = new Button({
+ *        height: 40,
+ *        width: 50,
+ *        left: 50,
+ *        text: "Smartface Button"
+ *    });
+ *    mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
+ *    mySliderDrawer.layout.addChild(myButton);
+ *    Router.sliderDrawer = mySliderDrawer;
  *
  */
 const SliderDrawer = extend(ViewGroup)(
@@ -15,17 +39,6 @@ const SliderDrawer = extend(ViewGroup)(
 
         /**
          * Gets/sets position of the SliderDrawer.
-         *
-         *     @example
-         *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-         *     const Pages = require('nf-core/ui/pages');
-         *     var myPage = new Page();
-         *     var myPages = new Pages({
-         *         rootPage: myPage
-         *     });
-         *     var mySliderDrawer = new SliderDrawer();
-         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
-         *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
          * @android
@@ -37,50 +50,16 @@ const SliderDrawer = extend(ViewGroup)(
         /**
          * Gets/sets layout of the SliderDrawer.
          *
-         *     @example
-         *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-         *     const Button = require('nf-core/ui/button');
-         *     const Pages = require('nf-core/ui/pages');
-         *     var myPage = new Page();
-         *     var myPages = new Pages({
-         *         rootPage: myPage
-         *     });
-         *     var mySliderDrawer = new SliderDrawer({
-         *         onLoad: function(){
-         *            mySliderDrawer.layout.addChild(myButton);
-         *         }
-         *     });
-         *     var myButton = new Button({
-         *         height: 40,
-         *         width: 50,
-         *         left: 50,
-         *         text: "Smartface Button"
-         *     });
-         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
-         *     myPages.sliderDrawer = mySliderDrawer;
-         *
-         * @property {UI.FlexLayout} [layout = null]
+         * @property {UI.FlexLayout} [layout = UI.FlexLayout]
          * @android
          * @ios
          * @readonly
          * @since 0.1
          */
-        this.layout = null;
+        this.layout = UI.FlexLayout;
 
         /**
          * Enables/disables the SliderDrawer.
-         *
-         *     @example
-         *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
-         *     const Pages = require('nf-core/ui/pages');
-         *     var myPage = new Page();
-         *     var myPages = new Pages({
-         *         rootPage: myPage
-         *     });
-         *     var mySliderDrawer = new SliderDrawer();
-         *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
-         *     mySliderDrawer.enabled = false;
-         *     myPages.sliderDrawer = mySliderDrawer;
          *
          * @property {Boolean} [enabled = true]
          * @android

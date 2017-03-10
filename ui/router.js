@@ -28,6 +28,23 @@ var pagesInstance = null;
 var routes = {};
 var history = [];
 
+/**
+ * Gets/sets sliderDrawer of the Pages.
+ *
+ *     @example
+ *     const Router = require('nf-core/ui/router');
+ *     Router.add('login', require('pages/pgLogin'));
+ *     Router.go('login');
+ *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+ *     var mySliderDrawer = new SliderDrawer();
+ *     Router.sliderDrawer = mySliderDrawer;
+ *
+ * @property {UI.SliderDrawer} [sliderDrawer = null]
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
 Object.defineProperty(Router, 'sliderDrawer', {
     get: function() 
     {
