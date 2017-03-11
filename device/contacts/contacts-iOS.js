@@ -82,42 +82,7 @@ Contacts.pick = function(params) {
                 });
             };
             pickerDelegate.contactPickerDidSelectContact = function(contact){
-                var returnValue = {};
-                if (contact.givenName){
-                    returnValue.displayName = contact.givenName + " " +contact.familyName;
-                }
-                
-                var phoneNumbers = [];
-                for (var number in contact.phoneNumbers) {
-                    phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
-                }
-                returnValue.phoneNumber = phoneNumbers;
-                
-                var emailAddresses = [];
-                for (var email in contact.emailAddresses) {
-                    emailAddresses.push(contact.emailAddresses[email].value);
-                }
-                returnValue.email = emailAddresses;
-                
-                var urlAddresses = [];
-                for (var urlAddress in contact.urlAddresses) {
-                    urlAddresses.push(contact.urlAddresses[urlAddress].value);
-                }
-                returnValue.urlAddress = urlAddresses;
-                
-                var addresses = [];
-                for (var address in contact.postalAddresses) {
-                    
-                    var addressStr = contact.postalAddresses[address].value.street +" "+ 
-                    contact.postalAddresses[address].value.city +" "+
-                    contact.postalAddresses[address].value.state +" "+
-                    contact.postalAddresses[address].value.postalCode +" "+
-                    contact.postalAddresses[address].value.country;
-                    
-                    addresses.push(addressStr);
-                }
-                returnValue.address = addresses;
-                
+                var returnValue = manageNativeContact(contact);
                 if(typeof params.onSuccess === 'function'){
                     params.onSuccess(returnValue);
                 }
@@ -127,10 +92,69 @@ Contacts.pick = function(params) {
             params.page.nativeObject.presentViewController(pickerViewController);
         },function(){
             if(typeof params.onFailure === 'function'){
-                    params.onFailure();
+                params.onFailure();
             }
         });
     }
+};
+
+Contacts.getAll = function(params) {
+    var store = CNContactStore.new();
+    store.requestAccess(function(){
+        store.fetchAllContacts(function(allContactsNativeArray){
+            var allContactsManagedArray = [];
+            for (var index in allContactsNativeArray) {
+                var managedContact = manageNativeContact(allContactsNativeArray[index]);
+                allContactsManagedArray.push(managedContact);
+            }
+            params.onSuccess(allContactsManagedArray);
+        },function(error){
+            params.onFailure(error);
+        });
+    },function(error){
+        if(typeof params.onFailure === 'function'){
+            params.onFailure(error);
+        }
+    });
+};
+
+function manageNativeContact(contact) {
+    var returnValue = {};
+    if (contact.givenName){
+        returnValue.displayName = contact.givenName + " " +contact.familyName;
+    }
+    
+    var phoneNumbers = [];
+    for (var number in contact.phoneNumbers) {
+        phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
+    }
+    returnValue.phoneNumber = phoneNumbers;
+    
+    var emailAddresses = [];
+    for (var email in contact.emailAddresses) {
+        emailAddresses.push(contact.emailAddresses[email].value);
+    }
+    returnValue.email = emailAddresses;
+    
+    var urlAddresses = [];
+    for (var urlAddress in contact.urlAddresses) {
+        urlAddresses.push(contact.urlAddresses[urlAddress].value);
+    }
+    returnValue.urlAddress = urlAddresses;
+    
+    var addresses = [];
+    for (var address in contact.postalAddresses) {
+        
+        var addressStr = contact.postalAddresses[address].value.street +" "+ 
+        contact.postalAddresses[address].value.city +" "+
+        contact.postalAddresses[address].value.state +" "+
+        contact.postalAddresses[address].value.postalCode +" "+
+        contact.postalAddresses[address].value.country;
+        addresses.push(addressStr);
+    }
+    returnValue.address = addresses;
+    
+    return returnValue;
 };
 
 module.exports = Contacts;
