@@ -10,9 +10,7 @@ const NativeDialogInterface = requireClass("android.content.DialogInterface");
 function AlertView (params) {
     var self = this;
     this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
-    this.nativeObject.setCancelable(false);
-    this.nativeObject.setCanceledOnTouchOutside(false);
-
+            
     var titleInitial = "";
     Object.defineProperty(this, 'title', {
         get: function() {
@@ -21,6 +19,20 @@ function AlertView (params) {
         set: function(title) {
             titleInitial = title;
             self.nativeObject.setTitle(title);
+        },
+        enumerable: true
+    });
+    
+    this.android = {};
+    var _cancellable;
+    Object.defineProperty(this.android, 'cancellable', {
+        get: function() {
+            return _cancellable;
+        },
+        set: function(cancellable) {
+            _cancellable = cancellable;
+            self.nativeObject.setCancelable(cancellable);
+            self.nativeObject.setCanceledOnTouchOutside(cancellable);
         },
         enumerable: true
     });
