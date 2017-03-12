@@ -17,6 +17,15 @@ TypeUtil.isObject = function(param){
     return typeof(param) == 'object';
 };
 
+TypeUtil.isFunction = function(param){
+    return typeof(param) == 'function';
+};
+
+TypeUtil.isArray = function(param){
+    return Array.isArray(param);
+};
+
+Array.isArray
 TypeUtil.isURL = function(param) {
   var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
   '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name

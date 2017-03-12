@@ -1,9 +1,18 @@
 const TypeUtil                  = require("nf-core/util/type");
 const AndroidConfig             = require("nf-core/util/Android/androidconfig");
+
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
-const NOTIFICATION_SERVICE      = "notification"; // android.content.Context.NOTIFICATION_SERVICE;
-const ALARM_SERVICE             = "alarm"
+const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
+const NativeRemoteNotificationListener = requireClass('io.smartface.android.listeners.RemoteNotificationListener');
+
+// android.content.Context.NOTIFICATION_SERVICE;
+const NOTIFICATION_SERVICE      = "notification";
+const NOTIFICATION_MANAGER      = 'android.app.NotificationManager'
+// android.content.Context.ALARM_SERVICE;
+const ALARM_SERVICE             = "alarm";
+const ALARM_MANAGER             = "android.app.AlarmManager"
+
 const PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 var Priority = {
     MIN: -2,
@@ -17,13 +26,22 @@ var senderID = null;
 var googleCloudMessagingInstance = null;
 var registrationToken;
 var activity = Android.getActivity();
+var notificationListener =  NativeRemoteNotificationListener.implement({
+                                onRemoteNotificationReceived: function(data){
+                                    console.log('onRemoteNotificationReceived');
+                                    Application.onReceivedNotification && Application.onReceivedNotification(data);
+                                }
+                            });
 
 function Notifications(){};
 
 Notifications.LocalNotification = function(params) {
-   
     var self = this;
     this.android = {};
+    // When notification builded, notification must canceled via its pending intent and
+    // its notification object.
+    this.mPendingIntent = null;
+    this.mNotification = null;
 
     this.nativeObject = new NativeNotificationCompat.Builder(activity);
     this.nativeObject = self.nativeObject.setSmallIcon(NativeR.drawable.icon);
@@ -42,7 +60,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isString(value)) {
                     _alertBody = value;
-                    self.nativeObject = self.nativeObject.setContentText(value);
+                    self.nativeObject.setContentText(value);
                 }
             },
             enumerable: true
@@ -54,7 +72,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isString(value)) {
                     _alertAction = value;
-                    self.nativeObject = self.nativeObject.setContentTitle(value);
+                    self.nativeObject.setContentTitle(value);
                 }
             },
             enumerable: true
@@ -83,7 +101,7 @@ Notifications.LocalNotification = function(params) {
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();
                         if(largeImageBitmap){
-                            self.nativeObject = self.nativeObject.setLargeIcon(largeImage.nativeObject);
+                            self.nativeObject.setLargeIcon(largeImage.nativeObject);
                         }
                     }
                 }
@@ -114,12 +132,12 @@ Notifications.LocalNotification = function(params) {
         },
         'schedule' : {
             value: function(){
-                var notification = self.nativeObject.build();
-                startNotificationIntent(notification, {
+                self.mNotification = self.nativeObject.build();
+                startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
                     'id': _id,
                     // LocalNotificationReceiver.NOTIFICATION_OBJECT
-                    'notification': notification,
+                    'notification': self.mNotification,
                     'fireDate': _fireDate,
                     'repeatInterval': _repeatInterval
                 });
@@ -129,22 +147,29 @@ Notifications.LocalNotification = function(params) {
         'present' : {
             value: function(){
                 console.log('present');
-                var notification = self.nativeObject.build();
-                startNotificationIntent(notification, {
+                self.mNotification = self.nativeObject.build();
+                startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
                     'id': _id,
                     // LocalNotificationReceiver.NOTIFICATION_OBJECT
-                    'notification': notification
+                    'notification': self.mNotification
                 });
             },
             enumerable: true
         },
         'cancel' : {
             value: function(){
-                var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
-                notificationManager.cancel(_id);
+                if(self.mPendingIntent && self.mNotification){
+                    cancelNotificationIntent(self);
+                }
             },
             enumerable: true
+        },
+        //Internal call only.
+        'getId' : {
+            value: function(){
+                return _id;
+            }
         },
     });
     
@@ -163,7 +188,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isNumeric(value)) {
                     _color = value;
-                    self.nativeObject = self.nativeObject.setColor(value);
+                    self.nativeObject.setColor(value);
                 }
             },
             enumerable: true
@@ -175,7 +200,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if(TypeUtil.isBoolean(value)){
                     _indeterminate = value
-                    self.nativeObject = self.nativeObject.setProgress(0, 100, value);
+                    self.nativeObject.setProgress(0, 100, value);
                 }
             },
             enumerable: true
@@ -187,7 +212,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isString(value)) {
                     _ticker = value;
-                    self.nativeObject = self.nativeObject.setTicker(value);
+                    self.nativeObject.setTicker(value);
                 }
             },
             enumerable: true
@@ -199,7 +224,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isBoolean(value)) {
                     _vibrate = true;
-                    self.nativeObject = self.nativeObject.setVibrate([1000]);
+                    self.nativeObject.setVibrate([1000]);
                 }
             },
             enumerable: true
@@ -211,7 +236,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isNumeric(value) && Priority.indexOf(value) != -1) {
                     _priority = value;
-                    self.nativeObject = self.nativeObject.setPriority(value);
+                    self.nativeObject.setPriority(value);
                 }
             },
             enumerable: true
@@ -223,7 +248,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isString(value)) {
                     _subText = value;
-                    self.nativeObject = self.nativeObject.setSubText(value);
+                    self.nativeObject.setSubText(value);
                 }
             },
             enumerable: true
@@ -235,7 +260,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isBoolean(value)) {
                     _ongoing = value;
-                    self.nativeObject = self.nativeObject.setOngoing(value);
+                    self.nativeObject.setOngoing(value);
                 }
             },
             enumerable: true
@@ -262,7 +287,7 @@ Object.defineProperties(Notifications,{
     },
     'cancelAllLocalNotifications': {
         value: function(){
-            var notificationManager = activity.getSystemService(NOTIFICATION_SERVICE);
+            var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
             notificationManager.cancelAll();
         },
         enumerable: true
@@ -281,10 +306,12 @@ Object.defineProperties(Notifications,{
     },
 });
 
+
+// Generate unique random number
 function getNewNotificationId(){
-    var randomnumber = Math.ceil(Math.random()*1000000 + 1000000);
+    var randomnumber = Math.ceil(Math.random()*1000 + 1000);
     while(selectedNotificationIds.indexOf(randomnumber) != -1){
-        randomnumber = Math.ceil(Math.random()*1000000 + 1000000);
+        randomnumber = Math.ceil(Math.random()*1000 + 1000);
     }
     selectedNotificationIds.push(randomnumber);
     return randomnumber;
@@ -293,11 +320,12 @@ function getNewNotificationId(){
 function unregisterPushNotification(){
     if(senderID && registrationToken){
         if(googleCloudMessagingInstance){
-            const NativeGoogleCloudMessaging = requireClass('com.google.android.gsm.gcm.GoogleCloudMessaging');
+            const NativeGoogleCloudMessaging = requireClass('com.google.android.gms.gcm.GoogleCloudMessaging');
             googleCloudMessagingInstance = NativeGoogleCloudMessaging.getInstance (activity);
         }
         try {
             googleCloudMessagingInstance.unregister ();
+            NativeLocalNotificationReceiver.unregisterRemoteNotificationListener(notificationListener);
         } 
         catch (ex) {
         }
@@ -312,42 +340,66 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     if(!senderID){
         readSenderIDFromProjectJson();
     }
-    
-    if(TypeUtil.isString(senderID) && senderID != -1 ){
+    console.log("senderID: " + senderID);
+    if(TypeUtil.isString(senderID) && senderID != '' ){
         if(checkPlayServices()){
-            if(googleCloudMessagingInstance){
-                const NativeGoogleCloudMessaging = requireClass('com.google.android.gsm.gcm.GoogleCloudMessaging');
+            if(!googleCloudMessagingInstance){
+                console.log("googleCloudMessagingInstance: " + googleCloudMessagingInstance);
+                const NativeGoogleCloudMessaging = requireClass('com.google.android.gms.gcm.GoogleCloudMessaging');
                 googleCloudMessagingInstance = NativeGoogleCloudMessaging.getInstance (activity);
             }
-            try {
-                onFailureCallback && onFailureCallback();
-                registrationToken = googleCloudMessagingInstance.register (senderID);
-                onSuccessCallback && onSuccessCallback();
-
-            } 
-            catch (ex) {
-                onFailureCallback && onFailureCallback();
+            
+            const AsyncTask = require("nf-core/util/Android/asynctask");
+            try{
+            var registerTask = new AsyncTask({
+                onPreExecute: function(){
+                    console.log("onPreExecute")
+                },
+                doInBackground: function(params){
+                    console.log("doInBackground")
+                    try {
+                        console.log("try googleCloudMessagingInstance: " + googleCloudMessagingInstance)
+                        registrationToken = googleCloudMessagingInstance.register ([senderID]);
+                        NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
+                        onSuccessCallback && onSuccessCallback();
+        
+                    } 
+                    catch (ex) {
+                        console.log("catch ex")
+                        Application.onUnhandledError(ex);
+                        onFailureCallback && onFailureCallback();
+                    }
+                }
+            });
+            registerTask.execute(['1']);       
             }
+            catch(e){
+                Application.onUnhandledError(e);
+            }
+               
+          
         }
         else{
+            console.log("checkPlayServices false")
             onFailureCallback && onFailureCallback();
             // throw Error("Google Play Services not available.");
         }
     }
     else{
+        console.log("false: senderID: " + senderID);
         onFailureCallback && onFailureCallback();
         // throw Error("senderID not found in project.json");
     }
 }
 
 function checkPlayServices() {
-    const NativeGoogleApiAvailability = requireClass('com.google.android.gsm.common.GoogleApiAvailability')
+    const NativeGoogleApiAvailability = requireClass('com.google.android.gms.common.GoogleApiAvailability')
     var googleAPI = NativeGoogleApiAvailability.getInstance();
-    var result = googleAPI.isGooglePlayServicesAvailable(this);
+    var result = googleAPI.isGooglePlayServicesAvailable(activity);
     // ConnectionResult.SUCCESS
     if(result != 0) {
         if(googleAPI.isUserResolvableError(result)) {
-            googleAPI.getErrorDialog(this, result,
+            googleAPI.getErrorDialog(activity, result,
                     PLAY_SERVICES_RESOLUTION_REQUEST).show();
         }
         return false;
@@ -367,46 +419,53 @@ function readSenderIDFromProjectJson(){
         senderID = projectJsonObject['api']['googleCloudMessaging']['senderID'];
     }
     else{
-        senderID = -1;
+        senderID = '';
     }
 }
 
-function startNotificationIntent(notification, params){
+function startNotificationIntent(self, params){
     console.log('startNotificationIntent');
-    const LocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
-    const NativeClass = requireClass('java.lang.Class');
-    const NativeNotificationReceiverClass = NativeClass.forName('io.smartface.android.notifications.LocalNotificationReceiver');
     const NativeIntent = requireClass('android.content.Intent');
     const NativePendingIntent = requireClass('android.app.PendingIntent')
-    var notificationIntent = new NativeIntent(activity, NativeNotificationReceiverClass);
+    var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
+    var notificationIntent = new NativeIntent(activity, nativeNotificationReceiverClass);
     console.log('startNotificationIntent #2');
 
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
-    // PendingIntent.FLAG_UPDATE_CURRENT
-    var pendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 134217728);
+    // PendingIntent.FLAG_ONE_SHOT
+    self.mPendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 1073741824);
     
-    var alarmManager = activity.getSystemService(ALARM_SERVICE);
-    var fireDate = params.fireDate ? params.fireDate : Date.now();
+    var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
+    var fireDate = params.fireDate ? params.fireDate : 0;
     if(params.repeatInterval){
         // Scheduled
         // AlarmManager.RTC_WAKEUP
         console.log('startNotificationIntent repeat');
-        alarmManager.setRepeating(0, fireDate, params.repeatInterval, pendingIntent);
+        alarmManager.setRepeating(0, fireDate, params.repeatInterval, self.mPendingIntent);
     }
     else{
         // Not Scheduled
         // AlarmManager.ELAPSED_REALTIME_WAKEUP
         console.log('startNotificationIntent no repeat');
-         alarmManager.set(2, fireDate, pendingIntent);
+         alarmManager.set(2, fireDate, self.mPendingIntent);
     }
-            console.log('startNotificationIntent completed');
-
-
-    
-   
+    console.log('startNotificationIntent completed');
 }
+
+function cancelNotificationIntent(self){
+    console.log('cancelNotificationIntent: ' + self.mPendingIntent);
+    // Cancel alarm.
+    var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
+    alarmManager.cancel(self.mPendingIntent);
+    // Cancel notification
+    var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
+    console.log(self.getId());
+    notificationManager.cancel(self.getId());
+}
+
+
 // Handling iOS specific properties
 Notifications.ios = {};
 Notifications.ios.getBadgeNumber = function(){};
