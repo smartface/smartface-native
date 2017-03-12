@@ -13,7 +13,6 @@ const NOTIFICATION_MANAGER      = 'android.app.NotificationManager'
 const ALARM_SERVICE             = "alarm";
 const ALARM_MANAGER             = "android.app.AlarmManager"
 
-const PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 var Priority = {
     MIN: -2,
     LOW: -1,
@@ -23,15 +22,8 @@ var Priority = {
 };
 var selectedNotificationIds = [];
 var senderID = null;
-var googleCloudMessagingInstance = null;
-var registrationToken;
 var activity = Android.getActivity();
-var notificationListener =  NativeRemoteNotificationListener.implement({
-                                onRemoteNotificationReceived: function(data){
-                                    console.log('onRemoteNotificationReceived');
-                                    Application.onReceivedNotification && Application.onReceivedNotification(data);
-                                }
-                            });
+var notificationListener;
 
 function Notifications(){};
 
@@ -306,7 +298,6 @@ Object.defineProperties(Notifications,{
     },
 });
 
-
 // Generate unique random number
 function getNewNotificationId(){
     var randomnumber = Math.ceil(Math.random()*1000 + 1000);
@@ -318,16 +309,13 @@ function getNewNotificationId(){
 }
 
 function unregisterPushNotification(){
-    if(senderID && registrationToken){
-        if(googleCloudMessagingInstance){
-            const NativeGoogleCloudMessaging = requireClass('com.google.android.gms.gcm.GoogleCloudMessaging');
-            googleCloudMessagingInstance = NativeGoogleCloudMessaging.getInstance (activity);
-        }
-        try {
-            googleCloudMessagingInstance.unregister ();
-            NativeLocalNotificationReceiver.unregisterRemoteNotificationListener(notificationListener);
-        } 
-        catch (ex) {
+    // Implemented due to COR-1281
+    if(TypeUtil.isString(senderID) && senderID != ""){
+        const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
+        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
+        NativeGCMRegisterUtil.unregisterPushNotification(activity);
+        if(notificationListener){
+            NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
     }
     else{
@@ -342,69 +330,33 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     }
     console.log("senderID: " + senderID);
     if(TypeUtil.isString(senderID) && senderID != '' ){
-        if(checkPlayServices()){
-            if(!googleCloudMessagingInstance){
-                console.log("googleCloudMessagingInstance: " + googleCloudMessagingInstance);
-                const NativeGoogleCloudMessaging = requireClass('com.google.android.gms.gcm.GoogleCloudMessaging');
-                googleCloudMessagingInstance = NativeGoogleCloudMessaging.getInstance (activity);
-            }
-            
-            const AsyncTask = require("nf-core/util/Android/asynctask");
-            try{
-            var registerTask = new AsyncTask({
-                onPreExecute: function(){
-                    console.log("onPreExecute")
-                },
-                doInBackground: function(params){
-                    console.log("doInBackground")
-                    try {
-                        console.log("try googleCloudMessagingInstance: " + googleCloudMessagingInstance)
-                        registrationToken = googleCloudMessagingInstance.register ([senderID]);
-                        NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
-                        onSuccessCallback && onSuccessCallback();
-        
-                    } 
-                    catch (ex) {
-                        console.log("catch ex")
-                        Application.onUnhandledError(ex);
-                        onFailureCallback && onFailureCallback();
-                    }
+        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
+        console.log("NativeGCMRegisterUtil: " + NativeGCMRegisterUtil);
+        NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
+            onSuccess: function(){
+                const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService')
+                console.log("NativeGCMRegisterUtil onSuccess");
+                if(!notificationListener){
+                    notificationListener =  NativeRemoteNotificationListener.implement({
+                        onRemoteNotificationReceived: function(data){
+                            console.log('onRemoteNotificationReceived');
+                            Application.onReceivedNotification && Application.onReceivedNotification(data);
+                        }
+                    });
                 }
-            });
-            registerTask.execute(['1']);       
+                NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
+                onSuccessCallback && onSuccessCallback();
+            },
+            onFailure: function(){
+                console.log("NativeGCMRegisterUtil onFailure");
+                onFailureCallback && onFailureCallback();
             }
-            catch(e){
-                Application.onUnhandledError(e);
-            }
-               
-          
-        }
-        else{
-            console.log("checkPlayServices false")
-            onFailureCallback && onFailureCallback();
-            // throw Error("Google Play Services not available.");
-        }
+        });
     }
     else{
         console.log("false: senderID: " + senderID);
         onFailureCallback && onFailureCallback();
-        // throw Error("senderID not found in project.json");
     }
-}
-
-function checkPlayServices() {
-    const NativeGoogleApiAvailability = requireClass('com.google.android.gms.common.GoogleApiAvailability')
-    var googleAPI = NativeGoogleApiAvailability.getInstance();
-    var result = googleAPI.isGooglePlayServicesAvailable(activity);
-    // ConnectionResult.SUCCESS
-    if(result != 0) {
-        if(googleAPI.isUserResolvableError(result)) {
-            googleAPI.getErrorDialog(activity, result,
-                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
-        }
-        return false;
-    }
-    return true;
 }
 
 function readSenderIDFromProjectJson(){
@@ -464,7 +416,6 @@ function cancelNotificationIntent(self){
     console.log(self.getId());
     notificationManager.cancel(self.getId());
 }
-
 
 // Handling iOS specific properties
 Notifications.ios = {};
