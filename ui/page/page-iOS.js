@@ -35,6 +35,23 @@ function Page(params) {
        self.calculatePosition();
     }
 
+    var _onOrientationChange;
+    Object.defineProperty(this, 'onOrientationChange', {
+        get: function() {
+            return _onOrientationChange;
+        },
+        set: function(onOrientationChange) {
+            _onOrientationChange = onOrientationChange.bind(this);
+        },
+        enumerable: true
+    });
+    
+    self.onOrientationChangeHandler = function(){
+        self.onOrientationChange();
+    }
+    
+    self.nativeObject.viewWillTransition = self.onOrientationChangeHandler;
+    
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.pageView;
