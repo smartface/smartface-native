@@ -111,7 +111,7 @@ System.android.menuKeyAvaliable;
  * @static
  * @since 0.1
  */
-System.fingerPrintAvaliable;
+System.ios.fingerPrintAvaliable;
 
 /**
  *
@@ -173,7 +173,7 @@ System.android.getPackageVersion ({
  * @ios
  * @since 0.1
  */
-System.validateFingerPrint ({
+System.ios.validateFingerPrint ({
     onSuccess: function(){},
     onError: function(){}
 });

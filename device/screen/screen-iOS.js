@@ -2,6 +2,7 @@ const Image = require("nf-core/ui/image");
 
 function Screen() {}
 
+Screen.ios = {};
 /*
     0 unknown
     1 portrait
@@ -35,7 +36,7 @@ Object.defineProperty(Screen, 'touchSupported', {
   enumerable: true
 });
 
-Object.defineProperty(Screen, 'forceTouchAvaliable', {
+Object.defineProperty(Screen.ios, 'forceTouchAvaliable', {
   value: UIDevice.forceTouchAvaliable(),  
   writable: false,
   enumerable: true

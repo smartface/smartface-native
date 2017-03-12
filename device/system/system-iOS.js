@@ -1,6 +1,7 @@
 function System() {}
 
 System.android = {}
+System.ios = {}
 
 const UIDeviceBatteryState = {
     unknown : 0,
@@ -58,7 +59,7 @@ Object.defineProperty(System, 'clipboard', {
   enumerable: true
 });
 
-Object.defineProperty(System, 'fingerPrintAvaliable', {
+Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   get: function() {
       var context = new LAContext();
       return context.canEvaluatePolicy();
@@ -74,7 +75,7 @@ Object.defineProperty(System, 'vibrate', {
   enumerable: true
 });
 
-System.validateFingerPrint = function(params){
+System.ios.validateFingerPrint = function(params){
     var context = new LAContext();
     context.evaluatePolicy(params.message,params.onSuccess,params.onError);
 }
