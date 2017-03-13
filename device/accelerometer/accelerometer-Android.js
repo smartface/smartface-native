@@ -1,12 +1,13 @@
-const NativeContext             = requireClass('android.content.Context');
+const AndroidConfig             = require('nf-core/util/Android/androidconfig')
 const NativeSensor              = requireClass('android.hardware.Sensor');
-const NativeSensorManager       = requireClass('android.hardware.SensorManager');
 const NativeSensorEventListener = requireClass('android.hardware.SensorEventListener');
+// Context.SENSOR_SERVICE
+const SENSOR_SERVICE = 'sensor';
+const SENSOR_MANAGER = 'android.hardware.SensorManager';
 
-const activity = Android.getActivity();
 const Accelerometer = {};
 
-var sensorManager = activity.getSystemService(NativeContext.SENSOR_SERVICE);
+var sensorManager = AndroidConfig.getSystemService(SENSOR_SERVICE, SENSOR_MANAGER);
 var sensor = sensorManager.getDefaultSensor(NativeSensor.TYPE_ACCELEROMETER);
 
 var _callback;
@@ -24,7 +25,8 @@ Object.defineProperties(Accelerometer, {
                     });
                 }
             });
-            sensorManager.registerListener(_sensorListener, sensor, NativeSensorManager.SENSOR_DELAY_UI);
+            // SensorManager.SENSOR_DELAY_UI
+            sensorManager.registerListener(_sensorListener, sensor, 2);
         }
     },
     'stop': {

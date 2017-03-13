@@ -5,13 +5,14 @@ const KeyboardType = require('../keyboardtype');
 const ActionKeyType = require('../actionkeytype');
 const TextAlignment = require('nf-core/ui/textalignment')
 
-const NativeActivity = requireClass("android.app.Activity");
-const NativeContext = requireClass("android.content.Context"); 
-const NativeInputMethodManager = requireClass("android.view.inputmethod.InputMethodManager");
 const NativeEditText = requireClass("android.widget.EditText"); 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView = requireClass("android.widget.TextView");
+
+// Context.INPUT_METHOD_SERVICE
+const INPUT_METHOD_SERVICE = 'input_method';
+const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
     2,              //InputType.TYPE_CLASS_NUMBER
@@ -218,18 +219,15 @@ const TextBox = extend(Label)(
         }
         
         this.showKeyboard = function(){
-            // todo: toggleSoftInput doesn't work causing by issue AND-2566
             self.nativeObject.requestFocus();
-            var context = activity.getApplicationContext();
-            var inputMethodManager = context.getSystemService(NativeActivity.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInput(NativeInputMethodManager.SHOW_FORCED, NativeInputMethodManager.HIDE_IMPLICIT_ONLY);
+            var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+            // InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
+            inputMethodManager.toggleSoftInput(2, 1);
         };
         
         this.hideKeyboard = function(){
-            // todo: toggleSoftInput doesn't work causing by issue AND-2566
             self.nativeObject.clearFocus();
-            var context = activity.getApplicationContext();
-            var inputMethodManager = context.getSystemService(NativeContext.INPUT_METHOD_SERVICE);
+            var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
             inputMethodManager.hideSoftInputFromWindow(self.nativeObject.getWindowToken(), 0); 
         };
         

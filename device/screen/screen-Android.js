@@ -1,3 +1,4 @@
+const AndroidConfig   = require('nf-core/util/Android/androidconfig')
 const UnitConverter   = require('nf-core/util/Android/unitconverter');
 const Image           = require('nf-core/ui/image');
 const OrientationType = require('nf-core/device/screen/orientationtype');
@@ -6,7 +7,9 @@ const NativeContext        = requireClass('android.content.Context');
 const NativeBitmap         = requireClass('android.graphics.Bitmap');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
 const NativeR              = requireClass('android.R');
-
+// Context.WINDOW_SERVICE
+const WINDOW_SERVICE = 'window';
+const WINDOW_MANAGER = 'android.view.WindowManager';
 const Screen = {};
 
 Screen.ios = {};
@@ -56,8 +59,7 @@ Object.defineProperty(Screen, 'touchSupported', {
 
 Object.defineProperty(Screen, 'orientation', {
     get: function () {
-        var activity = Android.getActivity();
-        var windowManager = activity.getSystemService(NativeContext.WINDOW_SERVICE);
+        var windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
         var display = windowManager.getDefaultDisplay();
 
         return orientationArray[display.getRotation()];
