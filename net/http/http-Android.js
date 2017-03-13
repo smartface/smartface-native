@@ -1,10 +1,14 @@
 const Volley = requireClass("com.android.volley.toolbox.Volley");
-const Request = requireClass("com.android.volley.Request");
-const Response = requireClass("com.android.volley.Response");
-const NativeInteger = requireClass("java.lang.Integer");
-const NativeString = requireClass("java.lang.String");
+const VolleyRequest  = requireClass("com.android.volley.Request");
+const VolleyResponse = requireClass("com.android.volley.Response");
+const NativeInteger  = requireClass("java.lang.Integer");
+const NativeString   = requireClass("java.lang.String");
+
+const Request = require('./httpRequest');
 
 var http = {};
+
+const RequestQueue = Volley.newRequestQueue(Android.getActivity());
 
 const methods = {
     "GET": 0,
@@ -19,12 +23,12 @@ const methods = {
 
 http.requestString = function(url, onLoad, onError) {
     try {
-        var responseListener = Response.Listener.implement({
+        var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
                 onLoad(response);
             }
         });
-        var responseErrorListener = Response.ErrorListener.implement({
+        var responseErrorListener = VolleyResponse.ErrorListener.implement({
             onErrorResponse: function(error) {
                 onError(error);
             }
@@ -32,11 +36,13 @@ http.requestString = function(url, onLoad, onError) {
         
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-            var myRequest = new StringRequest(Request.Method.GET, url,
+
+            var request = new Request();
+            request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
                     responseListener, responseErrorListener);
-    
-            var requestQueue = Volley.newRequestQueue(Android.getActivity());
-            requestQueue.add(myRequest);
+
+            RequestQueue.add(request.nativeObject);
+            return request;
         }
         else {
             if(onError)
@@ -50,25 +56,27 @@ http.requestString = function(url, onLoad, onError) {
 
 http.requestImage = function(url, onLoad, onError) {
     try {
-        var responseListener = Response.Listener.implement({
+        var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
                 const Image = require("nf-core/ui/image");
                 var image = new Image({bitmap: response});
                 onLoad(image);
             }
         });
-        var responseErrorListener = Response.ErrorListener.implement({
+        var responseErrorListener = VolleyResponse.ErrorListener.implement({
             onErrorResponse: function(error) {
                 onError(error);
             }
         });
         if(checkInternet()) {
             const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-            var myRequest = new ImageRequest(url,responseListener, 
+
+            var request = new Request();
+            request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
-                
-            var requestQueue = Volley.newRequestQueue(Android.getActivity());
-            requestQueue.add(myRequest);
+
+            RequestQueue.add(request.nativeObject);
+            return request;
         }
         else {
             onError("No network connection");
@@ -79,45 +87,45 @@ http.requestImage = function(url, onLoad, onError) {
 };
 
 http.requestJSON = function(url, onLoad, onError) {
-    http.getString(url, function(response) {
-            try {
-                // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
-                // onLoad(responseJSON);        // response is java.lang.String.
-                if(onLoad)
-                    onLoad(response);
-            } catch (e) {
-                if(onError)
-                    onError(e);
-            }
+    return http.requestString(url, function(response) {
+        try {
+            // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
+            // onLoad(responseJSON);        // response is java.lang.String.
+            if(onLoad)
+                onLoad(response);
+        } catch (e) {
+            if(onError)
+                onError(e);
+        }
     }, onError);
 };
 
 http.requestFile = function(url, fileName, onLoad, onError) {
-    http.getString(url, function(response){
-            try {
-                const IO = require("../../io");
-                var filePath;
-                if(!fileName)
-                    filePath = url.substring(url.lastIndexOf('/'));
-                filePath = fileName;
-                var file = new IO.File({path: filePath});
-                var stream = file.openStream(IO.FileStream.StreamType.WRITE);
-                stream.write(response);
-                stream.close();
-                onLoad(file);
-            } catch (e) {
-                onError(e);
-            }
-        }, onError);
+    return http.requestString(url, function(response){
+        try {
+            const IO = require("../../io");
+            var filePath;
+            if(!fileName)
+                filePath = url.substring(url.lastIndexOf('/'));
+            filePath = fileName;
+            var file = new IO.File({path: filePath});
+            var stream = file.openStream(IO.FileStream.StreamType.WRITE);
+            stream.write(response);
+            stream.close();
+            onLoad(file);
+        } catch (e) {
+            onError(e);
+        }
+    }, onError);
 };
 
 http.request = function(params, onLoad, onError) {
-    var responseListener = Response.Listener.implement({
+    var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
                 onLoad({body: response, headers: {}});
             }
         });
-    var responseErrorListener = Response.ErrorListener.implement({
+    var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
             onError(error);
         }
@@ -129,7 +137,7 @@ http.request = function(params, onLoad, onError) {
     var body = null;
     if(params.body)
         body = new NativeString(params.body);
-    var request = {};
+    var request = new Request();
     
     var contentType = "text/plain";
     if (params.headers && params.headers["Content-Type"]) {
@@ -162,10 +170,16 @@ http.request = function(params, onLoad, onError) {
         if(onError)
             onError(err);
     }
-    var requestQueue = Volley.newRequestQueue(Android.getActivity());
-    requestQueue.add(request.nativeObject);
+
+    RequestQueue.add(request.nativeObject);
+    return request;
 };
 
+http.cancelRequest = function(request) {
+    if (request && request.nativeObject) {
+        request.nativeObject.cancel();
+    }
+}
 
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
@@ -197,6 +211,5 @@ function checkInternet() {
         return false;
     return true;
 }
-
 
 module.exports = http;
