@@ -33,6 +33,9 @@ Font.create = function(fontFamily, size, style) {
 }
     
 Font.createFromFile = function(path, size) {
+    if (!size){
+        size = 15;
+    }
     var filePath = new File({path:path});
     var actualPath = filePath.nativeObject.getActualPath();
     return  UIFont.createFromFileWithFilenameStringSize(actualPath, size);

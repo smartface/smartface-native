@@ -175,10 +175,10 @@ function View(params) {
     
     this.getPosition = function(){
         return  {
-            width: AndroidUnitConverter.pixelToDp(self.width), 
-            height: AndroidUnitConverter.pixelToDp(self.height), 
-            top: AndroidUnitConverter.pixelToDp(self.top), 
-            left: AndroidUnitConverter.pixelToDp(self.left)
+            width: self.width, 
+            height: self.height, 
+            top: self.top, 
+            left: self.left
         }; 
     };
     

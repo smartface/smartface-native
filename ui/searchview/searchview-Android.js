@@ -60,6 +60,8 @@ const SearchView = extend(View)(
         
         self.nativeObject = new NativeSearchView(activity);
         self.nativeObject.onActionViewExpanded();
+        // Prevent gain focus when SearchView appear.
+        self.nativeObject.clearFocus();
         var mSearchSrcTextView = self.nativeObject.findViewById(NativeSupportR.id.search_src_text);
         var mCloseButton = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
         var  mSearchButton = self.nativeObject.findViewById(NativeSupportR.id.search_button);
@@ -334,8 +336,6 @@ const SearchView = extend(View)(
         // Handling ios specific properties
         self.ios = {};
         
-        // Assign default values
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

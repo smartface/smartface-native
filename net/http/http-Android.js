@@ -6,6 +6,17 @@ const NativeString = requireClass("java.lang.String");
 
 var http = {};
 
+const methods = {
+    "GET": 0,
+    "POST" : 1,
+    "PUT" : 2,
+    "DELETE" : 3,
+    "HEAD" : 4,
+    "OPTIONS" : 5,
+    "TRACE" : 6,
+    "PATCH" : 7
+};
+
 http.requestString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
@@ -19,12 +30,18 @@ http.requestString = function(url, onLoad, onError) {
             }
         });
         
-        const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-        var myRequest = new StringRequest(Request.Method.GET, url,
-                responseListener, responseErrorListener);
-
-        var requestQueue = Volley.newRequestQueue(Android.getActivity());
-        requestQueue.add(myRequest);
+        if(checkInternet()) {
+            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
+            var myRequest = new StringRequest(Request.Method.GET, url,
+                    responseListener, responseErrorListener);
+    
+            var requestQueue = Volley.newRequestQueue(Android.getActivity());
+            requestQueue.add(myRequest);
+        }
+        else {
+            if(onError)
+                onError("No network connection");
+        }
     } catch(e) {
         if(onError)
             onError(e);
@@ -45,13 +62,17 @@ http.requestImage = function(url, onLoad, onError) {
                 onError(error);
             }
         });
-        
-        const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-        var myRequest = new ImageRequest(url,responseListener, 
-            0, 0, null, null,responseErrorListener);
-            
-        var requestQueue = Volley.newRequestQueue(Android.getActivity());
-        requestQueue.add(myRequest);
+        if(checkInternet()) {
+            const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
+            var myRequest = new ImageRequest(url,responseListener, 
+                0, 0, null, null,responseErrorListener);
+                
+            var requestQueue = Volley.newRequestQueue(Android.getActivity());
+            requestQueue.add(myRequest);
+        }
+        else {
+            onError("No network connection");
+        }
     } catch(e) {
         onError(e);
     }
@@ -102,7 +123,7 @@ http.request = function(params, onLoad, onError) {
         }
     });
     
-    var method = new NativeInteger(params.method);
+    var method = new NativeInteger(methods[params.method]);
     var url = new NativeString(params.url);
     var parameters = [method, url, responseListener, responseErrorListener];
     var body = null;
@@ -110,18 +131,32 @@ http.request = function(params, onLoad, onError) {
         body = new NativeString(params.body);
     var request = {};
     
+    var contentType = "text/plain";
+    if (params.headers && params.headers["Content-Type"]) {
+        contentType = params.headers["Content-Type"];
+    }
+
     try {
-        const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-        request.nativeObject = StringRequest.extend("SFStringRequest", {
-            getBody: function() {
-                if(!body)
-                    return [];
-                return body.getBytes();
-            },
-            getHeaders: function() {
-                return getHeaderHashMap(params);
-            }
-        }, parameters);
+        if(checkInternet()) {
+            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
+            request.nativeObject = StringRequest.extend("SFStringRequest", {
+                getBody: function() {
+                    if(!body)
+                        return [];
+                    return body.getBytes();
+                },
+                getHeaders: function() {
+                    return getHeaderHashMap(params);
+                },
+                getBodyContentType: function() {
+                    return contentType;
+                }
+            }, parameters);    
+        }
+        else {
+            if(onError)
+                onError("No network connection");
+        }
     }
     catch(err) {
         if(onError)
@@ -155,5 +190,13 @@ function getHeaderHashMap(params) {
     }
     return headers;
 }
+
+function checkInternet() {
+    const Network = require("nf-core/device/network");
+    if(Network.connectionType == Network.ConnectionType.None)
+        return false;
+    return true;
+}
+
 
 module.exports = http;

@@ -110,6 +110,16 @@ function AlertView () {
      * @since 0.1
      */
     this.message = "";
+    
+    this.android = {};
+    /**
+     * Gets/sets whether the alert view is cancelable or not when touched outside.
+     *
+     * @property {Boolean} cancellable
+     * @android
+     * @since 0.1
+     */
+    this.android.cancellable = true;
 
     /**
      * Gets showing status of AlertView. It is set to true if AlertView is

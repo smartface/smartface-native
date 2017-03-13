@@ -173,16 +173,6 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
-        Object.defineProperty(this, 'showScrollBar', {
-            get: function() {
-                return self.nativeObject.isVerticalScrollBarEnabled();
-            },
-            set: function(showScrollBar) {
-                self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
-            },
-            enumerable: true
-        });
         
         function createColorStateList(textColors) {
             const NativeColorStateList = requireClass("android.content.res.ColorStateList");
@@ -210,32 +200,9 @@ const Label = extend(View)(
             }
             return (new NativeColorStateList (statesSet, colorsSets));
         }
-
-        // Added due to problem in vertical alignment inside YogaLayout for TextView
-        Object.defineProperty(this, 'height', {
-            get: function() {
-                return AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight());
-            },
-            set: function(height) {
-                self.minHeight = height;
-                self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(height));
-            },
-            enumerable: true,
-            configurable: true
-        });
         
-        // Added due to problem in vertical alignment inside YogaLayout for TextView
-        Object.defineProperty(this, 'width', {
-            get: function() {
-                return AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth());
-            },
-            set: function(width) {
-                self.minWidth = width;
-                self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(width))
-            },
-            enumerable: true,
-            configurable: true
-        });
+        // Handling iOS-specific properties
+        this.ios = {};
         
         // Assign parameters given in constructor
         if (params) {

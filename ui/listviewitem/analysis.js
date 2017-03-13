@@ -6,6 +6,8 @@ const extend = require('js-base/core/extend');
  * @extends UI.ViewGroup
  *
  * ListViewItem class can used for a row layout of the ListView.
+ * For a better performance, you should give id for all child views of ListViewItem.
+ * 
  * For example usage you can look {@link UI.ListView}.
  *
  */

@@ -43,7 +43,7 @@ function StatusBar(parentPage) {
 
     /**
      * Gets/sets color of the status bar. This property works only for Android version 
-     * KitKat (API 19) or above. If you want to make SliderDrawer to overlay Android StatusBar, 
+     * LOLLIPOP (API 21) or above. If you want to make SliderDrawer to overlay Android StatusBar, 
      * you should always use color with alpha channel.
      *
      *     @example
