@@ -4,7 +4,15 @@ const VolleyResponse = requireClass("com.android.volley.Response");
 const NativeInteger  = requireClass("java.lang.Integer");
 const NativeString   = requireClass("java.lang.String");
 
-const Request = require('./httpRequest');
+const Request = function() {
+    Object.defineProperties(this, {
+        'cancel': {
+            value: function() {
+                this.nativeObject.cancel();
+            }
+        }
+    });
+};
 
 const http = {
     RequestQueue: Volley.newRequestQueue(Android.getActivity())
@@ -174,12 +182,6 @@ http.request = function(params, onLoad, onError) {
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
-
-http.cancelRequest = function(request) {
-    if (request && request.nativeObject) {
-        request.nativeObject.cancel();
-    }
-}
 
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
