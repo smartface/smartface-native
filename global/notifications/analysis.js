@@ -363,5 +363,4 @@ Notifications.Priority.HIGH = 1;
  */
 Notifications.Priority.MAX = 2;
 
-
 module.exports = Notifications;
