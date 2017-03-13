@@ -31,8 +31,8 @@ const SliderDrawer = extend(Page)(
         
         self.nativeObject.onViewLayoutSubviews = function(){
             self.pageView.nativeObject.frame = {
-                x : UIScreen.mainScreen().bounds.x,
-                y:UIScreen.mainScreen().bounds.y,
+                x : self.drawerPosition ? UIScreen.mainScreen().bounds.width - self.pageView.nativeObject.frame.width : 0,
+                y : 0,
                 height: UIScreen.mainScreen().bounds.height,
                 width: self.width
             };

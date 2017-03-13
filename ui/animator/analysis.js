@@ -23,7 +23,7 @@
  *         backgroundColor: Color.GRAY,
  *         onPress: function() {
  *             myView.backgroundColor = Color.RED;
- *             Animator.animate(self.layout, 5000, function() {
+ *             Animator.animate(myPage.layout, 5000, function() {
  *                 myView.left = 150;
  *                 myView.right = 150;
  *             }).then(2500, function() {

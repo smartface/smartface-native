@@ -270,6 +270,16 @@ function View(params) {
         enumerable: true
     });
 
+    Object.defineProperty(self, 'display', {
+        get: function() {
+            return self.nativeObject.yoga.display;
+        },
+        set: function(value) {
+            self.nativeObject.yoga.display = value;
+        },
+        enumerable: true
+    });
+
     Object.defineProperty(self, 'flexGrow', {
         get: function() {
             return self.nativeObject.yoga.flexGrow;
@@ -782,7 +792,7 @@ function View(params) {
      Perform a layout calculation and update the frames of the views in the hierarchy with the results
      */
     this.applyLayout = function(){
-        self.nativeObject.yoga.applyLayout();
+        self.nativeObject.yoga.applyLayoutPreservingOrigin(false);
     }
 
     /*
