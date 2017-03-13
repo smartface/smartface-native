@@ -132,7 +132,126 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
-
+    
+    /**
+     * Gets/sets the orientation of the Page. This property must be set as constructor parameter. 
+     * {@link UI.Page.Orientation Orientation} constants can use with bitwise or operator. The default value of the 
+     * orientation defined in project.json.
+     *     
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     var myPage1 = new Page({
+     *          orientation: Page.Orientation.LANDSCAPELEFT
+     *     });
+     * 
+     * @property {UI.Page.Orientation} [orientation = UI.Page.Orientation.PORTRAIT]
+     * @android
+     * @ios
+     * @since 0.1
+    */
+    this.orientation = UI.Page.Orientation.PORTRAIT;
+    
+    /**
+     * This event will be called when orientation of the Page changes.
+     *
+     * @event onOrientationChange
+     * @android
+     * @ios
+     */
+    this.onOrientationChange = function (){};
 }
+
+Page.Orientation = {};
+
+/**
+ * Enum corresponding to portrait orientation. 
+ * 
+ * @property PORTRAIT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"PORTRAIT",{
+    value: 1
+});
+
+/**
+ * Enum corresponding to reverse portrait orientation (upside down).
+ * 
+ * @property UPSIDEDOWN
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
+    value: 2
+});
+
+/**
+ * Enum corresponding to both portrait orientation controlled by sensor.
+ * 
+ * @property AUTOPORTRAIT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
+    value: 3
+});
+
+/**
+ * Enum corresponding to landscape orientation (landspace left).
+ * 
+ * @property LANDSCAPELEFT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
+    value: 4
+});
+
+/**
+ * Enum corresponding to reverse landscape orientation (landspace right).
+ * 
+ * @property LANDSCAPERIGHT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
+    value: 8
+});
+
+/**
+ * Enum corresponding to both landscape orientation controlled by sensor.
+ * 
+ * @property AUTOLANDSCAPE
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
+    value: 12
+});
+
+/**
+ * Enum corresponding all orientation controlled by sensor.
+ * 
+ * @property AUTO
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTO",{
+    value: 15
+});
 
 module.exports = Page;

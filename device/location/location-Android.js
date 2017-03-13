@@ -1,9 +1,10 @@
-const NativeContext  = requireClass('android.content.Context');
-const NativeCriteria = requireClass('android.location.Criteria');
-const NativeLocationListener = requireClass('android.location.LocationListener');
-
-const activity = Android.getActivity();
-const locationManager = activity.getSystemService(NativeContext.LOCATION_SERVICE);
+const AndroidConfig             = require('nf-core/util/Android/androidconfig')
+const NativeCriteria            = requireClass('android.location.Criteria');
+const NativeLocationListener    = requireClass('android.location.LocationListener');
+// Context.LOCATION_SERVICE
+const LOCATION_SERVICE = 'location';
+const LOCATION_MANAGER = 'android.location.LocationManager';
+const locationManager = AndroidConfig.getSystemService(LOCATION_SERVICE, LOCATION_MANAGER);
 const criteria = new NativeCriteria();
 
 const Location = {};
