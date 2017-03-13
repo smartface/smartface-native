@@ -7,7 +7,10 @@ AndroidConfig.isEmulator = (NativeBuildConfig.FLAVOR.toLowerCase().indexOf("emul
 AndroidConfig.packageName = Android.getActivity().getPackageName();
 AndroidConfig.sdkVersion = NativeBuild.VERSION.SDK_INT;
 
-const SDK_MARSHMALLOW = 23;
+AndroidConfig.SDK = {};
+AndroidConfig.SDK.SDK_MARSHMALLOW = 23;
+AndroidConfig.SDK.SDK_LOLLIPOP = 21;
+
 var classesCache = {};
 var servicesCache = {};
 var activity = Android.getActivity();
@@ -23,7 +26,7 @@ AndroidConfig.getClass = function(className){
 
 AndroidConfig.getSystemService = function(serviceName, serviceClassName){
     if(!servicesCache[serviceName]){
-        if(AndroidConfig.sdkVersion >= SDK_MARSHMALLOW){
+        if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
             var serviceClass = AndroidConfig.getClass(serviceClassName);
             servicesCache[serviceName] = activity.getSystemService(serviceClass);
         }

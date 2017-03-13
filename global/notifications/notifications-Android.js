@@ -13,13 +13,6 @@ const NOTIFICATION_MANAGER      = 'android.app.NotificationManager';
 const ALARM_SERVICE             = "alarm";
 const ALARM_MANAGER             = "android.app.AlarmManager";
 
-var Priority = {
-    MIN: -2, // NotificationCompat.PRIORITY_MIN
-    LOW: -1, // NotificationCompat.PRIORITY_DEFAULT
-    DEFAULT: 0, // NotificationCompat.PRIORITY_MIN
-    HIGH: 1, // NotificationCompat.PRIORITY_HIGH
-    MAX: 2 // NotificationCompat.PRIORITY_MAX
-};
 var activity = Android.getActivity();
 var selectedNotificationIds = [];
 var senderID = null;
@@ -170,7 +163,7 @@ Notifications.LocalNotification = function(params) {
     var _indeterminate = false;
     var _ticker = '';
     var _vibrate = false;
-    var _priority = Priority.DEFAULT;
+    var _priority = Notifications.Priority.DEFAULT;
     var _subText = '';
     var _ongoing = false;
     Object.defineProperties(this.android,{
@@ -179,7 +172,7 @@ Notifications.LocalNotification = function(params) {
                 return _color;
             },
             set: function(value) {
-                if (TypeUtil.isNumeric(value)) {
+                if (TypeUtil.isNumeric(value) && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                     _color = value;
                     self.nativeObject.setColor(value);
                 }
@@ -227,7 +220,7 @@ Notifications.LocalNotification = function(params) {
                 return _priority;
             },
             set: function(value) {
-                if (TypeUtil.isNumeric(value) && Priority.indexOf(value) != -1) {
+                if (TypeUtil.isNumeric(value)) {
                     _priority = value;
                     self.nativeObject.setPriority(value);
                 }
@@ -300,6 +293,29 @@ Object.defineProperties(Notifications,{
     },
 });
 
+Notifications.Priority = {};
+Object.defineProperties(Notifications.Priority, {
+    'MIN': {
+        value: -2, // NotificationCompat.PRIORITY_MIN
+        enumerable: true
+    },
+    'LOW': {
+        value: -1, // NotificationCompat.PRIORITY_DEFAULT
+        enumerable: true
+    },
+    'DEFAULT': {
+        value: 0, // NotificationCompat.PRIORITY_MIN
+        enumerable: true
+    },
+    'HIGH': {
+        value: 1, // NotificationCompat.PRIORITY_HIGH
+        enumerable: true
+    },
+    'MAX': {
+        value: 2, // NotificationCompat.PRIORITY_MAX
+        enumerable: true
+    },
+})
 // Generate unique random number
 function getNewNotificationId(){
     var randomnumber = Math.ceil(Math.random()*1000 + 1000);
@@ -406,7 +422,5 @@ function cancelNotificationIntent(self){
 
 // Handling iOS specific properties
 Notifications.ios = {};
-Notifications.ios.getBadgeNumber = function(){};
-Notifications.ios.setBadgeNumber = function(){};
 
 module.exports = Notifications;
