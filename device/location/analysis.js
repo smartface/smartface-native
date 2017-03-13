@@ -3,6 +3,21 @@
  * @since 0.1
  * 
  * Device.Location allows capturing location change events on the device.
+ * 
+ *     @example
+ *     const Timer    = require("nf-core/global/timer");
+ *     const Location = require('nf-core/device/location'); 
+ * 
+ *     Location.start();
+ *     Location.onLocationChanged = function(event) {
+ *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
+ *     };
+ * 
+ *     Timer.setTimeout({
+ *         delay: 30000, 
+ *         task: function() { Location.stop() }
+ *     });
+ * 
  */
 function Location() {}
 

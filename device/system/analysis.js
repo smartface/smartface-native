@@ -111,7 +111,7 @@ System.android.menuKeyAvaliable;
  * @static
  * @since 0.1
  */
-System.fingerPrintAvaliable;
+System.ios.fingerPrintAvaliable;
 
 /**
  *
@@ -156,22 +156,24 @@ System.android.getPackageVersion ({
  * Checks if the provided finger print matches with the system's finger print.
  * 
  *     @example
- *     System.validateFingerPrint({
- *         onSuccess: function() {
- *             alert("valid finger");
- *         },
- *         onError: function() {
- *             alert("invalid finger");
- *         }
- *     });
+ *     System.ios.validateFingerPrint({
+ *            message : "Message",
+ *            onSuccess : function(){
+ *                  console.log("Success");
+ *            },
+ *            onError : function(){
+ *                  console.log("Error");
+ *            }
+ *      });
  * @method validateFingerPrint
+ * @param {String} message
  * @param {Function} onSuccess
  * @param {Function} onError
  * @static
  * @ios
  * @since 0.1
  */
-System.validateFingerPrint ({
+System.ios.validateFingerPrint ({
     onSuccess: function(){},
     onError: function(){}
 });
