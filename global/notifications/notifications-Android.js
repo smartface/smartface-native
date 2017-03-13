@@ -82,13 +82,13 @@ Notifications.LocalNotification = function(params) {
             },
             set: function(value) {
                 if (TypeUtil.isString(value)) {
-                    _launchImage = value;
                     const Image = require("nf-core/ui/image");
                     var largeImage = Image.createFromFile(value);
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();
                         if(largeImageBitmap){
                             self.nativeObject.setLargeIcon(largeImage.nativeObject);
+                            _launchImage = value;
                         }
                     }
                 }
