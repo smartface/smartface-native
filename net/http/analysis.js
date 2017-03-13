@@ -1,7 +1,20 @@
 /**
- * @class Net.http
+ * @class Net.Http
  * 
  * http module allows sending http requests.
+ * 
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *     var myImageUrl = your-image-url;
+ *     http.requestImage(myImageUrl, onLoad, onError);
+ * 
+ *     function onLoad(response) {
+ *         var image = response;
+ *     }
+ * 
+ *     function onError(error) {
+ *         alert(error);
+ *     }
  */
 var http = {};
 
@@ -17,7 +30,7 @@ var http = {};
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return UI.File
- * @since 0.2
+ * @since 0.1
  */
 http.requestFile = function(url, fileName, onLoad, onError) {}
 
@@ -31,7 +44,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return UI.Image
- * @since 0.2
+ * @since 0.1
  */
 http.requestImage = function(url, onLoad, onError) {}
 
@@ -45,7 +58,7 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return String
- * @since 0.2
+ * @since 0.1
  */
 http.requestString = function(url, onLoad, onError) {}
 
@@ -59,7 +72,7 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return String
- * @since 0.2
+ * @since 0.1
  */
 http.requestJSON = function(url, onLoad, onError) {}
 
@@ -68,6 +81,29 @@ http.requestJSON = function(url, onLoad, onError) {}
  * 
  * Sends an http request defined with parameters.
  * 
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *     var myHeaders = {
+ *         "Content-Type": "text/plain;charset=UTF-8"
+ *     }
+ * 
+ *     var params = {
+ *         url: your-url,
+ *         body: your-body,
+ *         method: "POST",
+ *         headers: myHeaders
+ *     }
+ *     
+ *     http.request(params, onLoad, onError);
+ *     
+ *     function onLoad(response) {
+ *         var body = response.body;
+ *         var headers = params.headers;
+ *     }
+ *     function onError(error) {
+ *         alert(error);
+ *     }
+ * 
  * @param {Object} params Parameters
  * @param {String} params.url URL
  * @param {Object} params.headers Headers
@@ -75,21 +111,10 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.body Http request body
  * @param {String} params.user Username for authorization if needed
  * @param {String} params.password Password for authorization if needed
- * @param {onLoad} onLoad Callback for success case
- * @param {onError} onError Callback for error case
- * @since 0.2
+ * @param {Function} onLoad Callback for success case
+ * @param {Function} onError Callback for error case
+ * @since 0.1
  */
-http.request = function(params, onLoad, onError) {}
-/**
- * @callback onLoad
- * @param {object} e.headers
- * @param {string} e.body
- */
-
- /**
- * @callback onError
- * @param {object} e
- * @param {string} e.message
- */
+http.request = function(params, onLoad, onError) {};
 
 module.exports = http;

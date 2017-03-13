@@ -211,10 +211,20 @@ function SearchView () {
      this.onSearchButtonClicked = function() {};
 };
 
+/**
+ * iOS Specific Properties.
+ * @class UI.SearchView.iOS
+ */
 SearchView.iOS = {};
+/**
+ * Bar style that specifies the search bar’s appearance.
+ * @class UI.SearchView.iOS.Style
+ */
 SearchView.iOS.Style = {};
 
 /**
+ * Default is prominent.
+ * @memberof UI.SearchView.iOS.Style
  * @property DEFAULT
  * @ios
  * @readonly
@@ -225,6 +235,7 @@ Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
 });
 
 /**
+ * The search bar has a transparent background.
  * @property PROMINENT
  * @ios
  * @readonly
@@ -235,6 +246,7 @@ Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
 });
 
 /**
+ * The search bar has no background.
  * @property MINIMAL
  * @ios
  * @readonly

@@ -173,6 +173,19 @@ Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
     },
 });
 ////////////////////////////////////////////////////////////////////////
+FlexLayout.Display = {};
+
+Object.defineProperty(FlexLayout.Display, 'FLEX', {
+    get: function() {
+        return YogaEnums.YGDisplay.Flex;
+    },
+});
+Object.defineProperty(FlexLayout.Display, 'NONE', {
+    get: function() {
+        return YogaEnums.YGDisplay.None;
+    },
+});
+////////////////////////////////////////////////////////////////////////
 FlexLayout.AlignSelf = {};
 
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {

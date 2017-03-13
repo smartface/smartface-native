@@ -28,7 +28,9 @@ const YGAlign = {
     Center : 2,
     FlexEnd : 3,
     Stretch : 4,
-    Baseline : 5
+    Baseline : 5,
+    SpaceBetween : 6,
+    SpaceAround : 7
 };
 
 const YGPositionType = {
@@ -38,7 +40,8 @@ const YGPositionType = {
 
 const YGWrap = {
     NoWrap : 0,
-    Wrap : 1
+    Wrap : 1 ,
+    WrapReverse : 2
 };
 
 const YGOverflow = {
@@ -46,6 +49,12 @@ const YGOverflow = {
     Hidden : 1,
     Scroll : 2
 };
+
+const YGDisplay = {
+    Flex : 0,
+    None : 1,
+};
+
 /////////////////////////////////////////////////////////
 
 module.exports = {
@@ -56,5 +65,6 @@ module.exports = {
     YGPositionType  :YGPositionType,
     YGWrap          :YGWrap,
     YGOverflow      :YGOverflow,
+    YGDisplay       :YGDisplay
 };
 

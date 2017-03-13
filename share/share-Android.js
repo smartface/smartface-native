@@ -1,5 +1,10 @@
 const activity = Android.getActivity();
-const NativeIntent = requireClass('android.content.Intent');
+const NativeIntent       = requireClass('android.content.Intent');
+const NativeBuildConfig  = requireClass(activity.getPackageName() + ".BuildConfig");
+const NativeBuildVersion = requireClass('android.os.Build').VERSION;
+const NativeFileProvider = requireClass('android.support.v4.content.FileProvider');
+
+const Authority = NativeBuildConfig.APPLICATION_ID + ".provider";
 
 const Share = {};
 Object.defineProperties(Share, {
@@ -14,8 +19,14 @@ Object.defineProperties(Share, {
     'shareImage': {
         value: function(image, page, blacklist) {
             const NativeURI = requireClass('android.net.Uri');
-            var tempFile = writeImageToFile(image);
-            var uri = NativeURI.fromFile(tempFile);
+            var imageFile = writeImageToFile(image);
+
+            var uri;
+            if (NativeBuildVersion.SDK_INT < 24) {
+                uri = NativeURI.fromFile(imageFile);
+            } else {
+                uri = NativeFileProvider.getUriForFile(activity, Authority, imageFile);
+            }
             
             var shareIntent = new NativeIntent();
             shareIntent.setAction(NativeIntent.ACTION_SEND);
@@ -29,7 +40,13 @@ Object.defineProperties(Share, {
             const NativeURI  = requireClass('android.net.Uri');
             const NativeFile = requireClass('java.io.File');
 
-            var uri = NativeURI.fromFile(new NativeFile(file.path));
+            var sharedFile = new NativeFile(file.path);
+            var uri;
+            if (NativeBuildVersion.SDK_INT < 24) {
+                uri = NativeURI.fromFile(sharedFile);
+            } else {
+                uri = NativeFileProvider.getUriForFile(activity, Authority, sharedFile);
+            }
 
             var shareIntent = new NativeIntent();
             shareIntent.setAction(NativeIntent.ACTION_SEND);

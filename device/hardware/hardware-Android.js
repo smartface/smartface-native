@@ -9,7 +9,14 @@ Hardware.android = {};
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
         var activity = Android.getActivity();
-        var telephonyManager = activity.getSystemService(NativeContext.TELEPHONY_SERVICE);
+        var telephonyManager;
+        if (NativeBuild.VERSION.SDK_INT < 23) {
+            telephonyManager = activity.getSystemService(NativeContext.TELEPHONY_SERVICE);
+        } else {
+            const NativeClass = requireClass('java.lang.Class');
+            const NativeTelephonyManagerClass = NativeClass.forName('android.telephony.TelephonyManager');
+            telephonyManager = activity.getSystemService(NativeTelephonyManagerClass);
+        }
         return telephonyManager.getDeviceId();
     },
     configurable: false
