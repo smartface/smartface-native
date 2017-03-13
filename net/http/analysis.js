@@ -119,13 +119,33 @@ http.requestJSON = function(url, onLoad, onError) {}
 http.request = function(params, onLoad, onError) {};
 
 /**
- * @method cancelRequest
+ * @class Net.Http.Request
  * 
- * Stops listening the request provided.
+ * Http Request CANNOT be initialized. Use http's request methods instead.
  * 
- * @param {Net.Http.Request} request 
- * @since 0.1
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *
+ *     var myImageUrl = your-image-url;
+ *     var request = http.requestImage(myImageUrl, onLoad, onError);
+ *     request.cancel();
+ * 
  */
-http.cancelRequest = function(request) {}
+const Request = function() {
+
+    /**
+     * @method cancel
+     * 
+     * Stops listening the response of the request.
+     * 
+     * @since 0.1
+     */
+    Object.defineProperties(this, {
+        'cancel': {
+            value: function() {}
+        }
+    });
+
+};
 
 module.exports = http;
