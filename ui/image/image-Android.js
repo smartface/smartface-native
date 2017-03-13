@@ -3,7 +3,6 @@ const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawa
 const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
-const NativeByteArrayInputStream = requireClass("java.io.ByteArrayInputStream");
 
 const Blob = require('nf-core/global/blob');
 const File = require('nf-core/io/file');
@@ -26,11 +25,11 @@ function Image (params) {
             self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
         }
         else{
-            throw "path or bitmap can not be empty for Image!"
+            throw "path or bitmap can not be empty for Image!";
         }
     }
     else{
-        throw "Constructor parameters needed for Image!"
+        throw "Constructor parameters needed for Image!";
     }
     
     Object.defineProperty(this, 'height', {
@@ -62,9 +61,9 @@ function Image (params) {
         }
         if(success) {
             if(onSuccess)
-                onSuccess.call(this, {image: new Image(["-resize", newBitmap])});
+                onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
             else
-                return (new Image(["-resize", newBitmap]));
+                return (new Image({bitmap: newBitmap}));
         }
     };
     
@@ -83,9 +82,9 @@ function Image (params) {
         }
         if(success) {
             if(onSuccess)
-                onSuccess.call(this, {image: new Image(["-crop", newBitmap])});
+                onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
             else
-                return (new Image(["-crop", newBitmap]));
+                return (new Image({bitmap: newBitmap}));
         }
     };
     
@@ -107,9 +106,9 @@ function Image (params) {
         }
         if(success) {
             if(onSuccess)
-                onSuccess.call(this, {image: new Image(["-rotate", newBitmap])});
+                onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
             else
-                return (new Image(["-rotate", newBitmap]));
+                return (new Image({bitmap: newBitmap}));
         }
     };
     
