@@ -6,7 +6,7 @@ const NativeConnectivityManager = requireClass('android.net.ConnectivityManager'
 const WIFI_SERVICE = 'wifi';
 const WIFI_MANAGER = 'android.net.wifi.WifiManager';
 // Context.CONNECTIVITY_SERVICE
-const CONNECTIVITY_SERVICE = 'connection';
+const CONNECTIVITY_SERVICE = 'connectivity';
 const CONNECTIVITY_MANAGER = 'android.net.ConnectivityManager';
 // Context.TELEPHONY_SERVICE
 const TELEPHONY_SERVICE = 'phone';

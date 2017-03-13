@@ -4,8 +4,8 @@ const Font                  = require('nf-core/ui/font');
 const TypeUtil              = require('nf-core/util/type');
 const Color                 = require('nf-core/ui/color');
 const KeyboardType          = require('nf-core/ui/keyboardtype');
-const TextAlignment         = require('nf-core/ui/textalignment')
-const AndroidConfig         = require('nf-core/util/Android/androidconfig')
+const TextAlignment         = require('nf-core/ui/textalignment');
+const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 
 const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
 const NativeSupportR        = requireClass('android.support.v7.appcompat.R');

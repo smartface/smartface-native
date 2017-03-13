@@ -1,18 +1,24 @@
-const Label = require('../label');
-const Color = require('../color');
-const extend = require('js-base/core/extend');
-const KeyboardType = require('../keyboardtype');
-const ActionKeyType = require('../actionkeytype');
-const TextAlignment = require('nf-core/ui/textalignment')
+const Label             = require('../label');
+const Color             = require('../color');
+const extend            = require('js-base/core/extend');
+const KeyboardType      = require('../keyboardtype');
+const ActionKeyType     = require('../actionkeytype');
+const TextAlignment     = require('nf-core/ui/textalignment');
+const AndroidConfig     = require('nf-core/util/Android/androidconfig');
 
-const NativeEditText = requireClass("android.widget.EditText"); 
-const NativeView = requireClass("android.view.View");
+const NativeEditText    = requireClass("android.widget.EditText"); 
+const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
-const NativeTextView = requireClass("android.widget.TextView");
+const NativeTextView    = requireClass("android.widget.TextView");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
 const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+
+// InputMethodManager.SHOW_FORCED
+const SHOW_FORCED = 2;
+// InputMethodManager.HIDE_IMPLICIT_ONLY
+const HIDE_IMPLICIT_ONLY = 1;
 
 const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
     2,              //InputType.TYPE_CLASS_NUMBER
@@ -221,14 +227,14 @@ const TextBox = extend(Label)(
         this.showKeyboard = function(){
             self.nativeObject.requestFocus();
             var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-            // InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY
-            inputMethodManager.toggleSoftInput(2, 1);
+            inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
         };
         
         this.hideKeyboard = function(){
             self.nativeObject.clearFocus();
             var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-            inputMethodManager.hideSoftInputFromWindow(self.nativeObject.getWindowToken(), 0); 
+            var windowToken = self.nativeObject.getWindowToken();
+            inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
         };
         
         // Handling ios specific properties
