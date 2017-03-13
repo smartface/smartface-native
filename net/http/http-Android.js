@@ -6,9 +6,9 @@ const NativeString   = requireClass("java.lang.String");
 
 const Request = require('./httpRequest');
 
-var http = {};
-
-const RequestQueue = Volley.newRequestQueue(Android.getActivity());
+const http = {
+    RequestQueue: Volley.newRequestQueue(Android.getActivity())
+};
 
 const methods = {
     "GET": 0,
@@ -41,7 +41,7 @@ http.requestString = function(url, onLoad, onError) {
             request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
                     responseListener, responseErrorListener);
 
-            RequestQueue.add(request.nativeObject);
+            http.RequestQueue.add(request.nativeObject);
             return request;
         }
         else {
@@ -75,7 +75,7 @@ http.requestImage = function(url, onLoad, onError) {
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
 
-            RequestQueue.add(request.nativeObject);
+            http.RequestQueue.add(request.nativeObject);
             return request;
         }
         else {
@@ -171,7 +171,7 @@ http.request = function(params, onLoad, onError) {
             onError(err);
     }
 
-    RequestQueue.add(request.nativeObject);
+    http.RequestQueue.add(request.nativeObject);
     return request;
 };
 
