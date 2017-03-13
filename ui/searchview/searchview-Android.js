@@ -4,13 +4,16 @@ const Font                  = require('nf-core/ui/font');
 const TypeUtil              = require('nf-core/util/type');
 const Color                 = require('nf-core/ui/color');
 const KeyboardType          = require('nf-core/ui/keyboardtype');
-const TextAlignment         = require('nf-core/ui/textalignment')
+const TextAlignment         = require('nf-core/ui/textalignment');
+const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 
-const NativeSearchView      = requireClass("android.support.v7.widget.SearchView"); 
-const NativeSupportR        = requireClass("android.support.v7.appcompat.R")
+const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
+const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
 
-// Activity.INPUT_METHOD_SERVICE
-const INPUT_METHOD_SERVICE = "input_method";
+// Context.INPUT_METHOD_SERVICE
+const INPUT_METHOD_SERVICE = 'input_method';
+const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
@@ -187,9 +190,8 @@ const SearchView = extend(View)(
             'showKeyboard': {
                 value: function(){
                     // @todo check is this best practise 
-                    // @todo: toggleSoftInput doesn't work causing by issue AND-2566
                     mSearchSrcTextView.requestFocus();
-                    var inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE);
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
                 },
                 enumerable: true
@@ -199,7 +201,7 @@ const SearchView = extend(View)(
                     // @todo check is this best practise 
                     // @todo: toggleSoftInput doesn't work causing by issue AND-2566
                     mSearchSrcTextView.clearFocus();
-                    var inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE);
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = self.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0); 
                 },
