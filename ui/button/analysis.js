@@ -77,12 +77,28 @@ const Button = extend(View)(
          *     const TextAlignment = require('nf-core/ui/textalignment');
          *     var myButton = new Button();
          *     myButton.textAlignment = TextAlignment.MIDCENTER;
+         * 
          * @since 0.1
          * @property {Number} textAlignment
          * @android
          * @ios
          */
-        textAlignment = TextAlignment.MIDCENTER;
+        this.textAlignment = UI.TextAlignment.MIDCENTER;
+        
+        /**
+         * Enables/disables the Button.
+         *
+         *     @example
+         *     const Button = require('nf-core/ui/button');
+         *     var myButton = new Button();
+         *     myButton.enabled = false;
+         *
+         * @since 0.1
+         * @property {Boolean} [enabled = true]
+         * @android
+         * @ios
+         */
+        this.enabled = true;
 
         /**
          * Gets/sets background imageof a Button.
