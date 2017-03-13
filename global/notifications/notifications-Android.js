@@ -35,6 +35,7 @@ Notifications.LocalNotification = function(params) {
     var _alertBody = "";
     var _alertAction = "";
     var _sound = "";
+    var _launchImage = null;
     var _fireDate = Date.now();
     var _repeatInterval = 0;
     Object.defineProperties(this, {
@@ -77,10 +78,11 @@ Notifications.LocalNotification = function(params) {
         },
         'launchImage': {
             get: function() {
-                return _sound;
+                return _launchImage;
             },
             set: function(value) {
                 if (TypeUtil.isString(value)) {
+                    _launchImage = value;
                     const Image = require("nf-core/ui/image");
                     var largeImage = Image.createFromFile(value);
                     if(largeImage && largeImage.nativeObject){
