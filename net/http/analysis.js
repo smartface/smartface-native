@@ -128,19 +128,4 @@ http.request = function(params, onLoad, onError) {};
  */
 http.cancelRequest = function(request) {}
 
-/**
- * @class Net.Http.Request
- * 
- * Http Request should NOT be initialized. Use http's request methods instead.
- * 
- *     @example
- *     const http = require("nf-core/net/http");
- *
- *     var myImageUrl = your-image-url;
- *     var request = http.requestImage(myImageUrl, onLoad, onError);
- *     http.cancelRequest(request);
- * 
- */
-http.Request = {};
-
 module.exports = http;
