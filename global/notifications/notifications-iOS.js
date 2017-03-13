@@ -125,45 +125,50 @@ Notifications.LocalNotification = function LocalNotification(params) {
         UIApplication.sharedApplication().cancelLocalNotification(self.nativeObject);
     };
     
+    // Handling Android specific properties
+    this.android = {};
+    
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
     }
-}
-
-Object.defineProperty(Notifications, 'scheduledLocalNotifications', {
-    get: function() {
-        var retval = [];
-        
-        var nativeNotifications = UIApplication.sharedApplication().scheduledLocalNotifications;
-        var arrayLength = nativeNotifications.length;
-        for (var i = 0; i < arrayLength; i++) {
-            var localNotification = new Notifications.LocalNotification();
-            localNotification.nativeObject = nativeNotifications[i];
-            retval.push(localNotification);
-        }
-        
-        return retval;
-    },
-});
+};
 
 Notifications.cancelAllLocalNotifications = function(){
     UIApplication.sharedApplication().cancelAllLocalNotifications();
 };
 
 Notifications.ios = {};
-Object.defineProperty(Notifications.ios, 'applicationIconBadgeNumber', {
-    get: function() {
-        return UIApplication.sharedApplication().applicationIconBadgeNumber;
+Object.defineProperties(Notifications.ios, {
+    'applicationIconBadgeNumber': {
+        get: function() {
+            return UIApplication.sharedApplication().applicationIconBadgeNumber;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+                UIApplication.sharedApplication().applicationIconBadgeNumber = value;
+            }
+        },
+        enumerable: true,
     },
-    set: function(value) {
-        if (typeof value === 'number') {
-            UIApplication.sharedApplication().applicationIconBadgeNumber = value;
-        }
-    },
-    enumerable: true
+    'scheduledLocalNotifications': {
+        get: function() {
+            var retval = [];
+            
+            var nativeNotifications = UIApplication.sharedApplication().scheduledLocalNotifications;
+            var arrayLength = nativeNotifications.length;
+            for (var i = 0; i < arrayLength; i++) {
+                var localNotification = new Notifications.LocalNotification();
+                localNotification.nativeObject = nativeNotifications[i];
+                retval.push(localNotification);
+            }
+            
+            return retval;
+        },
+        enumerable: true,
+    }
 });
 
 // PUSH NOTIFICATIONS
