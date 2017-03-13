@@ -33,16 +33,18 @@ const ListView = extend(View)(
 
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
-        self.onRowSwiped = function(direction){};
+        
 
         self.ios = {}
 
+        self.ios.onRowSwiped = function(direction){};
+        
         self.ios.swipeItem = function(title,color,padding,action){
             return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){
-            return self.onRowSwiped(e.direction,e.expansionSettings);
+            return self.ios.onRowSwiped(e.direction,e.expansionSettings);
         }
 
         self.stopRefresh = function(){

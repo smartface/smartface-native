@@ -173,16 +173,6 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
-        Object.defineProperty(this, 'showScrollBar', {
-            get: function() {
-                return self.nativeObject.isVerticalScrollBarEnabled();
-            },
-            set: function(showScrollBar) {
-                self.nativeObject.setVerticalScrollBarEnabled(showScrollBar);
-            },
-            enumerable: true
-        });
         
         function createColorStateList(textColors) {
             const NativeColorStateList = requireClass("android.content.res.ColorStateList");
@@ -210,6 +200,9 @@ const Label = extend(View)(
             }
             return (new NativeColorStateList (statesSet, colorsSets));
         }
+        
+        // Handling iOS-specific properties
+        this.ios = {};
         
         // Assign parameters given in constructor
         if (params) {

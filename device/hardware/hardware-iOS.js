@@ -1,5 +1,7 @@
 function Hardware() {}
 
+Hardware.android = {}
+
 Object.defineProperty(Hardware, 'UID', {
   value: UIDevice.currentDevice().UUID,  
   writable: false,
