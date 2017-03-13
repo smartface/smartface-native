@@ -8,30 +8,30 @@ const NativeRemoteNotificationListener = requireClass('io.smartface.android.list
 
 // android.content.Context.NOTIFICATION_SERVICE;
 const NOTIFICATION_SERVICE      = "notification";
-const NOTIFICATION_MANAGER      = 'android.app.NotificationManager'
+const NOTIFICATION_MANAGER      = 'android.app.NotificationManager';
 // android.content.Context.ALARM_SERVICE;
 const ALARM_SERVICE             = "alarm";
-const ALARM_MANAGER             = "android.app.AlarmManager"
+const ALARM_MANAGER             = "android.app.AlarmManager";
 
 var Priority = {
-    MIN: -2,
-    LOW: -1,
-    DEFAULT: 0,
-    HIGH: 1,
-    MAX: 2
+    MIN: -2, // NotificationCompat.PRIORITY_MIN
+    LOW: -1, // NotificationCompat.PRIORITY_DEFAULT
+    DEFAULT: 0, // NotificationCompat.PRIORITY_MIN
+    HIGH: 1, // NotificationCompat.PRIORITY_HIGH
+    MAX: 2 // NotificationCompat.PRIORITY_MAX
 };
+var activity = Android.getActivity();
 var selectedNotificationIds = [];
 var senderID = null;
-var activity = Android.getActivity();
-var notificationListener;
+var notificationListener = null;
 
-function Notifications(){};
+function Notifications(){}
 
 Notifications.LocalNotification = function(params) {
     var self = this;
     this.android = {};
-    // When notification builded, notification must canceled via its pending intent and
-    // its notification object.
+    // When notification builded, notification must canceled 
+    // via its pending intent and its notification object.
     this.mPendingIntent = null;
     this.mNotification = null;
 
@@ -127,7 +127,8 @@ Notifications.LocalNotification = function(params) {
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
-                    'id': _id,
+                    // Passing id as string due to AND-2702
+                    'id': _id.toString(),
                     // LocalNotificationReceiver.NOTIFICATION_OBJECT
                     'notification': self.mNotification,
                     'fireDate': _fireDate,
@@ -138,11 +139,11 @@ Notifications.LocalNotification = function(params) {
         },
         'present' : {
             value: function(){
-                console.log('present');
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
-                    'id': _id,
+                    // Passing id as string due to AND-2702
+                    'id': _id.toString(),
                     // LocalNotificationReceiver.NOTIFICATION_OBJECT
                     'notification': self.mNotification
                 });
@@ -191,7 +192,7 @@ Notifications.LocalNotification = function(params) {
             },
             set: function(value) {
                 if(TypeUtil.isBoolean(value)){
-                    _indeterminate = value
+                    _indeterminate = value;
                     self.nativeObject.setProgress(0, 100, value);
                 }
             },
@@ -271,12 +272,6 @@ Notifications.LocalNotification = function(params) {
 }
 
 Object.defineProperties(Notifications,{
-    'scheduledLocalNotifications': {
-        value: function(){
-
-        },
-        enumerable: true
-    },
     'cancelAllLocalNotifications': {
         value: function(){
             var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
@@ -286,13 +281,20 @@ Object.defineProperties(Notifications,{
     },
     'registerForPushNotifications': {
         value: function(onSuccess, onFailure){
-            registerPushNotification(onSuccess, onFailure);
+            if(!AndroidConfig.isEmulator){
+                registerPushNotification(onSuccess, onFailure);
+            }
+            else{
+                onFailure && onFailure();
+            }
         },
         enumerable: true
     },
     'unregisterForPushNotifications': {
         value: function(){
-            unregisterPushNotification();
+            if(!AndroidConfig.isEmulator){
+                unregisterPushNotification();
+            }
         },
         enumerable: true
     },
@@ -328,18 +330,14 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     if(!senderID){
         readSenderIDFromProjectJson();
     }
-    console.log("senderID: " + senderID);
     if(TypeUtil.isString(senderID) && senderID != '' ){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        console.log("NativeGCMRegisterUtil: " + NativeGCMRegisterUtil);
         NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
             onSuccess: function(){
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService')
-                console.log("NativeGCMRegisterUtil onSuccess");
                 if(!notificationListener){
                     notificationListener =  NativeRemoteNotificationListener.implement({
                         onRemoteNotificationReceived: function(data){
-                            console.log('onRemoteNotificationReceived');
                             Application.onReceivedNotification && Application.onReceivedNotification(data);
                         }
                     });
@@ -348,13 +346,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
                 onSuccessCallback && onSuccessCallback();
             },
             onFailure: function(){
-                console.log("NativeGCMRegisterUtil onFailure");
                 onFailureCallback && onFailureCallback();
             }
         });
     }
     else{
-        console.log("false: senderID: " + senderID);
         onFailureCallback && onFailureCallback();
     }
 }
@@ -376,12 +372,10 @@ function readSenderIDFromProjectJson(){
 }
 
 function startNotificationIntent(self, params){
-    console.log('startNotificationIntent');
     const NativeIntent = requireClass('android.content.Intent');
     const NativePendingIntent = requireClass('android.app.PendingIntent')
     var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
     var notificationIntent = new NativeIntent(activity, nativeNotificationReceiverClass);
-    console.log('startNotificationIntent #2');
 
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
@@ -392,28 +386,21 @@ function startNotificationIntent(self, params){
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     var fireDate = params.fireDate ? params.fireDate : 0;
     if(params.repeatInterval){
-        // Scheduled
         // AlarmManager.RTC_WAKEUP
-        console.log('startNotificationIntent repeat');
         alarmManager.setRepeating(0, fireDate, params.repeatInterval, self.mPendingIntent);
     }
     else{
-        // Not Scheduled
         // AlarmManager.ELAPSED_REALTIME_WAKEUP
-        console.log('startNotificationIntent no repeat');
          alarmManager.set(2, fireDate, self.mPendingIntent);
     }
-    console.log('startNotificationIntent completed');
 }
 
 function cancelNotificationIntent(self){
-    console.log('cancelNotificationIntent: ' + self.mPendingIntent);
     // Cancel alarm.
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     alarmManager.cancel(self.mPendingIntent);
     // Cancel notification
     var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
-    console.log(self.getId());
     notificationManager.cancel(self.getId());
 }
 
