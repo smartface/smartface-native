@@ -75,10 +75,9 @@ function AsyncTask(params){
         },
         'execute': {
             value: function(params){
-                console.log("execute: " + TypeUtil.isArray(params))
                 if(TypeUtil.isArray(params)){
                     try{
-                    asyncTask.execute(params)
+                        asyncTask.execute(params)
                     }
                     catch(e){
                         Application.onUnhandledError(e);
