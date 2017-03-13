@@ -11,6 +11,6 @@
  *     http.cancelRequest(request);
  * 
  */
-const Request = {};
+const Request = function() {};
 
 module.exports = Request;
