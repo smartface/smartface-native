@@ -1,21 +1,21 @@
-function Accelerate() {}
+function Accelerometer() {}
 
-Accelerate.monitonManager = new CMMotionManager();
+Accelerometer.monitonManager = new CMMotionManager();
 
-Accelerate.start = function(){
-      Accelerate.monitonManager.accelerometerUpdateInterval = 0.1;
-      Accelerate.monitonManager.startAccelerometerUpdates();
+Accelerometer.start = function(){
+      Accelerometer.monitonManager.accelerometerUpdateInterval = 0.1;
+      Accelerometer.monitonManager.startAccelerometerUpdates();
 }
 
-Accelerate.stop = function(){
-      Accelerate.monitonManager.stopAccelerometerUpdates();
+Accelerometer.stop = function(){
+      Accelerometer.monitonManager.stopAccelerometerUpdates();
 }
 
-Object.defineProperty(Accelerate, 'onAccelerate', {
+Object.defineProperty(Accelerometer, 'onAccelerate', {
     set : function(value){
-    Accelerate.monitonManager.callback = value;
+    Accelerometer.monitonManager.callback = value;
   },
   enumerable: true
 });
 
-module.exports = Accelerate;
+module.exports = Accelerometer;

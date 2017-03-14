@@ -33,16 +33,18 @@ const ListView = extend(View)(
 
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
-        self.onRowSwiped = function(direction){};
+        
 
         self.ios = {}
 
+        self.ios.onRowSwiped = function(direction){};
+        
         self.ios.swipeItem = function(title,color,padding,action){
             return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){
-            return self.onRowSwiped(e.direction,e.expansionSettings);
+            return self.ios.onRowSwiped(e.direction,e.expansionSettings);
         }
 
         self.stopRefresh = function(){
@@ -112,11 +114,13 @@ const ListView = extend(View)(
         }
 
         function setAllChilds(item){
-             for (var child in item.childs){
-                item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
-                setAllChilds(item.childs[child]);
-             }
-         }
+            for (var child in item.childs){
+                 if (item.childs[child].id){
+                    item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
+                    setAllChilds(item.childs[child]);
+                 }
+            }
+        }
 
         self.nativeObject.didSelectRowAt = function(e){
            var listItem = self.createTemplate(e);

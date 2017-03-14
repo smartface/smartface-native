@@ -1,12 +1,25 @@
 /**
- * @class Net.http
+ * @class Net.Http
  * 
  * http module allows sending http requests.
+ * 
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *     var myImageUrl = your-image-url;
+ *     http.requestImage(myImageUrl, onLoad, onError);
+ * 
+ *     function onLoad(response) {
+ *         var image = response;
+ *     }
+ * 
+ *     function onError(error) {
+ *         alert(error);
+ *     }
  */
 var http = {};
 
 /**
- * @method getFile
+ * @method requestFile
  * 
  * Sends an http request to given url and saves response file
  * to temp directory of application. If request ends successfully
@@ -17,12 +30,12 @@ var http = {};
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return UI.File
- * @since 0.2
+ * @since 0.1
  */
-http.getFile = function(url, fileName, onLoad, onError) {}
+http.requestFile = function(url, fileName, onLoad, onError) {}
 
 /**
- * @method getImage
+ * @method requestImage
  * 
  * Sends an http request to given url. If request ends successfully
  * onLoad callback will be called with received UI.Image object.
@@ -31,12 +44,12 @@ http.getFile = function(url, fileName, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return UI.Image
- * @since 0.2
+ * @since 0.1
  */
-http.getImage = function(url, onLoad, onError) {}
+http.requestImage = function(url, onLoad, onError) {}
 
 /**
- * @method getString
+ * @method requestString
  * 
  * Sends an http request to given url. If request ends successfully
  * onLoad callback will be called with received string.
@@ -45,12 +58,12 @@ http.getImage = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return String
- * @since 0.2
+ * @since 0.1
  */
-http.getString = function(url, onLoad, onError) {}
+http.requestString = function(url, onLoad, onError) {}
 
 /**
- * @method getJSON
+ * @method requestJSON
  * 
  * Sends an http request to given url. If request ends successfully
  * onLoad callback will be called with received JSON object.
@@ -59,23 +72,49 @@ http.getString = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
  * @return String
- * @since 0.2
+ * @since 0.1
  */
-http.getJSON = function(url, onLoad, onError) {}
+http.requestJSON = function(url, onLoad, onError) {}
 
 /**
  * @method request
  * 
  * Sends an http request defined with parameters.
  * 
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *     var myHeaders = {
+ *         "Content-Type": "text/plain;charset=UTF-8"
+ *     }
+ * 
+ *     var params = {
+ *         url: your-url,
+ *         body: your-body,
+ *         method: "POST",
+ *         headers: myHeaders
+ *     }
+ *     
+ *     http.request(params, onLoad, onError);
+ *     
+ *     function onLoad(response) {
+ *         var body = response.body;
+ *         var headers = params.headers;
+ *     }
+ *     function onError(error) {
+ *         alert(error);
+ *     }
+ * 
  * @param {Object} params Parameters
  * @param {String} params.url URL
+ * @param {Object} params.headers Headers
  * @param {String} params.method Http request method
  * @param {String} params.body Http request body
+ * @param {String} params.user Username for authorization if needed
+ * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @since 0.2
+ * @since 0.1
  */
-http.request = function(params, onLoad, onError) {}
+http.request = function(params, onLoad, onError) {};
 
 module.exports = http;

@@ -4,13 +4,16 @@ const Font                  = require('nf-core/ui/font');
 const TypeUtil              = require('nf-core/util/type');
 const Color                 = require('nf-core/ui/color');
 const KeyboardType          = require('nf-core/ui/keyboardtype');
-const TextAlignment         = require('nf-core/ui/textalignment')
+const TextAlignment         = require('nf-core/ui/textalignment');
+const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 
-const NativeSearchView      = requireClass("android.support.v7.widget.SearchView"); 
-const NativeSupportR        = requireClass("android.support.v7.appcompat.R")
+const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
+const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
 
-// Activity.INPUT_METHOD_SERVICE
-const INPUT_METHOD_SERVICE = "input_method";
+// Context.INPUT_METHOD_SERVICE
+const INPUT_METHOD_SERVICE = 'input_method';
+const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
@@ -60,8 +63,15 @@ const SearchView = extend(View)(
         
         self.nativeObject = new NativeSearchView(activity);
         self.nativeObject.onActionViewExpanded();
+        // Prevent gain focus when SearchView appear.
+        self.nativeObject.clearFocus();
         var mSearchSrcTextView = self.nativeObject.findViewById(NativeSupportR.id.search_src_text);
         var mCloseButton = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+        var  mSearchButton = self.nativeObject.findViewById(NativeSupportR.id.search_button);
+        
+        const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
+        mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+        mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
 
 
         _super(this);
@@ -164,10 +174,7 @@ const SearchView = extend(View)(
             'addToHeaderBar': {
                 value: function(page){
                     if(page){
-                        const HeaderBarItem = require("nf-core/ui/headerbaritem");
-                        var headerbarItems = page.headerBar.getItems();
-                        headerbarItems.push(new HeaderBarItem({searchView : self, title: "Search"}));
-                        page.headerBar.setItems(headerbarItems);
+                        page.headerBar.addViewToHeaderBar(self);
                     }
                 },
                 enumerable: true
@@ -175,15 +182,7 @@ const SearchView = extend(View)(
             'removeFromHeaderBar': {
                 value: function(page){
                     if(page){
-                        // the only way to remove SearchView from Toolbar.
-                        var headerbarItems = page.headerBar.getItems();
-                        for(var i = 0; i < headerbarItems.length ; i++){
-                            if(headerbarItems[i].searchView && headerbarItems[i].searchView.id == self.id){
-                                delete headerbarItems[i];
-                                break;
-                            }
-                        }
-                        page.headerBar.setItems(headerbarItems);
+                        page.headerBar.removeViewFromHeaderBar(self);
                     }
                 },
                 enumerable: true
@@ -191,9 +190,8 @@ const SearchView = extend(View)(
             'showKeyboard': {
                 value: function(){
                     // @todo check is this best practise 
-                    // @todo: toggleSoftInput doesn't work causing by issue AND-2566
                     mSearchSrcTextView.requestFocus();
-                    var inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE);
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
                 },
                 enumerable: true
@@ -203,7 +201,7 @@ const SearchView = extend(View)(
                     // @todo check is this best practise 
                     // @todo: toggleSoftInput doesn't work causing by issue AND-2566
                     mSearchSrcTextView.clearFocus();
-                    var inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE);
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = self.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0); 
                 },
@@ -339,11 +337,6 @@ const SearchView = extend(View)(
         
         // Handling ios specific properties
         self.ios = {};
-        
-        // Assign default values
-        self.textColor = _textColor;
-        self.android.hintTextColor = _hintTextColor;
-        self.hideKeyboard();
         
         // Assign parameters given in constructor
         if (params) {

@@ -1,6 +1,8 @@
 const extend = require('js-base/core/extend');
 const View = require('nf-core/ui/view');
 const File = require("nf-core/io/file");
+const Exception = require("nf-core/util").Exception;
+const TypeUtil = require("nf-core/util/type");
 
 const VideoView = extend(View)(
     function (_super, params) {
@@ -14,12 +16,16 @@ const VideoView = extend(View)(
         self.nativeObject.addSubview(self.avPlayerViewController.view);
         
         self.loadURL = function(value){
-            self.avPlayerViewController.removeObserver();
-            var url = NSURL.URLWithString(value);
-            self.avPlayer = AVPlayer.createFromURL(url);
-            self.avPlayerViewController.player = self.avPlayer;
-            self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
-            self.avPlayerViewController.addObserver();       
+            if (TypeUtil.isURL(value)){
+                self.avPlayerViewController.removeObserver();
+                var url = NSURL.URLWithString(value);
+                self.avPlayer = AVPlayer.createFromURL(url);
+                self.avPlayerViewController.player = self.avPlayer;
+                self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
+                self.avPlayerViewController.addObserver();   
+            }else{
+                throw new TypeError(Exception.TypeError.URL);
+            }
         };
         
         self.loadFile = function(value){
@@ -93,7 +99,7 @@ const VideoView = extend(View)(
         Object.defineProperty(self, 'totalDuration', {
             get: function() {
                 
-                return self.avPlayer.duration();
+                return self.avPlayer.duration() * 1000;
             },
             enumerable: true
         });
@@ -101,7 +107,7 @@ const VideoView = extend(View)(
         Object.defineProperty(self, 'currentDuration', {
             get: function() {
                 
-                return self.avPlayer.getCurrentTime();
+                return self.avPlayer.getCurrentTime() * 1000;
             },
             enumerable: true
         });

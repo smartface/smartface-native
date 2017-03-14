@@ -38,7 +38,7 @@ const ViewGroup = extend(View)(
         this.removeAll = function(){
             self.childs = {};
             var subviews = self.nativeObject.subviews;
-            for (subview in subviews) { 
+            for (var subview in subviews) { 
                  subviews[subview].removeFromSuperview();
             }
         };

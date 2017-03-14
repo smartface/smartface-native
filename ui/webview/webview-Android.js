@@ -3,7 +3,7 @@ const View = require('nf-core/ui/view');
 
 const WebView = extend(View)(
     function (_super, params) {
-        const NativeBuildVersion = requireClass('android.os.Build.VERSION');
+        const NativeBuildVersion = requireClass('android.os.Build').VERSION;
         var activity = Android.getActivity();
         
         var self = this;
@@ -24,8 +24,7 @@ const WebView = extend(View)(
                 overrideMethods.shouldOverrideUrlLoading = function(view, request) {
                     const NativeString = requireClass('java.lang.String');
                     var uri = request.getUrl();
-                    var url = NativeString.valueOf(uri);
-
+                    var url = uri.toString();
                     _callbackOnChangedURL && _callbackOnChangedURL({url: url});
                     return overrideURLChange(url);
                 };
@@ -42,9 +41,9 @@ const WebView = extend(View)(
                     var uri = webResourceRequest.getUrl();
                     var url = NativeString.valueOf(uri);
                     var code = webResourceError.getErrorCode();
-                    // var message = webResourceError.getDescription(); // TODO: fix message with charsequence bug
+                    var message = webResourceError.getDescription();
 
-                    _callbackOnError && _callbackOnError({message: "", code: code, url: url}); // TODO: fix message with charsequence bug
+                    _callbackOnError && _callbackOnError({message: message, code: code, url: url});
                 };
             } else {
                 overrideMethods.onReceivedError = function(view, errorCode, description, failingUrl) {
@@ -55,8 +54,7 @@ const WebView = extend(View)(
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
             var nativeWebClient = NativeWebClient.extend("NFWebClient", overrideMethods, null);
             self.nativeObject.setWebViewClient(nativeWebClient);
-            // TODO: uncomment below if you can getSettings()
-            // self.nativeObject.getSettings().setJavaScriptEnabled(true);
+            self.nativeObject.getSettings().setJavaScriptEnabled(true);
         }
         _super(self);
 
@@ -89,14 +87,12 @@ const WebView = extend(View)(
                     self.nativeObject.goForward();
                 }
             },
-            // TODO: uncomment below if you can getSettings()
             'zoomEnabled': {
                 get: function() {
-                    return false;
-                    // self.nativeObject.getSettings().getBuiltInZoomControls(); 
+                    return self.nativeObject.getSettings().getBuiltInZoomControls();
                 },
                 set: function(enabled) {
-                    // self.nativeObject.getSettings().setBuiltInZoomControls(enabled);
+                    self.nativeObject.getSettings().setBuiltInZoomControls(enabled);
                 }
             },
             'loadURL': {

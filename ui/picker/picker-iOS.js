@@ -70,6 +70,15 @@ const Picker = extend(View)(
         };
         self.nativeObject.delegate = self.pickerDelegate;
 
+        self.show = function(ok,cancel){
+              var okFunc = function(e){
+                  ok({index : e.index});
+              };
+              var cancelFunc = function(e){
+                  cancel();
+              };
+              self.nativeObject.show(self.nativeObject,cancelFunc,okFunc);
+        }
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

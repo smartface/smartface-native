@@ -1,3 +1,5 @@
 module.exports = {
-    Blob: require('./blob')
+    Blob: require('./blob'),
+    Notifications: require('./notifications'),
+    Timer: require('./timer')
 };

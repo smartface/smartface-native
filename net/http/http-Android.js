@@ -1,10 +1,23 @@
 const Volley = requireClass("com.android.volley.toolbox.Volley");
 const Request = requireClass("com.android.volley.Request");
 const Response = requireClass("com.android.volley.Response");
+const NativeInteger = requireClass("java.lang.Integer");
+const NativeString = requireClass("java.lang.String");
 
 var http = {};
 
-http.getString = function(url, onLoad, onError) {
+const methods = {
+    "GET": 0,
+    "POST" : 1,
+    "PUT" : 2,
+    "DELETE" : 3,
+    "HEAD" : 4,
+    "OPTIONS" : 5,
+    "TRACE" : 6,
+    "PATCH" : 7
+};
+
+http.requestString = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
@@ -17,19 +30,25 @@ http.getString = function(url, onLoad, onError) {
             }
         });
         
-        const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-        var myRequest = new StringRequest(Request.Method.GET, url,
-                responseListener, responseErrorListener);
-
-        var requestQueue = Volley.newRequestQueue(Android.getActivity());
-        requestQueue.add(myRequest);
+        if(checkInternet()) {
+            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
+            var myRequest = new StringRequest(Request.Method.GET, url,
+                    responseListener, responseErrorListener);
+    
+            var requestQueue = Volley.newRequestQueue(Android.getActivity());
+            requestQueue.add(myRequest);
+        }
+        else {
+            if(onError)
+                onError("No network connection");
+        }
     } catch(e) {
         if(onError)
             onError(e);
     }
 };
 
-http.getImage = function(url, onLoad, onError) {
+http.requestImage = function(url, onLoad, onError) {
     try {
         var responseListener = Response.Listener.implement({
             onResponse: function(response) {
@@ -43,19 +62,23 @@ http.getImage = function(url, onLoad, onError) {
                 onError(error);
             }
         });
-        
-        const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-        var myRequest = new ImageRequest(url,responseListener, 
-            0, 0, null, null,responseErrorListener);
-            
-        var requestQueue = Volley.newRequestQueue(Android.getActivity());
-        requestQueue.add(myRequest);
+        if(checkInternet()) {
+            const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
+            var myRequest = new ImageRequest(url,responseListener, 
+                0, 0, null, null,responseErrorListener);
+                
+            var requestQueue = Volley.newRequestQueue(Android.getActivity());
+            requestQueue.add(myRequest);
+        }
+        else {
+            onError("No network connection");
+        }
     } catch(e) {
         onError(e);
     }
 };
 
-http.getJSON = function(url, onLoad, onError) {
+http.requestJSON = function(url, onLoad, onError) {
     http.getString(url, function(response) {
             try {
                 // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
@@ -69,7 +92,7 @@ http.getJSON = function(url, onLoad, onError) {
     }, onError);
 };
 
-http.getFile = function(url, fileName, onLoad, onError) {
+http.requestFile = function(url, fileName, onLoad, onError) {
     http.getString(url, function(response){
             try {
                 const IO = require("../../io");
@@ -91,7 +114,7 @@ http.getFile = function(url, fileName, onLoad, onError) {
 http.request = function(params, onLoad, onError) {
     var responseListener = Response.Listener.implement({
             onResponse: function(response) {
-                onLoad(response);
+                onLoad({body: response, headers: {}});
             }
         });
     var responseErrorListener = Response.ErrorListener.implement({
@@ -100,32 +123,80 @@ http.request = function(params, onLoad, onError) {
         }
     });
     
-    var parameters = [params.method, params.url,
-        responseListener, responseErrorListener];
-    var body = params.body;
+    var method = new NativeInteger(methods[params.method]);
+    var url = new NativeString(params.url);
+    var parameters = [method, url, responseListener, responseErrorListener];
+    var body = null;
+    if(params.body)
+        body = new NativeString(params.body);
     var request = {};
     
+    var contentType = "text/plain";
+    if (params.headers && params.headers["Content-Type"]) {
+        contentType = params.headers["Content-Type"];
+    }
+
     try {
-        const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-        request.nativeObject = StringRequest.extend("SFStringRequest", {
-            getBody: function() {
-                if(!body)
-                    return null;
-                    
-                const NativeString = requireClass("java.lang.String");
-                var bodyStr = new NativeString(body);
-                console.log("bodyStr " + bodyStr);
-                return body.getBytes();
-            }
-        }, parameters);
+        if(checkInternet()) {
+            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
+            request.nativeObject = StringRequest.extend("SFStringRequest", {
+                getBody: function() {
+                    if(!body)
+                        return [];
+                    return body.getBytes();
+                },
+                getHeaders: function() {
+                    return getHeaderHashMap(params);
+                },
+                getBodyContentType: function() {
+                    return contentType;
+                }
+            }, parameters);    
+        }
+        else {
+            if(onError)
+                onError("No network connection");
+        }
     }
     catch(err) {
         if(onError)
             onError(err);
     }
-    
     var requestQueue = Volley.newRequestQueue(Android.getActivity());
     requestQueue.add(request.nativeObject);
 };
+
+
+function getHeaderHashMap(params) {
+    const NativeHashMap = requireClass("java.util.HashMap");
+    var headers = new NativeHashMap();
+    var credentials = "";
+    if(params.user && params.password)
+        credentials = params.user + ":" + params.password;
+    const NativeBase64 = requireClass("android.util.Base64");
+    var bytes = new NativeString(credentials).getBytes();
+    var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
+    var auth = "Basic " + encodedString;
+    headers.put("Authorization", auth);
+    
+    if(params.headers) {
+        var i;
+        var keys = Object.keys(params.headers);
+        for(i = 0; i < keys.length; i++) {
+            var value = params.headers[keys[i]];
+            if(typeof(keys[i]) == "string" && typeof(value) == "string")
+                headers.put(keys[i], value);
+        }
+    }
+    return headers;
+}
+
+function checkInternet() {
+    const Network = require("nf-core/device/network");
+    if(Network.connectionType == Network.ConnectionType.None)
+        return false;
+    return true;
+}
+
 
 module.exports = http;

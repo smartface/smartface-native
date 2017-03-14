@@ -1,7 +1,9 @@
-const NativeContext  = requireClass('android.content.Context');
-const NativeSettings = requireClass('android.provider.Settings');
-const NativeBuild    = requireClass('android.os.Build');
-
+const AndroidConfig     = require('nf-core/util/Android/androidconfig')
+const NativeSettings    = requireClass('android.provider.Settings');
+const NativeBuild       = requireClass('android.os.Build');
+// Context.TELEPHONY_SERVICE
+const TELEPHONY_SERVICE = 'phone';
+const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 const Hardware = {};
 
 Hardware.android = {};
@@ -9,7 +11,7 @@ Hardware.android = {};
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
         var activity = Android.getActivity();
-        var telephonyManager = activity.getSystemService(NativeContext.TELEPHONY_SERVICE);
+        var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
         return telephonyManager.getDeviceId();
     },
     configurable: false

@@ -90,12 +90,34 @@ const TextBox = extend(View)(
             enumerable: true
         });
         
+        var _textAligment = 3;
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
-                return self.nativeObject.textAlignment + 3; // Only Midleft,Midcenter,Midright
+                return _textAligment;
             },
             set: function(value) {
-                self.nativeObject.textAlignment = value % 3; // Only Midleft,Midcenter,Midright
+                _textAligment = value;
+                
+                var vertical;
+                if (parseInt(value / 3) == 0) {
+                    vertical = 1;
+                }else if (parseInt(value / 3) == 1){
+                    vertical = 0;
+                }else{
+                    vertical = 2;
+                }
+                
+                var horizontal;
+                 if (value % 3 == 0) {
+                    horizontal = 0;
+                }else if (value % 3 == 1){
+                    horizontal = 1;
+                }else{
+                    horizontal = 2;
+                }
+                
+                self.nativeObject.contentVerticalAlignment = vertical;
+                self.nativeObject.textAlignment = horizontal;
             },
             enumerable: true
         });

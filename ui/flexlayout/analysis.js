@@ -4,20 +4,19 @@ const extend = require('js-base/core/extend');
  * @class UI.FlexLayout
  * @since 0.1
  * @extends UI.ViewGroup
- * 
- * FlexLayout is a layout type which has behaviour like CSS Flexbox 
- * on web. You can add views to FlexLayout and it ensures objects will
- * be located same on all devices.
- * 
+ *
+ * FlexLayout is a viewgroup which has same behaviour of Flexbox on CSS.
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes
+ * Its purpose is to provide a easy way to scale, align and distribute space among items in a container,
+ * even when their size is unknown and/or dynamic. FlexLayout has the ability to alter its item's width/height to
+ * fill the available space.
+ *
  *     @example
  *     const FlexLayout = require('nf-core/ui/flexlayout');
  *     var myFlexLayout = new FlexLayout({
- *         top: 0,
- *         bottom: 0,
- *         left: 0,
- *         right: 0
+ *         flexGrow:1
  *     });
- * 
+ *
  *     const Label = require('nf-core/ui/label');
  *     const Color = require('nf-core/ui/color');
  *     var myLabel1 = new UI.Label({
@@ -30,124 +29,123 @@ const extend = require('js-base/core/extend');
  *     var myLabel2 = new UI.Label({
  *         width: 100,
  *         height: 50,
- *         text: "First label",
+ *         text: "Second label",
  *         backgroundColor: Color.CYAN
  *     });
  *     myFlexLayout.addChild(myLabel2);
- * 
+ *
  *     page.layout.addChild(myFlexLayout);
- * 
+ *
  */
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
         _super(this);
 
         /**
-         * Gets/sets direction of FlexLayout. You can specify positioning direction of
-         * FlexLayout with this property.
-         * 
+         * This property specifies where items will start to be positioned.
+         * If you set RTL(right to left) objects will be positioned by starting from right edge of the FlexLayout.
+         * If you set LTR(left to right) objects will be positioned by starting from left edge of the FlexLayout.
+         *
          *     @example
          *     const FlexLayout = require('nf-core/ui/flexlayout');
          *     var myFlexLayout = new FlexLayout({
-         *         top: 0,
-         *         bottom: 0,
-         *         left: 0,
-         *         right: 0,
+         *         flexGrow : 1
          *         direction: FlexLayout.Direction.RTL
          *     });
          *
-         * @property {UI.FlexLayout.Direction} [direction = UI.FlexLayout.Direction.INHERIT]   
+         * @property {UI.FlexLayout.Direction} [direction = UI.FlexLayout.Direction.INHERIT]
          * @since 0.1
          */
         this.direction = UI.FlexLayout.Direction.INHERIT;
-        
-        /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
-         *
-         * @property {UI.FlexLayout.Position} [position = UI.FlexLayout.Position.RELATIVE]   
-         * @since 0.1
-         */
-        this.position = UI.FlexLayout.Position.RELATIVE;
 
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property specifies how children will be placed(horizontally or vertical) in FlexLayout.
+         * It defines the main axis.
+         * It works like flex-direction on CSS.
+         * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
          *
-         * @property {UI.FlexLayout.FlexDirection} [flexDirection = UI.FlexLayout.FlexDirection.ROW]   
+         *
+         * @property {UI.FlexLayout.FlexDirection} [flexDirection = UI.FlexLayout.FlexDirection.ROW]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.flexDirection = UI.FlexLayout.FlexDirection.ROW;
-        
+
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property specifies the distribution of children along the main-axis.
+         * It works like justify-content on CSS.
+         * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content
          *
-         * @property {UI.FlexLayout.JustifyContent} [justifyContent = UI.FlexLayout.JustifyContent.FLEX_START]   
+         * @property {UI.FlexLayout.JustifyContent} [justifyContent = UI.FlexLayout.JustifyContent.FLEX_START]
          * @since 0.1
          */
         this.justifyContent = UI.FlexLayout.JustifyContent.FLEX_START;
-            
+
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property aligns FlexLayout rows when there is space available in the cross-axis,
+         * similar to how justify-content aligns individual child within the main-axis.
+         * This property has no effect when there is only one row of children.
+         *
          *
          * @property {UI.FlexLayout.AlignContent} [alignContent = UI.FlexLayout.AlignContent.STRETCH]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.alignContent = UI.FlexLayout.AlignContent.STRETCH;
-        
+
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property aligns children along the cross-axis of their container.
+         * If UI.FlexLayout.FlexDirection is row, this property controls the alignment in vertical direction.
+         * It works like align-items on CSS.
+         * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
          *
          * @property {UI.FlexLayout.AlignItems} [alignItems = UI.FlexLayout.AlignItems.STRETCH]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.alignItems = UI.FlexLayout.AlignItems.STRETCH;
-        
+
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property specifies whether children of FlexLayout are forced into a single row
+         * or can be wrapped onto other rows
+         * It works like flex-wrap on CSS.
+         * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap
+         *
          *
          * @property {UI.FlexLayout.FlexWrap} [flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP;
-        
+
         /**
-         * // @todo add description.
-         * 
-         *     @example
-         *     // @todo add example
+         * This property controls child views will be measured and displayed.
+         * If set to scroll, child views will be measured independently of FlexLayout's main axis.
+         * It works like overflow on CSS.
+         * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/overflow
          *
          * @property {UI.FlexLayout.Overflow} [overFlow = UI.FlexLayout.Overflow.VISIBLE]
+         * @android
+         * @ios
          * @since 0.1
          */
         this.overFlow = UI.FlexLayout.Overflow.VISIBLE;
-            
+
         /**
-         * // @todo add description.
+         * This functions recalculates the positioning parameters.
+         * It is useful to call this method when you want to change layout parameters on runtime.
          *
-         *     @example
-         *     // @todo add example
          *
          * @method applyLayout
+         * @android
+         * @ios
          */
         this.applyLayout = function(){};
-        
+
     }
 );
 
@@ -157,18 +155,13 @@ const FlexLayout = extend(ViewGroup)(
  * @readonly
  * @since 0.1
  *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
- *
  */
 FlexLayout.FlexDirection = {};
 /**
  * @property {Number} COLUMN
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -177,9 +170,9 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
 });
 /**
  * @property {Number} COLUMN_REVERSE
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -188,9 +181,9 @@ Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
 });
 /**
  * @property {Number} ROW
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -199,9 +192,9 @@ Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
 });
 /**
  * @property {Number} ROW_REVERSE
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -212,21 +205,21 @@ Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
 /**
  * @enum {Number} UI.FlexLayout.JustifyContent
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  *
  * // @todo add description.
  *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.JustifyContent = {};
 /**
  * @property {Number} FLEX_START
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -235,9 +228,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
 });
 /**
  * @property {Number} CENTER
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -246,9 +239,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
 });
 /**
  * @property {Number} FLEX_END
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -257,9 +250,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
 });
 /**
  * @property {Number} SPACE_BETWEEN
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -268,9 +261,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_BETWEEN', {
 });
 /**
  * @property {Number} SPACE_AROUND
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -281,6 +274,8 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
 /**
  * @enum {Number} UI.FlexLayout.AlignContent
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  *
@@ -293,9 +288,9 @@ Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
 FlexLayout.AlignContent = {};
 /**
  * @property {Number} AUTO
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -304,9 +299,9 @@ Object.defineProperty(FlexLayout.AlignContent, 'AUTO', {
 });
 /**
  * @property {Number} FLEX_START
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -315,9 +310,9 @@ Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
 });
 /**
  * @property {Number} CENTER
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -326,9 +321,9 @@ Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
 });
 /**
  * @property {Number} FLEX_END
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -337,9 +332,9 @@ Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
 });
 /**
  * @property {Number} STRETCH
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -350,21 +345,18 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
 /**
  * @enum {Number} UI.FlexLayout.FlexWrap
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.FlexWrap = {};
 /**
  * @property {Number} NOWRAP
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -373,9 +365,9 @@ Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
 });
 /**
  * @property {Number} WRAP
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -386,6 +378,8 @@ Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
 /**
  * @enum {Number} UI.FlexLayout.AlignItems
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  *
@@ -398,9 +392,9 @@ Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
 FlexLayout.AlignItems = {};
 /**
  * @property {Number} AUTO
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -409,9 +403,9 @@ Object.defineProperty(FlexLayout.AlignItems, 'AUTO', {
 });
 /**
  * @property {Number} FLEX_START
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -420,9 +414,9 @@ Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
 });
 /**
  * @property {Number} CENTER
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -431,9 +425,9 @@ Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
 });
 /**
  * @property {Number} FLEX_END
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -442,9 +436,9 @@ Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
 });
 /**
  * @property {Number} STRETCH
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -455,21 +449,18 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
 /**
  * @enum {Number} UI.FlexLayout.AlignSelf
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.AlignSelf = {};
 /**
  * @property {Number} AUTO
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -478,9 +469,9 @@ Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
 });
 /**
  * @property {Number} FLEX_START
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -489,9 +480,9 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
 });
 /**
  * @property {Number} CENTER
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -500,9 +491,9 @@ Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
 });
 /**
  * @property {Number} FLEX_END
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -511,9 +502,9 @@ Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
 });
 /**
  * @property {Number} STRETCH
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -524,21 +515,18 @@ Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
 /**
  * @enum {Number} UI.FlexLayout.Direction
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.Direction = {};
 /**
  * @property {Number} INHERIT
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -547,9 +535,9 @@ Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
 });
 /**
  * @property {Number} LTR
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -558,9 +546,9 @@ Object.defineProperty(FlexLayout.Direction, 'LTR', {
 });
 /**
  * @property {Number} RTL
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -571,21 +559,20 @@ Object.defineProperty(FlexLayout.Direction, 'RTL', {
 /**
  * @enum {Number} UI.FlexLayout.Overflow
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.Overflow = {};
 /**
  * @property {Number} VISIBLE
  * // @todo add description.
- * 
+ *
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -595,9 +582,9 @@ Object.defineProperty(FlexLayout.Overflow, 'VISIBLE', {
 
 /**
  * @property {Number} HIDDEN
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -606,9 +593,9 @@ Object.defineProperty(FlexLayout.Overflow, 'HIDDEN', {
 });
 /**
  * @property {Number} SCROLL
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -619,21 +606,18 @@ Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
 /**
  * @enum UI.FlexLayout.PositionType
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
  *
  */
 FlexLayout.PositionType = {};
 /**
  * @property RELATIVE
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */
@@ -642,9 +626,9 @@ Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
 });
 /**
  * @property ABSOLUTE
- * // @todo add description.
- * 
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 0.1
  */

@@ -2,7 +2,9 @@
  * @class UI.Picker
  * @since 0.1
  *
- * Picker allows you to create a list which you can pick only one of them.
+ * Picker is a UIView that allows you to create a list which you can pick only one of them.
+ * You can add Picker as a View to your layout. If you want to show Picker as a dialog,
+ * you can call show() method.
  *
  *     @example
  *     const Picker = require("nf-core/ui/picker");
@@ -15,10 +17,21 @@
  *     ];
  *     var myPicker = new Picker({
  *         items: items,
- *         valueIndex: 2
+ *         index: 2
  *     });
  *
- *     var valueIndex = myPicker.valueIndex;
+ *    var okCallback = function()
+ *    {
+ *      console.log('ok button clicked')
+ *    }
+ *    var cancelCallback = function()
+ *    {
+ *      console.log('cancel button clicked')
+ *    }
+ *    myPicker.show(okCallback,cancelCallback);
+ *
+ *
+ *
  *
  */
 function Picker() {
@@ -52,6 +65,18 @@ function Picker() {
      * @since 0.1
      */
     this.onSelected = function onSelected(index){ };
+
+     /**
+     * This function shows picker in a dialog.
+     *
+     * @param {Function} ok This event is called when user clicks ok button.
+     * @param {Function} cancel This event is called when user clicks cancel button.
+     * @method show
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.show = function(ok, cancel){};
 
 }
 

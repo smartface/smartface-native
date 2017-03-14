@@ -1,3 +1,4 @@
+const AndroidConfig   = require('nf-core/util/Android/androidconfig')
 const UnitConverter   = require('nf-core/util/Android/unitconverter');
 const Image           = require('nf-core/ui/image');
 const OrientationType = require('nf-core/device/screen/orientationtype');
@@ -6,8 +7,12 @@ const NativeContext        = requireClass('android.content.Context');
 const NativeBitmap         = requireClass('android.graphics.Bitmap');
 const NativeBitmapDrawable = requireClass('android.graphics.drawable.BitmapDrawable');
 const NativeR              = requireClass('android.R');
-
+// Context.WINDOW_SERVICE
+const WINDOW_SERVICE = 'window';
+const WINDOW_MANAGER = 'android.view.WindowManager';
 const Screen = {};
+
+Screen.ios = {};
 
 const orientationArray = [
     OrientationType.PORTRAIT,
@@ -29,7 +34,7 @@ Object.defineProperty(Screen, 'height', {
     get: function () {
         var activity = Android.getActivity();
         var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(activity, metrics.heightPixels);
+        return UnitConverter.pixelToDp(metrics.heightPixels);
     },
     configurable: false
 });
@@ -38,7 +43,7 @@ Object.defineProperty(Screen, 'width', {
     get: function () {
         var activity = Android.getActivity();
         var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(activity, metrics.widthPixels);
+        return UnitConverter.pixelToDp(metrics.widthPixels);
     },
     configurable: false
 });
@@ -54,8 +59,7 @@ Object.defineProperty(Screen, 'touchSupported', {
 
 Object.defineProperty(Screen, 'orientation', {
     get: function () {
-        var activity = Android.getActivity();
-        var windowManager = activity.getSystemService(NativeContext.WINDOW_SERVICE);
+        var windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
         var display = windowManager.getDefaultDisplay();
 
         return orientationArray[display.getRotation()];
@@ -65,8 +69,7 @@ Object.defineProperty(Screen, 'orientation', {
 
 Screen.capture = function() {
     var activity = Android.getActivity();
-    var resources = activity.getResources();
-    
+
     var content = NativeR.id.content;
     var rootView = activity.findViewById(content).getRootView();
     rootView.setDrawingCacheEnabled(true);
@@ -74,9 +77,9 @@ Screen.capture = function() {
     var bitmap = NativeBitmap.createBitmap(cachedBitmap);
     rootView.setDrawingCacheEnabled(false);
 
-    var image = new Image();
-    image.nativeObject = new NativeBitmapDrawable(resources, bitmap);
-    return image;
+    return new Image({
+        bitmap: bitmap
+    });
 };
 
 module.exports = Screen;

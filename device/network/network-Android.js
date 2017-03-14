@@ -1,13 +1,24 @@
-const NativeContext             = requireClass('android.content.Context');
+const AndroidConfig             = require('nf-core/util/Android/androidconfig')
 const NativeBluetoothAdapter    = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager    = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');
+// Context.WIFI_SERVICE
+const WIFI_SERVICE = 'wifi';
+const WIFI_MANAGER = 'android.net.wifi.WifiManager';
+// Context.CONNECTIVITY_SERVICE
+const CONNECTIVITY_SERVICE = 'connectivity';
+const CONNECTIVITY_MANAGER = 'android.net.ConnectivityManager';
+// Context.TELEPHONY_SERVICE
+const TELEPHONY_SERVICE = 'phone';
+const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
 const Network = {};
 Network.ConnectionType = {};
 Network.ConnectionType.None   = 0;
 Network.ConnectionType.Mobile = 1;
 Network.ConnectionType.WIFI   = 2;
+
+const MARSHMALLOW = 23;
 
 Object.defineProperties(Network, {
     'IMSI': {
@@ -59,7 +70,7 @@ Object.defineProperties(Network, {
     'connectionIP': {
         get: function() {
             if (Network.connectionType == Network.ConnectionType.WIFI) {
-                var wifiManager = Android.getActivity().getSystemService(NativeContext.WIFI_SERVICE);
+                var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
                 return (wifiInfo.getIpAddress() & 0xff) 
                     + "." + ((wifiInfo.getIpAddress() >> 8)  & 0xff)
@@ -73,7 +84,7 @@ Object.defineProperties(Network, {
     },
     'wirelessMacAddress': {
         get: function() {
-            var wifiManager = Android.getActivity().getSystemService(NativeContext.WIFI_SERVICE);
+            var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
             var wifiInfo = wifiManager.getConnectionInfo();
             return wifiInfo.getMacAddress();
         },
@@ -82,12 +93,13 @@ Object.defineProperties(Network, {
 });
 
 function getActiveInternet() {
-    var connectivityManager = Android.getActivity().getSystemService(NativeContext.CONNECTIVITY_SERVICE);
+    var connectivityManager;
+    connectivityManager = AndroidConfig.getSystemService(CONNECTIVITY_SERVICE, CONNECTIVITY_MANAGER);
     return connectivityManager.getActiveNetworkInfo();
 }
 
 function getTelephonyManager() {
-    return Android.getActivity().getSystemService(NativeContext.TELEPHONY_SERVICE);
+    return AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
 }
 
 module.exports = Network;

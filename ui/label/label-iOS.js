@@ -32,7 +32,8 @@ const Label = extend(View)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'showScrollBar', {
+        self.ios = {};
+        Object.defineProperty(self.ios, 'showScrollBar', {
             get:function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
             },

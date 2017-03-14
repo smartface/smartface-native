@@ -42,8 +42,9 @@ function StatusBar(parentPage) {
     this.visible = true;
 
     /**
-     * Gets/sets color of the status bar. This property works only for Android
-     * version KitKat (API 19) or above.
+     * Gets/sets color of the status bar. This property works only for Android version 
+     * LOLLIPOP (API 21) or above. If you want to make SliderDrawer to overlay Android StatusBar, 
+     * you should always use color with alpha channel.
      *
      *     @example
      *     const Page = require('nf-core/ui/page');

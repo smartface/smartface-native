@@ -2,37 +2,59 @@
  * @class Device.Location
  * @since 0.1
  * 
- * TODO: type definition
+ * Device.Location allows capturing location change events on the device.
+ * 
+ *     @example
+ *     const Timer    = require("nf-core/global/timer");
+ *     const Location = require('nf-core/device/location'); 
+ * 
+ *     Location.start();
+ *     Location.onLocationChanged = function(event) {
+ *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
+ *     };
+ * 
+ *     Timer.setTimeout({
+ *         delay: 30000, 
+ *         task: function() { Location.stop() }
+ *     });
+ * 
  */
 function Location() {}
 
 /**
  *
- * TODO: type definition
- * @property {String} gpsAvaliable
- * @readonly
+ * Starts capturing.
+ * @method start
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
-Location.gpsAvaliable;
+Location.start();
 
 /**
  *
- * TODO: type definition
- * @property {String} gpsEnabled
+ * Stops capturing.
+ * @method stop
+ * @android
+ * @ios
  * @static
  * @since 0.1
  */
-Location.gpsEnabled;
+Location.stop();
 
 /**
- * TODO: type definition
  * 
- * @since 0.1
+ * Callback to capture location events.
+ * 
  * @event onLocationChanged
- * @param {Number} latitude
- * @param {Number} longitude
+ * @param {Object} event
+ * @param {Number} event.latitude
+ * @param {Number} event.longitude
+ * @android
+ * @ios
+ * @since 0.1
  */
-Location.onLocationChanged = function onLocationChanged(latitude, longitude){ }
+Location.onLocationChanged = function onLocationChanged(event){ }
 
 module.exports = Location;

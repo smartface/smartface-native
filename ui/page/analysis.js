@@ -13,28 +13,33 @@
  * See also {@link UI.Pages} to see how to show a created page on screen.
  *
  *     @example
- *     const Pages = require('nf-core/ui/pages');
+ *     const extend = require("js-base/core/extend");
+ *     const Router = require('nf-core/ui/router');
  *     const Page = require('nf-core/ui/page');
- *     var myPage = new Page({
- *         onLoad: function() {
- *             const Button = require('nf-core/ui/button');
- *             var myButton = new Button({
- *                 width: 150,
- *                 height: 80,
- *                 text: "Click me!"
+ *     var page1 = new extend(Page)(
+ *         function(_super,params)
+ *         {
+ *             var self = this;
+ *             _super(this,{
+ *                 onShow: function() {
+ *                     this.headerBar.visible = true;
+ *                     this.headerBar.title = "Smartface Page";
+ *                 },
+ *                 onLoad: function(){
+ *                     const Button = require('nf-core/ui/button');
+ *                     var myButton = new Button({
+ *                         width: 150,
+ *                         height: 80,
+ *                         text: "Smartface Button"
+ *                     });
+ *                     this.layout.addChild(myButton);
+ *                 }
  *             });
- *             this.layout.addChild(myButton);
- *         },
- *         onShow: function() {
- *             this.headerBar.visible = true;
- *             this.headerBar.title = "Page Example";
  *         }
- *     });
+ *     );
  *
- *     // After next expression created page will be shown on screen
- *     global.Router = new Pages({
- *         rootPage: myPage
- *     });
+ *     Router.add('myPage',page1);
+ *     Router.go('myPage');
  *
  */
 function Page(params) {
@@ -74,10 +79,11 @@ function Page(params) {
      *     });
      *
      * @event onShow
+     * @param {Object} parameters Parameters passed from UI.Router.go function
      * @android
      * @ios
      */
-    this.onShow = function (){};
+    this.onShow = function (parameters){};
 
     /**
      * This event is called when a page disappears from the screen.
@@ -126,7 +132,126 @@ function Page(params) {
      * @since 0.1
      */
     this.headerBar;
-
+    
+    /**
+     * Gets/sets the orientation of the Page. This property must be set as constructor parameter. 
+     * {@link UI.Page.Orientation Orientation} constants can use with bitwise or operator. The default value of the 
+     * orientation defined in project.json.
+     *     
+     *     @example
+     *     const Page = require('nf-core/ui/page');
+     *     var myPage1 = new Page({
+     *          orientation: Page.Orientation.LANDSCAPELEFT
+     *     });
+     * 
+     * @property {UI.Page.Orientation} [orientation = UI.Page.Orientation.PORTRAIT]
+     * @android
+     * @ios
+     * @since 0.1
+    */
+    this.orientation = UI.Page.Orientation.PORTRAIT;
+    
+    /**
+     * This event will be called when orientation of the Page changes.
+     *
+     * @event onOrientationChange
+     * @android
+     * @ios
+     */
+    this.onOrientationChange = function (){};
 }
+
+Page.Orientation = {};
+
+/**
+ * Enum corresponding to portrait orientation. 
+ * 
+ * @property PORTRAIT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"PORTRAIT",{
+    value: 1
+});
+
+/**
+ * Enum corresponding to reverse portrait orientation (upside down).
+ * 
+ * @property UPSIDEDOWN
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
+    value: 2
+});
+
+/**
+ * Enum corresponding to both portrait orientation controlled by sensor.
+ * 
+ * @property AUTOPORTRAIT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
+    value: 3
+});
+
+/**
+ * Enum corresponding to landscape orientation (landspace left).
+ * 
+ * @property LANDSCAPELEFT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
+    value: 4
+});
+
+/**
+ * Enum corresponding to reverse landscape orientation (landspace right).
+ * 
+ * @property LANDSCAPERIGHT
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
+    value: 8
+});
+
+/**
+ * Enum corresponding to both landscape orientation controlled by sensor.
+ * 
+ * @property AUTOLANDSCAPE
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
+    value: 12
+});
+
+/**
+ * Enum corresponding all orientation controlled by sensor.
+ * 
+ * @property AUTO
+ * @android 
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(Page.Orientation,"AUTO",{
+    value: 15
+});
 
 module.exports = Page;

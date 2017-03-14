@@ -30,8 +30,9 @@ const ImageView = extend(View)(
         _super(this);
              
         //defaults
-         self.nativeObject.contentMode = UIViewContentMode.center;
-          
+        self.nativeObject.contentMode = UIViewContentMode.center;
+        self.touchEnabled = true;
+         
         Object.defineProperty(self, 'image', {
             get: function() {
                 return Image.createFromImage(self.nativeObject.image);
@@ -43,6 +44,14 @@ const ImageView = extend(View)(
             },
             enumerable: true
         });
+        
+        self.loadFromUrl = function(url, placeHolder){
+            if (placeHolder){
+                self.nativeObject.loadFromURL(NSURL.URLWithString(url),placeHolder.nativeObject);
+            }else{
+                self.nativeObject.loadFromURL(NSURL.URLWithString(url));
+            }
+        }
         
         Object.defineProperty(self, 'imageFillType', {
             get: function() {
