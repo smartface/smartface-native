@@ -1,10 +1,3 @@
-var Application = {};
-
-var _onApplicationCallReceived;
-var _onStart;
-var _onExit;
-var _onMaximize;
-var _onMinimize;
 
 Object.defineProperty(Application, 'byteReceived', {
     get: function() {
@@ -55,73 +48,13 @@ Object.defineProperty(Application, 'version', {
     enumerable: true
 });
 
-Object.defineProperty(Application,'onApplicationCallReceived', {
-    get: function(){
-        return _onApplicationCallReceived;
-    },
-    set: function(onApplicationCallReceived){
-        if(onApplicationCallReceived instanceof Function){
-            _onApplicationCallReceived = onApplicationCallReceived;
-        }
-    },
-    enumerable: true
-});
-
-Object.defineProperty(Application,'onExit', {
-    get: function(){
-        return _onExit;
-    },
-    set: function(onExit){
-        if(onExit instanceof Function){
-            _onExit = onExit;
-        }
-    },
-    enumerable: true
-});
-
-Object.defineProperty(Application,'onStart', {
-    get: function(){
-        return _onStart;
-    },
-    set: function(onStart){
-        if(onStart instanceof Function){
-            _onStart = onStart;
-        }
-    },
-    enumerable: true
-});
-
-Object.defineProperty(Application,'onMaximize', {
-    get: function(){
-        return _onMaximize;
-    },
-    set: function(onMaximize){
-        if(onMaximize instanceof Function){
-            _onMaximize = onMaximize;
-        }
-    },
-    enumerable: true
-});
-
-Object.defineProperty(Application,'onMinimize', {
-    get: function(){
-        return _onMinimize;
-    },
-    set: function(onMinimize){
-        if(onMinimize instanceof Function){
-            _onMinimize = onMinimize;
-        }
-    },
-    enumerable: true
-});
-
 Application.call = function(uriScheme, data){
     SMFApplication.callWithData(uriScheme, data);
 };
 
 Application.exit = function(){
-    SMFApplication.exit();
     Application.onExit();
+    SMFApplication.exit();
 };
 
 Application.restart = function(){
