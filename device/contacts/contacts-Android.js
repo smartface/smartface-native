@@ -3,7 +3,7 @@ const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
 var NativeIntent = requireClass("android.content.Intent");
 
-const Pages = require("nf-core/ui/pages");
+const Router = require("nf-core/ui/router");
 
 var contentProviderOperation;
 var uri;
@@ -79,9 +79,7 @@ Contacts.pick = function(params) {
         var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
         intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
         
-        var currentPage = Pages.getCurrentPage();
-        var nativeObject = currentPage.nativeObject;
-        nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
+        Router.getCurrentPage().page.nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
     }
     catch(err) {
         if(_onFailure)

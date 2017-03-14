@@ -84,7 +84,8 @@ function Page(params) {
                 if (_headerBarLeftItem) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 } else {
-                    activity.getSupportFragmentManager().popBackStackImmediate();
+                    const Router = require("nf-core/ui/router");
+                    Router.goBack(null, true);
                 }
             } else if (_headerBarItems[menuItem.getItemId()]) {
                 var item = _headerBarItems[menuItem.getItemId()];
@@ -195,7 +196,6 @@ function Page(params) {
         enumerable: true
     });
     
-    
     var _orientation = Page.Orientation.PORTRAIT;
     Object.defineProperty(this, 'orientation', {
         get: function() {
@@ -212,14 +212,14 @@ function Page(params) {
     });
 
     this.android = {};
-    var isBackButtonEnabled;
-    Object.defineProperty(this.android, 'backButtonEnabled', {
+        
+    var _onBackButtonPressed;
+    Object.defineProperty(this.android, 'onBackButtonPressed', {
         get: function() {
-            // will be handling from Pages
-            return isBackButtonEnabled;
+            return _onBackButtonPressed;
         },
-        set: function(backButtonEnabled) {
-            isBackButtonEnabled = backButtonEnabled;
+        set: function(onBackButtonPressed) {
+            _onBackButtonPressed = onBackButtonPressed.bind(this);
         },
         enumerable: true
     });
@@ -351,15 +351,18 @@ function Page(params) {
     
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
-            return Pages.getToolbar().getVisibility() ==  0; // View.VISIBLE
+            // View.VISIBLE
+            return Pages.getToolbar().getVisibility() ==  0;
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if(visible){
-                    Pages.getToolbar().setVisibility(0); // View.VISIBLE
+                    // View.VISIBLE
+                    Pages.getToolbar().setVisibility(0);
                 }
                 else{
-                    Pages.getToolbar().setVisibility(8); // View.GONE
+                    // View.GONE
+                    Pages.getToolbar().setVisibility(8);
                 }
             }
         },
@@ -497,12 +500,11 @@ function Page(params) {
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function (leftItem) {
         const HeaderBarItem = require("../headerbaritem");
-        
         if (leftItem instanceof HeaderBarItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             Pages.getActionBar().setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
         } else {
-            _headerBarLeftItem = null;
+            _headerBarLeftItem = null;            
             Pages.getActionBar().setHomeAsUpIndicator(null);
         }
     };
@@ -517,7 +519,6 @@ function Page(params) {
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
     self.headerBar.visible = true;
-    
     
     //Handling ios value
     self.statusBar.ios = {};

@@ -93,21 +93,15 @@ function Page(params) {
      * @ios
      */
     this.onHide = function (){};
-
+    
     /**
-     * Gets/sets back button enabled status on page. If it is set to true previous page will be
-     * loaded when back button pressed. This property works only on Android.
+     * This event will be triggered when user clicks back button on the Device.
      *
-     *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     var page = new Page();
-     *     page.android.backButtonEnabled = false;
-     *
-     * @property {Boolean} backButtonEnabled
+     * @event onHide
      * @android
      * @since 0.1
      */
-    this.android.backButtonEnabled = false;
+    this.android.onBackButtonPressed = function (){};
 
     /**
      * Gets status bar object. This property is readonly, you can not set
