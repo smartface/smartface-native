@@ -53,14 +53,15 @@ Contacts.addContact = function(params) {
     } 
     catch(msg) {
         success = false;
-        if(_onFailure)
-            _onFailure.call(this, msg);
-        else
+        if(typeof _onFailure === 'function'){
+            _onFailure(this, msg);
+        }
+        else{
             throw msg;
+        }
     }
-    if(success) {
-        if(_onSuccess)
-            _onSuccess.call(this);
+    if(success && typeof _onSuccess === 'function') {
+        _onSuccess();
     }
 };
 
@@ -69,8 +70,7 @@ Contacts.pick = function(params) {
         _onSuccess = params.onSuccess;
         _onFailure = params.onFailure;
     }
-    var activity = Android.getActivity();
-    
+
     try {
         var actionPick = NativeIntent.ACTION_PICK;
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
