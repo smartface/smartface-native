@@ -123,7 +123,7 @@ Application.restart = function(){};
  * @param {Object} [e] 
  * @param {JSON} [e.data] Data sent by application.
  * @param {String} [e.eventType] This parameter is available only for Android. For iOS this always returns "call". 
- * @param {e.result} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
+ * @param {String} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
  * @android
  * @ios
  * @static
