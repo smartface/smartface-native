@@ -25,11 +25,11 @@ function Image (params) {
             self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
         }
         else{
-            throw "path or bitmap can not be empty for Image!";
+            throw new Error("path or bitmap can not be empty for Image!");
         }
     }
     else{
-        throw "Constructor parameters needed for Image!";
+        throw new Error("Constructor parameters needed for Image!");
     }
     
     Object.defineProperty(this, 'height', {

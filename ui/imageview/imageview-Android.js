@@ -26,8 +26,8 @@ const ImageView = extend(View)(
         Object.defineProperties(this, {
             'image': {
                 get: function() {
-                    var image = new Image();
-                    image.nativeObject = self.nativeObject.getDrawable();
+                    var drawable =  self.nativeObject.getDrawable();
+                    var image = new Image({bitmap: drawable.getBitmap()});
                     return image;
                 },
                 set: function(image) {
