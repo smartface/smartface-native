@@ -5,7 +5,6 @@ module.exports = {
     Font: require('./font'),
     Color: require('./color'),
     Button: require('./button'),
-    StateList: require('../util/statelist'),
     ActivityIndicator: require('./activityindicator'),
     Switch: require('./switch'),
     AlertView: require('./alertview'),
@@ -36,5 +35,7 @@ module.exports = {
     Quicklook: require('./quicklook'),
     Picker: require('./picker'),
     SearchView: require('./searchview'),
-    Animator: require('./animator')
+    Animator: require('./animator'),
+    WebView: require('./webview'),
+    Router: require('./router')
 };

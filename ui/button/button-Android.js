@@ -1,6 +1,5 @@
 const Label = require("nf-core/ui/label");
 const Color = require("nf-core/ui/color");
-const StateList = require("nf-core/util/statelist");
 const View = require("nf-core/ui/view");
 const extend = require('js-base/core/extend');
 
