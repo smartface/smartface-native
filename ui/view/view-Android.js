@@ -50,7 +50,7 @@ function View(params) {
     // Passing click event from child to parent due to z-index
     self.nativeObject.setDuplicateParentStateEnabled(true);
 
-    var _backgroundColor = 0;
+    var _backgroundColor = Color.WHITE;
     var backgroundDrawable = new NativeGradientDrawable();
     
     var radii = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -762,6 +762,7 @@ function View(params) {
     };
 
     // Assign defaults
+    this.backgroundColor = _backgroundColor;
     
     // Assign parameters given in constructor
     if (params) {
