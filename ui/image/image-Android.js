@@ -4,7 +4,7 @@ const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
-const Blob = require('nf-core/global/blob');
+const Blob = require('nf-core/blob');
 const File = require('nf-core/io/file');
 const Path = require("nf-core/io/path");
 
