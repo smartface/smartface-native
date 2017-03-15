@@ -52,7 +52,7 @@ const ListView = extend(View)(
         }
 
         var _refreshEnabled = true;
-        Object.defineProperty(self.ios, 'refreshEnabled', {
+        Object.defineProperty(self, 'refreshEnabled', {
             get: function() {
                 return _refreshEnabled;
             },
