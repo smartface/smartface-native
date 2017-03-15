@@ -2,6 +2,8 @@ module.exports = {
     UI: require('./ui'),
     Device: require('./device'),
     IO: require('./io'),
-    Blob: require('./global/blob'),
-    Share: require('./share')
+    Blob: require('./blob'),
+    Notifications: require('./notifications'),
+    Share: require('./share'),
+    Timer: require('./timer')
 }
