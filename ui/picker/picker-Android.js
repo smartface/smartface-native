@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('nf-core/ui/view');
-const Pages = require('nf-core/ui/pages');
+const Router = require('nf-core/ui/router');
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
@@ -11,9 +11,7 @@ const Picker = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject) {
-            var page = Pages.currentPage;
-            var pageNativeObject = page.nativeObject;
-            var fragmentActivity = pageNativeObject.getActivity();
+            var fragmentActivity = Router.getCurrentPage().page.nativeObject.getActivity();
             self.nativeObject = new NativeNumberPicker(fragmentActivity);
         }
         _super(this);

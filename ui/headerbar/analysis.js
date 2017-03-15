@@ -78,14 +78,14 @@ function HeaderBar() {
     /**
      * Gets/sets the navigation indicator visibility of the headerBar.
      * If false navigation indicator will not show, otherwise will show
-     * as back icon with home as up indicator image.
+     * as back icon if left item not set.
      *
-     * @property {Boolean} [displayShowHomeEnabled = false]
+     * @property {Boolean} [leftItemEnabled = false]
      * @android
      * @ios
      * @since 0.1
      */
-    this.displayShowHomeEnabled = false;
+    this.leftItemEnabled = false;
 
     /**
      * Gets the height of the header bar. Height is a read only property and
@@ -100,22 +100,34 @@ function HeaderBar() {
     this.height;
 
     /**
-     * Gets/sets home as up indicator image which will shown with home as up
-     * indicator of the headerBar. If not set, the application icon will
-     * shown. This property will work only for Android.
-     *
+     * Gets/sets the logo of the HeaderBar image which will shown left
+     * side of the left item. You should enable the logo with logoEnabled.
+     * If log is not set, the logo image will not shown. 
+     * This property will work only for Android.
+     * 
      *     @example
      *     const Page = require('nf-core/ui/page');
      *     const Image = require('nf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://icon.png');
-     *     myPage.headerBar.android.homeAsUpIndicatorImage = myImage;
+     *     myPage.headerBar.android.logoEnabled = true;
+     *     myPage.headerBar.android.logo = myImage;
      *
-     * @property {UI.Image} [homeAsUpIndicatorImage = null]
+     * @property {UI.Image} [logo = null]
      * @android
      * @since 0.1
      */
-    this.android.homeAsUpIndicatorImage = null;
+    this.android.logo = null;
+    
+    /**
+     * Gets/sets the logo visibility of the HeaderBar. If logo is disable, 
+     * logo image will newer shown. This property will work only for Android.
+     *
+     * @property {Boolean} [logoEnabled = false]
+     * @android
+     * @since 0.1
+     */
+    this.android.logoEnabled = null;
 
     /**
      * Gets/sets subtitle of the header bar. If not set subtitle will not show.
