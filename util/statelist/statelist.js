@@ -3,7 +3,7 @@
  * StateList is a class to display a text on the screen. StateList creates a specified values based on states.
  *
  *     @example
- *     const StateList = require('sf-core/util/statelist');
+ *     const StateList = require('nf-core/util/statelist');
  *     var myStateList = new StateList(
  *         normal: "assets://normal.png"
  *         disabled: "assets://disabled.png"
@@ -13,7 +13,7 @@
  *     ); 
  *     var normalImage = myStateList.normal;
  * 
- *     const Color = require('sf-core/ui/color');
+ *     const Color = require('nf-core/ui/color');
  *     myStateList = new StateList({  
  *         normal: Color.LIGHTGRAY, 
  *         disabled: Color.BLACK, 
