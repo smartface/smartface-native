@@ -5,5 +5,6 @@ module.exports = {
     Blob: require('./blob'),
     Notifications: require('./notifications'),
     Share: require('./share'),
-    Timer: require('./timer')
+    Timer: require('./timer'),
+    Data: require('./data')
 }
