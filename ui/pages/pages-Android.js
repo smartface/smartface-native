@@ -95,7 +95,7 @@ Pages.drawerLayout = activity.findViewById(NativeR.id.layout_root);
 function showSliderDrawer(_sliderDrawer, drawerLayout){
     if(_sliderDrawer && _sliderDrawer.enabled){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
-        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.drawerPosition == SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT 
             drawerLayout.openDrawer(5);
         }
@@ -109,7 +109,7 @@ function showSliderDrawer(_sliderDrawer, drawerLayout){
 function hideSliderDrawer(_sliderDrawer, drawerLayout) {
    if(_sliderDrawer){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
-        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.drawerPosition == SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             drawerLayout.closeDrawer(5);
         }
