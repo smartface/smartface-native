@@ -3,7 +3,7 @@ const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
 var NativeIntent = requireClass("android.content.Intent");
 
-const Pages = require("nf-core/ui/pages");
+const Router = require("nf-core/ui/router");
 
 var contentProviderOperation;
 var uri;
@@ -53,14 +53,15 @@ Contacts.addContact = function(params) {
     } 
     catch(msg) {
         success = false;
-        if(_onFailure)
-            _onFailure.call(this, msg);
-        else
+        if(typeof _onFailure === 'function'){
+            _onFailure(this, msg);
+        }
+        else{
             throw msg;
+        }
     }
-    if(success) {
-        if(_onSuccess)
-            _onSuccess.call(this);
+    if(success && typeof _onSuccess === 'function') {
+        _onSuccess();
     }
 };
 
@@ -69,8 +70,7 @@ Contacts.pick = function(params) {
         _onSuccess = params.onSuccess;
         _onFailure = params.onFailure;
     }
-    var activity = Android.getActivity();
-    
+
     try {
         var actionPick = NativeIntent.ACTION_PICK;
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
@@ -79,9 +79,7 @@ Contacts.pick = function(params) {
         var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
         intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
         
-        var currentPage = Pages.currentPage;
-        var nativeObject = currentPage.nativeObject;
-        nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
+        Router.getCurrentPage().page.nativeObject.startActivityForResult(intent, PICK_REQUEST_CODE);
     }
     catch(err) {
         if(_onFailure)

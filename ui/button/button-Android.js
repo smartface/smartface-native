@@ -1,15 +1,13 @@
-const Label = require("nf-core/ui/label");
-const Color = require("nf-core/ui/color");
-const View = require("nf-core/ui/view");
-const extend = require('js-base/core/extend');
+const Label                     = require("nf-core/ui/label");
+const Color                     = require("nf-core/ui/color");
+const View                      = require("nf-core/ui/view");
+const extend                    = require('js-base/core/extend');
+const TypeUtil                  = require("nf-core/util/type");
 
-const NativeButton = requireClass("android.widget.Button");
-const NativeR = requireClass("android.R");
-const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
-const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
-const NativeView = requireClass("android.view.View");
+const NativeButton              = requireClass("android.widget.Button");
+const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeDrawable            = requireClass("android.graphics.drawable.Drawable");
+const NativeView                = requireClass("android.view.View");
 
 const Button = extend(Label)(
     function (_super, params) {
@@ -20,89 +18,6 @@ const Button = extend(Label)(
         _super(this);
         
         self.nativeObject.setAllCaps(false); // enable lowercase texts
-        
-        // @todo property not working. Caused by issue AND-2427
-        var textColorStateListDrawable;
-        var textColorsInitial = new StateList({
-            normal: Color.BLACK,
-            disabled: Color.BLACK,
-            selected: Color.BLACK,
-            pressed: Color.BLACK,
-            focused: Color.BLACK
-        });
-        Object.defineProperty(this, 'textColors', {
-            get: function() {
-                return textColorsInitial;
-            }, 
-            set: function(textColors) {
-                textColorsInitial = textColors;
-                var statesSet = [];
-                var colorsSets = [];
-                if(textColors.normal){
-                    statesSet.push(View.State.STATE_NORMAL);
-                    colorsSets.push(textColors.normal);
-                }
-                if(textColors.disabled){
-                    statesSet.push(View.State.STATE_DISABLED);
-                    colorsSets.push(textColors.disabled);
-                }
-                if(textColors.selected){
-                    statesSet.push(View.State.STATE_SELECTED);
-                    colorsSets.push(textColors.selected);
-                }
-                if(textColors.pressed){
-                    statesSet.push(View.State.STATE_PRESSED);
-                    colorsSets.push(textColors.pressed);
-                }
-                if(textColors.focused){
-                    statesSet.push(View.State.STATE_FOCUSED);
-                    colorsSets.push(textColors.focused);
-                }
-                textColorStateListDrawable = new NativeColorStateList (statesSet, colorsSets);
-                self.nativeObject.setTextColor(textColorStateListDrawable);
-            },
-            enumerable: true
-        });
-        
-        var stateListSet;
-        var backgroundColorsInitial = new StateList({
-            normal: Color.WHITE,
-            disabled: Color.WHITE,
-            selected: Color.WHITE,
-            pressed: Color.WHITE,
-            focused: Color.WHITE
-        });
-        Object.defineProperty(this, 'backgroundColors', {
-            get: function() {
-                return backgroundColorsInitial;
-            }, 
-            set: function(backgroundColors) {
-                backgroundColorsInitial = backgroundColors;
-                stateListSet = new NativeStateListDrawable();
-                if(backgroundColors.normal){
-                    var stateDrawable = NativeColorDrawable(backgroundColors.normal);
-                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
-                }
-                if(backgroundColors.disabled){
-                    var stateDrawable = NativeColorDrawable(backgroundColors.disabled);
-                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
-                }
-                if(backgroundColors.selected){
-                    var stateDrawable = NativeColorDrawable(backgroundColors.selected);
-                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
-                }
-                if(backgroundColors.pressed){
-                    var stateDrawable = NativeColorDrawable(backgroundColors.pressed);
-                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
-                }
-                if(backgroundColors.focused){
-                    var stateDrawable = NativeColorDrawable(backgroundColors.focused);
-                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
-                }
-                self.nativeObject.setBackground(stateListSet);
-            },
-            enumerable: true
-        });
 
         var _backgroundImages = {
             normal: "",
@@ -111,7 +26,6 @@ const Button = extend(Label)(
             pressed: "",
             focused: ""
         };
-        var isString = true;
         Object.defineProperty(this, 'backgroundImage', {
             get: function() {
                 return _backgroundImages;
@@ -124,7 +38,7 @@ const Button = extend(Label)(
                     self.nativeObject.setBackground(drawable);
                 }
                 else{
-                    stateListSet = new NativeStateListDrawable();
+                    var stateListSet = new NativeStateListDrawable();
                     if(_backgroundImages.normal){
                         var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.normal);
                         stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
@@ -151,42 +65,14 @@ const Button = extend(Label)(
             enumerable: true
         });
         
-        var backgroundImagesInitial = new StateList({
-            normal: "",
-            disabled: "",
-            selected: "",
-            pressed: "",
-            focused: ""
-        });
-        Object.defineProperty(this, 'backgroundImages', {
+        Object.defineProperty(this, 'enabled', {
             get: function() {
-                return backgroundImagesInitial;
-            }, 
-            set: function(backgroundImages) {
-                // Assuming all paths are full path.
-                backgroundImagesInitial = backgroundImages;
-                stateListSet = new NativeStateListDrawable();
-                if(backgroundImages.normal){
-                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.normal);
-                    stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
+                return self.nativeObject.isEnabled();
+            },
+            set: function(enabled) {
+                if(TypeUtil.isBoolean(enabled)){
+                    self.nativeObject.setEnabled(enabled);
                 }
-                if(backgroundImages.disabled){
-                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.disabled);
-                    stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
-                }
-                if(backgroundImages.selected){
-                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.selected);
-                    stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
-                }
-                if(backgroundImages.pressed){
-                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.pressed);
-                    stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
-                }
-                if(backgroundImages.focused){
-                    var stateDrawable = NativeDrawable.createFromPath(backgroundImages.focused);
-                    stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
-                }
-                self.nativeObject.setBackground(stateListSet);
             },
             enumerable: true
         });

@@ -69,6 +69,20 @@ const ImageView = extend(View)(
          * @since 0.1
          */
         this.imageFillType = UI.ImageFillType.NORMAL;
+        
+        /**
+         * Load image from the server and place the returned image into the ImageView.
+         * If you pass any image to placeHolder parameter, placeHolder image will shown
+         * until image loaded.
+         *
+         * @method loadFromUrl
+         * @param {String} url 
+         * @param {UI.Image} placeHolder 
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.loadFromUrl = function(url, placeHolder){};
     }
 );
 

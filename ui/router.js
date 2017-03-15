@@ -184,6 +184,11 @@ Router.getCurrent = function() {
     return history[history.length-1].path;
 };
 
+// Added for android.
+Router.getCurrentPage = function() {
+    return history[history.length-1];
+};
+
 function getRoute(to) {
     if (!routes[to]) {
         throw Error(to + " is not in routes");

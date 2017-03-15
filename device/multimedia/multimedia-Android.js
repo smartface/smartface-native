@@ -297,9 +297,8 @@ function getAllMediaFromUri(params) {
 }
 
 function getCurrentPageFragment() {
-    const Pages = require("nf-core/ui/pages");
-    var currentPage = Pages.currentPage;
-    return currentPage.nativeObject;
+    const Router = require("nf-core/ui/router");
+    return Router.getCurrentPage().page.nativeObject;
 }
 
 module.exports = Multimedia;

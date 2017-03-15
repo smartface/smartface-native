@@ -139,6 +139,10 @@ function File(params) {
 
 File.getDocumentsDirectory = function(){
     return SMFFile.getDocumentsDirectory();
-}
+};
+
+File.getMainBundleDirectory = function(){
+    return SMFFile.getMainBundleDirectory();
+};
 
 module.exports = File;
