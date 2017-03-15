@@ -1,6 +1,6 @@
 {
   "name": "nf-core",
-  "version": "0.0.259",
+  "version": "0.0.260",
   "description": "Core Modules of Native Libraries..",
   "main": "index.js",
   "scripts": {
