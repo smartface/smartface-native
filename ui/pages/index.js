@@ -1,1 +1,5 @@
-module.exports = require('./pages-' + Device.deviceOS + '.js');
+if (Device.deviceOS === "iOS") {
+  module.exports = require('./pages-iOS');
+} else if (Device.deviceOS === "Android") {
+  module.exports = require('./pages-Android');
+}

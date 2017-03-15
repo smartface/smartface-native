@@ -1,1 +1,5 @@
-module.exports = require('./mapview-' + Device.deviceOS + '.js');
+if (Device.deviceOS === "iOS") {
+  module.exports = require('./mapview-iOS');
+} else if (Device.deviceOS === "Android") {
+  module.exports = require('./mapview-Android');
+}
