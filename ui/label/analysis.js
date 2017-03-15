@@ -1,106 +1,129 @@
+const View = require('../view');
+const extend = require('js-base/core/extend');
 /**
- * @class Label
- *
- *
- * Label is a UI object to display a text on the screen. Label can contain only a single type font.
- *
- *
+ * @class UI.Label
+ * @since 0.1
+ * @extends UI.View
+ * Label is a view that displays read-only text on the screen.
  *
  *     @example
- *     var Label = require('sf/ui/label');
- *     var myLabel = Label({
+ *     const Label = require('nf-core/ui/label');
+ *     const Color = require('nf-core/ui/color');
+ *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
  *     });
- *     myLabel.backgroundColor = "#00FFFFFF";
- *
- *
+ *     myLabel.width = "200",
+ *     myLabel.height = "50",
+ *     myLabel.top = "10",
+ *     myLabel.left = "20",
+ *     myLabel.backgroundColor = Color.GRAY;
  */
-class Label {
-    /**
-     * Creates a Label instance with given options.
-     * 
-     * @constructor 
-     * @param {Object} options
-     *<strong>Style options</strong>
-     */
-    constructor(options) {
-        /** 
-         * Defines opacity of Label view. The value of this property is float number
-         * between 0.0 and 1.0. 0 represents view is completely transparent and 1 
-         * represents view is completely opaque.
-         *
-         * @example
-         * var label = new Label();
-         * label.alpha = 0.5;
-         *
-         * @property {number} alpha Alpha value of Label object
-         */
-        this.alpha = 1.0;
+const Label = extend(View)(
+    function (_super, params) {
+        _super(this);
 
-        const UILabel = require("UILabel");
-        
-        Object.defineProperty(this, 'alpha', {
-            get: function() {
-                return 
-            }
-        })
-        
         /**
-         * Gets or sets HTML text value. This property helps user showing HTML
-         * tagged texts in Label view.
-         * 
-         * @example
-         * // In this example 'This link' text inside Label will shown blue and
-         * // underlined
-         * var label = new Label();
-         * label.htmlText = "<a href='http://smartface.io'>This link</a> will redirect you to Smartface website.";
-         * 
-         * @property {string} htmlText HTML text to display in object
+         * Gets/sets HTML text value of Label. This property helps user showing HTML
+         * texts on the screen.
+         *
+         *     @example
+         *     // In this example 'This link' text inside Label will shown underlined.
+         *     const Label = require('nf-core/ui/label');
+         *     var myLabel = new Label();
+         *     myLabel.htmlText = "<a href='http://www.smartface.io'>This link</a> will redirect you to Smartface website.";
+         *
+         * @property {String} [htmlText = ""]
+         * @android
+         * @ios
+         * @since 0.1
          */
         this.htmlText = "";
-        
+
         /**
-         * Gets or sets background color of label view. It allows setting background 
-         * color with string or SF.UI.Color properties.
-         * 
-         * @example
-         * var label = new Label();
-         * label.backgroundColor = "#00FFFFFF";
-         * 
-         * @property {Color} backgroundColor Background color
-         */ 
-        this.backgroundColor = "#00FFFFFF";
-        
-        this.textColor = SF.Color.BLACK;
-        
-        this.multipleLine = true;
-        this.id = 5421;
-        this.text = "Text";
-        this.textAlignment = SF.TextAlignment.CENTER;
-        this.touchEnabled = true;
-        this.visible = true;
-        
-        this.setPosition = function(positionObject){} // positionObject : {width: 3, height: 5, top: 7, left: 9}
-        this.getPosition = function(){return  {width: 3, height: 5, top: 7, left: 9}; }
-        this.onTouch = function(){ }
-        this.onTouchEnded = function(){ }
-        
-        // Assign properties given in constructor
-        if (props) {
-            for (var prop in props) {
-                this[prop] = props[prop];
+         * Gets/sets font of a Label. When set to null label uses system font.
+         * It is set to null by default.
+         *
+         *     @example
+         *     const Label = require('nf-core/ui/label');
+         *     const Font = require('nf-core/ui/font')
+         *     var myLabel = new Label({
+         *         text: "This is my label",
+         *         visible: true
+         *     });
+         *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+         *
+         * @property {UI.Font} [font = null]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.font = null;
+
+        /**
+         * Enables/disables multiple line property of a Label. If set to true
+         * and the text is long enough, text will be shown in multiline.
+         *
+         * @property {Boolean} [multiline = false]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.multiline = false;
+
+        /**
+         * Gets/sets text on Label.
+         *
+         * @property {String} [text = ""]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.text = "";
+
+        /**
+         * Gets/sets text alignment of a Label. UI.TextAlignment constants
+         * can be used.
+         *
+         *     @example
+         *     const Label = require('nf-core/ui/label');
+         *     const TextAlignment = require('nf-core/ui/textalignment');
+         *     var myLabel = new Label();
+         *     myLabel.textAlignment = TextAlignment.MIDCENTER;
+         *
+         * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.textAlignment = UI.TextAlignment.MIDLEFT;
+
+        /**
+         * Gets/sets text color of Label.
+         *
+         * @property {UI.Color} [textColor = UI.Color.BLACK]
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.textColor = UI.Color.BLACK;
+
+        /**
+         * Sets/gets visibiliy of scroll bar when text is too long.
+         *
+         * @property {Boolean} [showScrollBar = false]
+         * @ios
+         * @since 0.1
+         */
+        this.ios.showScrollBar = false;
+
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
             }
         }
     }
-
-    get alpha() {
-        return androidView.getAlpha();
-    }
-
-    set alpha(value) {
-        androidView.setAlpha(value);
-    }
-}
+);
 
 module.exports = Label;

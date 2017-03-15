@@ -1,0 +1,15 @@
+**/analysis.js
+generateDocs.sh
+install-dev-dep.sh
+docs_resource
+addVersion.py
+sonar-project.properties
+README.md
+coverage.js
+.sonar
+android-mock
+coverage
+tests
+CHANGELOG.html
+env.properties
+encrypt
