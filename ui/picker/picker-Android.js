@@ -11,8 +11,8 @@ const Picker = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject) {
-            var fragmentActivity = Router.getCurrentPage().page.nativeObject.getActivity();
-            self.nativeObject = new NativeNumberPicker(fragmentActivity);
+            var activity = Android.getActivity();
+            self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
 
