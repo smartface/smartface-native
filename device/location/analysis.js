@@ -5,7 +5,7 @@
  * Device.Location allows capturing location change events on the device.
  * 
  *     @example
- *     const Timer    = require("nf-core/global/timer");
+ *     const Timer    = require("nf-core/timer");
  *     const Location = require('nf-core/device/location'); 
  * 
  *     Location.start();

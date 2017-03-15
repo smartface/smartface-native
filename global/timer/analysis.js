@@ -6,7 +6,7 @@
  * 
  *     @example
  *     const Button = require("nf-core/ui/button")
- *     const Timer = require("nf-core/global/timer");
+ *     const Timer = require("nf-core/timer");
  *     var myButton = new Button({
  *         onPress: setTimer
  *     });

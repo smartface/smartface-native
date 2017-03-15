@@ -4,7 +4,7 @@
  * Notification is a message belongs to an application. 
  * 
  *     @example
- *     const Notifications = require("nf-core/global/notifications");
+ *     const Notifications = require("nf-core/notifications");
  *     Notifications.registerForPushNotifications(function(){
  *         console.log("Successfully registered")     
  *     },function(){
@@ -86,7 +86,7 @@ Notifications.ios.scheduledLocalNotifications = null;
  * 
  * 
  *     @example
- *     const Notifications = require("nf-core/global/notifications");
+ *     const Notifications = require("nf-core/notifications");
  *     var notification = new Notifications.LocalNotification();
  *     notification.alertAction = "Notification alertAction";
  *     notification.alertBody = "Notification alertBody";
