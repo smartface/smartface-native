@@ -26,7 +26,8 @@ function AlertView (params) {
     };
     
     this.nativeObject = new SMFUIAlertView(delegate);
-
+    self.nativeObject.title = "";
+    
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {
@@ -34,7 +35,7 @@ function AlertView (params) {
         },
         set: function(value) {
             _title = value;
-                self.nativeObject.title = value;
+            self.nativeObject.title = value;
         },
         enumerable: true
     });
