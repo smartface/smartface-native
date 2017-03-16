@@ -88,4 +88,28 @@ Contacts.add = function(params) {};
  */
 Contacts.pick = function(params) {};
 
+/**
+ * This function returns a contact array.
+ *
+ *
+ *     @example
+ *     const Contacts = require("nf-core/device/contacts");
+ *     Contacts.getAll({
+ *         onSuccess : function(contacts){
+ *             var count = contacts.length;
+ *         },
+ *         onFailure : function(error){
+ *             alert("Message : " + error);
+ *         }
+ *     });
+ *
+ * @param {Object} params Object describing callbacks
+ * @param {Function} [params.onSuccess] This event is called after getting contacts successfully.
+ * @param {Function} [params.onFailure] This event is called after getting contacts fails.
+ * @method getAll
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Contacts.getAll = function(params) {};
 module.exports = Contacts;
