@@ -179,4 +179,18 @@ Application.onMaximize = function(){};
  */
 Application.onMinimize = function(){};
 
+/**
+ * Triggered after a push (remote) notification recieved. This event will be 
+ * fired only if application is active and running. 
+ * 
+ * @since 0.1
+ * @event onReceivedNotification
+ * @param {JSON} data
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+Application.onReceivedNotification = function(data){};
+
 module.exports = Application;

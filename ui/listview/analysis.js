@@ -182,7 +182,7 @@ const ListView = extend(View)(
          * the top of a ListView at a given time.
          *
          * @return {Number}
-         * @method firstVisibleIndex
+         * @method getFirstVisibleIndex
          * @android
          * @ios
          * @since 0.1
@@ -194,7 +194,7 @@ const ListView = extend(View)(
          * the bottom of a ListView at a given time.
          *
          * @return {Number}
-         * @method lastVisibleIndex
+         * @method getLastVisibleIndex
          * @android
          * @ios
          * @since 0.1
