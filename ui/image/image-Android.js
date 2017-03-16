@@ -129,7 +129,7 @@ function Image (params) {
         }
         if(success) {
             if(onSuccess) 
-                onSuccess.call(this, {image: new Blob(byteArray, {type:"image"})});
+                onSuccess.call(this, {blob: new Blob(byteArray, {type:"image"})});
             else 
                 return (new Blob(byteArray, {type:"image"}));
         }
@@ -151,7 +151,7 @@ Image.createFromFile = function(path) {
         else{
             bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
         }
-        return (new Image({bitmap: bitmap}))
+        return (new Image({bitmap: bitmap}));
     }
     return null;
 };

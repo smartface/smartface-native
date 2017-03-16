@@ -64,7 +64,10 @@ function Image(params) {
          * @param {Number} width Width of the new bitmap.
          * @param {Number} height Height of the new bitmap.
          * @param {Function} onSuccess Callback for success situation.
+         * @param {Object} onSuccess.params 
+         * @param {UI.Image} onSuccess.params.image Resized image
          * @param {Function} onFailure Callback for failure situation.
+         * @param {String} onFailure.message Failure message 
          * @return UI.Image
          * @since 0.1
          */
@@ -80,24 +83,36 @@ function Image(params) {
          * @param {Number} width Width of the new bitmap.
          * @param {Number} height Height of the new bitmap.
          * @param {Function} onSuccess Callback for success situation.
+         * @param {Object} onSuccess.params 
+         * @param {UI.Image} onSuccess.params.image Cropped image
          * @param {Function} onFailure Callback for failure situation.
-         * @return UI.Image
+         * @param {String} onFailure.message Failure message 
+         * @return {Object.image} UI.Image
          * @since 0.1
          */
         this.crop = function(x, y, width, height, onSuccess, onFailure) {}
-        
+                
         /**
          * Returns a compressed blob from existing image with given quality.
          * onSuccess and onFailure are optional parameters.
+         * 
+         *     @example
+         *     const Image = require('nf-core/ui/image');
+         *     const ImageFormat = require('nf-core/ui/imageformat');
+         *     var myImage = Image.createFromFile("images://smartface.png")
+         *     var myBlob = myImage.compress(ImageFormat.JPEG, 50); 
+         *     var myCompressedImage = Image.createFromBlob(myBlob);
          *
          * @method compress
          * @param {UI.ImageFormat} format Image format.
          * @param {Number} quality Image quality is between 0 and 100.
          * @param {Function} onSuccess Callback for success situation.
+         * @param {Object} onSuccess.params 
+         * @param {Blob} onSuccess.params.blob Compressed data
          * @param {Function} onFailure Callback for failure situation.
+         * @param {String} onFailure.message Failure message 
          * @return Blob
          * @since 0.1
-         * //todo Add example after blob implementation
          */
         this.compress = function(format, quality, onSuccess, onFailure) {}
         
@@ -108,7 +123,10 @@ function Image(params) {
          * @method rotate
          * @param {Number} angle The angle value of the rectangle top-left corner.
          * @param {Function} onSuccess Callback for success situation.
+         * @param {Object} onSuccess.params 
+         * @param {UI.Image} onSuccess.params.image Rotated image
          * @param {Function} onFailure Callback for failure situation.
+         * @param {String} onFailure.message Failure message 
          * @return UI.Image
          * @since 0.1
          */
@@ -139,6 +157,6 @@ Image.createFromBlob = function(blob) { }
  * @static
  * @since 0.1
  */
-Image.createFromFile = function(path) { }
+Image.createFromFile = function(path) { };
 
 module.exports = Image;
