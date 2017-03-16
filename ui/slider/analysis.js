@@ -1,6 +1,3 @@
-const View = require('../view');
-const extend = require('js-base/core/extend');
-
 /**
  * @class UI.Slider
  * @since 0.1
@@ -53,7 +50,7 @@ const Slider = extend(View)(
          *     var mySlider = new Slider();
          *     mySlider.thumbImage = Image.createFromFile("images://smartface.png");
          *
-         * @property {String}
+         * @property {UI.Image} thumbImage
          * @android
          * @ios
          * @since 0.1
