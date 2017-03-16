@@ -67,7 +67,8 @@ function Image(params) {
          * @param {Object} onSuccess.params 
          * @param {UI.Image} onSuccess.params.image Resized image
          * @param {Function} onFailure Callback for failure situation.
-         * @param {String} onFailure.message Failure message 
+         * @param {Object} onFailure.params 
+         * @param {String} onFailure.params.message Failure message 
          * @return UI.Image
          * @since 0.1
          */
@@ -86,11 +87,12 @@ function Image(params) {
          * @param {Object} onSuccess.params 
          * @param {UI.Image} onSuccess.params.image Cropped image
          * @param {Function} onFailure Callback for failure situation.
-         * @param {String} onFailure.message Failure message 
-         * @return {Object.image} UI.Image
+         * @param {Object} onFailure.params 
+         * @param {String} onFailure.params.message Failure message 
+         * @return UI.Image
          * @since 0.1
          */
-        this.crop = function(x, y, width, height, onSuccess, onFailure) {}
+        this.crop = function(x, y, width, height, onSuccess, onFailure) {};
                 
         /**
          * Returns a compressed blob from existing image with given quality.
@@ -110,7 +112,8 @@ function Image(params) {
          * @param {Object} onSuccess.params 
          * @param {Blob} onSuccess.params.blob Compressed data
          * @param {Function} onFailure Callback for failure situation.
-         * @param {String} onFailure.message Failure message 
+         * @param {Object} onFailure.params 
+         * @param {String} onFailure.params.message Failure message 
          * @return Blob
          * @since 0.1
          */
@@ -126,7 +129,8 @@ function Image(params) {
          * @param {Object} onSuccess.params 
          * @param {UI.Image} onSuccess.params.image Rotated image
          * @param {Function} onFailure Callback for failure situation.
-         * @param {String} onFailure.message Failure message 
+         * @param {Object} onFailure.params 
+         * @param {String} onFailure.params.message Failure message 
          * @return UI.Image
          * @since 0.1
          */
