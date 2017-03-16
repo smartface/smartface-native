@@ -89,11 +89,15 @@ function Sound() {
 
     self.addCallbackFunction = function(){
         self.nativeObject.onReady = function(){
-            self.onReady();
+            if (typeof self.onReady === "function"){
+                self.onReady();
+            }
         }
         
         self.nativeObject.AVPlayerItemDidPlayToEndTime = function(){
-            self.onFinish();
+            if (typeof self.onFinish === "function"){
+                self.onFinish();
+            }
             if (self.isLooping == true){
                 self.seekTo(0);
                 self.play();

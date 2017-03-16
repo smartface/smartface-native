@@ -130,7 +130,9 @@ const Slider = extend(View)(
              self.nativeObject.setValueAnimated(intValue,true);
              if (_value != intValue){
                  _value = intValue;
-                 self.onValueChange();
+                 if (typeof self.onValueChange === "function"){
+                    self.onValueChange();
+                 }
              }
          }
          
