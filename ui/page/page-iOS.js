@@ -129,7 +129,9 @@ function Page(params) {
     this.android = {};
 
     self.headerBar = {}
-
+    
+    self.headerBar.android = {}
+    
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return self.nativeObject.title;
@@ -192,12 +194,13 @@ function Page(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
             self.nativeObject.navigationItem.hidesBackButton;
         },
         set: function(value) {
             self.nativeObject.navigationItem.hidesBackButton = !value;
+            self.nativeObject.navigationItem.leftBarButtonItem.enabled = value;
         },
         enumerable: true
     });
