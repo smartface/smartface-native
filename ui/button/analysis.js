@@ -119,17 +119,16 @@ const Button = extend(View)(
          *     myButton2.text = "Second button text";
          *
          * @since 0.1
-         * @property {Object} backgroundImage
+         * @property {Object} [backgroundImage = {}]
+         * @property {UI.Image} backgroundImage.normal
+         * @property {UI.Image} backgroundImage.disabled
+         * @property {UI.Image} backgroundImage.selected
+         * @property {UI.Image} backgroundImage.pressed
+         * @property {UI.Image} backgroundImage.focused
          * @android
          * @ios
          */
-        this.backgroundImage = {
-            normal: "",
-            disabled: "",
-            selected: "",
-            pressed: "",
-            focused: ""
-        };
+        this.backgroundImage = {};
 
         /**
          * Gets/sets press event callback for a Button.

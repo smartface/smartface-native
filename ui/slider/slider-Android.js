@@ -98,18 +98,20 @@ const Slider = extend(View)(
             enumerable: true
         });
 
-        var _thumbImage;
+        var _thumbImage = null;
         Object.defineProperty(this, 'thumbImage', {
             get: function() {
                 return _thumbImage;
             },
-            set: function(imagePath) {
-                _thumbImage = imagePath;
-                
-                var imageBitmap = BitmapFactory.decodeFile(imagePath);
-                if (imageBitmap) {
-                    var bitmapDrawable = new BitmapDrawable(imageBitmap);
-                    self.nativeObject.setThumb(bitmapDrawable);
+            set: function(thumbImage) {
+                const Image = require("nf-core/ui/image")
+                if(thumbImage instanceof Image && thumbImage.nativeObject){
+                    _thumbImage = thumbImage;
+                    self.nativeObject.setThumb(thumbImage.nativeObject);
+                }
+                else if(thumbImage === null){
+                    _thumbImage = thumbImage;
+                    self.nativeObject.setThumb(null);
                 }
             },
             enumerable: true
