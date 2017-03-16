@@ -286,6 +286,7 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
+            self.flexBasis = 1;
         },
         enumerable: true
     });
