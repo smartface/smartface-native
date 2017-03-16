@@ -20,19 +20,15 @@
  *         index: 2
  *     });
  *
- *    var okCallback = function()
- *    {
- *      console.log('ok button clicked')
- *    }
- *    var cancelCallback = function()
- *    {
- *      console.log('cancel button clicked')
- *    }
- *    myPicker.show(okCallback,cancelCallback);
- *
- *
- *
- *
+ *     var okCallback = function()
+ *     {
+ *         alert('ok button clicked');
+ *     }
+ *     var cancelCallback = function()
+ *     {
+ *         alert('cancel button clicked');
+ *     }
+ *     myPicker.show(okCallback,cancelCallback);
  */
 function Picker() {
     /**
