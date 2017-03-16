@@ -356,7 +356,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
                 if(!notificationListener){
                     notificationListener =  NativeRemoteNotificationListener.implement({
                         onRemoteNotificationReceived: function(data){
-                            Application.onReceivedNotification && Application.onReceivedNotification(data);
+                            Application.onReceivedNotification && Application.onReceivedNotification(JSON.parse(data));
                         }
                     });
                 }
