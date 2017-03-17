@@ -148,19 +148,8 @@ function FileStream(params) {
     });
 }
 
-/**
- * @enum {Number} IO.FileStream.StreamType
- * @static
- * @readonly
- * @since 0.1
- *
- * // @todo add description.
- *
- *     @example
- *     // @todo add example
- *
- */
 FileStream.StreamType = {};
+
 Object.defineProperties(FileStream.StreamType, {
     'APPEND': {
         value: 0,
