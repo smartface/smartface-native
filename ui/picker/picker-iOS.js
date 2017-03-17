@@ -66,7 +66,9 @@ const Picker = extend(View)(
         };
         self.pickerDelegate.didSelectRow = function(e){
             _currentIndex = e.row;
-            _onSelectedCallback(e.row);
+            if (typeof _onSelectedCallback === "function"){
+                _onSelectedCallback(e.row);
+            }
         };
         self.nativeObject.delegate = self.pickerDelegate;
 

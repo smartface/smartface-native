@@ -5,6 +5,8 @@ function DatePicker (params) {
         self.nativeObject = new SMFUIDatePicker();
     }
     
+    self.onDateSelected = function(){}
+    
     self.onDateSelectedListener = function(e){
         self.onDateSelected(e.date);
     }
