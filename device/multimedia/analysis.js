@@ -5,16 +5,43 @@
  * Multimedia manages camera, video and image.
  * 
  *     @example
+ *     const Page = require("nf-core/ui/page");
+ *     const extend = require("js-base/core/extend");
+ *     const Button = require('nf-core/ui/button');
  *     const Multimedia = require("nf-core/device/multimedia");
  *     
- *     Multimedia.startCamera({
- *         onSuccess: capturedImage,
- *         action: Multimedia.ActionType.IMAGE_CAPTURE
- *     });
+ *        var Page1 = extend(Page)(
+ *            function(_super) {
+ *                _super(this, {
+ *                    onShow: function(params) {
+ *                    },
+ *                    onLoad: function(){
+ *                       var self = this;
+ *                        var button = new Button();
+ *                        button.flexGrow = 1;
+ *                        button.text = "Button"
+ *                        
+ *                        button.onPress = function(){
+ *                        
+ *                           Multimedia.startCamera({
+ *                               onSuccess: capturedImage,
+ *                                action: Multimedia.ActionType.IMAGE_CAPTURE,
+ *                                page : self
+ *                            });
+ *                            
+ *                            function capturedImage(picked) { 
+ *                                var image = picked.image;
+ *                            }
+ *                        }
+ *                        this.layout.addChild(button);
+ *                    }
+ *                });
+ *        
+ *            }
+ *        );
+ *        
+ *       module.exports = Page1;
  * 
- *     function capturedImage(picked) { 
- *         var image = picked.image;
- *     }
  * 
  */
 function Multimedia() {}
@@ -42,26 +69,39 @@ Multimedia.startCamera = function(e) { };
  *     @example
  *     const Image = require("nf-core/ui/image");
  *     const Multimedia = require("nf-core/device/multimedia");
- *     
- *     if(readExternalStoragePermission())  {
- *         Multimedia.pickFromGallery({
- *             type: Multimedia.Type.IMAGE,
- *             onSuccess: onSuccess
- *         });
- *     }
+ *     const Page = require("nf-core/ui/page");
+ *     const extend = require("js-base/core/extend");
+ *     const Button = require('nf-core/ui/button');
  * 
- *     function onSuccess(e) {
- *         var image = e.image;
- *     }
- * 
- *     function readExternalStoragePermission() {
- *         var result = Application.checkPermission("READ_EXTERNAL_STORAGE");
- *         if(!result) {
- *             var permissionCode = 1003;
- *             Application.requestPermissions(permissionCode, "READ_EXTERNAL_STORAGE");
- *         }
- *         return Application.checkPermission("READ_EXTERNAL_STORAGE");
- *     }
+ *     var Page1 = extend(Page)(
+ *        function(_super) {
+ *            _super(this, {
+ *                onShow: function(params) {
+ *                },
+ *                onLoad: function(){
+ *                    var self = this;
+ *                    var button = new Button();
+ *                    button.flexGrow = 1;
+ *                    button.text = "Button"
+ *                    
+ *                    button.onPress = function(){
+ *                        Multimedia.pickFromGallery({
+ *                            type: Multimedia.Type.IMAGE,
+ *                            onSuccess: onSuccess,
+ *                            page : self
+ *                         });
+ *                        
+ *                        function onSuccess(picked) { 
+ *                            var image = picked.image;
+ *                        }
+ *                    }
+ *                    this.layout.addChild(button);
+ *                }
+ *            });
+ *        }
+ *    );
+ *    
+ *    module.exports = Page1;
  * 
  * @param {Object} params Object describing parameters for the function.
  * @param {Device.Multimedia.Type} [params.type] Data type.
