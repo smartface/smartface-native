@@ -6,9 +6,9 @@
  *     @example
  *     const Notifications = require("nf-core/notifications");
  *     Notifications.registerForPushNotifications(function(e){
- *         console.log("Successfully registered. The token is: " + e.token)     
+ *         console.log("Successfully registered. The token is: " + e.token);     
  *     },function(){
- *         console.log("Register failed.")     
+ *         console.log("Register failed.");     
  *     });
  * 
  */
