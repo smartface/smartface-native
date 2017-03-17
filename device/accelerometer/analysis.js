@@ -20,7 +20,7 @@ const Accelerometer = {};
 
 
 /**
- * Starts capturing.
+ * Starts capturing accelerometer values.
  * 
  * @method start
  * @android
