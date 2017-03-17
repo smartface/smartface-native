@@ -103,7 +103,9 @@ Multimedia.pickFromGallery = function(params) {
     getCurrentPageFragment().startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
 };
 
-Multimedia.getAllGalleryItems = function(params) {
+Multimedia.android = {};
+
+Multimedia.android.getAllGalleryItems = function(params) {
     try {
         var projection = [ NativeMediaStore.MediaColumns.DATA ];
         var result = {};
@@ -136,7 +138,7 @@ Multimedia.getAllGalleryItems = function(params) {
     }
     catch(err) {
         if(params && params.onFailure)
-            params.onFailure(err);
+            params.onFailure({message: err});
     }
     
 };
@@ -178,7 +180,7 @@ function pickFromGallery(resultCode, data) {
         }
         catch (err) {
             if(_pickParams.onFailure)
-                _pickParams.onFailure(err);
+                _pickParams.onFailure({message: err});
         }
     }
     else {
@@ -265,7 +267,7 @@ function getCameraData(resultCode, data) {
             }
         } catch(err) {
             if(_captureParams.onFailure)
-                _captureParams.onFailure();
+                _captureParams.onFailure({message: err});
         }
     }
     else {
