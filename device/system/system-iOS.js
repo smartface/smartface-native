@@ -1,6 +1,8 @@
 function System() {}
 
 System.android = {}
+System.android.isApplicationInstalled = function(){}
+
 System.ios = {}
 
 const UIDeviceBatteryState = {
