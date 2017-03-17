@@ -111,7 +111,7 @@ const Picker = extend(View)(
                 parent.removeView(self.nativeObject);
             }
             layout.addView(self.nativeObject, new NativeFrameLayout.LayoutParams(
-                -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+                -1 , // FrameLayout.LayoutParams.MATCH_PARENT
                 -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
                 17)); // Gravity.CENTER
             return layout;
