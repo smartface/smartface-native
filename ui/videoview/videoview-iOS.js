@@ -53,7 +53,9 @@ const VideoView = extend(View)(
         };
         
         self.avPlayerViewController.onReady = function(){
-            self.onReady();
+            if (typeof self.onReady === "function"){
+                self.onReady();
+            }
         }
         
         var _loopEnabled = false;
@@ -62,7 +64,9 @@ const VideoView = extend(View)(
         };
         
         self.avPlayerViewController.AVPlayerItemDidPlayToEndTime = function(){
-            self.onFinish();
+            if (typeof self.onFinish === "function"){
+                self.onFinish();
+            }
             if (_loopEnabled == true){
                 self.seekTo(0);
                 self.play();
