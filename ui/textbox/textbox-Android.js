@@ -173,20 +173,13 @@ const TextBox = extend(Label)(
             // todo: Control insertedText after resolving story/AND-2508 issue.
             onTextChanged: function(charSequence, start, before, count){
                 if(_onTextChangedCallback){
-                    var index = Math.abs(start+before);
-                    if(count > before){
-                        var insertedText = charSequence.subSequence(start+before,start+count);
-                        var e = {
-                            location: index,
-                            insertedText: insertedText
-                        }
-                        _onTextChangedCallback(e);
-                    }
+                    _onTextChangedCallback({
+                        location: Math.abs(start+before),
+                        insertedText: self.text
+                    });
                 }
             },
-            
             beforeTextChanged: function(charSequence, start, count, after){},
-            
             afterTextChanged: function(editable){}
         }));
         

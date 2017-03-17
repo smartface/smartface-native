@@ -73,7 +73,8 @@ function View(params) {
         set: function(alpha) {
             self.nativeObject.setAlpha(alpha);
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     var idInitial = NativeView.generateViewId();

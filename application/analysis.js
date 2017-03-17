@@ -185,7 +185,8 @@ Application.onMinimize = function(){};
  * 
  * @since 0.1
  * @event onReceivedNotification
- * @param {JSON} data
+ * @param {JSON} data 
+ * @param {JSON} data.remote
  * @android
  * @ios
  * @static
