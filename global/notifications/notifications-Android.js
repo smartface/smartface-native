@@ -351,7 +351,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     if(TypeUtil.isString(senderID) && senderID != '' ){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
-            onSuccess: function(){
+            onSuccess: function(token){
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService')
                 if(!notificationListener){
                     notificationListener =  NativeRemoteNotificationListener.implement({
@@ -361,7 +361,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
                     });
                 }
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback();
+                onSuccessCallback && onSuccessCallback(token);
             },
             onFailure: function(){
                 onFailureCallback && onFailureCallback();
