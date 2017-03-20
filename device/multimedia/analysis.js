@@ -1,6 +1,8 @@
 /**
  * @class Device.Multimedia
  * @since 0.1
+ * @android
+ * @ios
  * 
  * Multimedia manages camera, video and image.
  * 
@@ -52,11 +54,17 @@ function Multimedia() {}
  * Calls the camera intent.
  * 
  * @param {Object} params Object describing parameters for the function.
- * @param {Device.Multimedia.ActionType} [params.action] Camera action.
- * @param {Function} [params.onSuccess] Callback for success situation.
+ * @param {Device.Multimedia.ActionType} params.action Camera action.
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {UI.Image} params.onSuccess.params.image Captured image
+ * @param {IO.File} params.onSuccess.params.video Captured video
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
- * @return IO.File
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
+ * @ios
  * @since 0.1
  */
 Multimedia.startCamera = function(e) { };
@@ -104,14 +112,22 @@ Multimedia.startCamera = function(e) { };
  *    module.exports = Page1;
  * 
  * @param {Object} params Object describing parameters for the function.
- * @param {Device.Multimedia.Type} [params.type] Data type.
- * @param {Function} [params.onSuccess] Callback for success situation.
+ * @param {Device.Multimedia.Type} params.type Data type.
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {UI.Image} params.onSuccess.params.image Captured image
+ * @param {IO.File} params.onSuccess.params.video Captured video
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
- * @return IO.File
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
+ * @ios
  * @since 0.1
  */
 Multimedia.pickFromGallery = function(e) { };
+
+Multimedia.android = {};
 
 /**
  * @method getAllGalleryItems
@@ -119,18 +135,25 @@ Multimedia.pickFromGallery = function(e) { };
  * Gets an object array contains gallery items.
  * 
  * @param {Object} params Object describing parameters for the function.
- * @param {Device.Multimedia.Type} [params.type] Data type.
- * @param {Function} [params.onSuccess] Callback for success situation.
+ * @param {Device.Multimedia.Type} params.type Data type.
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.params 
+ * @param {Array.<UI.Image>} params.onSuccess.params.images 
+ * @param {Array.<IO.File>} params.onSuccess.params.videos 
  * @param {Function} [params.onCancel] Callback for cancellation situation.
  * @param {Function} [params.onFailure] Callback for failure situation.
- * @return {Object}
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message Failure message
+ * @android
  * @since 0.1
  */
-Multimedia.getAllGalleryItems = function(e) { };
+Multimedia.android.getAllGalleryItems = function(e) { };
 
 /**
  * @enum {Number} Device.Multimedia.Type
  * @since 0.1
+ * @android
+ * @ios
  *
  * Type is used to indicate type of the media.
  */
@@ -140,6 +163,8 @@ var Type = { };
  * @property {Number} IMAGE
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 Type.IMAGE = 0;
@@ -149,6 +174,8 @@ Type.IMAGE = 0;
  * @static
  * @readonly
  * @since 0.1
+ * @android
+ * @ios
  */
 Type.VIDEO = 1;
 
@@ -156,6 +183,8 @@ Type.VIDEO = 1;
 /**
  * @enum {Number} Device.Multimedia.ActionType
  * @since 0.1
+ * @android
+ * @ios
  *
  * ActionType is used to indicate type of the camera action.
  */
@@ -165,6 +194,8 @@ var ActionType = { };
  * @property {Number} IMAGE_CAPTURE
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 ActionType.IMAGE_CAPTURE = 0;
@@ -173,9 +204,10 @@ ActionType.IMAGE_CAPTURE = 0;
  * @property {Number} VIDEO_CAPTURE
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
 ActionType.VIDEO_CAPTURE = 1;
-
 
 module.exports = Multimedia;
