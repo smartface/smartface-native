@@ -1,6 +1,3 @@
-const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-
 /**
  * @class UI.WebView
  * @since 0.1

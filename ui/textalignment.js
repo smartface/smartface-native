@@ -1,4 +1,3 @@
-
 /**
  * @class UI.TextAlignment
  * @since 0.1
@@ -11,19 +10,22 @@
  *     myLabel.text = "Smartface";
  *     myLabel.textAlignment = TextAlignment.TOPRIGHT;
  */
-const TextAlignment = { }
+function TextAlignment(){}
 
-// Constants
 /**
  * Gets the text alignment to the top left.
  *
  * @property {Number} TOPLEFT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.TOPLEFT = 0;
+Object.defineProperty(TextAlignment, 'TOPLEFT', {
+  value: 0,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the top center.
@@ -31,10 +33,14 @@ TextAlignment.TOPLEFT = 0;
  * @property {Number} TOPCENTER
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.TOPCENTER = 1;
+Object.defineProperty(TextAlignment, 'TOPCENTER', {
+  value: 1,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the top right.
@@ -42,10 +48,14 @@ TextAlignment.TOPCENTER = 1;
  * @property {Number} TOPRIGHT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.TOPRIGHT = 2;
+Object.defineProperty(TextAlignment, 'TOPRIGHT', {
+  value: 2,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the middle left.
@@ -53,10 +63,14 @@ TextAlignment.TOPRIGHT = 2;
  * @property {Number} MIDLEFT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.MIDLEFT = 3;
+Object.defineProperty(TextAlignment, 'MIDLEFT', {
+  value: 3,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the middle center.
@@ -64,10 +78,14 @@ TextAlignment.MIDLEFT = 3;
  * @property {Number} MIDCENTER
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.MIDCENTER = 4;
+Object.defineProperty(TextAlignment, 'MIDCENTER', {
+  value: 4,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the middle right.
@@ -75,10 +93,14 @@ TextAlignment.MIDCENTER = 4;
  * @property {Number} MIDRIGHT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.MIDRIGHT = 5;
+Object.defineProperty(TextAlignment, 'MIDRIGHT', {
+  value: 5,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the bottom left.
@@ -86,10 +108,14 @@ TextAlignment.MIDRIGHT = 5;
  * @property {Number} BOTTOMLEFT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.BOTTOMLEFT = 6;
+Object.defineProperty(TextAlignment, 'BOTTOMLEFT', {
+  value: 6,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the bottom center.
@@ -97,10 +123,14 @@ TextAlignment.BOTTOMLEFT = 6;
  * @property {Number} BOTTOMCENTER
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.BOTTOMCENTER = 7;
+Object.defineProperty(TextAlignment, 'BOTTOMCENTER', {
+  value: 7,
+  writable: false
+});
 
 /**
  * Gets the text alignment to the bottom right.
@@ -108,9 +138,13 @@ TextAlignment.BOTTOMCENTER = 7;
  * @property {Number} BOTTOMRIGHT
  * @android
  * @ios
- * @since 0.1
  * @static
+ * @readonly
+ * @since 0.1
  */
-TextAlignment.BOTTOMRIGHT = 8;
+Object.defineProperty(TextAlignment, 'BOTTOMRIGHT', {
+  value: 8,
+  writable: false
+});
 
 module.exports = TextAlignment;

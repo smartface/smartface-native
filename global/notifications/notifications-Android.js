@@ -356,12 +356,12 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
                 if(!notificationListener){
                     notificationListener =  NativeRemoteNotificationListener.implement({
                         onRemoteNotificationReceived: function(data){
-                            Application.onReceivedNotification && Application.onReceivedNotification(JSON.parse(data));
+                            Application.onReceivedNotification && Application.onReceivedNotification({ 'remote': JSON.parse(data) });
                         }
                     });
                 }
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback(token);
+                onSuccessCallback && onSuccessCallback({ 'token' : token });
             },
             onFailure: function(){
                 onFailureCallback && onFailureCallback();
@@ -374,19 +374,9 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
 }
 
 function readSenderIDFromProjectJson(){
-    const File = require("nf-core/io/file");
-    const projectFile = new File({path: "assets://project.json"});
-    
-    if(projectFile.exists){
-        const FileStream = require("nf-core/io/filestream");
-        var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
-        var projectFileContent = projectFileStream.readToEnd();
-        var projectJsonObject = JSON.parse(projectFileContent);
-        senderID = projectJsonObject['api']['googleCloudMessaging']['senderID'];
-    }
-    else{
-        senderID = '';
-    }
+    // get from GCMRegisterUtil due to the project.json encryption
+    const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
+    senderID = NativeGCMRegisterUtil.getSenderID();
 }
 
 function startNotificationIntent(self, params){

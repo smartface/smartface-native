@@ -1,6 +1,3 @@
-const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-
 /**
  * @class UI.VideoView
  * @since 0.1
@@ -31,7 +28,6 @@ const VideoView = extend(View)(
 
         self.ios = {};
 
-        // cross-platform properties
         Object.defineProperties(self, {
             /**
              * This function plays the loaded video clip.
@@ -44,6 +40,7 @@ const VideoView = extend(View)(
             'play': {
                 value: function() {}
             },
+            
             /**
              * This function pauses the video clip.
              *
@@ -70,6 +67,7 @@ const VideoView = extend(View)(
              * This function returns status of the video, if the video clip is played or not.
              *
              * @method isPlaying
+             * @return {Boolean}
              * @android
              * @ios
              * @since 0.1
@@ -199,7 +197,6 @@ const VideoView = extend(View)(
             }
         });
 
-        // platform specific properties
         Object.defineProperties(self.ios, {
             /**
              * Gets/Sets the page where the videoview is put.

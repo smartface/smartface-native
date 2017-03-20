@@ -82,7 +82,7 @@ Application.version;
  *
  * @method call
  * @param {String} uriScheme
- * @param {JSON} data
+ * @param {Object} data
  * @readonly
  * @android
  * @ios
@@ -121,7 +121,7 @@ Application.restart = function(){};
  * @since 0.1
  * @event onApplicationCallReceived
  * @param {Object} [e] 
- * @param {JSON} [e.data] Data sent by application.
+ * @param {Object} [e.data] Data sent by application.
  * @param {String} [e.eventType] This parameter is available only for Android. For iOS this always returns "call". 
  * @param {String} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
  * @android
@@ -185,7 +185,8 @@ Application.onMinimize = function(){};
  * 
  * @since 0.1
  * @event onReceivedNotification
- * @param {JSON} data
+ * @param {Object} data 
+ * @param {Object} data.remote
  * @android
  * @ios
  * @static
