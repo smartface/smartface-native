@@ -5,10 +5,25 @@ const Image             = require("nf-core/ui/image");
 
 const NativeImageView   = requireClass("android.widget.ImageView");
 
+const FillType = { 
+    NORMAL: 0,
+    STRETCH: 1,
+    ASPECTFIT: 2,
+    TOPLEFT: 3,
+    TOPCENTER: 4,
+    TOPRIGHT: 5,
+    MIDLEFT: 6,
+    MIDCENTER: 7,
+    MIDRIGHT: 8,
+    BOTTOMLEFT: 9,
+    BOTTOMCENTER: 10,
+    BOTTOMRIGHT: 11
+};
+
 const ImageFillTypeDic = {};
-ImageFillTypeDic[Image.FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
-ImageFillTypeDic[Image.FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
-ImageFillTypeDic[Image.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
+ImageFillTypeDic[FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
+ImageFillTypeDic[FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
+ImageFillTypeDic[FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
 
 const ImageView = extend(View)(
     function (_super, params) {
@@ -78,5 +93,11 @@ const ImageView = extend(View)(
         }
     }
 );
+
+Object.defineProperty(Image, 'FillType', {
+    value: FillType,
+    writable: false,
+    enumerable: true
+});
 
 module.exports = ImageView;

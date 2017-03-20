@@ -18,6 +18,21 @@ const UIViewContentMode = {
     bottomRight : 12
 };
 
+const FillType = { 
+    NORMAL: 0,
+    STRETCH: 1,
+    ASPECTFIT: 2,
+    TOPLEFT: 3,
+    TOPCENTER: 4,
+    TOPRIGHT: 5,
+    MIDLEFT: 6,
+    MIDCENTER: 7,
+    MIDRIGHT: 8,
+    BOTTOMLEFT: 9,
+    BOTTOMCENTER: 10,
+    BOTTOMRIGHT: 11
+};
+
 const ImageView = extend(View)(
      function (_super, params) {
         var self = this;
@@ -151,5 +166,11 @@ const ImageView = extend(View)(
         }
     }
 );
+
+Object.defineProperty(Image, 'FillType', {
+    value: FillType,
+    writable: false,
+    enumerable: true
+});
 
 module.exports = ImageView;
