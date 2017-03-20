@@ -19,7 +19,7 @@
 function FileStream(params) {
     
     /**
-     * Gets the mode of the FileStream. The mode determines what you can do with this FileStream.
+     * Gets the mode of FileStream operation.
      * 
      * @property {IO.FileStream.StreamType} mode
      * @readonly
@@ -30,7 +30,7 @@ function FileStream(params) {
     this.mode;
     
     /**
-     * Checks the stream is readable.
+     * Checks whether the stream is readable.
      * 
      * @property {Boolean} isReadable
      * @readonly
@@ -41,7 +41,7 @@ function FileStream(params) {
     this.isReadable;
     
     /**
-     * Checks the stream is writable.
+     * Checks whether the stream is writable.
      * 
      * @property {Boolean} isWritable
      * @readonly
@@ -52,7 +52,7 @@ function FileStream(params) {
     this.isWritable;
     
     /**
-     * Gets name of the File object that the FileStream object created with. 
+     * Gets the name of the file it belongs to.
      *
      * @property {String} name
      * @readonly
@@ -63,7 +63,7 @@ function FileStream(params) {
     this.name;
     
     /**
-     * Gets path of the File object that the FileStream object created with. 
+     * Gets the path of the file it belongs to.
      * 
      * @property {String} path
      * @readonly
@@ -74,7 +74,7 @@ function FileStream(params) {
     this.path;
     
     /**
-     * Closes the FileStream object. FileStream have to be closed when its job is done.
+     * Closes the FileStream instance. FileStream have to be closed when its job is done.
      *
      * @method close
      * @android
@@ -95,8 +95,8 @@ function FileStream(params) {
     this.readBlob = function(){};
     
     /**
-     * Gets all characters from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType.READ} mode,
-     * will return null.
+     * Gets all characters from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode,
+     * returns null.
      *
      * @return {String}
      * @method readToEnd
@@ -107,8 +107,8 @@ function FileStream(params) {
     this.readToEnd = function(){};
     
     /**
-     * Writes all characters into the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType.WRITE} 
-     * or {@link IO.FileStream.StreamType.APPEND} mode, will writes nothing.
+     * Writes all characters into the file stream. If the file stream opened with {@link IO.FileStream.StreamType#READ} 
+     * ,returns false.
      * 
      * @param {String} text
      * @return {Boolean}
@@ -121,7 +121,7 @@ function FileStream(params) {
 }
 
 /**
- * The StreamType determines what you can do with this FileStream.
+ * The StreamType determines type of the FileStream operation.
  * 
  * @enum {Number} IO.FileStream.StreamType
  * @static
@@ -142,10 +142,7 @@ FileStream.StreamType = {};
  * @ios
  * @since 0.1
  */
-Object.defineProperty(FileStream.StreamType, 'APPEND', {
-    value: 0,
-    writable: false
-});
+FileStream.StreamType.APPEND = 0;
 
 /**
  * Read existing file.
@@ -157,10 +154,7 @@ Object.defineProperty(FileStream.StreamType, 'APPEND', {
  * @ios
  * @since 0.1
  */
-Object.defineProperty(FileStream.StreamType, 'READ', {
-    value: 1,
-    writable: false
-});
+FileStream.StreamType.READ = 1;
 
 /**
  * Delete file if exists and write inside of it.
@@ -172,9 +166,6 @@ Object.defineProperty(FileStream.StreamType, 'READ', {
  * @ios
  * @since 0.1
  */
-Object.defineProperty(FileStream.StreamType, 'WRITE', {
-    value: 2,
-    writable: false
-});
+FileStream.StreamType.WRITE = 2;
 
 module.exports = FileStream;

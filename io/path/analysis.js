@@ -67,14 +67,13 @@ Object.defineProperty(Path, 'AssetsUriScheme', {
  * @since 0.1
  */
 Object.defineProperty(Path, 'Separator', {
-    value: "/",
     writable: false
 });
 
 /**
  * Gets data directory path of the application.
  * 
- * @property {IO.File} DataDirectory
+ * @property {String} DataDirectory
  * @static
  * @readonly
  * @android
@@ -95,7 +94,6 @@ Object.defineProperty(Path, 'DataDirectory', {
  * @static
  * @readonly
  * @android
- * @ios
  * @since 0.1
  */
 Object.defineProperty(Path.android, 'externalStorages', {
