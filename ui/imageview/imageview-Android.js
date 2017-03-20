@@ -50,8 +50,15 @@ const ImageView = extend(View)(
                     return _fillType;
                 },
                 set: function(fillType) {
-                    _fillType = fillType;
-                    
+                    switch (fillType) {
+                        case FillType.NORMAL:
+                        case FillType.ASPECTFIT:
+                        case FillType.STRETCH:
+                            _fillType = fillType;
+                            break;
+                        default:
+                            _fillType = FillType.NORMAL;
+                    }
                     var scaleType = ImageFillTypeDic[_fillType];
                     self.nativeObject.setScaleType(scaleType);
                 },

@@ -1,7 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("nf-core/ui/image");
-const ImageView = require("nf-core/ui/imageview");
 
 const FillType = { 
     NORMAL: 0,
