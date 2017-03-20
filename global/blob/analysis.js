@@ -39,4 +39,23 @@ function Blob(parts, properties) {
      * @since 0.1
      */
     this.slice = function(start, end, type) {};
+    
+    /**
+     * Returns a base64 String
+     *
+     * @method toBase64
+     * @since 0.1
+     */
+    this.toBase64 = function() {};
 }
+
+/**
+ * Creates a blob object from given a base64String.
+ *
+ * @param {String} base64String
+ * @method createFromBase64
+ * @return Blob
+ * @static
+ * @since 0.1
+ */
+Blob.createFromBase64 = function(base64) { }
