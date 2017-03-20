@@ -59,16 +59,16 @@ const ImageView = extend(View)(
          *         image: myImage,
          *         width: 200, height: 200
          *     });
-         *     myImageView.imageFillType = ImageFillType.STRETCH;
+         *     myImageView.imageFillType = Image.FillType.STRETCH;
          *
          *     myPage.layout.addChild(myImageView);
          *
-         * @property {UI.ImageFillType} [imageFillType = UI.ImageFillType.NORMAL]
+         * @property {UI.Image.FillType} [imageFillType = UI.Image.FillType.NORMAL]
          * @android
          * @ios
          * @since 0.1
          */
-        this.imageFillType = UI.ImageFillType.NORMAL;
+        this.imageFillType = UI.Image.FillType.NORMAL;
         
         /**
          * Load image from the server and place the returned image into the ImageView.

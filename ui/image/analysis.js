@@ -100,13 +100,12 @@ function Image(params) {
          * 
          *     @example
          *     const Image = require('nf-core/ui/image');
-         *     const ImageFormat = require('nf-core/ui/imageformat');
          *     var myImage = Image.createFromFile("images://smartface.png")
-         *     var myBlob = myImage.compress(ImageFormat.JPEG, 50); 
+         *     var myBlob = myImage.compress(Image.Format.JPEG, 50); 
          *     var myCompressedImage = Image.createFromBlob(myBlob);
          *
          * @method compress
-         * @param {UI.ImageFormat} format Image format.
+         * @param {UI.Image.Format} format Image format.
          * @param {Number} quality Image quality is between 0 and 100.
          * @param {Function} onSuccess Callback for success situation.
          * @param {Object} onSuccess.params 
@@ -162,5 +161,178 @@ Image.createFromBlob = function(blob) { }
  * @since 0.1
  */
 Image.createFromFile = function(path) { };
+
+/**
+ * @enum {Number} UI.Image.Format
+ * @static
+ * @since 0.1
+ *
+ * Specifies image compression type.
+ *
+ */
+
+var Format = {};
+/**
+ * @property {Number} JPEG
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Format.JPEG = 0;
+
+/**
+ * @property {Number} PNG
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Format.PNG = 1;
+
+/**
+ * @enum {Number} UI.Image.FillType
+ * @since 0.1
+ * ImageFillType is an enum. It defines the fill type of an UI.Image inside its parent.
+ *
+ *     @example
+ *     const ImageView = require('nf-core/ui/imageview');
+ *     const Image = require('nf-core/ui/image');
+ *
+ *     var myImage = Image.createFromFile("images://nativeface.png")
+ *     var myImageView = new ImageView({
+ *         image: myImage,
+ *         imageFillType: Image.FillType.NORMAL,
+ *         width:200, height: 200
+ *     });
+ *     myPage.layout.addChild(myImageView);
+ *
+ */
+const FillType = { };
+
+/**
+ * @property {Number} NORMAL
+ * @android
+ * @ios
+ * The source image will be displayed in its normal dimensions inside the parent.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.NORMAL = 0;
+
+/**
+ * @property {Number} STRETCH
+ * @android
+ * @ios
+ * The source image will be stretched to the size of the parent.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.STRETCH = 1;
+
+/**
+ * @property {Number} ASPECTFIT
+ * @android
+ * @ios
+ * The source image will grow by saving its aspect ratio until the image is at its max size inside the parent.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.ASPECTFIT = 2;
+
+/**
+ * @property {Number} TOPLEFT
+ * @ios
+ * The source image position will be top center. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.TOPLEFT = 3;
+
+/**
+ * @property {Number} TOPCENTER
+ * @ios
+ * The source image position will be top center. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.TOPCENTER = 4;
+
+/**
+ * @property {Number} TOPRIGHT
+ * @ios
+ * The source image position will be top right. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.TOPRIGHT = 5;
+
+/**
+ * @property {Number} MIDLEFT
+ * @ios
+ * The source image position will be mid left. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.MIDLEFT = 6;
+
+/**
+ * @property {Number} MIDCENTER
+ * @ios
+ * The source image position will be mid center. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.MIDCENTER = 7;
+
+/**
+ * @property {Number} MIDRIGHT
+ * @ios
+ * The source image position will be mid right. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.MIDRIGHT = 8;
+
+/**
+ * @property {Number} BOTTOMLEFT
+ * @ios
+ * The source image position will be bottom left. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.BOTTOMLEFT = 9;
+
+/**
+ * @property {Number} BOTTOMCENTER
+ * @ios
+ * The source image position will be bottom center. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.BOTTOMCENTER = 10;
+
+/**
+ * @property {Number} BOTTOMRIGHT
+ * @ios
+ * The source image position will be bottom right. Works only for iOS.
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+FillType.BOTTOMRIGHT = 11;
 
 module.exports = Image;

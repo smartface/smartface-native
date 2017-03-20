@@ -7,9 +7,8 @@
  * 
  *     @example
  *     const Image = require('nf-core/ui/image');
- *     const ImageFormat = require('nf-core/ui/imageformat');
  *     var myImage = Image.createFromFile("images://smartface.png")
- *     var blob = myImage.compress(ImageFormat.JPEG, 100); 
+ *     var blob = myImage.compress(Image.Format.JPEG, 100); 
  *     var blobSize = blob.size, blobType = blob.type;
  */
 function Blob(parts, properties) {

@@ -2,14 +2,13 @@ const extend            = require('js-base/core/extend');
 const View              = require('../view');
 const TypeUtil          = require("nf-core/util/type");
 const Image             = require("nf-core/ui/image");
-const ImageFillType     = require("nf-core/ui/imagefilltype");
 
 const NativeImageView   = requireClass("android.widget.ImageView");
 
 const ImageFillTypeDic = {};
-ImageFillTypeDic[ImageFillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
-ImageFillTypeDic[ImageFillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
-ImageFillTypeDic[ImageFillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
+ImageFillTypeDic[Image.FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
+ImageFillTypeDic[Image.FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
+ImageFillTypeDic[Image.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
 
 const ImageView = extend(View)(
     function (_super, params) {
@@ -69,7 +68,7 @@ const ImageView = extend(View)(
         });
 
         // SET DEFAULTS
-        self.imageFillType = ImageFillType.NORMAL;
+        self.imageFillType = Image.FillType.NORMAL;
 
         // Assign parameters given in constructor
         if (params) {
