@@ -1,36 +1,25 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("nf-core/ui/image");
-
-const UIViewContentMode = {
-    scaleToFill : 0,
-    scaleAspectFit : 1, // contents scaled to fit with fixed aspect. remainder is transparent
-    scaleAspectFill : 2, // contents scaled to fill with fixed aspect. some portion of content may be clipped.
-    redraw : 3, // redraw on bounds change (calls -setNeedsDisplay)
-    center : 4, // contents remain same size. positioned adjusted.
-    top : 5,
-    bottom : 6,
-    left : 7,
-    right : 8,
-    topLeft : 9,
-    topRight : 10,
-    bottomLeft : 11,
-    bottomRight : 12
-};
+const ImageView = require("nf-core/ui/imageview");
 
 const FillType = { 
     NORMAL: 0,
     STRETCH: 1,
-    ASPECTFIT: 2,
-    TOPLEFT: 3,
-    TOPCENTER: 4,
-    TOPRIGHT: 5,
-    MIDLEFT: 6,
-    MIDCENTER: 7,
+    ASPECTFIT: 2
+};
+
+FillType.ios = {
+    REDRAW: 3,
+    MIDCENTER: 4,
+    TOPCENTER: 5,
+    BOTTOMCENTER: 6,
+    MIDLEFT: 7,
     MIDRIGHT: 8,
-    BOTTOMLEFT: 9,
-    BOTTOMCENTER: 10,
-    BOTTOMRIGHT: 11
+    TOPLEFT: 9,
+    TOPRIGHT: 10,
+    BOTTOMLEFT: 11,
+    BOTTOMRIGHT: 12
 };
 
 const ImageView = extend(View)(
@@ -44,7 +33,7 @@ const ImageView = extend(View)(
         _super(this);
              
         //defaults
-        self.nativeObject.contentMode = UIViewContentMode.center;
+        self.nativeObject.contentMode = FillType.ios.MIDCENTER;
         self.touchEnabled = true;
          
         Object.defineProperty(self, 'image', {
@@ -65,96 +54,14 @@ const ImageView = extend(View)(
             }else{
                 self.nativeObject.loadFromURL(NSURL.URLWithString(url));
             }
-        }
+        };
         
         Object.defineProperty(self, 'imageFillType', {
             get: function() {
-               var returnValue = null;
-                
-               switch(self.nativeObject.contentMode) {
-                    case  UIViewContentMode.center:
-                        returnValue = Image.FillType.NORMAL;
-                        break;
-                    case UIViewContentMode.scaleToFill:
-                        returnValue = Image.FillType.STRETCH;
-                        break;
-                    case UIViewContentMode.scaleAspectFit:
-                        returnValue = Image.FillType.ASPECTFIT;
-                    break;
-                    case UIViewContentMode.topLeft:
-                        returnValue = Image.FillType.TOPLEFT;
-                    break;
-                    case UIViewContentMode.top:
-                        returnValue = Image.FillType.TOPCENTER;
-                    break;
-                    case UIViewContentMode.topRight:
-                        returnValue = Image.FillType.TOPRIGHT;
-                    break;
-                    case UIViewContentMode.left:
-                        returnValue = Image.FillType.MIDLEFT;
-                    break;
-                    case UIViewContentMode.center:
-                        returnValue = Image.FillType.MIDCENTER;
-                    break;
-                    case UIViewContentMode.right:
-                        returnValue = Image.FillType.MIDRIGHT;
-                    break;
-                    case UIViewContentMode.bottomLeft:
-                        returnValue = Image.FillType.BOTTOMLEFT;
-                    break;
-                    case UIViewContentMode.bottom:
-                        returnValue = Image.FillType.BOTTOMCENTER;
-                    break;
-                    case UIViewContentMode.bottomRight:
-                        returnValue = Image.FillType.BOTTOMRIGHT;
-                    break;
-                    default:
-                        returnValue = null;
-                }
-                return returnValue;
+                return self.nativeObject.contentMode;
             },
             set: function(value) {
-                switch(value) {
-                    case Image.FillType.NORMAL:
-                        self.nativeObject.contentMode = UIViewContentMode.center;
-                        break;
-                    case Image.FillType.STRETCH:
-                        self.nativeObject.contentMode = UIViewContentMode.scaleToFill;
-                        break;
-                    case Image.FillType.ASPECTFIT:
-                        self.nativeObject.contentMode = UIViewContentMode.scaleAspectFit;
-                        break;
-                    case Image.FillType.TOPLEFT:
-                        self.nativeObject.contentMode = UIViewContentMode.topLeft;
-                    break;
-                    case Image.FillType.TOPCENTER:
-                        self.nativeObject.contentMode = UIViewContentMode.top;
-                    break;
-                    case Image.FillType.TOPRIGHT:
-                        self.nativeObject.contentMode = UIViewContentMode.topRight;
-                    break;
-                    case Image.FillType.MIDLEFT:
-                        self.nativeObject.contentMode = UIViewContentMode.left;
-                    break;
-                    case Image.FillType.MIDCENTER:
-                        self.nativeObject.contentMode = UIViewContentMode.center;
-                    break;
-                    case Image.FillType.MIDRIGHT:
-                        self.nativeObject.contentMode = UIViewContentMode.right;
-                    break;
-                    case Image.FillType.BOTTOMLEFT:
-                        self.nativeObject.contentMode = UIViewContentMode.bottomLeft;
-                    break;
-                    case Image.FillType.BOTTOMCENTER:
-                        self.nativeObject.contentMode = UIViewContentMode.bottom;
-                    break;
-                    case Image.FillType.BOTTOMRIGHT:
-                        self.nativeObject.contentMode = UIViewContentMode.bottomRight;
-                    break;
-                    default:
-                        self.nativeObject.contentMode = UIViewContentMode.center;
-                }
-
+                self.nativeObject.contentMode = value;
             },
             enumerable: true
         });

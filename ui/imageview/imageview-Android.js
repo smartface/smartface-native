@@ -9,15 +9,7 @@ const FillType = {
     NORMAL: 0,
     STRETCH: 1,
     ASPECTFIT: 2,
-    TOPLEFT: 3,
-    TOPCENTER: 4,
-    TOPRIGHT: 5,
-    MIDLEFT: 6,
-    MIDCENTER: 7,
-    MIDRIGHT: 8,
-    BOTTOMLEFT: 9,
-    BOTTOMCENTER: 10,
-    BOTTOMRIGHT: 11
+    ios: {}
 };
 
 const ImageFillTypeDic = {};
