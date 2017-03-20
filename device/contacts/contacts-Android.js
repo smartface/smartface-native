@@ -1,7 +1,8 @@
-const NativeContactsContract = requireClass("android.provider.ContactsContract");
-const NativeArrayList = requireClass("java.util.ArrayList");
+const TypeUtil                       = require('nf-core/util/type');
+const NativeContactsContract         = requireClass("android.provider.ContactsContract");
+const NativeArrayList                = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
-var NativeIntent = requireClass("android.content.Intent");
+var NativeIntent                     = requireClass("android.content.Intent");
 
 const Pages = require("nf-core/ui/pages");
 
@@ -12,54 +13,42 @@ var MIMETYPE = NativeContactsContract.DataColumns.MIMETYPE;
 var CONTENT_ITEM_TYPE = NativeContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
 var DISPLAY_NAME = NativeContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
 
+// ContactsContract.SyncColumns.ACCOUNT_NAME
+const SyncColumns_ACCOUNT_NAME = 'account_name';
+// ContactsContract.SyncColumns.ACCOUNT_TYPE
+const SyncColumns_ACCOUNT_TYPE = 'account_type';
+
 var _onSuccess;
 var _onFailure;
+var activity = Android.getActivity();
 
 function Contacts () { }
 
-Contacts.addContact = function(params) {
-    var contact = {};
-    if(params) {
-        contact = params.contact; 
-        _onSuccess = params.onSuccess;
-        _onFailure = params.onFailure;
-    }
-    var activity = Android.getActivity();
-    var contentResolver = activity.getContentResolver();
-    var success = true;
-    
+Contacts.addContact = function(params) {    
+    var contentResolver = activity.getContentResolver();    
     try {
         contentProviderOperation = new NativeArrayList();
-        var ACCOUNT_NAME = NativeContactsContract.SyncColumns.ACCOUNT_NAME;
-        var ACCOUNT_TYPE = NativeContactsContract.SyncColumns.ACCOUNT_TYPE;
+        
         uri = NativeContactsContract.RawContacts.CONTENT_URI;
     
         var newContent = NativeContentProviderOperation.newInsert(uri);
-        newContent = newContent.withValue(ACCOUNT_TYPE, null);
-        newContent = newContent.withValue(ACCOUNT_NAME, null);
+        newContent = newContent.withValue(SyncColumns_ACCOUNT_TYPE, null);
+        newContent = newContent.withValue(SyncColumns_ACCOUNT_NAME, null);
         var content = newContent.build();
         contentProviderOperation.add(content);
         
-        uri = NativeContactsContract.Data.CONTENT_URI;
-        addContactName(contact.displayName);
-        addContactNumber(contact.phoneNumber);
-        addContactEmail(contact.email);
-        addContactUrl(contact.urlAddress);
-        addContactAddress(contact.address);
+        TypeUtil.isString(params.displayName) && addContactName(params.displayName);
+        TypeUtil.isString(params.phoneNumber) && addContactNumber(params.phoneNumber);
+        TypeUtil.isString(params.email) && addContactEmail(params.email);
+        TypeUtil.isString(params.urlAddress) && addContactUrl(params.urlAddress);
+        TypeUtil.isString(params.address) && addContactAddress(params.address);
     
         var AUTHORITY = NativeContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
+        params.onSuccess && params.onSuccess();
     } 
     catch(msg) {
-        success = false;
-        if(_onFailure)
-            _onFailure.call(this, msg);
-        else
-            throw msg;
-    }
-    if(success) {
-        if(_onSuccess)
-            _onSuccess.call(this);
+        params.onFailure && params.onFailure({message: msg});
     }
 };
 
