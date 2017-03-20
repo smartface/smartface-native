@@ -97,6 +97,8 @@ function AlertView (params) {
                         case -3:
                             buttonCallbacks[ButtonType.NEUTRAL] && buttonCallbacks[ButtonType.NEUTRAL]();
                             break;
+                        default:
+                            break;
                    }
                }
         }));
