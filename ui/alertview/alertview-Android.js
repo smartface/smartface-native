@@ -68,7 +68,7 @@ function AlertView (params) {
     this.addButton = function(params){
         !params.text && (params.text = "");
         buttonCallbacks[params.index] = params.onClick;
-        var nativeButtonIndex = -1;
+        var nativeButtonIndex;
         switch(params.index) {
             case ButtonType.POSITIVE:
                 nativeButtonIndex = -1;
