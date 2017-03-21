@@ -3,7 +3,6 @@ const extend = require('js-base/core/extend');
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
-        const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
         var activity = Android.getActivity();
         var self = this;
         

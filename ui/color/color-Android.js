@@ -48,7 +48,7 @@ Color.createGradient = function(e){
 };
 
 Color.create = function(param1, param2, param3, param4){
-    if (arguments.length == 1) {
+    if (arguments.length === 1) {
         if(!TypeUtil.isNumeric(param1)){
             return NativeColor.parseColor(param1);
         }
@@ -56,13 +56,13 @@ Color.create = function(param1, param2, param3, param4){
             return param1;
         }
     } 
-    else if (arguments.length == 3) {
+    else if (arguments.length === 3) {
         return NativeColor.rgb(param1,param2,param3);
     } 
-    else if (arguments.length == 4) {
+    else if (arguments.length === 4) {
         return NativeColor.argb(param1,param2,param3,param4);
-    };
-}
+    }
+};
 
 Color.red = function(color){ 
     var colorParam = color;

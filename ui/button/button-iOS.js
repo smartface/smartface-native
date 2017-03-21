@@ -53,18 +53,18 @@ const Button = extend(View)(
             },
             set: function(value) {
                 var vertical;
-                if (parseInt(value / 3) == 0) {
+                if (parseInt(value / 3) === 0) {
                     vertical = 1;
-                }else if (parseInt(value / 3) == 1){
+                }else if (parseInt(value / 3) === 1){
                     vertical = 0;
                 }else{
                     vertical = 2;
                 }
                 
                 var horizontal;
-                 if (value % 3 == 0) {
+                 if (value % 3 === 0) {
                     horizontal = 1;
-                }else if (value % 3 == 1){
+                }else if (value % 3 === 1){
                     horizontal = 0;
                 }else{
                     horizontal = 2;
@@ -128,7 +128,7 @@ const Button = extend(View)(
             }, 
             set: function(bgColors) {
                 backgroundColorsInitial = bgColors;
-                 if (bgColors.constructor.name != "Object") {
+                 if (bgColors.constructor.name !== "Object") {
                      self.nativeObject.setBackgroundColor(backgroundColorsInitial,ButtonState.normal);
                  }else{
                      if (typeof backgroundColorsInitial.normal !== 'undefined') {
@@ -160,7 +160,7 @@ const Button = extend(View)(
             set: function(bgImages) {
                 backgroundImagesInitial = bgImages;
 
-                if (bgImages.constructor.name != "Object") {
+                if (bgImages.constructor.name !== "Object") {
                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.nativeObject,ButtonState.normal);
                 }else{
                     if (backgroundImagesInitial.normal)
