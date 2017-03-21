@@ -153,7 +153,7 @@ function View(params) {
     Object.defineProperty(this, 'visible', {
         get: function() {
             // View.VISIBLE is 0
-            return self.nativeObject.getVisibility() == 0;
+            return self.nativeObject.getVisibility() === 0;
         },
         set: function(visible) {
             if(visible)
