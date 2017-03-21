@@ -1,5 +1,4 @@
 const FlexLayout = require('nf-core/ui/flexlayout');
-const ImageFillType = require('nf-core/ui/imagefilltype');
 const Image = require("nf-core/ui/image");
 
 const UIInterfaceOrientation = {
