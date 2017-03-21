@@ -8,7 +8,7 @@ function Menu(params) {
             return _headerTitle;
         },
         set: function(headerTitle) {
-            _headerTitle = headerTitle
+            _headerTitle = headerTitle;
         },
         enumerable: true
     });
@@ -27,16 +27,16 @@ function Menu(params) {
     self.show = function(page){
         self.nativeObject = UIAlertController.createAlertController(0);
         
-        if (self.headerTitle != "" && self.headerTitle){
+        if (self.headerTitle && self.headerTitle !== ""){
              self.nativeObject.title = self.headerTitle;
         }
         
-        for (var action in self.items){
-            var action = UIAlertAction.createAction(self.items[action].title,0,self.items[action].onSelectedListener);
+        for (var item in self.items){
+            var action = UIAlertAction.createAction(self.items[item].title,0,self.items[item].onSelectedListener);
             self.nativeObject.addAction(action);
         }
         page.nativeObject.presentViewController(self.nativeObject);
-    }
+    };
      // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

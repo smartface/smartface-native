@@ -6,7 +6,7 @@ var ButtonType = {
 
 const MethodNames = {
     didDismissWithButtonIndex: "didDismissWithButtonIndex"
-}
+};
     
 function AlertView (params) {
     var self = this;
