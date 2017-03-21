@@ -198,9 +198,6 @@ const TextBox = extend(View)(
             },
             set: function(value) {
                 switch (value) {
-                    case ActionKeyType.DEFAULT:
-                        self.nativeObject.returnKeyType = IOSReturnKeyType.default;
-                        break;
                     case ActionKeyType.NEXT:
                         self.nativeObject.returnKeyType = IOSReturnKeyType.next;
                         break;

@@ -105,7 +105,7 @@ Object.defineProperties(Pages,{
 function showSliderDrawer(_sliderDrawer){
     if(_sliderDrawer && _sliderDrawer.enabled){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
-        if(_sliderDrawer.drawerPosition == SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT 
             mDrawerLayout.openDrawer(5);
         }
@@ -119,7 +119,7 @@ function showSliderDrawer(_sliderDrawer){
 function hideSliderDrawer(_sliderDrawer) {
    if(_sliderDrawer){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
-        if(_sliderDrawer.drawerPosition == SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             mDrawerLayout.closeDrawer(5);
         }
@@ -149,7 +149,7 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
 function isSliderDrawerOpen(_sliderDrawer) {
     if(_sliderDrawer){
         const SliderDrawer = require('nf-core/ui/sliderdrawer');
-        if(_sliderDrawer.position == SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.position === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             return mDrawerLayout.isDrawerOpen(5);
         }
@@ -185,8 +185,8 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
             pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
         }
         
-        if(pageAnimationsCache.leftEnter != 0 && pageAnimationsCache.leftExit != 0 
-                && pageAnimationsCache.rightEnter != 0 && pageAnimationsCache.rightExit != 0){
+        if(pageAnimationsCache.leftEnter !== 0 && pageAnimationsCache.leftExit !== 0 
+                && pageAnimationsCache.rightEnter !== 0 && pageAnimationsCache.rightExit !== 0){
             fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
                                                     pageAnimationsCache.leftExit,
                                                     pageAnimationsCache.rightEnter,

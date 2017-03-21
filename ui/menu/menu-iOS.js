@@ -31,8 +31,8 @@ function Menu(params) {
              self.nativeObject.title = self.headerTitle;
         }
         
-        for (var item in self.items){
-            var action = UIAlertAction.createAction(self.items[item].title,0,self.items[item].onSelectedListener);
+        for (var i = 0; i < self.items.length; i++){
+            var action = UIAlertAction.createAction(self.items[i].title,0,self.items[i].onSelectedListener);
             self.nativeObject.addAction(action);
         }
         page.nativeObject.presentViewController(self.nativeObject);

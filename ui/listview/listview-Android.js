@@ -198,9 +198,9 @@ const ListView = extend(View)(
             jsView.nativeObject = nativeView;
             jsView.parent = parentJsView;
             if(jsView.childViews){
-                for(var childViewKey in jsView.childViews){
-                    var childId = jsView.childViews[childViewKey].id;
-                    createFromTemplate(jsView.childViews[childViewKey],nativeView.findViewById(childId),jsView);
+                for(var i = 0; i < jsView.childViews.length; i++) {
+                    var childId = jsView.childViews[i].id;
+                    createFromTemplate(jsView.childViews[i],nativeView.findViewById(childId),jsView);
                 }
             }
         }
