@@ -6,7 +6,7 @@ const ScrollViewEdge = require("nf-core/ui/scrollview/scrollview-edge");
 const ScrollType = {
     vertical : 0,
     horizontal : 1
-}
+};
 
 const ScrollView = extend(ViewGroup)(
    function (_super, params) {
@@ -32,7 +32,7 @@ const ScrollView = extend(ViewGroup)(
          var _align = ScrollType.vertical;
          Object.defineProperty(self, 'align', {
             get: function() {
-                if (_align == ScrollType.horizontal){
+                if (_align === ScrollType.horizontal){
                     return ScrollViewAlign.HORIZONTAL;
                 }else{
                     return ScrollViewAlign.VERTICAL;
@@ -40,7 +40,7 @@ const ScrollView = extend(ViewGroup)(
                 
             },
             set: function(value) {
-                if (value == ScrollViewAlign.HORIZONTAL) {
+                if (value === ScrollViewAlign.HORIZONTAL) {
                     _align = ScrollType.horizontal;
                 }else{
                     _align = ScrollType.vertical;
@@ -51,33 +51,33 @@ const ScrollView = extend(ViewGroup)(
          });
          
         self.scrollToEdge = function(edge){
-             if (_align == ScrollType.horizontal){
-                 if (edge == ScrollViewEdge.LEFT){
+             if (_align === ScrollType.horizontal){
+                 if (edge === ScrollViewEdge.LEFT){
                     self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
-                 }else if(edge == ScrollViewEdge.RIGHT){
+                 }else if(edge === ScrollViewEdge.RIGHT){
                      self.nativeObject.scrollToRight();
                  }
-             }else if (_align == ScrollType.vertical){
-                 if (edge == ScrollViewEdge.TOP){
+             }else if (_align === ScrollType.vertical){
+                 if (edge === ScrollViewEdge.TOP){
                      self.nativeObject.setContentOffsetAnimated({x : 0,y : 0},true);
-                 }else if(edge == ScrollViewEdge.BOTTOM){
+                 }else if(edge === ScrollViewEdge.BOTTOM){
                      self.nativeObject.scrollToBottom();
                  }
              }
-        }
+        };
          
         self.scrollToCoordinate = function(coordinate){
-             if (_align == ScrollType.horizontal){
+             if (_align === ScrollType.horizontal){
                  self.nativeObject.setContentOffsetAnimated({x : coordinate,y : 0},true);
-             }else if (_align == ScrollType.vertical){
+             }else if (_align === ScrollType.vertical){
                  self.nativeObject.setContentOffsetAnimated({x : 0,y : coordinate},true);
              }
-        }
+        };
     
         self.autoSize = function(){
             self.applyLayout();
             self.nativeObject.autoContentSize(_align);
-        }
+        };
         
         if (params) {
             for (var param in params) {

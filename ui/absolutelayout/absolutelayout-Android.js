@@ -3,7 +3,6 @@ const FlexLayout = require('../flexlayout');
 
 const AbsoluteLayout = extend(FlexLayout)(
     function (_super, params) {
-        var self = this;
         _super(this);
 
         var superAddChild = this.addChild;

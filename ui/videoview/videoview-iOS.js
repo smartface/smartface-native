@@ -67,18 +67,18 @@ const VideoView = extend(View)(
             if (typeof self.onFinish === "function"){
                 self.onFinish();
             }
-            if (_loopEnabled == true){
+            if (_loopEnabled === true){
                 self.seekTo(0);
                 self.play();
             }
-        }
+        };
         
         self.seekTo = function(milliseconds){
             self.avPlayerViewController.seekToMillisecond(milliseconds);
-        }
+        };
         
         self.isPlaying = function(){
-            if (self.avPlayer.rate != 0){
+            if (self.avPlayer.rate !== 0){
                 return true;
             }else {
                 return false;
@@ -118,11 +118,11 @@ const VideoView = extend(View)(
         
         self.setVolume = function(value){
             self.avPlayer.volume = value;
-        }
+        };
         
         self.setControllerEnabled = function(value){
             self.avPlayerViewController.showsPlaybackControls = value;
-        }
+        };
         
         if (params) {
             for (var param in params) {

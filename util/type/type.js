@@ -2,23 +2,23 @@
 function TypeUtil() {}
 
 TypeUtil.isNumeric = function(param){
-    return typeof(param) == "number";
+    return typeof(param) === "number";
 };
 
 TypeUtil.isBoolean = function(param){
-    return typeof(param) == 'boolean';
+    return typeof(param) === 'boolean';
 };
 
 TypeUtil.isString = function(param){
-    return typeof(param) == 'string';
+    return typeof(param) === 'string';
 };
 
 TypeUtil.isObject = function(param){
-    return typeof(param) == 'object';
+    return typeof(param) === 'object';
 };
 
 TypeUtil.isFunction = function(param){
-    return typeof(param) == 'function';
+    return typeof(param) === 'function';
 };
 
 TypeUtil.isArray = function(param){
@@ -33,6 +33,6 @@ TypeUtil.isURL = function(param) {
   '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
   '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
   return pattern.test(param);
-}
+};
 
 module.exports = TypeUtil;

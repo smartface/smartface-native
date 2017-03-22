@@ -22,7 +22,6 @@ const WebView = extend(View)(
 
             if (NativeBuildVersion.SDK_INT >= 24) {
                 overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                    const NativeString = requireClass('java.lang.String');
                     var uri = request.getUrl();
                     var url = uri.toString();
                     _callbackOnChangedURL && _callbackOnChangedURL({url: url});
