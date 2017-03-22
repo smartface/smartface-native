@@ -1,6 +1,5 @@
 const extend = require('js-base/core/extend');
 const Page = require('nf-core/ui/page');
-
 const AbsoluteLayout = require('nf-core/ui/absolutelayout');
 
 const SliderDrawer = extend(Page)(
@@ -10,8 +9,6 @@ const SliderDrawer = extend(Page)(
         var _position = 0;
         var _enabled = true;
         var _drawerWidth = 100;
-        var _onShow = null;
-        var _onHide = null;
 
         if(!self.nativeObject){
             self.nativeObject = SMFSliderDrawer.new();
@@ -91,7 +88,7 @@ const SliderDrawer = extend(Page)(
         
         this.hide = function(){
             self.nativeObject.hide();
-        }
+        };
         
         // Assign parameters given in constructor
         if (params) {

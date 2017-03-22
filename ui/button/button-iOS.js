@@ -4,12 +4,12 @@ const extend = require('js-base/core/extend');
 const UIControlEvents = require("nf-core/util").UIControlEvents;
 
 const ButtonState = {
-        normal: 0,
-        disabled: 1,
-        selected: 2,
-        pressed: 3,
-        focused: 4 // #available(iOS 9.0, *)
-    }
+    normal: 0,
+    disabled: 1,
+    selected: 2,
+    pressed: 3,
+    focused: 4 // #available(iOS 9.0, *)
+};
 
 const Button = extend(View)(
      function (_super, params) {
@@ -47,27 +47,24 @@ const Button = extend(View)(
             enumerable: true
         });
         
-        var _textAligment = 4;
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
                 return self.nativeObject.textAlignmentNumber;
             },
             set: function(value) {
-                _textAligment = value;
-                
                 var vertical;
-                if (parseInt(value / 3) == 0) {
+                if (parseInt(value / 3) === 0) {
                     vertical = 1;
-                }else if (parseInt(value / 3) == 1){
+                }else if (parseInt(value / 3) === 1){
                     vertical = 0;
                 }else{
                     vertical = 2;
                 }
                 
                 var horizontal;
-                 if (value % 3 == 0) {
+                 if (value % 3 === 0) {
                     horizontal = 1;
-                }else if (value % 3 == 1){
+                }else if (value % 3 === 1){
                     horizontal = 0;
                 }else{
                     horizontal = 2;
@@ -85,7 +82,7 @@ const Button = extend(View)(
             selected: Color.BLACK,
             pressed: Color.BLACK,
             focused: Color.BLACK
-    	}
+    	};
     	
         Object.defineProperty(this, 'textColor', {
             get: function() {
@@ -93,22 +90,22 @@ const Button = extend(View)(
             }, 
             set: function(textColor) {
                 textColorsInitial = textColor;
-                if (textColor.constructor.name != "Object") {
+                if (textColor.constructor.name !== "Object") {
                     self.nativeObject.setTitleColor(textColor,ButtonState.normal);
                 }else{
-                    if (typeof textColor.normal != 'undefined') {
+                    if (typeof textColor.normal !== 'undefined') {
                         self.nativeObject.setTitleColor(textColor.normal,ButtonState.normal);
                     }
-                    if (typeof textColor.disabled != 'undefined') {
+                    if (typeof textColor.disabled !== 'undefined') {
                         self.nativeObject.setTitleColor(textColor.disabled,ButtonState.disabled);
                     }
-                    if (typeof textColor.selected != 'undefined') {
+                    if (typeof textColor.selected !== 'undefined') {
                         self.nativeObject.setTitleColor(textColor.selected,ButtonState.selected);
                     }
-                    if (typeof textColor.pressed != 'undefined') {
+                    if (typeof textColor.pressed !== 'undefined') {
                         self.nativeObject.setTitleColor(textColor.pressed,ButtonState.pressed);
                     }
-                    if (typeof textColor.focused != 'undefined') {
+                    if (typeof textColor.focused !== 'undefined') {
                         self.nativeObject.setTitleColor(textColor.focused,ButtonState.focused);
                     }
                     
@@ -131,22 +128,22 @@ const Button = extend(View)(
             }, 
             set: function(bgColors) {
                 backgroundColorsInitial = bgColors;
-                 if (bgColors.constructor.name != "Object") {
+                 if (bgColors.constructor.name !== "Object") {
                      self.nativeObject.setBackgroundColor(backgroundColorsInitial,ButtonState.normal);
                  }else{
-                     if (typeof backgroundColorsInitial.normal != 'undefined') {
+                     if (typeof backgroundColorsInitial.normal !== 'undefined') {
                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal,ButtonState.normal);
                      }
-                     if (typeof backgroundColorsInitial.disabled != 'undefined') {
+                     if (typeof backgroundColorsInitial.disabled !== 'undefined') {
                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled,ButtonState.disabled);
                      }
-                     if (typeof backgroundColorsInitial.selected != 'undefined') {
+                     if (typeof backgroundColorsInitial.selected !== 'undefined') {
                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected,ButtonState.selected);
                      }
-                     if (typeof backgroundColorsInitial.pressed != 'undefined') {
+                     if (typeof backgroundColorsInitial.pressed !== 'undefined') {
                           self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed,ButtonState.pressed);
                      }
-                     if (typeof backgroundColorsInitial.focused != 'undefined') {
+                     if (typeof backgroundColorsInitial.focused !== 'undefined') {
                           self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused,ButtonState.focused);
                      }
                     
@@ -163,7 +160,7 @@ const Button = extend(View)(
             set: function(bgImages) {
                 backgroundImagesInitial = bgImages;
 
-                if (bgImages.constructor.name != "Object") {
+                if (bgImages.constructor.name !== "Object") {
                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.nativeObject,ButtonState.normal);
                 }else{
                     if (backgroundImagesInitial.normal)

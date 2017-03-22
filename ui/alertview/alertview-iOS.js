@@ -6,7 +6,7 @@ var ButtonType = {
 
 const MethodNames = {
     didDismissWithButtonIndex: "didDismissWithButtonIndex"
-}
+};
     
 function AlertView (params) {
     var self = this;
@@ -14,7 +14,7 @@ function AlertView (params) {
     var delegate = function (method){
         switch (method.name) {
             case MethodNames.didDismissWithButtonIndex:
-                if (method.buttonIndex != -1){
+                if (method.buttonIndex !== -1){
                    if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
                         _buttonArray[method.buttonIndex].onClick();
                     }

@@ -196,7 +196,7 @@ const TextBox = extend(Label)(
     
         self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
             onEditorAction: function(textView, actionId, event){
-                if (actionId == NativeActionKeyType[_actionKeyType])  {
+                if (actionId === NativeActionKeyType[_actionKeyType])  {
                     _onActionButtonCallback && _onActionButtonCallback({actionKeyType: _actionKeyType});
                 }
                 return false;

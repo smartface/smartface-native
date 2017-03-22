@@ -100,13 +100,12 @@ function Image(params) {
          * 
          *     @example
          *     const Image = require('nf-core/ui/image');
-         *     const ImageFormat = require('nf-core/ui/imageformat');
          *     var myImage = Image.createFromFile("images://smartface.png")
-         *     var myBlob = myImage.compress(ImageFormat.JPEG, 50); 
+         *     var myBlob = myImage.compress(Image.Format.JPEG, 50); 
          *     var myCompressedImage = Image.createFromBlob(myBlob);
          *
          * @method compress
-         * @param {UI.ImageFormat} format Image format.
+         * @param {UI.Image.Format} format Image format.
          * @param {Number} quality Image quality is between 0 and 100.
          * @param {Function} onSuccess Callback for success situation.
          * @param {Object} onSuccess.params 
@@ -162,5 +161,35 @@ Image.createFromBlob = function(blob) { }
  * @since 0.1
  */
 Image.createFromFile = function(path) { };
+
+/**
+ * @enum {Number} UI.Image.Format
+ * @static
+ * @since 0.1
+ *
+ * Specifies image compression type.
+ *
+ */
+
+var Format = {};
+/**
+ * @property {Number} JPEG
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Format.JPEG = 0;
+
+/**
+ * @property {Number} PNG
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Format.PNG = 1;
 
 module.exports = Image;

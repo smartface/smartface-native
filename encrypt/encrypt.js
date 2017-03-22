@@ -17,7 +17,7 @@ if (isEncryptedContent.toString() !== "Hello World!") {
   walker.on("file", function (root, fileStats, next) {
     if (path.extname(fileStats.name) === ".js" && ignoreFiles.indexOf(fileStats.name) === -1) {
       des3.encryptFileWith3DES_ECB(path.join(root, fileStats.name),
-          "VGhpc2lzZm9ybmYtY29yZQ==",
+          "RW11U21mTmYyMDE3USslLQ==",
           path.join(root, fileStats.name));
     }
     next();

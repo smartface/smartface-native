@@ -69,7 +69,7 @@ const Label = extend(View)(
 
         Object.defineProperty(this, 'multiline', {
             get: function() {
-                return self.nativeObject.getLineCount() != 1;
+                return self.nativeObject.getLineCount() !== 1;
             },
             set: function(multiline) {
                 self.nativeObject.setSingleLine(!multiline);
