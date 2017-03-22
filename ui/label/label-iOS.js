@@ -58,10 +58,10 @@ const Label = extend(View)(
 
         Object.defineProperty(self, 'multiline', {
             get: function() {
-               if(self.nativeObject.textContainer.maximumNumberOfLines == 0 && self.nativeObject.textContainer.lineBreakMode == 0){
-                    return true
+               if(self.nativeObject.textContainer.maximumNumberOfLines === 0 && self.nativeObject.textContainer.lineBreakMode === 0){
+                    return true;
                 }else{
-                    return false
+                    return false;
                 }
             },
             set: function(value) {
@@ -109,7 +109,7 @@ const Label = extend(View)(
             set: function(value) {
                 _textColor = value;
                 self.nativeObject.setEditable = true;
-                self.nativeObject.textColor = value
+                self.nativeObject.textColor = value;
                 self.nativeObject.setEditable = false;
             },
             enumerable: true

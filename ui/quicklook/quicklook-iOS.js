@@ -16,8 +16,10 @@ function QuickLook (params) {
             set:function(value) {
                 _document = value;
                 var uRLArray = [];
-                for (var string in value){
-                    var filePath = new File({path:value[string]});
+                for (var i = 0; i < value.length; i++){
+                    var filePath = new File({
+                        path: value[i]
+                    });
                     var actualPath = filePath.nativeObject.getActualPath();
                     uRLArray.push(NSURL.fileURLWithPath(actualPath));
                 }
@@ -46,7 +48,7 @@ function QuickLook (params) {
             enumerable: true
      });
     
-    self.statusBar = {}
+    self.statusBar = {};
     
     Object.defineProperty(self.statusBar, 'visible', {
         get: function() {
@@ -72,13 +74,13 @@ function QuickLook (params) {
     
     self.show = function(Page){
         Page.nativeObject.presentViewController(self.nativeObject);
-    }
+    };
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 module.exports = QuickLook;

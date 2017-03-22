@@ -1,5 +1,4 @@
 const FlexLayout = require('nf-core/ui/flexlayout');
-const ImageFillType = require('nf-core/ui/imagefilltype');
 const Image = require("nf-core/ui/image");
 
 const UIInterfaceOrientation = {
@@ -80,10 +79,10 @@ function Page(params) {
     self.checkOrientation = function(){
         var currentOrientation = UIApplication.sharedApplication().statusBarOrientation;
 
-        if (self.orientation.indexOf(currentOrientation) == -1){
+        if (self.orientation.indexOf(currentOrientation) === -1){
             UIDevice.changeOrientation(self.orientation[0]);
         }
-    }
+    };
     
     Object.defineProperty(this, 'orientation', {
         get: function() {
@@ -157,9 +156,9 @@ function Page(params) {
     // Prevent undefined is not an object error
     this.android = {};
 
-    self.headerBar = {}
+    self.headerBar = {};
     
-    self.headerBar.android = {}
+    self.headerBar.android = {};
     
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
@@ -173,7 +172,7 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
+            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"];
         },
         set: function(value) {
              self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value};
@@ -242,7 +241,7 @@ function Page(params) {
         }
 
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
-    }
+    };
 
     self.headerBar.setLeftItem = function(value){
         if(value){
@@ -250,11 +249,11 @@ function Page(params) {
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
-    }
+    };
 
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.frame.height
+            return self.nativeObject.navigationController.navigationBar.frame.height;
         },
         enumerable: true
     });

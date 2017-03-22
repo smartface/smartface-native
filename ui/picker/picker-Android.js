@@ -72,7 +72,7 @@ const Picker = extend(View)(
 
         self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
             onScrollStateChange: function(picker, scrollState) {
-                if(scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     if(_onSelectedCallback)
                         _onSelectedCallback(self.currentIndex);
                 }

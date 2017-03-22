@@ -47,7 +47,7 @@ const VideoView = extend(View)(
             },
             'isPlaying': {
                 value: function() {
-                    self.nativeObject.isPlaying();
+                    return self.nativeObject.isPlaying();
                 }
             },
             'setLoopEnabled': {

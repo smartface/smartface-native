@@ -154,7 +154,14 @@ function Page(params) {
      */
     this.onOrientationChange = function (){};
 }
-
+/**
+ * @enum {Number} UI.Page.Orientation
+ * @static
+ * @since 0.1
+ *
+ * Orientation is an enum that defines page orientation.
+ *
+ */
 Page.Orientation = {};
 
 /**
@@ -166,9 +173,7 @@ Page.Orientation = {};
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"PORTRAIT",{
-    value: 1
-});
+Page.Orientation.PORTRAIT = 1;
 
 /**
  * Enum corresponding to reverse portrait orientation (upside down).
@@ -179,9 +184,7 @@ Object.defineProperty(Page.Orientation,"PORTRAIT",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
-    value: 2
-});
+Page.Orientation.UPSIDEDOWN = 2;
 
 /**
  * Enum corresponding to both portrait orientation controlled by sensor.
@@ -192,9 +195,7 @@ Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
-    value: 3
-});
+Page.Orientation.AUTOPORTRAIT = 3;
 
 /**
  * Enum corresponding to landscape orientation (landspace left).
@@ -205,9 +206,7 @@ Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
-    value: 4
-});
+Page.Orientation.LANDSCAPELEFT = 4;
 
 /**
  * Enum corresponding to reverse landscape orientation (landspace right).
@@ -218,9 +217,7 @@ Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
-    value: 8
-});
+Page.Orientation.LANDSCAPERIGHT = 8;
 
 /**
  * Enum corresponding to both landscape orientation controlled by sensor.
@@ -231,9 +228,7 @@ Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
-    value: 12
-});
+Page.Orientation.AUTOLANDSCAPE = 12;
 
 /**
  * Enum corresponding all orientation controlled by sensor.
@@ -244,8 +239,6 @@ Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(Page.Orientation,"AUTO",{
-    value: 15
-});
+Page.Orientation.AUTO = 15;
 
 module.exports = Page;
