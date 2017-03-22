@@ -57,4 +57,4 @@ function Blob(parts, properties) {
  * @static
  * @since 0.1
  */
-Blob.createFromBase64 = function(base64) { }
+Blob.createFromBase64 = function(base64) { };
