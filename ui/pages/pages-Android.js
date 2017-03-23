@@ -4,9 +4,7 @@ const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManag
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
 var activity = Android.getActivity();
-var mToolbar = activity.findViewById(NativeR.id.toolbar);
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-var mSupportActionBar = activity.getSupportActionBar();
 var pageAnimationsCache;
 
 const Pages = function(params) {
@@ -14,7 +12,7 @@ const Pages = function(params) {
     var _sliderDrawer = null;
 
     var pagesStack = [];
-    var rootViewId = NativeR.id.layout_container;
+    var rootViewId = NativeR.id.container_page;
     
     registerOnBackKeyPressed(pagesStack);
     
@@ -85,19 +83,9 @@ const Pages = function(params) {
 };
 
 Object.defineProperties(Pages,{
-    'getToolbar': {
-        value: function(){
-            return mToolbar;  
-        }
-    },
     'getDrawerLayout': {
         value: function(){
             return mDrawerLayout;  
-        }
-    },
-    'getActionBar': {
-        value: function(){
-            return mSupportActionBar;  
         }
     }
 });
