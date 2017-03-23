@@ -2,6 +2,7 @@ const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("nf-core/ui/image");
 
+
 const FillType = { 
     NORMAL: 0,
     STRETCH: 1,
@@ -73,10 +74,66 @@ const ImageView = extend(View)(
     }
 );
 
-Object.defineProperty(Image, 'FillType', {
-    value: FillType,
-    writable: false,
+Object.defineProperty(ImageView, "FillType",{
+    value: {},
     enumerable: true
+});
+
+Object.defineProperties(ImageView.FillType,{
+    'NORMAL':{
+        value: 0,
+        enumerable: true
+    },
+    'STRETCH':{
+        value: 1,
+        enumerable: true
+    },
+    'ASPECTFIT':{
+        value: 2,
+        enumerable: true
+    },
+    'ios':{
+        value: {},
+        enumerable: true
+    },
+});
+Object.defineProperties(ImageView.FillType.ios,{
+    'MIDCENTER':{
+        value: 4,
+        enumerable: true
+    },
+    'TOPCENTER':{
+        value: 5,
+        enumerable: true
+    },
+    'BOTTOMCENTER':{
+        value: 6,
+        enumerable: true
+    },
+    'MIDLEFT':{
+        value: 7,
+        enumerable: true
+    },
+    'MIDRIGHT':{
+        value: 8,
+        enumerable: true
+    },
+    'TOPLEFT':{
+        value: 9,
+        enumerable: true
+    },
+    'TOPRIGHT':{
+        value: 10,
+        enumerable: true
+    },
+    'BOTTOMLEFT':{
+        value: 11,
+        enumerable: true
+    },
+    'BOTTOMRIGHT':{
+        value: 12,
+        enumerable: true
+    }
 });
 
 module.exports = ImageView;

@@ -106,7 +106,8 @@ const ImageView = extend(View)(
  *     myPage.layout.addChild(myImageView);
  *
  */
-const FillType = { };
+ImageView.FillType = {};
+ImageView.FillType.ios = {};
 
 /**
  * @property {Number} NORMAL
@@ -115,9 +116,11 @@ const FillType = { };
  * The source image will be displayed in its normal dimensions inside the parent.
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
-FillType.NORMAL = 0;
+ImageView.FillType.NORMAL;
 
 /**
  * @property {Number} STRETCH
@@ -126,9 +129,11 @@ FillType.NORMAL = 0;
  * The source image will be stretched to the size of the parent.
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
-FillType.STRETCH = 1;
+ImageView.FillType.STRETCH;
 
 /**
  * @property {Number} ASPECTFIT
@@ -137,9 +142,11 @@ FillType.STRETCH = 1;
  * The source image will grow by saving its aspect ratio until the image is at its max size inside the parent.
  * @static
  * @readonly
+ * @android
+ * @ios
  * @since 0.1
  */
-FillType.ASPECTFIT = 2;
+ImageView.FillType.ASPECTFIT;
 
 /**
  * @property {Number} TOPLEFT
@@ -147,9 +154,10 @@ FillType.ASPECTFIT = 2;
  * The source image position will be top center. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.TOPLEFT = 3;
+ImageView.FillType.ios.TOPLEFT;
 
 /**
  * @property {Number} TOPCENTER
@@ -157,9 +165,10 @@ FillType.TOPLEFT = 3;
  * The source image position will be top center. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.TOPCENTER = 4;
+ImageView.FillType.ios.TOPCENTER;
 
 /**
  * @property {Number} TOPRIGHT
@@ -167,9 +176,10 @@ FillType.TOPCENTER = 4;
  * The source image position will be top right. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.TOPRIGHT = 5;
+ImageView.FillType.ios.TOPRIGHT;
 
 /**
  * @property {Number} MIDLEFT
@@ -177,9 +187,10 @@ FillType.TOPRIGHT = 5;
  * The source image position will be mid left. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.MIDLEFT = 6;
+ImageView.FillType.ios.MIDLEFT;
 
 /**
  * @property {Number} MIDCENTER
@@ -187,9 +198,10 @@ FillType.MIDLEFT = 6;
  * The source image position will be mid center. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.MIDCENTER = 7;
+ImageView.FillType.ios.MIDCENTER;
 
 /**
  * @property {Number} MIDRIGHT
@@ -197,9 +209,10 @@ FillType.MIDCENTER = 7;
  * The source image position will be mid right. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.MIDRIGHT = 8;
+ImageView.FillType.ios.MIDRIGHT;
 
 /**
  * @property {Number} BOTTOMLEFT
@@ -207,9 +220,10 @@ FillType.MIDRIGHT = 8;
  * The source image position will be bottom left. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.BOTTOMLEFT = 9;
+ImageView.FillType.ios.BOTTOMLEFT;
 
 /**
  * @property {Number} BOTTOMCENTER
@@ -217,9 +231,10 @@ FillType.BOTTOMLEFT = 9;
  * The source image position will be bottom center. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.BOTTOMCENTER = 10;
+ImageView.FillType.ios.BOTTOMCENTER;
 
 /**
  * @property {Number} BOTTOMRIGHT
@@ -227,8 +242,9 @@ FillType.BOTTOMCENTER = 10;
  * The source image position will be bottom right. Works only for iOS.
  * @static
  * @readonly
+ * @ios
  * @since 0.1
  */
-FillType.BOTTOMRIGHT = 11;
+ImageView.FillType.ios.BOTTOMRIGHT;
 
 module.exports = ImageView;

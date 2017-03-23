@@ -2,20 +2,7 @@ const extend            = require('js-base/core/extend');
 const View              = require('../view');
 const TypeUtil          = require("nf-core/util/type");
 const Image             = require("nf-core/ui/image");
-
 const NativeImageView   = requireClass("android.widget.ImageView");
-
-const FillType = { 
-    NORMAL: 0,
-    STRETCH: 1,
-    ASPECTFIT: 2,
-    ios: {}
-};
-
-const ImageFillTypeDic = {};
-ImageFillTypeDic[FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
-ImageFillTypeDic[FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
-ImageFillTypeDic[FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
 
 const ImageView = extend(View)(
     function (_super, params) {
@@ -50,17 +37,11 @@ const ImageView = extend(View)(
                     return _fillType;
                 },
                 set: function(fillType) {
-                    switch (fillType) {
-                        case FillType.NORMAL:
-                        case FillType.ASPECTFIT:
-                        case FillType.STRETCH:
-                            _fillType = fillType;
-                            break;
-                        default:
-                            _fillType = FillType.NORMAL;
+                    if (!(fillType in ImageFillTypeDic)){
+                        fillType = ImageView.FillType.NORMAL;
                     }
-                    var scaleType = ImageFillTypeDic[_fillType];
-                    self.nativeObject.setScaleType(scaleType);
+                    _fillType = fillType
+                    self.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
                 },
                 enumerable: true
             },
@@ -82,7 +63,7 @@ const ImageView = extend(View)(
         });
 
         // SET DEFAULTS
-        self.imageFillType = Image.FillType.NORMAL;
+        self.imageFillType = ImageView.FillType.NORMAL;
 
         // Assign parameters given in constructor
         if (params) {
@@ -93,10 +74,32 @@ const ImageView = extend(View)(
     }
 );
 
-Object.defineProperty(Image, 'FillType', {
-    value: FillType,
-    writable: false,
+Object.defineProperty(ImageView, "FillType",{
+    value: {},
     enumerable: true
 });
+Object.defineProperties(ImageView.FillType,{
+    'NORMAL':{
+        value: 0,
+        enumerable: true
+    },
+    'STRETCH':{
+        value: 1,
+        enumerable: true
+    },
+    'ASPECTFIT':{
+        value: 2,
+        enumerable: true
+    },
+    'ios':{
+        value: {},
+        enumerable: true
+    },
+});
+
+const ImageFillTypeDic = {};
+ImageFillTypeDic[ImageView.FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
+ImageFillTypeDic[ImageView.FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
+ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
 
 module.exports = ImageView;
