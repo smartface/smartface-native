@@ -1,6 +1,5 @@
 const AndroidConfig         = require('nf-core/util/Android/androidconfig');
 const NativeView            = requireClass("android.view.View");
-const NativeFragmentManager = requireClass("android.support.v4.app.FragmentManager");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
 var activity = Android.getActivity();
@@ -12,7 +11,7 @@ const Pages = function(params) {
     var _sliderDrawer = null;
 
     var pagesStack = [];
-    var rootViewId = NativeR.id.container_page;
+    var rootViewId = NativeR.id.page_container;
     
     registerOnBackKeyPressed(pagesStack);
     

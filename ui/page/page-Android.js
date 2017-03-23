@@ -1,18 +1,13 @@
-const FlexLayout = require("nf-core/ui/flexlayout");
-const Color = require("nf-core/ui/color");
-const TypeUtil = require("nf-core/util/type");
-const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
-const Pages = require("nf-core/ui/pages");
+const FlexLayout    = require("nf-core/ui/flexlayout");
+const Color         = require("nf-core/ui/color");
+const TypeUtil      = require("nf-core/util/type");
 const AndroidConfig = require("nf-core/util/Android/androidconfig");
 
-const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
-const NativeAndroidR = requireClass("android.R");
-const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
-const NativeSupportR = requireClass("android.support.v7.appcompat.R");
-const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-const NativeHtml = requireClass("android.text.Html");
-const NativeDrawerLayout = requireClass('android.support.v4.widget.DrawerLayout');
+const NativeAndroidR     = requireClass("android.R");
+const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
+const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
@@ -37,23 +32,22 @@ const OrientationDictionary = {
     15: 4
 };
 
-
 function Page(params) {
     var self = this;
     var activity = Android.getActivity();
-
-    var pageLayout = activity.getLayoutInflater().inflate(NativeSFR.layout.page_layout, null);
+    var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
+    var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
         backgroundColor: Color.WHITE
     });
-    pageLayout.findViewById(NativeSFR.id.layout_container).addView(rootLayout.nativeObject);
-    var toolbar = pageLayout.findViewById(NativeSFR.id.toolbar);
+    rootLayout.parent = self;
+    pageLayout.addView(rootLayout.nativeObject);
+    
+    var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
-    rootLayout.parent = self;
     var isCreated = false;
-
     var optionsMenu = null;
     self.contextMenu = {};
 
@@ -65,7 +59,7 @@ function Page(params) {
                 isCreated = true;
             }
             self.orientation = _orientation;
-            return pageLayout;
+            return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
             const NativeRunnable = requireClass('java.lang.Runnable');
