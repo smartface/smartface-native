@@ -1,16 +1,13 @@
-const FlexLayout = require("nf-core/ui/flexlayout");
-const Color = require("nf-core/ui/color");
-const TypeUtil = require("nf-core/util/type");
-const AndroidUnitConverter = require("nf-core/util/Android/unitconverter.js");
-const Pages = require("nf-core/ui/pages");
+const FlexLayout    = require("nf-core/ui/flexlayout");
+const Color         = require("nf-core/ui/color");
+const TypeUtil      = require("nf-core/util/type");
+const AndroidConfig = require("nf-core/util/Android/androidconfig");
 
-const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
-const NativeAndroidR = requireClass("android.R");
-const NativeSupportR = requireClass("android.support.v7.appcompat.R");
-const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-const NativeHtml = requireClass("android.text.Html");
-const NativeDrawerLayout = requireClass('android.support.v4.widget.DrawerLayout');
+const NativeAndroidR     = requireClass("android.R");
+const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
+const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
@@ -35,19 +32,22 @@ const OrientationDictionary = {
     15: 4
 };
 
-
 function Page(params) {
     var self = this;
     var activity = Android.getActivity();
-
+    var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
+    var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
         backgroundColor: Color.WHITE
     });
-
     rootLayout.parent = self;
+    pageLayout.addView(rootLayout.nativeObject);
+    
+    var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
+    activity.setSupportActionBar(toolbar);
+    var actionBar = activity.getSupportActionBar();
     var isCreated = false;
-
     var optionsMenu = null;
     self.contextMenu = {};
 
@@ -59,7 +59,7 @@ function Page(params) {
                 isCreated = true;
             }
             self.orientation = _orientation;
-            return rootLayout.nativeObject;
+            return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
             const NativeRunnable = requireClass('java.lang.Runnable');
@@ -278,7 +278,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                Pages.getToolbar().setBackgroundColor(color);
+                toolbar.setBackgroundColor(color);
             }
         },
         enumerable: true
@@ -292,7 +292,7 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerBarImage = image;
-                Pages.getToolbar().setBackground(image.nativeObject);
+                toolbar.setBackground(image.nativeObject);
             }
         },
         enumerable: true
@@ -306,7 +306,7 @@ function Page(params) {
         set: function(leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                Pages.getActionBar().setDisplayHomeAsUpEnabled(_leftItemEnabled);
+                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true
@@ -322,14 +322,14 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return Pages.getToolbar().getTitle();
+            return toolbar.getTitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Pages.getToolbar().setTitle(text);
+                toolbar.setTitle(text);
             }
             else {
-                Pages.getToolbar().setTitle("");
+                toolbar.setTitle("");
             }
         },
         enumerable: true
@@ -343,7 +343,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                Pages.getToolbar().setTitleTextColor(color);
+                toolbar.setTitleTextColor(color);
             }
         },
         enumerable: true
@@ -352,17 +352,17 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             // View.VISIBLE
-            return Pages.getToolbar().getVisibility() === 0;
+            return toolbar.getVisibility() === 0;
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
                     // View.VISIBLE
-                    Pages.getToolbar().setVisibility(0);
+                    toolbar.setVisibility(0);
                 }
                 else {
                     // View.GONE
-                    Pages.getToolbar().setVisibility(8);
+                    toolbar.setVisibility(8);
                 }
             }
         },
@@ -371,14 +371,14 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return Pages.getToolbar().getSubtitle();
+            return toolbar.getSubtitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                Pages.getToolbar().setSubtitle(text);
+                toolbar.setSubtitle(text);
             }
             else {
-                Pages.getToolbar().setSubtitle("");
+                toolbar.setSubtitle("");
             }
         },
         enumerable: true
@@ -391,7 +391,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                Pages.getToolbar().setSubtitleTextColor(color);
+                toolbar.setSubtitleTextColor(color);
             }
         },
         enumerable: true
@@ -406,7 +406,7 @@ function Page(params) {
             const Image = require("nf-core/ui/image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
-                Pages.getActionBar().setLogo(_headerBarLogo.nativeObject);
+                actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
         enumerable: true
@@ -420,7 +420,7 @@ function Page(params) {
         set: function(logoEnabled) {
             if (TypeUtil.isBoolean(logoEnabled)) {
                 _headerBarLogoEnabled = logoEnabled;
-                Pages.getActionBar().setDisplayUseLogoEnabled(_headerBarLogoEnabled);
+                actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
         enumerable: true
@@ -507,11 +507,11 @@ function Page(params) {
         const HeaderBarItem = require("../headerbaritem");
         if (leftItem instanceof HeaderBarItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
-            Pages.getActionBar().setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
         }
         else {
             _headerBarLeftItem = null;
-            Pages.getActionBar().setHomeAsUpIndicator(null);
+            actionBar.setHomeAsUpIndicator(null);
         }
     };
 
