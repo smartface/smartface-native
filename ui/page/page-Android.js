@@ -517,10 +517,9 @@ function Page(params) {
 
     // Default values
     self.statusBar.visible = true;
-    self.isBackButtonEnabled = false;
     self.statusBar.color = Color.TRANSPARENT;
     self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.leftItemEnabled = false;
+    self.headerBar.leftItemEnabled = true;
     self.headerBar.android.logoEnabled = false;
     self.headerBar.titleColor = Color.WHITE;
     self.headerBar.subtitleColor = Color.WHITE;
