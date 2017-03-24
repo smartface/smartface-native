@@ -81,15 +81,15 @@ Object.defineProperty(ImageView, "FillType",{
 
 Object.defineProperties(ImageView.FillType,{
     'NORMAL':{
-        value: 0,
+        value: 4,
         enumerable: true
     },
     'STRETCH':{
-        value: 1,
+        value: 0,
         enumerable: true
     },
     'ASPECTFIT':{
-        value: 2,
+        value: 1,
         enumerable: true
     },
     'ios':{
