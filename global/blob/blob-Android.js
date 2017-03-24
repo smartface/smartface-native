@@ -3,15 +3,10 @@ const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream"
 function Blob (parts, properties) {
     var self = this;
     var _type = null;
-    var _parts = [];
-    if(parts && properties.type) {
-        _parts = parts;
+    if(parts && properties && properties.type) {
         _type = properties.type;
         self.nativeObject = new NativeByteArrayOutputStream();
         self.nativeObject.write(parts, 0, parts.length);
-    }
-    else{
-        throw "Part and Type can not be empty for Blob!";
     }
     
     Object.defineProperty(this, 'type', {
@@ -21,7 +16,7 @@ function Blob (parts, properties) {
         enumerable: true
     });
     
-    var _size = 0;
+    
     Object.defineProperty(this, 'size', {
         get: function() {
             return self.nativeObject && self.nativeObject.toByteArray().length;
@@ -35,6 +30,20 @@ function Blob (parts, properties) {
         newBlob.nativeObject.write(byteArray, byteArray.length - start, end-start); //  write(byte[] b, int off, int len)
         return newBlob;
     };
+    
+    this.toBase64 = function() {
+        const NativeBase64 = requireClass("android.util.Base64");
+        var byteArray = self.nativeObject.toByteArray();
+        var encodedString = NativeBase64.encodeToString(byteArray, 0, byteArray.length, NativeBase64.DEFAULT);
+        return encodedString;
+    };
 }
+
+Blob.createFromBase64 = function(base64String) {
+    const NativeBase64 = requireClass("android.util.Base64");
+    var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);
+    var newBlob = new Blob(byteArray, {type:"image"});
+    return newBlob;
+};
 
 module.exports = Blob;

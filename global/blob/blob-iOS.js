@@ -8,6 +8,15 @@ function Blob(parts, properties) {
           value: self.nativeObject.length,
           writable: false
         });
+        
+        self.toBase64 = function(){
+            return self.nativeObject.toBase64();
+        }
+    
+}
+
+Blob.createFromBase64 = function(base64) {
+     return new Blob(NSData.base64Encoded(base64));;
 }
 
 module.exports = Blob;
