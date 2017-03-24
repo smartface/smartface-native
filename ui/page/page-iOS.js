@@ -224,11 +224,17 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
-            self.nativeObject.navigationItem.hidesBackButton;
+            return !self.nativeObject.navigationItem.hidesBackButton;
         },
         set: function(value) {
             self.nativeObject.navigationItem.hidesBackButton = !value;
-            self.nativeObject.navigationItem.leftBarButtonItem.enabled = value;
+            if (value){
+                if (_leftItem){
+                    self.nativeObject.navigationItem.leftBarButtonItem = _leftItem;
+                }
+            }else{
+                self.nativeObject.navigationItem.leftBarButtonItem = undefined;
+            }
         },
         enumerable: true
     });
@@ -243,9 +249,13 @@ function Page(params) {
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
     };
 
+    var _leftItem;
     self.headerBar.setLeftItem = function(value){
         if(value){
-            self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            if(self.headerBar.leftItemEnabled){
+                self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            }
+            _leftItem = value.nativeObject;
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
