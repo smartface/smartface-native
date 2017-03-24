@@ -112,16 +112,15 @@ function Page(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self, 'onHide', {
-        get: function() {
-            return self.nativeObject.onHide;
-        },
-        set: function(value) {
-            self.nativeObject.onHide = value.bind(this);
-        },
-        enumerable: true
-    });
-
+    self.onHideHandler = function(){
+        self.layout.nativeObject.endEditing(true);
+        if (typeof self.onHide === "function"){
+            self.onHide();
+        }
+    }
+    
+    self.nativeObject.onHide = self.onHideHandler;
+    
     this.statusBar = {};
     Object.defineProperty(self.statusBar, 'height', {
      value:  UIApplication.sharedApplication().statusBarFrame.height,

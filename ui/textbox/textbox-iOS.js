@@ -2,6 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const KeyboardType = require('nf-core/ui/keyboardtype');
 const ActionKeyType = require('nf-core/ui/actionkeytype');
+const Animator = require('nf-core/ui/animator');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -302,15 +303,53 @@ const TextBox = extend(View)(
             },
             enumerable: true
         });
-
-        this.showKeyboard = function() {
-            self.nativeObject.becomeFirstResponder();
+        
+        this.showKeyboard = function(){
+           self.nativeObject.becomeFirstResponder();
         };
-
-        this.hideKeyboard = function() {
-            self.nativeObject.resignFirstResponder();
+       
+        this.hideKeyboard = function(){
+           self.nativeObject.resignFirstResponder();
         };
-
+       
+        self.nativeObject.onShowKeyboard = function(e){
+              keyboardShowAnimation(e.keyboardHeight);
+        }
+           
+        self.nativeObject.onHideKeyboard = function(e){
+              keyboardHideAnimation();
+        }
+        
+        self.getParentViewController = function(){
+            return self.nativeObject.parentViewController();
+        }  
+        
+        function keyboardShowAnimation(keyboardHeight){
+            var height = self.nativeObject.frame.height;
+            var top = self.nativeObject.frame.y;
+            if(self.getParentViewController()){
+                if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
+                    SMFUIView.animation(230,0,function(){
+                        self.getParentViewController().view.yoga.top = - (top - (keyboardHeight + height));
+                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                    },function(){
+                        
+                    });
+                }
+            }
+         }
+          
+        function keyboardHideAnimation(){
+            if(self.getParentViewController()){
+                SMFUIView.animation(130,0,function(){
+                    self.getParentViewController().view.yoga.top = 64;
+                    self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                },function(){
+                    
+                });
+            }
+        }
+  
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
