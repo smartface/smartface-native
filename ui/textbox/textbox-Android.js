@@ -78,7 +78,7 @@ const TextBox = extend(Label)(
             enumerable: true
         });
         
-        this.android = {}
+        this.android = {};
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
                 return self.nativeObject.getHintTextColors().getDefaultColor();
@@ -233,8 +233,10 @@ const TextBox = extend(Label)(
         // Handling ios specific properties
         self.ios = {};
         
-        self.hint = "";
-        self.multiline = false;
+        // Don't use self.multiline = false due to AND-2725 bug.
+        // setMovementMethod in label-Android.js file removes the textbox cursor. 
+        self.nativeObject.setSingleLine(true);
+        
         self.android.hintTextColor = Color.LIGHTGRAY;
         self.textAlignment = TextAlignment.MIDLEFT;
         
