@@ -74,7 +74,7 @@ const VideoView = extend(View)(
         };
         
         self.seekTo = function(milliseconds){
-            self.avPlayerViewController.seekToMillisecond(milliseconds);
+            self.avPlayer.seekToMillisecond(milliseconds);
         };
         
         self.isPlaying = function(){
