@@ -39,7 +39,9 @@ const MapView = extend(View)(
         function mapRender(){
             if (_isFirstRender){
                 _isFirstRender = 0;
-                self.onCreate();
+                if (typeof self.onCreate === "function"){
+                    self.onCreate();
+                }
             }
         }
         
