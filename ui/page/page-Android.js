@@ -514,6 +514,15 @@ function Page(params) {
             actionBar.setHomeAsUpIndicator(null);
         }
     };
+    
+     
+    // Added to solve AND-2713 bug.
+    const NativeView = requireClass('android.view.View');
+    self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
+        onLongClick : function(view){
+            return true;
+        }
+    }));
 
     // Default values
     self.statusBar.visible = true;

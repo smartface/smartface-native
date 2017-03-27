@@ -111,7 +111,7 @@ const Button = extend(Label)(
                 if(onLongPressCallback) {
                     onLongPressCallback.apply(self);
                 }
-                return true; // Returns always true due to AND-2713 bug.
+                return true; // Returns always true to solve AND-2713 bug.
             }
         }));
         
