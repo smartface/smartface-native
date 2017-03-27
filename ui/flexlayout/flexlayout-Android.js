@@ -96,6 +96,14 @@ const FlexLayout = extend(ViewGroup)(
             },
             enumerable: true
         });
+     
+        // Added to solve AND-2713 bug.
+        const NativeView = requireClass('android.view.View');
+        self.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
+            onLongClick : function(view){
+                return true;
+            }
+        }));
         
         // Assign parameters given in constructor
         if (params) {

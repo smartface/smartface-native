@@ -108,7 +108,10 @@ const Button = extend(Label)(
         
         self.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
             onLongClick : function(view){
-                onLongPressCallback && onLongPressCallback.apply(self);
+                if(onLongPressCallback) {
+                    onLongPressCallback.apply(self);
+                }
+                return true; // Returns always true due to AND-2713 bug.
             }
         }));
         
