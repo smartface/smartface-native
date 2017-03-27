@@ -713,6 +713,7 @@ function View(params) {
         },
         set: function(flexGrow) {
             self.yogaNode.setFlexGrow(flexGrow);
+            self.flexBasis = 1;
         },
         enumerable: true
     });
