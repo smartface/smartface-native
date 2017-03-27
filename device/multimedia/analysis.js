@@ -107,9 +107,9 @@ Multimedia.startCamera = function(e) { };
  *                }
  *            });
  *        }
- *    );
+ *     );
  *    
- *    module.exports = Page1;
+ *     module.exports = Page1;
  * 
  * @param {Object} params Object describing parameters for the function.
  * @param {Device.Multimedia.Type} params.type Data type.
