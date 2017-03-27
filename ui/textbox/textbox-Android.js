@@ -234,7 +234,7 @@ const TextBox = extend(Label)(
         self.ios = {};
         
         self.hint = "";
-        self.multiline = false;
+        self.nativeObject.setSingleLine(true);
         self.android.hintTextColor = Color.LIGHTGRAY;
         self.textAlignment = TextAlignment.MIDLEFT;
         
