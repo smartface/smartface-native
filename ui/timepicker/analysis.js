@@ -34,9 +34,8 @@ function TimePicker () {
        /**
         * Sets whether time is 24-hour or AM/PM mode.
         *
-        * @property is24HourFormat
+        * @property {Boolean} is24HourFormat
         * @android
-        * @param {Boolean} hourFormat
         * @since 0.1
         */
         'is24HourFormat': {
