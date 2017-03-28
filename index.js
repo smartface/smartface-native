@@ -6,5 +6,6 @@ module.exports = {
     Notifications: require('./notifications'),
     Share: require('./share'),
     Timer: require('./timer'),
-    Data: require('./data')
-}
+    Data: require('./data'),
+    Application: require('./application')
+};
