@@ -61,10 +61,10 @@ function Sound(params) {
         },
         set: function(dataSource) {
             _dataSource = dataSource;
-            if(dataSource.path)
-                setPath(dataSource.path);
-            else if(dataSource.url)
-                setURL(dataSource.url);
+            // if(dataSource.path)
+            //     setPath(dataSource.path);
+            // else if(dataSource.url)
+                // setURL(dataSource.url);
         },
         enumerable: true
     });
@@ -81,7 +81,7 @@ function Sound(params) {
         self.nativeObject.stop();
     };
     
-    self.start = function() {
+    self.play = function() {
         self.nativeObject.prepare();
         self.nativeObject.start();
     };
@@ -120,16 +120,18 @@ function Sound(params) {
         }
     }));
     
-    function setPath(fullPath) {
-        self.nativeObject.setDataSource(fullPath);
-    }
+    self.loadFile = function(path) {
+        const File = require("nf-core/io/file");
+        var file = new File({path: path});
+        self.nativeObject.setDataSource(file.fullPath);
+    };
     
-    function setURL(url) {
+    self.loadURL = function(url) {
         const NativeURI = requireClass('android.net.Uri');
         var uri = NativeURI.parse(url);
         var fragmentActivity = getCurrentPageFragment().getActivity();
         self.nativeObject.setDataSource(fragmentActivity, uri);
-    }
+    };
     
     // Assign parameters given in constructor
     if (params) {
@@ -139,7 +141,10 @@ function Sound(params) {
     }
 }
 
-Sound.getAll = function(params) {
+Sound.PICK_SOUND = 1004;
+Sound.android = {};
+
+Sound.android.getAll = function(params) {
     var sounds = [];
     try {
         var uri = NativeMedia.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -165,9 +170,7 @@ Sound.getAll = function(params) {
     }
 };
 
-Sound.PICK_SOUND = 1004;
-
-Sound.pick = function(params) {
+Sound.android.pick = function(params) {
     _pickParams = params;
     var intent = new NativeIntent();
     intent.setType("audio/*");

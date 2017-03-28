@@ -9,7 +9,7 @@
  *     var mySound = new Sound();
  *     mySound.dataSource = {path: your-sound-full-path};
  *     mySound.isLooping = true;
- *     mySound.start();
+ *     mySound.play();
  * 
  */
 function Sound() {
@@ -74,12 +74,12 @@ function Sound() {
     this.seekTo = function(milliseconds){};
     
     /**
-     * Starts the sound.
+     * plays the sound.
      *
-     * @method start
+     * @method play
      * @since 0.1
      */
-    this.start = function(){};
+    this.play = function(){};
     
     /**
      * Pauses the sound.
@@ -116,7 +116,9 @@ function Sound() {
      */
     this.onFinish = function onFinish(e){ };
 }
-    
+
+Sound.android = {};
+
 /**
  * Gets all sounds on the device. Returns sound array.
  *
@@ -126,20 +128,21 @@ function Sound() {
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @return {Array}
  * @static
+ * @android
  * @since 0.1
  */
-Sound.getAll = function(params) {};
+Sound.android.getAll = function(params) {};
 
 /**
  * Picks a sound on the device.
  * 
  *     @example
  *     const Sound = require("nf-core/device/sound");
- *     Sound.pick({onSuccess: soundPicked});
+ *     Sound.android.pick({onSuccess: soundPicked});
  * 
  *     function soundPicked(sound) {
  *         if(!sound.isPlaying)
- *             sound.start();
+ *             sound.play();
  *     }
  *
  * @method pick
@@ -148,8 +151,9 @@ Sound.getAll = function(params) {};
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @return {Device.Sound}
  * @static
+ * @android
  * @since 0.1
  */
-Sound.pick = function(params) {};
+Sound.android.pick = function(params) {};
 
 module.exports = Sound;
