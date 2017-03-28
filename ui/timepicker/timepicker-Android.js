@@ -20,7 +20,8 @@ function TimePicker(params) {
         }
     });
     
-    Object.defineProperty(this, 'is24HourFormat', {
+    this.android = {};
+    Object.defineProperty(this.android, 'is24HourFormat', {
         get: function() {
             return _is24HourFormat;
         },
