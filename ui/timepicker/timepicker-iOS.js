@@ -8,6 +8,8 @@ function TimePicker (params) {
         self.nativeObject = new SMFUIDatePicker();
     }
     
+    self.android = {};
+    
     self.onTimeSelected = function(){};
     
     self.onTimeSelectedListener = function(e){
