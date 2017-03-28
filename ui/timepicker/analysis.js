@@ -10,6 +10,7 @@
  *     myTimePicker.onTimeSelected = function(time) {
  *         alert('Hour: ' + time.hour + ' Minute: ' + time.minute);
  *     };
+ *     myTimePicker.android.is24HourFormat = false;
  *     myTimePicker.show();
  *
  */
@@ -27,16 +28,14 @@ function TimePicker () {
         * @since 0.1
         */
         'setTime': {
-            value: function(date) {}
+            value: function(time) {}
         },
         
        /**
         * Sets whether time is 24-hour or AM/PM mode.
         *
-        * @property is24HourFormat
+        * @property {Boolean} is24HourFormat
         * @android
-        * @ios
-        * @param {Boolean} hourFormat
         * @since 0.1
         */
         'is24HourFormat': {
