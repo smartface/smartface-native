@@ -8,7 +8,7 @@
  *     const TimePicker = require('nf-core/ui/timepicker');
  *     var myTimePicker = new TimePicker();
  *     myTimePicker.onTimeSelected = function(time) {
- *         alert('Hour: ' + time.hour + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
+ *         alert('Hour: ' + time.hour + ' Minute: ' + time.minute);
  *     };
  *     myTimePicker.show();
  *
@@ -33,7 +33,7 @@ function TimePicker () {
        /**
         * Sets whether time is 24-hour or AM/PM mode.
         *
-        * @method is24HourFormat
+        * @property is24HourFormat
         * @android
         * @ios
         * @param {Boolean} hourFormat
