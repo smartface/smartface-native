@@ -23,7 +23,6 @@ function Menu(params) {
     });
    
     this.show = function(page) {
-        
         var layout = page.layout;
         var layoutNativeObject = layout.nativeObject;
         var pageNativeObject = page.nativeObject;
