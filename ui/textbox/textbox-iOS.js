@@ -43,7 +43,9 @@ const TextBox = extend(View)(
         }
 
         _super(this);
-
+        
+        self.android = {};
+        
         self.nativeObject.textBoxDelegate = function(method) {
             if (method.name === "textFieldShouldBeginEditing") {
                 self.onEditBegins();
