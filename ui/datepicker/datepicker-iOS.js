@@ -1,4 +1,5 @@
 const TypeUtil = require('nf-core/util/type');
+const UIDatePickerMode = require("nf-core/util").UIDatePickerMode;
 
 function DatePicker (params) {
     var self = this;
@@ -34,6 +35,7 @@ function DatePicker (params) {
     };
     
     self.show = function(){
+        self.nativeObject.datePickerMode = UIDatePickerMode.date;
         self.nativeObject.show();
     };
     
