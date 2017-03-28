@@ -5,7 +5,7 @@ const ScrollView = extend(ViewGroup)(
     function (_super, params) {
         var activity = Android.getActivity();
         var self = this;
-        
+        var _align = params.align ? params.align : ScrollView.Align.VERTICAL;
         if (!self.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
