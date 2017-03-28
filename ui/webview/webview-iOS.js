@@ -26,15 +26,18 @@ const WebView = extend(View)(
             },
             enumerable: true
          });
-         
+        
+        self.onLoad = function(){}
         self.nativeObject.onLoad = function(e){
             self.onLoad({url : e.url.absoluteString});
         }
         
+        self.onShow = function(){}
         self.nativeObject.onShow = function(e){
             self.onShow({url : e.url.absoluteString});
         }
         
+        self.onError = function(){}
         self.nativeObject.onError = function(e){
             self.onError({code :  e.error.code , message : e.error.localizedDescription});
         }
@@ -72,12 +75,10 @@ const WebView = extend(View)(
         }
         
         self.onChangedURL = function(){}
-        
         self.nativeObject.onChangedURL = function(e){
             self.onChangedURL({url : e.url.absoluteString});
             return true;
         }
-        
         
         Object.defineProperty(self, 'openLinkInside', {
             get: function() {

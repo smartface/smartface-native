@@ -11,7 +11,7 @@ function Menu(params) {
         enumerable: true
     });
     
-    var _headerTitle = [];
+    var _headerTitle = "";
     Object.defineProperty(this, 'headerTitle', {
         get: function() {
             return _headerTitle;
@@ -23,7 +23,6 @@ function Menu(params) {
     });
    
     this.show = function(page) {
-        
         var layout = page.layout;
         var layoutNativeObject = layout.nativeObject;
         var pageNativeObject = page.nativeObject;

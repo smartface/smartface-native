@@ -1,6 +1,3 @@
-const View = require('../view');
-const extend = require('js-base/core/extend');
-
 /**
  * @class UI.TextBox
  * @since 0.1
@@ -71,10 +68,6 @@ const TextBox = extend(View)(
         /**
          * Gets/sets the color of the hint text. This property works only for Android.
          *
-         *     @example
-         *     const Color = require('nf-core/ui/color');
-         *     myTextBox.android.hintTextColor = Color.RED;
-         *
          * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
          * @android
          * @since 0.1
@@ -86,9 +79,6 @@ const TextBox = extend(View)(
          * you should set minimum font size by changing the minimumFontSize property.
          * This property works only for iOS.
          *
-         *     @example
-         *     myTextBox.ios.adjustFontSizeToFit = true;
-         *
          * @property {Boolean} [adjustFontSizeToFit = false]
          * @ios
          * @since 0.1
@@ -98,10 +88,6 @@ const TextBox = extend(View)(
         /**
          * Gets/sets minimum font size of TextBox.
          * This property works only for iOS.
-         *
-         *     @example
-         *     myTextBox.ios.adjustFontSizeToFit = true;
-         *     myTextBox.ios.minimumFontSize = 15;
          *
          * @property {Number} [minimumFontSize = 7]
          * @ios
@@ -122,10 +108,6 @@ const TextBox = extend(View)(
         /**
          * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
          * This property works only for iOS.
-         *
-         *     @example
-         *     const KeyboardAppearance = require('nf-core/ui/keyboardappearance');
-         *     myTextBox.ios.keyboardAppearance = KeyboardAppearance.DARK;
          *
          * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
          * @ios
@@ -155,10 +137,6 @@ const TextBox = extend(View)(
 
         /**
          * Gets/sets action key type for TextBox.
-         *
-         *     @example
-         *     const ActionKeyType = require('nf-core/ui/actionkeytype');
-         *     myTextBox.actionKeyType = ActionKeyType.NEXT;
          *
          * @property {UI.ActionKeyType} [actionKeyType = UI.ActionKeyType.DEFAULT]
          * @android
@@ -209,11 +187,6 @@ const TextBox = extend(View)(
         /**
          * This event is called when user focus on the textbox by selecting it.
          *
-         *     @example
-         *     myTextBox.onEditBegins = function() {
-         *         console.log(Begin to type.);
-         *     };
-         *
          * @event onEditBegins
          * @android
          * @ios
@@ -225,11 +198,6 @@ const TextBox = extend(View)(
          * This event is called when user finishes editing by clicking return key
          * or clicking outside of the TextBox.
          *
-         *     @example
-         *     myTextBox.onEditEnds = function() {
-         *         console.log(Typing Ended.);
-         *     };
-         *
          * @event onEditEnds
          * @android
          * @ios
@@ -239,11 +207,6 @@ const TextBox = extend(View)(
 
         /**
          * This event is called when user clicks action key on the keyboard.
-         *
-         *     @example
-         *     myTextBox.onActionButtonPress = function(e) {
-         *             alert('Action Button pressed');
-         *     });
          *
          * @param {Object} e Event arguments.
          * @param {UI.ActionKeyType} e.actionKeyType Pressed action key type.

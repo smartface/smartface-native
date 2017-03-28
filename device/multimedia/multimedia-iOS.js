@@ -63,9 +63,9 @@ Multimedia.pickFromGallery = function(e) {
     e.page.nativeObject.presentViewController(this.picker);
 };
 
-Multimedia.getAllGalleryItems = function(e) { 
+Multimedia.android = {};
 
-};
+Multimedia.android.getAllGalleryItems = function(){};
 
 Multimedia.Type = { };
 

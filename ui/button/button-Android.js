@@ -39,24 +39,25 @@ const Button = extend(Label)(
                 }
                 else{
                     var stateListSet = new NativeStateListDrawable();
+                    var stateDrawable;
                     if(_backgroundImages.normal){
-                        var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.normal);
+                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.normal);
                         stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
                     }
                     if(_backgroundImages.disabled){
-                        var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.disabled);
+                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.disabled);
                         stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
                     }
                     if(_backgroundImages.selected){
-                        var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.selected);
+                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.selected);
                         stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
                     }
                     if(_backgroundImages.pressed){
-                        var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.pressed);
+                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.pressed);
                         stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
                     }
                     if(_backgroundImages.focused){
-                        var stateDrawable = NativeDrawable.createFromPath(_backgroundImages.focused);
+                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.focused);
                         stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
                     }
                     self.nativeObject.setBackground(stateListSet);
@@ -107,7 +108,10 @@ const Button = extend(Label)(
         
         self.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
             onLongClick : function(view){
-                onLongPressCallback && onLongPressCallback.apply(self);
+                if(onLongPressCallback) {
+                    onLongPressCallback.apply(self);
+                }
+                return true; // Returns always true to solve AND-2713 bug.
             }
         }));
         

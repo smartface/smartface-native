@@ -1,26 +1,23 @@
-function Application() {}
+function ApplicationWrapper() {}
 
 // Intent.ACTION_VIEW
 var ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 var FLAG_ACTIVITY_NEW_TASK = 268435456;
 
+var _onMinimize,
+    _onMaximize,
+    _onExit;
+    
 var activity = Android.getActivity();
-var projectJsonObject;
-Application.android = {};
+ApplicationWrapper.android = {};
 
-
-Object.defineProperty(Application.android, 'packageName', {
+Object.defineProperty(ApplicationWrapper.android, 'packageName', {
     value: activity.getPackageName(),
     enumerable: true
 });
 
-var _onApplicationCallReceived;
-var _onStart;
-var _onExit;
-var _onMaximize;
-var _onMinimize;
-Object.defineProperties(Application, {
+Object.defineProperties(ApplicationWrapper, {
     // properties
     'byteReceived': {
         get: function(){
@@ -42,31 +39,19 @@ Object.defineProperties(Application, {
     },
     'currentReleaseChannel': {
         get: function(){
-            var projectJson = getProjectJsonObject();
-            if(projectJson && projectJson.config && projectJson.config.rau){
-                return projectJson.config.rau.currentReleaseChannel;
-            }
-            return null;
+            return Application.currentReleaseChannel;
         },
         enumerable: true
     },
     'smartfaceAppName': {
         get: function(){
-            var projectJson = getProjectJsonObject();
-            if(projectJson && projectJson.info){
-                return projectJson.info.name;
-            }
-            return null;
+            return Application.smartfaceAppName;
         },
         enumerable: true
     },
     'version': {
         get: function(){
-            var projectJson = getProjectJsonObject();
-            if(projectJson && projectJson.info){
-                return projectJson.info.version;
-            }
-            return -1;
+            return Application.version;
         },
         enumerable: true
     },
@@ -109,11 +94,11 @@ Object.defineProperties(Application, {
     // events
     'onApplicationCallReceived': {
         get: function(){
-            return _onApplicationCallReceived;
+            return Application.onApplicationCallReceived;
         },
         set: function(onApplicationCallReceived){
             if(onApplicationCallReceived instanceof Function){
-                _onApplicationCallReceived = onApplicationCallReceived;
+                Application.onApplicationCallReceived = onApplicationCallReceived;
             }
         },
         enumerable: true
@@ -123,19 +108,8 @@ Object.defineProperties(Application, {
             return _onExit;
         },
         set: function(onExit){
-            if(onExit instanceof Function){
+            if(onExit instanceof Function || onExit === null){
                 _onExit = onExit;
-            }
-        },
-        enumerable: true
-    },
-    'onStart': {
-        get: function(){
-            return _onStart;
-        },
-        set: function(onStart){
-            if(onStart instanceof Function){
-                _onStart = onStart;
             }
         },
         enumerable: true
@@ -145,7 +119,7 @@ Object.defineProperties(Application, {
             return _onMaximize;
         },
         set: function(onMaximize){
-            if(onMaximize instanceof Function){
+            if(onMaximize instanceof Function || onMaximize === null){
                 _onMaximize = onMaximize;
             }
         },
@@ -156,30 +130,48 @@ Object.defineProperties(Application, {
             return _onMinimize;
         },
         set: function(onMinimize){
-            if(onMinimize instanceof Function){
+            if(onMinimize instanceof Function || onMinimize === null){
                 _onMinimize = onMinimize;
+            }
+        },
+        enumerable: true
+    },
+    'onUnhandledError': {
+        get: function(){
+            return Application.onUnhandledError;
+        },
+        set: function(onUnhandledError){
+            if(onUnhandledError instanceof Function || onUnhandledError === null){
+                Application.onUnhandledError = onUnhandledError;
             }
         },
         enumerable: true
     },
 });
 
-function getProjectJsonObject(){
-    if(projectJsonObject) return projectJsonObject;
-    const File = require("nf-core/io/file");
-    const projectFile = new File({path: "assets://project.json"});
-    
-    if(projectFile.exists){
-        const FileStream = require("nf-core/io/filestream");
-        var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
-        var projectFileContent = projectFileStream.readToEnd();
-        projectJsonObject = JSON.parse(projectFileContent);
-        return projectJsonObject;
+const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
+console.log("NativeActivityLifeCycleListener " + NativeActivityLifeCycleListener);
+var listener = NativeActivityLifeCycleListener.implement({
+    onCreate: function() {},
+    onResume: function(){
+        if(_onMaximize) {
+            _onMaximize();
+        }
+    },
+    onPause: function(){
+        if(_onMinimize) {
+            _onMinimize();
+        }
+    },
+    onStop: function() {},
+    onStart: function() {},
+    onDestroy: function() {
+        if(_onExit) {
+            _onExit();
+        }
     }
-    projectJsonObject = null;
-    return null;
-}
+});
+const SpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
+SpratAndroidActivity.getInstance().addActivityLifeCycleCallbacks(listener);
 
-// @todo add interface to SpratAndroidActivity for handling lifecycle events.
-
-module.exports = Application;
+module.exports = ApplicationWrapper;

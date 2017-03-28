@@ -4,8 +4,6 @@ const Color  = require('nf-core/ui/color');
 
 const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
-const BitmapFactory  = requireClass("android.graphics.BitmapFactory");
-const BitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawable");
 const SeekBar        = requireClass("android.widget.SeekBar");
 const NativeR        = requireClass("android.R");
 
@@ -14,7 +12,7 @@ const Slider = extend(View)(
         var self = this;
         if(!self.nativeObject) {
             self.nativeObject = new SeekBar(Android.getActivity());
-        };
+        }
         _super(self);
         
         var _layerDrawable = self.nativeObject.getProgressDrawable().getCurrent();
@@ -62,7 +60,7 @@ const Slider = extend(View)(
                 return _maxValue;
             }, 
             set: function(value) {
-                _maxValue = value
+                _maxValue = value;
                 self.nativeObject.setMax(_maxValue - _minValue);
             },
             enumerable: true
@@ -98,18 +96,20 @@ const Slider = extend(View)(
             enumerable: true
         });
 
-        var _thumbImage;
+        var _thumbImage = null;
         Object.defineProperty(this, 'thumbImage', {
             get: function() {
                 return _thumbImage;
             },
-            set: function(imagePath) {
-                _thumbImage = imagePath;
-                
-                var imageBitmap = BitmapFactory.decodeFile(imagePath);
-                if (imageBitmap) {
-                    var bitmapDrawable = new BitmapDrawable(imageBitmap);
-                    self.nativeObject.setThumb(bitmapDrawable);
+            set: function(thumbImage) {
+                const Image = require("nf-core/ui/image");
+                if(thumbImage instanceof Image && thumbImage.nativeObject){
+                    _thumbImage = thumbImage;
+                    self.nativeObject.setThumb(thumbImage.nativeObject);
+                }
+                else if(thumbImage === null){
+                    _thumbImage = thumbImage;
+                    self.nativeObject.setThumb(null);
                 }
             },
             enumerable: true

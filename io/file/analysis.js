@@ -19,7 +19,7 @@
 function File(params) {
     
     /**
-     * Gets creation date of the File. If file or directory not exists or path is not refer a file or directory returns -1.
+     * Gets creation date of the File instance. If the file doesn't exist returns -1.
      *
      * @property {Number} creationDate
      * @readonly
@@ -30,7 +30,7 @@ function File(params) {
     this.creationDate;
     
     /**
-     * Check file or directory exists in given path. 
+     * Check whether file or directory exists in given path. 
      *
      * @property {Boolean} exists
      * @readonly
@@ -41,7 +41,7 @@ function File(params) {
     this.exists;
     
     /**
-     * Gets the extension of the File. 
+     * Gets the extension of the file. 
      *
      * @property {String} extension
      * @readonly
@@ -52,7 +52,7 @@ function File(params) {
     this.extension;
     
     /**
-     * Check the File object is directory or not. 
+     * Check whether the File instance is a directory. 
      * 
      * @property {Boolean} isDirectory
      * @readonly
@@ -63,7 +63,7 @@ function File(params) {
     this.isDirectory;
     
     /**
-     * Check the File object is file or not. 
+     * Check whether the File instance is a file. 
      * 
      * @property {Boolean} isFile
      * @readonly
@@ -74,7 +74,7 @@ function File(params) {
     this.isFile;
     
     /**
-     * Gets last modified date of the File. If file or directory not exists or path is not refer a file or directory returns -1. 
+     * Gets last modified time of the File. It measured in milliseconds. If file doesn't exists returns -1.
      * 
      * @property {Number} modifiedDate
      * @readonly
@@ -96,7 +96,7 @@ function File(params) {
     this.name;
     
     /**
-     * Gets the parent directory of the file or directory. If file or directory not exists or path is not refer a file or directory returns null. 
+     * Gets the parent directory of the file or directory. If the file or parent of the file doesn't exist returns null. 
      * 
      * @property {IO.File} parent
      * @readonly
@@ -107,9 +107,9 @@ function File(params) {
     this.parent;
     
     /**
-     * Gets the path given on constructor. This property required for creating the File object. 
+     * Gets the path given on constructor. This property required for creating the File instance. 
      * 
-     * @property {String} [path = param.path]
+     * @property {String} path
      * @readonly
      * @android
      * @ios
@@ -118,7 +118,7 @@ function File(params) {
     this.path;
     
     /**
-     * Gets the size of the file or directory. If file or directory not exists or path is not refer a file or directory returns -1. 
+     * Gets the size of the file or directory. If file or directory doesn't exists returns -1. 
      * 
      * @property {Number} size
      * @readonly
@@ -129,7 +129,7 @@ function File(params) {
     this.size;
     
     /**
-     * Check the File object can writable.
+     * Check whether the File object can writable.
      * 
      * @property {Boolean} writable
      * @readonly
@@ -142,7 +142,7 @@ function File(params) {
     /**
      * Copy file or directory to given path.
      * 
-     * @param {String} [destination]
+     * @param {String} destination
      * @return {Boolean}
      * @method copy
      * @android

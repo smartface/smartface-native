@@ -50,7 +50,7 @@ function View(params) {
     // Passing click event from child to parent due to z-index
     self.nativeObject.setDuplicateParentStateEnabled(true);
 
-    var _backgroundColor = Color.WHITE;
+    var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable = new NativeGradientDrawable();
     
     var radii = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -73,7 +73,8 @@ function View(params) {
         set: function(alpha) {
             self.nativeObject.setAlpha(alpha);
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     var idInitial = NativeView.generateViewId();
@@ -152,7 +153,7 @@ function View(params) {
     Object.defineProperty(this, 'visible', {
         get: function() {
             // View.VISIBLE is 0
-            return self.nativeObject.getVisibility() == 0;
+            return self.nativeObject.getVisibility() === 0;
         },
         set: function(visible) {
             if(visible)
@@ -712,6 +713,7 @@ function View(params) {
         },
         set: function(flexGrow) {
             self.yogaNode.setFlexGrow(flexGrow);
+            self.flexBasis = 1;
         },
         enumerable: true
     });
@@ -762,7 +764,6 @@ function View(params) {
     };
 
     // Assign defaults
-    this.backgroundColor = _backgroundColor;
     
     // Assign parameters given in constructor
     if (params) {

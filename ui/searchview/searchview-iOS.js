@@ -197,19 +197,29 @@ const SearchView = extend(View)(
         // UISearchBarDelegate
         self.searchBarDelegate = new SMFUISearchBarDelegate();
         self.searchBarDelegate.cancelButtonClicked = function(e){
-            _onCancelButtonClicked();
+            if (typeof self._onCancelButtonClicked === "function"){
+                    self._onCancelButtonClicked();
+            }
         };
         self.searchBarDelegate.didBeginEditing = function(){
-            _onSearchBegin();
+            if (typeof self._onSearchBegin === "function"){
+                    self._onSearchBegin();
+            }
         };
         self.searchBarDelegate.didEndEditing = function(){
-            _onSearchEnd();
+            if (typeof self._onSearchEnd === "function"){
+                    self._onSearchEnd();
+            }
         };
         self.searchBarDelegate.textDidChange = function(searchText){
-            _onTextChanged(searchText);
+            if (typeof self._onTextChanged === "function"){
+                    self._onTextChanged();
+            }
         };
         self.searchBarDelegate.searchButtonClicked = function(){
-            _onSearchButtonClicked();
+            if (typeof self._onSearchButtonClicked === "function"){
+                    self._onSearchButtonClicked();
+            }
         };
         self.nativeObject.delegate = self.searchBarDelegate;
         

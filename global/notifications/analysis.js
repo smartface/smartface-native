@@ -5,10 +5,10 @@
  * 
  *     @example
  *     const Notifications = require("nf-core/notifications");
- *     Notifications.registerForPushNotifications(function(){
- *         console.log("Successfully registered")     
+ *     Notifications.registerForPushNotifications(function(e){
+ *         console.log("Successfully registered. The token is: " + e.token);     
  *     },function(){
- *         console.log("Register failed.")     
+ *         console.log("Register failed.");     
  *     });
  * 
  */
@@ -27,12 +27,13 @@ Notifications.cancelAllLocalNotifications = function(){};
 
 /**
  * Register for remote push notifications. For emulator this will not work and always calls onFailure callback.
- * This function uses senderID inside of project.json file for registering push notification services.
+ * This function uses senderID inside of project.json file for registering push notification services. You can obtain
+ * registration token from onSuccess callback's argument's 'token' property.
  * 
  * You can receive push notification data from Application.onReceivedNotification when push notification arrives.
  * 
  * @method registerForPushNotifications
- * @param {Function} onSuccess
+ * @param {Function} onSuccess 
  * @param {Function} onFailure
  * @android
  * @ios

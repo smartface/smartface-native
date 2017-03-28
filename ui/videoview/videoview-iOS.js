@@ -53,7 +53,9 @@ const VideoView = extend(View)(
         };
         
         self.avPlayerViewController.onReady = function(){
-            self.onReady();
+            if (typeof self.onReady === "function"){
+                self.onReady();
+            }
         }
         
         var _loopEnabled = false;
@@ -62,19 +64,21 @@ const VideoView = extend(View)(
         };
         
         self.avPlayerViewController.AVPlayerItemDidPlayToEndTime = function(){
-            self.onFinish();
-            if (_loopEnabled == true){
+            if (typeof self.onFinish === "function"){
+                self.onFinish();
+            }
+            if (_loopEnabled === true){
                 self.seekTo(0);
                 self.play();
             }
-        }
+        };
         
         self.seekTo = function(milliseconds){
-            self.avPlayerViewController.seekToMillisecond(milliseconds);
-        }
+            self.avPlayer.seekToMillisecond(milliseconds);
+        };
         
         self.isPlaying = function(){
-            if (self.avPlayer.rate != 0){
+            if (self.avPlayer.rate !== 0){
                 return true;
             }else {
                 return false;
@@ -114,11 +118,11 @@ const VideoView = extend(View)(
         
         self.setVolume = function(value){
             self.avPlayer.volume = value;
-        }
+        };
         
         self.setControllerEnabled = function(value){
             self.avPlayerViewController.showsPlaybackControls = value;
-        }
+        };
         
         if (params) {
             for (var param in params) {

@@ -78,7 +78,7 @@ const TextBox = extend(Label)(
             enumerable: true
         });
         
-        this.android = {}
+        this.android = {};
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
                 return self.nativeObject.getHintTextColors().getDefaultColor();
@@ -173,20 +173,13 @@ const TextBox = extend(Label)(
             // todo: Control insertedText after resolving story/AND-2508 issue.
             onTextChanged: function(charSequence, start, before, count){
                 if(_onTextChangedCallback){
-                    var index = Math.abs(start+before);
-                    if(count > before){
-                        var insertedText = charSequence.subSequence(start+before,start+count);
-                        var e = {
-                            location: index,
-                            insertedText: insertedText
-                        }
-                        _onTextChangedCallback(e);
-                    }
+                    _onTextChangedCallback({
+                        location: Math.abs(start+before),
+                        insertedText: self.text
+                    });
                 }
             },
-            
             beforeTextChanged: function(charSequence, start, count, after){},
-            
             afterTextChanged: function(editable){}
         }));
         
@@ -203,7 +196,7 @@ const TextBox = extend(Label)(
     
         self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
             onEditorAction: function(textView, actionId, event){
-                if (actionId == NativeActionKeyType[_actionKeyType])  {
+                if (actionId === NativeActionKeyType[_actionKeyType])  {
                     _onActionButtonCallback && _onActionButtonCallback({actionKeyType: _actionKeyType});
                 }
                 return false;
@@ -240,8 +233,10 @@ const TextBox = extend(Label)(
         // Handling ios specific properties
         self.ios = {};
         
-        self.hint = "";
-        self.multiline = false;
+        // Don't use self.multiline = false due to AND-2725 bug.
+        // setMovementMethod in label-Android.js file removes the textbox cursor. 
+        self.nativeObject.setSingleLine(true);
+        
         self.android.hintTextColor = Color.LIGHTGRAY;
         self.textAlignment = TextAlignment.MIDLEFT;
         

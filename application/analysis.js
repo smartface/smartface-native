@@ -82,7 +82,7 @@ Application.version;
  *
  * @method call
  * @param {String} uriScheme
- * @param {JSON} data
+ * @param {Object} data
  * @readonly
  * @android
  * @ios
@@ -120,8 +120,8 @@ Application.restart = function(){};
  * 
  * @since 0.1
  * @event onApplicationCallReceived
- * @param {Object} [e] 
- * @param {JSON} [e.data] Data sent by application.
+ * @param {Object} e 
+ * @param {Object} e.data Data sent by application.
  * @param {String} [e.eventType] This parameter is available only for Android. For iOS this always returns "call". 
  * @param {String} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
  * @android
@@ -142,18 +142,6 @@ Application.onApplicationCallReceived = function(e){};
  * @since 0.1
  */
 Application.onExit = function(){};
-
-/**
- * Triggered when application is started.
- * 
- * @since 0.1
- * @event onStart
- * @android
- * @ios
- * @static
- * @since 0.1
- */
-Application.onStart = function(){};
 
 /**
  * Triggered after application bring to front.
@@ -178,5 +166,35 @@ Application.onMaximize = function(){};
  * @since 0.1
  */
 Application.onMinimize = function(){};
+
+/**
+ * Triggered after a push (remote) notification recieved. This event will be 
+ * fired only if application is active and running. 
+ * 
+ * @since 0.1
+ * @event onReceivedNotification
+ * @param {Object} data 
+ * @param {Object} data.remote
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+Application.onReceivedNotification = function(data){};
+
+/**
+ * Triggered when unhandelled error occurs.
+ * 
+ * @since 0.1
+ * @event onUnhandledError
+ * @param {Object} error 
+ * @param {String} error.message
+ * @param {String} error.stack
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+Application.onUnhandledError = function(error){};
 
 module.exports = Application;

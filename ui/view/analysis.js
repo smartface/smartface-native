@@ -14,14 +14,16 @@
  *     myView.top = 50;
  *     myView.left = 50;
  *     myView.backgroundColor = Color.RED;
+ * 
  */
 function View(params) {
+    
     /**
      * Defines the opacity of a view. The value of this property is a float number
      * between 0.0 and 1.0. 0 represents view is completely transparent and 1
      * represents view is completely opaque.
      *
-     * @property {Number} alpha
+     * @property {Number} [alpha = 1]
      * @android
      * @ios
      * @member UI.View
@@ -56,7 +58,7 @@ function View(params) {
      * Sets/gets border thickness of bounded view. Accepts unsigned
      * numbers, 0 means no border.
      *
-     * @property {Number} borderWidth
+     * @property {Number} [borderWidth = 0]
      * @android
      * @ios
      * @since 0.1
@@ -66,7 +68,7 @@ function View(params) {
     /**
      * Sets/gets corner radius of a view.
      *
-     * @property {Number} borderRadius
+     * @property {Number} [borderRadius = 0]
      * @android
      * @ios
      * @since 0.1
@@ -75,7 +77,7 @@ function View(params) {
 
     /**
      * Gets/sets id of a view. It should be unique number for each object
-     * inside page.
+     * inside page. Id will be generated unique by default.
      *
      * @property {Number} id
      * @android
@@ -83,12 +85,12 @@ function View(params) {
      * @member UI.View
      * @since 0.1
      */
-    this.id = 5421;
+    this.id;
 
     /**
      * Gets/sets visibility of view. It is set to true as default.
      *
-     * @property {Boolean} visible
+     * @property {Boolean} [visible = true]
      * @android
      * @ios
      * @member UI.View
@@ -100,7 +102,7 @@ function View(params) {
      * Enables/disables touches to view. When set to false events
      * related to touches won't fire. It is set to true as default.
      *
-     * @property {Boolean} touchEnabled
+     * @property {Boolean} [touchEnabled = true]
      * @android
      * @ios
      * @member UI.View
@@ -370,36 +372,6 @@ function View(params) {
     /**
      * This method put a view to the top of other views in z-direction.
      *
-     *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const FlexLayout = require('nf-core/ui/flexlayout')
-     *     const Label = require('nf-core/ui/label');
-     *     const Color = require('nf-core/ui/color');
-     *     var myPage = new Page();
-     *     var myLabelBehind = new Label({
-     *         width: "300",
-     *         height: "50",
-     *         top: "10",
-     *         left: "15",
-     *         text: "Label at behind",
-     *         backgroundColor: Color.BLUE,
-     *         textColor: Color.WHITE,
-     *         positionType: FlexLayout.PositionType.ABSOLUTE
-     *     });
-     *     var myLabelFront = new Label({
-     *         width: "300",
-     *         height: "50",
-     *         top: "10",
-     *         left: "15",
-     *         text: "Label at front",
-     *         backgroundColor: Color.BLACK,
-     *         textColor: Color.CYAN,
-     *         positionType: FlexLayout.PositionType.ABSOLUTE
-     *     });
-     *     myPage.layout.add(myLabelBehind);
-     *     myPage.layout.add(myLabelFront);
-     *     myLabelBehind.bringToFront();
-     *
      * @method bringToFront
      * @android
      * @ios
@@ -423,7 +395,7 @@ function View(params) {
      *     myFlexLayout.addChild(myLabel);
      *     var parentId = myLabel.getParent().id; //is equal to 5432.
      *
-     * @return {UI.View} Parent view of a view, null if not exists.
+     * @return {UI.ViewGroup} Parent view of a view, null if not exists.
      * @method getParent
      * @android
      * @ios

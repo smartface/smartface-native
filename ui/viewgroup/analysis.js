@@ -1,5 +1,3 @@
-const View = require('../view');
-const extend = require('js-base/core/extend');
 /**
  * @class UI.ViewGroup
  * @since 0.1
@@ -23,15 +21,6 @@ const ViewGroup = extend(View)(
         /**
          * This function adds a child view to a viewgroup.
          *
-         *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
-         *     const Label = require('nf-core/ui/label');
-         *     var myFlexLayout = new FlexLayout();
-         *     var myLabel = new Label({
-         *          text: "Smartface Label"
-         *     });
-         *     myFlexLayout.addChild(myLabel);
-         *
          * @param {UI.View} view The child view to add.
          * @android
          * @ios
@@ -42,16 +31,6 @@ const ViewGroup = extend(View)(
 
         /**
          * Remove a child view from viewgroup.
-         *
-         *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
-         *     const Label = require('nf-core/ui/label');
-         *     var myFlexLayout = new FlexLayout();
-         *     var myLabel = new Label({
-         *          text: "Smartface Label"
-         *     });
-         *     myFlexLayout.addChild(myLabel);
-         *     myFlexLayout.removeChild(myLabel);
          *
          * @param {UI.View} view The child view to remove.
          * @android
@@ -64,16 +43,6 @@ const ViewGroup = extend(View)(
         /**
          * Removes all child views from viewgroup.
          *
-         *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
-         *     const Label = require('nf-core/ui/label');
-         *     var myFlexLayout = new FlexLayout();
-         *     var myLabel = new Label({
-         *          text: "Smartface Label"
-         *     });
-         *     myFlexLayout.addChild(myLabel);
-         *     myFlexLayout.removeAll();
-         *
          * @method removeAll
          * @android
          * @ios
@@ -83,15 +52,6 @@ const ViewGroup = extend(View)(
 
         /**
          * Gets the count of children in a viewgroup.
-         *
-         *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
-         *     const Label = require('nf-core/ui/label');
-         *     var myFlexLayout = new FlexLayout();
-         *     var myLabel = new Label({
-         *          text: "Smartface Label"
-         *     });
-         *     var childViewCount = myFlexLayout.getChildCount();
          *
          * @returns {Number} The number of children in the layout, or 0 if there is no child exists within the layout.
          * @method getChildCount

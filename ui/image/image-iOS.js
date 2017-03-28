@@ -2,6 +2,11 @@ const File = require('nf-core/io/file');
 const TypeUtil = require("nf-core/util/type");
 const Blob = require('nf-core/blob');
 
+const Format = {
+    JPEG: 0,
+    PNG: 1
+};
+
 function Image(params) {
     var self = this;
     
@@ -46,7 +51,7 @@ function Image(params) {
           if (onFailure) {
               onFailure();
           }
-          return  false
+          return  false;
       },
       writable: false
     });
@@ -64,7 +69,7 @@ function Image(params) {
           if (onFailure) {
               onFailure();
           }
-          return  false
+          return  false;
       },
       writable: false
     });
@@ -82,7 +87,7 @@ function Image(params) {
           if (onFailure) {
               onFailure();
           }
-          return  false
+          return  false;
       },
       writable: false
     });
@@ -100,7 +105,7 @@ function Image(params) {
           if (onFailure) {
               onFailure();
           }
-          return  false
+          return  false;
       },
       writable: false
     });
@@ -116,18 +121,24 @@ Image.createFromFile = function(path) {
     retval = new Image({"path": imageFile.nativeObject.getActualPath()});
   }
   return retval;
-}
+};
 
 Image.createFromName = function(name) { 
     return new Image({"name": name});
-}
+};
 
 Image.createFromImage = function(image) { 
     return new Image({"image": image});
-}
+};
 
 Image.createFromBlob = function(blob) {
      return new Image({"blob": blob});
-}
+};
+
+Object.defineProperty(Image, 'Format', {
+    value: Format,
+    writable: false,
+    enumerable: true
+});
 
 module.exports = Image;

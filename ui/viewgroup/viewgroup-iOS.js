@@ -21,11 +21,11 @@ const ViewGroup = extend(View)(
             view.parent = self;
             var uniqueId = view.uniqueId;
             self.childs[uniqueId] = view;
-            if(self.nativeObject.constructor.name == "Emu_Dev.SMFUIScrollView"){
+            if(self.nativeObject.constructor.name === "Emu_Dev.SMFUIScrollView"){
                 self.autoSize();
             }
             
-            if (view.nativeObject.constructor.name == "Emu_Dev.SMFUIScrollView"){
+            if (view.nativeObject.constructor.name === "Emu_Dev.SMFUIScrollView"){
                 view.autoSize();
             }
         };
@@ -38,14 +38,14 @@ const ViewGroup = extend(View)(
         this.removeAll = function(){
             self.childs = {};
             var subviews = self.nativeObject.subviews;
-            for (var subview in subviews) { 
-                 subviews[subview].removeFromSuperview();
+            for (var i = 0; i < subviews.length; i++) { 
+                 subviews[i].removeFromSuperview();
             }
         };
 
 
         this.getChildCount = function(){
-            return Object.keys(self.childs).length
+            return Object.keys(self.childs).length;
         };
 
      

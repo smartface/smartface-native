@@ -6,7 +6,7 @@ var ButtonType = {
 
 const MethodNames = {
     didDismissWithButtonIndex: "didDismissWithButtonIndex"
-}
+};
     
 function AlertView (params) {
     var self = this;
@@ -14,7 +14,7 @@ function AlertView (params) {
     var delegate = function (method){
         switch (method.name) {
             case MethodNames.didDismissWithButtonIndex:
-                if (method.buttonIndex != -1){
+                if (method.buttonIndex !== -1){
                    if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
                         _buttonArray[method.buttonIndex].onClick();
                     }
@@ -26,7 +26,8 @@ function AlertView (params) {
     };
     
     this.nativeObject = new SMFUIAlertView(delegate);
-
+    self.nativeObject.title = "";
+    
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {
@@ -34,7 +35,7 @@ function AlertView (params) {
         },
         set: function(value) {
             _title = value;
-                self.nativeObject.title = value;
+            self.nativeObject.title = value;
         },
         enumerable: true
     });

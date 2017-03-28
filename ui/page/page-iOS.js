@@ -1,6 +1,13 @@
 const FlexLayout = require('nf-core/ui/flexlayout');
-const ImageFillType = require('nf-core/ui/imagefilltype');
 const Image = require("nf-core/ui/image");
+
+const UIInterfaceOrientation = {
+    unknown : 0,
+    portrait : 1, // Device oriented vertically, home button on the bottom
+    portraitUpsideDown : 2, // Device oriented vertically, home button on the top
+    landscapeLeft : 3, // Device oriented horizontally, home button on the right
+    landscapeRight : 4
+}
 
 function Page(params) {
     var self = this;
@@ -69,12 +76,33 @@ function Page(params) {
         enumerable: true
     });
 
+    self.checkOrientation = function(){
+        var currentOrientation = UIApplication.sharedApplication().statusBarOrientation;
+
+        if (self.orientation.indexOf(currentOrientation) === -1){
+            UIDevice.changeOrientation(self.orientation[0]);
+        }
+    };
+    
+    Object.defineProperty(this, 'orientation', {
+        get: function() {
+            return self.nativeObject.orientations;
+        },
+        set: function(orientation) {
+            self.nativeObject.orientations = orientation;
+        },
+        enumerable: true
+    });
+    
+    self.orientation = [UIInterfaceOrientation.portrait]; // Default Portrait
+    
     Object.defineProperty(self, 'onShow', {
         get: function() {
             return self.nativeObject.onShow;
         },
         set: function(value) {
             self.nativeObject.onShow = (function() {
+                self.checkOrientation();
                 if (value instanceof Function) {
                     value.call(this, this.__pendingParameters);
                     delete this.__pendingParameters;
@@ -84,16 +112,15 @@ function Page(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self, 'onHide', {
-        get: function() {
-            return self.nativeObject.onHide;
-        },
-        set: function(value) {
-            self.nativeObject.onHide = value.bind(this);
-        },
-        enumerable: true
-    });
-
+    self.onHideHandler = function(){
+        self.layout.nativeObject.endEditing(true);
+        if (typeof self.onHide === "function"){
+            self.onHide();
+        }
+    }
+    
+    self.nativeObject.onHide = self.onHideHandler;
+    
     this.statusBar = {};
     Object.defineProperty(self.statusBar, 'height', {
      value:  UIApplication.sharedApplication().statusBarFrame.height,
@@ -128,8 +155,10 @@ function Page(params) {
     // Prevent undefined is not an object error
     this.android = {};
 
-    self.headerBar = {}
-
+    self.headerBar = {};
+    
+    self.headerBar.android = {};
+    
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return self.nativeObject.title;
@@ -142,7 +171,7 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]
+            return self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"];
         },
         set: function(value) {
              self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value};
@@ -192,12 +221,19 @@ function Page(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self.headerBar, 'displayShowHomeEnabled', {
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
-            self.nativeObject.navigationItem.hidesBackButton;
+            return !self.nativeObject.navigationItem.hidesBackButton;
         },
         set: function(value) {
             self.nativeObject.navigationItem.hidesBackButton = !value;
+            if (value){
+                if (_leftItem){
+                    self.nativeObject.navigationItem.leftBarButtonItem = _leftItem;
+                }
+            }else{
+                self.nativeObject.navigationItem.leftBarButtonItem = undefined;
+            }
         },
         enumerable: true
     });
@@ -210,19 +246,23 @@ function Page(params) {
         }
 
         self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
-    }
+    };
 
+    var _leftItem;
     self.headerBar.setLeftItem = function(value){
         if(value){
-            self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            if(self.headerBar.leftItemEnabled){
+                self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            }
+            _leftItem = value.nativeObject;
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
-    }
+    };
 
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.frame.height
+            return self.nativeObject.navigationController.navigationBar.frame.height;
         },
         enumerable: true
     });
@@ -233,5 +273,28 @@ function Page(params) {
         }
     }
 }
+
+Page.Orientation = {};
+Object.defineProperty(Page.Orientation,"PORTRAIT",{
+    value: [UIInterfaceOrientation.portrait]
+});
+Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
+    value: [UIInterfaceOrientation.portraitUpsideDown]
+});
+Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
+    value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown]
+});
+Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
+    value: [UIInterfaceOrientation.landscapeLeft]
+});
+Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
+    value: [UIInterfaceOrientation.landscapeRight]
+});
+Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
+    value: [UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+});
+Object.defineProperty(Page.Orientation,"AUTO",{
+    value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown,UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+});
 
 module.exports = Page;

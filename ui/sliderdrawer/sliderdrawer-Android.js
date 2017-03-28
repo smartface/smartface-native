@@ -27,7 +27,7 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 set: function(position){
                     _position = position;
-                    if(position == SliderDrawer.Position.RIGHT){
+                    if(position === SliderDrawer.Position.RIGHT){
                         // Gravity.RIGHT
                         drawerLayoutParams.gravity = 5;
                     }

@@ -4,13 +4,12 @@ const UIControlEvents = require("nf-core/util").UIControlEvents;
 const Color = require("nf-core/ui/color");
 
 const SliderState = {
-        normal: 0,
-        disabled: 1,
-        selected: 2,
-        pressed: 3,
-        focused: 4 // #available(iOS 9.0, *)
-    }
-    
+    normal: 0,
+    disabled: 1,
+    selected: 2,
+    pressed: 3,
+    focused: 4 // #available(iOS 9.0, *)
+};
     
 const Slider = extend(View)(
      function (_super, params) {
@@ -128,9 +127,11 @@ const Slider = extend(View)(
          function handleValueChange(){
              var intValue = Math.round(self.value);
              self.nativeObject.setValueAnimated(intValue,true);
-             if (_value != intValue){
+             if (_value !== intValue){
                  _value = intValue;
-                 self.onValueChange();
+                 if (typeof self.onValueChange === "function"){
+                    self.onValueChange();
+                 }
              }
          }
          

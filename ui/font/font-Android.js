@@ -20,7 +20,7 @@ Font.create = function(fontFamily, size, style) {
 
     var fontStyle = 1;
     var fontSuffix = "_n";
-    switch(style){
+    switch (style) {
         case Font.NORMAL:
             fontStyle = NativeTypeface.NORMAL;
             fontSuffix = "_n";
@@ -39,63 +39,71 @@ Font.create = function(fontFamily, size, style) {
             break;
     }
     var typeface;
-    if(fontFamily && fontFamily.length > 0 && fontFamily !== Font.DEFAULT) {
+    var font;
+    if (fontFamily && fontFamily.length > 0 && fontFamily !== Font.DEFAULT) {
         // Searching font on assets:
-        var convertedFontName = fontFamily.replace(' ','.') + fontSuffix + ".ttf";
-        var fontFile = new File({path: "assets://" + convertedFontName});
-        if(fontFile.exists){
-            var font = Font.createFromFile(fontFile.fullPath, size);
+        var convertedFontName = fontFamily.replace(' ', '.') + fontSuffix + ".ttf";
+        var fontFile = new File({
+            path: "assets://" + convertedFontName
+        });
+        if (fontFile.exists) {
+            font = Font.createFromFile(fontFile.fullPath, size);
             addToCache(fontFamily, style, font);
             return font;
         }
-        else{
-            convertedFontName = fontFamily.replace(' ','.') + fontSuffix + ".otf";
-            fontFile = new File({path: "assets://" + convertedFontName});
-            if(fontFile.exists){
-                var font = Font.createFromFile(fontFile.fullPath, size);
+        else {
+
+            convertedFontName = fontFamily.replace(' ', '.') + fontSuffix + ".otf";
+            fontFile = new File({
+                path: "assets://" + convertedFontName
+            });
+            if (fontFile.exists) {
+                font = Font.createFromFile(fontFile.fullPath, size);
                 addToCache(fontFamily, style, font);
                 return font;
             }
-            else{
+            else {
                 typeface = NativeTypeface.create(fontFamily, fontStyle);
             }
         }
     }
-    else{
+    else {
         typeface = NativeTypeface.defaultFromStyle(fontStyle);
     }
-    
-    var font = new Font({
-        "nativeObject":typeface,
-        "size":size
+
+    font = new Font({
+        "nativeObject": typeface,
+        "size": size
     });
     addToCache(fontFamily, style, font);
     return font;
-}
+};
 
-Font.createFromFile = function(path, size) { 
+Font.createFromFile = function(path, size) {
     var typeface = NativeTypeface.DEFAULT;
-    if(path){
-        var fontFile = new File({path: path});
-        if(fontFile.nativeObject){
-            var bitmap;
-            if(fontFile.type === Path.FILE_TYPE.ASSET){
+    if (path) {
+        var fontFile = new File({
+            path: path
+        });
+        if (fontFile.nativeObject) {
+            if (fontFile.type === Path.FILE_TYPE.ASSET) {
                 var assets = Android.getActivity().getAssets();
-                typeface = NativeTypeface.createFromAsset(assets,fontFile.name);
+                typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
             }
-            else{
+            else {
                 typeface = NativeTypeface.createFromFile(fontFile.nativeObject);
             }
         }
     }
 
     return new Font({
-        "nativeObject":typeface,
-        "size":size
+        "nativeObject": typeface,
+        "size": size
     });
-}
+};
 
 var fontCache = {};
+
 function getFromCache(family, style, size) {
     if (fontCache[family] && fontCache[family][style]) {
         return new Font({

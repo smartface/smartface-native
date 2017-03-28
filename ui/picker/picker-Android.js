@@ -11,8 +11,8 @@ const Picker = extend(View)(
     function (_super, params) {
         var self = this;
         if(!self.nativeObject) {
-            var fragmentActivity = Router.getCurrentPage().page.nativeObject.getActivity();
-            self.nativeObject = new NativeNumberPicker(fragmentActivity);
+            var activity = Android.getActivity();
+            self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
 
@@ -72,7 +72,7 @@ const Picker = extend(View)(
 
         self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
             onScrollStateChange: function(picker, scrollState) {
-                if(scrollState == NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                     if(_onSelectedCallback)
                         _onSelectedCallback(self.currentIndex);
                 }
@@ -111,7 +111,7 @@ const Picker = extend(View)(
                 parent.removeView(self.nativeObject);
             }
             layout.addView(self.nativeObject, new NativeFrameLayout.LayoutParams(
-                -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+                -1 , // FrameLayout.LayoutParams.MATCH_PARENT
                 -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
                 17)); // Gravity.CENTER
             return layout;

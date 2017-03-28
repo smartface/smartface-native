@@ -42,18 +42,18 @@ function Pages(params) {
     }
 
     self.pop = function(animated){
-        if (arguments.length == 0) {
+        if (arguments.length === 0) {
             self.nativeObject.pop(true);
-        } else if (arguments.length == 1) {
+        } else if (arguments.length === 1) {
             self.nativeObject.pop(animated);
         }
         return true;
     }
     
     self.popToRoot = function(animated){
-        if (arguments.length == 0) {
+        if (arguments.length === 0) {
             self.nativeObject.popToRoot(true);
-        } else if (arguments.length == 1) {
+        } else if (arguments.length === 1) {
             self.nativeObject.popToRoot(animated);
         }
         return true;
@@ -61,9 +61,9 @@ function Pages(params) {
     
     self.popTo = function(tag, page, animated){
         if(page.nativeObject) {
-            if (arguments.length == 2) {
+            if (arguments.length === 2) {
                 self.nativeObject.popToPage(page.nativeObject, true);
-            } else if (arguments.length == 3) {
+            } else if (arguments.length === 3) {
                 self.nativeObject.popToPage(page.nativeObject, animated);
             }
         }

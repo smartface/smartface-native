@@ -20,7 +20,7 @@ const ActivityIndicator = extend(View)(
                 return colorInitial;
             },
             set: function(color) {
-                if (colorInitial != color) {
+                if (colorInitial !== color) {
                     colorInitial = color;
                     self.nativeObject.getIndeterminateDrawable().setColorFilter(colorInitial, NativePorterDuff.Mode.SRC_IN);
                 }

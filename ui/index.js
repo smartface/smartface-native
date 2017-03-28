@@ -16,8 +16,6 @@ module.exports = {
     Slider: require('./slider'),
     ImageView: require('./imageview'),
     Image: require('./image'),
-    ImageFillType: require('./imagefilltype'),
-    ImageFormat: require('./imageformat'),
     StatusBarStyle: require('./statusbarstyle'),
     TextBox: require('./textbox'),
     KeyboardType: require('./keyboardtype'),
@@ -37,5 +35,6 @@ module.exports = {
     SearchView: require('./searchview'),
     Animator: require('./animator'),
     WebView: require('./webview'),
+    TimePicker: require('./timepicker'),
     Router: require('./router')
 };

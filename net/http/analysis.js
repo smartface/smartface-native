@@ -6,7 +6,7 @@
  *     @example
  *     const http = require("nf-core/net/http");
  *     var myImageUrl = your-image-url;
- *     http.requestImage(myImageUrl, onLoad, onError);
+ *     var request = http.requestImage(myImageUrl, onLoad, onError);
  * 
  *     function onLoad(response) {
  *         var image = response;
@@ -29,7 +29,7 @@ var http = {};
  * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @return UI.File
+ * @return {Net.Http.Request}
  * @since 0.1
  */
 http.requestFile = function(url, fileName, onLoad, onError) {}
@@ -43,7 +43,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {}
  * @param {String} url URL of Image
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @return UI.Image
+ * @return {Net.Http.Request}
  * @since 0.1
  */
 http.requestImage = function(url, onLoad, onError) {}
@@ -57,7 +57,7 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @return String
+ * @return {Net.Http.Request}
  * @since 0.1
  */
 http.requestString = function(url, onLoad, onError) {}
@@ -71,7 +71,7 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @return String
+ * @return {Net.Http.Request}
  * @since 0.1
  */
 http.requestJSON = function(url, onLoad, onError) {}
@@ -113,8 +113,39 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @return {Net.Http.Request}
  * @since 0.1
  */
 http.request = function(params, onLoad, onError) {};
+
+/**
+ * @class Net.Http.Request
+ * 
+ * Http Request CANNOT be initialized. Use http's request methods instead.
+ * 
+ *     @example
+ *     const http = require("nf-core/net/http");
+ *
+ *     var myImageUrl = your-image-url;
+ *     var request = http.requestImage(myImageUrl, onLoad, onError);
+ *     request.cancel();
+ * 
+ */
+const Request = function() {
+
+    /**
+     * @method cancel
+     * 
+     * Stops listening the response of the request.
+     * 
+     * @since 0.1
+     */
+    Object.defineProperties(this, {
+        'cancel': {
+            value: function() {}
+        }
+    });
+
+};
 
 module.exports = http;
