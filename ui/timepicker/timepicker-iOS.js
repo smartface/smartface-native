@@ -26,16 +26,6 @@ function TimePicker (params) {
         }
     };
     
-    Object.defineProperty(self, 'is24HourFormat', {
-        get: function() {
-            return self.nativeObject.is24HourFormat;
-        },
-        set: function(value) {
-                self.nativeObject.is24HourFormat = value;
-        },
-        enumerable: true
-    });
-    
     self.show = function(){
         self.nativeObject.datePickerMode = UIDatePickerMode.time;
         self.nativeObject.show();
