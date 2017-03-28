@@ -10,6 +10,7 @@
  *     myTimePicker.onTimeSelected = function(time) {
  *         alert('Hour: ' + time.hour + ' Minute: ' + time.minute);
  *     };
+ *     myTimePicker.is24HourFormat = false;
  *     myTimePicker.show();
  *
  */
