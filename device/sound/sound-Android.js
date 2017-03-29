@@ -1,4 +1,3 @@
-const NativeMedia = requireClass("android.provider.MediaStore");
 const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
 
@@ -6,8 +5,7 @@ var _pickParams = {};
 
 function Sound(params) {
     var self = this;
-    if(!self.nativeObject)
-        self.nativeObject = new NativeMediaPlayer();
+    self.nativeObject = new NativeMediaPlayer();
     
     var _volume = 1.0;
     Object.defineProperty(this, 'volume', {
@@ -40,31 +38,16 @@ function Sound(params) {
         enumerable: true
     });
     
-    Object.defineProperty(this, 'currentPosition', {
+    Object.defineProperty(this, 'currentDuration', {
         get: function() {
             return self.nativeObject.getCurrentPosition();
         },
         enumerable: true
     });
     
-    Object.defineProperty(this, 'currentDuration', {
+    Object.defineProperty(this, 'totalDuration', {
         get: function() {
             return self.nativeObject.getDuration();
-        },
-        enumerable: true
-    });
-    
-    var _dataSource = null;
-    Object.defineProperty(this, 'dataSource', {
-        get: function() {
-            return _dataSource;
-        },
-        set: function(dataSource) {
-            _dataSource = dataSource;
-            if(dataSource.path)
-                setPath(dataSource.path);
-            else if(dataSource.url)
-                setURL(dataSource.url);
         },
         enumerable: true
     });
@@ -81,7 +64,7 @@ function Sound(params) {
         self.nativeObject.stop();
     };
     
-    self.start = function() {
+    self.play = function() {
         self.nativeObject.prepare();
         self.nativeObject.start();
     };
@@ -120,16 +103,13 @@ function Sound(params) {
         }
     }));
     
-    function setPath(fullPath) {
-        self.nativeObject.setDataSource(fullPath);
-    }
+    this.loadFile = function(file) {
+        self.nativeObject.setDataSource(file.fullPath);
+    };
     
-    function setURL(url) {
-        const NativeURI = requireClass('android.net.Uri');
-        var uri = NativeURI.parse(url);
-        var fragmentActivity = getCurrentPageFragment().getActivity();
-        self.nativeObject.setDataSource(fragmentActivity, uri);
-    }
+    this.loadURL = function(url) {
+        self.nativeObject.setDataSource(url);
+    };
     
     // Assign parameters given in constructor
     if (params) {
@@ -139,35 +119,10 @@ function Sound(params) {
     }
 }
 
-Sound.getAll = function(params) {
-    var sounds = [];
-    try {
-        var uri = NativeMedia.Audio.Media.EXTERNAL_CONTENT_URI;
-        var projection = [NativeMedia.MediaColumns.DATA];
-        var fragmentActivity = getCurrentPageFragment().getActivity();
-        var contentResolver = fragmentActivity.getContentResolver();
-        var cursor = contentResolver.query(uri, projection, null, null, null);
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                var path = cursor.getString(0);
-                var sound = new Sound();
-                sound.dataSource = {path: path};
-                sounds.push(sound); 
-            }
-            cursor.close();
-        }
-        if(params.onSuccess)
-            params.onSuccess(sounds);
-    } 
-    catch(err) {
-        if(params.onFailure)
-            params.onFailure(err);
-    }
-};
-
 Sound.PICK_SOUND = 1004;
+Sound.android = {};
 
-Sound.pick = function(params) {
+Sound.android.pick = function(params) {
     _pickParams = params;
     var intent = new NativeIntent();
     intent.setType("audio/*");
@@ -176,19 +131,19 @@ Sound.pick = function(params) {
 };
 
 Sound.onActivityResult = function(requestCode, resultCode, data) {
-    if(requestCode == Sound.PICK_SOUND) {
-        var fragmentActivity = getCurrentPageFragment().getActivity();
-        if (resultCode == fragmentActivity.RESULT_OK) {
+    if(requestCode === Sound.PICK_SOUND) {
+        var fragmentActivity = Android.getActivity();
+        if (resultCode === fragmentActivity.RESULT_OK) {
             try {
                 var uri = data.getData();
                 var sound = new Sound();
                 sound.nativeObject.setDataSource(fragmentActivity, uri);
                 if(_pickParams.onSuccess)
-                    _pickParams.onSuccess(sound);
+                    _pickParams.onSuccess({sound: sound});
             }
             catch (err) {
                 if(_pickParams.onFailure)
-                    _pickParams.onFailure();
+                    _pickParams.onFailure({message: err});
             }
         }
         else {

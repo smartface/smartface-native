@@ -43,7 +43,9 @@ const TextBox = extend(View)(
         }
 
         _super(this);
-
+        
+        self.android = {};
+        
         self.nativeObject.textBoxDelegate = function(method) {
             if (method.name === "textFieldShouldBeginEditing") {
                 self.onEditBegins();
@@ -327,22 +329,36 @@ const TextBox = extend(View)(
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
             var top = self.nativeObject.frame.y;
+            var navigationBarHeight = 0;
+        
             if(self.getParentViewController()){
+                if(self.getParentViewController().navigationController.navigationBar.visible){
+                    navigationBarHeight = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
+                    var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
                     SMFUIView.animation(230,0,function(){
-                        self.getParentViewController().view.yoga.top = - (top - (keyboardHeight + height));
+                        self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
                         
                     });
+                }else{
+                    if (self.getParentViewController().view.frame.y != 0){
+                        keyboardHideAnimation();
+                    }
                 }
             }
          }
           
         function keyboardHideAnimation(){
             if(self.getParentViewController()){
+                var top = 0;
+                if(self.getParentViewController().navigationController.navigationBar.visible){
+                    top = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                }
                 SMFUIView.animation(130,0,function(){
-                    self.getParentViewController().view.yoga.top = 64;
+                    self.getParentViewController().view.yoga.top = top;
                     self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                 },function(){
                     
