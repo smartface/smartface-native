@@ -147,28 +147,6 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            // Set height to max min until Facebook fix issue
-            'height': {
-                get: function() {
-                    return self.minHeight;
-                },
-                set: function(height) {
-                    self.maxHeight = height;
-                },
-                enumerable: true,
-                configurable: true
-            },
-            // Set width to max min until Facebook fix issue
-            'width': {
-                get: function() {
-                    return self.maxWidth;
-                },
-                set: function(width) {
-                    self.maxWidth = width;
-                },
-                enumerable: true,
-                configurable: true
-            },
             
             // methods
             'addToHeaderBar': {
