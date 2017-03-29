@@ -115,6 +115,10 @@ const Button = extend(Label)(
             }
         }));
         
+        // Default settings
+        this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
+        this.textColor = Color.WHITE;
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
