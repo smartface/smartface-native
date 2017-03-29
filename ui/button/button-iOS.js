@@ -1,6 +1,5 @@
 const View = require("nf-core/ui/view");
 const Color = require("nf-core/ui/color");
-const Font = require("nf-core/ui/font");
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("nf-core/util").UIControlEvents;
 
@@ -202,17 +201,7 @@ const Button = extend(View)(
             enumerable: true
          });
     
-        // Set defaults same as Android
-        if (!params) params = {};
-        !params.text && (params.text = "Button");
-        !params.backgroundColor && (params.backgroundColor = {
-            normal: Color.create("#00A1F1"),
-            pressed: Color.create("#016a9e")
-        });
-        !params.font && (params.font = Font.create(null, 16, Font.NORMAL));
-        !params.textColor && (params.textColor = Color.WHITE);
-
-        // Assign parameters given in constructor
+         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
