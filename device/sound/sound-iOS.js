@@ -4,6 +4,8 @@ function Sound() {
 
     var self = this;
     
+    self.android = {};
+    
     self.loadURL = function(value){
         var url = NSURL.URLWithString(value);
         self.avPlayerItem = AVPlayerItem.createFromURL(url);
