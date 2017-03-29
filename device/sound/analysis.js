@@ -1,15 +1,17 @@
 /**
  * @class Device.Sound
  * @since 0.1
+ * @android
+ * @ios
  * 
  * Controls sound files.
  * 
  *     @example
  *     const Sound = require("nf-core/device/sound");
  *     var mySound = new Sound();
- *     mySound.dataSource = {path: your-sound-full-path};
+ *     mySound.loadURL(your-url);
  *     mySound.isLooping = true;
- *     mySound.start();
+ *     mySound.play();
  * 
  */
 function Sound() {
@@ -18,6 +20,8 @@ function Sound() {
      *
      * @property {Boolean} isPlaying
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isPlaying;
@@ -26,6 +30,9 @@ function Sound() {
      * Gets/sets whether the sound is looping or non-looping.
      *
      * @property {Boolean} isLooping
+     * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.isLooping = false;
@@ -34,57 +41,61 @@ function Sound() {
      * Gets/sets the volume of the sound. The range is between {0.0, 1.0}
      *
      * @property {Number} volume
+     * @android
+     * @ios
      * @since 0.1
      */
     this.volume = 1.0;
     
     /**
-     * Gets the current position in milliseconds.
+     * Gets the duration in milliseconds.
      *
-     * @property {Number} currentPosition
+     * @property {Number} totalDuration
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
-    this.currentPosition;
+    this.totalDuration;
     
     /**
      * Gets the current duration in milliseconds.
      *
      * @property {Number} currentDuration
      * @readonly
+     * @android
+     * @ios
      * @since 0.1
      */
     this.currentDuration;
-    
-    /**
-     * Gets/sets data source of the sound.
-     *
-     * @property {Object} dataSource
-     * @since 0.1
-     */
-    this.dataSource = null;
     
     /**
      * Seeks to specified time position.
      *
      * @method seekTo
      * @param {Number} milliseconds
+     * @android
+     * @ios
      * @since 0.1
      */
     this.seekTo = function(milliseconds){};
     
     /**
-     * Starts the sound.
+     * plays the sound.
      *
-     * @method start
+     * @method play
+     * @android
+     * @ios
      * @since 0.1
      */
-    this.start = function(){};
+    this.play = function(){};
     
     /**
      * Pauses the sound.
      *
      * @method pause
+     * @android
+     * @ios
      * @since 0.1
      */
     this.pause = function(){};
@@ -93,6 +104,8 @@ function Sound() {
      * Stops the sound.
      *
      * @method stop
+     * @android
+     * @ios
      * @since 0.1
      */
     this.stop = function(){};
@@ -101,7 +114,8 @@ function Sound() {
      * Triggered when the sound is ready for playing.
      * 
      * @since 0.1
-     * @param {Function} callback
+     * @android
+     * @ios
      * @event onReady
      */
     this.onReady = function onReady(){ };
@@ -111,45 +125,37 @@ function Sound() {
      * Triggered when the sound complited playing.
      *
      * @event onFinish
-     * @param {Function} callback
+     * @android
+     * @ios
      * @since 0.1
      */
     this.onFinish = function onFinish(e){ };
 }
-    
-/**
- * Gets all sounds on the device. Returns sound array.
- *
- * @method getAll
- * @param {Object} params Object describing function parameters.
- * @param {Function} [params.onSuccess] Callback for success situation.
- * @param {Function} [params.onFailure] Callback for failure situation.
- * @return {Array}
- * @static
- * @since 0.1
- */
-Sound.getAll = function(params) {};
+
+Sound.android = {};
 
 /**
  * Picks a sound on the device.
  * 
  *     @example
  *     const Sound = require("nf-core/device/sound");
- *     Sound.pick({onSuccess: soundPicked});
+ *     Sound.android.pick({onSuccess: soundPicked});
  * 
- *     function soundPicked(sound) {
- *         if(!sound.isPlaying)
- *             sound.start();
+ *     function soundPicked(e) {
+ *         if(!e.sound.isPlaying)
+ *             e.sound.play();
  *     }
  *
  * @method pick
  * @param {Object} params Object describing function parameters.
- * @param {Function} [params.onSuccess] Callback for success situation.
+ * @param {Function} params.onSuccess Callback for success situation.
+ * @param {Object} params.onSuccess.param 
+ * @param {Device.Sound} params.onSuccess.param.sound 
  * @param {Function} [params.onFailure] Callback for failure situation.
- * @return {Device.Sound}
  * @static
+ * @android
  * @since 0.1
  */
-Sound.pick = function(params) {};
+Sound.android.pick = function(params) {};
 
 module.exports = Sound;
