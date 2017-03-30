@@ -21,11 +21,12 @@ const ViewGroup = extend(View)(
             view.parent = self;
             var uniqueId = view.uniqueId;
             self.childs[uniqueId] = view;
-            if(self.nativeObject.constructor.name === "Emu_Dev.SMFUIScrollView"){
+
+            if(self.nativeObject.constructor.name === "SMFNative.SMFUIScrollView"){
                 self.autoSize();
             }
             
-            if (view.nativeObject.constructor.name === "Emu_Dev.SMFUIScrollView"){
+            if (view.nativeObject.constructor.name === "SMFNative.SMFUIScrollView"){
                 view.autoSize();
             }
         };

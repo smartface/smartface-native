@@ -54,7 +54,9 @@ function Page(params) {
     });
     
     self.onOrientationChangeHandler = function(){
-        self.onOrientationChange();
+        if (typeof self.onOrientationChange === "function"){
+             self.onOrientationChange();
+        }
     }
     
     self.nativeObject.viewWillTransition = self.onOrientationChangeHandler;

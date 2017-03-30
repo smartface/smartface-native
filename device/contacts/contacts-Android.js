@@ -1,87 +1,73 @@
-const TypeUtil                       = require('nf-core/util/type');
-const NativeContactsContract         = requireClass("android.provider.ContactsContract");
-const NativeArrayList                = requireClass("java.util.ArrayList");
+const NativeContactsContract = requireClass("android.provider.ContactsContract");
+const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
-var NativeIntent                     = requireClass("android.content.Intent");
+var NativeIntent = requireClass("android.content.Intent");
 
-const Pages = require("nf-core/ui/pages");
+var contentProviderOperation;
+var uri;
+var RAW_CONTACT_ID = "raw_contact_id"; // ContactsContract.DataColumns.RAW_CONTACT_ID;
+var CONTACT_ID = "contact_id"; // ContactsContract.RawContactsColumns.CONTACT_ID
+var MIMETYPE = "mimetype"; // ContactsContract.DataColumns.MIMETYPE;
+var CONTENT_ITEM_TYPE = "vnd.android.cursor.item/name"; // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
+var DISPLAY_NAME = "data1"; // ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME;
 
-// ContactsContract.AUTHORITY
-const ContactsContract_AUTHORITY = 'com.android.contacts';
-// ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE
-const StructuredName_CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/name';
-// NativeContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-const Phone_CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/phone_v2';
-// ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
-const CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/website';
-// ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYP
-const Email_CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/email_v2';
-// ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE
-const StructuredPostal_CONTENT_ITEM_TYPE = 'vnd.android.cursor.item/postal-address_v2';
-// ContactsContract.DataColumns.RAW_CONTACT_ID;
-const DataColumns_RAW_CONTACT_ID = "raw_contact_id";
-// ContactsContract.DataColumns.MIMETYPE
-const DataColumns_MIMETYPE = 'mimetype';
-// ContactsContract.SyncColumns.ACCOUNT_NAME
-const SyncColumns_ACCOUNT_NAME = 'account_name';
-// ContactsContract.SyncColumns.ACCOUNT_TYPE
-const SyncColumns_ACCOUNT_TYPE = 'account_type';
-// ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS
-const StructuredPostal_FORMATTED_ADDRESS = 'data1';
-// ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME
-const StructuredName_DISPLAY_NAME = 'data1';
-// ContactsContract.CommonDataKinds.Phone.NUMBER
-const Phone_NUMBER = 'data1';
-// ContactsContract.CommonDataKinds.CommonColumns.TYPE;
-const CommonColumns_TYPE = 'data2';
-// ContactsContract.CommonDataKinds.CommonColumns.DATA
-const CommonColumns_DATA = 'data1';
-// ContactsContract.CommonDataKinds.Website.URL
-const Website_URL = 'data1';
-// ContactsContract.CommonDataKinds.Website.TYPE_OTHER
-const Website_TYPE_OTHER = 7;
-// ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
-const Phone_TYPE_HOME = 1;
-// ContactsContract.RawContacts.CONTENT_URI
-const RawContacts_CONTENT_URI = NativeContactsContract.RawContacts.CONTENT_URI;
-
-
+var NUMBER = "data1"; // ContactsContract.CommonDataKinds.Phone.NUMBER;
+var TYPE = "data2"; // ContactsContract.CommonDataKinds.CommonColumns.TYPE;
+var TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
+    
+const Phone_CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+const Phone_NUMBER = "data1";
 
 var _onSuccess;
 var _onFailure;
-var activity = Android.getActivity();
+
+const CommonColumns_DATA = "data1"; // ContactsContract.CommonDataKinds.CommonColumns.DATA
 
 function Contacts () { }
-
 Contacts.PICK_REQUEST_CODE = 1001;
 
-Contacts.addContact = function(params) {    
+Contacts.add = function(params) {
+    var contact = {};
+    if(params) {
+        contact = params.contact; 
+        _onSuccess = params.onSuccess;
+        _onFailure = params.onFailure;
+    }
+    var activity = Android.getActivity();
+    var contentResolver = activity.getContentResolver();
+    
     try {
-        var contentProviderOperation = new NativeArrayList();
-        
-        var newContent = NativeContentProviderOperation.newInsert(RawContacts_CONTENT_URI);
-        newContent = newContent.withValue(SyncColumns_ACCOUNT_TYPE, null);
-        newContent = newContent.withValue(SyncColumns_ACCOUNT_NAME, null);
+        contentProviderOperation = new NativeArrayList();
+        const ACCOUNT_NAME = "account_name"; // ContactsContract.SyncColumns.ACCOUNT_NAME;
+        const ACCOUNT_TYPE = "account_type"; // ContactsContract.SyncColumns.ACCOUNT_TYPE;
+        uri = NativeContactsContract.RawContacts.CONTENT_URI;
+    
+        var newContent = NativeContentProviderOperation.newInsert(uri);
+        newContent = newContent.withValue(ACCOUNT_TYPE, null);
+        newContent = newContent.withValue(ACCOUNT_NAME, null);
         var content = newContent.build();
         contentProviderOperation.add(content);
         
-        addContactName(params.displayName, RawContacts_CONTENT_URI, contentProviderOperation);
-        addContactNumber(params.phoneNumber, RawContacts_CONTENT_URI, contentProviderOperation);
-        addContactEmail(params.email, RawContacts_CONTENT_URI, contentProviderOperation);
-        addContactUrl(params.urlAddress, RawContacts_CONTENT_URI, contentProviderOperation);
-        addContactAddress(params.address, RawContacts_CONTENT_URI, contentProviderOperation);
+        uri = NativeContactsContract.Data.CONTENT_URI;
+        addContactName(contact.displayName);
+        addContactNumber(contact.phoneNumber);
+        addContactEmail(contact.email);
+        addContactUrl(contact.urlAddress);
+        addContactAddress(contact.address);
     
-        var contentResolver = activity.getContentResolver();
-        contentResolver.applyBatch(ContactsContract_AUTHORITY, contentProviderOperation);
-        params.onSuccess && params.onSuccess();
+        const AUTHORITY = "com.android.contacts"; // ContactsContract.AUTHORITY;
+        contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
+        if(_onSuccess)
+            _onSuccess();
     } 
-    catch(msg) {
-        params.onFailure && params.onFailure({message: msg});
+    catch(error) {
+        if(_onFailure)
+            _onFailure(error);
     }
 };
 
 Contacts.pick = function(params) {
-    if(params) {
+    if (params) {
         _onSuccess = params.onSuccess;
         _onFailure = params.onFailure;
     }
@@ -90,47 +76,35 @@ Contacts.pick = function(params) {
         var actionPick = NativeIntent.ACTION_PICK;
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
         var intent = new NativeIntent(actionPick, uri);
-        var CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
-        intent.setType(CONTENT_TYPE);  //should filter only contacts with phone numbers
-        
-        var currentPage = Pages.currentPage;
-        var nativeObject = currentPage.nativeObject;
-        nativeObject.startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
+        intent.setType(Phone_CONTENT_TYPE); //should filter only contacts with phone numbers
+
+        getCurrentPageFragment().startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
     }
-    catch(err) {
-        if(_onFailure)
-            _onFailure.call(this);
-        else
-            throw err;
+    catch (error) {
+        if (_onFailure)
+            _onFailure(error);
     }
 };
 
 Contacts.onActivityResult = function(requestCode, resultCode, data) {
     var contactUri = data.getData();
-    
     var contact = {};
-    var success = true;
     try {
         contact.phoneNumber = getContactPhoneNumber(contactUri);
         contact.displayName = getContactDisplayName(contactUri); 
-    }
-    catch(err) {
-        success = false;
-        if(_onFailure)
-            _onFailure.call(this);
-        else
-            throw err;
-    }
-    
-    if(success) {
+        
         if(_onSuccess)
-            _onSuccess.call(this, contact);
+            _onSuccess(contact);
+        }
+    catch(error) {
+        if(_onFailure)
+            _onFailure(error);
     }
 };
 
 Contacts.getAll = function(params) {
     try {
-        var contentResolver = activity.getContentResolver();
+        var contentResolver = Android.getActivity().getContentResolver();
         var projection = [
             "_id", // BaseColumns._ID,
             "display_name"// ContactsContract.Contacts.DISPLAY_NAME
@@ -141,29 +115,27 @@ Contacts.getAll = function(params) {
         cursor.moveToFirst();
         var contacts = [];
         do {
-            var column = projection[0];
-            var index = cursor.getColumnIndex(column);
+            var index = cursor.getColumnIndex(projection[0]);
             var id = cursor.getString(index);
-            column = projection[1];
-            index = cursor.getColumnIndex(column);
-            var displayName = cursor.getString(index);
-            var phones = getPhonesById(id, contentResolver);
-            var emails = getEmailById(id, contentResolver);
-            var address = getAddressById(id, contentResolver);
+            index = cursor.getColumnIndex(projection[1]);
+            var queryParams = {
+                id: id,
+                projection: [CommonColumns_DATA],
+                contentResolver: contentResolver,
+                columnTag: CommonColumns_DATA, 
+                uri: uri
+            };
             
             contacts.push({
-                displayName: displayName,
-                phoneNumber: phones,
-                emailAddresses: emails,
-                address: address
+                displayName: cursor.getString(index),
+                phoneNumber: getPhonesById(queryParams),
+                emailAddresses: getEmailById(queryParams),
+                address: getAddressById(queryParams)
             });
         } while (cursor.moveToNext());
         
         if(params && params.onSuccess) {
             params.onSuccess(contacts);
-        }
-        else {
-            return contacts;
         }
     }
     catch(error) {
@@ -173,31 +145,21 @@ Contacts.getAll = function(params) {
     }
 };
 
-function getAddressById(id, contentResolver) {
-    uri = NativeContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-    var params = {
-        id: id, projection: ["data1"], contentResolver: contentResolver,
-        columnTag: "data1", // data1 = ContactsContract.CommonDataKinds.CommonColumns.DATA
-        uri: uri
-    };
-    return getDataById(params);
-}
-
-function getDataById(params) {
+function getContactDataById(params) {
     var cursor = params.contentResolver.query(
-            params.uri, 
-            params.projection,
-            "contact_id" + " = ?", // ContactsContract.RawContactsColumns.CONTACT_ID
-            [params.id], null
+        params.uri,
+        params.projection,
+        CONTACT_ID + " = ?", 
+        [params.id], null
     );
     
-    var data;
+    var data = [];
     if(cursor != null && cursor.getCount() > 0) {
         cursor.moveToFirst();
         do {
             var columnIndex = cursor.getColumnIndex(params.columnTag);
             if(columnIndex >= 0) {
-                data = cursor.getString(columnIndex);
+                data.push(cursor.getString(columnIndex));
             }
         }while (cursor.moveToNext());
         cursor.close();
@@ -205,31 +167,24 @@ function getDataById(params) {
     return data;
 }
 
-function getEmailById(id, contentResolver) {
-    uri = NativeContactsContract.CommonDataKinds.Email.CONTENT_URI;
-    
-    var params = {
-        id: id, projection: ["data1"], contentResolver: contentResolver,
-        columnTag: "data1", // data1 = ContactsContract.CommonDataKinds.CommonColumns.DATA
-        uri: uri
-    };
-    return getDataById(params);
+function getAddressById(params) {
+    params.uri = NativeContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
+    return getContactDataById(params)[0];
 }
-    
-function getPhonesById(id, contentResolver) {
-    uri = NativeContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-   
-    var params = {
-        id: id, projection: ["data1"], contentResolver: contentResolver,
-        columnTag: "data1", // data1 = ContactsContract.CommonDataKinds.CommonColumns.DATA
-        uri: uri
-    };
-    return getDataById(params);
+
+function getEmailById(params) {
+    params.uri = NativeContactsContract.CommonDataKinds.Email.CONTENT_URI;
+    return getContactDataById(params);
+}
+
+function getPhonesById(params) {
+    params.uri = NativeContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+    return getContactDataById(params);
 }
 
 function getContactDisplayName(contactUri) {
     var contactName = "";
-    
+    var activity = Android.getActivity();
     var context = activity.getApplicationContext();
     var contentResolver = context.getContentResolver();
     var projection = [ 
@@ -249,79 +204,96 @@ function getContactDisplayName(contactUri) {
 }
 
 function getContactPhoneNumber(contactUri) {
+    var activity = Android.getActivity();
     var contentResolver = activity.getContentResolver();
-    var columnTag = NativeContactsContract.CommonDataKinds.Phone.NUMBER;
-    
-    var projection = [
-        columnTag
-    ];
+    var projection = [ Phone_NUMBER ];
     var cursor = contentResolver.query(contactUri, projection, null, null, null);
     cursor.moveToFirst();
     
-    var columnIndex = cursor.getColumnIndex(columnTag);
+    var columnIndex = cursor.getColumnIndex(projection[0]);
     var number = "";
     if(columnIndex >= 0)
         number = cursor.getString(columnIndex);
     return number;
 }
 
-function addContactName(displayName, uri, contentProviderOperation) {
-    if(TypeUtil.isString(displayName)){
+function addContactName(displayName) {
+    // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
+    CONTENT_ITEM_TYPE = "vnd.android.cursor.item/name"; 
+    if (displayName) {
         var displayNameContent = NativeContentProviderOperation.newInsert(uri);
-        displayNameContent = displayNameContent.withValueBackReference(DataColumns_RAW_CONTACT_ID, 0);
-        displayNameContent = displayNameContent.withValue(DataColumns_MIMETYPE, StructuredName_CONTENT_ITEM_TYPE);
-        displayNameContent = displayNameContent.withValue(StructuredName_DISPLAY_NAME, displayName);
+        displayNameContent = displayNameContent.withValueBackReference(RAW_CONTACT_ID, 0);
+        displayNameContent = displayNameContent.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+        displayNameContent = displayNameContent.withValue(DISPLAY_NAME, displayName);
         var cpo = displayNameContent.build();
         contentProviderOperation.add(cpo);
     }
 }
 
-function addContactNumber(phoneNumber, uri, contentProviderOperation) {
-    if(TypeUtil.isString(phoneNumber)){
-        var phoneNumberContent = NativeContentProviderOperation.newInsert(uri);
-        phoneNumberContent = phoneNumberContent.withValue(CommonColumns_TYPE, Phone_TYPE_HOME);
-        phoneNumberContent = phoneNumberContent.withValueBackReference(DataColumns_RAW_CONTACT_ID, 0);
-        phoneNumberContent = phoneNumberContent.withValue(DataColumns_MIMETYPE, Phone_CONTENT_ITEM_TYPE);
-        phoneNumberContent = phoneNumberContent.withValue(Phone_NUMBER, phoneNumber);
-        
-        var cpo = phoneNumberContent.build();
-        contentProviderOperation.add(cpo);
-    }
+function addContactNumber(phoneNumber) {
+    //NativeContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
+    CONTENT_ITEM_TYPE = "vnd.android.cursor.item/phone_v2";
+    
+    var phoneNumberContent = NativeContentProviderOperation.newInsert(uri);
+    phoneNumberContent.withValue(TYPE, TYPE_HOME);
+    phoneNumberContent.withValueBackReference(RAW_CONTACT_ID, 0);
+    phoneNumberContent.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+    phoneNumberContent.withValue(NUMBER, phoneNumber);
+    
+    var cpo = phoneNumberContent.build();
+    contentProviderOperation.add(cpo);
 }
 
-function addContactEmail(email, uri, contentProviderOperation) {
-    if(TypeUtil.isString(email)){
+function addContactEmail(email) {
+    if (email != null) {
+        // NativeContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
+        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/email_v2";
+        var TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Email.TYPE_HOME;
+        
         var content = NativeContentProviderOperation.newInsert(uri);
-        content = content.withValueBackReference(DataColumns_RAW_CONTACT_ID, 0);
-        content = content.withValue(DataColumns_MIMETYPE, Email_CONTENT_ITEM_TYPE);
+        content = content.withValueBackReference(RAW_CONTACT_ID, 0);
+        content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
         content = content.withValue(CommonColumns_DATA, email);
-        content = content.withValue(CommonColumns_TYPE, 1);
+        content = content.withValue(TYPE, TYPE_HOME);
         content = content.build();
         contentProviderOperation.add(content);
     }
 }
     
-function addContactUrl(urlAddress, uri, contentProviderOperation) {
-    if(TypeUtil.isString(urlAddress)){
+function addContactUrl(urlAddress) {
+    if(urlAddress) {
+        var URL = NativeContactsContract.CommonDataKinds.Website.URL;
+        // ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE;
+        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/website"; 
+        var TYPE_OTHER = 7; // ContactsContract.CommonDataKinds.Website.TYPE_OTHER;
+        
         var content = NativeContentProviderOperation.newInsert(uri);
-        content = content.withValueBackReference(DataColumns_RAW_CONTACT_ID, 0);
-        content = content.withValue(DataColumns_MIMETYPE, CONTENT_ITEM_TYPE);
-        content = content.withValue(Website_URL, urlAddress);
-        content = content.withValue(CommonColumns_TYPE, Website_TYPE_OTHER);
+        content = content.withValueBackReference(RAW_CONTACT_ID, 0);
+        content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+        content = content.withValue(URL, urlAddress);
+        content = content.withValue(TYPE, TYPE_OTHER);
         content = content.build();
         contentProviderOperation.add(content);
     }
 }
 
-function addContactAddress(address, uri, contentProviderOperation) {
+function addContactAddress(address) {
     if(address) {
+        // ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE;
+        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/postal-address_v2"; 
+        var FORMATTED_ADDRESS = "data1"; // ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS;
         var content = NativeContentProviderOperation.newInsert(uri);
-        content = content.withValueBackReference(DataColumns_RAW_CONTACT_ID, 0);
-        content = content.withValue(DataColumns_MIMETYPE, StructuredPostal_CONTENT_ITEM_TYPE);
-        content = content.withValue(StructuredPostal_FORMATTED_ADDRESS, address);
+        content = content.withValueBackReference(RAW_CONTACT_ID, 0);
+        content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
+        content = content.withValue(FORMATTED_ADDRESS, address);
         content = content.build();
         contentProviderOperation.add(content);
     }
+}
+
+function getCurrentPageFragment() {
+    const Router = require("nf-core/ui/router");
+    return Router.getCurrentPage().page.nativeObject;
 }
 
 module.exports = Contacts;

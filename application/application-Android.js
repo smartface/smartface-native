@@ -37,18 +37,21 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
+    // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'currentReleaseChannel': {
         get: function(){
             return Application.currentReleaseChannel;
         },
         enumerable: true
     },
+    // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'smartfaceAppName': {
         get: function(){
             return Application.smartfaceAppName;
         },
         enumerable: true
     },
+    // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'version': {
         get: function(){
             return Application.version;
@@ -90,8 +93,15 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-    
+    // We can not check update from js side and we can not update js files, so let SMFApplication handle this
+    'checkUpdate': {
+        value: function(callback){
+            Application.checkUpdate(callback);
+        },
+        enumerable: true
+    },
     // events
+    // We can not handle application calls for now, so let SMFApplication handle this
     'onApplicationCallReceived': {
         get: function(){
             return Application.onApplicationCallReceived;
@@ -136,6 +146,7 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
+    // We can not detect js exceptions, so let SMFApplication handle this
     'onUnhandledError': {
         get: function(){
             return Application.onUnhandledError;
@@ -150,7 +161,6 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
-console.log("NativeActivityLifeCycleListener " + NativeActivityLifeCycleListener);
 var listener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
     onResume: function(){
