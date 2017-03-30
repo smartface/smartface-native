@@ -154,13 +154,13 @@ function getContactDataById(params) {
         [params.id], null
     );
     
-    var data;
+    var data = [];
     if(cursor != null && cursor.getCount() > 0) {
         cursor.moveToFirst();
         do {
             var columnIndex = cursor.getColumnIndex(params.columnTag);
             if(columnIndex >= 0) {
-                data = cursor.getString(columnIndex);
+                data.push(cursor.getString(columnIndex));
             }
         }while (cursor.moveToNext());
         cursor.close();
@@ -170,7 +170,7 @@ function getContactDataById(params) {
 
 function getAddressById(params) {
     params.uri = NativeContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI;
-    return getContactDataById(params);
+    return getContactDataById(params)[0];
 }
 
 function getEmailById(params) {

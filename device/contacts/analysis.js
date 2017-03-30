@@ -32,16 +32,17 @@ function Contacts() {}
  *
  *     @example
  *     const Contacts = require("nf-core/device/contacts");
- *     Contacts.add({
- *         displayName : "Smartface Team",
- *         phoneNumber : "+16506173265",
- *         email       : "info@smartface.io",
- *         address     : "347 N Canon Dr Beverly Hills, CA 90210",
- *         onSuccess : function(){
- *             console.log("Success");
+ *     Contacts.add(
+ *         contact: {
+ *             displayName : "Smartface Team",
+ *             phoneNumber : "+16506173265",
+ *             email       : "info@smartface.io",
+ *             address     : "347 N Canon Dr Beverly Hills, CA 90210",
+ *             onSuccess : function(){
+ *                 alert("Success");
  *         },
  *         onFailure : function(){
- *             console.log("Failure");
+ *             alert("Failure");
  *         }
  *     });
  *
@@ -53,8 +54,10 @@ function Contacts() {}
  * @param {String} params.contact.email Contact email
  * @param {String} params.contact.urlAddress Contact website
  * @param {String} params.contact.address Contact address
- * @param {Function} [params.onSuccess] This event is called after adding contact successfully.
+ * @param {Function} params.onSuccess This event is called after adding contact successfully.
  * @param {Function} [params.onFailure] This event is called after adding contact fails.
+ * @param {Object} params.onFailure.params 
+ * @param {String} params.onFailure.params.message
  * @method add
  * @android
  * @ios
@@ -71,15 +74,18 @@ Contacts.add = function(params) {};
  *     Contacts.pick({
  *         page : myPage,
  *         onSuccess : function(contact){
- *             console.log("Successfully picked");
+ *             alert("Successfully picked");
  *         },
- *         onFailure : function(){
- *             console.log("Something went wrong");
+ *         onFailure : function(e){
+ *             alert("Something went wrong");
  *         }
  *     });
  *
  * @param {Object} params Object describing callbacks
- * @param {Function} [params.onSuccess] This event is called after getting contact successfully.
+ * @param {Function} params.onSuccess This event is called after getting contact successfully.
+ * @param {Object} params.onSuccess.params
+ * @param {String} params.onSuccess.params.displayName
+ * @param {Array} params.onSuccess.params.phoneNumber
  * @param {Function} [params.onFailure] This event is called after getting contact fails.
  * @method pick
  * @android
@@ -104,7 +110,12 @@ Contacts.pick = function(params) {};
  *     });
  *
  * @param {Object} params Object describing callbacks
- * @param {Function} [params.onSuccess] This event is called after getting contacts successfully.
+ * @param {Function} params.onSuccess This event is called after getting contacts successfully.
+ * @param {Array} params.onSuccess.params
+ * @param {Object} params.onSuccess.params.displayName
+ * @param {Array} params.onSuccess.params.phoneNumber
+ * @param {Array} params.onSuccess.params.emailAddresses
+ * @param {String} params.onSuccess.params.address
  * @param {Function} [params.onFailure] This event is called after getting contacts fails.
  * @method getAll
  * @android
