@@ -116,6 +116,53 @@ Application.exit = function(){};
 Application.restart = function(){};
 
 /**
+ * Check new update from {@link https://developer.smartface.io/docs/remote-app-update RAU}.
+ * 
+ *     @example
+ *     Application.checkUpdate(function(err, result) {
+ *         if (err) {
+ *             alert("check update error: " + err);
+ *         } else {
+ *             result.download(function(err, downloadFinish) {
+ *                 if (err) {
+ *                     alert("download error: " + err);
+ *                 } else {
+ *                     downloadFinish.updateAll(function(err) {
+ *                         if (err) {
+ *                             alert("update all error: " + err);
+ *                         } else {
+ *                             alert(downloadFinish.meta);
+ *                             Application.restart();
+ *                         }
+ *                     });
+ *                 }
+ *             });
+ *         }
+ *     });
+ * 
+ * @method checkUpdate
+ * @param {Function} callback Function for update check result
+ * @param {Object} callback.err For a valid update data, err argument should be null otherwise it will be message field in json response.
+ * @param {Object} callback.update Update object when there is a new version of the app.
+ * @param {String} callback.update.newVersion New version number obtained from RAU.
+ * @param {String} callback.update.newRevision Revision value of the new version.
+ * @param {Function} callback.update.download Method that initiates download of update files.
+ * @param {Object} callback.update.download.err Error object of the download operation. For a valid update data, err argument should be null.
+ * @param {Object} callback.update.download.downloadFinish Result object of the download operation.
+ * @param {Function} callback.update.download.downloadFinish.updateAll Updates all files silently, callback is fired at the end of operation.
+ * @param {Object} callback.update.download.downloadFinish.updateAll.err Error object of the update operation. For a valid update, err argument should be null.
+ * @param {Function} callback.update.download.downloadFinish.cancel Clears all staged files.
+ * @param {Object} callback.update.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument should be null.
+ * @param {Function} callback.update.download.downloadFinish.meta  Meta in rau.json as object parsed.
+ * @readonly
+ * @android
+ * @ios
+ * @static
+ * @since 0.1
+ */
+Application.checkUpdate = function(callback){};
+
+/**
  * Triggered when application is called by another application.
  * 
  * @since 0.1
