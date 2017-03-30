@@ -49,7 +49,6 @@ Contacts.add = function(params) {
         contentProviderOperation.add(content);
         
         uri = NativeContactsContract.Data.CONTENT_URI;
-        console.log("Add displayName " + contact.displayName);
         addContactName(contact.displayName);
         addContactNumber(contact.phoneNumber);
         addContactEmail(contact.email);
