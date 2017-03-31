@@ -29,7 +29,7 @@ const MapView = extend(View)(
         self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
             onMapReady: function(googleMap) {
                 _nativeGoogleMap = googleMap;
-                defineMapRequiredProperties();
+                !definedProperties && defineMapRequiredProperties();
 
                 self.nativeObject.onStart();
                 self.nativeObject.onResume();
@@ -56,6 +56,7 @@ const MapView = extend(View)(
             }
         });
 
+        var definedProperties = false;
         function defineMapRequiredProperties() {
             Object.defineProperties(self, {
                 'centerLocation': {
@@ -174,6 +175,7 @@ const MapView = extend(View)(
                     }
                 }
             });
+            definedProperties = true;
         };
 
         // Assign parameters given in constructor
