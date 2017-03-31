@@ -4,7 +4,6 @@ const Color = require("nf-core/ui/color");
 /**
  * @class UI.QuickLook
  * @since 0.1
- * @extends UI.View
  *
  * Quick Look lets people preview Keynote, Numbers, Pages, and PDF documents,
  * as well as images and other types of files, even if your app doesn't support those file formats.
