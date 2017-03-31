@@ -65,10 +65,9 @@ const VideoView = extend(View)(
             },
             'loadFile': {
                 value: function(file) {
-                    // TODO: handle inner paths.
                     const File = require("nf-core/io/file");
                     const Path = require("nf-core/io/path");
-                    console.log("file.type !== Path.FILE_TYPE.FILE: " + file.type !== Path.FILE_TYPE.FILE)
+                    
                     if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
