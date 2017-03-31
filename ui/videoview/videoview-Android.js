@@ -68,7 +68,8 @@ const VideoView = extend(View)(
                     // TODO: handle inner paths.
                     const File = require("nf-core/io/file");
                     const Path = require("nf-core/io/path");
-                    if(!(file instanceof File) || (file.type == Path.FILE_TYPE.FILE)){
+                    console.log("file.type !== Path.FILE_TYPE.FILE: " + file.type !== Path.FILE_TYPE.FILE)
+                    if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
                     self.nativeObject.setVideoPath(file.path);
