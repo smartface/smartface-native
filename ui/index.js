@@ -36,5 +36,6 @@ module.exports = {
     Animator: require('./animator'),
     WebView: require('./webview'),
     TimePicker: require('./timepicker'),
+    Dialog: require('./dialog'),
     Router: require('./router')
 };
