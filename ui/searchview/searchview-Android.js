@@ -79,7 +79,6 @@ const SearchView = extend(View)(
         var _iconImage = null;
         var _hint = "";
         var _textColor = Color.BLACK;
-        var _backgroundImage = null;
         var _onTextChangedCallback;
         var _onSearchBeginCallback;
         var _onSearchEndCallback;
@@ -117,19 +116,6 @@ const SearchView = extend(View)(
                     _textColor = textColor;
                     if(TypeUtil.isNumeric(textColor)) {
                         mSearchSrcTextView.setTextColor(textColor);
-                    }
-                },
-                enumerable: true
-            },
-            "backgroundImage": {
-                get: function() {
-                    return _backgroundImage;
-                },
-                set: function(backgroundImage) {
-                    // If setting null to icon, default search icon will be displayed.
-                    if(backgroundImage instanceof require("nf-core/ui/image")){
-                        _backgroundImage = backgroundImage;
-                        self.nativeObject.setBackground(backgroundImage.nativeObject);
                     }
                 },
                 enumerable: true
