@@ -14,10 +14,7 @@ function Dialog(params) {
     Object.defineProperties(this, {
         'layout': {
             get: function() { return _layout },
-            set: function(flexLayout) { 
-                _layout = flexLayout;
-                this.nativeObject.setContentView(flexLayout.nativeObject); 
-            }
+            enumerable: true
         },
         'show': {
             value: function() {

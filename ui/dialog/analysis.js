@@ -28,9 +28,10 @@
 function Dialog(params) {
 
     /**
-     * Gets/sets the layout of Dialog. You should add views to the layout of the dialog instance.
+     * Gets the layout of Dialog. You should add views to the layout of the dialog instance.
      *
      * @property {UI.FlexLayout} layout
+     * @readonly
      * @android
      * @ios
      * @since 0.1
