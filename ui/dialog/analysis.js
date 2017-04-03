@@ -5,7 +5,24 @@
  * Dialog class provides showing user interfaces. Dialog has an embedded layout 
  * inside which you can use for adding views into Dialog.
  *
- *     // todo Add example
+ *     @example
+ *     const Dialog = require("nf-core/ui/dialog");
+ *     const Button = require("nf-core/ui/button");
+ *     const Color = require("nf-core/ui/color");
+ *     var myDialog = new Dialog();
+ *     
+ *     var myButton = new Button({
+ *         width: 100,
+ *         height: 80,
+ *         backgroundColor: Color.BLUE,
+ *         text: "Hide Dialog",
+ *         onPress: function() {
+ *             myDialog.hide();
+ *         }
+ *     });
+ * 
+ *     myDialog.layout.addChild(myButton);
+ *     myDialog.show();
  *
  */
 function Dialog(params) {
