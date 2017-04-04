@@ -112,11 +112,9 @@ http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
         try {
             const IO = require("../../io");
-            var filePath;
             if(!fileName)
-                filePath = url.substring(url.lastIndexOf('/'));
-            filePath = fileName;
-            var file = new IO.File({path: filePath});
+                fileName = url.substring(url.lastIndexOf('/'));
+            var file = new IO.File({path: fileName});
             var stream = file.openStream(IO.FileStream.StreamType.WRITE);
             stream.write(response);
             stream.close();
@@ -200,7 +198,7 @@ function getHeaderHashMap(params) {
         var keys = Object.keys(params.headers);
         for(i = 0; i < keys.length; i++) {
             var value = params.headers[keys[i]];
-            if(typeof(keys[i]) == "string" && typeof(value) == "string")
+            if(typeof(keys[i]) === "string" && typeof(value) === "string")
                 headers.put(keys[i], value);
         }
     }
@@ -209,7 +207,7 @@ function getHeaderHashMap(params) {
 
 function checkInternet() {
     const Network = require("nf-core/device/network");
-    if(Network.connectionType == Network.ConnectionType.None)
+    if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
 }

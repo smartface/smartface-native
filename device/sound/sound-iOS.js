@@ -52,7 +52,7 @@ function Sound() {
     }
     
     self.isPlaying = function(){
-        if (self.nativeObject.rate != 0){
+        if (self.nativeObject.rate !== 0){
             return true;
         }else {
             return false;

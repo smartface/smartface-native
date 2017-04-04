@@ -150,13 +150,15 @@ function File(params) {
                 if(this.nativeObject){
                     var destinationFile = new File({path: destination});
                     if(destinationFile.type === Path.FILE_TYPE.FILE){
+                        var destinationFileStream;
                         if(resolvedPath.type === Path.FILE_TYPE.FILE){
+                            var destinationConfigured;
                             if(this.isDirectory){
-                                var destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
+                                destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
                                 return destinationConfigured && copyDirectory(this, destinationFile);
                             }
                             else if(this.isFile){
-                                var destinationConfigured = false;
+                                destinationConfigured = false;
                                 if(destinationFile.exists && destinationFile.isDirectory){
                                     destinationFile = new File({path: destinationFile.path + "/" + this.name});
                                     destinationConfigured = destinationFile.createFile(true);
@@ -176,7 +178,7 @@ function File(params) {
                                 const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
                                 var assetsInputStream = Android.getActivity().getAssets().open(this.nativeObject);
                                 var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
-                                var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
+                                destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
                                 copyStream(assetsBufferedInputStream,destinationFileStream);
                                 destinationFileStream.flush();
                                 assetsBufferedInputStream.close();
@@ -200,8 +202,8 @@ function File(params) {
                                 this.nativeObject.compress(NativeBitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, drawableByteArrayStream);
                                 var bitmapdata = drawableByteArrayStream.toByteArray();
         
-                                var destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, false)
-                                var destinationFileStream = new NativeBufferedOutputStream(destinationFileOutputStream);
+                                var destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
+                                destinationFileStream = new NativeBufferedOutputStream(destinationFileOutputStream);
                                 destinationFileStream.write(bitmapdata);
                                 destinationFileStream.flush();
                                 destinationFileStream.close();
@@ -249,7 +251,7 @@ function File(params) {
         'createDirectory' : {
             value: function(createParents){
                 if(resolvedPath.type === Path.FILE_TYPE.FILE){
-                    return createParents ? this.nativeObject.mkdirs() : this.nativeObject.mkdirs();
+                    return createParents ? this.nativeObject.mkdirs() : this.nativeObject.mkdir();
                 }
                 return false;
             },
@@ -327,7 +329,8 @@ function File(params) {
     });
     
     function copyStream(sourceFileStream, destinationFileStream) {
-        var buffer = new Array(1024);
+        var buffer = [];
+        buffer.length = 1024;
         var len = sourceFileStream.read(buffer);
         while(len > 0){
             destinationFileStream.write(buffer, 0, len);

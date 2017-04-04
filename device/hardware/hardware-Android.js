@@ -10,7 +10,6 @@ Hardware.android = {};
 
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
-        var activity = Android.getActivity();
         var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
         return telephonyManager.getDeviceId();
     },

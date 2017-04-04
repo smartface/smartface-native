@@ -106,7 +106,7 @@ function View(params) {
         },
         set: function(backgroundColor) {
             _backgroundColor = backgroundColor;
-            setBackgroundColor(_backgroundColor);
+            setBackgroundColor();
         },
         enumerable: true
      });

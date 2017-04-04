@@ -321,7 +321,7 @@ Object.defineProperties(Notifications.Priority, {
 // Generate unique random number
 function getNewNotificationId(){
     var randomnumber = Math.ceil(Math.random()*1000 + 1000);
-    while(selectedNotificationIds.indexOf(randomnumber) != -1){
+    while(selectedNotificationIds.indexOf(randomnumber) !== -1){
         randomnumber = Math.ceil(Math.random()*1000 + 1000);
     }
     selectedNotificationIds.push(randomnumber);
@@ -330,7 +330,7 @@ function getNewNotificationId(){
 
 function unregisterPushNotification(){
     // Implemented due to COR-1281
-    if(TypeUtil.isString(senderID) && senderID != ""){
+    if(TypeUtil.isString(senderID) && senderID !== ""){
         const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.unregisterPushNotification(activity);
@@ -348,7 +348,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     if(!senderID){
         readSenderIDFromProjectJson();
     }
-    if(TypeUtil.isString(senderID) && senderID != '' ){
+    if(TypeUtil.isString(senderID) && senderID !== '' ){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
             onSuccess: function(token){
