@@ -53,9 +53,9 @@ Object.defineProperty(Screen, 'capture', {
 
 Object.defineProperty(Screen, 'dpi', {
   get: function() {
-          if (UIScreen.mainScreen().scale == 2){
+          if (UIScreen.mainScreen().scale === 2){
               return 326;
-          }else if (UIScreen.mainScreen().scale == 3){
+          }else if (UIScreen.mainScreen().scale === 3){
               return 401;
           }else{
               return 163;
