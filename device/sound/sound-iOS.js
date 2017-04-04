@@ -94,18 +94,18 @@ function Sound() {
             if (typeof self.onReady === "function"){
                 self.onReady();
             }
-        }
+        };
         
         self.nativeObject.AVPlayerItemDidPlayToEndTime = function(){
             if (typeof self.onFinish === "function"){
                 self.onFinish();
             }
-            if (self.isLooping == true){
+            if (self.isLooping === true){
                 self.seekTo(0);
                 self.play();
             }
-        }
-    }
+        };
+    };
     
     var _isLooping = false;
     Object.defineProperty(self, 'isLooping', {

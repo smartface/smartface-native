@@ -29,9 +29,9 @@ Object.defineProperty(System, 'batteryLevel', {
 Object.defineProperty(System, 'isBatteryCharged', {
   get: function() {
       UIDevice.currentDevice().batteryMonitoringEnabled = true;
-      if(UIDevice.currentDevice().batteryState == 2 || UIDevice.currentDevice().batteryState == 3){
+      if(UIDevice.currentDevice().batteryState === 2 || UIDevice.currentDevice().batteryState === 3){
         return true;
-      }else if (UIDevice.currentDevice().batteryState == 1){
+      }else if (UIDevice.currentDevice().batteryState === 1){
         return false;
       }
       return false;
