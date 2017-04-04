@@ -36,7 +36,7 @@ Object.defineProperties(Network, {
     'bluetoothMacAddress': {
         get: function() {
             var bluetoothAdapter = NativeBluetoothAdapter.getDefaultAdapter();
-            if (bluetoothAdapter == null) {
+            if (bluetoothAdapter === null) {
                 return "null";
             } else {
                 return bluetoothAdapter.getAddress();
@@ -53,7 +53,7 @@ Object.defineProperties(Network, {
     'connectionType': {
         get: function() {
             var activeInternet = getActiveInternet();
-            if (activeInternet == null) {
+            if (activeInternet === null) {
                 return Network.ConnectionType.None;
             } else {
                 if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
@@ -69,7 +69,7 @@ Object.defineProperties(Network, {
     },
     'connectionIP': {
         get: function() {
-            if (Network.connectionType == Network.ConnectionType.WIFI) {
+            if (Network.connectionType === Network.ConnectionType.WIFI) {
                 var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
                 return (wifiInfo.getIpAddress() & 0xff) 
