@@ -344,7 +344,7 @@ const TextBox = extend(View)(
                         
                     });
                 }else{
-                    if (self.getParentViewController().view.frame.y != 0){
+                    if (self.getParentViewController().view.frame.y !== 0){
                         keyboardHideAnimation();
                     }
                 }

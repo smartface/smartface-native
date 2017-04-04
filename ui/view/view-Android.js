@@ -106,7 +106,7 @@ function View(params) {
         },
         set: function(backgroundColor) {
             _backgroundColor = backgroundColor;
-            setBackgroundColor(_backgroundColor);
+            setBackgroundColor();
         },
         enumerable: true
      });
@@ -239,7 +239,7 @@ function View(params) {
                 if(_backgroundImages.selected){
                     image = _backgroundImages.selected;
                     bitmap = image.nativeObject.getBitmap();
-                    stateDrawable = NativeRoundedBitmapFactory.create(resources, selectedBitmap);
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
                     backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
                 }

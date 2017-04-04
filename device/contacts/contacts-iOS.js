@@ -7,7 +7,11 @@ Contacts.add = function(params) {
     store.requestAccess(function(){
         var contact = CNMutableContact.new();
         for(var propertyName in params){
-            switch (propertyName) {
+            // Added this check to resolve the sonar issue. 
+            // It says that the body of every for...in statement should be wrapped 
+            // in an if statement that filters which properties are acted upon.
+            if (params.hasOwnProperty(propertyName)) { 
+                switch (propertyName) {
                 case 'displayName' :
                     contact.givenName = params[propertyName];
                     break;
@@ -27,6 +31,7 @@ Contacts.add = function(params) {
                     contact.postalAddresses = [new CNLabeledValue(CNLabelHome, addressValue)];
                     break;
                 default:
+            }
             }
         }
         
@@ -104,8 +109,12 @@ Contacts.getAll = function(params) {
         store.fetchAllContacts(function(allContactsNativeArray){
             var allContactsManagedArray = [];
             for (var index in allContactsNativeArray) {
-                var managedContact = manageNativeContact(allContactsNativeArray[index]);
-                allContactsManagedArray.push(managedContact);
+                // Added this check to resolve the sonar issue. 
+                // hasOwnProperty() is used to filter out properties from the object's prototype chain.
+                if (allContactsNativeArray.hasOwnProperty(index)) { 
+                    var managedContact = manageNativeContact(allContactsNativeArray[index]);
+                    allContactsManagedArray.push(managedContact);
+                }
             }
             params.onSuccess(allContactsManagedArray);
         },function(error){
@@ -126,31 +135,44 @@ function manageNativeContact(contact) {
     
     var phoneNumbers = [];
     for (var number in contact.phoneNumbers) {
-        phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
+        // Added this check to resolve the sonar issue. 
+        // hasOwnProperty() is used to filter out properties from the object's prototype chain.
+        if (contact.phoneNumbers.hasOwnProperty(number)) { 
+            phoneNumbers.push(contact.phoneNumbers[number].value.stringValue);
+        }
     }
     returnValue.phoneNumber = phoneNumbers;
     
     var emailAddresses = [];
     for (var email in contact.emailAddresses) {
-        emailAddresses.push(contact.emailAddresses[email].value);
+        // Added this check to resolve the sonar issue. 
+        // hasOwnProperty() is used to filter out properties from the object's prototype chain.
+        if (contact.emailAddresses.hasOwnProperty(email)) { 
+            emailAddresses.push(contact.emailAddresses[email].value);
+        }
     }
     returnValue.email = emailAddresses;
     
     var urlAddresses = [];
     for (var urlAddress in contact.urlAddresses) {
-        urlAddresses.push(contact.urlAddresses[urlAddress].value);
+        // Added this check to resolve the sonar issue. 
+        if (contact.urlAddresses.hasOwnProperty(urlAddress)) { 
+            urlAddresses.push(contact.urlAddresses[urlAddress].value);
+        }
     }
     returnValue.urlAddress = urlAddresses;
     
     var addresses = [];
     for (var address in contact.postalAddresses) {
-        
-        var addressStr = contact.postalAddresses[address].value.street +" "+ 
-        contact.postalAddresses[address].value.city +" "+
-        contact.postalAddresses[address].value.state +" "+
-        contact.postalAddresses[address].value.postalCode +" "+
-        contact.postalAddresses[address].value.country;
-        addresses.push(addressStr);
+        // Added this check to resolve the sonar issue. 
+        if (contact.postalAddresses.hasOwnProperty(address)) { 
+            var addressStr = contact.postalAddresses[address].value.street +" "+ 
+            contact.postalAddresses[address].value.city +" "+
+            contact.postalAddresses[address].value.state +" "+
+            contact.postalAddresses[address].value.postalCode +" "+
+            contact.postalAddresses[address].value.country;
+            addresses.push(addressStr);
+        }
     }
     returnValue.address = addresses;
     

@@ -52,7 +52,7 @@ function Sound() {
     }
     
     self.isPlaying = function(){
-        if (self.nativeObject.rate != 0){
+        if (self.nativeObject.rate !== 0){
             return true;
         }else {
             return false;
@@ -94,18 +94,18 @@ function Sound() {
             if (typeof self.onReady === "function"){
                 self.onReady();
             }
-        }
+        };
         
         self.nativeObject.AVPlayerItemDidPlayToEndTime = function(){
             if (typeof self.onFinish === "function"){
                 self.onFinish();
             }
-            if (self.isLooping == true){
+            if (self.isLooping === true){
                 self.seekTo(0);
                 self.play();
             }
-        }
-    }
+        };
+    };
     
     var _isLooping = false;
     Object.defineProperty(self, 'isLooping', {
