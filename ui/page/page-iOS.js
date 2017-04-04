@@ -18,6 +18,7 @@ function Page(params) {
 
     self.pageView = new FlexLayout();
     self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
         self.pageView.left = self.pageView.nativeObject.frame.x;
