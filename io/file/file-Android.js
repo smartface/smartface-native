@@ -10,7 +10,7 @@ var nativeAssetsList;
 
 function File(params) {
     if(!TypeUtil.isString(params.path)){
-        throw "File path must be string";
+        throw new Error("File path must be string");
     }
     
     this.nativeObject;
@@ -28,7 +28,7 @@ function File(params) {
                 nativeAssetsList = Android.getActivity().getAssets().list("");
             }
 
-            if(nativeAssetsList.indexOf(resolvedPath.name) != -1){
+            if(nativeAssetsList.indexOf(resolvedPath.name) !== -1){
                 this.nativeObject = resolvedPath.name;
             }
             else{
@@ -39,7 +39,7 @@ function File(params) {
             // this.nativeObject will be Bitmap
             var resources = Android.getActivity().getResources();
             this.drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
-            this.nativeObject = this.drawableResourceId != 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
+            this.nativeObject = this.drawableResourceId !== 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
             break;
         case Path.FILE_TYPE.RAU_ASSETS:
         case Path.FILE_TYPE.RAU_DRAWABLE:
@@ -55,13 +55,13 @@ function File(params) {
     Object.defineProperties(this, {
         'creationDate': {
             get: function(){
-                return resolvedPath.type == Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1 ;
+                return resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1 ;
             },
             enumerable: true
         },
         'exists': {
             get: function(){
-                if(resolvedPath.type == Path.FILE_TYPE.DRAWABLE || resolvedPath.type == Path.FILE_TYPE.ASSET){
+                if(resolvedPath.type === Path.FILE_TYPE.DRAWABLE || resolvedPath.type === Path.FILE_TYPE.ASSET){
                     return this.nativeObject ? true: false;
                 }
                 else{
@@ -73,7 +73,7 @@ function File(params) {
         'extension': {
             get: function(){
                 var fileName = this.name;
-                if (fileName.lastIndexOf(".") != -1) {
+                if (fileName.lastIndexOf(".") !== -1) {
                     return fileName.substring(fileName.lastIndexOf(".")+1, fileName.length);
                 } else {
                     return fileName;
@@ -83,19 +83,19 @@ function File(params) {
         },
         'isDirectory': {
             get: function(){
-                return (this.nativeObject ? (resolvedPath.type == Path.FILE_TYPE.FILE ? this.nativeObject.isDirectory() : false) : false);
+                return (this.nativeObject ? (resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isDirectory() : false) : false);
             },
             enumerable: true
         },
         'isFile': {
             get: function(){
-                return (this.nativeObject ? (resolvedPath.type == Path.FILE_TYPE.FILE ? this.nativeObject.isFile() : true) : false);
+                return (this.nativeObject ? (resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isFile() : true) : false);
             },
             enumerable: true
         },
         'modifiedDate': {
             get: function(){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.lastModified() : -1);
+                return (resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.lastModified() : -1);
             },
             enumerable: true
         },
@@ -107,7 +107,7 @@ function File(params) {
         },
         'parent': {
             get: function(){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject ? new File({ path: this.nativeObject.getParent() }) : null);
+                return (resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? new File({ path: this.nativeObject.getParent() }) : null);
             },
             enumerable: true
         },
@@ -141,7 +141,7 @@ function File(params) {
         },
         'writable': {
             get: function(){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.canWrite() : false);
+                return (resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.canWrite() : false);
             },
             enumerable: true
         },
@@ -149,8 +149,8 @@ function File(params) {
             value: function(destination){
                 if(this.nativeObject){
                     var destinationFile = new File({path: destination});
-                    if(destinationFile.type == Path.FILE_TYPE.FILE){
-                        if(resolvedPath.type == Path.FILE_TYPE.FILE){
+                    if(destinationFile.type === Path.FILE_TYPE.FILE){
+                        if(resolvedPath.type === Path.FILE_TYPE.FILE){
                             if(this.isDirectory){
                                 var destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
                                 return destinationConfigured && copyDirectory(this, destinationFile);
@@ -167,7 +167,7 @@ function File(params) {
                                 return destinationConfigured && copyFile(this, destinationFile);
                             }
                         }
-                        else if(resolvedPath.type == Path.FILE_TYPE.ASSET){
+                        else if(resolvedPath.type === Path.FILE_TYPE.ASSET){
                             if (destinationFile.exists && destinationFile.isDirectory){
                                 destinationFile = new File({path: destination + "/" + this.name});
                             }
@@ -186,7 +186,7 @@ function File(params) {
                             }
                             
                         }
-                        else if(resolvedPath.type == Path.FILE_TYPE.DRAWABLE){
+                        else if(resolvedPath.type === Path.FILE_TYPE.DRAWABLE){
                             if (destinationFile.exists && destinationFile.isDirectory){
                                 destinationFile = new File({path: destination + "/" + this.name + ".png"});
                             }
@@ -212,7 +212,7 @@ function File(params) {
                         else{
                             if (destinationFile.exists && destinationFile.isDirectory){
                                 var destinationFileName = destination + "/" + this.name;
-                                if(resolvedPath.type == Path.FILE_TYPE.EMULATOR_DRAWABLE || resolvedPath.type == Path.FILE_TYPE.RAU_DRAWABLE)
+                                if(resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE)
                                     destinationFileName += ".png";
                                 destinationFile = new File({path: destinationFileName});
                                 
@@ -229,7 +229,7 @@ function File(params) {
         },
         'createFile' : {
             value: function(createParents){
-                if(resolvedPath.type == Path.FILE_TYPE.FILE){
+                if(resolvedPath.type === Path.FILE_TYPE.FILE){
                     if(this.nativeObject.exists){
                         this.remove(true);
                     }
@@ -248,7 +248,7 @@ function File(params) {
         },
         'createDirectory' : {
             value: function(createParents){
-                if(resolvedPath.type == Path.FILE_TYPE.FILE){
+                if(resolvedPath.type === Path.FILE_TYPE.FILE){
                     return createParents ? this.nativeObject.mkdirs() : this.nativeObject.mkdirs();
                 }
                 return false;
@@ -257,13 +257,13 @@ function File(params) {
         },
         'remove' : {
             value: function(withChilds){
-                return (resolvedPath.type == Path.FILE_TYPE.FILE) && removeFile(this,withChilds);
+                return (resolvedPath.type === Path.FILE_TYPE.FILE) && removeFile(this,withChilds);
             },
             enumarable: true
         },
         'getFiles': {
             value: function(){
-                if(resolvedPath.type == Path.FILE_TYPE.FILE && this.nativeObject && this.exists){
+                if(resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists){
                     var allJSFiles = [];
                     var allNativeFiles = this.nativeObject.listFiles();
                     allNativeFiles.foreach(function(tmpFile){
@@ -279,8 +279,8 @@ function File(params) {
             value: function(destination){
                 if(resolvedPath.type === Path.FILE_TYPE.FILE){
                     var destinationFile = new File({path: destination});
-                    if(destinationFile == Path.FILE_TYPE.FILE){
-                        if(this.isFile){
+                    if(destinationFile === Path.FILE_TYPE.FILE){
+                        if(this.isFile || this.isDirectory){
                             if(destinationFile.exists){
                                 if(destinationFile.isDirectory){
                                     // Move to folder
@@ -292,18 +292,6 @@ function File(params) {
                                 }
                             }
                         }
-                        else if(this.isDirectory){
-                            if(destinationFile.exists){
-                                if(destinationFile.isDirectory){
-                                    destinationFile = new File({path: destinationFile.path + "/" +this.name});
-                                }
-                                else{
-                                    // MOVE TO FILE
-                                    destinationFile.remove();
-                                }
-                            }
-                        }
-                        
                         if(this.nativeObject.renameTo(destinationFile.nativeObject)){
                             resolvedPath.path = destinationFile.path;
                             resolvedPath.fullPath = destinationFile.path;
