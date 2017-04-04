@@ -109,8 +109,12 @@ Contacts.getAll = function(params) {
         store.fetchAllContacts(function(allContactsNativeArray){
             var allContactsManagedArray = [];
             for (var index in allContactsNativeArray) {
-                var managedContact = manageNativeContact(allContactsNativeArray[index]);
-                allContactsManagedArray.push(managedContact);
+                // Added this check to resolve the sonar issue. 
+                // hasOwnProperty() is used to filter out properties from the object's prototype chain.
+                if (allContactsNativeArray.hasOwnProperty(index)) { 
+                    var managedContact = manageNativeContact(allContactsNativeArray[index]);
+                    allContactsManagedArray.push(managedContact);
+                }
             }
             params.onSuccess(allContactsManagedArray);
         },function(error){
