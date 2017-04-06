@@ -151,7 +151,7 @@ http.request = function(params, onLoad, onError) {
         body = new NativeString(params.body);
     var request = new Request();
     
-    var contentType = "text/plain";
+    var contentType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
@@ -173,11 +173,10 @@ http.request = function(params, onLoad, onError) {
                 getBodyContentType: function() {
                     return contentType;
                 },
-                parseNetworkResponse: function(response) {
+                parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
                     var parsed = new NativeString();
                     var value = params.headers["Accept-Encoding"];
                     var parseCharset;
-                    var cacheHeaders;
                     if(value && value.indexOf("gzip") !== -1) { // contains gzip
                         try {
                             var inputStream = new ByteArrayInputStream(response.data);
@@ -188,7 +187,8 @@ http.request = function(params, onLoad, onError) {
                             bufferedReader.close();
                             gzipStream.close();
                         } catch (error) {
-                            return VolleyResponse.error(new VolleyParseError());
+                            var parseError = new VolleyParseError();
+                            return VolleyResponse.error(parseError);
                         }
                     }
                     else {
@@ -199,7 +199,7 @@ http.request = function(params, onLoad, onError) {
                             parsed = new NativeString(response.data);
                         }
                     }
-                    cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
+                    var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
                     return VolleyResponse.success(parsed, cacheHeaders);
                 }
             }, parameters);    
