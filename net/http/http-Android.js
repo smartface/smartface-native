@@ -1,8 +1,14 @@
-const Volley = requireClass("com.android.volley.toolbox.Volley");
-const VolleyRequest  = requireClass("com.android.volley.Request");
-const VolleyResponse = requireClass("com.android.volley.Response");
-const NativeInteger  = requireClass("java.lang.Integer");
-const NativeString   = requireClass("java.lang.String");
+const Volley                = requireClass("com.android.volley.toolbox.Volley");
+const VolleyRequest         = requireClass("com.android.volley.Request");
+const VolleyResponse        = requireClass("com.android.volley.Response");
+const VolleyParseError      = requireClass("com.android.volley.ParseError");
+const VolleyHttpHeaderParser= requireClass("com.android.volley.toolbox.HttpHeaderParser");
+const NativeInteger         = requireClass("java.lang.Integer");
+const NativeString          = requireClass("java.lang.String");
+const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
+const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
+const InputStreamReader     = requireClass("java.io.InputStreamReader");
+const BufferedReader        = requireClass("java.io.BufferedReader");
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -145,11 +151,13 @@ http.request = function(params, onLoad, onError) {
         body = new NativeString(params.body);
     var request = new Request();
     
-    var contentType = "text/plain";
+    var contentType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
 
+    const NativeHashMap = requireClass("java.util.HashMap");
+    var headers = new NativeHashMap();
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
@@ -160,10 +168,39 @@ http.request = function(params, onLoad, onError) {
                     return body.getBytes();
                 },
                 getHeaders: function() {
-                    return getHeaderHashMap(params);
+                    return getHeaderHashMap(params, headers);
                 },
                 getBodyContentType: function() {
                     return contentType;
+                },
+                parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
+                    var parsed = new NativeString();
+                    var value = params.headers["Accept-Encoding"];
+                    var parseCharset;
+                    if(value && value.indexOf("gzip") !== -1) { // contains gzip
+                        try {
+                            var inputStream = new ByteArrayInputStream(response.data);
+                            var gzipStream = new GZIPInputStream(inputStream);
+                            var reader = new InputStreamReader(gzipStream);
+                            var bufferedReader = new BufferedReader(reader);
+                            for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
+                            bufferedReader.close();
+                            gzipStream.close();
+                        } catch (error) {
+                            var parseError = new VolleyParseError();
+                            return VolleyResponse.error(parseError);
+                        }
+                    }
+                    else {
+                        try {
+                            parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
+                            parsed = new NativeString(response.data, parseCharset);
+                        } catch (error) {
+                            parsed = new NativeString(response.data);
+                        }
+                    }
+                    var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
+                    return VolleyResponse.success(parsed, cacheHeaders);
                 }
             }, parameters);    
         }
@@ -181,17 +218,16 @@ http.request = function(params, onLoad, onError) {
     return request;
 };
 
-function getHeaderHashMap(params) {
-    const NativeHashMap = requireClass("java.util.HashMap");
-    var headers = new NativeHashMap();
+function getHeaderHashMap(params, headers) {
     var credentials = "";
-    if(params.user && params.password)
+    if(params.user && params.password) {
         credentials = params.user + ":" + params.password;
-    const NativeBase64 = requireClass("android.util.Base64");
-    var bytes = new NativeString(credentials).getBytes();
-    var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
-    var auth = "Basic " + encodedString;
-    headers.put("Authorization", auth);
+        const NativeBase64 = requireClass("android.util.Base64");
+        var bytes = new NativeString(credentials).getBytes();
+        var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
+        var auth = "Basic " + encodedString;
+        headers.put("Authorization", auth);   
+    }
     
     if(params.headers) {
         var i;
