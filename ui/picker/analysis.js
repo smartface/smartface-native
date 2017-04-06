@@ -17,7 +17,7 @@
  *     ];
  *     var myPicker = new Picker({
  *         items: items,
- *         index: 2
+ *         currentIndex: 2
  *     });
  *
  *     var okCallback = function()
