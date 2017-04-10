@@ -1,5 +1,5 @@
-const FlexLayout = require('nf-core/ui/flexlayout');
-const Image = require("nf-core/ui/image");
+const FlexLayout = require('sf-core/ui/flexlayout');
+const Image = require("sf-core/ui/image");
 
 const UIInterfaceOrientation = {
     unknown : 0,

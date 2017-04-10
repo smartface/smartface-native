@@ -1,7 +1,7 @@
-const File                  = require("nf-core/io/file");
-const Path                  = require("nf-core/io/path");
-const TypeUtil              = require("nf-core/util/type");
-const Blob                  = require('nf-core/blob');
+const File                  = require("sf-core/io/file");
+const Path                  = require("sf-core/io/path");
+const TypeUtil              = require("sf-core/util/type");
+const Blob                  = require('sf-core/blob');
 
 function FileStream(params) {
     const NativeBufferedReader = requireClass("java.io.BufferedReader");

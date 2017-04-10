@@ -1,5 +1,5 @@
 const View = require('../view');
-const Color = require("nf-core/ui/color");
+const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
 
 const ActivityIndicator = extend(View)(

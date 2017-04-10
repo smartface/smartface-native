@@ -1,7 +1,7 @@
 const extend            = require('js-base/core/extend');
 const View              = require('../view');
-const TypeUtil          = require("nf-core/util/type");
-const Image             = require("nf-core/ui/image");
+const TypeUtil          = require("sf-core/util/type");
+const Image             = require("sf-core/ui/image");
 const NativeImageView   = requireClass("android.widget.ImageView");
 
 const ImageView = extend(View)(

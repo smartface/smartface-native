@@ -1,7 +1,7 @@
-const Path                  = require("nf-core/io/path");
-const FileStream            = require("nf-core/io/filestream");
-const TypeUtil              = require("nf-core/util/type");
-const AndroidConfig         = require("nf-core/util/Android/androidconfig");
+const Path                  = require("sf-core/io/path");
+const FileStream            = require("sf-core/io/filestream");
+const TypeUtil              = require("sf-core/util/type");
+const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 
 const NativeFile            = requireClass('java.io.File');
 const NativeBitmapFactory   = requireClass('android.graphics.BitmapFactory');

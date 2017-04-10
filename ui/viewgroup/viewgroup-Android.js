@@ -1,5 +1,5 @@
 const View = require('../view');
-const TypeUtil = require("nf-core/util/type");
+const TypeUtil = require("sf-core/util/type");
 const extend = require('js-base/core/extend');
 
 const ViewGroup = extend(View)(
@@ -15,7 +15,7 @@ const ViewGroup = extend(View)(
         this.addChild = function(view){
             view.parent = self;
             self.childViews[view.id] = view;
-            if(self instanceof require("nf-core/ui/flexlayout")){
+            if(self instanceof require("sf-core/ui/flexlayout")){
                 self.nativeObject.addView(view.nativeObject, view.yogaNode);
             }
             else{

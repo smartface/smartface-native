@@ -12,9 +12,9 @@
  * behaviour is undefined.
  *
  *     @example
- *     const Page = require('nf-core/ui/page');
- *     const Color = require('nf-core/ui/color');
- *     const HeaderBarItem = require('nf-core/ui/headerbaritem');
+ *     const Page = require('sf-core/ui/page');
+ *     const Color = require('sf-core/ui/color');
+ *     const HeaderBarItem = require('sf-core/ui/headerbaritem');
  *
  *     var myPage = new Page({
  *         onLoad: function() {
@@ -41,8 +41,8 @@ function HeaderBar() {
      * background color depending on device's OS and OS version.
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const Color = require('nf-core/ui/color');
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
      *     var myPage = new Page({
      *         onLoad: function() {
      *             this.headerBar.backgroundColor = Color.RED;
@@ -60,8 +60,8 @@ function HeaderBar() {
      * Gets/sets background image of the HeaderBar.
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const Image = require('nf-core/ui/image');
+     *     const Page = require('sf-core/ui/page');
+     *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page({
      *         onLoad: function() {
      *             this.headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
@@ -106,8 +106,8 @@ function HeaderBar() {
      * This property will work only for Android.
      * 
      *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const Image = require('nf-core/ui/image');
+     *     const Page = require('sf-core/ui/page');
+     *     const Image = require('sf-core/ui/image');
      *     var myPage = new Page();
      *     var myImage = Image.createFromFile('images://icon.png');
      *     myPage.headerBar.android.logoEnabled = true;
@@ -134,7 +134,7 @@ function HeaderBar() {
      * This property will work only for Android.
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
+     *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page();
      *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
      *
@@ -189,8 +189,8 @@ function HeaderBar() {
      * Sets left item of header bar to given item.
      *
      *     @example
-     *      const Page = require('nf-core/ui/page');
-     *      const HeaderBarItem = require('nf-core/ui/headerbaritem');
+     *      const Page = require('sf-core/ui/page');
+     *      const HeaderBarItem = require('sf-core/ui/headerbaritem');
      *      var myPage = new Page();
      *      myPage.onLoad = function(e){
      *          var leftItem = new HeaderBarItem();

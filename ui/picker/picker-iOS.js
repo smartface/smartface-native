@@ -1,5 +1,5 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
+const View = require('sf-core/ui/view');
 
 const Picker = extend(View)(
     function (_super, params) {
@@ -29,7 +29,7 @@ const Picker = extend(View)(
             },
             set: function(currentIndex) {
                 _currentIndex = currentIndex;
-                var defaultComponentIndex = 0; // nf-core does not support multi components.
+                var defaultComponentIndex = 0; // sf-core does not support multi components.
                 self.nativeObject.selectRowInComponentAnimated(_currentIndex, defaultComponentIndex, true);
             },
             enumerable: true

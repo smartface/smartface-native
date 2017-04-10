@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const Color = require("nf-core/ui/color");
-const SFTextAlignment = require("nf-core/ui/textalignment");
+const Color = require("sf-core/ui/color");
+const SFTextAlignment = require("sf-core/ui/textalignment");
 
 const Label = extend(View)(
     function (_super, params) {

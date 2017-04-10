@@ -1,4 +1,4 @@
-const AndroidConfig        = require('nf-core/util/Android/androidconfig')
+const AndroidConfig        = require('sf-core/util/Android/androidconfig')
 const NativeBuild          = requireClass('android.os.Build');
 const NativeIntentFilter   = requireClass('android.content.IntentFilter');
 const NativeBatteryManager = requireClass('android.os.BatteryManager');
@@ -65,7 +65,7 @@ Object.defineProperties(System, {
             }
         },
         set: function(text) {
-            var clip = NativeClipData.newPlainText("nf-core", text);
+            var clip = NativeClipData.newPlainText("sf-core", text);
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             clipboard.setPrimaryClip(clip);
         },

@@ -1,4 +1,4 @@
-const File = require("nf-core/io/file");
+const File = require("sf-core/io/file");
 
 function Sound() {
 

@@ -1,5 +1,5 @@
-const TypeUtil = require("nf-core/util/type");
-const Exception = require("nf-core/util").Exception;
+const TypeUtil = require("sf-core/util/type");
+const Exception = require("sf-core/util").Exception;
 
 function View(params) {
 

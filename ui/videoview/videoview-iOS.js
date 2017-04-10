@@ -1,8 +1,8 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-const File = require("nf-core/io/file");
-const Exception = require("nf-core/util").Exception;
-const TypeUtil = require("nf-core/util/type");
+const View = require('sf-core/ui/view');
+const File = require("sf-core/io/file");
+const Exception = require("sf-core/util").Exception;
+const TypeUtil = require("sf-core/util/type");
 
 const VideoView = extend(View)(
     function (_super, params) {

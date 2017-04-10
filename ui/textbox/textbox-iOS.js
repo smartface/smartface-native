@@ -1,8 +1,8 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const KeyboardType = require('nf-core/ui/keyboardtype');
-const ActionKeyType = require('nf-core/ui/actionkeytype');
-const Animator = require('nf-core/ui/animator');
+const KeyboardType = require('sf-core/ui/keyboardtype');
+const ActionKeyType = require('sf-core/ui/actionkeytype');
+const Animator = require('sf-core/ui/animator');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.

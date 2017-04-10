@@ -1,11 +1,11 @@
-const View                  = require('nf-core/ui/view');
+const View                  = require('sf-core/ui/view');
 const extend                = require('js-base/core/extend');
-const Font                  = require('nf-core/ui/font');
-const TypeUtil              = require('nf-core/util/type');
-const Color                 = require('nf-core/ui/color');
-const KeyboardType          = require('nf-core/ui/keyboardtype');
-const TextAlignment         = require('nf-core/ui/textalignment');
-const AndroidConfig         = require('nf-core/util/Android/androidconfig');
+const Font                  = require('sf-core/ui/font');
+const TypeUtil              = require('sf-core/util/type');
+const Color                 = require('sf-core/ui/color');
+const KeyboardType          = require('sf-core/ui/keyboardtype');
+const TextAlignment         = require('sf-core/ui/textalignment');
+const AndroidConfig         = require('sf-core/util/Android/androidconfig');
 
 const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
 const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
@@ -126,7 +126,7 @@ const SearchView = extend(View)(
                 },
                 set: function(iconImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(iconImage == null || iconImage instanceof require("nf-core/ui/image")){
+                    if(iconImage == null || iconImage instanceof require("sf-core/ui/image")){
                         _iconImage = iconImage;
                         updateQueryHint(self, mSearchSrcTextView, _iconImage, _hint);
                     }
@@ -268,7 +268,7 @@ const SearchView = extend(View)(
                 },
                 set: function(closeImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(closeImage == null || closeImage instanceof require("nf-core/ui/image")){
+                    if(closeImage == null || closeImage instanceof require("sf-core/ui/image")){
                         _closeImage = closeImage;
                         mCloseButton.setImageDrawable(closeImage.nativeObject);
                     }

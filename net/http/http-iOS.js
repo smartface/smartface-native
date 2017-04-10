@@ -25,7 +25,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {
                 url,
                 fileName,
                 function(e){
-                    const File = require('nf-core/io/file');
+                    const File = require('sf-core/io/file');
                     var file = new File({path:e});
                     onLoad(file);
                 },
@@ -41,7 +41,7 @@ http.requestImage = function(url, onLoad, onError) {
             SMFHttp.requestImageFrom(
                 url,
                 function(e){
-                    const Image = require('nf-core/ui/image');
+                    const Image = require('sf-core/ui/image');
                     var image = Image.createFromImage(e);
                     onLoad(image);
                 },

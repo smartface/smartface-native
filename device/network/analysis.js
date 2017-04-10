@@ -5,7 +5,7 @@
  * Device.Network provides several information about the network connections and adaptors on the device.
  * 
  *     @example
- *     const Network = require('nf-core/device/network');
+ *     const Network = require('sf-core/device/network');
  *     console.log("Device.Network.IMSI: "                + Network.IMSI);
  *     console.log("Device.Network.SMSEnabled: "          + Network.SMSEnabled); 
  *     console.log("Device.Network.bluetoothMacAddress: " + Network.bluetoothMacAddress); 

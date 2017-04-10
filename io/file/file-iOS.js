@@ -1,4 +1,4 @@
-const FileStream = require('nf-core/io/filestream');
+const FileStream = require('sf-core/io/filestream');
 
 function File(params) {
     var self = this;

@@ -7,8 +7,8 @@
  * It also holds some of the common functionalities of browsers like refresh, go back and etc.
  * 
  *     @example
- *     const WebView = require('nf-core/ui/webview');
- *     const Flex = require('nf-core/ui/flexlayout')
+ *     const WebView = require('sf-core/ui/webview');
+ *     const Flex = require('sf-core/ui/flexlayout')
  * 
  *     var myWebView = new WebView({
  *         left:10, top:10, right:10, bottom:10,

@@ -1,6 +1,6 @@
 const View                  = require('../view');
 const extend                = require('js-base/core/extend');
-const TypeUtil              = require("nf-core/util/type");
+const TypeUtil              = require("sf-core/util/type");
 
 const NativeView                    = requireClass("android.view.View");
 const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");

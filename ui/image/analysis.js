@@ -6,10 +6,10 @@
  * It can be set to UI objects' properties (e.g. UI.ImageView.image).
  * 
  *     @example
- *     const Image = require('nf-core/ui/image');
- *     const ImageView = require('nf-core/ui/imageview');
+ *     const Image = require('sf-core/ui/image');
+ *     const ImageView = require('sf-core/ui/imageview');
  *     
- *     var myImage = Image.createFromFile("images://nativeface.png")
+ *     var myImage = Image.createFromFile("images://smartface.png")
  *     var myImageView = new ImageView({
  *         image: myImage,
  *         width: 200, height: 200
@@ -43,15 +43,15 @@ function Image(params) {
          * onSuccess and onFailure are optional parameters.
          * 
          *     @example
-         *     const Image = require('nf-core/ui/image');
-         *     const ImageView = require('nf-core/ui/imageview');
+         *     const Image = require('sf-core/ui/image');
+         *     const ImageView = require('sf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImageView.image = myImage.resize(myImage.width/2, myImage.height/2); // resize example without callback
          * 
          *     
-         *     const Image = require('nf-core/ui/image');
-         *     const ImageView = require('nf-core/ui/imageview');
+         *     const Image = require('sf-core/ui/image');
+         *     const ImageView = require('sf-core/ui/imageview');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myImageView = new ImageView();
          *     myImage.resize(myImage.width/2, myImage.height/2, onSuccess); 
@@ -99,7 +99,7 @@ function Image(params) {
          * onSuccess and onFailure are optional parameters.
          * 
          *     @example
-         *     const Image = require('nf-core/ui/image');
+         *     const Image = require('sf-core/ui/image');
          *     var myImage = Image.createFromFile("images://smartface.png")
          *     var myBlob = myImage.compress(Image.Format.JPEG, 50); 
          *     var myCompressedImage = Image.createFromBlob(myBlob);
@@ -151,8 +151,8 @@ Image.createFromBlob = function(blob) { }
  * Creates an Image instance from given file path.
  *  
  *     @example
- *     const Image = require('nf-core/ui/image');
- *     var myImage = Image.createFromFile("images://nativeface.png");
+ *     const Image = require('sf-core/ui/image');
+ *     var myImage = Image.createFromFile("images://smartface.png");
  * 
  * @param {String} path Image file path
  * @method createFromFile

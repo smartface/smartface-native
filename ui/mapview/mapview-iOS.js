@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const MapType = require('nf-core/ui/mapview/maptype');
-const Image = require("nf-core/ui/image");
+const MapType = require('sf-core/ui/mapview/maptype');
+const Image = require("sf-core/ui/image");
 /**
  * @class UI.MapView
  * @since 0.1
@@ -9,7 +9,7 @@ const Image = require("nf-core/ui/image");
  * Apple maps and Google maps equivalent. 
  *
  *     @example
- *     const MapView = require('nf-core/ui/mapview');
+ *     const MapView = require('sf-core/ui/mapview');
  *     var myMapView = new MapView({
  *         left:0, top:0, right:0, bottom:0,
  *         scrollEnabled: true,

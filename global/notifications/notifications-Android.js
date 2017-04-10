@@ -1,5 +1,5 @@
-const TypeUtil                  = require("nf-core/util/type");
-const AndroidConfig             = require("nf-core/util/Android/androidconfig");
+const TypeUtil                  = require("sf-core/util/type");
+const AndroidConfig             = require("sf-core/util/Android/androidconfig");
 
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
@@ -82,7 +82,7 @@ Notifications.LocalNotification = function(params) {
             },
             set: function(value) {
                 if (TypeUtil.isString(value)) {
-                    const Image = require("nf-core/ui/image");
+                    const Image = require("sf-core/ui/image");
                     var largeImage = Image.createFromFile(value);
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();

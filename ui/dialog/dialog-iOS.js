@@ -1,5 +1,5 @@
-const FlexLayout = require('nf-core/ui/flexlayout');
-const Color = require('nf-core/ui/color');
+const FlexLayout = require('sf-core/ui/flexlayout');
+const Color = require('sf-core/ui/color');
 
 function Dialog(params) {
 

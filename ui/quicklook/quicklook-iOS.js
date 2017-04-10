@@ -1,5 +1,5 @@
-const File = require("nf-core/io/file");
-const Color = require("nf-core/ui/color");
+const File = require("sf-core/io/file");
+const Color = require("sf-core/ui/color");
 
 function QuickLook (params) {
     var self = this;

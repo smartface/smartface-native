@@ -1,7 +1,7 @@
-const View = require("nf-core/ui/view");
-const Color = require("nf-core/ui/color");
+const View = require("sf-core/ui/view");
+const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("nf-core/util").UIControlEvents;
+const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const ButtonState = {
     normal: 0,

@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const Page = require('nf-core/ui/page');
-const AbsoluteLayout = require('nf-core/ui/absolutelayout');
+const Page = require('sf-core/ui/page');
+const AbsoluteLayout = require('sf-core/ui/absolutelayout');
 
 const SliderDrawer = extend(Page)(
     function (_super, params) {

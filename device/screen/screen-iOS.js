@@ -1,4 +1,4 @@
-const Image = require("nf-core/ui/image");
+const Image = require("sf-core/ui/image");
 
 function Screen() {}
 

@@ -7,7 +7,7 @@
  * Controls sound files.
  * 
  *     @example
- *     const Sound = require("nf-core/device/sound");
+ *     const Sound = require("sf-core/device/sound");
  *     var mySound = new Sound();
  *     mySound.loadURL(your-url);
  *     mySound.isLooping = true;
@@ -138,7 +138,7 @@ Sound.android = {};
  * Picks a sound on the device.
  * 
  *     @example
- *     const Sound = require("nf-core/device/sound");
+ *     const Sound = require("sf-core/device/sound");
  *     Sound.android.pick({onSuccess: soundPicked});
  * 
  *     function soundPicked(e) {

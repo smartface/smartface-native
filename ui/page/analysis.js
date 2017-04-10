@@ -14,8 +14,8 @@
  *
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const Router = require('nf-core/ui/router');
- *     const Page = require('nf-core/ui/page');
+ *     const Router = require('sf-core/ui/router');
+ *     const Page = require('sf-core/ui/page');
  *     var page1 = new extend(Page)(
  *         function(_super,params)
  *         {
@@ -26,7 +26,7 @@
  *                     this.headerBar.title = "Smartface Page";
  *                 },
  *                 onLoad: function(){
- *                     const Button = require('nf-core/ui/button');
+ *                     const Button = require('sf-core/ui/button');
  *                     var myButton = new Button({
  *                         width: 150,
  *                         height: 80,
@@ -70,7 +70,7 @@ function Page(params) {
      * It will be better to set headerBar and statusBar properties in this callback.
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
+     *     const Page = require('sf-core/ui/page');
      *     var myPage = new Page({
      *         onShow: function() {
      *             this.headerBar.visible = true;
@@ -133,7 +133,7 @@ function Page(params) {
      * orientation defined in project.json.
      *     
      *     @example
-     *     const Page = require('nf-core/ui/page');
+     *     const Page = require('sf-core/ui/page');
      *     var myPage1 = new Page({
      *          orientation: Page.Orientation.LANDSCAPELEFT
      *     });

@@ -1,7 +1,7 @@
-const AndroidConfig   = require('nf-core/util/Android/androidconfig')
-const UnitConverter   = require('nf-core/util/Android/unitconverter');
-const Image           = require('nf-core/ui/image');
-const OrientationType = require('nf-core/device/screen/orientationtype');
+const AndroidConfig   = require('sf-core/util/Android/androidconfig')
+const UnitConverter   = require('sf-core/util/Android/unitconverter');
+const Image           = require('sf-core/ui/image');
+const OrientationType = require('sf-core/device/screen/orientationtype');
 
 const NativeContext        = requireClass('android.content.Context');
 const NativeBitmap         = requireClass('android.graphics.Bitmap');

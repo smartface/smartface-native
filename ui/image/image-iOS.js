@@ -1,6 +1,6 @@
-const File = require('nf-core/io/file');
-const TypeUtil = require("nf-core/util/type");
-const Blob = require('nf-core/blob');
+const File = require('sf-core/io/file');
+const TypeUtil = require("sf-core/util/type");
+const Blob = require('sf-core/blob');
 
 const Format = {
     JPEG: 0,

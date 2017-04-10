@@ -2,7 +2,7 @@ var Data = {};
 Data.ios = {};
 
 Data.ios.getNativeObject = function(){
-    var _identifier = "NF_USER_DEFAULTS";
+    var _identifier = "SF_USER_DEFAULTS";
     return new NSUserDefaults(_identifier);
 };
 

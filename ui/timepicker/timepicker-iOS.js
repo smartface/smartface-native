@@ -1,5 +1,5 @@
-const TypeUtil = require('nf-core/util/type');
-const UIDatePickerMode = require("nf-core/util").UIDatePickerMode;
+const TypeUtil = require('sf-core/util/type');
+const UIDatePickerMode = require("sf-core/util").UIDatePickerMode;
 
 function TimePicker (params) {
     var self = this;
