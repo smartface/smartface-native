@@ -18,13 +18,13 @@ function Dialog(params) {
 
         self.dialogView.applyLayout();
     }
-
+    
     self.dialogView.nativeObject.addObserver(function(){
                     self.dialogView.left =  UIApplication.sharedApplication().keyWindow.frame.x;
                     self.dialogView.top =  UIApplication.sharedApplication().keyWindow.frame.y;
                     self.dialogView.width =  UIApplication.sharedApplication().keyWindow.frame.width;
                     self.dialogView.height =  UIApplication.sharedApplication().keyWindow.frame.height;
-                    SMFUIView.animation(0.2,0,function(){
+                    SMFUIView.animation(UIApplication.sharedApplication().statusBarOrientationAnimationDuration,0,function(){
                         self.dialogView.applyLayout();
                     },function(){
                         
