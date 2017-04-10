@@ -11,7 +11,7 @@ const SliderDrawer = extend(Page)(
         var _drawerWidth = 100;
 
         if(!self.nativeObject){
-            self.nativeObject = SMFSliderDrawer.new();
+            self.nativeObject = __SF_SliderDrawer.new();
             self.nativeObject.position = _position;
             self.nativeObject.enabled = _enabled;
         }
@@ -19,18 +19,18 @@ const SliderDrawer = extend(Page)(
         _super(self);
         
         self.pageView = new AbsoluteLayout();
-        self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+        self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
 
         self.nativeObject.onViewLoad  = function(){
-            self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+            self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
             return self.pageView.nativeObject;
         };
         
         self.nativeObject.onViewLayoutSubviews = function(){
             self.pageView.nativeObject.frame = {
-                x : self.drawerPosition ? UIScreen.mainScreen().bounds.width - self.pageView.nativeObject.frame.width : 0,
+                x : self.drawerPosition ? __SF_UIScreen.mainScreen().bounds.width - self.pageView.nativeObject.frame.width : 0,
                 y : 0,
-                height: UIScreen.mainScreen().bounds.height,
+                height: __SF_UIScreen.mainScreen().bounds.height,
                 width: self.width
             };
             

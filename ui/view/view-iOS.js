@@ -8,7 +8,7 @@ function View(params) {
     self.uniqueId = guid();
 
     if(!self.nativeObject){
-        self.nativeObject = new SMFUIView();
+        self.nativeObject = new __SF_UIView();
     }
 
     // Defaults
@@ -54,7 +54,7 @@ function View(params) {
             return self.nativeObject.backgroundColor;
         },
         set: function(value) {
-            if (value.constructor.name === "CAGradientLayer"){
+            if (value.constructor.name === "__SF_CAGradientLayer"){
                 self.applyLayout();
                 value.frame = self.nativeObject.frame;
                 self.nativeObject.backgroundColor = value.layerToColor();

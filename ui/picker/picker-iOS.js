@@ -6,7 +6,7 @@ const Picker = extend(View)(
         var self = this;
 
         if(!self.nativeObject) {
-            self.nativeObject = new UIPickerView();
+            self.nativeObject = new __SF_UIPickerView();
         }
 
         _super(this);
@@ -49,7 +49,7 @@ const Picker = extend(View)(
         //////////////////////////////////////////////////////
         // UIPickerViewDataSource
         var _component = 1;
-        self.pickerDataSource = new SMFUIPickerViewDataSource();
+        self.pickerDataSource = new __SF_UIPickerViewDataSource();
         self.pickerDataSource.numberOfComponents = function(){
             return _component;
         };
@@ -60,7 +60,7 @@ const Picker = extend(View)(
 
         //////////////////////////////////////////////////////
         // UIPickerViewDelegate
-        self.pickerDelegate = new SMFUIPickerViewDelegate();
+        self.pickerDelegate = new __SF_UIPickerViewDelegate();
         self.pickerDelegate.titleForRow = function(e){
             return _items[e.row];
         };

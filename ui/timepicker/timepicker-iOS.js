@@ -5,7 +5,7 @@ function TimePicker (params) {
     var self = this;
         
     if(!self.nativeObject){
-        self.nativeObject = new SMFUIDatePicker();
+        self.nativeObject = new __SF_UIDatePicker();
     }
     
     self.android = {};

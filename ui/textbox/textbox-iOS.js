@@ -39,7 +39,7 @@ const TextBox = extend(View)(
         var self = this;
 
         if (!self.nativeObject) {
-            self.nativeObject = new SMFUITextField();
+            self.nativeObject = new __SF_UITextField();
         }
 
         _super(this);
@@ -333,11 +333,11 @@ const TextBox = extend(View)(
         
             if(self.getParentViewController()){
                 if(self.getParentViewController().navigationController.navigationBar.visible){
-                    navigationBarHeight = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
-                    SMFUIView.animation(230,0,function(){
+                    __SF_UIView.animation(230,0,function(){
                         self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
@@ -355,9 +355,9 @@ const TextBox = extend(View)(
             if(self.getParentViewController()){
                 var top = 0;
                 if(self.getParentViewController().navigationController.navigationBar.visible){
-                    top = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                    top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
-                SMFUIView.animation(130,0,function(){
+                __SF_UIView.animation(130,0,function(){
                     self.getParentViewController().view.yoga.top = top;
                     self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                 },function(){

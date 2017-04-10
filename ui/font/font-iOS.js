@@ -5,28 +5,28 @@ function Font () {}
 Font.create = function(fontFamily, size, style) {
     if (style === this.NORMAL) {
         if (fontFamily === Font.DEFAULT){
-            return UIFont.systemFontOfSize(size);
+            return __SF_UIFont.systemFontOfSize(size);
         }else{
-            return UIFont.fontWithNameSize(fontFamily,size);
+            return __SF_UIFont.fontWithNameSize(fontFamily,size);
         }
     }else if(style === this.BOLD){
         if (fontFamily === Font.DEFAULT){
-            return UIFont.boldSystemFontOfSize(size);
+            return __SF_UIFont.boldSystemFontOfSize(size);
         }else{
-            return UIFont.fontWithNameSize(fontFamily,size).bold();
+            return __SF_UIFont.fontWithNameSize(fontFamily,size).bold();
         }
     }
     else if(style === this.ITALIC){
         if (fontFamily === Font.DEFAULT){
-            return UIFont.italicSystemFontOfSize(size);
+            return __SF_UIFont.italicSystemFontOfSize(size);
         }else{
-            return UIFont.fontWithNameSize(fontFamily,size).italic();
+            return __SF_UIFont.fontWithNameSize(fontFamily,size).italic();
         }
     }else if(style === this.BOLD_ITALIC){
         if (fontFamily === Font.DEFAULT){
-            return UIFont.systemFontOfSize(size).boldItalic();
+            return __SF_UIFont.systemFontOfSize(size).boldItalic();
         }else{
-            return UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
+            return __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
         }
     }
         
@@ -38,7 +38,7 @@ Font.createFromFile = function(path, size) {
     }
     var filePath = new File({path:path});
     var actualPath = filePath.nativeObject.getActualPath();
-    return  UIFont.createFromFileWithFilenameStringSize(actualPath, size);
+    return  __SF_UIFont.createFromFileWithFilenameStringSize(actualPath, size);
 }
 
 Font.DEFAULT = "iOS-System-Font";

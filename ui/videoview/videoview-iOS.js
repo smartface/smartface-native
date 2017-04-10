@@ -10,7 +10,7 @@ const VideoView = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.avPlayerViewController = new SMFAVPlayerViewController();
+            self.avPlayerViewController = new __SF_AVPlayerViewController();
         }
         _super(this);
         self.nativeObject.addSubview(self.avPlayerViewController.view);
@@ -18,8 +18,8 @@ const VideoView = extend(View)(
         self.loadURL = function(value){
             if (TypeUtil.isURL(value)){
                 self.avPlayerViewController.removeObserver();
-                var url = NSURL.URLWithString(value);
-                self.avPlayer = AVPlayer.createFromURL(url);
+                var url = __SF_NSURL.URLWithString(value);
+                self.avPlayer = __SF_AVPlayer.createFromURL(url);
                 self.avPlayerViewController.player = self.avPlayer;
                 self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
                 self.avPlayerViewController.addObserver();   
@@ -32,8 +32,8 @@ const VideoView = extend(View)(
             self.avPlayerViewController.removeObserver();
             var filePath = new File({path:value});
             var actualPath = filePath.nativeObject.getActualPath();
-            var url = NSURL.fileURLWithPath(actualPath);
-            self.avPlayer = AVPlayer.createFromURL(url);
+            var url = __SF_NSURL.fileURLWithPath(actualPath);
+            self.avPlayer = __SF_AVPlayer.createFromURL(url);
             self.avPlayerViewController.player = self.avPlayer;
             self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
             self.avPlayerViewController.addObserver();     

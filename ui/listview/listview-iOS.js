@@ -21,8 +21,8 @@ const ListView = extend(View)(
         var self = this;
 
         if(!self.nativeObject){
-            self.nativeObject = new SMFUITableView();
-            self.refreshControl = new UIRefreshControl();
+            self.nativeObject = new __SF_UITableView();
+            self.refreshControl = new __SF_UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
             self.nativeObject.separatorStyle = 0;
         }
@@ -40,7 +40,7 @@ const ListView = extend(View)(
         self.ios.onRowSwiped = function(direction){};
         
         self.ios.swipeItem = function(title,color,padding,action){
-            return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
+            return __SF_MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){

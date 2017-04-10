@@ -29,7 +29,7 @@ const MapView = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFMKMapView();
+            self.nativeObject = new __SF_MKMapView();
             
         }
         
@@ -142,7 +142,7 @@ function Pin(params) {
 
     var self = this;
     if(!self.nativeObject){
-        self.nativeObject = Annotation.createAnnotation();
+        self.nativeObject = __SF_Annotation.createAnnotation();
     }
 
     Object.defineProperty(self, 'location', {

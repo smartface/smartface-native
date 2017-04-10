@@ -8,7 +8,7 @@ const Switch = extend(View)(
        var self = this;
        
        if(!self.nativeObject){
-           self.nativeObject = new UISwitch();            
+           self.nativeObject = new __SF_UISwitch();            
        }
          
        _super(this);

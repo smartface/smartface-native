@@ -5,7 +5,7 @@ function DatePicker (params) {
     var self = this;
         
     if(!self.nativeObject){
-        self.nativeObject = new SMFUIDatePicker();
+        self.nativeObject = new __SF_UIDatePicker();
     }
     
     self.onDateSelected = function(){};

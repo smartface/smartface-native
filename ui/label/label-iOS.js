@@ -8,7 +8,7 @@ const Label = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUITextView();
+            self.nativeObject = new __SF_UITextView();
         }
         
         _super(this);

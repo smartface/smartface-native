@@ -3,7 +3,7 @@ function Timer() {}
 Timer.timerArray = [];
 
 Timer.createTimer = function(params){
-    this.timer = new SMFTimer();
+    this.timer = new __SF_Timer();
     this.timer.scheduledTimer(params.delay/1000,function(){
         if (params.task){
             params.task();

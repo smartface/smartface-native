@@ -13,7 +13,7 @@ const ScrollView = extend(ViewGroup)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUIScrollView();
+            self.nativeObject = new __SF_UIScrollView();
         }
         
         _super(this);

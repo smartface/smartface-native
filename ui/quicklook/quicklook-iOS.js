@@ -5,7 +5,7 @@ function QuickLook (params) {
     var self = this;
         
     if(!self.nativeObject){
-        self.nativeObject = new SMFQLPreviewController();
+        self.nativeObject = new __SF_QLPreviewController();
     }
     
     var _document = [];
@@ -21,7 +21,7 @@ function QuickLook (params) {
                         path: value[i]
                     });
                     var actualPath = filePath.nativeObject.getActualPath();
-                    uRLArray.push(NSURL.fileURLWithPath(actualPath));
+                    uRLArray.push(__SF_NSURL.fileURLWithPath(actualPath));
                 }
                 self.nativeObject.document = uRLArray;
             },

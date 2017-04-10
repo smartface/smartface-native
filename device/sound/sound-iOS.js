@@ -7,13 +7,13 @@ function Sound() {
     self.android = {};
     
     self.loadURL = function(value){
-        var url = NSURL.URLWithString(value);
-        self.avPlayerItem = AVPlayerItem.createFromURL(url);
+        var url = __SF_NSURL.URLWithString(value);
+        self.avPlayerItem = __SF_AVPlayerItem.createFromURL(url);
         if (self.nativeObject){
             self.nativeObject.removeObserver();
             self.nativeObject.replaceCurrentItem(self.avPlayerItem);
         }else{
-            self.nativeObject = new AVPlayer(self.avPlayerItem);
+            self.nativeObject = new __SF_AVPlayer(self.avPlayerItem);
             self.addCallbackFunction();
         }
         self.nativeObject.addObserver();
@@ -22,13 +22,13 @@ function Sound() {
     self.loadFile = function(value){
         var filePath = new File({path:value});
         var actualPath = filePath.nativeObject.getActualPath();
-        var url = NSURL.fileURLWithPath(actualPath);
-        self.avPlayerItem = AVPlayerItem.createFromURL(url);
+        var url = __SF_NSURL.fileURLWithPath(actualPath);
+        self.avPlayerItem = __SF_AVPlayerItem.createFromURL(url);
         if (self.nativeObject){
             self.nativeObject.removeObserver();
             self.nativeObject.replaceCurrentItem(self.avPlayerItem);
         }else{
-            self.nativeObject = new AVPlayer(self.avPlayerItem);
+            self.nativeObject = new __SF_AVPlayer(self.avPlayerItem);
             self.addCallbackFunction();
         }
         self.nativeObject.addObserver();

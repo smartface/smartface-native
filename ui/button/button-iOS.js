@@ -16,7 +16,7 @@ const Button = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUIButton(); 
+            self.nativeObject = new __SF_UIButton(); 
         }
           
         _super(this);

@@ -27,7 +27,7 @@ const ImageView = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUIImageView();
+            self.nativeObject = new __SF_UIImageView();
         }
         
         _super(this);
@@ -50,9 +50,9 @@ const ImageView = extend(View)(
         
         self.loadFromUrl = function(url, placeHolder){
             if (placeHolder){
-                self.nativeObject.loadFromURL(NSURL.URLWithString(url),placeHolder.nativeObject);
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject);
             }else{
-                self.nativeObject.loadFromURL(NSURL.URLWithString(url));
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url));
             }
         };
         

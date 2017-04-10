@@ -16,7 +16,7 @@ const Slider = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUISlider(); 
+            self.nativeObject = new __SF_UISlider(); 
         }
         
         _super(this);
