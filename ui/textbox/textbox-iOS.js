@@ -326,9 +326,25 @@ const TextBox = extend(View)(
             return self.nativeObject.parentViewController();
         }  
         
+        var _top = 0;
+        function getViewTop(view){
+            _top += view.frame.y;
+            if(view.superview){
+                if(view.superview.constructor.name === "SMFNative.SMFUIView"){
+                    if (view.superview.superview){
+                        if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
+                            return getViewTop(view.superview);
+                        }
+                    }
+                }
+            }
+            return _top;
+        }
+        
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
-            var top = self.nativeObject.frame.y;
+            _top = 0;
+            var top = getViewTop(self.nativeObject);
             var navigationBarHeight = 0;
         
             if(self.getParentViewController()){

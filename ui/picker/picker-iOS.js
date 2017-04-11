@@ -74,10 +74,14 @@ const Picker = extend(View)(
 
         self.show = function(ok,cancel){
               var okFunc = function(e){
-                  ok({index : e.index});
+                if (typeof ok === "function"){
+                    ok({index : e.index});
+                }
               };
               var cancelFunc = function(e){
-                  cancel();
+                if (typeof cancel === "function"){
+                    cancel();
+                }
               };
               self.nativeObject.show(self.nativeObject,cancelFunc,okFunc);
         }
