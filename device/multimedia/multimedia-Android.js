@@ -4,8 +4,8 @@ const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
 const NativeContentValues = requireClass("android.content.ContentValues");
 const NativeBuild = requireClass("android.os.Build");
 
-const File = require("nf-core/io/file");
-const Image = require("nf-core/ui/image");
+const File = require("sf-core/io/file");
+const Image = require("sf-core/ui/image");
 
 const Type = {
     IMAGE: 0,
@@ -300,7 +300,7 @@ function getAllMediaFromUri(params) {
 }
 
 function getCurrentPageFragment() {
-    const Router = require("nf-core/ui/router");
+    const Router = require("sf-core/ui/router");
     return Router.getCurrentPage().page.nativeObject;
 }
 

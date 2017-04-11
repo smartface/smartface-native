@@ -6,9 +6,9 @@
  * inside which you can use for adding views into Dialog.
  *
  *     @example
- *     const Dialog = require("nf-core/ui/dialog");
- *     const Button = require("nf-core/ui/button");
- *     const Color = require("nf-core/ui/color");
+ *     const Dialog = require("sf-core/ui/dialog");
+ *     const Button = require("sf-core/ui/button");
+ *     const Color = require("sf-core/ui/color");
  *     var myDialog = new Dialog();
  *     
  *     var myButton = new Button({

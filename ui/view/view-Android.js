@@ -1,5 +1,5 @@
-const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-const Image                     = require("nf-core/ui/image");
+const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
+const Image                     = require("sf-core/ui/image");
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
@@ -11,7 +11,7 @@ const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeD
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
 
-const Color = require("nf-core/ui/color");
+const Color = require("sf-core/ui/color");
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -209,7 +209,7 @@ function View(params) {
     function setBackgroundImage() {
         var resources = Android.getActivity().getResources();
         const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
-        const Image = require("nf-core/ui/image");
+        const Image = require("sf-core/ui/image");
         var bitmap;
         if(_backgroundImages instanceof Image) {
             bitmap = _backgroundImages.nativeObject.getBitmap();

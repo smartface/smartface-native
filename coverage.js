@@ -87,15 +87,15 @@ global.Device = {
     deviceOS: "iOS"
 }
 if (Device.deviceOS === "iOS") {
-    global.UIColor                  = ClassProxy;
-    global.UIViewController         = ClassProxy;
-    global.SMFUIView                = ClassProxy;
-    global.UIApplication            = ClassProxy;
-    global.SMFUITextView            = ClassProxy;
-    global.UIFont                   = ClassProxy;
-    global.SMFUIButton              = ClassProxy;
-    global.UINavigationController   = ClassProxy;
-    global.SMFUISlider              = ClassProxy;
+    global.__SF_UIColor                  = ClassProxy;
+    global.__SF_UIViewController         = ClassProxy;
+    global.__SF_UIView                   = ClassProxy;
+    global.__SF_UIApplication            = ClassProxy;
+    global.__SF_UITextView               = ClassProxy;
+    global.__SF_UIFont                   = ClassProxy;
+    global.__SF_UIButton                 = ClassProxy;
+    global.__SF_UINavigationController   = ClassProxy;
+    global.__SF_UISlider                 = ClassProxy;
 
     var callbacksToRun = [];
     function addJSTarget(callback) {

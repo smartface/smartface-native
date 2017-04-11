@@ -1,20 +1,20 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
+const View = require('sf-core/ui/view');
 
 const WebView = extend(View)(
     function (_super, params) {
         var self = this;
        
         if(!self.nativeObject){
-           self.nativeObject = new SMFWKWebView();            
+           self.nativeObject = new __SF_WKWebView();            
         }
          
         _super(this);
     
         Object.defineProperty(self, 'loadURL', {
             value: function(value) {
-                var nsURL = NSURL.URLWithString(value);
-                var nsURLRequest = NSURLRequest.requestWithURL(nsURL);
+                var nsURL = __SF_NSURL.URLWithString(value);
+                var nsURLRequest = __SF_NSURLRequest.requestWithURL(nsURL);
                 self.nativeObject.load(nsURLRequest);
             },
             enumerable: true

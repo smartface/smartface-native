@@ -5,7 +5,7 @@
  * Accelerometer is an interface for accessing accelerometer data on the device. 
  * 
  *     @example
- *     const Accelerometer = require('nf-core/device/accelerometer');
+ *     const Accelerometer = require('sf-core/device/accelerometer');
  *     Accelerometer.start();
  *     Accelerometer.onAccelerate = function(e) {
  *         console.log("x: " + e.x + "  y : " + e.y + "  z : " + e.z);

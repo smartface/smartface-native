@@ -7,7 +7,7 @@
  * you can call show() method.
  *
  *     @example
- *     const Picker = require("nf-core/ui/picker");
+ *     const Picker = require("sf-core/ui/picker");
  *     var items = [
  *         "item 1",
  *         "item 2",

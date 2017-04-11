@@ -8,7 +8,7 @@ const extend = require('js-base/core/extend');
  * MapView is a view that shows Apple Maps on iOS and Google Maps on Android.
  *
  *     @example
- *     const MapView = require('nf-core/ui/mapview');
+ *     const MapView = require('sf-core/ui/mapview');
  *     var myMapView = new MapView({
  *         flexGrow :1,
            alignSelf : FlexLayout.AlignSelf.STRETCH,
@@ -80,7 +80,7 @@ const MapView = extend(View)(
          * This property sets center location of the map to the given latitude & longitude.
          *
          *     @example
-         *     const MapView = require('nf-core/ui/mapview');
+         *     const MapView = require('sf-core/ui/mapview');
          *     var myMapView = new MapView({
          *         centerLocation: {
          *             latitude: 41.0209078,
@@ -151,7 +151,7 @@ const MapView = extend(View)(
  * Pin is placed on UI.MapView.
  *
  *     @example
- *     const MapView = require('nf-core/ui/mapview');
+ *     const MapView = require('sf-core/ui/mapview');
  *     var myPin = new MapView.Pin({
  *         location: {
  *             latitude: 40.9844753,
@@ -185,7 +185,7 @@ const Pin = function() {
          * Pin location on the map. 
          *
          *     @example
-         *     const MapView = require('nf-core/ui/mapview');
+         *     const MapView = require('sf-core/ui/mapview');
          *     var myPin = new MapView.Pin({
          *         location: {
          *             latitude: 40.9844753,

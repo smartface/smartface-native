@@ -1,11 +1,11 @@
-const TypeUtil = require('nf-core/util/type');
-const UIDatePickerMode = require("nf-core/util").UIDatePickerMode;
+const TypeUtil = require('sf-core/util/type');
+const UIDatePickerMode = require("sf-core/util").UIDatePickerMode;
 
 function DatePicker (params) {
     var self = this;
         
     if(!self.nativeObject){
-        self.nativeObject = new SMFUIDatePicker();
+        self.nativeObject = new __SF_UIDatePicker();
     }
     
     self.onDateSelected = function(){};

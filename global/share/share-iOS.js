@@ -21,14 +21,14 @@ const UIActivityType = {
 Object.defineProperties(Share, {
     'shareText': {
         value: function(text, page, blacklist) {
-            var activity = new UIActivityViewController([text],undefined);
+            var activity = new __SF_UIActivityViewController([text],undefined);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }
     },
     'shareImage': {
         value: function(image, page, blacklist) {
-            var activity = new UIActivityViewController([image.nativeObject],undefined);
+            var activity = new __SF_UIActivityViewController([image.nativeObject],undefined);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }
@@ -36,8 +36,8 @@ Object.defineProperties(Share, {
     'shareFile': {
         value: function(file, page ,blacklist) {
             var actualPath = file.nativeObject.getActualPath();
-            var url = NSURL.fileURLWithPath(actualPath);
-            var activity = new UIActivityViewController([url],undefined);
+            var url = __SF_NSURL.fileURLWithPath(actualPath);
+            var activity = new __SF_UIActivityViewController([url],undefined);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }

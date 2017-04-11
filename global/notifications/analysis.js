@@ -4,7 +4,7 @@
  * Notification is a message belongs to an application. 
  * 
  *     @example
- *     const Notifications = require("nf-core/notifications");
+ *     const Notifications = require("sf-core/notifications");
  *     Notifications.registerForPushNotifications(function(e){
  *         console.log("Successfully registered. The token is: " + e.token);     
  *     },function(){
@@ -87,7 +87,7 @@ Notifications.ios.scheduledLocalNotifications = null;
  * 
  * 
  *     @example
- *     const Notifications = require("nf-core/notifications");
+ *     const Notifications = require("sf-core/notifications");
  *     var notification = new Notifications.LocalNotification();
  *     notification.alertAction = "Notification alertAction";
  *     notification.alertBody = "Notification alertBody";

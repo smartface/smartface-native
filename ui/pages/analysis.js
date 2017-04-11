@@ -8,11 +8,11 @@
  * Pages class should be initialized with a root page.
  *
  *     @example
- *     const Pages = require('nf-core/ui/pages');
- *     const Page = require('nf-core/ui/page');
- *     const Label = require('nf-core/ui/label');
- *     const FlexLayout = require('nf-core/ui/flexlayout');
- *     const Color = require('nf-core/ui/color');
+ *     const Pages = require('sf-core/ui/pages');
+ *     const Page = require('sf-core/ui/page');
+ *     const Label = require('sf-core/ui/label');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Color = require('sf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "Smartface Label",
  *         width: "100",
@@ -42,9 +42,9 @@ function Pages(params) {
      * This function shows a page by pushing it to the UI.Pages.
      *
      *     @example
-     *     const Pages = require('nf-core/ui/pages');
-     *     const Page = require('nf-core/ui/page');
-     *     const Button = require('nf-core/ui/button');
+     *     const Pages = require('sf-core/ui/pages');
+     *     const Page = require('sf-core/ui/page');
+     *     const Button = require('sf-core/ui/button');
      *     var myPage1 = new Page();
      *     var myPage2 = new Page();
      *
@@ -75,9 +75,9 @@ function Pages(params) {
      * This function returns to previous page in UI.Pages stack.
      *
      *     @example
-     *     const Pages = require('nf-core/ui/pages');
-     *     const Page = require('nf-core/ui/page');
-     *     const Button = require('nf-core/ui/button');
+     *     const Pages = require('sf-core/ui/pages');
+     *     const Page = require('sf-core/ui/page');
+     *     const Button = require('sf-core/ui/button');
      *     var myPage1 = new Page();
      *     var myPage2 = new Page();
      *

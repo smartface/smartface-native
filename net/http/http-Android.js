@@ -71,7 +71,7 @@ http.requestString = function(url, onLoad, onError) {
 http.requestImage = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
-            const Image = require("nf-core/ui/image");
+            const Image = require("sf-core/ui/image");
             var image = new Image({bitmap: response});
             onLoad(image);
         }
@@ -243,7 +243,7 @@ function getHeaderHashMap(params) {
 }
 
 function checkInternet() {
-    const Network = require("nf-core/device/network");
+    const Network = require("sf-core/device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;

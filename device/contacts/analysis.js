@@ -5,7 +5,7 @@
  * This class allows user to add a contact to contact list or to select a contact from list.
  *
  *     @example
- *     const Contacts = require("nf-core/device/contacts");
+ *     const Contacts = require("sf-core/device/contacts");
  *     var result = Application.checkPermission("READ_CONTACTS");
  *     if(!result) {
  *         var permissionCode = 1001;
@@ -31,7 +31,7 @@ function Contacts() {}
  *
  *
  *     @example
- *     const Contacts = require("nf-core/device/contacts");
+ *     const Contacts = require("sf-core/device/contacts");
  *     Contacts.add(
  *         contact: {
  *             displayName : "Smartface Team",
@@ -70,7 +70,7 @@ Contacts.add = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("nf-core/device/contacts");
+ *     const Contacts = require("sf-core/device/contacts");
  *     Contacts.pick({
  *         page : myPage,
  *         onSuccess : function(contact){
@@ -99,7 +99,7 @@ Contacts.pick = function(params) {};
  *
  *
  *     @example
- *     const Contacts = require("nf-core/device/contacts");
+ *     const Contacts = require("sf-core/device/contacts");
  *     Contacts.getAll({
  *         onSuccess : function(contacts){
  *             var count = contacts.length;

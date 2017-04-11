@@ -5,7 +5,7 @@
  * TextBox is a UI which users can edit the text.
  *
  *     @example
- *     const TextBox = require('nf-core/ui/textbox');
+ *     const TextBox = require('sf-core/ui/textbox');
  *     var myTextBox = new TextBox({
  *         left:10, top:10, width:200, height:65,
  *         hint: "Your hint text",

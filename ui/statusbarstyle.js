@@ -5,8 +5,8 @@
  * StatusBarStyle is an enum. It defines status bar appearance style for iOS.
  *
  *     @example
- *     const Page = require('nf-core/ui/page');
- *     const StatusBarStyle = require('nf-core/ui/statusbarstyle');
+ *     const Page = require('sf-core/ui/page');
+ *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
  *     var myPage = new Page();
  *     myPage.statusBar.ios.style = StatusBarStyle.LIGHTCONTENT;
  *

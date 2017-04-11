@@ -1,7 +1,7 @@
 const NativeDialog = requireClass("android.app.Dialog");
 
 function Dialog(params) {
-    const Flex = require("nf-core/ui/flexlayout");
+    const Flex = require("sf-core/ui/flexlayout");
     var _layout = new Flex();
     
     var activity = Android.getActivity();
