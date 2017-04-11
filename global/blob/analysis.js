@@ -6,7 +6,7 @@
  * Blob is a binary large object.
  * 
  *     @example
- *     const Image = require('nf-core/ui/image');
+ *     const Image = require('sf-core/ui/image');
  *     var myImage = Image.createFromFile("images://smartface.png")
  *     var blob = myImage.compress(Image.Format.JPEG, 100); 
  *     var blobSize = blob.size, blobType = blob.type;

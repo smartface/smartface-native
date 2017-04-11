@@ -7,8 +7,8 @@ const extend = require('js-base/core/extend');
  * Label is a view that displays read-only text on the screen.
  *
  *     @example
- *     const Label = require('nf-core/ui/label');
- *     const Color = require('nf-core/ui/color');
+ *     const Label = require('sf-core/ui/label');
+ *     const Color = require('sf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "This is my label",
  *         visible: true
@@ -29,7 +29,7 @@ const Label = extend(View)(
          *
          *     @example
          *     // In this example 'This link' text inside Label will shown underlined.
-         *     const Label = require('nf-core/ui/label');
+         *     const Label = require('sf-core/ui/label');
          *     var myLabel = new Label();
          *     myLabel.htmlText = "<a href='http://www.smartface.io'>This link</a> will redirect you to Smartface website.";
          *
@@ -45,8 +45,8 @@ const Label = extend(View)(
          * It is set to null by default.
          *
          *     @example
-         *     const Label = require('nf-core/ui/label');
-         *     const Font = require('nf-core/ui/font')
+         *     const Label = require('sf-core/ui/label');
+         *     const Font = require('sf-core/ui/font')
          *     var myLabel = new Label({
          *         text: "This is my label",
          *         visible: true
@@ -86,8 +86,8 @@ const Label = extend(View)(
          * can be used.
          *
          *     @example
-         *     const Label = require('nf-core/ui/label');
-         *     const TextAlignment = require('nf-core/ui/textalignment');
+         *     const Label = require('sf-core/ui/label');
+         *     const TextAlignment = require('sf-core/ui/textalignment');
          *     var myLabel = new Label();
          *     myLabel.textAlignment = TextAlignment.MIDCENTER;
          *

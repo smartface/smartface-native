@@ -7,7 +7,7 @@
  * can enable/disable items and listen press event.
  *
  *     @example
- *     const UI = require('nf-core/ui');
+ *     const UI = require('sf-core/ui');
  *     var myPage = new UI.Page();
  *     var myItem = new UI.HeaderBarItem({
  *         title: "Smartface",

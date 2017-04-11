@@ -1,8 +1,8 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("nf-core/util").UIControlEvents;
-const Color = require('nf-core/ui/color');
-const Direction = require('nf-core/ui/listview/direction');
+const UIControlEvents = require("sf-core/util").UIControlEvents;
+const Color = require('sf-core/ui/color');
+const Direction = require('sf-core/ui/listview/direction');
 
 const UITableViewRowAnimation = {
     fade : 0,
@@ -21,8 +21,8 @@ const ListView = extend(View)(
         var self = this;
 
         if(!self.nativeObject){
-            self.nativeObject = new SMFUITableView();
-            self.refreshControl = new UIRefreshControl();
+            self.nativeObject = new __SF_UITableView();
+            self.refreshControl = new __SF_UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
             self.nativeObject.separatorStyle = 0;
         }
@@ -40,7 +40,7 @@ const ListView = extend(View)(
         self.ios.onRowSwiped = function(direction){};
         
         self.ios.swipeItem = function(title,color,padding,action){
-            return MGSwipeButton.createMGSwipeButton(title,color,padding,action);
+            return __SF_MGSwipeButton.createMGSwipeButton(title,color,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){

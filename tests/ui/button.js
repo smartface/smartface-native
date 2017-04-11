@@ -1,10 +1,10 @@
 var expect  = require("chai").expect;
 var assert  = require("chai").assert;
 
-const Button        = require('nf-core/ui/button');
-const Color         = require('nf-core/ui/color');
-const StateList     = require('nf-core/util/statelist');
-const TextAlignment = require('nf-core/ui/textalignment');
+const Button        = require('sf-core/ui/button');
+const Color         = require('sf-core/ui/color');
+const StateList     = require('sf-core/util/statelist');
+const TextAlignment = require('sf-core/ui/textalignment');
 
 const colorList1 = new StateList({
     normal:   Color.WHITE,
@@ -30,7 +30,7 @@ const imageList = new StateList({
     focused:  "assets://focused.png"
 });
 
-salep.test("nf-core/ui/label Unit Test", function () {
+salep.test("sf-core/ui/label Unit Test", function () {
     this.case("[backgroundColors] setter/getter.", function () {
         var myButton = new Button();
         myButton.backgroundColors = colorList1;

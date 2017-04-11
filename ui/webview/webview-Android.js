@@ -1,5 +1,5 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
+const View = require('sf-core/ui/view');
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -51,7 +51,7 @@ const WebView = extend(View)(
             }
 
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
-            var nativeWebClient = NativeWebClient.extend("NFWebClient", overrideMethods, null);
+            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
             self.nativeObject.setWebViewClient(nativeWebClient);
             self.nativeObject.getSettings().setJavaScriptEnabled(true);
         }

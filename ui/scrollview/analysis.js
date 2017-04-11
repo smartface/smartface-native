@@ -9,9 +9,9 @@ const extend = require('js-base/core/extend');
  * ScrollView enables user to view pages with large content exceeding screen size via scroll action.
  *
  *     @example
- *     const View = require('nf-core/ui/view');
- *     const Color = require('nf-core/ui/color');
- *     const ScrollView = require('nf-core/ui/scrollview');
+ *     const View = require('sf-core/ui/view');
+ *     const Color = require('sf-core/ui/color');
+ *     const ScrollView = require('sf-core/ui/scrollview');
  *
  *     var myScrollView = new ScrollView({
  *         width: 500, height: 750,

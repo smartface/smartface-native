@@ -1,9 +1,9 @@
 const extend                        = require('js-base/core/extend');
-const View                          = require('nf-core/ui/view');
-const Color                         = require("nf-core/ui/color");
-const TextAlignment                 = require("nf-core/ui/textalignment");
-const TypeUtil                      = require("nf-core/util/type");
-const AndroidUnitConverter          = require("nf-core/util/Android/unitconverter.js");
+const View                          = require('sf-core/ui/view');
+const Color                         = require("sf-core/ui/color");
+const TextAlignment                 = require("sf-core/ui/textalignment");
+const TypeUtil                      = require("sf-core/util/type");
+const AndroidUnitConverter          = require("sf-core/util/Android/unitconverter.js");
         
 const Label = extend(View)(
     function (_super, params) {

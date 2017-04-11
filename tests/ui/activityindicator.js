@@ -1,10 +1,10 @@
 var expect  = require("chai").expect;
 var assert  = require("chai").assert;
 
-const ActivityIndicator = require('nf-core/ui/activityindicator');
-const Color = require('nf-core/ui/color');
+const ActivityIndicator = require('sf-core/ui/activityindicator');
+const Color = require('sf-core/ui/color');
 
-salep.test("nf-core/ui/activityindicator Unit Test", function () {
+salep.test("sf-core/ui/activityindicator Unit Test", function () {
     this.case("[color] setter/getter.", function () {
         var myActivityIndicator = new ActivityIndicator();
         myActivityIndicator.color = Color.BLUE;

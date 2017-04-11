@@ -4,8 +4,8 @@
  * TextAlignment aligns the text of a label instance.
  *
  *     @example
- *     const TextAlignment = require('nf-core/ui/textalignment');
- *     const Label = require('nf-core/ui/label');
+ *     const TextAlignment = require('sf-core/ui/textalignment');
+ *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label();
  *     myLabel.text = "Smartface";
  *     myLabel.textAlignment = TextAlignment.TOPRIGHT;

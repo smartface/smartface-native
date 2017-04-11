@@ -3,7 +3,7 @@ var Notifications = {};
 Notifications.LocalNotification = function LocalNotification(params) {
     var self = this;
     if (!self.nativeObject) {
-        self.nativeObject = new UILocalNotification();
+        self.nativeObject = new __SF_UILocalNotification();
     }
     
     Object.defineProperty(this, 'alertBody', {
@@ -114,15 +114,15 @@ Notifications.LocalNotification = function LocalNotification(params) {
     });
     
     this.schedule = function() {
-        UIApplication.sharedApplication().scheduleLocalNotification(self.nativeObject);
+        __SF_UIApplication.sharedApplication().scheduleLocalNotification(self.nativeObject);
     };
     
     this.present = function() {
-        UIApplication.sharedApplication().presentLocalNotificationNow(self.nativeObject);
+        __SF_UIApplication.sharedApplication().presentLocalNotificationNow(self.nativeObject);
     };
     
     this.cancel = function() {
-        UIApplication.sharedApplication().cancelLocalNotification(self.nativeObject);
+        __SF_UIApplication.sharedApplication().cancelLocalNotification(self.nativeObject);
     };
     
     // Handling Android specific properties
@@ -137,18 +137,18 @@ Notifications.LocalNotification = function LocalNotification(params) {
 };
 
 Notifications.cancelAllLocalNotifications = function(){
-    UIApplication.sharedApplication().cancelAllLocalNotifications();
+    __SF_UIApplication.sharedApplication().cancelAllLocalNotifications();
 };
 
 Notifications.ios = {};
 Object.defineProperties(Notifications.ios, {
     'applicationIconBadgeNumber': {
         get: function() {
-            return UIApplication.sharedApplication().applicationIconBadgeNumber;
+            return __SF_UIApplication.sharedApplication().applicationIconBadgeNumber;
         },
         set: function(value) {
             if (typeof value === 'number') {
-                UIApplication.sharedApplication().applicationIconBadgeNumber = value;
+                __SF_UIApplication.sharedApplication().applicationIconBadgeNumber = value;
             }
         },
         enumerable: true,
@@ -157,7 +157,7 @@ Object.defineProperties(Notifications.ios, {
         get: function() {
             var retval = [];
             
-            var nativeNotifications = UIApplication.sharedApplication().scheduledLocalNotifications;
+            var nativeNotifications = __SF_UIApplication.sharedApplication().scheduledLocalNotifications;
             var arrayLength = nativeNotifications.length;
             for (var i = 0; i < arrayLength; i++) {
                 var localNotification = new Notifications.LocalNotification();
@@ -180,13 +180,13 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){
     Application.ios.registeredRemoteWithSuccessCallback = onSuccess;
     Application.ios.registeredRemoteWithFailureCallback = onFailure;
     
-    var userNotificationSettings = UIUserNotificationSettings.settingsForTypesCategories((UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge), undefined);
-    UIApplication.sharedApplication().registerUserNotificationSettings(userNotificationSettings);
-    UIApplication.sharedApplication().registerForRemoteNotifications();
+    var userNotificationSettings = __SF_UIUserNotificationSettings.settingsForTypesCategories((__SF_UIUserNotificationTypeSound | __SF_UIUserNotificationTypeAlert | __SF_UIUserNotificationTypeBadge), undefined);
+    __SF_UIApplication.sharedApplication().registerUserNotificationSettings(userNotificationSettings);
+    __SF_UIApplication.sharedApplication().registerForRemoteNotifications();
 };
 
 Notifications.unregisterForPushNotifications = function(){
-    UIApplication.sharedApplication().unregisterForRemoteNotifications();
+    __SF_UIApplication.sharedApplication().unregisterForRemoteNotifications();
 }
 
 module.exports = Notifications;

@@ -21,11 +21,11 @@ http.Request = function Request(nativeObject) {
 
 http.requestFile = function(url, fileName, onLoad, onError) {
     return new http.Request(
-            SMFHttp.requestFileFrom(
+            __SF_Http.requestFileFrom(
                 url,
                 fileName,
                 function(e){
-                    const File = require('nf-core/io/file');
+                    const File = require('sf-core/io/file');
                     var file = new File({path:e});
                     onLoad(file);
                 },
@@ -38,10 +38,10 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 
 http.requestImage = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.requestImageFrom(
+            __SF_Http.requestImageFrom(
                 url,
                 function(e){
-                    const Image = require('nf-core/ui/image');
+                    const Image = require('sf-core/ui/image');
                     var image = Image.createFromImage(e);
                     onLoad(image);
                 },
@@ -54,7 +54,7 @@ http.requestImage = function(url, onLoad, onError) {
 
 http.requestString = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.requestStringFrom(
+            __SF_Http.requestStringFrom(
                 url,
                 function(e){
                     onLoad(e);
@@ -68,7 +68,7 @@ http.requestString = function(url, onLoad, onError) {
 
 http.requestJSON = function(url, onLoad, onError) {
     return new http.Request(
-            SMFHttp.requestJSONFrom(
+            __SF_Http.requestJSONFrom(
                 url,
                 function(e){
                     onLoad(e);
@@ -82,7 +82,7 @@ http.requestJSON = function(url, onLoad, onError) {
 
 http.request = function(params, onLoad, onError) {
     return new http.Request(
-            SMFHttp.requestWith(
+            __SF_Http.requestWith(
                 params,
                 function(e){
                     onLoad(e);

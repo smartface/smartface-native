@@ -1,4 +1,4 @@
-const Image = require("nf-core/ui/image");
+const Image = require("sf-core/ui/image");
 
 const UIImagePickerControllerSourceType = {
     photoLibrary : 0,
@@ -14,7 +14,7 @@ const UIImagePickerMediaTypes = {
 function Multimedia() {}
 
 Multimedia.createImagePickerController = function(e){
-    var picker =  new UIImagePickerController();
+    var picker =  new __SF_UIImagePickerController();
     if (e.action) {
         picker.mediaTypes = e.action;
     }
@@ -25,7 +25,7 @@ Multimedia.createImagePickerController = function(e){
     
     picker.allowsEditing = false;
     picker.sourceType = e.sourceType;
-    this.pickerDelegate =  new SMFUIImagePickerControllerDelegate();
+    this.pickerDelegate =  new __SF_UIImagePickerControllerDelegate();
           
     this.pickerDelegate.imagePickerControllerDidCancel = function(){
         if (e.onCancel){

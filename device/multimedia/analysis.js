@@ -7,10 +7,10 @@
  * Multimedia manages camera, video and image.
  * 
  *     @example
- *     const Page = require("nf-core/ui/page");
+ *     const Page = require("sf-core/ui/page");
  *     const extend = require("js-base/core/extend");
- *     const Button = require('nf-core/ui/button');
- *     const Multimedia = require("nf-core/device/multimedia");
+ *     const Button = require('sf-core/ui/button');
+ *     const Multimedia = require("sf-core/device/multimedia");
  *     
  *        var Page1 = extend(Page)(
  *            function(_super) {
@@ -75,11 +75,11 @@ Multimedia.startCamera = function(e) { };
  * Allows pick item from gallery.
  * 
  *     @example
- *     const Image = require("nf-core/ui/image");
- *     const Multimedia = require("nf-core/device/multimedia");
- *     const Page = require("nf-core/ui/page");
+ *     const Image = require("sf-core/ui/image");
+ *     const Multimedia = require("sf-core/device/multimedia");
+ *     const Page = require("sf-core/ui/page");
  *     const extend = require("js-base/core/extend");
- *     const Button = require('nf-core/ui/button');
+ *     const Button = require('sf-core/ui/button');
  * 
  *     var Page1 = extend(Page)(
  *        function(_super) {

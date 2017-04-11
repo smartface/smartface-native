@@ -1,5 +1,5 @@
 const ViewGroup                 = require('../viewgroup');
-const AndroidConfig             = require('nf-core/util/Android/androidconfig');
+const AndroidConfig             = require('sf-core/util/Android/androidconfig');
 const extend                    = require('js-base/core/extend');
 
 const NativeYogaLayout          = requireClass('com.facebook.yoga.android.YogaLayout');

@@ -7,12 +7,12 @@ const extend = require('js-base/core/extend');
  * ListView is a View that displays given items as a one-column vertical list.
  *
  *     @example
- *     const Color = require('nf-core/ui/color');
- *     const ListView = require('nf-core/ui/listview');
- *     const ListViewItem = require('nf-core/ui/listviewitem');
- *     const Label = require('nf-core/ui/label');
- *     const FlexLayout = require('nf-core/ui/flexlayout');
- *     const Direction = require('nf-core/ui/listview/direction');
+ *     const Color = require('sf-core/ui/color');
+ *     const ListView = require('sf-core/ui/listview');
+ *     const ListViewItem = require('sf-core/ui/listviewitem');
+ *     const Label = require('sf-core/ui/label');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Direction = require('sf-core/ui/listview/direction');
  *
  *     var myDataSet = [
  *         {

@@ -8,7 +8,7 @@ function Animator(params) {
         'perform': {
             value: function() {
                 // p1 : duration - Float, p2 : delay - Float, p3 : animations - Func(), p4 : completion - Func()  
-                SMFUIView.animation(self.duration,0,function(){
+                __SF_UIView.animation(self.duration,0,function(){
                     self.animFunction();
                     self.layout.applyLayout();
                 },function(){

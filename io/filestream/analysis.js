@@ -5,14 +5,14 @@
  * FileStream is a class which allows you to making IO operations. 
  * 
  *     @example
- *     const File = require('nf-core/io/file');
- *     const Path = require('nf-core/io/path');
- *     const FileStream = require('nf-core/ioui/filestream');
+ *     const File = require('sf-core/io/file');
+ *     const Path = require('sf-core/io/path');
+ *     const FileStream = require('sf-core/ioui/filestream');
  *     var myFile = new File({
  *         path: Path.DataDirectory + '/myFile.txt'
  *     });
  *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE);
- *     myFileStream.write('NativeFace');
+ *     myFileStream.write('Smartface');
  *     myFileStream.close();
  * 
  */

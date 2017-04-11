@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-const Image = require('nf-core/ui/image');
+const View = require('sf-core/ui/view');
+const Image = require('sf-core/ui/image');
 
 const UISearchBarStyle = {
     default : 0,
@@ -20,7 +20,7 @@ const SearchView = extend(View)(
         var self = this;
         
         if(!self.nativeObject) {
-            self.nativeObject = new UISearchBar();
+            self.nativeObject = new __SF_UISearchBar();
         }
         
         _super(this);
@@ -92,7 +92,7 @@ const SearchView = extend(View)(
             },
             set: function(iconImage) {
                 _iconImage = iconImage;
-                self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, UIControlStateNormal);
+                self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
             },
             enumerable: true
         });
@@ -195,7 +195,7 @@ const SearchView = extend(View)(
         
         //////////////////////////////////////////////////////
         // UISearchBarDelegate
-        self.searchBarDelegate = new SMFUISearchBarDelegate();
+        self.searchBarDelegate = new __SF_UISearchBarDelegate();
         self.searchBarDelegate.cancelButtonClicked = function(e){
             if (typeof self._onCancelButtonClicked === "function"){
                     self._onCancelButtonClicked();

@@ -2,10 +2,10 @@
 var Contacts = {};
 
 Contacts.add = function(params) {
-    var store = CNContactStore.new();
+    var store = __SF_CNContactStore.new();
 
     store.requestAccess(function(){
-        var contact = CNMutableContact.new();
+        var contact = __SF_CNMutableContact.new();
         for(var propertyName in params){
             // Added this check to resolve the sonar issue. 
             // It says that the body of every for...in statement should be wrapped 
@@ -16,19 +16,19 @@ Contacts.add = function(params) {
                     contact.givenName = params[propertyName];
                     break;
                 case 'phoneNumber' :
-                    var phoneNumber = CNPhoneNumber.phoneNumberWithStringValue(params[propertyName]);
-                    contact.phoneNumbers = [new CNLabeledValue(CNLabelPhoneNumberMain, phoneNumber)];
+                    var phoneNumber = __SF_CNPhoneNumber.phoneNumberWithStringValue(params[propertyName]);
+                    contact.phoneNumbers = [new __SF_CNLabeledValue(__SF_CNLabelPhoneNumberMain, phoneNumber)];
                     break;
                 case 'email' :
-                    contact.emailAddresses = [new CNLabeledValue(CNLabelHome, params[propertyName])];
+                    contact.emailAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, params[propertyName])];
                     break;
                 case 'urlAddress' :
-                    contact.urlAddresses = [new CNLabeledValue(CNLabelURLAddressHomePage, params[propertyName])];
+                    contact.urlAddresses = [new __SF_CNLabeledValue(__SF_CNLabelURLAddressHomePage, params[propertyName])];
                     break;
                 case 'address' :
-                    var addressValue = CNMutablePostalAddress.new();
+                    var addressValue = __SF_CNMutablePostalAddress.new();
                     addressValue.street = params[propertyName];
-                    contact.postalAddresses = [new CNLabeledValue(CNLabelHome, addressValue)];
+                    contact.postalAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, addressValue)];
                     break;
                 default:
             }
@@ -36,10 +36,10 @@ Contacts.add = function(params) {
         }
         
         if (typeof params.page === 'object') {
-            var contactViewController = CNContactViewController.viewControllerForNewContact(contact);
+            var contactViewController = __SF_CNContactViewController.viewControllerForNewContact(contact);
             contactViewController.contactStore = store;
             contactViewController.allowsActions = false;
-            var contactViewControllerDelegate = new SMFCNContactViewControllerDelegate();
+            var contactViewControllerDelegate = new __SF_CNContactViewControllerDelegate();
             contactViewControllerDelegate.didCompleteWithContact = function(contact){
                 if (contact) {
                     if (typeof params.onSuccess === 'function') {
@@ -52,10 +52,10 @@ Contacts.add = function(params) {
                 }
             };
             contactViewController.delegate = contactViewControllerDelegate;
-            var navigationalcontactViewController = new UINavigationController(contactViewController);
+            var navigationalcontactViewController = new __SF_UINavigationController(contactViewController);
             params.page.nativeObject.presentViewController(navigationalcontactViewController);
         } else {
-            var saveRequest = CNSaveRequest.new();
+            var saveRequest = __SF_CNSaveRequest.new();
             saveRequest.addContact(contact);
             var retval = store.executeSave(saveRequest);
             
@@ -77,11 +77,11 @@ Contacts.add = function(params) {
 Contacts.pick = function(params) {
     
     if (typeof params.page === 'object') {
-        var store = CNContactStore.new();
+        var store = __SF_CNContactStore.new();
         
         store.requestAccess(function(){
-            var pickerViewController = CNContactPickerViewController.new();
-            var pickerDelegate = new SMFCNContactPickerDelegate();
+            var pickerViewController = __SF_CNContactPickerViewController.new();
+            var pickerDelegate = new __SF_CNContactPickerDelegate();
             pickerDelegate.contactPickerDidCancel = function(){
                 pickerViewController.dismiss(true, function(){
                 });
@@ -104,7 +104,7 @@ Contacts.pick = function(params) {
 };
 
 Contacts.getAll = function(params) {
-    var store = CNContactStore.new();
+    var store = __SF_CNContactStore.new();
     store.requestAccess(function(){
         store.fetchAllContacts(function(allContactsNativeArray){
             var allContactsManagedArray = [];
