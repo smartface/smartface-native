@@ -62,7 +62,6 @@ Object.defineProperty(Path.android, 'storages', {
     get: function(){
         if(!storages.isResolved){
             var filesDir = NativeEnvironment.getExternalStorageDirectory().getPath();
-            console.log("filesDir: " + filesDir)
             if(filesDir){
                 storages['internal'] = filesDir;
             }
