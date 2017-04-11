@@ -6,7 +6,7 @@
  * SearchView is a UI which user can enter a search query and submit a request to search provider.
  *
  *     @example
- *     const SearchView = require('nf-core/ui/searchview');
+ *     const SearchView = require('sf-core/ui/searchview');
  *     var searchBar = new SearchView();
  *     searchBar.onTextChanged = function(searchText){
  *         console.log("searched text : " + searchText);

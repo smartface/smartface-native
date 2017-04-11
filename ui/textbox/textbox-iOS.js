@@ -1,8 +1,8 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const KeyboardType = require('nf-core/ui/keyboardtype');
-const ActionKeyType = require('nf-core/ui/actionkeytype');
-const Animator = require('nf-core/ui/animator');
+const KeyboardType = require('sf-core/ui/keyboardtype');
+const ActionKeyType = require('sf-core/ui/actionkeytype');
+const Animator = require('sf-core/ui/animator');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -39,7 +39,7 @@ const TextBox = extend(View)(
         var self = this;
 
         if (!self.nativeObject) {
-            self.nativeObject = new SMFUITextField();
+            self.nativeObject = new __SF_UITextField();
         }
 
         _super(this);
@@ -326,18 +326,34 @@ const TextBox = extend(View)(
             return self.nativeObject.parentViewController();
         }  
         
+        var _top = 0;
+        function getViewTop(view){
+            _top += view.frame.y;
+            if(view.superview){
+                if(view.superview.constructor.name === "SMFNative.SMFUIView"){
+                    if (view.superview.superview){
+                        if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
+                            return getViewTop(view.superview);
+                        }
+                    }
+                }
+            }
+            return _top;
+        }
+        
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
-            var top = self.nativeObject.frame.y;
+            _top = 0;
+            var top = getViewTop(self.nativeObject);
             var navigationBarHeight = 0;
         
             if(self.getParentViewController()){
                 if(self.getParentViewController().navigationController.navigationBar.visible){
-                    navigationBarHeight = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
-                    SMFUIView.animation(230,0,function(){
+                    __SF_UIView.animation(230,0,function(){
                         self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
@@ -355,9 +371,9 @@ const TextBox = extend(View)(
             if(self.getParentViewController()){
                 var top = 0;
                 if(self.getParentViewController().navigationController.navigationBar.visible){
-                    top = UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                    top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
-                SMFUIView.animation(130,0,function(){
+                __SF_UIView.animation(130,0,function(){
                     self.getParentViewController().view.yoga.top = top;
                     self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                 },function(){

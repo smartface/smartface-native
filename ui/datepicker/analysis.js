@@ -5,7 +5,7 @@
  * DatePicker is a dialog where users are able to pick a date on.
  *
  *     @example
- *     const DatePicker = require('nf-core/ui/datepicker');
+ *     const DatePicker = require('sf-core/ui/datepicker');
  *     var myDatePicker = new DatePicker();
  *     myDatePicker.onDateSelected = function(date) {
  *         alert('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());

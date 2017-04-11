@@ -6,8 +6,8 @@
  * for event handling. View is the base of all UI classes.
  *
  *     @example
- *     const View = require('nf-core/ui/view');
- *     const Color = require('nf-core/ui/color');
+ *     const View = require('sf-core/ui/view');
+ *     const Color = require('sf-core/ui/color');
  *     var myView = new View();
  *     myView.width = 300;
  *     myView.height = 500;
@@ -383,8 +383,8 @@ function View(params) {
      * Gets the parent view of a view.
      *
      *     @example
-     *     const FlexLayout = require('nf-core/ui/flexlayout');
-     *     const Label = require('nf-core/ui/label');
+     *     const FlexLayout = require('sf-core/ui/flexlayout');
+     *     const Label = require('sf-core/ui/label');
      *
      *     var myFlexLayout = new FlexLayout();
      *     myAbsoluteLayout.id = 5432;

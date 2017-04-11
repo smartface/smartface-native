@@ -8,7 +8,7 @@ Network.ConnectionType.WIFI   = 2;
 
 Object.defineProperty(Network, 'carrier', {
   get: function() {
-      var info = new CTTelephonyNetworkInfo();
+      var info = new __SF_CTTelephonyNetworkInfo();
       return info.subscriberCellularProvider.carrierName;
      },
      enumerable: true
@@ -16,14 +16,14 @@ Object.defineProperty(Network, 'carrier', {
 
 Object.defineProperty(Network, 'connectionType', {
   get: function() {
-      return UIDevice.currentReachabilityStatus();
+      return __SF_UIDevice.currentReachabilityStatus();
      },
      enumerable: true
 });
 
 Object.defineProperty(Network, 'connectionIP', {
   get: function() {
-      return UIDevice.getIFAddresses()[0];
+      return __SF_UIDevice.getIFAddresses()[0];
      },
      enumerable: true
 });

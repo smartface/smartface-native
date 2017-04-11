@@ -1,6 +1,6 @@
-const File = require('nf-core/io/file');
-const TypeUtil = require("nf-core/util/type");
-const Blob = require('nf-core/blob');
+const File = require('sf-core/io/file');
+const TypeUtil = require("sf-core/util/type");
+const Blob = require('sf-core/blob');
 
 const Format = {
     JPEG: 0,
@@ -16,14 +16,14 @@ function Image(params) {
         // For using [UIImage imageNamed:] function.
         var array = params.path.split("/");
         var fileName = array.pop();
-        self.nativeObject = UIImage.createName(fileName);
+        self.nativeObject = __SF_UIImage.createName(fileName);
       } else {
-        self.nativeObject = new UIImage(params.path);
+        self.nativeObject = new __SF_UIImage(params.path);
       }        
     }else if (params.name){
-        self.nativeObject = new UIImage.createName(params.name);
+        self.nativeObject = new __SF_UIImage.createName(params.name);
     }else if (params.blob){
-        self.nativeObject = UIImage.createNSData(params.blob.nativeObject);
+        self.nativeObject = __SF_UIImage.createNSData(params.blob.nativeObject);
     }else if (params.image){
         self.nativeObject = params.image;
     }

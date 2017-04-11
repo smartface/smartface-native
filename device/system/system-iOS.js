@@ -13,25 +13,25 @@ const UIDeviceBatteryState = {
 }
 
 Object.defineProperty(System, 'language', {
-  value: NSLocale.currentLocale().identifier,  
+  value: __SF_NSLocale.currentLocale().identifier,  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(System, 'batteryLevel', {
   get: function() {
-      UIDevice.currentDevice().batteryMonitoringEnabled = true;
-      return UIDevice.currentDevice().batteryLevel;
+      __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
+      return __SF_UIDevice.currentDevice().batteryLevel;
   },
   enumerable: true
 });
 
 Object.defineProperty(System, 'isBatteryCharged', {
   get: function() {
-      UIDevice.currentDevice().batteryMonitoringEnabled = true;
-      if(UIDevice.currentDevice().batteryState === 2 || UIDevice.currentDevice().batteryState === 3){
+      __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
+      if(__SF_UIDevice.currentDevice().batteryState === 2 || __SF_UIDevice.currentDevice().batteryState === 3){
         return true;
-      }else if (UIDevice.currentDevice().batteryState === 1){
+      }else if (__SF_UIDevice.currentDevice().batteryState === 1){
         return false;
       }
       return false;
@@ -46,24 +46,24 @@ Object.defineProperty(System, 'OS', {
 });
 
 Object.defineProperty(System, 'OSVersion', {
-  value: UIDevice.currentDevice().systemVersion,  
+  value: __SF_UIDevice.currentDevice().systemVersion,  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(System, 'clipboard', {
   get: function() {
-      return UIPasteboard.generalPasteboard().string;
+      return __SF_UIPasteboard.generalPasteboard().string;
   },
   set : function(value){
-    UIPasteboard.generalPasteboard().string = value;
+    __SF_UIPasteboard.generalPasteboard().string = value;
   },
   enumerable: true
 });
 
 Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   get: function() {
-      var context = new LAContext();
+      var context = new __SF_LAContext();
       return context.canEvaluatePolicy();
   },
   enumerable: true
@@ -71,20 +71,20 @@ Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
 
 Object.defineProperty(System, 'vibrate', {
   value:function(){
-     UIDevice.vibrate();
+     __SF_UIDevice.vibrate();
   },  
   writable: false,
   enumerable: true
 });
 
 System.ios.validateFingerPrint = function(params){
-    var context = new LAContext();
+    var context = new __SF_LAContext();
     context.evaluatePolicy(params.message,params.onSuccess,params.onError);
 }
 
 System.isApplicationInstalled = function(packageName) {
-  var url = NSURL.URLWithString(packageName);
-  if (UIApplication.sharedApplication().canOpenURL(url)){
+  var url = __SF_NSURL.URLWithString(packageName);
+  if (__SF_UIApplication.sharedApplication().canOpenURL(url)){
     return true;
   }else{
     return false;

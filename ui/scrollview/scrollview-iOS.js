@@ -1,7 +1,7 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
-const ScrollViewAlign = require("nf-core/ui/scrollview/scrollview-align");
-const ScrollViewEdge = require("nf-core/ui/scrollview/scrollview-edge");
+const ScrollViewAlign = require("sf-core/ui/scrollview/scrollview-align");
+const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
 
 const ScrollType = {
     vertical : 0,
@@ -13,7 +13,7 @@ const ScrollView = extend(ViewGroup)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUIScrollView();
+            self.nativeObject = new __SF_UIScrollView();
         }
         
         _super(this);

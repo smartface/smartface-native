@@ -10,8 +10,8 @@ const extend = require('js-base/core/extend');
  * A button instance consists of text or an icon(or both of them).
  *
  *     @example
- *     const Color = require('nf-core/ui/color');
- *     const Button = require('nf-core/ui/button');
+ *     const Color = require('sf-core/ui/color');
+ *     const Button = require('sf-core/ui/button');
  *     var myButton = new Button({
  *         width: 100,
  *         height: 80,
@@ -44,8 +44,8 @@ const Button = extend(View)(
          * It is set to null by default.
          *
          *     @example
-         *     const Button = require('nf-core/ui/button');
-         *     const Font = require('nf-core/ui/font');
+         *     const Button = require('sf-core/ui/button');
+         *     const Font = require('sf-core/ui/font');
          *     var myButton = new Button({
          *         text: "Click me!"
          *     });
@@ -73,8 +73,8 @@ const Button = extend(View)(
          * can be used.
          *
          *     @example
-         *     const Button = require('nf-core/ui/button');
-         *     const TextAlignment = require('nf-core/ui/textalignment');
+         *     const Button = require('sf-core/ui/button');
+         *     const TextAlignment = require('sf-core/ui/textalignment');
          *     var myButton = new Button();
          *     myButton.textAlignment = TextAlignment.MIDCENTER;
          * 
@@ -89,7 +89,7 @@ const Button = extend(View)(
          * Enables/disables the Button.
          *
          *     @example
-         *     const Button = require('nf-core/ui/button');
+         *     const Button = require('sf-core/ui/button');
          *     var myButton = new Button();
          *     myButton.enabled = false;
          *
@@ -104,8 +104,8 @@ const Button = extend(View)(
          * Gets/sets background imageof a Button.
          *
          *     @example
-         *     const Image = require('nf-core/ui/image');
-         *     const Button = require('nf-core/ui/button');
+         *     const Image = require('sf-core/ui/image');
+         *     const Button = require('sf-core/ui/button');
          *     var myButton = new Button();
          *     myButton.backgroundImage = {
          *         normal: Image.createFromFile("images://normal.png"),

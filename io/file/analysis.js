@@ -6,8 +6,8 @@
  * 'path' is required property for construction the File object.
  * 
  *     @example
- *     const File = require('nf-core/io/file');
- *     const Path = require('nf-core/io/path');
+ *     const File = require('sf-core/io/file');
+ *     const Path = require('sf-core/io/path');
  *     var myImage = new File({
  *         path: 'images://smartface.png'
  *     });

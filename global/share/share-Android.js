@@ -68,7 +68,7 @@ function writeImageToFile(image) {
     bitmap.compress(NativeBitmap.CompressFormat.PNG, 100, outStream);
 
     var byteArray = outStream.toByteArray();
-    var tempFile = new NativeFile(activity.getExternalFilesDir(null), "nf-core-temp.png");
+    var tempFile = new NativeFile(activity.getExternalFilesDir(null), "sf-core-temp.png");
     var fileOutStream = new NativeFileOutStream(tempFile);
     fileOutStream.write(byteArray);
     fileOutStream.flush();

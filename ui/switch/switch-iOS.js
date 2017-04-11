@@ -1,14 +1,14 @@
 const View = require('../view');
-const Color = require("nf-core/ui/color");
+const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("nf-core/util").UIControlEvents;
+const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const Switch = extend(View)(
     function (_super, params)  {
        var self = this;
        
        if(!self.nativeObject){
-           self.nativeObject = new UISwitch();            
+           self.nativeObject = new __SF_UISwitch();            
        }
          
        _super(this);

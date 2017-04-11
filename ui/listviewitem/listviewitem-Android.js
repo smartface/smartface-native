@@ -1,6 +1,6 @@
-const AndroidUnitConverter  = require("nf-core/util/Android/unitconverter.js");
+const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
-const FlexLayout            = require('nf-core/ui/flexlayout');
+const FlexLayout            = require('sf-core/ui/flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
 // due to performance this must required here. 
 const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout'); 

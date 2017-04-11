@@ -1,7 +1,7 @@
-const FlexLayout    = require("nf-core/ui/flexlayout");
-const Color         = require("nf-core/ui/color");
-const TypeUtil      = require("nf-core/util/type");
-const AndroidConfig = require("nf-core/util/Android/androidconfig");
+const FlexLayout    = require("sf-core/ui/flexlayout");
+const Color         = require("sf-core/ui/color");
+const TypeUtil      = require("sf-core/util/type");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
@@ -85,7 +85,7 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("nf-core/ui/router");
+                    const Router = require("sf-core/ui/router");
                     Router.goBack(null, true);
                 }
             }
@@ -117,9 +117,9 @@ function Page(params) {
             }
         },
         onActivityResult: function(requestCode, resultCode, data) {
-            const Contacts = require("nf-core/device/contacts");
-            const Multimedia = require("nf-core/device/multimedia");
-            const Sound = require("nf-core/device/sound");
+            const Contacts = require("sf-core/device/contacts");
+            const Multimedia = require("sf-core/device/multimedia");
+            const Sound = require("sf-core/device/sound");
 
             // todo: Define a method to register request and its callback 
             // for better performance. Remove if statement.
@@ -403,7 +403,7 @@ function Page(params) {
             return _headerBarLogo;
         },
         set: function(image) {
-            const Image = require("nf-core/ui/image");
+            const Image = require("sf-core/ui/image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
                 actionBar.setLogo(_headerBarLogo.nativeObject);
@@ -428,7 +428,7 @@ function Page(params) {
 
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
-        const HeaderBarItem = require("nf-core/ui/headerbaritem");
+        const HeaderBarItem = require("sf-core/ui/headerbaritem");
         view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,

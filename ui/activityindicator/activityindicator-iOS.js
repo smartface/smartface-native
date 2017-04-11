@@ -1,5 +1,5 @@
 const View = require('../view');
-const Color = require("nf-core/ui/color");
+const Color = require("sf-core/ui/color");
 const extend = require('js-base/core/extend');
 
 const ActivityIndicator = extend(View)(
@@ -11,12 +11,12 @@ const ActivityIndicator = extend(View)(
          if(!self.nativeObject){
               if (params.ios){
                   if (typeof params.ios.type === "number" && params.ios.type >= 0 && params.ios.type < 3){
-                      self.nativeObject = new UIActivityIndicatorView(params.ios.type);
+                      self.nativeObject = new __SF_UIActivityIndicatorView(params.ios.type);
                   }else{
-                       self.nativeObject = new UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
+                       self.nativeObject = new __SF_UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
                   }
               }else{
-                   self.nativeObject = new UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
+                   self.nativeObject = new __SF_UIActivityIndicatorView(ActivityIndicator.iOS.Type.WHITE);
               }
          }
          _super(this);

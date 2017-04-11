@@ -1,4 +1,4 @@
-const FileStream = require('nf-core/io/filestream');
+const FileStream = require('sf-core/io/filestream');
 
 function File(params) {
     var self = this;
@@ -52,7 +52,7 @@ function File(params) {
                 return self.nativeObject.getPath();
             },
             set: function(value){
-                self.nativeObject = SMFFile.create(value);
+                self.nativeObject = __SF_File.create(value);
             }
         },
         'size': {
@@ -138,11 +138,11 @@ function File(params) {
 };
 
 File.getDocumentsDirectory = function(){
-    return SMFFile.getDocumentsDirectory();
+    return __SF_File.getDocumentsDirectory();
 };
 
 File.getMainBundleDirectory = function(){
-    return SMFFile.getMainBundleDirectory();
+    return __SF_File.getMainBundleDirectory();
 };
 
 module.exports = File;

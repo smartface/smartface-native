@@ -1,4 +1,4 @@
-const AndroidConfig     = require('nf-core/util/Android/androidconfig')
+const AndroidConfig     = require('sf-core/util/Android/androidconfig')
 const NativeSettings    = requireClass('android.provider.Settings');
 const NativeBuild       = requireClass('android.os.Build');
 // Context.TELEPHONY_SERVICE

@@ -11,7 +11,7 @@ const Pages = require("./pages");
  * callback of page to be shown.
  * 
  *     @example
- *     const Router = require('nf-core/ui/router');
+ *     const Router = require('sf-core/ui/router');
  *     Router.add('login', require('pages/pgLogin'));
  *     Router.add('dashboard', require('pages/pgDashboard'));
  *     Router.go('login');
@@ -32,10 +32,10 @@ var history = [];
  * Gets/sets sliderDrawer of the Router.
  *
  *     @example
- *     const Router = require('nf-core/ui/router');
+ *     const Router = require('sf-core/ui/router');
  *     Router.add('login', require('pages/pgLogin'));
  *     Router.go('login');
- *     const SliderDrawer = require('nf-core/ui/sliderdrawer');
+ *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
  *     var mySliderDrawer = new SliderDrawer();
  *     Router.sliderDrawer = mySliderDrawer;
  *
@@ -57,7 +57,7 @@ Object.defineProperty(Router, 'sliderDrawer', {
     },
     set: function(sliderDrawerValue) 
     {
-        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        const SliderDrawer = require('sf-core/ui/sliderdrawer');
         if (sliderDrawerValue instanceof SliderDrawer) 
         {
             if (pagesInstance) 

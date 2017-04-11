@@ -6,8 +6,8 @@
  *
  *
  *     @example
- *     const Menu    = require('nf-core/ui/menu');
- *     const MenuItem    = require('nf-core/ui/menuitem');
+ *     const Menu    = require('sf-core/ui/menu');
+ *     const MenuItem    = require('sf-core/ui/menuitem');
  *
  *     var menu = new Menu();
  *     menu.headerTitle = "My Menu Title";

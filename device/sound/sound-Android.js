@@ -154,7 +154,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function getCurrentPageFragment() {
-    const Router = require("nf-core/ui/router");
+    const Router = require("sf-core/ui/router");
     return Router.getCurrentPage().page.nativeObject;
 }
 

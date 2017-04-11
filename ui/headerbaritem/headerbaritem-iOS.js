@@ -8,7 +8,7 @@ function HeaderBarItem(params) {
     
     var self = this;
     
-    self.nativeObject = new UIBarButtonItem();
+    self.nativeObject = new __SF_UIBarButtonItem();
     self.nativeObject.target = self.nativeObject;
     
     Object.defineProperties(this, {

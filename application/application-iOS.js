@@ -68,7 +68,7 @@ Application.restart = function(){
 // });
 
 // function getProjectJsonObject(){
-//     const File = require("nf-core/io/file");
+//     const File = require("sf-core/io/file");
 //     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
     
 //     // Publish case
@@ -78,7 +78,7 @@ Application.restart = function(){
     
 //     var retval = {};
 //     if(projectFile.exists){
-//         const FileStream = require("nf-core/io/filestream");
+//         const FileStream = require("sf-core/io/filestream");
 //         var projectFileStream = projectFile.openStream(FileStream.StreamType.READ);
 //         var projectFileContent = projectFileStream.readToEnd();
 //         if (projectFileContent) {
