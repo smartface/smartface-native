@@ -66,7 +66,7 @@ const Picker = extend(View)(
                 self.nativeObject.setMinValue(0);
                 self.nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 self.nativeObject.setDisplayedValues(_items);
-                self.nativeObject.setWrapSelectorWheel(true);
+                self.nativeObject.setWrapSelectorWheel(false);
             }
         }
 
