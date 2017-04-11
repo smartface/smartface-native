@@ -36,18 +36,18 @@ const methods = {
 };
 
 http.requestString = function(url, onLoad, onError) {
-    try {
-        var responseListener = VolleyResponse.Listener.implement({
-            onResponse: function(response) {
-                onLoad(response);
-            }
-        });
-        var responseErrorListener = VolleyResponse.ErrorListener.implement({
-            onErrorResponse: function(error) {
-                onError(error);
-            }
-        });
+    var responseListener = VolleyResponse.Listener.implement({
+        onResponse: function(response) {
+            onLoad(response);
+        }
+    });
+    var responseErrorListener = VolleyResponse.ErrorListener.implement({
+        onErrorResponse: function(error) {
+            onError(error);
+        }
+    });
         
+    try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
 
@@ -69,22 +69,22 @@ http.requestString = function(url, onLoad, onError) {
 };
 
 http.requestImage = function(url, onLoad, onError) {
+    var responseListener = VolleyResponse.Listener.implement({
+        onResponse: function(response) {
+            const Image = require("nf-core/ui/image");
+            var image = new Image({bitmap: response});
+            onLoad(image);
+        }
+    });
+    var responseErrorListener = VolleyResponse.ErrorListener.implement({
+        onErrorResponse: function(error) {
+            onError(error);
+        }
+    });
+    
     try {
-        var responseListener = VolleyResponse.Listener.implement({
-            onResponse: function(response) {
-                const Image = require("nf-core/ui/image");
-                var image = new Image({bitmap: response});
-                onLoad(image);
-            }
-        });
-        var responseErrorListener = VolleyResponse.ErrorListener.implement({
-            onErrorResponse: function(error) {
-                onError(error);
-            }
-        });
         if(checkInternet()) {
             const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-
             var request = new Request();
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
@@ -102,20 +102,16 @@ http.requestImage = function(url, onLoad, onError) {
 
 http.requestJSON = function(url, onLoad, onError) {
     return http.requestString(url, function(response) {
-        try {
-            // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
-            // onLoad(responseJSON);        // response is java.lang.String.
-            if(onLoad)
-                onLoad(response);
-        } catch (e) {
-            if(onError)
-                onError(e);
-        }
+        // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
+        // onLoad(responseJSON);        // response is java.lang.String.
+        if(onLoad)
+            onLoad(response);
     }, onError);
 };
 
 http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
+        var success = true;
         try {
             const IO = require("../../io");
             if(!fileName)
@@ -124,9 +120,12 @@ http.requestFile = function(url, fileName, onLoad, onError) {
             var stream = file.openStream(IO.FileStream.StreamType.WRITE);
             stream.write(response);
             stream.close();
-            onLoad(file);
         } catch (e) {
+            success = true;
             onError(e);
+        }
+        if(success) {
+            onLoad(file);
         }
     }, onError);
 };
@@ -156,8 +155,6 @@ http.request = function(params, onLoad, onError) {
         contentType = params.headers["Content-Type"];
     }
 
-    const NativeHashMap = requireClass("java.util.HashMap");
-    var headers = new NativeHashMap();
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
@@ -168,14 +165,16 @@ http.request = function(params, onLoad, onError) {
                     return body.getBytes();
                 },
                 getHeaders: function() {
-                    return getHeaderHashMap(params, headers);
+                    return getHeaderHashMap(params);
                 },
                 getBodyContentType: function() {
                     return contentType;
                 },
                 parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
                     var parsed = new NativeString();
-                    var value = params.headers["Accept-Encoding"];
+                    var value = null;
+                    if(params.headers)
+                        value = params.headers["Accept-Encoding"];
                     var parseCharset;
                     if(value && value.indexOf("gzip") !== -1) { // contains gzip
                         try {
@@ -218,7 +217,9 @@ http.request = function(params, onLoad, onError) {
     return request;
 };
 
-function getHeaderHashMap(params, headers) {
+function getHeaderHashMap(params) {
+    const NativeHashMap = requireClass("java.util.HashMap");
+    var headers = new NativeHashMap();
     var credentials = "";
     if(params.user && params.password) {
         credentials = params.user + ":" + params.password;
