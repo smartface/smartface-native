@@ -1,4 +1,4 @@
-const TypeUtil = require('nf-core/util/type');
+const TypeUtil = require('sf-core/util/type');
 
 function TimePicker(params) {
     var self = this;

@@ -1,5 +1,5 @@
-const FlexLayout = require('nf-core/ui/flexlayout');
-const Image = require("nf-core/ui/image");
+const FlexLayout = require('sf-core/ui/flexlayout');
+const Image = require("sf-core/ui/image");
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -13,11 +13,12 @@ function Page(params) {
     var self = this;
 
     if(!self.nativeObject){
-        self.nativeObject = new UIViewController();
+        self.nativeObject = new __SF_UIViewController();
     }
 
     self.pageView = new FlexLayout();
-    self.pageView.nativeObject.frame = UIScreen.mainScreen().bounds;
+    self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
         self.pageView.left = self.pageView.nativeObject.frame.x;
@@ -30,7 +31,7 @@ function Page(params) {
     self.calculatePosition();
 
     self.nativeObject.onViewLoad  = function(){
-        self.pageView.nativeObject.backgroundColor = UIColor.whiteColor();
+        self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
         return self.pageView.nativeObject;
     }
 
@@ -79,7 +80,7 @@ function Page(params) {
     });
 
     self.checkOrientation = function(){
-        var currentOrientation = UIApplication.sharedApplication().statusBarOrientation;
+        var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
 
         if (self.orientation.indexOf(currentOrientation) === -1){
             UIDevice.changeOrientation(self.orientation[0]);
@@ -125,7 +126,7 @@ function Page(params) {
     
     this.statusBar = {};
     Object.defineProperty(self.statusBar, 'height', {
-     value:  UIApplication.sharedApplication().statusBarFrame.height,
+     value:  __SF_UIApplication.sharedApplication().statusBarFrame.height,
      writable: false
     });
 

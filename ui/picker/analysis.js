@@ -7,7 +7,7 @@
  * you can call show() method.
  *
  *     @example
- *     const Picker = require("nf-core/ui/picker");
+ *     const Picker = require("sf-core/ui/picker");
  *     var items = [
  *         "item 1",
  *         "item 2",
@@ -17,7 +17,7 @@
  *     ];
  *     var myPicker = new Picker({
  *         items: items,
- *         index: 2
+ *         currentIndex: 2
  *     });
  *
  *     var okCallback = function()
@@ -44,7 +44,7 @@ function Picker() {
     /**
      * Gets/sets current index of the picker.
      *
-     * @property {Number} index
+     * @property {Number} currentIndex
      * @android
      * @ios
      * @since 0.1
@@ -66,6 +66,8 @@ function Picker() {
      * This function shows picker in a dialog.
      *
      * @param {Function} ok This event is called when user clicks ok button.
+     * @param {Object} ok.param
+     * @param {Number} ok.param.index
      * @param {Function} cancel This event is called when user clicks cancel button.
      * @method show
      * @android

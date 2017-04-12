@@ -7,8 +7,8 @@
  * to select between two options.
  *
  *     @example
- *     const Switch = require('nf-core/ui/switch');
- *     const Color = require('nf-core/ui/color');
+ *     const Switch = require('sf-core/ui/switch');
+ *     const Color = require('sf-core/ui/color');
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
@@ -54,8 +54,8 @@ const Switch = extend(View)(
      * by default. This property works only for Android.
      *
      *     @example
-     *     const Switch = require('nf-core/ui/switch');
-     *     const Color = require('nf-core/ui/color');
+     *     const Switch = require('sf-core/ui/switch');
+     *     const Color = require('sf-core/ui/color');
      *     var mySwitch = new Switch();
      *     mySwitch.android.toggleOffColor = Color.DARKGRAY;
      *

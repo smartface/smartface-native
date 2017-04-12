@@ -1,4 +1,4 @@
-const AndroidConfig     = require('nf-core/util/Android/androidconfig')
+const AndroidConfig     = require('sf-core/util/Android/androidconfig')
 const NativeSettings    = requireClass('android.provider.Settings');
 const NativeBuild       = requireClass('android.os.Build');
 // Context.TELEPHONY_SERVICE
@@ -10,7 +10,6 @@ Hardware.android = {};
 
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
-        var activity = Android.getActivity();
         var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
         return telephonyManager.getDeviceId();
     },

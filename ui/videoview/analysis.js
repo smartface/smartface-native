@@ -6,8 +6,8 @@
  * Supported formats for both platforms are 3GPP (.3gp) and MPEG-4 (.mp4).
  *
  *     @example
- *     const Flex      = require('nf-core/ui/flexlayout');
- *     const VideoView = require('nf-core/ui/videoview');
+ *     const Flex      = require('sf-core/ui/flexlayout');
+ *     const VideoView = require('sf-core/ui/videoview');
  *
  *     var myVideoView = new VideoView({
  *         left:10, top:10, height:250, width:250,

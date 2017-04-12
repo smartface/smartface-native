@@ -25,14 +25,14 @@ function Menu(params) {
     });
     
     self.show = function(page){
-        self.nativeObject = UIAlertController.createAlertController(0);
+        self.nativeObject = __SF_UIAlertController.createAlertController(0);
         
         if (self.headerTitle && self.headerTitle !== ""){
              self.nativeObject.title = self.headerTitle;
         }
         
         for (var i = 0; i < self.items.length; i++){
-            var action = UIAlertAction.createAction(self.items[i].title,0,self.items[i].onSelectedListener);
+            var action = __SF_UIAlertAction.createAction(self.items[i].title,0,self.items[i].onSelectedListener);
             self.nativeObject.addAction(action);
         }
         page.nativeObject.presentViewController(self.nativeObject);

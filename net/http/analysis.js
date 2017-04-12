@@ -4,7 +4,7 @@
  * http module allows sending http requests.
  * 
  *     @example
- *     const http = require("nf-core/net/http");
+ *     const http = require("sf-core/net/http");
  *     var myImageUrl = your-image-url;
  *     var request = http.requestImage(myImageUrl, onLoad, onError);
  * 
@@ -82,7 +82,7 @@ http.requestJSON = function(url, onLoad, onError) {}
  * Sends an http request defined with parameters.
  * 
  *     @example
- *     const http = require("nf-core/net/http");
+ *     const http = require("sf-core/net/http");
  *     var myHeaders = {
  *         "Content-Type": "text/plain;charset=UTF-8"
  *     }
@@ -124,7 +124,7 @@ http.request = function(params, onLoad, onError) {};
  * Http Request CANNOT be initialized. Use http's request methods instead.
  * 
  *     @example
- *     const http = require("nf-core/net/http");
+ *     const http = require("sf-core/net/http");
  *
  *     var myImageUrl = your-image-url;
  *     var request = http.requestImage(myImageUrl, onLoad, onError);

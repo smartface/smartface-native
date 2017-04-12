@@ -5,24 +5,24 @@
  * proceed with a given task.
  *
  *
- * @example
- *    const Menu    = require('nf-core/ui/menu');
- *    const MenuItem    = require('nf-core/ui/menuitem');
+ *     @example
+ *     const Menu    = require('sf-core/ui/menu');
+ *     const MenuItem    = require('sf-core/ui/menuitem');
  *
- *    var menu = new Menu();
- *    menu.headerTitle = "My Menu Title";
- *    var menuItem1    = new MenuItem({title : "Menu Item 1"});
- *    var menuItem2   = new MenuItem({title : "Menu Item 2"});
- *    menuItem1.onSelected = function(){
- *        console.log("menu item 1 clicked")
- *    }
+ *     var menu = new Menu();
+ *     menu.headerTitle = "My Menu Title";
+ *     var menuItem1    = new MenuItem({title : "Menu Item 1"});
+ *     var menuItem2   = new MenuItem({title : "Menu Item 2"});
+ *     menuItem1.onSelected = function(){
+ *         alert("menu item 1 clicked");
+ *     };
  *
- *    menuItem2.onSelected = function(){
- *        console.log("menu item 2 clicked")
- *    }
+ *     menuItem2.onSelected = function(){
+ *         alert("menu item 2 clicked");
+ *     };
  *
- *    menu.items = [menuItem1,menuItem2];
- *    menu.show(myPage);
+ *     menu.items = [menuItem1,menuItem2];
+ *     menu.show(myPage);
  */
 function Menu(params) {
     /**

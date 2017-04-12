@@ -1,5 +1,6 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
+const View = require('sf-core/ui/view');
+const Exception = require("sf-core/util/exception");
 
 const VideoView = extend(View)(
     function (_super, params) {
@@ -64,7 +65,12 @@ const VideoView = extend(View)(
             },
             'loadFile': {
                 value: function(file) {
-                    // TODO: handle inner paths.
+                    const File = require("sf-core/io/file");
+                    const Path = require("sf-core/io/path");
+                    
+                    if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
+                        throw new TypeError(Exception.TypeError.FILE);
+                    }
                     self.nativeObject.setVideoPath(file.path);
                 }
             },

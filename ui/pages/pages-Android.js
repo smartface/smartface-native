@@ -1,4 +1,4 @@
-const AndroidConfig         = require('nf-core/util/Android/androidconfig');
+const AndroidConfig         = require('sf-core/util/Android/androidconfig');
 const NativeView            = requireClass("android.view.View");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
@@ -91,7 +91,7 @@ Object.defineProperties(Pages,{
 
 function showSliderDrawer(_sliderDrawer){
     if(_sliderDrawer && _sliderDrawer.enabled){
-        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        const SliderDrawer = require('sf-core/ui/sliderdrawer');
         if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT 
             mDrawerLayout.openDrawer(5);
@@ -105,7 +105,7 @@ function showSliderDrawer(_sliderDrawer){
 
 function hideSliderDrawer(_sliderDrawer) {
    if(_sliderDrawer){
-        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        const SliderDrawer = require('sf-core/ui/sliderdrawer');
         if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             mDrawerLayout.closeDrawer(5);
@@ -135,7 +135,7 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
 
 function isSliderDrawerOpen(_sliderDrawer) {
     if(_sliderDrawer){
-        const SliderDrawer = require('nf-core/ui/sliderdrawer');
+        const SliderDrawer = require('sf-core/ui/sliderdrawer');
         if(_sliderDrawer.position === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             return mDrawerLayout.isDrawerOpen(5);
@@ -200,7 +200,7 @@ function registerOnBackKeyPressed(pagesStack){
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if( keyCode === 4 && keyEvent.getAction() === 0) {
-                const Router = require("nf-core/ui/router");
+                const Router = require("sf-core/ui/router");
                 var currentHistoryObject = Router.getCurrentPage();
                 if (currentHistoryObject && currentHistoryObject.page) {
                    currentHistoryObject.page.android.onBackButtonPressed && 

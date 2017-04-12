@@ -1,12 +1,9 @@
-const Label                     = require("nf-core/ui/label");
-const Color                     = require("nf-core/ui/color");
-const View                      = require("nf-core/ui/view");
+const Label                     = require("sf-core/ui/label");
+const Color                     = require("sf-core/ui/color");
 const extend                    = require('js-base/core/extend');
-const TypeUtil                  = require("nf-core/util/type");
+const TypeUtil                  = require("sf-core/util/type");
 
 const NativeButton              = requireClass("android.widget.Button");
-const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
-const NativeDrawable            = requireClass("android.graphics.drawable.Drawable");
 const NativeView                = requireClass("android.view.View");
 
 const Button = extend(Label)(
@@ -18,53 +15,6 @@ const Button = extend(Label)(
         _super(this);
         
         self.nativeObject.setAllCaps(false); // enable lowercase texts
-
-        var _backgroundImages = {
-            normal: "",
-            disabled: "",
-            selected: "",
-            pressed: "",
-            focused: ""
-        };
-        Object.defineProperty(this, 'backgroundImage', {
-            get: function() {
-                return _backgroundImages;
-            }, 
-            set: function(backgroundImage) {
-                // Assuming all paths are full path.
-                _backgroundImages = backgroundImage;
-                if(typeof(backgroundImage) === "string") {
-                    var drawable = NativeDrawable.createFromPath(backgroundImage);
-                    self.nativeObject.setBackground(drawable);
-                }
-                else{
-                    var stateListSet = new NativeStateListDrawable();
-                    var stateDrawable;
-                    if(_backgroundImages.normal){
-                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.normal);
-                        stateListSet.addState(View.State.STATE_NORMAL,stateDrawable);
-                    }
-                    if(_backgroundImages.disabled){
-                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.disabled);
-                        stateListSet.addState(View.State.STATE_DISABLED,stateDrawable);
-                    }
-                    if(_backgroundImages.selected){
-                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.selected);
-                        stateListSet.addState(View.State.STATE_SELECTED,stateDrawable);
-                    }
-                    if(_backgroundImages.pressed){
-                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.pressed);
-                        stateListSet.addState(View.State.STATE_PRESSED,stateDrawable);
-                    }
-                    if(_backgroundImages.focused){
-                        stateDrawable = NativeDrawable.createFromPath(_backgroundImages.focused);
-                        stateListSet.addState(View.State.STATE_FOCUSED,stateDrawable);
-                    }
-                    self.nativeObject.setBackground(stateListSet);
-                }
-            },
-            enumerable: true
-        });
         
         Object.defineProperty(this, 'enabled', {
             get: function() {

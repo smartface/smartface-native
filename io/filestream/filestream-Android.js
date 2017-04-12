@@ -1,7 +1,7 @@
-const File                  = require("nf-core/io/file");
-const Path                  = require("nf-core/io/path");
-const TypeUtil              = require("nf-core/util/type");
-const Blob                  = require('nf-core/blob');
+const File                  = require("sf-core/io/file");
+const Path                  = require("sf-core/io/path");
+const TypeUtil              = require("sf-core/util/type");
+const Blob                  = require('sf-core/blob');
 
 function FileStream(params) {
     const NativeBufferedReader = requireClass("java.io.BufferedReader");
@@ -28,29 +28,29 @@ function FileStream(params) {
             fileObject = params.source;
         }
         else{
-            throw "File path must be string or source must be given";
+            throw new Error("File path must be string or source must be given");
         }
     }
     else{
-        throw "Mode must be FileStream.StreamType";
+        throw new Error("Mode must be FileStream.StreamType");
     }
     
-    if(_mode == FileStream.StreamType.APPEND){
-        if(fileObject.type != Path.FILE_TYPE.FILE){
-            throw "FileStream.StreamType.APPEND can be used for only files.";
+    if(_mode === FileStream.StreamType.APPEND){
+        if(fileObject.type !== Path.FILE_TYPE.FILE){
+            throw new Error("FileStream.StreamType.APPEND can be used for only files.");
         }
         streamObject = new NativeFileWriter(fileObject.nativeObject,true);
         this.nativeObject = new NativeBufferedWriter(streamObject);
         
     }
-    else if(_mode == FileStream.StreamType.READ){
+    else if(_mode === FileStream.StreamType.READ){
         if(fileObject.nativeObject){
-            if(fileObject.type == Path.FILE_TYPE.ASSET){
+            if(fileObject.type === Path.FILE_TYPE.ASSET){
                 var assetsStreamObject = Android.getActivity().getAssets().open(fileObject.nativeObject);
                 streamObject = new NativeInputStreamReader(assetsStreamObject);
                 intermediaryStreamObjects.push(assetsStreamObject);
             }
-            else if(fileObject.type == Path.FILE_TYPE.DRAWABLE){
+            else if(fileObject.type === Path.FILE_TYPE.DRAWABLE){
                 var bitmapStreamObject = new NativeByteArrayOutputStream();
                 fileObject.nativeObject.compress(NativeBitmap.CompressFormat.PNG, 100, bitmapStreamObject);
                 var imageInByte = bitmapStreamObject.toByteArray();
@@ -65,14 +65,14 @@ function FileStream(params) {
             this.nativeObject = new NativeBufferedReader(streamObject);
         }
     }
-    else if(_mode == FileStream.StreamType.WRITE){
-        if(fileObject.type != Path.FILE_TYPE.FILE){
-            throw "FileStream.StreamType.WRITE can be used for only files.";
+    else if(_mode === FileStream.StreamType.WRITE){
+        if(fileObject.type !== Path.FILE_TYPE.FILE){
+            throw new Error("FileStream.StreamType.WRITE can be used for only files.");
         }
         streamObject = new NativeFileWriter(fileObject.nativeObject,false);
         this.nativeObject = new NativeBufferedWriter(streamObject);
     }
-    else {throw "Mode must be FileStream.StreamType"}
+    else {throw new Error("Mode must be FileStream.StreamType")}
     
     
     // For prevent crashing, we should keep stream status.
@@ -86,13 +86,13 @@ function FileStream(params) {
         },
         'isReadable': {
             get: function(){
-                return this.nativeObject && _closed && (_mode == FileStream.StreamType.READ);
+                return this.nativeObject && _closed && (_mode === FileStream.StreamType.READ);
             },
             enumerable: true
         },
         'isWritable': {
             get: function(){
-                return this.nativeObject && _closed && (_mode != FileStream.StreamType.READ);
+                return this.nativeObject && _closed && (_mode !== FileStream.StreamType.READ);
             },
             enumerable: true
         },
@@ -124,7 +124,7 @@ function FileStream(params) {
         },
         'readToEnd' : {
             value: function(){
-                if(!_closed && _mode == FileStream.StreamType.READ){
+                if(!_closed && _mode === FileStream.StreamType.READ){
                     var inputLine = this.nativeObject.readLine();
                     var fileContent = "";
                     while(inputLine){
@@ -139,7 +139,7 @@ function FileStream(params) {
         },
         'write' : {
             value: function(data){
-                if(!_closed && (_mode != FileStream.StreamType.READ)){
+                if(!_closed && (_mode !== FileStream.StreamType.READ)){
                     this.nativeObject.write(data);
                 }
             },
@@ -164,6 +164,5 @@ Object.defineProperties(FileStream.StreamType, {
         writable: false
     }
 });
-
 
 module.exports = FileStream;

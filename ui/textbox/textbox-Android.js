@@ -3,8 +3,8 @@ const Color             = require('../color');
 const extend            = require('js-base/core/extend');
 const KeyboardType      = require('../keyboardtype');
 const ActionKeyType     = require('../actionkeytype');
-const TextAlignment     = require('nf-core/ui/textalignment');
-const AndroidConfig     = require('nf-core/util/Android/androidconfig');
+const TextAlignment     = require('sf-core/ui/textalignment');
+const AndroidConfig     = require('sf-core/util/Android/androidconfig');
 
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");

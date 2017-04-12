@@ -25,7 +25,7 @@ function AlertView (params) {
          }
     };
     
-    this.nativeObject = new SMFUIAlertView(delegate);
+    this.nativeObject = new __SF_UIAlertView(delegate);
     self.nativeObject.title = "";
     
     var _title = "";

@@ -1,6 +1,6 @@
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
-const AndroidUnitConverter  = require('nf-core/util/Android/unitconverter.js');
+const AndroidUnitConverter  = require('sf-core/util/Android/unitconverter.js');
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 const SliderDrawer = extend(FlexLayout)(

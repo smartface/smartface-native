@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-const Router = require('nf-core/ui/router');
+const View = require('sf-core/ui/view');
+const Router = require('sf-core/ui/router');
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
@@ -66,7 +66,7 @@ const Picker = extend(View)(
                 self.nativeObject.setMinValue(0);
                 self.nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
                 self.nativeObject.setDisplayedValues(_items);
-                self.nativeObject.setWrapSelectorWheel(true);
+                self.nativeObject.setWrapSelectorWheel(false);
             }
         }
 

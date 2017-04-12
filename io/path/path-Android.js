@@ -1,5 +1,5 @@
-const AndroidConfig         = require("nf-core/util/Android/androidconfig");
-const TypeUtil              = require("nf-core/util/type");
+const AndroidConfig         = require("sf-core/util/Android/androidconfig");
+const TypeUtil              = require("sf-core/util/type");
 const NativeFile            = requireClass('java.io.File');
 
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
@@ -8,7 +8,7 @@ const emulatorPath = Android.getActivity().getExternalCacheDir().getAbsolutePath
 
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
-var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
+var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
 var desiredDrawableSizeIndex;
 var desiredDrawableDensityIndex;
 
@@ -67,13 +67,13 @@ Object.defineProperty(Path.android, 'storages', {
             
             // @todo test for more devices
             var externalStorage = new NativeFile('/storage/sdcard1/');
-            if(externalStorage.exists() && externalStorage.list() != null){
+            if(externalStorage.exists() && externalStorage.list() !== null){
                 storages['external'] = '/storage/sdcard1/';
             }
             
             // @todo test for more devices
             var usbStorage = new NativeFile('/storage/usbdisk/');
-            if(usbStorage.exists() && usbStorage.list() != null){
+            if(usbStorage.exists() && usbStorage.list() !== null){
                 storages['usb'] = '/storage/usbdisk/';
             }
             storages.isResolved = true;
@@ -92,9 +92,10 @@ function getResolvedPath(path){
     resolvedPaths[path] = {};
     resolvedPaths[path].path = path;
     
+    var fileName;
     if(path.startsWith('assets://')){
         // assets://smartface.png to smartface.png
-        var fileName = path.slice(9);
+        fileName = path.slice(9);
         resolvedPaths[path].name = fileName;
         
         if(AndroidConfig.isEmulator){
@@ -116,7 +117,7 @@ function getResolvedPath(path){
     }
     else if (path.startsWith('images://')){
         // images://smartface.png to smartface.png
-        var fileName = path.slice(9);
+        fileName = path.slice(9);
         if(fileName.endsWith(".png")){
             // we need file name without extension. We should check fileName.png and fileName.9.png for 9Path drawable.
             // images://smartface.png to smartface
@@ -170,14 +171,15 @@ function findDrawableAtDirectory(path,drawableName){
     }
     
     // searching on drawable folder
-    var targetPath = path + "/drawable/" + drawableName + ".png";
+    targetPath = path + "/drawable/" + drawableName + ".png";
     if(checkFileExistsInPath(targetPath)){
         return targetPath;
     }
     
+    var i, j;
     // searching drawable on densities and screen size which are over the device density and screen size
-    for(var i = desiredDrawableDensityIndex+1; i<drawableDensities.length; i++){
-        for(var j = desiredDrawableSizeIndex+1; j<drawableSizes.length; j++){
+    for(i = desiredDrawableDensityIndex+1; i<drawableDensities.length; i++){
+        for(j = desiredDrawableSizeIndex+1; j<drawableSizes.length; j++){
             targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
             if(targetPath){
                 return targetPath;
@@ -186,8 +188,8 @@ function findDrawableAtDirectory(path,drawableName){
     }
     
     // searching drawable on densities and screen size which are below the device density and screen size
-    for(var i = desiredDrawableDensityIndex-1; i>=0; i--){
-        for(var j = desiredDrawableSizeIndex-1; j>=0; j--){
+    for(i = desiredDrawableDensityIndex-1; i>=0; i--){
+        for(j = desiredDrawableSizeIndex-1; j>=0; j--){
             targetPath = checkDrawableVariations(path, drawableSizes[j], drawableDensities[i], drawableName);
             if(targetPath){
                 return targetPath;
@@ -241,19 +243,16 @@ function setScreenConfigs(){
     const NativeConfiguration   = requireClass("android.content.res.Configuration");
 
     var configuration = Android.getActivity().getResources().getConfiguration();
-    if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
+    if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
         desiredDrawableSizeIndex = 0;
     } 
-    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_NORMAL) {
-        desiredDrawableSizeIndex = 1;
-    } 
-    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_LARGE) {
+    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_LARGE) {
         desiredDrawableSizeIndex = 2;
     } 
-    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) == NativeConfiguration.SCREENLAYOUT_SIZE_XLARGE) {
+    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_XLARGE) {
         desiredDrawableSizeIndex = 3;
     } 
-    else {
+    else { // NativeConfiguration.SCREENLAYOUT_SIZE_NORMAL and others
         desiredDrawableSizeIndex = 1;
     }
     

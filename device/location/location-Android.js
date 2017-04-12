@@ -1,4 +1,4 @@
-const AndroidConfig             = require('nf-core/util/Android/androidconfig')
+const AndroidConfig             = require('sf-core/util/Android/androidconfig')
 const NativeCriteria            = requireClass('android.location.Criteria');
 const NativeLocationListener    = requireClass('android.location.LocationListener');
 // Context.LOCATION_SERVICE

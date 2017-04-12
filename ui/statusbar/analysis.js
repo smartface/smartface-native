@@ -7,9 +7,9 @@
  * UI.Page.statusBar property of your page.
  *
  *     @example
- *     const StatusBarStyle = require('nf-core/ui/statusbarstyle');
- *     const Color = require('nf-core/ui/color');
- *     const Page = require('nf-core/ui/page');
+ *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+ *     const Color = require('sf-core/ui/color');
+ *     const Page = require('sf-core/ui/page');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.statusBar.visible = true;
@@ -47,8 +47,8 @@ function StatusBar(parentPage) {
      * you should always use color with alpha channel.
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const Color = require('nf-core/ui/color');
+     *     const Page = require('sf-core/ui/page');
+     *     const Color = require('sf-core/ui/color');
      *     var myPage = new Page({
      *         onShow: function() {
      *             this.statusBar.android.color = Color.RED;
@@ -65,8 +65,8 @@ function StatusBar(parentPage) {
      * Gets/sets status bar style. This property works only for iOS
      *
      *     @example
-     *     const Page = require('nf-core/ui/page');
-     *     const StatusBarStyle = require('nf-core/ui/statusbarstyle');
+     *     const Page = require('sf-core/ui/page');
+     *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
      *     var myPage = new Page({
      *         onShow: function() {
      *             this.statusBar.ios.style = StatusBarStyle.DEFAULT;
