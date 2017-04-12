@@ -1,5 +1,5 @@
-const AndroidUnitConverter      = require("nf-core/util/Android/unitconverter.js");
-
+const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
+const Image                     = require("sf-core/ui/image");
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
@@ -11,7 +11,7 @@ const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeD
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
 
-const Color = require("nf-core/ui/color");
+const Color = require("sf-core/ui/color");
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -47,8 +47,6 @@ function View(params) {
             self.yogaNode = new NativeYogaNode();
         }
     }
-    // Passing click event from child to parent due to z-index
-    self.nativeObject.setDuplicateParentStateEnabled(true);
 
     var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable = new NativeGradientDrawable();
@@ -76,6 +74,18 @@ function View(params) {
         enumerable: true,
         configurable: true
     });
+    
+    var _backgroundImages = null;
+    Object.defineProperty(this, 'backgroundImage', {
+        get: function() {
+            return _backgroundImages;
+        }, 
+        set: function(backgroundImage) {
+            _backgroundImages = backgroundImage;
+            setBackgroundImage();
+        },
+        enumerable: true
+    });
 
     var idInitial = NativeView.generateViewId();
     self.nativeObject.setId(idInitial);
@@ -96,7 +106,7 @@ function View(params) {
         },
         set: function(backgroundColor) {
             _backgroundColor = backgroundColor;
-            setBackgroundColor(_backgroundColor);
+            setBackgroundColor();
         },
         enumerable: true
      });
@@ -122,6 +132,12 @@ function View(params) {
         set: function(borderRadius) {
             _borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
             setBorder();
+            if(_backgroundImages){
+                setBackgroundImage();
+            }
+            else{
+                setBackgroundColor();
+            }
         },
         enumerable: true
     });
@@ -190,72 +206,128 @@ function View(params) {
         position.height && (self.height = position.height);
     };
     
-    function setBackgroundColor(backgroundColor) {
-        if(typeof(backgroundColor) === "number") {
+    function setBackgroundImage() {
+        var resources = Android.getActivity().getResources();
+        const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
+        const Image = require("sf-core/ui/image");
+        var bitmap;
+        if(_backgroundImages instanceof Image) {
+            bitmap = _backgroundImages.nativeObject.getBitmap();
+            backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap); 
+            backgroundDrawable.setCornerRadius(_borderRadius);
+            setBackground(0);
+        }
+        else {
+            if(_backgroundImages) {
+                var stateDrawable;
+                var image;
+                backgroundDrawable = new NativeStateListDrawable();
+                if(_backgroundImages.normal) {
+                    image = _backgroundImages.normal;
+                    bitmap = image.nativeObject.getBitmap();
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                    stateDrawable.setCornerRadius(_borderRadius);
+                    backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
+                }
+                if(_backgroundImages.disabled){
+                    image = _backgroundImages.disabled;
+                    bitmap = image.nativeObject.getBitmap();
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                    stateDrawable.setCornerRadius(_borderRadius);
+                    backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+                }
+                if(_backgroundImages.selected){
+                    image = _backgroundImages.selected;
+                    bitmap = image.nativeObject.getBitmap();
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                    stateDrawable.setCornerRadius(_borderRadius);
+                    backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
+                }
+                if(_backgroundImages.pressed){
+                    image = _backgroundImages.pressed;
+                    bitmap = image.nativeObject.getBitmap();
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                    stateDrawable.setCornerRadius(_borderRadius);
+                    backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
+                }
+                if(_backgroundImages.focused){
+                    image = _backgroundImages.focused;
+                    bitmap = image.nativeObject.getBitmap();
+                    stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                    stateDrawable.setCornerRadius(_borderRadius);
+                    backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+                }
+                setBackground(0);
+            }
+        }
+    }
+    
+    function setBackgroundColor() {
+        if(typeof(_backgroundColor) === "number") {
             backgroundDrawable = new NativeGradientDrawable(); 
             backgroundDrawable.setCornerRadius(_borderRadius);
-            backgroundDrawable.setColor(backgroundColor);
+            backgroundDrawable.setColor(_backgroundColor);
         }
-        else if(backgroundColor.isGradient) {
-            var orientation = backgroundColor.nativeObject.getOrientation();
-            var colors = backgroundColor.colors;
+        else if(_backgroundColor.isGradient) {
+            var orientation = _backgroundColor.nativeObject.getOrientation();
+            var colors = _backgroundColor.colors;
             backgroundDrawable = new NativeGradientDrawable(orientation, colors); 
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
         else {
             var stateDrawable;
             backgroundDrawable = new NativeStateListDrawable();
-            if(backgroundColor.normal){
-                if(backgroundColor.normal.isGradient) {
-                    stateDrawable = backgroundColor.normal.nativeObject;
+            if(_backgroundColor.normal){
+                if(_backgroundColor.normal.isGradient) {
+                    stateDrawable = _backgroundColor.normal.nativeObject;
                 }
                 else {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(backgroundColor.normal);
+                    stateDrawable.setColor(_backgroundColor.normal);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
             }
-            if(backgroundColor.disabled){
-                if(backgroundColor.disabled.isGradient) {
-                    stateDrawable = backgroundColor.disabled.nativeObject;
+            if(_backgroundColor.disabled){
+                if(_backgroundColor.disabled.isGradient) {
+                    stateDrawable = _backgroundColor.disabled.nativeObject;
                 }
                 else {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(backgroundColor.disabled);
+                    stateDrawable.setColor(_backgroundColor.disabled);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
             }
-            if(backgroundColor.selected){
-                if(backgroundColor.selected.isGradient) {
-                    stateDrawable = backgroundColor.selected.nativeObject;
+            if(_backgroundColor.selected){
+                if(_backgroundColor.selected.isGradient) {
+                    stateDrawable = _backgroundColor.selected.nativeObject;
                 }
                 else {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(backgroundColor.selected);
+                    stateDrawable.setColor(_backgroundColor.selected);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_SELECTED,stateDrawable);
             }
-            if(backgroundColor.pressed){
-                if(backgroundColor.pressed.isGradient) {
-                    stateDrawable = backgroundColor.pressed.nativeObject;
+            if(_backgroundColor.pressed){
+                if(_backgroundColor.pressed.isGradient) {
+                    stateDrawable = _backgroundColor.pressed.nativeObject;
                 }
                 else {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(backgroundColor.pressed);
+                    stateDrawable.setColor(_backgroundColor.pressed);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
             }
-            if(backgroundColor.focused){
-                if(backgroundColor.focused.isGradient) {
-                    stateDrawable = backgroundColor.focused.nativeObject;
+            if(_backgroundColor.focused){
+                if(_backgroundColor.focused.isGradient) {
+                    stateDrawable = _backgroundColor.focused.nativeObject;
                 }
                 else {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(backgroundColor.focused);
+                    stateDrawable.setColor(_backgroundColor.focused);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
@@ -274,8 +346,6 @@ function View(params) {
             borderShapeDrawable = new NativeShapeDrawable(roundRect);
             borderShapeDrawable.getPaint().setColor(_borderColor);
             setBackground(1);
-            
-            setBackgroundColor(_backgroundColor);
         }
     }
     

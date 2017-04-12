@@ -1,5 +1,5 @@
-const File = require('nf-core/io/file');
-const Path = require('nf-core/io/path');
+const File = require('sf-core/io/file');
+const Path = require('sf-core/io/path');
 
 function Font(params) {
     // Assign parameters given in constructor

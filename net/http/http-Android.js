@@ -1,8 +1,14 @@
-const Volley = requireClass("com.android.volley.toolbox.Volley");
-const VolleyRequest  = requireClass("com.android.volley.Request");
-const VolleyResponse = requireClass("com.android.volley.Response");
-const NativeInteger  = requireClass("java.lang.Integer");
-const NativeString   = requireClass("java.lang.String");
+const Volley                = requireClass("com.android.volley.toolbox.Volley");
+const VolleyRequest         = requireClass("com.android.volley.Request");
+const VolleyResponse        = requireClass("com.android.volley.Response");
+const VolleyParseError      = requireClass("com.android.volley.ParseError");
+const VolleyHttpHeaderParser= requireClass("com.android.volley.toolbox.HttpHeaderParser");
+const NativeInteger         = requireClass("java.lang.Integer");
+const NativeString          = requireClass("java.lang.String");
+const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
+const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
+const InputStreamReader     = requireClass("java.io.InputStreamReader");
+const BufferedReader        = requireClass("java.io.BufferedReader");
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -30,18 +36,18 @@ const methods = {
 };
 
 http.requestString = function(url, onLoad, onError) {
-    try {
-        var responseListener = VolleyResponse.Listener.implement({
-            onResponse: function(response) {
-                onLoad(response);
-            }
-        });
-        var responseErrorListener = VolleyResponse.ErrorListener.implement({
-            onErrorResponse: function(error) {
-                onError(error);
-            }
-        });
+    var responseListener = VolleyResponse.Listener.implement({
+        onResponse: function(response) {
+            onLoad(response);
+        }
+    });
+    var responseErrorListener = VolleyResponse.ErrorListener.implement({
+        onErrorResponse: function(error) {
+            onError(error);
+        }
+    });
         
+    try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
 
@@ -63,22 +69,22 @@ http.requestString = function(url, onLoad, onError) {
 };
 
 http.requestImage = function(url, onLoad, onError) {
+    var responseListener = VolleyResponse.Listener.implement({
+        onResponse: function(response) {
+            const Image = require("sf-core/ui/image");
+            var image = new Image({bitmap: response});
+            onLoad(image);
+        }
+    });
+    var responseErrorListener = VolleyResponse.ErrorListener.implement({
+        onErrorResponse: function(error) {
+            onError(error);
+        }
+    });
+    
     try {
-        var responseListener = VolleyResponse.Listener.implement({
-            onResponse: function(response) {
-                const Image = require("nf-core/ui/image");
-                var image = new Image({bitmap: response});
-                onLoad(image);
-            }
-        });
-        var responseErrorListener = VolleyResponse.ErrorListener.implement({
-            onErrorResponse: function(error) {
-                onError(error);
-            }
-        });
         if(checkInternet()) {
             const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-
             var request = new Request();
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
@@ -96,33 +102,30 @@ http.requestImage = function(url, onLoad, onError) {
 
 http.requestJSON = function(url, onLoad, onError) {
     return http.requestString(url, function(response) {
-        try {
-            // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
-            // onLoad(responseJSON);        // response is java.lang.String.
-            if(onLoad)
-                onLoad(response);
-        } catch (e) {
-            if(onError)
-                onError(e);
-        }
+        // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
+        // onLoad(responseJSON);        // response is java.lang.String.
+        if(onLoad)
+            onLoad(response);
     }, onError);
 };
 
 http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
+        var success = true;
         try {
             const IO = require("../../io");
-            var filePath;
             if(!fileName)
-                filePath = url.substring(url.lastIndexOf('/'));
-            filePath = fileName;
-            var file = new IO.File({path: filePath});
+                fileName = url.substring(url.lastIndexOf('/'));
+            var file = new IO.File({path: fileName});
             var stream = file.openStream(IO.FileStream.StreamType.WRITE);
             stream.write(response);
             stream.close();
-            onLoad(file);
         } catch (e) {
+            success = true;
             onError(e);
+        }
+        if(success) {
+            onLoad(file);
         }
     }, onError);
 };
@@ -147,7 +150,7 @@ http.request = function(params, onLoad, onError) {
         body = new NativeString(params.body);
     var request = new Request();
     
-    var contentType = "text/plain";
+    var contentType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
@@ -166,6 +169,37 @@ http.request = function(params, onLoad, onError) {
                 },
                 getBodyContentType: function() {
                     return contentType;
+                },
+                parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
+                    var parsed = new NativeString();
+                    var value = null;
+                    if(params.headers)
+                        value = params.headers["Accept-Encoding"];
+                    var parseCharset;
+                    if(value && value.indexOf("gzip") !== -1) { // contains gzip
+                        try {
+                            var inputStream = new ByteArrayInputStream(response.data);
+                            var gzipStream = new GZIPInputStream(inputStream);
+                            var reader = new InputStreamReader(gzipStream);
+                            var bufferedReader = new BufferedReader(reader);
+                            for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
+                            bufferedReader.close();
+                            gzipStream.close();
+                        } catch (error) {
+                            var parseError = new VolleyParseError();
+                            return VolleyResponse.error(parseError);
+                        }
+                    }
+                    else {
+                        try {
+                            parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
+                            parsed = new NativeString(response.data, parseCharset);
+                        } catch (error) {
+                            parsed = new NativeString(response.data);
+                        }
+                    }
+                    var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
+                    return VolleyResponse.success(parsed, cacheHeaders);
                 }
             }, parameters);    
         }
@@ -187,20 +221,21 @@ function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
     var credentials = "";
-    if(params.user && params.password)
+    if(params.user && params.password) {
         credentials = params.user + ":" + params.password;
-    const NativeBase64 = requireClass("android.util.Base64");
-    var bytes = new NativeString(credentials).getBytes();
-    var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
-    var auth = "Basic " + encodedString;
-    headers.put("Authorization", auth);
+        const NativeBase64 = requireClass("android.util.Base64");
+        var bytes = new NativeString(credentials).getBytes();
+        var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
+        var auth = "Basic " + encodedString;
+        headers.put("Authorization", auth);   
+    }
     
     if(params.headers) {
         var i;
         var keys = Object.keys(params.headers);
         for(i = 0; i < keys.length; i++) {
             var value = params.headers[keys[i]];
-            if(typeof(keys[i]) == "string" && typeof(value) == "string")
+            if(typeof(keys[i]) === "string" && typeof(value) === "string")
                 headers.put(keys[i], value);
         }
     }
@@ -208,8 +243,8 @@ function getHeaderHashMap(params) {
 }
 
 function checkInternet() {
-    const Network = require("nf-core/device/network");
-    if(Network.connectionType == Network.ConnectionType.None)
+    const Network = require("sf-core/device/network");
+    if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
 }

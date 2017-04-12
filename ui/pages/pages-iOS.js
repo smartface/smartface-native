@@ -5,12 +5,12 @@ function Pages(params) {
     var _sliderDrawer = null;
     self.sliderDrawerGesture = null;
     
-   // UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
+   // __SF_UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
 
-    self.nativeObject = new UINavigationController(rootViewController);
+    self.nativeObject = new __SF_UINavigationController(rootViewController);
     self.nativeObject.setTranslucent(false);
-    UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
-    UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
+    __SF_UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
+    __SF_UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
     
     Object.defineProperty(self, 'sliderDrawer', {
         get: function() {
@@ -24,7 +24,7 @@ function Pages(params) {
         enumerable: true
     });
     
-    self.navigationControllerDelegate = new SMFUINavigationControllerDelegate();
+    self.navigationControllerDelegate = new __SF_UINavigationControllerDelegate();
     self.navigationControllerDelegate.willShow = function(e)
     {
         var pageToShow = e[0];

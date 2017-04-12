@@ -16,7 +16,7 @@ function Blob(parts, properties) {
 }
 
 Blob.createFromBase64 = function(base64) {
-     return new Blob(NSData.base64Encoded(base64));;
+     return new Blob(__SF_NSData.base64Encoded(base64));;
 }
 
 module.exports = Blob;

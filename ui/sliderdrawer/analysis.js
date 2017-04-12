@@ -10,9 +10,9 @@ const extend = require('js-base/core/extend');
  * 
  * 
  *    @example
- *    const SliderDrawer = require('nf-core/ui/sliderdrawer');
- *    const Button = require('nf-core/ui/button');
- *    const Router = require('nf-core/ui/router');
+ *    const SliderDrawer = require('sf-core/ui/sliderdrawer');
+ *    const Button = require('sf-core/ui/button');
+ *    const Router = require('sf-core/ui/router');
  *    
  *    Router.add('login', require('pages/pgLogin'));
  *    Router.go('login');

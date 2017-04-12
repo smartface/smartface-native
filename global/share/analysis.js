@@ -14,8 +14,8 @@ Object.defineProperties(Share, {
     * Shares a text.
     * 
     *     @example
-    *     const Share = require('nf-core/share');
-    *     Share.shareText("Hello from nf-core", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
+    *     const Share = require('sf-core/share');
+    *     Share.shareText("Hello from sf-core", myPage, [Share.ios.Twitter, Share.ios.Facebook]);
     *
     * @method shareText
     * @param {String} text
@@ -34,8 +34,8 @@ Object.defineProperties(Share, {
     * Shares an image.
     *
     *     @example
-    *     const Share = require('nf-core/share');
-    *     const Image = require('nf-core/ui/image');
+    *     const Share = require('sf-core/share');
+    *     const Image = require('sf-core/ui/image');
     *    
     *     var image = Image.createFromFile('path to the image');
     *     Share.shareImage(image, myPage, []);
@@ -57,8 +57,8 @@ Object.defineProperties(Share, {
     * Shares a file.
     * 
     *     @example
-    *     const Share = require('nf-core/share');
-    *     const File = require('nf-core/io/file');
+    *     const Share = require('sf-core/share');
+    *     const File = require('sf-core/io/file');
     *    
     *     var file = new File({path: 'path to the file'});
     *     Share.shareFile(file, myPage, []);

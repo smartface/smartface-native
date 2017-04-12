@@ -1,12 +1,12 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
+const View = require('sf-core/ui/view');
 
 const Picker = extend(View)(
     function (_super, params) {
         var self = this;
 
         if(!self.nativeObject) {
-            self.nativeObject = new UIPickerView();
+            self.nativeObject = new __SF_UIPickerView();
         }
 
         _super(this);
@@ -29,7 +29,7 @@ const Picker = extend(View)(
             },
             set: function(currentIndex) {
                 _currentIndex = currentIndex;
-                var defaultComponentIndex = 0; // nf-core does not support multi components.
+                var defaultComponentIndex = 0; // sf-core does not support multi components.
                 self.nativeObject.selectRowInComponentAnimated(_currentIndex, defaultComponentIndex, true);
             },
             enumerable: true
@@ -49,7 +49,7 @@ const Picker = extend(View)(
         //////////////////////////////////////////////////////
         // UIPickerViewDataSource
         var _component = 1;
-        self.pickerDataSource = new SMFUIPickerViewDataSource();
+        self.pickerDataSource = new __SF_UIPickerViewDataSource();
         self.pickerDataSource.numberOfComponents = function(){
             return _component;
         };
@@ -60,7 +60,7 @@ const Picker = extend(View)(
 
         //////////////////////////////////////////////////////
         // UIPickerViewDelegate
-        self.pickerDelegate = new SMFUIPickerViewDelegate();
+        self.pickerDelegate = new __SF_UIPickerViewDelegate();
         self.pickerDelegate.titleForRow = function(e){
             return _items[e.row];
         };
@@ -74,10 +74,14 @@ const Picker = extend(View)(
 
         self.show = function(ok,cancel){
               var okFunc = function(e){
-                  ok({index : e.index});
+                if (typeof ok === "function"){
+                    ok({index : e.index});
+                }
               };
               var cancelFunc = function(e){
-                  cancel();
+                if (typeof cancel === "function"){
+                    cancel();
+                }
               };
               self.nativeObject.show(self.nativeObject,cancelFunc,okFunc);
         }

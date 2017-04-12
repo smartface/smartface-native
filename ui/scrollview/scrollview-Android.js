@@ -31,7 +31,7 @@ const ScrollView = extend(ViewGroup)(
             'scrollToCoordinate': {
                 value: function(coordinate) {
                     if (coordinate) {
-                        const UnitConverter = require('nf-core/util/Android/unitconverter');
+                        const UnitConverter = require('sf-core/util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         (ScrollView.Align.HORIZONTAL === _align) && self.nativeObject.smoothScrollTo(coordinate, 0);

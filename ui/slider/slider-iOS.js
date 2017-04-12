@@ -1,7 +1,7 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const UIControlEvents = require("nf-core/util").UIControlEvents;
-const Color = require("nf-core/ui/color");
+const UIControlEvents = require("sf-core/util").UIControlEvents;
+const Color = require("sf-core/ui/color");
 
 const SliderState = {
     normal: 0,
@@ -16,7 +16,7 @@ const Slider = extend(View)(
         var self = this;
         
         if(!self.nativeObject){
-            self.nativeObject = new SMFUISlider(); 
+            self.nativeObject = new __SF_UISlider(); 
         }
         
         _super(this);

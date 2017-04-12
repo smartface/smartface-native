@@ -6,8 +6,8 @@
  * ViewGroup is parent class of all layouts. ViewGroup is an abstract class. You can't create instance from it.
  *
  *     @example
- *     const FlexLayout = require('nf-core/ui/flexlayout');
- *     const Label = require('nf-core/ui/label');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Label = require('sf-core/ui/label');
  *     var myFlexLayout = new FlexLayout();
  *     var myLabel = new Label({
  *          text: "Smartface Label"
@@ -65,8 +65,8 @@ const ViewGroup = extend(View)(
          * Finds a child view with specified id within the layout.
          *
          *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
-         *     const Label = require('nf-core/ui/label');
+         *     const FlexLayout = require('sf-core/ui/flexlayout');
+         *     const Label = require('sf-core/ui/label');
          *     var myFlexLayout = new FlexLayout();
          *     var myLabel = new Label({
          *          text: "Smartface Label",

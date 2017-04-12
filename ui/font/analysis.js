@@ -6,8 +6,8 @@
  * to UI objects holding text property (UI.Label, UI.Button etc).
  *
  *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
+ *     const Font = require('sf-core/ui/font');
+ *     const Label = require('sf-core/ui/label');
  *
  *     var myLabel = new Label();
  *     myLabel.text = "Bold_Italic Font";
@@ -24,8 +24,8 @@ function Font() {}
  * Creates a font instance with the given family name, size and style.
  *
  *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
+ *     const Font = require('sf-core/ui/font');
+ *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL)
  *     });
@@ -46,8 +46,8 @@ Font.create = function(fontFamily, size, style) { }
  * Creates a font instance with the given file path and size.
  *
  *     @example
- *     const Font = require('nf-core/ui/font');
- *     const Label = require('nf-core/ui/label');
+ *     const Font = require('sf-core/ui/font');
+ *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label({
  *         font: Font.createFromFile("assets://MyFont.ttf", 16)
  *     });

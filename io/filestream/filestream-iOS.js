@@ -5,7 +5,7 @@ FileStream.create = function(path, mode){
     }
 
     var fileStreamInstance = new FileStream();
-    fileStreamInstance.nativeObject = SMFFileStream.createWithPathWithMode(path, modeValue);
+    fileStreamInstance.nativeObject = __SF_FileStream.createWithPathWithMode(path, modeValue);
     return fileStreamInstance;
 };
 

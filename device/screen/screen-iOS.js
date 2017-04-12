@@ -1,4 +1,4 @@
-const Image = require("nf-core/ui/image");
+const Image = require("sf-core/ui/image");
 
 function Screen() {}
 
@@ -13,19 +13,19 @@ Screen.ios = {};
     6 faceDown
 */
 Object.defineProperty(Screen, 'orientation', {
-  value: UIDevice.currentDevice().orientation,  
+  value: __SF_UIDevice.currentDevice().orientation,  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(Screen, 'height', {
-  value: UIScreen.mainScreen().bounds.height,  
+  value: __SF_UIScreen.mainScreen().bounds.height,  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(Screen, 'width', {
-  value: UIScreen.mainScreen().bounds.width,  
+  value: __SF_UIScreen.mainScreen().bounds.width,  
   writable: false,
   enumerable: true
 });
@@ -37,14 +37,14 @@ Object.defineProperty(Screen, 'touchSupported', {
 });
 
 Object.defineProperty(Screen.ios, 'forceTouchAvaliable', {
-  value: UIDevice.forceTouchAvaliable(),  
+  value: __SF_UIDevice.forceTouchAvaliable(),  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(Screen, 'capture', {
   value: function(){
-    return Image.createFromImage(UIDevice.takeSnapShot());
+    return Image.createFromImage(__SF_UIDevice.takeSnapShot());
   },  
   writable: false,
   enumerable: true
@@ -53,9 +53,9 @@ Object.defineProperty(Screen, 'capture', {
 
 Object.defineProperty(Screen, 'dpi', {
   get: function() {
-          if (UIScreen.mainScreen().scale == 2){
+          if (__SF_UIScreen.mainScreen().scale === 2){
               return 326;
-          }else if (UIScreen.mainScreen().scale == 3){
+          }else if (__SF_UIScreen.mainScreen().scale === 3){
               return 401;
           }else{
               return 163;

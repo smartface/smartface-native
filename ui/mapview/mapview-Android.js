@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
-const View = require('nf-core/ui/view');
-const Color = require('nf-core/ui/color');
+const View = require('sf-core/ui/view');
+const Color = require('sf-core/ui/color');
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 
 const hueDic = {};
@@ -29,7 +29,7 @@ const MapView = extend(View)(
         self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
             onMapReady: function(googleMap) {
                 _nativeGoogleMap = googleMap;
-                defineMapRequiredProperties();
+                !definedProperties && defineMapRequiredProperties();
 
                 self.nativeObject.onStart();
                 self.nativeObject.onResume();
@@ -56,6 +56,7 @@ const MapView = extend(View)(
             }
         });
 
+        var definedProperties = false;
         function defineMapRequiredProperties() {
             Object.defineProperties(self, {
                 'centerLocation': {
@@ -174,6 +175,7 @@ const MapView = extend(View)(
                     }
                 }
             });
+            definedProperties = true;
         };
 
         // Assign parameters given in constructor

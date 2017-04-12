@@ -5,8 +5,8 @@
  * Data is an interface for storing key data on Device like user information, login data or token. 
  * 
  *     @example
- *     const Data = require('nf-core/data');
- *     const Router = require('nf-core/ui/router');
+ *     const Data = require('sf-core/data');
+ *     const Router = require('sf-core/ui/router');
  *     
  *     Data.setStringVariable('userName','Smartface');
  *     Data.setStringVariable('userEmail','info@smartface.io');

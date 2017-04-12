@@ -12,13 +12,13 @@ const extend = require('js-base/core/extend');
  * fill the available space.
  *
  *     @example
- *     const FlexLayout = require('nf-core/ui/flexlayout');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     var myFlexLayout = new FlexLayout({
  *         flexGrow:1
  *     });
  *
- *     const Label = require('nf-core/ui/label');
- *     const Color = require('nf-core/ui/color');
+ *     const Label = require('sf-core/ui/label');
+ *     const Color = require('sf-core/ui/color');
  *     var myLabel1 = new UI.Label({
  *         width: 100,
  *         height: 50,
@@ -47,7 +47,7 @@ const FlexLayout = extend(ViewGroup)(
          * If you set LTR(left to right) objects will be positioned by starting from left edge of the FlexLayout.
          *
          *     @example
-         *     const FlexLayout = require('nf-core/ui/flexlayout');
+         *     const FlexLayout = require('sf-core/ui/flexlayout');
          *     var myFlexLayout = new FlexLayout({
          *         flexGrow : 1
          *         direction: FlexLayout.Direction.RTL

@@ -1,10 +1,10 @@
 var assert  = require("chai").assert;
 
-const Slider = require('nf-core/ui/slider');
-const Color = require('nf-core/ui/color');
+const Slider = require('sf-core/ui/slider');
+const Color = require('sf-core/ui/color');
 
 
-salep.test("nf-core/ui/slider Unit Test", function () {
+salep.test("sf-core/ui/slider Unit Test", function () {
     var mySlider = new Slider();
     //Test with default values
     this.case("[Slider] test defaults values.", function() {

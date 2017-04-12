@@ -1,6 +1,6 @@
 function Accelerometer() {}
 
-Accelerometer.monitonManager = new CMMotionManager();
+Accelerometer.monitonManager = new __SF_CMMotionManager();
 
 Accelerometer.start = function(){
       Accelerometer.monitonManager.accelerometerUpdateInterval = 0.1;

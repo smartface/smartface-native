@@ -3,7 +3,7 @@ var assert  = require("chai").assert;
 
 const Color = require("../../ui/color");
 
-salep.test("nf-core/ui/color Unit Test", function() {
+salep.test("sf-core/ui/color Unit Test", function() {
     this.case("[create] create a color instance with integer values.", function() {
         var myColor1 = Color.create(255, 0, 100);
         assert.equal(255, Color.red(myColor1), "Red value must be 255.");

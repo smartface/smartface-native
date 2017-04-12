@@ -5,8 +5,8 @@
  * Timer allows you to create, start and clear timers.
  * 
  *     @example
- *     const Button = require("nf-core/ui/button")
- *     const Timer = require("nf-core/timer");
+ *     const Button = require("sf-core/ui/button")
+ *     const Timer = require("sf-core/timer");
  *     var myButton = new Button({
  *         onPress: setTimer
  *     });
@@ -18,7 +18,7 @@
  *         });
  *     }
  * 
- *     const Color = require("nf-core/ui/color");
+ *     const Color = require("sf-core/ui/color");
  *     function changeBackgroundColor() {
  *         myButton.backgroundColor = Color.RED;
  *     }

@@ -1,10 +1,9 @@
-const StatusBarStyle = require('nf-core/ui/statusbarstyle');
-const Color = require("nf-core/ui/color");
+const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+const Color = require("sf-core/ui/color");
 
 /**
  * @class UI.QuickLook
  * @since 0.1
- * @extends UI.View
  *
  * Quick Look lets people preview Keynote, Numbers, Pages, and PDF documents,
  * as well as images and other types of files, even if your app doesn't support those file formats.
@@ -12,7 +11,7 @@ const Color = require("nf-core/ui/color");
  * This class works only for IOS.
  *
  *     @example
- *     const QuickLook = require('nf-core/ui/quicklook');
+ *     const QuickLook = require('sf-core/ui/quicklook');
  *     var quickLook = new QuickLook();
  *     var testPDF = "assets://test.pdf";
  *     var testImage = "images://test.png";
@@ -29,7 +28,7 @@ function QuickLook(params) {
          * Gets/sets array of documents(paths) that will be shown on QuickLook.
          *
          *     @example
-         *     const QuickLook = require('nf-core/ui/quicklook');
+         *     const QuickLook = require('sf-core/ui/quicklook');
          *     var quicklook = new QuickLook();
          *     quicklook.document = ["images://.png","assests://.pdf"];
          *
@@ -43,7 +42,7 @@ function QuickLook(params) {
          * Gets/sets headerBar color of QuickLook View.
          *
          *     @example
-         *     const QuickLook = require('nf-core/ui/quicklook');
+         *     const QuickLook = require('sf-core/ui/quicklook');
          *     var quicklook = new QuickLook();
          *     quicklook.barColor = UI.Color.BLACK;
          *
@@ -57,7 +56,7 @@ function QuickLook(params) {
          * Gets/sets color of items on header & footer of QuickLook view.
          *
          *     @example
-         *     const QuickLook = require('nf-core/ui/quicklook');
+         *     const QuickLook = require('sf-core/ui/quicklook');
          *     var quicklook = new QuickLook();
          *     quicklook.itemColor = UI.Color.BLACK;
          *
@@ -71,7 +70,7 @@ function QuickLook(params) {
          * Gets/sets visibility of status bar on QuickLook view.
          *
          *     @example
-         *     const QuickLook = require('nf-core/ui/quicklook');
+         *     const QuickLook = require('sf-core/ui/quicklook');
          *     var quicklook = new QuickLook();
          *     quicklook.statusBar.visible = false;
          *
@@ -84,7 +83,7 @@ function QuickLook(params) {
          * Gets/sets statusBar style of QuickLook View.
          *
          *     @example
-         *     const QuickLook = require('nf-core/ui/quicklook');
+         *     const QuickLook = require('sf-core/ui/quicklook');
          *     var quicklook = new QuickLook();
          *     quicklook.statusBar.style = false;
          *
