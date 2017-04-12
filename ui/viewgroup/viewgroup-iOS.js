@@ -22,11 +22,11 @@ const ViewGroup = extend(View)(
             var uniqueId = view.uniqueId;
             self.childs[uniqueId] = view;
 
-            if(self.nativeObject.constructor.name === "SMFNative.__SF_UIScrollView"){
+            if(self.nativeObject.constructor.name === "SMFNative.SMFUIScrollView"){
                 self.autoSize();
             }
             
-            if (view.nativeObject.constructor.name === "SMFNative.__SF_UIScrollView"){
+            if (view.nativeObject.constructor.name === "SMFNative.SMFUIScrollView"){
                 view.autoSize();
             }
         };
