@@ -74,16 +74,6 @@ function Database(params){
                 }
             },
             enumarable: true
-        },
-        'executeFile': {
-            value: function(file){
-                if(file instanceof File){
-                    var inputStream = file.openStream(FileStream.StreamType.READ);
-                    var sqlCommand = inputStream.readToEnd();
-                    this.execute(sqlCommand);
-                }
-            },
-            enumarable: true
         }
     });
 }
