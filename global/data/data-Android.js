@@ -115,6 +115,12 @@ Object.defineProperties(Data, {
         },
         enumerable: true
     },
+    'Database': {
+        value: require('./database'),
+        enumerable: true
+    }
 });
+
+
 
 module.exports = Data;
