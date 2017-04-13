@@ -203,6 +203,7 @@ Database.DatabaseObject = function(params){
      * @return {String}
      * @android
      * @ios
+     * @throws {Error}
      * @since 1.0
      */
     this.getString = function(columnName){};
@@ -215,6 +216,7 @@ Database.DatabaseObject = function(params){
      * @return {Number}
      * @android
      * @ios
+     * @throws {Error}
      * @since 1.0
      */
     this.getInteger = function(columnName){};
@@ -227,6 +229,7 @@ Database.DatabaseObject = function(params){
      * @return {Boolean}
      * @android
      * @ios
+     * @throws {Error}
      * @since 1.0
      */
     this.getBoolean = function(columnName){};
@@ -239,6 +242,7 @@ Database.DatabaseObject = function(params){
      * @return {Number}
      * @android
      * @ios
+     * @throws {Error}
      * @since 1.0
      */
     this.getFloat = function(columnName){};
