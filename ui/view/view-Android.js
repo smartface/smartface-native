@@ -337,7 +337,9 @@ function View(params) {
     }
     
     function setBorder(){
-        var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
+        var dp_borderWidth = AndroidUnitConverter.dpToPixel(_borderWidth);
+        setYogaBorder(dp_borderWidth);
+        
         if(dp_borderWidth > 0)  {
             radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
                      _borderRadius,_borderRadius,_borderRadius,_borderRadius];
@@ -353,6 +355,15 @@ function View(params) {
         self.nativeObject.requestLayout();
         self.nativeObject.invalidate();
     };
+    
+    function setYogaBorder(dp_borderwidth) {
+        self.yogaNode.setBorder(YogaEdge.LEFT, dp_borderwidth);
+        self.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderwidth);
+        self.yogaNode.setBorder(YogaEdge.TOP, dp_borderwidth);
+        self.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
+        self.yogaNode.setBorder(YogaEdge.START, dp_borderwidth);
+        self.yogaNode.setBorder(YogaEdge.END, dp_borderwidth);
+    }
     
     function setBackground(layerIndex){
         switch (layerIndex){
@@ -768,7 +779,7 @@ function View(params) {
     var _borderWidth = 0;
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return _borderWidth;
+            return AndroidUnitConverter.pixelToDp(self.yogaNode.getBorder(YogaEdge.TOP));
         },
         set: function(borderWidth) {
             _borderWidth = borderWidth;
