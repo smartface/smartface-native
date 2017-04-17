@@ -1,7 +1,7 @@
 const View                  = require('../view');
 const extend                = require('js-base/core/extend');
 const TypeUtil              = require("sf-core/util/type");
-
+const ListViewItem          = require("sf-core/ui/listviewitem");
 const NativeView                    = requireClass("android.view.View");
 const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout      = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -24,7 +24,12 @@ const ListView = extend(View)(
         var holderViewLayout;
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
             onCreateViewHolder: function(parent,viewType){
-                holderViewLayout = _onRowCreate();
+                try{
+                    holderViewLayout = _onRowCreate();
+                }
+                catch(e){
+                    holderViewLayout = new ListViewItem();
+                }
                 holderViewLayout.height = self.rowHeight;
                 return holderViewLayout.nativeInner;
             },
