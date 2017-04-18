@@ -16,7 +16,7 @@ const Button = extend(Label)(
         }
         _super(this);
         
-        Object.defineProperty(this, {
+        Object.defineProperties(this, {
             'enabled': {
                 get: function() {
                     return self.nativeObject.isEnabled();
@@ -62,13 +62,13 @@ const Button = extend(Label)(
             this.textColor = Color.WHITE;
             this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
                 onClick: function(view) {
-                        onPressCallback && onPressCallback.apply(self);
+                        _onPress && _onPress.apply(self);
                 }
             }));
             this.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                 onLongClick : function(view){
-                    if(onLongPressCallback) {
-                        onLongPressCallback.apply(self);
+                    if(_onLongPress) {
+                        _onLongPress.apply(self);
                     }
                     return true; // Returns always true to solve AND-2713 bug.
                 }
