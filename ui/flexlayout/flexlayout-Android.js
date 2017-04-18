@@ -92,6 +92,13 @@ const FlexLayout = extend(ViewGroup)(
                     this.yogaNode.setOverflow(overFlow);
                 },
                 enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'FlexLayout';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
         

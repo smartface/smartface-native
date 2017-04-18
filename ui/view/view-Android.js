@@ -216,6 +216,13 @@ function View(params) {
             },
             enumerable: true
         },
+        'toString': {
+            value: function(){
+                return 'View';
+            },
+            enumerable: true, 
+            configurable: true
+        }
     });
     
     function setBackgroundImage() {
@@ -786,7 +793,7 @@ function View(params) {
         }
     });
     // Assign defaults
-    if(!this.isClone){
+    if(!this.isSetDefaults){
         this.nativeObject.setBackground(layerDrawable);
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {

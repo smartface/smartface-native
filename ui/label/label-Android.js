@@ -35,7 +35,7 @@ const Label = extend(View)(
             
         }
         else{
-            if(!this.isClone){
+            if(!this.isSetDefaults){
                 _textAlignment = TextAlignment.MIDCENTER;
                 // Gravity.CENTER
                 self.nativeObject.setGravity(17);
@@ -141,6 +141,13 @@ const Label = extend(View)(
                     }
                 },
                 enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'Label';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
         

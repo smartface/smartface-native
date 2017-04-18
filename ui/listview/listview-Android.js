@@ -28,7 +28,7 @@ const ListView = extend(View)(
                     holderViewLayout = _onRowCreate();
                 }
                 catch(e){
-                    console.log(e.message + "\n\n*" + e.sourceURL + "\n*" + e.line + "\n*" + e.stack)
+                    Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
                 holderViewLayout.height = self.rowHeight;
@@ -51,8 +51,7 @@ const ListView = extend(View)(
             }
         },null);
 
-        self.nativeInner.setAdapter(dataAdapter);
-
+        this.nativeInner.setAdapter(dataAdapter);
 
         var _onScroll;
         var _rowHeight = 0;
@@ -82,29 +81,29 @@ const ListView = extend(View)(
                 set: function(itemCount) {
                     if(TypeUtil.isNumeric(itemCount)){
                         _itemCount = itemCount;
-                        self.refreshData();
+                        this.refreshData();
                     }
                 },
                 enumerable: true
             },
             'verticalScrollBarEnabled': {
                 get: function() {
-                    return self.nativeInner.isVerticalScrollBarEnabled();
+                    return this.nativeInner.isVerticalScrollBarEnabled();
                 },
                 set: function(verticalScrollBarEnabled) {
                     if(TypeUtil.isBoolean(verticalScrollBarEnabled)){
-                        self.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+                        this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
                     }
                 },
                 enumerable: true
             },
             'refreshEnabled': {
                 get: function() {
-                    return self.nativeObject.isEnabled();
+                    return this.nativeObject.isEnabled();
                 },
                 set: function(refreshEnabled) {
                     if(TypeUtil.isBoolean(refreshEnabled)){
-                        self.nativeObject.setEnabled(refreshEnabled);
+                        this.nativeObject.setEnabled(refreshEnabled);
                     }
                 },
                 enumerable: true
@@ -112,19 +111,19 @@ const ListView = extend(View)(
             //methods
             'getLastVisibleIndex': {
                 value: function(colors) {
-                    return self.nativeInner.getLayoutManager().findLastVisibleItemPosition();
+                    return this.nativeInner.getLayoutManager().findLastVisibleItemPosition();
                 },
                 enumerable: true
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    return self.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
+                    return this.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
                 },
                 enumerable: true
             },
             'scrollTo': {
                 value: function(index) {
-                    self.nativeInner.smoothScrollToPosition(index);
+                    this.nativeInner.smoothScrollToPosition(index);
                 },
                 enumerable: true
             },
@@ -136,13 +135,13 @@ const ListView = extend(View)(
             },
             'setPullRefreshColors': {
                 value: function(colors) {
-                    self.nativeObject.setColorSchemeColors(colors);
+                    this.nativeObject.setColorSchemeColors(colors);
                 },
                 enumerable: true
             },
             'stopRefresh': {
                 value: function() {
-                    self.nativeObject.setRefreshing(false);
+                    this.nativeObject.setRefreshing(false);
                 },
                 enumerable: true
             },
@@ -181,10 +180,10 @@ const ListView = extend(View)(
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
                     if(onScroll){
-                        self.nativeInner.setOnScrollListener(onScrollListener);
+                        this.nativeInner.setOnScrollListener(onScrollListener);
                     }
                     else{
-                        self.nativeInner.removeOnScrollListener(onScrollListener);
+                        this.nativeInner.removeOnScrollListener(onScrollListener);
                     }
                 },
                 enumerable: true
@@ -200,32 +199,7 @@ const ListView = extend(View)(
             },
         });
 
-        function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
-            var _jsView = cloneObject(jsView, nativeObject, nativeInner);
-            // console.log("jsView.nativeObject: " + jsView.nativeObject);
-            // console.log("_jsView.nativeObject: " + _jsView.nativeObject);
-            // console.log("nativeObject: " + nativeObject);
-            // console.log("jsView.id: " + jsView.id);
-            // console.log("_jsView.id: " + _jsView.id);
-            // console.log("nativeObject.id: " + nativeObject.getId());
-            // console.log("jsView.hashCode: " + jsView.nativeObject.hashCode());
-            // console.log("_jsView.hashCode: " + _jsView.nativeObject.hashCode());
-            // console.log("nativeObject.hashCode: " + nativeObject.hashCode());
-            // console.log("nativeInner: " + nativeInner);
-            // console.log("parentJsView.nativeObject: " + parentJsView.nativeObject);
-            _jsView.parent = parentJsView;
-            
-            
-            if(jsView.childViews){
-                var _childViews = {};
-                
-                Object.keys(jsView.childViews).forEach(function(key){
-                    _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, _jsView);
-                })
-                _jsView.childViews = _childViews;
-            }
-            return _jsView;
-        }
+        
         
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
@@ -235,7 +209,7 @@ const ListView = extend(View)(
             },
         },null);
         
-        self.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
+        this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
             onRefresh: function(){
                 _onPullRefresh && _onPullRefresh();
             }
@@ -256,16 +230,23 @@ const ListView = extend(View)(
     }
 );
 
+function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
+    var _jsView = cloneObject(jsView, nativeObject, nativeInner);
+    _jsView.parent = parentJsView;
+    
+    if(jsView.childViews){
+        var _childViews = {};
+        
+        Object.keys(jsView.childViews).forEach(function(key){
+            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, _jsView);
+        })
+        _jsView.childViews = _childViews;
+    }
+    return _jsView;
+}
+
 function findConstructor(jsView){
-    if(jsView instanceof require("sf-core/ui/flexlayout")){
-        return require("sf-core/ui/flexlayout");
-    }
-    else if(jsView instanceof require("sf-core/ui/label")){
-        return require("sf-core/ui/label");
-    }
-    else if(jsView instanceof require("sf-core/ui/listviewitem")){
-        return require("sf-core/ui/listviewitem");
-    }
+    return require("sf-core/ui/"+jsView.toString().toLowerCase());
 }
 
 function cloneObject(jsView, nativeObject, nativeInner){
@@ -274,7 +255,7 @@ function cloneObject(jsView, nativeObject, nativeInner){
         function (_super, params) {
             this.nativeObject = params.nativeObject;
             this.nativeInner = params.nativeInner;
-            this.isClone = true;
+            this.isSetDefaults = true;
             _super(this);
             
             if (params) {

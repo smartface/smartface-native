@@ -2,7 +2,6 @@ const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
 const FlexLayout            = require('sf-core/ui/flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
-// due to performance this must required here. 
 const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout'); 
 
 const ListViewItem = extend(FlexLayout)(
@@ -41,10 +40,17 @@ const ListViewItem = extend(FlexLayout)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'ListViewItem';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
 
-        if(!this.isClone){
+        if(!this.isSetDefaults){
             var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
             this.nativeObject.setLayoutParams(layoutParams);
         }

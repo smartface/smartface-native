@@ -53,6 +53,13 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
+            'toString': {
+                value: function(){
+                    return 'ViewGroup';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
 
         // Assign parameters given in constructor
