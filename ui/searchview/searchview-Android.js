@@ -286,7 +286,7 @@ const SearchView = extend(View)(
         // Handling ios specific properties
         this.ios = {};
         
-        if(!this.isSetDefaults){
+        if(this.isSetDefaults){
             const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
             mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);

@@ -92,7 +92,7 @@ const Picker = extend(View)(
             }
         });
 
-        if(!this.isSetDefaults){
+        if(this.isSetDefaults){
             self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
                 onScrollStateChange: function(picker, scrollState) {
                     if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {

@@ -50,7 +50,7 @@ const ListViewItem = extend(FlexLayout)(
             }
         });
 
-        if(!this.isSetDefaults){
+        if(this.isSetDefaults){
             var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
             this.nativeObject.setLayoutParams(layoutParams);
         }

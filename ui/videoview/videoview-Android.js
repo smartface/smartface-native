@@ -1,54 +1,42 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const Exception = require("sf-core/util/exception");
+const extend            = require('js-base/core/extend');
+const View              = require('sf-core/ui/view');
+const Exception         = require("sf-core/util/exception");
+const NativeVideoView   = requireClass('android.widget.VideoView');
 
 const VideoView = extend(View)(
     function (_super, params) {
         var activity = Android.getActivity();
         
-        var self = this;
-        const NativeVideoView = requireClass('android.widget.VideoView');
-        self.nativeObject = new NativeVideoView(activity);
+        if(!this.nativeObject){
+            this.nativeObject = new NativeVideoView(activity);
+        }
         _super(this);
 
-        const NativeMediaPlayer = requireClass('android.media.MediaPlayer');        
-        self.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
-            onPrepared: function(mediaPlayer) {
-                _nativeMediaPlayer = mediaPlayer;
-
-                _callbackOnReady && _callbackOnReady();
-            }
-        }));
+        const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
         
-        self.nativeObject.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
-            onCompletion: function(mediaPlayer) {
-                _callbackOnFinish && _callbackOnFinish();
-            }
-        }));
-        
-        var _callbackOnReady;
-        var _callbackOnFinish;
+        var _onReady;
+        var _onFinish;
         var _nativeMediaPlayer;
-        Object.defineProperties(self, {
+        Object.defineProperties(this, {
             'play': {
                 value: function() {
-                    self.nativeObject.start();
+                    this.nativeObject.start();
                 }
             },
             'pause': {
                 value: function() {
-                    self.nativeObject.pause();
+                    this.nativeObject.pause();
                 }
             },
             'stop': {
                 value: function() {
-                    self.nativeObject.pause();
-                    self.nativeObject.seekTo(0);
+                    this.nativeObject.pause();
+                    this.nativeObject.seekTo(0);
                 }
             },
             'isPlaying': {
                 value: function() {
-                    return self.nativeObject.isPlaying();
+                    return this.nativeObject.isPlaying();
                 }
             },
             'setLoopEnabled': {
@@ -60,7 +48,7 @@ const VideoView = extend(View)(
                 value: function(url) {
                     const NativeURI = requireClass('android.net.Uri');
                     var uri = NativeURI.parse(url);
-                    self.nativeObject.setVideoURI(uri);
+                    this.nativeObject.setVideoURI(uri);
                 }
             },
             'loadFile': {
@@ -71,16 +59,16 @@ const VideoView = extend(View)(
                     if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
-                    self.nativeObject.setVideoPath(file.path);
+                    this.nativeObject.setVideoPath(file.path);
                 }
             },
             'onReady': {
-                get: function() { return _callbackOnReady },
-                set: function(callback) { _callbackOnReady = callback }
+                get: function() { return _onReady },
+                set: function(callback) { _onReady = callback }
             },
             'onFinish': {
-                get: function() { return _callbackOnFinish },
-                set: function(callback) { _callbackOnFinish = callback }
+                get: function() { return _onFinish },
+                set: function(callback) { _onFinish = callback }
             },
             'seekTo': {
                 value: function(milliseconds) {
@@ -106,11 +94,34 @@ const VideoView = extend(View)(
                 value: function(enabled) {
                     // TODO: implement after yoga fix.
                 }
+            },
+            'toString': {
+                value: function(){
+                    return 'VideoView';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
         
         // Handling ios specific properties
-        self.ios = {};
+        this.ios = {};
+        
+        if(this.isSetDefaults){
+            this.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
+                onPrepared: function(mediaPlayer) {
+                    _nativeMediaPlayer = mediaPlayer;
+    
+                    _onReady && _onReady();
+                }
+            }));
+            
+            this.nativeObject.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
+                onCompletion: function(mediaPlayer) {
+                    _onFinish && _onFinish();
+                }
+            }));
+        }
 
         // Assign parameters given in constructor
         if (params) {

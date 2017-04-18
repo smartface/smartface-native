@@ -35,7 +35,7 @@ const Label = extend(View)(
             
         }
         else{
-            if(!this.isSetDefaults){
+            if(this.isSetDefaults){
                 _textAlignment = TextAlignment.MIDCENTER;
                 // Gravity.CENTER
                 self.nativeObject.setGravity(17);

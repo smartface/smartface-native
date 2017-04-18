@@ -77,7 +77,7 @@ const ImageView = extend(View)(
             }
         });
 
-        if(!this.isSetDefaults){
+        if(this.isSetDefaults){
             // SET DEFAULTS
             this.imageFillType = ImageView.FillType.NORMAL;
         }
