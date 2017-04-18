@@ -28,6 +28,7 @@ const ListView = extend(View)(
                     holderViewLayout = _onRowCreate();
                 }
                 catch(e){
+                    console.log(e.message + "\n\n*" + e.sourceURL + "\n*" + e.line + "\n*" + e.stack)
                     holderViewLayout = new ListViewItem();
                 }
                 holderViewLayout.height = self.rowHeight;
@@ -36,8 +37,8 @@ const ListView = extend(View)(
             onBindViewHolder: function(nativeHolderView,position){
                 if(_onRowBind){
                     // @todo make performance improvements
-                    createFromTemplate(holderViewLayout,nativeHolderView.itemView,self);
-                    _onRowBind(holderViewLayout,position);
+                    var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
+                    _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view){
                             _onRowSelected && _onRowSelected(holderViewLayout, position);
@@ -199,15 +200,31 @@ const ListView = extend(View)(
             },
         });
 
-        function createFromTemplate(jsView, nativeView,parentJsView){
-            jsView.nativeObject = nativeView;
-            jsView.parent = parentJsView;
+        function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
+            var _jsView = cloneObject(jsView, nativeObject, nativeInner);
+            // console.log("jsView.nativeObject: " + jsView.nativeObject);
+            // console.log("_jsView.nativeObject: " + _jsView.nativeObject);
+            // console.log("nativeObject: " + nativeObject);
+            // console.log("jsView.id: " + jsView.id);
+            // console.log("_jsView.id: " + _jsView.id);
+            // console.log("nativeObject.id: " + nativeObject.getId());
+            // console.log("jsView.hashCode: " + jsView.nativeObject.hashCode());
+            // console.log("_jsView.hashCode: " + _jsView.nativeObject.hashCode());
+            // console.log("nativeObject.hashCode: " + nativeObject.hashCode());
+            // console.log("nativeInner: " + nativeInner);
+            // console.log("parentJsView.nativeObject: " + parentJsView.nativeObject);
+            _jsView.parent = parentJsView;
+            
+            
             if(jsView.childViews){
-                for(var i = 0; i < jsView.childViews.length; i++) {
-                    var childId = jsView.childViews[i].id;
-                    createFromTemplate(jsView.childViews[i],nativeView.findViewById(childId),jsView);
-                }
+                var _childViews = {};
+                
+                Object.keys(jsView.childViews).forEach(function(key){
+                    _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, _jsView);
+                })
+                _jsView.childViews = _childViews;
             }
+            return _jsView;
         }
         
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
@@ -238,5 +255,39 @@ const ListView = extend(View)(
         }
     }
 );
+
+function findConstructor(jsView){
+    if(jsView instanceof require("sf-core/ui/flexlayout")){
+        return require("sf-core/ui/flexlayout");
+    }
+    else if(jsView instanceof require("sf-core/ui/label")){
+        return require("sf-core/ui/label");
+    }
+    else if(jsView instanceof require("sf-core/ui/listviewitem")){
+        return require("sf-core/ui/listviewitem");
+    }
+}
+
+function cloneObject(jsView, nativeObject, nativeInner){
+    const extend = require('js-base/core/extend');
+    var jsViewConstructorCopy = extend(findConstructor(jsView))(
+        function (_super, params) {
+            this.nativeObject = params.nativeObject;
+            this.nativeInner = params.nativeInner;
+            this.isClone = true;
+            _super(this);
+            
+            if (params) {
+                for (var param in params) {
+                    this[param] = params[param];
+                }
+            }
+        }
+    );
+    return new jsViewConstructorCopy({
+        nativeObject: nativeObject,
+        nativeInner: nativeInner
+    });
+}
 
 module.exports = ListView;

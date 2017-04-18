@@ -3,203 +3,146 @@ const View                          = require('sf-core/ui/view');
 const Color                         = require("sf-core/ui/color");
 const TextAlignment                 = require("sf-core/ui/textalignment");
 const TypeUtil                      = require("sf-core/util/type");
-const AndroidUnitConverter          = require("sf-core/util/Android/unitconverter.js");
-        
+
+const TextAlignmentDic = {};
+TextAlignmentDic[TextAlignment.TOPLEFT] = 48 | 3;// Gravity.TOP | Gravity.LEFT
+TextAlignmentDic[TextAlignment.TOPCENTER] = 48 | 1; //Gravity.TOP | Gravity.CENTER_HORIZONTAL
+TextAlignmentDic[TextAlignment.TOPRIGHT] = 48 | 5; //Gravity.TOP | Gravity.RIGHT
+TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
+TextAlignmentDic[TextAlignment.MIDCENTER] = 17; // Gravity.CENTER
+TextAlignmentDic[TextAlignment.MIDRIGHT] = 16 | 5; // Gravity.CENTER_VERTICAL | Gravity.RIGHT
+TextAlignmentDic[TextAlignment.BOTTOMLEFT] = 80 | 3; // Gravity.BOTTOM | Gravity.LEFT
+TextAlignmentDic[TextAlignment.BOTTOMCENTER] = 80 | 1; // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
+TextAlignmentDic[TextAlignment.BOTTOMRIGHT] = 80 | 5; // Gravity.BOTTOM | Gravity.RIGHT
+
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
-        var textAlignmentInitial;
+        var _textAlignment;
         var viewNativeDefaultTextAlignment;
         var activity = Android.getActivity();
+        var fontInitial;
+        var _textColor = Color.BLACK;
         
         // Is Label Check
         if(!self.nativeObject){
             const NativeTextView = requireClass("android.widget.TextView");
             self.nativeObject = new NativeTextView(activity);
-            textAlignmentInitial = TextAlignment.MIDLEFT;
+            _textAlignment = TextAlignment.MIDLEFT;
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
             self.nativeObject.setGravity(16 | 3);
             viewNativeDefaultTextAlignment = 16 | 3;
             
         }
         else{
-            textAlignmentInitial = TextAlignment.MIDCENTER;
-            // Gravity.CENTER
-            self.nativeObject.setGravity(17);
-            viewNativeDefaultTextAlignment = 17;
+            if(!this.isClone){
+                _textAlignment = TextAlignment.MIDCENTER;
+                // Gravity.CENTER
+                self.nativeObject.setGravity(17);
+                viewNativeDefaultTextAlignment = 17;
+            }
         }
+        
         _super(this);
 
-        Object.defineProperty(this, 'htmlText', {
-            get: function() {
-                var text = self.nativeObject.getText();
-                if(text){
-                    const NativeHtml = requireClass("android.text.Html");
-                    var htmlText = NativeHtml.toHtml(text);
-                    return htmlText.toString();
-                }
-                else{
-                    return "";
-                }
-                
-            }, 
-            set: function(htmlText) {
-                const NativeHtml = requireClass("android.text.Html");
-                var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                self.nativeObject.setText(htmlTextNative);
-            },
-            enumerable: true
-        });
-
-        var fontInitial;
-        Object.defineProperty(this, 'font', {
-            get: function() {
-                return fontInitial;
-            },
-            set: function(font) {
-                if(font){
-                    fontInitial = font;
-                    self.nativeObject.setTypeface(font.nativeObject);
-                    if(font.size && TypeUtil.isNumeric(font.size))
-                       self.nativeObject.setTextSize(font.size);
+        Object.defineProperties(this, {
+            'htmlText': {
+                get: function() {
+                    var text = self.nativeObject.getText();
+                    if(text){
+                        const NativeHtml = requireClass("android.text.Html");
+                        var htmlText = NativeHtml.toHtml(text);
+                        return htmlText.toString();
                     }
+                    else{
+                        return "";
+                    }
+                    
+                }, 
+                set: function(htmlText) {
+                    const NativeHtml = requireClass("android.text.Html");
+                    var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
+                    self.nativeObject.setText(htmlTextNative);
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-
-        Object.defineProperty(this, 'multiline', {
-            get: function() {
-                return self.nativeObject.getLineCount() !== 1;
+            'font': {
+                get: function() {
+                    return fontInitial;
+                },
+                set: function(font) {
+                    if(font){
+                        fontInitial = font;
+                        self.nativeObject.setTypeface(font.nativeObject);
+                        if(font.size && TypeUtil.isNumeric(font.size))
+                           self.nativeObject.setTextSize(font.size);
+                        }
+                },
+                enumerable: true
             },
-            set: function(multiline) {
-                self.nativeObject.setSingleLine(!multiline);
-                // Integer.MAX_VALUE
-                // const NativeInteger = requireClass("java.lang.Integer");
-                self.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                if(multiline){
-                    const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                    var movementMethod = new NativeScrollingMovementMethod();
-                    self.nativeObject.setMovementMethod(movementMethod);
-                }
-                else{
-                    self.nativeObject.setMovementMethod(null);
-                }
-                
+            'multiline': {
+                get: function() {
+                    return self.nativeObject.getLineCount() !== 1;
+                },
+                set: function(multiline) {
+                    self.nativeObject.setSingleLine(!multiline);
+                    // Integer.MAX_VALUE
+                    // const NativeInteger = requireClass("java.lang.Integer");
+                    self.nativeObject.setMaxLines (multiline ? 1000 : 1);
+                    if(multiline){
+                        const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
+                        var movementMethod = new NativeScrollingMovementMethod();
+                        self.nativeObject.setMovementMethod(movementMethod);
+                    }
+                    else{
+                        self.nativeObject.setMovementMethod(null);
+                    }
+                    
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
- 
-        // @todo property returns CharSquence object not string. Caused by issue AND-2508
-        Object.defineProperty(this, 'text', {
-            get: function() {
-                return self.nativeObject.getText();
+            'text': {
+                get: function() {
+                    return self.nativeObject.getText();
+                },
+                set: function(text) {
+                    self.nativeObject.setText("" + text);
+                },
+                enumerable: true
             },
-            set: function(text) {
-                self.nativeObject.setText("" + text);
-                // @todo this will cause performance issues in feature. Must be replaced.
-                self.nativeObject.requestLayout();
+            'textAlignment': {
+                get: function() {
+                    return _textAlignment;
+                },
+                set: function(textAlignment) {
+                    if(textAlignment in TextAlignmentDic){
+                        _textAlignment = textAlignment;
+                    }
+                    else{
+                        _textAlignment = viewNativeDefaultTextAlignment;
+                    }
+                    self.nativeObject.setGravity(TextAlignmentDic[_textAlignment]);
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-        
-        
-        Object.defineProperty(this, 'textAlignment', {
-            get: function() {
-                return textAlignmentInitial;
-            },
-            set: function(textAlignment) {
-                textAlignmentInitial = textAlignment;
-                var alignment = viewNativeDefaultTextAlignment;
-                switch(textAlignment){
-                    case TextAlignment.TOPLEFT:
-                        // Gravity.TOP | Gravity.LEFT
-                        alignment = 48 | 3;
-                        break;
-                    case TextAlignment.TOPCENTER:
-                        // Gravity.TOP | Gravity.CENTER_HORIZONTAL
-                        alignment = 48 | 1;
-                        break;
-                    case TextAlignment.TOPRIGHT:
-                        // Gravity.TOP | Gravity.RIGHT
-                        alignment = 48 | 5;
-                        break;
-                    case TextAlignment.MIDLEFT:
-                        // Gravity.CENTER_VERTICAL | Gravity.LEFT
-                        alignment = 16 | 3;
-                        break;
-                    case TextAlignment.MIDCENTER:
-                        // Gravity.CENTER
-                        alignment = 17;
-                        break;
-                    case TextAlignment.MIDRIGHT:
-                        // Gravity.CENTER_VERTICAL | Gravity.RIGHT
-                        alignment = 16 | 5;
-                        break;
-                    case TextAlignment.BOTTOMLEFT:
-                        // Gravity.BOTTOM | Gravity.LEFT
-                        alignment = 80 | 3;
-                        break;
-                    case TextAlignment.BOTTOMCENTER:
-                        // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
-                        alignment = 80 | 1;
-                        break;
-                    case TextAlignment.BOTTOMRIGHT:
-                        // Gravity.BOTTOM | Gravity.RIGHT
-                        alignment = 80 | 5;
-                        break;                   
-                }
-                self.nativeObject.setGravity(alignment);
-            },
-            enumerable: true
-        });
-
-        var _textColor = Color.BLACK;
-        Object.defineProperty(this, 'textColor', {
-            get: function() {
-                if(typeof(_textColor) === "number") {
-                    return self.nativeObject.getCurrentTextColor();
-                }
-                return _textColor;
-            },
-            set: function(textColor) {
-                _textColor = textColor;
-                if(typeof(textColor) === "number") {
-                    self.nativeObject.setTextColor(textColor);
-                }
-                else {
-                    var textColorStateListDrawable = createColorStateList(textColor);
-                    self.nativeObject.setTextColor(textColorStateListDrawable);
-                }
-            },
-            enumerable: true
-        });
-        
-        function createColorStateList(textColors) {
-            const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-            var statesSet = [];
-            var colorsSets = [];
-            if(textColors.normal){
-                statesSet.push(View.State.STATE_NORMAL);
-                colorsSets.push(textColors.normal);
+            'textColor': {
+                get: function() {
+                    return _textColor;
+                },
+                set: function(textColor) {
+                    if(TypeUtil.isNumeric(textColor)) {
+                        _textColor = textColor;
+                        self.nativeObject.setTextColor(textColor);
+                    }
+                    else if(TypeUtil.isObject(textColor)) {
+                        _textColor = textColor;
+                        var textColorStateListDrawable = createColorStateList(textColor);
+                        self.nativeObject.setTextColor(textColorStateListDrawable);
+                    }
+                },
+                enumerable: true
             }
-            if(textColors.disabled){
-                statesSet.push(View.State.STATE_DISABLED);
-                colorsSets.push(textColors.disabled);
-            }
-            if(textColors.selected){
-                statesSet.push(View.State.STATE_SELECTED);
-                colorsSets.push(textColors.selected);
-            }
-            if(textColors.pressed){
-                statesSet.push(View.State.STATE_PRESSED);
-                colorsSets.push(textColors.pressed);
-            }
-            if(textColors.focused){
-                statesSet.push(View.State.STATE_FOCUSED);
-                colorsSets.push(textColors.focused);
-            }
-            return (new NativeColorStateList (statesSet, colorsSets));
-        }
+        });
         
         // Handling iOS-specific properties
         this.ios = {};
@@ -212,5 +155,32 @@ const Label = extend(View)(
         }
     }
 );
+
+function createColorStateList(textColors) {
+    const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+    var statesSet = [];
+    var colorsSets = [];
+    if(textColors.normal){
+        statesSet.push(View.State.STATE_NORMAL);
+        colorsSets.push(textColors.normal);
+    }
+    if(textColors.disabled){
+        statesSet.push(View.State.STATE_DISABLED);
+        colorsSets.push(textColors.disabled);
+    }
+    if(textColors.selected){
+        statesSet.push(View.State.STATE_SELECTED);
+        colorsSets.push(textColors.selected);
+    }
+    if(textColors.pressed){
+        statesSet.push(View.State.STATE_PRESSED);
+        colorsSets.push(textColors.pressed);
+    }
+    if(textColors.focused){
+        statesSet.push(View.State.STATE_FOCUSED);
+        colorsSets.push(textColors.focused);
+    }
+    return (new NativeColorStateList (statesSet, colorsSets));
+}
 
 module.exports = Label;
