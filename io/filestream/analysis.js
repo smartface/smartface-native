@@ -7,11 +7,11 @@
  *     @example
  *     const File = require('sf-core/io/file');
  *     const Path = require('sf-core/io/path');
- *     const FileStream = require('sf-core/ioui/filestream');
+ *     const FileStream = require('sf-core/io/filestream');
  *     var myFile = new File({
  *         path: Path.DataDirectory + '/myFile.txt'
  *     });
- *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE);
+ *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE, FileStream.AppendMode.TEXT);
  *     myFileStream.write('Smartface');
  *     myFileStream.close();
  * 
@@ -28,6 +28,17 @@ function FileStream(params) {
      * @since 0.1
      */
     this.mode;
+    
+    /**
+     * Gets the append mode of FileStream operation.
+     * 
+     * @property {IO.FileStream.AppendMode} mode
+     * @readonly
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.appendMode;
     
     /**
      * Checks whether the stream is readable.
@@ -107,17 +118,17 @@ function FileStream(params) {
     this.readToEnd = function(){};
     
     /**
-     * Writes all characters into the file stream. If the file stream opened with {@link IO.FileStream.StreamType#READ} 
-     * ,returns false.
+     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#appendMode appendMode}  append mode. 
+     * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false. 
      * 
-     * @param {String} text
+     * @param {String|Blob} content
      * @return {Boolean}
      * @method write
      * @android
      * @ios
      * @since 0.1
      */
-    this.write = function(text){};
+    this.write = function(content){};
 }
 
 /**
@@ -167,5 +178,41 @@ FileStream.StreamType.READ = 1;
  * @since 0.1
  */
 FileStream.StreamType.WRITE = 2;
+
+/**
+ * The AppendMode write mode for the FileStream operation. If AppendMode is BINARY, FileStream.write accepts blob object othervise accepts text.
+ * 
+ * @enum {Number} IO.FileStream.AppendMode
+ * @static
+ * @readonly
+ * @android
+ * @ios
+ * @since 1.1
+ */
+FileStream.AppendMode = {};
+
+/**
+ * Open FileStream as text.
+ * 
+ * @property TEXT
+ * @static
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.AppendMode.TEXT;
+
+/**
+ * Open FileStream as binary.
+ * 
+ * @property BINARY
+ * @static
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.AppendMode.BINARY;
 
 module.exports = FileStream;
