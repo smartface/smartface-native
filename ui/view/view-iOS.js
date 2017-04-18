@@ -54,11 +54,26 @@ function View(params) {
             return self.nativeObject.backgroundColor;
         },
         set: function(value) {
-            if (value.constructor.name === "__SF_CAGradientLayer"){
+            if (value.constructor.name === "CAGradientLayer"){
                 self.applyLayout();
+                if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
+                    throw new Error("");
+                }
                 value.frame = self.nativeObject.frame;
                 self.nativeObject.backgroundColor = value.layerToColor();
+                self.gradientColor = value;
+                self.nativeObject.addObserver(function(){
+                    if (self.gradientColor) {
+                        if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
+
+                        }else{
+                            self.gradientColor.frame = self.nativeObject.frame;
+                            self.nativeObject.backgroundColor = value.layerToColor();
+                        }
+                    }
+                },__SF_UIDeviceOrientationDidChangeNotification);
             }else{
+                self.gradientColor = undefined;
                 self.nativeObject.backgroundColor = value;
             }
         },
