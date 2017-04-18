@@ -168,7 +168,14 @@ const ListView = extend(View)(
                 self.refreshControl.tintColor = param;
             }
         }
-
+        
+        Object.defineProperty(self, 'onScroll', {
+            set: function(value) {
+                self.nativeObject.didScroll = value;
+            },
+            enumerable: true
+        });
+          
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

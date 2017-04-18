@@ -83,7 +83,7 @@ function Page(params) {
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
 
         if (self.orientation.indexOf(currentOrientation) === -1){
-            UIDevice.changeOrientation(self.orientation[0]);
+            __SF_UIDevice.changeOrientation(self.orientation[0]);
         }
     };
     
