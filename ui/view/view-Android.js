@@ -337,7 +337,7 @@ function View(params) {
     }
     
     function setBorder(){
-        var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
+        var dp_borderWidth = self.borderWidth;
         if(dp_borderWidth > 0)  {
             radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
                      _borderRadius,_borderRadius,_borderRadius,_borderRadius];
@@ -765,13 +765,17 @@ function View(params) {
         },
         enumerable: true
     });
-    var _borderWidth = 0;
+    
     Object.defineProperty(this, 'borderWidth', {
         get: function() {
-            return _borderWidth;
+            return AndroidUnitConverter.pixelToDp(self.yogaNode.getBorder(YogaEdge.TOP));
         },
         set: function(borderWidth) {
-            _borderWidth = borderWidth;
+            var dp_borderwidth = AndroidUnitConverter.dpToPixel(borderWidth);
+            self.yogaNode.setBorder(YogaEdge.LEFT, dp_borderwidth);
+            self.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderwidth);
+            self.yogaNode.setBorder(YogaEdge.TOP, dp_borderwidth);
+            self.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
             setBorder();
         },
         enumerable: true
