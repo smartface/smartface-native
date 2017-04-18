@@ -1,68 +1,33 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
+const AndroidConfig = require('sf-core/util/Android/androidconfig');
 
 const WebView = extend(View)(
     function (_super, params) {
-        const NativeBuildVersion = requireClass('android.os.Build').VERSION;
         var activity = Android.getActivity();
         
-        var self = this;
-        if (!self.nativeObject) {
+        if (!this.nativeObject) {
             const NativeWebView = requireClass('android.webkit.WebView');
-            self.nativeObject = new NativeWebView(activity);
-
-            var overrideMethods = {
-                onPageFinished: function(view, url) {
-                    _callbackOnShow && _callbackOnShow({url: url});
-                },
-                onPageStarted: function(view, url, favicon) {
-                    _callbackOnLoad && _callbackOnLoad({url: url});
-                }
-            };
-
-            if (NativeBuildVersion.SDK_INT >= 24) {
-                overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                    var uri = request.getUrl();
-                    var url = uri.toString();
-                    _callbackOnChangedURL && _callbackOnChangedURL({url: url});
-                    return overrideURLChange(url);
-                };
-            } else {
-                overrideMethods.shouldOverrideUrlLoading = function(view, url) {
-                    _callbackOnChangedURL && _callbackOnChangedURL({url: url});
-                    return overrideURLChange(url);
-                };
-            }
-
-            if (NativeBuildVersion.SDK_INT >= 23) {
-                overrideMethods.onReceivedError = function(webView, webResourceRequest, webResourceError) {
-                    const NativeString = requireClass('java.lang.String');
-                    var uri = webResourceRequest.getUrl();
-                    var url = NativeString.valueOf(uri);
-                    var code = webResourceError.getErrorCode();
-                    var message = webResourceError.getDescription();
-
-                    _callbackOnError && _callbackOnError({message: message, code: code, url: url});
-                };
-            } else {
-                overrideMethods.onReceivedError = function(view, errorCode, description, failingUrl) {
-                    _callbackOnError && _callbackOnError({message: description, code: errorCode, url: failingUrl});
-                };
-            }
-
-            const NativeWebClient = requireClass('android.webkit.WebViewClient');
-            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
-            self.nativeObject.setWebViewClient(nativeWebClient);
-            self.nativeObject.getSettings().setJavaScriptEnabled(true);
+            this.nativeObject = new NativeWebView(activity);
         }
-        _super(self);
+        
+        _super(this);
+        
+        var overrideMethods = {
+            onPageFinished: function(view, url) {
+                _onShow && _onShow({url: url});
+            },
+            onPageStarted: function(view, url, favicon) {
+                _onLoad && _onLoad({url: url});
+            }
+        };
 
         var _canOpenLinkInside = true;
-        var _callbackOnError;
-        var _callbackOnShow;
-        var _callbackOnLoad;
-        var _callbackOnChangedURL;
-        Object.defineProperties(self, {
+        var _onError;
+        var _onShow;
+        var _onLoad;
+        var _onChangedURL;
+        Object.defineProperties(this, {
             'openLinkInside': {
                 get: function() {
                     return _canOpenLinkInside;
@@ -73,79 +38,123 @@ const WebView = extend(View)(
             },
             'refresh': {
                 value: function() {
-                    self.nativeObject.reload();
+                    this.nativeObject.reload();
                 }
             },
             'goBack': {
                 value: function() {
-                    self.nativeObject.goBack();
+                    this.nativeObject.goBack();
                 }
             },
             'goForward': {
                 value: function() {
-                    self.nativeObject.goForward();
+                    this.nativeObject.goForward();
                 }
             },
             'zoomEnabled': {
                 get: function() {
-                    return self.nativeObject.getSettings().getBuiltInZoomControls();
+                    return this.nativeObject.getSettings().getBuiltInZoomControls();
                 },
                 set: function(enabled) {
-                    self.nativeObject.getSettings().setBuiltInZoomControls(enabled);
+                    this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
                 }
             },
             'loadURL': {
                 value: function(url) {
-                    self.nativeObject.loadUrl(url);
+                    this.nativeObject.loadUrl(url);
                 }
             },
             'loadHTML': {
                 value: function(htmlText) {
-                    self.nativeObject.loadData(htmlText, "text/html", null);
+                    this.nativeObject.loadData(htmlText, "text/html", null);
                 }
             },
             'evaluateJS': {
                 value: function(javascript) {
-                    if (NativeBuildVersion.SDK_INT >= 19) {
-                        self.nativeObject.evaluateJavascript(javascript, null);
+                    if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
+                        this.nativeObject.evaluateJavascript(javascript, null);
                     } else {
-                        self.nativeObject.loadUrl("javascript:"+ javascript);
+                        this.nativeObject.loadUrl("javascript:"+ javascript);
                     }
                 }
             },
             'onChangedURL': {
                 get: function() {
-                    return _callbackOnChangedURL;
+                    return _onChangedURL;
                 },
                 set: function(callback) {
-                    _callbackOnChangedURL = callback;
+                    _onChangedURL = callback;
                 }
             },
             'onLoad': {
                 get: function() {
-                    return _callbackOnLoad;
+                    return _onLoad;
                 },
                 set: function(callback) {
-                    _callbackOnLoad = callback;
+                    _onLoad = callback;
                 }
             },
             'onError': {
                 get: function() {
-                    return _callbackOnError;
+                    return _onError;
                 },
                 set: function(callback) {
-                    _callbackOnError = callback;
+                    _onError = callback;
                 }
             },
             'onShow': {
                 get: function() {
-                    return _callbackOnShow;
+                    return _onShow;
                 },
                 set: function(callback) {
-                    _callbackOnShow = callback;
+                    _onShow = callback;
                 }
+            },
+            'toString': {
+                value: function(){
+                    return 'WebView';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
+        
+        if(!this.isNotSetDefaults){
+            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+                overrideMethods.shouldOverrideUrlLoading = function(view, request) {
+                    var uri = request.getUrl();
+                    var url = uri.toString();
+                    _onChangedURL && _onChangedURL({url: url});
+                    return overrideURLChange(url, _canOpenLinkInside);
+                };
+            } else {
+                overrideMethods.shouldOverrideUrlLoading = function(view, url) {
+                    _onChangedURL && _onChangedURL({url: url});
+                    return overrideURLChange(url, _canOpenLinkInside);
+                };
+            }
+    
+            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
+                overrideMethods.onReceivedError = function(webView, webResourceRequest, webResourceError) {
+                    const NativeString = requireClass('java.lang.String');
+                    var uri = webResourceRequest.getUrl();
+                    var url = NativeString.valueOf(uri);
+                    var code = webResourceError.getErrorCode();
+                    var message = webResourceError.getDescription();
+    
+                    _onError && _onError({message: message, code: code, url: url});
+                };
+            } else {
+                overrideMethods.onReceivedError = function(view, errorCode, description, failingUrl) {
+                    _onError && _onError({message: description, code: errorCode, url: failingUrl});
+                };
+            }
+    
+            const NativeWebClient = requireClass('android.webkit.WebViewClient');
+            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
+            this.nativeObject.setWebViewClient(nativeWebClient);
+            this.nativeObject.getSettings().setJavaScriptEnabled(true);
+        }
 
         // Assign parameters given in constructor
         if (params) {
@@ -154,20 +163,22 @@ const WebView = extend(View)(
             }
         }
         
-        function overrideURLChange(url) {
-            if (_canOpenLinkInside) {
-                return false;
-            } else {
-                const NativeIntent = requireClass('android.content.Intent');
-                const NativeURI = requireClass('android.net.Uri');
-                var action = NativeIntent.ACTION_VIEW;
-                var uri = NativeURI.parse(url);
-                var intent = new NativeIntent(action, uri);
-                activity.startActivity(intent);
-                return true;
-            }
-        }
+        
     }
 );
+
+function overrideURLChange(url, _canOpenLinkInside) {
+    if (_canOpenLinkInside) {
+        return false;
+    } else {
+        const NativeIntent = requireClass('android.content.Intent');
+        const NativeURI = requireClass('android.net.Uri');
+        var action = NativeIntent.ACTION_VIEW;
+        var uri = NativeURI.parse(url);
+        var intent = new NativeIntent(action, uri);
+        Android.getActivity().startActivity(intent);
+        return true;
+    }
+}
 
 module.exports = WebView;

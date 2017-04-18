@@ -382,8 +382,6 @@ function View(params) {
         self.nativeObject.setBackground(layerDrawable);
     }
     
-     
-     
     // YOGA PROPERTIES
     var _borderWidth = 0;
     Object.defineProperties(this, {
@@ -792,6 +790,7 @@ function View(params) {
             }
         }
     });
+    
     // Assign defaults
     if(!this.isNotSetDefaults){
         this.nativeObject.setBackground(layerDrawable);
