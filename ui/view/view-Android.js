@@ -788,6 +788,16 @@ function View(params) {
         enumerable: true
     });
     
+    Object.defineProperty(this, 'aspectRatio', {
+        get: function() {
+            return self.yogaNode.getAspectRatio();
+        },
+        set: function(aspectRatio) {
+            self.yogaNode.setAspectRatio(aspectRatio);
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(this, 'flexShrink', {
         get: function() {
             return self.yogaNode.getFlexShrink();
