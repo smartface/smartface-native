@@ -13,7 +13,6 @@ const ImageView = extend(View)(
         }
         _super(this);
         
-
         var _fillType; // native does not store ImageFillType but ScaleType
         Object.defineProperties(this, {
             'image': {

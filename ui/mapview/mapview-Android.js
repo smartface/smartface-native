@@ -53,6 +53,13 @@ const MapView = extend(View)(
                 set: function(callback) {
                     _callbackOnCreate = callback;
                 }
+            },
+            'toString': {
+                value: function(){
+                    return 'MapView';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
 

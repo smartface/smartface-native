@@ -1,17 +1,20 @@
 //Generated for handling ios view
 
 function QuickLook (params) {
-    var self = this;
-   
-    self.nativeObject = null;
-    self.document = null;
-    self.barColor = null;
-    self.itemColor = null;
-    self.visible = null;
-    self.document = null;
-    self.style = {};
-    self.statusBar = {};
-    self.show = function(Page){};
+
+    this.nativeObject = null;
+    this.document = null;
+    this.barColor = null;
+    this.itemColor = null;
+    this.visible = null;
+    this.document = null;
+    this.style = {};
+    this.statusBar = {};
+    this.toString = function(){
+        return "QuickLook";  
+    };
+    
+    this.show = function(Page){};
 
     // Assign parameters given in constructor
     if (params) {

@@ -13,11 +13,11 @@ const ListView = extend(View)(
         var self = this;
         var activity = Android.getActivity();
         
-        self.nativeObject = new NativeSwipeRefreshLayout(activity);
-        self.nativeInner = new NativeRecyclerView(activity); 
+        this.nativeObject = new NativeSwipeRefreshLayout(activity);
+        this.nativeInner = new NativeRecyclerView(activity); 
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
-        self.nativeInner.setLayoutManager(linearLayoutManager);
-        self.nativeObject.addView(self.nativeInner);
+        this.nativeInner.setLayoutManager(linearLayoutManager);
+        this.nativeObject.addView(this.nativeInner);
 
         _super(this);
 
@@ -50,8 +50,6 @@ const ListView = extend(View)(
                 return _itemCount;
             }
         },null);
-
-        this.nativeInner.setAdapter(dataAdapter);
 
         var _onScroll;
         var _rowHeight = 0;
@@ -197,10 +195,15 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'toString': {
+                value: function(){
+                    return 'ListView';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
 
-        
-        
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
                     _onScroll && _onScroll();
@@ -208,12 +211,6 @@ const ListView = extend(View)(
             onScrollStateChanged: function(recyclerView, newState){
             },
         },null);
-        
-        this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
-            onRefresh: function(){
-                _onPullRefresh && _onPullRefresh();
-            }
-        }));
 
         // ios-only properties
         this.ios = {};
@@ -221,6 +218,15 @@ const ListView = extend(View)(
         this.ios.swipeItem = function(title,action){
             return {};
         };
+        
+        if(!this.isSetDefaults){
+            this.nativeInner.setAdapter(dataAdapter);
+            this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
+                onRefresh: function(){
+                    _onPullRefresh && _onPullRefresh();
+                }
+            }));
+        }
 
         if (params) {
             for (var param in params) {
