@@ -40,7 +40,7 @@ const ActivityIndicator = extend(View)(
         // Handling ios specific properties.
         this.ios = {}; 
         
-        if(this.isSetDefaults){
+        if(!this.isNotSetDefaults){
             this.nativeObject.setIndeterminate(true);
             this.color = Color.create("#00A1F1"); // SmartfaceBlue
         }

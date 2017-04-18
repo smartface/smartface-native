@@ -793,7 +793,7 @@ function View(params) {
         }
     });
     // Assign defaults
-    if(this.isSetDefaults){
+    if(!this.isNotSetDefaults){
         this.nativeObject.setBackground(layerDrawable);
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {

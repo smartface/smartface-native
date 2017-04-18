@@ -219,7 +219,7 @@ const ListView = extend(View)(
             return {};
         };
         
-        if(this.isSetDefaults){
+        if(!this.isNotSetDefaults){
             this.nativeInner.setAdapter(dataAdapter);
             this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
                 onRefresh: function(){
@@ -261,7 +261,7 @@ function cloneObject(jsView, nativeObject, nativeInner){
         function (_super, params) {
             this.nativeObject = params.nativeObject;
             this.nativeInner = params.nativeInner;
-            this.isSetDefaults = false;
+            this.isNotSetDefaults = true;
             _super(this);
             
             if (params) {
