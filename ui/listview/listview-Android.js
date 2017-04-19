@@ -33,6 +33,7 @@ const ListView = extend(View)(
                     holderViewLayout = _onRowCreate();
                 }
                 catch(e){
+                    const Application = require("sf-core/application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }

@@ -1,21 +1,72 @@
+const TypeUtil = require("sf-core/util/type");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
+const NativeApplicationPermissionResultListener = requireClass("io.smartface.android.listeners.ApplicationPermissionResultListener");
+
 function ApplicationWrapper() {}
 
 // Intent.ACTION_VIEW
 var ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
 var FLAG_ACTIVITY_NEW_TASK = 268435456;
-
-var _onMinimize,
-    _onMaximize,
-    _onExit;
-    
+var _onMinimize;
+var _onMaximize;
+var _onExit;
+var _onReceivedNotification;
+var _onRequestPermissionsResult;
 var activity = Android.getActivity();
-ApplicationWrapper.android = {};
-
-Object.defineProperty(ApplicationWrapper.android, 'packageName', {
-    value: activity.getPackageName(),
-    enumerable: true
+var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
+// Creating Activity Lifecycle listener
+var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
+    onCreate: function() {},
+    onResume: function(){
+        if(_onMaximize) {
+            _onMaximize();
+        }
+    },
+    onPause: function(){
+        if(_onMinimize) {
+            _onMinimize();
+        }
+    },
+    onStop: function() {},
+    onStart: function() {},
+    onDestroy: function() {
+        if(_onExit) {
+            _onExit();
+        }
+    }
 });
+// Creating Request Permission Result listener
+var applicationPermissionResultListener = NativeApplicationPermissionResultListener.implement({
+    onRequestPermissionsResult: function(requestCode, permission, grantResult){
+        console.log("onRequestPermissionsResult requestCode: " + requestCode)
+        console.log("onRequestPermissionsResult permissions: " + permission)
+        console.log("onRequestPermissionsResult grantResults: " + grantResult)
+        var permissionResults = {};
+        permissionResults['requestCode'] = requestCode;
+        permissionResults['result'] = (grantResult === 0);
+        // for(var i = 0; i<permissions.length; i++){
+        //     permissionResults['results'].push(grantResults[i] === 0)
+        // }
+        // if(grantResults.length > 0){
+        //     for(var i = 0; i<permissions.length; i++){
+        //         permissionResults['results'].push(grantResults[i] === 0)
+        //     }
+        // }
+        // else{
+        //     for(var i = 0; i<permissions.length; i++){
+        //         permissionResults['results'].push(false)
+        //     }
+        // }
+        ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
+    }
+})
+
+// Attaching Activity Lifecycle and Request Permission Result events
+spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
+spratAndroidActivityInstance.addPermissionResultCallbacks(applicationPermissionResultListener);
+
 
 Object.defineProperties(ApplicationWrapper, {
     // properties
@@ -58,7 +109,14 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-    
+    'android':{
+        value: {},
+        enumerable: true
+    },
+    'Permissions': {
+        value: {},
+        enumerable: true
+    },
     // methods
     'call': {
         value: function(uriScheme, data){
@@ -96,7 +154,9 @@ Object.defineProperties(ApplicationWrapper, {
     // We can not check update from js side and we can not update js files, so let SMFApplication handle this
     'checkUpdate': {
         value: function(callback){
-            Application.checkUpdate(callback);
+            if(TypeUtil.isFunction(callback)){
+                Application.checkUpdate(callback);
+            }
         },
         enumerable: true
     },
@@ -107,7 +167,7 @@ Object.defineProperties(ApplicationWrapper, {
             return Application.onApplicationCallReceived;
         },
         set: function(onApplicationCallReceived){
-            if(onApplicationCallReceived instanceof Function){
+            if(TypeUtil.isFunction(onApplicationCallReceived)){
                 Application.onApplicationCallReceived = onApplicationCallReceived;
             }
         },
@@ -118,7 +178,7 @@ Object.defineProperties(ApplicationWrapper, {
             return _onExit;
         },
         set: function(onExit){
-            if(onExit instanceof Function || onExit === null){
+            if(TypeUtil.isFunction(onExit) || onExit === null){
                 _onExit = onExit;
             }
         },
@@ -129,7 +189,7 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMaximize;
         },
         set: function(onMaximize){
-            if(onMaximize instanceof Function || onMaximize === null){
+            if(TypeUtil.isFunction(onMaximize) || onMaximize === null){
                 _onMaximize = onMaximize;
             }
         },
@@ -140,8 +200,19 @@ Object.defineProperties(ApplicationWrapper, {
             return _onMinimize;
         },
         set: function(onMinimize){
-            if(onMinimize instanceof Function || onMinimize === null){
+            if(TypeUtil.isFunction(onMinimize) || onMinimize === null){
                 _onMinimize = onMinimize;
+            }
+        },
+        enumerable: true
+    },
+    'onReceivedNotification': {
+        get: function(){
+            return _onReceivedNotification;
+        },
+        set: function(callback){
+            if(TypeUtil.isFunction(callback) || callback === null){
+                _onReceivedNotification = callback;
             }
         },
         enumerable: true
@@ -152,7 +223,7 @@ Object.defineProperties(ApplicationWrapper, {
             return Application.onUnhandledError;
         },
         set: function(onUnhandledError){
-            if(onUnhandledError instanceof Function || onUnhandledError === null){
+            if(TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null){
                 Application.onUnhandledError = onUnhandledError;
             }
         },
@@ -160,28 +231,168 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
-const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
-var listener = NativeActivityLifeCycleListener.implement({
-    onCreate: function() {},
-    onResume: function(){
-        if(_onMaximize) {
-            _onMaximize();
-        }
+Object.defineProperties(ApplicationWrapper.android, {
+    'packageName': {
+        value: activity.getPackageName(),
+        enumerable: true
     },
-    onPause: function(){
-        if(_onMinimize) {
-            _onMinimize();
-        }
+    'checkPermission':{
+        value: function(permission){
+            if(!TypeUtil.isString(permission)){
+                throw new Error('Permission must be Application.Permission type');
+            }
+            
+            if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
+                // PackageManager.PERMISSION_GRANTED
+                return activity.checkSelfPermission(permission) == 0
+            }
+            else{
+                var packageManager = activity.getPackageManager();
+                // PackageManager.PERMISSION_GRANTED
+                return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
+            }
+            
+        },
+        enumerable: true
     },
-    onStop: function() {},
-    onStart: function() {},
-    onDestroy: function() {
-        if(_onExit) {
-            _onExit();
+    // @todo requestPermissions should accept permission array too, but due to AND- it accepts just one permission.
+    'requestPermissions':{
+        value: function(requestCode, permissions){
+            if(!TypeUtil.isNumeric(requestCode) || !(TypeUtil.isString(permissions))){
+                throw new Error('requestCode must be numeric or permission must be Application.Permission type or array of Application.Permission.');
+            }
+            if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
+                ApplicationWrapper.onRequestPermissionsResult && ApplicationWrapper.onRequestPermissionsResult({
+                    requestCode: requestCode,
+                    result: true
+                });
+            }
+            else{
+                activity.requestPermissions([permissions], requestCode);
+            }
+            
+        },
+        enumerable: true
+    },
+    'shouldShowRequestPermissionRationale':{
+        value: function(permission){
+            if(!TypeUtil.isString(permission)){
+                throw new Error('Permission must be Application.Permission type');
+            }
+            return activity.shouldShowRequestPermissionRationale(permission);
+        },
+        enumerable: true
+    },
+    'onRequestPermissionsResult': {
+        get: function(){
+            return _onRequestPermissionsResult;
+        },
+        set: function(callback){
+            if(TypeUtil.isFunction(callback) || callback === null){
+                _onRequestPermissionsResult = callback;
+            }
         }
+        
     }
 });
-const SpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity");
-SpratAndroidActivity.getInstance().addActivityLifeCycleCallbacks(listener);
+
+Object.defineProperties(ApplicationWrapper.Permissions, {
+    'READ_CALENDAR': {
+        value: 'android.permission.READ_CALENDAR',
+        enumerable: true
+    },
+    'WRITE_CALENDAR': {
+        value: 'android.permission.WRITE_CALENDAR',
+        enumerable: true
+    },
+    'CAMERA': {
+        value: 'android.permission.CAMERA',
+        enumerable: true
+    },
+    'READ_CONTACTS': {
+        value: 'android.permission.READ_CONTACTS',
+        enumerable: true
+    },
+    'WRITE_CONTACTS': {
+        value: 'android.permission.WRITE_CONTACTS',
+        enumerable: true
+    },
+    'GET_ACCOUNTS': {
+        value: 'android.permission.GET_ACCOUNTS',
+        enumerable: true
+    },
+    'ACCESS_FINE_LOCATION': {
+        value: 'android.permission.ACCESS_FINE_LOCATION',
+        enumerable: true
+    },
+    'ACCESS_COARSE_LOCATION': {
+        value: 'android.permission.ACCESS_COARSE_LOCATION',
+        enumerable: true
+    },
+    'RECORD_AUDIO': {
+        value: 'android.permission.RECORD_AUDIO',
+        enumerable: true
+    },
+    'READ_PHONE_STATE': {
+        value: 'android.permission.READ_PHONE_STATE',
+        enumerable: true
+    },
+    'CALL_PHONE': {
+        value: 'android.permission.CALL_PHONE',
+        enumerable: true
+    },
+    'READ_CALL_LOG': {
+        value: 'android.permission.READ_CALL_LOG',
+        enumerable: true
+    },
+    'WRITE_CALL_LOG': {
+        value: 'android.permission.WRITE_CALL_LOG',
+        enumerable: true
+    },
+    'ADD_VOICEMAIL': {
+        value: 'com.android.voicemail.permission.ADD_VOICEMAIL',
+        enumerable: true
+    },
+    'USE_SIP': {
+        value: 'android.permission.USE_SIP',
+        enumerable: true
+    },
+    'PROCESS_OUTGOING_CALLS': {
+        value: 'android.permission.PROCESS_OUTGOING_CALLS',
+        enumerable: true
+    },
+    'BODY_SENSORS': {
+        value: 'android.permission.BODY_SENSORS',
+        enumerable: true
+    },
+    'SEND_SMS': {
+        value: 'android.permission.SEND_SMS',
+        enumerable: true
+    },
+    'RECEIVE_SMS': {
+        value: 'android.permission.RECEIVE_SMS',
+        enumerable: true
+    },
+    'READ_SMS': {
+        value: 'android.permission.READ_SMS',
+        enumerable: true
+    },
+    'RECEIVE_WAP_PUSH': {
+        value: 'android.permission.RECEIVE_WAP_PUSH',
+        enumerable: true
+    },
+    'RECEIVE_MMS': {
+        value: 'android.permission.RECEIVE_MMS',
+        enumerable: true
+    },
+    'READ_EXTERNAL_STORAGE': {
+        value: 'android.permission.READ_EXTERNAL_STORAGE',
+        enumerable: true
+    },
+    'WRITE_EXTERNAL_STORAGE': {
+        value: 'android.permission.WRITE_EXTERNAL_STORAGE',
+        enumerable: true
+    }
+});
 
 module.exports = ApplicationWrapper;
