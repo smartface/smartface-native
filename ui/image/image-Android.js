@@ -37,130 +37,151 @@ function Image (params) {
         throw new Error("Constructor parameters needed for Image!");
     }
     
-    Object.defineProperty(this, 'height', {
-        get: function() {
-            return self.nativeObject.getBitmap().getHeight();
-        }, 
-        enumerable: true
+    Object.defineProperties(this, {
+        'height': {
+            get: function() {
+                return self.nativeObject.getBitmap().getHeight();
+            }, 
+            enumerable: true
+        },
+        'width': {
+            get: function() {
+                return self.nativeObject.getBitmap().getWidth();
+            }, 
+            enumerable: true
+        },
+        'resize':{
+            value: function(width, height, onSuccess, onFailure){
+                try {
+                    var originalBitmap = self.nativeObject.getBitmap();
+                    var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);  
+                    if(onSuccess)
+                        onSuccess({image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap})); 
+                }
+                catch(err) {
+                    if(onFailure) 
+                        onFailure({message: err});
+                    else 
+                        return null;
+                }
+            }, 
+            enumerable: true
+        },
+        'crop':{
+            value: function(x, y, width, height, onSuccess, onFailure) {
+                try {
+                    var originalBitmap = self.nativeObject.getBitmap();
+                    var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
+                    
+                    if(onSuccess)
+                        onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap}));
+                }
+                catch(err) {
+                    if(onFailure) 
+                        onFailure.call(this, {message: err});
+                    else 
+                        return null;
+                }
+            }, 
+            enumerable: true
+        },
+        'rotate': {
+            value: function(angle, onSuccess, onFailure) {
+                try {
+                    var matrix = new NativeMatrix();
+                    matrix.postRotate(angle);
+                    var bitmap = self.nativeObject.getBitmap();
+                    var width = bitmap.getWidth(), height = bitmap.getHeight();
+                    var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
+                    
+                    if(onSuccess)
+                        onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap}));
+                }
+                catch(err) {
+                    if(onFailure) 
+                        onFailure.call(this, {message: err});
+                    else 
+                        return null;
+                }
+            }, 
+            enumerable: true
+        },
+        'compress': {
+            value: function(format, quality, onSuccess, onFailure) {
+                try {
+                    var out = new NativeByteArrayOutputStream();
+                    var bitmap = self.nativeObject.getBitmap();
+                    bitmap.compress(CompressFormat[format], quality, out);
+                    var byteArray = out.toByteArray();
+                    
+                    if(onSuccess) 
+                        onSuccess.call(this, {blob: new Blob(byteArray, {type:"image"})});
+                    else 
+                        return (new Blob(byteArray, {type:"image"}));
+                }
+                catch(err) {
+                    if(onFailure) 
+                        onFailure.call(this, {message: err});
+                    else 
+                        return null;
+                }
+            }, 
+            enumerable: true
+        },
+        'toString': {
+            value: function(){
+                return 'Image';
+            },
+            enumerable: true, 
+            configurable: true
+        }
     });
-
-    Object.defineProperty(this, 'width', {
-        get: function() {
-            return self.nativeObject.getBitmap().getWidth();
-        }, 
-        enumerable: true
-    });
-    
-    this.resize = function(width, height, onSuccess, onFailure){
-        try {
-            var originalBitmap = self.nativeObject.getBitmap();
-            var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);  
-            if(onSuccess)
-                onSuccess({image: new Image({bitmap: newBitmap})});
-            else
-                return (new Image({bitmap: newBitmap})); 
-        }
-        catch(err) {
-            if(onFailure) 
-                onFailure({message: err});
-            else 
-                return null;
-        }
-    };
-    
-    this.crop = function(x, y, width, height, onSuccess, onFailure) {
-        try {
-            var originalBitmap = self.nativeObject.getBitmap();
-            var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
-            
-            if(onSuccess)
-                onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
-            else
-                return (new Image({bitmap: newBitmap}));
-        }
-        catch(err) {
-            if(onFailure) 
-                onFailure.call(this, {message: err});
-            else 
-                return null;
-        }
-    };
-    
-    this.rotate = function(angle, onSuccess, onFailure) {
-        try {
-            var matrix = new NativeMatrix();
-            matrix.postRotate(angle);
-            var bitmap = self.nativeObject.getBitmap();
-            var width = bitmap.getWidth(), height = bitmap.getHeight();
-            var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
-            
-            if(onSuccess)
-                onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
-            else
-                return (new Image({bitmap: newBitmap}));
-        }
-        catch(err) {
-            if(onFailure) 
-                onFailure.call(this, {message: err});
-            else 
-                return null;
-        }
-    };
-    
-    this.compress = function(format, quality, onSuccess, onFailure) {
-        try {
-            var out = new NativeByteArrayOutputStream();
-            var bitmap = self.nativeObject.getBitmap();
-            bitmap.compress(CompressFormat[format], quality, out);
-            var byteArray = out.toByteArray();
-            
-            if(onSuccess) 
-                onSuccess.call(this, {blob: new Blob(byteArray, {type:"image"})});
-            else 
-                return (new Blob(byteArray, {type:"image"}));
-        }
-        catch(err) {
-            if(onFailure) 
-                onFailure.call(this, {message: err});
-            else 
-                return null;
-        }
-    };
 }
 
-Image.createFromFile = function(path) {
-    var imageFile = new File({path:path});
-    if(imageFile && imageFile.nativeObject){
-        var bitmap;
-        if(imageFile.type === Path.FILE_TYPE.ASSET){
-            var assetsInputStream = Android.getActivity().getAssets().open(imageFile.nativeObject);
-            bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
-            assetsInputStream.close();
-        }
-        else if(imageFile.type === Path.FILE_TYPE.DRAWABLE){
-            bitmap = imageFile.nativeObject;
-        }
-        else{
-            bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
-        }
-        return (new Image({bitmap: bitmap}));
+Object.defineProperties(Image,{
+    'createFromFile': {
+        value: function(path) {
+            var imageFile = new File({path:path});
+            if(imageFile && imageFile.nativeObject){
+                var bitmap;
+                if(imageFile.type === Path.FILE_TYPE.ASSET){
+                    var assetsInputStream = Android.getActivity().getAssets().open(imageFile.nativeObject);
+                    bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
+                    assetsInputStream.close();
+                }
+                else if(imageFile.type === Path.FILE_TYPE.DRAWABLE){
+                    bitmap = imageFile.nativeObject;
+                }
+                else{
+                    bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
+                }
+                return (new Image({bitmap: bitmap}));
+            }
+            return null;
+        },
+        enumerable: true
+    },
+    'createFromBlob': {
+        value: function(blob) {
+            var byteArray = blob.nativeObject.toByteArray();
+            var size = blob.nativeObject.size();
+            var newBitmap = NativeBitmapFactory.decodeByteArray(byteArray, 0, size);
+            if(newBitmap)
+                return (new Image({bitmap: newBitmap}));
+            return null;
+        },
+        enumerable: true
+    },
+    'Format': {
+        value: Format,
+        enumerable: true
     }
-    return null;
-};
-
-Image.createFromBlob = function(blob) {
-    var byteArray = blob.nativeObject.toByteArray();
-    var size = blob.nativeObject.size();
-    var newBitmap = NativeBitmapFactory.decodeByteArray(byteArray, 0, size);
-    if(newBitmap)
-        return (new Image({bitmap: newBitmap}));
-    return null;
-};
-
-Object.defineProperty(Image, 'Format', {
-    value: Format,
-    writable: false,
-    enumerable: true
 });
 
 module.exports = Image;

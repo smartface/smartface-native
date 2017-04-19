@@ -82,6 +82,13 @@ function HeaderBarItem(params) {
                 }
             },
             enumerable: true
+        },
+        'toString': {
+            value: function(){
+                return 'HeaderBarItem';
+            },
+            enumerable: true, 
+            configurable: true
         }
     });
 

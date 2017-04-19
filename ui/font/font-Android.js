@@ -2,6 +2,16 @@ const File = require('sf-core/io/file');
 const Path = require('sf-core/io/path');
 
 function Font(params) {
+    Object.defineProperties(this,{
+        'toString': {
+            value: function(){
+                return 'Font';
+            },
+            enumerable: true, 
+            configurable: true
+        }
+    })
+    
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

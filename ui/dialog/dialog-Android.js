@@ -25,6 +25,13 @@ function Dialog(params) {
             value: function() {
                 this.nativeObject.dismiss();
             }
+        },
+        'toString': {
+            value: function(){
+                return 'Dialog';
+            },
+            enumerable: true, 
+            configurable: true
         }
     });
         

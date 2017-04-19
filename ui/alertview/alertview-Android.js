@@ -9,22 +9,117 @@ const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 function AlertView (params) {
     var self = this;
-    this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
+    if(!this.nativeObject){
+        this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
+    }
             
     var titleInitial = "";
-    Object.defineProperty(this, 'title', {
-        get: function() {
-            return titleInitial;
+    var _cancellable;
+    var _message = "";
+    var buttonCallbacks = [];
+    var _onDismiss;
+    Object.defineProperties(this, {
+        'title': {
+            get: function() {
+                return titleInitial;
+            },
+            set: function(title) {
+                titleInitial = title;
+                self.nativeObject.setTitle(title);
+            },
+            enumerable: true
         },
-        set: function(title) {
-            titleInitial = title;
-            self.nativeObject.setTitle(title);
+        'message': {
+            get: function() {
+                return _message;
+            },
+            set: function(message) {
+                _message = message;
+                self.nativeObject.setMessage(message);
+            },
+            enumerable: true
         },
-        enumerable: true
+        'isShowing': {
+            get: function() {
+                return self.nativeObject.isShowing();
+            },
+            enumerable: true
+        },
+        'show':{
+            value: function() {
+                self.nativeObject.show();
+            },
+            enumerable: true
+        },
+        'dismiss':{
+            value: function() {
+                self.nativeObject.dismiss();
+            },
+            enumerable: true
+        },
+        'addButton':{
+            value: function(params){
+                !params.text && (params.text = "");
+                buttonCallbacks[params.index] = params.onClick;
+                var nativeButtonIndex;
+                switch(params.index) {
+                    case ButtonType.POSITIVE:
+                        nativeButtonIndex = -1;
+                        break;
+                    case ButtonType.NEGATIVE:
+                        nativeButtonIndex = -2;
+                        break;
+                    case ButtonType.NEUTRAL:
+                        nativeButtonIndex = -3;
+                        break;
+                    default:
+                        nativeButtonIndex = -3;
+                        break;
+                }
+        
+                self.nativeObject.setButton(nativeButtonIndex,params.text,
+                    NativeDialogInterface.OnClickListener.implement({
+                       onClick: function(dialog,which){
+                           switch(which){
+                                case -1:
+                                    buttonCallbacks[ButtonType.POSITIVE] && buttonCallbacks[ButtonType.POSITIVE]();
+                                    break;
+                                case -2:
+                                    buttonCallbacks[ButtonType.NEGATIVE] && buttonCallbacks[ButtonType.NEGATIVE]();
+                                    break;
+                                case -3:
+                                    buttonCallbacks[ButtonType.NEUTRAL] && buttonCallbacks[ButtonType.NEUTRAL]();
+                                    break;
+                                default:
+                                    break;
+                           }
+                       }
+                }));
+            },
+            enumerable: true
+        },
+        'onDismiss': {
+            get: function() {
+                return _onDismiss;
+            },
+            set: function(onDismiss) {
+                _onDismiss = onDismiss.bind(this);
+            },
+            enumerable: true
+        },
+        'android': {
+            value: {},
+            enumerable: true
+        },
+        'toString': {
+            value: function(){
+                return 'AlertView';
+            },
+            enumerable: true, 
+            configurable: true
+        }
     });
     
-    this.android = {};
-    var _cancellable;
     Object.defineProperty(this.android, 'cancellable', {
         get: function() {
             return _cancellable;
@@ -37,87 +132,9 @@ function AlertView (params) {
         enumerable: true
     });
 
-    var messageInitial = "";
-    Object.defineProperty(this, 'message', {
-        get: function() {
-            return messageInitial;
-        },
-        set: function(message) {
-            messageInitial = message;
-            self.nativeObject.setMessage(message);
-        },
-        enumerable: true
-    });
-     
-    Object.defineProperty(this, 'isShowing', {
-        get: function() {
-            return self.nativeObject.isShowing();
-        },
-        enumerable: true
-    });
-
-    this.show = function() {
-        self.nativeObject.show();
-    };
-
-    this.dismiss = function() {
-        self.nativeObject.dismiss();
-    };
-
-    var buttonCallbacks = [];
-    this.addButton = function(params){
-        !params.text && (params.text = "");
-        buttonCallbacks[params.index] = params.onClick;
-        var nativeButtonIndex;
-        switch(params.index) {
-            case ButtonType.POSITIVE:
-                nativeButtonIndex = -1;
-                break;
-            case ButtonType.NEGATIVE:
-                nativeButtonIndex = -2;
-                break;
-            case ButtonType.NEUTRAL:
-                nativeButtonIndex = -3;
-                break;
-            default:
-                nativeButtonIndex = -3;
-                break;
-        }
-
-        self.nativeObject.setButton(nativeButtonIndex,params.text,
-            NativeDialogInterface.OnClickListener.implement({
-               onClick: function(dialog,which){
-                   switch(which){
-                        case -1:
-                            buttonCallbacks[ButtonType.POSITIVE] && buttonCallbacks[ButtonType.POSITIVE]();
-                            break;
-                        case -2:
-                            buttonCallbacks[ButtonType.NEGATIVE] && buttonCallbacks[ButtonType.NEGATIVE]();
-                            break;
-                        case -3:
-                            buttonCallbacks[ButtonType.NEUTRAL] && buttonCallbacks[ButtonType.NEUTRAL]();
-                            break;
-                        default:
-                            break;
-                   }
-               }
-        }));
-    };
-
-    var onDismissCallback;
-    Object.defineProperty(this, 'onDismiss', {
-        get: function() {
-            return onDismissCallback;
-        },
-        set: function(onDismiss) {
-            onDismissCallback = onDismiss.bind(this);
-        },
-        enumerable: true
-    });
-
     self.nativeObject.setOnDismissListener(NativeDialogInterface.OnDismissListener.implement({
         onDismiss: function(dialog){
-            onDismissCallback && onDismissCallback(self);
+            _onDismiss && _onDismiss(self);
         }
     }));
 

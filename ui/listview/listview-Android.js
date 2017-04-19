@@ -13,8 +13,13 @@ const ListView = extend(View)(
         var self = this;
         var activity = Android.getActivity();
         
-        this.nativeObject = new NativeSwipeRefreshLayout(activity);
-        this.nativeInner = new NativeRecyclerView(activity); 
+        if(!this.nativeObject){
+            this.nativeObject = new NativeSwipeRefreshLayout(activity);
+        }
+        
+        if(!this.nativeInner){
+            this.nativeInner = new NativeRecyclerView(activity); 
+        }
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
         this.nativeInner.setLayoutManager(linearLayoutManager);
         this.nativeObject.addView(this.nativeInner);
