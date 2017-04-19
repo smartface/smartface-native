@@ -290,14 +290,14 @@ Application.onReceivedNotification = function(data){};
  * @param {Boolean} e.result
  * @android
  * @static
- * @since 0.1
+ * @since 1.2
  */
 Application.android.onRequestPermissionsResult = function(e){}
 
 /**
  * Triggered when unhandelled error occurs.
  * 
- * @since 0.1
+ * @since 1.2
  * @event onUnhandledError
  * @param {Object} error 
  * @param {String} error.message
@@ -305,13 +305,13 @@ Application.android.onRequestPermissionsResult = function(e){}
  * @android
  * @ios
  * @static
- * @since 0.1
+ * @since 1.2
  */
 Application.onUnhandledError = function(error){};
 
 /** 
  * @enum Application.Permissions 
- * @since 0.1
+ * @since 1.2
  * 
  * Permission enum for Application.
  * Permission managements should be developed OS specific in the applications.
@@ -324,7 +324,7 @@ Application.Permissions = {};
  * @property READ_CALENDAR
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_CALENDAR;
 
@@ -334,7 +334,7 @@ Application.Permissions.READ_CALENDAR;
  * @property WRITE_CALENDAR
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.WRITE_CALENDAR;
 
@@ -344,7 +344,7 @@ Application.Permissions.WRITE_CALENDAR;
  * @property CAMERA
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.CAMERA;
 
@@ -354,7 +354,7 @@ Application.Permissions.CAMERA;
  * @property READ_CONTACTS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_CONTACTS;
 
@@ -364,7 +364,7 @@ Application.Permissions.READ_CONTACTS;
  * @property WRITE_CONTACTS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.WRITE_CONTACTS;
 
@@ -374,7 +374,7 @@ Application.Permissions.WRITE_CONTACTS;
  * @property GET_ACCOUNTS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.GET_ACCOUNTS;
 
@@ -384,7 +384,7 @@ Application.Permissions.GET_ACCOUNTS;
  * @property ACCESS_FINE_LOCATION
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.ACCESS_FINE_LOCATION;
 
@@ -394,7 +394,7 @@ Application.Permissions.ACCESS_FINE_LOCATION;
  * @property ACCESS_COARSE_LOCATION
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.ACCESS_COARSE_LOCATION;
 
@@ -404,7 +404,7 @@ Application.Permissions.ACCESS_COARSE_LOCATION;
  * @property RECORD_AUDIO
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.RECORD_AUDIO;
 
@@ -416,7 +416,7 @@ Application.Permissions.RECORD_AUDIO;
  * @property READ_PHONE_STATE
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_PHONE_STATE;
 
@@ -427,7 +427,7 @@ Application.Permissions.READ_PHONE_STATE;
  * @property CALL_PHONE
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.CALL_PHONE;
 
@@ -437,7 +437,7 @@ Application.Permissions.CALL_PHONE;
  * @property READ_CALL_LOG
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_CALL_LOG;
 
@@ -447,7 +447,7 @@ Application.Permissions.READ_CALL_LOG;
  * @property WRITE_CALL_LOG
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.WRITE_CALL_LOG;
 
@@ -457,7 +457,7 @@ Application.Permissions.WRITE_CALL_LOG;
  * @property ADD_VOICEMAIL
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.ADD_VOICEMAIL;
 
@@ -467,7 +467,7 @@ Application.Permissions.ADD_VOICEMAIL;
  * @property USE_SIP
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.USE_SIP;
 
@@ -479,7 +479,7 @@ Application.Permissions.USE_SIP;
  * @property PROCESS_OUTGOING_CALLS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.PROCESS_OUTGOING_CALLS;
 
@@ -491,7 +491,7 @@ Application.Permissions.PROCESS_OUTGOING_CALLS;
  * @property BODY_SENSORS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.BODY_SENSORS;
 
@@ -501,7 +501,7 @@ Application.Permissions.BODY_SENSORS;
  * @property SEND_SMS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.SEND_SMS;
 
@@ -511,7 +511,7 @@ Application.Permissions.SEND_SMS;
  * @property RECEIVE_SMS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.RECEIVE_SMS;
 
@@ -521,7 +521,7 @@ Application.Permissions.RECEIVE_SMS;
  * @property READ_SMS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_SMS;
 
@@ -531,7 +531,7 @@ Application.Permissions.READ_SMS;
  * @property RECEIVE_WAP_PUSH
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.RECEIVE_WAP_PUSH;
 
@@ -541,7 +541,7 @@ Application.Permissions.RECEIVE_WAP_PUSH;
  * @property RECEIVE_MMS
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.RECEIVE_MMS;
 
@@ -553,7 +553,7 @@ Application.Permissions.RECEIVE_MMS;
  * @property READ_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.READ_EXTERNAL_STORAGE;
 
@@ -563,7 +563,7 @@ Application.Permissions.READ_EXTERNAL_STORAGE;
  * @property WRITE_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 0.1
+ * @since 1.2
  */
 Application.Permissions.WRITE_EXTERNAL_STORAGE;
 
