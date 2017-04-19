@@ -1,7 +1,7 @@
 /**
  * @class UI.TextAlignment
  * @since 0.1
- * TextAlignment aligns the text of a label instance.
+ * TextAlignment aligns the text of an UI instance.
  *
  *     @example
  *     const TextAlignment = require('sf-core/ui/textalignment');
