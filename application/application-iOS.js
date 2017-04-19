@@ -1,5 +1,6 @@
+var SFApplication = {};
 
-Object.defineProperty(Application, 'byteReceived', {
+Object.defineProperty(SFApplication, 'byteReceived', {
     get: function() {
         var counterInfo = SMFApplication.dataCounters();
         return counterInfo.WiFiReceived + counterInfo.WWANReceived;
@@ -7,7 +8,7 @@ Object.defineProperty(Application, 'byteReceived', {
     enumerable: true
 });
 
-Object.defineProperty(Application, 'byteSent', {
+Object.defineProperty(SFApplication, 'byteSent', {
     get: function() {
         var counterInfo = SMFApplication.dataCounters();
         return counterInfo.WiFiSent + counterInfo.WWANSent;
@@ -15,18 +16,28 @@ Object.defineProperty(Application, 'byteSent', {
     enumerable: true
 });
 
-Application.call = function(uriScheme, data){
+SFApplication.call = function(uriScheme, data){
     SMFApplication.callWithData(uriScheme, data);
 };
 
-Application.exit = function(){
+SFApplication.exit = function(){
     Application.onExit();
     SMFApplication.exit();
 };
 
-Application.restart = function(){
+SFApplication.restart = function(){
     SMFApplication.restart();
 };
+
+Object.defineProperty(SFApplication, 'onUnhandledError', {
+    set:function(value){
+        Application.onUnhandledError = value;
+    },
+    get: function() {
+        return Application.onUnhandledError;
+    },
+    enumerable: true
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // THIS PART IS DISABLED
@@ -90,4 +101,4 @@ Application.restart = function(){
 // }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = Application;
+module.exports = SFApplication;
