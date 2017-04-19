@@ -248,7 +248,7 @@ const TextBox = extend(Label)(
 );
 
 function setKeyboardType(self){
-    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType.keyboardType]);
+    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
     
     if(self.isPassword){
         var inputType = NativeKeyboardType[self.keyboardType];
