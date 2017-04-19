@@ -38,7 +38,6 @@ const methods = {
 http.requestString = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
-            alert(response);
             onLoad(response);
         }
     });
