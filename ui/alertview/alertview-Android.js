@@ -1,16 +1,17 @@
+const Type                  = require("sf-core/util/type");
+const NativeAlertDialog     = requireClass("android.app.AlertDialog");
+const NativeDialogInterface = requireClass("android.content.DialogInterface");
+
 var ButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
 };
 
-const NativeAlertDialog = requireClass("android.app.AlertDialog");
-const NativeDialogInterface = requireClass("android.content.DialogInterface");
-
 function AlertView (params) {
-    var self = this;
+    var activity = Android.getActivity();
     if(!this.nativeObject){
-        this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
+        this.nativeObject = new NativeAlertDialog.Builder(activity).create();
     }
             
     var _title = "";
@@ -24,8 +25,10 @@ function AlertView (params) {
                 return _title;
             },
             set: function(title) {
-                _title = title;
-                self.nativeObject.setTitle(title);
+                if(Type.isString(title)){
+                    _title = title;
+                    this.nativeObject.setTitle(title);
+                }
             },
             enumerable: true
         },
@@ -34,26 +37,28 @@ function AlertView (params) {
                 return _message;
             },
             set: function(message) {
-                _message = message;
-                self.nativeObject.setMessage(message);
+                if(Type.isString(message)){
+                    _message = message;
+                    this.nativeObject.setMessage(message);
+                }
             },
             enumerable: true
         },
         'isShowing': {
             get: function() {
-                return self.nativeObject.isShowing();
+                return this.nativeObject.isShowing();
             },
             enumerable: true
         },
         'show':{
             value: function() {
-                self.nativeObject.show();
+                this.nativeObject.show();
             },
             enumerable: true
         },
         'dismiss':{
             value: function() {
-                self.nativeObject.dismiss();
+                this.nativeObject.dismiss();
             },
             enumerable: true
         },
@@ -77,7 +82,7 @@ function AlertView (params) {
                         break;
                 }
         
-                self.nativeObject.setButton(nativeButtonIndex,params.text,
+                this.nativeObject.setButton(nativeButtonIndex,params.text,
                     NativeDialogInterface.OnClickListener.implement({
                        onClick: function(dialog,which){
                            switch(which){
@@ -126,17 +131,19 @@ function AlertView (params) {
         },
         set: function(cancellable) {
             _cancellable = cancellable;
-            self.nativeObject.setCancelable(cancellable);
-            self.nativeObject.setCanceledOnTouchOutside(cancellable);
+            this.nativeObject.setCancelable(cancellable);
+            this.nativeObject.setCanceledOnTouchOutside(cancellable);
         },
         enumerable: true
     });
-
-    self.nativeObject.setOnDismissListener(NativeDialogInterface.OnDismissListener.implement({
-        onDismiss: function(dialog){
-            _onDismiss && _onDismiss(self);
-        }
-    }));
+    
+    if(!this.isNotSetDefaults){
+        this.nativeObject.setOnDismissListener(NativeDialogInterface.OnDismissListener.implement({
+            onDismiss: function(dialog){
+                _onDismiss && _onDismiss(this);
+            }
+        }));
+    }
 
     // Assign parameters given in constructor
     if (params) {
