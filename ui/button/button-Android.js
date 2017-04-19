@@ -8,22 +8,21 @@ const NativeView                = requireClass("android.view.View");
 
 const Button = extend(Label)(
     function (_super, params) {
-        var self = this;
         var _onPress;
         var _onLongPress;
-        if(!self.nativeObject){
-            self.nativeObject = new NativeButton(Android.getActivity());
+        if(!this.nativeObject){
+            this.nativeObject = new NativeButton(Android.getActivity());
         }
         _super(this);
         
         Object.defineProperties(this, {
             'enabled': {
                 get: function() {
-                    return self.nativeObject.isEnabled();
+                    return this.nativeObject.isEnabled();
                 },
                 set: function(enabled) {
                     if(TypeUtil.isBoolean(enabled)){
-                        self.nativeObject.setEnabled(enabled);
+                        this.nativeObject.setEnabled(enabled);
                     }
                 },
                 enumerable: true
@@ -57,18 +56,18 @@ const Button = extend(Label)(
         
         // Default settings
         if(!this.isNotSetDefaults){
-            self.nativeObject.setAllCaps(false); // enable lowercase texts
+            this.nativeObject.setAllCaps(false); // enable lowercase texts
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;
             this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
                 onClick: function(view) {
-                        _onPress && _onPress.apply(self);
+                        _onPress && _onPress.apply(this);
                 }
             }));
             this.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                 onLongClick : function(view){
                     if(_onLongPress) {
-                        _onLongPress.apply(self);
+                        _onLongPress.apply(this);
                     }
                     return true; // Returns always true to solve AND-2713 bug.
                 }
