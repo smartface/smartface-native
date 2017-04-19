@@ -25,7 +25,7 @@ const FlexLayout = extend(ViewGroup)(
             // direction values same as native
             'direction': {
                 get: function() {
-                    return this.yogaNode.getStyleDirection();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getStyleDirection(), FlexLayout.Direction);
                 },
                 set: function(direction) {
                     this.yogaNode.setDirection(direction);
@@ -35,7 +35,7 @@ const FlexLayout = extend(ViewGroup)(
             // flexDirection values same as native
             'flexDirection': {
                 get: function() {
-                    return this.yogaNode.getFlexDirection();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getFlexDirection(), FlexLayout.FlexDirection);
                 },
                 set: function(flexDirection) {
                     this.yogaNode.setFlexDirection(flexDirection);
@@ -45,7 +45,7 @@ const FlexLayout = extend(ViewGroup)(
             // justifyContent values same as native
             'justifyContent': {
                 get: function() {
-                    return this.yogaNode.getJustifyContent();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getJustifyContent(), FlexLayout.JustifyContent);
                 },
                 set: function(justifyContent) {
                     this.yogaNode.setJustifyContent(justifyContent);
@@ -55,7 +55,7 @@ const FlexLayout = extend(ViewGroup)(
             // alignContent values same as native
             'alignContent': {
                 get: function() {
-                    return this.yogaNode.getAlignContent();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignContent(), FlexLayout.AlignContent);
                 },
                 set: function(alignContent) {
                     this.yogaNode.setAlignContent(alignContent);
@@ -65,7 +65,7 @@ const FlexLayout = extend(ViewGroup)(
             // alignItems values same as native    
             'alignItems': {
                 get: function() {
-                    return this.yogaNode.getAlignItems();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getAlignItems(), FlexLayout.AlignItems);
                 },
                 set: function(alignItems) {
                     this.yogaNode.setAlignItems(alignItems);
@@ -86,7 +86,7 @@ const FlexLayout = extend(ViewGroup)(
             // overFlow values same as native 
             'overFlow': {
                 get: function() {
-                    return this.yogaNode.getOverflow();
+                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getOverflow(), FlexLayout.Overflow);
                 },
                 set: function(overFlow) {
                     this.yogaNode.setOverflow(overFlow);
@@ -111,158 +111,168 @@ const FlexLayout = extend(ViewGroup)(
     }
 );
 
+function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums){
+    var jsKeys = Object.keys(jsEnums);
+    for(var i = 0; i< jsKeys.length ; i++){
+        if(javaEnum.equals(jsEnums[jsKeys[i]])){
+            return jsEnums[jsKeys[i]];
+        }
+    }
+    return null;
+}
+
 FlexLayout.Direction = {};
 Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
     value: NativeYogaDirection.INHERIT,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.Direction, 'LTR', {
     value: NativeYogaDirection.LTR,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.Direction, 'RTL', {
     value: NativeYogaDirection.RTL,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.FlexDirection = {};
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN', {
     value: NativeYogaFlexDirection.COLUMN,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.FlexDirection, 'COLUMN_REVERSE', {
     value: NativeYogaFlexDirection.COLUMN_REVERSE,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW', {
     value: NativeYogaFlexDirection.ROW,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.FlexDirection, 'ROW_REVERSE', {
     value: NativeYogaFlexDirection.ROW_REVERSE,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.JustifyContent = {};
 Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_START', {
     value: NativeYogaJustify.FLEX_START,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.JustifyContent, 'CENTER', {
     value: NativeYogaJustify.CENTER,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.JustifyContent, 'FLEX_END', {
     value: NativeYogaJustify.FLEX_END,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_BETWEEN', {
     value: NativeYogaJustify.SPACE_BETWEEN,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.JustifyContent, 'SPACE_AROUND', {
     value: NativeYogaJustify.SPACE_AROUND,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.AlignContent = {};
 Object.defineProperty(FlexLayout.AlignContent, 'AUTO', {
     value: NativeYogaAlign.AUTO,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_START', {
     value: NativeYogaAlign.FLEX_START,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignContent, 'CENTER', {
     value: NativeYogaAlign.CENTER,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignContent, 'FLEX_END', {
     value: NativeYogaAlign.FLEX_END,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
     value: NativeYogaAlign.STRETCH,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.FlexWrap = {};
 Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
     value : NativeYogaWrap.NO_WRAP,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
     value : NativeYogaWrap.WRAP,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.Overflow = {};
 Object.defineProperty(FlexLayout.Overflow, 'VISIBLE', {
     value : NativeYogaOverflow.VISIBLE,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.Overflow, 'HIDDEN', {
     value : NativeYogaOverflow.HIDDEN,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
     value : NativeYogaOverflow.SCROLL,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.AlignItems = {};
 Object.defineProperty(FlexLayout.AlignItems, 'AUTO', {
     value: NativeYogaAlign.AUTO,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_START', {
     value: NativeYogaAlign.FLEX_START,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignItems, 'CENTER', {
     value: NativeYogaAlign.CENTER,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignItems, 'FLEX_END', {
     value: NativeYogaAlign.FLEX_END,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
     value: NativeYogaAlign.STRETCH,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.AlignSelf = {};
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
     value : NativeYogaAlign.AUTO,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
     value : NativeYogaAlign.FLEX_START,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
     value : NativeYogaAlign.CENTER,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
     value : NativeYogaAlign.FLEX_END,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
     value : NativeYogaAlign.STRETCH,
-    writable: false
+    enumerable: true
 });
 
 FlexLayout.PositionType = {};
 Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
     value : NativeYogaPositionType.RELATIVE,
-    writable: false
+    enumerable: true
 });
 Object.defineProperty(FlexLayout.PositionType, 'ABSOLUTE', {
     value : NativeYogaPositionType.ABSOLUTE,
-    writable: false
+    enumerable: true
 });
 
 module.exports = FlexLayout;
