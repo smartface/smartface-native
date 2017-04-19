@@ -29,6 +29,13 @@ SFApplication.restart = function(){
     SMFApplication.restart();
 };
 
+SFApplication.android = {};
+SFApplication.android.checkPermission = function(){};
+SFApplication.android.requestPermissions = function(){};
+SFApplication.android.shouldShowRequestPermissionRationale = function(){};
+SFApplication.android.onRequestPermissionsResult = function(){};
+
+
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set:function(value){
         Application.onUnhandledError = value;
