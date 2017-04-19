@@ -36,7 +36,27 @@ const ListView = extend(View)(
         
 
         self.ios = {}
-
+        
+        Object.defineProperty(self.ios, 'leftToRightSwipeEnabled', {
+            get: function() {
+                return self.nativeObject.leftToRightSwipeEnabled;
+            },
+            set: function(value) {
+                self.nativeObject.leftToRightSwipeEnabled = value;
+            },
+            enumerable: true
+         });
+          
+        Object.defineProperty(self.ios, 'rightToLeftSwipeEnabled', {
+          get: function() {
+              return self.nativeObject.rightToLeftSwipeEnabled;
+          },
+          set: function(value) {
+              self.nativeObject.rightToLeftSwipeEnabled = value;
+          },
+          enumerable: true
+        });
+        
         self.ios.onRowSwiped = function(direction){};
         
         self.ios.swipeItem = function(title,color,padding,action){
@@ -168,7 +188,14 @@ const ListView = extend(View)(
                 self.refreshControl.tintColor = param;
             }
         }
-
+        
+        Object.defineProperty(self, 'onScroll', {
+            set: function(value) {
+                self.nativeObject.didScroll = value;
+            },
+            enumerable: true
+        });
+          
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

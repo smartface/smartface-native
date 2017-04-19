@@ -1,6 +1,7 @@
 const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const TypeUtil              = require("sf-core/util/type");
 const NativeFile            = requireClass('java.io.File');
+const NativeEnvironment     = requireClass('android.os.Environment');
 
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
@@ -60,9 +61,9 @@ Path.android = {};
 Object.defineProperty(Path.android, 'storages', {
     get: function(){
         if(!storages.isResolved){
-            var filesDir = Android.getActivity().getExternalFilesDir(null);
+            var filesDir = NativeEnvironment.getExternalStorageDirectory().getPath();
             if(filesDir){
-                storages['internal'] = filesDir.getAbsolutePath();
+                storages['internal'] = filesDir;
             }
             
             // @todo test for more devices

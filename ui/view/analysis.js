@@ -233,7 +233,6 @@ function View(params) {
      */
     this.paddingBottom = 0;
 
-
     /**
      * Gets/Sets the padding space on the left side of a view.
      *
@@ -315,7 +314,6 @@ function View(params) {
      */
     this.margin = 0;
 
-
     /**
      * This property specifies the type of positioning method used for a view.
      * To position a view relative to its parent with top,left,right and bottom
@@ -337,6 +335,16 @@ function View(params) {
      * @since 0.1
      */
     this.flexGrow = 0;
+    
+    /**
+     * AspectRatio keeps the ratio between the width and the height of a view. AspectRatio has higher priority than {@link UI.View#flexGrow flexGrow}.
+     *
+     * @property {Number} aspectRatio
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.aspectRatio;
 
     /**
      * This property specifies how much a view will shrink relative to the other views inside the same {@link UI.FlexLayout FlexLayout}.

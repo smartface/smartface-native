@@ -2,6 +2,9 @@ const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Color = require('sf-core/ui/color');
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
+const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
+const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
+const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
 
 const hueDic = {};
 hueDic[Color.BLUE]    = NativeDescriptorFactory.HUE_BLUE;
@@ -17,7 +20,6 @@ const MapView = extend(View)(
 
         var self = this;
         if (!self.nativeObject) {
-            const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
             self.nativeObject = new NativeMapView(activity);
             var activityIntent = activity.getIntent();
             var savedBundles = activityIntent.getExtras();
@@ -37,14 +39,25 @@ const MapView = extend(View)(
                 const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                 var zoomUpdate = NativeCameraUpdateFactory.zoomTo(10);
                 googleMap.moveCamera(zoomUpdate);
-
                 
+                googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
+                    onMarkerClick: function(marker) {
+                        _pins.forEach(function(pin) {
+                            if (pin.nativeObject.getId() === marker.getId()) {
+                                pin.onPress();
+                            }
+                        });
+                        return false;
+                    }
+                }));
+
                 _callbackOnCreate && _callbackOnCreate();
             }
         }));
 
         var _nativeGoogleMap;
         var _callbackOnCreate;
+        var _pins = [];
         Object.defineProperties(self, {
             'onCreate': {
                 get: function() {
@@ -170,12 +183,14 @@ const MapView = extend(View)(
                             }
 
                             pin.nativeObject = _nativeGoogleMap.addMarker(marker);
+                            _pins.push(pin);
                         }
                     }
                 },
                 'removePin': {
                     value: function(pin) {
                         if (pin && pin.nativeObject) {
+                            _pins.splice(_pins.indexOf(pin), 1);
                             pin.nativeObject.remove();
                             pin.nativeObject = null;
                         }
@@ -205,6 +220,7 @@ function Pin(params) {
     var _subtitle;
     var _title;
     var _visible;
+    var _onPress;
     Object.defineProperties(self, {
         'color': {
             get: function() {
@@ -252,6 +268,14 @@ function Pin(params) {
             },
             set: function(visible) {
                 _visible = visible;
+            }
+        },
+        'onPress': {
+            get: function() {
+                return _onPress;
+            },
+            set: function(callback) {
+                _onPress = callback;
             }
         }
     });
