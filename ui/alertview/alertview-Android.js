@@ -13,7 +13,7 @@ function AlertView (params) {
         this.nativeObject = new NativeAlertDialog.Builder(Android.getActivity()).create();
     }
             
-    var titleInitial = "";
+    var _title = "";
     var _cancellable;
     var _message = "";
     var buttonCallbacks = [];
@@ -21,10 +21,10 @@ function AlertView (params) {
     Object.defineProperties(this, {
         'title': {
             get: function() {
-                return titleInitial;
+                return _title;
             },
             set: function(title) {
-                titleInitial = title;
+                _title = title;
                 self.nativeObject.setTitle(title);
             },
             enumerable: true
