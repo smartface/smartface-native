@@ -131,9 +131,10 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 };
 
 http.request = function(params, onLoad, onError) {
+    var responseHeaders = {};
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                onLoad({body: response, headers: {}});
+                onLoad({body: response, headers: responseHeaders});
             }
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
@@ -176,6 +177,8 @@ http.request = function(params, onLoad, onError) {
                     if(params.headers)
                         value = params.headers["Accept-Encoding"];
                     var parseCharset;
+                    
+                    getResponseHeaders(response, responseHeaders);
                     if(value && value.indexOf("gzip") !== -1) { // contains gzip
                         try {
                             var inputStream = new ByteArrayInputStream(response.data);
@@ -216,6 +219,19 @@ http.request = function(params, onLoad, onError) {
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
+
+function getResponseHeaders(response, responseHeaders) {
+    var headers = response.headers;
+    if(headers && headers.keySet()) {
+        var iterator = headers.keySet().iterator();
+        while(iterator.hasNext()) {
+            var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
+            if(key && headers.get(key)) {
+                responseHeaders[key] = headers.get(key).substring(0);
+            }
+        }
+    }
+}
 
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
