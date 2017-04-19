@@ -46,7 +46,7 @@ Object.defineProperties(Color,{
         enumerable: true
     },
     'LIGHTGRAY': {
-        value: NativeColor.LIGHTGRAY,
+        value: NativeColor.LTGRAY,
         enumerable: true
     },
     'MAGENTA': {

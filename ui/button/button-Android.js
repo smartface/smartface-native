@@ -32,7 +32,7 @@ const Button = extend(Label)(
                     return _onPress;
                 },
                 set: function(onPress) {
-                    _onPress = onPress;
+                    _onPress = onPress.bind(this);
                 },
                 enumerable: true
             },
@@ -41,7 +41,7 @@ const Button = extend(Label)(
                     return _onLongPress;
                 },
                 set: function(onLongPress) {
-                    _onLongPress = onLongPress;
+                    _onLongPress = onLongPress.bind(this);
                 },
                 enumerable: true
             },
@@ -61,13 +61,13 @@ const Button = extend(Label)(
             this.textColor = Color.WHITE;
             this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
                 onClick: function(view) {
-                        _onPress && _onPress.apply(this);
+                        _onPress && _onPress();
                 }
             }));
             this.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                 onLongClick : function(view){
                     if(_onLongPress) {
-                        _onLongPress.apply(this);
+                        _onLongPress();
                     }
                     return true; // Returns always true to solve AND-2713 bug.
                 }
