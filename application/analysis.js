@@ -134,6 +134,13 @@ Application.android.checkPermission = function(permission){};
 /**
  * With Application.requestPermissions function, Android System Dialog will appear to ask for 
  * permission grant by user for dangerous(privacy) permissions. 
+ * 
+ *     @example
+ *     const Application = require("sf-core/application");
+ *     Application.android.requestPermissions(1002, Application.Permissions.WRITE_EXTERNAL_STORAGE)
+ *     Application.android.onRequestPermissionsResult = function(e){
+ *         alert(JSON.stringify(e));
+ *     }
  *
  * @method requestPermissions
  * @param {Number} requestCode
