@@ -49,19 +49,13 @@ function View(params) {
     }
 
     var _backgroundColor = Color.TRANSPARENT;
-    var backgroundDrawable = new NativeGradientDrawable();
-    
-    var radii = [0, 0, 0, 0, 0, 0, 0, 0];
-    var rectF = new NativeRectF(0, 0, 0, 0);
-    var roundRect = new NativeRoundRectShape(radii, rectF, radii);
-    var borderShapeDrawable = new NativeShapeDrawable();
-    borderShapeDrawable.getPaint().setColor(Color.TRANSPARENT);
-    
-    var layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
-    layerDrawable.setId(0,0);
-    layerDrawable.setId(1,1);
-    layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-    layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+    var backgroundDrawable;
+    var radii;
+    var rectF;
+    var roundRect;
+    var borderShapeDrawable;
+
+    var layerDrawable;
     
     var _backgroundImages = null;
     var _borderColor = Color.BLACK;
@@ -369,6 +363,15 @@ function View(params) {
     }
     
     function setBackground(layerIndex){
+        if(!layerDrawable){
+            layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
+            layerDrawable.setId(0,0);
+            layerDrawable.setId(1,1);
+            layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
+            if(borderShapeDrawable){
+                layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+            }
+        }
         switch (layerIndex){
             case 0: 
                 layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
@@ -793,7 +796,7 @@ function View(params) {
     
     // Assign defaults
     if(!this.isNotSetDefaults){
-        this.nativeObject.setBackground(layerDrawable);
+        this.backgroundColor = _backgroundColor;
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {
                 if(self.touchEnabled){
