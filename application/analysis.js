@@ -132,7 +132,7 @@ Application.restart = function(){};
 Application.android.checkPermission = function(permission){};
 
 /**
- * With Application.requestPermissions function, Android System Dialog will appear to ask for 
+ * With {@link Application#requestPermissions requestPermissions}, the System Dialog will appear to ask for 
  * permission grant by user for dangerous(privacy) permissions. 
  * 
  *     @example
@@ -281,7 +281,8 @@ Application.onMinimize = function(){};
 Application.onReceivedNotification = function(data){};
 
 /**
- *
+ * This event is called after Application.requestPermissions function. This event is 
+ * fired asynchronous way, there is no way to make sure which request is answered.
  * 
  * @since 1.2
  * @event onRequestPermissionsResult
