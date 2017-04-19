@@ -159,7 +159,6 @@ Application.android.requestPermissions = function(requestCode, permission){};
  */
 Application.android.shouldShowRequestPermissionRationale = function(permission){};
 
-
 /**
  * Check new update from {@link https://developer.smartface.io/docs/remote-app-update RAU}.
  * 

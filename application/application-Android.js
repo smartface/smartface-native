@@ -395,10 +395,4 @@ Object.defineProperties(ApplicationWrapper.Permissions, {
     }
 });
 
-
-
-
-
-
-
 module.exports = ApplicationWrapper;
