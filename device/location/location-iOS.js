@@ -25,4 +25,7 @@ Location.stop = function(){
 
 Location.onLocationChanged = function onLocationChanged(event){ }
 
+Location.android = {};
+Location.android.Provider = {};
+
 module.exports = Location;
