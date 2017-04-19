@@ -44,7 +44,8 @@ const MapView = extend(View)(
                     onMarkerClick: function(marker) {
                         _pins.forEach(function(pin) {
                             if (pin.nativeObject.getId() === marker.getId()) {
-                                pin.onPress();
+                                if(pin.onPress)
+                                    pin.onPress();
                             }
                         });
                         return false;
