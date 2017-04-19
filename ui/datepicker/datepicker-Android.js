@@ -1,21 +1,35 @@
 const TypeUtil = require('sf-core/util/type');
 
 function DatePicker(params) {
-    var self = this;
     var activity = Android.getActivity();
 
     const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
     var today = new Date();
-    self.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
-        onDateSet: function(datePicker, year, month, day) {
-            self.onDateSelected && self.onDateSelected(new Date(year, month, day));
-        }
-    }), today.getFullYear(), today.getMonth(), today.getDate());
     
-    Object.defineProperties(self, {
+    if(!this.nativeObject){
+        this.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
+            onDateSet: function(datePicker, year, month, day) {
+                _onDateSelected && _onDateSelected(new Date(year, month, day));
+            }
+        }), today.getFullYear(), today.getMonth(), today.getDate());
+    }
+    
+    var _onDateSelected;
+    Object.defineProperties(this, {
+        'onDateSelected': {
+            get: function(){
+                return _onDateSelected;
+            },
+            set: function(callback){
+                if(TypeUtil.isFunction(callback)){
+                    _onDateSelected = callback;
+                }
+            },
+            enumerable: true
+        },
         'show': {
             value: function() {
-                self.nativeObject.show();
+                this.nativeObject.show();
             }
         },
         'setMinDate': {
@@ -23,7 +37,7 @@ function DatePicker(params) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
                     var milliTime = date.getTime();
 
-                    var nativeDatePicker = self.nativeObject.getDatePicker();
+                    var nativeDatePicker = this.nativeObject.getDatePicker();
                     nativeDatePicker.setMinDate(milliTime);
                 }
             }
@@ -33,7 +47,7 @@ function DatePicker(params) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
                     var milliTime = date.getTime();
 
-                    var nativeDatePicker = self.nativeObject.getDatePicker();
+                    var nativeDatePicker = this.nativeObject.getDatePicker();
                     nativeDatePicker.setMaxDate(milliTime);
                 }
             }
@@ -41,9 +55,16 @@ function DatePicker(params) {
         'setDate': {
             value: function(date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
-                    self.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
                 }
             }
+        },
+        'toString': {
+            value: function(){
+                return 'DatePicker';
+            },
+            enumerable: true, 
+            configurable: true
         }
     });
     

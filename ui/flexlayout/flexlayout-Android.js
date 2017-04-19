@@ -1,5 +1,4 @@
 const ViewGroup                 = require('../viewgroup');
-const AndroidConfig             = require('sf-core/util/Android/androidconfig');
 const extend                    = require('js-base/core/extend');
 
 const NativeYogaLayout          = requireClass('com.facebook.yoga.android.YogaLayout');
@@ -13,88 +12,94 @@ const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionTy
 
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
-        var self = this;
         var activity = Android.getActivity();
-        self.nativeObject = new NativeYogaLayout(activity);
+        
+        if(!this.nativeObject){
+            this.nativeObject = new NativeYogaLayout(activity);
+        }
+
         _super(this);
         
-        // direction values same as native
-        Object.defineProperty(this, 'direction', {
-            get: function() {
-                return self.yogaNode.getStyleDirection();
-            },
-            set: function(direction) {
-                self.yogaNode.setDirection(direction);
-            },
-            enumerable: true
-        });
-        
-        // flexDirection values same as native
-        Object.defineProperty(this, 'flexDirection', {
-            get: function() {
-                return self.yogaNode.getFlexDirection();
-            },
-            set: function(flexDirection) {
-                self.yogaNode.setFlexDirection(flexDirection);
-            },
-            enumerable: true
-        });
-        
-        // justifyContent values same as native
-        Object.defineProperty(this, 'justifyContent', {
-            get: function() {
-                return self.yogaNode.getJustifyContent();
-            },
-            set: function(justifyContent) {
-                self.yogaNode.setJustifyContent(justifyContent);
-            },
-            enumerable: true
-        });
-        
-        // alignContent values same as native
-        Object.defineProperty(this, 'alignContent', {
-            get: function() {
-                return self.yogaNode.getAlignContent();
-            },
-            set: function(alignContent) {
-                self.yogaNode.setAlignContent(alignContent);
-            },
-            enumerable: true
-        });
-        
-        // alignItems values same as native    
-        Object.defineProperty(this, 'alignItems', {
-            get: function() {
-                return self.yogaNode.getAlignItems();
-            },
-            set: function(alignItems) {
-                self.yogaNode.setAlignItems(alignItems);
-            },
-            enumerable: true
-        });
-        
-        // flexWrap values same as native 
         var _flexWrap;
-        Object.defineProperty(this, 'flexWrap', {
-            get: function() {
-                return _flexWrap;
+        Object.defineProperties(this, {
+            // direction values same as native
+            'direction': {
+                get: function() {
+                    return this.yogaNode.getStyleDirection();
+                },
+                set: function(direction) {
+                    this.yogaNode.setDirection(direction);
+                },
+                enumerable: true
             },
-            set: function(flexWrap) {
-                _flexWrap = flexWrap;
-                self.yogaNode.setWrap(flexWrap);
+            // flexDirection values same as native
+            'flexDirection': {
+                get: function() {
+                    return this.yogaNode.getFlexDirection();
+                },
+                set: function(flexDirection) {
+                    this.yogaNode.setFlexDirection(flexDirection);
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-        
-        // overFlow values same as native 
-        Object.defineProperty(this, 'overFlow', {
-            get: function() {
-                return self.yogaNode.getOverflow();
+            // justifyContent values same as native
+            'justifyContent': {
+                get: function() {
+                    return this.yogaNode.getJustifyContent();
+                },
+                set: function(justifyContent) {
+                    this.yogaNode.setJustifyContent(justifyContent);
+                },
+                enumerable: true
             },
-            set: function(overFlow) {
-                self.yogaNode.setOverflow(overFlow);
+            // alignContent values same as native
+            'alignContent': {
+                get: function() {
+                    return this.yogaNode.getAlignContent();
+                },
+                set: function(alignContent) {
+                    this.yogaNode.setAlignContent(alignContent);
+                },
+                enumerable: true
             },
-            enumerable: true
+            // alignItems values same as native    
+            'alignItems': {
+                get: function() {
+                    return this.yogaNode.getAlignItems();
+                },
+                set: function(alignItems) {
+                    this.yogaNode.setAlignItems(alignItems);
+                },
+                enumerable: true
+            },
+            // flexWrap values same as native 
+            'flexWrap': {
+                get: function() {
+                    return _flexWrap;
+                },
+                set: function(flexWrap) {
+                    _flexWrap = flexWrap;
+                    this.yogaNode.setWrap(flexWrap);
+                },
+                enumerable: true
+            },
+            // overFlow values same as native 
+            'overFlow': {
+                get: function() {
+                    return this.yogaNode.getOverflow();
+                },
+                set: function(overFlow) {
+                    this.yogaNode.setOverflow(overFlow);
+                },
+                enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'FlexLayout';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
         
         // Assign parameters given in constructor

@@ -7,31 +7,43 @@ const Color = require('sf-core/ui/color');
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {
-        var self = this;
-        if (!self.nativeObject) {
-            self.nativeObject = new NativeProgressBar(Android.getActivity());
+        var _color = null;
+        
+        if (!this.nativeObject) {
+            this.nativeObject = new NativeProgressBar(Android.getActivity());
         }
+        
         _super(this);
-        self.nativeObject.setIndeterminate(true);
-
-        var colorInitial = null;
-        Object.defineProperty(this, 'color', {
-            get: function() {
-                return colorInitial;
+        
+        Object.defineProperties(this, {
+            'color': {
+                get: function() {
+                    return _color;
+                },
+                set: function(color) {
+                    if (_color !== color) {
+                        _color = color;
+                        this.nativeObject.getIndeterminateDrawable().setColorFilter(_color, NativePorterDuff.Mode.SRC_IN);
+                    }
+                },
+                enumerable: true
             },
-            set: function(color) {
-                if (colorInitial !== color) {
-                    colorInitial = color;
-                    self.nativeObject.getIndeterminateDrawable().setColorFilter(colorInitial, NativePorterDuff.Mode.SRC_IN);
-                }
-            },
-            enumerable: true
+            'toString': {
+                value: function(){
+                    return 'ActivityIndicator';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
 
-        self.color = Color.create("#00A1F1"); // SmartfaceBlue
-        
         // Handling ios specific properties.
-        self.ios = {}; 
+        this.ios = {}; 
+        
+        if(!this.isNotSetDefaults){
+            this.nativeObject.setIndeterminate(true);
+            this.color = Color.create("#00A1F1"); // SmartfaceBlue
+        }
         
         // Assign parameters given in constructor
         if (params) {
@@ -43,7 +55,6 @@ const ActivityIndicator = extend(View)(
 );
 
 ActivityIndicator.iOS = {};
-
 ActivityIndicator.iOS.Type = {};
 
 module.exports = ActivityIndicator;

@@ -9,145 +9,147 @@ const NativeR        = requireClass("android.R");
 
 const Slider = extend(View)(
     function (_super, params) {
-        var self = this;
-        if(!self.nativeObject) {
-            self.nativeObject = new SeekBar(Android.getActivity());
+        if(!this.nativeObject) {
+            this.nativeObject = new SeekBar(Android.getActivity());
         }
-        _super(self);
+        _super(this);
         
-        var _layerDrawable = self.nativeObject.getProgressDrawable().getCurrent();
-        var _defaultThumb  = self.nativeObject.getThumb();
-
-        self.nativeObject.setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener.implement({
-            onProgressChanged: function(seekBar, actualValue, fromUser) {
-                _onValueChange && _onValueChange(actualValue + _minValue);
-            },
-            onStartTrackingTouch: function(seekBar) {}, 
-            onStopTrackingTouch: function(seekBar) {}
-        }));
-        
-        Object.defineProperty(this, 'value', {
-            get: function() {
-                return self.nativeObject.getProgress() + _minValue;
-            }, 
-            set: function(value) {
-                if (value < _minValue) {
-                    value = _minValue;
-                } else if (value > _maxValue) {
-                    value = _maxValue;
-                }
-                
-                self.nativeObject.setProgress(value - _minValue);
-            },
-            enumerable: true
-        });
+        var _layerDrawable = this.nativeObject.getProgressDrawable().getCurrent();
+        var _defaultThumb  = this.nativeObject.getThumb();
 
         var _minValue;
-        Object.defineProperty(this, 'minValue', {
-            get: function() {
-                return _minValue;
-            }, 
-            set: function(value) {
-                _minValue = value;
-                self.nativeObject.setMax(_maxValue - _minValue);
-            },
-            enumerable: true
-        });
-
         var _maxValue;
-        Object.defineProperty(this, 'maxValue', {
-            get: function() {
-                return _maxValue;
-            }, 
-            set: function(value) {
-                _maxValue = value;
-                self.nativeObject.setMax(_maxValue - _minValue);
-            },
-            enumerable: true
-        });
-
         var _minTrackColor;
-        Object.defineProperty(this, 'minTrackColor', {
-            get: function() {
-                return _minTrackColor;
-            }, 
-            set: function(color) {
-                if (color) {
-                    _minTrackColor = color;
-
-                    _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
-                }
-            },
-            enumerable: true
-        });
-
         var _maxTrackColor;
-        Object.defineProperty(this, 'maxTrackColor', {
-            get: function() {
-                return _maxTrackColor;
-            }, 
-            set: function(color) {
-                if (color) {
-                    _maxTrackColor = color;
-                    
-                    _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
-                }
-            },
-            enumerable: true
-        });
-
         var _thumbImage = null;
-        Object.defineProperty(this, 'thumbImage', {
-            get: function() {
-                return _thumbImage;
-            },
-            set: function(thumbImage) {
-                const Image = require("sf-core/ui/image");
-                if(thumbImage instanceof Image && thumbImage.nativeObject){
-                    _thumbImage = thumbImage;
-                    self.nativeObject.setThumb(thumbImage.nativeObject);
-                }
-                else if(thumbImage === null){
-                    _thumbImage = thumbImage;
-                    self.nativeObject.setThumb(null);
-                }
-            },
-            enumerable: true
-        });
-
         var _thumbColor;
-        Object.defineProperty(this, 'thumbColor', {
-            get: function() {
-                return _thumbColor;
-            }, 
-            set: function(color) {
-                if (color) {
-                    _thumbColor = color;
-                    _defaultThumb.setColorFilter(color, PorterDuffMode);
-                    self.nativeObject.setThumb(_defaultThumb);
-                }
-            },
-            enumerable: true
-        });
-        
         var _onValueChange;
-        Object.defineProperty(this, 'onValueChange', {
-            get: function() {
-                return _onValueChange;
-            }, 
-            set: function(callback) {
-                _onValueChange = callback.bind(this);
+        Object.defineProperties(this, {
+            'value': {
+                get: function() {
+                    return this.nativeObject.getProgress() + _minValue;
+                }, 
+                set: function(value) {
+                    if (value < _minValue) {
+                        value = _minValue;
+                    } else if (value > _maxValue) {
+                        value = _maxValue;
+                    }
+                    
+                    this.nativeObject.setProgress(value - _minValue);
+                },
+                enumerable: true
             },
-            enumerable: true
+            'minValue': {
+                get: function() {
+                    return _minValue;
+                }, 
+                set: function(value) {
+                    _minValue = value;
+                    this.nativeObject.setMax(_maxValue - _minValue);
+                },
+                enumerable: true
+            },
+            'maxValue': {
+                get: function() {
+                    return _maxValue;
+                }, 
+                set: function(value) {
+                    _maxValue = value;
+                    this.nativeObject.setMax(_maxValue - _minValue);
+                },
+                enumerable: true
+            },
+            'minTrackColor': {
+                get: function() {
+                    return _minTrackColor;
+                }, 
+                set: function(color) {
+                    if (color) {
+                        _minTrackColor = color;
+    
+                        _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
+                    }
+                },
+                enumerable: true
+            },
+            'maxTrackColor': {
+                get: function() {
+                    return _maxTrackColor;
+                }, 
+                set: function(color) {
+                    if (color) {
+                        _maxTrackColor = color;
+                        
+                        _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
+                    }
+                },
+                enumerable: true
+            },
+            'thumbImage': {
+                get: function() {
+                    return _thumbImage;
+                },
+                set: function(thumbImage) {
+                    const Image = require("sf-core/ui/image");
+                    if(thumbImage instanceof Image && thumbImage.nativeObject){
+                        _thumbImage = thumbImage;
+                        this.nativeObject.setThumb(thumbImage.nativeObject);
+                    }
+                    else if(thumbImage === null){
+                        _thumbImage = thumbImage;
+                        this.nativeObject.setThumb(null);
+                    }
+                },
+                enumerable: true
+            },
+            'thumbColor': {
+                get: function() {
+                return _thumbColor;
+                }, 
+                set: function(color) {
+                    if (color) {
+                        _thumbColor = color;
+                        _defaultThumb.setColorFilter(color, PorterDuffMode);
+                        this.nativeObject.setThumb(_defaultThumb);
+                    }
+                },
+                enumerable: true
+            },
+            'onValueChange': {
+                get: function() {
+                    return _onValueChange;
+                }, 
+                set: function(callback) {
+                    _onValueChange = callback.bind(this);
+                },
+                enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'Slider';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
         
-        // SET DEFAULTS
-        self.thumbColor = Color.GRAY;
-        self.minTrackColor = Color.DARKGRAY;
-        self.maxTrackColor = Color.GREEN;
-        self.value = 0;
-        self.minValue = 0;
-        self.maxValue = 100;
+        if(!this.isNotSetDefaults){
+            // SET DEFAULTS
+            this.thumbColor = Color.GRAY;
+            this.minTrackColor = Color.DARKGRAY;
+            this.maxTrackColor = Color.GREEN;
+            this.value = 0;
+            this.minValue = 0;
+            this.maxValue = 100;
+            this.nativeObject.setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener.implement({
+                onProgressChanged: function(seekBar, actualValue, fromUser) {
+                    _onValueChange && _onValueChange(actualValue + _minValue);
+                },
+                onStartTrackingTouch: function(seekBar) {}, 
+                onStopTrackingTouch: function(seekBar) {}
+            }));
+        }
         
         // Assign parameters given in constructor
         if (params) {

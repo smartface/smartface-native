@@ -5,21 +5,19 @@ const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayo
 
 const SliderDrawer = extend(FlexLayout)(
     function (_super, params) {
-        var self = this;
         _super(this);
         
         var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
         // Gravity.LEFT
         drawerLayoutParams.gravity = 3;
-        self.nativeObject.setLayoutParams (drawerLayoutParams);
-        self.nativeObject.setFitsSystemWindows(true);
         
         var _position;
         var _onShow;
         var _onHide;
         var _onLoad;
-        self.attachedPages = null;
+        this.attachedPages = null;
         var _enabled = true;
+        
         Object.defineProperties(this,{
             'drawerPosition' : {
                 get: function(){
@@ -35,7 +33,7 @@ const SliderDrawer = extend(FlexLayout)(
                         // Gravity.LEFT
                         drawerLayoutParams.gravity = 3;
                     }
-                    self.nativeObject.setLayoutParams (drawerLayoutParams);
+                    this.nativeObject.setLayoutParams (drawerLayoutParams);
                 },
                 enumerable: true
             },
@@ -45,28 +43,28 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 set: function(enabled){
                     _enabled = enabled;
-                    if(self.attachedPages){
-                        self.attachedPages.setDrawerLocked(!enabled);
+                    if(this.attachedPages){
+                        this.attachedPages.setDrawerLocked(!enabled);
                     }
                 },
                 enumerable: true
             },
             'layout': {
-                value: self,
+                value: this,
                 writable: false
             },
             'show': {
                 value: function(){
-                    if(self.attachedPages){
-                        self.attachedPages.showSliderDrawer();
+                    if(this.attachedPages){
+                        this.attachedPages.showSliderDrawer();
                     }
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    if(self.attachedPages){
-                        self.attachedPages.hideSliderDrawer();
+                    if(this.attachedPages){
+                        this.attachedPages.hideSliderDrawer();
                     }
                 },
                 writable: false
@@ -125,6 +123,13 @@ const SliderDrawer = extend(FlexLayout)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'SliderDrawer';
+                },
+                enumerable: true, 
+                configurable: true
             }
         });
         
@@ -143,8 +148,13 @@ const SliderDrawer = extend(FlexLayout)(
             }
         });
         
-        // setting default values
-        this.width = 200;
+        if(!this.isNotSetDefaults){
+            // setting default values
+            this.width = 200;
+            this.nativeObject.setLayoutParams (drawerLayoutParams);
+            this.nativeObject.setFitsSystemWindows(true);
+        }
+        
         
         // Assign parameters given in constructor
         if (params) {

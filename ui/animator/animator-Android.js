@@ -55,6 +55,13 @@ function Animator(params) {
             value: function(completeFunction) {
                 _completeFunction = completeFunction;
             }
+        },
+        'toString': {
+            value: function(){
+                return 'Animator';
+            },
+            enumerable: true, 
+            configurable: true
         }
     });
 };

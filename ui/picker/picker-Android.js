@@ -10,113 +10,99 @@ const NativeDialogInterface = requireClass("android.content.DialogInterface");
 const Picker = extend(View)(
     function (_super, params) {
         var self = this;
+        var activity = Android.getActivity();
         if(!self.nativeObject) {
-            var activity = Android.getActivity();
             self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
 
         var _items = [];
-        Object.defineProperty(this, 'items', {
-            get: function() {
-                return _items;  // todo: Returns self.nativeObject.getDisplayValues()
-            },                  // after string problem is solved.
-            set: function(items) {
-                _items = items;
-                setNumberPicker();
+        var _onSelected;
+        Object.defineProperties(this,{
+            'items': {
+                get: function() {
+                    return _items;  // todo: Returns self.nativeObject.getDisplayValues()
+                },                  // after string problem is solved.
+                set: function(items) {
+                    _items = items;
+                    setNumberPicker(this.nativeObject, _items);
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-
-        Object.defineProperty(this, 'currentIndex', {
-            get: function() {
-                return self.nativeObject.getValue();
+            'currentIndex': {
+                get: function() {
+                    return self.nativeObject.getValue();
+                },
+                set: function(currentIndex) {
+                    self.nativeObject.setValue(currentIndex);
+                },
+                enumerable: true
             },
-            set: function(currentIndex) {
-                self.nativeObject.setValue(currentIndex);
+            'enabled': {
+                get: function() {
+                    return self.nativeObject.isEnabled();
+                },
+                set: function(enabled) {
+                    self.nativeObject.setEnabled(enabled);
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-
-        Object.defineProperty(this, 'enabled', {
-            get: function() {
-                return self.nativeObject.isEnabled();
+            'onSelected': {
+                get: function() {
+                    return _onSelected;
+                },
+                set: function(onSelected) {
+                    _onSelected = onSelected;
+                },
+                enumerable: true
             },
-            set: function(enabled) {
-                self.nativeObject.setEnabled(enabled);
+            'show': {
+                value: function(done, cancel) {
+                    var layout = addViewToLayout(this.nativeObject);
+                    
+                    var cancelListener = NativeDialogInterface.OnClickListener.implement({
+                        onClick: function(dialogInterface, i) {
+                            if(cancel)
+                                cancel();
+                        }
+                    });
+                    
+                    var doneListener = NativeDialogInterface.OnClickListener.implement({
+                        onClick: function(dialogInterface, i) {
+                            if(done)
+                                done({index: self.currentIndex});
+                        }
+                    });
+                    
+                    const NativeRString = requireClass("android.R").string;
+                    var builder = new NativeAlertDialog.Builder(Android.getActivity());
+                    builder = builder.setView(layout);
+                    builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
+                    builder = builder.setPositiveButton(NativeRString.ok, doneListener);
+                    builder.show();
+                },
+                enumerable: true
             },
-            enumerable: true
-        });
-
-        var _onSelectedCallback;
-        Object.defineProperty(this, 'onSelected', {
-            get: function() {
-                return _onSelectedCallback;
-            },
-            set: function(onSelected) {
-                _onSelectedCallback = onSelected;
-            },
-            enumerable: true
-        });
-
-        function setNumberPicker() {
-            if(_items.length > 0) {
-                self.nativeObject.setDisplayedValues(null);
-                self.nativeObject.setMaxValue(_items.length -1);
-                self.nativeObject.setMinValue(0);
-                self.nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                self.nativeObject.setDisplayedValues(_items);
-                self.nativeObject.setWrapSelectorWheel(false);
+            'toString': {
+                value: function(){
+                    return 'Picker';
+                },
+                enumerable: true, 
+                configurable: true
             }
+        });
+
+        if(!this.isNotSetDefaults){
+            self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
+                onScrollStateChange: function(picker, scrollState) {
+                    if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                        if(_onSelected)
+                            _onSelected(self.currentIndex);
+                    }
+                }
+            }));
         }
-
-        self.nativeObject.setOnScrollListener(NativeNumberPicker.OnScrollListener.implement({
-            onScrollStateChange: function(picker, scrollState) {
-                if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
-                    if(_onSelectedCallback)
-                        _onSelectedCallback(self.currentIndex);
-                }
-            }
-        }));
         
-        self.show = function(done, cancel) {
-            var layout = addViewToLayout();
-            
-            var cancelListener = NativeDialogInterface.OnClickListener.implement({
-                onClick: function(dialogInterface, i) {
-                    if(cancel)
-                        cancel();
-                }
-            });
-            
-            var doneListener = NativeDialogInterface.OnClickListener.implement({
-                onClick: function(dialogInterface, i) {
-                    if(done)
-                        done({index: self.currentIndex});
-                }
-            });
-            
-            const NativeRString = requireClass("android.R").string;
-            var builder = new NativeAlertDialog.Builder(Android.getActivity());
-            builder = builder.setView(layout);
-            builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
-            builder = builder.setPositiveButton(NativeRString.ok, doneListener);
-            builder.show();
-        };
-        
-        function addViewToLayout() {
-            var layout = new NativeFrameLayout(Android.getActivity());
-            var parent = self.nativeObject.getParent();
-            if(parent) {
-                parent.removeView(self.nativeObject);
-            }
-            layout.addView(self.nativeObject, new NativeFrameLayout.LayoutParams(
-                -1 , // FrameLayout.LayoutParams.MATCH_PARENT
-                -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
-                17)); // Gravity.CENTER
-            return layout;
-        }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -125,5 +111,29 @@ const Picker = extend(View)(
         }
     }
 );
+
+function setNumberPicker(nativeObject, _items) {
+    if(_items.length > 0) {
+        nativeObject.setDisplayedValues(null);
+        nativeObject.setMaxValue(_items.length -1);
+        nativeObject.setMinValue(0);
+        nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        nativeObject.setDisplayedValues(_items);
+        nativeObject.setWrapSelectorWheel(false);
+    }
+}
+
+function addViewToLayout(nativeObject) {
+    var layout = new NativeFrameLayout(Android.getActivity());
+    var parent = nativeObject.getParent();
+    if(parent) {
+        parent.removeView(nativeObject);
+    }
+    layout.addView(nativeObject, new NativeFrameLayout.LayoutParams(
+        -1 , // FrameLayout.LayoutParams.MATCH_PARENT
+        -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+        17)); // Gravity.CENTER
+    return layout;
+}
 
 module.exports = Picker;

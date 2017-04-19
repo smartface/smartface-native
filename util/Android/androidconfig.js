@@ -8,8 +8,10 @@ AndroidConfig.packageName = Android.getActivity().getPackageName();
 AndroidConfig.sdkVersion = NativeBuild.VERSION.SDK_INT;
 
 AndroidConfig.SDK = {};
+AndroidConfig.SDK.SDK_NOUGAT = 24;
 AndroidConfig.SDK.SDK_MARSHMALLOW = 23;
 AndroidConfig.SDK.SDK_LOLLIPOP = 21;
+AndroidConfig.SDK.SDK_KITKAT = 19;
 
 var classesCache = {};
 var servicesCache = {};
