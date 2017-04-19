@@ -133,21 +133,17 @@ Application.android.checkPermission = function(permission){};
 
 /**
  * With Application.requestPermissions function, Android System Dialog will appear to ask for 
- * permission grant by user for dangerous(privacy) permissions. This function accepts array of 
- * strings similar to checkPermission function. In the background this function checks for 
- * permissions then fires Application.onRequestPermissionsResult event. Later when 
- * {@link Application.onRequestPermissionsResult onRequestPermissionsResult} event is called, 
- * values are matching in same order as given array in permissionNames parameter.
+ * permission grant by user for dangerous(privacy) permissions. 
  *
  * @method requestPermissions
  * @param {Number} requestCode
- * @param {String[]|String} permissions
+ * @param {String} permission
  * @readonly
  * @android
  * @static
  * @since 1.2
  */
-Application.android.requestPermissions = function(requestCode, permissions){};
+Application.android.requestPermissions = function(requestCode, permission){};
 
 /**
  * This method checks for a permission is shown before to user 
@@ -284,7 +280,7 @@ Application.onReceivedNotification = function(data){};
  * @since 1.2
  * @event onRequestPermissionsResult
  * @param {Number} e.requestCode
- * @param {Boolean[]} e.results
+ * @param {Boolean} e.result
  * @android
  * @static
  * @since 0.1

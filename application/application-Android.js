@@ -39,13 +39,16 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 });
 // Creating Request Permission Result listener
 var applicationPermissionResultListener = NativeApplicationPermissionResultListener.implement({
-    onRequestPermissionsResult: function(requestCode, permissions, grantResults){
+    onRequestPermissionsResult: function(requestCode, permission, grantResult){
+        console.log("onRequestPermissionsResult requestCode: " + requestCode)
+        console.log("onRequestPermissionsResult permissions: " + permission)
+        console.log("onRequestPermissionsResult grantResults: " + grantResult)
         var permissionResults = {};
         permissionResults['requestCode'] = requestCode;
-        permissionResults['results'] = [];
-        for(var i = 0; i<permissions.length; i++){
-            permissionResults['results'].push(grantResults[i] === 0)
-        }
+        permissionResults['result'] = (grantResult === 0);
+        // for(var i = 0; i<permissions.length; i++){
+        //     permissionResults['results'].push(grantResults[i] === 0)
+        // }
         // if(grantResults.length > 0){
         //     for(var i = 0; i<permissions.length; i++){
         //         permissionResults['results'].push(grantResults[i] === 0)
@@ -252,23 +255,20 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
-    'requestPermission':{
+    // @todo requestPermissions should accept permission array too, but due to AND- it accepts just one permission.
+    'requestPermissions':{
         value: function(requestCode, permissions){
-            if(!TypeUtil.isNumeric(requestCode) || !(TypeUtil.isString(permissions) || TypeUtil.isArray(permissions))){
+            if(!TypeUtil.isNumeric(requestCode) || !(TypeUtil.isString(permissions))){
                 throw new Error('requestCode must be numeric or permission must be Application.Permission type or array of Application.Permission.');
             }
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
-                var results = [];
-                for(var i = 0; i < permissions.length ; i++){
-                    results.push(true);
-                }
                 ApplicationWrapper.onRequestPermissionsResult && ApplicationWrapper.onRequestPermissionsResult({
                     requestCode: requestCode,
-                    results: results
+                    result: true
                 });
             }
             else{
-                activity.requestPermissions(permissions, requestCode);
+                activity.requestPermissions([permissions], requestCode);
             }
             
         },
