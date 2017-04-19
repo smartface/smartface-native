@@ -176,29 +176,31 @@ http.request = function(params, onLoad, onError) {
                     var value = null;
                     if(params.headers)
                         value = params.headers["Accept-Encoding"];
-                    var parseCharset;
-                    
+
                     getResponseHeaders(response, responseHeaders);
                     if(value && value.indexOf("gzip") !== -1) { // contains gzip
                         try {
-                            var inputStream = new ByteArrayInputStream(response.data);
-                            var gzipStream = new GZIPInputStream(inputStream);
-                            var reader = new InputStreamReader(gzipStream);
-                            var bufferedReader = new BufferedReader(reader);
-                            for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
-                            bufferedReader.close();
-                            gzipStream.close();
-                        } catch (error) {
-                            var parseError = new VolleyParseError();
-                            return VolleyResponse.error(parseError);
+                            parsed = parseGZIPResponse(response);
+                        } 
+                        catch (error) {
+                            // If header contains encoding different from gzip or
+                            // response is not gzip, try to parse as normal
+                            try {
+                                parsed = parseTextResponse(response);
+                            } 
+                            catch (error) {
+                                var parseError = new VolleyParseError();
+                                return VolleyResponse.error(parseError);
+                            }
                         }
                     }
                     else {
                         try {
-                            parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
-                            parsed = new NativeString(response.data, parseCharset);
-                        } catch (error) {
-                            parsed = new NativeString(response.data);
+                            parsed = parseTextResponse(response);
+                        } 
+                        catch (error) {
+                            var parseError = new VolleyParseError();
+                            return VolleyResponse.error(parseError);
                         }
                     }
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
@@ -219,6 +221,29 @@ http.request = function(params, onLoad, onError) {
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
+
+function parseGZIPResponse(response){
+    var parsed = '';
+    var inputStream = new ByteArrayInputStream(response.data);
+    var gzipStream = new GZIPInputStream(inputStream);
+    var reader = new InputStreamReader(gzipStream);
+    var bufferedReader = new BufferedReader(reader);
+    for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
+    bufferedReader.close();
+    gzipStream.close();
+    return parsed;
+}
+
+function parseTextResponse(response){
+    var parsed = "";
+    try {
+        var parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
+        parsed = new NativeString(response.data, parseCharset);
+    } catch (error) {
+        parsed = new NativeString(response.data);
+    }
+    return parsed;
+}
 
 function getResponseHeaders(response, responseHeaders) {
     var headers = response.headers;
