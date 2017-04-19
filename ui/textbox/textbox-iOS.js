@@ -354,7 +354,12 @@ const TextBox = extend(View)(
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
                     __SF_UIView.animation(230,0,function(){
-                        self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
+                        var distance = -(top-newTop) + navigationBarHeight;
+                        if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
+                            self.getParentViewController().view.yoga.top =  -keyboardHeight + navigationBarHeight;
+                        }else{
+                            self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
+                        }
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
                         
