@@ -243,7 +243,6 @@ const ListView = extend(View)(
 );
 
 function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
-    // var _jsView = cloneObject(jsView, nativeObject, nativeInner);
     jsView.nativeObject = nativeObject;
     jsView.nativeInner = nativeInner;
     jsView.parent = parentJsView;
