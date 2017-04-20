@@ -123,15 +123,20 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
             
-            var intent = new NativeIntent(ACTION_VIEW);
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            var intent, uri;
             if(data){
+                intent = new NativeIntent(ACTION_VIEW);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 var params = Object.keys(data).map(function(k) {
                     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
                 }).join('&');
-                var uri = uriScheme + "?" + params;
+                uri = uriScheme + "?" + params;
                 var uriObject = NativeUri.parse(uri);
                 intent.setData(uriObject);
+            }
+            else {
+                uri = new NativeUri.parse(uriScheme);
+                intent = new NativeIntent(ACTION_VIEW, uri);
             }
             activity.startActivity(intent);
         },
