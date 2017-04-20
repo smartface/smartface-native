@@ -15,13 +15,13 @@
  *     const Color = require('sf-core/ui/color');
  *     var myLabel = new Label({
  *         text: "Smartface Label",
- *         width: "100",
- *         height: "30",
+ *         width: 100,
+ *         height: 30,
  *         textColor: Color.WHITE
  *     });
  *     var myFlexlayout = new FlexLayout({
- *         width: "200",
- *         height: "50",
+ *         width: 200,
+ *         height: 50,
  *         backgroundColor: Color.BLUE
  *     });
  *     myFlexlayout.addChild(myLabel);
@@ -50,8 +50,8 @@ function Pages(params) {
      *
      *     var myButton = new Button({
      *         text: "Go to Page 2",
-     *         height: "30",
-     *         width: "100",
+     *         height: 30,
+     *         width: 100,
      *         onPress: function(){
      *             myPages.push(myPage2,true);
      *         }
@@ -83,8 +83,8 @@ function Pages(params) {
      *
      *     var myButton = new Button({
      *         text: "Go to Page 2",
-     *         height: "30",
-     *         width: "100",
+     *         height: 30,
+     *         width: 100,
      *         onPress: function(){
      *             myPages.push(myPage2,true);
      *         }
@@ -96,8 +96,8 @@ function Pages(params) {
      *
      *     var myButtonPage2 = new Button({
      *         text: "Back to Page 1",
-     *         height: "10",
-     *         width: "100",
+     *         height: 10,
+     *         width: 100,
      *         onPress: function(){
      *             myPages.pop();
      *         }
