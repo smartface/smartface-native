@@ -243,18 +243,20 @@ const ListView = extend(View)(
 );
 
 function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
-    var _jsView = cloneObject(jsView, nativeObject, nativeInner);
-    _jsView.parent = parentJsView;
+    // var _jsView = cloneObject(jsView, nativeObject, nativeInner);
+    jsView.nativeObject = nativeObject;
+    jsView.nativeInner = nativeInner;
+    jsView.parent = parentJsView;
     
     if(jsView.childViews){
         var _childViews = {};
         
         Object.keys(jsView.childViews).forEach(function(key){
-            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, _jsView);
-        })
-        _jsView.childViews = _childViews;
+            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, jsView);
+        });
+        jsView.childViews = _childViews;
     }
-    return _jsView;
+    return jsView;
 }
 
 function findConstructor(jsView){

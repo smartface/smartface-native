@@ -47,6 +47,21 @@ function View(params) {
             this.yogaNode = new NativeYogaNode();
         }
     }
+    
+    this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+        onTouch: function(view, event) {
+            if(self.touchEnabled){
+                if (event.getAction() === ACTION_UP && _onTouchEnded) {
+                    _onTouchEnded();
+                    return true;
+                } else if(event.getAction() === ACTION_DOWN && _onTouch) {
+                    _onTouch();
+                    return true;
+                }
+            }
+            return false;
+        }
+    }));
 
     var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable;
@@ -801,20 +816,6 @@ function View(params) {
     // Assign defaults
     if(!this.isNotSetDefaults){
         this.backgroundColor = _backgroundColor;
-        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
-            onTouch: function(view, event) {
-                if(self.touchEnabled){
-                    if (event.getAction() === ACTION_UP && _onTouchEnded) {
-                        _onTouchEnded();
-                        return true;
-                    } else if(event.getAction() === ACTION_DOWN && _onTouch) {
-                        _onTouch();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }));
         var idInitial = NativeView.generateViewId();
         self.nativeObject.setId(idInitial);
     }
