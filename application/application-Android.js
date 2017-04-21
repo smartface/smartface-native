@@ -117,7 +117,7 @@ Object.defineProperties(ApplicationWrapper, {
     'call': {
         value: function(uriScheme, data){
             if(!TypeUtil.isString(uriScheme)){
-                throw new Error('uriScheme must be string');
+                throw new TypeError('uriScheme must be string');
             }
             
             const NativeIntent = requireClass("android.content.Intent");
