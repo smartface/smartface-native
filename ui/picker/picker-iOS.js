@@ -71,7 +71,19 @@ const Picker = extend(View)(
             }
         };
         self.nativeObject.delegate = self.pickerDelegate;
-
+        
+        this.ios = {};
+        
+        Object.defineProperty(this.ios, 'rowHeight', {
+            get: function() {
+                return self.nativeObject.delegate.rowHeight;
+            },
+            set: function(onSelected) {
+                self.nativeObject.delegate.rowHeight = onSelected;
+            },
+            enumerable: true
+        });
+        
         self.show = function(ok,cancel){
               var okFunc = function(e){
                 if (typeof ok === "function"){
