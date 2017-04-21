@@ -79,6 +79,14 @@ Application.version;
 
 /**
  * Launches another application and passes data.
+ * 
+ *     @example
+ *     // Calling application's Google Play Store page. Will work only for iOS
+ *     Application.call("market://details",{
+ *         'id': Application.android.packageName
+ *     });
+ *     // Open caller app with phone number. Will work only for both.
+ *     Application.call("tel:+901234567890",{});
  *
  * @method call
  * @param {String} uriScheme
