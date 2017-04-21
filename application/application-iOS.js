@@ -46,6 +46,16 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
+Object.defineProperty(SFApplication, 'checkUpdate', {
+    set:function(value){
+        Application.checkUpdate = value;
+    },
+    get: function() {
+        return Application.checkUpdate;
+    },
+    enumerable: true
+});
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // THIS PART IS DISABLED
 // FOR PUBLISH CASE, PROJECT.JSON FILE WILL BE ENCRYPTED
