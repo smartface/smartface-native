@@ -132,25 +132,26 @@ Application.restart = function(){};
 Application.android.checkPermission = function(permission){};
 
 /**
- * With {@link Application#requestPermissions requestPermissions}, the System Dialog will appear to ask for 
+ * With requestPermissions, the System Dialog will appear to ask for 
  * permission grant by user for dangerous(privacy) permissions. 
+ * {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
  * 
  *     @example
  *     const Application = require("sf-core/application");
- *     Application.android.requestPermissions(1002, Application.Permissions.WRITE_EXTERNAL_STORAGE)
+ *     Application.android.requestPermissions(1002, Application.android.Permissions.WRITE_EXTERNAL_STORAGE)
  *     Application.android.onRequestPermissionsResult = function(e){
  *         alert(JSON.stringify(e));
  *     }
  *
  * @method requestPermissions
- * @param {Number} requestCode
+ * @param {Number} requestIdentifier This number  will be returned in {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not. 
  * @param {String} permission
  * @readonly
  * @android
  * @static
  * @since 1.2
  */
-Application.android.requestPermissions = function(requestCode, permission){};
+Application.android.requestPermissions = function(requestIdentifier, permission){};
 
 /**
  * This method checks for a permission is shown before to user 
@@ -310,13 +311,13 @@ Application.android.onRequestPermissionsResult = function(e){}
 Application.onUnhandledError = function(error){};
 
 /** 
- * @enum Application.Permissions 
+ * @enum Application.android.Permissions 
  * @since 1.2
  * 
  * Permission enum for Application.
  * Permission managements should be developed OS specific in the applications.
  */
-Application.Permissions = {};
+Application.android.Permissions = {};
 
 /**
  * Allows to read the calendar data.
@@ -326,7 +327,7 @@ Application.Permissions = {};
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_CALENDAR;
+Application.android.Permissions.READ_CALENDAR;
 
 /**
  * Allows an application to write the user's calendar data.
@@ -336,7 +337,7 @@ Application.Permissions.READ_CALENDAR;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.WRITE_CALENDAR;
+Application.android.Permissions.WRITE_CALENDAR;
 
 /**
  * Required to be able to access the camera device.
@@ -346,7 +347,7 @@ Application.Permissions.WRITE_CALENDAR;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.CAMERA;
+Application.android.Permissions.CAMERA;
 
 /**
  * Allows an application to read the user's contacts data.
@@ -356,7 +357,7 @@ Application.Permissions.CAMERA;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_CONTACTS;
+Application.android.Permissions.READ_CONTACTS;
 
 /**
  * Allows an application to write the user's contacts data.
@@ -366,7 +367,7 @@ Application.Permissions.READ_CONTACTS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.WRITE_CONTACTS;
+Application.android.Permissions.WRITE_CONTACTS;
 
 /**
  * Allows access to the list of accounts in the Accounts Service.
@@ -376,7 +377,7 @@ Application.Permissions.WRITE_CONTACTS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.GET_ACCOUNTS;
+Application.android.Permissions.GET_ACCOUNTS;
 
 /**
  * Allows an app to access precise location.
@@ -386,7 +387,7 @@ Application.Permissions.GET_ACCOUNTS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.ACCESS_FINE_LOCATION;
+Application.android.Permissions.ACCESS_FINE_LOCATION;
 
 /**
  * Allows an app to access approximate location.
@@ -396,7 +397,7 @@ Application.Permissions.ACCESS_FINE_LOCATION;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.ACCESS_COARSE_LOCATION;
+Application.android.Permissions.ACCESS_COARSE_LOCATION;
 
 /**
  * Allows an application to record audio.
@@ -406,7 +407,7 @@ Application.Permissions.ACCESS_COARSE_LOCATION;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.RECORD_AUDIO;
+Application.android.Permissions.RECORD_AUDIO;
 
 /**
  * Allows read only access to phone state, including the phone number of the device, 
@@ -418,7 +419,7 @@ Application.Permissions.RECORD_AUDIO;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_PHONE_STATE;
+Application.android.Permissions.READ_PHONE_STATE;
 
 /**
  * Allows an application to initiate a phone call without going through the 
@@ -429,7 +430,7 @@ Application.Permissions.READ_PHONE_STATE;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.CALL_PHONE;
+Application.android.Permissions.CALL_PHONE;
 
 /**
  * Allows an application to read the user's call log.
@@ -439,7 +440,7 @@ Application.Permissions.CALL_PHONE;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_CALL_LOG;
+Application.android.Permissions.READ_CALL_LOG;
 
 /**
  * Allows an application to write (but not read) the user's call log data.
@@ -449,7 +450,7 @@ Application.Permissions.READ_CALL_LOG;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.WRITE_CALL_LOG;
+Application.android.Permissions.WRITE_CALL_LOG;
 
 /**
  * Allows an application to add voicemails into the system.
@@ -459,7 +460,7 @@ Application.Permissions.WRITE_CALL_LOG;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.ADD_VOICEMAIL;
+Application.android.Permissions.ADD_VOICEMAIL;
 
 /**
  * Allows an application to use SIP service.
@@ -469,7 +470,7 @@ Application.Permissions.ADD_VOICEMAIL;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.USE_SIP;
+Application.android.Permissions.USE_SIP;
 
 /**
  * Allows an application to see the number being dialed during an 
@@ -481,7 +482,7 @@ Application.Permissions.USE_SIP;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.PROCESS_OUTGOING_CALLS;
+Application.android.Permissions.PROCESS_OUTGOING_CALLS;
 
 /**
  * Allows an application to access data from sensors 
@@ -493,7 +494,7 @@ Application.Permissions.PROCESS_OUTGOING_CALLS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.BODY_SENSORS;
+Application.android.Permissions.BODY_SENSORS;
 
 /**
  * Allows an application to send SMS messages.
@@ -503,7 +504,7 @@ Application.Permissions.BODY_SENSORS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.SEND_SMS;
+Application.android.Permissions.SEND_SMS;
 
 /**
  * Allows an application to receive SMS messages.
@@ -513,7 +514,7 @@ Application.Permissions.SEND_SMS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.RECEIVE_SMS;
+Application.android.Permissions.RECEIVE_SMS;
 
 /**
  * Allows an application to read SMS messages.
@@ -523,7 +524,7 @@ Application.Permissions.RECEIVE_SMS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_SMS;
+Application.android.Permissions.READ_SMS;
 
 /**
  * Allows an application to receive WAP push messages.
@@ -533,7 +534,7 @@ Application.Permissions.READ_SMS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.RECEIVE_WAP_PUSH;
+Application.android.Permissions.RECEIVE_WAP_PUSH;
 
 /**
  * Allows an application to monitor incoming MMS messages.
@@ -543,11 +544,11 @@ Application.Permissions.RECEIVE_WAP_PUSH;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.RECEIVE_MMS;
+Application.android.Permissions.RECEIVE_MMS;
 
 /**
  * Allows to read from external storage. 
- * If you granted {@link Application.Permissions.WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission, 
+ * If you granted {@link Application.android.Permissions.WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission, 
  * you don't need this to granted this permission.
  *
  * @property READ_EXTERNAL_STORAGE
@@ -555,7 +556,7 @@ Application.Permissions.RECEIVE_MMS;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.READ_EXTERNAL_STORAGE;
+Application.android.Permissions.READ_EXTERNAL_STORAGE;
 
 /**
  * Allows to write to external storage.
@@ -565,6 +566,6 @@ Application.Permissions.READ_EXTERNAL_STORAGE;
  * @readonly
  * @since 1.2
  */
-Application.Permissions.WRITE_EXTERNAL_STORAGE;
+Application.android.Permissions.WRITE_EXTERNAL_STORAGE;
 
 module.exports = Application;

@@ -113,25 +113,31 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
-    'Permissions': {
-        value: {},
-        enumerable: true
-    },
     // methods
     'call': {
         value: function(uriScheme, data){
+            if(!TypeUtil.isString(uriScheme)){
+                throw new TypeError('uriScheme must be string');
+            }
+            
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
             
             var intent = new NativeIntent(ACTION_VIEW);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            if(data){
+            
+            if(TypeUtil.isObject(data)){
+                // we should use intent.putExtra but it causes native crash.
                 var params = Object.keys(data).map(function(k) {
                     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
                 }).join('&');
                 var uri = uriScheme + "?" + params;
                 var uriObject = NativeUri.parse(uri);
                 intent.setData(uriObject);
+            }
+            else{
+                var uri = NativeUri.parse(uriScheme);
+                intent.setData(uri);
             }
             activity.startActivity(intent);
         },
@@ -293,10 +299,14 @@ Object.defineProperties(ApplicationWrapper.android, {
             }
         }
         
+    },
+    'Permissions': {
+        value: {},
+        enumerable: true
     }
 });
 
-Object.defineProperties(ApplicationWrapper.Permissions, {
+Object.defineProperties(ApplicationWrapper.android.Permissions, {
     'READ_CALENDAR': {
         value: 'android.permission.READ_CALENDAR',
         enumerable: true
