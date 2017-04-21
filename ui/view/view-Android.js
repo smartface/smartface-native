@@ -69,7 +69,6 @@ function View(params) {
     var rectF;
     var roundRect;
     var borderShapeDrawable;
-
     var layerDrawable;
     
     var _backgroundImages = null;
