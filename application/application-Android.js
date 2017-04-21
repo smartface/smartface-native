@@ -127,19 +127,21 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
             
-            var intent = intent = new NativeIntent(ACTION_VIEW);
-            var uri = NativeUri.parse(uriScheme);
+            var intent = new NativeIntent(ACTION_VIEW);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(uri);
+            
             if(TypeUtil.isObject(data)){
-                Object.keys(data).map(function(k) {
-                    try{
-                        intent.putExtra(k, data[k]);
-                    }
-                    catch(e){
-                        this.onUnhandledError && this.onUnhandledError(e)
-                    }
-                });
+                // we should use intent.putExtra but it causes native crash.
+                var params = Object.keys(data).map(function(k) {
+                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+                }).join('&');
+                var uri = uriScheme + "?" + params;
+                var uriObject = NativeUri.parse(uri);
+                intent.setData(uriObject);
+            }
+            else{
+                var uri = NativeUri.parse(uriScheme);
+                intent.setData(uri);
             }
             activity.startActivity(intent);
         },
