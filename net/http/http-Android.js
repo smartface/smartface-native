@@ -9,7 +9,7 @@ const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
 const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
 const InputStreamReader     = requireClass("java.io.InputStreamReader");
 const BufferedReader        = requireClass("java.io.BufferedReader");
-
+const Blob                  = require("sf-core/blob");
 const Request = function() {
     Object.defineProperties(this, {
         'cancel': {
@@ -19,11 +19,9 @@ const Request = function() {
         }
     });
 };
-
 const http = {
     RequestQueue: Volley.newRequestQueue(Android.getActivity())
 };
-
 const methods = {
     "GET": 0,
     "POST" : 1,
@@ -34,7 +32,6 @@ const methods = {
     "TRACE" : 6,
     "PATCH" : 7
 };
-
 http.requestString = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -50,11 +47,9 @@ http.requestString = function(url, onLoad, onError) {
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-
             var request = new Request();
             request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
                     responseListener, responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -67,7 +62,6 @@ http.requestString = function(url, onLoad, onError) {
             onError(e);
     }
 };
-
 http.requestImage = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -88,7 +82,6 @@ http.requestImage = function(url, onLoad, onError) {
             var request = new Request();
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -99,7 +92,6 @@ http.requestImage = function(url, onLoad, onError) {
         onError(e);
     }
 };
-
 http.requestJSON = function(url, onLoad, onError) {
     return http.requestString(url, function(response) {
         // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
@@ -108,7 +100,6 @@ http.requestJSON = function(url, onLoad, onError) {
             onLoad(response);
     }, onError);
 };
-
 http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
         var success = true;
@@ -129,12 +120,15 @@ http.requestFile = function(url, fileName, onLoad, onError) {
         }
     }, onError);
 };
-
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                onLoad({body: response, headers: responseHeaders});
+                var nativeString = new NativeString(response);
+                const NativeBase64 = requireClass("android.util.Base64");
+                var bytes = nativeString.getBytes();
+                var a = Blob.createFromBase64(NativeBase64.encode(bytes, 0));
+                onLoad({body: a, headers: responseHeaders});
             }
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
@@ -155,7 +149,6 @@ http.request = function(params, onLoad, onError) {
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
-
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
@@ -176,35 +169,13 @@ http.request = function(params, onLoad, onError) {
                     var value = null;
                     if(params.headers)
                         value = params.headers["Accept-Encoding"];
-
                     getResponseHeaders(response, responseHeaders);
-                    if(value && value.indexOf("gzip") !== -1) { // contains gzip
-                        try {
-                            parsed = parseGZIPResponse(response);
-                        } 
-                        catch (error) {
-                            // If header contains encoding different from gzip or
-                            // response is not gzip, try to parse as normal
-                            try {
-                                parsed = parseTextResponse(response);
-                            } 
-                            catch (error) {
-                                var parseError = new VolleyParseError();
-                                return VolleyResponse.error(parseError);
-                            }
-                        }
-                    }
-                    else {
-                        try {
-                            parsed = parseTextResponse(response);
-                        } 
-                        catch (error) {
-                            var parseError = new VolleyParseError();
-                            return VolleyResponse.error(parseError);
-                        }
-                    }
+                    
+                    var strFromBytes = new NativeString(response.data);
+                    var subStr = strFromBytes.substring(0);
+                    
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    return VolleyResponse.success(parsed, cacheHeaders);
+                    return VolleyResponse.success(subStr, cacheHeaders);
                 }
             }, parameters);    
         }
@@ -217,11 +188,9 @@ http.request = function(params, onLoad, onError) {
         if(onError)
             onError(err);
     }
-
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
-
 function parseGZIPResponse(response){
     var parsed = '';
     var inputStream = new ByteArrayInputStream(response.data);
@@ -233,7 +202,6 @@ function parseGZIPResponse(response){
     gzipStream.close();
     return parsed;
 }
-
 function parseTextResponse(response){
     var parsed = "";
     try {
@@ -244,7 +212,6 @@ function parseTextResponse(response){
     }
     return parsed;
 }
-
 function getResponseHeaders(response, responseHeaders) {
     var headers = response.headers;
     if(headers && headers.keySet()) {
@@ -257,7 +224,6 @@ function getResponseHeaders(response, responseHeaders) {
         }
     }
 }
-
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
@@ -282,12 +248,10 @@ function getHeaderHashMap(params) {
     }
     return headers;
 }
-
 function checkInternet() {
     const Network = require("sf-core/device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
 }
-
 module.exports = http;

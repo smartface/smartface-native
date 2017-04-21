@@ -37,6 +37,12 @@ function Blob (parts, properties) {
         var encodedString = NativeBase64.encodeToString(byteArray, 0, byteArray.length, NativeBase64.DEFAULT);
         return encodedString;
     };
+    
+    this.toString = function() {
+        const NativeString = requireClass("java.lang.String");
+        var stringFormat = new NativeString(this.nativeObject.toByteArray());
+        return stringFormat.substring(0);
+    }
 }
 
 Blob.createFromBase64 = function(base64String) {
