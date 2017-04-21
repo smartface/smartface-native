@@ -29,6 +29,10 @@ SFApplication.restart = function(){
     SMFApplication.restart();
 };
 
+SFApplication.checkUpdate = function(callback){
+    Application.checkUpdate(callback);
+};
+
 SFApplication.android = {};
 SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
@@ -42,16 +46,6 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     },
     get: function() {
         return Application.onUnhandledError;
-    },
-    enumerable: true
-});
-
-Object.defineProperty(SFApplication, 'checkUpdate', {
-    set:function(value){
-        Application.checkUpdate = value;
-    },
-    get: function() {
-        return Application.checkUpdate;
     },
     enumerable: true
 });
