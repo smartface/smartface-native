@@ -120,23 +120,27 @@ Object.defineProperties(ApplicationWrapper, {
     // methods
     'call': {
         value: function(uriScheme, data){
+            if(!TypeUtil.isString(uriScheme)){
+                throw new Error('uriScheme must be string');
+            }
+            
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
             
-            var intent, uri;
+            var intent = intent = new NativeIntent(ACTION_VIEW);
+            var uri = NativeUri.parse(uriScheme);
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(uri);
+            
             if(data){
-                intent = new NativeIntent(ACTION_VIEW);
-                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                var params = Object.keys(data).map(function(k) {
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
-                }).join('&');
-                uri = uriScheme + "?" + params;
-                var uriObject = NativeUri.parse(uri);
-                intent.setData(uriObject);
-            }
-            else {
-                uri = new NativeUri.parse(uriScheme);
-                intent = new NativeIntent(ACTION_VIEW, uri);
+                Object.keys(data).map(function(k) {
+                    try{
+                        intent.putExtra(k, data[k]);
+                    }
+                    catch(e){
+                        this.onUnhandledError && this.onUnhandledError(e)
+                    }
+                });
             }
             activity.startActivity(intent);
         },
