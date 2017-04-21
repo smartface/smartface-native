@@ -62,14 +62,13 @@ function View(params) {
             return false;
         }
     }));
-
+    
     var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable;
     var radii;
     var rectF;
     var roundRect;
     var borderShapeDrawable;
-
     var layerDrawable;
     
     var _backgroundImages = null;
@@ -365,7 +364,7 @@ function View(params) {
     }
     
     function setBorder(){
-        var dp_borderWidth = self.borderWidth;
+        var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
         if(dp_borderWidth > 0)  {
             radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
                      _borderRadius,_borderRadius,_borderRadius,_borderRadius];
@@ -750,11 +749,13 @@ function View(params) {
                 return _borderWidth;
             },
             set: function(borderWidth) {
-                var dp_borderwidth = AndroidUnitConverter.dpToPixel(borderWidth);
-                self.yogaNode.setBorder(YogaEdge.LEFT, dp_borderwidth);
-                self.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderwidth);
-                self.yogaNode.setBorder(YogaEdge.TOP, dp_borderwidth);
-                self.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderwidth);
+                _borderWidth = borderWidth;
+                var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+                
+                self.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
+                self.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
+                self.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
+                self.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderWidth);
                 setBorder();
             },
             enumerable: true
