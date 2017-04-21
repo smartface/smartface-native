@@ -113,10 +113,6 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
-    'Permissions': {
-        value: {},
-        enumerable: true
-    },
     // methods
     'call': {
         value: function(uriScheme, data){
@@ -303,10 +299,14 @@ Object.defineProperties(ApplicationWrapper.android, {
             }
         }
         
+    },
+    'Permissions': {
+        value: {},
+        enumerable: true
     }
 });
 
-Object.defineProperties(ApplicationWrapper.Permissions, {
+Object.defineProperties(ApplicationWrapper.android.Permissions, {
     'READ_CALENDAR': {
         value: 'android.permission.READ_CALENDAR',
         enumerable: true
