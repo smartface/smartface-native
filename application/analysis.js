@@ -132,8 +132,9 @@ Application.restart = function(){};
 Application.android.checkPermission = function(permission){};
 
 /**
- * With {@link Application#requestPermissions requestPermissions}, the System Dialog will appear to ask for 
+ * With requestPermissions, the System Dialog will appear to ask for 
  * permission grant by user for dangerous(privacy) permissions. 
+ * {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
  * 
  *     @example
  *     const Application = require("sf-core/application");
@@ -143,14 +144,14 @@ Application.android.checkPermission = function(permission){};
  *     }
  *
  * @method requestPermissions
- * @param {Number} requestCode
+ * @param {Number} requestIdentifier This number  will be returned in {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not. 
  * @param {String} permission
  * @readonly
  * @android
  * @static
  * @since 1.2
  */
-Application.android.requestPermissions = function(requestCode, permission){};
+Application.android.requestPermissions = function(requestIdentifier, permission){};
 
 /**
  * This method checks for a permission is shown before to user 
