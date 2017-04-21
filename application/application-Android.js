@@ -131,8 +131,7 @@ Object.defineProperties(ApplicationWrapper, {
             var uri = NativeUri.parse(uriScheme);
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
             intent.setData(uri);
-            
-            if(data){
+            if(TypeUtil.isObject(data)){
                 Object.keys(data).map(function(k) {
                     try{
                         intent.putExtra(k, data[k]);
