@@ -106,8 +106,8 @@ const TextBox = extend(Label)(
                 set: function(keyboardType) {
                     if(NativeKeyboardType.indexOf(self.keyboardType) === -1){
                         _keyboardType = KeyboardType.DEFAULT;
+                        setKeyboardType(this);
                     }
-                    setKeyboardType(this);
                 },
                 enumerable: true
             },
