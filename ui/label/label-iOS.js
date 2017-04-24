@@ -52,6 +52,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.font = value;
                 self.nativeObject.setEditable = false;
+                self.nativeObject.setSelectable = false;
             },
             enumerable: true
          });
@@ -85,6 +86,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.textColor = _textColor;
                 self.nativeObject.setEditable = false;
+                self.nativeObject.setSelectable = false;
             },
             enumerable: true
         });
@@ -97,6 +99,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.textAlignmentNumber = value;
                 self.nativeObject.setEditable = false;
+                self.nativeObject.setSelectable = false;
             },
             enumerable: true
         });
@@ -111,6 +114,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.textColor = value;
                 self.nativeObject.setEditable = false;
+                self.nativeObject.setSelectable = false;
             },
             enumerable: true
         });
