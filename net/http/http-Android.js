@@ -124,13 +124,15 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 };
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
+    var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
+                const Blob = require("sf-core/blob");
+                
                 var encodedStr = new NativeString(response);
                 var bytes = encodedStr.getBytes();
                 var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
-                const Blob = require("sf-core/blob");
-                var blob = new Blob(decoded, {type: "image/jpeg"});
+                var blob = new Blob(decoded, {type: responseType});
                 onLoad({body: blob, headers: responseHeaders});
             }
         });
@@ -168,7 +170,7 @@ http.request = function(params, onLoad, onError) {
                     return contentType;
                 },
                 parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
-                    getResponseHeaders(response, responseHeaders);
+                    getResponseHeaders(response, responseHeaders, responseType);
                     
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
                     var encoded = NativeBase64.encode(response.data, NativeBase64.DEFAULT);
@@ -190,7 +192,7 @@ http.request = function(params, onLoad, onError) {
     return request;
 };
 
-function getResponseHeaders(response, responseHeaders) {
+function getResponseHeaders(response, responseHeaders, responseType) {
     var headers = response.headers;
     if(headers && headers.keySet()) {
         var iterator = headers.keySet().iterator();
@@ -199,6 +201,10 @@ function getResponseHeaders(response, responseHeaders) {
             if(key && headers.get(key)) {
                 responseHeaders[key] = headers.get(key).substring(0);
             }
+        }
+        
+        if(headers.get("Content-Type")) {
+            responseType = headers.get("Content-Type").substring(0);
         }
     }
 }
