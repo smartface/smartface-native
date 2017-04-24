@@ -97,7 +97,7 @@ function Page(params) {
     /**
      * This event will be triggered when user clicks back button on the Device.
      *
-     * @event onHide
+     * @event onBackButtonPressed
      * @android
      * @since 0.1
      */
