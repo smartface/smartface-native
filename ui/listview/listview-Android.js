@@ -1,7 +1,7 @@
 const View                  = require('../view');
 const extend                = require('js-base/core/extend');
 const TypeUtil              = require("sf-core/util/type");
-
+const ListViewItem          = require("sf-core/ui/listviewitem");
 const NativeView                    = requireClass("android.view.View");
 const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout      = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -13,26 +13,38 @@ const ListView = extend(View)(
         var self = this;
         var activity = Android.getActivity();
         
-        self.nativeObject = new NativeSwipeRefreshLayout(activity);
-        self.nativeInner = new NativeRecyclerView(activity); 
+        if(!this.nativeObject){
+            this.nativeObject = new NativeSwipeRefreshLayout(activity);
+        }
+        
+        if(!this.nativeInner){
+            this.nativeInner = new NativeRecyclerView(activity); 
+        }
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
-        self.nativeInner.setLayoutManager(linearLayoutManager);
-        self.nativeObject.addView(self.nativeInner);
+        this.nativeInner.setLayoutManager(linearLayoutManager);
+        this.nativeObject.addView(this.nativeInner);
 
         _super(this);
 
         var holderViewLayout;
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
             onCreateViewHolder: function(parent,viewType){
-                holderViewLayout = _onRowCreate();
+                try{
+                    holderViewLayout = _onRowCreate();
+                }
+                catch(e){
+                    const Application = require("sf-core/application");
+                    Application.onUnhandledError && Application.onUnhandledError(e);
+                    holderViewLayout = new ListViewItem();
+                }
                 holderViewLayout.height = self.rowHeight;
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView,position){
                 if(_onRowBind){
                     // @todo make performance improvements
-                    createFromTemplate(holderViewLayout,nativeHolderView.itemView,self);
-                    _onRowBind(holderViewLayout,position);
+                    var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
+                    _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view){
                             _onRowSelected && _onRowSelected(holderViewLayout, position);
@@ -44,9 +56,6 @@ const ListView = extend(View)(
                 return _itemCount;
             }
         },null);
-
-        self.nativeInner.setAdapter(dataAdapter);
-
 
         var _onScroll;
         var _rowHeight = 0;
@@ -76,29 +85,29 @@ const ListView = extend(View)(
                 set: function(itemCount) {
                     if(TypeUtil.isNumeric(itemCount)){
                         _itemCount = itemCount;
-                        self.refreshData();
+                        this.refreshData();
                     }
                 },
                 enumerable: true
             },
             'verticalScrollBarEnabled': {
                 get: function() {
-                    return self.nativeInner.isVerticalScrollBarEnabled();
+                    return this.nativeInner.isVerticalScrollBarEnabled();
                 },
                 set: function(verticalScrollBarEnabled) {
                     if(TypeUtil.isBoolean(verticalScrollBarEnabled)){
-                        self.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+                        this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
                     }
                 },
                 enumerable: true
             },
             'refreshEnabled': {
                 get: function() {
-                    return self.nativeObject.isEnabled();
+                    return this.nativeObject.isEnabled();
                 },
                 set: function(refreshEnabled) {
                     if(TypeUtil.isBoolean(refreshEnabled)){
-                        self.nativeObject.setEnabled(refreshEnabled);
+                        this.nativeObject.setEnabled(refreshEnabled);
                     }
                 },
                 enumerable: true
@@ -106,19 +115,19 @@ const ListView = extend(View)(
             //methods
             'getLastVisibleIndex': {
                 value: function(colors) {
-                    return self.nativeInner.getLayoutManager().findLastVisibleItemPosition();
+                    return this.nativeInner.getLayoutManager().findLastVisibleItemPosition();
                 },
                 enumerable: true
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    return self.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
+                    return this.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
                 },
                 enumerable: true
             },
             'scrollTo': {
                 value: function(index) {
-                    self.nativeInner.smoothScrollToPosition(index);
+                    this.nativeInner.smoothScrollToPosition(index);
                 },
                 enumerable: true
             },
@@ -130,13 +139,13 @@ const ListView = extend(View)(
             },
             'setPullRefreshColors': {
                 value: function(colors) {
-                    self.nativeObject.setColorSchemeColors(colors);
+                    this.nativeObject.setColorSchemeColors(colors);
                 },
                 enumerable: true
             },
             'stopRefresh': {
                 value: function() {
-                    self.nativeObject.setRefreshing(false);
+                    this.nativeObject.setRefreshing(false);
                 },
                 enumerable: true
             },
@@ -175,10 +184,10 @@ const ListView = extend(View)(
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
                     if(onScroll){
-                        self.nativeInner.setOnScrollListener(onScrollListener);
+                        this.nativeInner.setOnScrollListener(onScrollListener);
                     }
                     else{
-                        self.nativeInner.removeOnScrollListener(onScrollListener);
+                        this.nativeInner.removeOnScrollListener(onScrollListener);
                     }
                 },
                 enumerable: true
@@ -192,19 +201,15 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'toString': {
+                value: function(){
+                    return 'ListView';
+                },
+                enumerable: true, 
+                configurable: true
+            }
         });
 
-        function createFromTemplate(jsView, nativeView,parentJsView){
-            jsView.nativeObject = nativeView;
-            jsView.parent = parentJsView;
-            if(jsView.childViews){
-                for(var i = 0; i < jsView.childViews.length; i++) {
-                    var childId = jsView.childViews[i].id;
-                    createFromTemplate(jsView.childViews[i],nativeView.findViewById(childId),jsView);
-                }
-            }
-        }
-        
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
                     _onScroll && _onScroll();
@@ -212,12 +217,6 @@ const ListView = extend(View)(
             onScrollStateChanged: function(recyclerView, newState){
             },
         },null);
-        
-        self.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
-            onRefresh: function(){
-                _onPullRefresh && _onPullRefresh();
-            }
-        }));
 
         // ios-only properties
         this.ios = {};
@@ -225,6 +224,15 @@ const ListView = extend(View)(
         this.ios.swipeItem = function(title,action){
             return {};
         };
+        
+        if(!this.isNotSetDefaults){
+            this.nativeInner.setAdapter(dataAdapter);
+            this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
+                onRefresh: function(){
+                    _onPullRefresh && _onPullRefresh();
+                }
+            }));
+        }
 
         if (params) {
             for (var param in params) {
@@ -233,5 +241,47 @@ const ListView = extend(View)(
         }
     }
 );
+
+function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
+    jsView.nativeObject = nativeObject;
+    jsView.nativeInner = nativeInner;
+    jsView.parent = parentJsView;
+    
+    if(jsView.childViews){
+        var _childViews = {};
+        
+        Object.keys(jsView.childViews).forEach(function(key){
+            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, jsView);
+        });
+        jsView.childViews = _childViews;
+    }
+    return jsView;
+}
+
+function findConstructor(jsView){
+    return require("sf-core/ui/"+jsView.toString().toLowerCase());
+}
+
+function cloneObject(jsView, nativeObject, nativeInner){
+    const extend = require('js-base/core/extend');
+    var jsViewConstructorCopy = extend(findConstructor(jsView))(
+        function (_super, params) {
+            this.nativeObject = params.nativeObject;
+            this.nativeInner = params.nativeInner;
+            this.isNotSetDefaults = true;
+            _super(this);
+            
+            if (params) {
+                for (var param in params) {
+                    this[param] = params[param];
+                }
+            }
+        }
+    );
+    return new jsViewConstructorCopy({
+        nativeObject: nativeObject,
+        nativeInner: nativeInner
+    });
+}
 
 module.exports = ListView;

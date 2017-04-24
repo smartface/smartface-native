@@ -4,28 +4,28 @@ const extend = require('js-base/core/extend');
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
         var activity = Android.getActivity();
-        var self = this;
+
         var _align = params.align ? params.align : ScrollView.Align.VERTICAL;
-        if (!self.nativeObject) {
+        if (!this.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
-                self.nativeObject = new NativeHorizontalScroll(activity);
+                this.nativeObject = new NativeHorizontalScroll(activity);
             } else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
-                self.nativeObject = new NativeVerticalScroll(activity);
+                this.nativeObject = new NativeVerticalScroll(activity);
             }
         }
         _super(this);
         
-        Object.defineProperties(self, {
+        Object.defineProperties(this, {
             'scrollBarEnabled': {
                 get: function() {
-                    return self.nativeObject.isHorizontalScrollBarEnabled()
-                        || self.nativeObject.isVerticalScrollBarEnabled();
+                    return this.nativeObject.isHorizontalScrollBarEnabled()
+                        || this.nativeObject.isVerticalScrollBarEnabled();
                 },
                 set: function(enabled) {
-                    self.nativeObject.setVerticalScrollBarEnabled(enabled);
-                    self.nativeObject.setHorizontalScrollBarEnabled(enabled);
+                    this.nativeObject.setVerticalScrollBarEnabled(enabled);
+                    this.nativeObject.setHorizontalScrollBarEnabled(enabled);
                 }
             },
             'scrollToCoordinate': {
@@ -34,8 +34,8 @@ const ScrollView = extend(ViewGroup)(
                         const UnitConverter = require('sf-core/util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
-                        (ScrollView.Align.HORIZONTAL === _align) && self.nativeObject.smoothScrollTo(coordinate, 0);
-                        (ScrollView.Align.VERTICAL   === _align) && self.nativeObject.smoothScrollTo(0, coordinate);
+                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
+                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
                     }
                 }
             },
@@ -44,22 +44,29 @@ const ScrollView = extend(ViewGroup)(
                     if (edge) {
                         const NativeView = requireClass('android.view.View');
 
-                        (ScrollView.Edge.TOP    === edge) && self.nativeObject.fullScroll(NativeView.FOCUS_UP);
-                        (ScrollView.Edge.BOTTOM === edge) && self.nativeObject.fullScroll(NativeView.FOCUS_DOWN);
-                        (ScrollView.Edge.LEFT   === edge) && self.nativeObject.fullScroll(NativeView.FOCUS_LEFT);
-                        (ScrollView.Edge.RIGHT  === edge) && self.nativeObject.fullScroll(NativeView.FOCUS_RIGHT);
+                        (ScrollView.Edge.TOP    === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_UP);
+                        (ScrollView.Edge.BOTTOM === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_DOWN);
+                        (ScrollView.Edge.LEFT   === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_LEFT);
+                        (ScrollView.Edge.RIGHT  === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_RIGHT);
                     }
                 }
             },
             // Overrided from View for make content measurements inside ScrollView calculated.
             'width': {
                 get: function() {
-                    return self.maxWidth;
+                    return this.maxWidth;
                 },
                 set: function(width) {
-                    self.maxWidth = width;
+                    this.maxWidth = width;
                 },
                 enumerable: true,
+                configurable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'ScrollView';
+                },
+                enumerable: true, 
                 configurable: true
             }
         });

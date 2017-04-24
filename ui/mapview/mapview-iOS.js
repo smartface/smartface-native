@@ -204,7 +204,17 @@ function Pin(params) {
             },
             enumerable: true
     });
-
+    
+    Object.defineProperty(self, 'onPress', {
+            get: function() {
+                return self.nativeObject.onPress;
+            },
+            set: function(value) {
+                self.nativeObject.onPress = value.bind(this);
+            },
+            enumerable: true
+    });
+    
     if (params) {
         for (var param in params) {
             this[param] = params[param];

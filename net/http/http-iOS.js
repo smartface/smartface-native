@@ -1,3 +1,5 @@
+const Blob = require("../../global/blob");
+
 var http = {};
 
 http.Request = function Request(nativeObject) {
@@ -85,6 +87,7 @@ http.request = function(params, onLoad, onError) {
             __SF_Http.requestWith(
                 params,
                 function(e){
+                    e.body = new Blob(e.body);
                     onLoad(e);
                 },
                 function(e){

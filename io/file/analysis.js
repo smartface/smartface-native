@@ -214,13 +214,14 @@ function File(params) {
      * Open a IO.FileStream object from this object. If path is refer a directory returns null. 
      * 
      * @param {IO.FileStream.StreamType} mode
+     * @param {IO.FileStream.AppendMode} appendMode
      * @return {IO.FileStream}
      * @method openStream
      * @android
      * @ios
      * @since 0.1
      */
-    this.openStream = function(mode){};
+    this.openStream = function(mode, appendMode){};
     
     /**
      * Rename the current file or directory to given name.

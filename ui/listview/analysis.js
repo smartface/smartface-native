@@ -44,8 +44,8 @@ const extend = require('js-base/core/extend');
  *         var myListViewItem = new ListViewItem();
  *         var myLabelTitle = new Label({
  *             id: 102,
- *             height: '40',
- *             width: '100',
+ *             height: 40,
+ *             width: 100,
  *             alignSelf: FlexLayout.AlignSelf.CENTER
  *         });
  *         myListViewItem.addChild(myLabelTitle);

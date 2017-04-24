@@ -6,10 +6,23 @@ const AbsoluteLayout = extend(FlexLayout)(
         _super(this);
 
         var superAddChild = this.addChild;
-        this.addChild = function(view){
-            superAddChild(view);
-            view.positionType = FlexLayout.PositionType.ABSOLUTE;
-        };
+        
+        Object.defineProperties(this, {
+            'addChild': {
+                value: function(view){
+                    superAddChild(view);
+                    view.positionType = FlexLayout.PositionType.ABSOLUTE;
+                }
+            },
+            'toString': {
+                value: function(){
+                    return 'AbsoluteLayout';
+                },
+                enumerable: true, 
+                configurable: true
+            }
+        });
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

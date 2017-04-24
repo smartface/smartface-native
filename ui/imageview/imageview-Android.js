@@ -6,28 +6,26 @@ const NativeImageView   = requireClass("android.widget.ImageView");
 
 const ImageView = extend(View)(
     function (_super, params) {
-        var self = this;
         var activity = Android.getActivity();
         
-        if (!self.nativeObject) {
-            self.nativeObject = new NativeImageView(activity);
+        if (!this.nativeObject) {
+            this.nativeObject = new NativeImageView(activity);
         }
-        _super(self);
+        _super(this);
         
-
         var _fillType; // native does not store ImageFillType but ScaleType
         Object.defineProperties(this, {
             'image': {
                 get: function() {
-                    var drawable =  self.nativeObject.getDrawable();
+                    var drawable =  this.nativeObject.getDrawable();
                     var image = new Image({bitmap: drawable.getBitmap()});
                     return image;
                 },
                 set: function(image) {
                     if (image instanceof Image) {
-                        self.nativeObject.setImageDrawable(image.nativeObject);
+                        this.nativeObject.setImageDrawable(image.nativeObject);
                     } else {
-                        self.nativeObject.setImageDrawable(null);
+                        this.nativeObject.setImageDrawable(null);
                     }
                 },
                 enumerable: true
@@ -41,7 +39,7 @@ const ImageView = extend(View)(
                         fillType = ImageView.FillType.NORMAL;
                     }
                     _fillType = fillType
-                    self.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
+                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
                 },
                 enumerable: true
             },
@@ -50,10 +48,10 @@ const ImageView = extend(View)(
                     const NativePicasso = requireClass("com.squareup.picasso.Picasso");
                     if(TypeUtil.isString(url)){
                         if(placeHolder instanceof Image){
-                            NativePicasso.with(activity).load(url).placeholder(placeHolder.nativeObject).into(self.nativeObject);
+                            NativePicasso.with(activity).load(url).placeholder(placeHolder.nativeObject).into(this.nativeObject);
                         }
                         else{
-                             NativePicasso.with(activity).load(url).into(self.nativeObject);
+                             NativePicasso.with(activity).load(url).into(this.nativeObject);
                         }
                     }
                 },
@@ -62,18 +60,27 @@ const ImageView = extend(View)(
             // Overloaded from view due to AND-2702
             'alpha': {
                 get: function() {
-                    return self.nativeObject.getAlpha()/255;
+                    return this.nativeObject.getAlpha()/255;
                 },
                 set: function(alpha) {
-                    self.nativeObject.setAlpha(alpha*255);
+                    this.nativeObject.setAlpha(alpha*255);
                 },
                 enumerable: true,
+                configurable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'ImageView';
+                },
+                enumerable: true, 
                 configurable: true
             }
         });
 
-        // SET DEFAULTS
-        self.imageFillType = ImageView.FillType.NORMAL;
+        if(!this.isNotSetDefaults){
+            // SET DEFAULTS
+            this.imageFillType = ImageView.FillType.NORMAL;
+        }
 
         // Assign parameters given in constructor
         if (params) {

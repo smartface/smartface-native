@@ -1,6 +1,6 @@
 const TypeUtil                  = require("sf-core/util/type");
 const AndroidConfig             = require("sf-core/util/Android/androidconfig");
-
+const Application               = require("sf-core/application")
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');

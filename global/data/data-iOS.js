@@ -104,4 +104,10 @@ Data.removeAllVariables = function(){
     return Data.ios.getNativeObject().synchronize();
 };
 
+Object.defineProperty(Data,'Database',
+{
+    value: require('./database'),
+    enumerable: true
+});
+
 module.exports = Data;

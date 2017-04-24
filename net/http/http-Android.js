@@ -9,6 +9,8 @@ const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
 const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
 const InputStreamReader     = requireClass("java.io.InputStreamReader");
 const BufferedReader        = requireClass("java.io.BufferedReader");
+const NativeBase64          = requireClass("android.util.Base64");
+const Blob                  = require("sf-core/blob");
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -19,11 +21,9 @@ const Request = function() {
         }
     });
 };
-
 const http = {
     RequestQueue: Volley.newRequestQueue(Android.getActivity())
 };
-
 const methods = {
     "GET": 0,
     "POST" : 1,
@@ -34,7 +34,6 @@ const methods = {
     "TRACE" : 6,
     "PATCH" : 7
 };
-
 http.requestString = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -50,11 +49,9 @@ http.requestString = function(url, onLoad, onError) {
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-
             var request = new Request();
             request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
                     responseListener, responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -67,7 +64,6 @@ http.requestString = function(url, onLoad, onError) {
             onError(e);
     }
 };
-
 http.requestImage = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -88,7 +84,6 @@ http.requestImage = function(url, onLoad, onError) {
             var request = new Request();
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -99,7 +94,6 @@ http.requestImage = function(url, onLoad, onError) {
         onError(e);
     }
 };
-
 http.requestJSON = function(url, onLoad, onError) {
     return http.requestString(url, function(response) {
         // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
@@ -108,7 +102,6 @@ http.requestJSON = function(url, onLoad, onError) {
             onLoad(response);
     }, onError);
 };
-
 http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
         var success = true;
@@ -129,16 +122,23 @@ http.requestFile = function(url, fileName, onLoad, onError) {
         }
     }, onError);
 };
-
 http.request = function(params, onLoad, onError) {
+    var responseHeaders = {};
+    var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                onLoad({body: response, headers: {}});
+                const Blob = require("sf-core/blob");
+                
+                var encodedStr = new NativeString(response);
+                var bytes = encodedStr.getBytes();
+                var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
+                var blob = new Blob(decoded, {type: responseType});
+                onLoad({body: blob, headers: responseHeaders});
             }
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            onError(error);
+            onError(error.getMessage());
         }
     });
     
@@ -154,7 +154,6 @@ http.request = function(params, onLoad, onError) {
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
-
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
@@ -171,35 +170,12 @@ http.request = function(params, onLoad, onError) {
                     return contentType;
                 },
                 parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
-                    var parsed = new NativeString();
-                    var value = null;
-                    if(params.headers)
-                        value = params.headers["Accept-Encoding"];
-                    var parseCharset;
-                    if(value && value.indexOf("gzip") !== -1) { // contains gzip
-                        try {
-                            var inputStream = new ByteArrayInputStream(response.data);
-                            var gzipStream = new GZIPInputStream(inputStream);
-                            var reader = new InputStreamReader(gzipStream);
-                            var bufferedReader = new BufferedReader(reader);
-                            for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
-                            bufferedReader.close();
-                            gzipStream.close();
-                        } catch (error) {
-                            var parseError = new VolleyParseError();
-                            return VolleyResponse.error(parseError);
-                        }
-                    }
-                    else {
-                        try {
-                            parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
-                            parsed = new NativeString(response.data, parseCharset);
-                        } catch (error) {
-                            parsed = new NativeString(response.data);
-                        }
-                    }
+                    getResponseHeaders(response, responseHeaders, responseType);
+                    
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    return VolleyResponse.success(parsed, cacheHeaders);
+                    var encoded = NativeBase64.encode(response.data, NativeBase64.DEFAULT);
+                    var encodedStr = new NativeString(encoded);
+                    return VolleyResponse.success(encodedStr, cacheHeaders);
                 }
             }, parameters);    
         }
@@ -212,11 +188,26 @@ http.request = function(params, onLoad, onError) {
         if(onError)
             onError(err);
     }
-
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
 
+function getResponseHeaders(response, responseHeaders, responseType) {
+    var headers = response.headers;
+    if(headers && headers.keySet()) {
+        var iterator = headers.keySet().iterator();
+        while(iterator.hasNext()) {
+            var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
+            if(key && headers.get(key)) {
+                responseHeaders[key] = headers.get(key).substring(0);
+            }
+        }
+        
+        if(headers.get("Content-Type")) {
+            responseType = headers.get("Content-Type").substring(0);
+        }
+    }
+}
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
@@ -241,12 +232,10 @@ function getHeaderHashMap(params) {
     }
     return headers;
 }
-
 function checkInternet() {
     const Network = require("sf-core/device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
 }
-
 module.exports = http;
