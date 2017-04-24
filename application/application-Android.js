@@ -40,25 +40,9 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 // Creating Request Permission Result listener
 var applicationPermissionResultListener = NativeApplicationPermissionResultListener.implement({
     onRequestPermissionsResult: function(requestCode, permission, grantResult){
-        console.log("onRequestPermissionsResult requestCode: " + requestCode)
-        console.log("onRequestPermissionsResult permissions: " + permission)
-        console.log("onRequestPermissionsResult grantResults: " + grantResult)
         var permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
-        // for(var i = 0; i<permissions.length; i++){
-        //     permissionResults['results'].push(grantResults[i] === 0)
-        // }
-        // if(grantResults.length > 0){
-        //     for(var i = 0; i<permissions.length; i++){
-        //         permissionResults['results'].push(grantResults[i] === 0)
-        //     }
-        // }
-        // else{
-        //     for(var i = 0; i<permissions.length; i++){
-        //         permissionResults['results'].push(false)
-        //     }
-        // }
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
     }
 })
@@ -250,7 +234,8 @@ Object.defineProperties(ApplicationWrapper.android, {
             
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
                 // PackageManager.PERMISSION_GRANTED
-                return activity.checkSelfPermission(permission) == 0
+                const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
+                return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
             }
             else{
                 var packageManager = activity.getPackageManager();
@@ -269,7 +254,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             }
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
                 ApplicationWrapper.onRequestPermissionsResult && ApplicationWrapper.onRequestPermissionsResult({
-                    requestCode: requestCode,
+                    requestCode: this.checkPermission(permissions),
                     result: true
                 });
             }

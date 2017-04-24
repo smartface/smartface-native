@@ -133,7 +133,7 @@ http.request = function(params, onLoad, onError) {
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            onError(error);
+            onError(error.getMessage());
         }
     });
     
