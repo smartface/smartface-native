@@ -15,7 +15,9 @@ const Picker = extend(View)(
             self.nativeObject = new NativeNumberPicker(activity);
         }
         _super(this);
-
+        
+        this.ios = {};
+        
         var _items = [];
         var _onSelected;
         Object.defineProperties(this,{
