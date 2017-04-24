@@ -2,6 +2,7 @@ const NativeTransitionManager = requireClass('android.support.transition.Transit
 const NativeTransition        = requireClass('android.support.transition.Transition');
 const NativeTransitionSet     = requireClass('android.support.transition.TransitionSet');
 const NativeAutoTransition    = requireClass('android.support.transition.AutoTransition');
+const NativeAlphaTransition   = requireClass('io.smartface.android.anims.AlphaTransition');
 
 function Animator(params) {
     var _layout       = params.layout;
@@ -23,8 +24,10 @@ function Animator(params) {
         'perform': {
             value: function() {
                 var autoTransition = new NativeAutoTransition();
+                var alphaTransition = new NativeAlphaTransition();
                 var transitionSet = new NativeTransitionSet();
                 transitionSet.addTransition(autoTransition);
+                transitionSet.addTransition(alphaTransition);
                 transitionSet.setDuration(_duration);
                 transitionSet.addListener(NativeTransition.TransitionListener.implement({
                     onTransitionStart:  function(transition) {},
