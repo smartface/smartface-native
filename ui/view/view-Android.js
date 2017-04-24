@@ -53,10 +53,10 @@ function View(params) {
             if(self.touchEnabled){
                 if (event.getAction() === ACTION_UP && _onTouchEnded) {
                     _onTouchEnded();
-                    return true;
+                    // return true; Commented out due to resolving COR-1302.
                 } else if(event.getAction() === ACTION_DOWN && _onTouch) {
                     _onTouch();
-                    return true;
+                    // return true; Commented out due to resolving COR-1302.
                 }
             }
             return false;
