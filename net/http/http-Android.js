@@ -9,7 +9,9 @@ const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
 const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
 const InputStreamReader     = requireClass("java.io.InputStreamReader");
 const BufferedReader        = requireClass("java.io.BufferedReader");
+const NativeBase64          = requireClass("android.util.Base64");
 const Blob                  = require("sf-core/blob");
+
 const Request = function() {
     Object.defineProperties(this, {
         'cancel': {
@@ -122,13 +124,16 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 };
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
+    var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                var nativeString = new NativeString(response);
-                const NativeBase64 = requireClass("android.util.Base64");
-                var bytes = nativeString.getBytes();
-                var a = Blob.createFromBase64(NativeBase64.encode(bytes, 0));
-                onLoad({body: a, headers: responseHeaders});
+                const Blob = require("sf-core/blob");
+                
+                var encodedStr = new NativeString(response);
+                var bytes = encodedStr.getBytes();
+                var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
+                var blob = new Blob(decoded, {type: responseType});
+                onLoad({body: blob, headers: responseHeaders});
             }
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
@@ -165,17 +170,12 @@ http.request = function(params, onLoad, onError) {
                     return contentType;
                 },
                 parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
-                    var parsed = new NativeString();
-                    var value = null;
-                    if(params.headers)
-                        value = params.headers["Accept-Encoding"];
-                    getResponseHeaders(response, responseHeaders);
-                    
-                    var strFromBytes = new NativeString(response.data);
-                    var subStr = strFromBytes.substring(0);
+                    getResponseHeaders(response, responseHeaders, responseType);
                     
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    return VolleyResponse.success(subStr, cacheHeaders);
+                    var encoded = NativeBase64.encode(response.data, NativeBase64.DEFAULT);
+                    var encodedStr = new NativeString(encoded);
+                    return VolleyResponse.success(encodedStr, cacheHeaders);
                 }
             }, parameters);    
         }
@@ -191,28 +191,8 @@ http.request = function(params, onLoad, onError) {
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
-function parseGZIPResponse(response){
-    var parsed = '';
-    var inputStream = new ByteArrayInputStream(response.data);
-    var gzipStream = new GZIPInputStream(inputStream);
-    var reader = new InputStreamReader(gzipStream);
-    var bufferedReader = new BufferedReader(reader);
-    for (var line = new NativeString(); (line = bufferedReader.readLine()) !== null; parsed += line) ;
-    bufferedReader.close();
-    gzipStream.close();
-    return parsed;
-}
-function parseTextResponse(response){
-    var parsed = "";
-    try {
-        var parseCharset = VolleyHttpHeaderParser.parseCharset(response.headers,'UTF-8');
-        parsed = new NativeString(response.data, parseCharset);
-    } catch (error) {
-        parsed = new NativeString(response.data);
-    }
-    return parsed;
-}
-function getResponseHeaders(response, responseHeaders) {
+
+function getResponseHeaders(response, responseHeaders, responseType) {
     var headers = response.headers;
     if(headers && headers.keySet()) {
         var iterator = headers.keySet().iterator();
@@ -221,6 +201,10 @@ function getResponseHeaders(response, responseHeaders) {
             if(key && headers.get(key)) {
                 responseHeaders[key] = headers.get(key).substring(0);
             }
+        }
+        
+        if(headers.get("Content-Type")) {
+            responseType = headers.get("Content-Type").substring(0);
         }
     }
 }
