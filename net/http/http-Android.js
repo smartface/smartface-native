@@ -10,6 +10,7 @@ const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
 const InputStreamReader     = requireClass("java.io.InputStreamReader");
 const BufferedReader        = requireClass("java.io.BufferedReader");
 const NativeBase64          = requireClass("android.util.Base64");
+const Blob                  = require("sf-core/blob");
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -20,11 +21,9 @@ const Request = function() {
         }
     });
 };
-
 const http = {
     RequestQueue: Volley.newRequestQueue(Android.getActivity())
 };
-
 const methods = {
     "GET": 0,
     "POST" : 1,
@@ -35,7 +34,6 @@ const methods = {
     "TRACE" : 6,
     "PATCH" : 7
 };
-
 http.requestString = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -51,11 +49,9 @@ http.requestString = function(url, onLoad, onError) {
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-
             var request = new Request();
             request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
                     responseListener, responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -68,7 +64,6 @@ http.requestString = function(url, onLoad, onError) {
             onError(e);
     }
 };
-
 http.requestImage = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
@@ -89,7 +84,6 @@ http.requestImage = function(url, onLoad, onError) {
             var request = new Request();
             request.nativeObject = new ImageRequest(url,responseListener,
                 0, 0, null, null,responseErrorListener);
-
             http.RequestQueue.add(request.nativeObject);
             return request;
         }
@@ -100,7 +94,6 @@ http.requestImage = function(url, onLoad, onError) {
         onError(e);
     }
 };
-
 http.requestJSON = function(url, onLoad, onError) {
     return http.requestString(url, function(response) {
         // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
@@ -109,7 +102,6 @@ http.requestJSON = function(url, onLoad, onError) {
             onLoad(response);
     }, onError);
 };
-
 http.requestFile = function(url, fileName, onLoad, onError) {
     return http.requestString(url, function(response){
         var success = true;
@@ -130,7 +122,6 @@ http.requestFile = function(url, fileName, onLoad, onError) {
         }
     }, onError);
 };
-
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
     var responseListener = VolleyResponse.Listener.implement({
@@ -161,7 +152,6 @@ http.request = function(params, onLoad, onError) {
     if (params.headers && params.headers["Content-Type"]) {
         contentType = params.headers["Content-Type"];
     }
-
     try {
         if(checkInternet()) {
             const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
@@ -196,7 +186,6 @@ http.request = function(params, onLoad, onError) {
         if(onError)
             onError(err);
     }
-
     http.RequestQueue.add(request.nativeObject);
     return request;
 };
@@ -213,7 +202,6 @@ function getResponseHeaders(response, responseHeaders) {
         }
     }
 }
-
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
@@ -238,12 +226,10 @@ function getHeaderHashMap(params) {
     }
     return headers;
 }
-
 function checkInternet() {
     const Network = require("sf-core/device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
 }
-
 module.exports = http;

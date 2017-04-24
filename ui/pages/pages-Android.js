@@ -181,7 +181,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
         }
     }
     fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
-    fragmentTransaction.commit();
+    fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }
 

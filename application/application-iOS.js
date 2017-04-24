@@ -29,6 +29,10 @@ SFApplication.restart = function(){
     SMFApplication.restart();
 };
 
+SFApplication.checkUpdate = function(callback){
+    Application.checkUpdate(callback);
+};
+
 SFApplication.android = {};
 SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
