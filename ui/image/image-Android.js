@@ -52,84 +52,97 @@ function Image (params) {
         },
         'resize':{
             value: function(width, height, onSuccess, onFailure){
+                var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
                     var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);  
-                    if(onSuccess)
-                        onSuccess({image: new Image({bitmap: newBitmap})});
-                    else
-                        return (new Image({bitmap: newBitmap})); 
                 }
                 catch(err) {
+                    success = false;
                     if(onFailure) 
                         onFailure({message: err});
                     else 
                         return null;
+                }
+                if(success) {
+                    if(onSuccess)
+                        onSuccess({image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap}));
                 }
             }, 
             enumerable: true
         },
         'crop':{
             value: function(x, y, width, height, onSuccess, onFailure) {
+                var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
                     var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
-                    
-                    if(onSuccess)
-                        onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
-                    else
-                        return (new Image({bitmap: newBitmap}));
                 }
                 catch(err) {
+                    success = false;
                     if(onFailure) 
-                        onFailure.call(this, {message: err});
+                        onFailure({message: err});
                     else 
                         return null;
+                }
+                if(success) {
+                    if(onSuccess)
+                        onSuccess({image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap}));
                 }
             }, 
             enumerable: true
         },
         'rotate': {
             value: function(angle, onSuccess, onFailure) {
+                var success = true;
                 try {
                     var matrix = new NativeMatrix();
                     matrix.postRotate(angle);
                     var bitmap = self.nativeObject.getBitmap();
                     var width = bitmap.getWidth(), height = bitmap.getHeight();
                     var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
-                    
-                    if(onSuccess)
-                        onSuccess.call(this, {image: new Image({bitmap: newBitmap})});
-                    else
-                        return (new Image({bitmap: newBitmap}));
                 }
                 catch(err) {
+                    success = false;
                     if(onFailure) 
-                        onFailure.call(this, {message: err});
+                        onFailure({message: err});
                     else 
                         return null;
+                }
+                if(success) {
+                    if(onSuccess)
+                        onSuccess({image: new Image({bitmap: newBitmap})});
+                    else
+                        return (new Image({bitmap: newBitmap}));
                 }
             }, 
             enumerable: true
         },
         'compress': {
             value: function(format, quality, onSuccess, onFailure) {
+                var success = true;
                 try {
                     var out = new NativeByteArrayOutputStream();
                     var bitmap = self.nativeObject.getBitmap();
                     bitmap.compress(CompressFormat[format], quality, out);
                     var byteArray = out.toByteArray();
-                    
-                    if(onSuccess) 
-                        onSuccess.call(this, {blob: new Blob(byteArray, {type:"image"})});
-                    else 
-                        return (new Blob(byteArray, {type:"image"}));
                 }
                 catch(err) {
+                    success = false;
                     if(onFailure) 
-                        onFailure.call(this, {message: err});
+                        onFailure({message: err});
                     else 
                         return null;
+                }
+                if(success) {
+                    if(onSuccess) 
+                        onSuccess({blob: new Blob(byteArray, {type:"image"})});
+                    else 
+                        return (new Blob(byteArray, {type:"image"}));
                 }
             }, 
             enumerable: true
