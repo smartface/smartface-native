@@ -9,6 +9,7 @@ const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
 const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
 const InputStreamReader     = requireClass("java.io.InputStreamReader");
 const BufferedReader        = requireClass("java.io.BufferedReader");
+const NativeBase64          = requireClass("android.util.Base64");
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -134,7 +135,12 @@ http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                onLoad({body: response, headers: responseHeaders});
+                var encodedStr = new NativeString(response);
+                var bytes = encodedStr.getBytes();
+                var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
+                const Blob = require("sf-core/blob");
+                var blob = new Blob(decoded, {type: "image/jpeg"});
+                onLoad({body: blob, headers: responseHeaders});
             }
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
@@ -203,8 +209,11 @@ http.request = function(params, onLoad, onError) {
                             return VolleyResponse.error(parseError);
                         }
                     }
+                    
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    return VolleyResponse.success(parsed, cacheHeaders);
+                    var encoded = NativeBase64.encode(response.data, NativeBase64.DEFAULT);
+                    var encodedStr = new NativeString(encoded);
+                    return VolleyResponse.success(encodedStr, cacheHeaders);
                 }
             }, parameters);    
         }
