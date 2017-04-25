@@ -58,21 +58,17 @@ const NativeTextAlignment = [
 
 const SearchView = extend(View)(
     function (_super, params) {
-        var self = this;
         var activity = Android.getActivity();
         
-        self.nativeObject = new NativeSearchView(activity);
-        self.nativeObject.onActionViewExpanded();
-        // Prevent gain focus when SearchView appear.
-        self.nativeObject.clearFocus();
-        var mSearchSrcTextView = self.nativeObject.findViewById(NativeSupportR.id.search_src_text);
-        var mCloseButton = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
-        var  mSearchButton = self.nativeObject.findViewById(NativeSupportR.id.search_button);
-        
-        const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
-        mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
-        mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
-
+        if(!this.nativeObject){
+            this.nativeObject = new NativeSearchView(activity);
+            this.nativeObject.onActionViewExpanded();
+            // Prevent gain focus when SearchView appear.
+            this.nativeObject.clearFocus();
+        }
+        var mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
+        var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+        var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
 
         _super(this);
 
@@ -103,7 +99,7 @@ const SearchView = extend(View)(
                 set: function(hint) {
                     if(hint){
                         _hint = "" + hint;
-                        updateQueryHint(self, mSearchSrcTextView, _iconImage, _hint);
+                        updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
                 },
                 enumerable: true
@@ -128,9 +124,13 @@ const SearchView = extend(View)(
                     // If setting null to icon, default search icon will be displayed.
                     if(iconImage == null || iconImage instanceof require("sf-core/ui/image")){
                         _iconImage = iconImage;
-                        updateQueryHint(self, mSearchSrcTextView, _iconImage, _hint);
+                        updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
                 },
+                enumerable: true
+            },
+            'android': {
+                value: {},
                 enumerable: true
             },
             
@@ -138,7 +138,7 @@ const SearchView = extend(View)(
             'addToHeaderBar': {
                 value: function(page){
                     if(page){
-                        page.headerBar.addViewToHeaderBar(self);
+                        page.headerBar.addViewToHeaderBar(this);
                     }
                 },
                 enumerable: true
@@ -146,7 +146,7 @@ const SearchView = extend(View)(
             'removeFromHeaderBar': {
                 value: function(page){
                     if(page){
-                        page.headerBar.removeViewFromHeaderBar(self);
+                        page.headerBar.removeViewFromHeaderBar(this);
                     }
                 },
                 enumerable: true
@@ -166,10 +166,17 @@ const SearchView = extend(View)(
                     // @todo: toggleSoftInput doesn't work causing by issue AND-2566
                     mSearchSrcTextView.clearFocus();
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = self.nativeObject.getWindowToken();
+                    var windowToken = this.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0); 
                 },
                 enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'SearchView';
+                },
+                enumerable: true, 
+                configurable: true
             },
             
             // events
@@ -208,10 +215,9 @@ const SearchView = extend(View)(
                     _onSearchButtonClickedCallback = onSearchButtonClicked.bind(this);
                 },
                 enumerable: true
-            },
+            }
         });
         
-        this.android = {};
         var _hintTextColor = Color.LIGHTGRAY;
         var _keyboardType = KeyboardType.DEFAULT;
         var _font = null;
@@ -235,7 +241,7 @@ const SearchView = extend(View)(
                 },
                 set: function(keyboardType) {
                     _keyboardType = keyboardType; 
-                    self.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
+                    this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
                 },
                 enumerable: true
             },
@@ -277,30 +283,33 @@ const SearchView = extend(View)(
             },
         });
         
-        
-        self.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-            onQueryTextSubmit: function(query){
-                _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
-            },
-            onQueryTextChange: function(newText){
-                _onTextChangedCallback && _onTextChangedCallback(newText);
-            }
-        }));
-        
-        const NativeView = requireClass("android.view.View");
-        mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-            onFocusChange: function(view, hasFocus){
-                if (hasFocus)  {
-                    _onSearchBeginCallback && _onSearchBeginCallback();
-                }
-                else {
-                    _onSearchEndCallback && _onSearchEndCallback();
-                }
-            }
-        }));
-        
         // Handling ios specific properties
-        self.ios = {};
+        this.ios = {};
+        
+        if(!this.isNotSetDefaults){
+            const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
+            const NativeView = requireClass("android.view.View");
+            mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+            mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+            mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                onFocusChange: function(view, hasFocus){
+                    if (hasFocus)  {
+                        _onSearchBeginCallback && _onSearchBeginCallback();
+                    }
+                    else {
+                        _onSearchEndCallback && _onSearchEndCallback();
+                    }
+                }
+            }));
+            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
+                onQueryTextSubmit: function(query){
+                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                },
+                onQueryTextChange: function(newText){
+                    _onTextChangedCallback && _onTextChangedCallback(newText);
+                }
+            }));
+        }
         
         // Assign parameters given in constructor
         if (params) {

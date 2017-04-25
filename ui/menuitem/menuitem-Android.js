@@ -1,19 +1,30 @@
 function MenuItem(params) {
     var _title;
     
-    Object.defineProperty(this, 'title', {
-        get: function() {
-            return _title;
+    Object.defineProperties(this, {
+        'title': {
+            get: function() {
+                return _title;
+            },
+            set: function(title) {
+               _title = title;
+            },
+            enumerable: true
         },
-        set: function(title) {
-           _title = title;
+        'onSelected':{
+            value: function(e){
+                e.call(this);
+            },
+            enumerable: true
         },
-        enumerable: true
+        'toString': {
+            value: function(){
+                return 'MenuItem';
+            },
+            enumerable: true, 
+            configurable: true
+        }
     });
-    
-    this.onSelected = function(e) {
-        e.call(this);
-    };
     
     // Assign parameters given in constructor
     if (params) {

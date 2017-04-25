@@ -250,6 +250,16 @@ const Pin = function() {
          * @since 0.1
          */
         this.visible;
+
+        /**
+         * This event will be fired when the pin is touched.
+         *
+         * @event onPress
+         * @android
+         * @ios
+         * @since 1.1.2
+         */
+        this.onPress;
 };
 
 Object.defineProperty(MapView, 'Pin', {

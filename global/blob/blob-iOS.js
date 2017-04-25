@@ -12,6 +12,10 @@ function Blob(parts, properties) {
         self.toBase64 = function(){
             return self.nativeObject.toBase64();
         }
+        
+        self.toString = function() {
+            return self.nativeObject.toUtf8();
+        }
     
 }
 

@@ -299,13 +299,14 @@ Object.defineProperty(KeyboardType.android, 'TIME', {
 
 /**
  * @property {Number} EMAILADDRESS
- * Email address specific keyboard appearance. This keyboard type works only for Android.
+ * Email address specific keyboard appearance.
  * @static
  * @android
+ * @ios
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'EMAILADDRESS', {
+Object.defineProperty(KeyboardType, 'EMAILADDRESS', {
   value: 21,
   writable: false
 });

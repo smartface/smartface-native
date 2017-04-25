@@ -1,51 +1,50 @@
 const TypeUtil = require('sf-core/util/type');
 
 function TimePicker(params) {
-    var self = this;
-    var activity = Android.getActivity();
-
-    const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
     var _is24HourFormat = true;
     
-    var date = new Date();
-    if(!self.nativeObject) {
+    if(!this.nativeObject) {
         createTimerDialog();
     }
     
-    Object.defineProperties(self, {
+    Object.defineProperties(this, {
         'show': {
             value: function() {
-                self.nativeObject.show();
-            }
+                this.nativeObject.show();
+            },
+            enumerable: true
+        },
+        'setTime': {
+            value: function(setParams){
+                if(setParams && TypeUtil.isNumeric(setParams.hour) && TypeUtil.isNumeric(setParams.minute)) {
+                    this.nativeObject.updateTime(setParams.hour, setParams.minute);
+                }
+            },
+            enumerable: true
+        },
+        'android':{
+            value: {},
+            enumerable: true
+        },
+        'toString': {
+            value: function(){
+                return 'TimePicker';
+            },
+            enumerable: true, 
+            configurable: true
         }
     });
     
-    this.android = {};
     Object.defineProperty(this.android, 'is24HourFormat', {
         get: function() {
             return _is24HourFormat;
         },
         set: function(format) {
             _is24HourFormat = format;
-            createTimerDialog();
+            createTimerDialog(this);
         },
         enumerable: true
     });
-    
-    this.setTime = function(params) {
-        if(params) {
-            self.nativeObject.updateTime(params.hour, params.minute);
-        }
-    };
-    
-    function createTimerDialog() {
-        self.nativeObject = new NativeTimePickerDialog(activity, NativeTimePickerDialog.OnTimeSetListener.implement({
-            onTimeSet: function(timePicker, hour, minute) {
-                self.onTimeSelected && self.onTimeSelected({hour: hour, minute: minute});
-            }
-        }), date.getHours(), date.getMinutes(), _is24HourFormat);
-        self.nativeObject.setTitle("");
-    }
     
     // Assign parameters given in constructor
     if (params) {
@@ -53,6 +52,17 @@ function TimePicker(params) {
             this[param] = params[param];
         }
     }
+}
+
+function createTimerDialog(self) {
+    const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
+    var date = new Date();
+    self.nativeObject = new NativeTimePickerDialog(Android.getActivity(), NativeTimePickerDialog.OnTimeSetListener.implement({
+        onTimeSet: function(timePicker, hour, minute) {
+            self.onTimeSelected && self.onTimeSelected({hour: hour, minute: minute});
+        }
+    }), date.getHours(), date.getMinutes(), self.is24HourFormat);
+    self.nativeObject.setTitle("");
 }
 
 module.exports = TimePicker;

@@ -13,10 +13,10 @@ const extend = require('js-base/core/extend');
  *         text: "This is my label",
  *         visible: true
  *     });
- *     myLabel.width = "200",
- *     myLabel.height = "50",
- *     myLabel.top = "10",
- *     myLabel.left = "20",
+ *     myLabel.width = 200,
+ *     myLabel.height = 50,
+ *     myLabel.top = 10,
+ *     myLabel.left = 20,
  *     myLabel.backgroundColor = Color.GRAY;
  */
 const Label = extend(View)(

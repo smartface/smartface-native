@@ -479,6 +479,8 @@ function Page(params) {
                     item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
                     itemView = new NativeImageButton(activity);
                     itemView.setImageDrawable(imageCopy);
+                    itemView.setMinimumWidth(80);
+                    itemView.setMinimumHeight(80);
                 }
                 else {
                     itemView = new NativeTextButton(activity);
