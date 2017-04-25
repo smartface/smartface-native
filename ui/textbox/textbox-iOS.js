@@ -246,6 +246,9 @@ const TextBox = extend(View)(
                     case IOSKeyboardTypes.webSearch:
                         returnValue = KeyboardType.ios.WEBSEARCH;
                         break;
+                    case IOSKeyboardTypes.emailAddress:
+                        returnValue = KeyboardType.EMAILADDRESS;
+                        break;
                     default:
                         returnValue = null;
                 }
@@ -270,6 +273,9 @@ const TextBox = extend(View)(
                         break;
                     case KeyboardType.ios.WEBSEARCH:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.webSearch;
+                        break;
+                    case KeyboardType.EMAILADDRESS:
+                        self.nativeObject.keyboardType = IOSKeyboardTypes.emailAddress;
                         break;
                     default:
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
