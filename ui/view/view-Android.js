@@ -50,9 +50,9 @@ function View(params) {
     
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-            if(self.touchEnabled){
-                if (event.getAction() === ACTION_UP && _onTouchEnded) {
-                    _onTouchEnded();
+            if(self.touchEnabled && (_onTouch || _onTouchEnded)){
+                if (event.getAction() === ACTION_UP) {
+                    _onTouchEnded && _onTouchEnded();
                 } else if(event.getAction() === ACTION_DOWN) {
                     _onTouch && _onTouch();
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
