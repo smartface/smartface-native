@@ -53,9 +53,10 @@ function View(params) {
             if(self.touchEnabled){
                 if (event.getAction() === ACTION_UP && _onTouchEnded) {
                     _onTouchEnded();
-                    return true;
-                } else if(event.getAction() === ACTION_DOWN && _onTouch) {
-                    _onTouch();
+                } else if(event.getAction() === ACTION_DOWN) {
+                    _onTouch && _onTouch();
+                    // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
+                    // So we should consume ACTION_DOWN event.
                     return true;
                 }
             }
