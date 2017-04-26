@@ -1,7 +1,8 @@
-const FlexLayout    = require("sf-core/ui/flexlayout");
-const Color         = require("sf-core/ui/color");
-const TypeUtil      = require("sf-core/util/type");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const FlexLayout            = require("sf-core/ui/flexlayout");
+const Color                 = require("sf-core/ui/color");
+const TypeUtil              = require("sf-core/util/type");
+const AndroidConfig         = require("sf-core/util/Android/androidconfig");
+const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
@@ -266,7 +267,7 @@ function Page(params) {
             if (resourceId > 0) {
                 result = activity.getResources().getDimensionPixelSize(resourceId);
             }
-            return result;
+            return AndroidUnitConverter.pixelToDp(result);
         },
         enumerable: true
     });
@@ -315,7 +316,7 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
-            return resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material);
+            return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material))
         },
         enumerable: true
     });
@@ -464,7 +465,10 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeView = requireClass('android.view.View');
         const NativePorterDuff = requireClass('android.graphics.PorterDuff');
-
+        // to fix supportRTL padding bug, we should set this manually.
+        // @todo this values are hard coded. Find typed arrays
+        var paddingVertical = AndroidUnitConverter.dpToPixel(12);
+        var paddingHorizontal = AndroidUnitConverter.dpToPixel(10);
         optionsMenu.clear();
 
         var itemID = 1;
@@ -479,8 +483,6 @@ function Page(params) {
                     item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
                     itemView = new NativeImageButton(activity);
                     itemView.setImageDrawable(imageCopy);
-                    itemView.setMinimumWidth(80);
-                    itemView.setMinimumHeight(80);
                 }
                 else {
                     itemView = new NativeTextButton(activity);
@@ -495,6 +497,9 @@ function Page(params) {
                 }));
             }
             itemView.setBackgroundColor(Color.TRANSPARENT);
+            
+            // left, top, right, bottom
+            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
 
             var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
             menuItem.setEnabled(item.enabled);

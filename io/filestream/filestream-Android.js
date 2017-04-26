@@ -114,24 +114,24 @@ function FileStream(params) {
         },
         'readBlob' : {
             value: function(param){
-                const NativeString = requireClass('java.lang.String');
-                var fileContent = this.readToEnd();
-                var byteArray = new NativeString(fileContent).getBytes();
-                // var byteArray = fileContent.getBytes();
-                return new Blob(byteArray, {type:"file"});
+                if(!_closed && _mode === FileStream.StreamType.READ){
+                    var input = null;
+                    var bytes = [];
+                    while((input = this.nativeObject.read()) !== -1){
+                        bytes.push(input);
+                    }
+                    return new Blob(bytes, {type:"file"});
+                }
+                return null;
             },
             enumarable: true
         },
         'readToEnd' : {
             value: function(){
-                if(!_closed && _mode === FileStream.StreamType.READ){
-                    var inputLine = this.nativeObject.readLine();
-                    var fileContent = "";
-                    while(inputLine){
-                        fileContent += inputLine;
-                        inputLine = this.nativeObject.readLine();
-                    }
-                    return fileContent;
+                var blob = this.readBlob();
+                if(blob) {
+                    var bytes = blob.nativeObject.toByteArray();
+                    return String.fromCharCode.apply(String, bytes);
                 }
                 return null;
             },
