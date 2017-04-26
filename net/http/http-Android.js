@@ -1,16 +1,12 @@
 const Volley                = requireClass("com.android.volley.toolbox.Volley");
 const VolleyRequest         = requireClass("com.android.volley.Request");
 const VolleyResponse        = requireClass("com.android.volley.Response");
-const VolleyParseError      = requireClass("com.android.volley.ParseError");
 const VolleyHttpHeaderParser= requireClass("com.android.volley.toolbox.HttpHeaderParser");
 const NativeInteger         = requireClass("java.lang.Integer");
 const NativeString          = requireClass("java.lang.String");
-const GZIPInputStream       = requireClass("java.util.zip.GZIPInputStream");
-const ByteArrayInputStream  = requireClass("java.io.ByteArrayInputStream");
-const InputStreamReader     = requireClass("java.io.InputStreamReader");
-const BufferedReader        = requireClass("java.io.BufferedReader");
 const NativeBase64          = requireClass("android.util.Base64");
-const Blob                  = require("sf-core/blob");
+
+const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -224,10 +220,12 @@ function getHeaderHashMap(params) {
     if(params.headers) {
         var i;
         var keys = Object.keys(params.headers);
-        for(i = 0; i < keys.length; i++) {
+        for (i = 0; i < keys.length; i++) {
             var value = params.headers[keys[i]];
-            if(typeof(keys[i]) === "string" && typeof(value) === "string")
+            if (typeof(keys[i]) === "string" && typeof(value) === "string" &&
+                keys[i].toUpperCase() !== CONTENT_TYPE_KEY) {
                 headers.put(keys[i], value);
+            }
         }
     }
     return headers;
