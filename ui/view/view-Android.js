@@ -1,4 +1,5 @@
 const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
+const TypeUtil                  = require("sf-core/util/type");
 const Image                     = require("sf-core/ui/image");
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
@@ -66,6 +67,10 @@ function View(params) {
     
     var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable;
+    // these are for caching
+    var backgroundColorDrawable;
+    var backgroundStatelistDrawable;
+    var stateColorDrawables = {};
     var radii;
     var rectF;
     var roundRect;
@@ -292,87 +297,120 @@ function View(params) {
     
     function setBackgroundColor() {
         if(typeof(_backgroundColor) === "number") {
-            backgroundDrawable = new NativeGradientDrawable(); 
-            backgroundDrawable.setCornerRadius(_borderRadius);
-            backgroundDrawable.setColor(_backgroundColor);
+            // Check background drawable created and its not gradient. We use 
+            if(!backgroundColorDrawable){
+                backgroundColorDrawable = new NativeGradientDrawable(); 
+            }
+            backgroundColorDrawable.setColor(_backgroundColor);
+            backgroundColorDrawable.setCornerRadius(_borderRadius);
+            backgroundDrawable = backgroundColorDrawable;
         }
         else if(_backgroundColor.isGradient) {
-            var orientation = _backgroundColor.nativeObject.getOrientation();
-            var colors = _backgroundColor.colors;
-            backgroundDrawable = new NativeGradientDrawable(orientation, colors); 
+            backgroundDrawable = _backgroundColor.nativeObject; 
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
         else {
-            var stateDrawable;
-            backgroundDrawable = new NativeStateListDrawable();
-            if(_backgroundColor.normal){
+            if(!backgroundStatelistDrawable){
+                backgroundStatelistDrawable = new NativeStateListDrawable();
+            }
+            // state can be transparent. so we should check state exists.
+            if('normal' in _backgroundColor){
                 if(_backgroundColor.normal.isGradient) {
-                    stateDrawable = _backgroundColor.normal.nativeObject;
+                    stateColorDrawables.normal = _backgroundColor.normal.nativeObject;
                 }
-                else {
-                    stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.normal);
+                else if(TypeUtil.isNumeric(_backgroundColor.normal)) {
+                    if(!('normal' in stateColorDrawables)){
+                        stateColorDrawables.normal = new NativeGradientDrawable(); 
+                    }
+                    stateColorDrawables.normal.setColor(_backgroundColor.normal);
                 }
-                stateDrawable.setCornerRadius(_borderRadius);
-                backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
+                stateColorDrawables.normal.setCornerRadius(_borderRadius);
+                backgroundStatelistDrawable.addState(View.State.STATE_NORMAL,stateColorDrawables.normal);
             }
-            if(_backgroundColor.disabled){
+            if('disabled' in _backgroundColor){
                 if(_backgroundColor.disabled.isGradient) {
-                    stateDrawable = _backgroundColor.disabled.nativeObject;
+                    stateColorDrawables.disabled = _backgroundColor.disabled.nativeObject;
                 }
-                else {
-                    stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.disabled);
+                else if(TypeUtil.isNumeric(_backgroundColor.disabled)) {
+                    if(!('disabled' in stateColorDrawables)){
+                        stateColorDrawables.disabled = new NativeGradientDrawable(); 
+                    }
+                    stateColorDrawables.disabled.setColor(_backgroundColor.disabled);
                 }
-                stateDrawable.setCornerRadius(_borderRadius);
-                backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+                stateColorDrawables.disabled.setCornerRadius(_borderRadius);
+                backgroundStatelistDrawable.addState(View.State.STATE_DISABLED,stateColorDrawables.disabled);
             }
-            if(_backgroundColor.selected){
+            if('selected' in _backgroundColor){
                 if(_backgroundColor.selected.isGradient) {
-                    stateDrawable = _backgroundColor.selected.nativeObject;
+                    stateColorDrawables.selected = _backgroundColor.selected.nativeObject;
                 }
-                else {
-                    stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.selected);
+                else if(TypeUtil.isNumeric(_backgroundColor.selected)){
+                    if(!('selected' in stateColorDrawables)){
+                        stateColorDrawables.selected = new NativeGradientDrawable(); 
+                    }
+                    stateColorDrawables.selected.setColor(_backgroundColor.selected);
                 }
-                stateDrawable.setCornerRadius(_borderRadius);
-                backgroundDrawable.addState(View.State.STATE_SELECTED,stateDrawable);
+                stateColorDrawables.selected.setCornerRadius(_borderRadius);
+                backgroundStatelistDrawable.addState(View.State.STATE_SELECTED,stateColorDrawables.selected);
             }
-            if(_backgroundColor.pressed){
+            if('pressed' in _backgroundColor){
                 if(_backgroundColor.pressed.isGradient) {
-                    stateDrawable = _backgroundColor.pressed.nativeObject;
+                    stateColorDrawables.pressed = _backgroundColor.pressed.nativeObject;
                 }
-                else {
-                    stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.pressed);
+                else if(TypeUtil.isNumeric(_backgroundColor.pressed)){
+                    if(!('pressed' in stateColorDrawables)){
+                        stateColorDrawables.pressed = new NativeGradientDrawable(); 
+                    }
+                    stateColorDrawables.pressed.setColor(_backgroundColor.pressed);
                 }
-                stateDrawable.setCornerRadius(_borderRadius);
-                backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
+                stateColorDrawables.pressed.setCornerRadius(_borderRadius);
+                backgroundStatelistDrawable.addState(View.State.STATE_PRESSED,stateColorDrawables.pressed);
             }
-            if(_backgroundColor.focused){
+            if('focused' in _backgroundColor){
                 if(_backgroundColor.focused.isGradient) {
-                    stateDrawable = _backgroundColor.focused.nativeObject;
+                    stateColorDrawables.focused = _backgroundColor.focused.nativeObject;
                 }
-                else {
-                    stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.focused);
+                else if(TypeUtil.isNumeric(_backgroundColor.focused)){
+                    if(!('focused' in stateColorDrawables)){
+                        stateColorDrawables.focused = new NativeGradientDrawable(); 
+                    }
+                    stateColorDrawables.focused.setColor(_backgroundColor.focused);
                 }
-                stateDrawable.setCornerRadius(_borderRadius);
-                backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+                stateColorDrawables.focused.setCornerRadius(_borderRadius);
+                backgroundStatelistDrawable.addState(View.State.STATE_FOCUSED,stateColorDrawables.focused);
             }
+            backgroundDrawable = backgroundStatelistDrawable;
         }
         setBackground(0);
     }
     
     function setBorder(){
         var dp_borderWidth = AndroidUnitConverter.dpToPixel(self.borderWidth);
-        if(dp_borderWidth > 0)  {
+        // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
+        // so we should use created drawables.
+        if(dp_borderWidth >= 0)  {
             radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
                      _borderRadius,_borderRadius,_borderRadius,_borderRadius];
-            rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
+            if(!rectF){
+                rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
+            }
+            else{
+                rectF.set(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
+            }
             roundRect = new NativeRoundRectShape(radii, rectF, radii);
-            borderShapeDrawable = new NativeShapeDrawable(roundRect);
-            borderShapeDrawable.getPaint().setColor(_borderColor);
+            if(!borderShapeDrawable){
+                borderShapeDrawable = new NativeShapeDrawable(roundRect);
+            }
+            else{
+                borderShapeDrawable.setShape(roundRect);
+            }
+            // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
+            if(dp_borderWidth !== 0){
+                borderShapeDrawable.getPaint().setColor(_borderColor);
+            }
+            else{
+                borderShapeDrawable.getPaint().setColor(0);
+            }
             setBackground(1);
         }
     }
