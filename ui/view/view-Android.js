@@ -1,6 +1,6 @@
 const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
 const TypeUtil                  = require("sf-core/util/type");
-const Image                     = require("sf-core/ui/image");
+const Color                     = require("sf-core/ui/color");
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
@@ -11,8 +11,6 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
-
-const Color = require("sf-core/ui/color");
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -254,42 +252,45 @@ function View(params) {
             if(_backgroundImages) {
                 var stateDrawable;
                 var image;
-                backgroundDrawable = new NativeStateListDrawable();
+                if(!backgroundStatelistDrawable){
+                    backgroundStatelistDrawable = new NativeStateListDrawable();
+                }
                 if(_backgroundImages.normal) {
                     image = _backgroundImages.normal;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
+                    backgroundStatelistDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
                 }
                 if(_backgroundImages.disabled){
                     image = _backgroundImages.disabled;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+                    backgroundStatelistDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
                 }
                 if(_backgroundImages.selected){
                     image = _backgroundImages.selected;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
+                    backgroundStatelistDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
                 }
                 if(_backgroundImages.pressed){
                     image = _backgroundImages.pressed;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
+                    backgroundStatelistDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
                 }
                 if(_backgroundImages.focused){
                     image = _backgroundImages.focused;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+                    backgroundStatelistDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
                 }
+                backgroundDrawable = backgroundStatelistDrawable;
                 setBackground(0);
             }
         }
@@ -398,12 +399,14 @@ function View(params) {
                 rectF.set(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
             }
             roundRect = new NativeRoundRectShape(radii, rectF, radii);
+            
             if(!borderShapeDrawable){
                 borderShapeDrawable = new NativeShapeDrawable(roundRect);
             }
             else{
                 borderShapeDrawable.setShape(roundRect);
             }
+            
             // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
             if(dp_borderWidth !== 0){
                 borderShapeDrawable.getPaint().setColor(_borderColor);
