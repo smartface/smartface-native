@@ -13,7 +13,7 @@ const extend = require('js-base/core/extend');
  *     const Label = require('sf-core/ui/label');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     const Direction = require('sf-core/ui/listview/direction');
- *
+ * 
  *     var myDataSet = [
  *         {
  *             title: 'Smartface Title 1',
@@ -39,7 +39,7 @@ const extend = require('js-base/core/extend');
  *         backgroundColor: Color.LIGHTGRAY,
  *         itemCount: myDataSet.length,
  *     });
- *
+ * 
  *     myListView.onRowCreate = function(){
  *         var myListViewItem = new ListViewItem();
  *         var myLabelTitle = new Label({
@@ -51,15 +51,17 @@ const extend = require('js-base/core/extend');
  *         myListViewItem.addChild(myLabelTitle);
  *         return myListViewItem;
  *     };
+ * 
  *     myListView.onRowBind = function(listViewItem,index){
  *         var myLabelTitle = listViewItem.findChildById(102);
  *         myLabelTitle.text = myDataSet[index].title;
  *         myLabelTitle.backgroundColor = myDataSet[index].backgroundColor;
  *     };
+ * 
  *     myListView.onRowSelected = function(listViewItem,index){
  *         console.log("selected index = " + index)
  *     };
- *
+ * 
  *     myListView.onPullRefresh = function(){
  *         myDataSet.push({
  *             title: 'Smartface Title '+myDataSet.length,
@@ -68,24 +70,25 @@ const extend = require('js-base/core/extend');
  *         myListView.itemCount = myDataSet.length;
  *         myListView.refreshData();
  *         myListView.stopRefresh();
- *     }
+ *     };
  * 
  *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
- *            if (direction == Direction.RIGHTTOLEFT){
- *               expansionSettings.fillOnTrigger = true;  //if true the button fills the cell on trigger, else it bounces back to its initial position
- *               expansionSettings.threshold = 1.5;  //Size proportional threshold to trigger the expansion button. Default value 1.5
- *               var deleteAction = new myListView.ios.swipeItem("Delete",Color.RED,15,function(e) { 
- *                   console.log("Delete Action Index = " + e.index);
- *                });
- *                
- *                return [deleteAction];
- *            }else if (direction == Direction.LEFTTORIGHT){
- *                var moreAction = new myListView.ios.swipeItem("More",Color.GRAY,15,function(e){
- *                   console.log("More Action Index = " + e.index);
- *                });
- *                return [moreAction];
- *            }
- *       };
+ *         if (direction == Direction.RIGHTTOLEFT){
+ *             expansionSettings.fillOnTrigger = true;  //if true the button fills the cell on trigger, else it bounces back to its initial position
+ *             expansionSettings.threshold = 1.5;  //Size proportional threshold to trigger the expansion button. Default value 1.5
+ *             var deleteAction = new myListView.ios.swipeItem("Delete",Color.RED,15,function(e) { 
+ *                 console.log("Delete Action Index = " + e.index);
+ *             });
+ *             return [deleteAction];
+ *         }
+ *         else if (direction == Direction.LEFTTORIGHT){
+ *             var moreAction = new myListView.ios.swipeItem("More",Color.GRAY,15,function(e){
+ *                 console.log("More Action Index = " + e.index);
+ *             });
+ *             return [moreAction];
+ *             
+ *         }
+ *     };
  * 
  *
  */
