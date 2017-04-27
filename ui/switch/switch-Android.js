@@ -19,7 +19,7 @@ const Switch = extend(View)(
         var _toggleOnColor = Color.GRAY;
         var _toggleOffColor = Color.GRAY;
         var onToggleChangedCallback;
-        Object.defineProperty(this, {
+        Object.defineProperties(this, {
             'thumbOnColor': {
                 get: function() {
                     return _thumbOnColor;
