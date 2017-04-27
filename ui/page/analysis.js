@@ -153,6 +153,11 @@ function Page(params) {
      * @ios
      */
     this.onOrientationChange = function (){};
+
+    /**
+     * 
+     */
+    this.tabBarItem = null;
 }
 /**
  * @enum {Number} UI.Page.Orientation
