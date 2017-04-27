@@ -11,7 +11,7 @@ const extend = require('js-base/core/extend');
  * 
  *     @example
  *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
- *     const FlexLayout = require("sf-core/ui/flexlayout");
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     const Button = require('sf-core/ui/button');
  *     const Router = require('sf-core/ui/router');
  *    
