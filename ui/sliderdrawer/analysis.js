@@ -15,8 +15,6 @@ const extend = require('js-base/core/extend');
  *     const Button = require('sf-core/ui/button');
  *     const Router = require('sf-core/ui/router');
  *    
- *     Router.add('login', require('pages/pgLogin'));
- *     Router.go('login');
  *     var mySliderDrawer = new SliderDrawer({
  *         width: 200
  *     });
