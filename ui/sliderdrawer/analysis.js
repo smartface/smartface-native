@@ -9,28 +9,28 @@ const extend = require('js-base/core/extend');
  * It is hidden most of the time, when user swipes a finger from the left or right edge of the screen it will appear.
  * 
  * 
- *    @example
- *    const SliderDrawer = require('sf-core/ui/sliderdrawer');
- *    const Button = require('sf-core/ui/button');
- *    const Router = require('sf-core/ui/router');
+ *     @example
+ *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
+ *     const FlexLayout = require("sf-core/ui/flexlayout");
+ *     const Button = require('sf-core/ui/button');
+ *     const Router = require('sf-core/ui/router');
  *    
- *    Router.add('login', require('pages/pgLogin'));
- *    Router.go('login');
- *    var mySliderDrawer = new SliderDrawer({
- *        width: 200,
- *        onLoad: function(){
- *           mySliderDrawer.layout.addChild(myButton);
- *        }
- *    });
- *    var myButton = new Button({
- *        height: 40,
- *        width: 50,
- *        left: 50,
- *        text: "Smartface Button"
- *    });
- *    mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
- *    mySliderDrawer.layout.addChild(myButton);
- *    Router.sliderDrawer = mySliderDrawer;
+ *     Router.add('login', require('pages/pgLogin'));
+ *     Router.go('login');
+ *     var mySliderDrawer = new SliderDrawer({
+ *         width: 200
+ *     });
+ *     var myButton = new Button({
+ *         height: 40,
+ *         width: 100,
+ *         left: 50,
+ *         top: 50,
+ *         text: "Smartface Button",
+ *         positionType: FlexLayout.PositionType.ABSOLUTE
+ *     });
+ *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
+ *     mySliderDrawer.layout.addChild(myButton);
+ *     Router.sliderDrawer = mySliderDrawer;
  *
  */
 const SliderDrawer = extend(ViewGroup)(
