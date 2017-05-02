@@ -96,7 +96,7 @@ Contacts.pick = function(params) {};
 
 /**
  * This function returns a contact array.You need check 
- * {@link Application.Permissions#WRITE_CONTACTS} before using this function.
+ * {@link Application.Permissions#READ_CONTACTS} before using this function.
  *
  *
  *     @example
