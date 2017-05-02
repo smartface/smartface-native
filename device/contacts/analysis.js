@@ -9,7 +9,7 @@
  *     const Application = require("sf-core/application"); 
  * 
  *     const READ_CONTACTS_CODE = 1002;
- *     Application.android.requestPermissions(READ_CONTACTS_CODE, Application.Permissions.READ_CONTACTS);
+ *     Application.android.requestPermissions(READ_CONTACTS_CODE, Application.android.Permissions.READ_CONTACTS);
  *
  *     Application.android.onRequestPermissionsResult = function(e){
  *         if(e.requestCode === READ_CONTACTS_CODE && e.result) {
@@ -26,7 +26,7 @@ function Contacts() {}
 
 /**
  * This function adds a contact to contact list with specified properties. You need check 
- * {@link Application.Permissions#WRITE_CONTACTS} before adding contact.
+ * {@link Application.android.Permissions#WRITE_CONTACTS} before adding contact.
  *
  *
  *     @example
@@ -66,7 +66,7 @@ Contacts.add = function(params) {};
 
 /**
  * This function shows contact list. It allows user to pick a data from the list.You need check 
- * {@link Application.Permissions#READ_CONTACTS} before picking contact.
+ * {@link Application.android.Permissions#READ_CONTACTS} before picking contact.
  *
  *
  *     @example
@@ -96,7 +96,7 @@ Contacts.pick = function(params) {};
 
 /**
  * This function returns a contact array.You need check 
- * {@link Application.Permissions#READ_CONTACTS} before using this function.
+ * {@link Application.android.Permissions#READ_CONTACTS} before using this function.
  *
  *
  *     @example
