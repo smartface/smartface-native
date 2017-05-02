@@ -47,7 +47,8 @@ const ListView = extend(View)(
                     _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
-                            _onRowSelected && _onRowSelected(_holderViewLayout, position);
+                            var clickedView = createFromTemplate(holderViewLayout,view, nativeHolderView,self);
+                            _onRowSelected && _onRowSelected(clickedView, position);
                         }
                     }));
                 }
