@@ -266,45 +266,42 @@ function View(params) {
             if(_backgroundImages) {
                 var stateDrawable;
                 var image;
-                if(!backgroundStatelistDrawable){
-                    backgroundStatelistDrawable = new NativeStateListDrawable();
-                }
+                backgroundDrawable = new NativeStateListDrawable();
                 if(_backgroundImages.normal) {
                     image = _backgroundImages.normal;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundStatelistDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
+                    backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
                 }
                 if(_backgroundImages.disabled){
                     image = _backgroundImages.disabled;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundStatelistDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+                    backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
                 }
                 if(_backgroundImages.selected){
                     image = _backgroundImages.selected;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundStatelistDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
+                    backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
                 }
                 if(_backgroundImages.pressed){
                     image = _backgroundImages.pressed;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundStatelistDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
+                    backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
                 }
                 if(_backgroundImages.focused){
                     image = _backgroundImages.focused;
                     bitmap = image.nativeObject.getBitmap();
                     stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                     stateDrawable.setCornerRadius(_borderRadius);
-                    backgroundStatelistDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+                    backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
                 }
-                backgroundDrawable = backgroundStatelistDrawable;
                 setBackground(0);
             }
         }
@@ -409,15 +406,15 @@ function View(params) {
     function setBackground(layerIndex){
         var layerDrawableNative = self.nativeObject.getBackground().getConstantState().newDrawable();
         switch (layerIndex){
-                case 0: 
-                    layerDrawableNative.setDrawableByLayerId(0,backgroundDrawable);
-                    layerDrawableNative.invalidateDrawable(backgroundDrawable);
-                    break;
-                case 1:
-                    layerDrawableNative.setDrawableByLayerId(1,borderShapeDrawable);
-                    layerDrawableNative.invalidateDrawable(borderShapeDrawable);
-                    break;
-            }
+            case 0: 
+                layerDrawableNative.setDrawableByLayerId(0,backgroundDrawable);
+                layerDrawableNative.invalidateDrawable(backgroundDrawable);
+                break;
+            case 1:
+                layerDrawableNative.setDrawableByLayerId(1,borderShapeDrawable);
+                layerDrawableNative.invalidateDrawable(borderShapeDrawable);
+                break;
+        }
         
         self.nativeObject.setBackground(layerDrawableNative);
     }
