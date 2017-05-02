@@ -434,7 +434,7 @@ function View(params) {
             layerDrawable.setId(0,0);
             layerDrawable.setId(1,1);
             layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-            if(borderShapeDrawable || this.isCloned){
+            if(borderShapeDrawable){
                 layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
             }
         }
