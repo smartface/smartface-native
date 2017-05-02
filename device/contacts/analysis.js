@@ -6,28 +6,27 @@
  *
  *     @example
  *     const Contacts = require("sf-core/device/contacts");
- *     var result = Application.checkPermission("READ_CONTACTS");
- *     if(!result) {
- *         var permissionCode = 1001;
- *         Application.requestPermissions(permissionCode, "READ_CONTACTS");
- *     }
- *     result = Application.checkPermission("READ_CONTACTS");
- *     if(result) {
- *         Contacts.pick({
- *             onSuccess: getContact
- *         });
- *     }
+ *     const Application = require("sf-core/application"); 
+ * 
+ *     const READ_CONTACTS_CODE = 1002;
+ *     Application.android.requestPermissions(READ_CONTACTS_CODE, Application.android.Permissions.READ_CONTACTS);
  *
- *     function getContact(e) {
- *         var displayName = e.displayName;
- *         var phoneNumber = e.phoneNumber;
+ *     Application.android.onRequestPermissionsResult = function(e){
+ *         if(e.requestCode === READ_CONTACTS_CODE && e.result) {
+ *             Contacts.pick({
+ *                 onSuccess: function(e) {
+ *                     alert(JSON.stringify(e));
+ *                 }
+ *             }
+ *         }
  *     }
  *
  */
 function Contacts() {}
 
 /**
- * This function adds a contact to contact list with specified properties.
+ * This function adds a contact to contact list with specified properties. You need check 
+ * {@link Application.android.Permissions#WRITE_CONTACTS} before adding contact.
  *
  *
  *     @example
@@ -66,7 +65,8 @@ function Contacts() {}
 Contacts.add = function(params) {};
 
 /**
- * This function shows contact list. It allows user to pick a data from the list.
+ * This function shows contact list. It allows user to pick a data from the list.You need check 
+ * {@link Application.android.Permissions#READ_CONTACTS} before picking contact.
  *
  *
  *     @example
@@ -95,7 +95,8 @@ Contacts.add = function(params) {};
 Contacts.pick = function(params) {};
 
 /**
- * This function returns a contact array.
+ * This function returns a contact array.You need check 
+ * {@link Application.android.Permissions#READ_CONTACTS} before using this function.
  *
  *
  *     @example

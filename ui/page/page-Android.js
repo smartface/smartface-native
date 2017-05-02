@@ -521,7 +521,6 @@ function Page(params) {
             actionBar.setHomeAsUpIndicator(null);
         }
     };
-    
      
     // Added to solve AND-2713 bug.
     const NativeView = requireClass('android.view.View');

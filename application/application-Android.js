@@ -1,7 +1,6 @@
 const TypeUtil = require("sf-core/util/type");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
-const NativeApplicationPermissionResultListener = requireClass("io.smartface.android.listeners.ApplicationPermissionResultListener");
 
 function ApplicationWrapper() {}
 
@@ -35,22 +34,17 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         if(_onExit) {
             _onExit();
         }
-    }
-});
-// Creating Request Permission Result listener
-var applicationPermissionResultListener = NativeApplicationPermissionResultListener.implement({
+    },
     onRequestPermissionsResult: function(requestCode, permission, grantResult){
         var permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
     }
-})
+});
 
-// Attaching Activity Lifecycle and Request Permission Result events
+// Attaching Activity Lifecycle event
 spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
-spratAndroidActivityInstance.addPermissionResultCallbacks(applicationPermissionResultListener);
-
 
 Object.defineProperties(ApplicationWrapper, {
     // properties
