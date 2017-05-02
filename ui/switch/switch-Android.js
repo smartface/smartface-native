@@ -19,7 +19,7 @@ const Switch = extend(View)(
         var _toggleOnColor = Color.GRAY;
         var _toggleOffColor = Color.GRAY;
         var onToggleChangedCallback;
-        Object.defineProperty(this, {
+        Object.defineProperties(this, {
             'thumbOnColor': {
                 get: function() {
                     return _thumbOnColor;
@@ -129,7 +129,7 @@ function setTrackColor(self){
         self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
-        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOffColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 
