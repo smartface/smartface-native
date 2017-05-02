@@ -74,7 +74,7 @@ function View(params) {
     var roundRect;
     var borderShapeDrawable;
     var layerDrawable;
-    
+    var _isCloned = false;
     var _backgroundImages = null;
     var _borderColor = Color.BLACK;
     var _borderRadius = 0;
@@ -234,6 +234,15 @@ function View(params) {
             },
             enumerable: true, 
             configurable: true
+        },
+        // if view is cloned, re-create every view-specific properties like background drawables. 
+        'isCloned': {
+            get: function(){
+                return _isCloned;
+            },
+            set: function(value){
+                _isCloned = value;
+            }
         }
     });
     
@@ -299,7 +308,7 @@ function View(params) {
     function setBackgroundColor() {
         if(typeof(_backgroundColor) === "number") {
             // Check background drawable created and its not gradient. We use 
-            if(!backgroundColorDrawable){
+            if(!backgroundColorDrawable || self.isCloned){
                 backgroundColorDrawable = new NativeGradientDrawable(); 
             }
             backgroundColorDrawable.setColor(_backgroundColor);
@@ -311,7 +320,7 @@ function View(params) {
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
         else {
-            if(!backgroundStatelistDrawable){
+            if(!backgroundStatelistDrawable || self.isCloned){
                 backgroundStatelistDrawable = new NativeStateListDrawable();
             }
             // state can be transparent. so we should check state exists.
@@ -320,7 +329,7 @@ function View(params) {
                     stateColorDrawables.normal = _backgroundColor.normal.nativeObject;
                 }
                 else if(TypeUtil.isNumeric(_backgroundColor.normal)) {
-                    if(!('normal' in stateColorDrawables)){
+                    if(!('normal' in stateColorDrawables) || self.isCloned){
                         stateColorDrawables.normal = new NativeGradientDrawable(); 
                     }
                     stateColorDrawables.normal.setColor(_backgroundColor.normal);
@@ -333,7 +342,7 @@ function View(params) {
                     stateColorDrawables.disabled = _backgroundColor.disabled.nativeObject;
                 }
                 else if(TypeUtil.isNumeric(_backgroundColor.disabled)) {
-                    if(!('disabled' in stateColorDrawables)){
+                    if(!('disabled' in stateColorDrawables) || self.isCloned){
                         stateColorDrawables.disabled = new NativeGradientDrawable(); 
                     }
                     stateColorDrawables.disabled.setColor(_backgroundColor.disabled);
@@ -346,7 +355,7 @@ function View(params) {
                     stateColorDrawables.selected = _backgroundColor.selected.nativeObject;
                 }
                 else if(TypeUtil.isNumeric(_backgroundColor.selected)){
-                    if(!('selected' in stateColorDrawables)){
+                    if(!('selected' in stateColorDrawables) || self.isCloned){
                         stateColorDrawables.selected = new NativeGradientDrawable(); 
                     }
                     stateColorDrawables.selected.setColor(_backgroundColor.selected);
@@ -359,7 +368,7 @@ function View(params) {
                     stateColorDrawables.pressed = _backgroundColor.pressed.nativeObject;
                 }
                 else if(TypeUtil.isNumeric(_backgroundColor.pressed)){
-                    if(!('pressed' in stateColorDrawables)){
+                    if(!('pressed' in stateColorDrawables) || self.isCloned){
                         stateColorDrawables.pressed = new NativeGradientDrawable(); 
                     }
                     stateColorDrawables.pressed.setColor(_backgroundColor.pressed);
@@ -372,7 +381,7 @@ function View(params) {
                     stateColorDrawables.focused = _backgroundColor.focused.nativeObject;
                 }
                 else if(TypeUtil.isNumeric(_backgroundColor.focused)){
-                    if(!('focused' in stateColorDrawables)){
+                    if(!('focused' in stateColorDrawables) || self.isCloned){
                         stateColorDrawables.focused = new NativeGradientDrawable(); 
                     }
                     stateColorDrawables.focused.setColor(_backgroundColor.focused);
@@ -392,7 +401,7 @@ function View(params) {
         if(dp_borderWidth >= 0)  {
             radii = [_borderRadius, _borderRadius,_borderRadius,_borderRadius,
                      _borderRadius,_borderRadius,_borderRadius,_borderRadius];
-            if(!rectF){
+            if(!rectF || self.isCloned){
                 rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
             }
             else{
@@ -400,7 +409,7 @@ function View(params) {
             }
             roundRect = new NativeRoundRectShape(radii, rectF, radii);
             
-            if(!borderShapeDrawable){
+            if(!borderShapeDrawable  || self.isCloned){
                 borderShapeDrawable = new NativeShapeDrawable(roundRect);
             }
             else{
@@ -419,24 +428,27 @@ function View(params) {
     }
     
     function setBackground(layerIndex){
-        if(!layerDrawable){
+        // If view used on ListView, create each layer drawable for views. We use one template for all drawable.
+        if(!layerDrawable || self.isCloned){
             layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
             layerDrawable.setId(0,0);
             layerDrawable.setId(1,1);
             layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-            if(borderShapeDrawable){
+            if(borderShapeDrawable || this.isCloned){
                 layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
             }
         }
-        switch (layerIndex){
-            case 0: 
-                layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-                layerDrawable.invalidateDrawable(backgroundDrawable);
-                break;
-            case 1:
-                layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
-                layerDrawable.invalidateDrawable(borderShapeDrawable);
-                break;
+        else{
+            switch (layerIndex){
+                case 0: 
+                    layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
+                    layerDrawable.invalidateDrawable(backgroundDrawable);
+                    break;
+                case 1:
+                    layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+                    layerDrawable.invalidateDrawable(borderShapeDrawable);
+                    break;
+            }
         }
         self.nativeObject.setBackground(layerDrawable);
     }
