@@ -135,7 +135,6 @@ const ListView = extend(View)(
                 value: function() {
                     this.nativeInner.setLayoutManager(linearLayoutManager);
                     this.nativeInner.setAdapter(dataAdapter);
-                    dataAdapter.notifyDataSetChanged();
                 },
                 enumerable: true
             },
