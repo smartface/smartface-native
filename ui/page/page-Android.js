@@ -478,26 +478,17 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
+                item.imageButton = false;
                 if (item.image && item.image.nativeObject) {
-                    var imageCopy = item.image.nativeObject.mutate();
-                    item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
                     itemView = new NativeImageButton(activity);
                     item.nativeObject = itemView;
-                    itemView.setImageDrawable(imageCopy);
+                    item.imageButton = true;
                 }
                 else {
                     itemView = new NativeTextButton(activity);
                     item.nativeObject = itemView;
-                    item.color && itemView.setTextColor(item.color);
-                    itemView.setText(item.title);
                 }
-
-                item.enabled = item.enabled; // for constructor parameter
-                itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                    onClick: function(view) {
-                        item.onPress && item.onPress();
-                    }
-                }));
+                item.setValues();
             }
             itemView.setBackgroundColor(Color.TRANSPARENT);
             
