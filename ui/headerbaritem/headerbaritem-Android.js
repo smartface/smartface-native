@@ -26,7 +26,7 @@ function HeaderBarItem(params) {
                 }
                 _title = value;
                 if (this.nativeObject) {
-                    this.nativeObject.setTitle(_title);
+                    this.nativeObject.setText(_title);
                 }
             },
             enumerable: true
