@@ -20,7 +20,7 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if(!(typeof(value) === "number" || value instanceof Color)) {
-                    new TypeError("color must be Color instance");
+                    throw new TypeError("color must be Color instance");
                     return;
                 }
                 _color = value;
@@ -41,7 +41,7 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if (typeof(value) !== "string") {
-                    new TypeError("title must be string");
+                    throw new TypeError("title must be string");
                     return;
                 }
                 _title = value;
@@ -68,7 +68,7 @@ function HeaderBarItem(params) {
                     }
                 }
                 else {
-                    new TypeError("image must be Image instance.");
+                    throw new TypeError("image must be Image instance.");
                 }
             },
             enumerable: true
@@ -109,7 +109,7 @@ function HeaderBarItem(params) {
                     _onPress = value.bind(this);
                 }
                 else {
-                    new TypeError("onPress must be function.");
+                    throw new TypeError("onPress must be function.");
                 }
             },
             enumerable: true
