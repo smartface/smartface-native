@@ -1,5 +1,6 @@
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("sf-core/ui/color");
 const Image = require("sf-core/ui/image");
 
@@ -10,6 +11,7 @@ function HeaderBarItem(params) {
     var _onPress = null;
     var _color = null;
     var _searchView = null;
+    var _imageButton = false;
     
     Object.defineProperties(this, {
         'color': {
@@ -49,6 +51,10 @@ function HeaderBarItem(params) {
             },
             enumerable: true
         },
+        'imageButton' : {
+            get: function() { return _imageButton; },
+            set: function(value) { _imageButton = value; }
+        },
         'image': {
             get: function() {
                 return _image;
@@ -60,6 +66,9 @@ function HeaderBarItem(params) {
                         var imageCopy = _image.nativeObject.mutate();
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
+                }
+                else {
+                    new TypeError("image must be Image instance.");
                 }
             },
             enumerable: true
@@ -98,6 +107,9 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value instanceof Function) {
                     _onPress = value.bind(this);
+                }
+                else {
+                    new TypeError("onPress must be function.");
                 }
             },
             enumerable: true
