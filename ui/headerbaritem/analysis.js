@@ -4,7 +4,8 @@
  *
  * HeaderBarItem is a button object that can be shown in header bar of a page.
  * Items set to header bar will be shown on the right side of header bar. You
- * can enable/disable items and listen press event.
+ * can enable/disable items and listen press event. If you change title or image
+ * after UI.HeaderBarItem instance is created, you should use UI.HeaderBar.setItems function.
  *
  *     @example
  *     const UI = require('sf-core/ui');
