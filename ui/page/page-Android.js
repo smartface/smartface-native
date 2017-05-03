@@ -489,12 +489,6 @@ function Page(params) {
                     item.nativeObject = itemView;
                 }
                 item.setValues();
-                
-                itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                    onClick: function(view) {
-                        item.onPress && item.onPress();
-                    }
-                }));
             }
             itemView.setBackgroundColor(Color.TRANSPARENT);
             

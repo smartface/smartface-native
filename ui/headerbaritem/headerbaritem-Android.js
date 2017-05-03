@@ -124,6 +124,13 @@ function HeaderBarItem(params) {
                 else {
                     this.title = this.title;
                 }
+                
+                const NativeView = requireClass('android.view.View');
+                this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
+                    onClick: function(view) {
+                        _onPress && _onPress();
+                    }
+                }));
             }
         },
         'toString': {
