@@ -103,10 +103,10 @@ function HeaderBarItem(params) {
             enumerable: true
         },
         'setValues' : {
-            value: function(imageButton) {
+            value: function() {
                 this.color = this.color;
                 this.enabled = this.enabled; 
-                if(imageButton) {
+                if(this.imageButton) {
                     this.image = this.image;
                 }
                 else {
