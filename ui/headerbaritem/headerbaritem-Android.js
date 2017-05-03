@@ -1,3 +1,8 @@
+const NativeTextButton = requireClass('android.widget.Button');
+const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+const Color = require("sf-core/ui/color");
+const Image = require("sf-core/ui/image");
+
 function HeaderBarItem(params) {
     var _title = "";
     var _image = null;
@@ -12,7 +17,19 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
+                if(!(typeof(value) === "number" || value instanceof Color)) {
+                    new TypeError("color must be Color instance");
+                    return;
+                }
                 _color = value;
+                if(this.nativeObject && this.image && this.image.nativeObject) {
+                    var imageCopy = this.image.nativeObject.mutate();
+                    imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
+                    this.nativeObject.setImageDrawable(imageCopy);
+                }
+                else if(this.nativeObject) {
+                    this.nativeObject.setTextColor(_color);
+                }
             },
             enumerable: true
         },
@@ -22,10 +39,11 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 if (typeof(value) !== "string") {
+                    new TypeError("title must be string");
                     return;
                 }
                 _title = value;
-                if (this.nativeObject) {
+                if (this.nativeObject && !this.imageButton) {
                     this.nativeObject.setText(_title);
                 }
             },
@@ -36,10 +54,11 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-                if (value) {
+                if (value instanceof Image) {
                     _image = value;
-                    if (this.nativeObject) {
-                        this.nativeObject.setIcon(_image.nativeObject);
+                    if (this.nativeObject && this.imageButton) {
+                        var imageCopy = _image.nativeObject.mutate();
+                        this.nativeObject.setImageDrawable(imageCopy);
                     }
                 }
             },
@@ -82,6 +101,18 @@ function HeaderBarItem(params) {
                 }
             },
             enumerable: true
+        },
+        'setValues' : {
+            value: function(imageButton) {
+                this.color = this.color;
+                this.enabled = this.enabled; 
+                if(imageButton) {
+                    this.image = this.image;
+                }
+                else {
+                    this.title = this.title;
+                }
+            }
         },
         'toString': {
             value: function(){
