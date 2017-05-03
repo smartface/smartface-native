@@ -19,6 +19,8 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if(!(typeof(value) === "number" || value instanceof Color)) {
                     throw new TypeError("color must be Color instance");
                     return;
@@ -40,6 +42,8 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if (typeof(value) !== "string") {
                     throw new TypeError("title must be string");
                     return;
@@ -60,6 +64,8 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if (value instanceof Image) {
                     _image = value;
                     if (this.nativeObject && this.imageButton) {
