@@ -482,14 +482,17 @@ function Page(params) {
                     var imageCopy = item.image.nativeObject.mutate();
                     item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
                     itemView = new NativeImageButton(activity);
+                    item.nativeObject = itemView;
                     itemView.setImageDrawable(imageCopy);
                 }
                 else {
                     itemView = new NativeTextButton(activity);
+                    item.nativeObject = itemView;
                     item.color && itemView.setTextColor(item.color);
                     itemView.setText(item.title);
                 }
 
+                item.enabled = item.enabled; // for constructor parameter
                 itemView.setOnClickListener(NativeView.OnClickListener.implement({
                     onClick: function(view) {
                         item.onPress && item.onPress();
@@ -521,6 +524,7 @@ function Page(params) {
             actionBar.setHomeAsUpIndicator(null);
         }
     };
+    
      
     // Added to solve AND-2713 bug.
     const NativeView = requireClass('android.view.View');
