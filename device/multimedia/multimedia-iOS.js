@@ -29,13 +29,14 @@ Multimedia.createImagePickerController = function(e){
     this.pickerDelegate =  new __SF_UIImagePickerControllerDelegate();
           
     this.pickerDelegate.imagePickerControllerDidCancel = function(){
+        picker.dismissViewController();
         if (e.onCancel){
             e.onCancel();
         }
-        picker.dismissViewController();
     };
   
     this.pickerDelegate.didFinishPickingMediaWithInfo = function(param){
+        picker.dismissViewController();
         if (e.onSuccess){
             if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image){
                 e.onSuccess({image : Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"])});
@@ -45,7 +46,6 @@ Multimedia.createImagePickerController = function(e){
                 e.onSuccess({video : file});
             }
         }
-        picker.dismissViewController();
     };
     
     picker.delegate = this.pickerDelegate;
