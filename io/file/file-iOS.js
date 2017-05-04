@@ -71,6 +71,16 @@ function File(params) {
         return self.nativeObject.copy(destination);
     }
     
+    this.ios = {};
+    
+    this.ios.getNSURL = function(){
+        if (self.nativeObject.getActualPath()) {
+            return __SF_NSURL.fileURLWithPath(self.nativeObject.getActualPath());
+        }else{
+            return __SF_NSURL.URLWithString(self.nativeObject.getPath());
+        }
+    };
+    
     this.createDirectory = function(withParents){
         var value = true;
         if(typeof withParents === 'boolean'){
