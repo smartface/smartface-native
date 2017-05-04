@@ -20,11 +20,10 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
-                if(value == null)
+                if(value === null)
                     return;
                 if(!(typeof(value) === "number" || value instanceof Color)) {
                     throw new TypeError("color must be Color instance");
-                    return;
                 }
                 _color = value;
                 if(this.nativeObject && this.image && this.image.nativeObject) {
@@ -43,16 +42,19 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if(value == null)
-                    return;
-                if (typeof(value) !== "string") {
-                    throw new TypeError("title must be string");
-                    return;
+                if (value !== null && typeof(value) !== "string") {
+                    throw new TypeError("title must be string or null.");
                 }
                 _title = value;
-                if(!this.nativeObject || (this.nativeObject && this.imageButton)) {
+                if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
+                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                    if(this.paddingVertical !== undefined) 
+                        this.nativeObject.setPadding(this.paddingVertical, this.paddingHorizontal, this.paddingVertical, this.paddingHorizontal);
+                    
                     this.imageButton = false;
+                    if(this.menuItem)
+                        this.menuItem.setActionView(this.nativeObject);
                 }
                 if (this.nativeObject && !this.imageButton) {
                     this.nativeObject.setText(_title);
@@ -69,17 +71,29 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-                if(value == null)
-                    return;
-                if (value instanceof Image) {
+                if (value == null || value instanceof Image) {
                     _image = value;
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
+                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                        if(this.paddingVertical !== undefined && this.paddingHorizontal !== undefined)
+                            this.nativeObject.setPadding(this.paddingVertical, this.paddingHorizontal, this.paddingVertical, this.paddingHorizontal);
+                        
                         this.imageButton = true;
+                        if(this.menuItem) {
+                            this.menuItem.setActionView(this.nativeObject);
+                        }
                     }
                     if (this.nativeObject && this.imageButton) {
-                        var imageCopy = _image.nativeObject.mutate();
-                        this.nativeObject.setImageDrawable(imageCopy);
+                        if(_image) {
+                            var imageCopy = _image.nativeObject.mutate();
+                            this.nativeObject.setImageDrawable(imageCopy);
+                        }
+                        else {
+                            this.nativeObject.setImageDrawable(null);
+                            this.nativeObject = null;
+                            this.title = _title;
+                        }
                     }
                 }
                 else {

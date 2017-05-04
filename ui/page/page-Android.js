@@ -477,16 +477,19 @@ function Page(params) {
                 itemView = item.nativeObject;
                 item.setValues();
             }
-            itemView.setBackgroundColor(Color.TRANSPARENT);
-            
-            // left, top, right, bottom
-            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal);
-
-            var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
-            menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            menuItem.setActionView(itemView);
-
+            if(itemView) { 
+                itemView.setBackgroundColor(Color.TRANSPARENT);
+                
+                // left, top, right, bottom
+                itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal);
+                item.paddingVertical = paddingVertical;
+                item.paddingHorizontal = paddingHorizontal;
+                
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                item.menuItem.setEnabled(item.enabled);
+                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setActionView(itemView);
+            }
         });
     };
 
