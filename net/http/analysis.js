@@ -128,8 +128,9 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.user Username for authorization if needed
  * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
- * @param {Blob} onLoad.body
- * @param {Object} onLoad.headers
+ * @param {Object} onLoad.params
+ * @param {Blob} onLoad.params.body
+ * @param {Object} onLoad.params.headers
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
