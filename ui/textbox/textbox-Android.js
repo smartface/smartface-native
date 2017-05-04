@@ -132,12 +132,7 @@ const TextBox = extend(Label)(
             },
             'hideKeyboard': {
                 value: function(){
-                    // Force clear focus
                     self.nativeObject.clearFocus();
-                    self.nativeObject.setFocusableInTouchMode(false);
-                    self.nativeObject.setFocusable(false);
-                    self.nativeObject.setFocusableInTouchMode(true);
-                    self.nativeObject.setFocusable(true);
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = self.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
