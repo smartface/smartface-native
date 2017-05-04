@@ -461,14 +461,10 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const NativeImageButton = requireClass('android.widget.ImageButton');
-        const NativeTextButton = requireClass('android.widget.Button');
-        const NativeView = requireClass('android.view.View');
-        const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+        const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
-        var paddingVertical = AndroidUnitConverter.dpToPixel(12);
-        var paddingHorizontal = AndroidUnitConverter.dpToPixel(10);
+        
         optionsMenu.clear();
 
         var itemID = 1;
@@ -478,34 +474,21 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                if (item.image && item.image.nativeObject) {
-                    var imageCopy = item.image.nativeObject.mutate();
-                    item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
-                    itemView = new NativeImageButton(activity);
-                    itemView.setImageDrawable(imageCopy);
-                }
-                else {
-                    itemView = new NativeTextButton(activity);
-                    item.color && itemView.setTextColor(item.color);
-                    itemView.setText(item.title);
-                }
-
-                itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                    onClick: function(view) {
-                        item.onPress && item.onPress();
-                    }
-                }));
+                itemView = item.nativeObject;
+                item.setValues();
             }
-            itemView.setBackgroundColor(Color.TRANSPARENT);
-            
-            // left, top, right, bottom
-            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
-
-            var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
-            menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            menuItem.setActionView(itemView);
-
+            if(itemView) { 
+                itemView.setBackgroundColor(Color.TRANSPARENT);
+                // left, top, right, bottom
+                itemView.setPadding(
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                );
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                item.menuItem.setEnabled(item.enabled);
+                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setActionView(itemView);
+            }
         });
     };
 
