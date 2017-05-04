@@ -28,6 +28,7 @@ var http = {};
  * @param {String} url URL of file
  * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
+ * @param {IO.File} onLoad.e
  * @param {Function} onError Callback for error case
  * @return {Net.Http.Request}
  * @since 0.1
@@ -42,6 +43,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {}
  * 
  * @param {String} url URL of Image
  * @param {Function} onLoad Callback for success case
+ * @param {UI.Image} onLoad.e
  * @param {Function} onError Callback for error case
  * @return {Net.Http.Request}
  * @since 0.1
@@ -56,6 +58,7 @@ http.requestImage = function(url, onLoad, onError) {}
  * 
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
+ * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
  * @return {Net.Http.Request}
  * @since 0.1
@@ -70,6 +73,7 @@ http.requestString = function(url, onLoad, onError) {}
  * 
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
+ * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
  * @return {Net.Http.Request}
  * @since 0.1
@@ -112,6 +116,8 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.user Username for authorization if needed
  * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
+ * @param {Blob} onLoad.body
+ * @param {Object} onLoad.headers
  * @param {Function} onError Callback for error case
  * @return {Net.Http.Request}
  * @since 0.1
