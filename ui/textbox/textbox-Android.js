@@ -132,10 +132,16 @@ const TextBox = extend(Label)(
             },
             'hideKeyboard': {
                 value: function(){
+                    // Force clear focus
                     self.nativeObject.clearFocus();
+                    self.nativeObject.setFocusableInTouchMode(false);
+                    self.nativeObject.setFocusable(false);
+                    self.nativeObject.setFocusableInTouchMode(true);
+                    self.nativeObject.setFocusable(true);
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = self.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+                    
                 },
                 enumerable: true
             },
@@ -239,6 +245,24 @@ const TextBox = extend(Label)(
                 }
             }));
         }
+        
+        // Always return false for using both touch and focus events. 
+        // It will not broke events on scrollable parents. Solves: AND-2798
+        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+            onTouch: function(view, event) {
+                if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
+                    // MotionEvent.ACTION_UP
+                    if (event.getAction() === 1) {
+                        self.onTouchEnded && self.onTouchEnded();
+                    } 
+                    // MotionEvent.ACTION_DOWN
+                    else if(event.getAction() === 0) {
+                        self.onTouch && self.onTouch();
+                    }
+                }
+                return false;
+            }
+        }));
         
         // Assign parameters given in constructor
         if (params) {
