@@ -3,7 +3,7 @@ const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("sf-core/ui/color");
 const Image = require("sf-core/ui/image");
-const HeaderBarItemPadding = require("sf-core/ui/headerbaritem/android_constants");
+const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
 
 function HeaderBarItem(params) {
     var _title = "";
