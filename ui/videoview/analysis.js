@@ -30,6 +30,11 @@ const VideoView = extend(View)(
 
         Object.defineProperties(self, {
             /**
+             * @property backgroundColor
+             * @hide
+             */
+
+            /**
              * This function plays the loaded video clip.
              *
              * @method play
