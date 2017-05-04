@@ -3,9 +3,7 @@ const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("sf-core/ui/color");
 const Image = require("sf-core/ui/image");
-
-HeaderBarItem.paddingHorizontal;
-HeaderBarItem.paddingVertical;
+const HeaderBarItemPadding = require("sf-core/ui/headerbaritem/android_constants");
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -56,8 +54,10 @@ function HeaderBarItem(params) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
-                    if(HeaderBarItem.paddingVertical !== undefined && HeaderBarItem.paddingHorizontal !== undefined) 
-                        this.nativeObject.setPadding(HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal, HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal);
+                    this.nativeObject.setPadding(
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                    );
                     
                     this.imageButton = false;
                     if(this.menuItem)
@@ -87,9 +87,11 @@ function HeaderBarItem(params) {
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
-                        if(HeaderBarItem.paddingVertical !== undefined && HeaderBarItem.paddingHorizontal !== undefined)
-                            this.nativeObject.setPadding(HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal, HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal);
-                        
+                        this.nativeObject.setPadding(
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                        );
+                    
                         this.imageButton = true;
                         if(this.menuItem) {
                             this.menuItem.setActionView(this.nativeObject);

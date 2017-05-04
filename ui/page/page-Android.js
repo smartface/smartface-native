@@ -461,11 +461,9 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItem = require("sf-core/ui/headerbaritem");
+        const HeaderBarItemPadding = require("sf-core/ui/headerbaritem/android_constants");
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
-        HeaderBarItem.paddingHorizontal = AndroidUnitConverter.dpToPixel(12);
-        HeaderBarItem.paddingVertical = AndroidUnitConverter.dpToPixel(10);
         
         optionsMenu.clear();
 
@@ -483,8 +481,8 @@ function Page(params) {
                 itemView.setBackgroundColor(Color.TRANSPARENT);
                 // left, top, right, bottom
                 itemView.setPadding(
-                    HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal,
-                    HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                 );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
