@@ -12,6 +12,7 @@ function HeaderBarItem(params) {
     var _color = null;
     var _searchView = null;
     var _imageButton = false;
+    var activity = Android.getActivity();
     
     Object.defineProperties(this, {
         'color': {
@@ -49,6 +50,10 @@ function HeaderBarItem(params) {
                     return;
                 }
                 _title = value;
+                if(!this.nativeObject || (this.nativeObject && this.imageButton)) {
+                    this.nativeObject = new NativeTextButton(activity);
+                    this.imageButton = false;
+                }
                 if (this.nativeObject && !this.imageButton) {
                     this.nativeObject.setText(_title);
                 }
@@ -68,6 +73,10 @@ function HeaderBarItem(params) {
                     return;
                 if (value instanceof Image) {
                     _image = value;
+                    if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
+                        this.nativeObject = new NativeImageButton(activity);
+                        this.imageButton = true;
+                    }
                     if (this.nativeObject && this.imageButton) {
                         var imageCopy = _image.nativeObject.mutate();
                         this.nativeObject.setImageDrawable(imageCopy);

@@ -461,10 +461,6 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const NativeImageButton = requireClass('android.widget.ImageButton');
-        const NativeTextButton = requireClass('android.widget.Button');
-        const NativeView = requireClass('android.view.View');
-        const NativePorterDuff = requireClass('android.graphics.PorterDuff');
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
         var paddingVertical = AndroidUnitConverter.dpToPixel(12);
@@ -478,22 +474,13 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                item.imageButton = false;
-                if (item.image && item.image.nativeObject) {
-                    itemView = new NativeImageButton(activity);
-                    item.nativeObject = itemView;
-                    item.imageButton = true;
-                }
-                else {
-                    itemView = new NativeTextButton(activity);
-                    item.nativeObject = itemView;
-                }
+                itemView = item.nativeObject;
                 item.setValues();
             }
             itemView.setBackgroundColor(Color.TRANSPARENT);
             
             // left, top, right, bottom
-            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
+            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal);
 
             var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
             menuItem.setEnabled(item.enabled);
