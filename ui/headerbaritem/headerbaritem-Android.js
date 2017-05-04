@@ -4,6 +4,9 @@ const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("sf-core/ui/color");
 const Image = require("sf-core/ui/image");
 
+HeaderBarItem.paddingHorizontal;
+HeaderBarItem.paddingVertical;
+
 function HeaderBarItem(params) {
     var _title = "";
     var _image = null;
@@ -12,6 +15,7 @@ function HeaderBarItem(params) {
     var _color = null;
     var _searchView = null;
     var _imageButton = false;
+    var _menuItem = null;
     var activity = Android.getActivity();
     
     Object.defineProperties(this, {
@@ -20,20 +24,21 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
-                if(value == null)
+                if(value === null)
                     return;
                 if(!(typeof(value) === "number" || value instanceof Color)) {
                     throw new TypeError("color must be Color instance");
-                    return;
                 }
                 _color = value;
-                if(this.nativeObject && this.image && this.image.nativeObject) {
-                    var imageCopy = this.image.nativeObject.mutate();
-                    imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
-                    this.nativeObject.setImageDrawable(imageCopy);
-                }
-                else if(this.nativeObject) {
-                    this.nativeObject.setTextColor(_color);
+                if(this.nativeObject) {
+                    if(this.image && this.image.nativeObject) {
+                        var imageCopy = this.image.nativeObject.mutate();
+                        imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
+                        this.nativeObject.setImageDrawable(imageCopy);
+                    }
+                    else {
+                        this.nativeObject.setTextColor(_color);
+                    }
                 }
             },
             enumerable: true
@@ -43,18 +48,22 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if(value == null)
-                    return;
-                if (typeof(value) !== "string") {
-                    throw new TypeError("title must be string");
-                    return;
+                if (value !== null && typeof(value) !== "string") {
+                    throw new TypeError("title must be string or null.");
                 }
                 _title = value;
-                if(!this.nativeObject || (this.nativeObject && this.imageButton)) {
+                if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
+                    this.nativeObject.setText(_title);
+                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                    if(HeaderBarItem.paddingVertical !== undefined && HeaderBarItem.paddingHorizontal !== undefined) 
+                        this.nativeObject.setPadding(HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal, HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal);
+                    
                     this.imageButton = false;
+                    if(this.menuItem)
+                        this.menuItem.setActionView(this.nativeObject);
                 }
-                if (this.nativeObject && !this.imageButton) {
+                else if(!this.imageButton) {
                     this.nativeObject.setText(_title);
                 }
             },
@@ -64,22 +73,38 @@ function HeaderBarItem(params) {
             get: function() { return _imageButton; },
             set: function(value) { _imageButton = value; }
         },
+        'menuItem' : {
+            get: function() { return _menuItem; },
+            set: function(value) { _menuItem = value; }
+        },
         'image': {
             get: function() {
                 return _image;
             },
             set: function(value) {
-                if(value == null)
-                    return;
-                if (value instanceof Image) {
+                if (value === null || value instanceof Image) {
                     _image = value;
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
+                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                        if(HeaderBarItem.paddingVertical !== undefined && HeaderBarItem.paddingHorizontal !== undefined)
+                            this.nativeObject.setPadding(HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal, HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal);
+                        
                         this.imageButton = true;
+                        if(this.menuItem) {
+                            this.menuItem.setActionView(this.nativeObject);
+                        }
                     }
                     if (this.nativeObject && this.imageButton) {
-                        var imageCopy = _image.nativeObject.mutate();
-                        this.nativeObject.setImageDrawable(imageCopy);
+                        if(_image) {
+                            var imageCopy = _image.nativeObject.mutate();
+                            this.nativeObject.setImageDrawable(imageCopy);
+                        }
+                        else {
+                            this.nativeObject.setImageDrawable(null);
+                            this.nativeObject = null;
+                            this.title = _title;
+                        }
                     }
                 }
                 else {

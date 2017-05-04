@@ -461,10 +461,12 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
+        const HeaderBarItem = require("sf-core/ui/headerbaritem");
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
-        var paddingVertical = AndroidUnitConverter.dpToPixel(12);
-        var paddingHorizontal = AndroidUnitConverter.dpToPixel(10);
+        HeaderBarItem.paddingHorizontal = AndroidUnitConverter.dpToPixel(12);
+        HeaderBarItem.paddingVertical = AndroidUnitConverter.dpToPixel(10);
+        
         optionsMenu.clear();
 
         var itemID = 1;
@@ -477,16 +479,18 @@ function Page(params) {
                 itemView = item.nativeObject;
                 item.setValues();
             }
-            itemView.setBackgroundColor(Color.TRANSPARENT);
-            
-            // left, top, right, bottom
-            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal);
-
-            var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
-            menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            menuItem.setActionView(itemView);
-
+            if(itemView) { 
+                itemView.setBackgroundColor(Color.TRANSPARENT);
+                // left, top, right, bottom
+                itemView.setPadding(
+                    HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal,
+                    HeaderBarItem.paddingVertical, HeaderBarItem.paddingHorizontal
+                );
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                item.menuItem.setEnabled(item.enabled);
+                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setActionView(itemView);
+            }
         });
     };
 
