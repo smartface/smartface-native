@@ -29,8 +29,9 @@ var http = {};
  * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -45,8 +46,9 @@ http.requestFile = function(url, fileName, onLoad, onError) {};
  * @param {String} url URL of Image
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -61,8 +63,9 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -77,8 +80,9 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -121,8 +125,9 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
