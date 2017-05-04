@@ -141,7 +141,6 @@ const TextBox = extend(Label)(
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = self.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
-                    
                 },
                 enumerable: true
             },
