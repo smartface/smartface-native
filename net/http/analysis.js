@@ -29,10 +29,12 @@ var http = {};
  * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
  * @param {Function} onError Callback for error case
+ * @param {String} onError.message
+ * @param {String} onError.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
-http.requestFile = function(url, fileName, onLoad, onError) {}
+http.requestFile = function(url, fileName, onLoad, onError) {};
 
 /**
  * @method requestImage
@@ -140,12 +142,7 @@ const Request = function() {
      * 
      * @since 0.1
      */
-    Object.defineProperties(this, {
-        'cancel': {
-            value: function() {}
-        }
-    });
-
+    this.cancel = function(){};
 };
 
 module.exports = http;
