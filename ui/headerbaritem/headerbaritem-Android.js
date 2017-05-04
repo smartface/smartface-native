@@ -12,6 +12,7 @@ function HeaderBarItem(params) {
     var _color = null;
     var _searchView = null;
     var _imageButton = false;
+    var activity = Android.getActivity();
     
     Object.defineProperties(this, {
         'color': {
@@ -19,8 +20,10 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if(!(typeof(value) === "number" || value instanceof Color)) {
-                    new TypeError("color must be Color instance");
+                    throw new TypeError("color must be Color instance");
                     return;
                 }
                 _color = value;
@@ -40,11 +43,17 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if (typeof(value) !== "string") {
-                    new TypeError("title must be string");
+                    throw new TypeError("title must be string");
                     return;
                 }
                 _title = value;
+                if(!this.nativeObject || (this.nativeObject && this.imageButton)) {
+                    this.nativeObject = new NativeTextButton(activity);
+                    this.imageButton = false;
+                }
                 if (this.nativeObject && !this.imageButton) {
                     this.nativeObject.setText(_title);
                 }
@@ -60,15 +69,21 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
+                if(value == null)
+                    return;
                 if (value instanceof Image) {
                     _image = value;
+                    if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
+                        this.nativeObject = new NativeImageButton(activity);
+                        this.imageButton = true;
+                    }
                     if (this.nativeObject && this.imageButton) {
                         var imageCopy = _image.nativeObject.mutate();
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
                 }
                 else {
-                    new TypeError("image must be Image instance.");
+                    throw new TypeError("image must be Image instance.");
                 }
             },
             enumerable: true
@@ -109,7 +124,7 @@ function HeaderBarItem(params) {
                     _onPress = value.bind(this);
                 }
                 else {
-                    new TypeError("onPress must be function.");
+                    throw new TypeError("onPress must be function.");
                 }
             },
             enumerable: true
