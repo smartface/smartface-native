@@ -26,13 +26,15 @@ function HeaderBarItem(params) {
                     throw new TypeError("color must be Color instance");
                 }
                 _color = value;
-                if(this.nativeObject && this.image && this.image.nativeObject) {
-                    var imageCopy = this.image.nativeObject.mutate();
-                    imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
-                    this.nativeObject.setImageDrawable(imageCopy);
-                }
-                else if(this.nativeObject) {
-                    this.nativeObject.setTextColor(_color);
+                if(this.nativeObject) {
+                    if(this.image && this.image.nativeObject) {
+                        var imageCopy = this.image.nativeObject.mutate();
+                        imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
+                        this.nativeObject.setImageDrawable(imageCopy);
+                    }
+                    else {
+                        this.nativeObject.setTextColor(_color);
+                    }
                 }
             },
             enumerable: true
@@ -48,15 +50,16 @@ function HeaderBarItem(params) {
                 _title = value;
                 if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
+                    this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
-                    if(this.paddingVertical !== undefined) 
+                    if(this.paddingVertical !== undefined && this.paddingHorizontal !== undefined) 
                         this.nativeObject.setPadding(this.paddingVertical, this.paddingHorizontal, this.paddingVertical, this.paddingHorizontal);
                     
                     this.imageButton = false;
                     if(this.menuItem)
                         this.menuItem.setActionView(this.nativeObject);
                 }
-                if (this.nativeObject && !this.imageButton) {
+                else if(!this.imageButton) {
                     this.nativeObject.setText(_title);
                 }
             },
@@ -71,7 +74,7 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-                if (value == null || value instanceof Image) {
+                if (value === null || value instanceof Image) {
                     _image = value;
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
