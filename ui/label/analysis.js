@@ -72,7 +72,7 @@ const Label = extend(View)(
         this.multiline = false;
         
         /**
-         * Enables/disables selectable status of a Label. If set to true
+         * Enables/disables selectable status of the Label. If set to true
          * the text inside the Label will be selectable.
          *
          * @property {Boolean} [selectable = false]
