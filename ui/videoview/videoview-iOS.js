@@ -30,16 +30,7 @@ const VideoView = extend(View)(
         
         self.loadFile = function(value){
             self.avPlayerViewController.removeObserver();
-            var asset = value.split("://");
-            var url;
-            if(asset[0] == "assets-library"){
-                var url = __SF_NSURL.URLWithString(value);
-            }else{
-                var filePath = new File({path:value});
-                var actualPath = filePath.nativeObject.getActualPath();
-                var url = __SF_NSURL.fileURLWithPath(actualPath);
-            }
-            
+            var url = value.ios.getNSURL();
             self.avPlayer = __SF_AVPlayer.createFromURL(url);
             self.avPlayerViewController.player = self.avPlayer;
             self.avPlayerViewController.videoGravity = "AVLayerVideoGravityResizeAspect";
