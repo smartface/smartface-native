@@ -1,4 +1,5 @@
 const Image = require("sf-core/ui/image");
+const File = require("sf-core/io/file");
 
 const UIImagePickerControllerSourceType = {
     photoLibrary : 0,
@@ -40,7 +41,8 @@ Multimedia.createImagePickerController = function(e){
                 e.onSuccess({image : Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"])});
             }else if(param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video){
                 var videoURL = param.info["UIImagePickerControllerReferenceURL"];
-                e.onSuccess({video : videoURL.absoluteString});
+                var file = new File({path:videoURL.absoluteString});
+                e.onSuccess({video : file});
             }
         }
         picker.dismissViewController();
