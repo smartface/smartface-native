@@ -461,7 +461,7 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("sf-core/ui/headerbaritem/android_constants");
+        const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
         
