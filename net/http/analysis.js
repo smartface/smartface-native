@@ -30,8 +30,9 @@ var http = {};
  * @param {Function} onLoad Callback for success case
  * @param {IO.File} onLoad.e
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -47,8 +48,9 @@ http.requestFile = function(url, fileName, onLoad, onError) {};
  * @param {Function} onLoad Callback for success case
  * @param {UI.Image} onLoad.e
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -64,8 +66,9 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -81,8 +84,9 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -127,8 +131,9 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {Blob} onLoad.body
  * @param {Object} onLoad.headers
  * @param {Function} onError Callback for error case
- * @param {String} onError.message
- * @param {String} onError.statusCode
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
