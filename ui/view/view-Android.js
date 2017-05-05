@@ -152,6 +152,18 @@ function View(params) {
             },
             enumerable: true
         },
+        'enabled': {
+            get: function() {
+                return this.nativeObject.isEnabled();
+            },
+            set: function(enabled) {
+                if(TypeUtil.isBoolean(enabled)){
+                    this.nativeObject.setEnabled(enabled);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
         'touchEnabled': {
             get: function() {
                 return _touchEnabled;

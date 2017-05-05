@@ -47,7 +47,8 @@ const SliderDrawer = extend(FlexLayout)(
                         this.attachedPages.setDrawerLocked(!enabled);
                     }
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'layout': {
                 value: this,
