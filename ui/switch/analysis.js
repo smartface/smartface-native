@@ -24,7 +24,7 @@ const Switch = extend(View)(
      *     var mySwitch = new Switch();
      *     mySwitch.enabled = false;
      *
-     * @since 0.1
+     * @since 1.1.8
      * @property {Boolean} [enabled = true]
      * @android
      * @ios
