@@ -10,27 +10,33 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const MapView = require('sf-core/ui/mapview');
  *     var myMapView = new MapView({
- *         flexGrow :1,
-           alignSelf : FlexLayout.AlignSelf.STRETCH,
+ *         flexGrow: 1,
+ *         alignSelf: FlexLayout.AlignSelf.STRETCH,
  *         onCreate: function() {
  *             myMapView.centerLocation = {
- *                 latitude: 41.0209078,
- *                 longitude: 29.0039533
+ *                 latitude: 37.4488259,
+ *                 longitude: -122.1600047
  *             };
  *             var myPin = new MapView.Pin({
  *                 location: {
- *                     latitude: 40.9768982,
- *                     longitude: 28.8146
- *                  },
- *                  title: 'Ataturk Airport',
- *                  subtitle: 'LTBA',
- *                  color: Color.CYAN
+ *                     latitude: 37.4488259,
+ *                     longitude: -122.1600047
+ *                 },
+ *                 title: 'Smartface Inc.',
+ *                 subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
+ *                 color: Color.RED,
+ *                 onPress: function() {
+ *                     const Application = require('sf-core/application');
+ *                     Application.call("geo:" + myPin.location.latitude + ',' + myPin.location.longitude, {
+ *                         'hl': 'en',
+ *                     });
+ *                 }
  *             });
  *             myMapView.addPin(myPin);
  *        }
  *     });
  *     myPage.layout.addChild(myMapView);
- *
+ * 
  */
 const MapView = extend(View)(
     function (_super, params) {
