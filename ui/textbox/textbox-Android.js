@@ -240,6 +240,24 @@ const TextBox = extend(Label)(
             }));
         }
         
+        // Always return false for using both touch and focus events. 
+        // It will not broke events on scrollable parents. Solves: AND-2798
+        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+            onTouch: function(view, event) {
+                if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
+                    // MotionEvent.ACTION_UP
+                    if (event.getAction() === 1) {
+                        self.onTouchEnded && self.onTouchEnded();
+                    } 
+                    // MotionEvent.ACTION_DOWN
+                    else if(event.getAction() === 0) {
+                        self.onTouch && self.onTouch();
+                    }
+                }
+                return false;
+            }
+        }));
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -253,13 +271,12 @@ function setKeyboardType(self){
     self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
     
     if(self.isPassword){
-        var inputType = NativeKeyboardType[self.keyboardType];
-        if(NumberInputTypeIndex.indexOf(self.keyboardType) >= 0) {
-            self.nativeObject.setInputType(inputType | NativePasswordType.NUMBER);
-        }
-        else {
-            self.nativeObject.setInputType(inputType | NativePasswordType.TEXT);
-        }
+        const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
+        var passwordMethod = new NativePasswordTransformationMethod();
+        self.nativeObject.setTransformationMethod(passwordMethod);
+    }
+    else{
+        self.nativeObject.setTransformationMethod(null);
     }
 }
 
