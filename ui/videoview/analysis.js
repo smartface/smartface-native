@@ -35,6 +35,26 @@ const VideoView = extend(View)(
              */
 
             /**
+             * @property backgroundImage
+             * @hide
+             */
+
+            /**
+             * @property borderColor
+             * @hide
+             */
+
+            /**
+             * @property borderRadius
+             * @hide
+             */
+
+            /**
+             * @property borderWidth
+             * @hide
+             */
+
+            /**
              * This function plays the loaded video clip.
              *
              * @method play
