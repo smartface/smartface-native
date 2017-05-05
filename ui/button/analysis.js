@@ -101,7 +101,7 @@ const Button = extend(View)(
         this.enabled = true;
 
         /**
-         * Gets/sets background imageof a Button.
+         * Gets/sets background image of a Button.
          *
          *     @example
          *     const Image = require('sf-core/ui/image');
@@ -129,6 +129,37 @@ const Button = extend(View)(
          * @ios
          */
         this.backgroundImage = {};
+
+        /**
+         * Gets/sets background color of a Button. You can assign a color or 
+         * an object that contains colors depending on the state of the button.
+         *
+         *     @example
+         *     const Button = require('sf-core/ui/button');
+         *     const Color = require('sf-core/ui/color');
+         *     var myButton = new Button();
+         * 
+         *     // background color of the button
+         *     myButton.backgroundColor = Color.GREEN;
+         * 
+         *     // colors depending on the state of the button
+         *     myButton.backgroundColor = {
+         *         normal: Color.RED,
+         *         disabled: Color.GRAY,
+         *         pressed: Color.BLUE,
+         *     };
+         * 
+         * @since 0.1
+         * @property {Object} [backgroundColor = {}]
+         * @property {UI.Color} backgroundColor.normal
+         * @property {UI.Color} backgroundColor.disabled
+         * @property {UI.Color} backgroundColor.selected
+         * @property {UI.Color} backgroundColor.pressed
+         * @property {UI.Color} backgroundColor.focused
+         * @android
+         * @ios
+         */
+        this.backgroundColor = {};
 
         /**
          * Gets/sets press event callback for a Button.
