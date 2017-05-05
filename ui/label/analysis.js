@@ -78,7 +78,7 @@ const Label = extend(View)(
          * @property {Boolean} [selectable = false]
          * @android
          * @ios
-         * @since 0.1
+         * @since 1.1.8
          */
         this.selectable = false;
 
