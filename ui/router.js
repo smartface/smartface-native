@@ -149,7 +149,7 @@ Router.go = function(to, parameters, animated) {
  * @android
  * @ios
  */
-Router.goBack = function(to, animated) {
+Router.goBack = function(to, parameters, animated) {
     if (!pagesInstance || history.length <= 1) {
         return false;
     }
@@ -160,6 +160,10 @@ Router.goBack = function(to, animated) {
         if (pagesInstance.popTo(item.path, item.page)) {
             current && current.page.onHide && current.page.onHide();
             history.splice(history.indexOf(item)+1);
+            if(history.length > 0) {
+                current = history[history.length-1];
+                current.page.__pendingParameters = parameters;
+            }
             return true;
         }
     } else {
