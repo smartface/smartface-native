@@ -107,7 +107,7 @@ Router.add = function(to, page, isSingleton) {
  * use UI.Router.goBack to navigate them if they're in the history.
  * 
  * @param {String} to Route path to go
- * @param {Object} parameters Parameters to be passed onShow callback of
+ * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
  *                            navigated page 
  * @param {Boolean} animated Navigate with animation, if not given it is set to
  *                           true as default
