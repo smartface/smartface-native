@@ -271,13 +271,12 @@ function setKeyboardType(self){
     self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
     
     if(self.isPassword){
-        var inputType = NativeKeyboardType[self.keyboardType];
-        if(NumberInputTypeIndex.indexOf(self.keyboardType) >= 0) {
-            self.nativeObject.setInputType(inputType | NativePasswordType.NUMBER);
-        }
-        else {
-            self.nativeObject.setInputType(inputType | NativePasswordType.TEXT);
-        }
+        const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
+        var passwordMethod = new NativePasswordTransformationMethod();
+        self.nativeObject.setTransformationMethod(passwordMethod);
+    }
+    else{
+        self.nativeObject.setTransformationMethod(null);
     }
 }
 
