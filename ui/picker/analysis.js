@@ -4,7 +4,7 @@
  *
  * Picker is a UIView that allows you to create a list which you can pick only one of them.
  * You can add Picker as a View to your layout. If you want to show Picker as a dialog,
- * you can call show() method.
+ * you can call UI.Picker.show method.
  *
  *     @example
  *     const Picker = require("sf-core/ui/picker");
