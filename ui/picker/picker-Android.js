@@ -40,15 +40,6 @@ const Picker = extend(View)(
                 },
                 enumerable: true
             },
-            'enabled': {
-                get: function() {
-                    return self.nativeObject.isEnabled();
-                },
-                set: function(enabled) {
-                    self.nativeObject.setEnabled(enabled);
-                },
-                enumerable: true
-            },
             'onSelected': {
                 get: function() {
                     return _onSelected;

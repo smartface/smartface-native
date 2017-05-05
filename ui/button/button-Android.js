@@ -16,17 +16,6 @@ const Button = extend(Label)(
         _super(this);
         
         Object.defineProperties(this, {
-            'enabled': {
-                get: function() {
-                    return this.nativeObject.isEnabled();
-                },
-                set: function(enabled) {
-                    if(TypeUtil.isBoolean(enabled)){
-                        this.nativeObject.setEnabled(enabled);
-                    }
-                },
-                enumerable: true
-            },
             'onPress': {
                 get: function() {
                     return _onPress;
