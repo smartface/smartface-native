@@ -40,6 +40,16 @@ function Picker() {
      * @since 0.1
      */
     this.items = [];
+    
+    /**
+     * Enables/disables the Picker.
+     *
+     * @since 1.1.8
+     * @property {Boolean} [enabled = true]
+     * @android
+     * @ios
+     */
+    this.enabled = true;
 
     /**
      * Gets/sets current index of the picker.
