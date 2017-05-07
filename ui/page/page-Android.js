@@ -44,7 +44,6 @@ function Page(params) {
     });
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
-    
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
@@ -512,6 +511,18 @@ function Page(params) {
             return true;
         }
     }));
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if( keyCode === 4 && keyEvent.getAction() === 0) {
+                   typeof self.android.onBackButtonPressed === "function" && 
+                            self.android.onBackButtonPressed();
+            }
+            return true;
+        }
+    }));
+    self.layout.nativeObject.setFocusable(true);
+    self.layout.nativeObject.setFocusableInTouchMode(true);
 
     // Default values
     self.statusBar.visible = true;

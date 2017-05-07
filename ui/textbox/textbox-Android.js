@@ -6,6 +6,11 @@ const ActionKeyType     = require('../actionkeytype');
 const TextAlignment     = require('sf-core/ui/textalignment');
 const AndroidConfig     = require('sf-core/util/Android/androidconfig');
 
+const NativeR               = requireClass(AndroidConfig.packageName + '.R');
+
+var activity = Android.getActivity();
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
+
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -226,6 +231,7 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
+                        self.hideKeyboard();
                     }
                 }
             }));
@@ -236,6 +242,16 @@ const TextBox = extend(Label)(
                         _onActionButtonPress && _onActionButtonPress({actionKeyType: _actionKeyType});
                     }
                     return false;
+                }
+            }));
+            
+            self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                onKey: function( view, keyCode, keyEvent) {
+                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                    if(keyCode === 4 && keyEvent.getAction() === 1) {
+                        self.nativeObject.clearFocus();
+                    }
+                    return true;
                 }
             }));
         }
