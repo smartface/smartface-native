@@ -67,7 +67,7 @@ Contacts.add = function(params) {
 };
 
 Contacts.pick = function(params) {
-    if(!(params && params.page)){
+    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
         throw new TypeError('Page parameter required');
     }
     _onSuccess = params.onSuccess;
