@@ -47,9 +47,9 @@ function Picker() {
      * @since 1.1.8
      * @property {Boolean} [enabled = true]
      * @android
-     * @ios
      */
-    this.enabled = true;
+    this.android = {};
+    this.android.enabled = true;
 
     /**
      * Gets/sets current index of the picker.

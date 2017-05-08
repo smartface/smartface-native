@@ -20,6 +20,7 @@ const Picker = extend(View)(
         
         var _items = [];
         var _onSelected;
+        this.android = {};
         Object.defineProperties(this,{
             'items': {
                 get: function() {
@@ -37,15 +38,6 @@ const Picker = extend(View)(
                 },
                 set: function(currentIndex) {
                     self.nativeObject.setValue(currentIndex);
-                },
-                enumerable: true
-            },
-            'enabled': {
-                get: function() {
-                    return self.nativeObject.isEnabled();
-                },
-                set: function(enabled) {
-                    self.nativeObject.setEnabled(enabled);
                 },
                 enumerable: true
             },
@@ -92,6 +84,19 @@ const Picker = extend(View)(
                 enumerable: true, 
                 configurable: true
             }
+        });
+        Object.defineProperty(this.android,'enabled', {
+            get: function() {
+                return self.nativeObject.isEnabled();  
+            }, 
+            set: function(value) {
+                console.log("picker enabled");
+                if(typeof(value) === "boolean")
+                    self.nativeObject.setEnabled(value);
+                else 
+                    new TypeError("enabled property's value should be boolean.");
+            },
+            enumerable: true
         });
 
         if(!this.isNotSetDefaults){
