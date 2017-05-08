@@ -73,6 +73,7 @@ const Picker = extend(View)(
         self.nativeObject.delegate = self.pickerDelegate;
         
         this.ios = {};
+        this.android = {};
         
         Object.defineProperty(this.ios, 'rowHeight', {
             get: function() {
