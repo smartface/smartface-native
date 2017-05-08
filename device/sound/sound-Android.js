@@ -127,11 +127,11 @@ Sound.android.pick = function(params) {
     var intent = new NativeIntent();
     intent.setType("audio/*");
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-    if(params && params.page){
-        params.page.nativeObject.startActivityForResult(intent, Sound.PICK_SOUND);
+    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
+        getCurrentPageFragment().startActivityForResult(intent, Sound.PICK_SOUND);
     }
     else{
-        getCurrentPageFragment().startActivityForResult(intent, Sound.PICK_SOUND);
+        params.page.nativeObject.startActivityForResult(intent, Sound.PICK_SOUND);
     }
 };
 
