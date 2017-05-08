@@ -105,7 +105,8 @@ function View(params) {
                 _backgroundImages = backgroundImage;
                 setBackgroundImage();
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'id': {
             get: function() {
@@ -124,7 +125,8 @@ function View(params) {
                 _backgroundColor = backgroundColor;
                 setBackgroundColor();
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'borderColor': {
             get: function() {
@@ -134,7 +136,8 @@ function View(params) {
                 _borderColor = value;
                 setBorder();
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'borderRadius': {
             get: function() {
@@ -150,7 +153,8 @@ function View(params) {
                     setBackgroundColor();
                 }
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'touchEnabled': {
             get: function() {
@@ -778,7 +782,8 @@ function View(params) {
                 self.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderWidth);
                 setBorder();
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'flexGrow': {
             get: function() {
