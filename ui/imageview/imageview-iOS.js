@@ -97,6 +97,7 @@ Object.defineProperties(ImageView.FillType,{
         enumerable: true
     },
 });
+
 Object.defineProperties(ImageView.FillType.ios,{
     'MIDCENTER':{
         value: 4,
