@@ -138,7 +138,7 @@ const FlexLayout = extend(ViewGroup)(
         /**
          * This functions recalculates the positioning parameters.
          * It is useful to call this method when you want to change layout parameters on runtime.
-         *
+         * If you change view's position, you should call applyLayout from its parent not from the Page.
          *
          * @method applyLayout
          * @android
