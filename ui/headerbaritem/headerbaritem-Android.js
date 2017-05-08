@@ -59,12 +59,14 @@ function HeaderBarItem(params) {
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                     );
                     
+                    this.color = _color;
                     this.imageButton = false;
                     if(this.menuItem)
                         this.menuItem.setActionView(this.nativeObject);
                 }
                 else if(!this.imageButton) {
                     this.nativeObject.setText(_title);
+                    this.color = _color;
                 }
             },
             enumerable: true

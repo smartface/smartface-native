@@ -461,6 +461,8 @@ function Page(params) {
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
         const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+        const NativeImageButton = requireClass('android.widget.ImageButton');
+        const NativeTextButton = requireClass('android.widget.Button');
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
         
@@ -473,6 +475,10 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
+                if(item.image && item.image.nativeObject)
+                    item.nativeObject = new NativeImageButton(activity);
+                else 
+                    item.nativeObject = new NativeTextButton(activity);
                 itemView = item.nativeObject;
                 item.setValues();
             }
