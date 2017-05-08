@@ -101,7 +101,39 @@ const VideoView = extend(View)(
                 },
                 enumerable: true, 
                 configurable: true
-            }
+            },
+            // Overrided property because videoview does not support background stuffs.
+            'backgroundImage': {
+                get: function() {}, 
+                set: function(backgroundImage) {},
+                enumerable: true,
+                configurable: true
+            },
+            'backgroundColor': {
+                get: function() {},
+                set: function(backgroundColor) {},
+                enumerable: true,
+                configurable: true
+            },
+            'borderColor': {
+                get: function() {
+                },
+                set: function(value) {},
+                enumerable: true,
+                configurable: true
+            },
+            'borderRadius': {
+                get: function() {},
+                set: function(borderRadius) {},
+                enumerable: true,
+                configurable: true
+            },
+            'borderWidth': {
+                get: function() {},
+                set: function(borderRadius) {},
+                enumerable: true,
+                configurable: true
+            },
         });
         
         // Handling ios specific properties
