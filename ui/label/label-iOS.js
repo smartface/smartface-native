@@ -27,8 +27,10 @@ const Label = extend(View)(
                 return _selectable;
             },
             set:function(value) {
-                _selectable = value;
-                self.nativeObject.setSelectable = value;
+                if (typeof(value) === "boolean"){
+                    _selectable = value;
+                    self.nativeObject.setSelectable = value;
+                }
             },
             enumerable: true
          });
