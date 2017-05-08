@@ -23,218 +23,211 @@
  */
 const VideoView = extend(View)(
     function (_super, params) {
-        var self = this;
         _super(this);
 
-        self.ios = {};
+        /**
+         * Gets/sets background color of a view. It allows setting background
+         * color with UI.Color instance.
+         *
+         * @property {UI.Color} [backgroundColor = UI.Color.WHITE]
+         * @android
+         * @ios
+         * @removed
+         * @since 1.1.8
+         */
+        this.backgroundColor = UI.Color.WHITE;
 
-        Object.defineProperties(self, {
-            /**
-             * @property backgroundColor
-             * @hide
-             */
+        /**
+         * Sets/gets border color of bounded view.
+         *
+         * @property {UI.Color} [borderColor = UI.Color.BLACK]
+         * @android
+         * @ios
+         * @removed
+         * @since 1.1.8
+         */
+        this.borderColor = UI.Color.BLACK;
 
-            /**
-             * @property backgroundImage
-             * @hide
-             */
+        /**
+         * Sets/gets border thickness of bounded view. Accepts unsigned
+         * numbers, 0 means no border.
+         *
+         * @property {Number} [borderWidth = 0]
+         * @android
+         * @ios
+         * @removed
+         * @since 1.1.8
+         */
+        this.borderWidth = 0;
 
-            /**
-             * @property borderColor
-             * @hide
-             */
+        /**
+         * Sets/gets corner radius of a view.
+         *
+         * @property {Number} [borderRadius = 0]
+         * @android
+         * @ios
+         * @removed
+         * @since 1.1.8
+         */
+        this.borderRadius = 0;
 
-            /**
-             * @property borderRadius
-             * @hide
-             */
+        /**
+         * This function plays the loaded video clip.
+         *
+         * @method play
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.play = function(){};
+        
+        /**
+         * This function pauses the video clip.
+         *
+         * @method play
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.pause = function(){};
 
-            /**
-             * @property borderWidth
-             * @hide
-             */
+        /**
+         * This function stops the video clip by seeking to the initial position of the video.
+         *
+         * @method stop
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.stop = function(){};
 
-            /**
-             * This function plays the loaded video clip.
-             *
-             * @method play
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'play': {
-                value: function() {}
-            },
-            
-            /**
-             * This function pauses the video clip.
-             *
-             * @method play
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'pause': {
-                value: function() {}
-            },
-            /**
-             * This function stops the video clip by seeking to the initial position of the video.
-             *
-             * @method stop
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'stop': {
-                value: function() {}
-            },
-            /**
-             * This function returns status of the video, if the video clip is played or not.
-             *
-             * @method isPlaying
-             * @return {Boolean}
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'isPlaying': {
-                value: function() {return true | false}
-            },
-            /**
-             * This function puts the video clip in loop.
-             *
-             * @method setLoopEnabled
-             * @android
-             * @ios
-             * @param {Boolean} enabled
-             * @since 0.1
-             */
-            'setLoopEnabled': {
-                value: function(enabled) {}
-            },
-            /**
-             * This function loads the video clip from the given URL.
-             *
-             * @method loadURL
-             * @android
-             * @ios
-             * @param {String} url
-             * @since 0.1
-             */
-            'loadURL': {
-                value: function(url) {}
-            },
-            /**
-             * This function loads the video clip from the local file.
-             *
-             * @method loadFile
-             * @android
-             * @ios
-             * @param {IO.File} file
-             * @since 0.1
-             */
-            'loadFile': {
-                value: function(file) {}
-            },
-            /**
-             * This event is called when the video clip is ready to be played.
-             *
-             * @event onReady
-             * @android
-             * @ios
-             * @param {Function} callback
-             * @since 0.1
-             */
-            'onReady': {
-                get: function() {},
-                set: function(callback) {}
-            },
-            /**
-             * This event is called when the video clip completed playing.
-             *
-             * @event onFinish
-             * @android
-             * @ios
-             * @param {Function} callback
-             * @since 0.1
-             */
-            'onFinish': {
-                get: function() {},
-                set: function(callback) {}
-            },
-            /**
-             * This function seeks to desired position of the video.
-             *
-             * @method seekTo
-             * @android
-             * @ios
-             * @param {Number} milliseconds
-             * @since 0.1
-             */
-            'seekTo': {
-                value: function(milliseconds) {}
-            },
-            /**
-             * This function returns the total duration of the video.
-             *
-             * @property {Number} totalDuration
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'totalDuration': {
-                get: function() {return milliseconds}
-            },
-            /**
-             * This function returns the current duration of the video.
-             *
-             * @property {Number} currentDuration
-             * @android
-             * @ios
-             * @since 0.1
-             */
-            'currentDuration': {
-                get: function() {return milliseconds}
-            },
-            /**
-             * This function sets the volume of the video clip. The range is between {0.0, 1.0}
-             *
-             * @method setVolume
-             * @android
-             * @ios
-             * @param {Number} volume
-             * @since 0.1
-             */
-            'setVolume': {
-                value: function(volume) {}
-            },
-            /**
-             * This function sets the visibility of video controller
-             *
-             * @method setControllerEnabled
-             * @android
-             * @ios
-             * @param {Boolean} enabled
-             * @since 0.1
-             */
-            'setControllerEnabled': {
-                value: function(enabled) {}
-            }
-        });
+        /**
+         * This function returns status of the video, if the video clip is played or not.
+         *
+         * @method isPlaying
+         * @return {Boolean}
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.isPlaying = function(){};
 
-        Object.defineProperties(self.ios, {
-            /**
-             * Gets/Sets the page where the videoview is put.
-             *
-             * @property {UI.Page} page
-             * @ios
-             * @since 0.1
-             */
-            'page': {
-                get: function() {return page},
-                set: function(page) {}
-            }
-        });
+        /**
+         * This function puts the video clip in loop.
+         *
+         * @method setLoopEnabled
+         * @android
+         * @ios
+         * @param {Boolean} enabled
+         * @since 0.1
+         */
+        this.setLoopEnabled = function(enabled){};
+
+        /**
+         * This function loads the video clip from the given URL.
+         *
+         * @method loadURL
+         * @android
+         * @ios
+         * @param {String} url
+         * @since 0.1
+         */
+        this.loadURL = function(url){};
+
+        /**
+         * This function loads the video clip from the local file.
+         *
+         * @method loadFile
+         * @android
+         * @ios
+         * @param {IO.File} file
+         * @since 0.1
+         */
+        this.loadFile = function(file){};
+
+        /**
+         * This event is called when the video clip is ready to be played.
+         *
+         * @event onReady
+         * @android
+         * @ios
+         * @param {Function} callback
+         * @since 0.1
+         */
+        this.onReady = function(){};
+
+        /**
+         * This event is called when the video clip completed playing.
+         *
+         * @event onFinish
+         * @android
+         * @ios
+         * @param {Function} callback
+         * @since 0.1
+         */
+        this.onFinish = function(){};
+
+        /**
+         * This function seeks to desired position of the video.
+         *
+         * @method seekTo
+         * @android
+         * @ios
+         * @param {Number} milliseconds
+         * @since 0.1
+         */
+        this.seekTo = function(milliseconds){};
+
+        /**
+         * This function returns the total duration of the video.
+         *
+         * @property {Number} totalDuration
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.totalDuration;
+
+        /**
+         * This function returns the current duration of the video.
+         *
+         * @property {Number} currentDuration
+         * @android
+         * @ios
+         * @since 0.1
+         */
+        this.currentDuration;
+
+        /**
+         * This function sets the volume of the video clip. The range is between {0.0, 1.0}
+         *
+         * @method setVolume
+         * @android
+         * @ios
+         * @param {Number} volume
+         * @since 0.1
+         */
+        this.setVolume = function(volume){};
+        
+        /**
+         * This function sets the visibility of video controller
+         *
+         * @method setControllerEnabled
+         * @android
+         * @ios
+         * @param {Boolean} enabled
+         * @since 0.1
+         */
+        this.setControllerEnabled = function(enabled){};
+
+        /**
+         * Gets/Sets the page where the videoview is put.
+         *
+         * @property {UI.Page} page
+         * @ios
+         * @since 0.1
+         */
+        this.ios.page = null;
 
         // Assign parameters given in constructor
         if (params) {
