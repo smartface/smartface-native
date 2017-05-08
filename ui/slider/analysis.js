@@ -134,6 +134,16 @@ const Slider = extend(View)(
          * @since 0.1
          */
         this.maxValue = 100;
+        
+        /**
+         * Enables/disables the Sldier.
+         *
+         * @since 1.1.8
+         * @property {Boolean} [enabled = true]
+         * @android
+         * @ios
+         */
+        this.enabled = true;
 
         // events
         /**
