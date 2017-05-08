@@ -83,6 +83,7 @@ Contacts.add = function(params) {};
  *     });
  *
  * @param {Object} params Object describing callbacks
+ * @param {UI.Page} params.page This event is called after getting contact successfully.
  * @param {Function} params.onSuccess This event is called after getting contact successfully.
  * @param {Object} params.onSuccess.params
  * @param {String} params.onSuccess.params.displayName
