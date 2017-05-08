@@ -292,9 +292,4 @@ function addContactAddress(address) {
     }
 }
 
-function getCurrentPageFragment() {
-    const Router = require("sf-core/ui/router");
-    return Router.getCurrentPage().page.nativeObject;
-}
-
 module.exports = Contacts;
