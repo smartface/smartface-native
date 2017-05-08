@@ -71,7 +71,8 @@ function Page(params) {
             }));
         },
         onCreateOptionsMenu: function(menu) {
-            optionsMenu = menu;
+            if(!optionsMenu)
+                optionsMenu = menu;
             if (_headerBarItems.length > 0) {
                 self.headerBar.setItems(_headerBarItems);
             }
