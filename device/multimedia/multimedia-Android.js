@@ -109,7 +109,7 @@ Multimedia.pickFromGallery = function(params) {
         type = params.type;
     intent.setType(_types[type]);
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-    params.page.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
 };
 
 Multimedia.android = {};
