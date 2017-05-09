@@ -34,4 +34,12 @@ function MenuItem(params) {
     }
 }
 
+MenuItem.ios = {
+    Style: {
+        DEFAULT: 0,
+        CANCEL: 1,
+        DESTRUCTIVE: 2
+    }
+}
+
 module.exports = MenuItem;
