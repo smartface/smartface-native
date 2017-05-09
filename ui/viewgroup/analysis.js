@@ -101,14 +101,6 @@ function ViewGroup(params) {
      * @since 1.1.8
      */
     this.onViewRemoved = function() {};
-
-
-    // Assign parameters given in constructor
-    if (params) {
-        for (var param in params) {
-            this[param] = params[param];
-        }
-    }
-};
+}
 
 module.exports = ViewGroup;
