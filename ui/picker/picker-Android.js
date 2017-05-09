@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Router = require('sf-core/ui/router');
+const TypeUtil = require('sf-core/util/type');
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
@@ -85,16 +86,15 @@ const Picker = extend(View)(
                 configurable: true
             }
         });
-        Object.defineProperty(this.android,'enabled', {
+        Object.defineProperty(this.android, 'enabled', {
             get: function() {
                 return self.nativeObject.isEnabled();  
             }, 
             set: function(value) {
-                console.log("picker enabled");
-                if(typeof(value) === "boolean")
-                    self.nativeObject.setEnabled(value);
-                else 
-                    new TypeError("enabled property's value should be boolean.");
+                if(!TypeUtil.isBoolean(value)){
+                    new TypeError("Value should be boolean for enabled.");
+                }
+                self.nativeObject.setEnabled(value);
             },
             enumerable: true
         });
