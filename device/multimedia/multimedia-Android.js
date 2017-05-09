@@ -54,17 +54,21 @@ const NOUGAT = 24;
 var _fileURI = null;
 
 Multimedia.startCamera = function(params) {
-    _captureParams = params;
-    if(params && params.action !== undefined) {
+    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+        throw new TypeError('Page parameter required');
+    }
+    
+    if(params.action !== undefined) {
         _action = params.action;
     }
+    _captureParams = params;
     
     if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
         startCameraWithExtraField();
     }
     else {
         var takePictureIntent = new NativeIntent(NativeAction[_action]);
-        getCurrentPageFragment().startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+        params.page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
 };
 
@@ -89,12 +93,15 @@ function startCameraWithExtraField() {
         if(_fileURI) {
             var output = NativeMediaStore.EXTRA_OUTPUT;
             takePictureIntent.putExtra(output, _fileURI);
-            getCurrentPageFragment().startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+            _captureParams.page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
         }
     }
 }
 
 Multimedia.pickFromGallery = function(params) {
+    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+        throw new TypeError('Page parameter required');
+    }
     _pickParams = params;
     var intent = new NativeIntent();
     var type = Type.ALL;
@@ -102,7 +109,7 @@ Multimedia.pickFromGallery = function(params) {
         type = params.type;
     intent.setType(_types[type]);
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-    getCurrentPageFragment().startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
 };
 
 Multimedia.android = {};
@@ -297,11 +304,6 @@ function getAllMediaFromUri(params) {
         cursor.close();
     }
     return files;
-}
-
-function getCurrentPageFragment() {
-    const Router = require("sf-core/ui/router");
-    return Router.getCurrentPage().page.nativeObject;
 }
 
 module.exports = Multimedia;
