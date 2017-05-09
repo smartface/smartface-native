@@ -8,7 +8,6 @@ const ViewGroup = extend(View)(
         if(!this.nativeObject){
             throw new Error("Can't create instance from ViewGroup. It is an abstract class.");
         }
-        var self = this;
         this.childViews = {};
         _super(this);
         

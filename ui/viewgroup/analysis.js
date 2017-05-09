@@ -93,7 +93,7 @@ function ViewGroup(params) {
     this.onViewAdded = function() {};
     
     /**
-     * This event is called when a view removed to this view's hierarchy.
+     * This event is called when a view removed from this view's hierarchy.
      *
      * @event onViewRemoved
      * @android
