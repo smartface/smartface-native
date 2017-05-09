@@ -320,6 +320,14 @@ const TextBox = extend(View)(
            self.nativeObject.resignFirstResponder();
         };
        
+        this.requestFocus = function(){
+           self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+           self.nativeObject.resignFirstResponder();
+        };
+        
         self.nativeObject.onShowKeyboard = function(e){
               keyboardShowAnimation(e.keyboardHeight);
         }
