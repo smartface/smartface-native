@@ -11,7 +11,7 @@ function Color (params) {
         if(params.direction)
             index = params.direction;
         this.colors = colors;
-        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], colors);
+        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], [params.startColor.nativeObject, params.endColor.nativeObject]);
     } else {
         this.nativeObject = params.color;
     }

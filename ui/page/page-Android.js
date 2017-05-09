@@ -254,7 +254,7 @@ function Page(params) {
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
                 var window = activity.getWindow();
                 window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
+                window.setStatusBarColor(color.nativeObject);
             }
         },
         enumerable: true
@@ -478,7 +478,7 @@ function Page(params) {
                 item.setValues();
             }
             if(itemView) { 
-                itemView.setBackgroundColor(Color.TRANSPARENT);
+                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
                 itemView.setPadding(
                     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
