@@ -22,7 +22,7 @@ function MenuItem(params) {
     *
     * @property {MenuItem.ios.Style} style
     * @ios
-    * @since 0.1
+    * @since 1.1.8
     */
     this.ios.style = "";
 
@@ -47,7 +47,7 @@ MenuItem.ios.Style = {};
  * @static
  * @readonly
  * @ios
- * @since 0.1
+ * @since 1.1.8
  */
 MenuItem.ios.Style.DEFAULT;
 
@@ -58,7 +58,7 @@ MenuItem.ios.Style.DEFAULT;
  * @static
  * @readonly
  * @ios
- * @since 0.1
+ * @since 1.1.8
  */
 MenuItem.ios.Style.CANCEL;
 
@@ -69,7 +69,7 @@ MenuItem.ios.Style.CANCEL;
  * @static
  * @readonly
  * @ios
- * @since 0.1
+ * @since 1.1.8
  */
 MenuItem.ios.Style.DESTRUCTIVE;
 

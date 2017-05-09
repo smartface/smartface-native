@@ -32,7 +32,7 @@ function Menu(params) {
         }
         
         for (var i = 0; i < self.items.length; i++){
-            var action = __SF_UIAlertAction.createAction(self.items[i].title,self.items[i].style,self.items[i].onSelectedListener);
+            var action = __SF_UIAlertAction.createAction(self.items[i].title,self.items[i].ios.style,self.items[i].onSelectedListener);
             self.nativeObject.addAction(action);
         }
         page.nativeObject.presentViewController(self.nativeObject);
