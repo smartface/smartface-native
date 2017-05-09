@@ -93,6 +93,7 @@ function SearchView () {
      * @android
      * @ios
      * @since 0.1
+     * @deprecated 1.1.8 Use {@link UI.SearchView#requestFocus} instead.
      */
     this.showKeyboard = function(){};
 
@@ -103,8 +104,29 @@ function SearchView () {
      * @android
      * @ios
      * @since 0.1
+     * @deprecated 1.1.8 Use {@link UI.SearchView#removeFocus} instead.
      */
     this.hideKeyboard = function(){};
+
+    /**
+     * This function gives focus to the SearchView. When the SearchView gained focus, keyboard will appear.
+     *
+     * @method requestFocus
+     * @android
+     * @ios
+     * @since 1.1.8
+     */
+    this.requestFocus = function(){};
+    
+    /**
+     * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
+     *
+     * @method removeFocus
+     * @android
+     * @ios
+     * @since 1.1.8
+     */
+    this.removeFocus = function(){};
 
     /**
      * Gets/sets the search view’s style. This property works only for IOS.
