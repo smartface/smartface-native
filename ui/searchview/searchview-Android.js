@@ -289,8 +289,8 @@ const SearchView = extend(View)(
         if(!this.isNotSetDefaults){
             const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
-            mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
-            mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+            mSearchButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
+            mCloseButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus){
                     if (hasFocus)  {

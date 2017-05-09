@@ -130,9 +130,9 @@ const Label = extend(View)(
                     return _textColor;
                 },
                 set: function(textColor) {
-                    if(TypeUtil.isNumeric(textColor)) {
+                    if(TypeUtil.isNumeric(textColor.nativeObject)) {
                         _textColor = textColor;
-                        self.nativeObject.setTextColor(textColor);
+                        self.nativeObject.setTextColor(textColor.nativeObject);
                     }
                     else if(TypeUtil.isObject(textColor)) {
                         _textColor = textColor;

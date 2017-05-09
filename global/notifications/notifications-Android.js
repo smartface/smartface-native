@@ -174,9 +174,9 @@ Notifications.LocalNotification = function(params) {
                 return _color;
             },
             set: function(value) {
-                if (TypeUtil.isNumeric(value) && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+                if (TypeUtil.isNumeric(value.nativeObject) && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                     _color = value;
-                    self.nativeObject.setColor(value);
+                    self.nativeObject.setColor(value.nativeObject);
                 }
             },
             enumerable: true

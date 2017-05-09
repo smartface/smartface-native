@@ -279,7 +279,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                toolbar.setBackgroundColor(color);
+                toolbar.setBackgroundColor(color.nativeObject);
             }
         },
         enumerable: true
@@ -344,7 +344,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                toolbar.setTitleTextColor(color);
+                toolbar.setTitleTextColor(color.nativeObject);
             }
         },
         enumerable: true
