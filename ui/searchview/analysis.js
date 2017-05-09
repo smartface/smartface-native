@@ -109,7 +109,7 @@ function SearchView () {
     this.hideKeyboard = function(){};
 
     /**
-     * This function gives focus to the SearchView. When the SearchView gained focus, keyboard will be appeared.
+     * This function gives focus to the SearchView. When the SearchView gained focus, keyboard will appear.
      *
      * @method requestFocus
      * @android
@@ -119,7 +119,7 @@ function SearchView () {
     this.requestFocus = function(){};
     
     /**
-     * This function removes focus to the SearchView. When the SearchView lost its focus, keyboard will be disappeared.
+     * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
      *
      * @method removeFocus
      * @android
