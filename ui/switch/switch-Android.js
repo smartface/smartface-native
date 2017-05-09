@@ -81,17 +81,29 @@ const Switch = extend(View)(
             }
         });
 
-        Object.defineProperty(this.android, 'toggleOffColor', {
-            get: function() {
-                return _toggleOffColor;
+        Object.defineProperties(this.android, {
+            'toggleOffColor': {
+                get: function() {
+                    return _toggleOffColor;
+                },
+                set: function(toggleOffColor) {
+                    _toggleOffColor = toggleOffColor;
+                    setTrackColor(self);
+                },
+                enumerable: true
             },
-            set: function(toggleOffColor) {
-                _toggleOffColor = toggleOffColor;
-                setTrackColor(self);
-            },
-            enumerable: true
+            'thumbOffColor': {
+                get: function() {
+                    return _thumbOffColor;
+                },
+                set: function(value) {
+                    _thumbOffColor = value;
+                    setThumbColor(self);
+                },
+                enumerable: true
+            }
         });
-
+        
         if(!this.isNotSetDefaults){
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
