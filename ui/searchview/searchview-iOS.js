@@ -113,6 +113,14 @@ const SearchView = extend(View)(
             self.nativeObject.resignFirstResponder();
         };
         
+        this.requestFocus = function(){
+            self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+            self.nativeObject.resignFirstResponder();
+        };
+        
         this.ios = {};
         var _searchViewStyle = UISearchBarStyle.default;
         Object.defineProperty(this.ios, 'searchViewStyle', {
