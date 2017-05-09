@@ -121,20 +121,33 @@ const TextBox = extend(Label)(
                 },
                 enumerable: true
             },
-            
             'showKeyboard': {
                 value: function(){
-                    self.nativeObject.requestFocus();
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    this.requestFocus();
                 },
                 enumerable: true
             },
             'hideKeyboard': {
                 value: function(){
-                    self.nativeObject.clearFocus();
+                    this.removeFocus();
+                },
+                enumerable: true
+            },
+            'requestFocus': {
+                value: function(){
+                    this.nativeObject.requestFocus();
+                    // Due to the requirements we should show keyboard when focus requested.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = self.nativeObject.getWindowToken();
+                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                },
+                enumerable: true
+            },
+            'removeFocus': {
+                value: function(){
+                    this.nativeObject.clearFocus();
+                    // Due to the requirements we should hide keyboard when focus cleared.
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                    var windowToken = this.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
                 },
                 enumerable: true
