@@ -34,14 +34,14 @@ const Switch = extend(View)(
      * @property {UI.Color} thumbOffColor
      * @android
      * @since 0.1
-     * @deprecated 1.1.8 Use {@link UI.Switch#android.thumbOffColor} instead.
      */
     this.thumbOffColor = Color.GRAY;
     
     /**
      * Gets/sets color of the thumb when Switch is OFF.
      * It is set to gray by default.
-     *
+     * thumbOffColor deprecated 1.1.8 use android.thumbOffColor instead.
+     * 
      * @property {UI.Color} thumbOffColor
      * @android
      * @since 1.1.8
