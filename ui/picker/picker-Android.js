@@ -21,7 +21,6 @@ const Picker = extend(View)(
         
         var _items = [];
         var _onSelected;
-        this.android = {};
         Object.defineProperties(this,{
             'items': {
                 get: function() {
@@ -78,6 +77,10 @@ const Picker = extend(View)(
                 },
                 enumerable: true
             },
+            'android': {
+                value: {},
+                enumerable: true
+            },
             'toString': {
                 value: function(){
                     return 'Picker';
@@ -92,7 +95,7 @@ const Picker = extend(View)(
             }, 
             set: function(value) {
                 if(!TypeUtil.isBoolean(value)){
-                    new TypeError("Value should be boolean for enabled.");
+                    throw new TypeError("Value should be boolean for enabled.");
                 }
                 self.nativeObject.setEnabled(value);
             },
