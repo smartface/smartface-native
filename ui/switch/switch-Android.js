@@ -91,7 +91,18 @@ const Switch = extend(View)(
             },
             enumerable: true
         });
-
+        
+        Object.defineProperty(this.android, 'thumbOffColor', {
+            get: function() {
+                return _thumbOffColor;
+            },
+            set: function(value) {
+                _thumbOffColor = value;
+                setThumbColor(self);
+            },
+            enumerable: true
+        });
+        
         if(!this.isNotSetDefaults){
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
