@@ -149,7 +149,7 @@ function TextBox(){
      * @android
      * @ios
      * @since 0.1     
-     * @deprecated 1.1.8 Use {@link UI.TextBox#removeFocus} instead.
+     * @deprecated 1.1.8 Use {@link UI.TextBox#requestFocus} instead.
      */
     this.showKeyboard = function(){};
 
@@ -165,7 +165,7 @@ function TextBox(){
     this.hideKeyboard = function(){};
 
     /**
-     * This function gives focus to the TextBox. When the TextBox gained focus, keyboard will be appeared.
+     * This function gives focus to the TextBox. When the TextBox gained focus, keyboard will appear.
      *
      * @method requestFocus
      * @android
@@ -175,7 +175,7 @@ function TextBox(){
     this.requestFocus = function(){};
     
     /**
-     * This function removes focus to the TextBox. When the TextBox lost its focus, keyboard will be disappeared.
+     * This function removes focus from the TextBox. When the TextBox lost its focus, keyboard will disappear.
      *
      * @method removeFocus
      * @android
@@ -184,7 +184,6 @@ function TextBox(){
      */
     this.removeFocus = function(){};
 
-    // events
     /**
      * This event is called when user inserts or removes a character from TextBox.
      *
