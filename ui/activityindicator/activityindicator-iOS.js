@@ -35,8 +35,6 @@ const ActivityIndicator = extend(View)(
                 enumerable: true
         });
            
-        self.ios = {};
-         
         var _type = ActivityIndicator.iOS.Type.WHITE;
         Object.defineProperty(self.ios, 'type', {
                 get: function() {
