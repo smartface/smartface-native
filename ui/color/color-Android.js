@@ -3,7 +3,7 @@ const NativeColor            = requireClass("android.graphics.Color");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 
 function Color (params) {
-    this.isGradient = (params.isGradient)? true: false; // to handle undefined
+    this.isGradient = params && params.isGradient;
 
     if (this.isGradient) {
         var colors = [params.startColor, params.endColor];

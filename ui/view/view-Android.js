@@ -312,13 +312,13 @@ function View(params) {
     }
     
     function setBackgroundColor() {
-        if(typeof(_backgroundColor.nativeObject) === "number") {
-            backgroundDrawable = new NativeGradientDrawable(); 
-            backgroundDrawable.setColor(_backgroundColor.nativeObject);
+        if(_backgroundColor instanceof Color && _backgroundColor.isGradient) {
+            backgroundDrawable = _backgroundColor.nativeObject; 
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
-        else if(_backgroundColor.isGradient) {
-            backgroundDrawable = _backgroundColor.nativeObject; 
+        else if(_backgroundColor instanceof Color && !(_backgroundColor.isGradient)) {
+            backgroundDrawable = new NativeGradientDrawable(); 
+            backgroundDrawable.setColor(_backgroundColor.nativeObject);
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
         else {
@@ -329,7 +329,7 @@ function View(params) {
                 if(_backgroundColor.normal.isGradient) {
                     stateDrawable = _backgroundColor.normal.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.normal.nativeObject)) {
+                else if((_backgroundColor.normal) instanceof Color) {
                     stateDrawable = new NativeGradientDrawable(); 
                     stateDrawable.setColor(_backgroundColor.normal.nativeObject);
                 }
@@ -340,7 +340,7 @@ function View(params) {
                 if(_backgroundColor.disabled.isGradient) {
                     stateDrawable = _backgroundColor.disabled.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.disabled.nativeObject)) {
+                else if((_backgroundColor.disabled) instanceof Color) {
                     stateDrawable = new NativeGradientDrawable(); 
                     stateDrawable.setColor(_backgroundColor.disabled.nativeObject);
                 }
@@ -351,7 +351,7 @@ function View(params) {
                 if(_backgroundColor.selected.isGradient) {
                     stateDrawable = _backgroundColor.selected.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.selected.nativeObject)){
+                else if((_backgroundColor.selected) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
                     stateDrawable.setColor(_backgroundColor.selected.nativeObject);
                 }
@@ -362,7 +362,7 @@ function View(params) {
                 if(_backgroundColor.pressed.isGradient) {
                     stateDrawable = _backgroundColor.pressed.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.pressed.nativeObject)){
+                else if((_backgroundColor.pressed) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
                     stateDrawable.setColor(_backgroundColor.pressed.nativeObject);
                 }
@@ -373,7 +373,7 @@ function View(params) {
                 if(_backgroundColor.focused.isGradient) {
                     stateDrawable = _backgroundColor.focused.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.focused.nativeObject)){
+                else if((_backgroundColor.focused) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
                     stateDrawable.setColor(_backgroundColor.focused.nativeObject);
                 }
