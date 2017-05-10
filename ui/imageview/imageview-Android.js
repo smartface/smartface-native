@@ -59,8 +59,8 @@ const ImageView = extend(View)(
             },
             'alpha': {
                 get: function() {
-                    // getAlpha comes from view
-                    return this.nativeObject.getAlpha();
+                    // getAlpha should come from ImageView not View
+                    return this.nativeObject.getImageAlpha()/255;
                 },
                 set: function(alpha) {
                     // due to AND-2702 setAlpha goes to ImageView not View
