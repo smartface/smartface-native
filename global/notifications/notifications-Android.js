@@ -1,6 +1,7 @@
 const TypeUtil                  = require("sf-core/util/type");
 const AndroidConfig             = require("sf-core/util/Android/androidconfig");
-const Application               = require("sf-core/application")
+const Application               = require("sf-core/application");
+const Color                     = require("sf-core/ui/color");
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
@@ -174,7 +175,7 @@ Notifications.LocalNotification = function(params) {
                 return _color;
             },
             set: function(value) {
-                if (TypeUtil.isNumeric(value.nativeObject) && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+                if ((value instanceof Color) && (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP)) {
                     _color = value;
                     self.nativeObject.setColor(value.nativeObject);
                 }
