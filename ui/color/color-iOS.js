@@ -47,7 +47,7 @@ Color.alpha = function(color) {
 
 Color.createGradient = function(params) {
     if (params.direction === Color.GradientDirection.VERTICAL) { //topToBottom
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor, params.endColor, {
+        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
             x: 0,
             y: 0
         }, {
@@ -56,7 +56,7 @@ Color.createGradient = function(params) {
         })});
     }
     else if (params.direction === Color.GradientDirection.HORIZONTAL) { //leftToRight
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor, params.endColor, {
+        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
             x: 0,
             y: 0
         }, {
@@ -65,7 +65,7 @@ Color.createGradient = function(params) {
         })});
     }
     else if (params.direction === Color.GradientDirection.DIAGONAL_LEFT) { //topLeftToRightBottom
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor, params.endColor, {
+        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
             x: 0,
             y: 0
         }, {
@@ -74,7 +74,7 @@ Color.createGradient = function(params) {
         })});
     }
     else if (params.direction === Color.GradientDirection.DIAGONAL_RIGHT) { //topRightToLeftBottom
-        return new Color({color :__SF_CAGradientLayer.createGradient(params.startColor, params.endColor, {
+        return new Color({color :__SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
             x: 1,
             y: 0
         }, {
