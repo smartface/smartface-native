@@ -15,6 +15,21 @@
 const Switch = extend(View)(
     function (_super, params) {
         _super(this);
+        
+    /**
+     * Enables/disables the Switch.
+     *
+     *     @example
+     *     const Switch = require('sf-core/ui/switch');
+     *     var mySwitch = new Switch();
+     *     mySwitch.enabled = false;
+     *
+     * @since 1.1.8
+     * @property {Boolean} [enabled = true]
+     * @android
+     * @ios
+     */
+    this.enabled = true;
 
     /**
      * Gets/sets color of the thumb when Switch is ON.
