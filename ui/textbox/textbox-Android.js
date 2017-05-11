@@ -6,11 +6,6 @@ const ActionKeyType     = require('../actionkeytype');
 const TextAlignment     = require('sf-core/ui/textalignment');
 const AndroidConfig     = require('sf-core/util/Android/androidconfig');
 
-const NativeR               = requireClass(AndroidConfig.packageName + '.R');
-
-var activity = Android.getActivity();
-var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -48,13 +43,6 @@ const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
     4 | 32,         // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
     1 | 32          // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 ]
-
-const NumberInputTypeIndex = [1, 2, 3, 7, 8, 9, 20];
-
-const NativePasswordType = {
-    NUMBER: 16,
-    TEXT: 128
-};
 
 // NativeActionKeyType corresponds android action key type.
 const NativeActionKeyType = [6, // EditorInfo.IME_ACTION_DONE
@@ -267,7 +255,7 @@ const TextBox = extend(Label)(
                     if(keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
                     }
-                    return true;
+                    return false;
                 }
             }));
         }
