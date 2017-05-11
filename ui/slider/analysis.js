@@ -136,7 +136,7 @@ const Slider = extend(View)(
         this.maxValue = 100;
         
         /**
-         * Enables/disables the Sldier.
+         * Enables/disables the slider.
          *
          * @since 1.1.8
          * @property {Boolean} [enabled = true]
