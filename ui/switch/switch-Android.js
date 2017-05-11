@@ -129,19 +129,19 @@ const Switch = extend(View)(
 
 function setThumbColor(self){
     if(self.nativeObject.isChecked()){
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 
 function setTrackColor(self){
     if(self.nativeObject.isChecked()){
-        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
-        self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 

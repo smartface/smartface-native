@@ -207,10 +207,10 @@ const TextBox = extend(Label)(
         
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return self.nativeObject.getHintTextColors().getDefaultColor();
+                return new Color({ color: self.nativeObject.getHintTextColors().getDefaultColor() });
             },
             set: function(hintTextColor) {
-                self.nativeObject.setHintTextColor(hintTextColor);
+                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
             },
             enumerable: true
         });

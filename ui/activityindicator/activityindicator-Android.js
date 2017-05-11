@@ -23,7 +23,7 @@ const ActivityIndicator = extend(View)(
                 set: function(color) {
                     if (_color !== color) {
                         _color = color;
-                        this.nativeObject.getIndeterminateDrawable().setColorFilter(_color, NativePorterDuff.Mode.SRC_IN);
+                        this.nativeObject.getIndeterminateDrawable().setColorFilter(_color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                     }
                 },
                 enumerable: true
