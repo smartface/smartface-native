@@ -58,7 +58,6 @@ function View(params) {
                 if (!self.gradientColor){
                     self.nativeObject.addFrameObserver();
                     self.nativeObject.frameObserveHandler = function(e){
-                        console.log("Frame Handler");
                         self.gradientColor.frame = e.frame;
                         self.nativeObject.backgroundColor = value.layerToColor();
                     }
