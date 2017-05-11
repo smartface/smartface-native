@@ -44,7 +44,6 @@ function Page(params) {
     });
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
-    
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
@@ -71,7 +70,8 @@ function Page(params) {
             }));
         },
         onCreateOptionsMenu: function(menu) {
-            optionsMenu = menu;
+            if(!optionsMenu)
+                optionsMenu = menu;
             if (_headerBarItems.length > 0) {
                 self.headerBar.setItems(_headerBarItems);
             }
@@ -462,6 +462,8 @@ function Page(params) {
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
         const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+        const NativeImageButton = requireClass('android.widget.ImageButton');
+        const NativeTextButton = requireClass('android.widget.Button');
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
         
@@ -474,6 +476,10 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
+                if(item.image && item.image.nativeObject)
+                    item.nativeObject = new NativeImageButton(activity);
+                else 
+                    item.nativeObject = new NativeTextButton(activity);
                 itemView = item.nativeObject;
                 item.setValues();
             }
@@ -512,6 +518,18 @@ function Page(params) {
             return true;
         }
     }));
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if( keyCode === 4 && keyEvent.getAction() === 0) {
+                   typeof self.android.onBackButtonPressed === "function" && 
+                            self.android.onBackButtonPressed();
+            }
+            return true;
+        }
+    }));
+    self.layout.nativeObject.setFocusable(true);
+    self.layout.nativeObject.setFocusableInTouchMode(true);
 
     // Default values
     self.statusBar.visible = true;
