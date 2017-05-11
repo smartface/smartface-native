@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
 const ActionKeyType = require('sf-core/ui/actionkeytype');
 const Animator = require('sf-core/ui/animator');
+const Color = require('sf-core/ui/color');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -90,10 +91,10 @@ const TextBox = extend(View)(
 
         Object.defineProperty(self, 'textColor', {
             get: function() {
-                return self.nativeObject.textColor;
+                return new Color({color : self.nativeObject.textColor});
             },
             set: function(value) {
-                self.nativeObject.textColor = value;
+                self.nativeObject.textColor = value.nativeObject;
             },
             enumerable: true
         });

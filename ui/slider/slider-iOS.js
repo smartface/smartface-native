@@ -22,8 +22,8 @@ const Slider = extend(View)(
         _super(this);
         
         //defaults
-         self.nativeObject.minimumTrackTintColor = Color.DARKGRAY;
-         self.nativeObject.maximumTrackTintColor = Color.GREEN;
+         self.nativeObject.minimumTrackTintColor = Color.DARKGRAY.nativeObject;
+         self.nativeObject.maximumTrackTintColor = Color.GREEN.nativeObject;
          self.nativeObject.minimumValue = 0;
          self.nativeObject.maximumValue = 100;
          
@@ -39,10 +39,10 @@ const Slider = extend(View)(
         
         Object.defineProperty(self, 'thumbColor', {
             get: function() {
-                return self.nativeObject.thumbTintColor;
+                return new Color({color : self.nativeObject.thumbTintColor});
             },
             set: function(value) {
-                self.nativeObject.thumbTintColor = value;
+                self.nativeObject.thumbTintColor = value.nativeObject;
             },
             enumerable: true
         });
@@ -62,20 +62,20 @@ const Slider = extend(View)(
         
         Object.defineProperty(self, 'minTrackColor', {
             get: function() {
-                return self.nativeObject.minimumTrackTintColor;
+                return new Color({color : self.nativeObject.minimumTrackTintColor});
             },
             set: function(value) {
-                self.nativeObject.minimumTrackTintColor = value;
+                self.nativeObject.minimumTrackTintColor = value.nativeObject;
             },
             enumerable: true
         });
         
         Object.defineProperty(self, 'maxTrackColor', {
             get: function() {
-                return self.nativeObject.maximumTrackTintColor;
+                return new Color({color : self.nativeObject.maximumTrackTintColor});
             },
             set: function(value) {
-                self.nativeObject.maximumTrackTintColor = value;
+                self.nativeObject.maximumTrackTintColor = value.nativeObject;
             },
             enumerable: true
         });

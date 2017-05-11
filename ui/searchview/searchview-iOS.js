@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Image = require('sf-core/ui/image');
+const Color = require('sf-core/ui/color');
 
 const UISearchBarStyle = {
     default : 0,
@@ -52,10 +53,10 @@ const SearchView = extend(View)(
         var _textColor = self.nativeObject.textColor;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return _textColor;
+                return new Color({color : _textColor});
             },
             set: function(textColor) {
-                _textColor = textColor;
+                _textColor = textColor.nativeObject;
                 self.nativeObject.textColor = _textColor;
             },
             enumerable: true
@@ -64,10 +65,10 @@ const SearchView = extend(View)(
         var _backgroundColor = self.nativeObject.barTintColor;
         Object.defineProperty(this, 'backgroundColor', {
             get: function() {
-                return _backgroundColor;
+                return new Color({color : _backgroundColor});
             },
             set: function(backgroundColor) {
-                _backgroundColor = backgroundColor;
+                _backgroundColor = backgroundColor.nativeObject;
                 self.nativeObject.barTintColor = _backgroundColor;
             },
             enumerable: true
