@@ -254,7 +254,7 @@ const TextBox = extend(Label)(
                     if(keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
                     }
-                    return true;
+                    return false;
                 }
             }));
         }
