@@ -129,20 +129,6 @@ Object.defineProperties(SliderDrawer.Position,{
     }
 });
 
-SliderDrawer.State = {};
-Object.defineProperties(SliderDrawer.State,{ 
-    'CLOSE': {
-        value: 0,
-        writable: false
-    },
-    'DRAGGING': {
-        value: 1,
-        writable: false
-    },
-    'OPEN': {
-        value: 2,
-        writable: false
-    }
-});
+SliderDrawer.State = require("./sliderdrawer-state");
 
 module.exports = SliderDrawer;
