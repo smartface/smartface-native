@@ -23,7 +23,6 @@ function MenuItem(params) {
                     throw new TypeError(Exception.TypeError.STRING);
                 }
                _title = title;
-               this.android.titleSpanned = spanTitle(_title, _titleColor);
             },
             enumerable: true
         },
@@ -56,13 +55,26 @@ function MenuItem(params) {
             set: function(color) {
                 if (color instanceof Color) {
                     _titleColor = color;
-                    this.titleSpanned = spanTitle(_title, _titleColor);
                 }
             },
             enumerable: true
+        },
+        'spanTitle': {
+            value: function() {
+                var spannableStringBuilder = new NativeSpannableStringBuilder("");
+                if (_title) {
+                    spannableStringBuilder = new NativeSpannableStringBuilder(_title);
+                    if (_titleColor) {
+                        var colorSpan = new NativeColorSpan(_titleColor.nativeObject);
+                        spannableStringBuilder.setSpan(colorSpan, 0, _title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        return spannableStringBuilder;
+                    }
+                }
+                return spannableStringBuilder;
+            }
         }
     });
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -70,16 +82,6 @@ function MenuItem(params) {
         }
     }
 }
-
-function spanTitle(_title, _titleColor) {
-    if (_title && _titleColor) {
-        var colorSpan = new NativeColorSpan(_titleColor.nativeObject);
-        var spannableStringBuilder = new NativeSpannableStringBuilder(_title);
-        spannableStringBuilder.setSpan(colorSpan, 0, _title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
-        return spannableStringBuilder;
-    }
-    return null;
-};
 
 MenuItem.ios = {
     Style: {

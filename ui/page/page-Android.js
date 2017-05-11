@@ -107,7 +107,7 @@ function Page(params) {
 
             var i;
             for (i = 0; i < items.length; i++) {
-                var menuTitle = (items[i].android.titleSpanned)? items[i].android.titleSpanned : items[i].title;
+                var menuTitle = items[i].android.spanTitle();
                 menu.add(0, i, 0, menuTitle);
             }
         },
