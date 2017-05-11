@@ -65,7 +65,7 @@ function View(params) {
     
     var _backgroundColor = Color.TRANSPARENT;
     var backgroundDrawable = new NativeGradientDrawable(); 
-    backgroundDrawable.setColor(_backgroundColor);
+    backgroundDrawable.setColor(_backgroundColor.nativeObject);
 
     var _borderRadius = 0;
     var radii = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -312,13 +312,13 @@ function View(params) {
     }
     
     function setBackgroundColor() {
-        if(typeof(_backgroundColor) === "number") {
-            backgroundDrawable = new NativeGradientDrawable(); 
-            backgroundDrawable.setColor(_backgroundColor);
+        if(_backgroundColor instanceof Color && _backgroundColor.isGradient) {
+            backgroundDrawable = _backgroundColor.nativeObject; 
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
-        else if(_backgroundColor.isGradient) {
-            backgroundDrawable = _backgroundColor.nativeObject; 
+        else if(_backgroundColor instanceof Color && !(_backgroundColor.isGradient)) {
+            backgroundDrawable = new NativeGradientDrawable(); 
+            backgroundDrawable.setColor(_backgroundColor.nativeObject);
             backgroundDrawable.setCornerRadius(_borderRadius);
         }
         else {
@@ -329,9 +329,9 @@ function View(params) {
                 if(_backgroundColor.normal.isGradient) {
                     stateDrawable = _backgroundColor.normal.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.normal)) {
+                else if((_backgroundColor.normal) instanceof Color) {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.normal);
+                    stateDrawable.setColor(_backgroundColor.normal.nativeObject);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
@@ -340,9 +340,9 @@ function View(params) {
                 if(_backgroundColor.disabled.isGradient) {
                     stateDrawable = _backgroundColor.disabled.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.disabled)) {
+                else if((_backgroundColor.disabled) instanceof Color) {
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.disabled);
+                    stateDrawable.setColor(_backgroundColor.disabled.nativeObject);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
@@ -351,9 +351,9 @@ function View(params) {
                 if(_backgroundColor.selected.isGradient) {
                     stateDrawable = _backgroundColor.selected.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.selected)){
+                else if((_backgroundColor.selected) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.selected);
+                    stateDrawable.setColor(_backgroundColor.selected.nativeObject);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
@@ -362,9 +362,9 @@ function View(params) {
                 if(_backgroundColor.pressed.isGradient) {
                     stateDrawable = _backgroundColor.pressed.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.pressed)){
+                else if((_backgroundColor.pressed) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.pressed);
+                    stateDrawable.setColor(_backgroundColor.pressed.nativeObject);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
@@ -373,9 +373,9 @@ function View(params) {
                 if(_backgroundColor.focused.isGradient) {
                     stateDrawable = _backgroundColor.focused.nativeObject;
                 }
-                else if(TypeUtil.isNumeric(_backgroundColor.focused)){
+                else if((_backgroundColor.focused) instanceof Color){
                     stateDrawable = new NativeGradientDrawable(); 
-                    stateDrawable.setColor(_backgroundColor.focused);
+                    stateDrawable.setColor(_backgroundColor.focused.nativeObject);
                 }
                 stateDrawable.setCornerRadius(_borderRadius);
                 backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
@@ -398,7 +398,7 @@ function View(params) {
 
             // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
             if(dp_borderWidth !== 0){
-                borderShapeDrawable.getPaint().setColor(_borderColor);
+                borderShapeDrawable.getPaint().setColor(_borderColor.nativeObject);
             }
             else{
                 borderShapeDrawable.getPaint().setColor(0);

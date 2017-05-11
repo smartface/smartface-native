@@ -68,7 +68,7 @@ const Slider = extend(View)(
                     if (color) {
                         _minTrackColor = color;
     
-                        _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor, PorterDuffMode);
+                        _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor.nativeObject, PorterDuffMode);
                     }
                 },
                 enumerable: true
@@ -81,7 +81,7 @@ const Slider = extend(View)(
                     if (color) {
                         _maxTrackColor = color;
                         
-                        _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor, PorterDuffMode);
+                        _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor.nativeObject, PorterDuffMode);
                     }
                 },
                 enumerable: true
@@ -110,7 +110,7 @@ const Slider = extend(View)(
                 set: function(color) {
                     if (color) {
                         _thumbColor = color;
-                        _defaultThumb.setColorFilter(color, PorterDuffMode);
+                        _defaultThumb.setColorFilter(color.nativeObject, PorterDuffMode);
                         this.nativeObject.setThumb(_defaultThumb);
                     }
                 },
