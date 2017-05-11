@@ -113,6 +113,14 @@ const SearchView = extend(View)(
             self.nativeObject.resignFirstResponder();
         };
         
+        this.requestFocus = function(){
+            self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+            self.nativeObject.resignFirstResponder();
+        };
+        
         this.ios = {};
         var _searchViewStyle = UISearchBarStyle.default;
         Object.defineProperty(this.ios, 'searchViewStyle', {
@@ -197,28 +205,28 @@ const SearchView = extend(View)(
         // UISearchBarDelegate
         self.searchBarDelegate = new __SF_UISearchBarDelegate();
         self.searchBarDelegate.cancelButtonClicked = function(e){
-            if (typeof self._onCancelButtonClicked === "function"){
-                    self._onCancelButtonClicked();
+            if (typeof _onCancelButtonClicked === "function"){
+                    _onCancelButtonClicked();
             }
         };
         self.searchBarDelegate.didBeginEditing = function(){
-            if (typeof self._onSearchBegin === "function"){
-                    self._onSearchBegin();
+            if (typeof _onSearchBegin === "function"){
+                    _onSearchBegin();
             }
         };
         self.searchBarDelegate.didEndEditing = function(){
-            if (typeof self._onSearchEnd === "function"){
-                    self._onSearchEnd();
+            if (typeof _onSearchEnd === "function"){
+                    _onSearchEnd();
             }
         };
         self.searchBarDelegate.textDidChange = function(searchText){
-            if (typeof self._onTextChanged === "function"){
-                    self._onTextChanged();
+            if (typeof _onTextChanged === "function"){
+                    _onTextChanged();
             }
         };
         self.searchBarDelegate.searchButtonClicked = function(){
-            if (typeof self._onSearchButtonClicked === "function"){
-                    self._onSearchButtonClicked();
+            if (typeof _onSearchButtonClicked === "function"){
+                    _onSearchButtonClicked();
             }
         };
         self.nativeObject.delegate = self.searchBarDelegate;

@@ -4,7 +4,9 @@ const Color = require('sf-core/ui/color');
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
-const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
+const NativeOnMarkerClickListener  = NativeGoogleMap.OnMarkerClickListener;
+const NativeOnMapClickListener     = NativeGoogleMap.OnMapClickListener;
+const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 
 const hueDic = {};
 hueDic[Color.BLUE]    = NativeDescriptorFactory.HUE_BLUE;
@@ -51,6 +53,24 @@ const MapView = extend(View)(
                         return false;
                     }
                 }));
+                
+                googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
+                    onMapClick: function(location) {
+                        _callbackOnPress && _callbackOnPress({
+                            latitude: location.latitude,
+                            longitude: location.longitude,
+                        });
+                    }
+                }));
+
+                googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
+                    onMapLongClick: function(location) {
+                        _callbackOnLongPress && _callbackOnLongPress({
+                            latitude: location.latitude,
+                            longitude: location.longitude
+                        });
+                    }
+                }));
 
                 _callbackOnCreate && _callbackOnCreate();
             }
@@ -58,6 +78,8 @@ const MapView = extend(View)(
 
         var _nativeGoogleMap;
         var _callbackOnCreate;
+        var _callbackOnPress;
+        var _callbackOnLongPress;
         var _pins = [];
         Object.defineProperties(self, {
             'onCreate': {
@@ -66,6 +88,22 @@ const MapView = extend(View)(
                 },
                 set: function(callback) {
                     _callbackOnCreate = callback;
+                }
+            },
+            'onPress': {
+                get: function() {
+                    return _callbackOnPress;
+                },
+                set: function(callback) {
+                    _callbackOnPress = callback;
+                }
+            },
+            'onLongPress': {
+                get: function() {
+                    return _callbackOnLongPress;
+                },
+                set: function(callback) {
+                    _callbackOnLongPress = callback;
                 }
             },
             'toString': {

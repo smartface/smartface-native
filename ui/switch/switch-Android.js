@@ -19,7 +19,7 @@ const Switch = extend(View)(
         var _toggleOnColor = Color.GRAY;
         var _toggleOffColor = Color.GRAY;
         var onToggleChangedCallback;
-        Object.defineProperty(this, {
+        Object.defineProperties(this, {
             'thumbOnColor': {
                 get: function() {
                     return _thumbOnColor;
@@ -81,17 +81,29 @@ const Switch = extend(View)(
             }
         });
 
-        Object.defineProperty(this.android, 'toggleOffColor', {
-            get: function() {
-                return _toggleOffColor;
+        Object.defineProperties(this.android, {
+            'toggleOffColor': {
+                get: function() {
+                    return _toggleOffColor;
+                },
+                set: function(toggleOffColor) {
+                    _toggleOffColor = toggleOffColor;
+                    setTrackColor(self);
+                },
+                enumerable: true
             },
-            set: function(toggleOffColor) {
-                _toggleOffColor = toggleOffColor;
-                setTrackColor(self);
-            },
-            enumerable: true
+            'thumbOffColor': {
+                get: function() {
+                    return _thumbOffColor;
+                },
+                set: function(value) {
+                    _thumbOffColor = value;
+                    setThumbColor(self);
+                },
+                enumerable: true
+            }
         });
-
+        
         if(!this.isNotSetDefaults){
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
@@ -117,19 +129,19 @@ const Switch = extend(View)(
 
 function setThumbColor(self){
     if(self.nativeObject.isChecked()){
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 
 function setTrackColor(self){
     if(self.nativeObject.isChecked()){
-        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
-        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOffColor, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 

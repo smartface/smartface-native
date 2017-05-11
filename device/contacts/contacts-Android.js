@@ -67,10 +67,11 @@ Contacts.add = function(params) {
 };
 
 Contacts.pick = function(params) {
-    if (params) {
-        _onSuccess = params.onSuccess;
-        _onFailure = params.onFailure;
+    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
+        throw new TypeError('Page parameter required');
     }
+    _onSuccess = params.onSuccess;
+    _onFailure = params.onFailure;
 
     try {
         var actionPick = NativeIntent.ACTION_PICK;
@@ -78,7 +79,7 @@ Contacts.pick = function(params) {
         var intent = new NativeIntent(actionPick, uri);
         intent.setType(Phone_CONTENT_TYPE); //should filter only contacts with phone numbers
 
-        getCurrentPageFragment().startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
+        params.page.nativeObject.startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
     }
     catch (error) {
         if (_onFailure)
@@ -289,11 +290,6 @@ function addContactAddress(address) {
         content = content.build();
         contentProviderOperation.add(content);
     }
-}
-
-function getCurrentPageFragment() {
-    const Router = require("sf-core/ui/router");
-    return Router.getCurrentPage().page.nativeObject;
 }
 
 module.exports = Contacts;

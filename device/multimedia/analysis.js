@@ -54,6 +54,7 @@ function Multimedia() {}
  * Calls the camera intent.
  * 
  * @param {Object} params Object describing parameters for the function.
+ * @param {UI.Page} params.page
  * @param {Device.Multimedia.ActionType} params.action Camera action.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
@@ -112,6 +113,7 @@ Multimedia.startCamera = function(e) { };
  *     module.exports = Page1;
  * 
  * @param {Object} params Object describing parameters for the function.
+ * @param {UI.Page} params.page.
  * @param {Device.Multimedia.Type} params.type Data type.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 

@@ -38,7 +38,11 @@ http.requestString = function(url, onLoad, onError) {
     });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            onError(error);
+            var statusCode = error.networkResponse.statusCode;
+            onError({
+                message: error + " " + error.getMessage(),
+                statusCode: statusCode
+            });
         }
     });
         
@@ -53,11 +57,11 @@ http.requestString = function(url, onLoad, onError) {
         }
         else {
             if(onError)
-                onError("No network connection");
+                onError({message: "No network connection"});
         }
     } catch(e) {
         if(onError)
-            onError(e);
+            onError({message: e});
     }
 };
 http.requestImage = function(url, onLoad, onError) {
@@ -70,7 +74,11 @@ http.requestImage = function(url, onLoad, onError) {
     });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            onError(error);
+            var statusCode = error.networkResponse.statusCode;
+            onError({
+                message: error + " " + error.getMessage(),
+                statusCode: statusCode
+            });
         }
     });
     
@@ -84,10 +92,10 @@ http.requestImage = function(url, onLoad, onError) {
             return request;
         }
         else {
-            onError("No network connection");
+            onError({message: "No network connection"});
         }
     } catch(e) {
-        onError(e);
+        onError({message: e});
     }
 };
 http.requestJSON = function(url, onLoad, onError) {
@@ -111,7 +119,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {
             stream.close();
         } catch (e) {
             success = true;
-            onError(e);
+            onError({message: e});
         }
         if(success) {
             onLoad(file);
@@ -134,7 +142,11 @@ http.request = function(params, onLoad, onError) {
         });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            onError(error.getMessage());
+            var statusCode = error.networkResponse.statusCode;
+            onError({
+                message: error + " " + error.getMessage(),
+                statusCode: statusCode
+            });
         }
     });
     
@@ -177,12 +189,12 @@ http.request = function(params, onLoad, onError) {
         }
         else {
             if(onError)
-                onError("No network connection");
+                onError({message: "No network connection"});
         }
     }
     catch(err) {
         if(onError)
-            onError(err);
+            onError({message: err});
     }
     http.RequestQueue.add(request.nativeObject);
     return request;

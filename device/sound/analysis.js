@@ -148,14 +148,16 @@ Sound.android = {};
  *
  * @method pick
  * @param {Object} params Object describing function parameters.
+ * @param {UI.Page} params.page (required since 1.1.8)
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.param 
  * @param {Device.Sound} params.onSuccess.param.sound 
  * @param {Function} [params.onFailure] Callback for failure situation.
  * @static
  * @android
- * @since 0.1
+ * @since 1.1.8
  */
 Sound.android.pick = function(params) {};
+
 
 module.exports = Sound;
