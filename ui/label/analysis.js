@@ -70,6 +70,17 @@ const Label = extend(View)(
          * @since 0.1
          */
         this.multiline = false;
+        
+        /**
+         * Enables/disables selectable status of the Label. If set to true
+         * the text inside the Label will be selectable.
+         *
+         * @property {Boolean} [selectable = false]
+         * @android
+         * @ios
+         * @since 1.1.8
+         */
+        this.selectable = false;
 
         /**
          * Gets/sets text on Label.

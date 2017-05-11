@@ -97,7 +97,17 @@ const Label = extend(View)(
                     else{
                         self.nativeObject.setMovementMethod(null);
                     }
-                    
+                },
+                enumerable: true
+            },
+            'selectable': {
+                get: function() {
+                    return self.nativeObject.isTextSelectable();
+                },
+                set: function(value) {
+                    if(TypeUtil.isBoolean(value)){
+                        self.nativeObject.setTextIsSelectable(value);
+                    }
                 },
                 enumerable: true
             },
