@@ -1,5 +1,6 @@
 const TypeUtil = require("sf-core/util/type");
 const Exception = require("sf-core/util").Exception;
+const Color = require('sf-core/ui/color');
 
 function View(params) {
 
@@ -17,10 +18,10 @@ function View(params) {
 
     Object.defineProperty(self, 'borderColor', {
         get: function() {
-            return  self.nativeObject.layer.borderUIColor;
+            return new Color({color : self.nativeObject.layer.borderUIColor});
         },
         set: function(value) {
-            self.nativeObject.layer.borderUIColor = value;
+            self.nativeObject.layer.borderUIColor = value.nativeObject;
         },
         enumerable: true
     });
@@ -51,24 +52,24 @@ function View(params) {
 
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return self.nativeObject.backgroundColor;
+            return new Color({color : self.nativeObject.backgroundColor});
         },
         set: function(value) {
-            if (value.constructor.name === "CAGradientLayer"){
+            if (value.nativeObject.constructor.name === "CAGradientLayer"){
                 if (!self.gradientColor){
                     self.nativeObject.addFrameObserver();
                     self.nativeObject.frameObserveHandler = function(e){
                         self.gradientColor.frame = e.frame;
-                        self.nativeObject.backgroundColor = value.layerToColor();
+                        self.nativeObject.backgroundColor = value.nativeObject.layerToColor();
                     }
                 }
-                self.gradientColor = value;
+                self.gradientColor = value.nativeObject;
             }else{
                 if(self.gradientColor){
                     self.nativeObject.removeFrameObserver();
                     self.gradientColor = undefined;
                 }
-                self.nativeObject.backgroundColor = value;
+                self.nativeObject.backgroundColor = value.nativeObject;
             }
         },
         enumerable: true,

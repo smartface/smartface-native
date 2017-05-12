@@ -30,7 +30,7 @@ const ActivityIndicator = extend(View)(
                 },
                 set: function(color) {
                     _color = color;
-                    self.nativeObject.color = color;
+                    self.nativeObject.color = color.nativeObject;
                 },
                 enumerable: true
         });

@@ -97,7 +97,7 @@ const Label = extend(View)(
             set: function(value) {
                 self.nativeObject.text = value;
                 self.nativeObject.setEditable = true;
-                self.nativeObject.textColor = _textColor;
+                self.nativeObject.textColor = _textColor.nativeObject;
                 self.nativeObject.setEditable = false;
                 self.nativeObject.setSelectable = self.selectable;
             },
@@ -125,7 +125,7 @@ const Label = extend(View)(
             set: function(value) {
                 _textColor = value;
                 self.nativeObject.setEditable = true;
-                self.nativeObject.textColor = value;
+                self.nativeObject.textColor = value.nativeObject;
                 self.nativeObject.setEditable = false;
                 self.nativeObject.setSelectable = self.selectable;
             },

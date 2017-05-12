@@ -1,4 +1,5 @@
 const UI = require("../");
+const Color = require("sf-core/ui/color");
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -39,11 +40,11 @@ function HeaderBarItem(params) {
         },
         'color': {
             get: function() {
-                return self.nativeObject.tintColor;
+                return new Color({color : self.nativeObject.tintColor});
             },
             set: function(value) {
                 if (value) {
-                    self.nativeObject.tintColor = value;
+                    self.nativeObject.tintColor = value.nativeObject;
                 }
             },
             enumerable: true

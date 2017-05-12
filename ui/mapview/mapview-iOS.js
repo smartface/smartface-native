@@ -2,6 +2,8 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const MapType = require('sf-core/ui/mapview/maptype');
 const Image = require("sf-core/ui/image");
+const Color = require('sf-core/ui/color');
+
 /**
  * @class UI.MapView
  * @since 0.1
@@ -206,10 +208,10 @@ function Pin(params) {
     
     Object.defineProperty(self, 'color', { //cant set after added mapview
             get: function() {
-                return self.nativeObject.color;
+                return new Color({color : self.nativeObject.color});
             },
             set: function(value) {
-                self.nativeObject.color = value;
+                self.nativeObject.color = value.nativeObject;
             },
             enumerable: true
     });
