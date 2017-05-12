@@ -34,11 +34,15 @@ const SearchView = extend(View)(
         }  
         
         textfield.onShowKeyboard = function(e){
-              keyboardShowAnimation(e.keyboardHeight);
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                keyboardShowAnimation(e.keyboardHeight);
+            }
         }
            
         textfield.onHideKeyboard = function(e){
-              keyboardHideAnimation();
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                keyboardHideAnimation();
+            }
         }
         
         var _top = 0;
