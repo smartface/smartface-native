@@ -60,10 +60,12 @@ function View(params) {
                     self.nativeObject.addFrameObserver();
                     self.nativeObject.frameObserveHandler = function(e){
                         self.gradientColor.frame = e.frame;
-                        self.nativeObject.backgroundColor = value.nativeObject.layerToColor();
+                        self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
                     }
                 }
                 self.gradientColor = value.nativeObject;
+                self.gradientColor.frame = self.nativeObject.frame;
+                self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
             }else{
                 if(self.gradientColor){
                     self.nativeObject.removeFrameObserver();
