@@ -31,7 +31,7 @@ function Contacts() {}
  *
  *     @example
  *     const Contacts = require("sf-core/device/contacts");
- *     Contacts.add(
+ *     Contacts.add({
  *         contact: {
  *             displayName : "Smartface Team",
  *             phoneNumber : "+16506173265",
@@ -39,6 +39,7 @@ function Contacts() {}
  *             address     : "347 N Canon Dr Beverly Hills, CA 90210",
  *             onSuccess : function(){
  *                 alert("Success");
+ *             }
  *         },
  *         onFailure : function(){
  *             alert("Failure");

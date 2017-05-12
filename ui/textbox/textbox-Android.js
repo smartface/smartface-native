@@ -6,6 +6,11 @@ const ActionKeyType     = require('../actionkeytype');
 const TextAlignment     = require('sf-core/ui/textalignment');
 const AndroidConfig     = require('sf-core/util/Android/androidconfig');
 
+const NativeR               = requireClass(AndroidConfig.packageName + '.R');
+
+var activity = Android.getActivity();
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
+
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -104,10 +109,13 @@ const TextBox = extend(Label)(
                     return _keyboardType;
                 },
                 set: function(keyboardType) {
-                    if(NativeKeyboardType.indexOf(self.keyboardType) === -1){
+                    if(NativeKeyboardType.indexOf(keyboardType) === -1){
                         _keyboardType = KeyboardType.DEFAULT;
-                        setKeyboardType(this);
                     }
+                    else{
+                        _keyboardType = keyboardType;
+                    }
+                    setKeyboardType(this);
                 },
                 enumerable: true
             },
@@ -226,6 +234,7 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
+                        self.hideKeyboard();
                     }
                 }
             }));
@@ -238,7 +247,35 @@ const TextBox = extend(Label)(
                     return false;
                 }
             }));
+            
+            self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                onKey: function( view, keyCode, keyEvent) {
+                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                    if(keyCode === 4 && keyEvent.getAction() === 1) {
+                        self.nativeObject.clearFocus();
+                    }
+                    return false;
+                }
+            }));
         }
+        
+        // Always return false for using both touch and focus events. 
+        // It will not broke events on scrollable parents. Solves: AND-2798
+        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+            onTouch: function(view, event) {
+                if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
+                    // MotionEvent.ACTION_UP
+                    if (event.getAction() === 1) {
+                        self.onTouchEnded && self.onTouchEnded();
+                    } 
+                    // MotionEvent.ACTION_DOWN
+                    else if(event.getAction() === 0) {
+                        self.onTouch && self.onTouch();
+                    }
+                }
+                return false;
+            }
+        }));
         
         // Assign parameters given in constructor
         if (params) {
@@ -253,13 +290,12 @@ function setKeyboardType(self){
     self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
     
     if(self.isPassword){
-        var inputType = NativeKeyboardType[self.keyboardType];
-        if(NumberInputTypeIndex.indexOf(self.keyboardType) >= 0) {
-            self.nativeObject.setInputType(inputType | NativePasswordType.NUMBER);
-        }
-        else {
-            self.nativeObject.setInputType(inputType | NativePasswordType.TEXT);
-        }
+        const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
+        var passwordMethod = new NativePasswordTransformationMethod();
+        self.nativeObject.setTransformationMethod(passwordMethod);
+    }
+    else{
+        self.nativeObject.setTransformationMethod(null);
     }
 }
 

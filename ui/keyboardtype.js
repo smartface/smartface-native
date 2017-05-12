@@ -7,8 +7,15 @@
  * to the TextBox.
  *
  *     @example
- *     const KeyboardType = require('sf-core/ui/textbox').KeyboardType;
- *     var myKeyboardType = KeyboardType.DEFAULT;
+ *     const TextBox = require('sf-core/ui/textbox');
+ *     const KeyboardType = require('sf-core/ui/keyboardtype');
+ *     var myTextBox = new TextBox({
+ *         height: 75, 
+ *         width: 100,
+ *         hint: 'Smartface Hint',
+ *         keyboardType: KeyboardType.NUMBER,
+ *         isPassword: true
+ *     });
  *
  */
 

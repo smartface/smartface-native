@@ -1,3 +1,10 @@
+const NativeTextButton = requireClass('android.widget.Button');
+const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+const NativeImageButton = requireClass('android.widget.ImageButton');
+const Color = require("sf-core/ui/color");
+const Image = require("sf-core/ui/image");
+const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+
 function HeaderBarItem(params) {
     var _title = "";
     var _image = null;
@@ -5,6 +12,9 @@ function HeaderBarItem(params) {
     var _onPress = null;
     var _color = null;
     var _searchView = null;
+    var _imageButton = false;
+    var _menuItem = null;
+    var activity = Android.getActivity();
     
     Object.defineProperties(this, {
         'color': {
@@ -12,7 +22,22 @@ function HeaderBarItem(params) {
                 return _color;
             },
             set: function(value) {
+                if(value === null)
+                    return;
+                if(!(typeof(value) === "number" || value instanceof Color)) {
+                    throw new TypeError("color must be Color instance");
+                }
                 _color = value;
+                if(this.nativeObject) {
+                    if(this.image && this.image.nativeObject) {
+                        var imageCopy = this.image.nativeObject.mutate();
+                        imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
+                        this.nativeObject.setImageDrawable(imageCopy);
+                    }
+                    else {
+                        this.nativeObject.setTextColor(_color);
+                    }
+                }
             },
             enumerable: true
         },
@@ -21,26 +46,73 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if (typeof(value) !== "string") {
-                    return;
+                if (value !== null && typeof(value) !== "string") {
+                    throw new TypeError("title must be string or null.");
                 }
                 _title = value;
-                if (this.nativeObject) {
-                    this.nativeObject.setTitle(_title);
+                if(!this.nativeObject) {
+                    this.nativeObject = new NativeTextButton(activity);
+                    this.nativeObject.setText(_title);
+                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                    this.nativeObject.setPadding(
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                    );
+                    
+                    this.color = _color;
+                    this.imageButton = false;
+                    if(this.menuItem)
+                        this.menuItem.setActionView(this.nativeObject);
+                }
+                else if(!this.imageButton) {
+                    this.nativeObject.setText(_title);
+                    this.color = _color;
                 }
             },
             enumerable: true
+        },
+        'imageButton' : {
+            get: function() { return _imageButton; },
+            set: function(value) { _imageButton = value; }
+        },
+        'menuItem' : {
+            get: function() { return _menuItem; },
+            set: function(value) { _menuItem = value; }
         },
         'image': {
             get: function() {
                 return _image;
             },
             set: function(value) {
-                if (value) {
+                if (value === null || value instanceof Image) {
                     _image = value;
-                    if (this.nativeObject) {
-                        this.nativeObject.setIcon(_image.nativeObject);
+                    if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
+                        this.nativeObject = new NativeImageButton(activity);
+                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                        this.nativeObject.setPadding(
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                        );
+                    
+                        this.imageButton = true;
+                        if(this.menuItem) {
+                            this.menuItem.setActionView(this.nativeObject);
+                        }
                     }
+                    if (this.nativeObject && this.imageButton) {
+                        if(_image) {
+                            var imageCopy = _image.nativeObject.mutate();
+                            this.nativeObject.setImageDrawable(imageCopy);
+                        }
+                        else {
+                            this.nativeObject.setImageDrawable(null);
+                            this.nativeObject = null;
+                            this.title = _title;
+                        }
+                    }
+                }
+                else {
+                    throw new TypeError("image must be Image instance.");
                 }
             },
             enumerable: true
@@ -80,8 +152,30 @@ function HeaderBarItem(params) {
                 if (value instanceof Function) {
                     _onPress = value.bind(this);
                 }
+                else {
+                    throw new TypeError("onPress must be function.");
+                }
             },
             enumerable: true
+        },
+        'setValues' : {
+            value: function() {
+                this.color = this.color;
+                this.enabled = this.enabled; 
+                if(this.imageButton) {
+                    this.image = this.image;
+                }
+                else {
+                    this.title = this.title;
+                }
+                
+                const NativeView = requireClass('android.view.View');
+                this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
+                    onClick: function(view) {
+                        _onPress && _onPress();
+                    }
+                }));
+            }
         },
         'toString': {
             value: function(){
