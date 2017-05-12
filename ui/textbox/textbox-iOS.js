@@ -356,6 +356,7 @@ const TextBox = extend(View)(
             return _top;
         }
         
+        var _isKeyboadAnimationCompleted = true;
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
             _top = 0;
@@ -368,6 +369,7 @@ const TextBox = extend(View)(
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
+                    _isKeyboadAnimationCompleted = false;
                     __SF_UIView.animation(230,0,function(){
                         var distance = -(top-newTop) + navigationBarHeight;
                         if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
@@ -377,7 +379,7 @@ const TextBox = extend(View)(
                         }
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
-                        
+                        _isKeyboadAnimationCompleted = true;
                     });
                 }else{
                     if (self.getParentViewController().view.frame.y !== 0){
@@ -393,12 +395,19 @@ const TextBox = extend(View)(
                 if(self.getParentViewController().navigationController.navigationBar.visible){
                     top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
-                __SF_UIView.animation(130,0,function(){
+                if (_isKeyboadAnimationCompleted){
+                    __SF_UIView.animation(130,0,function(){
+                        self.getParentViewController().view.yoga.top = top;
+                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                    },function(){
+                        
+                    });
+                }else{
+                    self.getParentViewController().view.layer.removeAllAnimations();
                     self.getParentViewController().view.yoga.top = top;
                     self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                },function(){
-                    
-                });
+                }
+                
             }
         }
   
