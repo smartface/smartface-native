@@ -64,6 +64,9 @@ function View(params) {
                     }
                 }
                 self.gradientColor = value.nativeObject;
+                if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
+                    return;
+                }
                 self.gradientColor.frame = self.nativeObject.frame;
                 self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
             }else{
