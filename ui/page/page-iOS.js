@@ -17,6 +17,11 @@ function Page(params) {
     }
 
     self.pageView = new FlexLayout();
+    
+    self.pageView.nativeObject.addObserver(function(){
+                    self.layout.nativeObject.endEditing(true);
+                },__SF_UIApplicationWillResignActiveNotification);
+                
     self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
