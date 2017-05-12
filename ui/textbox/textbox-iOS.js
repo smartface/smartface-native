@@ -329,6 +329,8 @@ const TextBox = extend(View)(
            self.nativeObject.resignFirstResponder();
         };
         
+        self.nativeObject.addKeyboardObserver();
+        
         self.nativeObject.onShowKeyboard = function(e){
               keyboardShowAnimation(e.keyboardHeight);
         }
