@@ -1,3 +1,6 @@
+const TypeUtil = require("sf-core/util/type");
+const Exception = require("sf-core/util/exception");
+
 function Menu(params) {
     
     var _items = [];
@@ -9,6 +12,9 @@ function Menu(params) {
                 return _items;
             },
             set: function(items) {
+                if(!TypeUtil.isArray(items)){
+                    throw new TypeError(Exception.TypeError.ARRAY);
+                }
                 _items = items;
             },
             enumerable: true
@@ -18,12 +24,18 @@ function Menu(params) {
                 return _headerTitle;
             },
             set: function(headerTitle) {
+                if(!TypeUtil.isString(headerTitle)){
+                    throw new TypeError(Exception.TypeError.STRING);
+                }
                 _headerTitle = headerTitle;
             },
             enumerable: true
         },
         'show':{
             value:function(page) {
+                if(!(page instanceof require("sf-core/ui/page"))){
+                    throw new TypeError('Parameter must be instance of page');
+                }
                 var layout = page.layout;
                 var layoutNativeObject = layout.nativeObject;
                 var pageNativeObject = page.nativeObject;
