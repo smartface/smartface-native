@@ -1,18 +1,19 @@
 const extend     = require('js-base/core/extend');
 const FlexLayout = require('../flexlayout');
+var superAddChild;
 
 const AbsoluteLayout = extend(FlexLayout)(
     function (_super, params) {
         _super(this);
-
-        var superAddChild = this.addChild;
+        superAddChild = this.addChild; 
         
         Object.defineProperties(this, {
             'addChild': {
                 value: function(view){
                     superAddChild(view);
                     view.positionType = FlexLayout.PositionType.ABSOLUTE;
-                }
+                }, 
+                configurable: true
             },
             'toString': {
                 value: function(){
