@@ -11,7 +11,7 @@
  * 
  *     @example
  *     const File = require("sf-core/io/file");
- *     const Database = require('nf-core/data/database');
+ *     const Database = require('sf-core/data').Database;
  *     
  *     var database = new Database({
  *         file: new File({path: 'assets://database.sqlite'})
