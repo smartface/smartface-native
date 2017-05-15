@@ -23,7 +23,8 @@ const ViewGroup = extend(View)(
                         this.nativeObject.addView(view.nativeObject);
                     }
                 },
-                enumerable: true
+                enumerable: true, 
+                configurable: true
             },
             'removeChild': {
                 value: function(view){
