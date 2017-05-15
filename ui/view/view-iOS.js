@@ -59,12 +59,15 @@ function View(params) {
                 if (!self.gradientColor){
                     self.nativeObject.addFrameObserver();
                     self.nativeObject.frameObserveHandler = function(e){
+                        if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                            return;
+                        }
                         self.gradientColor.frame = e.frame;
                         self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
                     }
                 }
                 self.gradientColor = value.nativeObject;
-                if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
+                if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
                     return;
                 }
                 self.gradientColor.frame = self.nativeObject.frame;
