@@ -77,7 +77,8 @@ const MapView = extend(View)(
                 self.scrollEnabled = _scrollEnabled;
                 self.zoomEnabled = _zoomEnabled;
                 self.type = _type;
-                
+                self.zoomLevel = _zoomLevel;
+
                 _pendingPins.forEach(function(element){
                     self.addPin(element);
                 });
@@ -167,39 +168,15 @@ const MapView = extend(View)(
             },
             'zoomLevel': {
                 get: function() {
-                    return _zoomLevel;
+                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom : _zoomLevel;
                 },
                 set: function(value) {
                     if (TypeUtil.isNumeric(value)) {
                         _zoomLevel = value;
                         if(self.nativeObject.isShown()){
-                            _nativeGoogleMap.zoomTo(value);
-                        }
-                    }
-                }
-            },
-            'maxZoomLevel': {
-                get: function() {
-                    return _maxZoomLevel;
-                },
-                set: function(value) {
-                    if (TypeUtil.isNumeric(value)) {
-                        _maxZoomLevel = value;
-                        if(self.nativeObject.isShown()){
-                            _nativeGoogleMap.setMaxZoomPreference(value);
-                        }
-                    }
-                }
-            },
-            'minZoomLevel': {
-                get: function() {
-                    return _minZoomLevel;
-                },
-                set: function(value) {
-                    if (TypeUtil.isBoolean(value)) {
-                        _minZoomLevel = value;
-                        if(self.nativeObject.isShown()){
-                            _nativeGoogleMap.setMinZoomPreference(value);
+                            const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value)
+                            _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
                         }
                     }
                 }
