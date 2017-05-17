@@ -93,7 +93,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type;
+        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type, _zoomLevel, _maxZoomLevel, _minZoomLevel;
         Object.defineProperties(self, {
             'centerLocation': {
                 get: function() {
@@ -161,6 +161,45 @@ const MapView = extend(View)(
                         _zoomEnabled = enabled;
                         if(self.nativeObject.isShown()){
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
+                        }
+                    }
+                }
+            },
+            'zoomLevel': {
+                get: function() {
+                    return _zoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _zoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.zoomTo(value);
+                        }
+                    }
+                }
+            },
+            'maxZoomLevel': {
+                get: function() {
+                    return _maxZoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _maxZoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMaxZoomPreference(value);
+                        }
+                    }
+                }
+            },
+            'minZoomLevel': {
+                get: function() {
+                    return _minZoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isBoolean(value)) {
+                        _minZoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMinZoomPreference(value);
                         }
                     }
                 }
