@@ -94,7 +94,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type, _zoomLevel, _maxZoomLevel, _minZoomLevel;
+        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type, _zoomLevel;
         Object.defineProperties(self, {
             'centerLocation': {
                 get: function() {
