@@ -92,6 +92,49 @@ function View(params) {
         enumerable: true
     });
 
+    self.nativeObject.layer.rotationZ = 0;
+    self.nativeObject.layer.rotationX = 0;
+    self.nativeObject.layer.rotationY = 0;
+    
+    var _rotation = 0;
+    Object.defineProperty(self, 'rotation', {
+        get: function() {
+            return _rotation;
+        },
+        set: function(value) {
+            _rotation = value;
+            self.nativeObject.layer.rotationZ = _rotation * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
+    var _rotationX = 0;
+    Object.defineProperty(self, 'rotationX', {
+        get: function() {
+            return _rotationX;
+        },
+        set: function(value) {
+            _rotationX = value;
+            self.nativeObject.layer.rotationX = _rotationX * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
+    var _rotationY = 0;
+    Object.defineProperty(self, 'rotationY', {
+        get: function() {
+            return _rotationY;
+        },
+        set: function(value) {
+            _rotationY = value;
+            self.nativeObject.layer.rotationY = _rotationY * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self, 'visible', {
         get: function() {
             return self.nativeObject.visible;
