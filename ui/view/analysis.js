@@ -99,28 +99,6 @@ function View(params) {
     this.visible = true;
     
     /**
-     * Gets/sets the amount that the view is scaled in Y axis around the pivot point.
-     *
-     * @property {Number} [scaleY = 1]
-     * @android
-     * @ios
-     * @member UI.View
-     * @since 1.1.10
-     */
-    this.scaleY = 1;
-    
-    /**
-     * Gets/sets the amount that the view is scaled in X axis around the pivot point.
-     *
-     * @property {Number} [scaleX = 1]
-     * @android
-     * @ios
-     * @member UI.View
-     * @since 1.1.10
-     */
-    this.scaleX = 1;
-    
-    /**
      * Gets/sets the degrees that the view is rotated around the pivot point.
      *
      * @property {Number} [rotation = 0]
