@@ -97,6 +97,61 @@ function View(params) {
      * @since 0.1
      */
     this.visible = true;
+    
+    /**
+     * Gets/sets the amount that the view is scaled in Y axis around the pivot point.
+     *
+     * @property {Number} [scaleY = 1]
+     * @android
+     * @ios
+     * @member UI.View
+     * @since 1.1.10
+     */
+    this.scaleY = 1;
+    
+    /**
+     * Gets/sets the amount that the view is scaled in X axis around the pivot point.
+     *
+     * @property {Number} [scaleX = 1]
+     * @android
+     * @ios
+     * @member UI.View
+     * @since 1.1.10
+     */
+    this.scaleX = 1;
+    
+    /**
+     * Gets/sets the degrees that the view is rotated around the pivot point.
+     *
+     * @property {Number} [rotation = 0]
+     * @android
+     * @ios
+     * @member UI.View
+     * @since 1.1.10
+     */
+    this.rotation = 0;
+    
+    /**
+     * Gets/sets the degrees that the view is rotated around the horizontal axis through the pivot point.
+     *
+     * @property {Number} [rotationX = 0]
+     * @android
+     * @ios
+     * @member UI.View
+     * @since 1.1.10
+     */
+    this.rotationX = 0;
+    
+    /**
+     * Gets/sets the degrees that the view is rotated around the vertical axis through the pivot point.
+     *
+     * @property {Number} [rotationY = 0]
+     * @android
+     * @ios
+     * @member UI.View
+     * @since 1.1.10
+     */
+    this.rotationY = 0;
 
     /**
      * Enables/disables touches to view. When set to false events
