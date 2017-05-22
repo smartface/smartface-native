@@ -6,23 +6,51 @@
  * ScrollView enables user to view pages with large content exceeding screen size via scroll action.
  * ScrollView can have only one child view. The layout should be added if there are child views more 
  * than one.
- *
+ *    
  *     @example
- *     const View = require('sf-core/ui/view');
- *     const Color = require('sf-core/ui/color');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     const ScrollView = require('sf-core/ui/scrollview');
+ *     const Button = require('sf-core/ui/button');
+ *     const Color = require('sf-core/ui/color');
  *
- *     var myScrollView = new ScrollView({
- *         width: 500, height: 750,
- *         align: ScrollView.Align.VERTICAL
+ *     var scrollView = new ScrollView({
+ *         height: 300,
+ *         width: 200,
+ *         backgroundColor: Color.GREEN,
+ *         alignSelf: FlexLayout.AlignSelf.CENTER
  *     });
- *
- *     myScrollView.addChild(new View({
- *         width: 500, height:3000
- *         backgroundColor: Color.GREEN
- *     }));
- *
- *     myPage.layout.addChild(myScrollView);
+ *     
+ *     var scrollLayout = new FlexLayout({
+ *         height: 1500,
+ *         width: 200,
+ *         backgroundColor: Color.RED
+ *     });
+ *     
+ *     var buttonTop = new Button({
+ *         height: 100,
+ *         width: 100,
+ *         top: 50,
+ *         marginLeft: 50,
+ *         text: "Scroll to 1000",
+ *         backgroundColor: Color.BLUE,
+ *         onPress: function(){
+ *             scrollView.scrollToCoordinate(1000);
+ *         }
+ *     });
+ *     var buttonBottom = new Button({
+ *         height: 100,
+ *         width: 100,
+ *         top: 1000,
+ *         marginLeft: 50,
+ *         text: "Scroll to 50",
+ *         backgroundColor: Color.BLUE,
+ *         onPress: function(){
+ *             scrollView.scrollToCoordinate(50);
+ *         }
+ *     });
+ *     scrollLayout.addChild(buttonTop)
+ *     scrollLayout.addChild(buttonBottom)
+ *     scrollView.addChild(scrollLayout);
  *
  */
 function ScrollView(){
