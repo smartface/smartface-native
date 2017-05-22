@@ -75,7 +75,7 @@ Object.defineProperties(Font, {
             var font;
             if (fontFamily && fontFamily.length > 0 && fontFamily !== Font.DEFAULT) {
                 // Searching font on assets:
-                var convertedFontName = fontFamily.replace(' ', '.') + fontSuffix + ".ttf";
+                var convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".ttf";
                 var fontFile = new File({
                     path: "assets://" + convertedFontName
                 });
@@ -85,8 +85,7 @@ Object.defineProperties(Font, {
                     return font;
                 }
                 else {
-        
-                    convertedFontName = fontFamily.replace(' ', '.') + fontSuffix + ".otf";
+                    convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".otf";
                     fontFile = new File({
                         path: "assets://" + convertedFontName
                     });
