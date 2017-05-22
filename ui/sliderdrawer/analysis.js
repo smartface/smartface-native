@@ -46,6 +46,17 @@ const SliderDrawer = extend(ViewGroup)(
         this.drawerPosition = UI.SliderDrawer.Position.LEFT;
 
         /**
+         * Gets/sets state of the SliderDrawer.
+         *
+         * @property {UI.SliderDrawer.State} state
+         * @android
+         * @ios
+         * @readonly
+         * @since 1.1.8
+         */
+        this.state;
+
+        /**
          * Gets/sets layout of the SliderDrawer.
          *
          * @property {UI.FlexLayout} [layout = UI.FlexLayout]
@@ -158,6 +169,65 @@ Object.defineProperty(SliderDrawer.Position, 'LEFT', {
  */
 Object.defineProperty(SliderDrawer.Position, 'RIGHT', {
     value: 1,
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.SliderDrawer.State
+ * @static
+ * @readonly
+ * @since 1.1.8
+ *
+ * Define the state of SliderDrawer.
+ *
+ */
+SliderDrawer.State = {};
+
+/**
+ * @property {Number} OPEN
+ *
+ * Indicates the slider drawer is open.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'OPEN', {
+    value: 0,
+    writable: false
+});
+
+/**
+ * @property {Number} CLOSED
+ *
+ * Indicates the slider drawer is closed.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'CLOSED', {
+    value: 1,
+    writable: false
+});
+
+/**
+ * @property {Number} DRAGGED
+ *
+ * Indicates the slider drawer is dragged.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'DRAGGED', {
+    value: 2,
     writable: false
 });
 

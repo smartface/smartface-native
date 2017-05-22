@@ -30,20 +30,20 @@ function QuickLook (params) {
      
      Object.defineProperty(self, 'barColor', {
             get:function() {
-                return self.nativeObject.barColor;
+                return new Color({color : self.nativeObject.barColor});
             },
             set:function(value) {
-                self.nativeObject.barColor = value;
+                self.nativeObject.barColor = value.nativeObject;
             },
             enumerable: true
      });
      
      Object.defineProperty(self, 'itemColor', {
             get:function() {
-                return self.nativeObject.itemColor;
+                return new Color({color : self.nativeObject.itemColor});
             },
             set:function(value) {
-                self.nativeObject.itemColor = value;
+                self.nativeObject.itemColor = value.nativeObject;
             },
             enumerable: true
      });

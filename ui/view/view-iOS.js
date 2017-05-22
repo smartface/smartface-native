@@ -1,5 +1,6 @@
 const TypeUtil = require("sf-core/util/type");
 const Exception = require("sf-core/util").Exception;
+const Color = require('sf-core/ui/color');
 
 function View(params) {
 
@@ -17,10 +18,10 @@ function View(params) {
 
     Object.defineProperty(self, 'borderColor', {
         get: function() {
-            return  self.nativeObject.layer.borderUIColor;
+            return new Color({color : self.nativeObject.layer.borderUIColor});
         },
         set: function(value) {
-            self.nativeObject.layer.borderUIColor = value;
+            self.nativeObject.layer.borderUIColor = value.nativeObject;
         },
         enumerable: true
     });
@@ -51,30 +52,32 @@ function View(params) {
 
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return self.nativeObject.backgroundColor;
+            return new Color({color : self.nativeObject.backgroundColor});
         },
         set: function(value) {
-            if (value.constructor.name === "CAGradientLayer"){
-                self.applyLayout();
-                if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
-                    throw new Error("");
-                }
-                value.frame = self.nativeObject.frame;
-                self.nativeObject.backgroundColor = value.layerToColor();
-                self.gradientColor = value;
-                self.nativeObject.addObserver(function(){
-                    if (self.gradientColor) {
-                        if (self.nativeObject.frame.x === 0 && self.nativeObject.frame.y === 0 && self.nativeObject.frame.width === 0 && self.nativeObject.frame.height ===0){
-
-                        }else{
-                            self.gradientColor.frame = self.nativeObject.frame;
-                            self.nativeObject.backgroundColor = value.layerToColor();
+            if (value.nativeObject.constructor.name === "CAGradientLayer"){
+                if (!self.gradientColor){
+                    self.nativeObject.addFrameObserver();
+                    self.nativeObject.frameObserveHandler = function(e){
+                        if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                            return;
                         }
+                        self.gradientColor.frame = e.frame;
+                        self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
                     }
-                },__SF_UIDeviceOrientationDidChangeNotification);
+                }
+                self.gradientColor = value.nativeObject;
+                if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                    return;
+                }
+                self.gradientColor.frame = self.nativeObject.frame;
+                self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
             }else{
-                self.gradientColor = undefined;
-                self.nativeObject.backgroundColor = value;
+                if(self.gradientColor){
+                    self.nativeObject.removeFrameObserver();
+                    self.gradientColor = undefined;
+                }
+                self.nativeObject.backgroundColor = value.nativeObject;
             }
         },
         enumerable: true,
@@ -92,6 +95,49 @@ function View(params) {
         enumerable: true
     });
 
+    self.nativeObject.layer.rotationZ = 0;
+    self.nativeObject.layer.rotationX = 0;
+    self.nativeObject.layer.rotationY = 0;
+    
+    var _rotation = 0;
+    Object.defineProperty(self, 'rotation', {
+        get: function() {
+            return _rotation;
+        },
+        set: function(value) {
+            _rotation = value;
+            self.nativeObject.layer.rotationZ = _rotation * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
+    var _rotationX = 0;
+    Object.defineProperty(self, 'rotationX', {
+        get: function() {
+            return _rotationX;
+        },
+        set: function(value) {
+            _rotationX = value;
+            self.nativeObject.layer.rotationX = _rotationX * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
+    var _rotationY = 0;
+    Object.defineProperty(self, 'rotationY', {
+        get: function() {
+            return _rotationY;
+        },
+        set: function(value) {
+            _rotationY = value;
+            self.nativeObject.layer.rotationY = _rotationY * (Math.PI/180);
+            self.nativeObject.layer.rotate();
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self, 'visible', {
         get: function() {
             return self.nativeObject.visible;

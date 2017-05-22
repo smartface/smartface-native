@@ -60,7 +60,7 @@ const ListView = extend(View)(
         self.ios.onRowSwiped = function(direction){};
         
         self.ios.swipeItem = function(title,color,padding,action){
-            return __SF_MGSwipeButton.createMGSwipeButton(title,color,padding,action);
+            return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){
@@ -183,9 +183,9 @@ const ListView = extend(View)(
 
         self.setPullRefreshColors = function(param){
             if( Object.prototype.toString.call( param ) === '[object Array]' ) {
-                self.refreshControl.tintColor = param[0];
+                self.refreshControl.tintColor = param[0].nativeObject;
             }else{
-                self.refreshControl.tintColor = param;
+                self.refreshControl.tintColor = param.nativeObject;
             }
         }
         

@@ -107,7 +107,8 @@ function Page(params) {
 
             var i;
             for (i = 0; i < items.length; i++) {
-                menu.add(0, i, 0, items[i].title);
+                var menuTitle = items[i].android.spanTitle();
+                menu.add(0, i, 0, menuTitle);
             }
         },
         onContextItemSelected: function(item) {
@@ -254,7 +255,7 @@ function Page(params) {
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
                 var window = activity.getWindow();
                 window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
+                window.setStatusBarColor(color.nativeObject);
             }
         },
         enumerable: true
@@ -279,7 +280,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                toolbar.setBackgroundColor(color);
+                toolbar.setBackgroundColor(color.nativeObject);
             }
         },
         enumerable: true
@@ -344,7 +345,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                toolbar.setTitleTextColor(color);
+                toolbar.setTitleTextColor(color.nativeObject);
             }
         },
         enumerable: true
@@ -484,7 +485,7 @@ function Page(params) {
                 item.setValues();
             }
             if(itemView) { 
-                itemView.setBackgroundColor(Color.TRANSPARENT);
+                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
                 itemView.setPadding(
                     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,

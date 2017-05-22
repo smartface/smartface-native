@@ -6,11 +6,6 @@ const ActionKeyType     = require('../actionkeytype');
 const TextAlignment     = require('sf-core/ui/textalignment');
 const AndroidConfig     = require('sf-core/util/Android/androidconfig');
 
-const NativeR               = requireClass(AndroidConfig.packageName + '.R');
-
-var activity = Android.getActivity();
-var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -48,13 +43,6 @@ const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
     4 | 32,         // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
     1 | 32          // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 ]
-
-const NumberInputTypeIndex = [1, 2, 3, 7, 8, 9, 20];
-
-const NativePasswordType = {
-    NUMBER: 16,
-    TEXT: 128
-};
 
 // NativeActionKeyType corresponds android action key type.
 const NativeActionKeyType = [6, // EditorInfo.IME_ACTION_DONE
@@ -129,20 +117,33 @@ const TextBox = extend(Label)(
                 },
                 enumerable: true
             },
-            
             'showKeyboard': {
                 value: function(){
-                    self.nativeObject.requestFocus();
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    this.requestFocus();
                 },
                 enumerable: true
             },
             'hideKeyboard': {
                 value: function(){
-                    self.nativeObject.clearFocus();
+                    this.removeFocus();
+                },
+                enumerable: true
+            },
+            'requestFocus': {
+                value: function(){
+                    this.nativeObject.requestFocus();
+                    // Due to the requirements we should show keyboard when focus requested.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = self.nativeObject.getWindowToken();
+                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                },
+                enumerable: true
+            },
+            'removeFocus': {
+                value: function(){
+                    this.nativeObject.clearFocus();
+                    // Due to the requirements we should hide keyboard when focus cleared.
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                    var windowToken = this.nativeObject.getWindowToken();
                     inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
                 },
                 enumerable: true
@@ -194,10 +195,10 @@ const TextBox = extend(Label)(
         
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return self.nativeObject.getHintTextColors().getDefaultColor();
+                return new Color({ color: self.nativeObject.getHintTextColors().getDefaultColor() });
             },
             set: function(hintTextColor) {
-                self.nativeObject.setHintTextColor(hintTextColor);
+                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
             },
             enumerable: true
         });

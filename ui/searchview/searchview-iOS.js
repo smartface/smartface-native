@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Image = require('sf-core/ui/image');
+const Color = require('sf-core/ui/color');
 
 const UISearchBarStyle = {
     default : 0,
@@ -24,6 +25,86 @@ const SearchView = extend(View)(
         }
         
         _super(this);
+        
+        var textfield = self.nativeObject.valueForKey("searchField");
+        textfield.addKeyboardObserver();
+        
+        self.getParentViewController = function(){
+            return self.nativeObject.parentViewController();
+        }  
+        
+        textfield.onShowKeyboard = function(e){
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                keyboardShowAnimation(e.keyboardHeight);
+            }
+        }
+           
+        textfield.onHideKeyboard = function(e){
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                keyboardHideAnimation();
+            }
+        }
+        
+        var _top = 0;
+        function getViewTop(view){
+            _top += view.frame.y;
+            if(view.superview){
+                if(view.superview.constructor.name === "SMFNative.SMFUIView"){
+                    if (view.superview.superview){
+                        if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
+                            return getViewTop(view.superview);
+                        }
+                    }
+                }
+            }
+            return _top;
+        }
+        
+        function keyboardShowAnimation(keyboardHeight){
+            var height = self.nativeObject.frame.height;
+            _top = 0;
+            var top = getViewTop(self.nativeObject);
+            var navigationBarHeight = 0;
+        
+            if(self.getParentViewController()){
+                if(self.getParentViewController().navigationController.navigationBar.visible){
+                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                }
+                if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
+                    var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
+                    __SF_UIView.animation(230,0,function(){
+                        var distance = -(top-newTop) + navigationBarHeight;
+                        if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
+                            self.getParentViewController().view.yoga.top =  -keyboardHeight + navigationBarHeight;
+                        }else{
+                            self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
+                        }
+                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                    },function(){
+                        
+                    });
+                }else{
+                    if (self.getParentViewController().view.frame.y !== 0){
+                        keyboardHideAnimation();
+                    }
+                }
+            }
+         }
+          
+        function keyboardHideAnimation(){
+            if(self.getParentViewController()){
+                var top = 0;
+                if(self.getParentViewController().navigationController.navigationBar.visible){
+                    top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                }
+                __SF_UIView.animation(130,0,function(){
+                    self.getParentViewController().view.yoga.top = top;
+                    self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                },function(){
+                    
+                });
+            }
+        }
         
         var _text = "";
         Object.defineProperty(this, 'text', {
@@ -52,10 +133,10 @@ const SearchView = extend(View)(
         var _textColor = self.nativeObject.textColor;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return _textColor;
+                return new Color({color : _textColor});
             },
             set: function(textColor) {
-                _textColor = textColor;
+                _textColor = textColor.nativeObject;
                 self.nativeObject.textColor = _textColor;
             },
             enumerable: true
@@ -64,10 +145,10 @@ const SearchView = extend(View)(
         var _backgroundColor = self.nativeObject.barTintColor;
         Object.defineProperty(this, 'backgroundColor', {
             get: function() {
-                return _backgroundColor;
+                return new Color({color : _backgroundColor});
             },
             set: function(backgroundColor) {
-                _backgroundColor = backgroundColor;
+                _backgroundColor = backgroundColor.nativeObject;
                 self.nativeObject.barTintColor = _backgroundColor;
             },
             enumerable: true
@@ -110,6 +191,14 @@ const SearchView = extend(View)(
         };
        
         this.hideKeyboard = function(){
+            self.nativeObject.resignFirstResponder();
+        };
+        
+        this.requestFocus = function(){
+            self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
             self.nativeObject.resignFirstResponder();
         };
         

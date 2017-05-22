@@ -123,6 +123,32 @@ const MapView = extend(View)(
         this.removePin = function(){};
 
         /**
+         * Triggered when pressed on the map and sends the location pressed on the map.
+         *
+         * @event onPress
+         * @param {Object} location
+         * @param {Number} location.latitude
+         * @param {Number} location.longitude
+         * @android
+         * @ios
+         * @since 1.1.3
+         */
+        this.onPress;
+
+        /**
+         * Triggered when long pressed on the map and sends the location pressed on the map.
+         *
+         * @event onLongPress
+         * @param {Object} location
+         * @param {Number} location.latitude
+         * @param {Number} location.longitude
+         * @android
+         * @ios
+         * @since 1.1.3
+         */
+        this.onLongPress;
+
+        /**
          * This event is called when map is ready to be used.
          *
          * @since 0.1

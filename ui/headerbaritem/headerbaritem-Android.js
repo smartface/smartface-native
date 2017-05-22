@@ -31,7 +31,7 @@ function HeaderBarItem(params) {
                 if(this.nativeObject) {
                     if(this.image && this.image.nativeObject) {
                         var imageCopy = this.image.nativeObject.mutate();
-                        imageCopy.setColorFilter(this.color, NativePorterDuff.Mode.SRC_IN);
+                        imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
                     else {
@@ -53,7 +53,7 @@ function HeaderBarItem(params) {
                 if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
-                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                    this.nativeObject.setBackgroundColor((Color.TRANSPARENT).nativeObject);
                     this.nativeObject.setPadding(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
@@ -88,7 +88,7 @@ function HeaderBarItem(params) {
                     _image = value;
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
-                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT);
+                        this.nativeObject.setBackgroundColor((Color.TRANSPARENT).nativeObject);
                         this.nativeObject.setPadding(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal

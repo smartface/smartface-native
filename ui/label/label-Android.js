@@ -97,7 +97,17 @@ const Label = extend(View)(
                     else{
                         self.nativeObject.setMovementMethod(null);
                     }
-                    
+                },
+                enumerable: true
+            },
+            'selectable': {
+                get: function() {
+                    return self.nativeObject.isTextSelectable();
+                },
+                set: function(value) {
+                    if(TypeUtil.isBoolean(value)){
+                        self.nativeObject.setTextIsSelectable(value);
+                    }
                 },
                 enumerable: true
             },
@@ -130,9 +140,9 @@ const Label = extend(View)(
                     return _textColor;
                 },
                 set: function(textColor) {
-                    if(TypeUtil.isNumeric(textColor)) {
+                    if(TypeUtil.isNumeric(textColor.nativeObject)) {
                         _textColor = textColor;
-                        self.nativeObject.setTextColor(textColor);
+                        self.nativeObject.setTextColor(textColor.nativeObject);
                     }
                     else if(TypeUtil.isObject(textColor)) {
                         _textColor = textColor;

@@ -1,6 +1,8 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const Image = require("sf-core/ui/image");
+const Color = require('sf-core/ui/color');
+
 /**
  * @class UI.MapView
  * @since 0.1
@@ -30,38 +32,38 @@ const MapView = extend(View)(
         if(!self.nativeObject){
             self.nativeObject = new __SF_MKMapView();
             
-            // var tapGesture = new __SF_UITapGestureRecognizer();
+            var tapGesture = new __SF_UITapGestureRecognizer();
             
-            // var longGesture = new __SF_UILongPressGestureRecognizer();
+            var longGesture = new __SF_UILongPressGestureRecognizer();
         }
         
         _super(this);
         
-        // self.onPressHandler = function(e){
-        //     var gesture = e.gesture;
-        //     if (gesture.gestureRecognizerstate == 3){
-        //         var point = gesture.locationView(self.nativeObject);
-        //         var coordinate = self.nativeObject.convertToCoordinateFromView(point,self.nativeObject);
-        //         if (typeof self.onPress === "function"){
-        //             self.onPress({latitude :  coordinate.latitude, longitude : coordinate.longitude});
-        //         }
-        //     }
-        // }
-        // tapGesture.handle = self.onPressHandler;
-        // self.nativeObject.addGestureRecognizer(tapGesture);
+        self.onPressHandler = function(e){
+            var gesture = e.gesture;
+            if (gesture.gestureRecognizerstate == 3){
+                var point = gesture.locationView(self.nativeObject);
+                var coordinate = self.nativeObject.convertToCoordinateFromView(point,self.nativeObject);
+                if (typeof self.onPress === "function"){
+                    self.onPress({latitude :  coordinate.latitude, longitude : coordinate.longitude});
+                }
+            }
+        }
+        tapGesture.handle = self.onPressHandler;
+        self.nativeObject.addGestureRecognizer(tapGesture);
         
-        // self.onLongPressHandler = function(e){
-        //     var gesture = e.gesture;
-        //     if (gesture.gestureRecognizerstate == 1){
-        //         var point = gesture.locationView(self.nativeObject);
-        //         var coordinate = self.nativeObject.convertToCoordinateFromView(point,self.nativeObject);
-        //         if (typeof self.onLongPress === "function"){
-        //             self.onLongPress({latitude :  coordinate.latitude, longitude : coordinate.longitude});
-        //         }
-        //     }
-        // }
-        // longGesture.handle = self.onLongPressHandler;
-        // self.nativeObject.addGestureRecognizer(longGesture);
+        self.onLongPressHandler = function(e){
+            var gesture = e.gesture;
+            if (gesture.gestureRecognizerstate == 1){
+                var point = gesture.locationView(self.nativeObject);
+                var coordinate = self.nativeObject.convertToCoordinateFromView(point,self.nativeObject);
+                if (typeof self.onLongPress === "function"){
+                    self.onLongPress({latitude :  coordinate.latitude, longitude : coordinate.longitude});
+                }
+            }
+        }
+        longGesture.handle = self.onLongPressHandler;
+        self.nativeObject.addGestureRecognizer(longGesture);
         
         var _isFirstRender = 1;
         function mapRender(){
@@ -205,10 +207,10 @@ function Pin(params) {
     
     Object.defineProperty(self, 'color', { //cant set after added mapview
             get: function() {
-                return self.nativeObject.color;
+                return new Color({color : self.nativeObject.color});
             },
             set: function(value) {
-                self.nativeObject.color = value;
+                self.nativeObject.color = value.nativeObject;
             },
             enumerable: true
     });
