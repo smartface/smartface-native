@@ -10,6 +10,8 @@
 const ScrollViewEdge = {};
 
 /**
+ * Indicates left edge of the ScrollView
+ * 
  * @property {String} [LEFT = 'left']
  * @android
  * @ios
@@ -20,6 +22,8 @@ const ScrollViewEdge = {};
 ScrollViewEdge.LEFT = 'left';
 
 /**
+ * Indicates top edge of the ScrollView
+ * 
  * @property {String} [TOP = 'top']
  * @android
  * @ios
@@ -30,6 +34,8 @@ ScrollViewEdge.LEFT = 'left';
 ScrollViewEdge.TOP = 'top';
 
 /**
+ * Indicates right edge of the ScrollView
+ * 
  * @property {String} [RIGHT = 'right']
  * @android
  * @ios
@@ -40,6 +46,8 @@ ScrollViewEdge.TOP = 'top';
 ScrollViewEdge.RIGHT = 'right';
 
 /**
+ * Indicates bottom edge of the ScrollView
+ * 
  * @property {String} [BOTTOM = 'bottom']
  * @android
  * @ios

@@ -10,6 +10,8 @@
 const ScrollViewAlign = {};
 
 /**
+ * Horizontal alignment for ScrollView
+ * 
  * @property {String} [HORIZONTAL = 'horizontal']
  * @android
  * @ios
@@ -20,6 +22,8 @@ const ScrollViewAlign = {};
 ScrollViewAlign.HORIZONTAL = 'horizontal';
 
 /**
+ * Vertical alignment for ScrollView
+ * 
  * @property {String} [VERTICAL = 'vertical']
  * @android
  * @ios
