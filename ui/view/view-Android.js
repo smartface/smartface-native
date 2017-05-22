@@ -156,6 +156,66 @@ function View(params) {
             enumerable: true,
             configurable: true
         },
+        'rotation': {
+            get: function() {
+                return this.nativeObject.getRotation();
+            },
+            set: function(value) {
+                if(TypeUtil.isNumeric(value)){
+                    this.nativeObject.setRotation(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'rotationX': {
+            get: function() {
+                return this.nativeObject.getRotationX();
+            },
+            set: function(value) {
+                if(TypeUtil.isNumeric(value)){
+                    this.nativeObject.setRotationX(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'rotationY': {
+            get: function() {
+                return this.nativeObject.getRotationY();
+            },
+            set: function(value) {
+                if(TypeUtil.isNumeric(value)){
+                    this.nativeObject.setRotationY(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'scaleX': {
+            get: function() {
+                return this.nativeObject.getScaleX();
+            },
+            set: function(value) {
+                if(TypeUtil.isNumeric(value)){
+                    this.nativeObject.setScaleX(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'scaleY': {
+            get: function() {
+                return this.nativeObject.getScaleY();
+            },
+            set: function(value) {
+                if(TypeUtil.isNumeric(value)){
+                    this.nativeObject.setScaleY(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        },
         'enabled': {
             get: function() {
                 return this.nativeObject.isEnabled();
