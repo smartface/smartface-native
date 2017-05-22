@@ -1,6 +1,3 @@
-const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
-
 /**
  * @class UI.ScrollView
  * @extends UI.ViewGroup
@@ -28,13 +25,7 @@ const extend = require('js-base/core/extend');
  *     myPage.layout.addChild(myScrollView);
  *
  */
-const ScrollView = extend(ViewGroup)(
-    function (_super, params) {
-        _super(this);
-    }
-);
-
-Object.defineProperties(ScrollView, {
+function ScrollView(){
     /**
      * Gets/sets the alignment of the scrollview. It must be set as constructor parameter.
      * This property cannot be set after the object is initialized.
@@ -44,11 +35,8 @@ Object.defineProperties(ScrollView, {
      * @ios
      * @since 0.1
      */
-    'align': {
-        get: function() {},
-        set: function(value) {},
-        configurable: false
-    },
+    this.align = UI.ScrollView.Align.VERTICAL;
+    
     /**
      * Gets/sets the visibility of the scrollbar.
      *
@@ -57,12 +45,9 @@ Object.defineProperties(ScrollView, {
      * @ios
      * @since 0.1
      */
-    'scrollBarEnabled': {
-        get: function() {},
-        set: function(value){},
-        configurable: false
-    },
-    /**
+     this.scrollBarEnabled = true;
+     
+     /**
      * Immediately scrolls to the edge set.
      *
      * @method scrollToEdge
@@ -71,11 +56,9 @@ Object.defineProperties(ScrollView, {
      * @param {UI.ScrollView.Edge} edge
      * @since 0.1
      */
-    'scrollToEdge': {
-        value: function(edge) {},
-        configurable: false
-    },
-    /**
+     this.scrollToEdge = function(){};
+     
+     /**
      * Immediately scrolls to the given coordinate. Coordinate is X position for horizontal alignment and
      * Y position for vertical alignment.
      *
@@ -85,10 +68,6 @@ Object.defineProperties(ScrollView, {
      * @param {Number} coordinate
      * @since 0.1
      */
-    'scrollToCoordinate': {
-        value: function(coordinate) {},
-        configurable: false
-    }
-});
-
+     this.scrollToCoordinate = function(coordinate) {};
+}
 module.exports = ScrollView;
