@@ -1,5 +1,6 @@
 const Image = require("sf-core/ui/image");
 const File = require("sf-core/io/file");
+const Page = require('sf-core/ui/page');
 
 const UIImagePickerControllerSourceType = {
     photoLibrary : 0,
@@ -56,13 +57,21 @@ Multimedia.createImagePickerController = function(e){
 Multimedia.startCamera = function(e) {
     e["sourceType"] = UIImagePickerControllerSourceType.camera;
     this.picker = Multimedia.createImagePickerController(e);
-    e.page.nativeObject.presentViewController(this.picker);
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(this.picker);
+    }else{
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
 };
 
 Multimedia.pickFromGallery = function(e) {
     e["sourceType"] = UIImagePickerControllerSourceType.photoLibrary;
     this.picker = Multimedia.createImagePickerController(e);
-    e.page.nativeObject.presentViewController(this.picker);
+    if (e.page && (e.page instanceof Page)) {
+        e.page.nativeObject.presentViewController(this.picker);
+    }else{
+        throw new TypeError("Parameter type mismatch. params.page must be Page instance");
+    }
 };
 
 Multimedia.android = {};

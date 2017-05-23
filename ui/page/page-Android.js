@@ -107,7 +107,8 @@ function Page(params) {
 
             var i;
             for (i = 0; i < items.length; i++) {
-                menu.add(0, i, 0, items[i].title);
+                var menuTitle = items[i].android.spanTitle();
+                menu.add(0, i, 0, menuTitle);
             }
         },
         onContextItemSelected: function(item) {
