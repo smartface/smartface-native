@@ -79,7 +79,9 @@ function Animator() {
 /** 
 * Performs the changes declared in animFunction with animation inside the layout provided.
 * Duration indicates how long the animation will take in milliseconds.
-*
+* While animating Textbox, you may see the hint of the Textbox disappear on Android. 
+* This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should 
+* set empty text to the Textbox onComplete callback of animation.
 * @method animate
 * @param {UI.ViewGroup} rootLayout
 * @param {Number} duration

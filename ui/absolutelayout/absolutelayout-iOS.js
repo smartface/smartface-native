@@ -7,7 +7,7 @@ const AbsoluteLayout = extend(ViewGroup)(
         
         var superAddChild = this.addChild.bind(this);
         this.addChild = function(view){
-            view.position = 1;
+            view.nativeObject.yoga.position = 1;
             superAddChild(view);
         }
         
