@@ -1,5 +1,6 @@
 const View = require("sf-core/ui/view");
 const Color = require("sf-core/ui/color");
+const Image = require("sf-core/ui/image");
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 
@@ -129,28 +130,67 @@ const Button = extend(View)(
             set: function(bgColors) {
                 backgroundColorsInitial = bgColors;
                  if (bgColors.constructor.name !== "Object") {
-                     self.nativeObject.setBackgroundColor(backgroundColorsInitial.nativeObject,ButtonState.normal);
+                     checkAndSetBackground(backgroundColorsInitial,ButtonState.normal);
                  }else{
                      if (typeof backgroundColorsInitial.normal !== 'undefined') {
-                        self.nativeObject.setBackgroundColor(backgroundColorsInitial.normal.nativeObject,ButtonState.normal);
+                         checkAndSetBackground(backgroundColorsInitial.normal,ButtonState.normal);
                      }
                      if (typeof backgroundColorsInitial.disabled !== 'undefined') {
-                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.disabled.nativeObject,ButtonState.disabled);
+                         checkAndSetBackground(backgroundColorsInitial.disabled,ButtonState.disabled);
                      }
                      if (typeof backgroundColorsInitial.selected !== 'undefined') {
-                         self.nativeObject.setBackgroundColor(backgroundColorsInitial.selected.nativeObject,ButtonState.selected);
+                         checkAndSetBackground(backgroundColorsInitial.selected,ButtonState.selected);
                      }
                      if (typeof backgroundColorsInitial.pressed !== 'undefined') {
-                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.pressed.nativeObject,ButtonState.pressed);
+                         checkAndSetBackground(backgroundColorsInitial.pressed,ButtonState.pressed);
                      }
                      if (typeof backgroundColorsInitial.focused !== 'undefined') {
-                          self.nativeObject.setBackgroundColor(backgroundColorsInitial.focused.nativeObject,ButtonState.focused);
+                         checkAndSetBackground(backgroundColorsInitial.focused,ButtonState.focused);
                      }
-                    
                  }
             },
             enumerable: true
         });
+        
+        self.gradientColorObject = {};
+        function checkAndSetBackground(background,state){
+            if (background.nativeObject.constructor.name === "CAGradientLayer"){
+                if(Object.keys(self.gradientColorObject).length == 0){
+                    self.nativeObject.addFrameObserver();
+                    self.nativeObject.frameObserveHandler = function(e){
+                        if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                            return;
+                        }
+                        for(var state in self.gradientColorObject){
+                            var color = self.gradientColorObject[state];
+                            color.nativeObject.frame = e.frame;
+                            var layerColor = color.nativeObject.layerToImage();
+                            self.nativeObject.setBackgroundImage(layerColor,state);
+                        }
+                    } 
+                }
+                self.gradientColorObject[state] = background;
+                if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                    return;
+                }
+                background.nativeObject.frame = self.nativeObject.frame;
+                var layerColor = background.nativeObject.layerToImage();
+                self.nativeObject.setBackgroundImage(layerColor,state);
+            }else{
+                if(Object.keys(self.gradientColorObject).length != 0 && self.gradientColorObject[state]){
+                    delete self.gradientColorObject[state];
+                    if (Object.keys(self.gradientColorObject).length == 0){
+                        self.nativeObject.removeFrameObserver();
+                    }
+                }
+                if (background instanceof Color) {
+                    self.nativeObject.setBackgroundColor(background.nativeObject,state);
+                }else if(background instanceof Image){
+                    self.nativeObject.setBackgroundImage(background.nativeObject,state);
+                }
+                
+            }
+        }
         
         var backgroundImagesInitial = {};
         Object.defineProperty(this, 'backgroundImage', {
@@ -161,18 +201,18 @@ const Button = extend(View)(
                 backgroundImagesInitial = bgImages;
 
                 if (bgImages.constructor.name !== "Object") {
-                     self.nativeObject.setBackgroundImage(backgroundImagesInitial.nativeObject,ButtonState.normal);
+                     checkAndSetBackground(backgroundImagesInitial,ButtonState.normal);
                 }else{
                     if (backgroundImagesInitial.normal)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.normal.nativeObject,ButtonState.normal);
+                      checkAndSetBackground(backgroundImagesInitial.normal,ButtonState.normal);
                     if (backgroundImagesInitial.disabled)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.disabled.nativeObject,ButtonState.disabled);
+                      checkAndSetBackground(backgroundImagesInitial.disabled,ButtonState.disabled);
                     if (backgroundImagesInitial.selected)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.selected.nativeObject,ButtonState.selected);
+                      checkAndSetBackground(backgroundImagesInitial.selected,ButtonState.selected);
                     if (backgroundImagesInitial.pressed)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.pressed.nativeObject,ButtonState.pressed);
+                      checkAndSetBackground(backgroundImagesInitial.pressed,ButtonState.pressed);
                     if (backgroundImagesInitial.focused)
-                      self.nativeObject.setBackgroundImage(backgroundImagesInitial.focused.nativeObject,ButtonState.focused);
+                      checkAndSetBackground(backgroundImagesInitial.focused,ButtonState.focused);
                 }
             },
             enumerable: true
