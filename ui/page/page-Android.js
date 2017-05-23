@@ -241,7 +241,7 @@ function Page(params) {
                 window.addFlags(FLAG_FULLSCREEN);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     this.statusBar.android = {};
@@ -258,7 +258,7 @@ function Page(params) {
                 window.setStatusBarColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(this.statusBar, 'height', {
@@ -270,7 +270,7 @@ function Page(params) {
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarColor; // SmartfaceBlue
@@ -283,7 +283,7 @@ function Page(params) {
                 toolbar.setBackgroundColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarImage = null;
@@ -297,7 +297,7 @@ function Page(params) {
                 toolbar.setBackground(image.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _leftItemEnabled;
@@ -311,7 +311,7 @@ function Page(params) {
                 actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'height', {
@@ -319,7 +319,7 @@ function Page(params) {
             var resources = activity.getResources();
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material))
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'title', {
@@ -334,7 +334,7 @@ function Page(params) {
                 toolbar.setTitle("");
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarTitleColor;
@@ -348,7 +348,7 @@ function Page(params) {
                 toolbar.setTitleTextColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'visible', {
@@ -368,7 +368,7 @@ function Page(params) {
                 }
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
@@ -383,7 +383,7 @@ function Page(params) {
                 toolbar.setSubtitle("");
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarSubtitleColor;
@@ -396,7 +396,7 @@ function Page(params) {
                 toolbar.setSubtitleTextColor(color);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarLogo = null;
@@ -411,7 +411,7 @@ function Page(params) {
                 actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarLogoEnabled = false;
@@ -425,7 +425,7 @@ function Page(params) {
                 actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     // Implemented for just SearchView
