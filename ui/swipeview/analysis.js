@@ -55,7 +55,7 @@ function SwipeView() {
      * Gets/Sets the callback trigged during swipe actions.
      *
      * @event onStateChanged
-     * @param state
+     * @param {UI.SwipeView.State} state
      * @android
      * @ios
      * @since 1.1.11
@@ -83,3 +83,32 @@ function SwipeView() {
      */
     this.swipeToIndex = function(index, animated){};
 };
+
+/**
+ * @enum UI.SwipeView.State
+ * @static
+ * @readonly
+ * @since 1.1.11
+ *
+ */
+SwipeView.State = {};
+
+/**
+ * @property {Number} [IDLE = 0]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.11
+ */
+SwipeView.State.IDLE = 0;
+
+/**
+ * @property {Number} [DRAGGING = 1]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.11
+ */
+SwipeView.State.DRAGGING = 1;
