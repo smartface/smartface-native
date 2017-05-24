@@ -103,12 +103,12 @@ const MapView = extend(View)(
         /**
          * This property sets zoom level of the map to the given level. Zoom level must between 0 to 20.
          *
-         * @property {Number} zoomLevel
+         * @property {Number} [zoomLevel = 15]
          * @android
          * @ios
          * @since 1.1.10
          */
-        this.zoomLevel;
+        this.zoomLevel = 15;
 
         /**
          * Adds a UI.MapView.Pin on the map.
