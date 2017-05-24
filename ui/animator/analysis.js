@@ -7,10 +7,10 @@
  *     @example
  *     const Color      = require('sf-core/ui/color');
  *     const View       = require('sf-core/ui/view');
+ *     const System     = require('sf-core/device/system');
  *     const Button     = require('sf-core/ui/button');
  *     const Animator   = require('sf-core/ui/animator');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const System = require('sf-core/device/system');
  * 
  *     var myView = new View({
  *         left: 10, top: 10, right: 10, height: 100,
