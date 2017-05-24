@@ -110,6 +110,16 @@ const MapView = extend(View)(
          */
         this.zoomLevel;
 
+         /**
+         * Visible/Invisible user location pin on map.
+         *
+         * @property {Boolean} showUserLocation
+         * @android
+         * @ios
+         * @since 1.1.10
+         */
+        this.showUserLocation;
+
         /**
          * Adds a UI.MapView.Pin on the map.
          *
