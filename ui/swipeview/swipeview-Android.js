@@ -33,7 +33,7 @@ const SwipeView = extend(View)(
         };
         _super(self);
 
-        var _page;        
+        var _page;
         var _pages = [];
         var _callbackOnPageSelected;
         var _callbackOnPageStateChanged;
@@ -56,7 +56,9 @@ const SwipeView = extend(View)(
                         
                         var nativeFragments = [];
                         pages.forEach(function(page){
-                            var pageInstance = new page();
+                            var pageInstance = new page({
+                                skipDefaults: true
+                            });
                             bypassPageSpecificProperties(pageInstance);
                             nativeFragments.push(pageInstance.nativeObject);
                         });

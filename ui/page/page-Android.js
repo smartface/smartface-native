@@ -34,6 +34,7 @@ const OrientationDictionary = {
 };
 
 function Page(params) {
+    (!params) && (params = {});
     var self = this;
     var activity = Android.getActivity();
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
@@ -533,14 +534,16 @@ function Page(params) {
     self.layout.nativeObject.setFocusableInTouchMode(true);
 
     // Default values
-    self.statusBar.visible = true;
-    self.statusBar.color = Color.TRANSPARENT;
-    self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.leftItemEnabled = true;
-    self.headerBar.android.logoEnabled = false;
-    self.headerBar.titleColor = Color.WHITE;
-    self.headerBar.subtitleColor = Color.WHITE;
-    self.headerBar.visible = true;
+    if (!params.skipDefaults) {
+        self.statusBar.visible = true;
+        self.statusBar.color = Color.TRANSPARENT;
+        self.headerBar.backgroundColor = Color.create("#00A1F1");
+        self.headerBar.leftItemEnabled = true;
+        self.headerBar.android.logoEnabled = false;
+        self.headerBar.titleColor = Color.WHITE;
+        self.headerBar.subtitleColor = Color.WHITE;
+        self.headerBar.visible = true;
+    }
 
     //Handling ios value
     self.statusBar.ios = {};
