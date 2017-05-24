@@ -24,7 +24,7 @@
  *         backgroundColor: Color.GRAY,
  *         onPress: function() {
  *             myView.backgroundColor = Color.RED;
- *             var animationRootView = System.OS === "iOS" ? page.layout : button.parent;
+ *             var animationRootView = System.OS === "iOS" ? page.layout : myView.parent;
  *             Animator.animate(animationRootView, 5000, function() {
  *                 myView.left = 150;
  *                 myView.right = 150;
