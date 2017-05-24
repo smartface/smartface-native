@@ -104,11 +104,11 @@ const SwipeView = extend(View)(
         };
         
         self.onPageSelectedHandler = function(e){
-            if (typeof self.onPageSelected === "function"){
-                var selectedIndex = _pageNativeObjectArray.indexOf(self.pageController.viewControllers[0]);
-                if (currentIndex != selectedIndex){
-                    currentIndex = selectedIndex;
-                         self.onPageSelected(selectedIndex); 
+            var selectedIndex = _pageNativeObjectArray.indexOf(self.pageController.viewControllers[0]);
+            if (currentIndex != selectedIndex){
+                currentIndex = selectedIndex;
+                if (typeof self.onPageSelected === "function"){
+                    self.onPageSelected(selectedIndex); 
                 }
             }
         }
