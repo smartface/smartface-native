@@ -16,6 +16,15 @@ function MenuItem(params) {
     * @since 0.1
     */
     this.title = "";
+
+    /**
+    * Gets/sets the color of a menu item title.
+    *
+    * @property {UI.Color} titleColor
+    * @android
+    * @since 1.1.8
+    */
+    this.android.titleColor;
     
     /**
     * Gets/sets the style of a menu item.

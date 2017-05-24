@@ -1,38 +1,59 @@
-const ViewGroup = require('../viewgroup');
-const extend = require('js-base/core/extend');
-
 /**
  * @class UI.ScrollView
  * @extends UI.ViewGroup
  * @since 0.1
  *
  * ScrollView enables user to view pages with large content exceeding screen size via scroll action.
- *
+ * ScrollView can have only one child view. The layout should be added if there are child views more 
+ * than one.
+ *    
  *     @example
- *     const View = require('sf-core/ui/view');
- *     const Color = require('sf-core/ui/color');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     const ScrollView = require('sf-core/ui/scrollview');
+ *     const Button = require('sf-core/ui/button');
+ *     const Color = require('sf-core/ui/color');
  *
- *     var myScrollView = new ScrollView({
- *         width: 500, height: 750,
- *         align: ScrollView.Align.VERTICAL
+ *     var scrollView = new ScrollView({
+ *         height: 300,
+ *         width: 200,
+ *         backgroundColor: Color.GREEN,
+ *         alignSelf: FlexLayout.AlignSelf.CENTER
  *     });
- *
- *     myScrollView.addChild(new View({
- *         width: 500, height:3000
- *         backgroundColor: Color.GREEN
- *     }));
- *
- *     myPage.layout.addChild(myScrollView);
+ *     
+ *     var scrollLayout = new FlexLayout({
+ *         height: 1500,
+ *         width: 200,
+ *         backgroundColor: Color.RED
+ *     });
+ *     
+ *     var buttonTop = new Button({
+ *         height: 100,
+ *         width: 100,
+ *         top: 50,
+ *         marginLeft: 50,
+ *         text: "Scroll to 1000",
+ *         backgroundColor: Color.BLUE,
+ *         onPress: function(){
+ *             scrollView.scrollToCoordinate(1000);
+ *         }
+ *     });
+ *     var buttonBottom = new Button({
+ *         height: 100,
+ *         width: 100,
+ *         top: 1000,
+ *         marginLeft: 50,
+ *         text: "Scroll to 50",
+ *         backgroundColor: Color.BLUE,
+ *         onPress: function(){
+ *             scrollView.scrollToCoordinate(50);
+ *         }
+ *     });
+ *     scrollLayout.addChild(buttonTop)
+ *     scrollLayout.addChild(buttonBottom)
+ *     scrollView.addChild(scrollLayout);
  *
  */
-const ScrollView = extend(ViewGroup)(
-    function (_super, params) {
-        _super(this);
-    }
-);
-
-Object.defineProperties(ScrollView, {
+function ScrollView(){
     /**
      * Gets/sets the alignment of the scrollview. It must be set as constructor parameter.
      * This property cannot be set after the object is initialized.
@@ -42,11 +63,8 @@ Object.defineProperties(ScrollView, {
      * @ios
      * @since 0.1
      */
-    'align': {
-        get: function() {},
-        set: function(value) {},
-        configurable: false
-    },
+    this.align = UI.ScrollView.Align.VERTICAL;
+    
     /**
      * Gets/sets the visibility of the scrollbar.
      *
@@ -55,12 +73,9 @@ Object.defineProperties(ScrollView, {
      * @ios
      * @since 0.1
      */
-    'scrollBarEnabled': {
-        get: function() {},
-        set: function(value){},
-        configurable: false
-    },
-    /**
+     this.scrollBarEnabled = true;
+     
+     /**
      * Immediately scrolls to the edge set.
      *
      * @method scrollToEdge
@@ -69,11 +84,9 @@ Object.defineProperties(ScrollView, {
      * @param {UI.ScrollView.Edge} edge
      * @since 0.1
      */
-    'scrollToEdge': {
-        value: function(edge) {},
-        configurable: false
-    },
-    /**
+     this.scrollToEdge = function(){};
+     
+     /**
      * Immediately scrolls to the given coordinate. Coordinate is X position for horizontal alignment and
      * Y position for vertical alignment.
      *
@@ -83,10 +96,6 @@ Object.defineProperties(ScrollView, {
      * @param {Number} coordinate
      * @since 0.1
      */
-    'scrollToCoordinate': {
-        value: function(coordinate) {},
-        configurable: false
-    }
-});
-
+     this.scrollToCoordinate = function(coordinate) {};
+}
 module.exports = ScrollView;
