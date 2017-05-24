@@ -10,6 +10,7 @@
  *     const Button     = require('sf-core/ui/button');
  *     const Animator   = require('sf-core/ui/animator');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const System = require('sf-core/device/system');
  * 
  *     var myView = new View({
  *         left: 10, top: 10, right: 10, height: 100,
@@ -23,7 +24,8 @@
  *         backgroundColor: Color.GRAY,
  *         onPress: function() {
  *             myView.backgroundColor = Color.RED;
- *             Animator.animate(myPage.layout, 5000, function() {
+ *             var animationRootView = System.OS === "iOS" ? page.layout : button.parent;
+ *             Animator.animate(animationRootView, 5000, function() {
  *                 myView.left = 150;
  *                 myView.right = 150;
  *             }).then(2500, function() {
@@ -78,7 +80,9 @@ function Animator() {
 
 /** 
 * Performs the changes declared in animFunction with animation inside the layout provided.
-* Duration indicates how long the animation will take in milliseconds.
+* Duration indicates how long the animation will take in milliseconds. 
+* For animation rootLayout you should choose parent layout for Android, you can choose page 
+* layout for iOS as shown in example.
 * While animating Textbox, you may see the hint of the Textbox disappear on Android. 
 * This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should 
 * set empty text to the Textbox onComplete callback of animation.
