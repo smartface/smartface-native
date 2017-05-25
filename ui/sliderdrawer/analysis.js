@@ -31,103 +31,99 @@ const extend = require('js-base/core/extend');
  *     Router.sliderDrawer = mySliderDrawer;
  *
  */
-const SliderDrawer = extend(ViewGroup)(
-    function (_super, params) {
-        _super(this);
+function SliderDrawer(params) {
+    /**
+     * Gets/sets position of the SliderDrawer.
+     *
+     * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.drawerPosition = UI.SliderDrawer.Position.LEFT;
 
-        /**
-         * Gets/sets position of the SliderDrawer.
-         *
-         * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.drawerPosition = UI.SliderDrawer.Position.LEFT;
+    /**
+     * Gets/sets state of the SliderDrawer.
+     *
+     * @property {UI.SliderDrawer.State} state
+     * @android
+     * @ios
+     * @readonly
+     * @since 1.1.8
+     */
+    this.state;
 
-        /**
-         * Gets/sets state of the SliderDrawer.
-         *
-         * @property {UI.SliderDrawer.State} state
-         * @android
-         * @ios
-         * @readonly
-         * @since 1.1.8
-         */
-        this.state;
+    /**
+     * Gets/sets layout of the SliderDrawer.
+     *
+     * @property {UI.FlexLayout} [layout = UI.FlexLayout]
+     * @android
+     * @ios
+     * @readonly
+     * @since 0.1
+     */
+    this.layout = UI.FlexLayout;
 
-        /**
-         * Gets/sets layout of the SliderDrawer.
-         *
-         * @property {UI.FlexLayout} [layout = UI.FlexLayout]
-         * @android
-         * @ios
-         * @readonly
-         * @since 0.1
-         */
-        this.layout = UI.FlexLayout;
+    /**
+     * Enables/disables the SliderDrawer.
+     *
+     * @property {Boolean} [enabled = true]
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.enabled = true;
 
-        /**
-         * Enables/disables the SliderDrawer.
-         *
-         * @property {Boolean} [enabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.enabled = true;
+    /**
+     * This function allows you to show SliderDrawer on the screen.
+     *
+     * @method show
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.show = function(){};
 
-        /**
-         * This function allows you to show SliderDrawer on the screen.
-         *
-         * @method show
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.show = function(){};
+    /**
+     * This function allows you to hide SliderDrawer if it is on the screen.
+     *
+     * @method hide
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.hide = function(){};
 
-        /**
-         * This function allows you to hide SliderDrawer if it is on the screen.
-         *
-         * @method hide
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.hide = function(){};
+    /**
+     * This event is called user opens the SliderDrawer.
+     *
+     * @event onShow
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.onShow = null;
 
-        /**
-         * This event is called user opens the SliderDrawer.
-         *
-         * @event onShow
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onShow = null;
+    /**
+     * This event is called when user closes the SliderDrawer.
+     *
+     * @event onHide
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.onHide = null;
 
-        /**
-         * This event is called when user closes the SliderDrawer.
-         *
-         * @event onHide
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onHide = null;
-
-        /**
-         * This event is called when SliderDrawer begins to load.
-         *
-         * @event onLoad
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onLoad = null;
-    }
-);
+    /**
+     * This event is called when SliderDrawer begins to load.
+     *
+     * @event onLoad
+     * @android
+     * @ios
+     * @since 0.1
+     */
+    this.onLoad = null;
+}
 
 /**
  * @enum {Number} UI.SliderDrawer.Position
@@ -151,10 +147,7 @@ SliderDrawer.Position = {};
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(SliderDrawer.Position, 'LEFT', {
-    value: 0,
-    writable: false
-});
+SliderDrawer.Position.LEFT = 0;
 
 /**
  * @property {Number} RIGHT
@@ -167,10 +160,7 @@ Object.defineProperty(SliderDrawer.Position, 'LEFT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(SliderDrawer.Position, 'RIGHT', {
-    value: 1,
-    writable: false
-});
+SliderDrawer.Position.RIGHT = 1;
 
 /**
  * @enum {Number} UI.SliderDrawer.State
@@ -194,10 +184,7 @@ SliderDrawer.State = {};
  * @readonly
  * @since 1.1.8
  */
-Object.defineProperty(SliderDrawer.State, 'OPEN', {
-    value: 0,
-    writable: false
-});
+SliderDrawer.State.OPEN = 0;
 
 /**
  * @property {Number} CLOSED
@@ -210,10 +197,7 @@ Object.defineProperty(SliderDrawer.State, 'OPEN', {
  * @readonly
  * @since 1.1.8
  */
-Object.defineProperty(SliderDrawer.State, 'CLOSED', {
-    value: 1,
-    writable: false
-});
+SliderDrawer.State.CLOSED = 1;
 
 /**
  * @property {Number} DRAGGED
@@ -226,9 +210,6 @@ Object.defineProperty(SliderDrawer.State, 'CLOSED', {
  * @readonly
  * @since 1.1.8
  */
-Object.defineProperty(SliderDrawer.State, 'DRAGGED', {
-    value: 2,
-    writable: false
-});
+SliderDrawer.State.DRAGGED = 2;
 
 module.exports = SliderDrawer;

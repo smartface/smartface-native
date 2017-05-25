@@ -79,3 +79,5 @@ function StatusBar(parentPage) {
      */
     this.ios.style = StatusBarStyle.DEFAULT;
 }
+
+module.exports = StatusBar;

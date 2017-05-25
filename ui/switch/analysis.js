@@ -12,10 +12,7 @@
  *     var mySwitch = new Switch();
  *     mySwitch.thumbOnColor = Color.BLUE;
  */
-const Switch = extend(View)(
-    function (_super, params) {
-        _super(this);
-        
+function Switch(params) {
     /**
      * Enables/disables the Switch.
      *
@@ -113,6 +110,6 @@ const Switch = extend(View)(
      * @since 0.1
      */
     this.onToggleChanged = function() {};
-    }
-);
+}
+
 module.exports = Switch;

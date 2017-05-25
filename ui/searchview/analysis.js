@@ -252,9 +252,7 @@ SearchView.iOS.Style = {};
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
-    writable: false
-});
+SearchView.iOS.Style.DEFAULT = 0;
 
 /**
  * The search bar has a transparent background.
@@ -263,9 +261,7 @@ Object.defineProperty(SearchView.iOS.Style, 'DEFAULT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
-    writable: false
-});
+SearchView.iOS.Style.PROMINENT = 1;
 
 /**
  * The search bar has no background.
@@ -274,8 +270,6 @@ Object.defineProperty(SearchView.iOS.Style, 'PROMINENT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(SearchView.iOS.Style, 'MINIMAL', {
-    writable: false
-});
+SearchView.iOS.Style.MINIMAL = 2;
 
 module.exports = SearchView;

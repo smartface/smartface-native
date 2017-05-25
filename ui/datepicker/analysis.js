@@ -13,69 +13,60 @@
  *     myDatePicker.show();
  *
  */
-function DatePicker () {
-    Object.defineProperties(DatePicker, {
-       /**
-        * Sets the initial date avaliable on the picker.
-        *
-        * @method setDate
-        * @android
-        * @ios
-        * @param {Date} date
-        * @since 0.1
-        */
-        'setDate': {
-            value: function(date) {}
-        },
-       /**
-        * Sets the minimum date avaliable on the picker.
-        *
-        * @method setMinDate
-        * @android
-        * @ios
-        * @param {Date} minDate
-        * @since 0.1
-        */
-        'setMinDate': {
-            value: function(date) {}
-        },
-       /**
-        * Sets the maximum date avaliable on the picker.
-        *
-        * @method setMaxDate
-        * @android
-        * @ios
-        * @param {Date} maxDate
-        * @since 0.1
-        */
-        'setMaxDate': {
-            value: function(date) {}
-        },
-       /**
-        * Makes the picker appear on the screen.
-        *
-        * @method show
-        * @android
-        * @ios
-        * @since 0.1
-        */
-        'show': {
-            value: function() {}
-        },
-       /**
-        * Triggered when a date is selected on the picker.
-        *
-        * @since 0.1
-        * @param {Date} date
-        * @event onDateSelected
-        * @android
-        * @ios
-        */
-        'onDateSelected': {
-            get: function() {},
-            set: function(callback) {} // callback(date)
-        }
-    });
-};
+function DatePicker () {}
+
+/**
+ * Sets the initial date avaliable on the picker.
+ *
+ * @method setDate
+ * @android
+ * @ios
+ * @param {Date} date
+ * @since 0.1
+ */
+DatePicker.prototype.setDate = function(date) {};
+
+/**
+ * Sets the minimum date avaliable on the picker.
+ *
+ * @method setMinDate
+ * @android
+ * @ios
+ * @param {Date} minDate
+ * @since 0.1
+ */
+DatePicker.prototype.setMinDate = function(date) {};
+
+/**
+ * Sets the maximum date avaliable on the picker.
+ *
+ * @method setMaxDate
+ * @android
+ * @ios
+ * @param {Date} maxDate
+ * @since 0.1
+ */
+DatePicker.prototype.setMaxDate = function(date) {};
+
+/**
+ * Makes the picker appear on the screen.
+ *
+ * @method show
+ * @android
+ * @ios
+ * @since 0.1
+ */
+DatePicker.prototype.show = function() {};
+
+/**
+ * Triggered when a date is selected on the picker.
+ *
+ * @since 0.1
+ * @param {Date} date
+ * @event onDateSelected
+ * @android
+ * @ios
+ */
+DatePicker.prototype.onDateSelected = function(date) {};
 
 module.exports = DatePicker;

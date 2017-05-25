@@ -35,10 +35,7 @@ KeyboardType.android = { };
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardType, 'DEFAULT', {
-  value: 0,
-  writable: false
-});
+KeyboardType.DEFAULT = 0;
 
 /**
  * @property {Number} NUMBER
@@ -49,10 +46,7 @@ Object.defineProperty(KeyboardType, 'DEFAULT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardType, 'NUMBER', {
-  value: 1,
-  writable: false
-});
+KeyboardType.NUMBER = 1;
 
 /**
  * @property {Number} DECIMAL
@@ -63,10 +57,7 @@ Object.defineProperty(KeyboardType, 'NUMBER', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType, 'DECIMAL', {
-  value: 2,
-  writable: false
-});
+KeyboardType.DECIMAL = 2;
 
 /**
  * @property {Number} PHONE
@@ -77,10 +68,7 @@ Object.defineProperty(KeyboardType, 'DECIMAL', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType, 'PHONE', {
-  value: 3,
-  writable: false
-});
+KeyboardType.PHONE = 3;
 
 /**
  * @property {Number} URL
@@ -91,10 +79,7 @@ Object.defineProperty(KeyboardType, 'PHONE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType, 'URL', {
-  value: 4,
-  writable: false
-});
+KeyboardType.URL = 4;
 
 /**
  * @property {Number} TWITTER
@@ -104,10 +89,7 @@ Object.defineProperty(KeyboardType, 'URL', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardType.ios, 'TWITTER', {
-  value: 5,
-  writable: false
-});
+KeyboardType.ios.TWITTER = 5;
 
 /**
  * @property {Number} WEBSEARCH
@@ -117,10 +99,7 @@ Object.defineProperty(KeyboardType.ios, 'TWITTER', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardType.ios, 'WEBSEARCH', {
-  value: 6,
-  writable: false
-});
+KeyboardType.ios.WEBSEARCH = 6;
 
 /**
  * @property {Number} DATETIME
@@ -130,10 +109,7 @@ Object.defineProperty(KeyboardType.ios, 'WEBSEARCH', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardType.android, 'DATETIME', {
-  value: 7,
-  writable: false
-});
+KeyboardType.android.DATETIME = 7;
 
 /**
  * @property {Number} SIGNEDNUMBER
@@ -143,10 +119,7 @@ Object.defineProperty(KeyboardType.android, 'DATETIME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'SIGNEDNUMBER', {
-  value: 8,
-  writable: false
-});
+KeyboardType.android.SIGNEDNUMBER = 8;
 
 /**
  * @property {Number} SIGNEDDECIMAL
@@ -156,10 +129,7 @@ Object.defineProperty(KeyboardType.android, 'SIGNEDNUMBER', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
-  value: 9,
-  writable: false
-});
+KeyboardType.android.SIGNEDDECIMAL = 9;
 
 /**
  * @property {Number} TEXTAUTOCOMPLETE
@@ -169,10 +139,7 @@ Object.defineProperty(KeyboardType.android, 'SIGNEDDECIMAL', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
-  value: 10,
-  writable: false
-});
+KeyboardType.android.TEXTAUTOCOMPLETE = 10;
 
 /**
  * @property {Number} TEXTAUTOCORRECT
@@ -182,10 +149,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTAUTOCOMPLETE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTAUTOCORRECT', {
-  value: 11,
-  writable: false
-});
+KeyboardType.android.TEXTAUTOCORRECT = 11;
 
 /**
  * @property {Number} TEXTCAPCHARACTERS
@@ -195,10 +159,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTAUTOCORRECT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTCAPCHARACTERS', {
-  value: 12,
-  writable: false
-});
+KeyboardType.android.TEXTCAPCHARACTERS = 12;
 
 /**
  * @property {Number} TEXTCAPSENTENCES
@@ -208,10 +169,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPCHARACTERS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTCAPSENTENCES', {
-  value: 13,
-  writable: false
-});
+KeyboardType.android.TEXTCAPSENTENCES = 13;
 
 /**
  * @property {Number} TEXTCAPWORDS
@@ -221,10 +179,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPSENTENCES', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTCAPWORDS', {
-  value: 14,
-  writable: false
-});
+KeyboardType.android.TEXTCAPWORDS = 14;
 
 /**
  * @property {Number} TEXTEMAILSUBJECT
@@ -234,10 +189,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTCAPWORDS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTEMAILSUBJECT', {
-  value: 15,
-  writable: false
-});
+KeyboardType.android.TEXTEMAILSUBJECT = 15;
 
 /**
  * @property {Number} TEXTLONGMESSAGE
@@ -247,10 +199,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTEMAILSUBJECT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTLONGMESSAGE', {
-  value: 16,
-  writable: false
-});
+KeyboardType.android.TEXTLONGMESSAGE = 16;
 
 /**
  * @property {Number} TEXTNOSUGGESTIONS
@@ -260,10 +209,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTLONGMESSAGE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTNOSUGGESTIONS', {
-  value: 17,
-  writable: false
-});
+KeyboardType.android = TEXTNOSUGGESTIONS = 17;
 
 /**
  * @property {Number} TEXTPERSONNAME
@@ -273,10 +219,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTNOSUGGESTIONS', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTPERSONNAME', {
-  value: 18,
-  writable: false
-});
+KeyboardType.android.TEXTPERSONNAME = 18;
 
 /**
  * @property {Number} TEXTSHORTMESSAGE
@@ -286,10 +229,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTPERSONNAME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TEXTSHORTMESSAGE', {
-  value: 19,
-  writable: false
-});
+KeyboardType.android.TEXTSHORTMESSAGE = 19;
 
 /**
  * @property {Number} TIME
@@ -299,10 +239,7 @@ Object.defineProperty(KeyboardType.android, 'TEXTSHORTMESSAGE', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType.android, 'TIME', {
-  value: 20,
-  writable: false
-});
+KeyboardType.android.TIME = 20;
 
 /**
  * @property {Number} EMAILADDRESS
@@ -313,9 +250,8 @@ Object.defineProperty(KeyboardType.android, 'TIME', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardType, 'EMAILADDRESS', {
-  value: 21,
-  writable: false
-});
+KeyboardType.EMAILADDRESS = 21;
+
+Object.freeze(KeyboardType);
 
 module.exports = KeyboardType;
