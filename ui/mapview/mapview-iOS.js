@@ -2,30 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
-const Location = require('sf-core/device/location');
 
-/**
- * @class UI.MapView
- * @since 0.1
- * @extends UI.View
- * Apple maps and Google maps equivalent. 
- *
- *     @example
- *     const MapView = require('sf-core/ui/mapview');
- *     var myMapView = new MapView({
- *         left:0, top:0, right:0, bottom:0,
- *         scrollEnabled: true,
- *         rotateEnabled: true,
- *         zoomEnabled: true,
- *         compassEnabled: true,
- *         type: MapView.Type.NORMAL,
- *         centerLocation: {
- *             latitude: 41.0209078,
- *             longitude: 29.0039533
- *         }
- *     });
- *     myPage.layout.addChild(myMapView);
- */
 const MapView = extend(View)(
     function (_super, params) {
         var self = this;
@@ -95,21 +72,6 @@ const MapView = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.scrollEnabled = value;
-            },
-            enumerable: true
-        });
-        
-        Object.defineProperty(self, 'showUserLocation', {
-            get: function() {
-                return self.nativeObject.showsUserLocation;
-            },
-            set: function(value) {
-                if (value) {
-                   Location.start(); 
-                }else{
-                   Location.stop();
-                }
-                self.nativeObject.showsUserLocation = value;
             },
             enumerable: true
         });
