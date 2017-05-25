@@ -99,7 +99,7 @@ const MapView = extend(View)(
         var _rotateEnabled = true;
         var _scrollEnabled = true;
         var _zoomEnabled = true;
-        var _userLocationEnabled = true;
+        var _userLocationEnabled = false;
         var _type = MapView.Type.NORMAL;
         Object.defineProperties(self, {
             'centerLocation': {
