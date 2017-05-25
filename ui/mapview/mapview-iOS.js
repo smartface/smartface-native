@@ -2,6 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
+const Location = require('sf-core/device/location');
 
 /**
  * @class UI.MapView
@@ -93,6 +94,21 @@ const MapView = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.scrollEnabled = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'userLocationEnabled', {
+            get: function() {
+                return self.nativeObject.showsUserLocation;
+            },
+            set: function(value) {
+                if (value) {
+                   Location.start(); 
+                }else{
+                   Location.stop();
+                }
+                self.nativeObject.showsUserLocation = value;
             },
             enumerable: true
         });
