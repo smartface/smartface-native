@@ -106,8 +106,8 @@ function FileStream(params) {
     this.readBlob = function(){};
     
     /**
-     * Gets all characters or blob content from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode,
-     * returns null.
+     * Gets all characters or blob content from the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
+     * If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode, returns null.
      *
      * @return {String|Blob}
      * @method readToEnd
@@ -118,7 +118,7 @@ function FileStream(params) {
     this.readToEnd = function(){};
     
     /**
-     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode}  content mode. 
+     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode. 
      * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false. 
      * 
      * @param {String|Blob} content
