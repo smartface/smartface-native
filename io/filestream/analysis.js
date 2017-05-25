@@ -11,7 +11,7 @@
  *     var myFile = new File({
  *         path: Path.DataDirectory + '/myFile.txt'
  *     });
- *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE, FileStream.AppendMode.TEXT);
+ *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
  *     myFileStream.write('Smartface');
  *     myFileStream.close();
  * 
@@ -32,13 +32,13 @@ function FileStream(params) {
     /**
      * Gets the append mode of FileStream operation.
      * 
-     * @property {IO.FileStream.AppendMode} mode
+     * @property {IO.FileStream.ContentMode} mode
      * @readonly
      * @android
      * @ios
      * @since 0.1
      */
-    this.appendMode;
+    this.contentMode;
     
     /**
      * Checks whether the stream is readable.
@@ -101,15 +101,15 @@ function FileStream(params) {
      * @method readBlob
      * @android
      * @ios
-     * @since 0.1
+     * @deprecated since 1.1.10, you may use FileStream.readToEnd() function after you change contentMode of FileStream to FileStream.ContentMode.BINARY.
      */
     this.readBlob = function(){};
     
     /**
-     * Gets all characters from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode,
+     * Gets all characters or blob content from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode,
      * returns null.
      *
-     * @return {String}
+     * @return {String|Blob}
      * @method readToEnd
      * @android
      * @ios
@@ -118,7 +118,7 @@ function FileStream(params) {
     this.readToEnd = function(){};
     
     /**
-     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#appendMode appendMode}  append mode. 
+     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode}  content mode. 
      * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false. 
      * 
      * @param {String|Blob} content
@@ -180,19 +180,19 @@ FileStream.StreamType.READ = 1;
 FileStream.StreamType.WRITE = 2;
 
 /**
- * The AppendMode write mode for the FileStream operation. If AppendMode is BINARY, FileStream.write accepts blob object othervise accepts text.
+ * The ContentMode is read/write mode for the FileStream operation.
  * 
- * @enum {Number} IO.FileStream.AppendMode
+ * @enum {Number} IO.FileStream.ContentMode
  * @static
  * @readonly
  * @android
  * @ios
  * @since 1.1
  */
-FileStream.AppendMode = {};
+FileStream.ContentMode = {};
 
 /**
- * Open FileStream as text.
+ * Changes content type of FileStream as text.
  * 
  * @property TEXT
  * @static
@@ -201,10 +201,10 @@ FileStream.AppendMode = {};
  * @ios
  * @since 0.1
  */
-FileStream.AppendMode.TEXT;
+FileStream.ContentMode.TEXT;
 
 /**
- * Open FileStream as binary.
+ * Changes content type of FileStream as binary.
  * 
  * @property BINARY
  * @static
@@ -213,6 +213,6 @@ FileStream.AppendMode.TEXT;
  * @ios
  * @since 0.1
  */
-FileStream.AppendMode.BINARY;
+FileStream.ContentMode.BINARY;
 
 module.exports = FileStream;
