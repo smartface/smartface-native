@@ -85,18 +85,18 @@ Object.defineProperty(Path, 'DataDirectory', {
 });
 
 /**
- * Gets external storage paths for Android.
+ * Gets storages paths for Android.
  * 
- * @property {Object} externalStorages
- * @property {String} externalStorages.internal
- * @property {String} externalStorages.external
- * @property {String} externalStorages.usb
+ * @property {Object} storages
+ * @property {String} storages.internal is device's internal storage path.
+ * @property {String} storages.external is extended storage path.
+ * @property {String} storages.usb is usb storage path which connected to the device.
  * @static
  * @readonly
  * @android
  * @since 0.1
  */
-Object.defineProperty(Path.android, 'externalStorages', {
+Object.defineProperty(Path.android, 'storages', {
     writable: false
 });
 

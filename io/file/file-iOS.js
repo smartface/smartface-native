@@ -135,8 +135,8 @@ function File(params) {
         return self.nativeObject.rename(newName);
     };
     
-    this.openStream = function(mode){
-        return FileStream.create(self.nativeObject.getActualPath(), mode);
+    this.openStream = function(type, contentMode){
+        return FileStream.create(self.nativeObject.getActualPath(), type, contentMode);
     };
     
  // Assign parameters given in constructor
