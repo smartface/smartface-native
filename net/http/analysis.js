@@ -18,7 +18,6 @@
  *             myImageView.image = Image.createFromBlob(response.body);
  *             // Handling text request response
  *             myLabel.text = response.body.toString();
- *         
  *         },
  *         function(e){
  *             // Handle error like:
