@@ -76,6 +76,7 @@ const MapView = extend(View)(
                 self.rotateEnabled = _rotateEnabled; 
                 self.scrollEnabled = _scrollEnabled;
                 self.zoomEnabled = _zoomEnabled;
+                self.userLocationEnabled = _userLocationEnabled;
                 self.type = _type;
                 
                 _pendingPins.forEach(function(element){
@@ -93,7 +94,13 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type;
+        var _centerLocation;
+        var _compassEnabled = true;
+        var _rotateEnabled = true;
+        var _scrollEnabled = true;
+        var _zoomEnabled = true;
+        var _userLocationEnabled = false;
+        var _type = MapView.Type.NORMAL;
         Object.defineProperties(self, {
             'centerLocation': {
                 get: function() {
@@ -161,6 +168,19 @@ const MapView = extend(View)(
                         _zoomEnabled = enabled;
                         if(self.nativeObject.isShown()){
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
+                        }
+                    }
+                }
+            },
+            'userLocationEnabled': {
+                get: function() {
+                    return _userLocationEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _userLocationEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMyLocationEnabled(enabled);
                         }
                     }
                 }
