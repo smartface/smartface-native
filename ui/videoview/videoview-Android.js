@@ -2,17 +2,26 @@ const extend            = require('js-base/core/extend');
 const View              = require('sf-core/ui/view');
 const Exception         = require("sf-core/util/exception");
 const NativeVideoView   = requireClass('android.widget.VideoView');
+const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 
 const VideoView = extend(View)(
     function (_super, params) {
         var activity = Android.getActivity();
         
         if(!this.nativeObject){
-            this.nativeObject = new NativeVideoView(activity);
+            // To solve stretching due to yoga, we will wrap with RelativeLayout, workaround.
+            this.nativeObject = new NativeRelativeLayout(activity);
+            var layoutParams = new NativeRelativeLayout.LayoutParams(-1,-1);
+            // CENTER_IN_PARENT, TRUE
+            layoutParams.addRule(13, -1);
+            this.nativeInner = new NativeVideoView(activity);
+            this.nativeObject.addView(this.nativeInner, layoutParams);
+            this.nativeObject.setGravity(17);
         }
         _super(this);
 
         const NativeMediaPlayer = requireClass('android.media.MediaPlayer');
+        const NativeMediaController = requireClass('android.widget.MediaController');
         
         var _onReady;
         var _onFinish;
@@ -20,23 +29,23 @@ const VideoView = extend(View)(
         Object.defineProperties(this, {
             'play': {
                 value: function() {
-                    this.nativeObject.start();
+                    this.nativeInner.start();
                 }
             },
             'pause': {
                 value: function() {
-                    this.nativeObject.pause();
+                    this.nativeInner.pause();
                 }
             },
             'stop': {
                 value: function() {
-                    this.nativeObject.pause();
-                    this.nativeObject.seekTo(0);
+                    this.nativeInner.pause();
+                    this.nativeInner.seekTo(0);
                 }
             },
             'isPlaying': {
                 value: function() {
-                    return this.nativeObject.isPlaying();
+                    return this.nativeInner.isPlaying();
                 }
             },
             'setLoopEnabled': {
@@ -48,7 +57,7 @@ const VideoView = extend(View)(
                 value: function(url) {
                     const NativeURI = requireClass('android.net.Uri');
                     var uri = NativeURI.parse(url);
-                    this.nativeObject.setVideoURI(uri);
+                    this.nativeInner.setVideoURI(uri);
                 }
             },
             'loadFile': {
@@ -59,7 +68,7 @@ const VideoView = extend(View)(
                     if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
-                    this.nativeObject.setVideoPath(file.path);
+                    this.nativeInner.setVideoPath(file.path);
                 }
             },
             'onReady': {
@@ -93,6 +102,8 @@ const VideoView = extend(View)(
             'setControllerEnabled': {
                 value: function(enabled) {
                     // TODO: implement after yoga fix.
+                    var controller = enabled ? new NativeMediaController(activity) : null;
+                    this.nativeInner.setMediaController(controller);
                 }
             },
             'toString': {
@@ -140,7 +151,7 @@ const VideoView = extend(View)(
         this.ios = {};
         
         if(!this.isNotSetDefaults){
-            this.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
+            this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
                 onPrepared: function(mediaPlayer) {
                     _nativeMediaPlayer = mediaPlayer;
     
@@ -148,7 +159,7 @@ const VideoView = extend(View)(
                 }
             }));
             
-            this.nativeObject.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
+            this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
                 onCompletion: function(mediaPlayer) {
                     _onFinish && _onFinish();
                 }

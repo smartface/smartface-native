@@ -77,7 +77,8 @@ const MapView = extend(View)(
                 self.scrollEnabled = _scrollEnabled;
                 self.zoomEnabled = _zoomEnabled;
                 self.type = _type;
-                
+                self.zoomLevel = _zoomLevel;
+
                 _pendingPins.forEach(function(element){
                     self.addPin(element);
                 });
@@ -93,7 +94,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type;
+        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type, _zoomLevel;
         Object.defineProperties(self, {
             'centerLocation': {
                 get: function() {
@@ -161,6 +162,21 @@ const MapView = extend(View)(
                         _zoomEnabled = enabled;
                         if(self.nativeObject.isShown()){
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
+                        }
+                    }
+                }
+            },
+            'zoomLevel': {
+                get: function() {
+                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom : _zoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _zoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value)
+                            _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
                         }
                     }
                 }
