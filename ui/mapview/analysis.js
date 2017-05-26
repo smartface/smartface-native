@@ -81,6 +81,16 @@ const MapView = extend(View)(
          * @since 0.1
          */
         this.compassEnabled;
+        
+        /**
+         * Enables/Disables user location indicator on map.
+         *
+         * @property {Boolean} [userLocationEnabled = false]
+         * @android
+         * @ios
+         * @since 1.1.11
+         */
+        this.userLocationEnabled;
 
         /**
          * This property sets center location of the map to the given latitude & longitude.

@@ -310,8 +310,9 @@ const SearchView = extend(View)(
                     }
                     else {
                         _onSearchEndCallback && _onSearchEndCallback();
+                        this.removeFocus();
                     }
-                }
+                }.bind(this)
             }));
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query){
