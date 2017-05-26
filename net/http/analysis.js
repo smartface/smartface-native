@@ -13,8 +13,11 @@
  *             'method':'HTTP_METHOD_HERE',
  *             'body': 'YOUR_BODY_HERE',
  *         },
- *         function(data){
- *             // Handle response
+ *         function(response){
+ *             // Handling image request response 
+ *             myImageView.image = Image.createFromBlob(response.body);
+ *             // Handling text request response
+ *             myLabel.text = response.body.toString();
  *         
  *         },
  *         function(e){
