@@ -10,7 +10,6 @@
  *
  * Please refer to guides for best practices of page usages and page navigation.
  *
- * See also {@link UI.Pages} to see how to show a created page on screen.
  *
  *     @example
  *     const extend = require("js-base/core/extend");

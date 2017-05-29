@@ -66,7 +66,7 @@ Notifications.ios.applicationIconBadgeNumber = 0;
 /**
  * Gets scheduled local notifications. 
  * 
- * @property {[Notifications.LocalNotification]} [scheduledLocalNotifications = null]
+ * @property {Notifications.LocalNotification} [scheduledLocalNotifications = null]
  * @ios
  * @readonly
  * @static

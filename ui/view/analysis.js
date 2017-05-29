@@ -165,7 +165,7 @@ View.prototype.top = 0;
 
 /**
  * Gets/sets right position of a view relative to its parent. This property works only if
- * view's positionType is {@link UI.FlexLayout.PositionType.ABSOLUTE FlexLayout.PositionType.ABSOLUTE}.
+ * view's positionType is UI.FlexLayout.PositionType.ABSOLUTE.
  *
  * @property {Number} [right = 0]
  * @android
@@ -176,7 +176,7 @@ View.prototype.right = 0;
 
 /**
  * Gets/sets bottom position of a view relative to its parent. This property works only if
- * view's positionType is {@link UI.FlexLayout.PositionType.ABSOLUTE FlexLayout.PositionType.ABSOLUTE}.
+ * view's positionType is UI.FlexLayout.PositionType.ABSOLUTE.
  *
  * @property {Number} [bottom = 0]
  * @android

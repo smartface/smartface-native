@@ -31,7 +31,7 @@ function QuickLook(params) {}
  *     var quicklook = new QuickLook();
  *     quicklook.document = ["images://.png","assests://.pdf"];
  *
- * @property {[String]} document
+ * @property {String[]} document
  * @ios
  * @since 0.1
  */

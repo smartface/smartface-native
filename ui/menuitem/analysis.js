@@ -31,7 +31,7 @@ MenuItem.prototype.ios = {};
 /**
  * Gets/sets the style of a menu item.
  *
- * @property {MenuItem.ios.Style} style
+ * @property {UI.MenuItem.ios.Style} style
  * @ios
  * @since 1.1.8
  */

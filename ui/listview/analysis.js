@@ -206,7 +206,7 @@ ListView.prototype.getLastVisibleIndex = function(){};
  * user swipe gesture. iOS uses only the first color of the array.
  *
  * @method setPullRefreshColors
- * @param {[UI.Color]} colors
+ * @param {UI.Color[]} colors
  * @android
  * @ios
  * @since 0.1
@@ -275,7 +275,7 @@ ListView.prototype.onPullRefresh = function onPullRefresh(){}
 /**
  * @param {String} title
  * @param {UI.Color} color
- * @param {Integer} padding
+ * @param {Number} padding
  * @param {Function} action Callback for button click action
  * This method is create swipe item
  *
