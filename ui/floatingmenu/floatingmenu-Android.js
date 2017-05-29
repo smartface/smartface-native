@@ -18,6 +18,7 @@ function FloatingMenu(params) {
     var nativeObject;
     var _items = [];
     var _icon;
+    var _rotateEnabled = true;
     var _color = Color.create("#00A1F1");
     var _callbackClick;
     var _callbackOpen;
@@ -58,7 +59,7 @@ function FloatingMenu(params) {
             return true;
         },
         rotateFab: function() {
-            return _items.length > 0;
+            return _items.length > 0 && _rotateEnabled;
         }
     }, null);
     
@@ -126,6 +127,14 @@ function FloatingMenu(params) {
             },
             set: function(color) {
                 nativeObject.setBackgroundColour(color.nativeObject);
+            }
+        },
+        'rotateEnabled': {
+            get: function() {
+                return _rotateEnabled;
+            },
+            set: function(enabled) {
+                _rotateEnabled = enabled;
             }
         },
         'onClick': {
