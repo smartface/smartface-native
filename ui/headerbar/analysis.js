@@ -10,6 +10,9 @@
  *
  * On iOS you should work with header bar in scope of onLoad and onShow callbacks, otherwise
  * behaviour is undefined.
+ * 
+ * If the HeaderBar is visible, the pages starts under the HeaderBar, otherwise you should check 
+ * behaviour of the {@link UI.StatusBar}.
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
