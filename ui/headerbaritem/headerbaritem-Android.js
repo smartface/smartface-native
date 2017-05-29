@@ -35,7 +35,7 @@ function HeaderBarItem(params) {
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
                     else {
-                        this.nativeObject.setTextColor(_color);
+                        this.nativeObject.setTextColor(_color.nativeObject);
                     }
                 }
             },
