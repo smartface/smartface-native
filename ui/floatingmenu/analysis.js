@@ -1,7 +1,7 @@
 /**
  * @class UI.FloatingMenu
  * @since 1.1.10
- * Simple floating action button. Float action button position cannot be changed.
+ * Simple floating menu. Its position cannot be changed.
  *
  *     @example
  *     const FloatingMenu = require('sf-core/ui/floatingmenu');
@@ -44,8 +44,7 @@
  * 
  */
 function FloatingMenu(params) {
-    
-     /**
+    /**
      * Gets/sets array of UI.FloatingMenu.Item of the menu.
      *
      * @property {Array<UI.FloatingMenu.Item>} items
@@ -56,27 +55,27 @@ function FloatingMenu(params) {
     this.items = [];
     
      /**
-     * Gets/sets icon of FloatingMenu button
+     * Gets/sets icon of the button
      *
-     * @property {UI.Image} items
+     * @property {UI.Image} icon
      * @android
      * @ios
      * @since 1.1.10
      */
     this.icon;
     
-     /**
-     * Gets/sets color of FloatingMenu button
+    /**
+     * Gets/sets color of the button
      *
-     * @property {UI.Color} items
+     * @property {UI.Color} color
      * @android
      * @ios
      * @since 1.1.10
      */
     this.color;
     
-     /**
-     * Click event callback function. This function only fire when items array is empty
+    /**
+     * Gets/sets click event callback function. This function is fired when items array is empty.
      *
      * @since 1.1.10
      * @event onClick
@@ -86,7 +85,7 @@ function FloatingMenu(params) {
      this.onClick = function(e) {};
      
      /**
-     * Gets/sets open event callback for a FloatingMenu.
+     * Gets/sets open event callback.
      *
      * @since 1.1.10
      * @event onOpen
@@ -96,7 +95,7 @@ function FloatingMenu(params) {
      this.onOpen = function(e) {};
      
      /**
-     * Gets/sets onClose event callback for a FloatingMenu.
+     * Gets/sets onClose event callback.
      *
      * @since 1.1.10
      * @event onClose
@@ -106,47 +105,47 @@ function FloatingMenu(params) {
      this.onClose = function(e) {};
      
      /**
-     * Gets/sets open function for a FloatingMenu.
+     * Opens the menu.
      *
      * @since 1.1.10
      * @method open
      * @android
      * @ios
      */
-     this.open = function(e) {};
+     this.open = function() {};
      
      /**
-     * Gets/sets open function for a FloatingMenu.
+     * Closes the menu.
      *
      * @since 1.1.10
      * @method close
      * @android
      * @ios
      */
-     this.close = function(e) {};
+     this.close = function() {};
 }
 
 /**
- * @class UI.FloatingMenu.ITEM
+ * @class UI.FloatingMenu.Item
  * @since 1.1.10
  */
  
 FloatingMenu.Item = function() {
 
         /**
-         * Gets/sets title for a FloatingMenu.Item.
+         * Gets/sets title.
          *
          * @property {String} title
          * @android
          * @ios
-         * @since 0.1
+         * @since 1.1.10
          */
         this.title;
 
         /**
-         * Gets/sets icon of FloatingMenu.Item
+         * Gets/sets icon.
          *
-         * @property {UI.Image} items
+         * @property {UI.Image} icon
          * @android
          * @ios
          * @since 1.1.10
@@ -154,9 +153,9 @@ FloatingMenu.Item = function() {
         this.icon;
         
          /**
-         * Gets/sets color of FloatingMenu.Item button
+         * Gets/sets color of the item button.
          *
-         * @property {UI.Color} items
+         * @property {UI.Color} color
          * @android
          * @ios
          * @since 1.1.10
@@ -164,19 +163,19 @@ FloatingMenu.Item = function() {
         this.color;
 
         /**
-         * This event will be fired when the item is touched.
+         * Gets/sets the click callback function. This event will be fired when the item is touched.
          *
          * @event onClick
          * @android
          * @ios
-         * @since 1.1.2
+         * @since 1.1.10
          */
         this.onClick;
         
         /**
-         * Gets/sets color of FloatingMenu.Item button
+         * Gets/sets color of the title.
          *
-         * @property {UI.Color} items
+         * @property {UI.Color} titleColor
          * @android
          * @ios
          * @since 1.1.10
