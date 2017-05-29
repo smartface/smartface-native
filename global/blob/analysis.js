@@ -11,42 +11,41 @@
  *     var blob = myImage.compress(Image.Format.JPEG, 100); 
  *     var blobSize = blob.size, blobType = blob.type;
  */
-function Blob(parts, properties) {
+function Blob(parts, properties) {}
     
-    /**
-     * Returns the type of Blob data.
-     *
-     * @property {String} type
-     * @readonly
-     * @since 0.1
-     */
-    this.type;
-    
-    /**
-     * Returns blob size.
-     *
-     * @property {Number} size
-     * @readonly
-     * @since 0.1
-     */
-    this.size;
-    
-    /**
-     * Returns a new Blob object containing the data in the specified range of bytes of the existing Blob.
-     *
-     * @method slice
-     * @since 0.1
-     */
-    this.slice = function(start, end, type) {};
-    
-    /**
-     * Returns a base64 String
-     *
-     * @method toBase64
-     * @since 0.1
-     */
-    this.toBase64 = function() {};
-}
+/**
+ * Returns the type of Blob data.
+ *
+ * @property {String} type
+ * @readonly
+ * @since 0.1
+ */
+Blob.prototype.type;
+
+/**
+ * Returns blob size.
+ *
+ * @property {Number} size
+ * @readonly
+ * @since 0.1
+ */
+Blob.prototype.size;
+
+/**
+ * Returns a new Blob object containing the data in the specified range of bytes of the existing Blob.
+ *
+ * @method slice
+ * @since 0.1
+ */
+Blob.prototype.slice = function(start, end, type) {};
+
+/**
+ * Returns a base64 String
+ *
+ * @method toBase64
+ * @since 0.1
+ */
+Blob.prototype.toBase64 = function() {};
 
 /**
  * Creates a blob object from given a base64String.
@@ -58,3 +57,5 @@ function Blob(parts, properties) {
  * @since 0.1
  */
 Blob.createFromBase64 = function(base64) { };
+
+module.exports = Blob;

@@ -200,88 +200,87 @@ MapView.prototype.type = UI.MapView.Type.NORMAL;
  *     });
  *     myPage.layout.addChild(myMapView);
  */
-function Pin() {
+function Pin() {}
 
-    /**
-     * Pin location on the map. 
-     *
-     *     @example
-     *     const MapView = require('sf-core/ui/mapview');
-     *     var myPin = new MapView.Pin({
-     *         location: {
-     *             latitude: 40.9844753,
-     *             longitude: 28.8184597
-     *         }
-     *     });
-     *
-     * @property {Object} location
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.location;
+/**
+ * Pin location on the map. 
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myPin = new MapView.Pin({
+ *         location: {
+ *             latitude: 40.9844753,
+ *             longitude: 28.8184597
+ *         }
+ *     });
+ *
+ * @property {Object} location
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.location;
 
-    /**
-     * This property shows title when user touches on the pin.
-     *
-     * @property {String} title
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.title;
+/**
+ * This property shows title when user touches on the pin.
+ *
+ * @property {String} title
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.title;
 
-    /**
-     * This property shows subtitle when user touches on the pin.
-     *
-     * @property {String} subtitle
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.subtitle;
+/**
+ * This property shows subtitle when user touches on the pin.
+ *
+ * @property {String} subtitle
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.subtitle;
 
-    /**
-     * This property sets pin color.
-     * Avaliable colors for Android: [BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW]
-     *
-     * @property {UI.Color} color
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.color;
+/**
+ * This property sets pin color.
+ * Avaliable colors for Android: [BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW]
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.color;
 
-    /**
-     * This property sets an image as pin instead of default pin.
-     *
-     * @property {UI.Image} image
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.image;
+/**
+ * This property sets an image as pin instead of default pin.
+ *
+ * @property {UI.Image} image
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.image;
 
-    /**
-     * Gets/Sets visibility of a pin.
-     *
-     * @property {Boolean} visible
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.visible;
+/**
+ * Gets/Sets visibility of a pin.
+ *
+ * @property {Boolean} visible
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.visible;
 
-    /**
-     * This event will be fired when the pin is touched.
-     *
-     * @event onPress
-     * @android
-     * @ios
-     * @since 1.1.2
-     */
-    this.onPress;
-}
+/**
+ * This event will be fired when the pin is touched.
+ *
+ * @event onPress
+ * @android
+ * @ios
+ * @since 1.1.2
+ */
+Pin.prototype.onPress;
 
 MapView.Pin = Pin;
 

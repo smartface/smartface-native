@@ -36,10 +36,7 @@ function Path() {}
  * @ios
  * @since 0.1
  */
-Object.defineProperty(Path, 'ImagesUriScheme', {
-    value: 'images://',
-    writable: false
-});
+Path.ImagesUriScheme = 'images://';
 
 /**
  * Gets URI scheme for files under assets folder.
@@ -51,10 +48,7 @@ Object.defineProperty(Path, 'ImagesUriScheme', {
  * @ios
  * @since 0.1
  */
-Object.defineProperty(Path, 'AssetsUriScheme', {
-    value: 'assets://',
-    writable: false
-});
+Path.AssetsUriScheme = 'assets://';
 
 /**
  * Gets path separator for the running environment.
@@ -66,9 +60,7 @@ Object.defineProperty(Path, 'AssetsUriScheme', {
  * @ios
  * @since 0.1
  */
-Object.defineProperty(Path, 'Separator', {
-    writable: false
-});
+Path.Separator;
 
 /**
  * Gets data directory path of the application.
@@ -80,9 +72,7 @@ Object.defineProperty(Path, 'Separator', {
  * @ios
  * @since 0.1
  */
-Object.defineProperty(Path, 'DataDirectory', {
-    writable: false
-});
+Path.DataDirectory;
 
 /**
  * Gets external storage paths for Android.
@@ -96,8 +86,6 @@ Object.defineProperty(Path, 'DataDirectory', {
  * @android
  * @since 0.1
  */
-Object.defineProperty(Path.android, 'externalStorages', {
-    writable: false
-});
+Path.android.externalStorages;
 
 module.exports = Path;

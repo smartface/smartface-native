@@ -31,99 +31,99 @@ const extend = require('js-base/core/extend');
  *     Router.sliderDrawer = mySliderDrawer;
  *
  */
-function SliderDrawer(params) {
-    /**
-     * Gets/sets position of the SliderDrawer.
-     *
-     * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.drawerPosition = UI.SliderDrawer.Position.LEFT;
+function SliderDrawer(params) {}
 
-    /**
-     * Gets/sets state of the SliderDrawer.
-     *
-     * @property {UI.SliderDrawer.State} state
-     * @android
-     * @ios
-     * @readonly
-     * @since 1.1.8
-     */
-    this.state;
+/**
+ * Gets/sets position of the SliderDrawer.
+ *
+ * @property {UI.SliderDrawer.Position} [drawerPosition = UI.SliderDrawer.Position.LEFT]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.drawerPosition = UI.SliderDrawer.Position.LEFT;
 
-    /**
-     * Gets/sets layout of the SliderDrawer.
-     *
-     * @property {UI.FlexLayout} [layout = UI.FlexLayout]
-     * @android
-     * @ios
-     * @readonly
-     * @since 0.1
-     */
-    this.layout = UI.FlexLayout;
+/**
+ * Gets/sets state of the SliderDrawer.
+ *
+ * @property {UI.SliderDrawer.State} state
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+SliderDrawer.prototype.state;
 
-    /**
-     * Enables/disables the SliderDrawer.
-     *
-     * @property {Boolean} [enabled = true]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.enabled = true;
+/**
+ * Gets/sets layout of the SliderDrawer.
+ *
+ * @property {UI.FlexLayout} [layout = UI.FlexLayout]
+ * @android
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+SliderDrawer.prototype.layout = UI.FlexLayout;
 
-    /**
-     * This function allows you to show SliderDrawer on the screen.
-     *
-     * @method show
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.show = function(){};
+/**
+ * Enables/disables the SliderDrawer.
+ *
+ * @property {Boolean} [enabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.enabled = true;
 
-    /**
-     * This function allows you to hide SliderDrawer if it is on the screen.
-     *
-     * @method hide
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.hide = function(){};
+/**
+ * This function allows you to show SliderDrawer on the screen.
+ *
+ * @method show
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.show = function(){};
 
-    /**
-     * This event is called user opens the SliderDrawer.
-     *
-     * @event onShow
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onShow = null;
+/**
+ * This function allows you to hide SliderDrawer if it is on the screen.
+ *
+ * @method hide
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.hide = function(){};
 
-    /**
-     * This event is called when user closes the SliderDrawer.
-     *
-     * @event onHide
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onHide = null;
+/**
+ * This event is called user opens the SliderDrawer.
+ *
+ * @event onShow
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onShow = null;
 
-    /**
-     * This event is called when SliderDrawer begins to load.
-     *
-     * @event onLoad
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onLoad = null;
-}
+/**
+ * This event is called when user closes the SliderDrawer.
+ *
+ * @event onHide
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onHide = null;
+
+/**
+ * This event is called when SliderDrawer begins to load.
+ *
+ * @event onLoad
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SliderDrawer.prototype.onLoad = null;
 
 /**
  * @enum {Number} UI.SliderDrawer.Position

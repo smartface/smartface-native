@@ -21,87 +21,85 @@ const Color = require("sf-core/ui/color");
  *     quickLook.show(myPage);
  *
  */
+function QuickLook(params) {}
 
-function QuickLook(params) {
+/**
+ * Gets/sets array of documents(paths) that will be shown on QuickLook.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.document = ["images://.png","assests://.pdf"];
+ *
+ * @property {[String]} document
+ * @ios
+ * @since 0.1
+ */
+QuickLook.prototype.document = [];
 
-        /**
-         * Gets/sets array of documents(paths) that will be shown on QuickLook.
-         *
-         *     @example
-         *     const QuickLook = require('sf-core/ui/quicklook');
-         *     var quicklook = new QuickLook();
-         *     quicklook.document = ["images://.png","assests://.pdf"];
-         *
-         * @property {[String]} document
-         * @ios
-         * @since 0.1
-         */
-        this.document = [];
+/**
+ * Gets/sets headerBar color of QuickLook View.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.barColor = UI.Color.BLACK;
+ *
+ * @property {UI.Color} barColor
+ * @ios
+ * @since 0.1
+ */
+QuickLook.prototype.barColor = false;
 
-        /**
-         * Gets/sets headerBar color of QuickLook View.
-         *
-         *     @example
-         *     const QuickLook = require('sf-core/ui/quicklook');
-         *     var quicklook = new QuickLook();
-         *     quicklook.barColor = UI.Color.BLACK;
-         *
-         * @property {UI.Color} barColor
-         * @ios
-         * @since 0.1
-         */
-        this.barColor = false;
+/**
+ * Gets/sets color of items on header & footer of QuickLook view.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.itemColor = UI.Color.BLACK;
+ *
+ * @property {UI.Color} itemColor
+ * @ios
+ * @since 0.1
+ */
+QuickLook.prototype.itemColor = UI.Color.BLACK;
 
-        /**
-         * Gets/sets color of items on header & footer of QuickLook view.
-         *
-         *     @example
-         *     const QuickLook = require('sf-core/ui/quicklook');
-         *     var quicklook = new QuickLook();
-         *     quicklook.itemColor = UI.Color.BLACK;
-         *
-         * @property {UI.Color} itemColor
-         * @ios
-         * @since 0.1
-         */
-        this.itemColor = UI.Color.BLACK;
+/**
+ * Gets/sets visibility of status bar on QuickLook view.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.statusBar.visible = false;
+ *
+ * @property {Boolean} statusBar.visible
+ * @since 0.1
+ */
+QuickLook.prototype.statusBar.visible = false;
 
-        /**
-         * Gets/sets visibility of status bar on QuickLook view.
-         *
-         *     @example
-         *     const QuickLook = require('sf-core/ui/quicklook');
-         *     var quicklook = new QuickLook();
-         *     quicklook.statusBar.visible = false;
-         *
-         * @property {Boolean} statusBar.visible
-         * @since 0.1
-         */
-        this.statusBar.visible = false;
+/**
+ * Gets/sets statusBar style of QuickLook View.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.statusBar.style = false;
+ *
+ * @property {UI.StatusBarStyle} statusBar.style
+ * @ios
+ * @since 0.1
+ */
+QuickLook.prototype.statusBar.style = UI.StatusBarStyle.DEFAULT;
 
-        /**
-         * Gets/sets statusBar style of QuickLook View.
-         *
-         *     @example
-         *     const QuickLook = require('sf-core/ui/quicklook');
-         *     var quicklook = new QuickLook();
-         *     quicklook.statusBar.style = false;
-         *
-         * @property {UI.StatusBarStyle} statusBar.style
-         * @ios
-         * @since 0.1
-         */
-        this.statusBar.style = UI.StatusBarStyle.DEFAULT;
-
-        /**
-         * This function shows QuickLook on the given UI.Page.
-         *
-         * @param {UI.Page} page This is the page that QuickLook will be shown.
-         * @ios
-         * @method show
-         * @since 0.1
-         */
-        this.show = function(Page) {};
-}
+/**
+ * This function shows QuickLook on the given UI.Page.
+ *
+ * @param {UI.Page} page This is the page that QuickLook will be shown.
+ * @ios
+ * @method show
+ * @since 0.1
+ */
+QuickLook.prototype.show = function(Page) {};
 
 module.exports = QuickLook;
