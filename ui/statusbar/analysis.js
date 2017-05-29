@@ -5,6 +5,9 @@
  * StatusBar is not valid since you can't use in anywhere. If you
  * want to access status bar object you can access via
  * UI.Page.statusBar property of your page.
+ * 
+ * If the StatusBar visible, page starts under the StatusBar for Android but StatusBar 
+ * will overlaps the page for iOS if the HeaderBar is invisible at this moment.
  *
  *     @example
  *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
