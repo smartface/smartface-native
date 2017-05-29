@@ -154,6 +154,14 @@ function FloatingMenu(params) {
         }
     });
 
+    this.open = function() {
+        nativeObject.openSpeedDialMenu();
+    };
+
+    this.close = function() {
+        nativeObject.closeSpeedDialMenu();
+    };
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
