@@ -76,8 +76,10 @@ const MapView = extend(View)(
                 self.rotateEnabled = _rotateEnabled; 
                 self.scrollEnabled = _scrollEnabled;
                 self.zoomEnabled = _zoomEnabled;
+                self.userLocationEnabled = _userLocationEnabled;
                 self.type = _type;
-                
+                self.zoomLevel = _zoomLevel;
+
                 _pendingPins.forEach(function(element){
                     self.addPin(element);
                 });
@@ -93,7 +95,14 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation, _compassEnabled, _rotateEnabled, _scrollEnabled, _zoomEnabled, _type;
+        var _centerLocation;
+        var _compassEnabled = true;
+        var _rotateEnabled = true;
+        var _scrollEnabled = true;
+        var _zoomEnabled = true;
+        var _userLocationEnabled = false;
+        var _type = MapView.Type.NORMAL;
+        var _zoomLevel;
         Object.defineProperties(self, {
             'centerLocation': {
                 get: function() {
@@ -111,7 +120,8 @@ const MapView = extend(View)(
                             _nativeGoogleMap.moveCamera(cameraUpdate);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'compassEnabled': {
                 get: function() {
@@ -124,7 +134,8 @@ const MapView = extend(View)(
                             _nativeGoogleMap.getUiSettings().setCompassEnabled(enabled);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'rotateEnabled': {
                 get: function() {
@@ -137,7 +148,8 @@ const MapView = extend(View)(
                             _nativeGoogleMap.getUiSettings().setRotateGesturesEnabled(enabled);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'scrollEnabled': {
                 get: function() {
@@ -150,7 +162,8 @@ const MapView = extend(View)(
                             _nativeGoogleMap.getUiSettings().setScrollGesturesEnabled(enabled);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'zoomEnabled': {
                 get: function() {
@@ -163,7 +176,38 @@ const MapView = extend(View)(
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
                         }
                     }
-                }
+                },
+                enumerable: true
+            },
+            'zoomLevel': {
+                get: function() {
+                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom : _zoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _zoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value)
+                            _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'userLocationEnabled': {
+                get: function() {
+                    return _userLocationEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _userLocationEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMyLocationEnabled(enabled);
+                        }
+                    }
+                },
+                enumerable: true
             },
             'type': {
                 get: function() {
@@ -176,7 +220,8 @@ const MapView = extend(View)(
                             _nativeGoogleMap.setMapType(type);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'addPin': {
                 value: function(pin) {
@@ -213,7 +258,8 @@ const MapView = extend(View)(
                             _pendingPins.push(pin);
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'removePin': {
                 value: function(pin) {
@@ -233,7 +279,8 @@ const MapView = extend(View)(
                             }
                         }
                     }
-                }
+                },
+                enumerable: true
             },
             'onCreate': {
                 get: function() {
@@ -241,7 +288,8 @@ const MapView = extend(View)(
                 },
                 set: function(callback) {
                     _onCreate = callback;
-                }
+                },
+                enumerable: true
             },
             'onPress': {
                 get: function() {
@@ -249,7 +297,8 @@ const MapView = extend(View)(
                 },
                 set: function(callback) {
                     _onPress = callback;
-                }
+                },
+                enumerable: true
             },
             'onLongPress': {
                 get: function() {
@@ -257,7 +306,8 @@ const MapView = extend(View)(
                 },
                 set: function(callback) {
                     _onLongPress = callback;
-                }
+                },
+                enumerable: true
             },
             'toString': {
                 value: function(){

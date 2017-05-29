@@ -44,7 +44,7 @@ function SliderDrawer(params) {}
 SliderDrawer.prototype.drawerPosition = UI.SliderDrawer.Position.LEFT;
 
 /**
- * Gets/sets state of the SliderDrawer.
+ * Gets state of the SliderDrawer.
  *
  * @property {UI.SliderDrawer.State} state
  * @android

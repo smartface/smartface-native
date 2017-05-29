@@ -38,113 +38,141 @@ const extend = require('js-base/core/extend');
  *     myPage.layout.addChild(myMapView);
  * 
  */
-function MapView(params) {
-    /**
-     * Enables/Disables scroll gestures so that map can be dragged.
-     *
-     * @property {Boolean} [scrollEnabled = true]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.scrollEnabled;
+function MapView(params) {}
 
-    /**
-     * Enables/Disables rotate gestures so that map can be rotated.
-     *
-     * @property {Boolean} [rotateEnabled = true]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.rotateEnabled;
+/**
+ * Enables/Disables scroll gestures so that map can be dragged.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.scrollEnabled;
 
-    /**
-     * Enables/Disables zoom gestures so that map can be zoomed in and out.
-     *
-     * @property {Boolean} [zoomEnabled = true]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.zoomEnabled;
+/**
+ * Enables/Disables rotate gestures so that map can be rotated.
+ *
+ * @property {Boolean} [rotateEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.rotateEnabled;
 
-    /**
-     * Enables/Disables compass on map.
-     *
-     * @property {Boolean} [compassEnabled = true]
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.compassEnabled;
+/**
+ * Enables/Disables compass on map.
+ *
+ * @property {Boolean} [compassEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.compassEnabled;
 
-    /**
-     * This property sets center location of the map to the given latitude & longitude.
-     *
-     *     @example
-     *     const MapView = require('sf-core/ui/mapview');
-     *     var myMapView = new MapView({
-     *         centerLocation: {
-     *             latitude: 41.0209078,
-     *             longitude: 29.0039533
-     *         }
-     *     });
-     * @property {Object} centerLocation
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.centerLocation;
+/**
+ * Enables/Disables user location indicator on map.
+ *
+ * @property {Boolean} [userLocationEnabled = false]
+ * @android
+ * @ios
+ * @since 1.1.11
+ */
+MapView.prototype.userLocationEnabled;
 
-    /**
-     * Adds a UI.MapView.Pin on the map.
-     *
-     * @param {UI.MapView.Pin} pin
-     * @android
-     * @ios
-     * @method addPin
-     * @since 0.1
-     */
-    this.addPin = function(){};
+/**
+ * This property sets center location of the map to the given latitude & longitude.
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myMapView = new MapView({
+ *         centerLocation: {
+ *             latitude: 41.0209078,
+ *             longitude: 29.0039533
+ *         }
+ *     });
+ * @property {Object} centerLocation
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.centerLocation;
 
-    /**
-     * Removes the UI.MapView.Pin from the map.
-     *
-     * @param {UI.MapView.Pin} pin
-     * @method removePin
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.removePin = function(){};
+/**
+ * This property sets zoom level of the map to the given level. Zoom level must between 0 to 20.
+ *
+ * @property {Number} [zoomLevel = 15]
+ * @android
+ * @ios
+ * @since 1.1.10
+ */
+MapView.prototype.zoomLevel = 15;
 
-    /**
-     * Triggered when pressed on the map and sends the location pressed on the map.
-     *
-     * @event onPress
-     * @param {Object} location
-     * @param {Number} location.latitude
-     * @param {Number} location.longitude
-     * @android
-     * @ios
-     * @since 1.1.3
-     */
-    this.onPress;
+/**
+ * This property sets center location of the map to the given latitude & longitude.
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myMapView = new MapView({
+ *         centerLocation: {
+ *             latitude: 41.0209078,
+ *             longitude: 29.0039533
+ *         }
+ *     });
+ * @property {Object} centerLocation
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.centerLocation;
 
-    /**
-     * Triggered when long pressed on the map and sends the location pressed on the map.
-     *
-     * @event onLongPress
-     * @param {Object} location
-     * @param {Number} location.latitude
-     * @param {Number} location.longitude
-     * @android
-     * @ios
-     * @since 1.1.3
-     */
-    this.onLongPress;
-}
+/**
+ * Adds a UI.MapView.Pin on the map.
+ *
+ * @param {UI.MapView.Pin} pin
+ * @android
+ * @ios
+ * @method addPin
+ * @since 0.1
+ */
+MapView.prototype.addPin = function(){};
+
+/**
+ * Removes the UI.MapView.Pin from the map.
+ *
+ * @param {UI.MapView.Pin} pin
+ * @method removePin
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.removePin = function(){};
+
+/**
+ * Triggered when pressed on the map and sends the location pressed on the map.
+ *
+ * @event onPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onPress;
+
+/**
+ * Triggered when long pressed on the map and sends the location pressed on the map.
+ *
+ * @event onLongPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onLongPress;
 
 /**
  * This event is called when map is ready to be used.

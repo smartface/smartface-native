@@ -9,7 +9,7 @@ const VideoView = extend(View)(
         var activity = Android.getActivity();
         
         if(!this.nativeObject){
-            // To solve stretching due to yoga, we will wrap with RelativeLayout, workaround.
+            // To solve stretching due to yoga, we will wrap with RelativeLayout.
             this.nativeObject = new NativeRelativeLayout(activity);
             var layoutParams = new NativeRelativeLayout.LayoutParams(-1,-1);
             // CENTER_IN_PARENT, TRUE

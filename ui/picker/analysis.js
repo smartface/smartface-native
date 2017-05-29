@@ -20,13 +20,13 @@
  *         currentIndex: 2
  *     });
  *
- *     var okCallback = function()
+ *     var okCallback = function(params)
  *     {
- *         alert('ok button clicked');
+ *         alert('Selected index: ' + params.index);
  *     }
  *     var cancelCallback = function()
  *     {
- *         alert('cancel button clicked');
+ *         alert('Canceled');
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
