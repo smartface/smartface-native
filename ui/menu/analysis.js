@@ -39,7 +39,7 @@ Menu.prototype.headerTitle = "";
 /**
  * Gets/sets array of UI.MenuItem of the menu.
  *
- * @property {Array<UI.MenuItem>} items
+ * @property {UI.MenuItem[]} items
  * @android
  * @ios
  * @since 0.1

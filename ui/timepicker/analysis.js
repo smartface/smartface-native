@@ -14,7 +14,7 @@
  *     myTimePicker.show();
  *
  */
-function TimePicker () {
+function TimePicker () {}
 
 /**
  * Sets the time avaliable on the picker.

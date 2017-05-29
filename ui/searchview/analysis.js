@@ -132,7 +132,7 @@ SearchView.prototype.removeFocus = function(){};
 /**
  * Gets/sets the search view’s style. This property works only for IOS.
  *
- * @property {SearchView.iOS.Style} searchViewStyle
+ * @property {UI.SearchView.iOS.Style} searchViewStyle
  * @ios
  * @since 0.1
  */
