@@ -18,60 +18,61 @@
  *     });
  *     myPage.headerBar.setItems([myItem]);
  */
-function HeaderBarItem(params) {
-    /**
-     * Gets/sets title of header bar item. If image is not set, title will be
-     * shown in the header bar.
-     *
-     * Title won't show if item is set as left item to header bar.
-     *
-     * @property {String} title
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.title = "";
+function HeaderBarItem(params) {}
 
-    /**
-     * Gets/sets image of header bar item. Image is set to null as default.
-     *
-     * @property {UI.Image} image
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.image = null;
+/**
+ * Gets/sets title of header bar item. If image is not set, title will be
+ * shown in the header bar.
+ *
+ * Title won't show if item is set as left item to header bar.
+ *
+ * @property {String} title
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBarItem.prototype.title = "";
 
-    /**
-     * Gets/sets enabled status of header bar item. Enabled is set to true as
-     * default.
-     *
-     * @property {Boolean} enabled
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.enabled = true;
+/**
+ * Gets/sets image of header bar item. Image is set to null as default.
+ *
+ * @property {UI.Image} image
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBarItem.prototype.image = null;
 
-    /**
-     * Gets/sets callback for press event. If enabled property is set to false
-     * press callback won't be called.
-     *
-     * @property {Function} onPress
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onPress = null;
+/**
+ * Gets/sets enabled status of header bar item. Enabled is set to true as
+ * default.
+ *
+ * @property {Boolean} enabled
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBarItem.prototype.enabled = true;
 
-    /**
-     * Gets/sets color of the item's text/image.
-     *
-     * @property {UI.Color} color
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.color = null;
+/**
+ * Gets/sets callback for press event. If enabled property is set to false
+ * press callback won't be called.
+ *
+ * @property {Function} onPress
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBarItem.prototype.onPress = null;
 
-}
+/**
+ * Gets/sets color of the item's text/image.
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBarItem.prototype.color = null;
+
+module.exports = HeaderBarItem;

@@ -32,10 +32,7 @@ var KeyboardAppearance = { };
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardAppearance, 'DEFAULT', {
-  value: 0,
-  writable: false
-});
+KeyboardAppearance.DEFAULT = 0;
 
 /**
  * @property {Number} DARK
@@ -45,10 +42,7 @@ Object.defineProperty(KeyboardAppearance, 'DEFAULT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(KeyboardAppearance, 'DARK', {
-  value: 1,
-  writable: false
-});
+KeyboardAppearance.DARK = 1;
 
 /**
  * @property {Number} LIGHT
@@ -58,9 +52,8 @@ Object.defineProperty(KeyboardAppearance, 'DARK', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(KeyboardAppearance, 'LIGHT', {
-  value: 2,
-  writable: false
-});
+KeyboardAppearance.LIGHT = 2;
+
+Object.freeze(KeyboardAppearance);
 
 module.exports = KeyboardAppearance;
