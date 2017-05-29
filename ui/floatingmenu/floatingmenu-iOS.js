@@ -75,10 +75,26 @@ function FloatingMenu(params) {
     
     Object.defineProperty(this, 'icon', {
         get: function() {
-            return Image.createFromImage(self.nativeObject.icon);;
+            return Image.createFromImage(self.nativeObject.icon);
         },
         set: function(value) {
             self.nativeObject.buttonImage = value.nativeObject;
+        },
+        enumerable: true
+    });
+    
+    var _rotateEnabled = true;
+    Object.defineProperty(this, 'rotateEnabled', {
+        get: function() {
+            return _rotateEnabled;
+        },
+        set: function(value) {
+            _rotateEnabled = value;
+            if (_rotateEnabled) {
+                self.nativeObject.rotationDegrees = 45;
+            }else{
+                self.nativeObject.rotationDegrees = 0;
+            }
         },
         enumerable: true
     });
