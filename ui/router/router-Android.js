@@ -1,4 +1,6 @@
-const Pages = require("./pages");
+const Pages = require("sf-core/ui/pages");
+const Tab = require("sf-core/ui/tab");
+const Navigation = require("sf-core/ui/navigation");
 
 /**
  * @class UI.Router
@@ -27,6 +29,22 @@ function Router(){};
 var pagesInstance = null;
 var routes = {};
 var history = [];
+
+    
+Object.defineProperty(Router, 'routes', {
+    get: function() {
+        return routes;
+    },
+    enumerable: true
+});
+
+    
+Object.defineProperty(Router, 'pagesInstance', {
+    get: function() {
+        return pagesInstance;
+    },
+    enumerable: true
+});
 
 /**
  * Gets/sets sliderDrawer of the Router.
@@ -96,7 +114,7 @@ Router.add = function(to, page, isSingleton) {
             pageClass: page,
             isSingleton: !!isSingleton,
             pageObject: null
-        }
+        };
     }
 };
 
@@ -170,6 +188,11 @@ Router.goBack = function(to, parameters, animated) {
             return true;
         }
     } else {
+        if(Router.routes[current.path].pageClass.switchCounter) {
+            for(var i = 0; i < Router.routes[current.path].pageClass.switchCounter; i++)
+                pagesInstance.pop();
+            Router.routes[current.path].switchCounter = 0;
+        }
         if (pagesInstance.pop()) {
             current && current.page.onHide && current.page.onHide();
             history.pop();
@@ -207,12 +230,44 @@ function getRoute(to) {
     if (routes[to].isSingleton && isPathExistsInHistory(to)) {
         throw Error(to + " is set as singleton and exists in history");
     }
-
-    if (routes[to].isSingleton) {
-        return routes[to].pageObject ||
-                (routes[to].pageObject = new (routes[to].pageClass)());
-    } else {
-        return new (routes[to].pageClass)();
+    
+    if((routes[to].pageClass) instanceof Tab) {
+        var tabItems = [];
+        var tab = routes[to].pageClass;
+        var page;
+        if(tab.items) {
+            var keys = Object.keys(tab.items);
+            var selectedIndex = 0;
+            for(var i = 0; i < keys.length; i++) {
+                var tabItemPage = new (tab.items[keys[i]].page)(); 
+                if(keys[i] === tab.index) {
+                    selectedIndex = i;
+                }
+                tabItems.push(tabItemPage);
+            }
+            page = tabItems[selectedIndex];
+            page.parentTab = to;
+            page.selectedIndex = selectedIndex;
+            page.tabBarItems = tabItems;
+        }
+        return page;
+    }
+    else if((routes[to].pageClass) instanceof Navigation) {
+        var index = routes[to].pageClass.index;
+        if (routes[to].isSingleton) {
+            return routes[to].pageClass.itemInstances[index];
+        } else {
+            return new (routes[to].pageClass.items[index])();
+        }
+        return null;
+    }
+    else {
+        if (routes[to].isSingleton) {
+            return routes[to].pageObject ||
+                    (routes[to].pageObject = new (routes[to].pageClass)());
+        } else {
+            return new (routes[to].pageClass)();
+        }
     }
 }
 

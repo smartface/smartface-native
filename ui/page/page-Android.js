@@ -3,6 +3,7 @@ const Color                 = require("sf-core/ui/color");
 const TypeUtil              = require("sf-core/util/type");
 const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+const Router                = require("sf-core/ui/router");
 
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
@@ -428,6 +429,155 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
+    
+    this.tabbar = {};
+    Object.defineProperty(this.tabbar, 'height', {
+        get: function() {
+            var result = 0;
+            var activity = Android.getActivity();
+            
+            const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+            var packageName = activity.getPackageName();
+            var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
+            if (resourceId > 0) {
+                result = activity.getResources().getDimensionPixelSize(resourceId);
+            }
+            return AndroidUnitConverter.pixelToDp(result);
+        },
+        enumerable: true, configurable: true
+    });
+
+    var _parentTab;
+    var _selectedIndex;
+    var bottomNavigationView;
+    var _tabBarItems;
+    var rootLayoutID = NativeSFR.id.rootLayout;
+    
+    Object.defineProperty(this, 
+        'parentTab', {
+            get: function() {
+                return _parentTab;
+            },
+            set: function(tab) {
+                _parentTab = tab;
+            },
+            enumerable: true
+        }
+    );
+
+    Object.defineProperty(this, 'selectedIndex', {
+        get: function() {
+            return _selectedIndex;
+        },
+        set: function(index) {
+            _selectedIndex = index;
+            var menu;
+            if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
+                for(var i = 0; i < _tabBarItems.length; i++) {
+                    if(i === _selectedIndex) {
+                        menu.getItem(i).setChecked(true);
+                    }else {
+                        menu.getItem(i).setChecked(false);
+                    }
+                }
+            }
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(this, 
+        'tabBarItems', {
+            get: function() {
+                return _tabBarItems;
+            },
+            set: function(tabBarItems) {
+                _tabBarItems = tabBarItems;
+                createBottomNavigationView(pageLayout, tabBarItems);
+            },
+            enumerable: true
+        }
+    );
+
+    function createBottomNavigationView(pageLayout) {
+        if(bottomNavigationView) {
+            
+            return;
+        }
+        const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
+        const RelativeLayout = requireClass("android.widget.RelativeLayout");
+        const Color = require("sf-core/ui/color");
+        
+        bottomNavigationView = new BottomNavigationView(activity);
+        var menu = null;
+        var tab = Router.routes[_parentTab].pageClass;
+        if(bottomNavigationView) {
+            menu = bottomNavigationView.getMenu();
+            if(menu) {
+                var keys = Object.keys(tab.items);
+                for(var i = 0; i < keys.length; i++) {
+                    var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
+                    var icon = tab.items[keys[i]].icon;
+                    if(icon)  
+                        menuitem.setIcon(icon.nativeObject);
+                }
+                // Don't merge upper loop. It doesn't work inside upper loop.
+                for(i = 0; i < keys.length; i++) {
+                    if(i === _selectedIndex)
+                        menu.getItem(i).setChecked(true);
+                    else
+                        menu.getItem(i).setChecked(false);
+                }
+                
+                if(tab && tab.titleColor && ('checked' in tab.titleColor && 'normal' in tab.titleColor)) {
+                    const NativeR = requireClass("android.R");
+                    var states = [[NativeR.attr.state_checked], []];
+            
+                    const ColorStateList = requireClass("android.content.res.ColorStateList");
+                    var colors = [tab.titleColor.checked.nativeObject, tab.titleColor.normal.nativeObject];
+                    var statelist = new ColorStateList(states, colors);
+                    bottomNavigationView.setItemTextColor(statelist);
+                    bottomNavigationView.setItemIconTintList(statelist);
+                }
+                disableShiftMode();
+                bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
+                    onNavigationItemSelected: function(item) {
+                        var index = item.getItemId();
+                        var fragment = _tabBarItems[index];
+                        fragment.selectedIndex = index;
+                        fragment.parentTab = self.parentTab;
+                        fragment.tabBarItems = _tabBarItems;
+                        
+                        Router.routes[self.parentTab].pageClass.switchCounter += 1;
+                        Router.pagesInstance.push(fragment, false, self.parentTab);
+                        return true;
+                    }
+                }));
+            }
+        }
+        
+        var params = new RelativeLayout.LayoutParams(-1, -2);
+        params.addRule(12);
+        bottomNavigationView.setLayoutParams(params);
+        var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
+        bottomLayout.addView(bottomNavigationView);
+            
+        if(tab.backgroundColor instanceof Color) 
+            bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
+    }
+    
+    function disableShiftMode() {
+        var menuView = bottomNavigationView.getChildAt(0);
+        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+        shiftingMode.setAccessible(true);
+        shiftingMode.setBoolean(menuView, false);
+        shiftingMode.setAccessible(false);
+        for (var i = 0; i < menuView.getChildCount(); i++) {
+            var item = menuView.getChildAt(i);
+            item.setShiftingMode(false);
+            var checked = (item.getItemData()).isChecked();
+            item.setChecked(checked);
+        }
+    }
 
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
