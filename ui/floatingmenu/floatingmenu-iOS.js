@@ -28,6 +28,7 @@ function FloatingMenu(params) {
     self.nativeObject.openAnimationType = FloatyOpenAnimationType.slideUp;
     self.nativeObject.plusColor = Color.create("#00A1F1").nativeObject;
     
+    self.nativeObject.rotationDegrees = 45;
     self.floatyDelegate = new __SF_FloatyDelegate();
     
     self.floatyDelegate.emptyFloatySelected = function(){
