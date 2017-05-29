@@ -34,6 +34,7 @@ const OrientationDictionary = {
 };
 
 function Page(params) {
+    (!params) && (params = {});
     var self = this;
     var activity = Android.getActivity();
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
@@ -44,7 +45,6 @@ function Page(params) {
     });
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
-    
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
@@ -71,7 +71,8 @@ function Page(params) {
             }));
         },
         onCreateOptionsMenu: function(menu) {
-            optionsMenu = menu;
+            if(!optionsMenu)
+                optionsMenu = menu;
             if (_headerBarItems.length > 0) {
                 self.headerBar.setItems(_headerBarItems);
             }
@@ -107,7 +108,8 @@ function Page(params) {
 
             var i;
             for (i = 0; i < items.length; i++) {
-                menu.add(0, i, 0, items[i].title);
+                var menuTitle = items[i].android.spanTitle();
+                menu.add(0, i, 0, menuTitle);
             }
         },
         onContextItemSelected: function(item) {
@@ -240,7 +242,7 @@ function Page(params) {
                 window.addFlags(FLAG_FULLSCREEN);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     this.statusBar.android = {};
@@ -254,10 +256,10 @@ function Page(params) {
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
                 var window = activity.getWindow();
                 window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
+                window.setStatusBarColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(this.statusBar, 'height', {
@@ -269,7 +271,7 @@ function Page(params) {
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarColor; // SmartfaceBlue
@@ -279,10 +281,10 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                toolbar.setBackgroundColor(color);
+                toolbar.setBackgroundColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarImage = null;
@@ -296,7 +298,7 @@ function Page(params) {
                 toolbar.setBackground(image.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _leftItemEnabled;
@@ -310,7 +312,7 @@ function Page(params) {
                 actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'height', {
@@ -318,7 +320,7 @@ function Page(params) {
             var resources = activity.getResources();
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material))
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'title', {
@@ -333,7 +335,7 @@ function Page(params) {
                 toolbar.setTitle("");
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarTitleColor;
@@ -344,10 +346,10 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                toolbar.setTitleTextColor(color);
+                toolbar.setTitleTextColor(color.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'visible', {
@@ -367,7 +369,7 @@ function Page(params) {
                 }
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
@@ -382,7 +384,7 @@ function Page(params) {
                 toolbar.setSubtitle("");
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarSubtitleColor;
@@ -395,7 +397,7 @@ function Page(params) {
                 toolbar.setSubtitleTextColor(color);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarLogo = null;
@@ -410,7 +412,7 @@ function Page(params) {
                 actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     var _headerBarLogoEnabled = false;
@@ -424,7 +426,7 @@ function Page(params) {
                 actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     // Implemented for just SearchView
@@ -461,14 +463,12 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
+        const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
-        const NativeView = requireClass('android.view.View');
-        const NativePorterDuff = requireClass('android.graphics.PorterDuff');
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
-        var paddingVertical = AndroidUnitConverter.dpToPixel(12);
-        var paddingHorizontal = AndroidUnitConverter.dpToPixel(10);
+        
         optionsMenu.clear();
 
         var itemID = 1;
@@ -478,34 +478,25 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                if (item.image && item.image.nativeObject) {
-                    var imageCopy = item.image.nativeObject.mutate();
-                    item.color && imageCopy.setColorFilter(item.color, NativePorterDuff.Mode.SRC_IN);
-                    itemView = new NativeImageButton(activity);
-                    itemView.setImageDrawable(imageCopy);
-                }
-                else {
-                    itemView = new NativeTextButton(activity);
-                    item.color && itemView.setTextColor(item.color);
-                    itemView.setText(item.title);
-                }
-
-                itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                    onClick: function(view) {
-                        item.onPress && item.onPress();
-                    }
-                }));
+                if(item.image && item.image.nativeObject)
+                    item.nativeObject = new NativeImageButton(activity);
+                else 
+                    item.nativeObject = new NativeTextButton(activity);
+                itemView = item.nativeObject;
+                item.setValues();
             }
-            itemView.setBackgroundColor(Color.TRANSPARENT);
-            
-            // left, top, right, bottom
-            itemView.setPadding(paddingVertical, paddingHorizontal, paddingVertical, paddingHorizontal)
-
-            var menuItem = optionsMenu.add(0, itemID++, 0, item.title);
-            menuItem.setEnabled(item.enabled);
-            menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
-            menuItem.setActionView(itemView);
-
+            if(itemView) { 
+                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                // left, top, right, bottom
+                itemView.setPadding(
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                );
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                item.menuItem.setEnabled(item.enabled);
+                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setActionView(itemView);
+            }
         });
     };
 
@@ -521,7 +512,6 @@ function Page(params) {
             actionBar.setHomeAsUpIndicator(null);
         }
     };
-    
      
     // Added to solve AND-2713 bug.
     const NativeView = requireClass('android.view.View');
@@ -530,16 +520,30 @@ function Page(params) {
             return true;
         }
     }));
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if( keyCode === 4 && keyEvent.getAction() === 0) {
+                   typeof self.android.onBackButtonPressed === "function" && 
+                            self.android.onBackButtonPressed();
+            }
+            return true;
+        }
+    }));
+    self.layout.nativeObject.setFocusable(true);
+    self.layout.nativeObject.setFocusableInTouchMode(true);
 
     // Default values
-    self.statusBar.visible = true;
-    self.statusBar.color = Color.TRANSPARENT;
-    self.headerBar.backgroundColor = Color.create("#00A1F1");
-    self.headerBar.leftItemEnabled = true;
-    self.headerBar.android.logoEnabled = false;
-    self.headerBar.titleColor = Color.WHITE;
-    self.headerBar.subtitleColor = Color.WHITE;
-    self.headerBar.visible = true;
+    if (!params.skipDefaults) {
+        self.statusBar.visible = true;
+        self.statusBar.color = Color.TRANSPARENT;
+        self.headerBar.backgroundColor = Color.create("#00A1F1");
+        self.headerBar.leftItemEnabled = true;
+        self.headerBar.android.logoEnabled = false;
+        self.headerBar.titleColor = Color.WHITE;
+        self.headerBar.subtitleColor = Color.WHITE;
+        self.headerBar.visible = true;
+    }
 
     //Handling ios value
     self.statusBar.ios = {};

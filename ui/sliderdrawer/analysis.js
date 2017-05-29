@@ -9,28 +9,26 @@ const extend = require('js-base/core/extend');
  * It is hidden most of the time, when user swipes a finger from the left or right edge of the screen it will appear.
  * 
  * 
- *    @example
- *    const SliderDrawer = require('sf-core/ui/sliderdrawer');
- *    const Button = require('sf-core/ui/button');
- *    const Router = require('sf-core/ui/router');
+ *     @example
+ *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
+ *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Button = require('sf-core/ui/button');
+ *     const Router = require('sf-core/ui/router');
  *    
- *    Router.add('login', require('pages/pgLogin'));
- *    Router.go('login');
- *    var mySliderDrawer = new SliderDrawer({
- *        width: 200,
- *        onLoad: function(){
- *           mySliderDrawer.layout.addChild(myButton);
- *        }
- *    });
- *    var myButton = new Button({
- *        height: 40,
- *        width: 50,
- *        left: 50,
- *        text: "Smartface Button"
- *    });
- *    mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
- *    mySliderDrawer.layout.addChild(myButton);
- *    Router.sliderDrawer = mySliderDrawer;
+ *     var mySliderDrawer = new SliderDrawer({
+ *         width: 200
+ *     });
+ *     var myButton = new Button({
+ *         height: 40,
+ *         width: 100,
+ *         left: 50,
+ *         top: 50,
+ *         text: "Smartface Button",
+ *         positionType: FlexLayout.PositionType.ABSOLUTE
+ *     });
+ *     mySliderDrawer.drawerPosition = SliderDrawer.Position.LEFT;
+ *     mySliderDrawer.layout.addChild(myButton);
+ *     Router.sliderDrawer = mySliderDrawer;
  *
  */
 const SliderDrawer = extend(ViewGroup)(
@@ -46,6 +44,17 @@ const SliderDrawer = extend(ViewGroup)(
          * @since 0.1
          */
         this.drawerPosition = UI.SliderDrawer.Position.LEFT;
+
+        /**
+         * Gets state of the SliderDrawer.
+         *
+         * @property {UI.SliderDrawer.State} state
+         * @android
+         * @ios
+         * @readonly
+         * @since 1.1.8
+         */
+        this.state;
 
         /**
          * Gets/sets layout of the SliderDrawer.
@@ -160,6 +169,65 @@ Object.defineProperty(SliderDrawer.Position, 'LEFT', {
  */
 Object.defineProperty(SliderDrawer.Position, 'RIGHT', {
     value: 1,
+    writable: false
+});
+
+/**
+ * @enum {Number} UI.SliderDrawer.State
+ * @static
+ * @readonly
+ * @since 1.1.8
+ *
+ * Define the state of SliderDrawer.
+ *
+ */
+SliderDrawer.State = {};
+
+/**
+ * @property {Number} OPEN
+ *
+ * Indicates the slider drawer is open.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'OPEN', {
+    value: 0,
+    writable: false
+});
+
+/**
+ * @property {Number} CLOSED
+ *
+ * Indicates the slider drawer is closed.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'CLOSED', {
+    value: 1,
+    writable: false
+});
+
+/**
+ * @property {Number} DRAGGED
+ *
+ * Indicates the slider drawer is dragged.
+ *
+ * @static
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.8
+ */
+Object.defineProperty(SliderDrawer.State, 'DRAGGED', {
+    value: 2,
     writable: false
 });
 

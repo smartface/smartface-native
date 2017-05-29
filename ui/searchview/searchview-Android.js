@@ -153,24 +153,36 @@ const SearchView = extend(View)(
             },
             'showKeyboard': {
                 value: function(){
-                    // @todo check is this best practise 
-                    mSearchSrcTextView.requestFocus();
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    this.requestFocus();
                 },
                 enumerable: true
             },
             'hideKeyboard': {
                 value: function(){
-                    // @todo check is this best practise 
-                    // @todo: toggleSoftInput doesn't work causing by issue AND-2566
-                    mSearchSrcTextView.clearFocus();
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0); 
+                    this.removeFocus();
                 },
                 enumerable: true
             },
+            'requestFocus': {
+                value: function(){
+                    mSearchSrcTextView.requestFocus();
+                    // Due to the requirements we should show keyboard when focus requested.
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                },
+                enumerable: true
+            },
+            'removeFocus': {
+                value: function(){
+                    mSearchSrcTextView.clearFocus();
+                    // Due to the requirements we should hide keyboard when focus cleared.
+                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                    var windowToken = this.nativeObject.getWindowToken();
+                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+                },
+                enumerable: true
+            },
+            
             'toString': {
                 value: function(){
                     return 'SearchView';
@@ -289,8 +301,8 @@ const SearchView = extend(View)(
         if(!this.isNotSetDefaults){
             const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
-            mSearchButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
-            mCloseButton.getDrawable().setColorFilter(Color.WHITE,NativePorterDuff.Mode.SRC_IN);
+            mSearchButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
+            mCloseButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus){
                     if (hasFocus)  {
@@ -298,8 +310,9 @@ const SearchView = extend(View)(
                     }
                     else {
                         _onSearchEndCallback && _onSearchEndCallback();
+                        this.removeFocus();
                     }
-                }
+                }.bind(this)
             }));
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query){

@@ -107,7 +107,7 @@ Router.add = function(to, page, isSingleton) {
  * use UI.Router.goBack to navigate them if they're in the history.
  * 
  * @param {String} to Route path to go
- * @param {Object} parameters Parameters to be passed onShow callback of
+ * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
  *                            navigated page 
  * @param {Boolean} animated Navigate with animation, if not given it is set to
  *                           true as default
@@ -139,17 +139,20 @@ Router.go = function(to, parameters, animated) {
 
 /**
  * Navigates back to a page in history. If no route path is given to function
- * it will navigate to last page in history.
+ * it will navigate to last page in history. To pass to last page, first parameter
+ * should be null.
  * 
  * @param {String} to Optional, route path to navigate back
  * @param {Boolean} animated Navigate with animation, if not given it is set to
  *                           true as default
+ * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
+ *                            navigated page 
  * @return {Boolean} True if navigated successfully, false otherwise
  * @static
  * @android
  * @ios
  */
-Router.goBack = function(to, animated) {
+Router.goBack = function(to, parameters, animated) {
     if (!pagesInstance || history.length <= 1) {
         return false;
     }
@@ -160,12 +163,20 @@ Router.goBack = function(to, animated) {
         if (pagesInstance.popTo(item.path, item.page)) {
             current && current.page.onHide && current.page.onHide();
             history.splice(history.indexOf(item)+1);
+            if(history.length > 0) {
+                current = history[history.length-1];
+                current.page.__pendingParameters = parameters;
+            }
             return true;
         }
     } else {
         if (pagesInstance.pop()) {
             current && current.page.onHide && current.page.onHide();
             history.pop();
+            if(history.length > 0) {
+                current = history[history.length-1];
+                current.page.__pendingParameters = parameters;
+            }
             return true;
         }
     }

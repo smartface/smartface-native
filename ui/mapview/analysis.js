@@ -10,27 +10,33 @@ const extend = require('js-base/core/extend');
  *     @example
  *     const MapView = require('sf-core/ui/mapview');
  *     var myMapView = new MapView({
- *         flexGrow :1,
-           alignSelf : FlexLayout.AlignSelf.STRETCH,
+ *         flexGrow: 1,
+ *         alignSelf: FlexLayout.AlignSelf.STRETCH,
  *         onCreate: function() {
  *             myMapView.centerLocation = {
- *                 latitude: 41.0209078,
- *                 longitude: 29.0039533
+ *                 latitude: 37.4488259,
+ *                 longitude: -122.1600047
  *             };
  *             var myPin = new MapView.Pin({
  *                 location: {
- *                     latitude: 40.9768982,
- *                     longitude: 28.8146
- *                  },
- *                  title: 'Ataturk Airport',
- *                  subtitle: 'LTBA',
- *                  color: Color.CYAN
+ *                     latitude: 37.4488259,
+ *                     longitude: -122.1600047
+ *                 },
+ *                 title: 'Smartface Inc.',
+ *                 subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
+ *                 color: Color.RED,
+ *                 onPress: function() {
+ *                     const Application = require('sf-core/application');
+ *                     Application.call("geo:" + myPin.location.latitude + ',' + myPin.location.longitude, {
+ *                         'hl': 'en',
+ *                     });
+ *                 }
  *             });
  *             myMapView.addPin(myPin);
  *        }
  *     });
  *     myPage.layout.addChild(myMapView);
- *
+ * 
  */
 const MapView = extend(View)(
     function (_super, params) {
@@ -75,6 +81,16 @@ const MapView = extend(View)(
          * @since 0.1
          */
         this.compassEnabled;
+        
+        /**
+         * Enables/Disables user location indicator on map.
+         *
+         * @property {Boolean} [userLocationEnabled = false]
+         * @android
+         * @ios
+         * @since 1.1.11
+         */
+        this.userLocationEnabled;
 
         /**
          * This property sets center location of the map to the given latitude & longitude.
@@ -93,6 +109,16 @@ const MapView = extend(View)(
          * @since 0.1
          */
         this.centerLocation;
+        
+        /**
+         * This property sets zoom level of the map to the given level. Zoom level must between 0 to 20.
+         *
+         * @property {Number} [zoomLevel = 15]
+         * @android
+         * @ios
+         * @since 1.1.10
+         */
+        this.zoomLevel = 15;
 
         /**
          * Adds a UI.MapView.Pin on the map.
@@ -115,6 +141,32 @@ const MapView = extend(View)(
          * @since 0.1
          */
         this.removePin = function(){};
+
+        /**
+         * Triggered when pressed on the map and sends the location pressed on the map.
+         *
+         * @event onPress
+         * @param {Object} location
+         * @param {Number} location.latitude
+         * @param {Number} location.longitude
+         * @android
+         * @ios
+         * @since 1.1.3
+         */
+        this.onPress;
+
+        /**
+         * Triggered when long pressed on the map and sends the location pressed on the map.
+         *
+         * @event onLongPress
+         * @param {Object} location
+         * @param {Number} location.latitude
+         * @param {Number} location.longitude
+         * @android
+         * @ios
+         * @since 1.1.3
+         */
+        this.onLongPress;
 
         /**
          * This event is called when map is ready to be used.

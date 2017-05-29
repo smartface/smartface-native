@@ -46,8 +46,9 @@ const ListView = extend(View)(
                     var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
                     _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                        onClick: function(view){
-                            _onRowSelected && _onRowSelected(holderViewLayout, position);
+                        onClick: function(view) {
+                            var clickedView = createFromTemplate(holderViewLayout,view, nativeHolderView,self);
+                            _onRowSelected && _onRowSelected(clickedView, position);
                         }
                     }));
                 }
@@ -133,7 +134,8 @@ const ListView = extend(View)(
             },
             'refreshData': {
                 value: function() {
-                    dataAdapter.notifyDataSetChanged();
+                    this.nativeInner.setLayoutManager(linearLayoutManager);
+                    this.nativeInner.setAdapter(dataAdapter);
                 },
                 enumerable: true
             },
@@ -243,6 +245,7 @@ const ListView = extend(View)(
 );
 
 function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
+    jsView.isCloned = true;
     jsView.nativeObject = nativeObject;
     jsView.nativeInner = nativeInner;
     jsView.parent = parentJsView;

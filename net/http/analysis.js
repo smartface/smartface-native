@@ -4,17 +4,31 @@
  * http module allows sending http requests.
  * 
  *     @example
- *     const http = require("sf-core/net/http");
- *     var myImageUrl = your-image-url;
- *     var request = http.requestImage(myImageUrl, onLoad, onError);
- * 
- *     function onLoad(response) {
- *         var image = response;
- *     }
- * 
- *     function onError(error) {
- *         alert(error);
- *     }
+ *     Http.request(
+ *         {
+ *             'url':'YOUR_URL_HERE',
+ *             'headers': {
+ *                 // YOUR_HEADER_HERE',
+ *             },
+ *             'method':'HTTP_METHOD_HERE',
+ *             'body': 'YOUR_BODY_HERE',
+ *         },
+ *         function(response){
+ *             // Handling image request response 
+ *             myImageView.image = Image.createFromBlob(response.body);
+ *             // Handling text request response
+ *             myLabel.text = response.body.toString();
+ *         },
+ *         function(e){
+ *             // Handle error like:
+ *             if(e.statusCode === 500){
+ *                 console.log("Internal Server Error Occurred.");
+ *             }
+ *             else{
+ *                 console.log("Server responsed with: " + e.statusCode + ". Message is: " + e.message);
+ *             }
+ *         }
+ *     );
  */
 var http = {};
 
@@ -28,11 +42,15 @@ var http = {};
  * @param {String} url URL of file
  * @param {String} fileName File name
  * @param {Function} onLoad Callback for success case
+ * @param {IO.File} onLoad.e
  * @param {Function} onError Callback for error case
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
-http.requestFile = function(url, fileName, onLoad, onError) {}
+http.requestFile = function(url, fileName, onLoad, onError) {};
 
 /**
  * @method requestImage
@@ -42,7 +60,11 @@ http.requestFile = function(url, fileName, onLoad, onError) {}
  * 
  * @param {String} url URL of Image
  * @param {Function} onLoad Callback for success case
+ * @param {UI.Image} onLoad.e
  * @param {Function} onError Callback for error case
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -56,7 +78,11 @@ http.requestImage = function(url, onLoad, onError) {}
  * 
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
+ * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -70,7 +96,11 @@ http.requestString = function(url, onLoad, onError) {}
  * 
  * @param {String} url URL
  * @param {Function} onLoad Callback for success case
+ * @param {String} onLoad.e
  * @param {Function} onError Callback for error case
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -81,29 +111,6 @@ http.requestJSON = function(url, onLoad, onError) {}
  * 
  * Sends an http request defined with parameters.
  * 
- *     @example
- *     const http = require("sf-core/net/http");
- *     var myHeaders = {
- *         "Content-Type": "text/plain;charset=UTF-8"
- *     }
- * 
- *     var params = {
- *         url: your-url,
- *         body: your-body,
- *         method: "POST",
- *         headers: myHeaders
- *     }
- *     
- *     http.request(params, onLoad, onError);
- *     
- *     function onLoad(response) {
- *         var body = response.body;
- *         var headers = params.headers;
- *     }
- *     function onError(error) {
- *         alert(error);
- *     }
- * 
  * @param {Object} params Parameters
  * @param {String} params.url URL
  * @param {Object} params.headers Headers
@@ -112,7 +119,13 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {String} params.user Username for authorization if needed
  * @param {String} params.password Password for authorization if needed
  * @param {Function} onLoad Callback for success case
+ * @param {Object} onLoad.params
+ * @param {Blob} onLoad.params.body
+ * @param {Object} onLoad.params.headers
  * @param {Function} onError Callback for error case
+ * @param {Object} onError.params 
+ * @param {String} onError.params.message
+ * @param {String} onError.params.statusCode
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -140,12 +153,7 @@ const Request = function() {
      * 
      * @since 0.1
      */
-    Object.defineProperties(this, {
-        'cancel': {
-            value: function() {}
-        }
-    });
-
+    this.cancel = function(){};
 };
 
 module.exports = http;

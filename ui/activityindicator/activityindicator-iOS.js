@@ -9,7 +9,7 @@ const ActivityIndicator = extend(View)(
         self.ios = {};
         
          if(!self.nativeObject){
-              if (params.ios){
+              if (params && params.ios){
                   if (typeof params.ios.type === "number" && params.ios.type >= 0 && params.ios.type < 3){
                       self.nativeObject = new __SF_UIActivityIndicatorView(params.ios.type);
                   }else{
@@ -30,13 +30,11 @@ const ActivityIndicator = extend(View)(
                 },
                 set: function(color) {
                     _color = color;
-                    self.nativeObject.color = color;
+                    self.nativeObject.color = color.nativeObject;
                 },
                 enumerable: true
         });
            
-        self.ios = {};
-         
         var _type = ActivityIndicator.iOS.Type.WHITE;
         Object.defineProperty(self.ios, 'type', {
                 get: function() {

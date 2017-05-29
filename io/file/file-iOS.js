@@ -71,6 +71,16 @@ function File(params) {
         return self.nativeObject.copy(destination);
     }
     
+    this.ios = {};
+    
+    this.ios.getNSURL = function(){
+        if (self.nativeObject.getActualPath()) {
+            return __SF_NSURL.fileURLWithPath(self.nativeObject.getActualPath());
+        }else{
+            return __SF_NSURL.URLWithString(self.nativeObject.getPath());
+        }
+    };
+    
     this.createDirectory = function(withParents){
         var value = true;
         if(typeof withParents === 'boolean'){
@@ -125,8 +135,8 @@ function File(params) {
         return self.nativeObject.rename(newName);
     };
     
-    this.openStream = function(mode){
-        return FileStream.create(self.nativeObject.getActualPath(), mode);
+    this.openStream = function(type, contentMode){
+        return FileStream.create(self.nativeObject.getActualPath(), type, contentMode);
     };
     
  // Assign parameters given in constructor

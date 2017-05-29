@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
 const ActionKeyType = require('sf-core/ui/actionkeytype');
 const Animator = require('sf-core/ui/animator');
+const Color = require('sf-core/ui/color');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -90,10 +91,10 @@ const TextBox = extend(View)(
 
         Object.defineProperty(self, 'textColor', {
             get: function() {
-                return self.nativeObject.textColor;
+                return new Color({color : self.nativeObject.textColor});
             },
             set: function(value) {
-                self.nativeObject.textColor = value;
+                self.nativeObject.textColor = value.nativeObject;
             },
             enumerable: true
         });
@@ -320,6 +321,16 @@ const TextBox = extend(View)(
            self.nativeObject.resignFirstResponder();
         };
        
+        this.requestFocus = function(){
+           self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+           self.nativeObject.resignFirstResponder();
+        };
+        
+        self.nativeObject.addKeyboardObserver();
+        
         self.nativeObject.onShowKeyboard = function(e){
               keyboardShowAnimation(e.keyboardHeight);
         }
@@ -347,6 +358,7 @@ const TextBox = extend(View)(
             return _top;
         }
         
+        var _isKeyboadAnimationCompleted = true;
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
             _top = 0;
@@ -359,6 +371,7 @@ const TextBox = extend(View)(
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
+                    _isKeyboadAnimationCompleted = false;
                     __SF_UIView.animation(230,0,function(){
                         var distance = -(top-newTop) + navigationBarHeight;
                         if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
@@ -368,7 +381,7 @@ const TextBox = extend(View)(
                         }
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
                     },function(){
-                        
+                        _isKeyboadAnimationCompleted = true;
                     });
                 }else{
                     if (self.getParentViewController().view.frame.y !== 0){
@@ -384,12 +397,19 @@ const TextBox = extend(View)(
                 if(self.getParentViewController().navigationController.navigationBar.visible){
                     top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
-                __SF_UIView.animation(130,0,function(){
+                if (_isKeyboadAnimationCompleted){
+                    __SF_UIView.animation(130,0,function(){
+                        self.getParentViewController().view.yoga.top = top;
+                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
+                    },function(){
+                        
+                    });
+                }else{
+                    self.getParentViewController().view.layer.removeAllAnimations();
                     self.getParentViewController().view.yoga.top = top;
                     self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                },function(){
-                    
-                });
+                }
+                
             }
         }
   

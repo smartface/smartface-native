@@ -13,6 +13,7 @@ const SliderDrawer = extend(Page)(
         if(!self.nativeObject){
             self.nativeObject = __SF_SliderDrawer.new();
             self.nativeObject.position = _position;
+            self.nativeObject.state = 0;
             self.nativeObject.enabled = _enabled;
         }
         
@@ -53,6 +54,12 @@ const SliderDrawer = extend(Page)(
                 },
                 enumerable: true
             },
+            'state' : {
+                get: function(){
+                    return self.nativeObject.state;
+                },
+                enumerable: true
+            },
             'enabled' : {
                 get: function(){
                     return _enabled;
@@ -79,6 +86,17 @@ const SliderDrawer = extend(Page)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'onDrag': {
+                get : function() {
+                    return self.nativeObject.onDrag;
+                },
+                set : function(callback) {
+                    if (typeof callback === "function") {
+                        self.nativeObject.onDrag = callback;
+                    }
+                },
+                enumerable: true
             }
         });
         
@@ -110,5 +128,7 @@ Object.defineProperties(SliderDrawer.Position,{
         writable: false
     }
 });
+
+SliderDrawer.State = require("./sliderdrawer-state");
 
 module.exports = SliderDrawer;

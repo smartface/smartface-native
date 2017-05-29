@@ -1,10 +1,13 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const Color = require('sf-core/ui/color');
-const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
-const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
-const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
-const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
+const extend                        = require('js-base/core/extend');
+const View                          = require('sf-core/ui/view');
+const Color                         = require('sf-core/ui/color');
+const TypeUtil                      = require('sf-core/util/type');
+const NativeDescriptorFactory       = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
+const NativeMapView                 = requireClass('com.google.android.gms.maps.MapView');
+const NativeGoogleMap               = requireClass('com.google.android.gms.maps.GoogleMap');
+const NativeOnMarkerClickListener   = NativeGoogleMap.OnMarkerClickListener;
+const NativeOnMapClickListener      = NativeGoogleMap.OnMapClickListener;
+const NativeOnMapLongClickListener  = NativeGoogleMap.OnMapLongClickListener;
 
 const hueDic = {};
 hueDic[Color.BLUE]    = NativeDescriptorFactory.HUE_BLUE;
@@ -31,7 +34,6 @@ const MapView = extend(View)(
         self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
             onMapReady: function(googleMap) {
                 _nativeGoogleMap = googleMap;
-                !definedProperties && defineMapRequiredProperties();
 
                 self.nativeObject.onStart();
                 self.nativeObject.onResume();
@@ -51,44 +53,65 @@ const MapView = extend(View)(
                         return false;
                     }
                 }));
+                
+                googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
+                    onMapClick: function(location) {
+                        _onPress && _onPress({
+                            latitude: location.latitude,
+                            longitude: location.longitude,
+                        });
+                    }
+                }));
 
-                _callbackOnCreate && _callbackOnCreate();
+                googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
+                    onMapLongClick: function(location) {
+                        _onLongPress && _onLongPress({
+                            latitude: location.latitude,
+                            longitude: location.longitude
+                        });
+                    }
+                }));
+                self.centerLocation = _centerLocation;
+                self.compassEnabled = _compassEnabled;
+                self.rotateEnabled = _rotateEnabled; 
+                self.scrollEnabled = _scrollEnabled;
+                self.zoomEnabled = _zoomEnabled;
+                self.userLocationEnabled = _userLocationEnabled;
+                self.type = _type;
+                self.zoomLevel = _zoomLevel;
+
+                _pendingPins.forEach(function(element){
+                    self.addPin(element);
+                });
+                _pendingPins = []
+                
+                _onCreate && _onCreate();
             }
         }));
 
         var _nativeGoogleMap;
-        var _callbackOnCreate;
+        var _onCreate;
+        var _onPress;
+        var _onLongPress;
         var _pins = [];
+        var _pendingPins = [];
+        var _centerLocation;
+        var _compassEnabled = true;
+        var _rotateEnabled = true;
+        var _scrollEnabled = true;
+        var _zoomEnabled = true;
+        var _userLocationEnabled = false;
+        var _type = MapView.Type.NORMAL;
+        var _zoomLevel;
         Object.defineProperties(self, {
-            'onCreate': {
+            'centerLocation': {
                 get: function() {
-                    return _callbackOnCreate;
+                    return _centerLocation;
                 },
-                set: function(callback) {
-                    _callbackOnCreate = callback;
-                }
-            },
-            'toString': {
-                value: function(){
-                    return 'MapView';
-                },
-                enumerable: true, 
-                configurable: true
-            }
-        });
-
-        var definedProperties = false;
-        function defineMapRequiredProperties() {
-            Object.defineProperties(self, {
-                'centerLocation': {
-                    get: function() {
-                        return {
-                            latitude: _nativeGoogleMap.getCameraPosition().target.latitude,
-                            longitude: _nativeGoogleMap.getCameraPosition().target.longitude
-                        };
-                    },
-                    set: function(location) {
-                        if (location && location.latitude && location.longitude) {
+                set: function(location) {
+                    if (location && TypeUtil.isNumeric(location.latitude) && TypeUtil.isNumeric(location.longitude)) {
+                        _centerLocation = location;
+                        if(self.nativeObject.isShown()){
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                             const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                             
@@ -98,108 +121,202 @@ const MapView = extend(View)(
                         }
                     }
                 },
-                'compassEnabled': {
-                    get: function() {
-                        return _nativeGoogleMap.getUiSettings().isCompassEnabled();
-                    },
-                    set: function(enabled) {
-                        _nativeGoogleMap.getUiSettings().setCompassEnabled(enabled);
-                    }
+                enumerable: true
+            },
+            'compassEnabled': {
+                get: function() {
+                    return _compassEnabled;
                 },
-                'rotateEnabled': {
-                    get: function() {
-                        return _nativeGoogleMap.getUiSettings().isRotateGesturesEnabled();
-                    },
-                    set: function(enabled) {
-                        _nativeGoogleMap.getUiSettings().setRotateGesturesEnabled(enabled);
-                    }
-                },
-                'scrollEnabled': {
-                    get: function() {
-                        return _nativeGoogleMap.getUiSettings().isScrollGesturesEnabled();
-                    },
-                    set: function(enabled) {
-                        _nativeGoogleMap.getUiSettings().setScrollGesturesEnabled(enabled);
-                    }
-                },
-                'zoomEnabled': {
-                    get: function() {
-                        return _nativeGoogleMap.getUiSettings().isZoomGesturesEnabled();
-                    },
-                    set: function(enabled) {
-                        _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
-                    }
-                },
-                'type': {
-                    get: function() {
-                        const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
-                        switch (_nativeGoogleMap.getMapType()) {
-                            case NativeGoogleMap.MAP_TYPE_SATELLITE:
-                                return MapView.Type.SATELLITE;
-                            case NativeGoogleMap.MAP_TYPE_HYBRID:
-                                return MapView.Type.HYBRID;
-                            default:
-                                return MapView.Type.NORMAL;
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _compassEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.getUiSettings().setCompassEnabled(enabled);
                         }
-                    },
-                    set: function(type) {
-                        if (type) {
-                            const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
-                            switch (type) {
-                                case MapView.Type.SATELLITE:
-                                    _nativeGoogleMap.setMapType(NativeGoogleMap.MAP_TYPE_SATELLITE);
-                                    break;
-                                case MapView.Type.HYBRID:
-                                    _nativeGoogleMap.setMapType(NativeGoogleMap.MAP_TYPE_HYBRID);
-                                    break;
-                                default:
-                                    _nativeGoogleMap.setMapType(NativeGoogleMap.MAP_TYPE_NORMAL);
+                    }
+                },
+                enumerable: true
+            },
+            'rotateEnabled': {
+                get: function() {
+                    return _rotateEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _rotateEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.getUiSettings().setRotateGesturesEnabled(enabled);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'scrollEnabled': {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _scrollEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.getUiSettings().setScrollGesturesEnabled(enabled);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'zoomEnabled': {
+                get: function() {
+                    return _zoomEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _zoomEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'zoomLevel': {
+                get: function() {
+                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom : _zoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _zoomLevel = value;
+                        if(self.nativeObject.isShown()){
+                            const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value)
+                            _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'userLocationEnabled': {
+                get: function() {
+                    return _userLocationEnabled;
+                },
+                set: function(enabled) {
+                    if (TypeUtil.isBoolean(enabled)) {
+                        _userLocationEnabled = enabled;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMyLocationEnabled(enabled);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'type': {
+                get: function() {
+                    return _type;
+                },
+                set: function(type) {
+                    if(MapView.Type.contains(type)){
+                        _type = type;
+                        if(self.nativeObject.isShown()){
+                            _nativeGoogleMap.setMapType(type);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'addPin': {
+                value: function(pin) {
+                    if(pin instanceof MapView.Pin){
+                        if(self.nativeObject.isShown()){
+                            if (!pin.nativeObject) {
+                                const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
+                                var marker = new NativeMarkerOptions();
+                                pin.title    && marker.title(pin.title);
+                                pin.subtitle && marker.snippet(pin.subtitle);
+                                pin.visible  && marker.visible(pin.visible);
+        
+                                if (pin.location && pin.location.latitude && pin.location.longitude) {
+                                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+                                    var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
+                                    marker.position(position);
+                                }
+        
+                                if (pin.image) {
+                                    var iconBitmap = pin.image.nativeObject.getBitmap();
+                                    var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
+                                    marker.icon(icon);
+                                } else if (pin.color) {
+                                    var colorHUE = hueDic[pin.color];
+                                    var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
+                                    marker.icon(colorDrawable);
+                                }
+        
+                                pin.nativeObject = _nativeGoogleMap.addMarker(marker);
+                                _pins.push(pin);
+                            }
+                        }
+                        else{
+                            _pendingPins.push(pin);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'removePin': {
+                value: function(pin) {
+                    if(pin instanceof MapView.Pin){
+                        if(self.nativeObject.isShown()){
+                            if(_pins.indexOf(pin) !== -1){
+                                _pins.splice(_pins.indexOf(pin), 1);
+                                pin.nativeObject.remove();
+                                pin.nativeObject = null;
+                            }
+                        }
+                        else{
+                            if(_pendingPins.indexOf(pin) !== -1){
+                                _pendingPins.splice(_pendingPins.indexOf(pin), 1);
+                                pin.nativeObject.remove();
+                                pin.nativeObject = null;
                             }
                         }
                     }
                 },
-                'addPin': {
-                    value: function(pin) {
-                        if (pin && !pin.nativeObject) {
-                            const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
-                            var marker = new NativeMarkerOptions();
-                            pin.title    && marker.title(pin.title);
-                            pin.subtitle && marker.snippet(pin.subtitle);
-                            pin.visible  && marker.visible(pin.visible);
-    
-                            if (pin.location && pin.location.latitude && pin.location.longitude) {
-                                const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                                var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
-                                marker.position(position);
-                            }
-
-                            if (pin.image) {
-                                var iconBitmap = pin.image.nativeObject.getBitmap();
-                                var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-                                marker.icon(icon);
-                            } else if (pin.color) {
-                                var colorHUE = hueDic[pin.color];
-                                var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
-                                marker.icon(colorDrawable);
-                            }
-
-                            pin.nativeObject = _nativeGoogleMap.addMarker(marker);
-                            _pins.push(pin);
-                        }
-                    }
+                enumerable: true
+            },
+            'onCreate': {
+                get: function() {
+                    return _onCreate;
                 },
-                'removePin': {
-                    value: function(pin) {
-                        if (pin && pin.nativeObject) {
-                            _pins.splice(_pins.indexOf(pin), 1);
-                            pin.nativeObject.remove();
-                            pin.nativeObject = null;
-                        }
-                    }
-                }
-            });
-            definedProperties = true;
-        };
+                set: function(callback) {
+                    _onCreate = callback;
+                },
+                enumerable: true
+            },
+            'onPress': {
+                get: function() {
+                    return _onPress;
+                },
+                set: function(callback) {
+                    _onPress = callback;
+                },
+                enumerable: true
+            },
+            'onLongPress': {
+                get: function() {
+                    return _onLongPress;
+                },
+                set: function(callback) {
+                    _onLongPress = callback;
+                },
+                enumerable: true
+            },
+            'toString': {
+                value: function(){
+                    return 'MapView';
+                },
+                enumerable: true, 
+                configurable: true
+            }
+        });
 
         // Assign parameters given in constructor
         if (params) {
@@ -291,10 +408,32 @@ function Pin(params) {
 
 Object.defineProperties(MapView, {
     'Type': {
-        value: require('./maptype')
+        value: {},
+        enumerable: true
     },
     'Pin': {
-        value: Pin
+        value: Pin,
+        enumerable: true
+    }
+});
+
+Object.defineProperties(MapView.Type,{
+    'NORMAL': {
+        value: NativeGoogleMap.MAP_TYPE_NORMAL,
+        enumerable: true
+    },
+    'SATELLITE': {
+        value: NativeGoogleMap.MAP_TYPE_SATELLITE,
+        enumerable: true
+    },
+    'HYBRID': {
+        value: NativeGoogleMap.MAP_TYPE_HYBRID,
+        enumerable: true
+    },
+    'contains': {
+        value: function(key){
+            return (key === MapView.Type.NORMAL) || (key === MapView.Type.SATELLITE) || (key === MapView.Type.HYBRID); 
+        }
     }
 });
 
