@@ -4,31 +4,43 @@
  * Simple floating action button. Float action button position cannot be changed.
  *
  *     @example
- *       const FloatingMenu = require('sf-core/ui/floatingmenu');
- *       var floatingMenu = new FloatingMenu();
- *       floatingMenu.onOpen = function(){
- *           console.log("Open");
+ *     const FloatingMenu = require('sf-core/ui/floatingmenu');
+ *     const Color = require("sf-core/ui/color");
+ *     
+ *     var items = [
+ *       new FloatingMenu.Item({
+ *         title: "red",
+ *         color: Color.RED,
+ *         onClick: function() {
+ *           console.log("clicked: RED");
+ *         }
+ *       }),
+ *       new FloatingMenu.Item({
+ *         title: "yellow",
+ *         titleColor: Color.YELLOW,
+ *         color: Color.YELLOW,
+ *         onClick: function() {
+ *           console.log("clicked: YELLOW");
+ *         }
+ *       }),
+ *       new FloatingMenu.Item({
+ *         title: "default",
+ *         onClick: function() {
+ *           console.log("clicked: DEFAULT");
+ *         }
+ *       })
+ *     ];
+ * 
+ *     var floatingMenu = new FloatingMenu({
+ *       items: items,
+ *       onOpen: function() {
+ *         console.log("open items");
+ *       },
+ *       onClose: function() {
+ *         console.log("close items");
  *       }
- *       floatingMenu.onClose = function(){
- *           console.log("Close");
- *       }
- *       
- *       var item = new FloatingMenu.Item({
- *           title : "Title 1",
- *           color : Color.YELLOW,
- *           icon : Image.createFromFile("images://smartface.png"),
- *           onClick : function(){
- *              alert("Click 1");
- *           }
- *       });
- *       
- *       var item2 = new FloatingMenu.Item({
- *           title : "Title 2"
- *           
- *       });
- *       
- *       floatingMenu.items = [item,item2];
- *       layout.addChild(floatingMenu);
+ *     });
+ *     page.layout.addChild(floatingMenu);
  * 
  */
 function FloatingMenu(params) {
