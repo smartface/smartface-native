@@ -85,6 +85,26 @@ function SwipeView() {
 };
 
 /**
+ * This event is called when a touch screen motion event starts. Does not work on iOS.
+ *
+ * @event onTouch
+ * @android
+ * @member UI.SwipeView
+ * @since 1.1.11
+ */
+SwipeView.prototype.onTouch = function onTouch(){ }
+
+/**
+ * This event is called when a touch screen motion event ends. Does not work on iOS.
+ *
+ * @event onTouchEnded
+ * @android
+ * @member UI.SwipeView
+ * @since 1.1.11
+ */
+SwipeView.prototype.onTouchEnded = function onTouchEnded(){ }
+
+/**
  * @enum UI.SwipeView.State
  * @static
  * @readonly
