@@ -106,14 +106,12 @@ const SearchView = extend(View)(
             }
         }
         
-        var _text = "";
         Object.defineProperty(this, 'text', {
             get: function() {
-                return _text;
+                return self.nativeObject.text;
             },
             set: function(text) {
-                _text = text;
-                self.nativeObject.text = _text;
+                self.nativeObject.text = text;
             },
             enumerable: true
         });
@@ -302,7 +300,7 @@ const SearchView = extend(View)(
         };
         self.searchBarDelegate.textDidChange = function(searchText){
             if (typeof _onTextChanged === "function"){
-                    _onTextChanged();
+                    _onTextChanged(searchText);
             }
         };
         self.searchBarDelegate.searchButtonClicked = function(){

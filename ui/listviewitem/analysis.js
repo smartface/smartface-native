@@ -11,10 +11,6 @@ const extend = require('js-base/core/extend');
  * For example usage you can look {@link UI.ListView}.
  *
  */
-const ListViewItem = extend(ViewGroup)(
-    function (_super, params) {
-        _super(this);
-    }
-);
+function ListViewItem(params) {}
 
 module.exports = ListViewItem;

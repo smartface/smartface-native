@@ -24,38 +24,37 @@
  *     menu.items = [menuItem1,menuItem2];
  *     menu.show(myPage);
  */
-function Menu(params) {
-    /**
-     * Gets/sets header title of Menu
-     *
-     * @property {String} headerTitle
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.headerTitle = "";
+function Menu(params) {}
 
+/**
+ * Gets/sets header title of Menu
+ *
+ * @property {String} headerTitle
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Menu.prototype.headerTitle = "";
 
-    /**
-     * Gets/sets array of UI.MenuItem of the menu.
-     *
-     * @property {Array<UI.MenuItem>} items
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.items = null;
+/**
+ * Gets/sets array of UI.MenuItem of the menu.
+ *
+ * @property {Array<UI.MenuItem>} items
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Menu.prototype.items = null;
 
-    /**
-     * This function shows menu on the given UI.Page.
-     *
-     * @param {UI.Page} page This is the page that menu will be shown.
-     * @android
-     * @ios
-     * @method show
-     * @since 0.1
-     */
-    this.show = function(e) {};
-}
+/**
+ * This function shows menu on the given UI.Page.
+ *
+ * @param {UI.Page} page This is the page that menu will be shown.
+ * @android
+ * @ios
+ * @method show
+ * @since 0.1
+ */
+Menu.prototype.show = function(e) {};
 
 module.exports = Menu;

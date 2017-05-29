@@ -306,8 +306,8 @@ function File(params) {
             enumarable: true
         },
         'openStream': { 
-            value: function(mode){
-                return new FileStream({source: this, mode: mode})
+            value: function(streamType, contentMode){
+                return new FileStream({source: this, streamType: streamType, contentMode: contentMode})
             },
             enumarable: true
         },

@@ -253,68 +253,57 @@ Color.alpha = function(color){ return color.alpha };
  */
 Color.GradientDirection = {};
 
-Object.defineProperties(Color.GradientDirection, {
-    /**
-     * Indicates gradient color will start from top point with startColor and
-     * will end at bottom point with endColor.
-     *
-     * @property {UI.Color.GradientDirection} [VERTICAL = 0]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'VERTICAL': {
-        value: 0,
-        writable: false
-    },
-    /**
-     * Indicates gradient color will start from left point with startColor and
-     * will end at right point with endColor.
-     *
-     * @property {UI.Color.GradientDirection} [HORIZONTAL = 1]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'HORIZONTAL': {
-        value: 1,
-        writable: false
-    },
-    /**
-     * Indicates gradient color will start from top-left point with startColor and
-     * will end at bottom-right point with endColor.
-     *
-     * @property {UI.Color.GradientDirection} [DIAGONAL_LEFT = 2]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'DIAGONAL_LEFT': {
-        value: 2,
-        writable: false
-    },
-    /**
-     * Indicates gradient color will start from top-right point with startColor and
-     * will end at bottom-left point with endColor.
-     *
-     * @property {UI.Color.GradientDirection} [DIAGONAL_RIGHT = 3]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'DIAGONAL_RIGHT': {
-        value: 3,
-        writable: false
-    }
-});
+/**
+ * Indicates gradient color will start from top point with startColor and
+ * will end at bottom point with endColor.
+ *
+ * @property {UI.Color.GradientDirection} [VERTICAL = 0]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Color.GradientDirection.VERTICAL = 0;
+
+/**
+ * Indicates gradient color will start from left point with startColor and
+ * will end at right point with endColor.
+ *
+ * @property {UI.Color.GradientDirection} [HORIZONTAL = 1]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Color.GradientDirection.HORIZONTAL = 1;
+
+/**
+ * Indicates gradient color will start from top-left point with startColor and
+ * will end at bottom-right point with endColor.
+ *
+ * @property {UI.Color.GradientDirection} [DIAGONAL_LEFT = 2]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Color.GradientDirection.DIAGONAL_LEFT = 2;
+
+/**
+ * Indicates gradient color will start from top-right point with startColor and
+ * will end at bottom-left point with endColor.
+ *
+ * @property {UI.Color.GradientDirection} [DIAGONAL_RIGHT = 3]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+Color.GradientDirection.DIAGONAL_RIGHT = 3;
 
 // export module
 module.exports = Color;
