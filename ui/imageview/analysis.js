@@ -21,72 +21,66 @@ const View = require('../view');
  *     myPage.layout.addChild(myImageView);
  *
  */
-const ImageView = extend(View)(
-    function (_super, params) {
-        _super(this);
+function ImageView(params) {}
 
-        /**
-         * Gets/sets the image set.
-         *
-         *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageView');
-         *
-         *     var myImage = Image.createFromFile("images://smartface.png");
-         *     var myImageView = new ImageView({
-         *         width: 200, height: 200
-         *     });
-         *     myImageView.image = myImage;
-         *
-         *     myPage.layout.addChild(myImageView);
-         *
-         * @property {UI.Image} [image = null]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.image = null;
+/**
+ * Gets/sets the image set.
+ *
+ *     @example
+ *     const Image = require('sf-core/ui/image');
+ *     const ImageView = require('sf-core/ui/imageView');
+ *
+ *     var myImage = Image.createFromFile("images://smartface.png");
+ *     var myImageView = new ImageView({
+ *         width: 200, height: 200
+ *     });
+ *     myImageView.image = myImage;
+ *
+ *     myPage.layout.addChild(myImageView);
+ *
+ * @property {UI.Image} [image = null]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ImageView.prototype.image = null;
 
-        /**
-         * Gets/sets image fill type.
-         *
-         *     @example
-         *     const Image = require('sf-core/ui/image');
-         *     const ImageView = require('sf-core/ui/imageview');
-         *
-         *     var myImage = Image.createFromFile("images://smartface.png")
-         *     var myImageView = new ImageView({
-         *         image: myImage,
-         *         width: 200, height: 200
-         *     });
-         *     myImageView.imageFillType = ImageView.FillType.STRETCH;
-         *
-         *     myPage.layout.addChild(myImageView);
-         *
-         * @property {UI.ImageView.FillType} [imageFillType = UI.ImageView.FillType.NORMAL]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.imageFillType = UI.ImageView.FillType.NORMAL;
-        
-        /**
-         * Load image from the server and place the returned image into the ImageView.
-         * If you pass any image to placeHolder parameter, placeHolder image will shown
-         * until image loaded.
-         *
-         * @method loadFromUrl
-         * @param {String} url 
-         * @param {UI.Image} placeHolder 
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.loadFromUrl = function(url, placeHolder){};
-    }
-);
+/**
+ * Gets/sets image fill type.
+ *
+ *     @example
+ *     const Image = require('sf-core/ui/image');
+ *     const ImageView = require('sf-core/ui/imageview');
+ *
+ *     var myImage = Image.createFromFile("images://smartface.png")
+ *     var myImageView = new ImageView({
+ *         image: myImage,
+ *         width: 200, height: 200
+ *     });
+ *     myImageView.imageFillType = ImageView.FillType.STRETCH;
+ *
+ *     myPage.layout.addChild(myImageView);
+ *
+ * @property {UI.ImageView.FillType} [imageFillType = UI.ImageView.FillType.NORMAL]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
-
+/**
+ * Load image from the server and place the returned image into the ImageView.
+ * If you pass any image to placeHolder parameter, placeHolder image will shown
+ * until image loaded.
+ *
+ * @method loadFromUrl
+ * @param {String} url 
+ * @param {UI.Image} placeHolder 
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ImageView.prototype.loadFromUrl = function(url, placeHolder){};
 
 /**
  * @enum {Number} UI.ImageView.FillType
