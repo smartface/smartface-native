@@ -63,6 +63,16 @@ function FloatingMenu(params) {
      * @since 1.1.10
      */
     this.icon;
+
+    /**
+     * Gets/sets the menu button's rotate behaviour on click.
+     *
+     * @property {Boolean} [rotateEnabled=true]
+     * @android
+     * @ios
+     * @since 1.1.10
+     */
+    this.rotateEnabled = true;
     
     /**
      * Gets/sets color of the button
