@@ -430,8 +430,8 @@ function Page(params) {
         enumerable: true, configurable: true
     });
     
-    this.tabbar = {};
-    Object.defineProperty(this.tabbar, 'height', {
+    this.bottomTabBar = {};
+    Object.defineProperty(this.bottomTabBar, 'height', {
         get: function() {
             var result = 0;
             var activity = Android.getActivity();
@@ -563,6 +563,8 @@ function Page(params) {
             
         if(tab.backgroundColor instanceof Color) 
             bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
+        
+        rootLayout.paddingBottom = self.bottomTabBar.height;
     }
     
     function disableShiftMode() {
