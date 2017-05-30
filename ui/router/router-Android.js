@@ -1,5 +1,5 @@
 const Pages = require("sf-core/ui/pages");
-const Tab = require("sf-core/ui/tab");
+const BottomTabBar = require("sf-core/ui/bottomtabbar");
 const Navigation = require("sf-core/ui/navigation");
 
 /**
@@ -24,7 +24,7 @@ const Navigation = require("sf-core/ui/navigation");
  *         userName: loginInfo.userName
  *     });
  */
-function Router(){};
+function Router(){}
 
 var pagesInstance = null;
 var routes = {};
@@ -231,7 +231,7 @@ function getRoute(to) {
         throw Error(to + " is set as singleton and exists in history");
     }
     
-    if((routes[to].pageClass) instanceof Tab) {
+    if((routes[to].pageClass) instanceof BottomTabBar) {
         var tabItems = [];
         var tab = routes[to].pageClass;
         var page;
@@ -259,7 +259,6 @@ function getRoute(to) {
         } else {
             return new (routes[to].pageClass.items[index])();
         }
-        return null;
     }
     else {
         if (routes[to].isSingleton) {

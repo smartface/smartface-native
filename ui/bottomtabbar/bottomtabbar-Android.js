@@ -1,19 +1,26 @@
 const extend                     = require('js-base/core/extend');
 const Color                      = require("sf-core/ui/color");
 
-function Tab(params) {
+const MAXITEMCOUNT = 5;
+
+function BottomTabBar(params) {
         var _items = {};
         var _titleColors;
         var _index;
+        var _itemCount = 0;
         var _backgroundColor;
         var _switchCounter = 0;
         
         Object.defineProperties(this, {
             'add': {
                 value: function(path, item){
-                    const TabItem = require("sf-core/ui/tabitem");
-                    if(typeof(path) === "string" && item instanceof TabItem) {
+                    if(_itemCount === this.android.maxItemCount) {
+                        throw new Error("Maximum number of items supported by BottomTabBar is 5.");
+                    }
+                    const TabBarItem = require("sf-core/ui/tabbaritem");
+                    if(typeof(path) === "string" && item instanceof TabBarItem) {
                         _items[path] = item;
+                        _itemCount++;
                     }
                 },
                 enumerable: true
@@ -84,6 +91,17 @@ function Tab(params) {
             }
         });
         
+        this.android = {};
+        Object.defineProperty(this.android, 'maxItemCount', {
+            get: function() {
+                return MAXITEMCOUNT;
+            },
+            enumerable: true
+        });
+
+        this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
+                                            // elevation doesn't work with default background white color.
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -92,4 +110,4 @@ function Tab(params) {
         }
 };
 
-module.exports = Tab;
+module.exports = BottomTabBar;

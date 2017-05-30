@@ -1,4 +1,4 @@
-function TabItem(params) {
+function TabBarItem(params) {
     var _title;
     var _icon;
     var _page;
@@ -47,7 +47,7 @@ function TabItem(params) {
         },
         'toString': {
             value: function(){
-                return 'TabItem';
+                return 'TabBarItem';
             },
             enumerable: true, 
             configurable: true
@@ -62,4 +62,4 @@ function TabItem(params) {
     }
 };
 
-module.exports = TabItem;
+module.exports = TabBarItem;
