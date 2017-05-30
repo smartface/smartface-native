@@ -39,6 +39,5 @@ module.exports = {
     Dialog: require('./dialog'),
     Router: require('./router'),
     BottomTabBar: require('./bottomtabbar'),
-    TabBarItem: require('./tabbaritem'),
-    Navigator: require('./navigator')
+    TabBarItem: require('./tabbaritem')
 };
