@@ -33,10 +33,10 @@
  * 
  *     var floatingMenu = new FloatingMenu({
  *       items: items,
- *       onOpen: function() {
+ *       onMenuOpen: function() {
  *         console.log("open items");
  *       },
- *       onClose: function() {
+ *       onMenuClose: function() {
  *         console.log("close items");
  *       }
  *     });
@@ -109,21 +109,21 @@ FloatingMenu.prototype.onClick = function() {};
  * Gets/sets open event callback.
  *
  * @since 1.1.10
- * @event onOpen
+ * @event onMenuOpen
  * @android
  * @ios
  */
-FloatingMenu.prototype.onOpen = function() {};
+FloatingMenu.prototype.onMenuOpen = function() {};
      
 /**
- * Gets/sets onClose event callback.
+ * Gets/sets onMenuClose event callback.
  *
  * @since 1.1.10
- * @event onClose
+ * @event onMenuClose
  * @android
  * @ios
  */
-FloatingMenu.prototype.onClose = function() {};
+FloatingMenu.prototype.onMenuClose = function() {};
      
 /**
  * Opens the menu.
