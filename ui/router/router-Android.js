@@ -1,6 +1,6 @@
 const Pages = require("sf-core/ui/pages");
 const BottomTabBar = require("sf-core/ui/bottomtabbar");
-const Navigation = require("sf-core/ui/navigation");
+const Navigator = require("sf-core/navigator");
 
 /**
  * @class UI.Router
@@ -252,7 +252,7 @@ function getRoute(to) {
         }
         return page;
     }
-    else if((routes[to].pageClass) instanceof Navigation) {
+    else if((routes[to].pageClass) instanceof Navigator) {
         var index = routes[to].pageClass.index;
         if (routes[to].isSingleton) {
             return routes[to].pageClass.itemInstances[index];

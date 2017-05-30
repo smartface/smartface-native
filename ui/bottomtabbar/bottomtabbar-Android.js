@@ -5,7 +5,7 @@ const MAXITEMCOUNT = 5;
 
 function BottomTabBar(params) {
         var _items = {};
-        var _titleColors;
+        var _itemColors;
         var _index;
         var _itemCount = 0;
         var _backgroundColor;
@@ -25,20 +25,20 @@ function BottomTabBar(params) {
                 },
                 enumerable: true
             },
-            'titleColor': {
+            'itemColor': {
                 set: function(colors) {
                     if(colors && colors.normal && colors.checked) {
                         if(((colors.normal) instanceof Color) && ((colors.checked) instanceof Color))
-                            _titleColors = colors;
+                            _itemColors = colors;
                         else
-                            throw new Error("titleColor should be an object that contains instances of Color");
+                            throw new Error("itemColor should be an object that contains instances of Color");
                     }
                     else {
-                        throw new Error("titleColor should be an object that contains normal and checked state.");
+                        throw new Error("itemColor should be an object that contains normal and checked state.");
                     }
                 },
                 get: function(){
-                    return _titleColors;
+                    return _itemColors;
                 },
                 enumerable: true
             },

@@ -528,12 +528,12 @@ function Page(params) {
                         menu.getItem(i).setChecked(false);
                 }
                 
-                if(tab && tab.titleColor && ('checked' in tab.titleColor && 'normal' in tab.titleColor)) {
+                if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
                     const NativeR = requireClass("android.R");
                     var states = [[NativeR.attr.state_checked], []];
             
                     const ColorStateList = requireClass("android.content.res.ColorStateList");
-                    var colors = [tab.titleColor.checked.nativeObject, tab.titleColor.normal.nativeObject];
+                    var colors = [tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject];
                     var statelist = new ColorStateList(states, colors);
                     bottomNavigationView.setItemTextColor(statelist);
                     bottomNavigationView.setItemIconTintList(statelist);

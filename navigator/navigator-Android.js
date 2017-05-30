@@ -1,4 +1,4 @@
-function Navigation(params) {
+function Navigator(params) {
         var _items = {};
         var _itemInstances = {};
         var _index = null;
@@ -53,4 +53,4 @@ function Navigation(params) {
         }
 }
 
-module.exports = Navigation;
+module.exports = Navigator;
