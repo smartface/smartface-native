@@ -28,12 +28,24 @@
  * 
  *     myTab.add('profile', myProfileItem);
  *     myTab.add('messages', myMessageItem);
- *     myTab.selectedIndex('messages');
+ *     myTab.setIndex('messages');
  * 
  *     Router.add('dashboard', myTab);
  *     Router.go('dashboard');
  */
-function BottomTabBar() {};
+function BottomTabBar() {}
+
+
+/**
+ * Gets the maximum number of items that add to bottom tab bar.
+ *
+ * @since 1.1.8
+ * @property {Number} maxItemCount
+ * @android
+ * @readonly
+ */
+BottomTabBar.prototype.android = {};
+BottomTabBar.prototype.android.maxItemCount = true;
 
 /**
  * Gets/sets title and icon color of the tab bar items. 
