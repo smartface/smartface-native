@@ -87,7 +87,7 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("sf-core/ui/router");
+                    const Router = require("sf-core/router");
                     Router.goBack(null, true);
                 }
             }

@@ -13,7 +13,7 @@ const extend = require('js-base/core/extend');
  *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
  *     const Button = require('sf-core/ui/button');
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *    
  *     var mySliderDrawer = new SliderDrawer({
  *         width: 200
