@@ -38,7 +38,7 @@ const IOSReturnKeyType = {
 const TextBox = extend(View)(
     function(_super, params) {
         var self = this;
-
+        
         if (!self.nativeObject) {
             self.nativeObject = new __SF_UITextField();
         }
@@ -61,6 +61,7 @@ const TextBox = extend(View)(
             }
             else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
                 self.onTextChanged(method.replacementString, method.range);
+                return true;
             }
         };
 
@@ -132,7 +133,7 @@ const TextBox = extend(View)(
                 self.nativeObject.contentVerticalAlignment = vertical;
                 self.nativeObject.textAlignment = horizontal;
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'hint', {
