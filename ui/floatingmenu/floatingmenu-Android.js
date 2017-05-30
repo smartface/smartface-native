@@ -160,6 +160,18 @@ function FloatingMenu(params) {
             set: function(callback) {
                 _callbackClose = callback;
             }
+        },
+        'visible': {
+            get: function() {
+                return (nativeObject.getVisibility() === 0); // View.VISIBLE
+            },
+            set: function(visibility) {
+                if (visibility === true) {
+                    nativeObject.setVisibility(0); // View.VISIBLE
+                } else {
+                    nativeObject.setVisibility(4); // View.INVISIBLE    
+                }
+            }
         }
     });
 
