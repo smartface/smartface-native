@@ -158,7 +158,9 @@ AlertView.prototype.dismiss = function() {};
  *     });
  *
  * @param {Object} params Object describing button properties
- * @param {UI.AlertView.ButtonType} params.index Button type, it is set to
+ * @param {UI.AlertView.ButtonType} params.index [DEPRECATED since 1.1.10. Use 'type' instead] Button type, it is set to
+ *                                      UI.AlertView.ButtonType.NEUTRAL as default
+ * @param {UI.AlertView.ButtonType} params.type Button type, it is set to
  *                                      UI.AlertView.ButtonType.NEUTRAL as default
  * @param {String} params.text Button text
  * @param {Function} [params.onClick] Callback for button click action
