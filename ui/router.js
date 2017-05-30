@@ -200,20 +200,6 @@ Router.getCurrentPage = function() {
     return history[history.length-1];
 };
 
-/**
- * Creates new router with given type. 
- * 
- * @param {UI.Router.Type} type Router type
- */
-Router.create = function(type) {
-    // Will implement
-}
-
-Router.Type = {
-    NAVIGATION: "navigation",
-    TAB: "tab"
-};
-
 function getRoute(to) {
     if (!routes[to]) {
         throw Error(to + " is not in routes");
