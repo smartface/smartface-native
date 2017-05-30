@@ -48,7 +48,7 @@ function FloatingMenu(params) {};
 /**
  * Gets/sets array of UI.FloatingMenu.Item of the menu.
  *
- * @property {Array<UI.FloatingMenu.Item>} items
+ * @property {UI.FloatingMenu.Item[]} items
  * @android
  * @ios
  * @since 1.1.10
