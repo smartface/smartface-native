@@ -38,14 +38,14 @@ function FloatingMenu(params) {
     };
     
     self.floatyDelegate.floatyOpened = function(){
-        if (typeof self.onOpen === "function"){
-            self.onOpen();
+        if (typeof self.onMenuOpen === "function"){
+            self.onMenuOpen();
         }
     };
     
     self.floatyDelegate.floatyClosed = function(){
-        if (typeof self.onClose === "function"){
-            self.onClose();
+        if (typeof self.onMenuClose === "function"){
+            self.onMenuClose();
         }
     };
     
