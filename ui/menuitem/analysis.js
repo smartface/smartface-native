@@ -5,46 +5,47 @@
  * MenuItem is used to add row and action to the UI.Menu 
  *
  */
-function MenuItem(params) {
+function MenuItem(params) {}
 
-    /**
-    * Gets/sets the title of a menu item.
-    *
-    * @property {String} title
-    * @android
-    * @ios
-    * @since 0.1
-    */
-    this.title = "";
+/**
+ * Gets/sets the title of a menu item.
+ *
+ * @property {String} title
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MenuItem.prototype.title = "";
 
-    /**
-    * Gets/sets the color of a menu item title.
-    *
-    * @property {UI.Color} titleColor
-    * @android
-    * @since 1.1.8
-    */
-    this.android.titleColor;
-    
-    /**
-    * Gets/sets the style of a menu item.
-    *
-    * @property {MenuItem.ios.Style} style
-    * @ios
-    * @since 1.1.8
-    */
-    this.ios.style = "";
+MenuItem.prototype.android = {};
+/**
+ * Gets/sets the color of a menu item title.
+ *
+ * @property {UI.Color} titleColor
+ * @android
+ * @since 1.1.8
+ */
+MenuItem.prototype.android.titleColor;
 
-    /**
-     * This event is called when user selects a menu item.
-     *
-     * @since 0.1
-     * @event onSelected
-     * @android
-     * @ios
-     */
-    this.onSelected = function onSelected(){ };
-}
+MenuItem.prototype.ios = {};
+/**
+ * Gets/sets the style of a menu item.
+ *
+ * @property {UI.MenuItem.ios.Style} style
+ * @ios
+ * @since 1.1.8
+ */
+MenuItem.prototype.ios.style = "";
+
+/**
+ * This event is called when user selects a menu item.
+ *
+ * @since 0.1
+ * @event onSelected
+ * @android
+ * @ios
+ */
+MenuItem.prototype.onSelected = function onSelected(){ };
 
 MenuItem.ios = {};
 MenuItem.ios.Style = {};

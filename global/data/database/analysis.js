@@ -30,77 +30,76 @@
  *     alert("Worker count is: " + queryResult.count());
  *
  */
-function Database(params){
+function Database(params){}
     
-    /**
-     * The file for creating/opening database from it. If the given file is Assets, the database will be open but if assets not exists the exception will thrown. 
-     * The parameter will setted if only given in constructor.
-     *
-     * @property {IO.File} file
-     * @readonly
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.file;
+/**
+ * The file for creating/opening database from it. If the given file is Assets, the database will be open but if assets not exists the exception will thrown. 
+ * The parameter will setted if only given in constructor.
+ *
+ * @property {IO.File} file
+ * @readonly
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.prototype.file;
 
-    /**
-     * A boolean value that represents database object is in-memory or not. In-memory databases are a way faster than normal databases 
-     * but in-memory databases are temporary, you can not save them into a file. When database closes or application stopped, database 
-     * will be destroyed.
-     * The parameter will setted if only given in constructor.
-     * 
-     * @property {Boolean} inMemory
-     * @readonly
-     * @android
-     * @ios
-     * @throws {Error}
-     * @see https://sqlite.org/inmemorydb.html
-     * @see https://en.wikipedia.org/wiki/In-memory_database
-     * @since 1.0
-     */
-    this.inMemory;
+/**
+ * A boolean value that represents database object is in-memory or not. In-memory databases are a way faster than normal databases 
+ * but in-memory databases are temporary, you can not save them into a file. When database closes or application stopped, database 
+ * will be destroyed.
+ * The parameter will setted if only given in constructor.
+ * 
+ * @property {Boolean} inMemory
+ * @readonly
+ * @android
+ * @ios
+ * @throws {Error}
+ * @see https://sqlite.org/inmemorydb.html
+ * @see https://en.wikipedia.org/wiki/In-memory_database
+ * @since 1.0
+ */
+Database.prototype.inMemory;
 
-    /**
-     * Close the database. You should close the database after you done your job. 
-     * If you don't, you will not open the database until close and will throw exception if you want to reopen it.
-     * 
-     * @method close
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.close = function(){};
-    
-    /**
-     * Execute Non SELECT SQL Command on Database. Method will thrown exception when execution failed.
-     * 
-     * @param {String} sqlCommand
-     * @method execute
-     * @android
-     * @ios
-     * @throws {Error}
-     * @see https://sqlite.org/lang.html
-     * @since 1.0
-     */
-    this.execute = function(sqlCommand){};
-    
-    /**
-     * Execute SELECT SQL Command on Database. Method will thrown exception when execution failed.
-     * 
-     * @param {String} sqlCommand
-     * @return {Data.Database.QueryResult}
-     * @method query
-     * @android
-     * @ios
-     * @throws {Error}
-     * @see https://sqlite.org/lang.html
-     * @since 1.0
-     */
-    this.query = function(sqlCommand){};
-}
+/**
+ * Close the database. You should close the database after you done your job. 
+ * If you don't, you will not open the database until close and will throw exception if you want to reopen it.
+ * 
+ * @method close
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.prototype.close = function(){};
+
+/**
+ * Execute Non SELECT SQL Command on Database. Method will thrown exception when execution failed.
+ * 
+ * @param {String} sqlCommand
+ * @method execute
+ * @android
+ * @ios
+ * @throws {Error}
+ * @see https://sqlite.org/lang.html
+ * @since 1.0
+ */
+Database.prototype.execute = function(sqlCommand){};
+
+/**
+ * Execute SELECT SQL Command on Database. Method will thrown exception when execution failed.
+ * 
+ * @param {String} sqlCommand
+ * @return {Data.Database.QueryResult}
+ * @method query
+ * @android
+ * @ios
+ * @throws {Error}
+ * @see https://sqlite.org/lang.html
+ * @since 1.0
+ */
+Database.prototype.query = function(sqlCommand){};
 
 
 /**
@@ -120,54 +119,53 @@ function Database(params){
  *         rateGrater3Names.push( rateGrater3Result.get(i).getString('name') );
  *     }
  */
-Database.QueryResult = function(params){
+Database.QueryResult = function(params){}
 
     /**
-     * Returns the count of the query result.
-     * 
-     * @method count
-     * @return {Number}
-     * @android
-     * @ios
-     * @since 1.0
-     */
-    this.count = function(){};
-    
-    /**
-     * Returns first match from Query. If no result match with Query, will return null.
-     * 
-     * @method getFirst
-     * @return {Data.Database.DatabaseObject}
-     * @android
-     * @ios
-     * @since 1.0
-     */
-    this.getFirst = function(){};
-    
-    /**
-     * Returns last match from Query. If no result match with Query, will return null.
-     * 
-     * @method getLast
-     * @return {Data.Database.DatabaseObject}
-     * @android
-     * @ios
-     * @since 1.0
-     */
-    this.getLast = function(){};
-    
-    /**
-     * Returns the element at the specified index in this query result. If index greater than count, it will throw exception
-     * 
-     * @method get
-     * @param {Number} index
-     * @return {Data.Database.DatabaseObject}
-     * @android
-     * @ios
-     * @throws {Error} 
-     * @since 1.0
-     */
-    this.get = function(index){};
-};
+ * Returns the count of the query result.
+ * 
+ * @method count
+ * @return {Number}
+ * @android
+ * @ios
+ * @since 1.0
+ */
+Database.QueryResult.prototype.count = function(){};
+
+/**
+ * Returns first match from Query. If no result match with Query, will return null.
+ * 
+ * @method getFirst
+ * @return {Data.Database.DatabaseObject}
+ * @android
+ * @ios
+ * @since 1.0
+ */
+Database.QueryResult.prototype.getFirst = function(){};
+
+/**
+ * Returns last match from Query. If no result match with Query, will return null.
+ * 
+ * @method getLast
+ * @return {Data.Database.DatabaseObject}
+ * @android
+ * @ios
+ * @since 1.0
+ */
+Database.QueryResult.prototype.getLast = function(){};
+
+/**
+ * Returns the element at the specified index in this query result. If index greater than count, it will throw exception
+ * 
+ * @method get
+ * @param {Number} index
+ * @return {Data.Database.DatabaseObject}
+ * @android
+ * @ios
+ * @throws {Error} 
+ * @since 1.0
+ */
+Database.QueryResult.prototype.get = function(index){};
 
 /**
  * @class Data.Database.DatabaseObject
@@ -193,59 +191,58 @@ Database.QueryResult = function(params){
  *         } );
  *     }
  */
-Database.DatabaseObject = function(params){
+Database.DatabaseObject = function(params){};
     
-    /**
-     * Returns given column name with String. If the given column is not String will thrown exception.
-     * 
-     * @method getString
-     * @param {String} columnName
-     * @return {String}
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.getString = function(columnName){};
-    
-    /**
-     * Returns given column name with Integer. If the given column is not Integer will thrown exception.
-     * 
-     * @method getInteger
-     * @param {String} columnName
-     * @return {Number}
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.getInteger = function(columnName){};
-    
-    /**
-     * Returns given column name with Boolean. If the given column is not Boolean will thrown exception.
-     * 
-     * @method getBoolean
-     * @param {String} columnName
-     * @return {Boolean}
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.getBoolean = function(columnName){};
-    
-    /**
-     * Returns given column name with Float. If the given column is not Float will thrown exception.
-     * 
-     * @method getFloat
-     * @param {String} columnName
-     * @return {Number}
-     * @android
-     * @ios
-     * @throws {Error}
-     * @since 1.0
-     */
-    this.getFloat = function(columnName){};
-};
+/**
+ * Returns given column name with String. If the given column is not String will thrown exception.
+ * 
+ * @method getString
+ * @param {String} columnName
+ * @return {String}
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.DatabaseObject.prototype.getString = function(columnName){};
+
+/**
+ * Returns given column name with Integer. If the given column is not Integer will thrown exception.
+ * 
+ * @method getInteger
+ * @param {String} columnName
+ * @return {Number}
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.DatabaseObject.prototype.getInteger = function(columnName){};
+
+/**
+ * Returns given column name with Boolean. If the given column is not Boolean will thrown exception.
+ * 
+ * @method getBoolean
+ * @param {String} columnName
+ * @return {Boolean}
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.DatabaseObject.prototype.getBoolean = function(columnName){};
+
+/**
+ * Returns given column name with Float. If the given column is not Float will thrown exception.
+ * 
+ * @method getFloat
+ * @param {String} columnName
+ * @return {Number}
+ * @android
+ * @ios
+ * @throws {Error}
+ * @since 1.0
+ */
+Database.DatabaseObject.prototype.getFloat = function(columnName){};
 
 module.exports = Database;
