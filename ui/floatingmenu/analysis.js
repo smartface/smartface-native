@@ -85,6 +85,16 @@ function FloatingMenu(params) {
     this.color;
     
     /**
+     * Gets/sets visible of the FloatingMenu
+     *
+     * @property {Boolean} visible
+     * @android
+     * @ios
+     * @since 1.1.10
+     */
+     this.visible;
+    
+    /**
      * Gets/sets click event callback function. This function is fired when items array is empty.
      *
      * @since 1.1.10

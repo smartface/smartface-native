@@ -84,6 +84,17 @@ function FloatingMenu(params) {
         enumerable: true
     });
     
+    Object.defineProperty(this, 'visible', {
+        get: function() {
+            return self.nativeObject.visible;
+        },
+        set: function(value) {
+            self.close();
+            self.nativeObject.visible = value;
+        },
+        enumerable: true
+    });
+    
     var _rotateEnabled = true;
     Object.defineProperty(this, 'rotateEnabled', {
         get: function() {
