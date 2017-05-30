@@ -6,8 +6,8 @@
  * navigates to related page.
  *
  *     @example
- *     const Router = require('sf-core/ui/router');
- *     const Navigator = require('sf-core/ui/Navigator');
+ *     const Router = require('sf-core/router');
+ *     const Navigator = require('sf-core/Navigator');
  *     
  *     Navigator.add('pgProfile', require('pages/pgProfile'));
  *     Navigator.add('pgMessages', require('pages/pgMessages'));

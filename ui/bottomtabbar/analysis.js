@@ -7,7 +7,7 @@
  *     @example
  *     const TabBarItem = require('sf-core/ui/tabbaritem');
  *     const BottomTabBar = require('sf-core/ui/bottomtabbar');
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *     const Image = require('sf-core/ui/image');
  *     
  *     var myProfileImage = Image.createFromFile("images://profile.png");
