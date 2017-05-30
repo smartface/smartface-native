@@ -145,7 +145,7 @@ function FloatingMenu(params) {
                 _callbackClick = callback;
             }
         },
-        'onOpen': {
+        'onMenuOpen': {
             get: function() {
                 return _callbackOpen;
             },
@@ -153,7 +153,7 @@ function FloatingMenu(params) {
                 _callbackOpen = callback;
             }
         },
-        'onClose': {
+        'onMenuClose': {
             get: function() {
                 return _callbackClose;
             },
