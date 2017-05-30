@@ -7,7 +7,7 @@
  *
  *     @example
  *     const Router = require('sf-core/router');
- *     const Navigator = require('sf-core/Navigator');
+ *     const Navigator = require('sf-core/navigator');
  *     
  *     Navigator.add('pgProfile', require('pages/pgProfile'));
  *     Navigator.add('pgMessages', require('pages/pgMessages'));

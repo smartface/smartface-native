@@ -10,7 +10,7 @@
  * callback of page to be shown.
  * 
  *     @example
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *     Router.add('login', require('pages/pgLogin'));
  *     Router.add('dashboard', require('pages/pgDashboard'));
  *     Router.go('login');
@@ -28,7 +28,7 @@ function Router(){}
  * Gets/sets sliderDrawer of the Router.
  *
  *     @example
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *     Router.add('login', require('pages/pgLogin'));
  *     Router.go('login');
  *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
