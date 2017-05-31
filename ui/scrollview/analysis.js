@@ -4,7 +4,7 @@
  * @since 0.1
  *
  * ScrollView enables user to view pages with large content exceeding screen size via scroll action.
- * ScrollView can have only one child view. The layout should be added if there are child views more 
+ * ScrollView can have only one child layout. The layout should be added if there are child views more 
  * than one.
  *    
  *     @example
