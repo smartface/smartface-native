@@ -2,7 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class UI.SwipeView
- * @since 1.1.11
+ * @since 1.1.10
  * @extends UI.View
  * SwipeView holds page classes provided inside an array. These pages can be traversed horizontally via gesture
  * actions. 
@@ -38,7 +38,7 @@ function SwipeView() {
      * @property {Array} pages
      * @android
      * @ios
-     * @since 1.1.11
+     * @since 1.1.10
      */
     this.pages = [];
     /**
@@ -48,7 +48,7 @@ function SwipeView() {
      * @param index
      * @android
      * @ios
-     * @since 1.1.11
+     * @since 1.1.10
      */
     this.onPageSelected = function(index){};
     /**
@@ -58,7 +58,7 @@ function SwipeView() {
      * @param {UI.SwipeView.State} state
      * @android
      * @ios
-     * @since 1.1.11
+     * @since 1.1.10
      */
     this.onStateChanged = function(state){};
     /**
@@ -68,7 +68,7 @@ function SwipeView() {
      * @android
      * @ios
      * @readonly
-     * @since 1.1.11
+     * @since 1.1.10
      */
     this.currentIndex = -1;
     /**
@@ -79,16 +79,36 @@ function SwipeView() {
      * @param {Boolean} [animated=false]
      * @android
      * @ios
-     * @since 1.1.11
+     * @since 1.1.10
      */
     this.swipeToIndex = function(index, animated){};
 };
 
 /**
+ * This event is called when a touch screen motion event starts. Does not work on iOS.
+ *
+ * @event onTouch
+ * @android
+ * @member UI.SwipeView
+ * @since 1.1.10
+ */
+SwipeView.prototype.onTouch = function onTouch(){ }
+
+/**
+ * This event is called when a touch screen motion event ends. Does not work on iOS.
+ *
+ * @event onTouchEnded
+ * @android
+ * @member UI.SwipeView
+ * @since 1.1.10
+ */
+SwipeView.prototype.onTouchEnded = function onTouchEnded(){ }
+
+/**
  * @enum UI.SwipeView.State
  * @static
  * @readonly
- * @since 1.1.11
+ * @since 1.1.10
  *
  */
 SwipeView.State = {};
@@ -99,7 +119,7 @@ SwipeView.State = {};
  * @ios
  * @static
  * @readonly
- * @since 1.1.11
+ * @since 1.1.10
  */
 SwipeView.State.IDLE = 0;
 
@@ -109,6 +129,6 @@ SwipeView.State.IDLE = 0;
  * @ios
  * @static
  * @readonly
- * @since 1.1.11
+ * @since 1.1.10
  */
 SwipeView.State.DRAGGING = 1;
