@@ -36,81 +36,78 @@
  *     });
  *
  */
-function Pages(params) {
+function Pages(params) {}
 
-    /**
-     * This function shows a page by pushing it to the UI.Pages.
-     *
-     *     @example
-     *     const Pages = require('sf-core/ui/pages');
-     *     const Page = require('sf-core/ui/page');
-     *     const Button = require('sf-core/ui/button');
-     *     var myPage1 = new Page();
-     *     var myPage2 = new Page();
-     *
-     *     var myButton = new Button({
-     *         text: "Go to Page 2",
-     *         height: 30,
-     *         width: 100,
-     *         onPress: function(){
-     *             myPages.push(myPage2,true);
-     *         }
-     *     });
-     *     myPage1.layout.add(myButton);
-     *     var myPages = new Pages({
-     *          rootPage: myPage1
-     *     });
-     *
-     *
-     *
-     * @param {UI.Page} page Page to show. Previous page will be stacked.
-     * @param {Boolean} animated If true, page will be showed with default animation, otherwise there will be no animation.
-     * @method push
-     * @android
-     * @ios
-     */
-    this.push = function(page, animated){};
+/**
+ * This function shows a page by pushing it to the UI.Pages.
+ *
+ *     @example
+ *     const Pages = require('sf-core/ui/pages');
+ *     const Page = require('sf-core/ui/page');
+ *     const Button = require('sf-core/ui/button');
+ *     var myPage1 = new Page();
+ *     var myPage2 = new Page();
+ *
+ *     var myButton = new Button({
+ *         text: "Go to Page 2",
+ *         height: 30,
+ *         width: 100,
+ *         onPress: function(){
+ *             myPages.push(myPage2,true);
+ *         }
+ *     });
+ *     myPage1.layout.add(myButton);
+ *     var myPages = new Pages({
+ *          rootPage: myPage1
+ *     });
+ *
+ *
+ *
+ * @param {UI.Page} page Page to show. Previous page will be stacked.
+ * @param {Boolean} animated If true, page will be showed with default animation, otherwise there will be no animation.
+ * @method push
+ * @android
+ * @ios
+ */
+Pages.prototype.push = function(page, animated){};
 
-    /**
-     * This function returns to previous page in UI.Pages stack.
-     *
-     *     @example
-     *     const Pages = require('sf-core/ui/pages');
-     *     const Page = require('sf-core/ui/page');
-     *     const Button = require('sf-core/ui/button');
-     *     var myPage1 = new Page();
-     *     var myPage2 = new Page();
-     *
-     *     var myButton = new Button({
-     *         text: "Go to Page 2",
-     *         height: 30,
-     *         width: 100,
-     *         onPress: function(){
-     *             myPages.push(myPage2,true);
-     *         }
-     *     });
-     *     myPage1.layout.add(myButton);
-     *     var myPages = new Pages({
-     *          rootPage: myPage1
-     *     });
-     *
-     *     var myButtonPage2 = new Button({
-     *         text: "Back to Page 1",
-     *         height: 10,
-     *         width: 100,
-     *         onPress: function(){
-     *             myPages.pop();
-     *         }
-     *     });
-     *     myPage2.layout.add(myButtonPage2);
-     *
-     * @method pop
-     * @android
-     * @ios
-     */
-    this.pop = function(){};
-}
-
-
+/**
+ * This function returns to previous page in UI.Pages stack.
+ *
+ *     @example
+ *     const Pages = require('sf-core/ui/pages');
+ *     const Page = require('sf-core/ui/page');
+ *     const Button = require('sf-core/ui/button');
+ *     var myPage1 = new Page();
+ *     var myPage2 = new Page();
+ *
+ *     var myButton = new Button({
+ *         text: "Go to Page 2",
+ *         height: 30,
+ *         width: 100,
+ *         onPress: function(){
+ *             myPages.push(myPage2,true);
+ *         }
+ *     });
+ *     myPage1.layout.add(myButton);
+ *     var myPages = new Pages({
+ *          rootPage: myPage1
+ *     });
+ *
+ *     var myButtonPage2 = new Button({
+ *         text: "Back to Page 1",
+ *         height: 10,
+ *         width: 100,
+ *         onPress: function(){
+ *             myPages.pop();
+ *         }
+ *     });
+ *     myPage2.layout.add(myButtonPage2);
+ *
+ * @method pop
+ * @android
+ * @ios
+ */
+Pages.prototype.pop = function(){};
 
 module.exports = Pages;

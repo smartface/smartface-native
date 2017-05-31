@@ -30,62 +30,61 @@
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-function Picker() {
-    /**
-     * Gets/sets items of the picker.
-     *
-     * @property {Array} items
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.items = [];
-    
-    /**
-     * Enables/disables the Picker.
-     *
-     * @since 1.1.8
-     * @property {Boolean} [enabled = true]
-     * @android
-     */
-    this.android = {};
-    this.android.enabled = true;
+function Picker() {}
 
-    /**
-     * Gets/sets current index of the picker.
-     *
-     * @property {Number} currentIndex
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.currentIndex = 0;
+/**
+ * Gets/sets items of the picker.
+ *
+ * @property {Array} items
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.items = [];
 
-    /**
-     * This event is called when scroll ends & an item is selected on a picker.
-     *
-     * @param {Number} index
-     * @event onSelected
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onSelected = function onSelected(index){ };
+/**
+ * Enables/disables the Picker.
+ *
+ * @since 1.1.8
+ * @property {Boolean} [enabled = true]
+ * @android
+ */
+Picker.prototype.android = {};
+Picker.prototype.android.enabled = true;
 
-     /**
-     * This function shows picker in a dialog.
-     *
-     * @param {Function} ok This event is called when user clicks ok button.
-     * @param {Object} ok.param
-     * @param {Number} ok.param.index
-     * @param {Function} cancel This event is called when user clicks cancel button.
-     * @method show
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.show = function(ok, cancel){};
+/**
+ * Gets/sets current index of the picker.
+ *
+ * @property {Number} currentIndex
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.currentIndex = 0;
 
-}
+/**
+ * This event is called when scroll ends & an item is selected on a picker.
+ *
+ * @param {Number} index
+ * @event onSelected
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.onSelected = function onSelected(index){ };
+
+/**
+ * This function shows picker in a dialog.
+ *
+ * @param {Function} ok This event is called when user clicks ok button.
+ * @param {Object} ok.param
+ * @param {Number} ok.param.index
+ * @param {Function} cancel This event is called when user clicks cancel button.
+ * @method show
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.show = function(ok, cancel){};
 
 module.exports = Picker;

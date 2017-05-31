@@ -40,42 +40,37 @@
  *     myPage.layout.addChild(myButton);
  *
  */
-function Animator() {
-    Object.defineProperties(this, {
-       /**
-        * Performs the changes declared in animFunction with animation.
-        * Duration indicates how long the animation will take in milliseconds.
-        *
-        * @method then
-        * @param {Number} duration
-        * @param {Function} animFunction
-        * @return {UI.Animator}
-        * @android
-        * @ios
-        * @since 0.1
-        */
-        'then': {
-            value: function(duration, animFunction) {
-                // do stuff
-                return new Animator();
-            }
-        },
-       /** 
-        * Runs the function provided after all animations are completed.
-        * Note that: It does not perform any animations.
-        * 
-        * @method complete
-        * @param {Function} completeFunction
-        * @android
-        * @ios
-        * @since 0.1
-        */
-        'complete': {
-            value: function(completeFunction) {
-                // do stuff
-            }
-        }
-    });
+function Animator() {}
+
+/**
+ * Performs the changes declared in animFunction with animation.
+ * Duration indicates how long the animation will take in milliseconds.
+ *
+ * @method then
+ * @param {Number} duration
+ * @param {Function} animFunction
+ * @return {UI.Animator}
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Animator.prototype.then = function(duration, animFunction) {
+    // do stuff
+    return new Animator();
+};
+
+/** 
+ * Runs the function provided after all animations are completed.
+ * Note that: It does not perform any animations.
+ * 
+ * @method complete
+ * @param {Function} completeFunction
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Animator.prototype.complete = function(completeFunction) {
+    // do stuff
 };
 
 /** 
@@ -96,11 +91,9 @@ function Animator() {
 * @ios
 * @since 0.1
 */
-Object.defineProperty(Animator, 'animate', {
-   value: function(rootLayout, duration, animFunction) {
-        // do stuff
-        return new Animator();
-   }
-});
+Animator.animate = function(rootLayout, duration, animFunction) {
+    // do stuff
+    return new Animator();
+};
 
 module.exports = Animator;

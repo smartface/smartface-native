@@ -93,212 +93,205 @@ const extend = require('js-base/core/extend');
  *
  */
 
-const ListView = extend(View)(
-    function (_super, params) {
-        _super(this);
+function ListView(params) {}
 
-        /**
-         * This event is called when a ListView starts to create a ListViewItem.
-         * You can customize your UI(not data-binding) inside this callback.
-         *
-         * @event onRowCreate
-         * @android
-         * @ios
-         * @return {UI.ListViewItem}
-         * @since 0.1
-         */
-        this.onRowCreate = function onRowCreate(){};
+/**
+ * This event is called when a ListView starts to create a ListViewItem.
+ * You can customize your UI(not data-binding) inside this callback.
+ *
+ * @event onRowCreate
+ * @android
+ * @ios
+ * @return {UI.ListViewItem}
+ * @since 0.1
+ */
+ListView.prototype.onRowCreate = function onRowCreate(){};
 
-        /**
-         * This event is called when a UI.ListViewItem created at specified row index.
-         * You can bind your data to row items inside this callback.
-         *
-         * @param {UI.ListViewItem} listViewItem
-         * @param {Number} index
-         * @event onRowBind
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onRowBind = function onRowBind(listViewItem, index){};
+/**
+ * This event is called when a UI.ListViewItem created at specified row index.
+ * You can bind your data to row items inside this callback.
+ *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
+ * @event onRowBind
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
 
-        /**
-         * This event is called when user selects a row at specific index.
-         *
-         * @event onRowSelected
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onRowSelected = function onRowSelected(listViewItem, index){};
+/**
+ * This event is called when user selects a row at specific index.
+ *
+ * @event onRowSelected
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){};
 
-        /**
-         * Gets/sets the number of rows that will be shown in a ListView.
-         * You should update this property after each data operation.
-         *
-         * @property {Number} [itemCount = 0]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.itemCount = 0;
+/**
+ * Gets/sets the number of rows that will be shown in a ListView.
+ * You should update this property after each data operation.
+ *
+ * @property {Number} [itemCount = 0]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.itemCount = 0;
 
-        /**
-         * Gets/sets height of a row in a ListView. Once you created the ListView, 
-         * you can't change row height.
-         *
-         *
-         * @property {Number} rowHeight
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.rowHeight = 0;
+/**
+ * Gets/sets height of a row in a ListView. Once you created the ListView, 
+ * you can't change row height.
+ *
+ *
+ * @property {Number} rowHeight
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.rowHeight = 0;
 
-        /**
-         * Gets/sets the visibility of vertical scroll bar of ListView.
-         * If set to true, scroll bar will be shown otherwise
-         * scroll bar will be hidden.
-         *
-         * @property {Boolean} [verticalScrollBarEnabled = false]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.verticalScrollBarEnabled = false;
+/**
+ * Gets/sets the visibility of vertical scroll bar of ListView.
+ * If set to true, scroll bar will be shown otherwise
+ * scroll bar will be hidden.
+ *
+ * @property {Boolean} [verticalScrollBarEnabled = false]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.verticalScrollBarEnabled = false;
 
+/**
+ * Enables/disables the refresh function of ListView. If set to false
+ * onPullRefresh events will not be called.
+ *
+ * @property {Boolean} [refreshEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.refreshEnabled = true;
 
-        /**
-         * Enables/disables the refresh function of ListView. If set to false
-         * onPullRefresh events will not be called.
-         *
-         * @property {Boolean} [refreshEnabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.refreshEnabled = true;
+/**
+ * This method returns the index of row which is visible at
+ * the top of a ListView at a given time.
+ *
+ * @return {Number}
+ * @method getFirstVisibleIndex
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.getFirstVisibleIndex = function(){};
 
+/**
+ * This method returns the index of row which is visible at
+ * the bottom of a ListView at a given time.
+ *
+ * @return {Number}
+ * @method getLastVisibleIndex
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.getLastVisibleIndex = function(){};
 
-        /**
-         * This method returns the index of row which is visible at
-         * the top of a ListView at a given time.
-         *
-         * @return {Number}
-         * @method getFirstVisibleIndex
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.getFirstVisibleIndex = function(){};
+/**
+ * Sets the colors used in the refresh animation. On Android the first color
+ * will also be the color of the bar that grows in response to a
+ * user swipe gesture. iOS uses only the first color of the array.
+ *
+ * @method setPullRefreshColors
+ * @param {UI.Color[]} colors
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.setPullRefreshColors = function(colors){};
 
-        /**
-         * This method returns the index of row which is visible at
-         * the bottom of a ListView at a given time.
-         *
-         * @return {Number}
-         * @method getLastVisibleIndex
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.getLastVisibleIndex = function(){};
+/**
+ * This method notify ListView for data changes. After this method is called
+ * ListView refreshes itself and recreates the rows. Do not forget to
+ * update itemCount property after data changes.
+ *
+ * @method refreshData
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.refreshData = function(){};
 
+/**
+ * This method scrolls ListView to a specific index.
+ *
+ * @param {Number} index
+ * @method scrollTo
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.scrollTo = function(index){};
 
-        /**
-         * Sets the colors used in the refresh animation. On Android the first color
-         * will also be the color of the bar that grows in response to a
-         * user swipe gesture. iOS uses only the first color of the array.
-         *
-         * @method setPullRefreshColors
-         * @param {[UI.Color]} colors
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.setPullRefreshColors = function(colors){};
+/**
+ * This method cancels refresh operation and stops the refresh
+ * indicator on a ListView. You should call this method after
+ * finishing event inside onPullRefresh otherwise refresh indicator
+ * never stops.
+ *
+ * @method stopRefresh
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.stopRefresh = function(){};
 
-        /**
-         * This method notify ListView for data changes. After this method is called
-         * ListView refreshes itself and recreates the rows. Do not forget to
-         * update itemCount property after data changes.
-         *
-         * @method refreshData
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.refreshData = function(){};
+/**
+ * This event is called when a ListView is scrolling.
+ * For better performance, don't set any callback if does not
+ * necessary
+ *
+ * @event onScroll
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.onScroll = function onScroll(){ }
 
-        /**
-         * This method scrolls ListView to a specific index.
-         *
-         * @param {Number} index
-         * @method scrollTo
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.scrollTo = function(index){};
+/**
+ * This event is called when user pulls down and releases a ListView
+ * when scroll position is on the top.
+ *
+ * @event onPullRefresh
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.onPullRefresh = function onPullRefresh(){}
 
-        /**
-         * This method cancels refresh operation and stops the refresh
-         * indicator on a ListView. You should call this method after
-         * finishing event inside onPullRefresh otherwise refresh indicator
-         * never stops.
-         *
-         * @method stopRefresh
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.stopRefresh = function(){};
+/**
+ * @param {String} title
+ * @param {UI.Color} color
+ * @param {Number} padding
+ * @param {Function} action Callback for button click action
+ * This method is create swipe item
+ *
+ * @method swipeItem
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
 
-        /**
-         * This event is called when a ListView is scrolling.
-         * For better performance, don't set any callback if does not
-         * necessary
-         *
-         * @event onScroll
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onScroll = function onScroll(){ }
-
-        /**
-         * This event is called when user pulls down and releases a ListView
-         * when scroll position is on the top.
-         *
-         * @event onPullRefresh
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.onPullRefresh = function onPullRefresh(){}
-        
-        /**
-         * @param {String} title
-         * @param {UI.Color} color
-         * @param {Integer} padding
-         * @param {Function} action Callback for button click action
-         * This method is create swipe item
-         *
-         * @method swipeItem
-         * @ios
-         * @since 0.1
-         */
-        this.ios.swipeItem = function(title,color,padding,action){}
-        
-        /**
-         * This event is called when user swipe listview row
-         *
-         * @event onRowSwiped
-         * @ios
-         * @since 0.1
-         */
-        this.ios.onRowSwiped  = function(direction){}
-    }
-);
+/**
+ * This event is called when user swipe listview row
+ *
+ * @event onRowSwiped
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.ios.onRowSwiped  = function(direction){}
 
 module.exports = ListView;

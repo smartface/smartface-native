@@ -21,31 +21,30 @@ const View = require('../view');
  *
  *     myPage.layout.addChild(myActivityIndicator);
  */
-const ActivityIndicator = extend(View)(
-    function (_super, params) {
-        _super(this);
-        /**
-         * Gets/sets color of the activity indicator.
-         *
-         * @property {UI.Color} color
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.color = Color.GRAY;
-        
-        /**
-         * Gets/sets type of the activity indicator.
-         *
-         * @property {ActivityIndicator.iOS.Type} type
-         * @ios
-         * @since 0.1
-         */
-        this.ios.type = ActivityIndicator.iOS.Type.WHITE;
-    }
-);
+function ActivityIndicator(params){}
+
+/**
+ * Gets/sets color of the activity indicator.
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ActivityIndicator.prototype.color = Color.GRAY;
+
+ActivityIndicator.prototype.ios = {};
+/**
+ * Gets/sets type of the activity indicator.
+ *
+ * @property {ActivityIndicator.iOS.Type} type
+ * @ios
+ * @since 0.1
+ */
+ActivityIndicator.prototype.ios.type = ActivityIndicator.iOS.Type.WHITE;
 
 ActivityIndicator.iOS = {};
+ActivityIndicator.iOS.Type = {};
 /**
  * @property {Number} WHITELARGE
  * @ios
@@ -53,10 +52,7 @@ ActivityIndicator.iOS = {};
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITELARGE', {
-    value: 0,
-    writable: false
-});
+ActivityIndicator.iOS.Type.WHITELARGE = 0;
 
 /**
  * @property {Number} WHITE
@@ -65,10 +61,7 @@ Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITELARGE', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITE', {
-    value: 1,
-    writable: false
-});
+ActivityIndicator.iOS.Type.WHITE = 1;
 
 /**
  * @property {Number} GRAY
@@ -77,9 +70,6 @@ Object.defineProperty(ActivityIndicator.iOS.Type, 'WHITE', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActivityIndicator.iOS.Type, 'GRAY', {
-    value: 2,
-    writable: false
-});
+ActivityIndicator.iOS.Type.GRAY = 2;
 
 module.exports = ActivityIndicator;

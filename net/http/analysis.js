@@ -144,16 +144,15 @@ http.request = function(params, onLoad, onError) {};
  *     request.cancel();
  * 
  */
-const Request = function() {
+function Request(){}
 
-    /**
-     * @method cancel
-     * 
-     * Stops listening the response of the request.
-     * 
-     * @since 0.1
-     */
-    this.cancel = function(){};
-};
+/**
+ * @method cancel
+ * 
+ * Stops listening the response of the request.
+ * 
+ * @since 0.1
+ */
+Request.prototype.cancel = function(){};
 
 module.exports = http;
