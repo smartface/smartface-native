@@ -1,6 +1,9 @@
+const android = {};
+
 /**
  * @enum {Number} UI.AlertView.ButtonType
  * @since 0.1
+ * @deprecated 1.1.10 Use {@link UI.AlertView.android.ButtonType} instead.
  *
  * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
  * You can specify a button have negative, positive or neutral user experience.
@@ -33,7 +36,6 @@ var ButtonType = { };
 /**
  * @property {Number} POSITIVE
  * @android
- * @ios
  * @static
  * @readonly
  * @since 0.1
@@ -43,7 +45,6 @@ ButtonType.POSITIVE = 0;
 /**
  * @property {Number} NEUTRAL
  * @android
- * @ios
  * @static
  * @readonly
  * @since 0.1
@@ -53,12 +54,70 @@ ButtonType.NEUTRAL = 1;
 /**
  * @property {Number} NEGATIVE
  * @android
- * @ios
  * @static
  * @readonly
  * @since 0.1
  */
 ButtonType.NEGATIVE = 2;
+
+/**
+ * @enum {Number} UI.AlertView.android.ButtonType
+ * @since 0.1
+ *
+ * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
+ * You can specify a button have negative, positive or neutral user experience.
+ * According to operating system button appearance or positions may change.
+ *
+ *     @example
+ *     const AlertView = require('sf-core/ui/alertview');
+ *
+ *     var myAlertView = new AlertView({
+ *         title: "Alert Title",
+ *         message: "Alert Message"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.android.ButtonType.NEUTRAL,
+ *         text: "Ignore",
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.android.ButtonType.NEGATIVE,
+ *         text: "Cancel"
+ *     });
+ *     myAlertView.addButton({
+ *         index: AlertView.android.ButtonType.POSITIVE,
+ *         text: "Okay"
+ *     });
+ *
+ *     myAlertView.show();
+ */
+android.ButtonType = { };
+
+/**
+ * @property {Number} POSITIVE
+ * @android
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+android.ButtonType.POSITIVE = 0;
+
+/**
+ * @property {Number} NEUTRAL
+ * @android
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+android.ButtonType.NEUTRAL = 1;
+
+/**
+ * @property {Number} NEGATIVE
+ * @android
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+android.ButtonType.NEGATIVE = 2;
 
 /**
  * @class UI.AlertView
@@ -76,11 +135,11 @@ ButtonType.NEGATIVE = 2;
  *         message: "Alert Message"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.ButtonType.NEGATIVE,
+ *         type: AlertView.android.ButtonType.NEGATIVE,
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.ButtonType.POSITIVE,
+ *         type: AlertView.android.ButtonType.POSITIVE,
  *         text: "Okay",
  *         onClick: function() {
  *             console.log("Okay clicked.");
@@ -150,7 +209,7 @@ AlertView.prototype.dismiss = function() {};
  *
  *     @example
  *     myAlertView.addButton({
- *         index: AlertView.ButtonType.POSITIVE,
+ *         type: AlertView.android.ButtonType.POSITIVE,
  *         text: "Okay",
  *         onClick: function() {
  *             console.log("Okay clicked.");
@@ -160,8 +219,8 @@ AlertView.prototype.dismiss = function() {};
  * @param {Object} params Object describing button properties
  * @param {UI.AlertView.ButtonType} params.index [DEPRECATED since 1.1.10. Use 'type' instead] Button type, it is set to
  *                                      UI.AlertView.ButtonType.NEUTRAL as default
- * @param {UI.AlertView.ButtonType} params.type Button type, it is set to
- *                                      UI.AlertView.ButtonType.NEUTRAL as default
+ * @param {UI.AlertView.android.ButtonType} params.type Button type, it is set to
+ *                                      UI.AlertView.android.ButtonType.NEUTRAL as default
  * @param {String} params.text Button text
  * @param {Function} [params.onClick] Callback for button click action
  * @method addButton
