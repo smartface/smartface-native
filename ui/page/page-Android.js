@@ -509,7 +509,7 @@ function Page(params) {
         
         bottomNavigationView = new BottomNavigationView(activity);
         var menu = null;
-        var tab = Router.routes[_parentTab].pageClass;
+        var tab = Router.routes[_parentTab].pageObject;
         if(bottomNavigationView) {
             menu = bottomNavigationView.getMenu();
             if(menu) {
@@ -547,7 +547,7 @@ function Page(params) {
                         fragment.parentTab = self.parentTab;
                         fragment.tabBarItems = _tabBarItems;
                         
-                        Router.routes[self.parentTab].pageClass.switchCounter += 1;
+                        Router.routes[self.parentTab].pageObject.switchCounter += 1;
                         Router.pagesInstance.push(fragment, false, self.parentTab);
                         return true;
                     }

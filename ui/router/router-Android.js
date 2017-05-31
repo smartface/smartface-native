@@ -109,7 +109,15 @@ Router.add = function(to, page, isSingleton) {
         throw TypeError("add takes string and Page as parameters");
     }
     
-    if (!routes[to]) {
+    if(page instanceof BottomTabBar || page instanceof Navigator) {
+        if (!routes[to]) {
+            routes[to] = {
+                isSingleton: !!isSingleton,
+                pageObject: page
+            };
+        }
+    }
+    else if (!routes[to]) {
         routes[to] = {
             pageClass: page,
             isSingleton: !!isSingleton,
@@ -188,10 +196,10 @@ Router.goBack = function(to, parameters, animated) {
             return true;
         }
     } else {
-        if(Router.routes[current.path].pageClass.switchCounter) {
-            for(var i = 0; i < Router.routes[current.path].pageClass.switchCounter; i++)
+        if(Router.routes[current.path].pageObject.switchCounter > 0) {
+            for(var i = 0; i < Router.routes[current.path].pageObject.switchCounter; i++)
                 pagesInstance.pop();
-            Router.routes[current.path].switchCounter = 0;
+            Router.routes[current.path].pageObject.switchCounter = 0;
         }
         if (pagesInstance.pop()) {
             current && current.page.onHide && current.page.onHide();
@@ -224,6 +232,27 @@ Router.getCurrentPage = function() {
 };
 
 function getRoute(to) {
+    if(to && to.includes("/") && !Router.routes[to]) {
+        var subStr = to.split("/");
+        var route = Router.routes[subStr[0]];
+        var navigation = route.pageObject;
+        var pageClass = navigation.items[subStr[1]];
+        if(!pageClass)
+            throw Error(subStr[1] + " is not in routes");
+        var page;
+        if(route.isSingleton) {
+            page = navigation.itemInstances[subStr[1]];
+        }
+        else {
+            page = new pageClass();
+        }
+        Router.routes[to] = {
+            pageObject: page,
+            pageClass: pageClass,
+            isSingleton: route.isSingleton
+        };
+    }
+    
     if (!routes[to]) {
         throw Error(to + " is not in routes");
     }
@@ -231,9 +260,9 @@ function getRoute(to) {
         throw Error(to + " is set as singleton and exists in history");
     }
     
-    if((routes[to].pageClass) instanceof BottomTabBar) {
+    if((routes[to].pageObject) && ((routes[to].pageObject) instanceof BottomTabBar)) {
         var tabItems = [];
-        var tab = routes[to].pageClass;
+        var tab = routes[to].pageObject;
         var page;
         if(tab.items) {
             var keys = Object.keys(tab.items);
@@ -250,14 +279,15 @@ function getRoute(to) {
             page.selectedIndex = selectedIndex;
             page.tabBarItems = tabItems;
         }
+        tab.switchCounter = 0;
         return page;
     }
-    else if((routes[to].pageClass) instanceof Navigator) {
-        var index = routes[to].pageClass.index;
+    else if((routes[to].pageObject) instanceof Navigator) {
+        var index = routes[to].pageObject.index;
         if (routes[to].isSingleton) {
-            return routes[to].pageClass.itemInstances[index];
+            return routes[to].pageObject.itemInstances[index];
         } else {
-            return new (routes[to].pageClass.items[index])();
+            return new (routes[to].pageObject.items[index])();
         }
     }
     else {
