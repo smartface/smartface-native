@@ -1,6 +1,6 @@
 
 /**
- * @class UI.Router
+ * @class Router
  * @since 0.1
  * 
  * Router is used for navigating between pages with given paths and parameters.

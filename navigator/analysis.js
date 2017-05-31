@@ -1,5 +1,5 @@
 /**
- * @class UI.Navigator
+ * @class Navigator
  * @since 1.1.9
  *
  * Navigator is used for navigating between pages. When UI.Router.go calls navigator path,
