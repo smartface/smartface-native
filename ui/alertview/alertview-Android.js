@@ -65,9 +65,11 @@ function AlertView (params) {
         'addButton':{
             value: function(params){
                 !params.text && (params.text = "");
-                buttonCallbacks[params.index] = params.onClick;
+                var buttonType = params.index;
+                Number.isInteger(params.type) && (buttonType = params.type);
+                buttonCallbacks[buttonType] = params.onClick;
                 var nativeButtonIndex;
-                switch(params.index) {
+                switch(buttonType) {
                     case ButtonType.POSITIVE:
                         nativeButtonIndex = -1;
                         break;
