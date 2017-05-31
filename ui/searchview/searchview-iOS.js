@@ -159,7 +159,7 @@ const SearchView = extend(View)(
             },
             set: function(backgroundImage) {
                 _backgroundImage = backgroundImage;
-                self.nativeObject.backgroundImage = _backgroundImage.nativeObject;
+                self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject,0);
             },
             enumerable: true
         });
