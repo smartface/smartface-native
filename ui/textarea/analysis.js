@@ -7,7 +7,7 @@
  *     @example
  *     const TextArea = require('sf-core/ui/textarea');
  *     var myTextArea= new TextArea({
- *         left:10, top:10, width:200, height:65,
+ *         left:10, top:10, width:200, height:200,
  *         borderWidth: 1
  *     });
  *     myPage.layout.addChild(myTextArea);
