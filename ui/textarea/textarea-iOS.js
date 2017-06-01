@@ -37,6 +37,7 @@ const TextArea = extend(TextBox)(
             },
             enumerable: true
         });
+        self.showScrollBar = false;
         
         Object.defineProperty(self, 'hint', {
             get: function() {},
