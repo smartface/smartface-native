@@ -1,3 +1,10 @@
+const android = {};
+android.ButtonType = {
+    POSITIVE: 0,
+    NEUTRAL: 1,
+    NEGATIVE: 2,
+};
+
 var ButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
@@ -85,6 +92,12 @@ function AlertView (params) {
 
 Object.defineProperty(AlertView, 'ButtonType', {
     value: ButtonType,
+    writable: false,
+    enumerable: true
+});
+
+Object.defineProperty(AlertView, 'android', {
+    value: android,
     writable: false,
     enumerable: true
 });
