@@ -11,6 +11,7 @@ const TextArea = extend(TextBox)(
         self.nativeObject.setSingleLine(false);
         self.textAlignment = TextAlignment.TOPLEFT;
 
+        // Remove implementations of some properties
         Object.defineProperties(self, {
             'isPassword': {
                 get: function(){},
@@ -34,6 +35,7 @@ const TextArea = extend(TextBox)(
             }
         });
 
+        // Remove implementations of some properties
         Object.defineProperties(self.android, {
             'hint': {
                 get: function() {
