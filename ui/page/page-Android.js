@@ -4,11 +4,13 @@ const TypeUtil              = require("sf-core/util/type");
 const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 
-const NativeFragment     = requireClass("android.support.v4.app.Fragment");
-const NativeBuildVersion = requireClass("android.os.Build");
-const NativeAndroidR     = requireClass("android.R");
-const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
-const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
+const NativeFragment      = requireClass("android.support.v4.app.Fragment");
+const NativeBuildVersion  = requireClass("android.os.Build");
+const NativeAndroidR      = requireClass("android.R");
+const NativeSFR           = requireClass(AndroidConfig.packageName + ".R");
+const NativeSupportR      = requireClass("android.support.v7.appcompat.R");
+const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
+const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawable");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
@@ -274,13 +276,14 @@ function Page(params) {
         enumerable: true, configurable: true
     });
 
-    var _headerBarColor; // SmartfaceBlue
+    var _headerBarColor = Color.create("#00A1F1"); // Smartface blue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return _headerBarColor;
         },
         set: function(color) {
             if (color) {
+                _headerBarColor = color;
                 toolbar.setBackgroundColor(color.nativeObject);
             }
         },
@@ -295,7 +298,16 @@ function Page(params) {
         set: function(image) {
             if (image) {
                 _headerBarImage = image;
-                toolbar.setBackground(image.nativeObject);
+
+                var layers = [image.nativeObject];
+                if (_headerBarColor) {
+                    var colorDrawable = new NativeColorDrawable();
+                    colorDrawable.setColor(_headerBarColor.nativeObject);
+                    layers.splice(0, 0, colorDrawable);
+                };
+
+                var toolbarBackground = new NativeLayerDrawable(layers);
+                toolbar.setBackground(toolbarBackground);
             }
         },
         enumerable: true, configurable: true
