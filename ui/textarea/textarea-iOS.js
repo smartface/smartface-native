@@ -16,26 +16,6 @@ const TextArea = extend(TextBox)(
 
         _super(this);
         
-        Object.defineProperty(self, 'multiline', {
-            get: function() {
-               if(self.nativeObject.textContainer.maximumNumberOfLines === 0 && self.nativeObject.textContainer.lineBreakMode === 0){
-                    return true;
-                }else{
-                    return false;
-                }
-            },
-            set: function(value) {
-            	if (value){
-            		self.nativeObject.textContainer.maximumNumberOfLines = 0;
-    				self.nativeObject.textContainer.lineBreakMode = 0;
-            	}else{
-            		self.nativeObject.textContainer.maximumNumberOfLines = 1;
-    				self.nativeObject.textContainer.lineBreakMode = 4;
-            	}
-            },
-            enumerable: true
-        });
-        
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
                 return self.nativeObject.textAlignmentNumber;
@@ -45,7 +25,6 @@ const TextArea = extend(TextBox)(
             },
             enumerable: true
         });
-        
         self.textAlignment = TextAlignment.TOPLEFT;
         
         Object.defineProperty(self.ios, 'showScrollBar', {
