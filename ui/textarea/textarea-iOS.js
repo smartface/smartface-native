@@ -38,6 +38,48 @@ const TextArea = extend(TextBox)(
             enumerable: true
         });
         
+        Object.defineProperty(self, 'hint', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+        
+        Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+
+        Object.defineProperty(this.ios, 'minimumFontSize', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+        
+        Object.defineProperty(this, 'actionKeyType', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+
+        Object.defineProperty(self, 'keyboardType', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+        
+        Object.defineProperty(this.ios, 'clearButtonEnabled', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'isPassword', {
+            get: function() {},
+            set: function(value) {},
+            enumerable: true
+        });
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

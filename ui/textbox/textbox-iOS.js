@@ -143,7 +143,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.placeholder = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         this.ios = {};
@@ -154,7 +154,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.adjustsFontSizeToFitWidth = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         Object.defineProperty(this.ios, 'minimumFontSize', {
@@ -164,7 +164,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.minimumFontSize = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         Object.defineProperty(this.ios, 'keyboardAppearance', {
@@ -219,7 +219,7 @@ const TextBox = extend(View)(
                         self.nativeObject.returnKeyType = IOSReturnKeyType.default;
                 }
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'keyboardType', {
@@ -283,7 +283,7 @@ const TextBox = extend(View)(
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
                 }
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         var _clearButtonMode = false;
@@ -300,7 +300,7 @@ const TextBox = extend(View)(
                 }
 
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'isPassword', {
@@ -311,7 +311,7 @@ const TextBox = extend(View)(
                 self.nativeObject.isSecure = value;
 
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
         
         this.showKeyboard = function(){

@@ -80,17 +80,6 @@ TextArea.prototype.ios.minimumFontSize = 7;
 TextArea.prototype.ios.clearButtonEnabled = false;
 
 /**
- * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
- * This property works only for iOS.
- *
- * @property {UI.KeyboardAppearance} [keyboardAppearance = UI.KeyboardAppearance.DEFAULT]
- * @ios
- * @removed
- * @since 1.1.10
- */
-TextArea.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
-
-/**
  * Gets/sets the content of the TextBox is password or not.
  *
  * @property {Boolean} [isPassword = false]
