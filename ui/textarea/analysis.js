@@ -37,13 +37,13 @@ TextArea.prototype.hint = "";
 TextArea.prototype.android.hint = "";
 
 /**
- * Get/set showScrollBar property
+ * Get/set scrollBarEnabled property
  *
- * @property {Boolean} [showScrollBar = false]
+ * @property {Boolean} [scrollBarEnabled = true]
  * @ios
  * @since 1.1.10
  */
-TextArea.prototype.ios.showScrollBar = false;
+TextArea.prototype.ios.showScrollBar = true;
 
 /**
  * This property adjusts font size according to view's fixed width. If you set it true,
