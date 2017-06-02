@@ -159,7 +159,7 @@ const SearchView = extend(View)(
             },
             set: function(backgroundImage) {
                 _backgroundImage = backgroundImage;
-                self.nativeObject.backgroundImage = _backgroundImage.nativeObject;
+                self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject,0);
             },
             enumerable: true
         });
@@ -213,14 +213,13 @@ const SearchView = extend(View)(
             enumerable: true
         });
         
-        var _showsCancelButton = self.nativeObject.showsCancelButton;
+        var _showsCancelButton = false;
         Object.defineProperty(this.ios, 'showsCancelButton', {
             get: function() {
                 return _showsCancelButton;
             },
             set: function(showsCancelButton) {
                 _showsCancelButton = showsCancelButton;
-                self.nativeObject.showsCancelButton = _showsCancelButton;
             },
             enumerable: true
         });
@@ -289,11 +288,19 @@ const SearchView = extend(View)(
             }
         };
         self.searchBarDelegate.didBeginEditing = function(){
+            if (self.ios.showsCancelButton) {
+                self.nativeObject.setShowsCancelButtonAnimated(true,true);
+            }
+
             if (typeof _onSearchBegin === "function"){
                     _onSearchBegin();
             }
         };
         self.searchBarDelegate.didEndEditing = function(){
+            if (self.ios.showsCancelButton) {
+                self.nativeObject.setShowsCancelButtonAnimated(false,true);
+            }
+            
             if (typeof _onSearchEnd === "function"){
                     _onSearchEnd();
             }
