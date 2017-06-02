@@ -181,14 +181,14 @@ const MapView = extend(View)(
             },
             'zoomLevel': {
                 get: function() {
-                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom : _zoomLevel;
+                    return self.nativeObject.isShown() ? _nativeGoogleMap.getCameraPosition().zoom -2 : _zoomLevel;
                 },
                 set: function(value) {
                     if (TypeUtil.isNumeric(value)) {
                         _zoomLevel = value;
                         if(self.nativeObject.isShown()){
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value)
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value + 2)
                             _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
                         }
                     }
