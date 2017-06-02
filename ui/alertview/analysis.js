@@ -1,4 +1,4 @@
-const android = {};
+const Android = {};
 
 /**
  * @enum {Number} UI.AlertView.ButtonType
@@ -76,21 +76,21 @@ ButtonType.NEGATIVE = 2;
  *         message: "Alert Message"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.android.ButtonType.NEUTRAL,
+ *         index: AlertView.Android.ButtonType.NEUTRAL,
  *         text: "Ignore",
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.android.ButtonType.NEGATIVE,
+ *         index: AlertView.Android.ButtonType.NEGATIVE,
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.android.ButtonType.POSITIVE,
+ *         index: AlertView.Android.ButtonType.POSITIVE,
  *         text: "Okay"
  *     });
  *
  *     myAlertView.show();
  */
-android.ButtonType = { };
+Android.ButtonType = { };
 
 /**
  * @property {Number} POSITIVE
@@ -99,7 +99,7 @@ android.ButtonType = { };
  * @readonly
  * @since 0.1
  */
-android.ButtonType.POSITIVE = 0;
+Android.ButtonType.POSITIVE = 0;
 
 /**
  * @property {Number} NEUTRAL
@@ -108,7 +108,7 @@ android.ButtonType.POSITIVE = 0;
  * @readonly
  * @since 0.1
  */
-android.ButtonType.NEUTRAL = 1;
+Android.ButtonType.NEUTRAL = 1;
 
 /**
  * @property {Number} NEGATIVE
@@ -117,7 +117,7 @@ android.ButtonType.NEUTRAL = 1;
  * @readonly
  * @since 0.1
  */
-android.ButtonType.NEGATIVE = 2;
+Android.ButtonType.NEGATIVE = 2;
 
 /**
  * @class UI.AlertView
@@ -135,11 +135,11 @@ android.ButtonType.NEGATIVE = 2;
  *         message: "Alert Message"
  *     });
  *     myAlertView.addButton({
- *         type: AlertView.android.ButtonType.NEGATIVE,
+ *         type: AlertView.Android.ButtonType.NEGATIVE,
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
- *         type: AlertView.android.ButtonType.POSITIVE,
+ *         type: AlertView.Android.ButtonType.POSITIVE,
  *         text: "Okay",
  *         onClick: function() {
  *             console.log("Okay clicked.");
@@ -209,7 +209,7 @@ AlertView.prototype.dismiss = function() {};
  *
  *     @example
  *     myAlertView.addButton({
- *         type: AlertView.android.ButtonType.POSITIVE,
+ *         type: AlertView.Android.ButtonType.POSITIVE,
  *         text: "Okay",
  *         onClick: function() {
  *             console.log("Okay clicked.");
