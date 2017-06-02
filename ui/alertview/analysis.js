@@ -3,7 +3,7 @@ const android = {};
 /**
  * @enum {Number} UI.AlertView.ButtonType
  * @since 0.1
- * @deprecated 1.1.10 Use {@link UI.AlertView.android.ButtonType} instead.
+ * @deprecated 1.1.10 Use {@link UI.AlertView.Android.ButtonType} instead.
  *
  * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
  * You can specify a button have negative, positive or neutral user experience.
@@ -61,7 +61,7 @@ ButtonType.NEUTRAL = 1;
 ButtonType.NEGATIVE = 2;
 
 /**
- * @enum {Number} UI.AlertView.android.ButtonType
+ * @enum {Number} UI.AlertView.Android.ButtonType
  * @since 0.1
  *
  * ButtonType is used to indicate the behaviors of buttons in UI.AlertView.
@@ -219,8 +219,8 @@ AlertView.prototype.dismiss = function() {};
  * @param {Object} params Object describing button properties
  * @param {UI.AlertView.ButtonType} params.index [DEPRECATED since 1.1.10. Use 'type' instead] Button type, it is set to
  *                                      UI.AlertView.ButtonType.NEUTRAL as default
- * @param {UI.AlertView.android.ButtonType} params.type Button type, it is set to
- *                                      UI.AlertView.android.ButtonType.NEUTRAL as default
+ * @param {UI.AlertView.Android.ButtonType} params.type Button type, it is set to
+ *                                      UI.AlertView.Android.ButtonType.NEUTRAL as default
  * @param {String} params.text Button text. It's letter case behaves differently on the platforms.
  * @param {Function} [params.onClick] Callback for button click action
  * @method addButton
