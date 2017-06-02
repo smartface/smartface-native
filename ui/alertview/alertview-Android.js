@@ -2,8 +2,8 @@ const Type                  = require("sf-core/util/type");
 const NativeAlertDialog     = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
-const android = {};
-android.ButtonType = {
+AlertView.Android = {};
+AlertView.Android.ButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
@@ -78,13 +78,13 @@ function AlertView (params) {
                 buttonCallbacks[buttonType] = params.onClick;
                 var nativeButtonIndex;
                 switch(buttonType) {
-                    case android.ButtonType.POSITIVE:
+                    case AlertView.Android.ButtonType.POSITIVE:
                         nativeButtonIndex = -1;
                         break;
-                    case android.ButtonType.NEGATIVE:
+                    case AlertView.Android.ButtonType.NEGATIVE:
                         nativeButtonIndex = -2;
                         break;
-                    case android.ButtonType.NEUTRAL:
+                    case AlertView.Android.ButtonType.NEUTRAL:
                         nativeButtonIndex = -3;
                         break;
                     default:
@@ -97,13 +97,13 @@ function AlertView (params) {
                        onClick: function(dialog,which){
                            switch(which){
                                 case -1:
-                                    buttonCallbacks[android.ButtonType.POSITIVE] && buttonCallbacks[android.ButtonType.POSITIVE]();
+                                    buttonCallbacks[AlertView.Android.ButtonType.POSITIVE] && buttonCallbacks[AlertView.Android.ButtonType.POSITIVE]();
                                     break;
                                 case -2:
-                                    buttonCallbacks[android.ButtonType.NEGATIVE] && buttonCallbacks[android.ButtonType.NEGATIVE]();
+                                    buttonCallbacks[AlertView.Android.ButtonType.NEGATIVE] && buttonCallbacks[AlertView.Android.ButtonType.NEGATIVE]();
                                     break;
                                 case -3:
-                                    buttonCallbacks[android.ButtonType.NEUTRAL] && buttonCallbacks[android.ButtonType.NEUTRAL]();
+                                    buttonCallbacks[AlertView.Android.ButtonType.NEUTRAL] && buttonCallbacks[AlertView.Android.ButtonType.NEUTRAL]();
                                     break;
                                 default:
                                     break;
@@ -165,12 +165,6 @@ function AlertView (params) {
 
 Object.defineProperty(AlertView, 'ButtonType', {
     value: ButtonType,
-    writable: false,
-    enumerable: true
-});
-
-Object.defineProperty(AlertView, 'android', {
-    value: android,
     writable: false,
     enumerable: true
 });
