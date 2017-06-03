@@ -12,8 +12,8 @@
  *         path: Path.ImagesUriScheme + 'smartface.png'
  *     });
  * 
- *     if(Path.android.externalStorages.external){
- *         var destinationPath = Path.android.externalStorages.external + Path.Separator + 'myDirectory';
+ *     if(Path.android.storages.external){
+ *         var destinationPath = Path.android.storages.external + Path.Separator + 'myDirectory';
  *         var destinationDirectory = new File({
  *             path: destinationPath
  *         });

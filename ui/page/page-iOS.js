@@ -133,8 +133,10 @@ function Page(params) {
     
     this.statusBar = {};
     Object.defineProperty(self.statusBar, 'height', {
-     value:  __SF_UIApplication.sharedApplication().statusBarFrame.height,
-     writable: false
+         get: function() {
+                return __SF_UIApplication.sharedApplication().statusBarFrame.height;
+         },
+         enumerable: true,configurable : true
     });
 
     Object.defineProperty(self.statusBar, 'visible', {
