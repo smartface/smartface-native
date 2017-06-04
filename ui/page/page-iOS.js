@@ -171,10 +171,10 @@ function Page(params) {
     
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return self.nativeObject.title;
+            return self.nativeObject.navigationItem.title;
         },
         set: function(value) {
-            self.nativeObject.title = value;
+            self.nativeObject.navigationItem.title = value;
         },
         enumerable: true,configurable : true
     });
