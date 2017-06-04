@@ -11,12 +11,14 @@
  * 
  *     @example
  *     const Router = require('sf-core/router');
+ *     const BottomTabBar = require('sf-core/ui/bottomtabbar');
+ *     const TabBarItem = require('sf-core/ui/tabbaritem');
  *     var myTab = new BottomTabBar();
  *      
  *      var myProfileItem = new TabBarItem({
  *          title: "Profile",
  *          icon: myProfileIcon,
- *          page: require('./pages/home')
+ *          page: require('./pages/pgProfile')
  *      });
  *      
  *      myTab.add('profile', myProfileItem);
