@@ -9,8 +9,8 @@ function Pages(params) {
 
     self.nativeObject = new __SF_UINavigationController(rootViewController);
     self.nativeObject.setTranslucent(false);
-    __SF_UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
-    __SF_UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
+    // __SF_UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
+    // __SF_UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
     
     Object.defineProperty(self, 'sliderDrawer', {
         get: function() {
