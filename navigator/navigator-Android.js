@@ -2,22 +2,25 @@ function Navigator(params) {
         var _items = {};
         var _itemInstances = {};
         var _index = null;
+        var _switchCounter = 0;
         
         Object.defineProperties(this, {
             'add': {
                 value: function(to, page){
+                    if(!_index)
+                        _index = to;
+                    console.log('to ' + to);
                     _items[to] = page;
                     _itemInstances[to] = new page();
                 },
                 enumerable: true
             },
-            'setIndex': {
-                value: function(tag){
-                    if(tag in _items) {
-                        _index = tag;
-                    } else {
-                        throw new Error(tag +" is not in Navigations.");
-                    }
+            'switchCounter': {
+                set: function(count) {
+                    _switchCounter = count;
+                },
+                get: function(){
+                    return _switchCounter;
                 },
                 enumerable: true
             },

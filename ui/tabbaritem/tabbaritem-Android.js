@@ -2,6 +2,7 @@ function TabBarItem(params) {
     var _title;
     var _icon;
     var _page;
+    var _route;
     
     Object.defineProperties(this, {
         'title': {
@@ -37,10 +38,25 @@ function TabBarItem(params) {
                 return _page;
             },
             set: function(page) {
-                if(page) {
+                if(typeof(page) === 'function')
                     _page = page;
+            },
+            enumerable: true
+        },
+        'route': {
+            get: function() {
+                return _route;
+            },
+            set: function(route) {
+                const Navigator = require("sf-core/navigator");
+                if(route instanceof Navigator) {
+                    _page = route.items[route.index];
+                    _route = route;
+                }
+                else if(typeof(route) === 'function') {
+                    _page = route;
                 } else {
-                    throw new Error("page should be an instance of Page.");
+                    throw new Error("page should be an instance of Page or Navigator.");
                 }
             },
             enumerable: true

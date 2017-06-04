@@ -5,9 +5,11 @@ const MAXITEMCOUNT = 5;
 
 function BottomTabBar(params) {
         var _items = {};
+        var _itemInstances = [];
         var _itemColors;
         var _index;
         var _itemCount = 0;
+        var _currentIndex = 0;
         var _backgroundColor;
         var _switchCounter = 0;
         
@@ -20,6 +22,7 @@ function BottomTabBar(params) {
                     const TabBarItem = require("sf-core/ui/tabbaritem");
                     if(typeof(path) === "string" && item instanceof TabBarItem) {
                         _items[path] = item;
+                        _itemInstances.push(new item.page()); // TODO set after add method
                         _itemCount++;
                     }
                 },
@@ -66,6 +69,7 @@ function BottomTabBar(params) {
                 value: function(tag){
                     if(tag in _items) {
                         _index = tag;
+                        _currentIndex = (Object.keys(_items)).indexOf(tag);
                     } else {
                         throw new Error(tag +" is not in tabs.");
                     }
@@ -77,9 +81,22 @@ function BottomTabBar(params) {
                     return _index;
                 }
             },
+            'currentIndex': {
+                set: function(index) {
+                    _currentIndex = index;
+                },
+                get: function() {
+                    return _currentIndex;
+                }
+            },
             'items': {
                 get: function() {
                     return _items;
+                }
+            },
+            'itemInstances': {
+                get: function() {
+                    return _itemInstances;
                 }
             },
             'toString': {

@@ -509,6 +509,7 @@ function Page(params) {
         
         bottomNavigationView = new BottomNavigationView(activity);
         var menu = null;
+        console.log("_parentTab : " + _parentTab);
         var tab = Router.routes[_parentTab].pageObject;
         if(bottomNavigationView) {
             menu = bottomNavigationView.getMenu();
@@ -541,12 +542,22 @@ function Page(params) {
                 disableShiftMode();
                 bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
                     onNavigationItemSelected: function(item) {
+                        var tab = Router.routes[self.parentTab].pageObject;
+                        var key = Object.keys(tab.items)[tab.currentIndex];
+                        const Navigator = require("sf-core/navigator");
+                        var navigator = tab.items[key].route;
+                        if(navigator instanceof Navigator) {
+                            console.log('Page navigator.switchCounter ' + navigator.switchCounter);
+                            Router.removeFromHistory(navigator.switchCounter);
+                            navigator.switchCounter = 0;
+                        }
                         var index = item.getItemId();
                         var fragment = _tabBarItems[index];
                         fragment.selectedIndex = index;
                         fragment.parentTab = self.parentTab;
                         fragment.tabBarItems = _tabBarItems;
-                        
+                        console.log('self.parentTab ' + self.parentTab);
+                        Router.routes[self.parentTab].pageObject.currentIndex = index;
                         Router.routes[self.parentTab].pageObject.switchCounter += 1;
                         Router.pagesInstance.push(fragment, false, self.parentTab);
                         return true;
