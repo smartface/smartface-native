@@ -2,7 +2,7 @@
  * @class UI.TabBarItem
  * @since 1.1.9
  *
- * This class represents the page controller when added to a bottom tab bar. UI.Router navigates 
+ * This class represents the page controller when added to a bottom tab bar. Router navigates 
  * UI.TabBarItem.page when the tab bar item is clicked.
  *
  *     @example
@@ -15,7 +15,7 @@
  *     var myItem = new TabBarItem({
  *         title: "Home",
  *         icon: myHomeImage,
- *         page: require('pages/pgHome')
+ *         route: require('pages/pgHome')
  *     });
  *     myTab.add('home', myItem);
  */
@@ -45,13 +45,13 @@ TabBarItem.prototype.icon = null;
 
 
 /**
- * Gets/sets the page related to tab item. When an tab bar item is pressed, it page is shown when 
+ * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown. 
  *
- * @property {UI.Page} page
+ * @property {UI.Page/Navigator} route
  * @android
  * @ios
  * @since 1.1.9
  */
-TabBarItem.prototype.page = null;
+TabBarItem.prototype.route = null;
 
 module.exports = TabBarItem;
