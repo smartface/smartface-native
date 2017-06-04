@@ -22,7 +22,7 @@ const ActivityIndicator = extend(View)(
          _super(this);
         
         self.nativeObject.startAnimating();
-
+        
         var _color = Color.WHITE;
         Object.defineProperty(this, 'color', {
                 get: function() {
@@ -34,7 +34,21 @@ const ActivityIndicator = extend(View)(
                 },
                 enumerable: true
         });
-           
+        
+        Object.defineProperty(this, 'visible', {
+                get: function() {
+                    return self.nativeObject.visible;
+                },
+                set: function(value) {
+                    if (value) {
+                        self.nativeObject.startAnimating();
+                    }else{
+                        self.nativeObject.stopAnimating();
+                    }
+                },
+                enumerable: true
+        });
+        
         var _type = ActivityIndicator.iOS.Type.WHITE;
         Object.defineProperty(self.ios, 'type', {
                 get: function() {
