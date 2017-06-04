@@ -158,7 +158,6 @@ Router.go = function(to, parameters, animated) {
     } else {
         if('animated' in toPage && !toPage.animated)
             animated = false;
-        console.log("animated " + animated);
         pagesInstance.push(toPage, animated, to);
     }
     
@@ -183,10 +182,8 @@ Router.go = function(to, parameters, animated) {
  * @ios
  */
 Router.goBack = function(to, parameters, animated) {
-    if (!pagesInstance || history.length <= 1) {
-        console.log('history.lenght = ' + history.length);
+    if (!pagesInstance || history.length <= 1)
         return false;
-    }
     
     var current = history[history.length-1];
     if (to && isPathExistsInHistory(to)) {
@@ -198,7 +195,6 @@ Router.goBack = function(to, parameters, animated) {
                 current = history[history.length-1];
                 current.page.__pendingParameters = parameters;
             }
-            console.log('history.lenght = ' + history.length);
             return true;
         }
     } else {
@@ -246,7 +242,6 @@ Router.removeFromHistory = function(count) {
         if(pagesInstance.pop())
             history.pop();
     }
-    console.log('removeFromHistory ( ' + count + ') : ' + history.length + ' ' + pagesInstance.length);
 }
 
 function getRoute(to) {
@@ -272,7 +267,6 @@ function getRoute(to) {
             };
         }
         else if((route.pageObject) instanceof BottomTabBar){ 
-            console.log("(route.pageObject) instanceof BottomTabBar");
             if(!Router.routes[subStr[0]])
                 throw Error(subStr[0] + " is not in routes.");
             var tab = Router.routes[subStr[0]].pageObject;
@@ -281,23 +275,24 @@ function getRoute(to) {
             // TODO Add controls. Throws error.
             if((tab.items[subStr[1]].route) instanceof Navigator) {
                 var tabItem = tab.items[subStr[1]].route;
-                console.log("TabBarItem is a navigator.");
-                var page;
+                var page = null;
+                var pageClass = null;
                 if(subStr.length > 2) {
                     if(!tabItem.items[subStr[2]]) 
                         throw new Error(subStr[2] + ' is not in navigators.');
                     page = new (tabItem.items[subStr[2]])();
+                    pageClass = tabItem.items[subStr[2]];
+                }
+                else {
+                    page = new (tabItem.items[tabItem.index])(); 
+                    pageClass = tabItem.items[tabItem.index];
                 }
                    
                 if (!Router.routes[subStr[0]]) {
-                    console.log("-- !Router.routes[" + subStr[0] + ']');
                     Router.routes[subStr[0]] = {
                         // isSingleton: !!isSingleton,
                         pageObject: tab
                     };
-                }
-                else {
-                    console.log("-- Router.routes[" + subStr[0] + ']');
                 }
                 
                 page.parentTab = subStr[0];
@@ -307,19 +302,17 @@ function getRoute(to) {
                 page.headerBar.visible = false;
                 
                 if(!Router.routes[to]) {
-                    console.log('parentNavigator ' + to);
                     Router.routes[to] = {
                         // isSingleton: !!isSingleton,
                         pageObject: page,
                         parentNavigator: tabItem,
-                        pageClass: tabItem.items[subStr[2]] // TODO 2 olmayadabilir.
+                        pageClass: pageClass 
                     };
                 }
                 else {
                     page = Router.routes[to].pageObject;
                 }
                 tabItem.switchCounter += 1;
-                console.log('Navigator.switchCounter ' + tabItem.switchCounter);
                 return page;
             }
         }
@@ -335,7 +328,7 @@ function getRoute(to) {
     if((routes[to].pageObject) && ((routes[to].pageObject) instanceof BottomTabBar)) {
         var tabItems = [];
         var tab = routes[to].pageObject;
-        var page;
+        var page = null;
         if(tab.items) {
             var keys = Object.keys(tab.items);
             var selectedIndex = 0;
@@ -370,7 +363,6 @@ function getRoute(to) {
             return routes[to].pageObject ||
                     (routes[to].pageObject = new (routes[to].pageClass)());
         } else {
-            console.log('!isSingleton');
             return new (routes[to].pageClass)();
         }
     }

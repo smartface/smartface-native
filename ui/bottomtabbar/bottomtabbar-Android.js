@@ -125,6 +125,6 @@ function BottomTabBar(params) {
                 this[param] = params[param];
             }
         }
-};
+}
 
 module.exports = BottomTabBar;

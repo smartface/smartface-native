@@ -10,6 +10,7 @@ const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR     = requireClass("android.R");
 const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
+const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
@@ -319,7 +320,7 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
-            return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material))
+            return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
         },
         enumerable: true, configurable: true
     });
@@ -499,71 +500,16 @@ function Page(params) {
     );
 
     function createBottomNavigationView(pageLayout) {
-        if(bottomNavigationView) {
-            
+        if(bottomNavigationView) 
             return;
-        }
-        const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
         const RelativeLayout = requireClass("android.widget.RelativeLayout");
         const Color = require("sf-core/ui/color");
         
         bottomNavigationView = new BottomNavigationView(activity);
-        var menu = null;
-        console.log("_parentTab : " + _parentTab);
         var tab = Router.routes[_parentTab].pageObject;
-        if(bottomNavigationView) {
-            menu = bottomNavigationView.getMenu();
-            if(menu) {
-                var keys = Object.keys(tab.items);
-                for(var i = 0; i < keys.length; i++) {
-                    var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
-                    var icon = tab.items[keys[i]].icon;
-                    if(icon)  
-                        menuitem.setIcon(icon.nativeObject);
-                }
-                // Don't merge upper loop. It doesn't work inside upper loop.
-                for(i = 0; i < keys.length; i++) {
-                    if(i === _selectedIndex)
-                        menu.getItem(i).setChecked(true);
-                    else
-                        menu.getItem(i).setChecked(false);
-                }
-                
-                if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
-                    const NativeR = requireClass("android.R");
-                    var states = [[NativeR.attr.state_checked], []];
-            
-                    const ColorStateList = requireClass("android.content.res.ColorStateList");
-                    var colors = [tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject];
-                    var statelist = new ColorStateList(states, colors);
-                    bottomNavigationView.setItemTextColor(statelist);
-                    bottomNavigationView.setItemIconTintList(statelist);
-                }
-                disableShiftMode();
-                bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
-                    onNavigationItemSelected: function(item) {
-                        var tab = Router.routes[self.parentTab].pageObject;
-                        var key = Object.keys(tab.items)[tab.currentIndex];
-                        const Navigator = require("sf-core/navigator");
-                        var navigator = tab.items[key].route;
-                        if(navigator instanceof Navigator) {
-                            console.log('Page navigator.switchCounter ' + navigator.switchCounter);
-                            Router.removeFromHistory(navigator.switchCounter);
-                            navigator.switchCounter = 0;
-                        }
-                        var index = item.getItemId();
-                        var fragment = _tabBarItems[index];
-                        fragment.selectedIndex = index;
-                        fragment.parentTab = self.parentTab;
-                        fragment.tabBarItems = _tabBarItems;
-                        console.log('self.parentTab ' + self.parentTab);
-                        Router.routes[self.parentTab].pageObject.currentIndex = index;
-                        Router.routes[self.parentTab].pageObject.switchCounter += 1;
-                        Router.pagesInstance.push(fragment, false, self.parentTab);
-                        return true;
-                    }
-                }));
-            }
+        if(bottomNavigationView && bottomNavigationView.getMenu()) {
+            setPropertiesOfTabBarItems();
+            disableShiftMode();
         }
         
         var params = new RelativeLayout.LayoutParams(-1, -2);
@@ -576,6 +522,63 @@ function Page(params) {
             bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
         
         rootLayout.paddingBottom = self.bottomTabBar.height;
+    }
+    
+    function setPropertiesOfTabBarItems() {
+        var tab = Router.routes[_parentTab].pageObject;
+        var menu = bottomNavigationView.getMenu();
+        var keys = Object.keys(tab.items);
+        for(var i = 0; i < keys.length; i++) {
+            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
+            var icon = tab.items[keys[i]].icon;
+            if(icon)  
+                menuitem.setIcon(icon.nativeObject);
+        }
+        // Don't merge upper loop. It doesn't work inside upper loop.
+        for(i = 0; i < keys.length; i++) {
+            if(i === _selectedIndex)
+                menu.getItem(i).setChecked(true);
+            else
+                menu.getItem(i).setChecked(false);
+        }
+        
+        if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
+            const NativeR = requireClass("android.R");
+            var states = [[NativeR.attr.state_checked], []];
+    
+            const ColorStateList = requireClass("android.content.res.ColorStateList");
+            var colors = [tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject];
+            var statelist = new ColorStateList(states, colors);
+            bottomNavigationView.setItemTextColor(statelist);
+            bottomNavigationView.setItemIconTintList(statelist);
+        }
+        setBottomTabBarOnClickListener();
+    }
+    
+    function setBottomTabBarOnClickListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
+            onNavigationItemSelected: function(item) {
+                var tab = Router.routes[self.parentTab].pageObject;
+                var key = Object.keys(tab.items)[tab.currentIndex];
+                const Navigator = require("sf-core/navigator");
+                var navigator = tab.items[key].route;
+                if(navigator instanceof Navigator) {
+                    Router.removeFromHistory(navigator.switchCounter);
+                    navigator.switchCounter = 0;
+                }
+                
+                var index = item.getItemId();
+                var fragment = _tabBarItems[index];
+                fragment.selectedIndex = index;
+                fragment.parentTab = self.parentTab;
+                fragment.tabBarItems = _tabBarItems;
+                
+                Router.routes[self.parentTab].pageObject.currentIndex = index;
+                Router.routes[self.parentTab].pageObject.switchCounter += 1;
+                Router.pagesInstance.push(fragment, false, self.parentTab);
+                return true;
+            }
+        }));
     }
     
     function disableShiftMode() {
