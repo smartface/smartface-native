@@ -172,7 +172,6 @@ function TabBarFlowView(params) {
     
     var nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>',{
         tabBarControllerDidSelectViewController : function (tabBarController, viewController){
-            console.log("Index changed : " + tabBarController.selectedIndex);
             viewModel.indexChanged(tabBarController.selectedIndex);
         }
     }).new();
@@ -252,12 +251,10 @@ function TabBarFlowModel(argument) {
         return dividedRoute;
     };
     this.getRouteWithKey = function(key) {
-        console.log("HEEEY! : " + key);
         var retval = null;
         for (var i = 0; i < objects.length; i++) { 
             if (objects[i].key === key) {
                 retval = objects[i];
-                console.log("Retval object : " + objects[i]);
             }
         }
         return retval.values.pageInstance;

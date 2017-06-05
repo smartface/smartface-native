@@ -154,18 +154,23 @@ function NavigatorViewModel(params) {
 };
 
 function NavigatorView(params) {
+    const UINavigationBar = SF.requireClass("UINavigationBar");
+    const UINavigationController = SF.requireClass("UINavigationController");
+    
     var self = this;
     var viewModel = params.viewModel;
     
     // It shouldnt create with rootPage
     if (typeof params.rootPage === 'object') {
-        self.nativeObject = new __SF_UINavigationController(params.rootPage);
-        self.nativeObject.setTranslucent(false);
+        // Native object creation
+        var nativeNavigationController = UINavigationController.new();
+        nativeNavigationController.viewControllers = [params.rootPage];
+        nativeNavigationController.navigationBar.translucent = false;
+        // Assign as native object
+        self.nativeObject = nativeNavigationController;
         
         self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
             navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated){
-                console.log("navigation controller did show !!");
-                
                 var index = 0;
                 var childViewControllerArray = navigationController.childViewControllers;
                 for (var i = childViewControllerArray.length - 1; i >= 0; --i) {
@@ -174,13 +179,10 @@ function NavigatorView(params) {
                         break;
                     }
                 }
-                
-                console.log("will trigger with : " + viewController + ", index : " + index);
                 viewModel.didShowViewController(viewController, index);
             }
         }).new();
         
-        console.log( "DELEGATE : " + self.nativeObject)
         self.nativeObject.delegate = self.nativeObjectDelegate;
     }
     
@@ -201,7 +203,7 @@ function NavigatorView(params) {
         // Show
         var isShowed = false;
         if (viewControllerExists) {
-            self.nativeObject.popToPage(viewController, info.animated);
+            self.nativeObject.popToViewControllerAnimated(viewController, info.animated);
             isShowed = true;
         } else {
             self.nativeObject.pushViewControllerAnimated(viewController, info.animated);

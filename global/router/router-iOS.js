@@ -87,6 +87,12 @@ function RouterViewModel(argument) {
                 pageInfo.pagesNativeInstance = routerBrain.pagesInstance.nativeObject;
             }
             
+            if (routerBrain.currentPage) {
+                pageInfo.currentPage = routerBrain.currentPage.nativeObject;
+            } else {
+                pageInfo.currentPage = null;
+            }
+            
             var isShowed = routerView.show(pageInfo);
             if (isShowed) {
                 routerBrain.currentPage = pageToGo;
@@ -128,6 +134,7 @@ function RouterView(argument) {
     self.nativeObject = rootPage.nativeObject;
 
     this.show = function(info){
+        var currentPage = info.currentPage;
         var viewController = info.nativeObject;
         
         // Just for backward compability
@@ -145,7 +152,6 @@ function RouterView(argument) {
         // Check from native array
         var viewControllerExists = false;
         var childViewControllerArray = self.nativeObject.childViewControllers;
-        
         for (var i = 0; i < childViewControllerArray.length; i++) {
             if(viewController === childViewControllerArray[i]){
                 viewControllerExists = true;
@@ -159,13 +165,20 @@ function RouterView(argument) {
             if (info.pagesNativeInstance) {
                 self.nativeObject.popToPage(viewController, info.animated);
             } else {
-                self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not   
+                self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not
+                if (currentPage && currentPage !== viewController){
+                    currentPage.viewWillDisappear(false);
+                }
+                viewController.viewWillAppear(false);
             }
             isShowed = true;
         } else {
             if (info.pagesNativeInstance) {
                 self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
             } else {
+                if (currentPage) {
+                    currentPage.viewWillDisappear(false);
+                }
                 viewController.willMoveToParentViewController(self.nativeObject);
                 self.nativeObject.addChildViewController(viewController);
                 
@@ -179,7 +192,7 @@ function RouterView(argument) {
             }
             isShowed = true;
         }
-        
+
         return isShowed;
     };
     this.makeVisible = function () {
