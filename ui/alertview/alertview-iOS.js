@@ -1,5 +1,5 @@
-const android = {};
-android.ButtonType = {
+const Android = {};
+Android.ButtonType = {
     POSITIVE: 0,
     NEUTRAL: 1,
     NEGATIVE: 2,
@@ -96,8 +96,8 @@ Object.defineProperty(AlertView, 'ButtonType', {
     enumerable: true
 });
 
-Object.defineProperty(AlertView, 'android', {
-    value: android,
+Object.defineProperty(AlertView, 'Android', {
+    value: Android,
     writable: false,
     enumerable: true
 });
