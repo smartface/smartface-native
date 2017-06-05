@@ -22,7 +22,7 @@ Color.create = function(alpha, red, green, blue) {
         if (typeof alpha !== 'string') {
             throw new TypeError('Hex parameter must be a string');
         }
-        if ((alpha.charAt(0) !== "#")) {
+        if (alpha.charAt(0) !== "#") {
             throw new TypeError('Hex parameter must start with "#" character');
         }
         return new Color({color : __SF_UIColor.hexColor(alpha)});
