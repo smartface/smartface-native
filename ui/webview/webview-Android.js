@@ -156,6 +156,8 @@ const WebView = extend(View)(
             var settings = this.nativeObject.getSettings();
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
+            settings.setUseWideViewPort(true);
+            settings.setLoadWithOverviewMode(true);
         }
 
         // Assign parameters given in constructor
