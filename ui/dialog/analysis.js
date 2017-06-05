@@ -24,6 +24,7 @@ const FlexLayout = require("../flexlayout");
  *     });
  * 
  *     myDialog.layout.addChild(myButton);
+ *     myDialog.layout.applyLayout();
  *     myDialog.show();
  *
  */
