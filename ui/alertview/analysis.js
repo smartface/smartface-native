@@ -76,15 +76,15 @@ ButtonType.NEGATIVE = 2;
  *         message: "Alert Message"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.Android.ButtonType.NEUTRAL,
+ *         type: AlertView.Android.ButtonType.NEUTRAL,
  *         text: "Ignore",
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.Android.ButtonType.NEGATIVE,
+ *         type: AlertView.Android.ButtonType.NEGATIVE,
  *         text: "Cancel"
  *     });
  *     myAlertView.addButton({
- *         index: AlertView.Android.ButtonType.POSITIVE,
+ *         type: AlertView.Android.ButtonType.POSITIVE,
  *         text: "Okay"
  *     });
  *
