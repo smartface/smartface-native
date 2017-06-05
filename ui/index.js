@@ -37,5 +37,7 @@ module.exports = {
     WebView: require('./webview'),
     TimePicker: require('./timepicker'),
     Dialog: require('./dialog'),
-    Router: require('./router')
+    Router: require('./router'),
+    BottomTabBar: require('./bottomtabbar'),
+    TabBarItem: require('./tabbaritem')
 };

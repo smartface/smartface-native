@@ -76,7 +76,8 @@ const TextBox = extend(Label)(
                 set: function(hint) {
                     self.nativeObject.setHint(hint);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'android': {
                 value: {},
@@ -90,7 +91,8 @@ const TextBox = extend(Label)(
                     _isPassword = isPassword;
                     setKeyboardType(this);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'keyboardType': {
                 get: function() {
@@ -105,7 +107,8 @@ const TextBox = extend(Label)(
                     }
                     setKeyboardType(this);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'actionKeyType': {
                 get: function() {
@@ -115,7 +118,8 @@ const TextBox = extend(Label)(
                     _actionKeyType = actionKeyType; 
                     self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'showKeyboard': {
                 value: function(){
@@ -189,7 +193,8 @@ const TextBox = extend(Label)(
                 set: function(onActionButtonPress) {
                     _onActionButtonPress = onActionButtonPress.bind(this);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             }
         });
         

@@ -99,7 +99,7 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.centerLocation;
 
 /**
- * This property sets zoom level of the map to the given level. Zoom level must between 0 to 20.
+ * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19.
  *
  * @property {Number} [zoomLevel = 15]
  * @android

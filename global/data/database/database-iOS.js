@@ -48,7 +48,7 @@ Database.QueryResult = function(params){
     self.data = params.data;
 
     self.count = function(){
-        if (self.data.dataArray){
+        if (self.data && self.data.dataArray){
             return self.data.dataArray.length;
         }else{
             return null;
@@ -56,7 +56,7 @@ Database.QueryResult = function(params){
     };
     
     self.getFirst = function(){
-        if (self.data.dataArray){
+        if (self.data && self.data.dataArray){
             return new Database.DatabaseObject({
                 'data': self.data.dataArray[0],
                 'columNames' : self.data.columnNames
@@ -66,7 +66,7 @@ Database.QueryResult = function(params){
     };
     
     self.getLast = function(){
-        if (self.data.dataArray){
+        if (self.data && self.data.dataArray){
             return new Database.DatabaseObject({
                 'data': self.data.dataArray[self.count()-1],
                 'columNames' : self.data.columnNames
@@ -76,7 +76,7 @@ Database.QueryResult = function(params){
     };
     
     self.get = function(location){
-        if (self.data.dataArray){
+        if (self.data && self.data.dataArray){
             return new Database.DatabaseObject({
                 'data': self.data.dataArray[location],
                 'columNames' : self.data.columnNames
