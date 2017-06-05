@@ -90,6 +90,7 @@ function NavigatorViewModel(params) {
             
             if (self.view == null) {
                 self.view = new NavigatorView({
+                    viewModel: self,
                     rootPage : pageToGo.nativeObject
                 });
                 self.model.currentPage = pageToGo;
@@ -137,6 +138,14 @@ function NavigatorViewModel(params) {
     };
     ////////////////////////////////////////////////////////////////////////////
     
+    // From View's Delegate
+    this.didShowViewController = function(viewController, index){
+        // If user press back button, history needs to update
+        for (var i = self.model.history.length - 1; i > index; --i) {
+            self.model.history.pop();
+        }
+    };
+    ////////////////////////////////////////////////////////////////////////////
     if (params) {
         for (var param in params) {
             this[param] = params[param];
@@ -146,10 +155,33 @@ function NavigatorViewModel(params) {
 
 function NavigatorView(params) {
     var self = this;
+    var viewModel = params.viewModel;
     
     // It shouldnt create with rootPage
     if (typeof params.rootPage === 'object') {
         self.nativeObject = new __SF_UINavigationController(params.rootPage);
+        self.nativeObject.setTranslucent(false);
+        
+        self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
+            navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated){
+                console.log("navigation controller did show !!");
+                
+                var index = 0;
+                var childViewControllerArray = navigationController.childViewControllers;
+                for (var i = childViewControllerArray.length - 1; i >= 0; --i) {
+                    if(viewController === childViewControllerArray[i]){
+                        index = i;
+                        break;
+                    }
+                }
+                
+                console.log("will trigger with : " + viewController + ", index : " + index);
+                viewModel.didShowViewController(viewController, index);
+            }
+        }).new();
+        
+        console.log( "DELEGATE : " + self.nativeObject)
+        self.nativeObject.delegate = self.nativeObjectDelegate;
     }
     
     // Functions

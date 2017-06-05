@@ -9,5 +9,4 @@ module.exports = {
     Data: require('./data'),
     Application: require('./application'),
     Router: require('./router'),
-    Navigator: require('./navigator')
 };

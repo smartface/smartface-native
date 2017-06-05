@@ -33,7 +33,7 @@ function TabBarItem(params) {
             return _page;
         },
         set: function(page) {
-            if (typeof page === 'function') {
+            if (typeof page === 'function' || typeof page === 'object') {
                 _page = page;
             }
         },
