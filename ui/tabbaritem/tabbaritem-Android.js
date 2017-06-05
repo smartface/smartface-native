@@ -76,6 +76,6 @@ function TabBarItem(params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 module.exports = TabBarItem;

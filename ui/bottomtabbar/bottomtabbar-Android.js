@@ -1,4 +1,3 @@
-const extend                     = require('js-base/core/extend');
 const Color                      = require("sf-core/ui/color");
 
 const MAXITEMCOUNT = 5;
