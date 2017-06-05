@@ -194,7 +194,10 @@ function TabBarFlowView(params) {
         set: function(colorsObject) {
             if (self.nativeObject) {
                 if (typeof colorsObject.normal === 'object') {
-                    self.nativeObject.tabBar.unselectedItemTintColor = colorsObject.normal.nativeObject;
+                    var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
+                    if (systemVersion >= 10) {
+                        self.nativeObject.tabBar.unselectedItemTintColor = colorsObject.normal.nativeObject;
+                    }
                 }
                 if (typeof colorsObject.selected === 'object') {
                     self.nativeObject.tabBar.tintColor = colorsObject.selected.nativeObject;
