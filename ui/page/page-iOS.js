@@ -181,10 +181,16 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
-            return new Color({color : self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]});
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]});
+            }
+            return retval;
         },
         set: function(value) {
-             self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value.nativeObject};
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value.nativeObject};
+            }
         },
         enumerable: true,configurable : true
     });
@@ -196,37 +202,57 @@ function Page(params) {
         },
         set: function(value) {
             _visible = value;
-            self.nativeObject.navigationController.setNavigationBarHiddenAnimated(!value,true);
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.setNavigationBarHiddenAnimated(!value,true);
+            }
         },
         enumerable: true,configurable : true
     });
 
     Object.defineProperty(self.headerBar, 'itemColor', {
         get: function() {
-            return new Color({color : self.nativeObject.navigationController.navigationBar.tintColor});
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.tintColor});
+            }
+            return retval;
         },
         set: function(value) {
-            self.nativeObject.navigationController.navigationBar.tintColor = value.nativeObject;
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.tintColor = value.nativeObject;
+            }
         },
         enumerable: true,configurable : true
     });
 
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
-            return new Color({color : self.nativeObject.navigationController.navigationBar.barTintColor});
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.barTintColor});
+            }
+            return retval;
         },
         set: function(value) {
-            self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;  
+            }
         },
         enumerable: true,configurable : true
     });
 
     Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
-            return Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
+            }
+            return retval;
         },
         set: function(value) {
-            self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
+            }
         },
         enumerable: true,configurable : true
     });
@@ -272,7 +298,11 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
-            return self.nativeObject.navigationController.navigationBar.frame.height;
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = self.nativeObject.navigationController.navigationBar.frame.height;
+            }
+            return retval;
         },
         enumerable: true,configurable : true
     });
