@@ -194,7 +194,7 @@ function NavigatorView(params) {
         var viewControllerExists = false;
         var childViewControllerArray = self.nativeObject.childViewControllers;
         for (var i = 0; i < childViewControllerArray.length; i++) { 
-            if(viewController === childViewControllerArray[i]){
+            if(viewController.isEqual(childViewControllerArray[i])){
                 viewControllerExists = true;
                 break;
             }
