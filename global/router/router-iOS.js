@@ -1,8 +1,33 @@
 const Pages = require('sf-core/ui/pages');
 
-function RouterViewModel(argument) {
+function RouterViewModel(params) {
+    var self = this;
+    
     var routerView = new RouterView();
     var routerBrain = new RouterModel();
+    
+    // Properties
+    Object.defineProperty(self, 'sliderDrawer', {
+        get: function() 
+        {
+            return routerBrain.sliderDrawer;
+        },
+        set: function(sliderDrawerValue) 
+        {
+            const SliderDrawer = require('sf-core/ui/sliderdrawer');
+            if (sliderDrawerValue instanceof SliderDrawer) 
+            {
+                routerBrain.sliderDrawer = sliderDrawerValue;
+            } 
+            else 
+            {
+                throw TypeError("Object must be SliderDrawer instance");
+            }
+        },
+        enumerable: true
+    });
+    
+    ////////////////////////////////////////////////////////////////////////////
     
     this.add = function (to, page, isSingleton) {
         if (typeof(to) !== "string") {
@@ -83,6 +108,7 @@ function RouterViewModel(argument) {
             if (routerBrain.usingOldStyle) {
                 if (routerBrain.pagesInstance == null) {
                     routerBrain.createPagesInstanceWithRoot(pageToGo);
+                    routerBrain.currentPage = pageToGo;
                 }
                 pageInfo.pagesNativeInstance = routerBrain.pagesInstance.nativeObject;
             }
@@ -123,9 +149,15 @@ function RouterViewModel(argument) {
     this.getCurrent = function () {
         return routerBrain.currentPage;
     };
+    
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 };
 
-function RouterView(argument) {
+function RouterView(params) {
     var self = this;
     
     const Page = require('sf-core/ui/page');
@@ -152,8 +184,10 @@ function RouterView(argument) {
         // Check from native array
         var viewControllerExists = false;
         var childViewControllerArray = self.nativeObject.childViewControllers;
+        
         for (var i = 0; i < childViewControllerArray.length; i++) {
-            if(viewController === childViewControllerArray[i]){
+            // must use isEqual()! Javascript '===' operator is not certain way to compare
+            if(viewController.isEqual(childViewControllerArray[i])){
                 viewControllerExists = true;
                 break;
             }
@@ -203,15 +237,38 @@ function RouterView(argument) {
     this.makeVisible();
 };
 
-function RouterModel(argument) {
+function RouterModel(params) {
     var self = this;
     
     var objects = {};
     self.currentPage = null;
     self.history = [];
     
+    self.sliderDrawer = null;
+    
     // For oldStyle
-    self.pagesInstance = null;
+    var _pagesInstance = null;
+    Object.defineProperty(self, 'pagesInstance', {
+        get: function() 
+        {
+            return _pagesInstance;
+        },
+        set: function(pagesInstance)
+        {
+            const Pages = require('sf-core/ui/pages');
+            if (pagesInstance instanceof Pages) 
+            {
+                _pagesInstance = pagesInstance;
+                
+                // Add sliderDrawer if it exists.
+                if (self.sliderDrawer) {
+                    _pagesInstance.sliderDrawer = self.sliderDrawer;
+                }
+            }
+        },
+        enumerable: true
+    });
+    
     self.usingOldStyle = true;
     
     this.addObject = function (newObject) {
@@ -258,210 +315,3 @@ function RouterModel(argument) {
 };
 
 module.exports = new RouterViewModel();
-
-
-
-
-// function Router()
-// {
-//     var self = this;
-    
-//     var _routes = {};
-    
-//     // Container View Controller
-//     self.nativeObject = SF.requireClass("UIViewController").new();
-    
-//     this.add = function(key, page) 
-//     {
-//         if (typeof(key) !== "string") 
-//         {
-//             throw TypeError("add takes string and Page as parameters");
-//         }
-        
-//         if (!_routes[key]) 
-//         {
-//             var pageInstance = new page();
-//             _routes[key] = 
-//             {
-//                 pageClass: page,
-//                 pageObject: pageInstance
-//             }
-//             self.nativeObject.addChildViewController(pageInstance.nativeObject);
-//         }
-//     };
-    
-//     this.go = function(key, parameters, animated)
-//     {
-//         if (_routes[key]) 
-//         {
-//             var pageInstance = _routes[key].pageObject;
-//             if (parameters)
-//             {
-//                 pageInstance.__pendingParameters = parameters;
-//             }
-            
-//             self.nativeObject.showViewControllerSender(pageInstance.nativeObject, self.nativeObject);
-//         }
-//         else
-//         {
-//             throw Error(key + " is not in routes");
-//         }
-//     };
-
-//     // Finalize
-//     SF.requireClass("UIApplication").sharedApplication().keyWindow.rootViewController = self.nativeObject;
-//     SF.requireClass("UIApplication").sharedApplication().keyWindow.makeKeyAndVisible();
-// };
-
-// module.exports = new Router();
-
-
-
-
-
-// const Pages = require('sf-core/ui/pages');
-
-// function Router(){};
-
-// var pagesInstance = null;
-// var routes = {};
-// var history = [];
-
-// Router.add = function(to, page, isSingleton) {
-//     if (typeof(to) !== "string") {
-//         throw TypeError("add takes string and Page as parameters");
-//     }
-    
-//     if (!routes[to]) {
-//         routes[to] = {
-//             pageClass: page,
-//             isSingleton: !!isSingleton,
-//             pageObject: null
-//         }
-//     }
-// };
-
-// Router.go = function(to, parameters, animated) {
-//     if (arguments.length < 3) {
-//         animated = true;
-//     }
-
-//     var toPage = getRoute(to);
-//     toPage.__pendingParameters = parameters;
-//     if (pagesInstance === null) {
-//         pagesInstance = new Pages({
-//             rootPage: toPage,
-//             tag: to
-//         });
-//         pagesInstance.setHistory(history);
-//     } else {
-//         pagesInstance.push(toPage, animated, to);
-//     }
-    
-//     var current = history[history.length-1];
-//     current && current.page.onHide && current.page.onHide();
-//     history.push({path: to, page: toPage});
-// };
-
-// Router.goBack = function(to, parameters, animated) {
-//     if (!pagesInstance || history.length <= 1) {
-//         return false;
-//     }
-    
-//     var current = history[history.length-1];
-//     if (to && isPathExistsInHistory(to)) {
-//         var item = getLastOccurenceFromHistory(to);
-//         if (pagesInstance.popTo(item.path, item.page)) {
-//             current && current.page.onHide && current.page.onHide();
-//             history.splice(history.indexOf(item)+1);
-//             if(history.length > 0) {
-//                 current = history[history.length-1];
-//                 current.page.__pendingParameters = parameters;
-//             }
-//             return true;
-//         }
-//     } else {
-//         if (pagesInstance.pop()) {
-//             current && current.page.onHide && current.page.onHide();
-//             history.pop();
-//             if(history.length > 0) {
-//                 current = history[history.length-1];
-//                 current.page.__pendingParameters = parameters;
-//             }
-//             return true;
-//         }
-//     }
-//     return false;
-// };
-
-// Router.getCurrent = function() {
-//     return history[history.length-1].path;
-// };
-
-// // Added for android.
-// Router.getCurrentPage = function() {
-//     return history[history.length-1];
-// };
-
-// function getRoute(to) {
-//     if (!routes[to]) {
-//         throw Error(to + " is not in routes");
-//     }
-//     if (routes[to].isSingleton && isPathExistsInHistory(to)) {
-//         throw Error(to + " is set as singleton and exists in history");
-//     }
-
-//     if (routes[to].isSingleton) {
-//         return routes[to].pageObject ||
-//                 (routes[to].pageObject = new (routes[to].pageClass)());
-//     } else {
-//         return new (routes[to].pageClass)();
-//     }
-// }
-
-// function isPathExistsInHistory(path) {
-//     function historyFilter(value) {
-//         return value.path === path;
-//     }
-//     return history.filter(historyFilter).length > 0;
-// }
-
-// function getLastOccurenceFromHistory(path) {
-//     if (!isPathExistsInHistory(path)) return null;
-
-//     function historyFilter(value) {
-//         return value.path === path;
-//     }
-//     return history.filter(historyFilter).pop();
-// }
-
-
-// // SLIDER DRAWER STUFF - LATER
-// Object.defineProperty(Router, 'sliderDrawer', {
-//     get: function() 
-//     {
-//         var retval = null;
-//         if (pagesInstance) 
-//         {
-//             retval = pagesInstance.sliderDrawer;
-//         }
-//         return retval;
-//     },
-//     set: function(sliderDrawerValue) 
-//     {
-//         const SliderDrawer = require('sf-core/ui/sliderdrawer');
-//         if (sliderDrawerValue instanceof SliderDrawer) 
-//         {
-//             if (pagesInstance) 
-//             {
-//                 pagesInstance.sliderDrawer = sliderDrawerValue;
-//             }
-//         } 
-//         else 
-//         {
-//             throw TypeError("Object must be SliderDrawer instance");
-//         }
-//     },
-//     enumerable: true
-// });
-// module.exports = Router;
