@@ -112,7 +112,9 @@ View.prototype.visible = true;
 View.prototype.rotation = 0;
 
 /**
- * Gets/sets the degrees that the view is rotated around the horizontal axis through the pivot point.
+ * Gets/sets the degrees that the view is rotated around the horizontal axis through the pivot point. 
+ * RotationX works different for iOS and Android. Android gives perpective to the view but iOS doesn't. 
+ * This will cause difference on user interface.
  *
  * @property {Number} [rotationX = 0]
  * @android
@@ -124,7 +126,9 @@ View.prototype.rotationX = 0;
 
 /**
  * Gets/sets the degrees that the view is rotated around the vertical axis through the pivot point.
- *
+ * RotationY works different for iOS and Android. Android gives perpective to the view but iOS doesn't. 
+ * This will cause difference on user interface.
+ * 
  * @property {Number} [rotationY = 0]
  * @android
  * @ios
