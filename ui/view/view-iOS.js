@@ -756,7 +756,7 @@ function View(params) {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'height', {
@@ -770,7 +770,7 @@ function View(params) {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'minWidth', {
