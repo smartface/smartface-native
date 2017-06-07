@@ -50,7 +50,7 @@ function TabBarItem(params) {
                 return _route;
             },
             set: function(route) {
-                const Navigator = require("sf-core/navigator");
+                const Navigator = require("sf-core/ui/navigator");
                 if(route instanceof Navigator) {
                     _page = route.items[route.index];
                     _route = route;

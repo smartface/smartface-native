@@ -592,7 +592,7 @@ function Page(params) {
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
                 var key = Object.keys(tab.items)[tab.currentIndex];
-                const Navigator = require("sf-core/navigator");
+                const Navigator = require("sf-core/ui/navigator");
                 var navigator = tab.items[key].route;
                 if(navigator instanceof Navigator) {
                     // Router.removeFromHistory(navigator.switchCounter);

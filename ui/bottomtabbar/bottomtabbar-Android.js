@@ -106,7 +106,6 @@ function BottomTabBar(params) {
                 value: function(to){
                     if(!to) {
                         if(typeof(_items[_index].page) === 'function') {
-                            console.log('Page.');
                             if(!_itemInstances) {  
                                this.createItemInstances();
                             }
@@ -116,12 +115,10 @@ function BottomTabBar(params) {
                             return page; // TODO Add isSingleton control.
                         }
                         else {
-                            console.log('Not Page. Get route');
                             return _items[_index].getRoute();
                         }
                     }
                     else if(typeof(to) === 'string') {
-                        console.log('BottomTabBar.getRoute ' + to);
                         if(to.includes('/')) {
                             var splittedPath = to.split("/");
                             var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
@@ -139,14 +136,13 @@ function BottomTabBar(params) {
                                this.createItemInstances();
                             }
                             var keys = Object.keys(_items);
-                            console.log("_itemInstances " + _itemInstances.length + ' index ' + keys.indexOf(to));
                             this.selectedIndex = keys.indexOf(to);
                             var page = _itemInstances[this.selectedIndex];
                             this.setPageProperties(page, to);
                             return page;
                         }
                         else {
-                            console.log(to + ' is not a TabBarItem.')
+                            console.log(to + ' is not a TabBarItem.');
                         }
                     }
                     return null;
@@ -168,7 +164,6 @@ function BottomTabBar(params) {
                     for(var i = 0; i < keys.length; i++) {
                         var page = new _items[keys[i]].page();
                         if(typeof(_items[keys[i]].route) === 'function') {
-                            console.log(keys[i] + ' typeof.Route ' + typeof(_items[keys[i]].route));
                             page.isBottomTabBarPage = true;
                         }
                         _itemInstances.push(page);

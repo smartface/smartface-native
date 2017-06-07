@@ -14,7 +14,6 @@ function Navigator(params) {
                 value: function(to, page){
                     if(!_index)
                         _index = to;
-                    console.log('to ' + to);
                     _items[to] = page;
                 },
                 enumerable: true
@@ -53,7 +52,6 @@ function Navigator(params) {
             },
             'getRoute': {
                 value: function(to, isSingleton){
-                    console.log('Navigator.getRoute ' + to);
                     if(!to) {
                         // TODO check isSingleton
                         return this.getRoute(_index, isSingleton);
@@ -64,14 +62,12 @@ function Navigator(params) {
                             var splittedPath = to.split("/");
                             if(!_items[splittedPath[0]])
                                 throw new Error(splittedPath[0] + ' is not in routes.');
-                            console.log(splittedPath[0] + ' is in routes.');
                             var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-                            if(_items[splittedPath[0]] instanceof require("sf-core/navigator")) {
+                            if(_items[splittedPath[0]] instanceof require("sf-core/ui/navigator")) {
                                 alert(splittedPath[0] + " is a Navigator. We don't implement nested navigation.");
                                 return null;
                             }
                             else if(_items[splittedPath[0]] instanceof BottomTabBar) {
-                                console.log(splittedPath[0] + " is a BottomTabBar");
                                 var page = _items[splittedPath[0]].getRoute(subPath, _items[splittedPath[0]].isSingleton);
                                 if(!_items[splittedPath[0]].tag) 
                                     _items[splittedPath[0]].tag = splittedPath[0];
@@ -88,11 +84,9 @@ function Navigator(params) {
                                 
                             var page = (isSingleton === true) ? (_itemInstances[to]) : (new _items[to]());
                             _history.push({path: to, page: page});
-                            console.log(to + ' : ' + _itemInstances[to]);
                             return page;
                         }
                         else if(_items[to] instanceof BottomTabBar){
-                            console.log(to + ' is BottomTabBar.');
                             _history.push({path: to, controller: _items[to]});
                             var page = _items[to].getRoute();
                             if(!_items[to].tag) 
@@ -103,9 +97,6 @@ function Navigator(params) {
                         else {
                             alert(splittedPath[0] + " is a Navigator. We don't implement nested navigation.");
                             return null;
-                            // var splittedPath = to;
-                            // _history.push({path: splittedPath[0], page: _items[splittedPath[0]]});
-                            // return _items[splittedPath[0]].getRoute(splittedPath.slice(1), isSingleton);
                         }
                     }
                     else {
