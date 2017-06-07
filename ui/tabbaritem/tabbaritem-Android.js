@@ -40,6 +40,8 @@ function TabBarItem(params) {
             set: function(page) {
                 if(typeof(page) === 'function')
                     _page = page;
+                else 
+                    throw new Error("page should be a function.");
             },
             enumerable: true
         },
@@ -55,6 +57,7 @@ function TabBarItem(params) {
                 }
                 else if(typeof(route) === 'function') {
                     _page = route;
+                    _route = route;
                 } else {
                     throw new Error("page should be an instance of Page or Navigator.");
                 }
