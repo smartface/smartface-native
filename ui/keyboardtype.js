@@ -23,9 +23,6 @@ var KeyboardType = {};
 KeyboardType.ios = {};
 KeyboardType.android = {};
 
-KeyboardType.ios = { };
-
-KeyboardType.android = { };
 /**
  * @property {Number} DEFAULT
  * Default keyboard appearance.
@@ -209,7 +206,7 @@ KeyboardType.android.TEXTLONGMESSAGE = 16;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android = TEXTNOSUGGESTIONS = 17;
+KeyboardType.android.TEXTNOSUGGESTIONS = 17;
 
 /**
  * @property {Number} TEXTPERSONNAME
