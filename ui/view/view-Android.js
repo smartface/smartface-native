@@ -94,8 +94,7 @@ function View(params) {
             set: function(alpha) {
                 self.nativeObject.setAlpha(alpha);
             },
-            enumerable: true,
-            configurable: true
+            enumerable: true
         },
         'backgroundImage': {
             get: function() {
