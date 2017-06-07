@@ -160,7 +160,7 @@ AlertView.prototype.dismiss = function() {};
  * @param {Object} params Object describing button properties
  * @param {UI.AlertView.ButtonType} params.index Button type, it is set to
  *                                      UI.AlertView.ButtonType.NEUTRAL as default
- * @param {String} params.text Button text
+ * @param {String} params.text Button text. It's letter case behaves differently on the platforms.
  * @param {Function} [params.onClick] Callback for button click action
  * @method addButton
  * @android

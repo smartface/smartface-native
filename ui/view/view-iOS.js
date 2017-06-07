@@ -145,7 +145,7 @@ function View(params) {
         set: function(value) {
             self.nativeObject.visible = value;
         },
-        enumerable: true
+        enumerable: true,configurable: true
     });
 
     Object.defineProperty(self, 'touchEnabled', {

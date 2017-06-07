@@ -11,9 +11,23 @@
  * 
  *     @example
  *     const Router = require('sf-core/router');
- *     Router.add('login', require('pages/pgLogin'));
- *     Router.add('dashboard', require('pages/pgDashboard'));
- *     Router.go('login');
+ *     const BottomTabBar = require('sf-core/ui/bottomtabbar');
+ *     const TabBarItem = require('sf-core/ui/tabbaritem');
+ *     var myTab = new BottomTabBar();
+ *      
+ *      var myProfileItem = new TabBarItem({
+ *          title: "Profile",
+ *          icon: myProfileIcon,
+ *          page: require('./pages/pgProfile')
+ *      });
+ *      
+ *      myTab.add('profile', myProfileItem);
+ *      .....
+ *      Router.add('dashboard', myTab);
+ *      Router.go('dashboard'); 
+ *      Router.go('dashboard/profile'); // The bottom tab is shown with the tab bar item,
+ *                                      // associated with profile path, is selected.
+ * 
  *     ...
  *     // When user logins you can pass information to dashboard page
  *     Router.go('dashboard', {
@@ -45,19 +59,19 @@ Router.prototype.sliderDrawer = null;
 
 
 /**
- * Adds given page class to routes by matching it with given route path. You
- * can define if page instance will be singleton object or a new instance 
+ * Adds given route to routes by matching it with given route path. You
+ * can define if route instance will be singleton object or a new instance 
  * created everytime when UI.Router.go called.
  * 
  * @param {String} to Route path to page class
- * @param {UI.Page} page Page class to be used for creating and showing instances
+ * @param {UI.Page/Navigator/UI.BottomTabBar} route To be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
  *                              and everytime that instance will be shown
  * @static
  * @android
  * @ios
  */
-Router.prototype.add = function(to, page, isSingleton) {};
+Router.prototype.add = function(to, route, isSingleton) {};
 
 /**
  * Navigates to given route path. If route path is not defined an exception will
