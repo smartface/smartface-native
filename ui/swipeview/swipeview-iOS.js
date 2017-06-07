@@ -1,4 +1,5 @@
 const View = require('../view');
+const Exception = require("sf-core/util").Exception;
 const extend = require('js-base/core/extend');
 
 const UIPageViewControllerTransitionStyle = {
@@ -177,7 +178,38 @@ const SwipeView = extend(View)(
         self.pageController.dataSource = self.pageControllerDatasource;
         self.pageController.delegate = self.pageControllerDelegate;
                 
-                 
+        Object.defineProperty(self, 'width', {
+            get: function() {
+                return self.nativeObject.yoga.width;
+            },
+            set: function(value) {
+                if (typeof value === "number"){
+                    self.nativeObject.yoga.width = value;
+                    self.nativeObject.yoga.maxWidth = value;
+                    self.nativeObject.yoga.minWidth = value;
+                }else{
+                    throw new TypeError(Exception.TypeError.NUMBER);
+                }
+            },
+            enumerable: true, configurable: true
+        });
+    
+        Object.defineProperty(self, 'height', {
+            get: function() {
+                return self.nativeObject.yoga.height;
+            },
+            set: function(value) {
+                if (typeof value === "number"){
+                    self.nativeObject.yoga.height = value;
+                    self.nativeObject.yoga.maxHeight = value;
+                    self.nativeObject.yoga.minHeight = value;
+                }else{
+                    throw new TypeError(Exception.TypeError.NUMBER);
+                }
+            },
+            enumerable: true, configurable: true
+        });
+         
         
         if (params) {
             for (var param in params) {
