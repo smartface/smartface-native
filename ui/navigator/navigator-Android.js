@@ -84,6 +84,7 @@ function Navigator(params) {
                                 
                             var page = (isSingleton === true) ? (_itemInstances[to]) : (new _items[to]());
                             _history.push({path: to, page: page});
+                            _index = to;
                             return page;
                         }
                         else if(_items[to] instanceof BottomTabBar){

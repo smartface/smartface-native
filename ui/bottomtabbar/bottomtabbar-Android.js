@@ -137,7 +137,11 @@ function BottomTabBar(params) {
                             }
                             var keys = Object.keys(_items);
                             this.selectedIndex = keys.indexOf(to);
-                            var page = _itemInstances[this.selectedIndex];
+                            var page;
+                            if(typeof(_items[to].route) === 'function')
+                                page = _itemInstances[this.selectedIndex];
+                            else 
+                                page = _items[to].route.getRoute(null, true); 
                             this.setPageProperties(page, to);
                             return page;
                         }
