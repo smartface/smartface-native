@@ -1,10 +1,28 @@
 const Pages = require("sf-core/ui/pages");
+const Navigator = require("sf-core/ui/navigator");
+const BottomTabBar = require("sf-core/ui/bottomtabbar");
 
 function Router(){}
 
 var pagesInstance = null;
 var routes = {};
 var history = [];
+
+    
+Object.defineProperty(Router, 'routes', {
+    get: function() {
+        return routes;
+    },
+    enumerable: true
+});
+
+    
+Object.defineProperty(Router, 'pagesInstance', {
+    get: function() {
+        return pagesInstance;
+    },
+    enumerable: true
+});
 
 Object.defineProperty(Router, 'sliderDrawer', {
     get: function() 
@@ -39,12 +57,20 @@ Router.add = function(to, page, isSingleton) {
         throw TypeError("add takes string and Page as parameters");
     }
     
-    if (!routes[to]) {
+    if(typeof(page) !== 'function') {
+        if (!routes[to]) {
+            routes[to] = {
+                isSingleton: !!isSingleton,
+                pageObject: page,
+            };
+        }
+    }
+    else if (!routes[to]) {
         routes[to] = {
             pageClass: page,
             isSingleton: !!isSingleton,
             pageObject: null
-        }
+        };
     }
 };
 
@@ -53,27 +79,31 @@ Router.go = function(to, parameters, animated) {
         animated = true;
     }
 
-    var toPage = getRoute(to);
-    toPage.__pendingParameters = parameters;
+    var route = getRoute(to);
+    route.page.__pendingParameters = parameters;
+    if(!route.page.tag)     
+        route.page.tag = to;
     if (pagesInstance === null) {
         pagesInstance = new Pages({
-            rootPage: toPage,
-            tag: to
+            rootPage: route.page,
+            tag: route.page.tag
         });
         pagesInstance.setHistory(history);
     } else {
-        pagesInstance.push(toPage, animated, to);
+        if(route.page.isNavigatorPageInBottomTabBar)
+            pagesInstance.push(route.page, false, route.page.tag);
+        else 
+            pagesInstance.push(route.page, animated, route.page.tag);
     }
     
     var current = history[history.length-1];
     current && current.page.onHide && current.page.onHide();
-    history.push({path: to, page: toPage});
+    history.push({path: route.to, page: route.page, item: route.item});
 };
 
 Router.goBack = function(to, parameters, animated) {
-    if (!pagesInstance || history.length <= 1) {
+    if (!pagesInstance || history.length <= 1)
         return false;
-    }
     
     var current = history[history.length-1];
     if (to && isPathExistsInHistory(to)) {
@@ -88,6 +118,15 @@ Router.goBack = function(to, parameters, animated) {
             return true;
         }
     } else {
+        if((current.controller) instanceof Navigator) { 
+            current.controller.goBack(parameters);
+        }
+        else {
+            for(var i = 0; i < current.page.switchCounter; i++)
+                pagesInstance.pop();
+            current.page.switchCounter = 0;
+        }
+        
         if (pagesInstance.pop()) {
             current && current.page.onHide && current.page.onHide();
             history.pop();
@@ -110,19 +149,59 @@ Router.getCurrentPage = function() {
     return history[history.length-1];
 };
 
+Router.removeFromHistory = function(count) {
+    for(var i = 0; i < count; i++) {
+        if(pagesInstance.pop())
+            history.pop();
+    }
+};
+
 function getRoute(to) {
+    if(to && to.includes("/")) {
+        var splittedPath = to.split("/");
+        if(!routes[splittedPath[0]])
+            throw new Error(splittedPath[0] + ' is not in routes.');
+            
+        var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
+        if (((routes[splittedPath[0]].pageObject) instanceof require("sf-core/ui/navigator")) ||
+            ((routes[splittedPath[0]].pageObject) instanceof BottomTabBar)) {
+                
+            var page = routes[splittedPath[0]].pageObject.getRoute(subPath, routes[splittedPath[0]].isSingleton);
+            if(!routes[splittedPath[0]].pageObject.tag) 
+                routes[splittedPath[0]].pageObject.tag = splittedPath[0];
+            return {to: splittedPath[0], controller: routes[splittedPath[0]].pageObject, page: page};
+        }
+        else {
+            throw new Error(splittedPath[0] + ' is not a Navigator or a BottomTabBar');
+        }
+    }
+    
     if (!routes[to]) {
         throw Error(to + " is not in routes");
     }
     if (routes[to].isSingleton && isPathExistsInHistory(to)) {
         throw Error(to + " is set as singleton and exists in history");
     }
-
-    if (routes[to].isSingleton) {
-        return routes[to].pageObject ||
-                (routes[to].pageObject = new (routes[to].pageClass)());
-    } else {
-        return new (routes[to].pageClass)();
+    
+    if((routes[to].pageObject) && ((routes[to].pageObject) instanceof Navigator)) {
+        var page =  routes[to].pageObject.getRoute(null, routes[to].isSingleton);
+        return {to: to, controller: routes[to].pageObject, page: page};
+    }
+    
+    if((routes[to].pageObject) && ((routes[to].pageObject) instanceof BottomTabBar)) { // Implement again!
+        var page =  routes[to].pageObject.getRoute(null, routes[to].isSingleton);
+        if(!routes[to].pageObject.tag) 
+            routes[to].pageObject.tag = to;
+        return {to: to, controller: routes[to].pageObject, page: page};
+    }
+    
+    else {
+        if (routes[to].isSingleton) {
+            return {to: to, page : (routes[to].pageObject ||
+                    (routes[to].pageObject = new (routes[to].pageClass)()))};
+        } else {
+            return {to: to, page: new (routes[to].pageClass)()};
+        }
     }
 }
 

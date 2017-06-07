@@ -227,6 +227,20 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+
+    var _isBottomTabBarPage = false;
+    Object.defineProperty(self, 'isBottomTabBarPage', {
+        get: function() {
+            return _isBottomTabBarPage;
+        },
+        set: function(isBottomTabBarPage) {
+            _isBottomTabBarPage = isBottomTabBarPage;
+            if(_isBottomTabBarPage)
+                this.headerBar.visible = false;
+        },
+        enumerable: true
+    });
 
     this.statusBar = {};
     var _visible;
@@ -361,9 +375,15 @@ function Page(params) {
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
+                console.log('self.isBottomTabBarPage ' + self.isBottomTabBarPage);
                 if (visible) {
-                    // View.VISIBLE
-                    toolbar.setVisibility(0);
+                    if(self.isBottomTabBarPage) {
+                        // View.GONE
+                        toolbar.setVisibility(8);
+                    } else {
+                        // View.VISIBLE
+                        toolbar.setVisibility(0);
+                    }
                 }
                 else {
                     // View.GONE
@@ -465,6 +485,18 @@ function Page(params) {
             enumerable: true
         }
     );
+    var _tag;
+    Object.defineProperty(this, 
+        'tag', {
+            get: function() {
+                return _tag;
+            },
+            set: function(tag) {
+                _tag = tag;
+            },
+            enumerable: true
+        }
+    );
 
     Object.defineProperty(this, 'selectedIndex', {
         get: function() {
@@ -493,7 +525,7 @@ function Page(params) {
             },
             set: function(tabBarItems) {
                 _tabBarItems = tabBarItems;
-                createBottomNavigationView(pageLayout, tabBarItems);
+                createBottomNavigationView(pageLayout);
             },
             enumerable: true
         }
@@ -506,7 +538,7 @@ function Page(params) {
         const Color = require("sf-core/ui/color");
         
         bottomNavigationView = new BottomNavigationView(activity);
-        var tab = Router.routes[_parentTab].pageObject;
+        var tab = _parentTab;
         if(bottomNavigationView && bottomNavigationView.getMenu()) {
             setPropertiesOfTabBarItems();
             disableShiftMode();
@@ -525,7 +557,7 @@ function Page(params) {
     }
     
     function setPropertiesOfTabBarItems() {
-        var tab = Router.routes[_parentTab].pageObject;
+        var tab = _parentTab;
         var menu = bottomNavigationView.getMenu();
         var keys = Object.keys(tab.items);
         for(var i = 0; i < keys.length; i++) {
@@ -558,13 +590,13 @@ function Page(params) {
     function setBottomTabBarOnClickListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
-                var tab = Router.routes[self.parentTab].pageObject;
+                var tab = self.parentTab;
                 var key = Object.keys(tab.items)[tab.currentIndex];
-                const Navigator = require("sf-core/navigator");
+                const Navigator = require("sf-core/ui/navigator");
                 var navigator = tab.items[key].route;
                 if(navigator instanceof Navigator) {
-                    Router.removeFromHistory(navigator.switchCounter);
-                    navigator.switchCounter = 0;
+                    // Router.removeFromHistory(navigator.switchCounter);
+                    // navigator.switchCounter = 0;
                 }
                 
                 var index = item.getItemId();
@@ -573,9 +605,13 @@ function Page(params) {
                 fragment.parentTab = self.parentTab;
                 fragment.tabBarItems = _tabBarItems;
                 
-                Router.routes[self.parentTab].pageObject.currentIndex = index;
-                Router.routes[self.parentTab].pageObject.switchCounter += 1;
-                Router.pagesInstance.push(fragment, false, self.parentTab);
+                self.parentTab.currentIndex = index;
+                self.parentTab.switchCounter += 1;
+                // Router.pagesInstance.pop();
+                if(!fragment.tag)
+                    fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
+                console.log(" " + index + ' tag: ' + fragment.tag);
+                Router.pagesInstance.push(fragment, false, fragment.tag);
                 return true;
             }
         }));

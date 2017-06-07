@@ -156,7 +156,6 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
     if (!tag) {
         tag = "Page" + pagesStack.length;
     }
-
     page.pages = self;
     self.hideSliderDrawer();
     var fragmentManager = activity.getSupportFragmentManager();
