@@ -46,7 +46,7 @@ function Page(params) {
         self.calculatePosition();
     }
 
-    self.nativeObject.viewDidAppear = function(){
+    self.nativeObject.onViewDidAppear = function(){
        self.calculatePosition();
     }
 

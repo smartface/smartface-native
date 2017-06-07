@@ -201,9 +201,10 @@ function RouterView(params) {
             } else {
                 self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not
                 if (currentPage && currentPage !== viewController){
-                    currentPage.viewWillDisappear(false);
+                    currentPage.viewWillDisappear(info.animated);
                 }
-                viewController.viewWillAppear(false);
+                viewController.viewWillAppear(info.animated);
+                viewController.viewDidAppear(info.animated);
             }
             isShowed = true;
         } else {
@@ -211,7 +212,7 @@ function RouterView(params) {
                 self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
             } else {
                 if (currentPage) {
-                    currentPage.viewWillDisappear(false);
+                    currentPage.viewWillDisappear(info.animated);
                 }
                 viewController.willMoveToParentViewController(self.nativeObject);
                 self.nativeObject.addChildViewController(viewController);
