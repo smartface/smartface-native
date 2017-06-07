@@ -11,6 +11,7 @@
  *     
  *     Navigator.add('pgProfile', require('pages/pgProfile'));
  *     Navigator.add('pgMessages', require('pages/pgMessages'));
+ *     Navigator.go('pgProfile');
  * 
  *     Router.go('dashboard'); // Navigates the page named pgProfile.
  *     Router.go('dashboard/pgMessages'); // Navigates the page named pgMessages.
@@ -23,6 +24,7 @@ function Navigator() {}
  * can define if page instance will be singleton object or a new instance 
  * created everytime when Router.go called.
  * 
+ * @method add
  * @param {String} to Route path to page class
  * @param {UI.Page} page Page class to be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
@@ -37,6 +39,7 @@ Navigator.prototype.add = function(to, page, isSingleton) {};
 /**
  * Sets the page to be shown when Router.go is called with navigator path.
  * 
+ * @method go
  * @param {String} to Route path to page class
  * 
  * @static
@@ -44,4 +47,4 @@ Navigator.prototype.add = function(to, page, isSingleton) {};
  * @ios
  * @since 1.1.9
  */
-Navigator.prototype.setIndex = function(path) {};
+Navigator.prototype.go = function(path) {};

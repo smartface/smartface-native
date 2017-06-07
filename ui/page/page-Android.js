@@ -471,7 +471,6 @@ function Page(params) {
     var _parentTab;
     var _selectedIndex;
     var bottomNavigationView;
-    var _tabBarItems;
     var rootLayoutID = NativeSFR.id.rootLayout;
     
     Object.defineProperty(this, 
@@ -481,6 +480,7 @@ function Page(params) {
             },
             set: function(tab) {
                 _parentTab = tab;
+                createBottomNavigationView(pageLayout);
             },
             enumerable: true
         }
@@ -506,7 +506,7 @@ function Page(params) {
             _selectedIndex = index;
             var menu;
             if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for(var i = 0; i < _tabBarItems.length; i++) {
+                for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
                     if(i === _selectedIndex) {
                         menu.getItem(i).setChecked(true);
                     }else {
@@ -517,19 +517,6 @@ function Page(params) {
         },
         enumerable: true
     });
-    
-    Object.defineProperty(this, 
-        'tabBarItems', {
-            get: function() {
-                return _tabBarItems;
-            },
-            set: function(tabBarItems) {
-                _tabBarItems = tabBarItems;
-                createBottomNavigationView(pageLayout);
-            },
-            enumerable: true
-        }
-    );
 
     function createBottomNavigationView(pageLayout) {
         if(bottomNavigationView) 
@@ -600,12 +587,11 @@ function Page(params) {
                 }
                 
                 var index = item.getItemId();
-                var fragment = _tabBarItems[index];
+                self.parentTab.currentIndex = index;
+                var fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index]);
                 fragment.selectedIndex = index;
                 fragment.parentTab = self.parentTab;
-                fragment.tabBarItems = _tabBarItems;
                 
-                self.parentTab.currentIndex = index;
                 self.parentTab.switchCounter += 1;
                 // Router.pagesInstance.pop();
                 if(!fragment.tag)

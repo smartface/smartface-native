@@ -84,6 +84,7 @@ function Navigator(params) {
                                 
                             var page = (isSingleton === true) ? (_itemInstances[to]) : (new _items[to]());
                             _history.push({path: to, page: page});
+                            _index = to;
                             return page;
                         }
                         else if(_items[to] instanceof BottomTabBar){
@@ -102,6 +103,15 @@ function Navigator(params) {
                     else {
                         throw new Error('getRoute parameters should be a string and boolean.');
                     }
+                },
+                enumerable: true
+            },
+            'go': {
+                value: function(to){
+                    if(!_items[to])
+                        throw new Error(to + ' is not in Navigator.');
+                    
+                    _index = to;
                 },
                 enumerable: true
             },
