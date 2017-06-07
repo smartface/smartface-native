@@ -2,6 +2,7 @@ const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 const ScrollViewAlign = require("sf-core/ui/scrollview/scrollview-align");
 const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 const ScrollType = {
     vertical : 0,
@@ -14,10 +15,23 @@ const ScrollView = extend(ViewGroup)(
         
         if(!self.nativeObject){
             self.nativeObject = new __SF_UIScrollView();
+            self.contentLayout = new FlexLayout();
+            self.contentLayout.nativeObject.addFrameObserver();
+            self.contentLayout.nativeObject.frameObserveHandler = function(e){
+                self.changeContentSize(e.frame);
+            }; 
+            self.nativeObject.addSubview(self.contentLayout.nativeObject);
         }
         
         _super(this);
-        self.flexBasis = 1; 
+        
+        Object.defineProperty(self, 'layout', {
+            get: function() {
+                return self.contentLayout;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'scrollBarEnabled', {
             get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
@@ -46,6 +60,7 @@ const ScrollView = extend(ViewGroup)(
                     _align = ScrollType.vertical;
                 }
                 self.autoSize();
+                self.autoSize(self.layout.nativeObject.frame);
             },
             enumerable: true
          });
@@ -75,8 +90,22 @@ const ScrollView = extend(ViewGroup)(
         };
     
         self.autoSize = function(){
+            if (self.nativeObject.subviews.length === 3) { 
+                return;
+            }
             self.applyLayout();
             self.nativeObject.autoContentSize(_align);
+        };
+        
+        self.changeContentSize = function(frame){
+            if (self.nativeObject.subviews.length > 3) { 
+                return;
+            }
+            if (_align ==- ScrollType.vertical) {
+                self.nativeObject.contentSize = {width : 0, height : frame.height};
+            }else{
+                self.nativeObject.contentSize = {width : frame.width, height : 0};
+            }
         };
         
         if (params) {
