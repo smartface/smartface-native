@@ -74,10 +74,10 @@ function TabBarFlowViewModel(params) {
                 }
             };
             
-            if (typeof tabbaritem.page === 'function') {
-                pageObject.values.pageClass = tabbaritem.page;
-            } else if (typeof tabbaritem.page === 'object') {
-                pageObject.values.pageInstance = tabbaritem.page;
+            if (typeof tabbaritem.route === 'function') {
+                pageObject.values.pageClass = tabbaritem.route;
+            } else if (typeof tabbaritem.route === 'object') {
+                pageObject.values.pageInstance = tabbaritem.route;
             }
             
             self.tabBarBrain.addObject(pageObject);

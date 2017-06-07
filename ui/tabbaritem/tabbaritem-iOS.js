@@ -27,14 +27,14 @@ function TabBarItem(params) {
         enumerable: true
     });
     
-    var _page = null;
-    Object.defineProperty(this, 'page', {
+    var _route = null;
+    Object.defineProperty(this, 'route', {
         get: function() {
-            return _page;
+            return _route;
         },
-        set: function(page) {
-            if (typeof page === 'function' || typeof page === 'object') {
-                _page = page;
+        set: function(route) {
+            if (typeof route === 'function' || typeof route === 'object') {
+                _route = route;
             }
         },
         enumerable: true
