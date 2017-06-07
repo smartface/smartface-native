@@ -47,7 +47,7 @@ TabBarItem.prototype.icon = null;
 /**
  * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown. 
  *
- * @property {UI.Page/Navigator} route
+ * @property {UI.Page/UI.Navigator} route
  * @android
  * @ios
  * @since 1.1.9

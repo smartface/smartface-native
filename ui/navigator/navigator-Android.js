@@ -106,6 +106,15 @@ function Navigator(params) {
                 },
                 enumerable: true
             },
+            'go': {
+                value: function(to){
+                    if(!_items[to])
+                        throw new Error(to + ' is not in Navigator.');
+                    
+                    _index = to;
+                },
+                enumerable: true
+            },
             'goBack': {
                 value: function(parameters){
                     var current = _history[_history.length-1];

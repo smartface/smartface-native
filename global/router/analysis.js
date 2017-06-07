@@ -13,20 +13,19 @@
  *     const Router = require('sf-core/router');
  *     const BottomTabBar = require('sf-core/ui/bottomtabbar');
  *     const TabBarItem = require('sf-core/ui/tabbaritem');
+ * 
  *     var myTab = new BottomTabBar();
  *      
- *      var myProfileItem = new TabBarItem({
- *          title: "Profile",
- *          icon: myProfileIcon,
- *          page: require('./pages/pgProfile')
- *      });
+ *     var myProfileItem = new TabBarItem({
+ *         title: "Profile",
+ *         icon: myProfileIcon,
+ *         page: require('./pages/pgProfile')
+ *     });
  *      
- *      myTab.add('profile', myProfileItem);
- *      .....
- *      Router.add('dashboard', myTab);
- *      Router.go('dashboard'); 
- *      Router.go('dashboard/profile'); // The bottom tab is shown with the tab bar item,
- *                                      // associated with profile path, is selected.
+ *     myTab.add('profile', myProfileItem);
+ *     .....
+ *     Router.add('dashboard', myTab);
+ *     Router.go('dashboard'); 
  * 
  *     ...
  *     // When user logins you can pass information to dashboard page
@@ -63,6 +62,7 @@ Router.prototype.sliderDrawer = null;
  * can define if route instance will be singleton object or a new instance 
  * created everytime when UI.Router.go called.
  * 
+ * @method add
  * @param {String} to Route path to page class
  * @param {UI.Page/Navigator/UI.BottomTabBar} route To be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
@@ -79,6 +79,7 @@ Router.prototype.add = function(to, route, isSingleton) {};
  * page history an exception will be thrown. For singleton pages you should
  * use UI.Router.goBack to navigate them if they're in the history.
  * 
+ * @method go
  * @param {String} to Route path to go
  * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
  *                            navigated page 
@@ -95,6 +96,7 @@ Router.prototype.go = function(to, parameters, animated) {};
  * it will navigate to last page in history. To pass to last page, first parameter
  * should be null.
  * 
+ * @method goBack
  * @param {String} to Optional, route path to navigate back
  * @param {Boolean} animated Navigate with animation, if not given it is set to
  *                           true as default
@@ -109,6 +111,8 @@ Router.prototype.goBack = function(to, parameters, animated) {};
 
 /**
  * Gets current route path.
+ * 
+ * @method getCurrent
  * 
  * @return {String} Current route path
  * @static
