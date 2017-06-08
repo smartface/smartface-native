@@ -67,7 +67,7 @@ const SearchView = extend(View)(
             var navigationBarHeight = 0;
         
             if(self.getParentViewController()){
-                if(self.getParentViewController().navigationController.navigationBar.visible){
+                if(self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible){
                     navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
@@ -94,7 +94,7 @@ const SearchView = extend(View)(
         function keyboardHideAnimation(){
             if(self.getParentViewController()){
                 var top = 0;
-                if(self.getParentViewController().navigationController.navigationBar.visible){
+                if(self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible){
                     top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
                 __SF_UIView.animation(130,0,function(){
