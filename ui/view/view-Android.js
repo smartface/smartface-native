@@ -615,7 +615,8 @@ function View(params) {
             set: function(paddingTop) {
                 self.yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(paddingTop));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingBottom': {
             get: function() {
@@ -624,7 +625,8 @@ function View(params) {
             set: function(paddingBottom) {
                 self.yogaNode.setPadding(YogaEdge.BOTTOM, AndroidUnitConverter.dpToPixel(paddingBottom));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingStart': {
             get: function() {
@@ -651,7 +653,8 @@ function View(params) {
             set: function(paddingLeft) {
                 self.yogaNode.setPadding(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(paddingLeft));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingRight': {
             get: function() {
@@ -660,7 +663,8 @@ function View(params) {
             set: function(paddingRight) {
                 self.yogaNode.setPadding(YogaEdge.RIGHT, AndroidUnitConverter.dpToPixel(paddingRight));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingHorizontal': {
             get: function() {
@@ -693,7 +697,8 @@ function View(params) {
                 self.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
                 self.yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'marginTop': {
             get: function() {
