@@ -24,6 +24,8 @@ function BottomTabBar(params) {
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
                         _itemCount++;
+                        if(!_index)
+                            _index = path;
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
@@ -146,7 +148,7 @@ function BottomTabBar(params) {
                             return page;
                         }
                         else {
-                            console.log(to + ' is not a TabBarItem.');
+                            throw new Error(to + " is a bottom tab bar. We don't implement nested tab.");
                         }
                     }
                     return null;
@@ -187,8 +189,6 @@ function BottomTabBar(params) {
                     page.parentTab = this;
                     page.selectedIndex = _currentIndex;
                     page.tabBarItems = _itemInstances;
-                    // if(!page.tag)
-                    //     page.tag = to + " - " + page.selectedIndex;
                 },
                 enumerable: true
             }
