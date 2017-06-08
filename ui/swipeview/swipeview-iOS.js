@@ -29,6 +29,30 @@ const SwipeView = extend(View)(
         
         _super(this);
         
+        Object.defineProperty(self, 'onTouch', {
+            get: function() {
+                return self.pageController.view.onTouch;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouch = value.bind(this);
+                }
+            },
+            enumerable: true
+        });
+    
+        Object.defineProperty(self, 'onTouchEnded', {
+            get: function() {
+                return self.pageController.view.onTouchEnded;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouchEnded = value.bind(this);
+                }
+            },
+            enumerable: true
+        });
+        
         self.pageController.onViewWillLayoutSubviews = function(){
             self.pageController.setViewFrame({x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height});
         }

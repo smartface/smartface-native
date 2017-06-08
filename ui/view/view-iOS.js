@@ -186,9 +186,11 @@ function View(params) {
             return self.nativeObject.onTouch;
         },
         set: function(value) {
-            self.nativeObject.onTouch = value.bind(this);
+            if (typeof value === 'function') {
+                self.nativeObject.onTouch = value.bind(this);
+            }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'onTouchEnded', {
@@ -196,9 +198,11 @@ function View(params) {
             return self.nativeObject.onTouchEnded;
         },
         set: function(value) {
-            self.nativeObject.onTouchEnded = value.bind(this);
+            if (typeof value === 'function') {
+                self.nativeObject.onTouchEnded = value.bind(this);
+            }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     function guid() {
