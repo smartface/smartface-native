@@ -169,6 +169,7 @@ function TabBarFlowView(params) {
     var viewModel = params.viewModel;
     
     self.nativeObject = SF.requireClass("UITabBarController").new();
+    self.nativeObject.tabBar.translucent = false;
     
     var nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>',{
         tabBarControllerDidSelectViewController : function (tabBarController, viewController){
