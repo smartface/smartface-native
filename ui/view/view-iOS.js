@@ -188,7 +188,7 @@ function View(params) {
         set: function(value) {
             self.nativeObject.onTouch = value.bind(this);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'onTouchEnded', {
@@ -198,7 +198,7 @@ function View(params) {
         set: function(value) {
             self.nativeObject.onTouchEnded = value.bind(this);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     function guid() {
