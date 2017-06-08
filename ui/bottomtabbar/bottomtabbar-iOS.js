@@ -208,7 +208,7 @@ function TabBarFlowView(params) {
     });
     Object.defineProperty(self, 'barTintColor', {
         set: function(backgroundColor) {
-            if (self.nativeObject) {
+            if (self.nativeObject && typeof backgroundColor === 'object') {
                 self.nativeObject.tabBar.barTintColor = backgroundColor.nativeObject;
             }
         },
