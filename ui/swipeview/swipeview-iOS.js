@@ -34,7 +34,9 @@ const SwipeView = extend(View)(
                 return self.pageController.view.onTouch;
             },
             set: function(value) {
-                self.pageController.view.onTouch = value.bind(this);
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouch = value.bind(this);
+                }
             },
             enumerable: true
         });
@@ -44,7 +46,9 @@ const SwipeView = extend(View)(
                 return self.pageController.view.onTouchEnded;
             },
             set: function(value) {
-                self.pageController.view.onTouchEnded = value.bind(this);
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouchEnded = value.bind(this);
+                }
             },
             enumerable: true
         });
