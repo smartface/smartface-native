@@ -375,7 +375,6 @@ function Page(params) {
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
-                console.log('self.isBottomTabBarPage ' + self.isBottomTabBarPage);
                 if (visible) {
                     if(self.isBottomTabBarPage) {
                         // View.GONE
@@ -596,7 +595,6 @@ function Page(params) {
                 // Router.pagesInstance.pop();
                 if(!fragment.tag)
                     fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
-                console.log(" " + index + ' tag: ' + fragment.tag);
                 Router.pagesInstance.push(fragment, false, fragment.tag);
                 return true;
             }
