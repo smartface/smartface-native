@@ -4,7 +4,7 @@
  * @since 0.1
  *
  * KeyboardType is an enum. It defines keyboard appearance when user focused
- * to the TextBox and input type for Android and keyboard appearence for iOS. 
+ * to the TextBox and also input type for Android. 
  * Keyboard types will cause a little differences between iOS and Android due 
  * to native differences.
  *
