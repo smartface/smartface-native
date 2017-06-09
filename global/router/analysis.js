@@ -64,7 +64,7 @@ Router.prototype.sliderDrawer = null;
  * 
  * @method add
  * @param {String} to Route path to page class
- * @param {UI.Page/Navigator/UI.BottomTabBar} route To be used for creating and showing instances
+ * @param {UI.Page|Navigator|UI.BottomTabBar} route To be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
  *                              and everytime that instance will be shown
  * @static

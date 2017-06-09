@@ -1,17 +1,18 @@
 /**
  * @class Navigator
- * @since 1.1.9
+ * @since 1.1.10
  *
  * Navigator is used for navigating between pages. When Router.go calls navigator path,
  * navigates to related page.
  *
  *     @example
  *     const Router = require('sf-core/router');
- *     const Navigator = require('sf-core/navigator');
+ *     const Navigator = require('sf-core/ui/navigator');
  *     
- *     Navigator.add('pgProfile', require('pages/pgProfile'));
- *     Navigator.add('pgMessages', require('pages/pgMessages'));
- *     Navigator.go('pgProfile');
+ *     var navigator = new Navigator();
+ *     navigator.add('pgProfile', require('pages/pgProfile'));
+ *     navigator.add('pgMessages', require('pages/pgMessages'));
+ *     navigator.go('pgProfile');
  * 
  *     Router.go('dashboard'); // Navigates the page named pgProfile.
  *     Router.go('dashboard/pgMessages'); // Navigates the page named pgMessages.
@@ -32,7 +33,7 @@ function Navigator() {}
  * @static
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 Navigator.prototype.add = function(to, page, isSingleton) {};
 
@@ -45,6 +46,6 @@ Navigator.prototype.add = function(to, page, isSingleton) {};
  * @static
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 Navigator.prototype.go = function(path) {};

@@ -1,6 +1,6 @@
 /**
  * @class UI.BottomTabBar
- * @since 1.1.9
+ * @since 1.1.10
  *
  * BottomTabBar is used for navigating between tab bar items with given tags.
  *
@@ -39,7 +39,7 @@ function BottomTabBar() {}
 /**
  * Gets the maximum number of items that add to bottom tab bar.
  *
- * @since 1.1.8
+ * @since 1.1.10
  * @property {Number} maxItemCount
  * @android
  * @readonly
@@ -55,7 +55,7 @@ BottomTabBar.prototype.android.maxItemCount = true;
  * @property {UI.Color} selected
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 BottomTabBar.prototype.itemColor = {normal: Color.BLACK, selected: Color.BLUE};
 
@@ -65,7 +65,7 @@ BottomTabBar.prototype.itemColor = {normal: Color.BLACK, selected: Color.BLUE};
  * @property {UI.Color} backgroundColor
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 BottomTabBar.prototype.backgroundColor = Color.WHITE;
 
@@ -78,7 +78,7 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
  * @param {UI.TabBarItem} tabBarItem Tab bar item
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 BottomTabBar.prototype.add = function(tag, tabBarItem) {};
 
@@ -89,7 +89,7 @@ BottomTabBar.prototype.add = function(tag, tabBarItem) {};
  * @param {String} tag Tag of the selected tab bar item
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 BottomTabBar.prototype.setIndex = function(tag) {};
 
