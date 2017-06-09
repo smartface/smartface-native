@@ -5,8 +5,8 @@
  *
  * KeyboardType is an enum. When user focused on the TextBox or TextField keyboard appears 
  * with different layouts based on the KeyboardType such as number, email etc. Also keyboard 
- * type effects input type that allows only set a type of data being placed in a text field 
- * based on the KeyboardType.
+ * type effects input type that allows only a type of data being placed in a text field based 
+ * on the KeyboardType.
  * Keyboard types will cause differences between iOS and Android due to native differences.
  *
  *     @example
