@@ -2,6 +2,7 @@ const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Image = require('sf-core/ui/image');
 const Color = require('sf-core/ui/color');
+const Screen = require('sf-core/device/screen');
 
 const UISearchBarStyle = {
     default : 0,
