@@ -1,16 +1,19 @@
 function Pages(params) {
+    const UINavigationBar = SF.requireClass("UINavigationBar");
+    const UINavigationController = SF.requireClass("UINavigationController");
+    
     var self = this;
     
     var rootViewController = params.rootPage.nativeObject;
     var _sliderDrawer = null;
     self.sliderDrawerGesture = null;
     
-   // __SF_UIApplication.sharedApplication().setStatusBarHiddenWithAnimation(false,0);
-
-    self.nativeObject = new __SF_UINavigationController(rootViewController);
-    self.nativeObject.setTranslucent(false);
-    __SF_UIApplication.sharedApplication().keyWindow.rootViewController = self.nativeObject;
-    __SF_UIApplication.sharedApplication().keyWindow.makeKeyAndVisible();
+    // Native object creation
+    var nativeNavigationController = UINavigationController.new();
+    nativeNavigationController.viewControllers = [params.rootPage.nativeObject];
+    nativeNavigationController.navigationBar.translucent = false;
+    // Assign as native object
+    self.nativeObject = nativeNavigationController;
     
     Object.defineProperty(self, 'sliderDrawer', {
         get: function() {
@@ -24,15 +27,15 @@ function Pages(params) {
         enumerable: true
     });
     
-    self.navigationControllerDelegate = new __SF_UINavigationControllerDelegate();
-    self.navigationControllerDelegate.willShow = function(e)
-    {
-        var pageToShow = e[0];
-        if(self.sliderDrawer){
-            self.sliderDrawer.nativeObject.checkSwipeGesture(pageToShow, self, _sliderDrawer.nativeObject);
+    self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
+        navigationControllerWillShowViewControllerAnimated: function (navigationController, viewController, animated){
+            if(self.sliderDrawer){
+                self.sliderDrawer.nativeObject.checkSwipeGesture(viewController, self, _sliderDrawer.nativeObject);
+            }
         }
-    }
-    self.nativeObject.delegate = self.navigationControllerDelegate;
+    }).new();
+    
+    self.nativeObject.delegate = self.nativeObjectDelegate;
     
     self.push = function(page, animated){
         if(self.sliderDrawer){
@@ -43,18 +46,18 @@ function Pages(params) {
 
     self.pop = function(animated){
         if (arguments.length === 0) {
-            self.nativeObject.pop(true);
+            self.nativeObject.popViewControllerAnimated(true);
         } else if (arguments.length === 1) {
-            self.nativeObject.pop(animated);
+            self.nativeObject.popViewControllerAnimated(animated);
         }
         return true;
     }
     
     self.popToRoot = function(animated){
         if (arguments.length === 0) {
-            self.nativeObject.popToRoot(true);
+            self.nativeObject.popToRootViewControllerAnimated(true);
         } else if (arguments.length === 1) {
-            self.nativeObject.popToRoot(animated);
+            self.nativeObject.popToRootViewControllerAnimated(animated);
         }
         return true;
     }
@@ -62,9 +65,9 @@ function Pages(params) {
     self.popTo = function(tag, page, animated){
         if(page.nativeObject) {
             if (arguments.length === 2) {
-                self.nativeObject.popToPage(page.nativeObject, true);
+                self.nativeObject.popToViewControllerAnimated(page.nativeObject, true);
             } else if (arguments.length === 3) {
-                self.nativeObject.popToPage(page.nativeObject, animated);
+                self.nativeObject.popToViewControllerAnimated(page.nativeObject, animated);
             }
         }
         return true;

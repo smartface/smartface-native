@@ -13,7 +13,7 @@
  *
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *     const Page = require('sf-core/ui/page');
  *     var page1 = new extend(Page)(
  *         function(_super,params)

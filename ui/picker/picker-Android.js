@@ -1,6 +1,5 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
-const Router = require('sf-core/ui/router');
 const TypeUtil = require('sf-core/util/type');
 
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
