@@ -3,10 +3,11 @@
  * @static
  * @since 0.1
  *
- * KeyboardType is an enum. It defines keyboard appearance when user focused
- * to the TextBox and also input type for Android. 
- * Keyboard types will cause a little differences between iOS and Android due 
- * to native differences.
+ * KeyboardType is an enum. When user focused on the TextBox or TextField keyboard appears 
+ * with different layouts based on the KeyboardType such as number, email etc. Also keyboard 
+ * type effects input type that allows only set a type of data being placed in a text field 
+ * based on the KeyboardType.
+ * Keyboard types will cause differences between iOS and Android due to native differences.
  *
  *     @example
  *     const TextBox = require('sf-core/ui/textbox');
