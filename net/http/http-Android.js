@@ -41,7 +41,8 @@ http.requestString = function(url, onLoad, onError) {
             var statusCode = error.networkResponse.statusCode;
             onError({
                 message: error + " " + error.getMessage(),
-                statusCode: statusCode
+                statusCode: statusCode,
+                headers: parseErrorHeaders(error.networkResponse.headers)
             });
         }
     });
@@ -57,11 +58,11 @@ http.requestString = function(url, onLoad, onError) {
         }
         else {
             if(onError)
-                onError({message: "No network connection"});
+                onError({message: "No network connection", headers: {}});
         }
     } catch(e) {
         if(onError)
-            onError({message: e});
+            onError({message: e, headers: {}});
     }
 };
 http.requestImage = function(url, onLoad, onError) {
@@ -77,7 +78,8 @@ http.requestImage = function(url, onLoad, onError) {
             var statusCode = error.networkResponse.statusCode;
             onError({
                 message: error + " " + error.getMessage(),
-                statusCode: statusCode
+                statusCode: statusCode,
+                headers: parseErrorHeaders(error.networkResponse.headers)
             });
         }
     });
@@ -92,10 +94,10 @@ http.requestImage = function(url, onLoad, onError) {
             return request;
         }
         else {
-            onError({message: "No network connection"});
+            onError({message: "No network connection", headers: {}});
         }
     } catch(e) {
-        onError({message: e});
+        onError({message: e, headers: {}});
     }
 };
 http.requestJSON = function(url, onLoad, onError) {
@@ -119,7 +121,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {
             stream.close();
         } catch (e) {
             success = true;
-            onError({message: e});
+            onError({message: e, headers: {}});
         }
         if(success) {
             onLoad(file);
@@ -145,7 +147,8 @@ http.request = function(params, onLoad, onError) {
             var statusCode = error.networkResponse.statusCode;
             onError({
                 message: error + " " + error.getMessage(),
-                statusCode: statusCode
+                statusCode: statusCode,
+                headers: parseErrorHeaders(error.networkResponse.headers)
             });
         }
     });
@@ -189,12 +192,12 @@ http.request = function(params, onLoad, onError) {
         }
         else {
             if(onError)
-                onError({message: "No network connection"});
+                onError({message: "No network connection", headers: {}});
         }
     }
     catch(err) {
         if(onError)
-            onError({message: err});
+            onError({message: err, headers: {}});
     }
     http.RequestQueue.add(request.nativeObject);
     return request;
@@ -216,6 +219,21 @@ function getResponseHeaders(response, responseHeaders, responseType) {
         }
     }
 }
+
+function parseErrorHeaders(headers) {
+    var errorHeaders = {};
+    if(headers && headers.keySet()) {
+        var iterator = headers.keySet().iterator();
+        while(iterator.hasNext()) {
+            var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
+            if(key && headers.get(key)) {
+                errorHeaders[key] = headers.get(key).substring(0);
+            }
+        }
+    }
+    return errorHeaders;
+}
+
 function getHeaderHashMap(params) {
     const NativeHashMap = requireClass("java.util.HashMap");
     var headers = new NativeHashMap();
