@@ -46,6 +46,7 @@ var http = {};
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
  * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
@@ -65,6 +66,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {};
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
  * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
@@ -84,6 +86,7 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
  * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
@@ -103,6 +106,7 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
  * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
@@ -129,6 +133,7 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
  * @param {Object} onError.params.headers
  * @return {Net.Http.Request}

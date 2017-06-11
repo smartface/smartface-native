@@ -6,6 +6,8 @@ const NativeInteger         = requireClass("java.lang.Integer");
 const NativeString          = requireClass("java.lang.String");
 const NativeBase64          = requireClass("android.util.Base64");
 
+const Blob = require("sf-core/blob");
+
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 
 const Request = function() {
@@ -39,10 +41,12 @@ http.requestString = function(url, onLoad, onError) {
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
             var statusCode = error.networkResponse.statusCode;
+            var errorBytes = error.networkResponse.data;
             onError({
                 message: error + " " + error.getMessage(),
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers)
+                headers: parseErrorHeaders(error.networkResponse.headers),
+                body: new Blob(errorBytes, {type: {}})
             });
         }
     });
@@ -76,10 +80,12 @@ http.requestImage = function(url, onLoad, onError) {
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
             var statusCode = error.networkResponse.statusCode;
+            var errorBytes = error.networkResponse.data;
             onError({
                 message: error + " " + error.getMessage(),
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers)
+                headers: parseErrorHeaders(error.networkResponse.headers),
+                body: new Blob(errorBytes, {type: {}})
             });
         }
     });
@@ -133,8 +139,6 @@ http.request = function(params, onLoad, onError) {
     var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseListener = VolleyResponse.Listener.implement({
             onResponse: function(response) {
-                const Blob = require("sf-core/blob");
-                
                 var encodedStr = new NativeString(response);
                 var bytes = encodedStr.getBytes();
                 var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
@@ -145,10 +149,12 @@ http.request = function(params, onLoad, onError) {
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
             var statusCode = error.networkResponse.statusCode;
+            var errorBytes = error.networkResponse.data;
             onError({
                 message: error + " " + error.getMessage(),
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers)
+                headers: parseErrorHeaders(error.networkResponse.headers),
+                body: new Blob(errorBytes, {type: {}})
             });
         }
     });
