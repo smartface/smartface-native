@@ -99,7 +99,7 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.centerLocation;
 
 /**
- * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19.
+ * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
  *
  * @property {Number} [zoomLevel = 15]
  * @android

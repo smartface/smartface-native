@@ -57,18 +57,6 @@ const ImageView = extend(View)(
                 },
                 enumerable: true
             },
-            'alpha': {
-                get: function() {
-                    // getAlpha should come from ImageView not View
-                    return this.nativeObject.getImageAlpha()/255;
-                },
-                set: function(alpha) {
-                    // due to AND-2702 setAlpha goes to ImageView not View
-                    this.nativeObject.setAlpha(alpha*255);
-                },
-                enumerable: true,
-                configurable: true
-            },
             'toString': {
                 value: function(){
                     return 'ImageView';

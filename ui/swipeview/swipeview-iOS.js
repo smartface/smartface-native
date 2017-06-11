@@ -1,4 +1,5 @@
 const View = require('../view');
+const Exception = require("sf-core/util").Exception;
 const extend = require('js-base/core/extend');
 
 const UIPageViewControllerTransitionStyle = {
@@ -27,6 +28,30 @@ const SwipeView = extend(View)(
         }
         
         _super(this);
+        
+        Object.defineProperty(self, 'onTouch', {
+            get: function() {
+                return self.pageController.view.onTouch;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouch = value.bind(this);
+                }
+            },
+            enumerable: true
+        });
+    
+        Object.defineProperty(self, 'onTouchEnded', {
+            get: function() {
+                return self.pageController.view.onTouchEnded;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    self.pageController.view.onTouchEnded = value.bind(this);
+                }
+            },
+            enumerable: true
+        });
         
         self.pageController.onViewWillLayoutSubviews = function(){
             self.pageController.setViewFrame({x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height});
@@ -177,7 +202,38 @@ const SwipeView = extend(View)(
         self.pageController.dataSource = self.pageControllerDatasource;
         self.pageController.delegate = self.pageControllerDelegate;
                 
-                 
+        Object.defineProperty(self, 'width', {
+            get: function() {
+                return self.nativeObject.yoga.width;
+            },
+            set: function(value) {
+                if (typeof value === "number"){
+                    self.nativeObject.yoga.width = value;
+                    self.nativeObject.yoga.maxWidth = value;
+                    self.nativeObject.yoga.minWidth = value;
+                }else{
+                    throw new TypeError(Exception.TypeError.NUMBER);
+                }
+            },
+            enumerable: true, configurable: true
+        });
+    
+        Object.defineProperty(self, 'height', {
+            get: function() {
+                return self.nativeObject.yoga.height;
+            },
+            set: function(value) {
+                if (typeof value === "number"){
+                    self.nativeObject.yoga.height = value;
+                    self.nativeObject.yoga.maxHeight = value;
+                    self.nativeObject.yoga.minHeight = value;
+                }else{
+                    throw new TypeError(Exception.TypeError.NUMBER);
+                }
+            },
+            enumerable: true, configurable: true
+        });
+         
         
         if (params) {
             for (var param in params) {

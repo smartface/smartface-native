@@ -89,13 +89,14 @@ function View(params) {
     Object.defineProperties(this, {
         'alpha': {
             get: function() {
-                return self.nativeObject.getAlpha();
+                // Avoiding integer-float conflics of engine
+                return self.nativeObject.getAlpha()-0.0000001;
             },
             set: function(alpha) {
-                self.nativeObject.setAlpha(alpha);
+                // Avoiding integer-float conflics of engine
+                self.nativeObject.setAlpha(alpha+0.0000001);
             },
-            enumerable: true,
-            configurable: true
+            enumerable: true
         },
         'backgroundImage': {
             get: function() {

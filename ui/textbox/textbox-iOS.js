@@ -4,6 +4,7 @@ const KeyboardType = require('sf-core/ui/keyboardtype');
 const ActionKeyType = require('sf-core/ui/actionkeytype');
 const Animator = require('sf-core/ui/animator');
 const Color = require('sf-core/ui/color');
+const Screen = require('sf-core/device/screen');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -360,6 +361,7 @@ const TextBox = extend(View)(
         }
         
         var _isKeyboadAnimationCompleted = true;
+        var _animatedTop = 0;
         function keyboardShowAnimation(keyboardHeight){
             var height = self.nativeObject.frame.height;
             _top = 0;
@@ -367,8 +369,20 @@ const TextBox = extend(View)(
             var navigationBarHeight = 0;
         
             if(self.getParentViewController()){
-                if(self.getParentViewController().navigationController.navigationBar.visible){
-                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                if (self.getParentViewController().tabBarController) {
+                    if (self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible) {
+                        if (Screen.height != self.getParentViewController().view.yoga.top + self.getParentViewController().view.yoga.height + self.getParentViewController().tabBarController.tabBar.frame.height) {
+                            navigationBarHeight = self.getParentViewController().tabBarController.tabBar.frame.height;
+                        }else{
+                            navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height + self.getParentViewController().tabBarController.tabBar.frame.height;
+                        } 
+                    }else if (!self.getParentViewController().navigationController || self.getParentViewController().navigationController && !self.getParentViewController().navigationController.navigationBar.visible) {
+                        navigationBarHeight = self.getParentViewController().tabBarController.tabBar.frame.height;
+                    }
+                }else{
+                    if (self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible) {
+                        navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                    }
                 }
                 if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
                     var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
@@ -376,8 +390,10 @@ const TextBox = extend(View)(
                     __SF_UIView.animation(230,0,function(){
                         var distance = -(top-newTop) + navigationBarHeight;
                         if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
+                            _animatedTop = self.getParentViewController().view.yoga.top - (-keyboardHeight + navigationBarHeight);
                             self.getParentViewController().view.yoga.top =  -keyboardHeight + navigationBarHeight;
                         }else{
+                            _animatedTop = self.getParentViewController().view.yoga.top - (-(top-newTop) + navigationBarHeight);
                             self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
                         }
                         self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
@@ -395,9 +411,18 @@ const TextBox = extend(View)(
         function keyboardHideAnimation(){
             if(self.getParentViewController()){
                 var top = 0;
-                if(self.getParentViewController().navigationController.navigationBar.visible){
+                if (self.getParentViewController().tabBarController) {
+                    if(self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible){
+                      if (Screen.height != self.getParentViewController().view.yoga.top + self.getParentViewController().view.yoga.height + self.getParentViewController().tabBarController.tabBar.frame.height + _animatedTop) {
+                          
+                      }else{
+                          top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
+                      }
+                    }
+                }else if(self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible){
                     top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
                 }
+                
                 if (_isKeyboadAnimationCompleted){
                     __SF_UIView.animation(130,0,function(){
                         self.getParentViewController().view.yoga.top = top;

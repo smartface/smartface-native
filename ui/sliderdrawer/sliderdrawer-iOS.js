@@ -2,6 +2,12 @@ const extend = require('js-base/core/extend');
 const Page = require('sf-core/ui/page');
 const AbsoluteLayout = require('sf-core/ui/absolutelayout');
 
+const SLIDER_DRAWER_STATE = {
+    CLOSE : 0,
+    DRAGGING : 1,
+    OPEN : 2
+};
+
 const SliderDrawer = extend(Page)(
     function (_super, params) {
         var self = this;
@@ -56,7 +62,20 @@ const SliderDrawer = extend(Page)(
             },
             'state' : {
                 get: function(){
-                    return self.nativeObject.state;
+                    var state = self.nativeObject.state;
+                    switch (state) {
+                        case SLIDER_DRAWER_STATE.OPEN:
+                            return SliderDrawer.State.OPEN;
+                            break;
+                        case SLIDER_DRAWER_STATE.CLOSE:
+                            return SliderDrawer.State.CLOSED;
+                            break;
+                        case SLIDER_DRAWER_STATE.DRAGGING:
+                            return SliderDrawer.State.DRAGGED;
+                            break;
+                        default:
+                            return -1;
+                    }
                 },
                 enumerable: true
             },

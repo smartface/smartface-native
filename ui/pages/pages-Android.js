@@ -156,7 +156,6 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
     if (!tag) {
         tag = "Page" + pagesStack.length;
     }
-
     page.pages = self;
     self.hideSliderDrawer();
     var fragmentManager = activity.getSupportFragmentManager();
@@ -200,7 +199,7 @@ function registerOnBackKeyPressed(pagesStack){
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if( keyCode === 4 && keyEvent.getAction() === 0) {
-                const Router = require("sf-core/ui/router");
+                const Router = require("sf-core/router");
                 var currentHistoryObject = Router.getCurrentPage();
                 if (currentHistoryObject && currentHistoryObject.page) {
                    currentHistoryObject.page.android.onBackButtonPressed && 

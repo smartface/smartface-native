@@ -17,7 +17,7 @@ const ScrollView = extend(ViewGroup)(
         }
         
         _super(this);
-        self.flexBasis = 1; 
+
         Object.defineProperty(self, 'scrollBarEnabled', {
             get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
