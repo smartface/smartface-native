@@ -30,9 +30,6 @@ const ViewGroup = extend(View)(
                     if(this instanceof require("sf-core/ui/flexlayout")){
                         this.nativeObject.addView(view.nativeObject, view.yogaNode);
                     }
-                    else{
-                        this.nativeObject.addView(view.nativeObject);
-                    }
                 },
                 enumerable: true, 
                 configurable: true
