@@ -132,10 +132,9 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {Object} onLoad.params.headers
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {Object} onError.params.body
- * @param {String} onError.params.statusCode
- * @param {Object} onError.params.headers
+ * @param {Object} onError.params.body Body of the error
+ * @param {String} onError.params.statusCode Error status code
+ * @param {Object} onError.params.headers Headers sent with error
  * @return {Net.Http.Request}
  * @since 0.1
  */
