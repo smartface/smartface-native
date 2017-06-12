@@ -3,5 +3,6 @@ module.exports = {
     UIControlEvents : require("./iOS/uicontrolevents.js"),
     YogaEnums: require("./iOS/yogaenums.js"),
     Exception : require("./exception/exception.js"),
-    UIDatePickerMode : require("./iOS/uidatepickermode.js")
+    UIDatePickerMode : require("./iOS/uidatepickermode.js"),
+    KeyboardAnimationDelegate : require("./iOS/keyboardanimationdelegate.js")
 };
