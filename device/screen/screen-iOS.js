@@ -19,14 +19,16 @@ Object.defineProperty(Screen, 'orientation', {
 });
 
 Object.defineProperty(Screen, 'height', {
-  value: __SF_UIScreen.mainScreen().bounds.height,  
-  writable: false,
+  get: function() {
+    return __SF_UIScreen.mainScreen().bounds.height;
+  },
   enumerable: true
 });
 
 Object.defineProperty(Screen, 'width', {
-  value: __SF_UIScreen.mainScreen().bounds.width,  
-  writable: false,
+  get: function() {
+    return __SF_UIScreen.mainScreen().bounds.width;
+  },
   enumerable: true
 });
 

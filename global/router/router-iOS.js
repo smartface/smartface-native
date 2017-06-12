@@ -161,7 +161,9 @@ function RouterView(params) {
     var self = this;
     
     const Page = require('sf-core/ui/page');
-    var rootPage = new Page();
+    var rootPage = new Page({
+        orientation : Page.Orientation.AUTO
+    });
     
     self.nativeObject = rootPage.nativeObject;
 
