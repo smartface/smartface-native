@@ -559,6 +559,12 @@ function View(params) {
             },
             set: function(height) {
                 self.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
+                 // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
+                const ScrollView = require("sf-core/ui/scrollview");
+                if(self.parent instanceof ScrollView && self.parent.align === ScrollView.Align.HORIZONTAL){
+                    var layoutParams = self.nativeObject.getLayoutParams();
+                    layoutParams && (layoutParams.height = -2);
+                }
             },
             enumerable: true,
             configurable: true
@@ -569,6 +575,12 @@ function View(params) {
             },
             set: function(width) {
                 self.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
+                // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
+                const ScrollView = require("sf-core/ui/scrollview");
+                if(self.parent instanceof ScrollView && self.parent.align === ScrollView.Align.VERTICAL){
+                    var layoutParams = self.nativeObject.getLayoutParams();
+                    layoutParams && (layoutParams.width = -2);
+                }
             },
             enumerable: true,
             configurable: true
