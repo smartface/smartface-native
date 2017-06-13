@@ -869,7 +869,12 @@ function View(params) {
             },
             set: function(flexGrow) {
                 self.yogaNode.setFlexGrow(flexGrow);
-                self.flexBasis = 1;
+                if(flexGrow > 0){
+                    self.flexBasis = 1;
+                }
+                else{
+                    self.flexBasis = 0;
+                }
             },
             enumerable: true
         },
