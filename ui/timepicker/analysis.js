@@ -8,7 +8,7 @@
  *     const TimePicker = require('sf-core/ui/timepicker');
  *     var myTimePicker = new TimePicker();
  *     myTimePicker.onTimeSelected = function(time) {
- *         alert('Hour: ' + time.hour + ' Minute: ' + time.minute);
+ *         console.log('Hour: ' + time.hour + ' Minute: ' + time.minute);
  *     };
  *     myTimePicker.android.is24HourFormat = false;
  *     myTimePicker.show();

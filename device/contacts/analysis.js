@@ -15,7 +15,7 @@
  *         if(e.requestCode === READ_CONTACTS_CODE && e.result) {
  *             Contacts.pick({
  *                 onSuccess: function(e) {
- *                     alert(JSON.stringify(e));
+ *                     console.log(JSON.stringify(e));
  *                 }
  *             }
  *         }
@@ -38,11 +38,11 @@ function Contacts() {}
  *             email       : "info@smartface.io",
  *             address     : "347 N Canon Dr Beverly Hills, CA 90210",
  *             onSuccess : function(){
- *                 alert("Success");
+ *                 console.log("Success");
  *             }
  *         },
  *         onFailure : function(){
- *             alert("Failure");
+ *             console.log("Failure");
  *         }
  *     });
  *
@@ -75,10 +75,10 @@ Contacts.add = function(params) {};
  *     Contacts.pick({
  *         page : myPage,
  *         onSuccess : function(contact){
- *             alert("Successfully picked");
+ *             console.log("Successfully picked");
  *         },
  *         onFailure : function(e){
- *             alert("Something went wrong");
+ *             console.log("Something went wrong");
  *         }
  *     });
  *
@@ -108,7 +108,7 @@ Contacts.pick = function(params) {};
  *             var count = contacts.length;
  *         },
  *         onFailure : function(error){
- *             alert("Message : " + error);
+ *             console.log("Message : " + error);
  *         }
  *     });
  *
