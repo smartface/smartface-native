@@ -148,7 +148,7 @@ Application.android.checkPermission = function(permission){};
  *     const Application = require("sf-core/application");
  *     Application.android.requestPermissions(1002, Application.android.Permissions.WRITE_EXTERNAL_STORAGE)
  *     Application.android.onRequestPermissionsResult = function(e){
- *         alert(JSON.stringify(e));
+ *         console.log(JSON.stringify(e));
  *     }
  *
  * @method requestPermissions
@@ -176,22 +176,22 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
 Application.android.shouldShowRequestPermissionRationale = function(permission){};
 
 /**
- * Check new update from {@link https://developer.smartface.io/docs/remote-app-update RAU}.
+ * Checks if there is a new update from {@link https://developer.smartface.io/docs/remote-app-update RAU}.
  * 
  *     @example
  *     Application.checkUpdate(function(err, result) {
  *         if (err) {
- *             alert("check update error: " + err);
+ *             console.log("check update error: " + err);
  *         } else {
  *             result.download(function(err, downloadFinish) {
  *                 if (err) {
- *                     alert("download error: " + err);
+ *                     console.log("download error: " + err);
  *                 } else {
  *                     downloadFinish.updateAll(function(err) {
  *                         if (err) {
- *                             alert("update all error: " + err);
+ *                             console.log("update all error: " + err);
  *                         } else {
- *                             alert(downloadFinish.meta);
+ *                             console.log(downloadFinish.meta);
  *                             Application.restart();
  *                         }
  *                     });

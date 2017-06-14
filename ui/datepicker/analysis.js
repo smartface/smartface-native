@@ -8,7 +8,7 @@
  *     const DatePicker = require('sf-core/ui/datepicker');
  *     var myDatePicker = new DatePicker();
  *     myDatePicker.onDateSelected = function(date) {
- *         alert('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
+ *         console.log('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
  *     };
  *     myDatePicker.show();
  *
