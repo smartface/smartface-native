@@ -4,17 +4,31 @@
  * http module allows sending http requests.
  * 
  *     @example
- *     const http = require("sf-core/net/http");
- *     var myImageUrl = your-image-url;
- *     var request = http.requestImage(myImageUrl, onLoad, onError);
- * 
- *     function onLoad(response) {
- *         var image = response;
- *     }
- * 
- *     function onError(error) {
- *         alert(error);
- *     }
+ *     Http.request(
+ *         {
+ *             'url':'YOUR_URL_HERE',
+ *             'headers': {
+ *                 // YOUR_HEADER_HERE',
+ *             },
+ *             'method':'HTTP_METHOD_HERE',
+ *             'body': 'YOUR_BODY_HERE',
+ *         },
+ *         function(response){
+ *             // Handling image request response 
+ *             myImageView.image = Image.createFromBlob(response.body);
+ *             // Handling text request response
+ *             myLabel.text = response.body.toString();
+ *         },
+ *         function(e){
+ *             // Handle error like:
+ *             if(e.statusCode === 500){
+ *                 console.log("Internal Server Error Occurred.");
+ *             }
+ *             else{
+ *                 console.log("Server responsed with: " + e.statusCode + ". Message is: " + e.message);
+ *             }
+ *         }
+ *     );
  */
 var http = {};
 
@@ -32,7 +46,9 @@ var http = {};
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
+ * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -50,7 +66,9 @@ http.requestFile = function(url, fileName, onLoad, onError) {};
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
+ * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -68,7 +86,9 @@ http.requestImage = function(url, onLoad, onError) {}
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
+ * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -86,7 +106,9 @@ http.requestString = function(url, onLoad, onError) {}
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
  * @param {String} onError.params.message
+ * @param {Object} onError.params.body
  * @param {String} onError.params.statusCode
+ * @param {Object} onError.params.headers
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -96,29 +118,6 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @method request
  * 
  * Sends an http request defined with parameters.
- * 
- *     @example
- *     const http = require("sf-core/net/http");
- *     var myHeaders = {
- *         "Content-Type": "text/plain;charset=UTF-8"
- *     }
- * 
- *     var params = {
- *         url: your-url,
- *         body: your-body,
- *         method: "POST",
- *         headers: myHeaders
- *     }
- *     
- *     http.request(params, onLoad, onError);
- *     
- *     function onLoad(response) {
- *         var body = response.body;
- *         var headers = params.headers;
- *     }
- *     function onError(error) {
- *         alert(error);
- *     }
  * 
  * @param {Object} params Parameters
  * @param {String} params.url URL
@@ -133,8 +132,9 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {Object} onLoad.params.headers
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {String} onError.params.statusCode
+ * @param {Object} onError.params.body Body of the error
+ * @param {String} onError.params.statusCode Error status code
+ * @param {Object} onError.params.headers Headers sent with error
  * @return {Net.Http.Request}
  * @since 0.1
  */
@@ -153,16 +153,15 @@ http.request = function(params, onLoad, onError) {};
  *     request.cancel();
  * 
  */
-const Request = function() {
+function Request(){}
 
-    /**
-     * @method cancel
-     * 
-     * Stops listening the response of the request.
-     * 
-     * @since 0.1
-     */
-    this.cancel = function(){};
-};
+/**
+ * @method cancel
+ * 
+ * Stops listening the response of the request.
+ * 
+ * @since 0.1
+ */
+Request.prototype.cancel = function(){};
 
 module.exports = http;

@@ -19,16 +19,23 @@ function TimePicker (params) {
     
     self.nativeObject.onSelected = self.onTimeSelectedListener;
     
+    var _hours = null;
+    var _minutes = null;
+    
     self.setTime = function(time){
         if (TypeUtil.isNumeric(time.hour) && TypeUtil.isNumeric(time.minute)) {
-            var date = new Date();
-            date.setHours(time.hour);
-            date.setMinutes(time.minute);
-            self.nativeObject.defaultDate = date;
+            _hours = time.hour;
+            _minutes = time.minute;
         }
     };
     
     self.show = function(){
+        var date = new Date();
+        if (_hours && _minutes) {
+            date.setHours(_hours);
+            date.setMinutes(_minutes);
+        }
+        self.nativeObject.defaultDate = date;
         self.nativeObject.datePickerMode = UIDatePickerMode.time;
         self.nativeObject.show();
     };

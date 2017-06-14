@@ -1,3 +1,5 @@
+const FlexLayout = require("../flexlayout");
+
 /**
  * @class UI.Dialog
  * @since 0.1
@@ -22,41 +24,41 @@
  *     });
  * 
  *     myDialog.layout.addChild(myButton);
+ *     myDialog.layout.applyLayout();
  *     myDialog.show();
  *
  */
-function Dialog(params) {
+function Dialog(params) {}
 
-    /**
-     * Gets the layout of Dialog. You should add views to the layout of the dialog instance.
-     *
-     * @property {UI.FlexLayout} layout
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.layout;
-    
-    /**
-     * Hides the dialog.
-     * 
-     * @method hide
-     * @android
-     * @ios
-     * @since 0.1
-    */
-    this.hide = function (){};
-    
-    /**
-     * Shows the dialog.
-     *
-     * @method show
-     * @since 0.1
-     * @android
-     * @ios
-     */
-    this.show = function (){};
-}
+/**
+ * Gets the layout of Dialog. You should add views to the layout of the dialog instance.
+ *
+ * @property {UI.FlexLayout} layout
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Dialog.prototype.layout = new FlexLayout();
+
+/**
+ * Hides the dialog.
+ * 
+ * @method hide
+ * @android
+ * @ios
+ * @since 0.1
+*/
+Dialog.prototype.hide = function (){};
+
+/**
+ * Shows the dialog.
+ *
+ * @method show
+ * @since 0.1
+ * @android
+ * @ios
+ */
+Dialog.prototype.show = function (){};
 
 module.exports = Dialog;

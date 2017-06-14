@@ -4,7 +4,7 @@
  *
  * Picker is a UIView that allows you to create a list which you can pick only one of them.
  * You can add Picker as a View to your layout. If you want to show Picker as a dialog,
- * you can call show() method.
+ * you can call UI.Picker.show method.
  *
  *     @example
  *     const Picker = require("sf-core/ui/picker");
@@ -20,62 +20,71 @@
  *         currentIndex: 2
  *     });
  *
- *     var okCallback = function()
+ *     var okCallback = function(params)
  *     {
- *         alert('ok button clicked');
+ *         alert('Selected index: ' + params.index);
  *     }
  *     var cancelCallback = function()
  *     {
- *         alert('cancel button clicked');
+ *         alert('Canceled');
  *     }
  *     myPicker.show(okCallback,cancelCallback);
  */
-function Picker() {
-    /**
-     * Gets/sets items of the picker.
-     *
-     * @property {Array} items
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.items = [];
+function Picker() {}
 
-    /**
-     * Gets/sets current index of the picker.
-     *
-     * @property {Number} currentIndex
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.currentIndex = 0;
+/**
+ * Gets/sets items of the picker.
+ *
+ * @property {Array} items
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.items = [];
 
-    /**
-     * This event is called when scroll ends & an item is selected on a picker.
-     *
-     * @param {Number} index
-     * @event onSelected
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.onSelected = function onSelected(index){ };
+/**
+ * Enables/disables the Picker.
+ *
+ * @since 1.1.8
+ * @property {Boolean} [enabled = true]
+ * @android
+ */
+Picker.prototype.android = {};
+Picker.prototype.android.enabled = true;
 
-     /**
-     * This function shows picker in a dialog.
-     *
-     * @param {Function} ok This event is called when user clicks ok button.
-     * @param {Object} ok.param
-     * @param {Number} ok.param.index
-     * @param {Function} cancel This event is called when user clicks cancel button.
-     * @method show
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.show = function(ok, cancel){};
+/**
+ * Gets/sets current index of the picker.
+ *
+ * @property {Number} currentIndex
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.currentIndex = 0;
 
-}
+/**
+ * This event is called when scroll ends & an item is selected on a picker.
+ *
+ * @param {Number} index
+ * @event onSelected
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.onSelected = function onSelected(index){ };
+
+/**
+ * This function shows picker in a dialog.
+ *
+ * @param {Function} ok This event is called when user clicks ok button.
+ * @param {Object} ok.param
+ * @param {Number} ok.param.index
+ * @param {Function} cancel This event is called when user clicks cancel button.
+ * @method show
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Picker.prototype.show = function(ok, cancel){};
 
 module.exports = Picker;

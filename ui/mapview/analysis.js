@@ -38,118 +38,161 @@ const extend = require('js-base/core/extend');
  *     myPage.layout.addChild(myMapView);
  * 
  */
-const MapView = extend(View)(
-    function (_super, params) {
-        _super(this);
+function MapView(params) {}
 
-        /**
-         * Enables/Disables scroll gestures so that map can be dragged.
-         *
-         * @property {Boolean} [scrollEnabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.scrollEnabled;
+/**
+ * Enables/Disables scroll gestures so that map can be dragged.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.scrollEnabled;
 
-        /**
-         * Enables/Disables rotate gestures so that map can be rotated.
-         *
-         * @property {Boolean} [rotateEnabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.rotateEnabled;
+/**
+ * Enables/Disables rotate gestures so that map can be rotated.
+ *
+ * @property {Boolean} [rotateEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.rotateEnabled;
 
-        /**
-         * Enables/Disables zoom gestures so that map can be zoomed in and out.
-         *
-         * @property {Boolean} [zoomEnabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.zoomEnabled;
+/**
+ * Enables/Disables compass on map.
+ *
+ * @property {Boolean} [compassEnabled = true]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.compassEnabled;
 
-        /**
-         * Enables/Disables compass on map.
-         *
-         * @property {Boolean} [compassEnabled = true]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.compassEnabled;
+/**
+ * Enables/Disables user location indicator on map.
+ *
+ * @property {Boolean} [userLocationEnabled = false]
+ * @android
+ * @ios
+ * @since 1.1.11
+ */
+MapView.prototype.userLocationEnabled;
 
-        /**
-         * This property sets center location of the map to the given latitude & longitude.
-         *
-         *     @example
-         *     const MapView = require('sf-core/ui/mapview');
-         *     var myMapView = new MapView({
-         *         centerLocation: {
-         *             latitude: 41.0209078,
-         *             longitude: 29.0039533
-         *         }
-         *     });
-         * @property {Object} centerLocation
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.centerLocation;
+/**
+ * This property sets center location of the map to the given latitude & longitude.
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myMapView = new MapView({
+ *         centerLocation: {
+ *             latitude: 41.0209078,
+ *             longitude: 29.0039533
+ *         }
+ *     });
+ * @property {Object} centerLocation
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.centerLocation;
 
-        /**
-         * Adds a UI.MapView.Pin on the map.
-         *
-         * @param {UI.MapView.Pin} pin
-         * @android
-         * @ios
-         * @method addPin
-         * @since 0.1
-         */
-        this.addPin = function(){};
+/**
+ * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
+ *
+ * @property {Number} [zoomLevel = 15]
+ * @android
+ * @ios
+ * @since 1.1.10
+ */
+MapView.prototype.zoomLevel = 15;
 
-        /**
-         * Removes the UI.MapView.Pin from the map.
-         *
-         * @param {UI.MapView.Pin} pin
-         * @method removePin
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.removePin = function(){};
+/**
+ * This property sets center location of the map to the given latitude & longitude.
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myMapView = new MapView({
+ *         centerLocation: {
+ *             latitude: 41.0209078,
+ *             longitude: 29.0039533
+ *         }
+ *     });
+ * @property {Object} centerLocation
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.centerLocation;
 
-        /**
-         * This event is called when map is ready to be used.
-         *
-         * @since 0.1
-         * @event onCreate
-         * @android
-         * @ios
-         */
-        this.onCreate = function onCreate(){ }
+/**
+ * Adds a UI.MapView.Pin on the map.
+ *
+ * @param {UI.MapView.Pin} pin
+ * @android
+ * @ios
+ * @method addPin
+ * @since 0.1
+ */
+MapView.prototype.addPin = function(){};
 
-        /**
-         * Gets/Sets map type
-         *
-         * @property {UI.MapView.Type} [type = UI.MapView.Type.NORMAL]
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.type = UI.MapView.Type.NORMAL;
+/**
+ * Removes the UI.MapView.Pin from the map.
+ *
+ * @param {UI.MapView.Pin} pin
+ * @method removePin
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.removePin = function(){};
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    }
-);
+/**
+ * Triggered when pressed on the map and sends the location pressed on the map.
+ *
+ * @event onPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onPress;
+
+/**
+ * Triggered when long pressed on the map and sends the location pressed on the map.
+ *
+ * @event onLongPress
+ * @param {Object} location
+ * @param {Number} location.latitude
+ * @param {Number} location.longitude
+ * @android
+ * @ios
+ * @since 1.1.3
+ */
+MapView.prototype.onLongPress;
+
+/**
+ * This event is called when map is ready to be used.
+ *
+ * @since 0.1
+ * @event onCreate
+ * @android
+ * @ios
+ */
+MapView.prototype.onCreate = function onCreate(){ };
+
+/**
+ * Gets/Sets map type
+ *
+ * @property {UI.MapView.Type} [type = UI.MapView.Type.NORMAL]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MapView.prototype.type = UI.MapView.Type.NORMAL;
 
 /**
  * @class UI.MapView.Pin
@@ -185,93 +228,89 @@ const MapView = extend(View)(
  *     });
  *     myPage.layout.addChild(myMapView);
  */
-const Pin = function() {
+function Pin() {}
 
-        /**
-         * Pin location on the map. 
-         *
-         *     @example
-         *     const MapView = require('sf-core/ui/mapview');
-         *     var myPin = new MapView.Pin({
-         *         location: {
-         *             latitude: 40.9844753,
-         *             longitude: 28.8184597
-         *         }
-         *     });
-         *
-         * @property {Object} location
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.location;
+/**
+ * Pin location on the map. 
+ *
+ *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myPin = new MapView.Pin({
+ *         location: {
+ *             latitude: 40.9844753,
+ *             longitude: 28.8184597
+ *         }
+ *     });
+ *
+ * @property {Object} location
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.location;
 
-        /**
-         * This property shows title when user touches on the pin.
-         *
-         * @property {String} title
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.title;
+/**
+ * This property shows title when user touches on the pin.
+ *
+ * @property {String} title
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.title;
 
-        /**
-         * This property shows subtitle when user touches on the pin.
-         *
-         * @property {String} subtitle
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.subtitle;
+/**
+ * This property shows subtitle when user touches on the pin.
+ *
+ * @property {String} subtitle
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.subtitle;
 
-        /**
-         * This property sets pin color.
-         * Avaliable colors for Android: [BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW]
-         *
-         * @property {UI.Color} color
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.color;
+/**
+ * This property sets pin color.
+ * Avaliable colors for Android: [BLUE, CYAN, GREEN, MAGENTA, RED, YELLOW]
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.color;
 
-        /**
-         * This property sets an image as pin instead of default pin.
-         *
-         * @property {UI.Image} image
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.image;
+/**
+ * This property sets an image as pin instead of default pin.
+ *
+ * @property {UI.Image} image
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.image;
 
-        /**
-         * Gets/Sets visibility of a pin.
-         *
-         * @property {Boolean} visible
-         * @android
-         * @ios
-         * @since 0.1
-         */
-        this.visible;
+/**
+ * Gets/Sets visibility of a pin.
+ *
+ * @property {Boolean} visible
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Pin.prototype.visible;
 
-        /**
-         * This event will be fired when the pin is touched.
-         *
-         * @event onPress
-         * @android
-         * @ios
-         * @since 1.1.2
-         */
-        this.onPress;
-};
+/**
+ * This event will be fired when the pin is touched.
+ *
+ * @event onPress
+ * @android
+ * @ios
+ * @since 1.1.2
+ */
+Pin.prototype.onPress;
 
-Object.defineProperty(MapView, 'Pin', {
-    value: Pin,
-    writable: false
-});
+MapView.Pin = Pin;
 
 /**
  * @enum UI.MapView.Type
@@ -282,44 +321,36 @@ Object.defineProperty(MapView, 'Pin', {
  * This property indicates how map will be displayed.
  *
  */
-MapView.Type={};
-Object.defineProperties(MapType, {
-    /**
-     * @property {Number} [NORMAL = 0]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'NORMAL': {
-        value: 0,
-        configurable: false
-    },
-    /**
-     * @property {Number} [SATELLITE = 1]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'SATELLITE': {
-        value: 1,
-        configurable: false
-    },
-    /**
-     * @property {Number} [HYBRID = 2]
-     * @android
-     * @ios
-     * @static
-     * @readonly
-     * @since 0.1
-     */
-    'HYBRID': {
-        value: 2,
-        configurable: false
-    }
-});
+MapView.Type = {};
+
+/**
+ * @property {Number} [NORMAL = 0]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+MapView.Type.NORMAL = 0;
+
+/**
+ * @property {Number} [SATELLITE = 1]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+MapView.Type.SATELLITE = 1;
+
+/**
+ * @property {Number} [HYBRID = 2]
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 0.1
+ */
+MapView.Type.HYBRID = 2;
 
 module.exports = MapView;

@@ -28,6 +28,12 @@ Font.create = function(fontFamily, size, style) {
         }else{
             return __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
         }
+    }else{
+        if (fontFamily === Font.DEFAULT){
+            return __SF_UIFont.systemFontOfSize(size);
+        }else{
+            return __SF_UIFont.fontWithNameSize(fontFamily,size);
+        }
     }
         
 }

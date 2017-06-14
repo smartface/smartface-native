@@ -20,8 +20,22 @@ const Label = extend(View)(
 	    self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
 	    self.nativeObject.textContainer.maximumNumberOfLines = 0;
     	self.nativeObject.textContainer.lineBreakMode = 0;
-    				
-    				
+    	self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
+    	
+    	var _selectable = false;			
+    	Object.defineProperty(self, 'selectable', {
+            get:function() {
+                return _selectable;
+            },
+            set:function(value) {
+                if (typeof(value) === "boolean"){
+                    _selectable = value;
+                    self.nativeObject.setSelectable = value;
+                }
+            },
+            enumerable: true
+         });
+         
         Object.defineProperty(self, 'htmlText', {
             get:function() {
                 return self.nativeObject.htmlText;
@@ -52,7 +66,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.font = value;
                 self.nativeObject.setEditable = false;
-                self.nativeObject.setSelectable = false;
+                self.nativeObject.setSelectable = self.selectable;
             },
             enumerable: true
          });
@@ -84,9 +98,9 @@ const Label = extend(View)(
             set: function(value) {
                 self.nativeObject.text = value;
                 self.nativeObject.setEditable = true;
-                self.nativeObject.textColor = _textColor;
+                self.nativeObject.textColor = _textColor.nativeObject;
                 self.nativeObject.setEditable = false;
-                self.nativeObject.setSelectable = false;
+                self.nativeObject.setSelectable = self.selectable;
             },
             enumerable: true
         });
@@ -99,7 +113,7 @@ const Label = extend(View)(
                 self.nativeObject.setEditable = true;
                 self.nativeObject.textAlignmentNumber = value;
                 self.nativeObject.setEditable = false;
-                self.nativeObject.setSelectable = false;
+                self.nativeObject.setSelectable = self.selectable;
             },
             enumerable: true
         });
@@ -112,9 +126,9 @@ const Label = extend(View)(
             set: function(value) {
                 _textColor = value;
                 self.nativeObject.setEditable = true;
-                self.nativeObject.textColor = value;
+                self.nativeObject.textColor = value.nativeObject;
                 self.nativeObject.setEditable = false;
-                self.nativeObject.setSelectable = false;
+                self.nativeObject.setSelectable = self.selectable;
             },
             enumerable: true
         });

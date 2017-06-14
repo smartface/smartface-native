@@ -57,17 +57,6 @@ const ImageView = extend(View)(
                 },
                 enumerable: true
             },
-            // Overloaded from view due to AND-2702
-            'alpha': {
-                get: function() {
-                    return this.nativeObject.getAlpha()/255;
-                },
-                set: function(alpha) {
-                    this.nativeObject.setAlpha(alpha*255);
-                },
-                enumerable: true,
-                configurable: true
-            },
             'toString': {
                 value: function(){
                     return 'ImageView';

@@ -62,6 +62,20 @@ const ViewGroup = extend(View)(
                 }
             }
         }
+
+        self.onViewAddedHandler = function(e){
+            if (typeof self.onViewAdded === "function"){
+                self.onViewAdded();
+            }
+        }
+        self.nativeObject.didAddSubview = self.onViewAddedHandler;
+        
+        self.onViewRemovedHandler = function(e){
+            if (typeof self.onViewRemoved === "function"){
+                self.onViewRemoved();
+            }
+        }
+        self.nativeObject.willRemoveSubview = self.onViewRemovedHandler;
         
         // Assign parameters given in constructor
         if (params) {

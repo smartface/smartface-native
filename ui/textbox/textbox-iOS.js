@@ -3,6 +3,9 @@ const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
 const ActionKeyType = require('sf-core/ui/actionkeytype');
 const Animator = require('sf-core/ui/animator');
+const Color = require('sf-core/ui/color');
+const Screen = require('sf-core/device/screen');
+const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -37,7 +40,7 @@ const IOSReturnKeyType = {
 const TextBox = extend(View)(
     function(_super, params) {
         var self = this;
-
+        
         if (!self.nativeObject) {
             self.nativeObject = new __SF_UITextField();
         }
@@ -60,6 +63,7 @@ const TextBox = extend(View)(
             }
             else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
                 self.onTextChanged(method.replacementString, method.range);
+                return true;
             }
         };
 
@@ -90,10 +94,10 @@ const TextBox = extend(View)(
 
         Object.defineProperty(self, 'textColor', {
             get: function() {
-                return self.nativeObject.textColor;
+                return new Color({color : self.nativeObject.textColor});
             },
             set: function(value) {
-                self.nativeObject.textColor = value;
+                self.nativeObject.textColor = value.nativeObject;
             },
             enumerable: true
         });
@@ -131,7 +135,7 @@ const TextBox = extend(View)(
                 self.nativeObject.contentVerticalAlignment = vertical;
                 self.nativeObject.textAlignment = horizontal;
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'hint', {
@@ -141,7 +145,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.placeholder = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         this.ios = {};
@@ -152,7 +156,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.adjustsFontSizeToFitWidth = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         Object.defineProperty(this.ios, 'minimumFontSize', {
@@ -162,7 +166,7 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.minimumFontSize = value;
             },
-            enumerable: true
+            enumerable: true,configurable : true
         });
 
         Object.defineProperty(this.ios, 'keyboardAppearance', {
@@ -217,7 +221,7 @@ const TextBox = extend(View)(
                         self.nativeObject.returnKeyType = IOSReturnKeyType.default;
                 }
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'keyboardType', {
@@ -281,7 +285,7 @@ const TextBox = extend(View)(
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
                 }
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         var _clearButtonMode = false;
@@ -298,7 +302,7 @@ const TextBox = extend(View)(
                 }
 
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
 
         Object.defineProperty(self, 'isPassword', {
@@ -309,7 +313,7 @@ const TextBox = extend(View)(
                 self.nativeObject.isSecure = value;
 
             },
-            enumerable: true
+            enumerable: true,configurable: true
         });
         
         this.showKeyboard = function(){
@@ -320,79 +324,28 @@ const TextBox = extend(View)(
            self.nativeObject.resignFirstResponder();
         };
        
+        this.requestFocus = function(){
+           self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+           self.nativeObject.resignFirstResponder();
+        };
+        
+        self.nativeObject.addKeyboardObserver();
+        
+        self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
+            nativeObject : self.nativeObject
+        });
+        
         self.nativeObject.onShowKeyboard = function(e){
-              keyboardShowAnimation(e.keyboardHeight);
+            self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
         }
            
         self.nativeObject.onHideKeyboard = function(e){
-              keyboardHideAnimation();
+            self.keyboardanimationdelegate.keyboardHideAnimation();
         }
         
-        self.getParentViewController = function(){
-            return self.nativeObject.parentViewController();
-        }  
-        
-        var _top = 0;
-        function getViewTop(view){
-            _top += view.frame.y;
-            if(view.superview){
-                if(view.superview.constructor.name === "SMFNative.SMFUIView"){
-                    if (view.superview.superview){
-                        if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
-                            return getViewTop(view.superview);
-                        }
-                    }
-                }
-            }
-            return _top;
-        }
-        
-        function keyboardShowAnimation(keyboardHeight){
-            var height = self.nativeObject.frame.height;
-            _top = 0;
-            var top = getViewTop(self.nativeObject);
-            var navigationBarHeight = 0;
-        
-            if(self.getParentViewController()){
-                if(self.getParentViewController().navigationController.navigationBar.visible){
-                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
-                }
-                if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
-                    var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
-                    __SF_UIView.animation(230,0,function(){
-                        var distance = -(top-newTop) + navigationBarHeight;
-                        if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
-                            self.getParentViewController().view.yoga.top =  -keyboardHeight + navigationBarHeight;
-                        }else{
-                            self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
-                        }
-                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                    },function(){
-                        
-                    });
-                }else{
-                    if (self.getParentViewController().view.frame.y !== 0){
-                        keyboardHideAnimation();
-                    }
-                }
-            }
-         }
-          
-        function keyboardHideAnimation(){
-            if(self.getParentViewController()){
-                var top = 0;
-                if(self.getParentViewController().navigationController.navigationBar.visible){
-                    top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
-                }
-                __SF_UIView.animation(130,0,function(){
-                    self.getParentViewController().view.yoga.top = top;
-                    self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                },function(){
-                    
-                });
-            }
-        }
-  
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

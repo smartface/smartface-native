@@ -32,10 +32,7 @@ var ActionKeyType = { };
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType, 'DEFAULT', {
-  value: 0,
-  writable: false
-});
+ActionKeyType.DEFAULT = 0;
 
 /**
  * @property {Number} NEXT
@@ -46,10 +43,7 @@ Object.defineProperty(ActionKeyType, 'DEFAULT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(ActionKeyType, 'NEXT', {
-  value: 1,
-  writable: false
-});
+ActionKeyType.NEXT = 1;
 
 /**
  * @property {Number} GO
@@ -60,10 +54,7 @@ Object.defineProperty(ActionKeyType, 'NEXT', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'GO', {
-  value: 2,
-  writable: false
-});
+ActionKeyType.GO = 2;
 
 /**
  * @property {Number} SEARCH
@@ -74,10 +65,7 @@ Object.defineProperty(ActionKeyType, 'GO', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'SEARCH', {
-  value: 3,
-  writable: false
-});
+ActionKeyType.SEARCH = 3;
 
 /**
  * @property {Number} SEND
@@ -88,9 +76,8 @@ Object.defineProperty(ActionKeyType, 'SEARCH', {
  * @since 0.1
  * @readonly
  */
-Object.defineProperty(ActionKeyType, 'SEND', {
-  value: 4,
-  writable: false
-});
+ActionKeyType.SEND = 4;
+
+Object.freeze(ActionKeyType);
 
 module.exports = ActionKeyType;

@@ -4,6 +4,8 @@ const extend = require('js-base/core/extend');
  * @class UI.AbsoluteLayout
  * @since 0.1
  * @extends UI.ViewGroup
+ * @deprecated since 1.1.10, you may use UI.FlexLayout.PositionType#ABSOLUTE instead
+ * 
  * AbsoluteLayout is a layout that lets you specify the exact positions of its child views.
  *
  *     @example
@@ -36,17 +38,13 @@ const extend = require('js-base/core/extend');
  *     myAbsoluteLayout.addChild(myLabel2);
  *     myAbsoluteLayout.addChild(myLabel3);
 */
-const AbsoluteLayout = extend(ViewGroup)(
-    function (_super, params) {
-        _super(this);
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
+function AbsoluteLayout(params) {
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
         }
     }
-);
+}
 
 module.exports = AbsoluteLayout;

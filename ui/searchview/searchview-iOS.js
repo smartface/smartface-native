@@ -1,6 +1,9 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Image = require('sf-core/ui/image');
+const Color = require('sf-core/ui/color');
+const Screen = require('sf-core/device/screen');
+const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
 
 const UISearchBarStyle = {
     default : 0,
@@ -25,14 +28,32 @@ const SearchView = extend(View)(
         
         _super(this);
         
-        var _text = "";
+        var textfield = self.nativeObject.valueForKey("searchField");
+        textfield.addKeyboardObserver();
+        
+        self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
+            nativeObject : self.nativeObject
+        });
+        
+        textfield.onShowKeyboard = function(e){
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
+            }
+        }
+           
+        textfield.onHideKeyboard = function(e){
+            if(self.nativeObject.superview.className() != "UINavigationBar"){
+                self.keyboardanimationdelegate.keyboardHideAnimation();
+            }
+        }
+        
+        
         Object.defineProperty(this, 'text', {
             get: function() {
-                return _text;
+                return self.nativeObject.text;
             },
             set: function(text) {
-                _text = text;
-                self.nativeObject.text = _text;
+                self.nativeObject.text = text;
             },
             enumerable: true
         });
@@ -52,10 +73,10 @@ const SearchView = extend(View)(
         var _textColor = self.nativeObject.textColor;
         Object.defineProperty(this, 'textColor', {
             get: function() {
-                return _textColor;
+                return new Color({color : _textColor});
             },
             set: function(textColor) {
-                _textColor = textColor;
+                _textColor = textColor.nativeObject;
                 self.nativeObject.textColor = _textColor;
             },
             enumerable: true
@@ -64,10 +85,10 @@ const SearchView = extend(View)(
         var _backgroundColor = self.nativeObject.barTintColor;
         Object.defineProperty(this, 'backgroundColor', {
             get: function() {
-                return _backgroundColor;
+                return new Color({color : _backgroundColor});
             },
             set: function(backgroundColor) {
-                _backgroundColor = backgroundColor;
+                _backgroundColor = backgroundColor.nativeObject;
                 self.nativeObject.barTintColor = _backgroundColor;
             },
             enumerable: true
@@ -80,7 +101,7 @@ const SearchView = extend(View)(
             },
             set: function(backgroundImage) {
                 _backgroundImage = backgroundImage;
-                self.nativeObject.backgroundImage = _backgroundImage.nativeObject;
+                self.nativeObject.setSearchFieldBackgroundImage(_backgroundImage.nativeObject,0);
             },
             enumerable: true
         });
@@ -113,6 +134,14 @@ const SearchView = extend(View)(
             self.nativeObject.resignFirstResponder();
         };
         
+        this.requestFocus = function(){
+            self.nativeObject.becomeFirstResponder();
+        };
+       
+        this.removeFocus = function(){
+            self.nativeObject.resignFirstResponder();
+        };
+        
         this.ios = {};
         var _searchViewStyle = UISearchBarStyle.default;
         Object.defineProperty(this.ios, 'searchViewStyle', {
@@ -126,14 +155,13 @@ const SearchView = extend(View)(
             enumerable: true
         });
         
-        var _showsCancelButton = self.nativeObject.showsCancelButton;
+        var _showsCancelButton = false;
         Object.defineProperty(this.ios, 'showsCancelButton', {
             get: function() {
                 return _showsCancelButton;
             },
             set: function(showsCancelButton) {
                 _showsCancelButton = showsCancelButton;
-                self.nativeObject.showsCancelButton = _showsCancelButton;
             },
             enumerable: true
         });
@@ -202,18 +230,26 @@ const SearchView = extend(View)(
             }
         };
         self.searchBarDelegate.didBeginEditing = function(){
+            if (self.ios.showsCancelButton) {
+                self.nativeObject.setShowsCancelButtonAnimated(true,true);
+            }
+
             if (typeof _onSearchBegin === "function"){
                     _onSearchBegin();
             }
         };
         self.searchBarDelegate.didEndEditing = function(){
+            if (self.ios.showsCancelButton) {
+                self.nativeObject.setShowsCancelButtonAnimated(false,true);
+            }
+            
             if (typeof _onSearchEnd === "function"){
                     _onSearchEnd();
             }
         };
         self.searchBarDelegate.textDidChange = function(searchText){
             if (typeof _onTextChanged === "function"){
-                    _onTextChanged();
+                    _onTextChanged(searchText);
             }
         };
         self.searchBarDelegate.searchButtonClicked = function(){

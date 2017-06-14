@@ -22,10 +22,7 @@ function TextAlignment(){}
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'TOPLEFT', {
-  value: 0,
-  writable: false
-});
+TextAlignment.TOPLEFT = 0;
 
 /**
  * Gets the text alignment to the top center.
@@ -37,10 +34,7 @@ Object.defineProperty(TextAlignment, 'TOPLEFT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'TOPCENTER', {
-  value: 1,
-  writable: false
-});
+TextAlignment.TOPCENTER = 1;
 
 /**
  * Gets the text alignment to the top right.
@@ -52,10 +46,7 @@ Object.defineProperty(TextAlignment, 'TOPCENTER', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'TOPRIGHT', {
-  value: 2,
-  writable: false
-});
+TextAlignment.TOPRIGHT = 2;
 
 /**
  * Gets the text alignment to the middle left.
@@ -67,10 +58,7 @@ Object.defineProperty(TextAlignment, 'TOPRIGHT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'MIDLEFT', {
-  value: 3,
-  writable: false
-});
+TextAlignment.MIDLEFT = 3;
 
 /**
  * Gets the text alignment to the middle center.
@@ -82,10 +70,7 @@ Object.defineProperty(TextAlignment, 'MIDLEFT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'MIDCENTER', {
-  value: 4,
-  writable: false
-});
+TextAlignment.MIDCENTER = 4;
 
 /**
  * Gets the text alignment to the middle right.
@@ -97,10 +82,7 @@ Object.defineProperty(TextAlignment, 'MIDCENTER', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'MIDRIGHT', {
-  value: 5,
-  writable: false
-});
+TextAlignment.MIDRIGHT = 5;
 
 /**
  * Gets the text alignment to the bottom left.
@@ -112,10 +94,7 @@ Object.defineProperty(TextAlignment, 'MIDRIGHT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'BOTTOMLEFT', {
-  value: 6,
-  writable: false
-});
+TextAlignment.BOTTOMLEFT = 6;
 
 /**
  * Gets the text alignment to the bottom center.
@@ -127,10 +106,7 @@ Object.defineProperty(TextAlignment, 'BOTTOMLEFT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'BOTTOMCENTER', {
-  value: 7,
-  writable: false
-});
+TextAlignment.BOTTOMCENTER = 7;
 
 /**
  * Gets the text alignment to the bottom right.
@@ -142,9 +118,6 @@ Object.defineProperty(TextAlignment, 'BOTTOMCENTER', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(TextAlignment, 'BOTTOMRIGHT', {
-  value: 8,
-  writable: false
-});
+TextAlignment.BOTTOMRIGHT = 8;
 
-module.exports = TextAlignment;
+module.exports = Object.freeze(TextAlignment);

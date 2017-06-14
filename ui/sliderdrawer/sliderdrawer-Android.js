@@ -17,8 +17,15 @@ const SliderDrawer = extend(FlexLayout)(
         var _onLoad;
         this.attachedPages = null;
         var _enabled = true;
+        var _state = SliderDrawer.State.CLOSED;
         
         Object.defineProperties(this,{
+            'state' : {
+                get: function(){
+                    return _state;
+                },
+                enumerable: true
+            },
             'drawerPosition' : {
                 get: function(){
                     return _position;
@@ -47,7 +54,8 @@ const SliderDrawer = extend(FlexLayout)(
                         this.attachedPages.setDrawerLocked(!enabled);
                     }
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'layout': {
                 value: this,
@@ -136,15 +144,19 @@ const SliderDrawer = extend(FlexLayout)(
         this.drawerListener = NativeDrawerLayout.DrawerListener.implement({
             onDrawerClosed: function(drawerView){
                 _onHide && _onHide();
+                _state = SliderDrawer.State.CLOSED;
             },
             'onDrawerOpened': function(drawerView){
                 _onShow && _onShow();
+                _state = SliderDrawer.State.OPEN;
             },
             'onDrawerSlide': function(drawerView, slideOffset){
                 
             },
             'onDrawerStateChanged': function(newState){
-                
+                if (newState === 1) { // STATE_DRAGGING
+                    _state = SliderDrawer.State.DRAGGED;
+                }
             }
         });
         
@@ -176,5 +188,7 @@ Object.defineProperties(SliderDrawer.Position,{
         writable: false
     }
 });
+
+SliderDrawer.State = require("./sliderdrawer-state");
 
 module.exports = SliderDrawer;

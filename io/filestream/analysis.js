@@ -11,125 +11,124 @@
  *     var myFile = new File({
  *         path: Path.DataDirectory + '/myFile.txt'
  *     });
- *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE, FileStream.AppendMode.TEXT);
+ *     var myFileStream = myFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.TEXT);
  *     myFileStream.write('Smartface');
  *     myFileStream.close();
  * 
  */
-function FileStream(params) {
+function FileStream(params) {}
     
-    /**
-     * Gets the mode of FileStream operation.
-     * 
-     * @property {IO.FileStream.StreamType} mode
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.mode;
-    
-    /**
-     * Gets the append mode of FileStream operation.
-     * 
-     * @property {IO.FileStream.AppendMode} mode
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.appendMode;
-    
-    /**
-     * Checks whether the stream is readable.
-     * 
-     * @property {Boolean} isReadable
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.isReadable;
-    
-    /**
-     * Checks whether the stream is writable.
-     * 
-     * @property {Boolean} isWritable
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.isWritable;
-    
-    /**
-     * Gets the name of the file it belongs to.
-     *
-     * @property {String} name
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.name;
-    
-    /**
-     * Gets the path of the file it belongs to.
-     * 
-     * @property {String} path
-     * @readonly
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.path;
-    
-    /**
-     * Closes the FileStream instance. FileStream have to be closed when its job is done.
-     *
-     * @method close
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.close = function(){};
-    
-    /**
-     * Gets the {@link Blob} object from FileStream.
-     *
-     * @return {Blob}
-     * @method readBlob
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.readBlob = function(){};
-    
-    /**
-     * Gets all characters from the FileStream. If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode,
-     * returns null.
-     *
-     * @return {String}
-     * @method readToEnd
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.readToEnd = function(){};
-    
-    /**
-     * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#appendMode appendMode}  append mode. 
-     * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false. 
-     * 
-     * @param {String|Blob} content
-     * @return {Boolean}
-     * @method write
-     * @android
-     * @ios
-     * @since 0.1
-     */
-    this.write = function(content){};
-}
+/**
+ * Gets the mode of FileStream operation.
+ * 
+ * @property {IO.FileStream.StreamType} mode
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.mode;
+
+/**
+ * Gets the content mode of FileStream operation.
+ * 
+ * @property {IO.FileStream.ContentMode} mode
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.contentMode;
+
+/**
+ * Checks whether the stream is readable.
+ * 
+ * @property {Boolean} isReadable
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.isReadable;
+
+/**
+ * Checks whether the stream is writable.
+ * 
+ * @property {Boolean} isWritable
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.isWritable;
+
+/**
+ * Gets the name of the file it belongs to.
+ *
+ * @property {String} name
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.name;
+
+/**
+ * Gets the path of the file it belongs to.
+ * 
+ * @property {String} path
+ * @readonly
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.path;
+
+/**
+ * Closes the FileStream instance. FileStream have to be closed when its job is done.
+ *
+ * @method close
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.close = function(){};
+
+/**
+ * Gets the {@link Blob} object from FileStream.
+ *
+ * @return {Blob}
+ * @method readBlob
+ * @android
+ * @ios
+ * @deprecated since 1.1.10, you may use FileStream.readToEnd() function after you change contentMode of FileStream to FileStream.ContentMode.BINARY.
+ */
+FileStream.prototype.readBlob = function(){};
+
+/**
+ * Gets all characters or blob content from the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
+ * If FileStream not opened with {@link IO.FileStream.StreamType#READ} mode, returns null.
+ *
+ * @return {String|Blob}
+ * @method readToEnd
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.readToEnd = function(){};
+
+/**
+ * Writes all characters or blob content into the file stream depending of {@link IO.FileStream#ContentMode contentMode} content mode.
+ * If the file stream opened with {@link IO.FileStream.StreamType#READ}, returns false. 
+ * 
+ * @param {String|Blob} content
+ * @return {Boolean}
+ * @method write
+ * @android
+ * @ios
+ * @since 0.1
+ */
+FileStream.prototype.write = function(content){};
 
 /**
  * The StreamType determines type of the FileStream operation.
@@ -180,39 +179,39 @@ FileStream.StreamType.READ = 1;
 FileStream.StreamType.WRITE = 2;
 
 /**
- * The AppendMode write mode for the FileStream operation. If AppendMode is BINARY, FileStream.write accepts blob object othervise accepts text.
+ * The ContentMode is read/write mode for the FileStream operation.
  * 
- * @enum {Number} IO.FileStream.AppendMode
+ * @enum {Number} IO.FileStream.ContentMode
  * @static
  * @readonly
  * @android
  * @ios
- * @since 1.1
+ * @since 1.1.11
  */
-FileStream.AppendMode = {};
+FileStream.ContentMode = {};
 
 /**
- * Open FileStream as text.
+ * Changes content type of FileStream as text.
  * 
  * @property TEXT
  * @static
  * @readonly
  * @android
  * @ios
- * @since 0.1
+ * @since 1.1.11
  */
-FileStream.AppendMode.TEXT;
+FileStream.ContentMode.TEXT;
 
 /**
- * Open FileStream as binary.
+ * Changes content type of FileStream as binary.
  * 
  * @property BINARY
  * @static
  * @readonly
  * @android
  * @ios
- * @since 0.1
+ * @since 1.1.11
  */
-FileStream.AppendMode.BINARY;
+FileStream.ContentMode.BINARY;
 
 module.exports = FileStream;

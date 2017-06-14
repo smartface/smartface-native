@@ -153,7 +153,11 @@ const WebView = extend(View)(
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
             var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
             this.nativeObject.setWebViewClient(nativeWebClient);
-            this.nativeObject.getSettings().setJavaScriptEnabled(true);
+            var settings = this.nativeObject.getSettings();
+            settings.setJavaScriptEnabled(true);
+            settings.setDomStorageEnabled(true);
+            settings.setUseWideViewPort(true);
+            settings.setLoadWithOverviewMode(true);
         }
 
         // Assign parameters given in constructor

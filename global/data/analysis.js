@@ -6,7 +6,7 @@
  * 
  *     @example
  *     const Data = require('sf-core/data');
- *     const Router = require('sf-core/ui/router');
+ *     const Router = require('sf-core/router');
  *     
  *     Data.setStringVariable('userName','Smartface');
  *     Data.setStringVariable('userEmail','info@smartface.io');
