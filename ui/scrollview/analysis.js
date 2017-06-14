@@ -77,6 +77,17 @@ ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL;
 ScrollView.prototype.scrollBarEnabled = true;
 
 /**
+ * Gets layout of the ScrollView. Use this property to add a child to the ScrollView instead of {@link ScrollView#addChild}
+ *
+ * @property {UI.FlexLayout} [layout = UI.FlexLayout]
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.10
+ */
+ScrollView.prototype.layout = UI.FlexLayout;
+
+/**
  * Immediately scrolls to the edge set.
  *
  * @method scrollToEdge
