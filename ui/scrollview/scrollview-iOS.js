@@ -97,7 +97,7 @@ const ScrollView = extend(ViewGroup)(
                     _align = ScrollType.vertical;
                 }
                 self.autoSize();
-                self.autoSize(self.layout.nativeObject.frame);
+                self.changeContentSize(self.layout.nativeObject.frame);
             },
             enumerable: true
          });
@@ -127,7 +127,7 @@ const ScrollView = extend(ViewGroup)(
         };
     
         self.autoSize = function(){
-            if (self.nativeObject.subviews.length === 3) { 
+            if (nativeObjectViewSubviewCount() === 1) { 
                 return;
             }
             self.applyLayout();
@@ -135,7 +135,7 @@ const ScrollView = extend(ViewGroup)(
         };
         
         self.changeContentSize = function(frame){
-            if (self.nativeObject.subviews.length > 3) { 
+            if (nativeObjectViewSubviewCount() ===  2) { 
                 return;
             }
             if (_align ==- ScrollType.vertical) {
@@ -144,6 +144,16 @@ const ScrollView = extend(ViewGroup)(
                 self.nativeObject.contentSize = {width : frame.width, height : 0};
             }
         };
+        
+        function nativeObjectViewSubviewCount(){
+            var count = 0;
+            for (var subview in self.nativeObject.subviews) {
+                if(self.nativeObject.subviews[subview].constructor.name === "SMFNative.SMFUIView"){
+                    count++;
+                }
+            }
+            return count;
+        }
         
         if (params) {
             for (var param in params) {
