@@ -40,7 +40,7 @@ function Dialog(params) {
         this.nativeObject.requestWindowFeature(1); // 1 = android.View.Window.FEATURE_NO_TITLE
         this.nativeObject.setContentView(_layout.nativeObject);
         var dialogWindow = this.nativeObject.getWindow();
-        var colorDrawable = new NativeColorDrawable((Color.TRANSPARENT).nativeObject);
+        var colorDrawable = new NativeColorDrawable((Color.create(150, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         dialogWindow.setLayout(-1, -1); // -1 = android.View.WindowManager.LayoutParams.MATCH_PARENT
     }

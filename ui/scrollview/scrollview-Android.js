@@ -18,6 +18,11 @@ const ScrollView = extend(ViewGroup)(
         _super(this);
         
         Object.defineProperties(this, {
+            'align': {
+                get: function() {
+                    return _align;
+                }
+            },
             'scrollBarEnabled': {
                 get: function() {
                     return this.nativeObject.isHorizontalScrollBarEnabled()
@@ -58,6 +63,16 @@ const ScrollView = extend(ViewGroup)(
                 },
                 set: function(width) {
                     this.maxWidth = width;
+                },
+                enumerable: true,
+                configurable: true
+            },
+            // // Overrided from ViewGroup due to difference between FlexLayout.
+            'addChild': {
+                value: function(view){
+                    view.parent = this;
+                    this.childViews[view.id] = view;
+                    this.nativeObject.addView(view.nativeObject);
                 },
                 enumerable: true,
                 configurable: true

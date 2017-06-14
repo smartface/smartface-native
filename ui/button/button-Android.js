@@ -48,6 +48,7 @@ const Button = extend(Label)(
             this.nativeObject.setAllCaps(false); // enable lowercase texts
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;
+            this.padding = 0;
             this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
                 onClick: function(view) {
                         _onPress && _onPress();

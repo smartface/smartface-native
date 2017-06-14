@@ -3,8 +3,14 @@
  * @static
  * @since 0.1
  *
- * KeyboardType is an enum. It defines keyboard appearance when user focused
- * to the TextBox.
+ * KeyboardType is an enum. When user focused on the TextBox or TextArea keyboard appears 
+ * with different layouts based on the KeyboardType such as number, email etc. Text based 
+ * fields like TextBox or TextArea have different behaviors based on KeyboardType in iOS 
+ * and Android. Android forces user to input data matched with KeyboardType but iOS doesn't.
+ * For example with KeyboardType.DECIMAL user can't enter 5.1.1 for Android because it's not 
+ * a decimal number but can enter this number for iOS.
+ *  
+ * Keyboard types will cause differences between iOS and Android due to native differences.
  *
  *     @example
  *     const TextBox = require('sf-core/ui/textbox');
@@ -23,9 +29,6 @@ var KeyboardType = {};
 KeyboardType.ios = {};
 KeyboardType.android = {};
 
-KeyboardType.ios = { };
-
-KeyboardType.android = { };
 /**
  * @property {Number} DEFAULT
  * Default keyboard appearance.
@@ -209,7 +212,7 @@ KeyboardType.android.TEXTLONGMESSAGE = 16;
  * @since 0.1
  * @readonly
  */
-KeyboardType.android = TEXTNOSUGGESTIONS = 17;
+KeyboardType.android.TEXTNOSUGGESTIONS = 17;
 
 /**
  * @property {Number} TEXTPERSONNAME

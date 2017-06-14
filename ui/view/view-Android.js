@@ -89,13 +89,14 @@ function View(params) {
     Object.defineProperties(this, {
         'alpha': {
             get: function() {
-                return self.nativeObject.getAlpha();
+                // Avoiding integer-float conflics of engine
+                return self.nativeObject.getAlpha()-0.0000001;
             },
             set: function(alpha) {
-                self.nativeObject.setAlpha(alpha);
+                // Avoiding integer-float conflics of engine
+                self.nativeObject.setAlpha(alpha+0.0000001);
             },
-            enumerable: true,
-            configurable: true
+            enumerable: true
         },
         'backgroundImage': {
             get: function() {
@@ -558,6 +559,12 @@ function View(params) {
             },
             set: function(height) {
                 self.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
+                 // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
+                const ScrollView = require("sf-core/ui/scrollview");
+                if(self.parent instanceof ScrollView && self.parent.align === ScrollView.Align.HORIZONTAL){
+                    var layoutParams = self.nativeObject.getLayoutParams();
+                    layoutParams && (layoutParams.height = -2);
+                }
             },
             enumerable: true,
             configurable: true
@@ -568,6 +575,12 @@ function View(params) {
             },
             set: function(width) {
                 self.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
+                // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
+                const ScrollView = require("sf-core/ui/scrollview");
+                if(self.parent instanceof ScrollView && self.parent.align === ScrollView.Align.VERTICAL){
+                    var layoutParams = self.nativeObject.getLayoutParams();
+                    layoutParams && (layoutParams.width = -2);
+                }
             },
             enumerable: true,
             configurable: true
@@ -615,7 +628,8 @@ function View(params) {
             set: function(paddingTop) {
                 self.yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(paddingTop));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingBottom': {
             get: function() {
@@ -624,7 +638,8 @@ function View(params) {
             set: function(paddingBottom) {
                 self.yogaNode.setPadding(YogaEdge.BOTTOM, AndroidUnitConverter.dpToPixel(paddingBottom));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingStart': {
             get: function() {
@@ -651,7 +666,8 @@ function View(params) {
             set: function(paddingLeft) {
                 self.yogaNode.setPadding(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(paddingLeft));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingRight': {
             get: function() {
@@ -660,7 +676,8 @@ function View(params) {
             set: function(paddingRight) {
                 self.yogaNode.setPadding(YogaEdge.RIGHT, AndroidUnitConverter.dpToPixel(paddingRight));
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'paddingHorizontal': {
             get: function() {
@@ -693,7 +710,8 @@ function View(params) {
                 self.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
                 self.yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'marginTop': {
             get: function() {
@@ -863,7 +881,12 @@ function View(params) {
             },
             set: function(flexGrow) {
                 self.yogaNode.setFlexGrow(flexGrow);
-                self.flexBasis = 1;
+                if(flexGrow > 0){
+                    self.flexBasis = 1;
+                }
+                else{
+                    self.flexBasis = NaN;
+                }
             },
             enumerable: true
         },
@@ -878,7 +901,7 @@ function View(params) {
         },
         'flexBasis': {
             get: function() {
-                return self.yogaNode.getFlexBasis();
+                return self.yogaNode.getFlexBasis().value;
             },
             set: function(flexBasis) {
                 self.yogaNode.setFlexBasis(flexBasis);

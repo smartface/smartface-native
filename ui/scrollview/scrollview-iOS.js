@@ -24,7 +24,7 @@ const ScrollView = extend(ViewGroup)(
         }
         
         _super(this);
-        
+
         Object.defineProperty(self, 'layout', {
             get: function() {
                 return self.contentLayout;

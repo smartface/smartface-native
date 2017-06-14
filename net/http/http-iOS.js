@@ -32,6 +32,7 @@ http.requestFile = function(url, fileName, onLoad, onError) {
                     onLoad(file);
                 },
                 function(e){
+                    e.body = new Blob(e.body);
                     onError(e);
                 }
             )
@@ -48,6 +49,7 @@ http.requestImage = function(url, onLoad, onError) {
                     onLoad(image);
                 },
                 function(e){
+                    e.body = new Blob(e.body);
                     onError(e);
                 }
             )
@@ -62,6 +64,7 @@ http.requestString = function(url, onLoad, onError) {
                     onLoad(e);
                 },
                 function(e){
+                    e.body = new Blob(e.body);
                     onError(e);
                 }
             )
@@ -76,6 +79,7 @@ http.requestJSON = function(url, onLoad, onError) {
                     onLoad(e);
                 },
                 function(e){
+                    e.body = new Blob(e.body);
                     onError(e);
                 }
             )
@@ -91,6 +95,7 @@ http.request = function(params, onLoad, onError) {
                     onLoad(e);
                 },
                 function(e){
+                    e.body = new Blob(e.body);
                     onError(e);
                 }
             )

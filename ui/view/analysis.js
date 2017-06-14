@@ -66,7 +66,7 @@ View.prototype.borderColor = UI.Color.BLACK;
 View.prototype.borderWidth = 0;
 
 /**
- * Sets/gets corner radius of a view.
+ * Sets/gets corner radius of a view. BorderRadius maximum value must be half of the shortest edge.
  *
  * @property {Number} [borderRadius = 0]
  * @android

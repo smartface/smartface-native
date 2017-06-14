@@ -2,6 +2,8 @@ const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Image = require('sf-core/ui/image');
 const Color = require('sf-core/ui/color');
+const Screen = require('sf-core/device/screen');
+const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
 
 const UISearchBarStyle = {
     default : 0,
@@ -29,82 +31,22 @@ const SearchView = extend(View)(
         var textfield = self.nativeObject.valueForKey("searchField");
         textfield.addKeyboardObserver();
         
-        self.getParentViewController = function(){
-            return self.nativeObject.parentViewController();
-        }  
+        self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
+            nativeObject : self.nativeObject
+        });
         
         textfield.onShowKeyboard = function(e){
             if(self.nativeObject.superview.className() != "UINavigationBar"){
-                keyboardShowAnimation(e.keyboardHeight);
+                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
             }
         }
            
         textfield.onHideKeyboard = function(e){
             if(self.nativeObject.superview.className() != "UINavigationBar"){
-                keyboardHideAnimation();
+                self.keyboardanimationdelegate.keyboardHideAnimation();
             }
         }
         
-        var _top = 0;
-        function getViewTop(view){
-            _top += view.frame.y;
-            if(view.superview){
-                if(view.superview.constructor.name === "SMFNative.SMFUIView"){
-                    if (view.superview.superview){
-                        if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
-                            return getViewTop(view.superview);
-                        }
-                    }
-                }
-            }
-            return _top;
-        }
-        
-        function keyboardShowAnimation(keyboardHeight){
-            var height = self.nativeObject.frame.height;
-            _top = 0;
-            var top = getViewTop(self.nativeObject);
-            var navigationBarHeight = 0;
-        
-            if(self.getParentViewController()){
-                if(self.getParentViewController().navigationController.navigationBar.visible){
-                    navigationBarHeight = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
-                }
-                if ((top + height) > self.getParentViewController().view.yoga.height - keyboardHeight){
-                    var newTop = self.getParentViewController().view.yoga.height - height - keyboardHeight;
-                    __SF_UIView.animation(230,0,function(){
-                        var distance = -(top-newTop) + navigationBarHeight;
-                        if (Math.abs(distance) + navigationBarHeight > keyboardHeight){
-                            self.getParentViewController().view.yoga.top =  -keyboardHeight + navigationBarHeight;
-                        }else{
-                            self.getParentViewController().view.yoga.top =  -(top-newTop) + navigationBarHeight;
-                        }
-                        self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                    },function(){
-                        
-                    });
-                }else{
-                    if (self.getParentViewController().view.frame.y !== 0){
-                        keyboardHideAnimation();
-                    }
-                }
-            }
-         }
-          
-        function keyboardHideAnimation(){
-            if(self.getParentViewController()){
-                var top = 0;
-                if(self.getParentViewController().navigationController.navigationBar.visible){
-                    top = __SF_UIApplication.sharedApplication().statusBarFrame.height + self.getParentViewController().navigationController.navigationBar.frame.height;
-                }
-                __SF_UIView.animation(130,0,function(){
-                    self.getParentViewController().view.yoga.top = top;
-                    self.getParentViewController().view.yoga.applyLayoutPreservingOrigin(false);
-                },function(){
-                    
-                });
-            }
-        }
         
         Object.defineProperty(this, 'text', {
             get: function() {

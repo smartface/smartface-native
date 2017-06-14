@@ -186,9 +186,11 @@ function View(params) {
             return self.nativeObject.onTouch;
         },
         set: function(value) {
-            self.nativeObject.onTouch = value.bind(this);
+            if (typeof value === 'function') {
+                self.nativeObject.onTouch = value.bind(this);
+            }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'onTouchEnded', {
@@ -196,9 +198,11 @@ function View(params) {
             return self.nativeObject.onTouchEnded;
         },
         set: function(value) {
-            self.nativeObject.onTouchEnded = value.bind(this);
+            if (typeof value === 'function') {
+                self.nativeObject.onTouchEnded = value.bind(this);
+            }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     function guid() {
@@ -347,7 +351,12 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            self.flexBasis = 1;
+            if(value > 0){
+                self.flexBasis = 1;
+            }
+            else{
+                self.flexBasis = NaN;
+            }
         },
         enumerable: true
     });
@@ -756,7 +765,7 @@ function View(params) {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'height', {
@@ -770,7 +779,7 @@ function View(params) {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
 
     Object.defineProperty(self, 'minWidth', {
