@@ -20,9 +20,7 @@ const ScrollView = extend(ViewGroup)(
         const FlexLayout = require("sf-core/ui/flexlayout");
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
-        // this.yogaNode.setMeasureFunction(null);
-        // this.yogaNode.addChildAt(_layout.yogaNode, 0);
-        
+
         Object.defineProperties(this, {
             'align': {
                 get: function() {
