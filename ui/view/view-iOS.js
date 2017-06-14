@@ -351,7 +351,12 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            self.flexBasis = 1;
+            if(value > 0){
+                self.flexBasis = 1;
+            }
+            else{
+                self.flexBasis = NaN;
+            }
         },
         enumerable: true
     });

@@ -881,7 +881,12 @@ function View(params) {
             },
             set: function(flexGrow) {
                 self.yogaNode.setFlexGrow(flexGrow);
-                self.flexBasis = 1;
+                if(flexGrow > 0){
+                    self.flexBasis = 1;
+                }
+                else{
+                    self.flexBasis = NaN;
+                }
             },
             enumerable: true
         },
@@ -896,7 +901,7 @@ function View(params) {
         },
         'flexBasis': {
             get: function() {
-                return self.yogaNode.getFlexBasis();
+                return self.yogaNode.getFlexBasis().value;
             },
             set: function(flexBasis) {
                 self.yogaNode.setFlexBasis(flexBasis);
