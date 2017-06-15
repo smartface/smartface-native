@@ -158,7 +158,6 @@ const Button = extend(View)(
                 if(Object.keys(self.gradientColorObject).length == 0){
                     self.nativeObject.addFrameObserver();
                     self.nativeObject.frameObserveHandler = function(e){
-                        alert("Framee");
                         if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
                             return;
                         }
