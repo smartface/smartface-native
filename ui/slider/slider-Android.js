@@ -6,6 +6,7 @@ const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
 const SeekBar        = requireClass("android.widget.SeekBar");
 const NativeR        = requireClass("android.R");
+const NativeView     = requireClass("android.view.View");
 
 const Slider = extend(View)(
     function (_super, params) {
@@ -148,6 +149,11 @@ const Slider = extend(View)(
                 },
                 onStartTrackingTouch: function(seekBar) {}, 
                 onStopTrackingTouch: function(seekBar) {}
+            }));
+    
+            // Added for AND-2869 bug.
+            this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
+                onClick: function(view) { }
             }));
         }
         
