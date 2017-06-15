@@ -1,6 +1,6 @@
 const extend = require('js-base/core/extend');
 const Page = require('sf-core/ui/page');
-const AbsoluteLayout = require('sf-core/ui/absolutelayout');
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 const SLIDER_DRAWER_STATE = {
     CLOSE : 0,
@@ -25,7 +25,7 @@ const SliderDrawer = extend(Page)(
         
         _super(self);
         
-        self.pageView = new AbsoluteLayout();
+        self.pageView = new FlexLayout();
         self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
 
         self.nativeObject.onViewLoad  = function(){
