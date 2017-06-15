@@ -42,6 +42,22 @@ function WebView(params) {}
 WebView.prototype.openLinkInside = true;
 
 /**
+ * Sets/Gets the visibility of scrollbar.
+ *
+ * @property {Boolean} scrollBarEnabled
+ * @since 1.1.12
+ */
+WebView.prototype.scrollBarEnabled = true;
+
+/**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounceEnabled
+ * @since 1.1.12
+ */
+WebView.prototype.bounceEnabled = true;
+
+/**
  * Reloads the current page.
  *
  * @method refresh
