@@ -18,7 +18,10 @@ function RouterViewModel(params) {
             if (sliderDrawerValue instanceof SliderDrawer) 
             {
                 routerBrain.sliderDrawer = sliderDrawerValue;
-            } 
+                if (routerBrain.pagesInstance) {
+                    routerBrain.pagesInstance.sliderDrawer = routerBrain.sliderDrawer;
+                }
+            }
             else 
             {
                 throw TypeError("Object must be SliderDrawer instance");
