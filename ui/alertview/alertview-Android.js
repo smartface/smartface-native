@@ -22,8 +22,8 @@ function AlertView (params) {
         this.nativeObject = new NativeAlertDialog.Builder(activity).create();
     }
             
+    var androidProperties = new AndroidSpesificProperties(this);
     var _title = "";
-    var _cancellable;
     var _message = "";
     var buttonCallbacks = [];
     var _onDismiss;
@@ -123,7 +123,14 @@ function AlertView (params) {
             enumerable: true
         },
         'android': {
-            value: {},
+            get: function() {
+                return androidProperties;
+            },
+            set: function(properties) {
+                for (var param in properties) {
+                    androidProperties[param] = properties[param];
+                }
+            },
             enumerable: true
         },
         'toString': {
@@ -133,18 +140,6 @@ function AlertView (params) {
             enumerable: true, 
             configurable: true
         }
-    });
-    
-    Object.defineProperty(this.android, 'cancellable', {
-        get: function() {
-            return _cancellable;
-        },
-        set: function(cancellable) {
-            _cancellable = cancellable;
-            this.nativeObject.setCancelable(cancellable);
-            this.nativeObject.setCanceledOnTouchOutside(cancellable);
-        },
-        enumerable: true
     });
     
     if(!this.isNotSetDefaults){
@@ -161,6 +156,21 @@ function AlertView (params) {
             this[param] = params[param];
         }
     }
+}
+
+function AndroidSpesificProperties (alertview) {
+    var _cancellable;
+    Object.defineProperty(this, 'cancellable', {
+        get: function() {
+            return _cancellable;
+        },
+        set: function(cancellable) {
+            _cancellable = cancellable;
+            alertview.nativeObject.setCancelable(cancellable);
+            alertview.nativeObject.setCanceledOnTouchOutside(cancellable);
+        },
+        enumerable: true
+    });
 }
 
 Object.defineProperty(AlertView, 'ButtonType', {
