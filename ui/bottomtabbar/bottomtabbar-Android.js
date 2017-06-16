@@ -5,7 +5,7 @@ const MAXITEMCOUNT = 5;
 
 function BottomTabBar(params) {
         var _items = {};
-        var _itemInstances = null;
+        var _itemInstances = [];
         var _itemColors;
         var _index;
         var _itemCount = 0;
@@ -26,6 +26,10 @@ function BottomTabBar(params) {
                         _itemCount++;
                         if(!_index)
                             _index = path;
+                        if(typeof(item.route) !== 'function') 
+                            _itemInstances.push(item.route.getRoute(null, true));
+                        else 
+                            _itemInstances.push(new _items[path].page());
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
@@ -108,9 +112,6 @@ function BottomTabBar(params) {
                 value: function(to){
                     if(!to) {
                         if(typeof(_items[_index].page) === 'function') {
-                            if(!_itemInstances) {  
-                               this.createItemInstances();
-                            }
                             var keys = Object.keys(_items);
                             var page = _itemInstances[keys.indexOf(_index)];
                             this.setPageProperties(page, _index);
@@ -134,9 +135,6 @@ function BottomTabBar(params) {
                         }
                         
                         if(_items[to] instanceof TabBarItem){
-                            if(!_itemInstances) {   
-                               this.createItemInstances();
-                            }
                             var keys = Object.keys(_items);
                             this.selectedIndex = keys.indexOf(to);
                             var page;
@@ -162,20 +160,6 @@ function BottomTabBar(params) {
                 get: function() {
                     return _tag;
                 }
-            },
-            'createItemInstances': {
-                value: function(){
-                    var keys = Object.keys(_items);
-                    _itemInstances = [];
-                    for(var i = 0; i < keys.length; i++) {
-                        var page = new _items[keys[i]].page();
-                        if(typeof(_items[keys[i]].route) === 'function') {
-                            page.isBottomTabBarPage = true;
-                        }
-                        _itemInstances.push(page);
-                    } 
-                },
-                enumerable: true
             },
             'toString': {
                 value: function(){
