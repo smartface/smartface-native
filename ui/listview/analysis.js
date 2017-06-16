@@ -5,6 +5,7 @@ const extend = require('js-base/core/extend');
  * @since 0.1
  * @extends UI.View
  * ListView is a View that displays given items as a one-column vertical list.
+ * ID is required for all children of {@link UI.ListViewItem items}
  *
  *     @example
  *     const Color = require('sf-core/ui/color');
