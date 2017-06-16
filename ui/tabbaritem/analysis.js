@@ -1,6 +1,6 @@
 /**
  * @class UI.TabBarItem
- * @since 1.1.9
+ * @since 1.1.10
  *
  * This class represents the page controller when added to a bottom tab bar. Router navigates 
  * UI.TabBarItem.page when the tab bar item is clicked.
@@ -28,7 +28,7 @@ function TabBarItem(params) {}
  * @property {String} title
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 TabBarItem.prototype.title = "";
 
@@ -39,7 +39,7 @@ TabBarItem.prototype.title = "";
  * @property {UI.Image} icon
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 TabBarItem.prototype.icon = null;
 
@@ -50,7 +50,7 @@ TabBarItem.prototype.icon = null;
  * @property {UI.Page/UI.Navigator} route
  * @android
  * @ios
- * @since 1.1.9
+ * @since 1.1.10
  */
 TabBarItem.prototype.route = null;
 
