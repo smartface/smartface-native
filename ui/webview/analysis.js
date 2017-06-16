@@ -37,6 +37,8 @@ function WebView(params) {}
  * Otherwise, the default browser of the device will handle that link.
  *
  * @property {Boolean} openLinkInside
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.openLinkInside = true;
@@ -45,6 +47,8 @@ WebView.prototype.openLinkInside = true;
  * Sets/Gets the visibility of scrollbar.
  *
  * @property {Boolean} scrollBarEnabled
+ * @android
+ * @ios
  * @since 1.1.12
  */
 WebView.prototype.scrollBarEnabled = true;
@@ -53,6 +57,8 @@ WebView.prototype.scrollBarEnabled = true;
  * Sets/Gets the bounce effect when scrolling.
  *
  * @property {Boolean} bounceEnabled
+ * @android
+ * @ios
  * @since 1.1.12
  */
 WebView.prototype.bounceEnabled = true;
@@ -61,6 +67,8 @@ WebView.prototype.bounceEnabled = true;
  * Reloads the current page.
  *
  * @method refresh
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.refresh = function() {};
@@ -69,6 +77,8 @@ WebView.prototype.refresh = function() {};
  * Goes back to the previous web page.
  *
  * @method goBack
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.goBack = function() {};
@@ -77,6 +87,8 @@ WebView.prototype.goBack = function() {};
  * Goes back to the next web page if there is any.
  *
  * @method goForward
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.goForward = function() {};
@@ -85,6 +97,8 @@ WebView.prototype.goForward = function() {};
  * Enables zoom on the web page with gestures.
  *
  * @property {Boolean} zoomEnabled
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.zoomEnabled = true;
@@ -94,6 +108,8 @@ WebView.prototype.zoomEnabled = true;
  *
  * @method loadURL
  * @param {String} url
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.loadURL =  function(url) {};
@@ -103,6 +119,8 @@ WebView.prototype.loadURL =  function(url) {};
  *
  * @method loadHTML
  * @param {String} htmlText
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype. loadHTML = function(htmlText) {};
@@ -112,6 +130,8 @@ WebView.prototype. loadHTML = function(htmlText) {};
  *
  * @method evaluateJS
  * @param {String} javascript
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.evaluateJS = function(javascript) {};
@@ -122,6 +142,8 @@ WebView.prototype.evaluateJS = function(javascript) {};
  * @event onChangedURL
  * @param {Object} event
  * @param {String} event.url
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.onChangedURL = function(event) {};
@@ -132,6 +154,8 @@ WebView.prototype.onChangedURL = function(event) {};
  * @event onLoad
  * @param {Object} event
  * @param {String} event.url
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.onLoad = function(event) {};
@@ -144,6 +168,8 @@ WebView.prototype.onLoad = function(event) {};
  * @param {String} event.url
  * @param {Number} event.code
  * @param {String} event.message
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.onError = function(event) {};
@@ -154,6 +180,8 @@ WebView.prototype.onError = function(event) {};
  * @event onShow
  * @param {Object} event
  * @param {String} event.url
+ * @android
+ * @ios
  * @since 0.1
  */
 WebView.prototype.onShow = function(event) {};
