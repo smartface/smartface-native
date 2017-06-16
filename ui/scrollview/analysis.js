@@ -67,6 +67,17 @@ function ScrollView(){}
 ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL; 
 
 /**
+ * Gets layout of the ScrollView. Use this property to add a child to the ScrollView instead of {@link ScrollView#addChild}
+ *
+ * @property {UI.FlexLayout} [layout = UI.FlexLayout]
+ * @android
+ * @ios
+ * @readonly
+ * @since 1.1.10
+ */
+ScrollView.prototype.layout = UI.FlexLayout;
+
+/**
  * Gets/sets the visibility of the scrollbar.
  *
  * @property {Boolean} [scrollBarEnabled = true]
@@ -75,6 +86,76 @@ ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL;
  * @since 0.1
  */
 ScrollView.prototype.scrollBarEnabled = true;
+
+/**
+ * This function adds a child view to a viewgroup.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @param {UI.View} view The child view to add.
+ * @android
+ * @ios
+ * @method addChild
+ * @since 0.1
+ */
+ScrollView.prototype.addChild = function(view){};
+
+/**
+ * Finds a child view with specified id within the layout.
+ * 
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @param {Number} id The specified id of the view.
+ * @returns {UI.View} Founded view within the layout, or null if view does not exists within the layout.
+ * @method findChildById
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ScrollView.prototype.findChildById = function(id){};
+
+/**
+ * Gets the count of children in a viewgroup.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @returns {Number} The number of children in the layout, or 0 if there is no child exists within the layout.
+ * @method getChildCount
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ScrollView.prototype.getChildCount = function(){};
+
+/**
+ * Removes all child views from viewgroup.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @method removeAll
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ScrollView.prototype.removeAll = function(){};
+
+/**
+ * Remove a child view from viewgroup.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @param {UI.View} view The child view to remove.
+ * @android
+ * @ios
+ * @method removeChild
+ * @since 0.1
+ */
+ScrollView.prototype.removeChild = function(view){};
 
 /**
  * Immediately scrolls to the edge set.
@@ -98,5 +179,31 @@ ScrollView.prototype.scrollToEdge = function(){};
  * @since 0.1
  */
 ScrollView.prototype.scrollToCoordinate = function(coordinate) {};
+
+/**
+ * This event is called when a view added to this view's hierarchy.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @event onViewAdded
+ * @android
+ * @ios
+ * @since 1.1.8
+ */
+ScrollView.prototype.onViewAdded = function() {};
+
+/**
+ * This event is called when a view removed from this view's hierarchy.
+ *
+ * @deprecated 1.1.10
+ * Use {@link UI.ScrollView#layout} property instead
+ * 
+ * @event onViewRemoved
+ * @android
+ * @ios
+ * @since 1.1.8
+ */
+ScrollView.prototype.onViewRemoved = function() {};
 
 module.exports = ScrollView;
