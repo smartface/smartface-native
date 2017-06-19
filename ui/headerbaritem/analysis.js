@@ -11,7 +11,6 @@
  *     var myPage = new UI.Page();
  *     var myItem = new UI.HeaderBarItem({
  *         title: "Smartface",
- *         image: UI.Image.createFromFile("images://icon.png"),
  *         onPress: function() {
  *             console.log("Smartface item pressed!");
  *         }
@@ -36,6 +35,8 @@ HeaderBarItem.prototype.title = "";
 /**
  * Gets/sets image of header bar item. Image is set to null as default.
  *
+ * If image set on HeaderBarItem, title should not set.
+ * 
  * @property {UI.Image} image
  * @android
  * @ios
