@@ -35,6 +35,8 @@ HeaderBarItem.prototype.title = "";
 /**
  * Gets/sets image of header bar item. Image is set to null as default.
  *
+ * If image set on HeaderBarItem, title should not set.
+ * 
  * @property {UI.Image} image
  * @android
  * @ios
