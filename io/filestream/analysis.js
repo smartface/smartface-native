@@ -186,7 +186,7 @@ FileStream.StreamType.WRITE = 2;
  * @readonly
  * @android
  * @ios
- * @since 1.1.11
+ * @since 1.1.10
  */
 FileStream.ContentMode = {};
 
@@ -198,7 +198,7 @@ FileStream.ContentMode = {};
  * @readonly
  * @android
  * @ios
- * @since 1.1.11
+ * @since 1.1.10
  */
 FileStream.ContentMode.TEXT;
 
@@ -210,7 +210,7 @@ FileStream.ContentMode.TEXT;
  * @readonly
  * @android
  * @ios
- * @since 1.1.11
+ * @since 1.1.10
  */
 FileStream.ContentMode.BINARY;
 
