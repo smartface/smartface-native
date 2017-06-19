@@ -43,6 +43,8 @@ const ImageView = extend(View)(
             set: function(value) {
                 if (value) {
                     self.nativeObject.loadImage(value.nativeObject);
+                }else{
+                    self.nativeObject.loadImage(undefined);
                 }
             },
             enumerable: true
