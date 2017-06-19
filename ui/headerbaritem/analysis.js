@@ -11,7 +11,6 @@
  *     var myPage = new UI.Page();
  *     var myItem = new UI.HeaderBarItem({
  *         title: "Smartface",
- *         image: UI.Image.createFromFile("images://icon.png"),
  *         onPress: function() {
  *             console.log("Smartface item pressed!");
  *         }
