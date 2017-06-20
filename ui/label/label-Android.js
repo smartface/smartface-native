@@ -41,6 +41,7 @@ const Label = extend(View)(
                 // Gravity.CENTER
                 self.nativeObject.setGravity(17);
                 viewNativeDefaultTextAlignment = 17;
+                this.padding = 0;
             }
         }
         
