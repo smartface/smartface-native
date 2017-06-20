@@ -39,14 +39,14 @@ function BottomTabBar(params) {
             },
             'itemColor': {
                 set: function(colors) {
-                    if(colors && colors.normal && colors.checked) {
-                        if(((colors.normal) instanceof Color) && ((colors.checked) instanceof Color))
+                    if(colors && colors.normal && colors.selected) {
+                        if(((colors.normal) instanceof Color) && ((colors.selected) instanceof Color))
                             _itemColors = colors;
                         else
                             throw new Error("itemColor should be an object that contains instances of Color");
                     }
                     else {
-                        throw new Error("itemColor should be an object that contains normal and checked state.");
+                        throw new Error("itemColor should be an object that contains normal and selected state.");
                     }
                 },
                 get: function(){

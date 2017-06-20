@@ -51,8 +51,8 @@ BottomTabBar.prototype.android.maxItemCount = true;
  * Gets/sets title and icon color of the tab bar items. 
  *
  * @property {Object} itemColor
- * @property {UI.Color} normal 
- * @property {UI.Color} selected
+ * @property {UI.Color} itemColor.normal 
+ * @property {UI.Color} itemColor.selected
  * @android
  * @ios
  * @since 1.1.10
