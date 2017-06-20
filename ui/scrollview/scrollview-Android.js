@@ -65,17 +65,6 @@ const ScrollView = extend(ViewGroup)(
                     }
                 }
             },
-            // Overrided from View for make content measurements inside ScrollView calculated.
-            'width': {
-                get: function() {
-                    return this.maxWidth;
-                },
-                set: function(width) {
-                    this.maxWidth = width;
-                },
-                enumerable: true,
-                configurable: true
-            },
             // // Overrided from ViewGroup due to difference between FlexLayout.
             'addChild': {
                 value: function(view){
