@@ -1,4 +1,5 @@
 const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
+const AndroidConfig             = require("sf-core/util/Android/androidconfig");
 const TypeUtil                  = require("sf-core/util/type");
 const Color                     = require("sf-core/ui/color");
 const NativeR                   = requireClass("android.R");
@@ -471,7 +472,14 @@ function View(params) {
             else{
                 borderShapeDrawable.getPaint().setColor(0);
             }
-            setBackground(1);
+            
+            // Android brings foreground drawable support. Prevent view content overlaps border.
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
+                self.nativeObject.setForeground(borderShapeDrawable);
+            }
+            else{
+                setBackground(1);
+            }
         }
     }
     
