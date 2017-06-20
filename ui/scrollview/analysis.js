@@ -14,44 +14,35 @@
  *     const Color = require('sf-core/ui/color');
  *
  *     var scrollView = new ScrollView({
- *         height: 300,
- *         width: 200,
- *         backgroundColor: Color.GREEN,
- *         alignSelf: FlexLayout.AlignSelf.CENTER
+ *        flexGrow: 1,
+ *        backgroundColor: Color.GREEN,
+ *        alignSelf: FlexLayout.AlignSelf.STRETCH
  *     });
- *     
- *     var scrollLayout = new FlexLayout({
- *         height: 1500,
- *         width: 200,
- *         backgroundColor: Color.RED
- *     });
- *     
+ *     scrollView.layout.height = 2000;
+ *     scrollView.layout.backgroundColor = Color.RED;
+ *     scrollView.layout.alignItems = FlexLayout.AlignItems.CENTER;
  *     var buttonTop = new Button({
- *         height: 100,
- *         width: 100,
- *         top: 50,
- *         marginLeft: 50,
- *         text: "Scroll to 1000",
- *         backgroundColor: Color.BLUE,
- *         onPress: function(){
- *             scrollView.scrollToCoordinate(1000);
- *         }
+ *       height: 100,
+ *       width: 100,
+ *       top:10,
+ *       text: "Scroll to 1100",
+ *       backgroundColor: Color.BLUE,
+ *       onPress: function(){
+ *           scrollView.scrollToCoordinate(1100);
+ *       }
  *     });
  *     var buttonBottom = new Button({
- *         height: 100,
- *         width: 100,
- *         top: 1000,
- *         marginLeft: 50,
- *         text: "Scroll to 50",
- *         backgroundColor: Color.BLUE,
- *         onPress: function(){
- *             scrollView.scrollToCoordinate(50);
- *         }
+ *       height: 100,
+ *       width: 100,
+ *       top: 1000,
+ *       text: "Scroll to 10",
+ *       backgroundColor: Color.BLUE,
+ *       onPress: function(){
+ *           scrollView.scrollToCoordinate(10);
+ *       }
  *     });
- *     scrollLayout.addChild(buttonTop)
- *     scrollLayout.addChild(buttonBottom)
- *     scrollView.addChild(scrollLayout);
- *
+ *     scrollView.layout.addChild(buttonTop);
+ *     scrollView.layout.addChild(buttonBottom);
  */
 function ScrollView(){}
 
