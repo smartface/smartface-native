@@ -31,20 +31,21 @@ function Contacts() {}
  *
  *     @example
  *     const Contacts = require("sf-core/device/contacts");
- *     Contacts.add({
- *         contact: {
- *             displayName : "Smartface Team",
- *             phoneNumber : "+16506173265",
- *             email       : "info@smartface.io",
- *             address     : "347 N Canon Dr Beverly Hills, CA 90210",
- *             onSuccess : function(){
- *                 console.log("Success");
- *             }
- *         },
- *         onFailure : function(){
- *             console.log("Failure");
- *         }
- *     });
+ *     const Contacts = require("sf-core/device/contacts");
+ *           Contacts.add({
+ *               contact: {
+ *                   displayName : "Smartface Team",
+ *                   phoneNumber : "+16506173265",
+ *                   email       : "info@smartface.io",
+ *                   address     : "347 N Canon Dr Beverly Hills, CA 90210"
+ *               },
+ *               onSuccess : function(){
+ *                   console.log("Success");
+ *               },
+ *               onFailure : function(){
+ *                   console.log("Failure");
+ *               }
+ *           }); 
  *
  *
  * @param {Object} params Object describing properties
