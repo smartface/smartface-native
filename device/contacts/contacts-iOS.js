@@ -6,28 +6,30 @@ Contacts.add = function(params) {
 
     store.requestAccess(function(){
         var contact = __SF_CNMutableContact.new();
-        for(var propertyName in params){
+        var parameterContact = params.contact;
+        
+        for(var propertyName in parameterContact){
             // Added this check to resolve the sonar issue. 
             // It says that the body of every for...in statement should be wrapped 
             // in an if statement that filters which properties are acted upon.
-            if (params.hasOwnProperty(propertyName)) { 
+            if (parameterContact.hasOwnProperty(propertyName)) { 
                 switch (propertyName) {
                 case 'displayName' :
-                    contact.givenName = params[propertyName];
+                    contact.givenName = parameterContact[propertyName];
                     break;
                 case 'phoneNumber' :
-                    var phoneNumber = __SF_CNPhoneNumber.phoneNumberWithStringValue(params[propertyName]);
+                    var phoneNumber = __SF_CNPhoneNumber.phoneNumberWithStringValue(parameterContact[propertyName]);
                     contact.phoneNumbers = [new __SF_CNLabeledValue(__SF_CNLabelPhoneNumberMain, phoneNumber)];
                     break;
                 case 'email' :
-                    contact.emailAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, params[propertyName])];
+                    contact.emailAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, parameterContact[propertyName])];
                     break;
                 case 'urlAddress' :
-                    contact.urlAddresses = [new __SF_CNLabeledValue(__SF_CNLabelURLAddressHomePage, params[propertyName])];
+                    contact.urlAddresses = [new __SF_CNLabeledValue(__SF_CNLabelURLAddressHomePage, parameterContact[propertyName])];
                     break;
                 case 'address' :
                     var addressValue = __SF_CNMutablePostalAddress.new();
-                    addressValue.street = params[propertyName];
+                    addressValue.street = parameterContact[propertyName];
                     contact.postalAddresses = [new __SF_CNLabeledValue(__SF_CNLabelHome, addressValue)];
                     break;
                 default:
@@ -36,11 +38,11 @@ Contacts.add = function(params) {
         }
         
         if (typeof params.page === 'object') {
-            var contactViewController = __SF_CNContactViewController.viewControllerForNewContact(contact);
-            contactViewController.contactStore = store;
-            contactViewController.allowsActions = false;
-            var contactViewControllerDelegate = new __SF_CNContactViewControllerDelegate();
-            contactViewControllerDelegate.didCompleteWithContact = function(contact){
+            this.contactViewController = __SF_CNContactViewController.viewControllerForNewContact(contact);
+            this.contactViewController.contactStore = store;
+            this.contactViewController.allowsActions = false;
+            this.contactViewControllerDelegate = new __SF_CNContactViewControllerDelegate();
+            this.contactViewControllerDelegate.didCompleteWithContact = function(contact){
                 if (contact) {
                     if (typeof params.onSuccess === 'function') {
                         params.onSuccess();
@@ -51,8 +53,10 @@ Contacts.add = function(params) {
                     }
                 }
             };
-            contactViewController.delegate = contactViewControllerDelegate;
-            var navigationalcontactViewController = new __SF_UINavigationController(contactViewController);
+            this.contactViewController.delegate = this.contactViewControllerDelegate;
+            const UINavigationController = SF.requireClass("UINavigationController");
+            var navigationalcontactViewController = UINavigationController.new();
+            navigationalcontactViewController.viewControllers = [this.contactViewController];
             params.page.nativeObject.presentViewController(navigationalcontactViewController);
         } else {
             var saveRequest = __SF_CNSaveRequest.new();
