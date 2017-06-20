@@ -27,7 +27,7 @@
  *     
  *     // Getting workers count
  *     var queryResult = database.query("SELECT * FROM person WHERE(isWorker = 1)");
- *     alert("Worker count is: " + queryResult.count());
+ *     console.log("Worker count is: " + queryResult.count());
  *
  */
 function Database(params){}

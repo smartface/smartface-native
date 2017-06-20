@@ -15,7 +15,7 @@
  *         if(e.requestCode === READ_CONTACTS_CODE && e.result) {
  *             Contacts.pick({
  *                 onSuccess: function(e) {
- *                     alert(JSON.stringify(e));
+ *                     console.log(JSON.stringify(e));
  *                 }
  *             }
  *         }
@@ -31,20 +31,21 @@ function Contacts() {}
  *
  *     @example
  *     const Contacts = require("sf-core/device/contacts");
- *     Contacts.add({
- *         contact: {
- *             displayName : "Smartface Team",
- *             phoneNumber : "+16506173265",
- *             email       : "info@smartface.io",
- *             address     : "347 N Canon Dr Beverly Hills, CA 90210",
- *             onSuccess : function(){
- *                 alert("Success");
- *             }
- *         },
- *         onFailure : function(){
- *             alert("Failure");
- *         }
- *     });
+ *     const Contacts = require("sf-core/device/contacts");
+ *           Contacts.add({
+ *               contact: {
+ *                   displayName : "Smartface Team",
+ *                   phoneNumber : "+16506173265",
+ *                   email       : "info@smartface.io",
+ *                   address     : "347 N Canon Dr Beverly Hills, CA 90210"
+ *               },
+ *               onSuccess : function(){
+ *                   console.log("Success");
+ *               },
+ *               onFailure : function(){
+ *                   console.log("Failure");
+ *               }
+ *           }); 
  *
  *
  * @param {Object} params Object describing properties
@@ -75,10 +76,10 @@ Contacts.add = function(params) {};
  *     Contacts.pick({
  *         page : myPage,
  *         onSuccess : function(contact){
- *             alert("Successfully picked");
+ *             console.log("Successfully picked");
  *         },
  *         onFailure : function(e){
- *             alert("Something went wrong");
+ *             console.log("Something went wrong");
  *         }
  *     });
  *
@@ -108,7 +109,7 @@ Contacts.pick = function(params) {};
  *             var count = contacts.length;
  *         },
  *         onFailure : function(error){
- *             alert("Message : " + error);
+ *             console.log("Message : " + error);
  *         }
  *     });
  *

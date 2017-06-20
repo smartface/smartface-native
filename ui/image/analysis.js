@@ -61,8 +61,8 @@ Image.prototype.width = 0;
  *     }
  *
  * @method resize
- * @param {Number} width Width of the new bitmap.
- * @param {Number} height Height of the new bitmap.
+ * @param {Number} width Width pixels of the new bitmap.
+ * @param {Number} height Height pixels of the new bitmap.
  * @param {Function} onSuccess Callback for success situation.
  * @param {Object} onSuccess.params 
  * @param {UI.Image} onSuccess.params.image Resized image
@@ -79,10 +79,10 @@ Image.prototype.resize = function(width, height, onSuccess, onFailure) {}
  * onSuccess and onFailure are optional parameters.
  *
  * @method crop
- * @param {Number} x The x value of the rectangle top-left corner.
- * @param {Number} y The y value of the rectangle top-left corner.
- * @param {Number} width Width of the new bitmap.
- * @param {Number} height Height of the new bitmap.
+ * @param {Number} x The x pixels of the rectangle top-left corner.
+ * @param {Number} y The y pixels of the rectangle top-left corner.
+ * @param {Number} width Width pixels of the new bitmap.
+ * @param {Number} height Height pixels of the new bitmap.
  * @param {Function} onSuccess Callback for success situation.
  * @param {Object} onSuccess.params 
  * @param {UI.Image} onSuccess.params.image Cropped image

@@ -129,12 +129,12 @@ System.clipboard;
  *     
  *     @example
  *     System.android.getPackageVersion({
- *         packageName: "io.smartface.SmartfaceDemo",
+ *         packageName: "io.smartface.SmartfaceApp",
  *         onSuccess: function(e) {
- *             alert("app version name:" + e.versionName);
+ *             console.log("App version name:" + e.versionName);
  *         },
  *         onError: function(e) {
- *             alert("Package doesn’t exist");
+ *             console.log("Package doesn’t exist");
  *         }
  *     });
  * 

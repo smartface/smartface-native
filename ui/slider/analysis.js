@@ -152,7 +152,7 @@ Slider.prototype.enabled = true;
  *     mySlider.value = 40;
  *
  *     function valueChanged() {
- *         alert("New value is: " + mySlider.value);
+ *         console.log("New value is: " + mySlider.value);
  *     }
  *
  * @event onValueChange

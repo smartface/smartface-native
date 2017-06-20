@@ -15,6 +15,10 @@ const VideoView = extend(View)(
         _super(this);
         self.nativeObject.addSubview(self.avPlayerViewController.view);
         
+        self.avPlayerViewController.viewDidDisappear = function(){
+            self.pause();
+        };
+        
         self.loadURL = function(value){
             if (TypeUtil.isURL(value)){
                 self.avPlayerViewController.removeObserver();

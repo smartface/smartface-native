@@ -100,6 +100,32 @@ const WebView = extend(View)(
             enumerable: true
          });
          
+         const UIScrollView = SF.requireClass("UIScrollView");
+         Object.defineProperty(self, 'bounceEnabled', {
+            get: function() {
+                return self.nativeObject.scrollView.bounces;
+            },
+            set: function(value) {
+                self.nativeObject.scrollView.bounces = value;
+            },
+            enumerable: true
+         });
+         
+         var _scrollBarEnabled = true;
+         Object.defineProperty(self, 'scrollBarEnabled', {
+            get: function() {
+                return _scrollBarEnabled;
+            },
+            set: function(value) {
+                if (typeof value === 'boolean') {
+                    self.nativeObject.scrollView.showsVerticalScrollIndicator = value;
+                    self.nativeObject.scrollView.showsHorizontalScrollIndicator = value;
+                    _scrollBarEnabled = value;  
+                }
+            },
+            enumerable: true
+         });
+         
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
