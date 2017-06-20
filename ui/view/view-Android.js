@@ -73,13 +73,8 @@ function View(params) {
     var roundRect = new NativeRoundRectShape(radii, rectF, radii);
     var borderShapeDrawable = new NativeShapeDrawable(roundRect);
     borderShapeDrawable.getPaint().setColor(0);
-    
-    
-    var layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
-    layerDrawable.setId(0,0);
-    layerDrawable.setId(1,1);
-    layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-    layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+  
+    var layerDrawable = createNewLayerDrawable([backgroundDrawable,borderShapeDrawable])
     var _isCloned = false;
     var _backgroundImages = null;
     var _borderColor = Color.BLACK;
@@ -481,7 +476,8 @@ function View(params) {
     }
     
     function setBackground(layerIndex){
-        var layerDrawableNative = self.nativeObject.getBackground().getConstantState().newDrawable();
+        var constantStateForCopy = self.nativeObject.getBackground().getConstantState();
+        var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([backgroundDrawable, borderShapeDrawable]);
         switch (layerIndex){
             case 0: 
                 layerDrawableNative.setDrawableByLayerId(0,backgroundDrawable);
@@ -971,5 +967,22 @@ View.State.STATE_FOCUSED = [
     NativeR.attr.state_focused,
     NativeR.attr.state_enabled,
 ];
+
+function createNewLayerDrawable(drawables){
+    var drawablesForObjectCreate = [];
+    var i = 0 ;
+    
+    for(i = 0 ; i < drawables.length ; i++){
+        drawablesForObjectCreate.push(drawables[0]);
+    }
+    
+    var layerDrawable = new NativeLayerDrawable(drawablesForObjectCreate);
+    for(i = 0 ; i < drawables.length ; i++){
+        layerDrawable.setId(i, i);
+        layerDrawable.setDrawableByLayerId(i,drawables[i]);
+    }
+    
+    return layerDrawable;
+}
 
 module.exports = View;
