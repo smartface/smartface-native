@@ -355,7 +355,7 @@ function View(params) {
                 self.flexBasis = 1;
             }
             else{
-                self.flexBasis = NaN;
+                self.flexBasis = 0;
             }
         },
         enumerable: true
