@@ -470,4 +470,15 @@ View.prototype.onTouch = function onTouch(){ }
  */
 View.prototype.onTouchEnded = function onTouchEnded(){ }
 
+/**
+ * Gets/Sets the elevation of the view.
+ * For details : https://developer.android.com/training/material/shadows-clipping.html
+ *
+ * @property {Number} elevation
+ * @android
+ * @member UI.View
+ * @since 1.1.12
+ */
+View.prototype.android.elevation;
+
 module.exports = View;

@@ -11,6 +11,8 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
+const NativeViewCompat          = requireClass("android.support.v4.view.ViewCompat");
+
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -320,7 +322,21 @@ function View(params) {
             set: function(value){
                 _isCloned = value;
             }
-        }
+        },
+    });
+
+    self.android = {};
+    Object.defineProperties(self.android, {
+        'elevation': {
+            get: function(){
+                return NativeViewCompat.getElevation(self.nativeObject);
+            },
+            set: function(value){
+                NativeViewCompat.setElevation(self.nativeObject, value);
+            },
+            enumerable: true,
+            configurable: true
+        },
     });
     
     function setBackgroundImage() {
