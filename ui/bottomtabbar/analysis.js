@@ -17,13 +17,13 @@
  *     var myProfileItem = new TabBarItem({
  *         title: "Profile",
  *         icon: myProfileImage,
- *         page: require('pages/pgProfile')
+ *         route: require('pages/pgProfile')
  *     });
  * 
  *     var myMessageItem = new TabBarItem({
  *         title: "Messages",
  *         icon: myMessageImage,
- *         page: require('pages/pgMessages')
+ *         route: require('pages/pgMessages')
  *     });
  * 
  *     myTab.add('profile', myProfileItem);
