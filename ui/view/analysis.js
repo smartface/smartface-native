@@ -44,9 +44,7 @@ View.prototype.alpha = 1.0;
 View.prototype.backgroundColor = UI.Color.WHITE;
 
 /**
- * Sets/gets border color of bounded view. Border drawn over the view in iOS 
- * and Android Marshmallow (API 23) or higher but it drawn under the view 
- * before Android Marshmallow (API 23) builds.
+ * Sets/gets border color of bounded view.
  *
  * @property {UI.Color} [borderColor = UI.Color.BLACK]
  * @android
