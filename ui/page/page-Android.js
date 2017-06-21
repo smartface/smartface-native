@@ -5,6 +5,7 @@ const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const Router                = require("sf-core/ui/router");
 
+const NativeView         = requireClass('android.view.View');
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR     = requireClass("android.R");
@@ -700,7 +701,6 @@ function Page(params) {
     };
      
     // Added to solve AND-2713 bug.
-    const NativeView = requireClass('android.view.View');
     self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
         onLongClick : function(view){
             return true;
@@ -716,6 +716,19 @@ function Page(params) {
             return true;
         }
     }));
+    
+    self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+        onFocusChange: function(view, hasFocus){
+            if (hasFocus)  {
+                var focusedView = activity.getCurrentFocus();
+                var windowToken = focusedView.getWindowToken();
+                
+                var inputMethodManager = activity.getSystemService(activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+            }
+        }
+    }));
+
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
 
