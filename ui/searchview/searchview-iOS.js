@@ -36,12 +36,18 @@ const SearchView = extend(View)(
         });
         
         textfield.onShowKeyboard = function(e){
+            if (_isAddedHeaderBar) {
+                return;
+            }
             if(self.nativeObject.superview.className() != "UINavigationBar"){
                 self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
             }
         }
            
         textfield.onHideKeyboard = function(e){
+            if (_isAddedHeaderBar) {
+                return;
+            }
             if(self.nativeObject.superview.className() != "UINavigationBar"){
                 self.keyboardanimationdelegate.keyboardHideAnimation();
             }
@@ -118,11 +124,14 @@ const SearchView = extend(View)(
             enumerable: true
         });
         
+        var _isAddedHeaderBar = false;
         this.addToHeaderBar = function(page){
+            _isAddedHeaderBar = true;
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         };
         
         this.removeFromHeaderBar = function(page){
+            _isAddedHeaderBar = false;
             page.nativeObject.navigationItem.titleView = undefined;
         };
         
