@@ -723,7 +723,7 @@ function Page(params) {
                 var focusedView = activity.getCurrentFocus();
                 var windowToken = focusedView.getWindowToken();
                 
-                var inputMethodManager = activity.getSystemService(activity.INPUT_METHOD_SERVICE);
+                var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
                 inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
             }
         }
