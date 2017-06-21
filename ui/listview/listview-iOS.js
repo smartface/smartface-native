@@ -25,6 +25,7 @@ const ListView = extend(View)(
             self.refreshControl = new __SF_UIRefreshControl();
             self.nativeObject.addSubview(self.refreshControl);
             self.nativeObject.separatorStyle = 0;
+            self.nativeObject.showsVerticalScrollIndicator = false;
         }
 
         _super(this);

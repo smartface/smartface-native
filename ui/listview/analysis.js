@@ -72,6 +72,9 @@ const extend = require('js-base/core/extend');
  *         myListView.refreshData();
  *         myListView.stopRefresh();
  *     };
+ *      
+ *     myListView.ios.leftToRightSwipeEnabled = true;
+ *     myListView.ios.rightToLeftSwipeEnabled = true;
  * 
  *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
  *         if (direction == Direction.RIGHTTOLEFT){
@@ -294,5 +297,23 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * @since 0.1
  */
 ListView.prototype.ios.onRowSwiped  = function(direction){}
+
+/**
+ * Gets/sets leftToRightSwipeEnabled
+ *
+ * @property {Boolean} [leftToRightSwipeEnabled = false]
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.ios.leftToRightSwipeEnabled = false;
+
+/**
+ * Gets/sets rightToLeftSwipeEnabled
+ *
+ * @property {Boolean} [rightToLeftSwipeEnabled = false]
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.ios.rightToLeftSwipeEnabled = false;
 
 module.exports = ListView;
