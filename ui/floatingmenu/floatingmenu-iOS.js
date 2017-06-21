@@ -1,5 +1,6 @@
 const Color = require('sf-core/ui/color');
 const Image = require("sf-core/ui/image");
+const TypeUtil = require("sf-core/util/type");
 
 const FloatyOpenAnimationType = {
      pop : 0,
@@ -79,7 +80,11 @@ function FloatingMenu(params) {
             return Image.createFromImage(self.nativeObject.icon);
         },
         set: function(value) {
-            self.nativeObject.buttonImage = value.nativeObject;
+            if(value instanceof Image){
+                self.nativeObject.buttonImage = value.nativeObject;
+            }else{
+                throw new TypeError('icon must be a UI.Image');
+            }
         },
         enumerable: true
     });
@@ -116,8 +121,12 @@ function FloatingMenu(params) {
             return new Color({color : self.nativeObject.buttonColor});;
         },
         set: function(value) {
-            self.nativeObject.buttonColor = value.nativeObject;
-            self.nativeObject.plusColor = value.nativeObject;
+            if(value instanceof Color){
+                self.nativeObject.buttonColor = value.nativeObject;
+                self.nativeObject.plusColor = value.nativeObject;
+            }else{
+                throw new TypeError('color must be a UI.Color');
+            }
         },
         enumerable: true
     });
@@ -144,6 +153,9 @@ FloatingMenu.Item = function FloatingMenuItem(params) {
                 return self.nativeObject.title;
             },
             set: function(value) {
+                if(!TypeUtil.isString(value)){
+                    throw new TypeError('title must be string');
+                }
                 self.nativeObject.title = value;
             }
         },
@@ -152,7 +164,11 @@ FloatingMenu.Item = function FloatingMenuItem(params) {
                 return Image.createFromImage(self.nativeObject.icon);
             },
             set: function(value) {
-                self.nativeObject.icon = value.nativeObject;
+                if(value instanceof Image){
+                    self.nativeObject.icon = value.nativeObject;
+                }else{
+                    throw new TypeError('icon must be a UI.Image');
+                }
             }
         },
         'color': {
@@ -160,7 +176,11 @@ FloatingMenu.Item = function FloatingMenuItem(params) {
                 return new Color({color : self.nativeObject.buttonColor});
             },
             set: function(value) {
-                self.nativeObject.buttonColor = value.nativeObject;
+                if(value instanceof Color){
+                    self.nativeObject.buttonColor = value.nativeObject;
+                }else{
+                    throw new TypeError('color must be a UI.Color');
+                }
             }
         },
         'onClick': {
@@ -176,7 +196,11 @@ FloatingMenu.Item = function FloatingMenuItem(params) {
                 return new Color({color : self.nativeObject.titleColor});
             },
             set: function(titleColor) {
-                self.nativeObject.titleColor = titleColor.nativeObject;
+                if(titleColor instanceof Color){
+                    self.nativeObject.titleColor = titleColor.nativeObject;
+                }else{
+                    throw new TypeError('titleColor must be a UI.Color');
+                }
             }
         }
     });
