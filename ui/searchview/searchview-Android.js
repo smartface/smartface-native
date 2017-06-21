@@ -247,7 +247,7 @@ const SearchView = extend(View)(
                     if(!(hintTextColor instanceof Color)){
                         throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                     }
-                    mSearchSrcTextView.setHintTextColor(hintTextColor);
+                    mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
