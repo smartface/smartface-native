@@ -111,6 +111,7 @@ function RouterViewModel(params) {
             if (routerBrain.usingOldStyle) {
                 if (routerBrain.pagesInstance == null) {
                     routerBrain.createPagesInstanceWithRoot(pageToGo);
+                    routerBrain.pagesInstance.delegate = self;
                     routerBrain.currentPage = pageToGo;
                 }
                 pageInfo.pagesNativeInstance = routerBrain.pagesInstance.nativeObject;
@@ -152,6 +153,16 @@ function RouterViewModel(params) {
     this.getCurrent = function () {
         return routerBrain.currentPage;
     };
+    
+    ////////////////////////////////////////////////////////////////////////////
+    // old pages instance delegate function
+    this.didShowViewController = function(viewController, index) {
+        // If user press back button, history needs to update
+        for (var i = routerBrain.history.length - 1; i > index; --i) {
+            routerBrain.history.pop();
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
     
     if (params) {
         for (var param in params) {
