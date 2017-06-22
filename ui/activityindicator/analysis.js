@@ -13,12 +13,10 @@ const View = require('../view');
  *
  *     var myActivityIndicator = new ActivityIndicator({
  *         top: 100,
- *         left: 50,
- *         ios:{
- *            type : ActivityIndicator.iOS.Type.WHITE
- *         }
+ *         left: 50
  *     });
- *
+ *     myActivityIndicator.ios.type = ActivityIndicator.iOS.Type.WHITELARGE;    
+ * 
  *     myPage.layout.addChild(myActivityIndicator);
  */
 function ActivityIndicator(params){}
