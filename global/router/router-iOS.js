@@ -158,8 +158,8 @@ function RouterViewModel(params) {
     // old pages instance delegate function
     this.didShowViewController = function(viewController, index) {
         // If user press back button, history needs to update
-        for (var i = routerBrain.model.history.length - 1; i > index; --i) {
-            routerBrain.model.history.pop();
+        for (var i = routerBrain.history.length - 1; i > index; --i) {
+            routerBrain.history.pop();
         }
     }
     ////////////////////////////////////////////////////////////////////////////
