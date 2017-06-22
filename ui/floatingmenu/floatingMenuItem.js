@@ -21,7 +21,11 @@ function FloatingMenuItem(params) {
                 return _titleColor;
             },
             set: function(color) {
-                _titleColor = color;
+                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                    _titleColor = color;
+                } else {
+                    throw new Error("Provide FloatingMenuItem's color with a UI.Color.");
+                }
             }
         },
         'icon':{
@@ -29,7 +33,11 @@ function FloatingMenuItem(params) {
                 return _icon;
             },
             set: function(image) {
-                _icon = image;
+                if (image && image.nativeObject && (image instanceof require("sf-core/ui/image"))) {
+                    _icon = image;
+                } else {
+                    throw new Error("Provide FloatingMenuItem's icon with a UI.Image.");
+                }
             }
         },
         'color': {
@@ -37,7 +45,11 @@ function FloatingMenuItem(params) {
                 return _color;
             },
             set: function(color) {
-                _color = color;
+                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                    _color = color;
+                } else {
+                    throw new Error("Provide FloatingMenuItem's color with a UI.Color.");
+                }
             }
         },
         'onClick': {
