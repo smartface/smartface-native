@@ -192,7 +192,7 @@ const WebView = extend(View)(
             settings.setLoadWithOverviewMode(true);
             settings.setLoadsImagesAutomatically(true);
             
-            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
         }
