@@ -190,6 +190,8 @@ const WebView = extend(View)(
             settings.setDomStorageEnabled(true);
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
+            settings.setLoadsImagesAutomatically(true);
+            settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
         }
 
         // Assign parameters given in constructor
