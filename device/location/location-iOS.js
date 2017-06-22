@@ -9,15 +9,17 @@ Location.ios.authorizationStatus = {
     AuthorizedWhenInUse : 4
 };
 
-Location.nativeObject = new __SF_CLLocationManager();
-
-Location.delegate = new __SF_CLLocationManagerDelegate();
-
 Location.changeLocationListener = function(e) {
     Location.onLocationChanged(e);
 }
 
 Location.start = function(){
+    if (Location.nativeObject) {
+        Location.stop();
+    }
+    Location.nativeObject = new __SF_CLLocationManager();
+    Location.delegate = new __SF_CLLocationManagerDelegate();
+    
     if (__SF_CLLocationManager.locationServicesEnabled()) {
         Location.nativeObject.delegate = Location.delegate;
         Location.delegate.didUpdateLocations = Location.changeLocationListener;
@@ -37,7 +39,11 @@ Location.start = function(){
 }
 
 Location.stop = function() {
-    Location.nativeObject.stopUpdatingLocation();
+    if (Location.nativeObject) {
+        Location.nativeObject.stopUpdatingLocation();
+        Location.nativeObject = undefined;
+        Location.delegate = undefined;
+    }
 }
 
 Location.onLocationChanged = function onLocationChanged(event) { }
