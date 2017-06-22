@@ -12,6 +12,7 @@ const SwipeView = extend(View)(
         var fragmentManager = Android.getActivity().getSupportFragmentManager();
         var pagerAdapter = new NativePagerAdapter(fragmentManager);
         
+        var _lastIndex = -1;
         if(!self.nativeObject) {
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(Android.getActivity());
@@ -28,13 +29,19 @@ const SwipeView = extend(View)(
                 onPageSelected: function(position) {
                     _callbackOnPageSelected && _callbackOnPageSelected(position);
                 },
-                onPageScrolled: function(position, positionOffset, positionOffsetPixels) {}
+                onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
+                    if (_lastIndex !== position && positionOffset === 0 && positionOffsetPixels === 0) {
+                        _lastIndex = position;
+                        _pageInstances[position].onShowSwipeView && _pageInstances[position].onShowSwipeView();
+                    }
+                }
             }));
         };
         _super(self);
 
         var _page;
         var _pages = [];
+        var _pageInstances = [];
         var _callbackOnPageSelected;
         var _callbackOnPageStateChanged;
         Object.defineProperties(self, {
@@ -60,6 +67,7 @@ const SwipeView = extend(View)(
                                 skipDefaults: true
                             });
                             bypassPageSpecificProperties(pageInstance);
+                            _pageInstances.push(pageInstance);
                             nativeFragments.push(pageInstance.nativeObject);
                         });
                         pagerAdapter.setFragments(nativeFragments);
@@ -120,6 +128,8 @@ function bypassPageSpecificProperties(page) {
             get: function() {},
         });
     });
+    page.onShowSwipeView = page.onShow;
+    page.onShow = function() {};
 }
 
 SwipeView.State = require("./swipeviewState");
