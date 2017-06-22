@@ -8,6 +8,8 @@ function Pages(params) {
     var _sliderDrawer = null;
     self.sliderDrawerGesture = null;
     
+    self.delegate = null;
+    
     // Native object creation
     var nativeNavigationController = UINavigationController.new();
     nativeNavigationController.viewControllers = [params.rootPage.nativeObject];
@@ -32,7 +34,20 @@ function Pages(params) {
             if(self.sliderDrawer){
                 self.sliderDrawer.nativeObject.checkSwipeGesture(viewController, self, _sliderDrawer.nativeObject);
             }
-        }
+        },
+        navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated){
+                var index = 0;
+                var childViewControllerArray = navigationController.childViewControllers;
+                for (var i = childViewControllerArray.length - 1; i >= 0; --i) {
+                    if(viewController === childViewControllerArray[i]){
+                        index = i;
+                        break;
+                    }
+                }
+                if (self.delegate){
+                    self.delegate.didShowViewController(viewController, index);
+                }
+            }
     }).new();
     
     self.nativeObject.delegate = self.nativeObjectDelegate;
