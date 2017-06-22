@@ -242,8 +242,7 @@ const SearchView = extend(View)(
                     return _hintTextColor;
                 },
                 set: function(hintTextColor) {
-                    
-                    mSearchSrcTextView.setHintTextColor(hintTextColor);
+                    mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
