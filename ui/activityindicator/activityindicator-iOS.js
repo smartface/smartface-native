@@ -49,13 +49,13 @@ const ActivityIndicator = extend(View)(
                 enumerable: true
         });
         
-        var _type = ActivityIndicator.iOS.Type.WHITE;
         Object.defineProperty(self.ios, 'type', {
                 get: function() {
-                    return _type;
+                    return self.nativeObject.activityIndicatorViewStyle;
                 },
                 set: function(type) {
-                    _type = type;
+                    self.nativeObject.activityIndicatorViewStyle = type;
+                    self.nativeObject.color = _color.nativeObject;
                 },
                 enumerable: true
         });
