@@ -1,13 +1,10 @@
-const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
+const Base64Util = require("sf-core/util/base64");
 
 function Blob (parts, properties) {
-    var self = this;
     var _type = null;
     var _parts = null;
     if(parts && properties && properties.type) {
         _type = properties.type;
-        // self.nativeObject = new NativeByteArrayOutputStream();
-        // self.nativeObject.write(parts, 0, parts.length);
         _parts = parts;
     }
     
@@ -44,9 +41,7 @@ function Blob (parts, properties) {
     };
     
     this.toString = function() {
-        const NativeString = requireClass("java.lang.String");
-        var stringFormat = new NativeString(_parts);
-        return stringFormat.substring(0);
+        return Base64Util.Utf8ArrayToStr( _parts);
     }
 }
 
@@ -56,5 +51,6 @@ Blob.createFromBase64 = function(base64String) {
     var newBlob = new Blob(byteArray, {type:"image"});
     return newBlob;
 };
+
 
 module.exports = Blob;
