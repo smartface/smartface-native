@@ -144,6 +144,6 @@ Label.prototype.ios.showScrollBar = false;
  * @ios
  * @since 1.1.12
  */
-Label.prototype.ios.scrollEnabled = false;
+Label.prototype.ios.scrollEnabled = true;
 
 module.exports = Label;
