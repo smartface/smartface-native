@@ -137,4 +137,13 @@ Label.prototype.textColor = UI.Color.BLACK;
  */
 Label.prototype.ios.showScrollBar = false;
 
+/**
+ * Enable/Disable scroll bar when text is too long.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @since 1.1.12
+ */
+Label.prototype.ios.scrollEnabled = false;
+
 module.exports = Label;
