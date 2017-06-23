@@ -100,13 +100,12 @@ const WebView = extend(View)(
             enumerable: true
          });
          
-         const UIScrollView = SF.requireClass("UIScrollView");
          Object.defineProperty(self, 'bounceEnabled', {
             get: function() {
-                return self.nativeObject.scrollView.bounces;
+                return self.nativeObject.scrollView.valueForKey("bounces");
             },
             set: function(value) {
-                self.nativeObject.scrollView.bounces = value;
+                self.nativeObject.scrollView.setValueForKey(value,"bounces");
             },
             enumerable: true
          });
