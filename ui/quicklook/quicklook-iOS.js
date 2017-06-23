@@ -21,6 +21,9 @@ function QuickLook (params) {
                         path: value[i]
                     });
                     var actualPath = filePath.nativeObject.getActualPath();
+                    if (!actualPath) {
+                        throw Error('"' + _document[i] + '"' + "\nFile does not exist");
+                    }
                     uRLArray.push(__SF_NSURL.fileURLWithPath(actualPath));
                 }
                 self.nativeObject.document = uRLArray;
