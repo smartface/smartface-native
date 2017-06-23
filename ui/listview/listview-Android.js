@@ -22,8 +22,13 @@ const ListView = extend(View)(
         
         if(!this.nativeInner){
             // For creating RecyclerView with android:scrollbar=vertical attribute
-            var themeWrapper = new NativeContextThemeWrapper(activity, NativeR.style.ScrollBarRecyclerView);
-            this.nativeInner = new NativeRecyclerView(themeWrapper);
+            if(NativeR.style.ScrollBarRecyclerView){
+                var themeWrapper = new NativeContextThemeWrapper(activity, NativeR.style.ScrollBarRecyclerView);
+                this.nativeInner = new NativeRecyclerView(themeWrapper);
+            }
+            else{
+                this.nativeInner = new NativeRecyclerView(activity);
+            }
         }
 
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
