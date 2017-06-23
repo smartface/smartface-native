@@ -34,9 +34,11 @@ function Blob (parts, properties) {
     };
     
     this.toBase64 = function() {
-        const NativeBase64 = requireClass("android.util.Base64");
-        var encodedString = NativeBase64.encodeToString(_parts, 0, _parts.length, NativeBase64.DEFAULT);
-        return encodedString;
+        // const NativeBase64 = requireClass("android.util.Base64");
+        // var encodedString = NativeBase64.encodeToString(_parts, 0, _parts.length, NativeBase64.DEFAULT);
+        // return encodedString;
+        
+        return Base64Util.fromByteArray(_parts);
     };
     
     this.toString = function() {
