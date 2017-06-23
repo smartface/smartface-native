@@ -6,6 +6,7 @@ const Color                 = require('sf-core/ui/color');
 const KeyboardType          = require('sf-core/ui/keyboardtype');
 const TextAlignment         = require('sf-core/ui/textalignment');
 const AndroidConfig         = require('sf-core/util/Android/androidconfig');
+const Exception             = require("sf-core/util/exception");
 
 const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
 const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
@@ -109,10 +110,11 @@ const SearchView = extend(View)(
                     return _textColor;
                 },
                 set: function(textColor) {
-                    _textColor = textColor;
-                    if(TypeUtil.isNumeric(textColor)) {
-                        mSearchSrcTextView.setTextColor(textColor);
+                    if(!(textColor instanceof Color)){
+                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                     }
+                    _textColor = textColor;
+                    mSearchSrcTextView.setTextColor(textColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -242,6 +244,9 @@ const SearchView = extend(View)(
                     return _hintTextColor;
                 },
                 set: function(hintTextColor) {
+                    if(!(hintTextColor instanceof Color)){
+                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                    }
                     mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
                 },
                 enumerable: true

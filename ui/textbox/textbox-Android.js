@@ -241,7 +241,6 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
-                        self.hideKeyboard();
                     }
                 }
             }));

@@ -20,6 +20,7 @@ const ScrollView = extend(ViewGroup)(
         const FlexLayout = require("sf-core/ui/flexlayout");
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
+        _layout.parent = this;
 
         Object.defineProperties(this, {
             'align': {
