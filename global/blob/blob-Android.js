@@ -24,7 +24,7 @@ function Blob (parts, properties) {
     
     Object.defineProperty(this, 'size', {
         get: function() {
-            return _parts && _parts.length;
+            return _parts ? _parts.length : null;
         },
         enumerable: true
     });
