@@ -1,6 +1,3 @@
-
-// http://www.onicos.com/staff/iz/amuse/javascript/expert/utf.txt
-
 /* utf.js - UTF-8 <=> UTF-16 convertion
  *
  * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
