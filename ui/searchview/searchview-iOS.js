@@ -28,14 +28,14 @@ const SearchView = extend(View)(
         
         _super(this);
         
-        var textfield = self.nativeObject.valueForKey("searchField");
-        textfield.addKeyboardObserver();
+        self.textfield = self.nativeObject.valueForKey("searchField");
+        self.textfield.addKeyboardObserver();
         
         self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
             nativeObject : self.nativeObject
         });
         
-        textfield.onShowKeyboard = function(e){
+        self.textfield.onShowKeyboard = function(e){
             if (_isAddedHeaderBar) {
                 return;
             }
@@ -44,7 +44,7 @@ const SearchView = extend(View)(
             }
         }
            
-        textfield.onHideKeyboard = function(e){
+        self.textfield.onHideKeyboard = function(e){
             if (_isAddedHeaderBar) {
                 return;
             }
@@ -160,6 +160,27 @@ const SearchView = extend(View)(
             set: function(searchViewStyle) {
                 _searchViewStyle = searchViewStyle;
                 self.nativeObject.searchBarStyle = _searchViewStyle;
+            },
+            enumerable: true
+        });
+        
+        self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
+        Object.defineProperty(this.ios, 'cursorColor', {
+            get: function() {
+                return new Color({color : self.textfield.valueForKey("tintColor")});
+            },
+            set: function(color) {
+                self.textfield.setValueForKey(color.nativeObject,"tintColor");
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(this.ios, 'cancelButtonColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.valueForKey("tintColor")});
+            },
+            set: function(color) {
+                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
             },
             enumerable: true
         });

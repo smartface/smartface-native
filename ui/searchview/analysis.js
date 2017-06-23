@@ -148,6 +148,23 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
+ * Gets/sets cursor color of searchview. This property works only for IOS.
+ *
+ * @property {UI.Color} cursorColor
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.ios.cursorColor;
+
+/**
+ * Gets/sets cancel button color of searchview. This property works only for IOS.
+ *
+ * @property {UI.Color} cancelButtonColor
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.ios.cancelButtonColor;
+/**
  * Gets/sets the color of the hint text. This property works only for Android.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
