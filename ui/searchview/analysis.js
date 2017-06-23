@@ -152,7 +152,7 @@ SearchView.prototype.ios.showsCancelButton;
  *
  * @property {UI.Color} cursorColor
  * @ios
- * @since 0.1
+ * @since 1.1.12
  */
 SearchView.prototype.ios.cursorColor;
 
@@ -161,7 +161,7 @@ SearchView.prototype.ios.cursorColor;
  *
  * @property {UI.Color} cancelButtonColor
  * @ios
- * @since 0.1
+ * @since 1.1.12
  */
 SearchView.prototype.ios.cancelButtonColor;
 /**
