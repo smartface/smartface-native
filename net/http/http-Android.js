@@ -186,8 +186,7 @@ http.request = function(params, onLoad, onError) {
                     return VolleyResponse.success(response.data, cacheHeaders);
                 },
                 deliverResponse: function(object){
-                    var blob = new Blob(requestResult, {type: responseType});
-                    onLoad({body: blob, headers: responseHeaders});
+                    onLoad({body: new Blob(requestResult, {type: responseType}), headers: responseHeaders});
                 }
             }, parameters);    
         }
