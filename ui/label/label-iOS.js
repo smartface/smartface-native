@@ -57,7 +57,17 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
+        
+        Object.defineProperty(self.ios, 'scrollEnabled', {
+            get:function() {
+                return self.nativeObject.valueForKey("scrollEnabled");
+            },
+            set:function(value) {
+                self.nativeObject.setValueForKey(value,"scrollEnabled");
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'font', {
             get:function() {
                 return self.nativeObject.font;

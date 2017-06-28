@@ -50,21 +50,21 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-Object.defineProperty(Application, 'currentReleaseChannel', {
+Object.defineProperty(SFApplication, 'currentReleaseChannel', {
     get: function(){
         return Application.currentReleaseChannel;
     },
     enumerable: true
 });
 
-Object.defineProperty(Application, 'smartfaceAppName', {
+Object.defineProperty(SFApplication, 'smartfaceAppName', {
     get: function(){
         return Application.smartfaceAppName;
     },
     enumerable: true
 });
 
-Object.defineProperty(Application, 'version', {
+Object.defineProperty(SFApplication, 'version', {
     get: function(){
         return Application.version;
     },
