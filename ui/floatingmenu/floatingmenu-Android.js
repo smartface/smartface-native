@@ -117,8 +117,12 @@ function FloatingMenu(params) {
                 return _icon;
             },
             set: function(image) {
-                _icon = image;
-                nativeObject.setIcon(image.nativeObject);
+                if (image && image.nativeObject && (image instanceof require("sf-core/ui/image"))) {
+                    _icon = image;
+                    nativeObject.setIcon(image.nativeObject);
+                } else {
+                    throw new Error("Provide floatingMenu's icon with a UI.Image.");
+                }
             }
         },
         'color': {
@@ -126,7 +130,11 @@ function FloatingMenu(params) {
                 return _color;
             },
             set: function(color) {
-                nativeObject.setBackgroundColour(color.nativeObject);
+                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                    nativeObject.setBackgroundColour(color.nativeObject);
+                } else {
+                    throw new Error("Provide floatingMenu's color with a UI.Color.");
+                }
             }
         },
         'rotateEnabled': {

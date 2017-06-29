@@ -218,6 +218,7 @@ const TextBox = extend(Label)(
             
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
+            self.padding = 0;
             
             self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
                 // todo: Control insertedText after resolving story/AND-2508 issue.
@@ -240,7 +241,6 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
-                        self.hideKeyboard();
                     }
                 }
             }));

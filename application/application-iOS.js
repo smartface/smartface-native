@@ -50,44 +50,26 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// THIS PART IS DISABLED
-// FOR PUBLISH CASE, PROJECT.JSON FILE WILL BE ENCRYPTED
-// WE CANNOT DECRYPT THIS FILE, WE DONT HAVE A KEY
-// SMFCORE HAS GLOBAL "APPLICATION" CLASS, IT WILL HANDLE THESE FUNCTIONS BELOW
+Object.defineProperty(SFApplication, 'currentReleaseChannel', {
+    get: function(){
+        return Application.currentReleaseChannel;
+    },
+    enumerable: true
+});
 
-// Object.defineProperty(Application, 'currentReleaseChannel', {
-//     get: function(){
-//         var projectJson = getProjectJsonObject();
-//         if(projectJson.config && projectJson.config.rau){
-//             return projectJson.config.rau.currentReleaseChannel;
-//         }
-//         return null;
-//     },
-//     enumerable: true
-// });
+Object.defineProperty(SFApplication, 'smartfaceAppName', {
+    get: function(){
+        return Application.smartfaceAppName;
+    },
+    enumerable: true
+});
 
-// Object.defineProperty(Application, 'smartfaceAppName', {
-//     get: function(){
-//         var projectJson = getProjectJsonObject();
-//         if(projectJson.info){
-//             return projectJson.info.name;
-//         }
-//         return null;
-//     },
-//     enumerable: true
-// });
-
-// Object.defineProperty(Application, 'version', {
-//     get: function(){
-//         var projectJson = getProjectJsonObject();
-//         if(projectJson.info){
-//             return projectJson.info.version;
-//         }
-//         return -1;
-//     },
-//     enumerable: true
-// });
+Object.defineProperty(SFApplication, 'version', {
+    get: function(){
+        return Application.version;
+    },
+    enumerable: true
+});
 
 // function getProjectJsonObject(){
 //     const File = require("sf-core/io/file");

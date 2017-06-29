@@ -27,7 +27,36 @@ const WebView = extend(View)(
         var _onShow;
         var _onLoad;
         var _onChangedURL;
+        var _scrollBarEnabled = true;
         Object.defineProperties(this, {
+            'scrollBarEnabled': {
+                get: function() {
+                    return _scrollBarEnabled;
+                },
+                set: function(value) {
+                    if (value) {
+                        _scrollBarEnabled = true;
+                        this.nativeObject.setHorizontalScrollBarEnabled(true);
+                        this.nativeObject.setVerticalScrollBarEnabled(true);
+                    } else {
+                        _scrollBarEnabled = false;
+                        this.nativeObject.setHorizontalScrollBarEnabled(false);
+                        this.nativeObject.setVerticalScrollBarEnabled(false);
+                    }
+                }
+            },
+            'bounceEnabled': {
+                get: function() {
+                    return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
+                },
+                set: function(value) {
+                    if (value) {
+                        this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS 
+                    } else {
+                        this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
+                    }
+                }
+            },
             'openLinkInside': {
                 get: function() {
                     return _canOpenLinkInside;
@@ -153,11 +182,19 @@ const WebView = extend(View)(
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
             var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
             this.nativeObject.setWebViewClient(nativeWebClient);
+            this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
+            this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
+
             var settings = this.nativeObject.getSettings();
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
+            settings.setLoadsImagesAutomatically(true);
+            
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+                settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
+            }
         }
 
         // Assign parameters given in constructor

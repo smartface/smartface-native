@@ -76,7 +76,7 @@ MapView.prototype.compassEnabled;
  * @property {Boolean} [userLocationEnabled = false]
  * @android
  * @ios
- * @since 1.1.11
+ * @since 1.1.10
  */
 MapView.prototype.userLocationEnabled;
 

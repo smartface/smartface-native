@@ -22,6 +22,17 @@ const extend = require('js-base/core/extend');
 function Label(params) {}
 
 /**
+ * Gets/sets background color of a view. It allows setting background
+ * color with UI.Color instance.
+ *
+ * @property {UI.Color} [backgroundColor = UI.Color.TRANSPARENT]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Label.prototype.backgroundColor = UI.Color.TRANSPARENT;
+
+/**
  * Gets/sets HTML text value of Label. This property helps user showing HTML
  * texts on the screen.
  *
@@ -125,5 +136,14 @@ Label.prototype.textColor = UI.Color.BLACK;
  * @since 0.1
  */
 Label.prototype.ios.showScrollBar = false;
+
+/**
+ * Enable/Disable scroll bar when text is too long.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @since 1.1.12
+ */
+Label.prototype.ios.scrollEnabled = true;
 
 module.exports = Label;

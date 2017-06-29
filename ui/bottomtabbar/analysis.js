@@ -17,13 +17,13 @@
  *     var myProfileItem = new TabBarItem({
  *         title: "Profile",
  *         icon: myProfileImage,
- *         page: require('pages/pgProfile')
+ *         route: require('pages/pgProfile')
  *     });
  * 
  *     var myMessageItem = new TabBarItem({
  *         title: "Messages",
  *         icon: myMessageImage,
- *         page: require('pages/pgMessages')
+ *         route: require('pages/pgMessages')
  *     });
  * 
  *     myTab.add('profile', myProfileItem);
@@ -51,8 +51,8 @@ BottomTabBar.prototype.android.maxItemCount = true;
  * Gets/sets title and icon color of the tab bar items. 
  *
  * @property {Object} itemColor
- * @property {UI.Color} normal 
- * @property {UI.Color} selected
+ * @property {UI.Color} itemColor.normal 
+ * @property {UI.Color} itemColor.selected
  * @android
  * @ios
  * @since 1.1.10

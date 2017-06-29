@@ -59,7 +59,7 @@ Location.stop = function(){};
 Location.onLocationChanged = function onLocationChanged(event){}
 
 /** 
- * @enum Location.android.Provider
+ * @enum Device.Location.android.Provider
  * @android
  * @since 1.2
  * 

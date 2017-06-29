@@ -15,12 +15,22 @@ const ScrollView = extend(ViewGroup)(
                 this.nativeObject = new NativeVerticalScroll(activity);
             }
         }
-        _super(this);
         
+        _super(this);
+        const FlexLayout = require("sf-core/ui/flexlayout");
+        var _layout = new FlexLayout();
+        this.nativeObject.addView(_layout.nativeObject);
+        _layout.parent = this;
+
         Object.defineProperties(this, {
             'align': {
                 get: function() {
                     return _align;
+                }
+            },
+            'layout': {
+                get: function() {
+                    return _layout;
                 }
             },
             'scrollBarEnabled': {
@@ -56,20 +66,10 @@ const ScrollView = extend(ViewGroup)(
                     }
                 }
             },
-            // Overrided from View for make content measurements inside ScrollView calculated.
-            'width': {
-                get: function() {
-                    return this.maxWidth;
-                },
-                set: function(width) {
-                    this.maxWidth = width;
-                },
-                enumerable: true,
-                configurable: true
-            },
             // // Overrided from ViewGroup due to difference between FlexLayout.
             'addChild': {
                 value: function(view){
+                    this.nativeObject.removeView(_layout.nativeObject);
                     view.parent = this;
                     this.childViews[view.id] = view;
                     this.nativeObject.addView(view.nativeObject);

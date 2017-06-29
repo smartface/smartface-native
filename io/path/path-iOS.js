@@ -2,6 +2,13 @@ const File = require('sf-core/io/file');
 
 var Path = {};
 
+Path.android = {};
+
+Object.defineProperty(Path.android, 'storages', {
+    get: function(){},
+    enumerable: true
+});
+
 Object.defineProperties(Path, {
     'ImagesUriScheme': {
         get: function(){

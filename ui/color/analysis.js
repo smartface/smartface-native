@@ -177,7 +177,7 @@ Color.createGradient = function(params) {}
  *     const Color = require('sf-core/ui/color');
  *     var myRGBColor = Color.create(99, 0, 0);
  *     var red = Color.red(myRGBColor);
- *     alert(red);
+ *     console.log("" + red);
  *
  * @param {UI.Color} color A color instance.
  * @return {Number} An integer between 0-255.
@@ -196,7 +196,7 @@ Color.red = function(color){ return color.red };
  *     const Color = require('sf-core/ui/color');
  *     var myRGBColor = Color.create(0, 171, 0);
  *     var green = Color.green(myRGBColor);
- *     alert(green);
+ *     console.log("" + green);
  *
  * @param {UI.Color} color A color instance.
  * @return {Number} An integer between 0-255.
@@ -215,7 +215,7 @@ Color.green = function(color){ return color.green };
  *     const Color = require('sf-core/ui/color');
  *     var myRGBColor = Color.create(0, 0, 155);
  *     var blue = Color.blue(myRGBColor);
- *     alert(blue);
+ *     console.log("" + blue);
  *
  * @param {UI.Color} color A color instance.
  * @return {Number} An integer between 0-255.

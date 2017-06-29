@@ -100,6 +100,35 @@ const WebView = extend(View)(
             enumerable: true
          });
          
+         /////////////////////
+         // Temporary disabled
+         Object.defineProperty(self, 'bounceEnabled', {
+            get: function() {
+                // return self.nativeObject.scrollView.valueForKey("bounces");
+            },
+            set: function(value) {
+                // self.nativeObject.scrollView.setValueForKey(value,"bounces");
+            },
+            enumerable: true
+         });
+         
+         /////////////////////
+         // Temporary disabled
+         var _scrollBarEnabled = true;
+         Object.defineProperty(self, 'scrollBarEnabled', {
+            get: function() {
+                // return _scrollBarEnabled;
+            },
+            set: function(value) {
+                // if (typeof value === 'boolean') {
+                //     self.nativeObject.scrollView.setValueForKey(value,"showsVerticalScrollIndicator");
+                //     self.nativeObject.scrollView.setValueForKey(value,"showsHorizontalScrollIndicator");
+                //     _scrollBarEnabled = value;  
+                // }
+            },
+            enumerable: true
+         });
+         
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

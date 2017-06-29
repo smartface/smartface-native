@@ -137,15 +137,6 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
     var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
-    var responseListener = VolleyResponse.Listener.implement({
-            onResponse: function(response) {
-                var encodedStr = new NativeString(response);
-                var bytes = encodedStr.getBytes();
-                var decoded = NativeBase64.decode(bytes, NativeBase64.DEFAULT);
-                var blob = new Blob(decoded, {type: responseType});
-                onLoad({body: blob, headers: responseHeaders});
-            }
-        });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
             var statusCode = error.networkResponse.statusCode;
@@ -161,7 +152,7 @@ http.request = function(params, onLoad, onError) {
     
     var method = new NativeInteger(methods[params.method]);
     var url = new NativeString(params.url);
-    var parameters = [method, url, responseListener, responseErrorListener];
+    var parameters = [method, url, responseErrorListener];
     var body = null;
     if(params.body)
         body = new NativeString(params.body);
@@ -173,8 +164,9 @@ http.request = function(params, onLoad, onError) {
     }
     try {
         if(checkInternet()) {
-            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-            request.nativeObject = StringRequest.extend("SFStringRequest", {
+            const Request = requireClass("com.android.volley.Request");
+            var requestResult = null;
+            request.nativeObject = Request.extend("SFRequestt", {
                 getBody: function() {
                     if(!body)
                         return [];
@@ -188,11 +180,13 @@ http.request = function(params, onLoad, onError) {
                 },
                 parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
                     getResponseHeaders(response, responseHeaders, responseType);
-                    
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    var encoded = NativeBase64.encode(response.data, NativeBase64.DEFAULT);
-                    var encodedStr = new NativeString(encoded);
-                    return VolleyResponse.success(encodedStr, cacheHeaders);
+                    // we should pass Integer (class) array to native. Handle it from deliverResponse
+                    requestResult = response.data;
+                    return VolleyResponse.success(response.data, cacheHeaders);
+                },
+                deliverResponse: function(object){
+                    onLoad({body: new Blob(requestResult, {type: responseType}), headers: responseHeaders});
                 }
             }, parameters);    
         }
@@ -272,4 +266,5 @@ function checkInternet() {
         return false;
     return true;
 }
+
 module.exports = http;

@@ -11,6 +11,8 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
+const NativeViewCompat          = requireClass("android.support.v4.view.ViewCompat");
+
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -73,13 +75,8 @@ function View(params) {
     var roundRect = new NativeRoundRectShape(radii, rectF, radii);
     var borderShapeDrawable = new NativeShapeDrawable(roundRect);
     borderShapeDrawable.getPaint().setColor(0);
-    
-    
-    var layerDrawable = new NativeLayerDrawable([backgroundDrawable,backgroundDrawable]);
-    layerDrawable.setId(0,0);
-    layerDrawable.setId(1,1);
-    layerDrawable.setDrawableByLayerId(0,backgroundDrawable);
-    layerDrawable.setDrawableByLayerId(1,borderShapeDrawable);
+  
+    var layerDrawable = createNewLayerDrawable([backgroundDrawable,borderShapeDrawable])
     var _isCloned = false;
     var _backgroundImages = null;
     var _borderColor = Color.BLACK;
@@ -325,7 +322,21 @@ function View(params) {
             set: function(value){
                 _isCloned = value;
             }
-        }
+        },
+    });
+
+    self.android = {};
+    Object.defineProperties(self.android, {
+        'elevation': {
+            get: function(){
+                return NativeViewCompat.getElevation(self.nativeObject);
+            },
+            set: function(value){
+                NativeViewCompat.setElevation(self.nativeObject, value);
+            },
+            enumerable: true,
+            configurable: true
+        },
     });
     
     function setBackgroundImage() {
@@ -481,7 +492,8 @@ function View(params) {
     }
     
     function setBackground(layerIndex){
-        var layerDrawableNative = self.nativeObject.getBackground().getConstantState().newDrawable();
+        var constantStateForCopy = self.nativeObject.getBackground().getConstantState();
+        var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([backgroundDrawable, borderShapeDrawable]);
         switch (layerIndex){
             case 0: 
                 layerDrawableNative.setDrawableByLayerId(0,backgroundDrawable);
@@ -881,7 +893,12 @@ function View(params) {
             },
             set: function(flexGrow) {
                 self.yogaNode.setFlexGrow(flexGrow);
-                self.flexBasis = 1;
+                if(flexGrow > 0){
+                    self.flexBasis = 1;
+                }
+                else{
+                    self.flexBasis = NaN;
+                }
             },
             enumerable: true
         },
@@ -896,7 +913,7 @@ function View(params) {
         },
         'flexBasis': {
             get: function() {
-                return self.yogaNode.getFlexBasis();
+                return self.yogaNode.getFlexBasis().value;
             },
             set: function(flexBasis) {
                 self.yogaNode.setFlexBasis(flexBasis);
@@ -966,5 +983,22 @@ View.State.STATE_FOCUSED = [
     NativeR.attr.state_focused,
     NativeR.attr.state_enabled,
 ];
+
+function createNewLayerDrawable(drawables){
+    var drawablesForObjectCreate = [];
+    var i = 0 ;
+    
+    for(i = 0 ; i < drawables.length ; i++){
+        drawablesForObjectCreate.push(drawables[0]);
+    }
+    
+    var layerDrawable = new NativeLayerDrawable(drawablesForObjectCreate);
+    for(i = 0 ; i < drawables.length ; i++){
+        layerDrawable.setId(i, i);
+        layerDrawable.setDrawableByLayerId(i,drawables[i]);
+    }
+    
+    return layerDrawable;
+}
 
 module.exports = View;
