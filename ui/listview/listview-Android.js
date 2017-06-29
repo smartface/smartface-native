@@ -2,10 +2,13 @@ const View                  = require('../view');
 const extend                = require('js-base/core/extend');
 const TypeUtil              = require("sf-core/util/type");
 const ListViewItem          = require("sf-core/ui/listviewitem");
+const AndroidConfig             = require("sf-core/util/Android/androidconfig");
 const NativeView                    = requireClass("android.view.View");
 const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout      = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeLinearLayoutManager     = requireClass("android.support.v7.widget.LinearLayoutManager");
+const NativeContextThemeWrapper     = requireClass("android.view.ContextThemeWrapper");
+const NativeR                       = requireClass(AndroidConfig.packageName + ".R");
 
 const ListView = extend(View)(
     function (_super, params) {
@@ -27,6 +30,7 @@ const ListView = extend(View)(
                 this.nativeInner = new NativeRecyclerView(activity);
             }
         }
+
         var linearLayoutManager = new NativeLinearLayoutManager(activity);
         this.nativeInner.setLayoutManager(linearLayoutManager);
         this.nativeObject.addView(this.nativeInner);
