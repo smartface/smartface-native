@@ -26,10 +26,13 @@ function BottomTabBar(params) {
                         _itemCount++;
                         if(!_index)
                             _index = path;
+                        var page;
                         if(typeof(item.route) !== 'function') 
-                            _itemInstances.push(item.route.getRoute(null, true));
+                            page = item.route.getRoute(null, true);
                         else 
-                            _itemInstances.push(new _items[path].page());
+                            page = new _items[path].page();
+                        page.isBottomTabBarPage = true;
+                        _itemInstances.push(page);
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
