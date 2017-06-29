@@ -66,31 +66,16 @@ QuickLook.prototype.barColor = false;
 QuickLook.prototype.itemColor = UI.Color.BLACK;
 
 /**
- * Gets/sets visibility of status bar on QuickLook view.
+ * Gets status bar object. This property is readonly, you can not set
+ * status bar to a page but you can change properties of page's status bar.
  *
- *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
- *     var quicklook = new QuickLook();
- *     quicklook.statusBar.visible = false;
- *
- * @property {Boolean} statusBar.visible
- * @since 0.1
- */
-QuickLook.prototype.statusBar.visible = false;
-
-/**
- * Gets/sets statusBar style of QuickLook View.
- *
- *     @example
- *     const QuickLook = require('sf-core/ui/quicklook');
- *     var quicklook = new QuickLook();
- *     quicklook.statusBar.style = false;
- *
- * @property {UI.StatusBarStyle} statusBar.style
+ * @property {UI.StatusBar} statusBar
+ * @android
  * @ios
+ * @readonly
  * @since 0.1
  */
-QuickLook.prototype.statusBar.style = UI.StatusBarStyle.DEFAULT;
+QuickLook.prototype.statusBar;
 
 /**
  * This function shows QuickLook on the given UI.Page.
