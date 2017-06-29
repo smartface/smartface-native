@@ -117,8 +117,8 @@ const WebView = extend(View)(
             },
             set: function(value) {
                 if (typeof value === 'boolean') {
-                    self.nativeObject.scrollView.showsVerticalScrollIndicator = value;
-                    self.nativeObject.scrollView.showsHorizontalScrollIndicator = value;
+                    self.nativeObject.scrollView.setValueForKey(value,"showsVerticalScrollIndicator");
+                    self.nativeObject.scrollView.setValueForKey(value,"showsHorizontalScrollIndicator");
                     _scrollBarEnabled = value;  
                 }
             },
