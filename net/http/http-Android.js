@@ -136,15 +136,19 @@ http.requestFile = function(url, fileName, onLoad, onError) {
 };
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};
+    var statusCode;
     var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            var statusCode = error.networkResponse.statusCode;
-            var errorBytes = error.networkResponse.data;
+            if(error.networkResponse) {
+                var statusCode = error.networkResponse.statusCode;
+                var errorBytes = error.networkResponse.data;
+                var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
+            }
             onError({
                 message: error + " " + error.getMessage(),
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers),
+                headers: errorHeaders,
                 body: new Blob(errorBytes, {type: {}})
             });
         }
@@ -159,8 +163,14 @@ http.request = function(params, onLoad, onError) {
     var request = new Request();
     
     var contentType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
-    if (params.headers && params.headers["Content-Type"]) {
-        contentType = params.headers["Content-Type"];
+    if (params.headers) {
+        var keys = Object.keys(params.headers);
+        for(var i = 0; i < keys.length; i++) {
+            if(keys[i].toUpperCase() === CONTENT_TYPE_KEY) {
+                contentType = params.headers[keys[i]];
+                break;
+            }
+        }
     }
     try {
         if(checkInternet()) {
@@ -183,10 +193,11 @@ http.request = function(params, onLoad, onError) {
                     var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
                     // we should pass Integer (class) array to native. Handle it from deliverResponse
                     requestResult = response.data;
+                    statusCode = response.statusCode;
                     return VolleyResponse.success(response.data, cacheHeaders);
                 },
                 deliverResponse: function(object){
-                    onLoad({body: new Blob(requestResult, {type: responseType}), headers: responseHeaders});
+                    onLoad({body: new Blob(requestResult, {type: responseType}), headers: responseHeaders, statusCode: statusCode});
                 }
             }, parameters);    
         }
@@ -211,11 +222,9 @@ function getResponseHeaders(response, responseHeaders, responseType) {
             var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
             if(key && headers.get(key)) {
                 responseHeaders[key] = headers.get(key).substring(0);
+                if(key.toUpperCase() === CONTENT_TYPE_KEY)
+                    responseType = headers.get(key).substring(0);
             }
-        }
-        
-        if(headers.get("Content-Type")) {
-            responseType = headers.get("Content-Type").substring(0);
         }
     }
 }
@@ -248,9 +257,8 @@ function getHeaderHashMap(params) {
     }
     
     if(params.headers) {
-        var i;
         var keys = Object.keys(params.headers);
-        for (i = 0; i < keys.length; i++) {
+        for (var i = 0; i < keys.length; i++) {
             var value = params.headers[keys[i]];
             if (typeof(keys[i]) === "string" && typeof(value) === "string" &&
                 keys[i].toUpperCase() !== CONTENT_TYPE_KEY) {

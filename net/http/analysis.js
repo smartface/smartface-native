@@ -129,6 +129,7 @@ http.requestJSON = function(url, onLoad, onError) {}
  * @param {Function} onLoad Callback for success case
  * @param {Object} onLoad.params
  * @param {Blob} onLoad.params.body
+ * @param {Number} onLoad.params.statusCode
  * @param {Object} onLoad.params.headers
  * @param {Function} onError Callback for error case
  * @param {Object} onError.params 
