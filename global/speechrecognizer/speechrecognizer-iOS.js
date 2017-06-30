@@ -19,6 +19,39 @@ SpeechRecognizer.start = function(params) {
     
     SpeechRecognizer.onError = params.onError;
     
+    __SF_SFSpeechRecognizer.speechRequestAuthorization(function(e){
+        if(e.status == SFSpeechRecognizerAuthorizationStatus.authorized){
+            
+            Hardware.ios.microphone.requestRecordPermission(function(granted){
+                if(granted){
+                    SpeechRecognizer.createRecognizer(params);
+                }else{
+                    SpeechRecognizer.onErrorHandler(""); 
+                }
+            });
+            
+        }else{
+           SpeechRecognizer.onErrorHandler(""); 
+        }
+    });
+};
+
+SpeechRecognizer.stop = function() {
+    if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
+        SpeechRecognizer.avaudioengine.stop();
+        SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
+        if (SpeechRecognizer.recognitionRequest) {
+            SpeechRecognizer.recognitionRequest.endAudio();
+        }
+    }
+    
+    SpeechRecognizer.avaudioengine = undefined;
+    SpeechRecognizer.recognitionRequest = undefined;
+    SpeechRecognizer.recognitionTask = undefined;
+    SpeechRecognizer.speechRecognizer = undefined;
+};
+
+SpeechRecognizer.createRecognizer = function(params){
     if (params.locale) {
         SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(params.locale);    
     }else{
@@ -30,27 +63,13 @@ SpeechRecognizer.start = function(params) {
     SpeechRecognizer.recognitionTask = undefined;
     SpeechRecognizer.speechDelegate = new __SF_SFSpeechRecognizerDelegate();
     
-    SpeechRecognizer.speechRecognizer.delegate = SpeechRecognizer.speechDelegate;
-    
     SpeechRecognizer.speechDelegate.speechRecognizerAvailabilityDidChange = function(e){
         if(!e.available){
             SpeechRecognizer.onErrorHandler("");
         }
     }
-        
-    __SF_SFSpeechRecognizer.speechRequestAuthorization(function(e){
-        if(e.status == SFSpeechRecognizerAuthorizationStatus.authorized){
-          
-        }else{
-           SpeechRecognizer.onErrorHandler(""); 
-        }
-    });
     
-    Hardware.ios.microphone.requestRecordPermission(function(granted){
-        if(!granted){
-            SpeechRecognizer.onErrorHandler(""); 
-        }
-    });
+    SpeechRecognizer.speechRecognizer.delegate = SpeechRecognizer.speechDelegate;
     
     if (SpeechRecognizer.recognitionTask) {
         SpeechRecognizer.recognitionTask.cancel();
@@ -132,27 +151,13 @@ SpeechRecognizer.start = function(params) {
     SpeechRecognizer.avaudioengine.start(function(e){
         SpeechRecognizer.onErrorHandler("");
     });
-};
-
-SpeechRecognizer.stop = function() {
-    if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
-        SpeechRecognizer.avaudioengine.stop();
-        SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
-        if (SpeechRecognizer.recognitionRequest) {
-            SpeechRecognizer.recognitionRequest.endAudio();
-        }
-    }
-    
-    SpeechRecognizer.avaudioengine = undefined;
-    SpeechRecognizer.recognitionRequest = undefined;
-    SpeechRecognizer.recognitionTask = undefined;
-    SpeechRecognizer.speechRecognizer = undefined;
-};
+}
 
 SpeechRecognizer.onErrorHandler = function(error){
     SpeechRecognizer.stop();
     if (typeof SpeechRecognizer.onError === 'function') {
-        SpeechRecognizer.onError();
+        SpeechRecognizer.onError(error);
     }
 }
+
 module.exports = SpeechRecognizer;
