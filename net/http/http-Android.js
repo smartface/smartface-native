@@ -145,8 +145,11 @@ http.request = function(params, onLoad, onError) {
                 var errorBytes = error.networkResponse.data;
                 var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
             }
+            var message = error;
+            if(error)
+                message += " " + error.getMessage();
             onError({
-                message: error + " " + error.getMessage(),
+                message: message,
                 statusCode: statusCode,
                 headers: errorHeaders,
                 body: new Blob(errorBytes, {type: {}})
