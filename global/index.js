@@ -3,5 +3,6 @@ module.exports = {
     Notifications: require('./notifications'),
     Timer: require('./timer'),
     Share: require('./share'),
-    Data: require('./data')
+    Data: require('./data'),
+    SpeechRecognizer: require('./speechrecognizer')
 };
