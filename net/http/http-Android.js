@@ -40,12 +40,19 @@ http.requestString = function(url, onLoad, onError) {
     });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            var statusCode = error.networkResponse.statusCode;
-            var errorBytes = error.networkResponse.data;
+            if(error) {
+                var message = error.getMessage();
+                if(error.networkResponse) {
+                    var statusCode = error.networkResponse.statusCode;
+                    var errorBytes = error.networkResponse.data;
+                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
+                }
+            }
+            
             onError({
-                message: error + " " + error.getMessage(),
+                message: message,
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers),
+                headers: errorHeaders,
                 body: new Blob(errorBytes, {type: {}})
             });
         }
@@ -79,12 +86,19 @@ http.requestImage = function(url, onLoad, onError) {
     });
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            var statusCode = error.networkResponse.statusCode;
-            var errorBytes = error.networkResponse.data;
+            if(error) {
+                var message = error.getMessage();
+                if(error.networkResponse) {
+                    var statusCode = error.networkResponse.statusCode;
+                    var errorBytes = error.networkResponse.data;
+                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
+                }
+            }
+            
             onError({
-                message: error + " " + error.getMessage(),
+                message: message,
                 statusCode: statusCode,
-                headers: parseErrorHeaders(error.networkResponse.headers),
+                headers: errorHeaders,
                 body: new Blob(errorBytes, {type: {}})
             });
         }
@@ -140,14 +154,15 @@ http.request = function(params, onLoad, onError) {
     var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
     var responseErrorListener = VolleyResponse.ErrorListener.implement({
         onErrorResponse: function(error) {
-            if(error.networkResponse) {
-                var statusCode = error.networkResponse.statusCode;
-                var errorBytes = error.networkResponse.data;
-                var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
+            if(error) {
+                var message = error.getMessage();
+                if(error.networkResponse) {
+                    var statusCode = error.networkResponse.statusCode;
+                    var errorBytes = error.networkResponse.data;
+                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
+                }
             }
-            var message = error;
-            if(error)
-                message += " " + error.getMessage();
+            
             onError({
                 message: message,
                 statusCode: statusCode,
