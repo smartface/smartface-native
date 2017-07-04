@@ -31,12 +31,12 @@ SpeechRecognizer.start = function(params) {
                         delay: 100
                     });
                 }else{
-                    SpeechRecognizer.onErrorHandler(""); 
+                    SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_INSUFFICIENT_PERMISSIONS); 
                 }
             });
             
         }else{
-           SpeechRecognizer.onErrorHandler(""); 
+           SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_INSUFFICIENT_PERMISSIONS); 
         }
     });
 };
@@ -86,7 +86,7 @@ SpeechRecognizer.createRecognizer = function(params){
     
     SpeechRecognizer.speechDelegate.speechRecognizerAvailabilityDidChange = function(e){
         if(!e.available){
-            SpeechRecognizer.onErrorHandler("");
+            SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_NETWORK);
         }
     }
     
@@ -100,25 +100,25 @@ SpeechRecognizer.createRecognizer = function(params){
     SpeechRecognizer.avaudiosession = __SF_AVAudioSession.sharedInstance();
     
     SpeechRecognizer.avaudiosession.setCategory("AVAudioSessionCategoryRecord",function(e){
-        SpeechRecognizer.onErrorHandler(e.error.localizedDescription);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     });
     SpeechRecognizer.avaudiosession.setMode("AVAudioSessionModeMeasurement",function(e){
-        SpeechRecognizer.onErrorHandler(e.error.localizedDescription);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     });
     
     SpeechRecognizer.avaudiosession.setActiveWithOptions(true,1,function(e){
-        SpeechRecognizer.onErrorHandler(e.error.localizedDescription);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     });
     
     SpeechRecognizer.recognitionRequest = new __SF_SFSpeechAudioBufferRecognitionRequest();
     
     var inputNode = SpeechRecognizer.avaudioengine.inputNode;
     if (!inputNode) {
-        SpeechRecognizer.onErrorHandler("Audio engine has no input node");
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     }
     
     if (!SpeechRecognizer.recognitionRequest) { 
-        SpeechRecognizer.onErrorHandler("Unable to create an SFSpeechAudioBufferRecognitionRequest object");
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     }
     
     SpeechRecognizer.recognitionRequest.shouldReportPartialResults = true;
@@ -147,15 +147,9 @@ SpeechRecognizer.createRecognizer = function(params){
         if (e.error) {
             SpeechRecognizer.stop();
             if (e.error.code == 203) { //Retry
-                if (typeof params.onFinish === 'function'){
-                    if (e.result) {
-                        params.onFinish(e.result.bestTranscription.formattedString);
-                    }else{
-                        params.onFinish();
-                    }
-                }
+                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_SPEECH_TIMEOUT);
             }else{
-                SpeechRecognizer.onErrorHandler(e.error.localizedDescription);
+                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
             }
         }
         
@@ -170,7 +164,7 @@ SpeechRecognizer.createRecognizer = function(params){
     
     SpeechRecognizer.avaudioengine.prepare();
     SpeechRecognizer.avaudioengine.start(function(e){
-        SpeechRecognizer.onErrorHandler("");
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
     });
 }
 
@@ -184,5 +178,7 @@ SpeechRecognizer.onErrorHandler = function(error){
     }
     SpeechRecognizer.stop();
 }
+
+SpeechRecognizer.Error = require("./error");
 
 module.exports = SpeechRecognizer;
