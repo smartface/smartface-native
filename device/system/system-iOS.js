@@ -63,6 +63,13 @@ Object.defineProperty(System, 'clipboard', {
 
 Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   get: function() {
+      return System.fingerPrintAvaliable;
+  },
+  enumerable: true
+});
+
+Object.defineProperty(System, 'fingerPrintAvaliable', {
+  get: function() {
       var context = new __SF_LAContext();
       return context.canEvaluatePolicy();
   },
@@ -78,9 +85,16 @@ Object.defineProperty(System, 'vibrate', {
 });
 
 System.ios.validateFingerPrint = function(params){
-    var context = new __SF_LAContext();
-    context.evaluatePolicy(params.message,params.onSuccess,params.onError);
-}
+    System.validateFingerPrint(params);
+};
+
+Object.defineProperty(System, 'validateFingerPrint', {
+    value: function(params){
+        var context = new __SF_LAContext();
+        context.evaluatePolicy(params.message,params.onSuccess,params.onError);
+    },  
+    enumerable: true
+});
 
 System.isApplicationInstalled = function(packageName) {
   var url = __SF_NSURL.URLWithString(packageName);
