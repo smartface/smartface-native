@@ -394,6 +394,7 @@ function startNotificationIntent(self, params){
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
+    
     // PendingIntent.FLAG_ONE_SHOT
     self.mPendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 1073741824);
     
