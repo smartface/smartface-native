@@ -1,4 +1,5 @@
 const Hardware = require("sf-core/device/hardware");
+const Timer = require("sf-core/global/timer");
 
 const SpeechRecognizer = {};
 
@@ -13,10 +14,7 @@ const SFSpeechRecognizerAuthorizationStatus = {
 }
 
 SpeechRecognizer.start = function(params) {
-    if (SpeechRecognizer.speechRecognizer) {
-        SpeechRecognizer.stop();
-    }
-    
+    SpeechRecognizer.stop();
     SpeechRecognizer.onError = params.onError;
     
     __SF_SFSpeechRecognizer.speechRequestAuthorization(function(e){
@@ -24,7 +22,14 @@ SpeechRecognizer.start = function(params) {
             
             Hardware.ios.microphone.requestRecordPermission(function(granted){
                 if(granted){
-                    SpeechRecognizer.createRecognizer(params);
+                    var myTimer = Timer.setTimeout({
+                    task: function(){
+                            __SF_Dispatch.mainAsync(function(){
+                                SpeechRecognizer.createRecognizer(params);
+                            });
+                        },
+                        delay: 100
+                    });
                 }else{
                     SpeechRecognizer.onErrorHandler(""); 
                 }
@@ -36,7 +41,19 @@ SpeechRecognizer.start = function(params) {
     });
 };
 
+SpeechRecognizer.isRunning = function(){
+    if (SpeechRecognizer.avaudioengine) {
+        return SpeechRecognizer.avaudioengine.isRunning;
+    }else{
+        return false;
+    }
+}
+
 SpeechRecognizer.stop = function() {
+    if (!SpeechRecognizer.speechRecognizer) {
+        return;
+    }
+    
     if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
         SpeechRecognizer.avaudioengine.stop();
         SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
@@ -52,6 +69,10 @@ SpeechRecognizer.stop = function() {
 };
 
 SpeechRecognizer.createRecognizer = function(params){
+    if (SpeechRecognizer.speechRecognizer) {
+        return;
+    }
+    
     if (params.locale) {
         SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(params.locale);    
     }else{
@@ -154,10 +175,14 @@ SpeechRecognizer.createRecognizer = function(params){
 }
 
 SpeechRecognizer.onErrorHandler = function(error){
-    SpeechRecognizer.stop();
+    if (!SpeechRecognizer.speechRecognizer) {
+        return;
+    }
+    
     if (typeof SpeechRecognizer.onError === 'function') {
         SpeechRecognizer.onError(error);
     }
+    SpeechRecognizer.stop();
 }
 
 module.exports = SpeechRecognizer;

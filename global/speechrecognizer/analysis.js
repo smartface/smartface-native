@@ -37,4 +37,14 @@ SpeechRecognizer.start = function(params) {};
  */
 SpeechRecognizer.stop = function() {};
 
+/**
+ * Speech Recognizer isRunning method.
+ * 
+ * @method isRunning
+ * @android
+ * @ios
+ * @since 1.1.13
+ */
+SpeechRecognizer.isRunning = function() {};
+
 module.exports = SpeechRecognizer;
