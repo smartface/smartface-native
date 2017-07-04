@@ -278,7 +278,6 @@ Application.onMinimize = function(){};
  * Triggered after a push (remote) notification recieved. This event will be 
  * fired only if application is active and running. 
  * 
- * @since 0.1
  * @event onReceivedNotification
  * @param {Object} data 
  * @param {Object} data.remote
@@ -288,6 +287,26 @@ Application.onMinimize = function(){};
  * @since 0.1
  */
 Application.onReceivedNotification = function(data){};
+
+/**
+ * Triggered when application is called by another application.
+ * 
+ * @event onApplicationCallReceived
+ * @param {Object} e 
+ * @param {Object} e.data Data sent by application.
+ * @param {Object} e.eventType Can be "call" or "callback". 
+ * This parameter is available only for Android. For iOS this always returns "call". 
+ * For example; Application A calls application B, eventType becomes "call" for application B. 
+ * When application B is done its job and calls callFinish() method. Application A comes 
+ * foreground and eventType becomes "callback" for Android.
+ * @param {Object} e.result This parameter is available only for Android and when eventType is 
+ * "callback". Returns Android Activity result code.
+ * @android
+ * @ios
+ * @static
+ * @since 1.1.13
+ */
+Application.onApplicationCallReceived = function(e){};
 
 /**
  * This event is called after Application.requestPermissions function. This event is 
