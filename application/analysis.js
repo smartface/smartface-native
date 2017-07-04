@@ -87,6 +87,11 @@ Application.version;
  *     });
  *     // Open caller app with phone number. Will work only for both.
  *     Application.call("tel:+901234567890",{});
+ *     // Call another application with its own url schema.
+ *     Application.call("mySchema://",{});
+ *     // Call another application with package name and activity name.
+ *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
+ * 
  *
  * @method call
  * @param {String} uriScheme
@@ -223,22 +228,6 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
 Application.checkUpdate = function(callback){};
 
 /**
- * Triggered when application is called by another application.
- * 
- * @since 0.1
- * @event onApplicationCallReceived
- * @param {Object} e 
- * @param {Object} e.data Data sent by application.
- * @param {String} [e.eventType] This parameter is available only for Android. For iOS this always returns "call". 
- * @param {String} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
- * @android
- * @ios
- * @static
- * @since 0.1
- */
-Application.onApplicationCallReceived = function(e){};
-
-/**
  * Triggered before exiting application.
  * 
  * @since 0.1
@@ -281,6 +270,7 @@ Application.onMinimize = function(){};
  * @event onReceivedNotification
  * @param {Object} data 
  * @param {Object} data.remote
+ * @param {Object} data.local
  * @android
  * @ios
  * @static

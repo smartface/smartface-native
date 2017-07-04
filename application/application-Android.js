@@ -5,9 +5,10 @@ const NativeActivityLifeCycleListener = requireClass("io.smartface.android.liste
 function ApplicationWrapper() {}
 
 // Intent.ACTION_VIEW
-var ACTION_VIEW = "android.intent.action.VIEW";
+const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
-var FLAG_ACTIVITY_NEW_TASK = 268435456;
+const FLAG_ACTIVITY_NEW_TASK = 268435456;
+const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
@@ -102,22 +103,40 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeUri = requireClass("android.net.Uri");
             
             var intent = new NativeIntent(ACTION_VIEW);
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            
+
             if(TypeUtil.isObject(data)){
                 // we should use intent.putExtra but it causes native crash.
+                
                 var params = Object.keys(data).map(function(k) {
                     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
                 }).join('&');
-                var uri = uriScheme + "?" + params;
-                var uriObject = NativeUri.parse(uri);
+                var uriObject;
+                if(uriScheme.indexOf("|") !== -1){
+                    var classActivityNameArray = uriScheme.split("|");
+                    const NativeString = requireClass("java.lang.String");
+                    var className = new NativeString(classActivityNameArray[0]);
+                    var activityName = new NativeString(classActivityNameArray[1]);
+                    intent.setClassName(className, activityName);
+                    uriObject = NativeUri.parse(params);
+                }
+                else{
+                    var uri = uriScheme + "?" + params;
+                    uriObject = NativeUri.parse(uri);
+                }
                 intent.setData(uriObject);
             }
             else{
-                var uri = NativeUri.parse(uriScheme);
-                intent.setData(uri);
+                if(uriScheme.indexOf("|") !== -1){
+                    var classActivityNameArray = uriScheme.split("|");
+                    intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
+                }
+                else{
+                    var uri = NativeUri.parse(uriScheme);
+                    intent.setData(uri);
+                }
             }
-            activity.startActivity(intent);
+            
+            activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
         },
         enumerable: true
     },
@@ -209,6 +228,18 @@ Object.defineProperties(ApplicationWrapper, {
         set: function(onUnhandledError){
             if(TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null){
                 Application.onUnhandledError = onUnhandledError;
+            }
+        },
+        enumerable: true
+    },
+    
+    'onApplicationCallReceived': {
+        get: function(){
+            return Application.onApplicationCallReceived;
+        },
+        set: function(_onApplicationCallReceived){
+            if(TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null){
+                Application.onApplicationCallReceived = _onApplicationCallReceived;
             }
         },
         enumerable: true
