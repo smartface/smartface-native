@@ -74,7 +74,7 @@ SpeechRecognizer.createRecognizer = function(params){
     }
     
     if (params.locale) {
-        SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale(params.locale));    
+        SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(new __SF_NSLocale(params.locale));    
     }else{
         SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale.currentLocale()); 
     }
