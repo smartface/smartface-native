@@ -54,6 +54,11 @@ SpeechRecognizer.stop = function() {
         return;
     }
     
+    if (SpeechRecognizer.recognitionTask) {
+        SpeechRecognizer.recognitionTask.cancel();
+        SpeechRecognizer.recognitionTask = undefined;
+    }
+    
     if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
         SpeechRecognizer.avaudioengine.stop();
         SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
@@ -64,7 +69,6 @@ SpeechRecognizer.stop = function() {
     
     SpeechRecognizer.avaudioengine = undefined;
     SpeechRecognizer.recognitionRequest = undefined;
-    SpeechRecognizer.recognitionTask = undefined;
     SpeechRecognizer.speechRecognizer = undefined;
 };
 
