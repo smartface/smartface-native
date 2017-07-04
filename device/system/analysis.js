@@ -16,6 +16,7 @@
  *     console.log("Device.System.android.isApplicationInstalled: " + System.android.isApplicationInstalled('io.smartface.SmartfaceApp'));
  *     console.log("Device.System.vibrate(): "                      + System.vibrate());
  *     console.log("Device.System.android.menuKeyAvaliable: "       + System.android.menuKeyAvaliable);
+ *     console.log("Device.System.fingerPrintAvaliable: "           + System.fingerPrintAvaliable);
  * 
  */
 function System() {}
@@ -121,6 +122,7 @@ System.ios.fingerPrintAvaliable;
  * Will be false if TouchID not enabled for iOS and user not enrolled at least one 
  * fingerprint for Android or hardware not supported by both of iOS and Android.
  * Requires {@link Application.android.Permissions#USE_FINGERPRINT} permission on AndroidManifest.
+ * iOS only propery is deprecated.
  * 
  * @property {Boolean} fingerPrintAvaliable
  * @readonly
@@ -204,9 +206,10 @@ System.ios.validateFingerPrint ({
  * Will be false if TouchID not enabled for iOS and user not enrolled at least one 
  * fingerprint for Android or hardware not supported by both of iOS and Android.
  * Requires {@link Application.android.Permissions#USE_FINGERPRINT} permission on AndroidManifest.
+ * iOS only propery is deprecated.
  * 
  *     @example
- *     System.ios.validateFingerPrint({
+ *     System.validateFingerPrint({
  *            android: {
  *                title: "Title"
  *            },
