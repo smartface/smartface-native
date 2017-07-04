@@ -31,12 +31,12 @@ SpeechRecognizer.start = function(params) {
                         delay: 100
                     });
                 }else{
-                    SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_INSUFFICIENT_PERMISSIONS); 
+                    SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
                 }
             });
             
         }else{
-           SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_INSUFFICIENT_PERMISSIONS); 
+           SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
         }
     });
 };
@@ -86,7 +86,7 @@ SpeechRecognizer.createRecognizer = function(params){
     
     SpeechRecognizer.speechDelegate.speechRecognizerAvailabilityDidChange = function(e){
         if(!e.available){
-            SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_NETWORK);
+            SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.NETWORK);
         }
     }
     
@@ -100,25 +100,25 @@ SpeechRecognizer.createRecognizer = function(params){
     SpeechRecognizer.avaudiosession = __SF_AVAudioSession.sharedInstance();
     
     SpeechRecognizer.avaudiosession.setCategory("AVAudioSessionCategoryRecord",function(e){
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     });
     SpeechRecognizer.avaudiosession.setMode("AVAudioSessionModeMeasurement",function(e){
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     });
     
     SpeechRecognizer.avaudiosession.setActiveWithOptions(true,1,function(e){
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     });
     
     SpeechRecognizer.recognitionRequest = new __SF_SFSpeechAudioBufferRecognitionRequest();
     
     var inputNode = SpeechRecognizer.avaudioengine.inputNode;
     if (!inputNode) {
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     }
     
     if (!SpeechRecognizer.recognitionRequest) { 
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     }
     
     SpeechRecognizer.recognitionRequest.shouldReportPartialResults = true;
@@ -146,9 +146,9 @@ SpeechRecognizer.createRecognizer = function(params){
         
         if (e.error) {
             if (e.error.code == 203) { //Retry
-                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_SPEECH_TIMEOUT);
+                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.SPEECH_TIMEOUT);
             }else{
-                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
             }
         }
         
@@ -163,7 +163,7 @@ SpeechRecognizer.createRecognizer = function(params){
     
     SpeechRecognizer.avaudioengine.prepare();
     SpeechRecognizer.avaudioengine.start(function(e){
-        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_CLIENT);
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
     });
 }
 
