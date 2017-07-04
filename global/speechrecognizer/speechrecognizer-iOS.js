@@ -145,7 +145,6 @@ SpeechRecognizer.createRecognizer = function(params){
         }
         
         if (e.error) {
-            SpeechRecognizer.stop();
             if (e.error.code == 203) { //Retry
                 SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.ERROR_SPEECH_TIMEOUT);
             }else{
