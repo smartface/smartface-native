@@ -172,10 +172,12 @@ SpeechRecognizer.onErrorHandler = function(error){
         return;
     }
     
+    SpeechRecognizer.stop();
+    
     if (typeof SpeechRecognizer.onError === 'function') {
         SpeechRecognizer.onError(error);
     }
-    SpeechRecognizer.stop();
+    
 }
 
 SpeechRecognizer.Error = require("./error");
