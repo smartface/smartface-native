@@ -4,42 +4,42 @@ Error.ios = {};
 Error.android = {};
 
 Object.defineProperties(Error, {
-    'ERROR_INSUFFICIENT_PERMISSIONS': {
+    'INSUFFICIENT_PERMISSIONS': {
         value: "INSUFFICIENT_PERMISSIONS",
         configurable: false
     },
-    'ERROR_NETWORK': {
+    'NETWORK': {
         value: "NETWORK",
         configurable: false
     },
-    'ERROR_NETWORK_TIMEOUT': {
+    'NETWORK_TIMEOUT': {
         value: "NETWORK_TIMEOUT",
         configurable: false
     },
-    'ERROR_SPEECH_TIMEOUT': {
+    'SPEECH_TIMEOUT': {
         value: "SPEECH_TIMEOUT",
         configurable: false
     },
-    'ERROR_CLIENT': {
+    'CLIENT': {
         value: "CLIENT",
         configurable: false
     }
 });
 
 Object.defineProperties(Error.android, {
-    'ERROR_AUDIO': {
+    'AUDIO': {
         value: "AUDIO",
         configurable: false
     },
-    'ERROR_NO_MATCH': {
+    'NO_MATCH': {
         value: "NO_MATCH",
         configurable: false
     },
-    'ERROR_RECOGNIZER_BUSY': {
+    'RECOGNIZER_BUSY': {
         value: "RECOGNIZER_BUSY",
         configurable: false
     },
-    'ERROR_SERVER': {
+    'SERVER': {
         value: "SERVER",
         configurable: false
     }
