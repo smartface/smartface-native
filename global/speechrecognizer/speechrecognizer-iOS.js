@@ -28,7 +28,7 @@ SpeechRecognizer.start = function(params) {
                                 SpeechRecognizer.createRecognizer(params);
                             });
                         },
-                        delay: 100
+                        delay: 200
                     });
                 }else{
                     SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
@@ -54,22 +54,29 @@ SpeechRecognizer.stop = function() {
         return;
     }
     
-    if (SpeechRecognizer.recognitionTask) {
-        SpeechRecognizer.recognitionTask.cancel();
-        SpeechRecognizer.recognitionTask = undefined;
-    }
-    
-    if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
-        SpeechRecognizer.avaudioengine.stop();
-        SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
-        if (SpeechRecognizer.recognitionRequest) {
-            SpeechRecognizer.recognitionRequest.endAudio();
-        }
-    }
-    
-    SpeechRecognizer.avaudioengine = undefined;
-    SpeechRecognizer.recognitionRequest = undefined;
-    SpeechRecognizer.speechRecognizer = undefined;
+    var myTimer = Timer.setTimeout({
+    task: function(){
+            __SF_Dispatch.mainAsync(function(){
+                if (SpeechRecognizer.recognitionTask) {
+                    SpeechRecognizer.recognitionTask.cancel();
+                    SpeechRecognizer.recognitionTask = undefined;
+                }
+                
+                if (SpeechRecognizer.avaudioengine && SpeechRecognizer.avaudioengine.isRunning) {
+                    SpeechRecognizer.avaudioengine.stop();
+                    SpeechRecognizer.avaudioengine.inputNode.removeTapOnBus(0);
+                    if (SpeechRecognizer.recognitionRequest) {
+                        SpeechRecognizer.recognitionRequest.endAudio();
+                    }
+                }
+                
+                SpeechRecognizer.avaudioengine = undefined;
+                SpeechRecognizer.recognitionRequest = undefined;
+                SpeechRecognizer.speechRecognizer = undefined;
+            });
+        },
+        delay: 100
+    });
 };
 
 SpeechRecognizer.createRecognizer = function(params){
@@ -151,10 +158,10 @@ SpeechRecognizer.createRecognizer = function(params){
         if (e.error) {
             if (e.error.code == 203) { //Retry
                 SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.SPEECH_TIMEOUT);
-            }else if (e.error.code == 209){
+            }else if (e.error.code == 209 || e.error.code == 216){
                 
             }else{
-                SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+                SpeechRecognizer.onErrorHandler(e.error.localizedDescription);
             }
         }
         
