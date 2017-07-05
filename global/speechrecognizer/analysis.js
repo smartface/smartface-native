@@ -5,61 +5,60 @@
  * 
  * SpeechRecognizer class provides access to the speech recognition service.
  * 
- * @example
- *       const TextArea = require('sf-core/ui/textarea');
- *       const SpeechRecognizer = require("sf-core/speechrecognizer");
- *       const Application = require("sf-core/application"); 
- *       const Button = require('sf-core/ui/button');
- *       var button = new Button();
- *       button.height = 100;
- *       button.text = "Start Recording"; 
+ *     @example
+ *     const TextArea = require('sf-core/ui/textarea');
+ *     const SpeechRecognizer = require("sf-core/speechrecognizer");
+ *     const Application = require("sf-core/application"); 
+ *     const Button = require('sf-core/ui/button');
+ *     var button = new Button();
+ *     button.height = 100;
+ *     button.text = "Start Recording"; 
  *       
- *       var textarea = new TextArea();
- *       textarea.height = 100;
+ *     var textarea = new TextArea();
+ *     textarea.height = 100;
  * 
- *       button.onPress = function(){
- *           if(!SpeechRecognizer.isRunning()){
- *               button.text = "Stop Recording"; 
- *               if(Device.OS === "iOS") {
- *                   startSpeechRecognizer();
- *               }
- *               else if(Device.OS === "Android") {
- *                   const RECORD_AUDIO_CODE = 1002, WRITE_EXTERNAL_STORAGE_CODE = 1003;
- *                   Application.android.requestPermissions(WRITE_EXTERNAL_STORAGE_CODE, Application.android.Permissions.WRITE_EXTERNAL_STORAGE);
- *                   Application.android.onRequestPermissionsResult = function(e){
- *                       if(e.requestCode === WRITE_EXTERNAL_STORAGE_CODE && e.result) {
- *                           Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.android.Permissions.RECORD_AUDIO);
- *                       }
- *                       else if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
- *                           startSpeechRecognizer();
- *                       }
- *                   }
- *               }
- *           }else{
- *               button.text = "Start Recording"; 
- *               SpeechRecognizer.stop();
- *           }
- *       }
+ *     button.onPress = function(){
+ *         if(!SpeechRecognizer.isRunning()){
+ *             button.text = "Stop Recording"; 
+ *             if(Device.OS === "iOS") {
+ *                 startSpeechRecognizer();
+ *             }
+ *             else if(Device.OS === "Android") {
+ *                 const RECORD_AUDIO_CODE = 1002, WRITE_EXTERNAL_STORAGE_CODE = 1003;
+ *                 Application.android.requestPermissions(WRITE_EXTERNAL_STORAGE_CODE, Application.android.Permissions.WRITE_EXTERNAL_STORAGE);
+ *                 Application.android.onRequestPermissionsResult = function(e){
+ *                     if(e.requestCode === WRITE_EXTERNAL_STORAGE_CODE && e.result) {
+ *                         Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.android.Permissions.RECORD_AUDIO);
+ *                      }
+ *                      else if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
+ *                          startSpeechRecognizer();
+ *                      }
+ *                  }
+ *              }
+ *          }else{
+ *              button.text = "Start Recording"; 
+ *              SpeechRecognizer.stop();
+ *          }
+ *      }
  * 
- *       this.layout.addChild(textarea);
- *       this.layout.addChild(button);
+ *      this.layout.addChild(textarea);
+ *      this.layout.addChild(button);
  * 
- *       function startSpeechRecognizer() {
- *           SpeechRecognizer.start({
- *               onResult:function(result){
- *                   textarea.text = result;
- *               },
- *               onFinish  : function(result){
- *                   button.text = "Start Recording"; 
- *                   alert("Finish" + result);
- *               },
- *               onError : function(error){
- *                   button.text = "Start Recording";
- *                   alert("Error" + error);
- *               }
- *           });
- *       }
- * 
+ *      function startSpeechRecognizer() {
+ *          SpeechRecognizer.start({
+ *              onResult:function(result){
+ *                  textarea.text = result;
+ *              },
+ *              onFinish  : function(result){
+ *                  button.text = "Start Recording"; 
+ *                  alert("Finish" + result);
+ *              },
+ *              onError : function(error){
+ *                  button.text = "Start Recording";
+ *                  alert("Error" + error);
+ *              }
+ *          });
+ *      }
  */
 const SpeechRecognizer = {};
 
@@ -69,10 +68,8 @@ const SpeechRecognizer = {};
  * @param {Object} params Object describing callbacks
  * @param {String} params.locale
  * @param {Function} params.onResult
- * @param {Object} params.onResult.params
  * @param {String} params.onResult.result
  * @param {Function} params.onFinish
- * @param {Object} params.onFinish.params
  * @param {String} params.onFinish.result
  * @param {Function} params.onError This event is called after getting errors.
  * @param {SpeechRecognizer.Error} params.onError.error
@@ -97,10 +94,106 @@ SpeechRecognizer.stop = function() {};
  * Returns whether speech recognition service runs or not.
  * 
  * @method isRunning
+ * @return {Boolean}
  * @android
  * @ios
  * @since 1.1.13
  */
 SpeechRecognizer.isRunning = function() {};
+
+/**
+ * @enum {String} SpeechRecognizer.Error
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error = {};
+
+/**
+ * @property {String} INSUFFICIENT_PERMISSIONS
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS = 0;
+
+/**
+ * @property {String} NETWORK
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.NETWORK = 0;
+
+/**
+ * @property {String} NETWORK_TIMEOUT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.NETWORK_TIMEOUT = 0;
+
+/**
+ * @property {String} SPEECH_TIMEOUT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.SPEECH_TIMEOUT = 0;
+
+/**
+ * @property {String} CLIENT
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.CLIENT = 0;
+
+SpeechRecognizer.Error.android = {};
+
+/**
+ * @property {String} AUDIO
+ * @android
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.android.AUDIO = 0;
+
+/**
+ * @property {String} NO_MATCH
+ * @android
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.android.NO_MATCH = 0;
+
+/**
+ * @property {String} RECOGNIZER_BUSY
+ * @android
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.android.RECOGNIZER_BUSY = 0;
+
+/**
+ * @property {String} SERVER
+ * @android
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.android.SERVER = 0;
+
 
 module.exports = SpeechRecognizer;
