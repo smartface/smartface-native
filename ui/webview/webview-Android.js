@@ -99,9 +99,17 @@ const WebView = extend(View)(
                 }
             },
             'evaluateJS': {
-                value: function(javascript) {
+                value: function(javascript, callback) {
                     if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_KITKAT) {
-                        this.nativeObject.evaluateJavascript(javascript, null);
+                        const ValueCallback = requireClass("android.webkit.ValueCallback");
+                        var valueCallback = ValueCallback.implement({
+                            onReceiveValue: function(value) {
+                                if(callback)
+                                    callback(value);
+                            }
+                        });
+
+                        this.nativeObject.evaluateJavascript(javascript, valueCallback);
                     } else {
                         this.nativeObject.loadUrl("javascript:"+ javascript);
                     }
