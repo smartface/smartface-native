@@ -3,7 +3,40 @@
  * @static
  * @since 1.1.13
  * 
+ * @example
+ *       const TextArea = require('sf-core/ui/textarea');
+ *       const SpeechRecognizer = require("sf-core/speechrecognizer");
+ *       const Button = require('sf-core/ui/button');
+ *       var button = new Button();
+ *       button.height = 100;
+ *       button.text = "Start Recording"; 
+ *       
+ *       var textarea = new TextArea();
+ *       textarea.height = 100;
  * 
+ *       button.onPress = function(){
+ *           if(!SpeechRecognizer.isRunning()){
+ *               button.text = "Stop Recording"; 
+ *               SpeechRecognizer.start({
+ *                   onResult:function(result){
+ *                       textarea.text = result;
+ *                   },
+ *                   onFinish  : function(result){
+ *                       button.text = "Start Recording"; 
+ *                       alert("Finish" + result);
+ *                   },
+ *                   onError : function(error){
+ *                       button.text = "Start Recording";
+ *                       alert("Error" + error);
+ *                   }
+ *               });
+ *           }else{
+ *               button.text = "Start Recording"; 
+ *               SpeechRecognizer.stop();
+ *           }
+ *       }
+ *       this.layout.addChild(textarea);
+ *       this.layout.addChild(button);
  * 
  */
 const SpeechRecognizer = {};
