@@ -89,8 +89,10 @@ Application.version;
  *     Application.call("tel:+901234567890",{});
  *     // Call another application with its own url schema.
  *     Application.call("mySchema://",{});
- *     // Call another application with package name and activity name.
+ *     // Call another application with package name and activity name. Works only for Android.
  *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
+ *     // Call Smartface Emulator with url schema.
+ *     Application.call("smartface-emulator://",{});
  * 
  *
  * @method call
