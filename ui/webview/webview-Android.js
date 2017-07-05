@@ -161,7 +161,7 @@ const WebView = extend(View)(
                 overrideMethods.shouldOverrideUrlLoading = function(view, request) {
                     var uri = request.getUrl();
                     var url = uri.toString();
-                    var callbackValue;
+                    var callbackValue = true;
                     _onChangedURL && (callbackValue = _onChangedURL({url: url}));
                     if(!callbackValue)
                         return true;
@@ -170,7 +170,7 @@ const WebView = extend(View)(
                 };
             } else {
                 overrideMethods.shouldOverrideUrlLoading = function(view, url) {
-                    var callbackValue;
+                    var callbackValue = true;
                     _onChangedURL && (callbackValue = _onChangedURL({url: url}));
                     if(!callbackValue)
                         return true;
