@@ -86,7 +86,7 @@ Object.defineProperties(System, {
         },
         enumerable: true
     },
-    'fingerPrintAvaliable': {
+    'fingerPrintAvailable': {
         get: function() {
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
                 var fingerprintManager = AndroidConfig.getSystemService(FINGERPRINT_SERVICE, FINGERPRINT_MANAGER);

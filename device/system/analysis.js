@@ -16,7 +16,7 @@
  *     console.log("Device.System.android.isApplicationInstalled: " + System.android.isApplicationInstalled('io.smartface.SmartfaceApp'));
  *     console.log("Device.System.vibrate(): "                      + System.vibrate());
  *     console.log("Device.System.android.menuKeyAvaliable: "       + System.android.menuKeyAvaliable);
- *     console.log("Device.System.fingerPrintAvaliable: "           + System.fingerPrintAvaliable);
+ *     console.log("Device.System.fingerPrintAvailable: "           + System.fingerPrintAvailable);
  * 
  */
 function System() {}
@@ -124,14 +124,14 @@ System.ios.fingerPrintAvaliable;
  * Requires {@link Application.android.Permissions#USE_FINGERPRINT} permission on AndroidManifest.
  * iOS only propery is deprecated.
  * 
- * @property {Boolean} fingerPrintAvaliable
+ * @property {Boolean} fingerPrintAvailable
  * @readonly
  * @ios
  * @android
  * @static
  * @since 1.1.13
  */
-System.fingerPrintAvaliable;
+System.fingerPrintAvailable;
 
 /**
  * clipboard can be used to set a text to the device's clipboard or get a text from it.

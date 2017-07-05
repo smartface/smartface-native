@@ -63,12 +63,12 @@ Object.defineProperty(System, 'clipboard', {
 
 Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   get: function() {
-      return System.fingerPrintAvaliable;
+      return System.fingerPrintAvailable;
   },
   enumerable: true
 });
 
-Object.defineProperty(System, 'fingerPrintAvaliable', {
+Object.defineProperty(System, 'fingerPrintAvailable', {
   get: function() {
       var context = new __SF_LAContext();
       return context.canEvaluatePolicy();
