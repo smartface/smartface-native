@@ -25,15 +25,12 @@
  *                 startSpeechRecognizer();
  *             }
  *             else if(System.OS === "Android") {
- *                 const RECORD_AUDIO_CODE = 1002, WRITE_EXTERNAL_STORAGE_CODE = 1003;
- *                 Application.android.requestPermissions(WRITE_EXTERNAL_STORAGE_CODE, Application.android.Permissions.WRITE_EXTERNAL_STORAGE);
+ *                 const RECORD_AUDIO_CODE = 1002;
+ *                 Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.android.Permissions.RECORD_AUDIO);
  *                 Application.android.onRequestPermissionsResult = function(e){
- *                     if(e.requestCode === WRITE_EXTERNAL_STORAGE_CODE && e.result) {
- *                         Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.android.Permissions.RECORD_AUDIO);
- *                      }
- *                      else if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
- *                          startSpeechRecognizer();
- *                      }
+ *                     if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
+ *                         startSpeechRecognizer();
+ *                     }
  *                  }
  *              }
  *          }else{
@@ -64,7 +61,7 @@
 const SpeechRecognizer = {};
 
 /**
- * Starts speech recognition service.
+ * Starts speech recognition service. {@link Application.android.Permissions#RECORD_AUDIO} is required for Android platform.
  * 
  * @param {Object} params Object describing callbacks
  * @param {String} params.locale
