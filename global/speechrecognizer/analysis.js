@@ -10,6 +10,7 @@
  *     const SpeechRecognizer = require("sf-core/speechrecognizer");
  *     const Application = require("sf-core/application"); 
  *     const Button = require('sf-core/ui/button');
+ *     const System = require('sf-core/device/system');
  *     var button = new Button();
  *     button.height = 100;
  *     button.text = "Start Recording"; 
@@ -20,10 +21,10 @@
  *     button.onPress = function(){
  *         if(!SpeechRecognizer.isRunning()){
  *             button.text = "Stop Recording"; 
- *             if(Device.OS === "iOS") {
+ *             if(System.OS === "iOS") {
  *                 startSpeechRecognizer();
  *             }
- *             else if(Device.OS === "Android") {
+ *             else if(System.OS === "Android") {
  *                 const RECORD_AUDIO_CODE = 1002, WRITE_EXTERNAL_STORAGE_CODE = 1003;
  *                 Application.android.requestPermissions(WRITE_EXTERNAL_STORAGE_CODE, Application.android.Permissions.WRITE_EXTERNAL_STORAGE);
  *                 Application.android.onRequestPermissionsResult = function(e){
@@ -51,11 +52,11 @@
  *              },
  *              onFinish  : function(result){
  *                  button.text = "Start Recording"; 
- *                  alert("Finish" + result);
+ *                  alert("Finish : " + result);
  *              },
  *              onError : function(error){
  *                  button.text = "Start Recording";
- *                  alert("Error" + error);
+ *                  alert("Error : " + error);
  *              }
  *          });
  *      }
