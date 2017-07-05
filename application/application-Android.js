@@ -381,7 +381,11 @@ Object.defineProperties(ApplicationWrapper.android.Permissions, {
     'WRITE_EXTERNAL_STORAGE': {
         value: 'android.permission.WRITE_EXTERNAL_STORAGE',
         enumerable: true
-    }
+    },
+    'USE_FINGERPRINT': {
+        value: 'android.permission.USE_FINGERPRINT',
+        enumerable: true
+    },
 });
 
 module.exports = ApplicationWrapper;
