@@ -161,12 +161,19 @@ const WebView = extend(View)(
                 overrideMethods.shouldOverrideUrlLoading = function(view, request) {
                     var uri = request.getUrl();
                     var url = uri.toString();
-                    _onChangedURL && _onChangedURL({url: url});
+                    var callbackValue;
+                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
+                    if(!callbackValue)
+                        return true;
                     return overrideURLChange(url, _canOpenLinkInside);
+                    
                 };
             } else {
                 overrideMethods.shouldOverrideUrlLoading = function(view, url) {
-                    _onChangedURL && _onChangedURL({url: url});
+                    var callbackValue;
+                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
+                    if(!callbackValue)
+                        return true;
                     return overrideURLChange(url, _canOpenLinkInside);
                 };
             }
