@@ -85,7 +85,7 @@ Application.version;
  *     Application.call("market://details",{
  *         'id': Application.android.packageName
  *     });
- *     // Open caller app with phone number. Will work only for both.
+ *     // Open caller app with phone number.
  *     Application.call("tel:+901234567890",{});
  *     // Call another application with its own url schema.
  *     Application.call("mySchema://",{});

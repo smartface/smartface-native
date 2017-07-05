@@ -128,7 +128,10 @@ Object.defineProperties(ApplicationWrapper, {
             else{
                 if(uriScheme.indexOf("|") !== -1){
                     var classActivityNameArray = uriScheme.split("|");
-                    intent.setClassName(classActivityNameArray[0], classActivityNameArray[1]);
+                    const NativeString = requireClass("java.lang.String");
+                    var className = new NativeString(classActivityNameArray[0]);
+                    var activityName = new NativeString(classActivityNameArray[1]);
+                    intent.setClassName(className, activityName);
                 }
                 else{
                     var uri = NativeUri.parse(uriScheme);
