@@ -80,6 +80,7 @@ Application.version;
 /**
  * Launches another application and passes data. For Android, you can open application chooser with 
  * isShowChooser parameter and set chooser dialog title with chooserTitle.
+ * if an app can open a given URL resource onSuccess callback will be triggered othervise onFailure triggered. 
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
@@ -89,28 +90,37 @@ Application.version;
  *     // Open caller app with phone number.
  *     Application.call("tel:+901234567890",{});
  *     // Call another application with its own url schema.
- *     Application.call("mySchema://",{});
+ *     Application.call("mySchema://",{},function(){
+ *         alert("Application call completed")
+ *     },function(){
+ *         alert("Application call failed")
+ *     });
  *     // Call another application with package name and activity name. Works only for Android.
  *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
  *     // Call Smartface Emulator with url schema.
  *     Application.call("smartface-emulator://",{});
  *     // Open Youtube with Chooser for Android
- *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},true,"Select an Application");
+ *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},function(){
+ *         alert("Application call completed")
+ *     },function(){
+ *         alert("Application call failed")
+ *     },true,"Select an Application");
  * 
  *
  * @method call
  * @param {String} uriScheme
  * @param {Object} data
+ * @param {Function} onSuccess Added in 1.1.13.
+ * @param {Function} onFailure Added in 1.1.13.
  * @param {Boolean} isShowChooser Added in 1.1.13.
  * @param {String} chooserTitle Added in 1.1.13.
- * @returns {Boolean} True if an app can open a given URL resource false vice versa. Added in 1.1.13.
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Application.call = function(uriScheme, data, isShowChooser, chooserTitle) {};
+Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {};
 
 /**
  * Exists the application.
