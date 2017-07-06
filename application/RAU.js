@@ -1,6 +1,7 @@
 const HTTP = require("sf-core/net/http");
 const Path = require('sf-core/io/path');
 const File = require('sf-core/io/file');
+const FileStream = require('sf-core/io/filestream');
 
 const RemoteUpdateService = {};
 RemoteUpdateService.firstUrl  = "";
@@ -55,10 +56,17 @@ RemoteUpdateService.checkUpdate = function(callback) {
 
 function download(callback) {
     // TODO: enable firstURL request after IOS-2283
-    HTTP.requestFile(
-        RemoteUpdateService.secondUrl, 
-        zipPath, 
-        function(file) {
+    HTTP.request(
+        {
+            url: RemoteUpdateService.secondUrl,
+            method: "GET"
+        },
+        function(response) {
+            var zipFile = new File({ path: zipPath });
+            var zipFileStream = zipFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
+            zipFileStream.write(response.body);
+            zipFileStream.close();
+
             callback(null, {
                 updateAll: updateAll,
                 updateCancel: updateCancel
