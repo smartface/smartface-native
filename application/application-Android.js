@@ -1,3 +1,4 @@
+const RAU = require("./RAU");
 const TypeUtil = require("sf-core/util/type");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
@@ -172,11 +173,10 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-    // We can not check update from js side and we can not update js files, so let SMFApplication handle this
     'checkUpdate': {
         value: function(callback){
             if(TypeUtil.isFunction(callback)){
-                Application.checkUpdate(callback);
+                RAU.checkUpdate(callback);
             }
         },
         enumerable: true

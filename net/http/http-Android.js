@@ -129,24 +129,31 @@ http.requestJSON = function(url, onLoad, onError) {
     }, onError);
 };
 http.requestFile = function(url, fileName, onLoad, onError) {
-    return http.requestString(url, function(response){
-        var success = true;
-        try {
-            const IO = require("../../io");
-            if(!fileName)
-                fileName = url.substring(url.lastIndexOf('/'));
-            var file = new IO.File({path: fileName});
-            var stream = file.openStream(IO.FileStream.StreamType.WRITE);
-            stream.write(response);
-            stream.close();
-        } catch (e) {
-            success = true;
-            onError({message: e, headers: {}});
-        }
-        if(success) {
-            onLoad(file);
-        }
-    }, onError);
+    return http.request(
+        {
+            url: url,
+            method:'GET'
+        },
+        function(response){
+            var success = true;
+            try {
+                const IO = require("../../io");
+                if(!fileName)
+                    fileName = url.substring(url.lastIndexOf('/'));
+                var file = new IO.File({path: fileName});
+                var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
+                stream.write(response.body);
+                stream.close();
+            } catch (e) {
+                success = false;
+                onError({message: e, headers: {}});
+            }
+            if(success) {
+                onLoad(file);
+            }
+        }, 
+        onError
+    );
 };
 http.request = function(params, onLoad, onError) {
     var responseHeaders = {};

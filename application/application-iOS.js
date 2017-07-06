@@ -1,3 +1,5 @@
+const RAU = require("./RAU");
+
 var SFApplication = {};
 
 Object.defineProperty(SFApplication, 'byteReceived', {
@@ -30,7 +32,7 @@ SFApplication.restart = function(){
 };
 
 SFApplication.checkUpdate = function(callback){
-    Application.checkUpdate(callback);
+    RAU.checkUpdate(callback);
 };
 
 SFApplication.android = {};
