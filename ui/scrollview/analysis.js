@@ -209,6 +209,16 @@ ScrollView.prototype.onViewRemoved = function() {};
  */
 ScrollView.prototype.onScroll = function onScroll(){};
 
-
+/**
+ * Gets contentOffset of the ScrollView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @since 1.1.13
+ */
+ScrollView.prototype.contentOffset = {};
 
 module.exports = ScrollView;
