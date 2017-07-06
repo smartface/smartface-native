@@ -73,4 +73,20 @@ Hardware.brandName;
  */
 Hardware.android.vendorID;
 
+/**
+ *
+ * Checks to see if calling process has permission to record audio. The callback will be called
+ * immediately if permission has already been granted or denied.  Otherwise, it presents a dialog to notify
+ * the user and allow them to choose, and calls the block once the UI has been dismissed.  'true'
+ * indicates whether permission has been granted.
+ * 
+ * @param {Function} callback for permission situation.
+ * @method requestRecordPermission
+ * @ios
+ * @readonly
+ * @static
+ * @since 1.1.12
+ */
+Hardware.ios.microphone.requestRecordPermission(function callback(){});
+
 module.exports = Hardware;

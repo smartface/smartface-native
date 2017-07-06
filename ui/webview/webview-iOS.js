@@ -56,7 +56,8 @@ const WebView = extend(View)(
                            message :  e.error.localizedDescription
                         }
                     }
-                    callback({result : e.result,error : error});
+                    // callback({result : e.result,error : error});
+                    callback(e.result);
                 }
             }
             self.nativeObject.evaluateJavaScript(javascript,result);
@@ -76,8 +77,12 @@ const WebView = extend(View)(
         
         self.onChangedURL = function(){}
         self.nativeObject.onChangedURL = function(e){
-            self.onChangedURL({url : e.url.absoluteString});
-            return true;
+            var check = self.onChangedURL({url : e.url.absoluteString})
+            if(check || check === undefined){
+                return true;
+            }else{
+                return false;
+            }
         }
         
         Object.defineProperty(self, 'openLinkInside', {

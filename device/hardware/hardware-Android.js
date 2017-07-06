@@ -7,6 +7,9 @@ const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 const Hardware = {};
 
 Hardware.android = {};
+Hardware.ios = {}
+Hardware.ios.microphone = {}
+Hardware.ios.microphone.requestRecordPermission = function(){};
 
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {

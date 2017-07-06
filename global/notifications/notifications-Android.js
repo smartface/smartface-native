@@ -5,7 +5,7 @@ const Color                     = require("sf-core/ui/color");
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
-const NativeRemoteNotificationListener = requireClass('io.smartface.android.listeners.RemoteNotificationListener');
+const NativeNotificationListener = requireClass('io.smartface.android.listeners.NotificationListener');
 
 // android.content.Context.NOTIFICATION_SERVICE;
 const NOTIFICATION_SERVICE      = "notification";
@@ -14,10 +14,21 @@ const NOTIFICATION_MANAGER      = 'android.app.NotificationManager';
 const ALARM_SERVICE             = "alarm";
 const ALARM_MANAGER             = "android.app.AlarmManager";
 
+const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
+
 var activity = Android.getActivity();
 var selectedNotificationIds = [];
 var senderID = null;
-var notificationListener = null;
+var notificationListener =  NativeNotificationListener.implement({
+    onRemoteNotificationReceived: function(data){
+        Application.onReceivedNotification && Application.onReceivedNotification({ 'remote': JSON.parse(data) });
+    },
+    onLocalNotificationReceived: function(data){
+        Application.onReceivedNotification && Application.onReceivedNotification({ 'local': JSON.parse(data) });
+    }
+});
+
+NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
 
 function Notifications(){}
 
@@ -353,14 +364,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
             onSuccess: function(token){
-                const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService')
-                if(!notificationListener){
-                    notificationListener =  NativeRemoteNotificationListener.implement({
-                        onRemoteNotificationReceived: function(data){
-                            Application.onReceivedNotification && Application.onReceivedNotification({ 'remote': JSON.parse(data) });
-                        }
-                    });
-                }
+                const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
                 onSuccessCallback && onSuccessCallback({ 'token' : token });
             },
@@ -385,10 +389,12 @@ function startNotificationIntent(self, params){
     const NativePendingIntent = requireClass('android.app.PendingIntent')
     var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
     var notificationIntent = new NativeIntent(activity, nativeNotificationReceiverClass);
-
+    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED","");
+    
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
+    
     // PendingIntent.FLAG_ONE_SHOT
     self.mPendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 1073741824);
     

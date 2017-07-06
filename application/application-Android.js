@@ -1,3 +1,4 @@
+const RAU = require("./RAU");
 const TypeUtil = require("sf-core/util/type");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
@@ -5,9 +6,10 @@ const NativeActivityLifeCycleListener = requireClass("io.smartface.android.liste
 function ApplicationWrapper() {}
 
 // Intent.ACTION_VIEW
-var ACTION_VIEW = "android.intent.action.VIEW";
+const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
-var FLAG_ACTIVITY_NEW_TASK = 268435456;
+const FLAG_ACTIVITY_NEW_TASK = 268435456;
+const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
@@ -93,7 +95,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // methods
     'call': {
-        value: function(uriScheme, data){
+        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle){
             if(!TypeUtil.isString(uriScheme)){
                 throw new TypeError('uriScheme must be string');
             }
@@ -102,22 +104,71 @@ Object.defineProperties(ApplicationWrapper, {
             const NativeUri = requireClass("android.net.Uri");
             
             var intent = new NativeIntent(ACTION_VIEW);
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-            
+
             if(TypeUtil.isObject(data)){
                 // we should use intent.putExtra but it causes native crash.
+                
                 var params = Object.keys(data).map(function(k) {
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+                    return k + '=' + data[k];
                 }).join('&');
-                var uri = uriScheme + "?" + params;
-                var uriObject = NativeUri.parse(uri);
+                var uriObject;
+                if(uriScheme.indexOf("|") !== -1){
+                    var classActivityNameArray = uriScheme.split("|");
+                    // JS string pass causes parameter mismatch
+                    const NativeString = requireClass("java.lang.String");
+                    var className = new NativeString(classActivityNameArray[0]);
+                    var activityName = new NativeString(classActivityNameArray[1]);
+                    intent.setClassName(className, activityName);
+                    uriObject = NativeUri.parse(params);
+                }
+                else{
+                    var uri = uriScheme + "?" + params;
+                    uriObject = NativeUri.parse(uri);
+                }
                 intent.setData(uriObject);
             }
             else{
-                var uri = NativeUri.parse(uriScheme);
-                intent.setData(uri);
+                if(uriScheme.indexOf("|") !== -1){
+                    var classActivityNameArray = uriScheme.split("|");
+                    // JS string pass causes parameter mismatch
+                    const NativeString = requireClass("java.lang.String");
+                    var className = new NativeString(classActivityNameArray[0]);
+                    var activityName = new NativeString(classActivityNameArray[1]);
+                    intent.setClassName(className, activityName);
+                }
+                else{
+                    var uri = NativeUri.parse(uriScheme);
+                    intent.setData(uri);
+                }
             }
-            activity.startActivity(intent);
+            
+            var packageManager = activity.getPackageManager();
+            var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
+            if(activitiesCanHandle.size() > 0){
+                if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
+                    var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                    var chooserIntent = NativeIntent.createChooser(intent, title); 
+                    try{
+                        activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                    }
+                    catch(e){
+                        onFailure && onFailure();
+                        return;
+                    }
+                }
+                else{
+                    try{
+                        activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                    }
+                    catch(e){
+                        onFailure && onFailure();
+                        return;
+                    }
+                }
+                onSuccess && onSuccess();
+                return;
+            }
+            onFailure && onFailure();
         },
         enumerable: true
     },
@@ -135,11 +186,10 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-    // We can not check update from js side and we can not update js files, so let SMFApplication handle this
     'checkUpdate': {
         value: function(callback){
             if(TypeUtil.isFunction(callback)){
-                Application.checkUpdate(callback);
+                RAU.checkUpdate(callback);
             }
         },
         enumerable: true
@@ -209,6 +259,18 @@ Object.defineProperties(ApplicationWrapper, {
         set: function(onUnhandledError){
             if(TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null){
                 Application.onUnhandledError = onUnhandledError;
+            }
+        },
+        enumerable: true
+    },
+    
+    'onApplicationCallReceived': {
+        get: function(){
+            return Application.onApplicationCallReceived;
+        },
+        set: function(_onApplicationCallReceived){
+            if(TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null){
+                Application.onApplicationCallReceived = _onApplicationCallReceived;
             }
         },
         enumerable: true
@@ -381,7 +443,11 @@ Object.defineProperties(ApplicationWrapper.android.Permissions, {
     'WRITE_EXTERNAL_STORAGE': {
         value: 'android.permission.WRITE_EXTERNAL_STORAGE',
         enumerable: true
-    }
+    },
+    'USE_FINGERPRINT': {
+        value: 'android.permission.USE_FINGERPRINT',
+        enumerable: true
+    },
 });
 
 module.exports = ApplicationWrapper;
