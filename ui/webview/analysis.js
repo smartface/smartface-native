@@ -130,11 +130,13 @@ WebView.prototype. loadHTML = function(htmlText) {};
  *
  * @method evaluateJS
  * @param {String} javascript
+ * @param {Function} params.onReceive
+ * @param {String} params.onReceive.value
  * @android
  * @ios
  * @since 0.1
  */
-WebView.prototype.evaluateJS = function(javascript) {};
+WebView.prototype.evaluateJS = function(javascript,onReceive) {};
 
 /**
  * Callback triggered when the url is changed.
