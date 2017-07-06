@@ -197,4 +197,18 @@ ScrollView.prototype.onViewAdded = function() {};
  */
 ScrollView.prototype.onViewRemoved = function() {};
 
+/**
+ * This event is called when a ScrollView is scrolling.
+ * For better performance, don't set any callback if does not
+ * necessary
+ *
+ * @event onScroll
+ * @android
+ * @ios
+ * @since 1.1.13
+ */
+ScrollView.prototype.onScroll = function onScroll(){};
+
+
+
 module.exports = ScrollView;
