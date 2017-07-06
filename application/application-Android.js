@@ -94,7 +94,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // methods
     'call': {
-        value: function(uriScheme, data){
+        value: function(uriScheme, data, isShowChooser, chooserTitle){
             if(!TypeUtil.isString(uriScheme)){
                 throw new TypeError('uriScheme must be string');
             }
@@ -113,6 +113,7 @@ Object.defineProperties(ApplicationWrapper, {
                 var uriObject;
                 if(uriScheme.indexOf("|") !== -1){
                     var classActivityNameArray = uriScheme.split("|");
+                    // JS string pass causes parameter mismatch
                     const NativeString = requireClass("java.lang.String");
                     var className = new NativeString(classActivityNameArray[0]);
                     var activityName = new NativeString(classActivityNameArray[1]);
@@ -128,6 +129,7 @@ Object.defineProperties(ApplicationWrapper, {
             else{
                 if(uriScheme.indexOf("|") !== -1){
                     var classActivityNameArray = uriScheme.split("|");
+                    // JS string pass causes parameter mismatch
                     const NativeString = requireClass("java.lang.String");
                     var className = new NativeString(classActivityNameArray[0]);
                     var activityName = new NativeString(classActivityNameArray[1]);
@@ -139,7 +141,20 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             }
             
-            activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+            var packageManager = activity.getPackageManager();
+            var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
+            if(activitiesCanHandle.size() > 0){
+                if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
+                    var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
+                    var chooserIntent = NativeIntent.createChooser(intent, title); 
+                    activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                }
+                else{
+                    activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                }
+                return true;
+            }
+            return false;
         },
         enumerable: true
     },
