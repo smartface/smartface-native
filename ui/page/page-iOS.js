@@ -1,7 +1,7 @@
 const FlexLayout = require('sf-core/ui/flexlayout');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
-
+const System = require('sf-core/device/system');
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -43,7 +43,9 @@ function Page(params) {
     }
 
     self.nativeObject.onViewLayoutSubviews = function(){
-        self.calculatePosition();
+        if (parseInt(System.OSVersion) >= 10) {
+            self.calculatePosition();
+        }
     }
 
     self.nativeObject.onViewDidAppear = function(){
