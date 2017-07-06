@@ -118,11 +118,11 @@ System.android.menuKeyAvaliable;
 System.ios.fingerPrintAvaliable;
 
 /**
- * Indicates whether finger print operations can be used or not.
- * Will be false if TouchID not enabled for iOS and user not enrolled at least one 
- * fingerprint for Android or hardware not supported by both of iOS and Android.
- * Requires {@link Application.android.Permissions#USE_FINGERPRINT} permission on AndroidManifest.
- * iOS only propery is deprecated.
+ * Return value shows that if the device supports feature or not.
+ * Also it would be show that fingerprint (for Android) or 
+ * TouchID (for iOS) is defined or not defined on the phone,
+ * You need to add {@link Application.android.Permissions#USE_FINGERPRINT} 
+ * permission on AndroidManifest under config/Android when you publish project.
  * 
  * @property {Boolean} fingerPrintAvailable
  * @readonly
