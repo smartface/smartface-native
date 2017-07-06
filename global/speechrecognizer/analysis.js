@@ -64,10 +64,10 @@ const SpeechRecognizer = {};
  * Starts speech recognition service. {@link Application.android.Permissions#RECORD_AUDIO} is required for Android platform.
  * 
  * @param {Object} params Object describing callbacks
- * @param {String} params.locale
- * @param {Function} params.onResult
+ * @param {String} [params.locale] IETF language tag for example "en-US"
+ * @param {Function} params.onResult Triggers when when partial recognition results are available.
  * @param {String} params.onResult.result
- * @param {Function} params.onFinish
+ * @param {Function} params.onFinish Triggers when recognition result is ready.
  * @param {String} params.onFinish.result
  * @param {Function} params.onError This event is called after getting errors.
  * @param {SpeechRecognizer.Error} params.onError.error
@@ -113,7 +113,7 @@ SpeechRecognizer.Error = {};
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS = 0;
+SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS = "INSUFFICIENT_PERMISSIONS";
 
 /**
  * @property {String} NETWORK
@@ -123,7 +123,7 @@ SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.NETWORK = 0;
+SpeechRecognizer.Error.NETWORK = "NETWORK";
 
 /**
  * @property {String} NETWORK_TIMEOUT
@@ -133,7 +133,7 @@ SpeechRecognizer.Error.NETWORK = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.NETWORK_TIMEOUT = 0;
+SpeechRecognizer.Error.NETWORK_TIMEOUT = "NETWORK_TIMEOUT";
 
 /**
  * @property {String} SPEECH_TIMEOUT
@@ -143,7 +143,7 @@ SpeechRecognizer.Error.NETWORK_TIMEOUT = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.SPEECH_TIMEOUT = 0;
+SpeechRecognizer.Error.SPEECH_TIMEOUT = "SPEECH_TIMEOUT";
 
 /**
  * @property {String} CLIENT
@@ -153,7 +153,7 @@ SpeechRecognizer.Error.SPEECH_TIMEOUT = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.CLIENT = 0;
+SpeechRecognizer.Error.CLIENT = "CLIENT";
 
 SpeechRecognizer.Error.android = {};
 
@@ -164,7 +164,7 @@ SpeechRecognizer.Error.android = {};
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.android.AUDIO = 0;
+SpeechRecognizer.Error.android.AUDIO = "AUDIO";
 
 /**
  * @property {String} NO_MATCH
@@ -173,7 +173,7 @@ SpeechRecognizer.Error.android.AUDIO = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.android.NO_MATCH = 0;
+SpeechRecognizer.Error.android.NO_MATCH = "NO_MATCH";
 
 /**
  * @property {String} RECOGNIZER_BUSY
@@ -182,7 +182,7 @@ SpeechRecognizer.Error.android.NO_MATCH = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.android.RECOGNIZER_BUSY = 0;
+SpeechRecognizer.Error.android.RECOGNIZER_BUSY = "RECOGNIZER_BUSY";
 
 /**
  * @property {String} SERVER
@@ -191,7 +191,6 @@ SpeechRecognizer.Error.android.RECOGNIZER_BUSY = 0;
  * @readonly
  * @since 1.1.13
  */
-SpeechRecognizer.Error.android.SERVER = 0;
-
+SpeechRecognizer.Error.android.SERVER = "SERVER";
 
 module.exports = SpeechRecognizer;
