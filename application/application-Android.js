@@ -95,7 +95,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // methods
     'call': {
-        value: function(uriScheme, data, isShowChooser, chooserTitle){
+        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle){
             if(!TypeUtil.isString(uriScheme)){
                 throw new TypeError('uriScheme must be string');
             }
@@ -109,7 +109,7 @@ Object.defineProperties(ApplicationWrapper, {
                 // we should use intent.putExtra but it causes native crash.
                 
                 var params = Object.keys(data).map(function(k) {
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+                    return k + '=' + data[k];
                 }).join('&');
                 var uriObject;
                 if(uriScheme.indexOf("|") !== -1){
@@ -148,14 +148,27 @@ Object.defineProperties(ApplicationWrapper, {
                 if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title); 
-                    activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                    try{
+                        activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                    }
+                    catch(e){
+                        onFailure && onFailure();
+                        return;
+                    }
                 }
                 else{
-                    activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                    try{
+                        activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                    }
+                    catch(e){
+                        onFailure && onFailure();
+                        return;
+                    }
                 }
-                return true;
+                onSuccess && onSuccess();
+                return;
             }
-            return false;
+            onFailure && onFailure();
         },
         enumerable: true
     },

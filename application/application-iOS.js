@@ -18,8 +18,8 @@ Object.defineProperty(SFApplication, 'byteSent', {
     enumerable: true
 });
 
-SFApplication.call = function(uriScheme, data){
-    SMFApplication.callWithData(uriScheme, data);
+SFApplication.call = function(uriScheme, data, onSuccess, onFailure){
+    SMFApplication.call(uriScheme, data, onSuccess, onFailure);
 };
 
 SFApplication.exit = function(){
