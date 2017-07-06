@@ -95,7 +95,7 @@ Application.version;
  *     // Call Smartface Emulator with url schema.
  *     Application.call("smartface-emulator://",{});
  *     // Open Youtube with Chooser for Android
- *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},true);
+ *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},true,"Select an Application");
  * 
  *
  * @method call
