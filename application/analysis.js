@@ -91,7 +91,7 @@ Application.version;
  *     Application.call("tel:+901234567890",{});
  *     // Call another application with its own url schema.
  *     Application.call("mySchema://",{
- *         data: encodeURIComponent("Smartace Encoded Data")     
+ *         key: encodeURIComponent("Smartace Encoded Data")     
  *     },function(){
  *         alert("Application call completed")
  *     },function(){
