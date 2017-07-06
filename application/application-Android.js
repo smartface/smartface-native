@@ -108,7 +108,7 @@ Object.defineProperties(ApplicationWrapper, {
                 // we should use intent.putExtra but it causes native crash.
                 
                 var params = Object.keys(data).map(function(k) {
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+                    return k + '=' + data[k];
                 }).join('&');
                 var uriObject;
                 if(uriScheme.indexOf("|") !== -1){
