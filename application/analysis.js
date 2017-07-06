@@ -81,7 +81,6 @@ Application.version;
  * Launches another application and passes data. For Android, you can open application chooser with 
  * isShowChooser parameter and set chooser dialog title with chooserTitle.
  * if an app can open a given URL resource onSuccess callback will be triggered othervise onFailure triggered.
- * The data should be url encoded.
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
@@ -91,7 +90,9 @@ Application.version;
  *     // Open caller app with phone number.
  *     Application.call("tel:+901234567890",{});
  *     // Call another application with its own url schema.
- *     Application.call("mySchema://",{},function(){
+ *     Application.call("mySchema://",{
+ *         data: encodeURIComponent("Smartace Encoded Data")     
+ *     },function(){
  *         alert("Application call completed")
  *     },function(){
  *         alert("Application call failed")
@@ -110,7 +111,7 @@ Application.version;
  *
  * @method call
  * @param {String} uriScheme
- * @param {Object} data
+ * @param {Object} data parameter should be url encoded if necessary.
  * @param {Function} onSuccess Added in 1.1.13.
  * @param {Function} onFailure Added in 1.1.13.
  * @param {Boolean} isShowChooser Added in 1.1.13.
