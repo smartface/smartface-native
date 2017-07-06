@@ -54,8 +54,9 @@ RemoteUpdateService.checkUpdate = function(callback) {
 };
 
 function download(callback) {
+    // TODO: enable firstURL request after IOS-2283
     HTTP.requestFile(
-        RemoteUpdateService.firstUrl,
+        RemoteUpdateService.secondUrl, 
         zipPath, 
         function(file) {
             callback(null, {
@@ -64,19 +65,7 @@ function download(callback) {
             });
         },
         function(error) {
-            HTTP.requestFile(
-                RemoteUpdateService.secondUrl, 
-                zipPath, 
-                function(file) {
-                    callback(null, {
-                        updateAll: updateAll,
-                        updateCancel: updateCancel
-                    });
-                },
-                function(error) {
-                    callback("An error occured while downloding", null);
-                }
-            );
+            callback("An error occured while downloding", null);
         }
     );
 };
