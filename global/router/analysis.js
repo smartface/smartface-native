@@ -60,7 +60,7 @@ Router.prototype.sliderDrawer = null;
 /**
  * Adds given route to routes by matching it with given route path. You
  * can define if route instance will be singleton object or a new instance 
- * created everytime when UI.Router.go called.
+ * created everytime when Router.go called.
  * 
  * @method add
  * @param {String} to Route path to page class
@@ -77,7 +77,7 @@ Router.prototype.add = function(to, route, isSingleton) {};
  * Navigates to given route path. If route path is not defined an exception will
  * be thrown. Also if route path defined as singleton object and it exists in
  * page history an exception will be thrown. For singleton pages you should
- * use UI.Router.goBack to navigate them if they're in the history.
+ * use Router.goBack to navigate them if they're in the history.
  * 
  * @method go
  * @param {String} to Route path to go
