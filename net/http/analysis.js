@@ -4,6 +4,7 @@
  * http module allows sending http requests.
  * 
  *     @example
+ *     const Http = require("sf-core/net/http");
  *     Http.request(
  *         {
  *             'url':'YOUR_URL_HERE',
