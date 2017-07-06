@@ -80,7 +80,7 @@ Application.version;
 /**
  * Launches another application and passes data. For Android, you can open application chooser with 
  * isShowChooser parameter and set chooser dialog title with chooserTitle.
- * if an app can open a given URL resource onSuccess callback will be triggered othervise onFailure triggered.
+ * if an app can open a given URL resource onSuccess callback will be triggered otherwise onFailure will be triggered.
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
