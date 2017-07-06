@@ -54,24 +54,6 @@ RemoteUpdateService.checkUpdate = function(callback) {
 };
 
 function download(callback) {
-    if (Device.deviceOS === "iOS") {
-        downloadZIP(callback);
-    } else if (Device.deviceOS === "Android") {
-        const Application = require("sf-core/application");
-        Application.android.onRequestPermissionsResult = function(e){
-            if(e.requestCode === 7174) {
-                if(e.result) {
-                    downloadZIP(callback);
-                } else {
-                    callback("Permission denied while RAU download", null);
-                }
-            }
-        };
-        Application.android.requestPermissions(7174, Application.android.Permissions.WRITE_EXTERNAL_STORAGE);
-    }
-};
-
-function downloadZIP(callback) {
     HTTP.requestFile(
         RemoteUpdateService.firstUrl,
         zipPath, 
