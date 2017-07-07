@@ -216,9 +216,9 @@ ScrollView.prototype.onScroll = function onScroll(){};
  * @android
  * @ios
  * @readonly
- * @return {Object} contentOffset
- * @return {Number} contentOffset.x
- * @return {Number} contentOffset.y
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
  * @since 1.1.13
  */
 ScrollView.prototype.contentOffset = {};
