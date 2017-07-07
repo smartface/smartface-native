@@ -67,7 +67,7 @@ const SpeechRecognizer = {};
  * 
  * @param {Object} params Object describing callbacks
  * @param {String} [params.locale] IETF language tag for example "en-US"
- * @param {Function} params.onResult Triggers when when partial recognition results are available.
+ * @param {Function} params.onResult Triggers when partial recognition results are available.
  * @param {String} params.onResult.result
  * @param {Function} params.onFinish Triggers when recognition result is ready.
  * @param {String} params.onFinish.result
