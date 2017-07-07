@@ -63,7 +63,7 @@ function download(callback) {
         },
         function(response) {
             var zipFile = new File({ path: zipPath });
-            zipFile.createdFile();
+            zipFile.createFile(true);
             var zipFileStream = zipFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
             zipFileStream.write(response.body);
             zipFileStream.close();
