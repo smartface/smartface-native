@@ -59,6 +59,8 @@ function Contacts() {}
  * @param {Function} [params.onFailure] This event is called after adding contact fails.
  * @param {Object} params.onFailure.params 
  * @param {String} params.onFailure.params.message
+ * @param {UI.Page} [params.page] The page parameter is optional. If this property is set, 
+ *                                the contact application is opened.
  * @method add
  * @android
  * @ios

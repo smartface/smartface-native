@@ -78,7 +78,7 @@ Page.prototype.layout;
  *     });
  *
  * @event onShow
- * @param {Object} parameters Parameters passed from UI.Router.go function
+ * @param {Object} parameters Parameters passed from Router.go function
  * @android
  * @ios
  */
