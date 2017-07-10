@@ -61,6 +61,25 @@ function HeaderBar() {}
 HeaderBar.prototype.backgroundColor = Color.create("#00A1F1");
 
 /**
+ * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     const Color = require('sf-core/ui/color');
+ *     var myPage = new Page({
+ *         onLoad: function() {
+ *             this.headerBar.itemColor = Color.BLUE;
+ *         }
+ *     });
+ *
+ * @property {UI.Color} [itemColor = Color.WHITE]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+HeaderBar.prototype.itemColor = Color.WHITE;
+
+/**
  * Gets/sets background image of the HeaderBar.
  *
  *     @example

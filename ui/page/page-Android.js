@@ -4,6 +4,7 @@ const TypeUtil              = require("sf-core/util/type");
 const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const Router                = require("sf-core/ui/router");
+const PorterDuff            = requireClass("android.graphics.PorterDuff");
 
 const NativeView         = requireClass('android.view.View');
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
@@ -368,6 +369,38 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
+    
+    var _leftItemColor = Color.WHITE;
+    Object.defineProperty(self.headerBar, 'leftItemColor', {
+        get: function() {
+            return _leftItemColor;
+        },
+        set: function(color) {
+            if (color instanceof Color) {
+                var drawable = toolbar.getNavigationIcon();
+                if(drawable)
+                    drawable.setColorFilter(color.nativeObject, PorterDuff.Mode.SRC_ATOP);
+            }
+        },
+        enumerable: true, configurable: true
+    });
+    
+    var _itemColor = Color.WHITE; 
+    Object.defineProperty(self.headerBar, 'itemColor', {
+        get: function() {
+            return _itemColor;
+        },
+        set: function(color) {
+            if (color instanceof Color) {
+                self.headerBar.leftItemColor = color;
+                for(var i = 0; i < _headerBarItems.length; i++)
+                    _headerBarItems[i].color = color;
+                const HeaderBarItem = require("sf-core/ui/headerbaritem");
+                HeaderBarItem.itemColor = color;
+            }
+        },
+        enumerable: true, configurable: true
+    });
 
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
@@ -416,7 +449,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                toolbar.setSubtitleTextColor(color);
+                // toolbar.setSubtitleTextColor(color);
             }
         },
         enumerable: true, configurable: true
@@ -740,7 +773,7 @@ function Page(params) {
         self.headerBar.leftItemEnabled = true;
         self.headerBar.android.logoEnabled = false;
         self.headerBar.titleColor = Color.WHITE;
-        self.headerBar.subtitleColor = Color.WHITE;
+        self.headerBar.android.subtitleColor = Color.WHITE;
         self.headerBar.visible = true;
     }
 
