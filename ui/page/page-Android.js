@@ -449,7 +449,7 @@ function Page(params) {
         },
         set: function(color) {
             if (color) {
-                // toolbar.setSubtitleTextColor(color);
+                toolbar.setSubtitleTextColor(color.nativeObject);
             }
         },
         enumerable: true, configurable: true
