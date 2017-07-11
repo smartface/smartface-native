@@ -16,6 +16,7 @@
  *     console.log("Device.System.android.isApplicationInstalled: " + System.android.isApplicationInstalled('io.smartface.SmartfaceApp'));
  *     console.log("Device.System.vibrate(): "                      + System.vibrate());
  *     console.log("Device.System.android.menuKeyAvaliable: "       + System.android.menuKeyAvaliable);
+ *     console.log("Device.System.fingerPrintAvailable: "           + System.fingerPrintAvailable);
  * 
  */
 function System() {}
@@ -103,8 +104,11 @@ System.android.apiLevel;
 System.android.menuKeyAvaliable;
 
 /**
- *
+ * @deprecated
+ * 
  * Indicates whether finger print operations can be used or not.
+ * TouchID should be enabled to access fingerprint on iOS.
+ * 
  * @property {Boolean} fingerPrintAvaliable
  * @readonly
  * @ios
@@ -114,8 +118,24 @@ System.android.menuKeyAvaliable;
 System.ios.fingerPrintAvaliable;
 
 /**
- *
+ * Return value shows that if the device supports feature or not.
+ * Also it would be show that fingerprint (for Android) or 
+ * TouchID (for iOS) is defined or not defined on the phone,
+ * You need to add {@link Application.android.Permissions#USE_FINGERPRINT} 
+ * permission on AndroidManifest under config/Android when you publish project.
+ * 
+ * @property {Boolean} fingerPrintAvailable
+ * @readonly
+ * @ios
+ * @android
+ * @static
+ * @since 1.1.13
+ */
+System.fingerPrintAvailable;
+
+/**
  * clipboard can be used to set a text to the device's clipboard or get a text from it.
+ *
  * @property {String} clipboard
  * @android
  * @ios
@@ -153,7 +173,10 @@ System.android.getPackageVersion ({
 });
 
 /**
+ * @deprecated
+ * 
  * Checks if the provided finger print matches with the system's finger print.
+ * TouchID should be enabled to access fingerprint on iOS.
  * 
  *     @example
  *     System.ios.validateFingerPrint({
@@ -174,6 +197,42 @@ System.android.getPackageVersion ({
  * @since 0.1
  */
 System.ios.validateFingerPrint ({
+    onSuccess: function(){},
+    onError: function(){}
+});
+
+/**
+ * Checks if the provided finger print matches with the system's finger print.
+ * Will be false if TouchID not enabled for iOS and user not enrolled at least one 
+ * fingerprint for Android or hardware not supported by both of iOS and Android.
+ * Requires {@link Application.android.Permissions#USE_FINGERPRINT} permission on AndroidManifest.
+ * iOS only propery is deprecated.
+ * 
+ *     @example
+ *     System.validateFingerPrint({
+ *            android: {
+ *                title: "Title"
+ *            },
+ *            message : "Message",
+ *            onSuccess : function(){
+ *                  console.log("Success");
+ *            },
+ *            onError : function(){
+ *                  console.log("Error");
+ *            }
+ *      });
+ * @method validateFingerPrint
+ * @param {String} message
+ * @param {Object} android
+ * @param {String} android.title
+ * @param {Function} onSuccess
+ * @param {Function} onError
+ * @static
+ * @ios
+ * @android
+ * @since 1.1.13
+ */
+System.validateFingerPrint ({
     onSuccess: function(){},
     onError: function(){}
 });

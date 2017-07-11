@@ -324,7 +324,7 @@ MapView.Pin = Pin;
 MapView.Type = {};
 
 /**
- * @property {Number} [NORMAL = 0]
+ * @property {Number} NORMAL
  * @android
  * @ios
  * @static
@@ -334,7 +334,7 @@ MapView.Type = {};
 MapView.Type.NORMAL = 0;
 
 /**
- * @property {Number} [SATELLITE = 1]
+ * @property {Number} SATELLITE
  * @android
  * @ios
  * @static
@@ -344,7 +344,7 @@ MapView.Type.NORMAL = 0;
 MapView.Type.SATELLITE = 1;
 
 /**
- * @property {Number} [HYBRID = 2]
+ * @property {Number} HYBRID
  * @android
  * @ios
  * @static

@@ -186,6 +186,12 @@ function HeaderBarItem(params) {
         }
     });
 
+
+    if(!_color) {
+        if(HeaderBarItem.itemColor) {
+            this.color = HeaderBarItem.itemColor;
+        }
+    }
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -193,5 +199,18 @@ function HeaderBarItem(params) {
         }
     }
 }
+
+var _itemColor = Color.WHITE; 
+Object.defineProperty(HeaderBarItem, 'itemColor', {
+    get: function() {
+        return _itemColor;
+    },
+    set: function(color) {
+        if (color instanceof Color) {
+            _itemColor = color;
+        }
+    },
+    enumerable: true, configurable: true
+});
 
 module.exports = HeaderBarItem;

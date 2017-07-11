@@ -78,26 +78,51 @@ Application.smartfaceAppName;
 Application.version;
 
 /**
- * Launches another application and passes data.
+ * Launches another application and passes data. For Android, you can open application chooser with 
+ * isShowChooser parameter and set chooser dialog title with chooserTitle.
+ * If an app can open a given URL resource onSuccess callback will be triggered otherwise onFailure will be triggered.
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
  *     Application.call("market://details",{
  *         'id': Application.android.packageName
  *     });
- *     // Open caller app with phone number. Will work only for both.
+ *     // Open caller app with phone number.
  *     Application.call("tel:+901234567890",{});
+ *     // Call another application with its own url schema.
+ *     Application.call("mySchema://",{
+ *         key: encodeURIComponent("Smartace Encoded Data")     
+ *     },function(){
+ *         alert("Application call completed")
+ *     },function(){
+ *         alert("Application call failed")
+ *     });
+ *     // Call another application with package name and activity name. Works only for Android.
+ *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
+ *     // Call Smartface Emulator with url schema.
+ *     Application.call("smartface-emulator://",{});
+ *     // Open Youtube with Chooser for Android
+ *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},function(){
+ *         alert("Application call completed")
+ *     },function(){
+ *         alert("Application call failed")
+ *     },true,"Select an Application");
+ * 
  *
  * @method call
  * @param {String} uriScheme
- * @param {Object} data
+ * @param {Object} data parameter should be url encoded if necessary.
+ * @param {Function} onSuccess Added in 1.1.13.
+ * @param {Function} onFailure Added in 1.1.13.
+ * @param {Boolean} isShowChooser Added in 1.1.13.
+ * @param {String} chooserTitle Added in 1.1.13.
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Application.call = function(uriScheme, data) {};
+Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {};
 
 /**
  * Exists the application.
@@ -223,22 +248,6 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
 Application.checkUpdate = function(callback){};
 
 /**
- * Triggered when application is called by another application.
- * 
- * @since 0.1
- * @event onApplicationCallReceived
- * @param {Object} e 
- * @param {Object} e.data Data sent by application.
- * @param {String} [e.eventType] This parameter is available only for Android. For iOS this always returns "call". 
- * @param {String} [e.result] This parameter is available only for Android and when eventType is "callback". Returns Android Activity result code.
- * @android
- * @ios
- * @static
- * @since 0.1
- */
-Application.onApplicationCallReceived = function(e){};
-
-/**
  * Triggered before exiting application.
  * 
  * @since 0.1
@@ -278,10 +287,10 @@ Application.onMinimize = function(){};
  * Triggered after a push (remote) notification recieved. This event will be 
  * fired only if application is active and running. 
  * 
- * @since 0.1
  * @event onReceivedNotification
  * @param {Object} data 
  * @param {Object} data.remote
+ * @param {Object} data.local
  * @android
  * @ios
  * @static
@@ -290,11 +299,34 @@ Application.onMinimize = function(){};
 Application.onReceivedNotification = function(data){};
 
 /**
+ * Triggered when application is called by another application.
+ * 
+ * @event onApplicationCallReceived
+ * @param {Object} e 
+ * @param {Object} e.data Data sent by application.
+ * @param {String} e.eventType Can be "call" or "callback". 
+ * This parameter is available only for Android. For iOS this always returns "call". 
+ * For example; Application A calls application B, eventType becomes "call" for application B. 
+ * When application B is done its job and application A comes foreground and eventType becomes 
+ * "callback" for Android.
+ * @param {Number} e.result This parameter is available only for Android and when eventType is 
+ * "callback". Returns Android Activity result code.
+ * @see https://developer.android.com/training/basics/intents/result.html
+ * 
+ * @android
+ * @ios
+ * @static
+ * @since 1.1.13
+ */
+Application.onApplicationCallReceived = function(e){};
+
+/**
  * This event is called after Application.requestPermissions function. This event is 
  * fired asynchronous way, there is no way to make sure which request is answered.
  * 
  * @since 1.2
  * @event onRequestPermissionsResult
+ * @param {Object} e
  * @param {Number} e.requestCode
  * @param {Boolean} e.result
  * @android

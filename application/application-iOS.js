@@ -1,3 +1,5 @@
+const RAU = require("./RAU");
+
 var SFApplication = {};
 
 Object.defineProperty(SFApplication, 'byteReceived', {
@@ -16,8 +18,8 @@ Object.defineProperty(SFApplication, 'byteSent', {
     enumerable: true
 });
 
-SFApplication.call = function(uriScheme, data){
-    SMFApplication.callWithData(uriScheme, data);
+SFApplication.call = function(uriScheme, data, onSuccess, onFailure){
+    SMFApplication.call(uriScheme, data, onSuccess, onFailure);
 };
 
 SFApplication.exit = function(){
@@ -30,7 +32,7 @@ SFApplication.restart = function(){
 };
 
 SFApplication.checkUpdate = function(callback){
-    Application.checkUpdate(callback);
+    RAU.checkUpdate(callback);
 };
 
 SFApplication.android = {};
@@ -46,6 +48,16 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     },
     get: function() {
         return Application.onUnhandledError;
+    },
+    enumerable: true
+});
+
+Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
+    set:function(value){
+        Application.onApplicationCallReceived = value;
+    },
+    get: function() {
+        return Application.onApplicationCallReceived;
     },
     enumerable: true
 });

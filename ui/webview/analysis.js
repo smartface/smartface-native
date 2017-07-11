@@ -126,22 +126,48 @@ WebView.prototype.loadURL =  function(url) {};
 WebView.prototype. loadHTML = function(htmlText) {};
 
 /**
- * Runs a javascript code.
+ * Runs a javascript code. Return value must be inside a function.
+ * 
+ *     @example
+ *     const WebView = require('sf-core/ui/webview');
+ *     const Flex = require('sf-core/ui/flexlayout');
+ *     
+ *     var myScript = `
+ *         function doSomething() {
+ *             return "value";
+ *         }
+ *         doSomething();
+ *     `;
+ * 
+ *     var myWebView = new WebView({
+ *         left:10, top:10, right:10, bottom:10,
+ *         positionType: Flex.PositionType.ABSOLUTE
+ *         onShow: function(event) {
+ *             myWebView.evaluateJS(myScript, function(value) {
+ *                 console.log("Result " + value);
+ *             });
+ *         }
+ *     });
+ *     page.layout.addChild(myWebView);
+ *     myWebView.loadURL('https://www.google.com');
  *
  * @method evaluateJS
  * @param {String} javascript
+ * @param {Function} onReceive
+ * @param {String} onReceive.value
  * @android
  * @ios
  * @since 0.1
  */
-WebView.prototype.evaluateJS = function(javascript) {};
+WebView.prototype.evaluateJS = function(javascript,onReceive) {};
 
 /**
- * Callback triggered when the url is changed.
+ * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
  *
  * @event onChangedURL
  * @param {Object} event
  * @param {String} event.url
+ * @return {Boolean}
  * @android
  * @ios
  * @since 0.1

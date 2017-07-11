@@ -1,6 +1,8 @@
 function Hardware() {}
 
 Hardware.android = {}
+Hardware.ios = {}
+Hardware.ios.microphone = {}
 
 Object.defineProperty(Hardware, 'UID', {
   value: __SF_UIDevice.currentDevice().UUID,  
@@ -25,5 +27,14 @@ Object.defineProperty(Hardware, 'brandName', {
   writable: false,
   enumerable: true
 });
+
+Hardware.ios.microphone.requestRecordPermission = function(callback){
+  var avaudiosession = __SF_AVAudioSession.sharedInstance();
+  avaudiosession.requestRecordPermissionWithHandler(function(e){
+     if (typeof callback === 'function'){
+        callback(e.granted);
+     }
+  });
+};
 
 module.exports = Hardware;
