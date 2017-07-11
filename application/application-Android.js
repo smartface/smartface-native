@@ -309,9 +309,9 @@ Object.defineProperties(ApplicationWrapper.android, {
                 throw new Error('requestCode must be numeric or permission must be Application.Permission type or array of Application.Permission.');
             }
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
-                ApplicationWrapper.onRequestPermissionsResult && ApplicationWrapper.onRequestPermissionsResult({
-                    requestCode: this.checkPermission(permissions),
-                    result: true
+                ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult({
+                    requestCode: requestCode,
+                    result: this.checkPermission(permissions)
                 });
             }
             else{
