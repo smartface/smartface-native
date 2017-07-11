@@ -304,12 +304,12 @@ Application.onReceivedNotification = function(data){};
  * @event onApplicationCallReceived
  * @param {Object} e 
  * @param {Object} e.data Data sent by application.
- * @param {Object} e.eventType Can be "call" or "callback". 
+ * @param {String} e.eventType Can be "call" or "callback". 
  * This parameter is available only for Android. For iOS this always returns "call". 
  * For example; Application A calls application B, eventType becomes "call" for application B. 
  * When application B is done its job and calls callFinish() method. Application A comes 
  * foreground and eventType becomes "callback" for Android.
- * @param {Object} e.result This parameter is available only for Android and when eventType is 
+ * @param {Number} e.result This parameter is available only for Android and when eventType is 
  * "callback". Returns Android Activity result code.
  * @android
  * @ios
