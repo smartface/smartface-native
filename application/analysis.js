@@ -324,6 +324,7 @@ Application.onApplicationCallReceived = function(e){};
  * 
  * @since 1.2
  * @event onRequestPermissionsResult
+ * @param {Object} e
  * @param {Number} e.requestCode
  * @param {Boolean} e.result
  * @android
