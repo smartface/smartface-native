@@ -126,7 +126,7 @@ WebView.prototype.loadURL =  function(url) {};
 WebView.prototype. loadHTML = function(htmlText) {};
 
 /**
- * Runs a javascript code. Return value should be inside a function.
+ * Runs a javascript code. Return value must be inside a function.
  * 
  *     @example
  *     const WebView = require('sf-core/ui/webview');
