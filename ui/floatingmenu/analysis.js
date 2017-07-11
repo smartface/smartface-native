@@ -56,7 +56,7 @@ function FloatingMenu(params) {};
 FloatingMenu.prototype.items = [];
     
 /**
- * Gets/sets icon of the button
+ * Gets/sets icon of the button. In Android, the icon has the size of 24dp and it is stretched to a 24dp square container.
  *
  * @property {UI.Image} icon
  * @android
@@ -162,7 +162,7 @@ FloatingMenu.Item = function() {};
 FloatingMenu.Item.prototype.title;
 
 /**
- * Gets/sets icon.
+ * Gets/sets icon. In Android, the icon has the size of 24dp and it is stretched to a 24dp square container.
  *
  * @property {UI.Image} icon
  * @android
