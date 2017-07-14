@@ -17,7 +17,7 @@ if (Device.deviceOS === "iOS") {
 RemoteUpdateService.checkUpdate = function(callback) {
     HTTP.request(
         {
-            'url': "https://portalapi.smartface.io/api/v1/rau/check",
+            'url': "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
             'method':'POST',
             'body': RAU.getRequestBody(),
         },
