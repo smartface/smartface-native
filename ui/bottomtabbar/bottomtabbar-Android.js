@@ -27,11 +27,12 @@ function BottomTabBar(params) {
                         if(!_index)
                             _index = path;
                         var page;
-                        if(typeof(item.route) !== 'function') 
+                        if(typeof(item.route) !== 'function') {
                             page = item.route.getRoute(null, true);
-                        else 
+                        } else {
                             page = new _items[path].page();
-                        page.isBottomTabBarPage = true;
+                            page.isBottomTabBarPage = true;
+                        }
                         _itemInstances.push(page);
                     }
                     else {
