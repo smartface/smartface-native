@@ -2,8 +2,11 @@ const Blob = require("../../global/blob");
 
 var http = function Http(){
     var self = this;
+    
+    var _sessionConfiguration = null;
     if (!self.nativeObject) {
         self.nativeObject = new __SF_Http();
+        _sessionConfiguration = SF.requireClass("NSURLSessionConfiguration").defaultSessionConfiguration();
     }
     
     ////////////////////////////////////////////////////////////////////////
@@ -11,11 +14,11 @@ var http = function Http(){
     Object.defineProperty(self, 'timeoutIntervalForRequest', {
         get: function() {
             console.log("JS Getter");
-            return self.nativeObject.timeoutIntervalForRequest;
+            return _sessionConfiguration.timeoutIntervalForRequest;
         },
         set: function(value) {
             console.log("JS Setter : " + value );
-            self.nativeObject.timeoutIntervalForRequest = value;
+            _sessionConfiguration.timeoutIntervalForRequest = value;
         },
         enumerable: true
     });
@@ -24,7 +27,8 @@ var http = function Http(){
     // Functions
     this.requestFile = function(url, fileName, onLoad, onError) {
         return new http.Request(
-                self.nativeObject.requestFileFrom(
+                self.nativeObject.requestFile(
+                    _sessionConfiguration,
                     url,
                     fileName,
                     function(e){
@@ -44,7 +48,8 @@ var http = function Http(){
     
     this.requestImage = function(url, onLoad, onError) {
         return new http.Request(
-                self.nativeObject.requestImageFrom(
+                self.nativeObject.requestImage(
+                    _sessionConfiguration,
                     url,
                     function(e){
                         // Native returns UIImage instance.
@@ -63,7 +68,8 @@ var http = function Http(){
 
     this.requestString = function(url, onLoad, onError) {
         return new http.Request(
-                self.nativeObject.requestStringFrom(
+                self.nativeObject.requestString(
+                    _sessionConfiguration,
                     url,
                     function(e){
                         onLoad(e);
@@ -78,7 +84,8 @@ var http = function Http(){
     
     this.requestJSON = function(url, onLoad, onError) {
         return new http.Request(
-                self.nativeObject.requestJSONFrom(
+                self.nativeObject.requestJSON(
+                    _sessionConfiguration,
                     url,
                     function(e){
                         onLoad(e);
@@ -93,7 +100,8 @@ var http = function Http(){
     
     this.request = function(params, onLoad, onError) {
         return new http.Request(
-                self.nativeObject.requestWith(
+                self.nativeObject.request(
+                    _sessionConfiguration,
                     params,
                     function(e){
                         e.body = new Blob(e.body);
