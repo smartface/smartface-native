@@ -244,8 +244,9 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
+                        this.nativeObject.setSelection(0,0);
                     }
-                }
+                }.bind(this)
             }));
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
