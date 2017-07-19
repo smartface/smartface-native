@@ -39,8 +39,10 @@ const MapView = extend(View)(
                 self.nativeObject.onResume();
                 
                 const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                var zoomUpdate = NativeCameraUpdateFactory.zoomTo(10);
-                googleMap.moveCamera(zoomUpdate);
+                const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+                var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
+                var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
+                googleMap.moveCamera(cameraUpdate);
                 
                 googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                     onMarkerClick: function(marker) {
@@ -95,7 +97,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation;
+        var _centerLocation = [40.779720, -73.961766];
         var _compassEnabled = true;
         var _rotateEnabled = true;
         var _scrollEnabled = true;
