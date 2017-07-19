@@ -85,7 +85,7 @@ const MapView = extend(View)(
                 _pendingPins.forEach(function(element){
                     self.addPin(element);
                 });
-                _pendingPins = []
+                _pendingPins = [];
                 
                 _onCreate && _onCreate();
             }
@@ -97,7 +97,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation = [40.779720, -73.961766];
+        var _centerLocation = {latitude: 40.7828647, longitude: -73.9675491};
         var _compassEnabled = true;
         var _rotateEnabled = true;
         var _scrollEnabled = true;
