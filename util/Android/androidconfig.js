@@ -1,11 +1,13 @@
 function AndroidConfig() {}
 
-const NativeBuildConfig = requireClass(Android.getActivity().getPackageName()+".BuildConfig");
+const SpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity").getActivity();
+const packageName = string(SpratAndroidActivity.getPackageName());
+const NativeBuildConfig = requireClass(packageName + ".BuildConfig");
 const NativeBuild = requireClass("android.os.Build");
 
-AndroidConfig.isEmulator = (NativeBuildConfig.FLAVOR.toLowerCase().indexOf("emulator") !== -1);
-AndroidConfig.packageName = Android.getActivity().getPackageName();
-AndroidConfig.sdkVersion = NativeBuild.VERSION.SDK_INT;
+AndroidConfig.isEmulator = (string(NativeBuildConfig.FLAVOR.toLowerCase()).indexOf("emulator") !== -1);
+AndroidConfig.packageName = packageName;
+AndroidConfig.sdkVersion = int(NativeBuild.VERSION.SDK_INT);
 
 AndroidConfig.SDK = {};
 AndroidConfig.SDK.SDK_NOUGAT = 24;
@@ -15,7 +17,8 @@ AndroidConfig.SDK.SDK_KITKAT = 19;
 
 var classesCache = {};
 var servicesCache = {};
-var activity = Android.getActivity();
+var activity = SpratAndroidActivity;
+AndroidConfig.activity = SpratAndroidActivity;
 
 AndroidConfig.getClass = function(className){
     if(classesCache[className]){

@@ -1,6 +1,6 @@
-const RAU = require("./RAU");
-const TypeUtil = require("sf-core/util/type");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const TypeUtil = require("../util/type");
+const AndroidConfig = require("../util/Android/androidconfig");
+//const RAU = require("./RAU");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 
 function ApplicationWrapper() {}
@@ -15,8 +15,9 @@ var _onMaximize;
 var _onExit;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
-var activity = Android.getActivity();
+var activity = requireClass("io.smartface.android.SpratAndroidActivity").getActivity();
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
+
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},

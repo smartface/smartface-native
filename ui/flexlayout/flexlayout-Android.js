@@ -1,3 +1,4 @@
+const AndroidConfig             = require("../../util/Android/androidconfig")
 const ViewGroup                 = require('../viewgroup');
 const extend                    = require('js-base/core/extend');
 
@@ -12,12 +13,12 @@ const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionTy
 
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
         
         if(!this.nativeObject){
             this.nativeObject = new NativeYogaLayout(activity);
         }
-
+        
         _super(this);
         
         var _flexWrap;
@@ -126,12 +127,12 @@ Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
     value: NativeYogaDirection.INHERIT,
     enumerable: true
 });
-Object.defineProperty(FlexLayout.Direction, 'LTR', {
-    value: NativeYogaDirection.LTR,
-    enumerable: true
-});
 Object.defineProperty(FlexLayout.Direction, 'RTL', {
     value: NativeYogaDirection.RTL,
+    enumerable: true
+});
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
+    value: NativeYogaDirection.LTR,
     enumerable: true
 });
 

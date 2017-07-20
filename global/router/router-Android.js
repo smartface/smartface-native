@@ -1,6 +1,6 @@
-const Pages = require("sf-core/ui/pages");
-const Navigator = require("sf-core/ui/navigator");
-const BottomTabBar = require("sf-core/ui/bottomtabbar");
+const Pages = require("../../ui/pages");
+const Navigator = require("../../ui/navigator");
+const BottomTabBar = require("../../ui/bottomtabbar");
 
 function Router(){}
 
@@ -56,7 +56,7 @@ Router.add = function(to, page, isSingleton) {
     if (typeof(to) !== "string") {
         throw TypeError("add takes string and Page as parameters");
     }
-    
+
     if(typeof(page) !== 'function') {
         if (!routes[to]) {
             routes[to] = {
@@ -64,8 +64,7 @@ Router.add = function(to, page, isSingleton) {
                 pageObject: page,
             };
         }
-    }
-    else if (!routes[to]) {
+    } else if (!routes[to]) {
         routes[to] = {
             pageClass: page,
             isSingleton: !!isSingleton,

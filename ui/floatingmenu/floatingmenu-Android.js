@@ -176,9 +176,9 @@ function FloatingMenu(params) {
             },
             set: function(visibility) {
                 if (visibility === true) {
-                    nativeObject.setVisibility(0); // View.VISIBLE
+                    nativeObject.setVisibility(int(0)); // View.VISIBLE
                 } else {
-                    nativeObject.setVisibility(4); // View.INVISIBLE    
+                    nativeObject.setVisibility(int(4)); // View.INVISIBLE    
                 }
             }
         }

@@ -47,7 +47,7 @@ function File(params) {
         case Path.FILE_TYPE.EMULATOR_DRAWABLE:
         case Path.FILE_TYPE.FILE:
             // this.nativeObject will be File
-            this.nativeObject = resolvedPath.fullPath ? new NativeFile(resolvedPath.fullPath) : null;
+            this.nativeObject = resolvedPath.fullPath ? new NativeFile(string(resolvedPath.fullPath)) : null;
             break;
         
     }
@@ -237,7 +237,7 @@ function File(params) {
                     }
                     if (createParents) {
                         var fileParentPath = resolvedPath.fullPath.substring(0, resolvedPath.fullPath.lastIndexOf("/"));
-                        var fileParent = new NativeFile(fileParentPath);
+                        var fileParent = new NativeFile(string(fileParentPath));
                         if (!fileParent.exists()) {
                             fileParent.mkdirs();
                         }

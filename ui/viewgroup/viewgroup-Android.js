@@ -1,5 +1,5 @@
 const View              = require('../view');
-const TypeUtil          = require("sf-core/util/type");
+const TypeUtil          = require("../../util/type");
 const extend            = require('js-base/core/extend');
 const NativeViewGroup   = requireClass("android.view.ViewGroup");
 
@@ -10,7 +10,7 @@ const ViewGroup = extend(View)(
         }
         this.childViews = {};
         _super(this);
-        
+
         this.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
             'onChildViewAdded': function(parent, child){
                 this.onViewAdded && this.onViewAdded();
@@ -92,7 +92,7 @@ const ViewGroup = extend(View)(
                 configurable: true
             }
         });
-
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

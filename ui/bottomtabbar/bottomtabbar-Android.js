@@ -1,5 +1,5 @@
-const Color      = require("sf-core/ui/color");
-const TabBarItem = require("sf-core/ui/tabbaritem");
+const Color      = require("../color");
+const TabBarItem = require("../tabbaritem");
 
 const MAXITEMCOUNT = 5;
 

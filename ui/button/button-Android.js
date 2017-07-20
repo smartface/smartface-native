@@ -1,3 +1,4 @@
+const AndroidConfig             = require("sf-core/util/Android/androidconfig");
 const Label                     = require("sf-core/ui/label");
 const Color                     = require("sf-core/ui/color");
 const extend                    = require('js-base/core/extend');
@@ -11,7 +12,7 @@ const Button = extend(Label)(
         var _onPress;
         var _onLongPress;
         if(!this.nativeObject){
-            this.nativeObject = new NativeButton(Android.getActivity());
+            this.nativeObject = new NativeButton(AndroidConfig.activity);
         }
         _super(this);
         
@@ -45,7 +46,7 @@ const Button = extend(Label)(
         
         // Default settings
         if(!this.isNotSetDefaults){
-            this.nativeObject.setAllCaps(false); // enable lowercase texts
+            this.nativeObject.setAllCaps(bool(false)); // enable lowercase texts
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;
             this.padding = 0;

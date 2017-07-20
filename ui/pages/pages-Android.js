@@ -1,8 +1,8 @@
-const AndroidConfig         = require('sf-core/util/Android/androidconfig');
+const AndroidConfig         = require('../../util/Android/androidconfig');
 const NativeView            = requireClass("android.view.View");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
-var activity = Android.getActivity();
+var activity = AndroidConfig.activity;
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 var pageAnimationsCache;
 
@@ -193,7 +193,7 @@ function pop(){
 }
 
 function registerOnBackKeyPressed(pagesStack){
-    mDrawerLayout.setFocusableInTouchMode(true);
+    mDrawerLayout.setFocusableInTouchMode(bool(true));
     mDrawerLayout.requestFocus();
     mDrawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function( view, keyCode, keyEvent) {

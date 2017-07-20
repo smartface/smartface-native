@@ -5,7 +5,7 @@ const NativeEnvironment     = requireClass('android.os.Environment');
 
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
-const emulatorPath = Android.getActivity().getExternalCacheDir().getAbsolutePath();
+const emulatorPath = string(AndroidConfig.activity.getExternalCacheDir().getAbsolutePath());
 
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
@@ -35,9 +35,9 @@ Object.defineProperties(Path, {
     },
     'DataDirectory': {
         get: function(){
-            var filesDir = Android.getActivity().getFilesDir();
+            var filesDir = AndroidConfig.activity.getFilesDir();
             if(filesDir){
-                return filesDir.getAbsolutePath();
+                return string(filesDir.getAbsolutePath());
             }
             else{
                 return null;
@@ -61,20 +61,20 @@ Path.android = {};
 Object.defineProperty(Path.android, 'storages', {
     get: function(){
         if(!storages.isResolved){
-            var filesDir = NativeEnvironment.getExternalStorageDirectory().getPath();
+            var filesDir = string(NativeEnvironment.getExternalStorageDirectory().getPath());
             if(filesDir){
                 storages['internal'] = filesDir;
             }
             
             // @todo test for more devices
-            var externalStorage = new NativeFile('/storage/sdcard1/');
-            if(externalStorage.exists() && externalStorage.list() !== null){
+            var externalStorage = new NativeFile(string('/storage/sdcard1/'));
+            if(bool(externalStorage.exists()) && externalStorage.list() !== null){
                 storages['external'] = '/storage/sdcard1/';
             }
             
             // @todo test for more devices
-            var usbStorage = new NativeFile('/storage/usbdisk/');
-            if(usbStorage.exists() && usbStorage.list() !== null){
+            var usbStorage = new NativeFile(string('/storage/usbdisk/'));
+            if(bool(usbStorage.exists()) && usbStorage.list() !== null){
                 storages['usb'] = '/storage/usbdisk/';
             }
             storages.isResolved = true;
@@ -235,43 +235,43 @@ function checkDrawableVariations(path, drawableSize, drawableDensity, drawableNa
 
 function checkFileExistsInPath(path){
     // for preventing loop between File and Path, one of them must use native.
-    var fileInPath = new NativeFile(path);
-    return fileInPath.exists();
+    var fileInPath = new NativeFile(string(path));
+    return bool(fileInPath.exists());
 }
 
 function setScreenConfigs(){
     const NativeDisplayMetrics  = requireClass("android.util.DisplayMetrics")
     const NativeConfiguration   = requireClass("android.content.res.Configuration");
 
-    var configuration = Android.getActivity().getResources().getConfiguration();
-    if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
+    var configuration = AndroidConfig.activity.getResources().getConfiguration();
+    if ( (int(configuration.screenLayout) & int(NativeConfiguration.SCREENLAYOUT_SIZE_MASK)) === int(NativeConfiguration.SCREENLAYOUT_SIZE_SMALL)) {
         desiredDrawableSizeIndex = 0;
     } 
-    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_LARGE) {
+    else if ( (int(configuration.screenLayout) & int(NativeConfiguration.SCREENLAYOUT_SIZE_MASK)) === int(NativeConfiguration.SCREENLAYOUT_SIZE_LARGE)) {
         desiredDrawableSizeIndex = 2;
     } 
-    else if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_XLARGE) {
+    else if ( (int(configuration.screenLayout) & int(NativeConfiguration.SCREENLAYOUT_SIZE_MASK)) === int(NativeConfiguration.SCREENLAYOUT_SIZE_XLARGE)) {
         desiredDrawableSizeIndex = 3;
     } 
     else { // NativeConfiguration.SCREENLAYOUT_SIZE_NORMAL and others
         desiredDrawableSizeIndex = 1;
     }
     
-    var metrics = Android.getActivity().getResources().getDisplayMetrics();
+    var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
     
-    if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_LOW) {
+    if (int(metrics.densityDpi) <= int(NativeDisplayMetrics.DENSITY_LOW)) {
         desiredDrawableDensityIndex = 0;
     } 
-    else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_MEDIUM) {
+    else if (int(metrics.densityDpi) <= int(NativeDisplayMetrics.DENSITY_MEDIUM)) {
         desiredDrawableDensityIndex = 1;
     } 
-    else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_HIGH) {
+    else if (int(metrics.densityDpi) <= int(NativeDisplayMetrics.DENSITY_HIGH)) {
         desiredDrawableDensityIndex = 2;
     } 
-    else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_XHIGH) {
+    else if (int(metrics.densityDpi) <= int(NativeDisplayMetrics.DENSITY_XHIGH)) {
         desiredDrawableDensityIndex = 3;
     } 
-    else if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_XXHIGH) {
+    else if (int(metrics.densityDpi) <= int(NativeDisplayMetrics.DENSITY_XXHIGH)) {
         desiredDrawableDensityIndex = 4;
     }
     else {

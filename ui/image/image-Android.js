@@ -4,6 +4,7 @@ const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const Blob = require('sf-core/blob');
 const File = require('sf-core/io/file');
 const Path = require("sf-core/io/path");
@@ -20,13 +21,13 @@ const Format = {
 
 function Image (params) {
     var self = this;
-    var androidResources = Android.getActivity().getResources();
+    var androidResources = AndroidConfig.activity.getResources();
     if (params) {
         if(params.bitmap){
             self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
         }
         else if(params.path){
-            var bitmap = NativeBitmapFactory.decodeFile(params.path);
+            var bitmap = NativeBitmapFactory.decodeFile(string(params.path));
             self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
         }
         else{
@@ -55,7 +56,7 @@ function Image (params) {
                 var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
-                    var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);  
+                    var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, int(width), int(height), bool(false));  
                 }
                 catch(err) {
                     success = false;
@@ -78,7 +79,7 @@ function Image (params) {
                 var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
-                    var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
+                    var newBitmap = NativeBitmap.createBitmap(originalBitmap, int(x), int(y), int(width), int(height));
                 }
                 catch(err) {
                     success = false;
@@ -101,10 +102,10 @@ function Image (params) {
                 var success = true;
                 try {
                     var matrix = new NativeMatrix();
-                    matrix.postRotate(angle);
+                    matrix.postRotate(float(angle));
                     var bitmap = self.nativeObject.getBitmap();
                     var width = bitmap.getWidth(), height = bitmap.getHeight();
-                    var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
+                    var newBitmap = NativeBitmap.createBitmap(bitmap, int(0), int(0), int(width), int(height), matrix, bool(true));  
                 }
                 catch(err) {
                     success = false;
@@ -128,7 +129,7 @@ function Image (params) {
                 try {
                     var out = new NativeByteArrayOutputStream();
                     var bitmap = self.nativeObject.getBitmap();
-                    bitmap.compress(CompressFormat[format], quality, out);
+                    bitmap.compress(CompressFormat[format], int(quality), out);
                     var byteArray = out.toByteArray();
                 }
                 catch(err) {
@@ -172,7 +173,7 @@ Object.defineProperties(Image,{
                     bitmap = imageFile.nativeObject;
                 }
                 else{
-                    bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
+                    bitmap = NativeBitmapFactory.decodeFile(string(imageFile.fullPath));
                 }
                 return (new Image({bitmap: bitmap}));
             }
@@ -182,7 +183,7 @@ Object.defineProperties(Image,{
     },
     'createFromBlob': {
         value: function(blob) {
-            var newBitmap = NativeBitmapFactory.decodeByteArray(blob.parts, 0, blob.size);
+            var newBitmap = NativeBitmapFactory.decodeByteArray(array(blob.parts), int(0), int(blob.size));
             if(newBitmap)
                 return (new Image({bitmap: newBitmap}));
             return null;

@@ -201,7 +201,7 @@ http.request = function(params, onLoad, onError) {
         if(checkInternet()) {
             const Request = requireClass("com.android.volley.Request");
             var requestResult = null;
-            request.nativeObject = Request.extend("SFRequestt", {
+            request.nativeObject = Request.extend(string("SFRequestt"), {
                 getBody: function() {
                     if(!body)
                         return [];

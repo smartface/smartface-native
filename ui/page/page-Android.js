@@ -1,9 +1,9 @@
-const FlexLayout            = require("sf-core/ui/flexlayout");
-const Color                 = require("sf-core/ui/color");
-const TypeUtil              = require("sf-core/util/type");
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
-const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
-const Router                = require("sf-core/ui/router");
+const FlexLayout            = require("../flexlayout");
+const Color                 = require("../color");
+const TypeUtil              = require("../../util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
+const Router                = require("../../router");
 const PorterDuff            = requireClass("android.graphics.PorterDuff");
 
 const NativeView         = requireClass('android.view.View');
@@ -40,7 +40,7 @@ const OrientationDictionary = {
 function Page(params) {
     (!params) && (params = {});
     var self = this;
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
@@ -56,9 +56,9 @@ function Page(params) {
     var optionsMenu = null;
     self.contextMenu = {};
 
-    self.nativeObject = NativeFragment.extend("SFFragment", {
+    self.nativeObject = NativeFragment.extend(string("SFFragment"), {
         onCreateView: function() {
-            self.nativeObject.setHasOptionsMenu(true);
+            self.nativeObject.setHasOptionsMenu(bool(true));
             if (!isCreated) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
@@ -212,7 +212,7 @@ function Page(params) {
             if (typeof OrientationDictionary[_orientation] !== "number") {
                 _orientation = Page.Orientation.PORTRAIT;
             }
-            activity.setRequestedOrientation(OrientationDictionary[_orientation]);
+            activity.setRequestedOrientation(int(OrientationDictionary[_orientation]));
         },
         enumerable: true
     });
@@ -254,10 +254,10 @@ function Page(params) {
             _visible = visible;
             var window = activity.getWindow();
             if (visible) {
-                window.clearFlags(FLAG_FULLSCREEN);
+                window.clearFlags(int(FLAG_FULLSCREEN));
             }
             else {
-                window.addFlags(FLAG_FULLSCREEN);
+                window.addFlags(int(FLAG_FULLSCREEN));
             }
         },
         enumerable: true, configurable: true
@@ -271,9 +271,9 @@ function Page(params) {
         },
         set: function(color) {
             _color = color;
-            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+            if (int(NativeBuildVersion.VERSION.SDK_INT) >= MINAPILEVEL_STATUSBARCOLOR) {
                 var window = activity.getWindow();
-                window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.addFlags(int(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS));
                 window.setStatusBarColor(color.nativeObject);
             }
         },
@@ -327,7 +327,7 @@ function Page(params) {
         set: function(leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
+                actionBar.setDisplayHomeAsUpEnabled(bool(_leftItemEnabled));
             }
         },
         enumerable: true, configurable: true
@@ -405,22 +405,22 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             // View.VISIBLE
-            return toolbar.getVisibility() === 0;
+            return int(toolbar.getVisibility()) === 0;
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
                     if(self.isBottomTabBarPage) {
                         // View.GONE
-                        toolbar.setVisibility(8);
+                        toolbar.setVisibility(int(8));
                     } else {
                         // View.VISIBLE
-                        toolbar.setVisibility(0);
+                        toolbar.setVisibility(int(0));
                     }
                 }
                 else {
                     // View.GONE
-                    toolbar.setVisibility(8);
+                    toolbar.setVisibility(int(8));
                 }
             }
         },
@@ -478,7 +478,7 @@ function Page(params) {
         set: function(logoEnabled) {
             if (TypeUtil.isBoolean(logoEnabled)) {
                 _headerBarLogoEnabled = logoEnabled;
-                actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
+                actionBar.setDisplayUseLogoEnabled(bool(_headerBarLogoEnabled));
             }
         },
         enumerable: true, configurable: true
@@ -571,7 +571,7 @@ function Page(params) {
         bottomLayout.addView(bottomNavigationView);
             
         if(tab.backgroundColor instanceof Color) 
-            bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
+            bottomNavigationView.setBackgroundColor(int(tab.backgroundColor.nativeObject));
         
         rootLayout.paddingBottom = self.bottomTabBar.height;
     }
@@ -706,7 +706,7 @@ function Page(params) {
                 item.setValues();
             }
             if(itemView) { 
-                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                itemView.setBackgroundColor(int(Color.TRANSPARENT.nativeObject));
                 // left, top, right, bottom
                 itemView.setPadding(
                     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
@@ -762,8 +762,8 @@ function Page(params) {
         }
     }));
 
-    self.layout.nativeObject.setFocusable(true);
-    self.layout.nativeObject.setFocusableInTouchMode(true);
+    self.layout.nativeObject.setFocusable(bool(true));
+    self.layout.nativeObject.setFocusableInTouchMode(bool(true));
 
     // Default values
     if (!params.skipDefaults) {
