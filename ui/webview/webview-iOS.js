@@ -105,6 +105,7 @@ const WebView = extend(View)(
             enumerable: true
          });
          
+         var ScrollView = SF.requireClass("UIScrollView");
          /////////////////////
          // Temporary disabled
          Object.defineProperty(self, 'bounceEnabled', {

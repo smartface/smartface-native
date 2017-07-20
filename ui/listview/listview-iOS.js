@@ -204,11 +204,11 @@ const ListView = extend(View)(
     }
 );
 
-ListView.ios = {};
+ListView.iOS = {};
 
-ListView.ios.swipeDirection = require('sf-core/ui/listview/direction');
+ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
 
-ListView.ios.createSwipeItem = function(title,color,padding,action){
+ListView.iOS.createSwipeItem = function(title,color,padding,action){
     return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
 }
         
