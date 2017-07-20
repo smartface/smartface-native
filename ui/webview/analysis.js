@@ -126,7 +126,30 @@ WebView.prototype.loadURL =  function(url) {};
 WebView.prototype. loadHTML = function(htmlText) {};
 
 /**
- * Runs a javascript code.
+ * Runs a javascript code. Return value must be inside a function.
+ * 
+ *     @example
+ *     const WebView = require('sf-core/ui/webview');
+ *     const Flex = require('sf-core/ui/flexlayout');
+ *     
+ *     var myScript = `
+ *         function doSomething() {
+ *             return "value";
+ *         }
+ *         doSomething();
+ *     `;
+ * 
+ *     var myWebView = new WebView({
+ *         left:10, top:10, right:10, bottom:10,
+ *         positionType: Flex.PositionType.ABSOLUTE
+ *         onShow: function(event) {
+ *             myWebView.evaluateJS(myScript, function(value) {
+ *                 console.log("Result " + value);
+ *             });
+ *         }
+ *     });
+ *     page.layout.addChild(myWebView);
+ *     myWebView.loadURL('https://www.google.com');
  *
  * @method evaluateJS
  * @param {String} javascript
