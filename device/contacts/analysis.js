@@ -60,7 +60,7 @@ function Contacts() {}
  * @param {Object} params.onFailure.params 
  * @param {String} params.onFailure.params.message
  * @param {UI.Page} [params.page] The page parameter is optional. If this property is set, 
- *                                the contact application is opened.
+ *                                the contacts will be editable before saving.
  * @method add
  * @android
  * @ios
