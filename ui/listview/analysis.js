@@ -13,7 +13,6 @@ const extend = require('js-base/core/extend');
  *     const ListViewItem = require('sf-core/ui/listviewitem');
  *     const Label = require('sf-core/ui/label');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
- *     const Direction = require('sf-core/ui/listview/direction');
  * 
  *     var myDataSet = [
  *         {
@@ -75,24 +74,34 @@ const extend = require('js-base/core/extend');
  *      
  *     myListView.ios.leftToRightSwipeEnabled = true;
  *     myListView.ios.rightToLeftSwipeEnabled = true;
- * 
+ *       
  *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
- *         if (direction == Direction.RIGHTTOLEFT){
- *             expansionSettings.fillOnTrigger = true;  //if true the button fills the cell on trigger, else it bounces back to its initial position
- *             expansionSettings.threshold = 1.5;  //Size proportional threshold to trigger the expansion button. Default value 1.5
- *             var deleteAction = new myListView.ios.swipeItem("Delete",Color.RED,15,function(e) { 
- *                 console.log("Delete Action Index = " + e.index);
- *             });
- *             return [deleteAction];
- *         }
- *         else if (direction == Direction.LEFTTORIGHT){
- *             var moreAction = new myListView.ios.swipeItem("More",Color.GRAY,15,function(e){
- *                 console.log("More Action Index = " + e.index);
- *             });
- *             return [moreAction];
+ *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
+ *             //Expansion button index. Default value 0
+ *             expansionSettings.buttonIndex = -1;
  *             
+ *             var archiveSwipeItem = ListView.iOS.createSwipeItem("ARCHIVE",Color.GREEN,30,function(e){
+ *                 console.log("Archive " + e.index);
+ *             });
+ *             
+ *             return [archiveSwipeItem];
+ *         } else if(direction == ListView.iOS.SwipeDirection.RIGHTTOLEFT){
+ *             //Expansion button index. Default value 0
+ *             expansionSettings.buttonIndex = 0;
+ *             //Size proportional threshold to trigger the expansion button. Default value 1.5
+ *             expansionSettings.threshold = 1; 
+ *             
+ *             var moreSwipeItem = ListView.iOS.createSwipeItem("MORE",Color.GRAY,30,function(e){
+ *                 console.log("More "+ e.index);
+ *             });
+ *             
+ *             var deleteSwipeItem = ListView.iOS.createSwipeItem("DELETE",Color.RED,30,function(e){
+ *                 console.log("Delete "+ e.index);
+ *             });
+ *             
+ *             return [deleteSwipeItem,moreSwipeItem];
  *         }
- *     };
+ *     }
  * 
  *
  */
@@ -277,6 +286,8 @@ ListView.prototype.onScroll = function onScroll(){ }
 ListView.prototype.onPullRefresh = function onPullRefresh(){}
 
 /**
+ * @deprecated 1.1.14
+ * 
  * @param {String} title
  * @param {UI.Color} color
  * @param {Number} padding
@@ -291,12 +302,47 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
 
 /**
  * This event is called when user swipe listview row
- *
+ * 
+ *       @example
+ *       myListView.ios.leftToRightSwipeEnabled = true;
+ *       myListView.ios.rightToLeftSwipeEnabled = true;
+ *       
+ *       myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *          if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
+ *               //Expansion button index. Default value 0
+ *               expansionSettings.buttonIndex = -1;
+ *               
+ *               var archiveSwipeItem = ListView.iOS.createSwipeItem("ARCHIVE",Color.GREEN,30,function(e){
+ *                   console.log("Archive " + e.index);
+ *               });
+ *               
+ *               return [archiveSwipeItem];
+ *           } else if(direction == ListView.iOS.SwipeDirection.RIGHTTOLEFT){
+ *               //Expansion button index. Default value 0
+ *               expansionSettings.buttonIndex = 0;
+ *               //Size proportional threshold to trigger the expansion button. Default value 1.5
+ *               expansionSettings.threshold = 1; 
+ *               
+ *               var moreSwipeItem = ListView.iOS.createSwipeItem("MORE",Color.GRAY,30,function(e){
+ *                   console.log("More "+ e.index);
+ *               });
+ *               
+ *               var deleteSwipeItem = ListView.iOS.createSwipeItem("DELETE",Color.RED,30,function(e){
+ *                   console.log("Delete "+ e.index);
+ *               });
+ *               
+ *               return [deleteSwipeItem,moreSwipeItem];
+ *           }
+ *       } 
+ * 
  * @event onRowSwiped
+ * @param {UI.ListView.iOS.SwipeDirection} swipeDirection
+ * @param {Object} expansionSettings
  * @ios
  * @since 0.1
+ * 
  */
-ListView.prototype.ios.onRowSwiped  = function(direction){}
+ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings){}
 
 /**
  * Gets/sets leftToRightSwipeEnabled
@@ -315,5 +361,61 @@ ListView.prototype.ios.leftToRightSwipeEnabled = false;
  * @since 0.1
  */
 ListView.prototype.ios.rightToLeftSwipeEnabled = false;
+
+/**
+ * 
+ * This method is create swipe item
+ * 
+ *      @example
+ *      var moreSwipeItem = ListView.iOS.createSwipeItem("MORE",Color.GRAY,30,function(e){
+ *          console.log("More "+ e.index);
+ *      });
+ * 
+ * @param {String} title
+ * @param {UI.Color} color
+ * @param {Number} padding
+ * @param {Function} action Callback for button click action
+ * 
+ * @method createSwipeItem
+ * @static
+ * @ios
+ * @since 1.1.14
+ * 
+ 
+ */
+ListView.createSwipeItem = function(title,color,padding,action){};
+
+/**
+ * iOS Specific Properties.
+ * @class UI.ListView.iOS
+ */
+ListView.iOS = {};
+
+/**
+ * Bar style that specifies the search bar’s appearance.
+ * @class UI.ListView.iOS.SwipeDirection
+ * @readonly
+ * @ios
+ * @since 1.1.14
+ */
+ListView.iOS.SwipeDirection = {};
+
+/**
+ * @property {Number} LEFTTORIGHT
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.14
+ */
+ListView.iOS.SwipeDirection.LEFTTORIGHT = 0;
+
+/**
+ * @property {Number} RIGHTTOLEFT
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.14
+ */
+ListView.iOS.SwipeDirection.RIGHTTOLEFT = 1;
 
 module.exports = ListView;

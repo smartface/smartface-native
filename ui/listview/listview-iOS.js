@@ -2,7 +2,6 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 const Color = require('sf-core/ui/color');
-const Direction = require('sf-core/ui/listview/direction');
 
 const UITableViewRowAnimation = {
     fade : 0,
@@ -58,7 +57,7 @@ const ListView = extend(View)(
           enumerable: true
         });
         
-        self.ios.onRowSwiped = function(direction){};
+        self.ios.onRowSwiped = function(swipeDirection,expansionSettings){};
         
         self.ios.swipeItem = function(title,color,padding,action){
             return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
@@ -205,4 +204,12 @@ const ListView = extend(View)(
     }
 );
 
+ListView.iOS = {};
+
+ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
+
+ListView.iOS.createSwipeItem = function(title,color,padding,action){
+    return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
+}
+        
 module.exports = ListView;
