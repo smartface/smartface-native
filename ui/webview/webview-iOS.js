@@ -1,5 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
+const File = require('sf-core/io/file');
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -19,7 +20,28 @@ const WebView = extend(View)(
             },
             enumerable: true
          });
-        
+         
+         Object.defineProperty(self, 'loadFile', {
+            value: function(value) {
+                var actualPath = value.nativeObject.getActualPath();
+                var fileURL = __SF_NSURL.fileURLWithPath(actualPath);
+                var baseUrl = __SF_NSURL.fileURLWithPath(File.getDocumentsDirectory());
+
+                var invocation = __SF_NSInvocation.createInvocationWithSelectorInstance("loadFileURL:allowingReadAccessToURL:",self.nativeObject);
+                if (invocation) {
+                    invocation.target = self.nativeObject;
+                    invocation.setSelectorWithString("loadFileURL:allowingReadAccessToURL:");
+                    invocation.retainArguments();
+                    invocation.setNSObjectArgumentAtIndex(fileURL,2);
+                    invocation.setNSObjectArgumentAtIndex(baseUrl,3);
+                    
+                    invocation.invoke();
+                    var returnValue = invocation.getReturnValue();
+                 }
+            },
+            enumerable: true
+         });
+
         Object.defineProperty(self, 'loadHTML', {
             value: function(value) {
                 self.nativeObject.loadHTMLStringBaseURL(value,undefined);
