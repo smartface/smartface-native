@@ -25,8 +25,15 @@ const WebView = extend(View)(
             value: function(value) {
                 var actualPath = value.nativeObject.getActualPath();
                 var fileURL = __SF_NSURL.fileURLWithPath(actualPath);
-                var baseUrl = __SF_NSURL.fileURLWithPath(File.getDocumentsDirectory());
-
+                
+                var baseUrl;
+                
+                if (actualPath.includes(".app")) {
+                    baseUrl = __SF_NSURL.fileURLWithPath(File.getMainBundleDirectory());
+                }else{
+                    baseUrl = __SF_NSURL.fileURLWithPath(File.getDocumentsDirectory());
+                }
+                
                 var invocation = __SF_NSInvocation.createInvocationWithSelectorInstance("loadFileURL:allowingReadAccessToURL:",self.nativeObject);
                 if (invocation) {
                     invocation.target = self.nativeObject;
