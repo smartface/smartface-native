@@ -129,13 +129,13 @@ WebView.prototype.loadHTML = function(htmlText) {};
  * Loads the web page provided via {@link IO.File}. You can load complete web page with 
  * this method by passing index.html as a file.
  *
- * @method loadHTML
+ * @method loadFile
  * @param {IO.File} file
  * @android
  * @ios
  * @since 1.1.16
  */
-WebView.prototype.loadHTML = function(file) {};
+WebView.prototype.loadFile = function(file) {};
 
 /**
  * Runs a javascript code. Return value must be inside a function.
