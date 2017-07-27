@@ -62,15 +62,104 @@ const TextBox = extend(View)(
                 });
             }
             else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
-                self.onTextChanged(method.replacementString, method.range);
-                return true;
+                if (typeof self.onTextChanged !== 'function'){
+                    return true;
+                }
+                
+                var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
+                
+                var startPosition;
+                var invocation0 = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
+                if (invocation0) {
+                    invocation0.target = selectedTextRange;
+                    invocation0.setSelectorWithString("start");
+                    invocation0.retainArguments();
+                    
+                    invocation0.invoke();
+                    startPosition = invocation0.getReturnValue();
+                }
+                
+                var endPosition;
+                var invocation9 = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
+                if (invocation9) {
+                    invocation9.target = selectedTextRange;
+                    invocation9.setSelectorWithString("end");
+                    invocation9.retainArguments();
+                    
+                    invocation9.invoke();
+                    endPosition = invocation9.getReturnValue();
+                }
+                
+                var offset = 0;
+                var invocation11 = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
+                if (invocation11) {
+                    invocation11.target = self.nativeObject;
+                    invocation11.setSelectorWithString("offsetFromPosition:toPosition:");
+                    invocation11.retainArguments();
+                    invocation11.setNSObjectArgumentAtIndex(startPosition,2);
+                    invocation11.setNSObjectArgumentAtIndex(endPosition,3);
+                    invocation11.invoke();
+                    offset = invocation11.getNSIntegerReturnValue();
+                }
+                
+                if (method.replacementString == "") {
+                    if (offset === 0) {
+                        self.text = self.text.slice(0, method.range) + self.text.slice(method.range + 1);
+                    }else{
+                        self.text = self.text.slice(0, method.range) + self.text.slice(method.range + offset);
+                    }
+                }else{
+                    self.text = self.text.slice(0, method.range) + method.replacementString + self.text.slice(method.range);
+                }
+                
+                var secondCharacterPosition;
+                var invocation4 = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
+                if (invocation4) {
+                    invocation4.target = self.nativeObject;
+                    invocation4.setSelectorWithString("positionFromPosition:offset:");
+                    invocation4.retainArguments();
+                    invocation4.setNSObjectArgumentAtIndex(startPosition,2);
+                    if (method.replacementString == "") {
+                        if (offset === 0) {
+                           invocation4.setNSIntegerArgumentAtIndex(-1,3); 
+                        }else{
+                            invocation4.setNSIntegerArgumentAtIndex(0,3);
+                        }
+                    }else{
+                        invocation4.setNSIntegerArgumentAtIndex(method.replacementString.length,3);
+                    }   
+
+                    invocation4.invoke();
+                    secondCharacterPosition = invocation4.getReturnValue();
+                }
+                
+                var firstCharacterRange;
+                var invocation5 = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
+                if (invocation5) {
+                    invocation5.target = self.nativeObject;
+                    invocation5.setSelectorWithString("textRangeFromPosition:toPosition:");
+                    invocation5.retainArguments();
+                    invocation5.setNSObjectArgumentAtIndex(secondCharacterPosition,2);
+                    invocation5.setNSObjectArgumentAtIndex(secondCharacterPosition,3);
+                    
+                    invocation5.invoke();
+                    firstCharacterRange = invocation5.getReturnValue();
+                }
+                
+                self.nativeObject.setValueForKey(firstCharacterRange,"selectedTextRange");
+                
+                self.onTextChanged({
+                    location: method.range,
+                    insertedText: method.replacementString
+                });
+                        
+                return false;
             }
         };
 
         self.onEditBegins = function() {};
         self.onEditEnds = function() {};
         self.onActionButtonPress = function(e) {};
-        this.onTextChanged = function(insertedText, location) {};
 
         Object.defineProperty(self, 'font', {
             get: function() {
