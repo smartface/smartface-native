@@ -69,37 +69,37 @@ const TextBox = extend(View)(
                 var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
                 
                 var startPosition;
-                var invocation0 = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
-                if (invocation0) {
-                    invocation0.target = selectedTextRange;
-                    invocation0.setSelectorWithString("start");
-                    invocation0.retainArguments();
+                var invocationStartPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
+                if (invocationStartPosition) {
+                    invocationStartPosition.target = selectedTextRange;
+                    invocationStartPosition.setSelectorWithString("start");
+                    invocationStartPosition.retainArguments();
                     
-                    invocation0.invoke();
-                    startPosition = invocation0.getReturnValue();
+                    invocationStartPosition.invoke();
+                    startPosition = invocationStartPosition.getReturnValue();
                 }
                 
                 var endPosition;
-                var invocation9 = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
-                if (invocation9) {
-                    invocation9.target = selectedTextRange;
-                    invocation9.setSelectorWithString("end");
-                    invocation9.retainArguments();
+                var invocationEndPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
+                if (invocationEndPosition) {
+                    invocationEndPosition.target = selectedTextRange;
+                    invocationEndPosition.setSelectorWithString("end");
+                    invocationEndPosition.retainArguments();
                     
-                    invocation9.invoke();
-                    endPosition = invocation9.getReturnValue();
+                    invocationEndPosition.invoke();
+                    endPosition = invocationEndPosition.getReturnValue();
                 }
                 
                 var offset = 0;
-                var invocation11 = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
-                if (invocation11) {
-                    invocation11.target = self.nativeObject;
-                    invocation11.setSelectorWithString("offsetFromPosition:toPosition:");
-                    invocation11.retainArguments();
-                    invocation11.setNSObjectArgumentAtIndex(startPosition,2);
-                    invocation11.setNSObjectArgumentAtIndex(endPosition,3);
-                    invocation11.invoke();
-                    offset = invocation11.getNSIntegerReturnValue();
+                var invocationOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
+                if (invocationOffsetFromPosition) {
+                    invocationOffsetFromPosition.target = self.nativeObject;
+                    invocationOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
+                    invocationOffsetFromPosition.retainArguments();
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
+                    invocationOffsetFromPosition.invoke();
+                    offset = invocationOffsetFromPosition.getNSIntegerReturnValue();
                 }
                 
                 if (method.replacementString == "") {
@@ -113,37 +113,37 @@ const TextBox = extend(View)(
                 }
                 
                 var secondCharacterPosition;
-                var invocation4 = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
-                if (invocation4) {
-                    invocation4.target = self.nativeObject;
-                    invocation4.setSelectorWithString("positionFromPosition:offset:");
-                    invocation4.retainArguments();
-                    invocation4.setNSObjectArgumentAtIndex(startPosition,2);
+                var invocationPositionFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
+                if (invocationPositionFromPosition) {
+                    invocationPositionFromPosition.target = self.nativeObject;
+                    invocationPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
+                    invocationPositionFromPosition.retainArguments();
+                    invocationPositionFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
                     if (method.replacementString == "") {
                         if (offset === 0) {
-                           invocation4.setNSIntegerArgumentAtIndex(-1,3); 
+                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(-1,3); 
                         }else{
-                            invocation4.setNSIntegerArgumentAtIndex(0,3);
+                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(0,3);
                         }
                     }else{
-                        invocation4.setNSIntegerArgumentAtIndex(method.replacementString.length,3);
+                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(method.replacementString.length,3);
                     }   
 
-                    invocation4.invoke();
-                    secondCharacterPosition = invocation4.getReturnValue();
+                    invocationPositionFromPosition.invoke();
+                    secondCharacterPosition = invocationPositionFromPosition.getReturnValue();
                 }
                 
                 var firstCharacterRange;
-                var invocation5 = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
-                if (invocation5) {
-                    invocation5.target = self.nativeObject;
-                    invocation5.setSelectorWithString("textRangeFromPosition:toPosition:");
-                    invocation5.retainArguments();
-                    invocation5.setNSObjectArgumentAtIndex(secondCharacterPosition,2);
-                    invocation5.setNSObjectArgumentAtIndex(secondCharacterPosition,3);
+                var invocationTextRangeFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
+                if (invocationTextRangeFromPosition) {
+                    invocationTextRangeFromPosition.target = self.nativeObject;
+                    invocationTextRangeFromPosition.setSelectorWithString("textRangeFromPosition:toPosition:");
+                    invocationTextRangeFromPosition.retainArguments();
+                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition,2);
+                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition,3);
                     
-                    invocation5.invoke();
-                    firstCharacterRange = invocation5.getReturnValue();
+                    invocationTextRangeFromPosition.invoke();
+                    firstCharacterRange = invocationTextRangeFromPosition.getReturnValue();
                 }
                 
                 self.nativeObject.setValueForKey(firstCharacterRange,"selectedTextRange");
