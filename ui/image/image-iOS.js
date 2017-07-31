@@ -110,6 +110,18 @@ function Image(params) {
       writable: false
     });
     
+    Object.defineProperty(self, 'toBlob', {
+      value: function(){
+        var retval = null;
+        var imageData = self.nativeObject.convertToData();
+        if (imageData) {
+          retval = new Blob(imageData);
+        }
+        return retval;
+      },
+      writable: false
+    });
+    
 }
 
 Image.createFromFile = function(path) {
