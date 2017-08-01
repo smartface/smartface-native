@@ -1,6 +1,8 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const AndroidConfig = require('sf-core/util/Android/androidconfig');
+const File = require('sf-core/io/file');
+const Path = require('sf-core/io/path');
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -43,7 +45,8 @@ const WebView = extend(View)(
                         this.nativeObject.setHorizontalScrollBarEnabled(false);
                         this.nativeObject.setVerticalScrollBarEnabled(false);
                     }
-                }
+                },
+                enumerable: true
             },
             'bounceEnabled': {
                 get: function() {
@@ -55,7 +58,8 @@ const WebView = extend(View)(
                     } else {
                         this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
                     }
-                }
+                },
+                enumerable: true
             },
             'openLinkInside': {
                 get: function() {
@@ -63,22 +67,26 @@ const WebView = extend(View)(
                 },
                 set: function(enabled) {
                     _canOpenLinkInside = enabled;
-                }
+                },
+                enumerable: true
             },
             'refresh': {
                 value: function() {
                     this.nativeObject.reload();
-                }
+                },
+                enumerable: true
             },
             'goBack': {
                 value: function() {
                     this.nativeObject.goBack();
-                }
+                },
+                enumerable: true
             },
             'goForward': {
                 value: function() {
                     this.nativeObject.goForward();
-                }
+                },
+                enumerable: true
             },
             'zoomEnabled': {
                 get: function() {
@@ -86,17 +94,34 @@ const WebView = extend(View)(
                 },
                 set: function(enabled) {
                     this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
-                }
+                },
+                enumerable: true
             },
             'loadURL': {
                 value: function(url) {
                     this.nativeObject.loadUrl(url);
-                }
+                },
+                enumerable: true
             },
             'loadHTML': {
                 value: function(htmlText) {
                     this.nativeObject.loadData(htmlText, "text/html", null);
-                }
+                },
+                enumerable: true
+            },
+            'loadFile': {
+                value: function(file) {
+                    if(file instanceof File){
+                        if(file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSET){
+                            //Generate FILE PATH
+                            this.nativeObject.loadUrl("file:///" + file.fullPath);
+                        }
+                        else if(file.type == Path.FILE_TYPE.ASSET){
+                            this.nativeObject.loadUrl("file:///android_asset/" + (file.path.replace("assets://","")));
+                        }
+                    }
+                },
+                enumerable: true
             },
             'evaluateJS': {
                 value: function(javascript, callback) {
@@ -113,7 +138,8 @@ const WebView = extend(View)(
                     } else {
                         this.nativeObject.loadUrl("javascript:"+ javascript);
                     }
-                }
+                },
+                enumerable: true
             },
             'onChangedURL': {
                 get: function() {
@@ -121,7 +147,8 @@ const WebView = extend(View)(
                 },
                 set: function(callback) {
                     _onChangedURL = callback;
-                }
+                },
+                enumerable: true
             },
             'onLoad': {
                 get: function() {
@@ -129,7 +156,8 @@ const WebView = extend(View)(
                 },
                 set: function(callback) {
                     _onLoad = callback;
-                }
+                },
+                enumerable: true
             },
             'onError': {
                 get: function() {
@@ -137,7 +165,8 @@ const WebView = extend(View)(
                 },
                 set: function(callback) {
                     _onError = callback;
-                }
+                },
+                enumerable: true
             },
             'onShow': {
                 get: function() {
@@ -145,7 +174,8 @@ const WebView = extend(View)(
                 },
                 set: function(callback) {
                     _onShow = callback;
-                }
+                },
+                enumerable: true
             },
             'toString': {
                 value: function(){
