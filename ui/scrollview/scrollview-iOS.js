@@ -28,10 +28,30 @@ const ScrollView = extend(ViewGroup)(
         }
         
         _super(this);
-    
+        
+        self.nativeObject.onScrollBegin = function(){
+            if (typeof self.onTouch === 'function'){
+                self.onTouch();
+            }
+        }
+        
         Object.defineProperty(self, 'layout', {
             get: function() {
                 return self.contentLayout;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'onScroll', {
+            set: function(value) {
+                self.nativeObject.didScroll = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'contentOffset', {
+            get: function() {
+                return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
             },
             enumerable: true
         });
