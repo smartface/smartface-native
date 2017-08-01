@@ -18,6 +18,8 @@ const MapView = extend(View)(
         
         _super(this);
         
+        self.nativeObject.setCenter(40.7828647,-73.9675491,false); //Default coordinate
+                
         self.onPressHandler = function(e){
             var gesture = e.gesture;
             if (gesture.gestureRecognizerstate == 3){
@@ -226,7 +228,7 @@ const MapView = extend(View)(
             var span = coordinateSpanWithCenterCoordinate(centerLocation,zoomLevel);
             self.nativeObject.centerLocation = {latitudeDelta : span.latitudeDelta,longitudeDelta : span.longitudeDelta,latitude : centerLocation.latitude, longitude : centerLocation.longitude,animated : animated};
         }
-    
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
