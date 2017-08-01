@@ -22,14 +22,9 @@ SpeechRecognizer.start = function(params) {
             
             Hardware.ios.microphone.requestRecordPermission(function(granted){
                 if(granted){
-                    var myTimer = Timer.setTimeout({
-                    task: function(){
-                            __SF_Dispatch.mainAsync(function(){
-                                SpeechRecognizer.createRecognizer(params);
-                            });
-                        },
-                        delay: 200
-                    });
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                            SpeechRecognizer.createRecognizer(params);
+                    },200);
                 }else{
                     SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
                 }
