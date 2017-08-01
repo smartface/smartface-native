@@ -71,6 +71,7 @@ const TextBox = extend(Label)(
         var _onEditBegins;
         var _onEditEnds;
         var _onActionButtonPress;
+        var _hasEventsLocked = false;
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
@@ -198,7 +199,23 @@ const TextBox = extend(Label)(
                 },
                 enumerable: true,
                 configurable: true
-            }
+            },
+            'text': {
+                get: function() {
+                    return self.nativeObject.getText();
+                },
+                set: function(text) {
+                    _hasEventsLocked = true;
+
+                    self.nativeObject.setText("" + text);
+                    self.nativeObject.setSelection(text.length);
+
+                    _hasEventsLocked = false;
+                },
+                enumerable: true,
+                configurable: true
+            },
+
         });
         
         Object.defineProperty(this.android, 'hintTextColor', {
@@ -223,17 +240,23 @@ const TextBox = extend(Label)(
             self.textAlignment = TextAlignment.MIDLEFT;
             self.padding = 0;
             
+            var _oldText = "";
             self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
                 // todo: Control insertedText after resolving story/AND-2508 issue.
                 onTextChanged: function(charSequence, start, before, count){
-                    if(_onTextChanged){
-                        _onTextChanged({
-                            location: Math.abs(start+before),
-                            insertedText: self.text
-                        });
+                    if (!_hasEventsLocked) {
+                        var insertedText = (_oldText.length >= self.text.length)? "": self.text.replace(_oldText,'');
+                        if(_onTextChanged){
+                            _onTextChanged({
+                                location: Math.abs(start+before),
+                                insertedText: insertedText
+                            });
+                        }
                     }
+                }.bind(self),
+                beforeTextChanged: function(charSequence, start, count, after){
+                    _oldText = self.text;
                 },
-                beforeTextChanged: function(charSequence, start, count, after){},
                 afterTextChanged: function(editable){}
             }));
             
