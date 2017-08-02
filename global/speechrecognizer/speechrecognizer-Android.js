@@ -8,7 +8,7 @@ const SpeechRecognizerError = {
     1: RecognizerError.NETWORK_TIMEOUT,
     2: RecognizerError.NETWORK,
     3: RecognizerError.android.AUDIO,
-    4: RecognizerError.android.SERVER,
+    4: RecognizerError.SERVER,
     5: RecognizerError.CLIENT,
     6: RecognizerError.SPEECH_TIMEOUT,
     7: RecognizerError.android.NO_MATCH,
