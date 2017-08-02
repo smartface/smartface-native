@@ -7,37 +7,89 @@ Font.create = function(fontFamily, size, style) {
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.systemFontOfSize(size);
         }else{
-            return __SF_UIFont.fontWithNameSize(fontFamily,size);
+            var font = getFileFont(fontFamily,size,"_n");
+            if (font) {
+                return font;
+            }else{
+                return __SF_UIFont.fontWithNameSize(fontFamily,size);
+            }
         }
     }else if(style === this.BOLD){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.boldSystemFontOfSize(size);
         }else{
-            return __SF_UIFont.fontWithNameSize(fontFamily,size).bold();
+            var font = getFileFont(fontFamily,size,"_b");
+            if (font) {
+                return font;
+            }else{
+                return __SF_UIFont.fontWithNameSize(fontFamily,size).bold();
+            }
         }
     }
     else if(style === this.ITALIC){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.italicSystemFontOfSize(size);
         }else{
-            return __SF_UIFont.fontWithNameSize(fontFamily,size).italic();
+            var font = getFileFont(fontFamily,size,"_i");
+            if (font) {
+                return font;
+            }else{
+                return __SF_UIFont.fontWithNameSize(fontFamily,size).italic();
+            }
         }
     }else if(style === this.BOLD_ITALIC){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.systemFontOfSize(size).boldItalic();
         }else{
-            return __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic(); 
+            var font = getFileFont(fontFamily,size,"_bi");
+            if (font) {
+                return font;
+            }else{
+                return __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic();
+            }
         }
     }else{
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.systemFontOfSize(size);
         }else{
-            return __SF_UIFont.fontWithNameSize(fontFamily,size);
+            var font = getFileFont(fontFamily,size,"_n");
+            if (font) {
+                return font;
+            }else{
+                return __SF_UIFont.fontWithNameSize(fontFamily,size);
+            }
         }
     }
         
 }
+function getFileFont(fontFamily,size,fontSuffix){
+    var convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".ttf";
+    var font = __SF_UIFont.createFromFileWithFilenameStringSize(File.getDocumentsDirectory() + "/" + convertedFontName, size);
+    if (font != __SF_UIFont.systemFontOfSize(size)) {
+        return font;
+    }
     
+    convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".ttf";
+    font = __SF_UIFont.createFromFileWithFilenameStringSize(File.getMainBundleDirectory() + "/" + convertedFontName, size);
+    if (font != __SF_UIFont.systemFontOfSize(size)) {
+        return font;
+    }
+    
+    convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".otf";
+    font = __SF_UIFont.createFromFileWithFilenameStringSize(File.getDocumentsDirectory() + "/" + convertedFontName, size);
+    if (font != __SF_UIFont.systemFontOfSize(size)) {
+        return font;
+    }
+    
+    convertedFontName = fontFamily.split(" ").join(".") + fontSuffix + ".otf";
+    font = __SF_UIFont.createFromFileWithFilenameStringSize(File.getMainBundleDirectory() + "/" + convertedFontName, size);
+    if (font != __SF_UIFont.systemFontOfSize(size)) {
+        return font;
+    }
+    
+    return undefined;
+}
+
 Font.createFromFile = function(path, size) {
     if (!size){
         size = 15;
