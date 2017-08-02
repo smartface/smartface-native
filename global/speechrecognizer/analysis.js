@@ -157,6 +157,16 @@ SpeechRecognizer.Error.SPEECH_TIMEOUT = "SPEECH_TIMEOUT";
  */
 SpeechRecognizer.Error.CLIENT = "CLIENT";
 
+/**
+ * @property {String} SERVER
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 1.1.13
+ */
+SpeechRecognizer.Error.SERVER = "SERVER";
+
 SpeechRecognizer.Error.android = {};
 
 /**
@@ -185,14 +195,5 @@ SpeechRecognizer.Error.android.NO_MATCH = "NO_MATCH";
  * @since 1.1.13
  */
 SpeechRecognizer.Error.android.RECOGNIZER_BUSY = "RECOGNIZER_BUSY";
-
-/**
- * @property {String} SERVER
- * @android
- * @static
- * @readonly
- * @since 1.1.13
- */
-SpeechRecognizer.Error.android.SERVER = "SERVER";
 
 module.exports = SpeechRecognizer;
