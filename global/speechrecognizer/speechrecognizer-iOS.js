@@ -113,6 +113,13 @@ SpeechRecognizer.createRecognizer = function(params){
             
     SpeechRecognizer.avaudiosession = __SF_AVAudioSession.sharedInstance();
     
+    var isOtherAudioPlaying = SpeechRecognizer.avaudiosession.valueForKey("isOtherAudioPlaying");
+
+    if (isOtherAudioPlaying) {
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.NETWORK);
+        return;
+    }
+    
     SpeechRecognizer.avaudiosession.setCategory("AVAudioSessionCategoryRecord",function(e){
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
         return;
