@@ -19,22 +19,15 @@ SpeechRecognizer.start = function(params) {
     
     __SF_SFSpeechRecognizer.speechRequestAuthorization(function(e){
         if(e.status == SFSpeechRecognizerAuthorizationStatus.authorized){
-            
             Hardware.ios.microphone.requestRecordPermission(function(granted){
                 if(granted){
-                    var myTimer = Timer.setTimeout({
-                    task: function(){
-                            __SF_Dispatch.mainAsync(function(){
-                                SpeechRecognizer.createRecognizer(params);
-                            });
-                        },
-                        delay: 200
-                    });
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                            SpeechRecognizer.createRecognizer(params);
+                    },200);
                 }else{
                     SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
                 }
             });
-            
         }else{
            SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.INSUFFICIENT_PERMISSIONS); 
         }
@@ -85,9 +78,19 @@ SpeechRecognizer.createRecognizer = function(params){
     }
     
     if (params.locale) {
-        SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(new __SF_NSLocale(params.locale));    
+        if (isLocaleSupport(new __SF_NSLocale(params.locale))) {
+            SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(new __SF_NSLocale(params.locale)); 
+        }else{
+            SpeechRecognizer.sendError(SpeechRecognizer.Error.SERVER);
+            return;
+        }
     }else{
-        SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale.currentLocale()); 
+        if(isLocaleSupport(__SF_NSLocale.currentLocale())){
+            SpeechRecognizer.speechRecognizer = new __SF_SFSpeechRecognizer(__SF_NSLocale.currentLocale()); 
+        }else{
+            SpeechRecognizer.sendError(SpeechRecognizer.Error.SERVER);
+            return;
+        }
     }
     
     SpeechRecognizer.avaudioengine = new __SF_AVAudioEngine();
@@ -110,15 +113,25 @@ SpeechRecognizer.createRecognizer = function(params){
             
     SpeechRecognizer.avaudiosession = __SF_AVAudioSession.sharedInstance();
     
+    var isOtherAudioPlaying = SpeechRecognizer.avaudiosession.valueForKey("isOtherAudioPlaying");
+
+    if (isOtherAudioPlaying) {
+        SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.NETWORK);
+        return;
+    }
+    
     SpeechRecognizer.avaudiosession.setCategory("AVAudioSessionCategoryRecord",function(e){
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+        return;
     });
     SpeechRecognizer.avaudiosession.setMode("AVAudioSessionModeMeasurement",function(e){
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+        return;
     });
     
     SpeechRecognizer.avaudiosession.setActiveWithOptions(true,1,function(e){
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+        return;
     });
     
     SpeechRecognizer.recognitionRequest = new __SF_SFSpeechAudioBufferRecognitionRequest();
@@ -126,10 +139,12 @@ SpeechRecognizer.createRecognizer = function(params){
     var inputNode = SpeechRecognizer.avaudioengine.inputNode;
     if (!inputNode) {
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+        return;
     }
     
     if (!SpeechRecognizer.recognitionRequest) { 
         SpeechRecognizer.onErrorHandler(SpeechRecognizer.Error.CLIENT);
+        return;
     }
     
     SpeechRecognizer.recognitionRequest.shouldReportPartialResults = true;
@@ -184,13 +199,27 @@ SpeechRecognizer.onErrorHandler = function(error){
     if (!SpeechRecognizer.speechRecognizer) {
         return;
     }
-    
     SpeechRecognizer.stop();
-    
+    SpeechRecognizer.sendError(error);
+}
+
+SpeechRecognizer.sendError = function(error){
     if (typeof SpeechRecognizer.onError === 'function') {
         SpeechRecognizer.onError(error);
     }
-    
+}
+
+function isLocaleSupport(locale){
+    var supportedArray = __SF_SFSpeechRecognizer.supportedLocalesToArray();
+    var filtered = supportedArray.filter(function (obj, index, arr) {
+        var identifier = obj.identifier.replace(/-/g, "_");
+        return (identifier == locale.identifier);
+    });
+    if(filtered.length > 0){   
+        return true;
+    }else{
+        return false;
+    }
 }
 
 SpeechRecognizer.Error = require("./error");

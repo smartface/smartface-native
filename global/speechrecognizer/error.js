@@ -23,6 +23,10 @@ Object.defineProperties(Error, {
     'CLIENT': {
         value: "CLIENT",
         configurable: false
+    },
+    'SERVER': {
+        value: "SERVER",
+        configurable: false
     }
 });
 
@@ -37,10 +41,6 @@ Object.defineProperties(Error.android, {
     },
     'RECOGNIZER_BUSY': {
         value: "RECOGNIZER_BUSY",
-        configurable: false
-    },
-    'SERVER': {
-        value: "SERVER",
         configurable: false
     }
 });
