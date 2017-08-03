@@ -106,4 +106,26 @@ Object.defineProperty(SFApplication, 'version', {
 // }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+const EmulatorResetState = {
+    scan : 0,
+    update : 1,
+    clear : 2
+}
+
+Application.emulator = {};
+Application.emulator.globalObjectWillReset = function(state) {
+    
+    switch (state) {
+        case EmulatorResetState.scan :
+            break;
+        case EmulatorResetState.update :
+            break;
+        case EmulatorResetState.clear :
+            require("sf-core/global/data").removeAllVariables();
+            break;
+        default:
+            break;
+    }
+};
+
 module.exports = SFApplication;
