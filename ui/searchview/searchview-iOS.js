@@ -167,20 +167,20 @@ const SearchView = extend(View)(
         // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
         Object.defineProperty(this.ios, 'cursorColor', {
             get: function() {
-                // return new Color({color : self.textfield.valueForKey("tintColor")});
+                return new Color({color : self.textfield.valueForKey("tintColor")});
             },
             set: function(color) {
-                // self.textfield.setValueForKey(color.nativeObject,"tintColor");
+                self.textfield.setValueForKey(color.nativeObject,"tintColor");
             },
             enumerable: true
         });
         
         Object.defineProperty(this.ios, 'cancelButtonColor', {
             get: function() {
-                // return new Color({color : self.nativeObject.valueForKey("tintColor")});
+                return new Color({color : self.nativeObject.valueForKey("tintColor")});
             },
             set: function(color) {
-                // self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
+                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
             },
             enumerable: true
         });
