@@ -300,6 +300,8 @@ Application.onReceivedNotification = function(data){};
 
 /**
  * Triggered when application is called by another application.
+ * For Android this will be triggered when application started from System Launcher. For this reason,
+ * if data does not contains key that you can handle, you should ignore this call. 
  * 
  * @event onApplicationCallReceived
  * @param {Object} e 
@@ -317,6 +319,7 @@ Application.onReceivedNotification = function(data){};
  * @ios
  * @static
  * @since 1.1.13
+ * @see https://developer.android.com/training/sharing/receive.html
  */
 Application.onApplicationCallReceived = function(e){};
 
