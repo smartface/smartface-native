@@ -130,7 +130,6 @@ function FloatingMenu(params) {
                 return _color;
             },
             set: function(color) {
-                console.log("Color.nativeObject " + color.nativeObject );
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
                                                         // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
