@@ -188,7 +188,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
 
 function pop(){
     var fragmentManager = activity.getSupportFragmentManager();
-    if(fragmentManager.getBackStackEntryCount() > 0){
+    if(int(fragmentManager.getBackStackEntryCount()) > 0){
         return fragmentManager.popBackStackImmediate();
     }
     return false;
