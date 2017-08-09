@@ -179,7 +179,9 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    var result = fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(tag);
+    // Following line should be opened and following line should be removed
+    // fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(string(tag));
+    fragmentTransaction.replace(rootViewId, page.nativeObject).addToBackStack(string(tag));
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }
