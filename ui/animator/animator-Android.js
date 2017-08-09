@@ -32,7 +32,7 @@ function Animator(params) {
                 transitionSet.addTransition(autoTransition);
                 transitionSet.addTransition(alphaTransition);
                 transitionSet.addTransition(rotateTransition);
-                transitionSet.setDuration(_duration);
+                transitionSet.setDuration(long(_duration));
                 transitionSet.addListener(NativeTransition.TransitionListener.implement({
                     onTransitionStart:  function(transition) {},
                     onTransitionCancel: function(transition) {},
@@ -84,11 +84,11 @@ function applyLayoutInners(rootLayout) {
 }
 
 function addInnerNativeViewGroups(viewGroup, viewGroups) {
-    var viewGroupClass = NativeClass.forName("android.view.ViewGroup");
-    for (var i = 0; i < viewGroup.getChildCount(); i++) {
-        var innerView = viewGroup.getChildAt(i);
+    var viewGroupClass = requireClass("android.view.ViewGroup");
+    for (var i = 0; i < int(viewGroup.getChildCount()); i++) {
+        var innerView = viewGroup.getChildAt(int(i));
         var innerClass = innerView.getClass();
-        if(viewGroupClass.isAssignableFrom(innerClass)) {
+        if(bool(viewGroupClass.isAssignableFrom(innerClass))) {
             addInnerNativeViewGroups(innerView, viewGroups);
             viewGroups.push(innerView);
         }

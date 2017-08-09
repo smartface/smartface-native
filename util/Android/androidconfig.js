@@ -25,7 +25,7 @@ AndroidConfig.getClass = function(className){
         return classesCache[className];
     }
     const NativeClass = requireClass('java.lang.Class');
-    classesCache[className] = NativeClass.forName(className);
+    classesCache[className] = NativeClass.forName(string(className));
     return classesCache[className];
 }
 
@@ -36,7 +36,7 @@ AndroidConfig.getSystemService = function(serviceName, serviceClassName){
             servicesCache[serviceName] = activity.getSystemService(serviceClass);
         }
         else{
-            servicesCache[serviceName] = activity.getSystemService(serviceName);
+            servicesCache[serviceName] = activity.getSystemService(string(serviceName));
         }
     }
     return servicesCache[serviceName];

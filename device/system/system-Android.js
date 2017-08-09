@@ -125,10 +125,10 @@ Object.defineProperties(System, {
                 });
                 
                 if(TypeUtil.isString(params.message)){
-                    fragment.setMessage(params.message);
+                    fragment.setMessage(string(params.message));
                 }
                 if(TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
-                    fragment.setTitle(params.android.title);
+                    fragment.setTitle(string(params.android.title));
                 }
                 
                 fragment.addFingerPrintListener(listeners);

@@ -347,10 +347,10 @@ function Page(params) {
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                toolbar.setTitle(text);
+                toolbar.setTitle(string(text));
             }
             else {
-                toolbar.setTitle("");
+                toolbar.setTitle(string(""));
             }
         },
         enumerable: true, configurable: true

@@ -41,13 +41,13 @@ function Image (params) {
     Object.defineProperties(this, {
         'height': {
             get: function() {
-                return self.nativeObject.getBitmap().getHeight();
+                return int(self.nativeObject.getBitmap().getHeight());
             }, 
             enumerable: true
         },
         'width': {
             get: function() {
-                return self.nativeObject.getBitmap().getWidth();
+                return int(self.nativeObject.getBitmap().getWidth());
             }, 
             enumerable: true
         },

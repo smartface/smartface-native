@@ -14,7 +14,7 @@ const ListView = extend(View)(
     function (_super, params) {
 
         var self = this;
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
         
         if(!this.nativeObject){
             this.nativeObject = new NativeSwipeRefreshLayout(activity);
@@ -104,22 +104,22 @@ const ListView = extend(View)(
             },
             'verticalScrollBarEnabled': {
                 get: function() {
-                    return this.nativeInner.isVerticalScrollBarEnabled();
+                    return bool(this.nativeInner.isVerticalScrollBarEnabled());
                 },
                 set: function(verticalScrollBarEnabled) {
                     if(TypeUtil.isBoolean(verticalScrollBarEnabled)){
-                        this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+                        this.nativeInner.setVerticalScrollBarEnabled(bool(verticalScrollBarEnabled));
                     }
                 },
                 enumerable: true
             },
             'refreshEnabled': {
                 get: function() {
-                    return this.nativeObject.isEnabled();
+                    return bool(this.nativeObject.isEnabled());
                 },
                 set: function(refreshEnabled) {
                     if(TypeUtil.isBoolean(refreshEnabled)){
-                        this.nativeObject.setEnabled(refreshEnabled);
+                        this.nativeObject.setEnabled(bool(refreshEnabled));
                     }
                 },
                 enumerable: true
@@ -127,19 +127,19 @@ const ListView = extend(View)(
             //methods
             'getLastVisibleIndex': {
                 value: function(colors) {
-                    return this.nativeInner.getLayoutManager().findLastVisibleItemPosition();
+                    return int(this.nativeInner.getLayoutManager().findLastVisibleItemPosition());
                 },
                 enumerable: true
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    return this.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
+                    return int(this.nativeInner.getLayoutManager().findFirstVisibleItemPosition());
                 },
                 enumerable: true
             },
             'scrollTo': {
                 value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                    this.nativeInner.smoothScrollToPosition(int(index));
                 },
                 enumerable: true
             },
@@ -158,7 +158,7 @@ const ListView = extend(View)(
             },
             'stopRefresh': {
                 value: function() {
-                    this.nativeObject.setRefreshing(false);
+                    this.nativeObject.setRefreshing(bool(false));
                 },
                 enumerable: true
             },
@@ -223,7 +223,7 @@ const ListView = extend(View)(
             }
         });
 
-        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
+        var onScrollListener = NativeRecyclerView.OnScrollListener.extend(string("SFScrollListener"),{
             onScrolled : function(recyclerView, dx, dy){
                     _onScroll && _onScroll();
                 },
@@ -267,7 +267,7 @@ function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
         var _childViews = {};
         
         Object.keys(jsView.childViews).forEach(function(key){
-            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, jsView);
+            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(int(parseInt(key))), null, jsView);
         });
         jsView.childViews = _childViews;
     }

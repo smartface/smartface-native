@@ -121,14 +121,14 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
     if(_sliderDrawer){
         if(isLocked){
             // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            mDrawerLayout.setDrawerLockMode(1);
+            mDrawerLayout.setDrawerLockMode(int(1));
             if(Pages.isSliderDrawerOpen){
                 Pages.hideSliderDrawer();
             }
         }
         else{
             // DrawerLayout.LOCK_MODE_UNLOCKED
-            mDrawerLayout.setDrawerLockMode(0);
+            mDrawerLayout.setDrawerLockMode(int(0));
         }
     }
 }
@@ -138,11 +138,11 @@ function isSliderDrawerOpen(_sliderDrawer) {
         const SliderDrawer = require('sf-core/ui/sliderdrawer');
         if(_sliderDrawer.position === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
-            return mDrawerLayout.isDrawerOpen(5);
+            return mDrawerLayout.isDrawerOpen(int(5));
         }
         else{
             // Gravity.LEFT
-            return mDrawerLayout.isDrawerOpen(3);
+            return mDrawerLayout.isDrawerOpen(int(3));
         }
     }
     return false;
@@ -179,7 +179,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
+    var result = fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(tag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }

@@ -56,9 +56,9 @@ Object.defineProperties(Network, {
             if (activeInternet === null) {
                 return Network.ConnectionType.None;
             } else {
-                if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
+                if (int(activeInternet.getType()) === int(NativeConnectivityManager.TYPE_WIFI)) {
                     return Network.ConnectionType.WIFI;
-                } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
+                } else if (int(activeInternet.getType()) === int(NativeConnectivityManager.TYPE_MOBILE)) {
                     return Network.ConnectionType.Mobile;
                 } else {
                     return Network.ConnectionType.None;

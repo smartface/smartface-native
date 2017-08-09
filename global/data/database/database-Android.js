@@ -1,13 +1,10 @@
 /* global requireClass*/
 const File                  = require('sf-core/io/file');
-const FileStream            = require('sf-core/io/filestream');
 const Path                  = require('sf-core/io/path');
 
 const NativeSQLiteDatabase      = requireClass('android.database.sqlite.SQLiteDatabase');
-const NativeSQLiteOpenHelper    = requireClass('android.database.sqlite.SQLiteOpenHelper');
 
 function Database(params){
-    var activity = Android.getActivity();
     this.nativeObject = null;
     
     var _file = params.file;
@@ -58,7 +55,7 @@ function Database(params){
         'execute': {
             value: function(sqlCommand){
                 if(typeof sqlCommand === 'string'){
-                    this.nativeObject.execSQL(sqlCommand);
+                    this.nativeObject.execSQL(string(sqlCommand));
                 }
             },
             enumarable: true
@@ -68,7 +65,7 @@ function Database(params){
                 if(typeof sqlCommand === 'string'){
                     return new Database.QueryResult({
                         'isInternal': true,
-                        'cursor': this.nativeObject.rawQuery(sqlCommand, null)
+                        'cursor': this.nativeObject.rawQuery(string(sqlCommand), null)
                     });
                     
                 }
@@ -93,7 +90,7 @@ Database.QueryResult = function(params){
     Object.defineProperties(this,{
         'count': {
             value: function(){
-                return this.nativeObject.getCount();
+                return int(this.nativeObject.getCount());
             }
         },
         'getFirst': {
@@ -143,9 +140,9 @@ Database.DatabaseObject = function(params){
         'getString': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = this.nativeObject.getColumnIndex(columnName);
+                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
                     if(index != -1){
-                        return this.nativeObject.getString(index);
+                        return string(this.nativeObject.getString(int(index)));
                     }
                     return null;
                 }
@@ -158,9 +155,9 @@ Database.DatabaseObject = function(params){
         'getInteger': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = this.nativeObject.getColumnIndex(columnName);
+                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
                     if(index != -1){
-                        return this.nativeObject.getInt(index);
+                        return int(this.nativeObject.getInt(int(index)));
                     }
                     return null;
                 }
@@ -173,9 +170,9 @@ Database.DatabaseObject = function(params){
         'getBoolean': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = this.nativeObject.getColumnIndex(columnName);
+                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
                     if(index != -1){
-                        return this.nativeObject.getBoolean(index);
+                        return bool(this.nativeObject.getBoolean(int(index)));
                     }
                     return null;
                 }
@@ -188,9 +185,9 @@ Database.DatabaseObject = function(params){
         'getFloat': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = this.nativeObject.getColumnIndex(columnName);
+                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
                     if(index != -1){
-                        return this.nativeObject.getFloat(index);
+                        return float(this.nativeObject.getFloat(int(index)));
                     }
                     return null;
                 }

@@ -7,9 +7,9 @@ const SliderDrawer = extend(FlexLayout)(
     function (_super, params) {
         _super(this);
         
-        var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
+        var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (int(-1), int(-1));
         // Gravity.LEFT
-        drawerLayoutParams.gravity = 3;
+        drawerLayoutParams.gravity = int(3);
         
         var _position;
         var _onShow;
@@ -34,11 +34,11 @@ const SliderDrawer = extend(FlexLayout)(
                     _position = position;
                     if(position === SliderDrawer.Position.RIGHT){
                         // Gravity.RIGHT
-                        drawerLayoutParams.gravity = 5;
+                        drawerLayoutParams.gravity = int(5);
                     }
                     else{
                         // Gravity.LEFT
-                        drawerLayoutParams.gravity = 3;
+                        drawerLayoutParams.gravity = int(3);
                     }
                     this.nativeObject.setLayoutParams (drawerLayoutParams);
                 },
@@ -113,10 +113,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'height': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.height);
+                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.height));
                 },
                 set: function(height) {
-                    drawerLayoutParams.height = AndroidUnitConverter.dpToPixel(height);
+                    drawerLayoutParams.height = int(AndroidUnitConverter.dpToPixel(height));
                 },
                 enumerable: true,
                 configurable: true
@@ -124,10 +124,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'width': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.width);
+                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.width));
                 },
                 set: function(width) {
-                    drawerLayoutParams.width = AndroidUnitConverter.dpToPixel(width);
+                    drawerLayoutParams.width = int(AndroidUnitConverter.dpToPixel(width));
                 },
                 enumerable: true,
                 configurable: true
@@ -164,7 +164,7 @@ const SliderDrawer = extend(FlexLayout)(
             // setting default values
             this.width = 200;
             this.nativeObject.setLayoutParams (drawerLayoutParams);
-            this.nativeObject.setFitsSystemWindows(true);
+            this.nativeObject.setFitsSystemWindows(bool(true));
         }
         
         

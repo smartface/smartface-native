@@ -58,7 +58,7 @@ const NativeActionKeyType = [
 const TextBox = extend(Label)(
     function (_super, params) {
         var self = this;
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
         if(!self.nativeObject){
             self.nativeObject = new NativeEditText(activity);
         }
@@ -75,10 +75,10 @@ const TextBox = extend(Label)(
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
-                    return self.nativeObject.getHint();
+                    return string(self.nativeObject.getHint());
                 },
                 set: function(hint) {
-                    self.nativeObject.setHint(hint);
+                    self.nativeObject.setHint(string(hint));
                 },
                 enumerable: true,
                 configurable: true
@@ -119,8 +119,8 @@ const TextBox = extend(Label)(
                     return _actionKeyType;
                 },
                 set: function(actionKeyType) {
-                    _actionKeyType = actionKeyType; 
-                    self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
+                    _actionKeyType = actionKeyType;
+                    self.nativeObject.setImeOptions(int(NativeActionKeyType[_actionKeyType]));
                 },
                 enumerable: true,
                 configurable: true
@@ -142,7 +142,7 @@ const TextBox = extend(Label)(
                     this.nativeObject.requestFocus();
                     // Due to the requirements we should show keyboard when focus requested.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    inputMethodManager.toggleSoftInput(int(SHOW_FORCED), int(HIDE_IMPLICIT_ONLY));
                 },
                 enumerable: true
             },
@@ -152,7 +152,7 @@ const TextBox = extend(Label)(
                     // Due to the requirements we should hide keyboard when focus cleared.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
+                    inputMethodManager.hideSoftInputFromWindow(windowToken, int(0));
                 },
                 enumerable: true
             },
@@ -234,7 +234,7 @@ const TextBox = extend(Label)(
         if(!this.isNotSetDefaults){
             // Don't use self.multiline = false due to AND-2725 bug.
             // setMovementMethod in label-Android.js file removes the textbox cursor. 
-            self.nativeObject.setSingleLine(true);
+            self.nativeObject.setSingleLine(bool(true));
             
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
@@ -320,7 +320,7 @@ const TextBox = extend(Label)(
 );
 
 function setKeyboardType(self){
-    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
+    self.nativeObject.setInputType(int(NativeKeyboardType[self.keyboardType]));
     
     if(self.isPassword){
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');

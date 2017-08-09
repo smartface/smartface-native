@@ -1,6 +1,6 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
-//const RAU = require("./RAU");
+// const RAU = require("./RAU");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 
 function ApplicationWrapper() {}
