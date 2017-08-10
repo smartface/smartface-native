@@ -486,7 +486,7 @@ View.prototype.android.elevation;
  *
  * @property {Boolean} [masksToBounds = true]
  * @ios
- * @since 1.1.14
+ * @since 1.1.15
  */
 View.prototype.ios.masksToBounds = 0;
 
@@ -495,7 +495,7 @@ View.prototype.ios.masksToBounds = 0;
  *
  * @property {Boolean} [clipsToBounds = false]
  * @ios
- * @since 1.1.14
+ * @since 1.1.15
  */
 View.prototype.ios.clipsToBounds = 0;
 
