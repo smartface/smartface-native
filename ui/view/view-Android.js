@@ -581,7 +581,7 @@ function View(params) {
                 const ScrollView = require("sf-core/ui/scrollview");
                 if(self.parent instanceof ScrollView && self.parent.align === ScrollView.Align.HORIZONTAL){
                     var layoutParams = self.nativeObject.getLayoutParams();
-                    layoutParams && (layoutParams.height = -2);
+                    layoutParams && (layoutParams.height = float(-2));
                 }
             },
             enumerable: true,

@@ -2,7 +2,7 @@ const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
 const FlexLayout            = require('sf-core/ui/flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
-const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout'); 
+const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
 
 const ListViewItem = extend(FlexLayout)(
     function (_super, params) {
@@ -13,8 +13,8 @@ const ListViewItem = extend(FlexLayout)(
                 this.nativeInner = params.nativeInner;
             }
             else{
-                this.nativeInner = NativeRecyclerView.ViewHolder.extend("SFViewHolder",{},[this.nativeObject]);
-                this.nativeInner.itemView = this.nativeObject;
+                this.nativeInner = NativeRecyclerView.ViewHolder.extend(string("SFViewHolder"),{},[this.nativeObject]);
+                // this.nativeInner.itemView = this.nativeObject;
             }
         }
 
@@ -22,10 +22,10 @@ const ListViewItem = extend(FlexLayout)(
             // Added due to problem in row height for RecyclerView
             'height': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
+                    return AndroidUnitConverter.pixelToDp(int(this.nativeObject.getLayoutParams().height));
                 },
                 set: function(height) {
-                    this.nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(height);
+                    this.nativeObject.getLayoutParams().height = int(AndroidUnitConverter.dpToPixel(height));
                 },
                 enumerable: true,
                 configurable: true
@@ -33,10 +33,10 @@ const ListViewItem = extend(FlexLayout)(
             // Added due to problem in row width for RecyclerView
             'width': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
+                    return AndroidUnitConverter.pixelToDp(int(this.nativeObject.getLayoutParams().width));
                 },
                 set: function(width) {
-                    this.nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(width);
+                    this.nativeObject.getLayoutParams().width = int(AndroidUnitConverter.dpToPixel(width));
                 },
                 enumerable: true,
                 configurable: true
@@ -51,7 +51,7 @@ const ListViewItem = extend(FlexLayout)(
         });
 
         if(!this.isNotSetDefaults){
-            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
+            var layoutParams = new NativeYogaLayout.LayoutParams(int(-1),int(-2));
             this.nativeObject.setLayoutParams(layoutParams);
         }
         if (params) {

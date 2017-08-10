@@ -38,7 +38,7 @@ const ListView = extend(View)(
         _super(this);
 
         var holderViewLayout;
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
+        var dataAdapter = NativeRecyclerView.Adapter.extend(string("SFAdapter"),{
             onCreateViewHolder: function(parent,viewType){
                 try{
                     holderViewLayout = _onRowCreate();
@@ -65,7 +65,7 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
-                return _itemCount;
+                return int(_itemCount);
             }
         },null);
 
