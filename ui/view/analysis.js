@@ -481,4 +481,22 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
  */
 View.prototype.android.elevation;
 
+/**
+ * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
+ *
+ * @property {Boolean} [masksToBounds = true]
+ * @ios
+ * @since 1.1.15
+ */
+View.prototype.ios.masksToBounds = 0;
+
+/**
+ * A Boolean value that determines whether subviews are confined to the bounds of the view.
+ *
+ * @property {Boolean} [clipsToBounds = false]
+ * @ios
+ * @since 1.1.15
+ */
+View.prototype.ios.clipsToBounds = 0;
+
 module.exports = View;
