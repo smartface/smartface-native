@@ -14,7 +14,7 @@ const ListViewItem = extend(FlexLayout)(
             }
             else{
                 this.nativeInner = NativeRecyclerView.ViewHolder.extend(string("SFViewHolder"),{},[this.nativeObject]);
-                // this.nativeInner.itemView = this.nativeObject;
+                this.nativeInner.itemView = this.nativeObject;
             }
         }
 
