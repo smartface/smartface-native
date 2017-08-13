@@ -98,7 +98,7 @@ const Label = extend(View)(
                         this.fontInitial = font;
                         this.nativeObject.setTypeface(font.nativeObject);
                         if(font.size && TypeUtil.isNumeric(font.size))
-                          this.nativeObject.setTextSize(int(font.size));
+                          this.nativeObject.setTextSize(float(font.size));
                         }
                 },
                 enumerable: true

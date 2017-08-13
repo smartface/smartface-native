@@ -18,7 +18,19 @@ const ListViewItem = extend(FlexLayout)(
             }
         }
 
-        Object.defineProperties(this, {
+        if(!this.isNotSetDefaults){
+            var layoutParams = new NativeYogaLayout.LayoutParams(int(-1),int(-2));
+            this.nativeObject.setLayoutParams(layoutParams);
+        }
+
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(listViewItemPrototype) {
+        Object.defineProperties(listViewItemPrototype, {
             // Added due to problem in row height for RecyclerView
             'height': {
                 get: function() {
@@ -49,16 +61,6 @@ const ListViewItem = extend(FlexLayout)(
                 configurable: true
             }
         });
-
-        if(!this.isNotSetDefaults){
-            var layoutParams = new NativeYogaLayout.LayoutParams(int(-1),int(-2));
-            this.nativeObject.setLayoutParams(layoutParams);
-        }
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
     }
 );
 
