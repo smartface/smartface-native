@@ -1,21 +1,34 @@
+/*globals requireClass,string*/
 const extend            = require('js-base/core/extend');
 const AndroidConfig     = require("sf-core/util/Android/androidconfig");
 const View              = require('../view');
 const TypeUtil          = require("sf-core/util/type");
 const Image             = require("sf-core/ui/image");
 const NativeImageView   = requireClass("android.widget.ImageView");
+const activity          = AndroidConfig.activity;
 
 const ImageView = extend(View)(
     function (_super, params) {
-        var activity = AndroidConfig.activity;
-        
         if (!this.nativeObject) {
             this.nativeObject = new NativeImageView(activity);
         }
         _super(this);
-        
-        var _fillType; // native does not store ImageFillType but ScaleType
-        Object.defineProperties(this, {
+
+        if(!this.isNotSetDefaults){
+            // SET DEFAULTS
+            this.imageFillType = ImageView.FillType.NORMAL;
+        }
+
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(imageViewPrototype) {
+        imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
+        Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
                     var drawable =  this.nativeObject.getDrawable();
@@ -33,51 +46,34 @@ const ImageView = extend(View)(
             },
             'imageFillType': {
                 get: function() {
-                    return _fillType;
+                    return this._fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)){
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    _fillType = fillType
-                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
+                    this._fillType = fillType
+                    this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
                 },
                 enumerable: true
-            },
-            'loadFromUrl': {
-                value: function(url, placeHolder){
-                    const NativePicasso = requireClass("com.squareup.picasso.Picasso");
-                    if(TypeUtil.isString(url)){
-                        if(placeHolder instanceof Image){
-                            NativePicasso.with(activity).load(string(url)).placeholder(placeHolder.nativeObject).into(this.nativeObject);
-                        }
-                        else{
-                             NativePicasso.with(activity).load(string(url)).into(this.nativeObject);
-                        }
-                    }
-                },
-                enumerable: true
-            },
-            'toString': {
-                value: function(){
-                    return 'ImageView';
-                },
-                enumerable: true, 
-                configurable: true
             }
         });
-
-        if(!this.isNotSetDefaults){
-            // SET DEFAULTS
-            this.imageFillType = ImageView.FillType.NORMAL;
-        }
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
+        
+        imageViewPrototype.toString = function() {
+            return 'ImageView';
+        };
+        
+        imageViewPrototype.loadFromUrl = function(url, placeHolder){
+            const NativePicasso = requireClass("com.squareup.picasso.Picasso");
+            if(TypeUtil.isString(url)){
+                if(placeHolder instanceof Image){
+                    NativePicasso.with(activity).load(string(url)).placeholder(placeHolder.nativeObject).into(this.nativeObject);
+                }
+                else{
+                     NativePicasso.with(activity).load(string(url)).into(this.nativeObject);
+                }
             }
-        }
+        };
     }
 );
 
