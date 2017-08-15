@@ -6,6 +6,8 @@ function View(params) {
 
     var self = this;
 
+    self.android = {};
+    
     self.uniqueId = guid();
 
     if(!self.nativeObject){

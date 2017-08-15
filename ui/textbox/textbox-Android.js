@@ -1,4 +1,5 @@
 const Label             = require('../label');
+const TypeUtil             = require('sf-core/util/type');
 const Color             = require('../color');
 const extend            = require('js-base/core/extend');
 const KeyboardType      = require('../keyboardtype');
@@ -20,32 +21,34 @@ const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
 const HIDE_IMPLICIT_ONLY = 1;
 
-const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
-    2,              //InputType.TYPE_CLASS_NUMBER
-    2 | 8192,       // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-    3,              // InputType.TYPE_CLASS_PHONE
-    1 | 16,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI
-    1,              // InputType.TYPE_CLASS_TEXT
-    1,              // InputType.TYPE_CLASS_TEXT
-    4,              // InputType.TYPE_CLASS_DATETIME
-    2 | 4096,       // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
-    2 | 8192 | 4096,// InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED 
-    1 | 65536,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
-    1 | 32768,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-    1 | 4096,       // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
-    1 | 16384,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-    1 | 8192,       // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS
-    1 | 48,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT
-    1 | 80,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE
-    1 | 524288,     // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-    1 | 96,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-    1 | 64,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE
-    4 | 32,         // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
-    1 | 32          // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+const NativeKeyboardType = [
+    1,				// TYPE_CLASS_TEXT															
+    2,				// TYPE_CLASS_NUMBER														
+    2 | 8192,		// TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL								
+    3,				// TYPE_CLASS_PHONE															
+    1 | 16,	    	// TYPE_TEXT_VARIATION_URI													
+    1,				// TYPE_CLASS_TEXT															
+    160,			// TYPE_TEXT_VARIATION_WEB_EDIT_TEXT										
+    4,				// TYPE_CLASS_DATETIME														
+    2 | 4096,		// TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_SIGNED								
+    2 | 8192 | 4096,// TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL | TYPE_NUMBER_FLAG_SIGNED	
+    1 | 65536,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_COMPLETE							
+    1 | 32768,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_CORRECT							
+    1 | 4096,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_CHARACTERS							
+    1 | 16384,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_SENTENCES							
+    1 | 8192,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_WORDS								
+    1 | 48,			// TYPE_TEXT_VARIATION_EMAIL_SUBJECT										
+    1 | 80,			// TYPE_TEXT_VARIATION_LONG_MESSAGE											
+    1 | 524288,		// TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_NO_SUGGESTIONS							
+    1 | 96,			// TYPE_TEXT_VARIATION_PERSON_NAME											
+    1 | 64,			// TYPE_TEXT_VARIATION_SHORT_MESSAGE										
+    4 | 32,			// TYPE_DATETIME_VARIATION_TIME												
+    1 | 32,		    // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
 ]
 
 // NativeActionKeyType corresponds android action key type.
-const NativeActionKeyType = [6, // EditorInfo.IME_ACTION_DONE
+const NativeActionKeyType = [
+    6, // EditorInfo.IME_ACTION_DONE
     5, // EditorInfo.IME_ACTION_NEXT
     2, // EditorInfo.IME_ACTION_GO
     3, // EditorInfo.IME_ACTION_SEARCH
@@ -68,6 +71,7 @@ const TextBox = extend(Label)(
         var _onEditBegins;
         var _onEditEnds;
         var _onActionButtonPress;
+        var _hasEventsLocked = false;
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
@@ -99,7 +103,7 @@ const TextBox = extend(Label)(
                     return _keyboardType;
                 },
                 set: function(keyboardType) {
-                    if(NativeKeyboardType.indexOf(keyboardType) === -1){
+                    if(!TypeUtil.isNumeric(NativeKeyboardType[keyboardType])){
                         _keyboardType = KeyboardType.DEFAULT;
                     }
                     else{
@@ -195,7 +199,23 @@ const TextBox = extend(Label)(
                 },
                 enumerable: true,
                 configurable: true
-            }
+            },
+            'text': {
+                get: function() {
+                    return self.nativeObject.getText();
+                },
+                set: function(text) {
+                    _hasEventsLocked = true;
+
+                    self.nativeObject.setText("" + text);
+                    self.nativeObject.setSelection(text.length);
+
+                    _hasEventsLocked = false;
+                },
+                enumerable: true,
+                configurable: true
+            },
+
         });
         
         Object.defineProperty(this.android, 'hintTextColor', {
@@ -220,17 +240,23 @@ const TextBox = extend(Label)(
             self.textAlignment = TextAlignment.MIDLEFT;
             self.padding = 0;
             
+            var _oldText = "";
             self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
                 // todo: Control insertedText after resolving story/AND-2508 issue.
                 onTextChanged: function(charSequence, start, before, count){
-                    if(_onTextChanged){
-                        _onTextChanged({
-                            location: Math.abs(start+before),
-                            insertedText: self.text
-                        });
+                    if (!_hasEventsLocked) {
+                        var insertedText = (_oldText.length >= self.text.length)? "": self.text.replace(_oldText,'');
+                        if(_onTextChanged){
+                            _onTextChanged({
+                                location: Math.abs(start+before),
+                                insertedText: insertedText
+                            });
+                        }
                     }
+                }.bind(self),
+                beforeTextChanged: function(charSequence, start, count, after){
+                    _oldText = self.text;
                 },
-                beforeTextChanged: function(charSequence, start, count, after){},
                 afterTextChanged: function(editable){}
             }));
             
@@ -241,8 +267,9 @@ const TextBox = extend(Label)(
                     }
                     else {
                         _onEditEnds && _onEditEnds();
+                        this.nativeObject.setSelection(0,0);
                     }
-                }
+                }.bind(this)
             }));
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({

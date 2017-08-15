@@ -120,7 +120,8 @@ const Label = extend(View)(
                 set: function(text) {
                     self.nativeObject.setText("" + text);
                 },
-                enumerable: true
+                enumerable: true,
+                configurable: true
             },
             'textAlignment': {
                 get: function() {

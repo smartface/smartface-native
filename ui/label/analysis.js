@@ -138,7 +138,7 @@ Label.prototype.textColor = UI.Color.BLACK;
 Label.prototype.ios.showScrollBar = false;
 
 /**
- * Enable/Disable scroll bar when text is too long.
+ * Enable/Disable scroll bar when text is too long. If this property is "false", text alignment mid and bottom doesn't work for label.
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios

@@ -130,7 +130,8 @@ function FloatingMenu(params) {
                 return _color;
             },
             set: function(color) {
-                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
+                                                        // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
                 } else {
                     throw new Error("Provide floatingMenu's color with a UI.Color.");

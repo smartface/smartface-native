@@ -1,6 +1,7 @@
 const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
 const TypeUtil                  = require("sf-core/util/type");
 const Color                     = require("sf-core/ui/color");
+const AndroidConfig             = require("sf-core/util/Android/androidconfig");
 const NativeR                   = requireClass("android.R");
 const NativeView                = requireClass("android.view.View");
 const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
@@ -333,6 +334,9 @@ function View(params) {
             },
             set: function(value){
                 NativeViewCompat.setElevation(self.nativeObject, value);
+                if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
+                    self.nativeObject.setStateListAnimator(null);
+                }
             },
             enumerable: true,
             configurable: true

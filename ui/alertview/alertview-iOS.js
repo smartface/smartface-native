@@ -35,6 +35,9 @@ function AlertView (params) {
     this.nativeObject = new __SF_UIAlertView(delegate);
     self.nativeObject.title = "";
     
+    // Handling android specific properties
+    self.android = {};
+
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {
