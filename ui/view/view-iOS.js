@@ -7,6 +7,7 @@ function View(params) {
     var self = this;
 
     self.android = {};
+    self.ios = {};
     
     self.uniqueId = guid();
 
@@ -17,7 +18,27 @@ function View(params) {
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
-
+    
+    Object.defineProperty(self.ios, 'masksToBounds', {
+        get: function() {
+            return self.nativeObject.layer.masksToBounds;
+        },
+        set: function(value) {
+            self.nativeObject.layer.masksToBounds = value;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.ios, 'clipsToBounds', {
+        get: function() {
+            return self.nativeObject.valueForKey("clipsToBounds");
+        },
+        set: function(value) {
+            self.nativeObject.setValueForKey(value,"clipsToBounds");
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self, 'borderColor', {
         get: function() {
             return new Color({color : self.nativeObject.layer.borderUIColor});
