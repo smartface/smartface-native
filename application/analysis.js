@@ -350,9 +350,12 @@ Application.android.onRequestPermissionsResult = function(e){}
  */
 Application.onUnhandledError = function(error){};
 
+
+
 /** 
- * @enum Application.android.Permissions 
- * @since 1.2
+ * @enum Application.Android.Permissions 
+ * @deprecated
+ * @since 1.1.2
  * 
  * Permission enum for Application.
  * Permission managements should be developed OS specific in the applications.
@@ -365,7 +368,8 @@ Application.android.Permissions = {};
  * @property READ_CALENDAR
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_CALENDAR;
 
@@ -375,7 +379,8 @@ Application.android.Permissions.READ_CALENDAR;
  * @property WRITE_CALENDAR
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.WRITE_CALENDAR;
 
@@ -385,7 +390,8 @@ Application.android.Permissions.WRITE_CALENDAR;
  * @property CAMERA
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.CAMERA;
 
@@ -395,7 +401,8 @@ Application.android.Permissions.CAMERA;
  * @property READ_CONTACTS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated 
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_CONTACTS;
 
@@ -405,7 +412,8 @@ Application.android.Permissions.READ_CONTACTS;
  * @property WRITE_CONTACTS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.WRITE_CONTACTS;
 
@@ -415,7 +423,8 @@ Application.android.Permissions.WRITE_CONTACTS;
  * @property GET_ACCOUNTS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.GET_ACCOUNTS;
 
@@ -425,7 +434,8 @@ Application.android.Permissions.GET_ACCOUNTS;
  * @property ACCESS_FINE_LOCATION
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.ACCESS_FINE_LOCATION;
 
@@ -435,7 +445,8 @@ Application.android.Permissions.ACCESS_FINE_LOCATION;
  * @property ACCESS_COARSE_LOCATION
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.ACCESS_COARSE_LOCATION;
 
@@ -445,7 +456,8 @@ Application.android.Permissions.ACCESS_COARSE_LOCATION;
  * @property RECORD_AUDIO
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.RECORD_AUDIO;
 
@@ -457,7 +469,8 @@ Application.android.Permissions.RECORD_AUDIO;
  * @property READ_PHONE_STATE
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_PHONE_STATE;
 
@@ -468,7 +481,8 @@ Application.android.Permissions.READ_PHONE_STATE;
  * @property CALL_PHONE
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.CALL_PHONE;
 
@@ -478,7 +492,8 @@ Application.android.Permissions.CALL_PHONE;
  * @property READ_CALL_LOG
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_CALL_LOG;
 
@@ -488,7 +503,8 @@ Application.android.Permissions.READ_CALL_LOG;
  * @property WRITE_CALL_LOG
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.WRITE_CALL_LOG;
 
@@ -498,7 +514,8 @@ Application.android.Permissions.WRITE_CALL_LOG;
  * @property ADD_VOICEMAIL
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.ADD_VOICEMAIL;
 
@@ -508,7 +525,8 @@ Application.android.Permissions.ADD_VOICEMAIL;
  * @property USE_SIP
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.USE_SIP;
 
@@ -520,7 +538,8 @@ Application.android.Permissions.USE_SIP;
  * @property PROCESS_OUTGOING_CALLS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.PROCESS_OUTGOING_CALLS;
 
@@ -532,7 +551,8 @@ Application.android.Permissions.PROCESS_OUTGOING_CALLS;
  * @property BODY_SENSORS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.BODY_SENSORS;
 
@@ -542,7 +562,8 @@ Application.android.Permissions.BODY_SENSORS;
  * @property SEND_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.SEND_SMS;
 
@@ -552,7 +573,8 @@ Application.android.Permissions.SEND_SMS;
  * @property RECEIVE_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.RECEIVE_SMS;
 
@@ -562,7 +584,8 @@ Application.android.Permissions.RECEIVE_SMS;
  * @property READ_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_SMS;
 
@@ -572,7 +595,8 @@ Application.android.Permissions.READ_SMS;
  * @property RECEIVE_WAP_PUSH
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.RECEIVE_WAP_PUSH;
 
@@ -582,7 +606,8 @@ Application.android.Permissions.RECEIVE_WAP_PUSH;
  * @property RECEIVE_MMS
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.RECEIVE_MMS;
 
@@ -594,7 +619,8 @@ Application.android.Permissions.RECEIVE_MMS;
  * @property READ_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.READ_EXTERNAL_STORAGE;
 
@@ -604,8 +630,267 @@ Application.android.Permissions.READ_EXTERNAL_STORAGE;
  * @property WRITE_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 1.2
+ * @deprecated
+ * @since 1.1.2
  */
 Application.android.Permissions.WRITE_EXTERNAL_STORAGE;
+
+/** 
+ * @enum Application.Android.Permissions 
+ * @since 1.1.16
+ * 
+ * Permission enum for Application.
+ * Permission managements should be developed OS specific in the applications.
+ */
+Application.Android.Permissions = {};
+
+/**
+ * Allows to read the calendar data.
+ *
+ * @property READ_CALENDAR
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_CALENDAR;
+
+/**
+ * Allows an application to write the user's calendar data.
+ *
+ * @property WRITE_CALENDAR
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.WRITE_CALENDAR;
+
+/**
+ * Required to be able to access the camera device.
+ *
+ * @property CAMERA
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.CAMERA;
+
+/**
+ * Allows an application to read the user's contacts data.
+ *
+ * @property READ_CONTACTS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_CONTACTS;
+
+/**
+ * Allows an application to write the user's contacts data.
+ *
+ * @property WRITE_CONTACTS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.WRITE_CONTACTS;
+
+/**
+ * Allows access to the list of accounts in the Accounts Service.
+ *
+ * @property GET_ACCOUNTS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.GET_ACCOUNTS;
+
+/**
+ * Allows an app to access precise location.
+ *
+ * @property ACCESS_FINE_LOCATION
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.ACCESS_FINE_LOCATION;
+
+/**
+ * Allows an app to access approximate location.
+ *
+ * @property ACCESS_COARSE_LOCATION
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.ACCESS_COARSE_LOCATION;
+
+/**
+ * Allows an application to record audio.
+ *
+ * @property RECORD_AUDIO
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.RECORD_AUDIO;
+
+/**
+ * Allows read only access to phone state, including the phone number of the device, 
+ * current cellular network information, the status of any ongoing calls, and a list 
+ * of any PhoneAccounts registered on the device.
+ *
+ * @property READ_PHONE_STATE
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_PHONE_STATE;
+
+/**
+ * Allows an application to initiate a phone call without going through the 
+ * Dialer user interface for the user to confirm the call.
+ *
+ * @property CALL_PHONE
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.CALL_PHONE;
+
+/**
+ * Allows an application to read the user's call log.
+ *
+ * @property READ_CALL_LOG
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_CALL_LOG;
+
+/**
+ * Allows an application to write (but not read) the user's call log data.
+ *
+ * @property WRITE_CALL_LOG
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.WRITE_CALL_LOG;
+
+/**
+ * Allows an application to add voicemails into the system.
+ *
+ * @property ADD_VOICEMAIL
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.ADD_VOICEMAIL;
+
+/**
+ * Allows an application to use SIP service.
+ *
+ * @property USE_SIP
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.USE_SIP;
+
+/**
+ * Allows an application to see the number being dialed during an 
+ * outgoing call with the option to redirect the call to a different
+ * number or abort the call altogether.
+ *
+ * @property PROCESS_OUTGOING_CALLS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.PROCESS_OUTGOING_CALLS;
+
+/**
+ * Allows an application to access data from sensors 
+ * that the user uses to measure what is happening inside 
+ * his/her body, such as heart rate.
+ *
+ * @property BODY_SENSORS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.BODY_SENSORS;
+
+/**
+ * Allows an application to send SMS messages.
+ *
+ * @property SEND_SMS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.SEND_SMS;
+
+/**
+ * Allows an application to receive SMS messages.
+ *
+ * @property RECEIVE_SMS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.RECEIVE_SMS;
+
+/**
+ * Allows an application to read SMS messages.
+ *
+ * @property READ_SMS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_SMS;
+
+/**
+ * Allows an application to receive WAP push messages.
+ *
+ * @property RECEIVE_WAP_PUSH
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.RECEIVE_WAP_PUSH;
+
+/**
+ * Allows an application to monitor incoming MMS messages.
+ *
+ * @property RECEIVE_MMS
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.RECEIVE_MMS;
+
+/**
+ * Allows to read from external storage. 
+ * If you granted {@link Application.Android.Permissions.WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission, 
+ * you don't need this to granted this permission.
+ *
+ * @property READ_EXTERNAL_STORAGE
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.READ_EXTERNAL_STORAGE;
+
+/**
+ * Allows to write to external storage.
+ *
+ * @property WRITE_EXTERNAL_STORAGE
+ * @static
+ * @readonly
+ * @since 1.1.16
+ */
+Application.Android.Permissions.WRITE_EXTERNAL_STORAGE;
 
 module.exports = Application;

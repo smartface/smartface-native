@@ -347,7 +347,14 @@ Object.defineProperties(ApplicationWrapper.android, {
     }
 });
 
-Object.defineProperties(ApplicationWrapper.android.Permissions, {
+Object.defineProperties(ApplicationWrapper.Android, {
+    'Permissions': {
+        value: {},
+        enumerable: true
+    }
+});
+
+Object.defineProperties(ApplicationWrapper.Android.Permissions, {
     'READ_CALENDAR': {
         value: 'android.permission.READ_CALENDAR',
         enumerable: true
@@ -449,5 +456,7 @@ Object.defineProperties(ApplicationWrapper.android.Permissions, {
         enumerable: true
     },
 });
+
+ApplicationWrapper.android.Permissions = ApplicationWrapper.Android.Permissions;
 
 module.exports = ApplicationWrapper;
