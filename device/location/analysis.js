@@ -58,16 +58,24 @@ Location.stop = function(){};
  */
 Location.onLocationChanged = function onLocationChanged(event){}
 
+/**
+ * Android Specific Properties.
+ * @class Location.Android
+ * @since 1.1.16
+ */
+Location.Android = {};
+
 /** 
- * @enum Device.Location.android.Provider
+ * @enum Location.Android.Provider
  * @android
- * @since 1.2
+ * @since 1.1.16
  * 
  * Location providers for Android. For lower power consumption use Network
  * but for better accuracy use GPS; for let the device decide to provider use Auto
  * or don't pass parameter.
+ * Location.android.Provider deprecated since 1.1.16. Use Location.Android.Provider instead.
  */
-Location.android.Provider = {};
+Location.Android.Provider = {};
 
 /**
  * Let the device decide provider to use.
@@ -75,9 +83,9 @@ Location.android.Provider = {};
  * @property AUTO
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.AUTO;
+Location.Android.Provider.AUTO;
 
 /**
  * Use GPS as location provider. GPS has better accuracy and also has higher power
@@ -86,9 +94,9 @@ Location.android.Provider.AUTO;
  * @property GPS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.GPS;
+Location.Android.Provider.GPS;
 
 /**
  * Use network as location provider. Network has lower power consumption and accuracy
@@ -97,8 +105,8 @@ Location.android.Provider.GPS;
  * @property NETWORK
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.NETWORK;
+Location.Android.Provider.NETWORK;
 
 module.exports = Location;
