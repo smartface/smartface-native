@@ -8,7 +8,7 @@
  *     const Timer    = require("sf-core/timer");
  *     const Location = require('sf-core/device/location'); 
  * 
- *     Location.start(Location.android.Provider.AUTO);
+ *     Location.start(Location.Android.Provider.AUTO);
  *     Location.onLocationChanged = function(event) {
  *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
  *     };
@@ -26,7 +26,7 @@ function Location() {}
  * use for location; Gps, Network or Auto. iOS will ignore this provider.
  *
  * @method start
- * @param {Location.android.Provider} provider
+ * @param {Location.Android.Provider} provider
  * @android
  * @ios
  * @static
@@ -89,7 +89,7 @@ Location.Android.Provider.AUTO;
 
 /**
  * Use GPS as location provider. GPS has better accuracy and also has higher power
- * consumption than {@link Location.android.Provider#NETWORK NETWORK}.
+ * consumption than {@link Location.Android.Provider#NETWORK NETWORK}.
  *
  * @property GPS
  * @static
@@ -100,7 +100,7 @@ Location.Android.Provider.GPS;
 
 /**
  * Use network as location provider. Network has lower power consumption and accuracy
- * than {@link Location.android.Provider#GPS GPS}.
+ * than {@link Location.Android.Provider#GPS GPS}.
  *
  * @property NETWORK
  * @static
