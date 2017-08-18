@@ -99,10 +99,10 @@ const ViewGroup = extend(View)(
 function setHierarchyChangeListener(object) {
     object.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
         'onChildViewAdded': function(parent, child){
-            object.onViewAdded && object.onViewAdded();
+            this.onViewAdded && this.onViewAdded();
         }.bind(object),
         'onChildViewRemoved': function(parent, child){
-            object.onViewRemoved && object.onViewRemoved();
+            this.onViewRemoved && this.onViewRemoved();
         }.bind(object),
     }));
     

@@ -72,6 +72,7 @@ const TextBox = extend(Label)(
         var _onEditEnds;
         var _onActionButtonPress;
         var _hasEventsLocked = false;
+        var _oldText = "";
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
@@ -169,6 +170,27 @@ const TextBox = extend(Label)(
                 },
                 set: function(onTextChanged) {
                     _onTextChanged = onTextChanged.bind(this);
+                    if (!this.__didAddTextChangedListener) {
+                        this.__didAddTextChangedListener = true;
+                        this.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
+                            // todo: Control insertedText after resolving story/AND-2508 issue.
+                            onTextChanged: function(charSequence, start, before, count){
+                                if (!_hasEventsLocked) {
+                                    var insertedText = (_oldText.length >= this.text.length)? "": this.text.replace(_oldText,'');
+                                    if(_onTextChanged){
+                                        _onTextChanged({
+                                            location: Math.abs(int(start)+int(before)),
+                                            insertedText: insertedText
+                                        });
+                                    }
+                                }
+                            }.bind(this),
+                            beforeTextChanged: function(charSequence, start, count, after) {
+                                _oldText = this.text;
+                            }.bind(this),
+                            afterTextChanged: function(editable){}
+                        }));
+                    }
                 },
                 enumerable: true
             },
@@ -178,6 +200,20 @@ const TextBox = extend(Label)(
                 },
                 set: function(onEditBegins) {
                     _onEditBegins = onEditBegins.bind(this);
+                    if (!this.__didSetOnFocusChangeListener) {
+                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                            onFocusChange: function(view, hasFocus){
+                                if (hasFocus)  {
+                                    _onEditBegins && _onEditBegins();
+                                }
+                                else {
+                                    _onEditEnds && _onEditEnds();
+                                    this.nativeObject.setSelection(int(0),int(0));
+                                }
+                            }.bind(this)
+                        }));
+                        this.__didSetOnFocusChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -187,6 +223,20 @@ const TextBox = extend(Label)(
                 },
                 set: function(onEditEnds) {
                     _onEditEnds = onEditEnds.bind(this);
+                    if (!this.__didSetOnFocusChangeListener) {
+                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                            onFocusChange: function(view, hasFocus){
+                                if (hasFocus)  {
+                                    _onEditBegins && _onEditBegins();
+                                }
+                                else {
+                                    _onEditEnds && _onEditEnds();
+                                    this.nativeObject.setSelection(int(0),int(0));
+                                }
+                            }.bind(this)
+                        }));
+                        this.__didSetOnFocusChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -239,38 +289,7 @@ const TextBox = extend(Label)(
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
             self.padding = 0;
-            
-            var _oldText = "";
-            self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
-                // todo: Control insertedText after resolving story/AND-2508 issue.
-                onTextChanged: function(charSequence, start, before, count){
-                    if (!_hasEventsLocked) {
-                        var insertedText = (_oldText.length >= self.text.length)? "": self.text.replace(_oldText,'');
-                        if(_onTextChanged){
-                            _onTextChanged({
-                                location: Math.abs(start+before),
-                                insertedText: insertedText
-                            });
-                        }
-                    }
-                }.bind(self),
-                beforeTextChanged: function(charSequence, start, count, after){
-                    _oldText = self.text;
-                },
-                afterTextChanged: function(editable){}
-            }));
-            
-            self.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                onFocusChange: function(view, hasFocus){
-                    if (hasFocus)  {
-                        _onEditBegins && _onEditBegins();
-                    }
-                    else {
-                        _onEditEnds && _onEditEnds();
-                        this.nativeObject.setSelection(0,0);
-                    }
-                }.bind(this)
-            }));
+
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event){
@@ -298,11 +317,11 @@ const TextBox = extend(Label)(
             onTouch: function(view, event) {
                 if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
                     // MotionEvent.ACTION_UP
-                    if (event.getAction() === 1) {
+                    if (int(event.getAction()) === 1) {
                         self.onTouchEnded && self.onTouchEnded();
                     } 
                     // MotionEvent.ACTION_DOWN
-                    else if(event.getAction() === 0) {
+                    else if(int(event.getAction()) === 0) {
                         self.onTouch && self.onTouch();
                     }
                 }

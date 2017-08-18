@@ -9,8 +9,6 @@ const NativeView                = requireClass("android.view.View");
 
 const Button = extend(Label)(
     function (_super, params) {
-        var _onPress;
-        var _onLongPress;
         if(!this.nativeObject){
             this.nativeObject = new NativeButton(AndroidConfig.activity);
         }
@@ -19,19 +17,21 @@ const Button = extend(Label)(
         Object.defineProperties(this, {
             'onPress': {
                 get: function() {
-                    return _onPress;
+                    return this.__onPress;
                 },
                 set: function(onPress) {
-                    _onPress = onPress.bind(this);
+                    this.__onPress = onPress.bind(this);
+                    if (!this.__didSetOnClickListener) setOnClickListener(this);
                 },
                 enumerable: true
             },
             'onLongPress': {
                 get: function() {
-                    return _onLongPress;
+                    return this.__onLongPress;
                 },
                 set: function(onLongPress) {
-                    _onLongPress = onLongPress.bind(this);
+                    this.__onLongPress = onLongPress.bind(this);
+                    if (!this.__didSetOnLongClickListener) setOnLongClickListener(this);
                 },
                 enumerable: true
             },
@@ -50,19 +50,6 @@ const Button = extend(Label)(
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;
             this.padding = 0;
-            this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
-                onClick: function(view) {
-                        _onPress && _onPress();
-                }
-            }));
-            this.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-                onLongClick : function(view){
-                    if(_onLongPress) {
-                        _onLongPress();
-                    }
-                    return true; // Returns always true to solve AND-2713 bug.
-                }
-            }));
         }
         
         // Assign parameters given in constructor
@@ -72,5 +59,26 @@ const Button = extend(Label)(
             }
         }
 });
+
+function setOnClickListener(object) {
+    object.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
+        onClick: function(view) {
+                this.__onPress && this.__onPress();
+        }.bind(object)
+    }));
+    object.__didSetOnClickListener = true;
+}
+
+function setOnLongClickListener(object) {
+    object.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
+        onLongClick : function(view){
+            if(this.__onLongPress) {
+                this.__onLongPress();
+            }
+            return true; // Returns always true to solve AND-2713 bug.
+        }.bind(object)
+    }));
+    object.__didSetOnLongClickListener = true;
+}
 
 module.exports = Button;

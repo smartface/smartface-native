@@ -66,6 +66,16 @@ const Switch = extend(View)(
                 },
                 set: function(onToggleChanged) {
                     onToggleChangedCallback = onToggleChanged.bind(this);
+                    if (!this.__didSetOnCheckedChangeListener) {
+                        this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
+                            onCheckedChanged: function(buttonView, isChecked){
+                                setThumbColor(self);
+                                setTrackColor(self);
+                                onToggleChangedCallback && onToggleChangedCallback(bool(isChecked));
+                            }
+                        }));
+                        this.__didSetOnCheckedChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -110,13 +120,6 @@ const Switch = extend(View)(
             this.thumbOffColor = Color.GRAY;
             this.toggleOnColor = Color.GRAY;
             this.android.toggleOffColor = Color.GRAY;
-            this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
-                onCheckedChanged: function(buttonView, isChecked){
-                    setThumbColor(self);
-                    setTrackColor(self);
-                    onToggleChangedCallback && onToggleChangedCallback(bool(isChecked));
-                }
-            }));
         }
 
         // Assign parameters given in constructor

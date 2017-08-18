@@ -733,9 +733,9 @@ View.prototype.setTouchHandlers = function() {
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
             if(this.touchEnabled && (this._onTouch || this._onTouchEnded)){
-                if (event.getAction() === ACTION_UP) {
+                if (int(event.getAction()) === ACTION_UP) {
                     this._onTouchEnded && this._onTouchEnded();
-                } else if(event.getAction() === ACTION_DOWN) {
+                } else if(int(event.getAction()) === ACTION_DOWN) {
                     this._onTouch && this._onTouch();
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                     // So we should consume ACTION_DOWN event.
