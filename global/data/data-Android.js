@@ -10,7 +10,7 @@ var jsSharedPreferences = activity.getSharedPreferences(string("JS"),int(0));
 Object.defineProperties(Data, {
     'getStringVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(string(key))){
+            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
                 return string(jsSharedPreferences.getString(string(key), null));
             }
             return null;
@@ -19,7 +19,7 @@ Object.defineProperties(Data, {
     },
     'getBooleanVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(string(key))){
+            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
                 return bool(jsSharedPreferences.getBoolean(string(key), bool(false)));
             }
             return null;
@@ -28,7 +28,7 @@ Object.defineProperties(Data, {
     },
     'getIntVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(string(key))){
+            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
                 return int(jsSharedPreferences.getInt(string(key), int(-1)));
             }
             return null;
@@ -37,7 +37,7 @@ Object.defineProperties(Data, {
     },
     'getFloatVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(string(key))){
+            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
                 return float(jsSharedPreferences.getFloat(string(key), float(-1)));
             }
             return null;
@@ -46,7 +46,7 @@ Object.defineProperties(Data, {
     },
     'getLongVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(string(key))){
+            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
                 return long(jsSharedPreferences.getLong(string(key), long(-1)));
             }
             return null;

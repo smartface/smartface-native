@@ -283,9 +283,9 @@ function Page(params) {
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
             var result = 0;
-            var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            var resourceId = int(activity.getResources().getIdentifier(string("status_bar_height"), string("dimen"), string("android")));
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = int(activity.getResources().getDimensionPixelSize(int(resourceId)));
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -336,14 +336,14 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
-            return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
+            return AndroidUnitConverter.pixelToDp(float(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material)));
         },
         enumerable: true, configurable: true
     });
 
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return toolbar.getTitle();
+            return string(toolbar.getTitle());
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
@@ -429,14 +429,14 @@ function Page(params) {
 
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return toolbar.getSubtitle();
+            return string(toolbar.getSubtitle());
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                toolbar.setSubtitle(text);
+                toolbar.setSubtitle(string(text));
             }
             else {
-                toolbar.setSubtitle("");
+                toolbar.setSubtitle(string(""));
             }
         },
         enumerable: true, configurable: true
@@ -488,13 +488,13 @@ function Page(params) {
     Object.defineProperty(this.bottomTabBar, 'height', {
         get: function() {
             var result = 0;
-            var activity = Android.getActivity();
+            var activity = AndroidConfig.activity;
             
             const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
-            var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
+            var resourceId = int(activity.getResources().getIdentifier(string("design_bottom_navigation_height"), string("dimen"), packageName));
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = float(activity.getResources().getDimensionPixelSize(int(resourceId)));
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -541,9 +541,9 @@ function Page(params) {
             if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
                 for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
                     if(i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
+                        menu.getItem(int(i)).setChecked(bool(true));
                     }else {
-                        menu.getItem(i).setChecked(false);
+                        menu.getItem(int(i)).setChecked(bool(false));
                     }
                 }
             }
@@ -554,7 +554,7 @@ function Page(params) {
     function createBottomNavigationView(pageLayout) {
         if(bottomNavigationView) 
             return;
-        const RelativeLayout = requireClass("android.widget.RelativeLayout");
+        const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
         const Color = require("sf-core/ui/color");
         
         bottomNavigationView = new BottomNavigationView(activity);
@@ -564,14 +564,14 @@ function Page(params) {
             disableShiftMode();
         }
         
-        var params = new RelativeLayout.LayoutParams(-1, -2);
-        params.addRule(12);
+        var params = new RelativeLayoutLayoutParams(int(-1), int(-2));
+        params.addRule(int(12));
         bottomNavigationView.setLayoutParams(params);
         var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
         bottomLayout.addView(bottomNavigationView);
             
         if(tab.backgroundColor instanceof Color) 
-            bottomNavigationView.setBackgroundColor(int(tab.backgroundColor.nativeObject));
+            bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
         
         rootLayout.paddingBottom = self.bottomTabBar.height;
     }
@@ -581,7 +581,7 @@ function Page(params) {
         var menu = bottomNavigationView.getMenu();
         var keys = Object.keys(tab.items);
         for(var i = 0; i < keys.length; i++) {
-            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
+            var menuitem = menu.add(int(0), int(i), int(0), string(tab.items[keys[i]].title)); 
             var icon = tab.items[keys[i]].icon;
             if(icon)  
                 menuitem.setIcon(icon.nativeObject);
@@ -589,17 +589,17 @@ function Page(params) {
         // Don't merge upper loop. It doesn't work inside upper loop.
         for(i = 0; i < keys.length; i++) {
             if(i === _selectedIndex)
-                menu.getItem(i).setChecked(true);
+                menu.getItem(int(i)).setChecked(bool(true));
             else
-                menu.getItem(i).setChecked(false);
+                menu.getItem(int(i)).setChecked(bool(false));
         }
         
         if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
             const NativeR = requireClass("android.R");
-            var states = [[NativeR.attr.state_checked], []];
+            var states = array([array([NativeR.attr.state_checked]), array([])]);
     
             const ColorStateList = requireClass("android.content.res.ColorStateList");
-            var colors = [tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject];
+            var colors = array([tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject]);
             var statelist = new ColorStateList(states, colors);
             bottomNavigationView.setItemTextColor(statelist);
             bottomNavigationView.setItemIconTintList(statelist);
@@ -619,7 +619,7 @@ function Page(params) {
                     // navigator.switchCounter = 0;
                 }
                 
-                var index = item.getItemId();
+                var index = int(item.getItemId());
                 self.parentTab.currentIndex = index;
                 var fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index]);
                 fragment.selectedIndex = index;
@@ -636,14 +636,14 @@ function Page(params) {
     }
     
     function disableShiftMode() {
-        var menuView = bottomNavigationView.getChildAt(0);
-        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-        shiftingMode.setAccessible(true);
-        shiftingMode.setBoolean(menuView, false);
-        shiftingMode.setAccessible(false);
-        for (var i = 0; i < menuView.getChildCount(); i++) {
-            var item = menuView.getChildAt(i);
-            item.setShiftingMode(false);
+        var menuView = bottomNavigationView.getChildAt(int(0));
+        var shiftingMode = menuView.getClass().getDeclaredField(string("mShiftingMode"));
+        shiftingMode.setAccessible(bool(true));
+        shiftingMode.setBoolean(menuView, bool(false));
+        shiftingMode.setAccessible(bool(false));
+        for (var i = 0; i < int(menuView.getChildCount()); i++) {
+            var item = menuView.getChildAt(int(i));
+            item.setShiftingMode(bool(false));
             var checked = (item.getItemData()).isChecked();
             item.setChecked(checked);
         }
@@ -752,7 +752,7 @@ function Page(params) {
     
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus){
-            if (hasFocus)  {
+            if (bool(hasFocus))  {
                 var focusedView = activity.getCurrentFocus();
                 var windowToken = focusedView.getWindowToken();
                 

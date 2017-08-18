@@ -4,13 +4,14 @@ const extend = require('js-base/core/extend');
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 const Color = require('sf-core/ui/color');
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {
         var _color = null;
         
         if (!this.nativeObject) {
-            this.nativeObject = new NativeProgressBar(Android.getActivity());
+            this.nativeObject = new NativeProgressBar(AndroidConfig.activity);
         }
         
         _super(this);
@@ -41,7 +42,7 @@ const ActivityIndicator = extend(View)(
         this.ios = {}; 
         
         if(!this.isNotSetDefaults){
-            this.nativeObject.setIndeterminate(true);
+            this.nativeObject.setIndeterminate(bool(true));
             this.color = Color.create("#00A1F1"); // SmartfaceBlue
         }
         

@@ -55,13 +55,15 @@ const ListView = extend(View)(
                 if(_onRowBind){
                     // @todo make performance improvements
                     var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
-                    _onRowBind(_holderViewLayout,position);
-                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                        onClick: function(view) {
-                            var clickedView = createFromTemplate(holderViewLayout,view, nativeHolderView,self);
-                            _onRowSelected && _onRowSelected(clickedView, position);
-                        }
-                    }));
+                    _onRowBind(_holderViewLayout, int(position));
+                    if (typeof _onRowSelected === "function") {
+                        nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
+                            onClick: function(view) {
+                                var clickedView = createFromTemplate(holderViewLayout,view, nativeHolderView,self);
+                                _onRowSelected(clickedView, int(position));
+                            }
+                        }));
+                    }
                 }
             },
             getItemCount: function(){

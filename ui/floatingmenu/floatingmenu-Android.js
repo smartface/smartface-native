@@ -1,18 +1,18 @@
-const NativeView            = requireClass("android.view.View");
+const NativeClickListener            = requireClass("android.view.View$OnClickListener");
 const NativeSpannableString = requireClass("android.text.SpannableString");
 const NativeForegroundColor = requireClass("android.text.style.ForegroundColorSpan");
 const NativeTextView        = requireClass("android.widget.TextView");
 
-const NativeClickListener = NativeView.OnClickListener;
 const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 
 const NativeFloatingButton   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
-const NativeOnOpenListener   = NativeFloatingButton.OnSpeedDialOpenListener;
-const NativeOnCloseListener  = NativeFloatingButton.OnSpeedDialCloseListener;
+const NativeOnOpenListener   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
+const NativeOnCloseListener  = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
 const NativeSpeedDialAdapter = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter");
-const NativeMenuItem = NativeSpeedDialAdapter.MenuItem;
+const NativeMenuItem = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
 
 const Color = require("sf-core/ui/color");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 function FloatingMenu(params) {
     var nativeObject;
@@ -29,37 +29,37 @@ function FloatingMenu(params) {
             return _items.length;
         },
         getViews: function(context, position) {
-            position = reposition(position, _items.length);
+            position = reposition(int(position), _items.length);
             
             var item = new NativeMenuItem();
             _items[position].icon  && (item.iconDrawable = _items[position].icon.nativeObject);
             if (_items[position].title) {
-                var spannedTitle = new NativeSpannableString(_items[position].title);
+                var spannedTitle = new NativeSpannableString(string(_items[position].title));
                 var foregroundColor = new NativeForegroundColor(_items[position].titleColor.nativeObject);
                 var titleLength = spannedTitle.length();
-                spannedTitle.setSpan(foregroundColor, 0, titleLength, 17); // 17 means SPAN_INCLUSIVE_EXCLUSIVE
+                spannedTitle.setSpan(foregroundColor, int(0), titleLength, int(17)); // 17 means SPAN_INCLUSIVE_EXCLUSIVE
 
-                var labelView = new NativeTextView(Android.getActivity());
+                var labelView = new NativeTextView(AndroidConfig.activity);
                 labelView.setText(spannedTitle);
                 item.labelView = labelView;
             }
             return item;
         },
         getBackgroundColour: function(position) {
-            position = reposition(position, _items.length);
+            position = reposition(int(position), _items.length);
 
             var color = Color.GRAY;
             (_items[position].color) && (color = _items[position].color);
             return color.nativeObject;
         },
         onMenuItemClick: function(position) {
-            position = reposition(position, _items.length);
+            position = reposition(int(position), _items.length);
 
             _items[position].onClick && _items[position].onClick();
-            return true;
+            return bool(true);
         },
         rotateFab: function() {
-            return _items.length > 0 && _rotateEnabled;
+            return bool(_items.length > 0 && _rotateEnabled);
         }
     }, null);
     
@@ -87,12 +87,12 @@ function FloatingMenu(params) {
         
         this.yogaNode = new NativeYogaNode();
         this.yogaNode.setPositionType(NativeYogaPositionType.ABSOLUTE);
-        this.yogaNode.setPosition(NativeYogaEdge.TOP, 0);
-        this.yogaNode.setPosition(NativeYogaEdge.LEFT, 0);
-        this.yogaNode.setPosition(NativeYogaEdge.RIGHT, 0);
-        this.yogaNode.setPosition(NativeYogaEdge.BOTTOM, 0);
+        this.yogaNode.setPosition(NativeYogaEdge.TOP, float(0));
+        this.yogaNode.setPosition(NativeYogaEdge.LEFT, float(0));
+        this.yogaNode.setPosition(NativeYogaEdge.RIGHT, float(0));
+        this.yogaNode.setPosition(NativeYogaEdge.BOTTOM, float(0));
 
-        this.nativeObject = new NativeFloatingButton(Android.getActivity());
+        this.nativeObject = new NativeFloatingButton(AndroidConfig.activity);
         this.nativeObject.setMenuAdapter(menuAdapter);
         this.nativeObject.setBackgroundColour(_color.nativeObject);
         this.nativeObject.setOnClickListener(clickListener);
@@ -172,7 +172,7 @@ function FloatingMenu(params) {
         },
         'visible': {
             get: function() {
-                return (nativeObject.getVisibility() === 0); // View.VISIBLE
+                return (int(nativeObject.getVisibility()) === 0); // View.VISIBLE
             },
             set: function(visibility) {
                 if (visibility === true) {

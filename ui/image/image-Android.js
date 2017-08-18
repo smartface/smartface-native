@@ -105,7 +105,7 @@ function Image (params) {
                     matrix.postRotate(float(angle));
                     var bitmap = self.nativeObject.getBitmap();
                     var width = bitmap.getWidth(), height = bitmap.getHeight();
-                    var newBitmap = NativeBitmap.createBitmap(bitmap, int(0), int(0), int(width), int(height), matrix, bool(true));  
+                    var newBitmap = NativeBitmap.createBitmap(bitmap, int(0), int(0), width, height, matrix, bool(true));  
                 }
                 catch(err) {
                     success = false;

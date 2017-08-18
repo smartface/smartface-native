@@ -1,10 +1,11 @@
 const ViewGroup = require('../viewgroup');
 const UnitConverter = require("sf-core/util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
 
         var _align = params.align ? params.align : ScrollView.Align.VERTICAL;
         if (!this.nativeObject) {
@@ -49,12 +50,12 @@ const ScrollView = extend(ViewGroup)(
             },
             'scrollBarEnabled': {
                 get: function() {
-                    return this.nativeObject.isHorizontalScrollBarEnabled()
-                        || this.nativeObject.isVerticalScrollBarEnabled();
+                    return bool(this.nativeObject.isHorizontalScrollBarEnabled())
+                        || bool(this.nativeObject.isVerticalScrollBarEnabled());
                 },
                 set: function(enabled) {
-                    this.nativeObject.setVerticalScrollBarEnabled(enabled);
-                    this.nativeObject.setHorizontalScrollBarEnabled(enabled);
+                    this.nativeObject.setVerticalScrollBarEnabled(bool(enabled));
+                    this.nativeObject.setHorizontalScrollBarEnabled(bool(enabled));
                 }
             },
             'scrollToCoordinate': {
@@ -63,8 +64,8 @@ const ScrollView = extend(ViewGroup)(
                         const UnitConverter = require('sf-core/util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
-                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
-                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
+                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(int(coordinate), int(0));
+                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(int(0), int(coordinate));
                     }
                 }
             },
