@@ -167,17 +167,17 @@ Application.android.checkPermission = function(permission){};
 /**
  * With requestPermissions, the System Dialog will appear to ask for 
  * permission grant by user for dangerous(privacy) permissions. 
- * {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
+ * {@link Application.android#onRequestPermissionsResult onRequestPermissionsResult} will be fired after user interact with permission dialog.
  * 
  *     @example
  *     const Application = require("sf-core/application");
- *     Application.android.requestPermissions(1002, Application.android.Permissions.WRITE_EXTERNAL_STORAGE)
+ *     Application.android.requestPermissions(1002, Application.Android.Permissions.WRITE_EXTERNAL_STORAGE)
  *     Application.android.onRequestPermissionsResult = function(e){
  *         console.log(JSON.stringify(e));
  *     }
  *
  * @method requestPermissions
- * @param {Number} requestIdentifier This number  will be returned in {@link Application#android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not. 
+ * @param {Number} requestIdentifier This number  will be returned in {@link Application.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not. 
  * @param {String} permission
  * @readonly
  * @android
@@ -201,7 +201,7 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
 Application.android.shouldShowRequestPermissionRationale = function(permission){};
 
 /**
- * Checks if there is a new update from {@link https://developer.smartface.io/docs/remote-app-update RAU}.
+ * Checks if there is a new update.
  * 
  *     @example
  *     Application.checkUpdate(function(err, result) {
@@ -226,6 +226,7 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  *     });
  * 
  * @method checkUpdate
+ * @see https://developer.smartface.io/docs/remote-app-update
  * @param {Function} callback Function for update check result
  * @param {Object} callback.err For a valid update data, err argument should be null otherwise it will be message field in json response.
  * @param {Object} callback.update Update object when there is a new version of the app.
@@ -350,14 +351,22 @@ Application.android.onRequestPermissionsResult = function(e){}
  */
 Application.onUnhandledError = function(error){};
 
+/**
+ * Android Specific Properties.
+ * @class Application.Android
+ * @since 1.1.16
+ */
+Application.Android = {};
+
 /** 
- * @enum Application.android.Permissions 
- * @since 1.2
+ * @enum Application.Android.Permissions 
+ * @since 1.1.16
  * 
  * Permission enum for Application.
  * Permission managements should be developed OS specific in the applications.
+ * Application.android.Permissions deprecated since 1.1.16. Use Application.Android.Permissions instead.
  */
-Application.android.Permissions = {};
+Application.Android.Permissions = {};
 
 /**
  * Allows to read the calendar data.
@@ -365,9 +374,9 @@ Application.android.Permissions = {};
  * @property READ_CALENDAR
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_CALENDAR;
+Application.Android.Permissions.READ_CALENDAR;
 
 /**
  * Allows an application to write the user's calendar data.
@@ -375,9 +384,9 @@ Application.android.Permissions.READ_CALENDAR;
  * @property WRITE_CALENDAR
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.WRITE_CALENDAR;
+Application.Android.Permissions.WRITE_CALENDAR;
 
 /**
  * Required to be able to access the camera device.
@@ -385,9 +394,9 @@ Application.android.Permissions.WRITE_CALENDAR;
  * @property CAMERA
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.CAMERA;
+Application.Android.Permissions.CAMERA;
 
 /**
  * Allows an application to read the user's contacts data.
@@ -395,9 +404,9 @@ Application.android.Permissions.CAMERA;
  * @property READ_CONTACTS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_CONTACTS;
+Application.Android.Permissions.READ_CONTACTS;
 
 /**
  * Allows an application to write the user's contacts data.
@@ -405,9 +414,9 @@ Application.android.Permissions.READ_CONTACTS;
  * @property WRITE_CONTACTS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.WRITE_CONTACTS;
+Application.Android.Permissions.WRITE_CONTACTS;
 
 /**
  * Allows access to the list of accounts in the Accounts Service.
@@ -415,9 +424,9 @@ Application.android.Permissions.WRITE_CONTACTS;
  * @property GET_ACCOUNTS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.GET_ACCOUNTS;
+Application.Android.Permissions.GET_ACCOUNTS;
 
 /**
  * Allows an app to access precise location.
@@ -425,9 +434,9 @@ Application.android.Permissions.GET_ACCOUNTS;
  * @property ACCESS_FINE_LOCATION
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.ACCESS_FINE_LOCATION;
+Application.Android.Permissions.ACCESS_FINE_LOCATION;
 
 /**
  * Allows an app to access approximate location.
@@ -435,9 +444,9 @@ Application.android.Permissions.ACCESS_FINE_LOCATION;
  * @property ACCESS_COARSE_LOCATION
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.ACCESS_COARSE_LOCATION;
+Application.Android.Permissions.ACCESS_COARSE_LOCATION;
 
 /**
  * Allows an application to record audio.
@@ -445,9 +454,9 @@ Application.android.Permissions.ACCESS_COARSE_LOCATION;
  * @property RECORD_AUDIO
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.RECORD_AUDIO;
+Application.Android.Permissions.RECORD_AUDIO;
 
 /**
  * Allows read only access to phone state, including the phone number of the device, 
@@ -457,9 +466,9 @@ Application.android.Permissions.RECORD_AUDIO;
  * @property READ_PHONE_STATE
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_PHONE_STATE;
+Application.Android.Permissions.READ_PHONE_STATE;
 
 /**
  * Allows an application to initiate a phone call without going through the 
@@ -468,9 +477,9 @@ Application.android.Permissions.READ_PHONE_STATE;
  * @property CALL_PHONE
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.CALL_PHONE;
+Application.Android.Permissions.CALL_PHONE;
 
 /**
  * Allows an application to read the user's call log.
@@ -478,9 +487,9 @@ Application.android.Permissions.CALL_PHONE;
  * @property READ_CALL_LOG
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_CALL_LOG;
+Application.Android.Permissions.READ_CALL_LOG;
 
 /**
  * Allows an application to write (but not read) the user's call log data.
@@ -488,9 +497,9 @@ Application.android.Permissions.READ_CALL_LOG;
  * @property WRITE_CALL_LOG
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.WRITE_CALL_LOG;
+Application.Android.Permissions.WRITE_CALL_LOG;
 
 /**
  * Allows an application to add voicemails into the system.
@@ -498,9 +507,9 @@ Application.android.Permissions.WRITE_CALL_LOG;
  * @property ADD_VOICEMAIL
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.ADD_VOICEMAIL;
+Application.Android.Permissions.ADD_VOICEMAIL;
 
 /**
  * Allows an application to use SIP service.
@@ -508,9 +517,9 @@ Application.android.Permissions.ADD_VOICEMAIL;
  * @property USE_SIP
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.USE_SIP;
+Application.Android.Permissions.USE_SIP;
 
 /**
  * Allows an application to see the number being dialed during an 
@@ -520,9 +529,9 @@ Application.android.Permissions.USE_SIP;
  * @property PROCESS_OUTGOING_CALLS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.PROCESS_OUTGOING_CALLS;
+Application.Android.Permissions.PROCESS_OUTGOING_CALLS;
 
 /**
  * Allows an application to access data from sensors 
@@ -532,9 +541,9 @@ Application.android.Permissions.PROCESS_OUTGOING_CALLS;
  * @property BODY_SENSORS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.BODY_SENSORS;
+Application.Android.Permissions.BODY_SENSORS;
 
 /**
  * Allows an application to send SMS messages.
@@ -542,9 +551,9 @@ Application.android.Permissions.BODY_SENSORS;
  * @property SEND_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.SEND_SMS;
+Application.Android.Permissions.SEND_SMS;
 
 /**
  * Allows an application to receive SMS messages.
@@ -552,9 +561,9 @@ Application.android.Permissions.SEND_SMS;
  * @property RECEIVE_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.RECEIVE_SMS;
+Application.Android.Permissions.RECEIVE_SMS;
 
 /**
  * Allows an application to read SMS messages.
@@ -562,9 +571,9 @@ Application.android.Permissions.RECEIVE_SMS;
  * @property READ_SMS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_SMS;
+Application.Android.Permissions.READ_SMS;
 
 /**
  * Allows an application to receive WAP push messages.
@@ -572,9 +581,9 @@ Application.android.Permissions.READ_SMS;
  * @property RECEIVE_WAP_PUSH
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.RECEIVE_WAP_PUSH;
+Application.Android.Permissions.RECEIVE_WAP_PUSH;
 
 /**
  * Allows an application to monitor incoming MMS messages.
@@ -582,21 +591,21 @@ Application.android.Permissions.RECEIVE_WAP_PUSH;
  * @property RECEIVE_MMS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.RECEIVE_MMS;
+Application.Android.Permissions.RECEIVE_MMS;
 
 /**
  * Allows to read from external storage. 
- * If you granted {@link Application.android.Permissions.WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission, 
+ * If you granted {@link Application.Android.Permissions#WRITE_EXTERNAL_STORAGE WRITE_EXTERNAL_STORAGE} permission, 
  * you don't need this to granted this permission.
  *
  * @property READ_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.READ_EXTERNAL_STORAGE;
+Application.Android.Permissions.READ_EXTERNAL_STORAGE;
 
 /**
  * Allows to write to external storage.
@@ -604,8 +613,8 @@ Application.android.Permissions.READ_EXTERNAL_STORAGE;
  * @property WRITE_EXTERNAL_STORAGE
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Application.android.Permissions.WRITE_EXTERNAL_STORAGE;
+Application.Android.Permissions.WRITE_EXTERNAL_STORAGE;
 
 module.exports = Application;
