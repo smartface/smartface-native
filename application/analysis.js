@@ -228,17 +228,17 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  * @method checkUpdate
  * @param {Function} callback Function for update check result
  * @param {Object} callback.err For a valid update data, err argument should be null otherwise it will be message field in json response.
- * @param {Object} callback.update Update object when there is a new version of the app.
- * @param {String} callback.update.newVersion New version number obtained from RAU.
- * @param {String} callback.update.newRevision Revision value of the new version.
- * @param {Function} callback.update.download Method that initiates download of update files.
- * @param {Object} callback.update.download.err Error object of the download operation. For a valid update data, err argument should be null.
- * @param {Object} callback.update.download.downloadFinish Result object of the download operation.
- * @param {Function} callback.update.download.downloadFinish.updateAll Updates all files silently, callback is fired at the end of operation.
- * @param {Object} callback.update.download.downloadFinish.updateAll.err Error object of the update operation. For a valid update, err argument should be null.
- * @param {Function} callback.update.download.downloadFinish.cancel Clears all staged files.
- * @param {Object} callback.update.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument should be null.
- * @param {Function} callback.update.download.downloadFinish.meta  Meta in rau.json as object parsed.
+ * @param {Object} callback.result Update object when there is a new version of the app.
+ * @param {String} callback.result.newVersion New version number obtained from RAU.
+ * @param {String} callback.result.newRevision Revision value of the new version.
+ * @param {Function} callback.result.download Method that initiates download of update files.
+ * @param {Object} callback.result.download.err Error object of the download operation. For a valid update data, err argument should be null.
+ * @param {Object} callback.result.download.downloadFinish Result object of the download operation.
+ * @param {Function} callback.result.download.downloadFinish.updateAll Updates all files silently, callback is fired at the end of operation.
+ * @param {Object} callback.result.download.downloadFinish.updateAll.err Error object of the update operation. For a valid update, err argument will be null.
+ * @param {Function} callback.result.download.downloadFinish.cancel Clears all staged files.
+ * @param {Object} callback.result.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument will be null.
+ * @param {Function} callback.result.download.downloadFinish.meta  Meta in rau.json as object parsed.
  * @readonly
  * @android
  * @ios
