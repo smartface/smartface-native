@@ -60,20 +60,20 @@ Location.onLocationChanged = function onLocationChanged(event){}
 
 /**
  * Android Specific Properties.
- * @class Location.Android
+ * @class Device.Location.Android
  * @since 1.1.16
  */
 Location.Android = {};
 
 /** 
- * @enum Location.Android.Provider
+ * @enum Device.Location.Android.Provider
  * @android
  * @since 1.1.16
  * 
  * Location providers for Android. For lower power consumption use Network
  * but for better accuracy use GPS; for let the device decide to provider use Auto
  * or don't pass parameter.
- * Location.android.Provider deprecated since 1.1.16. Use Location.Android.Provider instead.
+ * Location.android.Provider deprecated since 1.1.16. Use Device.Location.Android.Provider instead.
  */
 Location.Android.Provider = {};
 
