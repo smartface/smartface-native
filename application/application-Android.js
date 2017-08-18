@@ -93,6 +93,10 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
+        'Android':{
+        value: {},
+        enumerable: true
+    },
     // methods
     'call': {
         value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle){
@@ -457,6 +461,6 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
     },
 });
 
-ApplicationWrapper.android.Permissions = ApplicationWrapper.Android.Permissions;
+Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
 
 module.exports = ApplicationWrapper;
