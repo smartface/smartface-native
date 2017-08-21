@@ -208,6 +208,20 @@ WebView.removeAllData = function(){
         nsdate = invocationNSDate.getReturnValue();
     }
         
+    var invocationFetchDataRecordsOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("fetchDataRecordsOfTypes:completionHandler:",defaultDataStore);
+    if (invocationFetchDataRecordsOfTypes) {
+        var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setIDBlockArgument:atIndex:",invocationFetchDataRecordsOfTypes);
+        if (invocationCheck) {
+            invocationFetchDataRecordsOfTypes.target = defaultDataStore;
+            invocationFetchDataRecordsOfTypes.setSelectorWithString("fetchDataRecordsOfTypes:completionHandler:");
+            invocationFetchDataRecordsOfTypes.retainArguments();
+            invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes,2);
+            invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function(result){},3);
+            
+            invocationFetchDataRecordsOfTypes.invoke();
+        }
+    }
+     
     var invocationRemoveDataOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("removeDataOfTypes:modifiedSince:completionHandler:",defaultDataStore);
     if (invocationRemoveDataOfTypes) {
         var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setVoidBlockArgument:atIndex:",invocationRemoveDataOfTypes);
@@ -217,7 +231,7 @@ WebView.removeAllData = function(){
             invocationRemoveDataOfTypes.retainArguments();
             invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes,2);
             invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate,3);
-            invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function(){console.log('Comlete Remove Data');},4);
+            invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function(){},4);
             
             invocationRemoveDataOfTypes.invoke();
         }

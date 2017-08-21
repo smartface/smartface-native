@@ -122,9 +122,7 @@ Application.emulator.globalObjectWillReset = function(state) {
         case EmulatorResetState.update :
             break;
         case EmulatorResetState.clear :
-            __SF_Dispatch.mainAsync(function(){
-                WebView.removeAllData();
-            });
+            WebView.removeAllData();
             require("sf-core/global/data").removeAllVariables();
             break;
         default:
