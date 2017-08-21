@@ -172,4 +172,70 @@ const WebView = extend(View)(
     }
 );
 
+WebView.removeAllData = function(){
+    
+    var allWebsiteDataTypes;
+    var invocationWebsiteDataTypes = __SF_NSInvocation.createClassInvocationWithSelectorInstance("allWebsiteDataTypes","WKWebsiteDataStore");
+    if (invocationWebsiteDataTypes) {
+        invocationWebsiteDataTypes.setClassTargetFromString("WKWebsiteDataStore");
+        invocationWebsiteDataTypes.setSelectorWithString("allWebsiteDataTypes");
+        invocationWebsiteDataTypes.retainArguments();
+        
+        invocationWebsiteDataTypes.invoke();
+        allWebsiteDataTypes = invocationWebsiteDataTypes.getReturnValue();
+     }
+     
+    var defaultDataStore;
+    var invocationDefaultDataStore = __SF_NSInvocation.createClassInvocationWithSelectorInstance("defaultDataStore","WKWebsiteDataStore");
+    if (invocationDefaultDataStore) {
+        invocationDefaultDataStore.setClassTargetFromString("WKWebsiteDataStore");
+        invocationDefaultDataStore.setSelectorWithString("defaultDataStore");
+        invocationDefaultDataStore.retainArguments();
+        
+        invocationDefaultDataStore.invoke();
+        defaultDataStore = invocationDefaultDataStore.getReturnValue();
+     }
+ 
+    var nsdate;
+    var invocationNSDate = __SF_NSInvocation.createClassInvocationWithSelectorInstance("dateWithTimeIntervalSince1970:", "NSDate");
+    if (invocationNSDate) {
+        invocationNSDate.setClassTargetFromString("NSDate");
+        invocationNSDate.setSelectorWithString("dateWithTimeIntervalSince1970:");
+        invocationNSDate.retainArguments();
+        invocationNSDate.setDoubleArgumentAtIndex(0,2);
+        
+        invocationNSDate.invoke();
+        nsdate = invocationNSDate.getReturnValue();
+    }
+        
+    var invocationFetchDataRecordsOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("fetchDataRecordsOfTypes:completionHandler:",defaultDataStore);
+    if (invocationFetchDataRecordsOfTypes) {
+        var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setIDBlockArgument:atIndex:",invocationFetchDataRecordsOfTypes);
+        if (invocationCheck) {
+            invocationFetchDataRecordsOfTypes.target = defaultDataStore;
+            invocationFetchDataRecordsOfTypes.setSelectorWithString("fetchDataRecordsOfTypes:completionHandler:");
+            invocationFetchDataRecordsOfTypes.retainArguments();
+            invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes,2);
+            invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function(result){},3);
+            
+            invocationFetchDataRecordsOfTypes.invoke();
+        }
+    }
+     
+    var invocationRemoveDataOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("removeDataOfTypes:modifiedSince:completionHandler:",defaultDataStore);
+    if (invocationRemoveDataOfTypes) {
+        var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setVoidBlockArgument:atIndex:",invocationRemoveDataOfTypes);
+        if (invocationCheck) {
+            invocationRemoveDataOfTypes.target = defaultDataStore;
+            invocationRemoveDataOfTypes.setSelectorWithString("removeDataOfTypes:modifiedSince:completionHandler:");
+            invocationRemoveDataOfTypes.retainArguments();
+            invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(allWebsiteDataTypes,2);
+            invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate,3);
+            invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function(){},4);
+            
+            invocationRemoveDataOfTypes.invoke();
+        }
+     }
+}
+
 module.exports = WebView;
