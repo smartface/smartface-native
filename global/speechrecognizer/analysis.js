@@ -102,6 +102,17 @@ SpeechRecognizer.stop = function() {};
 SpeechRecognizer.isRunning = function() {};
 
 /**
+ * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
+ * 
+ * @param {String} IETF language tag for example "en-US"
+ * @method isLocaleSupported
+ * @return {Boolean}
+ * @ios
+ * @since 1.1.16
+ */
+SpeechRecognizer.ios.isLocaleSupported = function(locale){};
+
+/**
  * @enum {String} SpeechRecognizer.Error
  * @since 1.1.13
  */
