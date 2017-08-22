@@ -4,7 +4,8 @@
 * @readonly
 * @since 0.1
 *
-* Indicates the alignment of the scroll.
+* Indicates the alignment of the scroll. ScrollViewAlign specifies 
+* the scroll direction of the ScrollView.
 *
 */
 const ScrollViewAlign = {};

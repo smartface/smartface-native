@@ -47,8 +47,9 @@
 function ScrollView(){}
 
 /**
- * Gets/sets the alignment of the scrollview. It must be set as constructor parameter.
- * This property cannot be set after the object is initialized.
+ * Gets/sets the alignment of the scrollview. If alignment is HORIZONTAL, the ScrollView 
+ * will be scroll horizontally, otherwise will be scroll vertically. 
+ * It must be set as constructor parameter. This property cannot be set after the object is initialized.
  *
  * @property {UI.ScrollView.Align} [align = UI.ScrollView.Align.VERTICAL]
  * @android
