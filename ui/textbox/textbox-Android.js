@@ -293,7 +293,7 @@ const TextBox = extend(Label)(
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event){
-                    if (actionId === NativeActionKeyType[_actionKeyType])  {
+                    if (int(actionId) === NativeActionKeyType[_actionKeyType])  {
                         _onActionButtonPress && _onActionButtonPress({actionKeyType: _actionKeyType});
                     }
                     return false;
@@ -303,7 +303,7 @@ const TextBox = extend(Label)(
             self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
                 onKey: function( view, keyCode, keyEvent) {
                     // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if(keyCode === 4 && keyEvent.getAction() === 1) {
+                    if(int(keyCode) === 4 && int(keyEvent.getAction()) === 1) {
                         self.nativeObject.clearFocus();
                     }
                     return false;
