@@ -108,8 +108,12 @@ function FloatingMenu(params) {
                 return _items;
             },
             set: function(items) {
+                try {
                 _items = items;
-                nativeObject.rebuildSpeedDialMenu();
+                this.nativeObject.rebuildSpeedDialMenu();
+                    
+                }catch(e) {}
+                
             }
         },
         'icon': {

@@ -107,11 +107,11 @@ function View(params) {
 View.prototype = {
     get alpha() {
         // Avoiding integer-float conflics of engine
-        return float(this.nativeObject.getAlpha())-0.0000001;
+        return float(this.nativeObject.getAlpha());
     },
     set alpha(alpha) {
         // Avoiding integer-float conflics of engine
-        this.nativeObject.setAlpha(float(alpha+0.0000001));
+        this.nativeObject.setAlpha(float(alpha));
     },
     get backgroundImage() {
         return this.__backgroundImages;

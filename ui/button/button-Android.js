@@ -14,7 +14,23 @@ const Button = extend(Label)(
         }
         _super(this);
         
-        Object.defineProperties(this, {
+        // Default settings
+        if(!this.isNotSetDefaults){
+            this.nativeObject.setAllCaps(bool(false)); // enable lowercase texts
+            this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
+            this.textColor = Color.WHITE;
+            this.padding = 0;
+        }
+        
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(prop) {
+        Object.defineProperties(prop, {
             'onPress': {
                 get: function() {
                     return this.__onPress;
@@ -43,22 +59,8 @@ const Button = extend(Label)(
                 configurable: true
             }
         });
-        
-        // Default settings
-        if(!this.isNotSetDefaults){
-            this.nativeObject.setAllCaps(bool(false)); // enable lowercase texts
-            this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
-            this.textColor = Color.WHITE;
-            this.padding = 0;
-        }
-        
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-});
+    }
+);
 
 function setOnClickListener(object) {
     object.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({

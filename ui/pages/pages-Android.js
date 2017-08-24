@@ -165,18 +165,18 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
             pageAnimationsCache = {};
             var packageName = activity.getPackageName();
             var resources =  activity.getResources();
-            pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName);
-            pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit","anim",packageName);
-            pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName);
-            pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
+            pageAnimationsCache.leftEnter = int(resources.getIdentifier(string("slide_left_enter"),string("anim"),string(packageName)));
+            pageAnimationsCache.leftExit = int(resources.getIdentifier(string("slide_left_exit"),string("anim"),string(packageName)));
+            pageAnimationsCache.rightEnter = int(resources.getIdentifier(string("slide_right_enter"),string("anim"),string(packageName)));
+            pageAnimationsCache.rightExit = int(resources.getIdentifier(string("slide_right_exit"),string("anim"),string(packageName)));
         }
         
         if(pageAnimationsCache.leftEnter !== 0 && pageAnimationsCache.leftExit !== 0 
                 && pageAnimationsCache.rightEnter !== 0 && pageAnimationsCache.rightExit !== 0){
-            fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
-                                                    pageAnimationsCache.leftExit,
-                                                    pageAnimationsCache.rightEnter,
-                                                    pageAnimationsCache.rightExit);
+            fragmentTransaction.setCustomAnimations(int(pageAnimationsCache.leftEnter),
+                                                    int(pageAnimationsCache.leftExit),
+                                                    int(pageAnimationsCache.rightEnter),
+                                                    int(pageAnimationsCache.rightExit));
         }
     }
     // Following line should be opened and following line should be removed

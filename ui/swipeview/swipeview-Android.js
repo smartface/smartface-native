@@ -7,10 +7,11 @@ const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
+const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
+
 const SwipeView = extend(View)(
     function (_super, params) {
         var self = this;
-        var fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
         var pagerAdapter = new NativePagerAdapter(fragmentManager);
         
         var _lastIndex = -1;
