@@ -104,7 +104,7 @@ function FileStream(params) {
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else{
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,true);
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
