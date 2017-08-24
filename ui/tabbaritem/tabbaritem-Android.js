@@ -1,8 +1,5 @@
 function TabBarItem(params) {
-    var _title;
-    var _icon;
-    var _page;
-    var _route;
+    var _title, _icon, _page, _route, _firstPageIsSet;
     
     Object.defineProperties(this, {
         'title': {
@@ -30,6 +27,15 @@ function TabBarItem(params) {
                 } else {
                     throw new Error("icon should be an instance of Image.");
                 }
+            },
+            enumerable: true
+        },
+        'firstPageIsSet': {
+            get: function() {
+                return _firstPageIsSet;
+            },
+            set: function(value) {
+                _firstPageIsSet = value;
             },
             enumerable: true
         },

@@ -1,29 +1,24 @@
-const BottomTabBar = require("../bottomtabbar");
-// const Router = require("../../router");
+const BottomTabBar = require("sf-core/ui/bottomtabbar");
 
 function Navigator(params) {
         var _items = {};
         var _itemInstances = {};
         var _index = null;
-        var _switchCounter = 0;
         var _history = [];
+        var _rootPage;
+        var _rootItemPage;
         var _tag;
+        
+        this.stack = [];
         
         Object.defineProperties(this, {
             'add': {
                 value: function(to, page){
-                    if(!_index)
+                    if(!_index) {
                         _index = to;
+                        _rootPage = to;
+                    }
                     _items[to] = page;
-                },
-                enumerable: true
-            },
-            'switchCounter': {
-                set: function(count) {
-                    _switchCounter = count;
-                },
-                get: function(){
-                    return _switchCounter;
                 },
                 enumerable: true
             },
@@ -52,6 +47,7 @@ function Navigator(params) {
             },
             'getRoute': {
                 value: function(to, isSingleton){
+                    isSingleton = true;
                     if(!to) {
                         // TODO check isSingleton
                         return this.getRoute(_index, isSingleton);
@@ -81,19 +77,25 @@ function Navigator(params) {
                         if(typeof(_items[to]) === 'function') {
                             if(!_itemInstances[to])
                                 _itemInstances[to] = new _items[to]();
-                                
-                            var page = (isSingleton === true) ? (_itemInstances[to]) : (new _items[to]());
-                            _history.push({path: to, page: page});
+                            var page;
+                            if(isSingleton) {
+                                page = _itemInstances[to];
+                            } else {
+                                page = new _items[to]();
+                                _itemInstances[to] = page;
+                            }
+                        
+                            // _history.push({path: to, page: page});
+                            page.tag = to;
                             _index = to;
                             return page;
                         }
                         else if(_items[to] instanceof BottomTabBar){
-                            _history.push({path: to, controller: _items[to]});
+                            // _history.push({path: to, controller: _items[to]});
                             var page = _items[to].getRoute();
                             if(!_items[to].tag) 
                                 _items[to].tag = to;
                             return page;
-                            
                         }
                         else {
                             alert(splittedPath[0] + " is a Navigator. We don't implement nested navigation.");
@@ -107,33 +109,62 @@ function Navigator(params) {
                 enumerable: true
             },
             'go': {
-                value: function(to){
+                value: function(to, isSingleton, isGoing){
                     if(!_items[to])
                         throw new Error(to + ' is not in Navigator.');
-                    
-                    _index = to;
+                    if(isGoing) {
+                        var page = this.getRoute(to, isSingleton);
+                        if(!_rootItemPage)
+                            _rootItemPage = page;
+                        if(_rootPage === to) {
+                            _history = [];
+                        }
+                        this.push(page, to, true);
+                        return page;
+                    } else {
+                        _index = to;
+                        return null;
+                    }
                 },
                 enumerable: true
             },
+            'push': {
+                value: function(page, to, addStack, isAttach) {
+                    const Router = require("sf-core/router");
+                    this.stack.push({page: page, to: to});
+                    if(!Router.pagesInstance)
+                        Router.pagesInstance = {page: page, tag:  page.tag};
+                    Router.pagesInstance.push(page, false, page.tag, false);
+                    if(addStack)
+                        _history.push({page: page, to: to});
+                }  
+            },
+            'rootItemPage': {
+                get: function() {
+                    return _rootItemPage;
+                } 
+            },
             'goBack': {
                 value: function(parameters){
+                    const Router = require("sf-core/router");
+                    if(_history.length < 1)
+                        return false;
                     var current = _history[_history.length-1];
-                    // if((current.controller) instanceof BottomTabBar) {
-                    //     console.log("History: BottomTabBar " + current.controller.switchCounter);
-                    //     for(var i = 0; i < current.controller.switchCounter; i++)
-                    //         Router.pagesInstance.pop();
-                    //     current.controller.switchCounter = 0;
-                    // }
-                    // if (Router.pagesInstance.pop()) {
-                    //     current && current.page.onHide && current.page.onHide();
-                    //     _history.pop();
-                    //     if(_history.length > 0) {
-                    //         current = _history[_history.length-1];
-                    //         current.page.__pendingParameters = parameters;
-                    //     }
-                    //     return true;
-                    // }
-                    return false;
+                    current && current.page && current.page.onHide && current.page.onHide();
+                    _history.pop();
+                    if(_history.length > 0) {
+                        current = _history[_history.length-1];
+                        _index = current.to;
+                    } else {
+                        _index = _rootPage;
+                        current = {page: _itemInstances[_index]};
+                    }
+                    if(!Router.pagesInstance)
+                        Router.pagesInstance = {page: current.page, tag: current.tag};
+                    
+                    current.page.__pendingParameters = parameters;
+                    Router.pagesInstance.push(current.page, false, current.page.to);
+                    return true;
                 },
                 enumerable: true
             },

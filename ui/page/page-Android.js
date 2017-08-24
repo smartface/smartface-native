@@ -232,6 +232,30 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    var _firstPageInNavigator;
+    Object.defineProperty(self, 'firstPageInNavigator', {
+        get: function() {
+            return _firstPageInNavigator;
+        },
+        set: function(value) {
+            _firstPageInNavigator = value;
+        },
+        enumerable: true
+    });
+    
+    var _isShown;
+    Object.defineProperty(self, 'isShown', {
+        get: function() {
+            return _isShown;
+        },
+        set: function(value) {
+            _isShown = value;
+        },
+        enumerable: true
+    });
+    
+
     this.statusBar = {};
     var _visible;
     Object.defineProperty(this.statusBar, 'visible', {
@@ -583,25 +607,25 @@ function Page(params) {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
-                var key = Object.keys(tab.items)[tab.currentIndex];
-                const Navigator = require("../navigator");
-                var navigator = tab.items[key].route;
-                if(navigator instanceof Navigator) {
-                    // Router.removeFromHistory(navigator.switchCounter);
-                    // navigator.switchCounter = 0;
-                }
-                
+                const Navigator = require("sf-core/ui/navigator");
+                var fragment;
                 var index = item.getItemId();
                 self.parentTab.currentIndex = index;
-                var fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index]);
+                var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
+                if(!fragment)
+                    fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index], true); // isSingleton is true for tab switching
+                
                 fragment.selectedIndex = index;
                 fragment.parentTab = self.parentTab;
                 
-                self.parentTab.switchCounter += 1;
-                // Router.pagesInstance.pop();
                 if(!fragment.tag)
                     fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
-                Router.pagesInstance.push(fragment, false, fragment.tag);
+                
+                if(fragment.isBottomTabBarPage || fragment.firstPageInNavigator) {
+                    Router.pagesInstance.push(fragment, false, fragment.tag, false);
+                } else if(tabItem instanceof Navigator) {
+                    tabItem.push(fragment, fragment.tag, false, true);
+                }
                 return true;
             }
         }));
