@@ -1,4 +1,5 @@
 const RAU = require("./RAU");
+const WebView = require('sf-core/ui/webview');
 
 var SFApplication = {};
 
@@ -121,6 +122,7 @@ Application.emulator.globalObjectWillReset = function(state) {
         case EmulatorResetState.update :
             break;
         case EmulatorResetState.clear :
+            WebView.removeAllData();
             require("sf-core/global/data").removeAllVariables();
             break;
         default:

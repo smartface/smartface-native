@@ -23,6 +23,10 @@ Object.defineProperties(Location, {
         value: {},
         enumerable: true
     },
+    'Android': {
+        value: {},
+        enumerable: true
+    },
     'start': {
         value: function(provider) {
             if (_locationListener) {
@@ -83,12 +87,16 @@ Object.defineProperties(Location, {
     }
 });
 
+Object.defineProperty(Location.Android, "Provider", {
+    value: {},
+    enumerable: true
+});
 Object.defineProperty(Location.android, "Provider", {
     value: {},
     enumerable: true
 });
 
-Object.defineProperties(Location.android.Provider, {
+Object.defineProperties(Location.Android.Provider, {
     'AUTO': {
         value: "auto",
         enumerable: true
@@ -103,8 +111,6 @@ Object.defineProperties(Location.android.Provider, {
     }
 });
 
-
-
-
+Object.assign(Location.android.Provider, Location.Android.Provider);
 
 module.exports = Location;

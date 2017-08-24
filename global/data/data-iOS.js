@@ -15,27 +15,35 @@ Data.getStringVariable = function(key){
 };
 
 Data.getBooleanVariable = function(key){
-    if (typeof key === 'string'){
-        return Data.ios.getNativeObject().boolForKey(key);
+    var retval = null;
+    if (typeof key === 'string' && Data.ios.getNativeObject().objectForKey(key) != undefined){
+        retval = Data.ios.getNativeObject().boolForKey(key);
     }
+    return retval;
 };
 
 Data.getIntVariable = function(key){
-    if (typeof key === 'string'){
-        return Data.ios.getNativeObject().integerForKey(key);
+    var retval = null;
+    if (typeof key === 'string' && Data.ios.getNativeObject().objectForKey(key) != undefined){
+        retval = Data.ios.getNativeObject().integerForKey(key);
     }
+    return retval;
 };
 
 Data.getFloatVariable = function(key){
-    if (typeof key === 'string'){
-        return Data.ios.getNativeObject().floatForKey(key);
+    var retval = null;
+    if (typeof key === 'string' && Data.ios.getNativeObject().objectForKey(key) != undefined){
+        retval = Data.ios.getNativeObject().floatForKey(key);
     }
+    return retval;
 };
 
 Data.getLongVariable = function(key){
-    if (typeof key === 'string'){
-        return Data.ios.getNativeObject().doubleForKey(key);
+    var retval = null;
+    if (typeof key === 'string' && Data.ios.getNativeObject().objectForKey(key) != undefined){
+        retval = Data.ios.getNativeObject().doubleForKey(key);
     }
+    return retval;
 };
 
 /////////////////////////////////////////////////////////////

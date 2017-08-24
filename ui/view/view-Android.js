@@ -34,6 +34,9 @@ const YogaEdge = {
 
 function View(params) {
     var self = this;
+    
+    self.ios = {};
+    
     var activity = Android.getActivity();
     self.yogaNode = null;
 

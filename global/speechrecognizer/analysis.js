@@ -28,7 +28,7 @@
  *             }
  *             else if(System.OS === "Android") {
  *                 const RECORD_AUDIO_CODE = 1002;
- *                 Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.android.Permissions.RECORD_AUDIO);
+ *                 Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.Android.Permissions.RECORD_AUDIO);
  *                 Application.android.onRequestPermissionsResult = function(e){
  *                     if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
  *                         startSpeechRecognizer();
@@ -63,7 +63,7 @@
 const SpeechRecognizer = {};
 
 /**
- * Starts speech recognition service. {@link Application.android.Permissions#RECORD_AUDIO} is required for Android platform.
+ * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
  * 
  * @param {Object} params Object describing callbacks
  * @param {String} [params.locale] IETF language tag for example "en-US"
@@ -100,6 +100,17 @@ SpeechRecognizer.stop = function() {};
  * @since 1.1.13
  */
 SpeechRecognizer.isRunning = function() {};
+
+/**
+ * Returns speech recognition supported locale or not supported. Locale parameter must be empty to check current locale.
+ * 
+ * @param {String} IETF language tag for example "en-US"
+ * @method isLocaleSupported
+ * @return {Boolean}
+ * @ios
+ * @since 1.1.16
+ */
+SpeechRecognizer.ios.isLocaleSupported = function(locale){};
 
 /**
  * @enum {String} SpeechRecognizer.Error
