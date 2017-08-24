@@ -8,7 +8,7 @@
  *     const Timer    = require("sf-core/timer");
  *     const Location = require('sf-core/device/location'); 
  * 
- *     Location.start(Location.android.Provider.AUTO);
+ *     Location.start(Location.Android.Provider.AUTO);
  *     Location.onLocationChanged = function(event) {
  *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
  *     };
@@ -26,7 +26,7 @@ function Location() {}
  * use for location; Gps, Network or Auto. iOS will ignore this provider.
  *
  * @method start
- * @param {Location.android.Provider} provider
+ * @param {Location.Android.Provider} provider
  * @android
  * @ios
  * @static
@@ -58,16 +58,24 @@ Location.stop = function(){};
  */
 Location.onLocationChanged = function onLocationChanged(event){}
 
+/**
+ * Android Specific Properties.
+ * @class Device.Location.Android
+ * @since 1.1.16
+ */
+Location.Android = {};
+
 /** 
- * @enum Device.Location.android.Provider
+ * @enum Device.Location.Android.Provider
  * @android
- * @since 1.2
+ * @since 1.1.16
  * 
  * Location providers for Android. For lower power consumption use Network
  * but for better accuracy use GPS; for let the device decide to provider use Auto
  * or don't pass parameter.
+ * Location.android.Provider deprecated since 1.1.16. Use Device.Location.Android.Provider instead.
  */
-Location.android.Provider = {};
+Location.Android.Provider = {};
 
 /**
  * Let the device decide provider to use.
@@ -75,30 +83,30 @@ Location.android.Provider = {};
  * @property AUTO
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.AUTO;
+Location.Android.Provider.AUTO;
 
 /**
  * Use GPS as location provider. GPS has better accuracy and also has higher power
- * consumption than {@link Location.android.Provider#NETWORK NETWORK}.
+ * consumption than {@link Location.Android.Provider#NETWORK NETWORK}.
  *
  * @property GPS
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.GPS;
+Location.Android.Provider.GPS;
 
 /**
  * Use network as location provider. Network has lower power consumption and accuracy
- * than {@link Location.android.Provider#GPS GPS}.
+ * than {@link Location.Android.Provider#GPS GPS}.
  *
  * @property NETWORK
  * @static
  * @readonly
- * @since 1.2
+ * @since 1.1.16
  */
-Location.android.Provider.NETWORK;
+Location.Android.Provider.NETWORK;
 
 module.exports = Location;

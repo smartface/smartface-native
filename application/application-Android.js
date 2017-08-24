@@ -93,6 +93,10 @@ Object.defineProperties(ApplicationWrapper, {
         value: {},
         enumerable: true
     },
+        'Android':{
+        value: {},
+        enumerable: true
+    },
     // methods
     'call': {
         value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle){
@@ -347,7 +351,14 @@ Object.defineProperties(ApplicationWrapper.android, {
     }
 });
 
-Object.defineProperties(ApplicationWrapper.android.Permissions, {
+Object.defineProperties(ApplicationWrapper.Android, {
+    'Permissions': {
+        value: {},
+        enumerable: true
+    }
+});
+
+Object.defineProperties(ApplicationWrapper.Android.Permissions, {
     'READ_CALENDAR': {
         value: 'android.permission.READ_CALENDAR',
         enumerable: true
@@ -449,5 +460,7 @@ Object.defineProperties(ApplicationWrapper.android.Permissions, {
         enumerable: true
     },
 });
+
+Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
 
 module.exports = ApplicationWrapper;
