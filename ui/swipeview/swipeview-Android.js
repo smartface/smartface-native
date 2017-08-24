@@ -22,14 +22,14 @@ const SwipeView = extend(View)(
             self.nativeObject.setAdapter(pagerAdapter);
             self.nativeObject.addOnPageChangeListener(NativeOnPageChangeListener.implement({
                 onPageScrollStateChanged: function(state) {
-                    if (state === 0) { // SCROLL_STATE_IDLE
+                    if (int(state) === 0) { // SCROLL_STATE_IDLE
                         _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
-                    } else if (state === 1) { // SCROLL_STATE_DRAGGING
+                    } else if (int(state) === 1) { // SCROLL_STATE_DRAGGING
                         _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.DRAGGING);
                     }
                 },
                 onPageSelected: function(position) {
-                    _callbackOnPageSelected && _callbackOnPageSelected(position);
+                    _callbackOnPageSelected && _callbackOnPageSelected(int(position));
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
                     var intPosition = int(position);
