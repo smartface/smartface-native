@@ -51,7 +51,7 @@ const SliderDrawer = extend(FlexLayout)(
                 set: function(enabled){
                     _enabled = enabled;
                     if(this.attachedPages){
-                        this.attachedPages.setDrawerLocked(!enabled);
+                        this.attachedPages.setDrawerLocked(bool(!enabled));
                     }
                 },
                 enumerable: true,
@@ -154,7 +154,7 @@ const SliderDrawer = extend(FlexLayout)(
                 
             },
             'onDrawerStateChanged': function(newState){
-                if (newState === 1) { // STATE_DRAGGING
+                if (int(newState) === 1) { // STATE_DRAGGING
                     _state = SliderDrawer.State.DRAGGED;
                 }
             }
