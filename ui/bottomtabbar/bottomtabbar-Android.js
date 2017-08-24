@@ -11,7 +11,6 @@ function BottomTabBar(params) {
         var _itemCount = 0;
         var _currentIndex = 0;
         var _backgroundColor;
-        var _switchCounter = 0;
         var _tag;
         
         Object.defineProperties(this, {
@@ -24,15 +23,20 @@ function BottomTabBar(params) {
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
                         _itemCount++;
-                        if(!_index)
-                            _index = path;
                         var page;
                         if(typeof(item.route) !== 'function') {
                             page = item.route.getRoute(null, true);
+                            if(!item.firstPageIsSet) {
+                                item.firstPageIsSet = true;
+                                page.firstPageInNavigator = true;
+                            }
                         } else {
                             page = new _items[path].page();
                             page.isBottomTabBarPage = true;
                         }
+                        
+                        if(!_index)
+                            _index = path;
                         _itemInstances.push(page);
                     }
                     else {
@@ -66,15 +70,6 @@ function BottomTabBar(params) {
                 },
                 get: function(){
                     return _backgroundColor;
-                },
-                enumerable: true
-            },
-            'switchCounter': {
-                set: function(count) {
-                    _switchCounter = count;
-                },
-                get: function(){
-                    return _switchCounter;
                 },
                 enumerable: true
             },
@@ -113,12 +108,12 @@ function BottomTabBar(params) {
                 }
             },
             'getRoute': {
-                value: function(to){
+                value: function(to, isSingleton, isGoing){
                     if(!to) {
                         if(typeof(_items[_index].page) === 'function') {
                             var keys = Object.keys(_items);
                             var page = _itemInstances[keys.indexOf(_index)];
-                            this.setPageProperties(page, _index);
+                            this.setPageProperties(page, to, _index);
                             return page; // TODO Add isSingleton control.
                         }
                         else {
@@ -129,7 +124,7 @@ function BottomTabBar(params) {
                         if(to.includes('/')) {
                             var splittedPath = to.split("/");
                             var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-                            var page = _items[splittedPath[0]].route.getRoute(subPath, true); // TODO Check isSingleton
+                            var page = _items[splittedPath[0]].route.go(subPath, true, isGoing); // TODO Check isSingleton
                             this.setPageProperties(page, to);
                             page.isNavigatorPageInBottomTabBar = true;
                             return page;
@@ -142,10 +137,11 @@ function BottomTabBar(params) {
                             var keys = Object.keys(_items);
                             this.selectedIndex = keys.indexOf(to);
                             var page;
-                            if(typeof(_items[to].route) === 'function')
+                            if(typeof(_items[to].route) === 'function') {
                                 page = _itemInstances[this.selectedIndex];
-                            else 
+                            } else {
                                 page = _items[to].route.getRoute(null, true); 
+                            }
                             this.setPageProperties(page, to);
                             return page;
                         }
@@ -173,9 +169,13 @@ function BottomTabBar(params) {
                 configurable: true
             },
             'setPageProperties': {
-                value: function(page, to){
+                value: function(page, to, index){
                     page.parentTab = this;
-                    page.selectedIndex = _currentIndex;
+                    if(!index) {
+                        page.selectedIndex = _currentIndex;
+                     } else {  
+                        page.selectedIndex = (Object.keys(_items)).indexOf(index);
+                     }
                     page.tabBarItems = _itemInstances;
                 },
                 enumerable: true

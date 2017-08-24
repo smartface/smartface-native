@@ -17,8 +17,8 @@ const Pages = function(params) {
     
     Object.defineProperties(self,{
         'push': {
-            value: function(page, animated, tag){
-                push(self, rootViewId, page, animated, pagesStack, tag);
+            value: function(page, animated, tag, addToStack){
+                push(self, rootViewId, page, animated, pagesStack, tag, addToStack);
             }
         },
         'pop': {
@@ -148,7 +148,7 @@ function isSliderDrawerOpen(_sliderDrawer) {
     return false;
 }
 
-function push(self, rootViewId, page, animated, pagesStack, tag){
+function push(self, rootViewId, page, animated, pagesStack, tag, addToStack){
     if(pagesStack.length > 0) {
         pagesStack[pagesStack.length-1].onHide && 
                 pagesStack[pagesStack.length-1].onHide();
@@ -179,7 +179,10 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
+    fragmentTransaction.replace(rootViewId, page.nativeObject, tag);
+    if(addToStack) {
+        fragmentTransaction.addToBackStack(tag); // for Backcompability
+    }
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }
