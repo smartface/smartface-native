@@ -88,8 +88,10 @@ var Http = function(params){
      * @param {String} params.url URL
      * @param {Object} params.headers Headers
      * @param {String} params.method Http request method 
-     * @param {Blob|Object} params.body Http request body ? Android headers
-     * @param {String} params.body.key
+     * @param {Object[]|Blob} params.body 
+     * @param {String} params.body.name
+     * @param {String} params.body.fileName
+     * @param {String} params.body.contentType
      * @param {Blob} params.body.value
      * @param {String} params.user Username for authorization if needed
      * @param {String} params.password Password for authorization if needed
