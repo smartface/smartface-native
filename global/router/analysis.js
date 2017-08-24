@@ -98,10 +98,10 @@ Router.prototype.go = function(to, parameters, animated) {};
  * 
  * @method goBack
  * @param {String} to Optional, route path to navigate back
- * @param {Boolean} animated Navigate with animation, if not given it is set to
- *                           true as default
  * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
  *                            navigated page 
+ * @param {Boolean} animated Navigate with animation, if not given it is set to
+ *                           true as default
  * @return {Boolean} True if navigated successfully, false otherwise
  * @static
  * @android

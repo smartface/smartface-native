@@ -31,6 +31,10 @@ function SpeechRecognizer (params) {
     }
 }
 
+SpeechRecognizer.ios = {};
+
+SpeechRecognizer.ios.isLocaleSupported = function(locale){}
+
 function createIntent(params) {
     _intent = new Intent("android.speech.action.RECOGNIZE_SPEECH"); // "android.speech.action.RECOGNIZE_SPEECH" = RecognizerIntent.ACTION_RECOGNIZE_SPEECH
     if(params && params.locale) {
