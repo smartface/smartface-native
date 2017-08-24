@@ -11,8 +11,9 @@ const ScrollView = extend(ViewGroup)(
         if (!this.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
-                this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
-                    onScrollChanged: function(x, y, oldx, oldy) {
+                this.nativeObject = NativeHorizontalScroll.extend(string("SFHorizontalScroll"), {
+                    onScrollChanged: function(xObj, y, oldx, oldy) {
+                        var x = int(xObj);
                         x = (x > 0)? x : 0; // negative values are provided as well
                         _contentOffset.x = UnitConverter.pixelToDp(x);
                         _callbackOnScroll && _callbackOnScroll();
@@ -20,8 +21,9 @@ const ScrollView = extend(ViewGroup)(
                 }, [activity]);
             } else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
-                this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
-                    onScrollChanged: function(x, y, oldx, oldy) {
+                this.nativeObject = NativeVerticalScroll.extend(string("SFVerticalScroll"), {
+                    onScrollChanged: function(x, yObj, oldx, oldy) {
+                        var y = int(y);
                         y = (y > 0)? y : 0; // negative values are provided as well
                         _contentOffset.y = UnitConverter.pixelToDp(y);
                         _callbackOnScroll && _callbackOnScroll();

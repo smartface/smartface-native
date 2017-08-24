@@ -86,7 +86,8 @@ function Page(params) {
             _onOrientationChange && _onOrientationChange();
         },
         onOptionsItemSelected: function(menuItem) {
-            if (menuItem.getItemId() === NativeAndroidR.id.home) {
+            var itemId = int(menuItem.getItemId());
+            if (itemId === int(NativeAndroidR.id.home)) {
                 if (_headerBarLeftItem) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
@@ -95,8 +96,8 @@ function Page(params) {
                     Router.goBack(null, true);
                 }
             }
-            else if (_headerBarItems[menuItem.getItemId()]) {
-                var item = _headerBarItems[menuItem.getItemId()];
+            else if (_headerBarItems[itemId]) {
+                var item = _headerBarItems[itemId];
                 if (item.onPress instanceof Function) {
                     item.onPress();
                 }
