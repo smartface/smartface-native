@@ -1,5 +1,4 @@
 const BottomTabBar = require("sf-core/ui/bottomtabbar");
-const Router = require("sf-core/router");
 
 function Navigator(params) {
         var _items = {};
@@ -131,6 +130,7 @@ function Navigator(params) {
             },
             'push': {
                 value: function(page, to, addStack, isAttach) {
+                    const Router = require("sf-core/router");
                     this.stack.push({page: page, to: to});
                     if(!Router.pagesInstance)
                         Router.pagesInstance = {page: page, tag:  page.tag};
@@ -146,6 +146,7 @@ function Navigator(params) {
             },
             'goBack': {
                 value: function(parameters){
+                    const Router = require("sf-core/router");
                     if(_history.length < 1)
                         return false;
                     var current = _history[_history.length-1];
