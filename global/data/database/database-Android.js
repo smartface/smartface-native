@@ -8,9 +8,7 @@ function Database(params){
     this.nativeObject = null;
     
     var _file = params.file;
-    
-    
-    
+
     if(typeof params.inMemory === 'boolean' && params.inMemory){
         this.nativeObject = NativeSQLiteDatabase.create(null);
     }
@@ -75,10 +73,6 @@ function Database(params){
     });
 }
 
-Object.defineProperty(Database, "createFromSQLFile", {
-    
-});
-
 Database.QueryResult = function(params){
     
     if(!params || !params.isInternal){
@@ -114,7 +108,7 @@ Database.QueryResult = function(params){
         'get': {
             value: function(location){
                 if(typeof location === 'number'){
-                    this.nativeObject.moveToPosition(location);
+                    this.nativeObject.moveToPosition(int(location));
                     return new Database.DatabaseObject({
                         'isInternal': true,
                         'cursor': this.nativeObject
