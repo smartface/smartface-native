@@ -4,7 +4,7 @@ var assert = require("chai").assert;
 const FileStream = require("../../io/filestream");
 const File = require("../../io/file");
 
-salep.test("sf-core/io/file Unit Test", function() {
+salep.test("sf-core/io/filestream Unit Test", function() {
     var myFile = new File({
         path: 'images://smartface.png'
     });

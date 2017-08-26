@@ -23,6 +23,7 @@ salep.on("skip", function(testCase) {
 
 require("./ui");
 require("./io");
+require("./global");
 
 var result = salep.getResults();
 alert("Success: " + result.success + ", Fail: " + result.fail + ", Skip: " + result.skip + ", Total: " + result.total);

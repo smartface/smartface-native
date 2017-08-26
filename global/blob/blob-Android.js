@@ -21,7 +21,6 @@ function Blob (parts, properties) {
         }
     });
     
-    
     Object.defineProperty(this, 'size', {
         get: function() {
             return _parts ? _parts.length : null;
@@ -33,20 +32,23 @@ function Blob (parts, properties) {
         return new Blob(_parts.slice(start, end), {type : type });
     };
     
+    /** @todo check this for 
+     *      java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.Class java.lang.Object.getClass()' on a null object reference
+     *      System.err  W  at io.smartface.ExposingEngine.JsObjectConversions.ToArray(JsObjectConversions.java:97) 
+     */
     this.toBase64 = function() {
         const NativeBase64 = requireClass("android.util.Base64");
-        var encodedString = NativeBase64.encodeToString(_parts, 0, _parts.length, NativeBase64.DEFAULT);
-        return encodedString;
+        return string(NativeBase64.encodeToString(array(_parts), int(0), int(_parts.length), NativeBase64.DEFAULT));
     };
     
     this.toString = function() {
-        return Base64Util.Utf8ArrayToStr( _parts);
+        return Base64Util.Utf8ArrayToStr(_parts);
     }
 }
 
 Blob.createFromBase64 = function(base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
-    var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);
+    var byteArray = array(NativeBase64.decode(string(base64String), NativeBase64.DEFAULT));
     var newBlob = new Blob(byteArray, {type:"image"});
     return newBlob;
 };
