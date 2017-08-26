@@ -1,1 +1,2 @@
 require("./blob");
+require("./data");
