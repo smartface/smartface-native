@@ -4,6 +4,7 @@ const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("sf-core/ui/color");
 const Image = require("sf-core/ui/image");
 const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+const AndroidConfig        = require("sf-core/util/Android/androidconfig");
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -14,7 +15,7 @@ function HeaderBarItem(params) {
     var _searchView = null;
     var _imageButton = false;
     var _menuItem = null;
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
     
     Object.defineProperties(this, {
         'color': {
@@ -52,11 +53,11 @@ function HeaderBarItem(params) {
                 _title = value;
                 if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
-                    this.nativeObject.setText(_title);
+                    this.nativeObject.setText(string(_title));
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                     this.nativeObject.setPadding(
-                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
-                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                        int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal), 
+                        int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
                     );
                     
                     this.color = _color;
@@ -65,7 +66,7 @@ function HeaderBarItem(params) {
                         this.menuItem.setActionView(this.nativeObject);
                 }
                 else if(!this.imageButton) {
-                    this.nativeObject.setText(_title);
+                    this.nativeObject.setText(string(_title));
                     this.color = _color;
                 }
             },
@@ -90,8 +91,8 @@ function HeaderBarItem(params) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                         this.nativeObject.setPadding(
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                            int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal), 
+                            int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
                         );
                     
                         this.imageButton = true;
@@ -139,7 +140,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 _enabled = !!value;
                 if (this.nativeObject) {
-                    this.nativeObject.setEnabled(_enabled);
+                    this.nativeObject.setEnabled(bool(_enabled));
                 }
             },
             enumerable: true
