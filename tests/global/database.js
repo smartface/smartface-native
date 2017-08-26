@@ -31,7 +31,7 @@ salep.test("sf-core/blob Unit Test", function() {
     });
     
     this.case("[execute] function.", function() {
-        assert.doesNotThrow(function(){testObject.execute(dropPersonTableQuery)}, "error");
+        assert.doesNotThrow(function(){testObject.execute(dropPersonTableQuery)}, Error);
     });
     
 });
