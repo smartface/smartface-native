@@ -5,3 +5,4 @@
 // require("./activityindicator");
 // require("./alertView");
 require("./image");
+require("./searchview");
