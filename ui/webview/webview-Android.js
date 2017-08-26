@@ -4,13 +4,11 @@ const AndroidConfig = require('sf-core/util/Android/androidconfig');
 const File          = require('sf-core/io/file');
 const Path          = require('sf-core/io/path');
 
-const activity = AndroidConfig.activity;
-
 const WebView = extend(View)(
     function (_super, params) {
         if (!this.nativeObject) {
             const NativeWebView = requireClass('android.webkit.WebView');
-            this.nativeObject = new NativeWebView(activity);
+            this.nativeObject = new NativeWebView(AndroidConfig.activity);
         }
         
         _super(this);
