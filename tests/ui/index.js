@@ -1,4 +1,4 @@
-// require("./image");
-// require("./searchview");
-// require("./webview");
+require("./image");
+require("./searchview");
+require("./webview");
 require("./mapview");
