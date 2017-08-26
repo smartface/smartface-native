@@ -56,7 +56,7 @@ File.prototype = {
     drawableResourceId: -1,
     nativeObject: null,
     get creationDate(){
-        return this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.lastModified() : -1 ;
+        return this.resolvedPath.type === Path.FILE_TYPE.FILE ? int(this.nativeObject.lastModified()) : -1 ;
     },
     get exists(){
         if(this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.ASSET){
@@ -75,19 +75,19 @@ File.prototype = {
         }
     },
     get isDirectory(){
-        return (this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isDirectory() : false) : false);
+        return (this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? bool(this.nativeObject.isDirectory()) : false) : false);
     },
     get isFile(){
-        return (this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? this.nativeObject.isFile() : true) : false);
+        return (this.nativeObject ? (this.resolvedPath.type === Path.FILE_TYPE.FILE ? bool(this.nativeObject.isFile()) : true) : false);
     },
     get modifiedDate(){
-        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.lastModified() : -1);
+        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? int(this.nativeObject.lastModified()) : -1);
     },
     get name(){
         return this.resolvedPath.name;
     },
     get parent(){
-        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? new File({ path: this.nativeObject.getParent() }) : null);
+        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? new File({ path: string(this.nativeObject.getParent().getAbsolutePath()) }) : null);
     },
     get path() {
         return this.resolvedPath.path;
@@ -97,23 +97,23 @@ File.prototype = {
             switch (this.resolvedPath.type){
                 case Path.FILE_TYPE.ASSET:
                     var assetsInputStream = activity.getAssets().open(this.nativeObject);
-                    var size = assetsInputStream.available();
+                    var size = int(assetsInputStream.available());
                     assetsInputStream.close();
                     return size;
                 case Path.FILE_TYPE.DRAWABLE:
-                    return this.nativeObject.getByteCount();
+                    return int(this.nativeObject.getByteCount());
                 case Path.FILE_TYPE.FILE:
                 case Path.FILE_TYPE.EMULATOR_ASSETS:
                 case Path.FILE_TYPE.EMULATOR_DRAWABLE:
                 case Path.FILE_TYPE.RAU_ASSETS:
                 case Path.FILE_TYPE.RAU_DRAWABLE:
-                    return this.nativeObject.length();
+                    return long(this.nativeObject.length());
             }
         }
         return -1;
     },
     get writable(){
-        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? this.nativeObject.canWrite() : false);
+        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? bool(this.nativeObject.canWrite()) : false);
     }
 };
 
@@ -125,17 +125,17 @@ File.prototype.copy = function(destination){
             if(this.resolvedPath.type === Path.FILE_TYPE.FILE){
                 var destinationConfigured;
                 if(this.isDirectory){
-                    destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
+                    destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(bool(true)));
                     return destinationConfigured && copyDirectory(this, destinationFile);
                 }
                 else if(this.isFile){
                     destinationConfigured = false;
                     if(destinationFile.exists && destinationFile.isDirectory){
                         destinationFile = new File({path: destinationFile.path + "/" + this.name});
-                        destinationConfigured = destinationFile.createFile(true);
+                        destinationConfigured = destinationFile.createFile(bool(true));
                     }
                     else if(!destinationFile.exists){
-                        destinationConfigured = destinationFile.createFile(true);
+                        destinationConfigured = destinationFile.createFile(bool(true));
                     }
                     return destinationConfigured && copyFile(this, destinationFile);
                 }
@@ -144,12 +144,12 @@ File.prototype.copy = function(destination){
                 if (destinationFile.exists && destinationFile.isDirectory){
                     destinationFile = new File({path: destination + "/" + this.name});
                 }
-                if(destinationFile.createFile(true)){
+                if(destinationFile.createFile(bool(true))){
                     const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
                     const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
                     var assetsInputStream = activity.getAssets().open(this.nativeObject);
                     var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
-                    destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
+                    destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, bool(false));
                     copyStream(assetsBufferedInputStream,destinationFileStream);
                     destinationFileStream.flush();
                     assetsBufferedInputStream.close();
@@ -163,17 +163,17 @@ File.prototype.copy = function(destination){
                 if (destinationFile.exists && destinationFile.isDirectory){
                     destinationFile = new File({path: destination + "/" + this.name + ".png"});
                 }
-                if (destinationFile.createFile(true)) {
+                if (destinationFile.createFile(bool(true))) {
                     const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
                     const NativeBufferedOutputStream = requireClass('java.io.BufferedOutputStream');
                     const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
                     const NativeBitmap = requireClass('android.graphics.Bitmap');
                     
                     var drawableByteArrayStream = new NativeByteArrayOutputStream();
-                    this.nativeObject.compress(NativeBitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, drawableByteArrayStream);
+                    this.nativeObject.compress(NativeBitmap.CompressFormat.PNG, int(0) /*ignored for PNG*/, drawableByteArrayStream);
                     var bitmapdata = drawableByteArrayStream.toByteArray();
 
-                    var destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
+                    var destinationFileOutputStream = new NativeFileOutputStream(destinationFile.nativeObject, bool(false));
                     destinationFileStream = new NativeBufferedOutputStream(destinationFileOutputStream);
                     destinationFileStream.write(bitmapdata);
                     destinationFileStream.flush();
@@ -201,24 +201,24 @@ File.prototype.copy = function(destination){
 
 File.prototype.createFile = function(createParents){
     if(this.resolvedPath.type === Path.FILE_TYPE.FILE){
-        if(this.nativeObject.exists){
+        if(bool(this.nativeObject.exists())){
             this.remove(true);
         }
         if (createParents) {
             var fileParentPath = this.resolvedPath.fullPath.substring(0, this.resolvedPath.fullPath.lastIndexOf("/"));
             var fileParent = new NativeFile(string(fileParentPath));
-            if (!fileParent.exists()) {
+            if (!bool(fileParent.exists())) {
                 fileParent.mkdirs();
             }
         }
-        return this.nativeObject.createNewFile();
+        return bool(this.nativeObject.createNewFile());
     }
     return false;
 };
 
 File.prototype.createDirectory = function(createParents){
     if(this.resolvedPath.type === Path.FILE_TYPE.FILE){
-        return createParents ? this.nativeObject.mkdirs() : this.nativeObject.mkdir();
+        return createParents ? bool(this.nativeObject.mkdirs()) : bool(this.nativeObject.mkdir());
     }
     return false;
 };
@@ -230,9 +230,9 @@ File.prototype.remove = function(withChilds){
 File.prototype.getFiles = function(){
     if(this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists){
         var allJSFiles = [];
-        var allNativeFiles = this.nativeObject.listFiles();
+        var allNativeFiles = array(this.nativeObject.listFiles());
         allNativeFiles.foreach(function(tmpFile){
-            allJSFiles.push(new File({path: tmpFile.getAbsolutePath()}));
+            allJSFiles.push(new File({path: string(tmpFile.getAbsolutePath())}));
         });
         return allJSFiles;
     }
@@ -255,7 +255,7 @@ File.prototype.move = function(destination){
                     }
                 }
             }
-            if(this.nativeObject.renameTo(destinationFile.nativeObject)){
+            if(bool(this.nativeObject.renameTo(destinationFile.nativeObject))){
                 this.resolvedPath.path = destinationFile.path;
                 this.resolvedPath.fullPath = destinationFile.path;
                 return true;
@@ -272,8 +272,8 @@ File.prototype.openStream = function(streamType, contentMode) {
 File.prototype.rename = function(newName) {
     if(this.resolvedPath.type === Path.FILE_TYPE.FILE){
         var newFileFullPath = this.path.substring(0, this.path.lastIndexOf("/")+1) + newName;
-        var newFile = new NativeFile(newFileFullPath);
-        if (this.nativeObject.renameTo(newFile)) {
+        var newFile = new NativeFile(string(newFileFullPath));
+        if (bool(this.nativeObject.renameTo(newFile))) {
             this.resolvedPath.path = newFileFullPath;
             this.resolvedPath.fullPath = newFileFullPath;
             return true;
@@ -314,17 +314,17 @@ function removeFile(fileToRemove, withChilds){
                 return removeFile(fileToRemove,false);
             }
         }
-        return fileToRemove.nativeObject.delete();
+        return bool(fileToRemove.nativeObject.delete());
     }
 }
 
 function copyStream(sourceFileStream, destinationFileStream) {
     var buffer = [];
     buffer.length = 1024;
-    var len = sourceFileStream.read(buffer);
+    var len = int(sourceFileStream.read(array(buffer)));
     while(len > 0){
-        destinationFileStream.write(buffer, 0, len);
-        len = sourceFileStream.read(buffer);
+        destinationFileStream.write(array(buffer), int(0), int(len));
+        len = int(sourceFileStream.read(array(buffer)));
     }
 }
 
@@ -333,7 +333,7 @@ function copyFile(sourceFile, destinationFile){
         const NativeFileInputStream = requireClass("java.io.FileInputStream");
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         var sourceFileStream = new NativeFileInputStream(sourceFile.nativeObject);
-        var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject,false);
+        var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject,bool(false));
         copyStream(sourceFileStream,destinationFileStream);
         sourceFileStream.close();
         destinationFileStream.close();
