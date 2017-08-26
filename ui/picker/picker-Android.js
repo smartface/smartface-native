@@ -132,8 +132,8 @@ function setNumberPicker(nativeObject, _items) {
         nativeObject.setMinValue(int(0));
         nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
         var items = [];
-        for(var i = 0; i < _items.length; i++) {
-            items[i] = string(_items[i]);
+        for(var item in _items) {
+            items.push(string(item));
         }
         
         nativeObject.setDisplayedValues(array(items));
