@@ -31,7 +31,7 @@ System.android = {};
 Object.defineProperties(System, {
     'language': {
         get: function() {
-            return NativeLocale.getDefault().getDisplayLanguage();
+            return string(NativeLocale.getDefault().getDisplayLanguage());
         },
         enumerable: true
     },
@@ -43,21 +43,21 @@ Object.defineProperties(System, {
     },
     'OSVersion': {
         get: function() {
-            return NativeBuild.VERSION.RELEASE;
+            return string(NativeBuild.VERSION.RELEASE);
         },
         enumerable: true
     },
     'isBatteryCharged': {
         get: function() {
-            var batteryStatus = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_STATUS, -1);
-            return batteryStatus === NativeBatteryManager.BATTERY_STATUS_CHARGING;
+            var batteryStatus = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_STATUS, -1));
+            return batteryStatus === int(NativeBatteryManager.BATTERY_STATUS_CHARGING);
         },
         enumerable: true
     },
     'batteryLevel': {
         get: function() {
-            var level = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_LEVEL, -1);
-            var scale = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_SCALE, -1);
+            var level = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_LEVEL, -1));
+            var scale = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_SCALE, -1));
             return (level / scale) * 100;
         },
         enumerable: true
@@ -67,7 +67,7 @@ Object.defineProperties(System, {
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
-                return storedData.getItemAt(0).getText();
+                return string(storedData.getItemAt(0).getText());
             } else {
                 return null;
             }
@@ -90,7 +90,7 @@ Object.defineProperties(System, {
         get: function() {
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
                 var fingerprintManager = AndroidConfig.getSystemService(FINGERPRINT_SERVICE, FINGERPRINT_MANAGER);
-                return fingerprintManager && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
+                return fingerprintManager && bool(fingerprintManager.isHardwareDetected()) && bool(fingerprintManager.hasEnrolledFingerprints());
             }
             return false;
         },
@@ -102,40 +102,39 @@ Object.defineProperties(System, {
                 const NativeFingerprintAuthenticationDialogFragment = requireClass("com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment");
                 const NativeFingerPrintListener = requireClass("com.android.fingerprintdialog.FingerPrintListener");
                 
-                var activity = Android.getActivity();
-                var fragmentManager = activity.getFragmentManager();
+                var fragmentManager = AndroidConfig.activity.getFragmentManager();
                 var fragment = new NativeFingerprintAuthenticationDialogFragment();
                 
                 var listeners = NativeFingerPrintListener.implement({
                     'onError': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onAuthenticated': function() {
-                        params.onSuccess && params.onSuccess();
+                        params && params.onSuccess && params.onSuccess();
                     },
                     'onTimeout': function(){
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onCancel': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onLockout': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     }
                 });
                 
-                if(TypeUtil.isString(params.message)){
-                    fragment.setMessage(string(params.message));
+                if(params && TypeUtil.isString(params.message)){
+                    fragment.setMessage(params.message);
                 }
-                if(TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
-                    fragment.setTitle(string(params.android.title));
+                if(params && TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
+                    fragment.setTitle(params.android.title);
                 }
                 
                 fragment.addFingerPrintListener(listeners);
                 fragment.show(fragmentManager, DIALOG_FRAGMENT_TAG);
                 return;
             }
-            params.onError && params.onError();
+            params && params.onError && params.onError();
         },
         enumerable: true
     }
@@ -144,22 +143,21 @@ Object.defineProperties(System, {
 Object.defineProperties(System.android, {
     'apiLevel': {
         get: function() {
-            return NativeBuild.VERSION.SDK_INT;
+            return int(NativeBuild.VERSION.SDK_INT);
         },
         enumerable: true
     },
     'menuKeyAvaliable': {
         get: function() {
-            var activity = Android.getActivity();
-            return NativeViewConfig.get(activity).hasPermanentMenuKey();
+            return bool(NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey());
         },
         enumerable: true
     },
     'isApplicationInstalled': {
         value: function(packageName) {
-            var packageList = Android.getActivity().getPackageManager().getInstalledApplications(0);
-            for (var i = 0; i < packageList.size(); i++) {
-                if(packageList.get(i).packageName === packageName) {
+            var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
+            for (var i = 0; i < int(packageList.size()); i++) {
+                if(string(packageList.get(i).packageName) === packageName) {
                     return true;
                 }
             }
@@ -171,7 +169,7 @@ Object.defineProperties(System.android, {
 
 function getBatteryIntent() {
     var intentFilter = new NativeIntentFilter(ACTION_BATTERY_CHANGED);
-    return Android.getActivity().registerReceiver(null, intentFilter);
+    return AndroidConfig.activity.registerReceiver(null, intentFilter);
 };
 
 // iOS specifics
