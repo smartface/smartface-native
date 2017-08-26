@@ -1,13 +1,13 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
+const extend        = require('js-base/core/extend');
+const View          = require('sf-core/ui/view');
 const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const File = require('sf-core/io/file');
-const Path = require('sf-core/io/path');
+const File          = require('sf-core/io/file');
+const Path          = require('sf-core/io/path');
+
+const activity = AndroidConfig.activity;
 
 const WebView = extend(View)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
         if (!this.nativeObject) {
             const NativeWebView = requireClass('android.webkit.WebView');
             this.nativeObject = new NativeWebView(activity);
@@ -17,13 +17,12 @@ const WebView = extend(View)(
         
         var overrideMethods = {
             onPageFinished: function(view, url) {
-                _onShow && _onShow({url: url});
+                _onShow && _onShow({url: string(url)});
             },
             onPageStarted: function(view, url, favicon) {
-                _onLoad && _onLoad({url: url});
+                _onLoad && _onLoad({url: string(url)});
             }
         };
-
         var _canOpenLinkInside = true;
         var _onError;
         var _onShow;
@@ -50,7 +49,7 @@ const WebView = extend(View)(
             },
             'bounceEnabled': {
                 get: function() {
-                    return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
+                    return (int(this.nativeObject.getOverScrollMode()) !== 2); // OVER_SCROLL_NEVER
                 },
                 set: function(value) {
                     if (value) {
@@ -90,7 +89,7 @@ const WebView = extend(View)(
             },
             'zoomEnabled': {
                 get: function() {
-                    return this.nativeObject.getSettings().getBuiltInZoomControls();
+                    return bool(this.nativeObject.getSettings().getBuiltInZoomControls());
                 },
                 set: function(enabled) {
                     this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
@@ -130,10 +129,9 @@ const WebView = extend(View)(
                         var valueCallback = ValueCallback.implement({
                             onReceiveValue: function(value) {
                                 if(callback)
-                                    callback(value);
+                                    callback(string(value));
                             }
                         });
-
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
                     } else {
                         this.nativeObject.loadUrl("javascript:"+ javascript);
@@ -192,7 +190,7 @@ const WebView = extend(View)(
                     var uri = request.getUrl();
                     var url = uri.toString();
                     var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
+                    _onChangedURL && (callbackValue = _onChangedURL({url: string(url)}));
                     if(!callbackValue)
                         return true;
                     return overrideURLChange(url, _canOpenLinkInside);
@@ -216,32 +214,36 @@ const WebView = extend(View)(
                     var code = webResourceError.getErrorCode();
                     var message = webResourceError.getDescription();
     
-                    _onError && _onError({message: message, code: code, url: url});
+                    _onError && _onError({message: string(message), code: string(code), url: string(url)});
                 };
             } else {
                 overrideMethods.onReceivedError = function(view, errorCode, description, failingUrl) {
-                    _onError && _onError({message: description, code: errorCode, url: failingUrl});
+                    _onError && _onError({message: string(description), code: int(errorCode), url: string(failingUrl)});
                 };
             }
-    
+            try{
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
-            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
+            var nativeWebClient = NativeWebClient.extend(string("SFWebClient"), overrideMethods, null);
             this.nativeObject.setWebViewClient(nativeWebClient);
             this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
             this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
-
             var settings = this.nativeObject.getSettings();
+            /** @todo causes exception 
+             * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
+             */
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
             settings.setLoadsImagesAutomatically(true);
+            }
+            catch(e)
+            {require("sf-core/application").onUnhandledError(e);}
             
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
         }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -252,7 +254,6 @@ const WebView = extend(View)(
         
     }
 );
-
 function overrideURLChange(url, _canOpenLinkInside) {
     if (_canOpenLinkInside) {
         return false;
@@ -262,9 +263,8 @@ function overrideURLChange(url, _canOpenLinkInside) {
         var action = NativeIntent.ACTION_VIEW;
         var uri = NativeURI.parse(url);
         var intent = new NativeIntent(action, uri);
-        Android.getActivity().startActivity(intent);
+        AndroidConfig.activity.startActivity(intent);
         return true;
     }
 }
-
 module.exports = WebView;
