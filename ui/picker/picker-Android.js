@@ -1,17 +1,15 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const TypeUtil = require('sf-core/util/type');
-console.log("Before requireClass");
-const NativeNumberPicker = requireClass("android.widget.NumberPicker");
-const NativeFrameLayout = requireClass("android.widget.FrameLayout");
-const NativeAlertDialog = requireClass("android.app.AlertDialog");
-const NativeDialogInterface = requireClass("android.content.DialogInterface");
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
+const extend        = require('js-base/core/extend');
+const View          = require('sf-core/ui/view');
+const TypeUtil      = require('sf-core/util/type');
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
-console.log("After requireClass");
+const NativeNumberPicker    = requireClass("android.widget.NumberPicker");
+const NativeFrameLayout     = requireClass("android.widget.FrameLayout");
+const NativeAlertDialog     = requireClass("android.app.AlertDialog");
+const NativeDialogInterface = requireClass("android.content.DialogInterface");
+
 const Picker = extend(View)(
     function (_super, params) {
-// function Picker(params) {
         var self = this;
         const activity = AndroidConfig.activity;
         if(!self.nativeObject) {
@@ -123,7 +121,6 @@ const Picker = extend(View)(
         }
     }
 );
-
 
 function setNumberPicker(nativeObject, _items) {
     if(_items.length > 0) {
