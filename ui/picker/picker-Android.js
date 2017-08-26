@@ -1,16 +1,19 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const TypeUtil = require('sf-core/util/type');
-
+console.log("Before requireClass");
 const NativeNumberPicker = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout = requireClass("android.widget.FrameLayout");
 const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
+const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 
+console.log("After requireClass");
 const Picker = extend(View)(
     function (_super, params) {
+// function Picker(params) {
         var self = this;
-        var activity = Android.getActivity();
+        const activity = AndroidConfig.activity;
         if(!self.nativeObject) {
             self.nativeObject = new NativeNumberPicker(activity);
         }
@@ -33,10 +36,10 @@ const Picker = extend(View)(
             },
             'currentIndex': {
                 get: function() {
-                    return self.nativeObject.getValue();
+                    return int(self.nativeObject.getValue());
                 },
                 set: function(currentIndex) {
-                    self.nativeObject.setValue(currentIndex);
+                    self.nativeObject.setValue(int(currentIndex));
                 },
                 enumerable: true
             },
@@ -63,7 +66,7 @@ const Picker = extend(View)(
                     var doneListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             if(done)
-                                done({index: self.currentIndex});
+                                done({index: int(self.currentIndex)});
                         }
                     });
                     
@@ -90,13 +93,13 @@ const Picker = extend(View)(
         });
         Object.defineProperty(this.android, 'enabled', {
             get: function() {
-                return self.nativeObject.isEnabled();  
+                return bool(self.nativeObject.isEnabled());  
             }, 
             set: function(value) {
                 if(!TypeUtil.isBoolean(value)){
                     throw new TypeError("Value should be boolean for enabled.");
                 }
-                self.nativeObject.setEnabled(value);
+                self.nativeObject.setEnabled(bool(value));
             },
             enumerable: true
         });
@@ -106,7 +109,7 @@ const Picker = extend(View)(
                 onScrollStateChange: function(picker, scrollState) {
                     if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                         if(_onSelected)
-                            _onSelected(self.currentIndex);
+                            _onSelected(int(self.currentIndex));
                     }
                 }
             }));
@@ -121,14 +124,20 @@ const Picker = extend(View)(
     }
 );
 
+
 function setNumberPicker(nativeObject, _items) {
     if(_items.length > 0) {
         nativeObject.setDisplayedValues(null);
-        nativeObject.setMaxValue(_items.length -1);
-        nativeObject.setMinValue(0);
+        nativeObject.setMaxValue(int(_items.length-1));
+        nativeObject.setMinValue(int(0));
         nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        nativeObject.setDisplayedValues(_items);
-        nativeObject.setWrapSelectorWheel(false);
+        var items = [];
+        for(var i = 0; i < _items.length; i++) {
+            items[i] = string(_items[i]);
+        }
+        
+        nativeObject.setDisplayedValues(array(items));
+        nativeObject.setWrapSelectorWheel(bool(false));
     }
 }
 
@@ -139,9 +148,9 @@ function addViewToLayout(nativeObject) {
         parent.removeView(nativeObject);
     }
     layout.addView(nativeObject, new NativeFrameLayout.LayoutParams(
-        -1 , // FrameLayout.LayoutParams.MATCH_PARENT
-        -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
-        17)); // Gravity.CENTER
+        int(-1) , // FrameLayout.LayoutParams.MATCH_PARENT
+        int(-2) , // FrameLayout.LayoutParams.WRAP_CONTENT
+        int(17))); // Gravity.CENTER
     return layout;
 }
 
