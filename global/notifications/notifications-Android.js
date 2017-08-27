@@ -16,7 +16,6 @@ const ALARM_MANAGER             = "android.app.AlarmManager";
 
 const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 
-var activity = Android.getActivity();
 var selectedNotificationIds = [];
 var senderID = null;
 var notificationListener =  NativeNotificationListener.implement({
@@ -40,7 +39,7 @@ Notifications.LocalNotification = function(params) {
     this.mPendingIntent = null;
     this.mNotification = null;
 
-    this.nativeObject = new NativeNotificationCompat.Builder(activity);
+    this.nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
     this.nativeObject = self.nativeObject.setSmallIcon(NativeR.drawable.icon);
     
     var _id = getNewNotificationId();
@@ -99,7 +98,7 @@ Notifications.LocalNotification = function(params) {
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();
                         if(largeImageBitmap){
-                            self.nativeObject.setLargeIcon(largeImage.nativeObject);
+                            self.nativeObject.setLargeIcon(largeImageBitmap);
                             _launchImage = value;
                         }
                     }
@@ -217,6 +216,9 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
+        /** @todo it looks like we got problems with primitive arrays
+         * method android.support.v4.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
+        * */
         'vibrate' : {
             get: function() {
                 return _vibrate;
@@ -224,7 +226,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isBoolean(value)) {
                     _vibrate = true;
-                    self.nativeObject.setVibrate([1000]);
+                    self.nativeObject.setVibrate(array([long(1000)]));
                 }
             },
             enumerable: true
@@ -345,7 +347,7 @@ function unregisterPushNotification(){
     if(TypeUtil.isString(senderID) && senderID !== ""){
         const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.unregisterPushNotification(activity);
+        NativeGCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
         if(notificationListener){
             NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
@@ -362,11 +364,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     }
     if(TypeUtil.isString(senderID) && senderID !== '' ){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
+        NativeGCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
             onSuccess: function(token){
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback({ 'token' : token });
+                onSuccessCallback && onSuccessCallback({ 'token' : string(token) });
             },
             onFailure: function(){
                 onFailureCallback && onFailureCallback();
@@ -387,17 +389,18 @@ function readSenderIDFromProjectJson(){
 function startNotificationIntent(self, params){
     const NativeIntent = requireClass('android.content.Intent');
     const NativePendingIntent = requireClass('android.app.PendingIntent')
+    /** @todo throw exception here 
+     * Error: An exception occured
+    */
     var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
-    var notificationIntent = new NativeIntent(activity, nativeNotificationReceiverClass);
-    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED","");
-    
+    var notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
+    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED",string(""));
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
-    
+
     // PendingIntent.FLAG_ONE_SHOT
-    self.mPendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 1073741824);
-    
+    self.mPendingIntent = NativePendingIntent.getBroadcast(AndroidConfig.activity, 0, notificationIntent, 1073741824);
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     var fireDate = params.fireDate ? params.fireDate : 0;
     if(params.repeatInterval){
