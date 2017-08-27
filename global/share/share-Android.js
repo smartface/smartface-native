@@ -1,10 +1,10 @@
-const activity = Android.getActivity();
-const NativeIntent       = requireClass('android.content.Intent');
-const NativeBuildConfig  = requireClass(activity.getPackageName() + ".BuildConfig");
-const NativeBuildVersion = requireClass('android.os.Build').VERSION;
-const NativeFileProvider = requireClass('android.support.v4.content.FileProvider');
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const NativeIntent          = requireClass('android.content.Intent');
+const NativeBuildConfig     = requireClass(string(AndroidConfig.activity.getPackageName()) + ".BuildConfig");
+const NativeBuildVersion    = requireClass('android.os.Build').VERSION;
+const NativeFileProvider    = requireClass('android.support.v4.content.FileProvider');
 
-const Authority = NativeBuildConfig.APPLICATION_ID + ".provider";
+const Authority = string(NativeBuildConfig.APPLICATION_ID) + ".provider";
 
 const Share = {};
 Object.defineProperties(Share, {
@@ -13,7 +13,7 @@ Object.defineProperties(Share, {
             var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(NativeIntent.EXTRA_TEXT, text);
-            activity.startActivity(shareIntent);
+            AndroidConfig.activity.startActivity(shareIntent);
         }
     },
     'shareImage': {
@@ -22,17 +22,17 @@ Object.defineProperties(Share, {
             var imageFile = writeImageToFile(image);
 
             var uri;
-            if (NativeBuildVersion.SDK_INT < 24) {
+            if (AndroidConfig.sdkVersion < 24) {
                 uri = NativeURI.fromFile(imageFile);
             } else {
-                uri = NativeFileProvider.getUriForFile(activity, Authority, imageFile);
+                uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, imageFile);
             }
             
             var shareIntent = new NativeIntent();
             shareIntent.setAction(NativeIntent.ACTION_SEND);
             shareIntent.putExtra(NativeIntent.EXTRA_STREAM, uri);
             shareIntent.setType("image/*");
-            activity.startActivity(shareIntent);
+            AndroidConfig.activity.startActivity(shareIntent);
         }
     },
     'shareFile': {
@@ -42,17 +42,17 @@ Object.defineProperties(Share, {
 
             var sharedFile = new NativeFile(file.path);
             var uri;
-            if (NativeBuildVersion.SDK_INT < 24) {
+            if (AndroidConfig.sdkVersion < 24) {
                 uri = NativeURI.fromFile(sharedFile);
             } else {
-                uri = NativeFileProvider.getUriForFile(activity, Authority, sharedFile);
+                uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, sharedFile);
             }
 
             var shareIntent = new NativeIntent();
             shareIntent.setAction(NativeIntent.ACTION_SEND);
             shareIntent.putExtra(NativeIntent.EXTRA_STREAM, uri);
             shareIntent.setType("application/*");
-            activity.startActivity(shareIntent);
+            AndroidConfig.activity.startActivity(shareIntent);
         }
     },
 });
@@ -68,7 +68,7 @@ function writeImageToFile(image) {
     bitmap.compress(NativeBitmap.CompressFormat.PNG, 100, outStream);
 
     var byteArray = outStream.toByteArray();
-    var tempFile = new NativeFile(activity.getExternalFilesDir(null), "sf-core-temp.png");
+    var tempFile = new NativeFile(AndroidConfig.activity.getExternalFilesDir(null), "sf-core-temp.png");
     var fileOutStream = new NativeFileOutStream(tempFile);
     fileOutStream.write(byteArray);
     fileOutStream.flush();
