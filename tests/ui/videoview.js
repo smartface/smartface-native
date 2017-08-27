@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const VideoView = require("../../ui/videoview");
 
-salep.test("sf-core/io/file Unit Test", function() {
+salep.test("sf-core/ui/videoview Unit Test", function() {
     var testObject = new VideoView();
     
     this.case("[loadURL] function.", function() {

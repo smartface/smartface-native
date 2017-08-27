@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const Data = require("../../data");
 
-salep.test("sf-core/blob Unit Test", function() {
+salep.test("sf-core/global/data Unit Test", function() {
     
     this.case("[string-variable] function.", function() {
         Data.setStringVariable("string-key","string-value");

@@ -5,7 +5,7 @@ const FileStream = require("../../io/filestream");
 const File = require("../../io/file");
 const Blob = require("../../blob");
 
-salep.test("sf-core/blob Unit Test", function() {
+salep.test("sf-core/global/blob Unit Test", function() {
     var myFile = new File({
         path: 'images://smartface.png'
     });

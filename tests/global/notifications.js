@@ -5,7 +5,7 @@ const Notifications = require("../../notifications");
 const Image = require("../../ui/image");
 const Color = require("../../ui/color");
 
-salep.test("sf-core/blob Unit Test", function() {
+salep.test("sf-core/global/notifications Unit Test", function() {
     
     var testObject = new Notifications.LocalNotification();
 

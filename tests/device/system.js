@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const System = require("../../device/system");
 
-salep.test("sf-core/blob Unit Test", function() {
+salep.test("sf-core/device/system Unit Test", function() {
     
     this.case("[language] getter.", function() {
         assert.isString(System.language, 'language must be string');

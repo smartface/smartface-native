@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const WebView = require("../../ui/webview");
 
-salep.test("sf-core/io/file Unit Test", function() {
+salep.test("sf-core/ui/webview Unit Test", function() {
     var testObject = null;
     
     this.beforeEach(function(){

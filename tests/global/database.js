@@ -5,7 +5,7 @@ const Database = require("../../data").Database;
 const Path = require("../../io/path");
 const File = require("../../io/file");
 
-salep.test("sf-core/blob Unit Test", function() {
+salep.test("sf-core/global/data/database Unit Test", function() {
     
     var dbFile = new File({path: Path.DataDirectory +'/database.sqlite'});
     var testObject = new Database({

@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const SearchView = require("../../ui/searchview");
 
-salep.test("sf-core/io/file Unit Test", function() {
+salep.test("sf-core/ui/searchview Unit Test", function() {
     var testObject = null;
     
     this.beforeEach(function(){

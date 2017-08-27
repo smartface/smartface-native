@@ -6,7 +6,7 @@ const MapView = require("../../ui/mapview");
 const Router = require("../../ui/router");
 const Page = require("../../ui/page");
 
-salep.test("sf-core/io/file Unit Test", function() {
+salep.test("sf-core/ui/mapview Unit Test", function() {
     var testObject = new MapView();
     var myPin = new MapView.Pin({
         location: {
