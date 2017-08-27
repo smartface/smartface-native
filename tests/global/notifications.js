@@ -86,4 +86,17 @@ salep.test("sf-core/blob Unit Test", function() {
     this.case("[cancel] function.", function() {
         assert.doesNotThrow(function(){ testObject.cancel(); }, Error);
     });
+    
+    this.case("[cancelAllLocalNotifications] function.", function() {
+        assert.doesNotThrow(function(){ Notifications.cancelAllLocalNotifications(); }, Error);
+    });
+    
+    this.case("[registerForPushNotifications] function.", function() {
+        assert.doesNotThrow(function(){ Notifications.registerForPushNotifications(); }, Error);
+    });
+    
+    this.case("[unregisterForPushNotifications] function.", function() {
+        assert.doesNotThrow(function(){ Notifications.unregisterForPushNotifications(); }, Error);
+    });
+    
 });
