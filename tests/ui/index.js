@@ -1,5 +1,6 @@
 require("./image");
-require("./searchview");
-require("./webview");
 require("./mapview");
+require("./searchview");
+require("./slider");
+require("./webview");
 require("./videoview");

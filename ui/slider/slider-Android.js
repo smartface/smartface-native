@@ -1,6 +1,7 @@
-const extend = require('js-base/core/extend');
-const View   = require('sf-core/ui/view');
-const Color  = require('sf-core/ui/color');
+const extend        = require('js-base/core/extend');
+const View          = require('sf-core/ui/view');
+const Color         = require('sf-core/ui/color');
+const AndroidConfig = require('sf-core/util/Android/androidconfig');
 
 const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
@@ -11,7 +12,7 @@ const NativeView     = requireClass("android.view.View");
 const Slider = extend(View)(
     function (_super, params) {
         if(!this.nativeObject) {
-            this.nativeObject = new SeekBar(Android.getActivity());
+            this.nativeObject = new SeekBar(AndroidConfig.activity);
         }
         _super(this);
         
@@ -28,7 +29,7 @@ const Slider = extend(View)(
         Object.defineProperties(this, {
             'value': {
                 get: function() {
-                    return this.nativeObject.getProgress() + _minValue;
+                    return int(this.nativeObject.getProgress()) + _minValue;
                 }, 
                 set: function(value) {
                     if (value < _minValue) {
@@ -37,7 +38,7 @@ const Slider = extend(View)(
                         value = _maxValue;
                     }
                     
-                    this.nativeObject.setProgress(value - _minValue);
+                    this.nativeObject.setProgress(int(value - _minValue));
                 },
                 enumerable: true
             },
@@ -47,7 +48,7 @@ const Slider = extend(View)(
                 }, 
                 set: function(value) {
                     _minValue = value;
-                    this.nativeObject.setMax(_maxValue - _minValue);
+                    this.nativeObject.setMax(int(_maxValue - _minValue));
                 },
                 enumerable: true
             },
@@ -57,7 +58,7 @@ const Slider = extend(View)(
                 }, 
                 set: function(value) {
                     _maxValue = value;
-                    this.nativeObject.setMax(_maxValue - _minValue);
+                    this.nativeObject.setMax(int(_maxValue - _minValue));
                 },
                 enumerable: true
             },
@@ -68,7 +69,6 @@ const Slider = extend(View)(
                 set: function(color) {
                     if (color) {
                         _minTrackColor = color;
-    
                         _layerDrawable.findDrawableByLayerId(NativeR.id.progress).setColorFilter(_minTrackColor.nativeObject, PorterDuffMode);
                     }
                 },
@@ -81,7 +81,6 @@ const Slider = extend(View)(
                 set: function(color) {
                     if (color) {
                         _maxTrackColor = color;
-                        
                         _layerDrawable.findDrawableByLayerId(NativeR.id.background).setColorFilter(_maxTrackColor.nativeObject, PorterDuffMode);
                     }
                 },
