@@ -15,7 +15,6 @@ var _onMaximize;
 var _onExit;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
-var activity = requireClass("io.smartface.android.SpratAndroidActivity").getActivity();
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 
 // Creating Activity Lifecycle listener
@@ -54,18 +53,16 @@ Object.defineProperties(ApplicationWrapper, {
     'byteReceived': {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var applicationInfo = activity.getApplicationInfo();
-            var UID = applicationInfo.uid;
-            return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
+            var UID = AndroidConfig.activity.getApplicationInfo().uid;
+            return long(NativeTrafficStats.getUidRxBytes(UID)) / (1024 * 1024);
         },
         enumerable: true
     },
     'byteSent': {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var applicationInfo = activity.getApplicationInfo();
-            var UID = applicationInfo.uid;
-            return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
+            var UID = AndroidConfig.activity.getApplicationInfo().uid;
+            return long(NativeTrafficStats.getUidTxBytes(UID)) / (1024 * 1024);
         },
         enumerable: true
     },
@@ -147,14 +144,14 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             }
             
-            var packageManager = activity.getPackageManager();
+            var packageManager = AndroidConfig.activity.getPackageManager();
             var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if(activitiesCanHandle.size() > 0){
+            if(int(activitiesCanHandle.size()) > 0){
                 if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title); 
                     try{
-                        activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
                     }
                     catch(e){
                         onFailure && onFailure();
@@ -163,7 +160,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
                 else{
                     try{
-                        activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
                     }
                     catch(e){
                         onFailure && onFailure();
@@ -179,15 +176,15 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'exit': {
         value: function(){
-            activity.finish();
+            AndroidConfig.activity.finish();
         },
         enumerable: true
     },
     'restart': {
         value: function(){
-            var spratIntent = activity.getIntent();
-            activity.finish();
-            activity.startActivity(spratIntent);
+            var spratIntent = AndroidConfig.activity.getIntent();
+            AndroidConfig.activity.finish();
+            AndroidConfig.activity.startActivity(spratIntent);
         },
         enumerable: true
     },
@@ -284,7 +281,7 @@ Object.defineProperties(ApplicationWrapper, {
 
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
-        value: activity.getPackageName(),
+        value: string(AndroidConfig.activity.getPackageName()),
         enumerable: true
     },
     'checkPermission':{
@@ -296,12 +293,12 @@ Object.defineProperties(ApplicationWrapper.android, {
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
-                return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
+                return int(NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission)) === 0;
             }
             else{
-                var packageManager = activity.getPackageManager();
+                var packageManager = AndroidConfig.activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
-                return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
+                return int(packageManager.checkPermission(permission, ApplicationWrapper.android.packageName)) == 0;
             }
             
         },
@@ -320,7 +317,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 });
             }
             else{
-                activity.requestPermissions([permissions], requestCode);
+                AndroidConfig.activity.requestPermissions(array([string(permissions)]), requestCode);
             }
             
         },
@@ -331,7 +328,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             if(!TypeUtil.isString(permission)){
                 throw new Error('Permission must be Application.Permission type');
             }
-            return activity.shouldShowRequestPermissionRationale(permission);
+            return bool(AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
         },
         enumerable: true
     },

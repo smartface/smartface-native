@@ -21,6 +21,7 @@ salep.on("skip", function(testCase) {
     // console.log("Skipped Case [" + testCase.name + "] in " + testCase.parent.name + ".");
 });
 
+require("./application");
 require("./device");
 require("./global");
 require("./io");
