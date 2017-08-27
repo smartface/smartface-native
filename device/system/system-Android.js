@@ -82,7 +82,7 @@ Object.defineProperties(System, {
     'vibrate': {
         value: function() {
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
-            vibrator.vibrate(500);
+            vibrator.vibrate(long(500));
         },
         enumerable: true
     },
