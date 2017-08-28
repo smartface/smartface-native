@@ -147,6 +147,15 @@ function Image (params) {
             }, 
             enumerable: true
         },
+        'toBlob':{
+            value: function() {
+                var bitmap = self.nativeObject.getBitmap();
+                var stream = new NativeByteArrayOutputStream();
+                bitmap.compress(CompressFormat[1], 100, stream);
+                return new Blob(stream.toByteArray(), {type: "image"});
+            }, 
+            enumerable: true
+        },
         'toString': {
             value: function(){
                 return 'Image';
