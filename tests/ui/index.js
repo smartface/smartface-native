@@ -11,6 +11,7 @@ require("./label");
 require("./listview");
 require("./listviewitem");
 require("./mapview");
+require("./scrollview");
 require("./searchview");
 require("./slider");
 require("./switch");
