@@ -1,3 +1,4 @@
+require("./alertview");
 require("./button");
 require("./color");
 require("./font");
