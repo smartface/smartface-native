@@ -3,6 +3,7 @@ require("./alertview");
 require("./animator");
 require("./button");
 require("./color");
+require("./datepicker");
 require("./dialog");
 require("./flexlayout");
 require("./floatingmenu");
