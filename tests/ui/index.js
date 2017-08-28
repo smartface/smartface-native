@@ -1,6 +1,7 @@
 require("./alertview");
 require("./button");
 require("./color");
+require("./dialog");
 require("./font");
 require("./image");
 require("./label");
