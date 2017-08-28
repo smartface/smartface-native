@@ -1,2 +1,3 @@
-require("./system");
 require("./hardware");
+require("./multimedia");
+require("./system");
