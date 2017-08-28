@@ -23,13 +23,13 @@ const MARSHMALLOW = 23;
 Object.defineProperties(Network, {
     'IMSI': {
         get: function() {
-            return getTelephonyManager().getSubscriberId();
+            return getTelephonyManager().getSubscriberId() ? string(getTelephonyManager().getSubscriberId()) : null; 
         },
         configurable: false
     },
     'SMSEnabled': {
         get: function() {
-            return getTelephonyManager().getDataState() === NativeTelephonyManager.DATA_CONNECTED;
+            return int(getTelephonyManager().getDataState()) === int(NativeTelephonyManager.DATA_CONNECTED);
         },
         configurable: false
     },
@@ -39,14 +39,14 @@ Object.defineProperties(Network, {
             if (bluetoothAdapter === null) {
                 return "null";
             } else {
-                return bluetoothAdapter.getAddress();
+                return string(bluetoothAdapter.getAddress());
             }
         },
         configurable: false
     },
     'carrier': {
         get: function() {
-            return getTelephonyManager().getNetworkOperatorName();
+            return string(getTelephonyManager().getNetworkOperatorName());
         },
         configurable: false
     },
@@ -72,10 +72,11 @@ Object.defineProperties(Network, {
             if (Network.connectionType === Network.ConnectionType.WIFI) {
                 var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
-                return (wifiInfo.getIpAddress() & 0xff) 
-                    + "." + ((wifiInfo.getIpAddress() >> 8)  & 0xff)
-                    + "." + ((wifiInfo.getIpAddress() >> 16) & 0xff)
-                    + "." + ((wifiInfo.getIpAddress() >> 24) & 0xff);
+                var ipAddress = int(wifiInfo.getIpAddress());
+                return (ipAddress & 0xff) 
+                    + "." + ((ipAddress >> 8)  & 0xff)
+                    + "." + ((ipAddress >> 16) & 0xff)
+                    + "." + ((ipAddress >> 24) & 0xff);
             } else {
                 return "0.0.0.0";
             }
@@ -86,7 +87,7 @@ Object.defineProperties(Network, {
         get: function() {
             var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
             var wifiInfo = wifiManager.getConnectionInfo();
-            return wifiInfo.getMacAddress();
+            return string(wifiInfo.getMacAddress());
         },
         configurable: false
     }
