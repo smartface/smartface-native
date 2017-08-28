@@ -5,14 +5,13 @@ const Page = require("../../ui/page");
 const extend = require('js-base/core/extend');
 
 salep.test("sf-core/ui/page Unit Test", function() {
-    var isLoad = false, isShowed = false;
+    var isLoad = false;
     var pageInstance;
     const page1 = extend(Page)(
         function (_super, params) {
             pageInstance = this;
             _super(this, {
-                onLoad: function() {isLoad = true;},
-                onShow: function() {console.log("OnShow"); isShowed = true;}
+                onLoad: function() {isLoad = true;}
             });
         }
     );
