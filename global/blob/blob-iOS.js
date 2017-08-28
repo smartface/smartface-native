@@ -16,11 +16,14 @@ function Blob(parts, properties) {
         self.toString = function() {
             return self.nativeObject.toUtf8();
         }
-    
 }
 
 Blob.createFromBase64 = function(base64) {
-     return new Blob(__SF_NSData.base64Encoded(base64));;
+     return new Blob(__SF_NSData.base64Encoded(base64));
+}
+
+Blob.createFromUTF8String = function(utf8String) {
+    return new Blob(__SF_NSData.dataFromUTF8String(utf8String));
 }
 
 module.exports = Blob;

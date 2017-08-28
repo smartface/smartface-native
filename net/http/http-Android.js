@@ -1,14 +1,14 @@
-const Volley                = requireClass("com.android.volley.toolbox.Volley");
-const VolleyRequest         = requireClass("com.android.volley.Request");
-const VolleyResponse        = requireClass("com.android.volley.Response");
-const VolleyHttpHeaderParser= requireClass("com.android.volley.toolbox.HttpHeaderParser");
-const NativeInteger         = requireClass("java.lang.Integer");
-const NativeString          = requireClass("java.lang.String");
-const NativeBase64          = requireClass("android.util.Base64");
+const OkHttpClient = requireClass("okhttp3.OkHttpClient");
+const OkHttpCallback = requireClass("okhttp3.Callback");
+const OkHttpRequest = requireClass("okhttp3.Request");
+const RequestBody = requireClass("okhttp3.RequestBody");
+const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
+const MediaType = requireClass("okhttp3.MediaType");
 
 const Blob = require("sf-core/blob");
 
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
+var activity = Android.getActivity();
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -19,285 +19,281 @@ const Request = function() {
         }
     });
 };
-const http = {
-    RequestQueue: Volley.newRequestQueue(Android.getActivity())
-};
-const methods = {
-    "GET": 0,
-    "POST" : 1,
-    "PUT" : 2,
-    "DELETE" : 3,
-    "HEAD" : 4,
-    "OPTIONS" : 5,
-    "TRACE" : 6,
-    "PATCH" : 7
-};
-http.requestString = function(url, onLoad, onError) {
-    var responseListener = VolleyResponse.Listener.implement({
-        onResponse: function(response) {
-            onLoad(response);
-        }
-    });
-    var responseErrorListener = VolleyResponse.ErrorListener.implement({
-        onErrorResponse: function(error) {
-            if(error) {
-                var message = error.getMessage();
-                if(error.networkResponse) {
-                    var statusCode = error.networkResponse.statusCode;
-                    var errorBytes = error.networkResponse.data;
-                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
-                }
-            }
-            
-            onError({
-                message: message,
-                statusCode: statusCode,
-                headers: errorHeaders,
-                body: new Blob(errorBytes, {type: {}})
-            });
-        }
-    });
-        
-    try {
-        if(checkInternet()) {
-            const StringRequest = requireClass("com.android.volley.toolbox.StringRequest");
-            var request = new Request();
-            request.nativeObject = new StringRequest(VolleyRequest.Method.GET, url,
-                    responseListener, responseErrorListener);
-            http.RequestQueue.add(request.nativeObject);
-            return request;
-        }
-        else {
-            if(onError)
-                onError({message: "No network connection", headers: {}});
-        }
-    } catch(e) {
-        if(onError)
-            onError({message: e, headers: {}});
-    }
-};
-http.requestImage = function(url, onLoad, onError) {
-    var responseListener = VolleyResponse.Listener.implement({
-        onResponse: function(response) {
-            const Image = require("sf-core/ui/image");
-            var image = new Image({bitmap: response});
-            onLoad(image);
-        }
-    });
-    var responseErrorListener = VolleyResponse.ErrorListener.implement({
-        onErrorResponse: function(error) {
-            if(error) {
-                var message = error.getMessage();
-                if(error.networkResponse) {
-                    var statusCode = error.networkResponse.statusCode;
-                    var errorBytes = error.networkResponse.data;
-                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
-                }
-            }
-            
-            onError({
-                message: message,
-                statusCode: statusCode,
-                headers: errorHeaders,
-                body: new Blob(errorBytes, {type: {}})
-            });
-        }
-    });
+
+
+function http(params) {
+    this.clientBuilder = new OkHttpClient.Builder();
     
-    try {
-        if(checkInternet()) {
-            const ImageRequest = requireClass("com.android.volley.toolbox.ImageRequest");
-            var request = new Request();
-            request.nativeObject = new ImageRequest(url,responseListener,
-                0, 0, null, null,responseErrorListener);
-            http.RequestQueue.add(request.nativeObject);
-            return request;
-        }
-        else {
-            onError({message: "No network connection", headers: {}});
-        }
-    } catch(e) {
-        onError({message: e, headers: {}});
-    }
-};
-http.requestJSON = function(url, onLoad, onError) {
-    return http.requestString(url, function(response) {
-        // var responseJSON = JSON.parse(response); // todo getJSON doesn't work.
-        // onLoad(responseJSON);        // response is java.lang.String.
-        if(onLoad)
-            onLoad(response);
-    }, onError);
-};
-http.requestFile = function(url, fileName, onLoad, onError) {
-    return http.request(
-        {
-            url: url,
-            method:'GET'
+    var _timeout = 10000, // default OkHttp timeout. There is no way getting timout for public method.
+        _defaultHeaders;
+    Object.defineProperty(this, "timeout", {
+        get: function() {
+            return _timeout;
         },
-        function(response){
-            var success = true;
-            try {
-                const IO = require("../../io");
-                if(!fileName)
-                    fileName = url.substring(url.lastIndexOf('/'));
-                var file = new IO.File({path: fileName});
-                var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
-                stream.write(response.body);
-                stream.close();
-            } catch (e) {
-                success = false;
-                onError({message: e, headers: {}});
-            }
-            if(success) {
-                onLoad(file);
-            }
-        }, 
-        onError
-    );
-};
-http.request = function(params, onLoad, onError) {
-    var responseHeaders = {};
-    var statusCode;
-    var responseType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
-    var responseErrorListener = VolleyResponse.ErrorListener.implement({
-        onErrorResponse: function(error) {
-            if(error) {
-                var message = error.getMessage();
-                if(error.networkResponse) {
-                    var statusCode = error.networkResponse.statusCode;
-                    var errorBytes = error.networkResponse.data;
-                    var errorHeaders = parseErrorHeaders(error.networkResponse.headers);
-                }
-            }
+        set: function(value) {
+            if(typeof(value) !== "number")
+                throw new Error("timeout must be a number.");
             
-            onError({
-                message: message,
-                statusCode: statusCode,
-                headers: errorHeaders,
-                body: new Blob(errorBytes, {type: {}})
-            });
+            _timeout = value;
+            this.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
+            this.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
+            this.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
+            this.client = this.clientBuilder.build();
         }
     });
     
-    var method = new NativeInteger(methods[params.method]);
-    var url = new NativeString(params.url);
-    var parameters = [method, url, responseErrorListener];
-    var body = null;
-    if(params.body)
-        body = new NativeString(params.body);
-    var request = new Request();
+    Object.defineProperty(this, "headers", {
+        get: function() {
+            return _defaultHeaders;
+        },
+        set: function(headers) {
+            if(headers)
+                _defaultHeaders = headers;
+        }
+    });
     
-    var contentType = "application/x-www-form-urlencoded; charset=" + "UTF-8";
-    if (params.headers) {
-        var keys = Object.keys(params.headers);
-        for(var i = 0; i < keys.length; i++) {
-            if(keys[i].toUpperCase() === CONTENT_TYPE_KEY) {
-                contentType = params.headers[keys[i]];
-                break;
+    this.client = this.clientBuilder.build();
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+}
+
+http.prototype.cancelAll = function() {
+    var dispatcher = this.client.dispatcher();
+    dispatcher && dispatcher.cancelAll();
+};
+
+http.prototype.upload = function(params) {
+    params && (params.method = "POST");
+    return this.request(params, true, true);
+};
+
+http.prototype.requestString = function(params) {
+    if(!params)
+        throw new Error("Required request parameters.");
+    
+    var requestOnLoad = params.onLoad;
+    params.onLoad = function (e) {
+        if(e && e.body)
+            e.string = e.body.toString();
+        requestOnLoad && runOnUiThread(requestOnLoad, e);
+    };
+    return this.request(params, false, false);
+};
+
+http.prototype.requestImage = function(params) {
+    if(!params)
+        throw new Error("Required request parameters.");
+    
+    var requestOnLoad = params.onLoad;
+    const Image = require("sf-core/ui/image");
+    
+    params.onLoad = function (e) {
+        if(e && e.body) {
+            e.image = Image.createFromBlob(e.body);
+        }
+        
+        requestOnLoad && runOnUiThread(requestOnLoad, e);
+    };
+    return this.request(params, false, false);
+};
+
+http.prototype.requestJSON = function(params) {
+    if(!params)
+        throw new Error("Required request parameters.");
+    
+    var requestOnLoad = params.onLoad;
+    params.onLoad = function (e) {
+        if(e && e.body) {
+            e.body = JSON.parse(e.body);
+        }
+        requestOnLoad && runOnUiThread(requestOnLoad, e);
+    };
+    return this.requestString(params, false, false);
+};
+
+http.prototype.requestFile = function(params) {
+    if(!params)
+        throw new Error("Required request parameters.");
+        
+    var requestOnLoad = params.onLoad;
+    params.onLoad = function(e) {
+        const IO = require("sf-core/io");
+        var cacheDir =  activity.getCacheDir().getAbsolutePath();
+        var path;
+        if(params.fileName)
+            path = cacheDir + IO.Path.Separator + params.fileName;
+        else 
+            path = cacheDir + params.url.substring(params.url.lastIndexOf('/'));
+        var file = new IO.File({path: path});
+        if(e && e.body) {
+            var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
+            var blob = new Blob(e.body.parts, {type: {}});
+            stream.write(blob);
+            stream.close();
+            e.file = file;
+        }
+            
+        requestOnLoad && runOnUiThread(requestOnLoad, e);
+    };
+
+    return this.request(params, false, false);
+};
+
+http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) {
+    if(!checkInternet()) {
+        throw new Error("No network connection.");
+    }
+    
+    var request = new Request();
+    var callback = OkHttpCallback.implement({
+        onFailure: function(call, e) {
+            if(e)
+                var message = e.getMessage();
+            params && params.onError && runOnUiThread(params.onError, {message: message});
+        },
+        onResponse: function(call, response) {
+            var statusCode = response.code();
+            var responseHeaders = getResponseHeaders(response.headers());
+            if(response.body()) {
+                var bytes = response.body().bytes();
+                var responseBody = new Blob(bytes, {type: {}});
+            }
+            
+            if(response.isSuccessful()) {
+                if(params && params.onLoad) {
+                    if(isRunOnBackgroundThread) {
+                        params.onLoad({ 
+                            statusCode: statusCode, 
+                            headers: responseHeaders, 
+                            body: responseBody 
+                        });
+                    } else {
+                        runOnUiThread(params.onLoad, {
+                            statusCode: statusCode,
+                            headers: responseHeaders,
+                            body: responseBody
+                        });
+                    }
+                }
+            } else {
+                params && params.onError && runOnUiThread(
+                    params.onError, {
+                        statusCode: statusCode,
+                        headers: responseHeaders,
+                        message: response.message()
+                    });
             }
         }
-    }
-    try {
-        if(checkInternet()) {
-            const Request = requireClass("com.android.volley.Request");
-            var requestResult = null;
-            request.nativeObject = Request.extend("SFRequestt", {
-                getBody: function() {
-                    if(!body)
-                        return [];
-                    return body.getBytes();
-                },
-                getHeaders: function() {
-                    return getHeaderHashMap(params);
-                },
-                getBodyContentType: function() {
-                    return contentType;
-                },
-                parseNetworkResponse: function(response) { // Added to resolve AND-2743 bug.
-                    getResponseHeaders(response, responseHeaders, responseType);
-                    var cacheHeaders = VolleyHttpHeaderParser.parseCacheHeaders(response);
-                    // we should pass Integer (class) array to native. Handle it from deliverResponse
-                    requestResult = response.data;
-                    statusCode = response.statusCode;
-                    return VolleyResponse.success(response.data, cacheHeaders);
-                },
-                deliverResponse: function(object){
-                    onLoad({body: new Blob(requestResult, {type: responseType}), headers: responseHeaders, statusCode: statusCode});
-                }
-            }, parameters);    
-        }
-        else {
-            if(onError)
-                onError({message: "No network connection", headers: {}});
-        }
-    }
-    catch(err) {
-        if(onError)
-            onError({message: err, headers: {}});
-    }
-    http.RequestQueue.add(request.nativeObject);
+    });
+    var okhttpRequest = createRequest(params, isMultipart);
+    request.nativeObject = this.client.newCall(okhttpRequest);
+    request.nativeObject.enqueue(callback);
     return request;
 };
 
-function getResponseHeaders(response, responseHeaders, responseType) {
-    var headers = response.headers;
-    if(headers && headers.keySet()) {
-        var iterator = headers.keySet().iterator();
-        while(iterator.hasNext()) {
-            var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
-            if(key && headers.get(key)) {
-                responseHeaders[key] = headers.get(key).substring(0);
-                if(key.toUpperCase() === CONTENT_TYPE_KEY)
-                    responseType = headers.get(key).substring(0);
-            }
-        }
+function createRequest(params, isMultipart) {
+    if(!params || !params.url) {
+        throw new Error("URL parameter is required.");
     }
-}
-
-function parseErrorHeaders(headers) {
-    var errorHeaders = {};
-    if(headers && headers.keySet()) {
-        var iterator = headers.keySet().iterator();
-        while(iterator.hasNext()) {
-            var key = iterator.next().substring(0); // iterator.next() is a java.lang.String not javascript string
-            if(key && headers.get(key)) {
-                errorHeaders[key] = headers.get(key).substring(0);
-            }
-        }
-    }
-    return errorHeaders;
-}
-
-function getHeaderHashMap(params) {
-    const NativeHashMap = requireClass("java.util.HashMap");
-    var headers = new NativeHashMap();
-    var credentials = "";
-    if(params.user && params.password) {
-        credentials = params.user + ":" + params.password;
-        const NativeBase64 = requireClass("android.util.Base64");
-        var bytes = new NativeString(credentials).getBytes();
-        var encodedString = NativeBase64.encodeToString(bytes, 2); // 2 = NativeBase64.NO_WRAP
-        var auth = "Basic " + encodedString;
-        headers.put("Authorization", auth);   
-    }
+    var builder = new OkHttpRequest.Builder();
+    builder = builder.url(params.url);
     
     if(params.headers) {
         var keys = Object.keys(params.headers);
-        for (var i = 0; i < keys.length; i++) {
-            var value = params.headers[keys[i]];
-            if (typeof(keys[i]) === "string" && typeof(value) === "string" &&
-                keys[i].toUpperCase() !== CONTENT_TYPE_KEY) {
-                headers.put(keys[i], value);
-            }
+        for(var i = 0; i < keys.length; i++) {
+            if(keys[i].toUpperCase() === CONTENT_TYPE_KEY)
+                var contentType = params.headers[keys[i]];
+            builder.addHeader(keys[i], params.headers[keys[i]]);
         }
     }
-    return headers;
+    
+    if(this.defaultHeaders) {
+        var keys = Object.keys(this.defaultHeaders);
+        for(var i = 0; i < keys.length; i++) {
+            if(keys[i].toUpperCase() === CONTENT_TYPE_KEY)
+                var contentType = this.defaultHeaders[keys[i]];
+            builder.addHeader(keys[i], this.defaultHeaders[keys[i]]);
+        }
+    }
+    
+    if(params.method) {
+        var body = createRequestBody(params.body, contentType, isMultipart);
+        builder = builder.method(params.method, body);
+    }
+    return builder.build();
 }
+
+function createRequestBody(body, contentType, isMultipart) {
+    if(!body) {
+        return RequestBody.create(null, []);
+    }
+    if(!isMultipart || body instanceof Blob) {
+        var mediaType = null;
+        if(contentType)
+             mediaType = MediaType.parse(contentType);
+        var content;
+        if(body instanceof Blob)
+            content = body.parts;
+        else if(typeof(body) === "string")
+            content = body;
+        return RequestBody.create(mediaType, content);
+    }
+    else {
+        return createMultipartBody(body);
+    }
+}
+
+function createMultipartBody(bodies) {
+    const MultipartBody = requireClass("okhttp3.MultipartBody");
+    var builder = new MultipartBody.Builder();
+    builder.setType(MultipartBody.FORM);
+    for(var i = 0; i < bodies.length; i++) {
+        if(!bodies[i].name) {
+            throw new Error("Name of the upload part data cannot be empty.");
+        }
+        if(bodies[i].contentType)
+            var mediaType = MediaType.parse(bodies[i].contentType);
+        if(bodies[i].value)
+            var body = RequestBody.create(mediaType, bodies[i].value.parts);
+        if(!body) {
+            throw new Error("Upload method must include request body.");
+        }
+        var fileName = null;
+        if(bodies[i].fileName)
+            fileName = bodies[i].fileName;
+        builder.addFormDataPart(bodies[i].name, fileName, body);
+    }
+    return builder.build();
+}
+
+function getResponseHeaders(headers) {
+    var responseHeaders = {};
+    for(var i = 0; i < headers.size(); i++) {
+        responseHeaders[headers.name(i)] = headers.value(i);
+    }
+    return responseHeaders;
+}
+
 function checkInternet() {
     const Network = require("sf-core/device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;
+}
+
+function runOnUiThread(requestOnLoad, e) {
+    const Runnable = requireClass("java.lang.Runnable");
+    var runnable = Runnable.implement({
+        run : function(){
+            requestOnLoad(e);
+        }
+    });
+    activity.runOnUiThread(runnable);
 }
 
 module.exports = http;

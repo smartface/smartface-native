@@ -1,6 +1,184 @@
 const Blob = require("../../global/blob");
 
-var http = {};
+var http = function Http(params){
+    var self = this;
+    
+    if (!self.nativeObject) {
+        self.nativeObject = new __SF_Http();
+    }
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Properties
+    Object.defineProperty(self, 'timeout', {
+        get: function() {
+            return self.nativeObject.timeoutIntervalForRequest;
+        },
+        set: function(value) {
+            self.nativeObject.timeoutIntervalForRequest = value;
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self, 'headers', {
+        get: function() {
+            return self.nativeObject.defaultHTTPHeaders;
+        },
+        set: function(value) {
+            self.nativeObject.defaultHTTPHeaders = value;
+        },
+        enumerable: true
+    });
+    
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////
+    // Functions
+    this.cancelAll = function () {
+        self.nativeObject.cancelAll();
+    };
+    
+    this.requestFile = function(params) {
+        
+        var url = params.url;
+        var fileName = params.fileName;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        return new http.Request(
+                self.nativeObject.requestFile(
+                    url,
+                    fileName,
+                    function(e){
+                        const File = require('sf-core/io/file');
+                        // Native returns file path first.
+                        // Convert to sf-core file object.
+                        e.file = new File({path:e.file});
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+    
+    this.requestImage = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        return new http.Request(
+                self.nativeObject.requestImage(
+                    url,
+                    function(e){
+                        // Native returns UIImage instance.
+                        // Convert to sf-core Image object.
+                        const Image = require('sf-core/ui/image');
+                        e.image = Image.createFromImage(e.image);
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+
+    this.requestString = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        return new http.Request(
+                self.nativeObject.requestString(
+                    url,
+                    function(e){
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+    
+    this.requestJSON = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        return new http.Request(
+                self.nativeObject.requestJSON(
+                    url,
+                    function(e){
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+    
+    this.request = function(params) {
+        
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        return new http.Request(
+                self.nativeObject.request(
+                    params,
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+    
+    this.upload = function(params) {
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        // Get NSData inside JS object
+        if( Object.prototype.toString.call( params.body ) === '[object Array]' ) {
+            for (var i = 0; i < params.body.length; i++) { 
+                params.body[i].value = params.body[i].value.nativeObject;
+            }
+        } else {
+            params.body = params.body.nativeObject;
+        }
+        
+        return new http.Request(
+                self.nativeObject.upload(
+                    params,
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+};
 
 http.Request = function Request(nativeObject) {
     var self = this;
@@ -9,97 +187,22 @@ http.Request = function Request(nativeObject) {
     }
     
     this.suspend = function(){
-        self.nativeObject.suspend();
+        if (self.nativeObject) {
+            self.nativeObject.suspend();
+        }
     };
     
     this.resume = function(){
-        self.nativeObject.resume();
+        if (self.nativeObject) {
+            self.nativeObject.resume();
+        }
     };
     
     this.cancel = function(){
-        self.nativeObject.cancel();
+        if (self.nativeObject) {
+            self.nativeObject.cancel();
+        }
     };
-};
-
-http.requestFile = function(url, fileName, onLoad, onError) {
-    return new http.Request(
-            __SF_Http.requestFileFrom(
-                url,
-                fileName,
-                function(e){
-                    const File = require('sf-core/io/file');
-                    var file = new File({path:e});
-                    onLoad(file);
-                },
-                function(e){
-                    e.body = new Blob(e.body);
-                    onError(e);
-                }
-            )
-        );
-};
-
-http.requestImage = function(url, onLoad, onError) {
-    return new http.Request(
-            __SF_Http.requestImageFrom(
-                url,
-                function(e){
-                    const Image = require('sf-core/ui/image');
-                    var image = Image.createFromImage(e);
-                    onLoad(image);
-                },
-                function(e){
-                    e.body = new Blob(e.body);
-                    onError(e);
-                }
-            )
-        );
-};
-
-http.requestString = function(url, onLoad, onError) {
-    return new http.Request(
-            __SF_Http.requestStringFrom(
-                url,
-                function(e){
-                    onLoad(e);
-                },
-                function(e){
-                    e.body = new Blob(e.body);
-                    onError(e);
-                }
-            )
-        );
-};
-
-http.requestJSON = function(url, onLoad, onError) {
-    return new http.Request(
-            __SF_Http.requestJSONFrom(
-                url,
-                function(e){
-                    onLoad(e);
-                },
-                function(e){
-                    e.body = new Blob(e.body);
-                    onError(e);
-                }
-            )
-        );
-};
-
-http.request = function(params, onLoad, onError) {
-    return new http.Request(
-            __SF_Http.requestWith(
-                params,
-                function(e){
-                    e.body = new Blob(e.body);
-                    onLoad(e);
-                },
-                function(e){
-                    e.body = new Blob(e.body);
-                    onError(e);
-                }
-            )
-        );
 };
 
 module.exports = http;
