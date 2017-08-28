@@ -1,16 +1,15 @@
 /*globals requireClass,string*/
 const extend            = require('js-base/core/extend');
-const AndroidConfig     = require("sf-core/util/Android/androidconfig");
+const AndroidConfig     = require("../../util/Android/androidconfig");
 const View              = require('../view');
-const TypeUtil          = require("sf-core/util/type");
-const Image             = require("sf-core/ui/image");
+const TypeUtil          = require("../../util/type");
+const Image             = require("../image");
 const NativeImageView   = requireClass("android.widget.ImageView");
-const activity          = AndroidConfig.activity;
 
 const ImageView = extend(View)(
     function (_super, params) {
         if (!this.nativeObject) {
-            this.nativeObject = new NativeImageView(activity);
+            this.nativeObject = new NativeImageView(AndroidConfig.activity);
         }
         _super(this);
 
@@ -28,17 +27,18 @@ const ImageView = extend(View)(
     },
     function(imageViewPrototype) {
         imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
+        imageViewPrototype._image = null;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    var drawable =  this.nativeObject.getDrawable();
-                    var image = new Image({bitmap: drawable.getBitmap()});
-                    return image;
+                    return this._image;
                 },
                 set: function(image) {
                     if (image instanceof Image) {
+                        this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
                     } else {
+                        this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
                 },
@@ -67,10 +67,10 @@ const ImageView = extend(View)(
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if(TypeUtil.isString(url)){
                 if(placeHolder instanceof Image){
-                    NativePicasso.with(activity).load(string(url)).placeholder(placeHolder.nativeObject).into(this.nativeObject);
+                    NativePicasso.with(AndroidConfig.activity).load(url).placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
                 else{
-                     NativePicasso.with(activity).load(string(url)).into(this.nativeObject);
+                     NativePicasso.with(AndroidConfig.activity).load(url).into(this.nativeObject);
                 }
             }
         };

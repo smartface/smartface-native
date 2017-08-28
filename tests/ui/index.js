@@ -6,6 +6,7 @@ require("./dialog");
 require("./flexlayout");
 require("./font");
 require("./image");
+require("./imageview");
 require("./label");
 require("./mapview");
 require("./searchview");
