@@ -42,14 +42,14 @@ function Page(params) {
     var self = this;
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
-    var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
+    var pageLayout = pageLayoutContainer.findViewById(int(NativeSFR.id.page_layout));
     var rootLayout = new FlexLayout({
         isRoot: true,
         backgroundColor: Color.WHITE
     });
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
-    var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
+    var toolbar = pageLayoutContainer.findViewById(int(NativeSFR.id.toolbar));
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
     var isCreated = false;
@@ -118,16 +118,19 @@ function Page(params) {
             }
         },
         onContextItemSelected: function(item) {
-            var itemId = item.getItemId();
+            var itemId = int(item.getItemId());
             var items = self.contextMenu.items;
             if (itemId >= 0) {
                 items[itemId].onSelected();
             }
         },
-        onActivityResult: function(requestCode, resultCode, data) {
+        onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
             const Contacts = require("sf-core/device/contacts");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
+            
+            var requestCode = int(nativeRequestCode);
+            var resultCode = int(nativeResultCode)
 
             // todo: Define a method to register request and its callback 
             // for better performance. Remove if statement.
@@ -710,11 +713,11 @@ function Page(params) {
                 itemView.setBackgroundColor(int(Color.TRANSPARENT.nativeObject));
                 // left, top, right, bottom
                 itemView.setPadding(
-                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                    int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal),
+                    int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
                 );
-                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
-                item.menuItem.setEnabled(item.enabled);
+                item.menuItem = optionsMenu.add(int(0), int(itemID++), int(0), string(item.title));
+                item.menuItem.setEnabled(bool(item.enabled));
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
                 item.menuItem.setActionView(itemView);
             }
@@ -743,7 +746,7 @@ function Page(params) {
     self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function(view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if( keyCode === 4 && keyEvent.getAction() === 0) {
+            if(int(keyCode) === 4 && (int(keyEvent.getAction()) === 0)) {
                    typeof self.android.onBackButtonPressed === "function" && 
                             self.android.onBackButtonPressed();
             }
