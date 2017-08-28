@@ -7,45 +7,46 @@ const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 const Hardware = {};
 
 Hardware.android = {};
-Hardware.ios = {}
-Hardware.ios.microphone = {}
+Hardware.ios = {};
+Hardware.ios.microphone = {};
 Hardware.ios.microphone.requestRecordPermission = function(){};
 
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
         var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
-        return telephonyManager.getDeviceId();
+        return string(telephonyManager.getDeviceId());
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware, 'UID', {
     get: function () {
-        var activity = Android.getActivity();
+        const AndroidConfig = require("sf-core/util/Android/androidconfig");
+        var activity = AndroidConfig.activity;
         var contentResolver = activity.getContentResolver();
 
-        return NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID);
+        return string(NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID));
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware, 'brandName', {
     get: function () {
-        return NativeBuild.BRAND;
+        return string(NativeBuild.BRAND);
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware, 'brandModel', {
     get: function () {
-        return NativeBuild.MODEL;
+        return string(NativeBuild.MODEL);
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware.android, 'vendorID', {
     get: function () {
-        return NativeBuild.SERIAL;
+        return string(NativeBuild.SERIAL);
     },
     configurable: false
 });
