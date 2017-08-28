@@ -1,3 +1,4 @@
+require("./accelerometer");
 require("./hardware");
 require("./multimedia");
 require("./network");
