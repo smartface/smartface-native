@@ -1,16 +1,17 @@
-const HTTP = require("sf-core/net/http");
-const Path = require('sf-core/io/path');
-const File = require('sf-core/io/file');
-const FileStream = require('sf-core/io/filestream');
+// const HTTP = require("../net/http");
+const Path = require('../io/path');
+const File = require('../io/file');
+const FileStream = require('../io/filestream');
+const System = require('../device/system');
 
 const RemoteUpdateService = {};
 RemoteUpdateService.firstUrl  = "";
 RemoteUpdateService.secondUrl = "";
 
 var zipPath = "";
-if (Device.deviceOS === "iOS") {
+if (System.OS === "iOS") {
     zipPath = Path.DataDirectory + "/stage/iOS.zip";
-} else if (Device.deviceOS === "Android") {
+} else if (System.OS === "Android") {
     zipPath = Path.android.storages.internal + "/Android/data/AndroidRAU.zip";
 }
 

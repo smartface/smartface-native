@@ -39,6 +39,7 @@ salep.test("sf-core/application Unit Test", function() {
         assert.doesNotThrow(function(){ Application.restart(); }, Error);
     });
     
+    salep.skipNext();
     this.case("[checkUpdate] function.", function() {
         assert.doesNotThrow(function(){ Application.checkUpdate(function(){}); }, Error);
     });
