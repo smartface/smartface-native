@@ -1,3 +1,4 @@
+require("./activityindicator");
 require("./alertview");
 require("./button");
 require("./color");

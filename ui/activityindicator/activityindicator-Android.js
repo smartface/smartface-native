@@ -1,10 +1,10 @@
-const View = require('sf-core/ui/view');
+const View = require('../view');
 const extend = require('js-base/core/extend');
 
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-const Color = require('sf-core/ui/color');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const Color = require('../color');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {
@@ -18,7 +18,7 @@ const ActivityIndicator = extend(View)(
         this.ios = {}; 
         
         if(!this.isNotSetDefaults){
-            this.nativeObject.setIndeterminate(bool(true));
+            this.nativeObject.setIndeterminate(true);
             this.color = Color.create("#00A1F1"); // SmartfaceBlue
         }
         
