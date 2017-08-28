@@ -61,12 +61,12 @@ function MenuItem(params) {
         },
         'spanTitle': {
             value: function() {
-                var spannableStringBuilder = new NativeSpannableStringBuilder("");
+                var spannableStringBuilder = new NativeSpannableStringBuilder(string(""));
                 if (_title) {
-                    spannableStringBuilder = new NativeSpannableStringBuilder(_title);
+                    spannableStringBuilder = new NativeSpannableStringBuilder(string(_title));
                     if (_titleColor) {
                         var colorSpan = new NativeColorSpan(_titleColor.nativeObject);
-                        spannableStringBuilder.setSpan(colorSpan, 0, _title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        spannableStringBuilder.setSpan(colorSpan, int(0), int(_title.length), NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
                         return spannableStringBuilder;
                     }
                 }
@@ -89,6 +89,6 @@ MenuItem.ios = {
         CANCEL: 1,
         DESTRUCTIVE: 2
     }
-}
+};
 
 module.exports = MenuItem;

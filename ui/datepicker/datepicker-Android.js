@@ -1,7 +1,8 @@
-const TypeUtil = require('sf-core/util/type');
+const TypeUtil      = require('sf-core/util/type');
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 function DatePicker(params) {
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
 
     const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
     var today = new Date();
@@ -9,9 +10,9 @@ function DatePicker(params) {
     if(!this.nativeObject){
         this.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
             onDateSet: function(datePicker, year, month, day) {
-                _onDateSelected && _onDateSelected(new Date(year, month, day));
+                _onDateSelected && _onDateSelected(new Date(int(year), int(month), int(day)));
             }
-        }), today.getFullYear(), today.getMonth(), today.getDate());
+        }), int(today.getFullYear()), int(today.getMonth()), int(today.getDate()));
     }
     
     var _onDateSelected;
@@ -38,7 +39,7 @@ function DatePicker(params) {
                     var milliTime = date.getTime();
 
                     var nativeDatePicker = this.nativeObject.getDatePicker();
-                    nativeDatePicker.setMinDate(milliTime);
+                    nativeDatePicker.setMinDate(long(milliTime));
                 }
             }
         },
@@ -48,14 +49,14 @@ function DatePicker(params) {
                     var milliTime = date.getTime();
 
                     var nativeDatePicker = this.nativeObject.getDatePicker();
-                    nativeDatePicker.setMaxDate(milliTime);
+                    nativeDatePicker.setMaxDate(long(milliTime));
                 }
             }
         },
         'setDate': {
             value: function(date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
-                    this.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
+                    this.nativeObject.updateDate(int(date.getFullYear()), int(date.getMonth()), int(date.getDate()));
                 }
             }
         },
