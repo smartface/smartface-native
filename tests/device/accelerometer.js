@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const Accelerometer = require("../../device/accelerometer");
 
-salep.test("sf-core/device/system Unit Test", function() {
+salep.test("sf-core/device/accelerometer Unit Test", function() {
     
     this.case("[onAccelerate] function.", function() {
         assert.doesNotThrow(function(){ Accelerometer.onAccelerate = function(e){console.log("onAccelerate: " + JSON.stringify(e));}; }, Error);

@@ -5,7 +5,7 @@ const View = require("../../ui/view");
 const Color = require("../../ui/color");
 const FlexLayout = require("../../ui/flexlayout");
 
-salep.test("sf-core/ui/webview Unit Test", function() {
+salep.test("sf-core/ui/view Unit Test", function() {
     var testObject = null;
     
     this.beforeEach(function(){

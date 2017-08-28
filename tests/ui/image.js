@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const Image = require("../../ui/image");
 
-salep.test("sf-core/ui/label Unit Test", function() {
+salep.test("sf-core/ui/image Unit Test", function() {
 
     this.case("[createFromFile] function.", function() {
         var myImage = Image.createFromFile("images://smartface.png");

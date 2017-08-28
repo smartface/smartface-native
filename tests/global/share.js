@@ -3,7 +3,7 @@ var assert = require("chai").assert;
 
 const Share = require("../../share");
 
-salep.test("sf-core/global/data Unit Test", function() {
+salep.test("sf-core/global/share Unit Test", function() {
     var myImage = require("../../ui/image").createFromFile('images://smartface.png');
     
     this.case("[shareText] function.", function() {

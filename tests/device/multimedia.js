@@ -17,7 +17,7 @@ const PageMultimedia = extend(Page)(
 Router.add("multimediaPage", PageMultimedia);
 Router.go("multimediaPage");
 
-salep.test("sf-core/device/system Unit Test", function() {
+salep.test("sf-core/device/multimedia Unit Test", function() {
 
     this.case("[startCamera] function.", function() {
         assert.doesNotThrow(function(){ Multimedia.startCamera({page: pageInstance}); }, Error);
