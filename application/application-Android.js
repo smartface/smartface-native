@@ -39,8 +39,8 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     },
     onRequestPermissionsResult: function(requestCode, permission, grantResult){
         var permissionResults = {};
-        permissionResults['requestCode'] = requestCode;
-        permissionResults['result'] = (grantResult === 0);
+        permissionResults['requestCode'] = int(requestCode);
+        permissionResults['result'] = (int(grantResult) === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
     }
 });

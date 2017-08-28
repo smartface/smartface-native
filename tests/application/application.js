@@ -52,7 +52,7 @@ salep.test("sf-core/application Unit Test", function() {
     });
     
     this.case("[android.requestPermissions] function.", function() {
-        assert.doesNotThrow(function(){ Application.android.requestPermissions(1234, Application.Android.Permissions.READ_CALENDAR); }, Error);
+        assert.doesNotThrow(function(){ Application.android.requestPermissions(1234, Application.android.Permissions.RECORD_AUDIO); }, Error);
     });
     
     this.case("[android.shouldShowRequestPermissionRationale] function.", function() {
