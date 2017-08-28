@@ -14,6 +14,7 @@ require("./mapview");
 require("./searchview");
 require("./slider");
 require("./switch");
+require("./textbox");
 require("./webview");
 require("./videoview");
 require("./view");

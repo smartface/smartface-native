@@ -252,7 +252,7 @@ const TextBox = extend(Label)(
             },
             'text': {
                 get: function() {
-                    return self.nativeObject.getText();
+                    return string(self.nativeObject.getText());
                 },
                 set: function(text) {
                     _hasEventsLocked = true;
@@ -269,12 +269,14 @@ const TextBox = extend(Label)(
 
         });
         
+        var _hintTextColor;
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return new Color({ color: self.nativeObject.getHintTextColors().getDefaultColor() });
+                return _hintTextColor;
             },
             set: function(hintTextColor) {
-                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
+                _hintTextColor = hintTextColor;
+                self.nativeObject.setHintTextColor(int(hintTextColor.nativeObject));
             },
             enumerable: true
         });
