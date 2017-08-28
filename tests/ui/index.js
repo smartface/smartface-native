@@ -1,5 +1,6 @@
 require("./activityindicator");
 require("./alertview");
+require("./animator");
 require("./button");
 require("./color");
 require("./dialog");
