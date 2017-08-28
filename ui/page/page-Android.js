@@ -42,14 +42,14 @@ function Page(params) {
     var self = this;
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
-    var pageLayout = pageLayoutContainer.findViewById(int(NativeSFR.id.page_layout));
+    var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
         backgroundColor: Color.WHITE
     });
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
-    var toolbar = pageLayoutContainer.findViewById(int(NativeSFR.id.toolbar));
+    var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
     activity.setSupportActionBar(toolbar);
     var actionBar = activity.getSupportActionBar();
     var isCreated = false;
