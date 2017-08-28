@@ -1,14 +1,12 @@
 var assert = require("chai").assert;
 
-// const Device = require("../../device");
-// const Hardware = Device.hardware;
 const Hardware = require('../../device/hardware');
 salep.test("Hardware Unit Test", function () {
     this.case("Hardware IMEI property", function () {
         assert.isNotNull(Hardware.android.IMEI, "IMEI cannot be null.");
     });
     
-    this.case("Hardware UID height property.", function () {
+    this.case("Hardware UID property.", function () {
         assert.isNotNull(Hardware.UID, "UID cannot be null.");
     });
     
