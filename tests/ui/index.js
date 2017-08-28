@@ -1,6 +1,7 @@
 require("./color");
 require("./font");
 require("./image");
+require("./label");
 require("./mapview");
 require("./searchview");
 require("./slider");
