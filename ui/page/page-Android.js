@@ -216,7 +216,7 @@ function Page(params) {
             if (typeof OrientationDictionary[_orientation] !== "number") {
                 _orientation = Page.Orientation.PORTRAIT;
             }
-            activity.setRequestedOrientation(int(OrientationDictionary[_orientation]));
+            activity.setRequestedOrientation(OrientationDictionary[_orientation]);
         },
         enumerable: true
     });

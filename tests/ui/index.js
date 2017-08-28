@@ -8,3 +8,4 @@ require("./webview");
 require("./videoview");
 require("./view");
 require("./navigator");
+require("./page");
