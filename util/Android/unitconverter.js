@@ -1,7 +1,9 @@
+const activity = require("./androidconfig").activity;
+
 function AndroidUnitConverter(){}
 
-AndroidUnitConverter.displayMetrics = Android.getActivity().getResources().getDisplayMetrics();
-AndroidUnitConverter.density = AndroidUnitConverter.displayMetrics.density;
+AndroidUnitConverter.displayMetrics = activity.getResources().getDisplayMetrics();
+AndroidUnitConverter.density = float(AndroidUnitConverter.displayMetrics.density);
 
 AndroidUnitConverter.pixelToDp = function(pixel) {
     if(isNaN(pixel) || typeof pixel !== "number") return Number.NaN;
