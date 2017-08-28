@@ -1,3 +1,4 @@
+require("./color");
 require("./image");
 require("./mapview");
 require("./searchview");
