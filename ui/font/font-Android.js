@@ -1,8 +1,7 @@
-const File           = require('sf-core/io/file');
-const Path           = require('sf-core/io/path');
+const File           = require('../../io/file');
+const Path           = require('../../io/path');
+const AndroidConfig  = require("../../util/Android/androidconfig.js");
 const NativeTypeface = requireClass("android.graphics.Typeface");
-const AndroidConfig  = require("sf-core/util/Android/androidconfig.js");
-const activity = AndroidConfig.activity;
 
 function Font(params) {
     // Assign parameters given in constructor
@@ -115,9 +114,9 @@ Object.defineProperties(Font, {
                 var fontFile = new File({
                     path: path
                 });
-                if (fontFile.nativeObject) {
+                if (fontFile.exists && fontFile.nativeObject) {
                     if (fontFile.type === Path.FILE_TYPE.ASSET) {
-                        var assets = activity.getAssets();
+                        var assets = AndroidConfig.activity.getAssets();
                         typeface = NativeTypeface.createFromAsset(assets, string(fontFile.name));
                     }
                     else {
@@ -125,7 +124,7 @@ Object.defineProperties(Font, {
                     }
                 }
             }
-        
+            
             return new Font({
                 "nativeObject": typeface,
                 "size": size
