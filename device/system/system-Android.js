@@ -98,7 +98,7 @@ Object.defineProperties(System, {
     },
     'validateFingerPrint': {
         value: function(params){
-            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable){
                 const NativeFingerprintAuthenticationDialogFragment = requireClass("com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment");
                 const NativeFingerPrintListener = requireClass("com.android.fingerprintdialog.FingerPrintListener");
                 
@@ -133,7 +133,9 @@ Object.defineProperties(System, {
                 
                 fragment.addFingerPrintListener(listeners);
                 fragment.show(fragmentManager, DIALOG_FRAGMENT_TAG);
+                return;
             }
+            params.onError && params.onError();
         },
         enumerable: true
     }

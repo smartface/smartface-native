@@ -91,6 +91,7 @@ SpeechRecognizer.createRecognizer = function(params){
             SpeechRecognizer.sendError(SpeechRecognizer.Error.SERVER);
             return;
         }
+        
     }
     
     SpeechRecognizer.avaudioengine = new __SF_AVAudioEngine();
@@ -207,6 +208,18 @@ SpeechRecognizer.sendError = function(error){
     if (typeof SpeechRecognizer.onError === 'function') {
         SpeechRecognizer.onError(error);
     }
+}
+
+SpeechRecognizer.ios = {};
+
+SpeechRecognizer.ios.isLocaleSupported = function(locale){
+    var nslocale;
+    if (locale) {
+        nslocale = new __SF_NSLocale(locale); 
+    }else{
+        nslocale = __SF_NSLocale.currentLocale();
+    }
+    return isLocaleSupport(nslocale);
 }
 
 function isLocaleSupport(locale){
