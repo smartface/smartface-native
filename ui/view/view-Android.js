@@ -141,7 +141,7 @@ View.prototype = {
         this.setBorder();
     },
     get borderRadius() {
-        return float(this._borderRadius);
+        return float(AndroidUnitConverter.pixelToDp(this._borderRadius));
     },
     set borderRadius(borderRadius) {
         this._borderRadius = float(AndroidUnitConverter.dpToPixel(borderRadius));

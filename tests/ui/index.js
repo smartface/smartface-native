@@ -5,3 +5,4 @@ require("./searchview");
 require("./slider");
 require("./webview");
 require("./videoview");
+require("./view");
