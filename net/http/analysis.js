@@ -117,7 +117,6 @@ var Http = function(params){
      * 
      * @param {Object} params 
      * @param {String} params.url URL of file
-     * @param {String} params.fileName File name
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
      * @param {UI.Image} params.onLoad.e.body
@@ -142,7 +141,6 @@ var Http = function(params){
      * 
      * @param {Object} params 
      * @param {String} params.url URL of file
-     * @param {String} params.fileName File name
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
      * @param {String} params.onLoad.e.body
@@ -167,7 +165,6 @@ var Http = function(params){
      * 
      * @param {Object} params 
      * @param {String} params.url URL of file
-     * @param {String} params.fileName File name
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
      * @param {String} params.onLoad.e.body
