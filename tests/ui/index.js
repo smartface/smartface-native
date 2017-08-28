@@ -8,6 +8,7 @@ require("./font");
 require("./image");
 require("./imageview");
 require("./label");
+require("./listview");
 require("./mapview");
 require("./searchview");
 require("./slider");
