@@ -1,7 +1,7 @@
-const View = require('sf-core/ui/view');
-const Color = require("sf-core/ui/color");
+const View = require('../view');
+const Color = require("../color");
 const extend = require('js-base/core/extend');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const NativeSwitch = requireClass("android.widget.Switch");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
@@ -56,7 +56,7 @@ const Switch = extend(View)(
                     return bool(this.nativeObject.isChecked());
                 },
                 set: function(toggle) {
-                    this.nativeObject.setChecked(bool(!!toggle));
+                    this.nativeObject.setChecked(bool(toggle));
                 },
                 enumerable: true
             },
@@ -132,7 +132,7 @@ const Switch = extend(View)(
 );
 
 function setThumbColor(self){
-    if(self.nativeObject.isChecked()){
+    if(self.toggle){
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
@@ -141,7 +141,7 @@ function setThumbColor(self){
 }
 
 function setTrackColor(self){
-    if(self.nativeObject.isChecked()){
+    if(self.toggle){
         self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{

@@ -10,6 +10,7 @@ require("./label");
 require("./mapview");
 require("./searchview");
 require("./slider");
+require("./switch");
 require("./webview");
 require("./videoview");
 require("./view");
