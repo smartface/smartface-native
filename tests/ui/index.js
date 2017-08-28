@@ -1,4 +1,5 @@
 require("./color");
+require("./font");
 require("./image");
 require("./mapview");
 require("./searchview");
