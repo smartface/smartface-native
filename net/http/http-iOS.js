@@ -1,34 +1,55 @@
 const Blob = require("../../global/blob");
 
-var http = function Http(){
+var http = function Http(params){
     var self = this;
     
-    var _sessionConfiguration = null;
     if (!self.nativeObject) {
         self.nativeObject = new __SF_Http();
-        _sessionConfiguration = SF.requireClass("NSURLSessionConfiguration").defaultSessionConfiguration();
     }
     
     ////////////////////////////////////////////////////////////////////////
     // Properties
-    Object.defineProperty(self, 'timeoutIntervalForRequest', {
+    Object.defineProperty(self, 'timeout', {
         get: function() {
-            console.log("JS Getter");
-            return _sessionConfiguration.timeoutIntervalForRequest;
+            return self.nativeObject.timeoutIntervalForRequest;
         },
         set: function(value) {
-            console.log("JS Setter : " + value );
-            _sessionConfiguration.timeoutIntervalForRequest = value;
+            self.nativeObject.timeoutIntervalForRequest = value;
         },
         enumerable: true
     });
     
+    Object.defineProperty(self, 'headers', {
+        get: function() {
+            return self.nativeObject.defaultHTTPHeaders;
+        },
+        set: function(value) {
+            self.nativeObject.defaultHTTPHeaders = value;
+        },
+        enumerable: true
+    });
+    
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
+    
     ////////////////////////////////////////////////////////////////////////
     // Functions
-    this.requestFile = function(url, fileName, onLoad, onError) {
+    this.cancelAll = function () {
+        self.nativeObject.cancelAll();
+    };
+    
+    this.requestFile = function(params) {
+        
+        var url = params.url;
+        var fileName = params.fileName;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
         return new http.Request(
                 self.nativeObject.requestFile(
-                    _sessionConfiguration,
                     url,
                     fileName,
                     function(e){
@@ -46,10 +67,14 @@ var http = function Http(){
             );
     };
     
-    this.requestImage = function(url, onLoad, onError) {
+    this.requestImage = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
         return new http.Request(
                 self.nativeObject.requestImage(
-                    _sessionConfiguration,
                     url,
                     function(e){
                         // Native returns UIImage instance.
@@ -66,10 +91,14 @@ var http = function Http(){
             );
     };
 
-    this.requestString = function(url, onLoad, onError) {
+    this.requestString = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
         return new http.Request(
                 self.nativeObject.requestString(
-                    _sessionConfiguration,
                     url,
                     function(e){
                         onLoad(e);
@@ -82,10 +111,14 @@ var http = function Http(){
             );
     };
     
-    this.requestJSON = function(url, onLoad, onError) {
+    this.requestJSON = function(params) {
+        
+        var url = params.url;
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
         return new http.Request(
                 self.nativeObject.requestJSON(
-                    _sessionConfiguration,
                     url,
                     function(e){
                         onLoad(e);
@@ -98,10 +131,41 @@ var http = function Http(){
             );
     };
     
-    this.request = function(params, onLoad, onError) {
+    this.request = function(params) {
+        
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
         return new http.Request(
                 self.nativeObject.request(
-                    _sessionConfiguration,
+                    params,
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onLoad(e);
+                    },
+                    function(e){
+                        e.body = new Blob(e.body);
+                        onError(e);
+                    }
+                )
+            );
+    };
+    
+    this.upload = function(params) {
+        var onLoad = params.onLoad;
+        var onError = params.onError;
+        
+        // Get NSData inside JS object
+        if( Object.prototype.toString.call( params.body ) === '[object Array]' ) {
+            for (var i = 0; i < params.body.length; i++) { 
+                params.body[i].value = params.body[i].value.nativeObject;
+            }
+        } else {
+            params.body = params.body.nativeObject;
+        }
+        
+        return new http.Request(
+                self.nativeObject.upload(
                     params,
                     function(e){
                         e.body = new Blob(e.body);
@@ -123,16 +187,22 @@ http.Request = function Request(nativeObject) {
     }
     
     this.suspend = function(){
-        self.nativeObject.suspend();
+        if (self.nativeObject) {
+            self.nativeObject.suspend();
+        }
     };
     
     this.resume = function(){
-        self.nativeObject.resume();
+        if (self.nativeObject) {
+            self.nativeObject.resume();
+        }
     };
     
     this.cancel = function(){
-        self.nativeObject.cancel();
+        if (self.nativeObject) {
+            self.nativeObject.cancel();
+        }
     };
 };
 
-module.exports = new http();
+module.exports = http;
