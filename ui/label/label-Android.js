@@ -1,10 +1,10 @@
 const extend                        = require('js-base/core/extend');
-const View                          = require('sf-core/ui/view');
-const Color                         = require("sf-core/ui/color");
-const TextAlignment                 = require("sf-core/ui/textalignment");
-const TypeUtil                      = require("sf-core/util/type");
-const AndroidUnitConverter          = require("sf-core/util/Android/unitconverter.js");
-const AndroidConfig                 = require("sf-core/util/Android/androidconfig.js");
+const View                          = require('../view');
+const Color                         = require("../color");
+const TextAlignment                 = require("../textalignment");
+const TypeUtil                      = require("../../util/type");
+const AndroidUnitConverter          = require("../../util/Android/unitconverter.js");
+const AndroidConfig                 = require("../../util/Android/androidconfig.js");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
@@ -105,7 +105,7 @@ const Label = extend(View)(
             },
             'multiline': {
                 get: function() {
-                    return int(this.nativeObject.getLineCount()) !== 1;
+                    return int(this.nativeObject.getMaxLines()) !== 1;
                 },
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(bool(!multiline));
