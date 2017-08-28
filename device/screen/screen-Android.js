@@ -23,36 +23,32 @@ const orientationArray = [
 
 Object.defineProperty(Screen, 'dpi', {
     get: function () {
-        var activity = Android.getActivity();
-        var metrics = activity.getResources().getDisplayMetrics();
-        return metrics.densityDpi;
+        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        return int(metrics.densityDpi);
     },
     configurable: false
 });
 
 Object.defineProperty(Screen, 'height', {
     get: function () {
-        var activity = Android.getActivity();
-        var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(metrics.heightPixels);
+        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        return UnitConverter.pixelToDp(int(metrics.heightPixels));
     },
     configurable: false
 });
 
 Object.defineProperty(Screen, 'width', {
     get: function () {
-        var activity = Android.getActivity();
-        var metrics = activity.getResources().getDisplayMetrics();
-        return UnitConverter.pixelToDp(metrics.widthPixels);
+        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        return UnitConverter.pixelToDp(int(metrics.widthPixels));
     },
     configurable: false
 });
 
 Object.defineProperty(Screen, 'touchSupported', {
     get: function () {
-        var activity = Android.getActivity();
-        var packageManager = activity.getPackageManager();
-        return packageManager.hasSystemFeature("android.hardware.touchscreen");
+        var packageManager = AndroidConfig.activity.getPackageManager();
+        return bool(packageManager.hasSystemFeature("android.hardware.touchscreen"));
     },
     configurable: false
 });
@@ -61,17 +57,14 @@ Object.defineProperty(Screen, 'orientation', {
     get: function () {
         var windowManager = AndroidConfig.getSystemService(WINDOW_SERVICE, WINDOW_MANAGER);
         var display = windowManager.getDefaultDisplay();
-
-        return orientationArray[display.getRotation()];
+        return orientationArray[int(display.getRotation())];
     },
     configurable: false
 });
 
 Screen.capture = function() {
-    var activity = Android.getActivity();
-
     var content = NativeR.id.content;
-    var rootView = activity.findViewById(content).getRootView();
+    var rootView = AndroidConfig.activity.findViewById(content).getRootView();
     rootView.setDrawingCacheEnabled(true);
     var cachedBitmap = rootView.getDrawingCache();
     var bitmap = NativeBitmap.createBitmap(cachedBitmap);
