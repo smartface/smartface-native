@@ -83,7 +83,7 @@ salep.test("sf-core/io/file Unit Test", function() {
     this.case("[remove] function.", function() {
         var result = testFile.remove(true);
         assert.isBoolean(result, 'remove() must be boolean');
-        assert.isFalse(result, 'remove() must be true');
+        assert.isFalse(result, 'remove() must be false');
     });
     
     this.case("[getFiles] function.", function() {
