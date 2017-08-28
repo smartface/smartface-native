@@ -59,6 +59,7 @@ http.prototype.cancelAll = function() {
 };
 
 http.prototype.upload = function(params) {
+    params && (params.method = "POST");
     return this.request(params, true, true);
 };
 
@@ -222,6 +223,7 @@ function createRequest(params, isMultipart) {
     }
     
     if(params.method) {
+        console.log("isMultipart " + isMultipart);
         var body = createRequestBody(params.body, contentType, isMultipart);
         builder = builder.method(params.method, body);
     }
@@ -229,12 +231,15 @@ function createRequest(params, isMultipart) {
 }
 
 function createRequestBody(body, contentType, isMultipart) {
-    if(!body || !contentType)
-        return null;
+    if(!body) {
+        return RequestBody.create(null, []);
+    }
     console.log("Before requireClass for body");
     console.log("MediaType.parse");
     if(!isMultipart || body instanceof Blob) {
-        var mediaType = MediaType.parse(contentType);
+        var mediaType = null;
+        if(contentType)
+             mediaType = MediaType.parse(contentType);
         return RequestBody.create(mediaType, body.parts);
     }
     else {
@@ -247,17 +252,25 @@ function createMultipartBody(bodies) {
     var builder = new MultipartBody.Builder();
     builder.setType(MultipartBody.FORM);
     for(var i = 0; i < bodies.length; i++) {
+        if(!bodies[i].name) {
+            throw new Error("Name of the upload part data cannot be empty.");
+        }
         if(bodies[i].contentType)
             var mediaType = MediaType.parse(bodies[i].contentType);
-        if(bodies[i].body)
-            var body = RequestBody.create(mediaType, bodies[i].body);
-        builder.addFormDataPart(bodies[i].name, bodies[i].fileName, body);
+        if(bodies[i].value)
+            var body = RequestBody.create(mediaType, bodies[i].value.parts);
+        if(!body) {
+            throw new Error("Upload method must include request body.");
+        }
+        var fileName = null;
+        if(bodies[i].fileName)
+            fileName = bodies[i].fileName;
+        builder.addFormDataPart(bodies[i].name, fileName, body);
     }
     return builder.build();
 }
 
 function getResponseHeaders(headers) {
-    console.log("headers.size " + headers.size());
     var responseHeaders = {};
     for(var i = 0; i < headers.size(); i++) {
         responseHeaders[headers.name(i)] = headers.value(i);
@@ -274,15 +287,12 @@ function checkInternet() {
 
 function runOnUiThread(requestOnLoad, e) {
     const Runnable = requireClass("java.lang.Runnable");
-    console.log("runOnUiThread");
     var runnable = Runnable.implement({
         run : function(){
-            console.log("requestOnLoad");
             requestOnLoad(e);
         }
     });
     activity.runOnUiThread(runnable);
 }
 
-console.log("Before module.exports.");
 module.exports = http;
