@@ -53,15 +53,14 @@ Object.defineProperties(Location, {
                         });
                     }
                 });
-                
                 locationManager.requestLocationUpdates(selectedProvider, 1000, 1, _locationListener);
                 
                 // firing initial location because we dont have "getLastKnownLocation" for one time location
                 var initialLocationFromProvider = locationManager.getLastKnownLocation(selectedProvider);
                 if (initialLocationFromProvider != null) {
                     _onLocationChanged && _onLocationChanged({
-                        latitude: initialLocationFromProvider.getLatitude(),
-                        longitude: initialLocationFromProvider.getLongitude()
+                        latitude: double(initialLocationFromProvider.getLatitude()),
+                        longitude: double(initialLocationFromProvider.getLongitude())
                     });
                 }
             }
