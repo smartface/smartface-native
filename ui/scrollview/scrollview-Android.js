@@ -1,7 +1,7 @@
 const ViewGroup = require('../viewgroup');
-const UnitConverter = require("sf-core/util/Android/unitconverter.js");
+const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const AndroidConfig = require("../../util/Android/androidconfig");
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
@@ -33,7 +33,7 @@ const ScrollView = extend(ViewGroup)(
         }
         
         _super(this);
-        const FlexLayout = require("sf-core/ui/flexlayout");
+        const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
         _layout.parent = this;
@@ -63,7 +63,7 @@ const ScrollView = extend(ViewGroup)(
             'scrollToCoordinate': {
                 value: function(coordinate) {
                     if (coordinate) {
-                        const UnitConverter = require('sf-core/util/Android/unitconverter');
+                        const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(int(coordinate), int(0));
