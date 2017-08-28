@@ -20,6 +20,7 @@ require("./picker");
 require("./scrollview");
 require("./searchview");
 require("./slider");
+require("./sliderdrawer");
 require("./statusbar");
 require("./switch");
 require("./textbox");

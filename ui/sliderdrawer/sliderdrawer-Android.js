@@ -1,15 +1,15 @@
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
-const AndroidUnitConverter  = require('sf-core/util/Android/unitconverter.js');
+const AndroidUnitConverter  = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 const SliderDrawer = extend(FlexLayout)(
     function (_super, params) {
         _super(this);
         
-        var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (int(-1), int(-1));
+        var drawerLayoutParams = new NativeDrawerLayout.LayoutParams (-1, -1);
         // Gravity.LEFT
-        drawerLayoutParams.gravity = int(3);
+        drawerLayoutParams.gravity = 3;
         
         var _position;
         var _onShow;
@@ -34,11 +34,11 @@ const SliderDrawer = extend(FlexLayout)(
                     _position = position;
                     if(position === SliderDrawer.Position.RIGHT){
                         // Gravity.RIGHT
-                        drawerLayoutParams.gravity = int(5);
+                        drawerLayoutParams.gravity = 5;
                     }
                     else{
                         // Gravity.LEFT
-                        drawerLayoutParams.gravity = int(3);
+                        drawerLayoutParams.gravity = 3;
                     }
                     this.nativeObject.setLayoutParams (drawerLayoutParams);
                 },
