@@ -135,7 +135,7 @@ function FloatingMenu(params) {
             },
             set: function(color) {
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
-                                                        // It causes exception.
+                    _color = color;                      // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
                 } else {
                     throw new Error("Provide floatingMenu's color with a UI.Color.");

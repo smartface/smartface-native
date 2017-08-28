@@ -4,6 +4,7 @@ require("./button");
 require("./color");
 require("./dialog");
 require("./flexlayout");
+require("./floatingmenu");
 require("./font");
 require("./headerbar");
 require("./headerbaritem");
