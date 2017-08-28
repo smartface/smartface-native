@@ -1,11 +1,10 @@
-console.log("Before require okhttp");
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
 const OkHttpCallback = requireClass("okhttp3.Callback");
 const OkHttpRequest = requireClass("okhttp3.Request");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
-console.log("Before require Blob");
+
 const Blob = require("sf-core/blob");
 
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
@@ -23,10 +22,10 @@ const Request = function() {
 
 
 function http(params) {
-    console.log("Before creating http object.");
     this.clientBuilder = new OkHttpClient.Builder();
     
-    var _timeout;
+    var _timeout = 10000, // default OkHttp timeout. There is no way getting timout for public method.
+        _defaultHeaders;
     Object.defineProperty(this, "timeout", {
         get: function() {
             return _timeout;
@@ -40,6 +39,16 @@ function http(params) {
             this.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
             this.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
             this.client = this.clientBuilder.build();
+        }
+    });
+    
+    Object.defineProperty(this, "headers", {
+        get: function() {
+            return _defaultHeaders;
+        },
+        set: function(headers) {
+            if(headers)
+                _defaultHeaders = headers;
         }
     });
     
@@ -69,16 +78,14 @@ http.prototype.requestString = function(params) {
     
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
-        console.log("Request onLoad. Create string");
         if(e && e.body)
-            e.body = e.body.toString();
+            e.string = e.body.toString();
         requestOnLoad && runOnUiThread(requestOnLoad, e);
     };
     return this.request(params, false, false);
 };
 
 http.prototype.requestImage = function(params) {
-    console.log("requestImage");
     if(!params)
         throw new Error("Required request parameters.");
     
@@ -86,10 +93,8 @@ http.prototype.requestImage = function(params) {
     const Image = require("sf-core/ui/image");
     
     params.onLoad = function (e) {
-        console.log("Request onLoad.");
         if(e && e.body) {
-            console.log("Create image");
-            e.body = Image.createFromBlob(e.body);
+            e.image = Image.createFromBlob(e.body);
         }
         
         requestOnLoad && runOnUiThread(requestOnLoad, e);
@@ -103,9 +108,7 @@ http.prototype.requestJSON = function(params) {
     
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
-        console.log("JSON onLoad.");
         if(e && e.body) {
-            console.log("Create JSON");
             e.body = JSON.parse(e.body);
         }
         requestOnLoad && runOnUiThread(requestOnLoad, e);
@@ -121,26 +124,18 @@ http.prototype.requestFile = function(params) {
     params.onLoad = function(e) {
         const IO = require("sf-core/io");
         var cacheDir =  activity.getCacheDir().getAbsolutePath();
-        console.log("cacheDir " + cacheDir);
         var path;
         if(params.fileName)
             path = cacheDir + IO.Path.Separator + params.fileName;
         else 
             path = cacheDir + params.url.substring(params.url.lastIndexOf('/'));
-        console.log("Path " + path);
         var file = new IO.File({path: path});
-        // console.log("File create " + file.createFile());
         if(e && e.body) {
-            console.log("Body");
             var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
-            console.log("Bytes  " + e.body.parts.length);
             var blob = new Blob(e.body.parts, {type: {}});
             stream.write(blob);
             stream.close();
-            e.body = file;
-        }
-        else {
-            console.log("e " + e  + "  !e.body");
+            e.file = file;
         }
             
         requestOnLoad && runOnUiThread(requestOnLoad, e);
@@ -157,7 +152,6 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
     var request = new Request();
     var callback = OkHttpCallback.implement({
         onFailure: function(call, e) {
-            console.log("onFailure " );
             if(e)
                 var message = e.getMessage();
             params && params.onError && runOnUiThread(params.onError, {message: message});
@@ -169,9 +163,8 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                 var bytes = response.body().bytes();
                 var responseBody = new Blob(bytes, {type: {}});
             }
-            console.log("onResponse " + statusCode);
+            
             if(response.isSuccessful()) {
-                console.log("onResponse is Successful" );
                 if(params && params.onLoad) {
                     if(isRunOnBackgroundThread) {
                         params.onLoad({ 
@@ -188,7 +181,6 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                     }
                 }
             } else {
-                console.log("onResponse is not Successful");
                 params && params.onError && runOnUiThread(
                     params.onError, {
                         statusCode: statusCode,
@@ -199,8 +191,6 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
         }
     });
     var okhttpRequest = createRequest(params, isMultipart);
-    console.log("Before client.");
-    console.log("Client " + this.client);
     request.nativeObject = this.client.newCall(okhttpRequest);
     request.nativeObject.enqueue(callback);
     return request;
@@ -222,8 +212,16 @@ function createRequest(params, isMultipart) {
         }
     }
     
+    if(this.defaultHeaders) {
+        var keys = Object.keys(this.defaultHeaders);
+        for(var i = 0; i < keys.length; i++) {
+            if(keys[i].toUpperCase() === CONTENT_TYPE_KEY)
+                var contentType = this.defaultHeaders[keys[i]];
+            builder.addHeader(keys[i], this.defaultHeaders[keys[i]]);
+        }
+    }
+    
     if(params.method) {
-        console.log("isMultipart " + isMultipart);
         var body = createRequestBody(params.body, contentType, isMultipart);
         builder = builder.method(params.method, body);
     }
@@ -234,13 +232,16 @@ function createRequestBody(body, contentType, isMultipart) {
     if(!body) {
         return RequestBody.create(null, []);
     }
-    console.log("Before requireClass for body");
-    console.log("MediaType.parse");
     if(!isMultipart || body instanceof Blob) {
         var mediaType = null;
         if(contentType)
              mediaType = MediaType.parse(contentType);
-        return RequestBody.create(mediaType, body.parts);
+        var content;
+        if(body instanceof Blob)
+            content = body.parts;
+        else if(typeof(body) === "string")
+            content = body;
+        return RequestBody.create(mediaType, content);
     }
     else {
         return createMultipartBody(body);

@@ -51,7 +51,7 @@ Blob.createFromBase64 = function(base64String) {
     return newBlob;
 };
 
-Blob.createFromString = function(str) {
+Blob.createFromUTF8String = function(str) { // utf string or string
     var utf8Array = Base64Util.StrToUtf8Array(str);
     return new Blob(utf8Array, {type: "text"});
 }
