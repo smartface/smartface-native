@@ -9,6 +9,7 @@ require("./image");
 require("./imageview");
 require("./label");
 require("./listview");
+require("./listviewitem");
 require("./mapview");
 require("./searchview");
 require("./slider");
