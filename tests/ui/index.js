@@ -1,3 +1,4 @@
+require("./button");
 require("./color");
 require("./font");
 require("./image");
