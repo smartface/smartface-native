@@ -18,7 +18,6 @@ salep.test("sf-core/ui/page.statusBar Unit Test", function () {
     
     this.case("StatusBar color property", function () {
         Creator.page.statusBar.android.color = Color.BLUE;
-        console.log(Creator.page.statusBar.color);
-        assert.equal(int(Creator.page.statusBar.color.nativeObject), int(Color.BLUE.nativeObject), "color must be equal to Color.BLUE.");
+        assert.equal(Creator.page.statusBar.android.color, Color.BLUE, "color must be equal to Color.BLUE.");
     });
 });
