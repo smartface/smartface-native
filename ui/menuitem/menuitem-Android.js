@@ -1,6 +1,6 @@
-const Color     = require("sf-core/ui/color");
-const TypeUtil  = require("sf-core/util/type");
-const Exception = require("sf-core/util/exception");
+const Color     = require("../color");
+const TypeUtil  = require("../../util/type");
+const Exception = require("../../util/exception");
 
 const NativeSpannable = requireClass("android.text.Spanned");
 const NativeColorSpan = requireClass("android.text.style.ForegroundColorSpan");

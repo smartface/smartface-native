@@ -1,4 +1,4 @@
-const AndroidConfig             = require('sf-core/util/Android/androidconfig')
+const AndroidConfig             = require('../../util/Android/androidconfig')
 const NativeBluetoothAdapter    = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager    = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');

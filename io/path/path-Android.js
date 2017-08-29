@@ -1,5 +1,5 @@
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
-const TypeUtil              = require("sf-core/util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const TypeUtil              = require("../../util/type");
 const NativeFile            = requireClass('java.io.File');
 const NativeEnvironment     = requireClass('android.os.Environment');
 

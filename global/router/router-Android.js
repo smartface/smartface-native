@@ -36,7 +36,7 @@ Object.defineProperty(Router, 'sliderDrawer', {
     },
     set: function(sliderDrawerValue) 
     {
-        const SliderDrawer = require('sf-core/ui/sliderdrawer');
+        const SliderDrawer = require('../../ui/sliderdrawer');
         if (sliderDrawerValue instanceof SliderDrawer) 
         {
             if (pagesInstance) 
@@ -162,7 +162,7 @@ function getRoute(to) {
             throw new Error(splittedPath[0] + ' is not in routes.');
             
         var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-        if (((routes[splittedPath[0]].pageObject) instanceof require("sf-core/ui/navigator")) ||
+        if (((routes[splittedPath[0]].pageObject) instanceof require("../../ui/navigator")) ||
             ((routes[splittedPath[0]].pageObject) instanceof BottomTabBar)) {
                 
             var page = routes[splittedPath[0]].pageObject.getRoute(subPath, routes[splittedPath[0]].isSingleton);

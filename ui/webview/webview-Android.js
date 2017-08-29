@@ -1,8 +1,8 @@
 const extend        = require('js-base/core/extend');
-const View          = require('sf-core/ui/view');
-const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const File          = require('sf-core/io/file');
-const Path          = require('sf-core/io/path');
+const View          = require('../view');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const File          = require('../../io/file');
+const Path          = require('../../io/path');
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -236,7 +236,7 @@ const WebView = extend(View)(
             settings.setLoadsImagesAutomatically(true);
             }
             catch(e)
-            {require("sf-core/application").onUnhandledError(e);}
+            {require("../../application").onUnhandledError(e);}
             
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0

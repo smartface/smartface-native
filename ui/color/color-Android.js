@@ -1,4 +1,4 @@
-const TypeUtil               = require("sf-core/util/type");
+const TypeUtil               = require("../../util/type");
 const NativeColor            = requireClass("android.graphics.Color");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 

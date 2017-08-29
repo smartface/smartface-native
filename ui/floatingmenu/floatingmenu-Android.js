@@ -1,18 +1,15 @@
-const NativeClickListener            = requireClass("android.view.View$OnClickListener");
-const NativeSpannableString = requireClass("android.text.SpannableString");
-const NativeForegroundColor = requireClass("android.text.style.ForegroundColorSpan");
-const NativeTextView        = requireClass("android.widget.TextView");
-
-const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
-
+const NativeClickListener    = requireClass("android.view.View$OnClickListener");
+const NativeSpannableString  = requireClass("android.text.SpannableString");
+const NativeForegroundColor  = requireClass("android.text.style.ForegroundColorSpan");
+const NativeTextView         = requireClass("android.widget.TextView");
+const NativeYogaNode         = requireClass('com.facebook.yoga.YogaNode');
 const NativeFloatingButton   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
 const NativeOnOpenListener   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
 const NativeOnCloseListener  = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
 const NativeSpeedDialAdapter = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter");
-const NativeMenuItem = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
-
-const Color = require("sf-core/ui/color");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const NativeMenuItem         = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
+const Color                  = require("../color");
+const AndroidConfig          = require("../../util/Android/androidconfig");
 
 function FloatingMenu(params) {
     var nativeObject;
@@ -121,7 +118,7 @@ function FloatingMenu(params) {
                 return _icon;
             },
             set: function(image) {
-                if (image && image.nativeObject && (image instanceof require("sf-core/ui/image"))) {
+                if (image && image.nativeObject && (image instanceof require("../image"))) {
                     _icon = image;
                     nativeObject.setIcon(image.nativeObject);
                 } else {
@@ -135,7 +132,7 @@ function FloatingMenu(params) {
             },
             set: function(color) {
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
-                                                        // It causes exception.
+                    _color = color;                      // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
                 } else {
                     throw new Error("Provide floatingMenu's color with a UI.Color.");

@@ -3,7 +3,7 @@ const Intent                    = requireClass("android.content.Intent");
 const Locale                    = requireClass("java.util.Locale");
 const RecognitionListener       = requireClass("android.speech.RecognitionListener");
 const RecognizerError           = require("./error");
-const AndroidConfig             = require("sf-core/util/Android/androidconfig");
+const AndroidConfig             = require("../../util/Android/androidconfig");
 
 const SpeechRecognizerError = {
     1: RecognizerError.NETWORK_TIMEOUT,
@@ -44,7 +44,7 @@ function createIntent(params) {
     
     } else {
         var locale = Locale.getDefault();
-        _intent.putExtra(string("android.speech.extra.LANGUAGE"), string(locale)); 
+        _intent.putExtra(string("android.speech.extra.LANGUAGE"), locale); 
     }
     _intent.putExtra(string("android.speech.extra.DICTATION_MODE"), bool(true));
     _intent.putExtra(string("android.speech.extra.PARTIAL_RESULTS"), bool(true));
@@ -55,7 +55,7 @@ function createRecognizerListener(params) {
         onResults: function(bundle) {
             var results = bundle.getStringArrayList(string("results_recognition"));
             if(params && params.onFinish) {
-                params.onFinish(results.get(int(0)).substring(0)); // toString must be called. results.get(0) is a java.lang.String
+                params.onFinish(string(results.get(int(0)).substring(0))); // toString must be called. results.get(0) is a java.lang.String
             }
             _isRunning = false;
         },
@@ -66,7 +66,7 @@ function createRecognizerListener(params) {
             var results = partialResults.getStringArrayList(string("results_recognition")); //results_recognition = SpeechRecognizer.RESULTS_RECOGNITION
             var matched = results.get(0).substring(0); 
             if(params && params.onResult) {
-                params.onResult(matched);
+                params.onResult(string(matched));
             }
         },
         onEvent: function(eventType, params) {},

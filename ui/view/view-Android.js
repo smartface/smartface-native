@@ -302,7 +302,7 @@ View.prototype = {
     set height(height) {
         this.yogaNode.setHeight(float(AndroidUnitConverter.dpToPixel(height)));
          // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
-        const ScrollView = require("sf-core/ui/scrollview");
+        const ScrollView = require("../scrollview");
         if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL){
             var layoutParams = this.nativeObject.getLayoutParams();
             layoutParams && (layoutParams.height = float(-2));
@@ -314,7 +314,7 @@ View.prototype = {
     set width(width) {
         this.yogaNode.setWidth(float(AndroidUnitConverter.dpToPixel(width)));
         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
-        const ScrollView = require("sf-core/ui/scrollview");
+        const ScrollView = require("../scrollview");
         if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL){
             var layoutParams = this.nativeObject.getLayoutParams();
             layoutParams && (layoutParams.width = -2);
@@ -561,7 +561,7 @@ View.prototype = {
 View.prototype.setBackgroundImage = function() {
     var resources = AndroidConfig.activity.getResources();
     const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
-    const Image = require("sf-core/ui/image");
+    const Image = require("../image");
     var bitmap;
     if(this.__backgroundImages instanceof Image) {
         bitmap = this.__backgroundImages.nativeObject.getBitmap();

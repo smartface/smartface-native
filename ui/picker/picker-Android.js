@@ -1,7 +1,7 @@
 const extend        = require('js-base/core/extend');
-const View          = require('sf-core/ui/view');
-const TypeUtil      = require('sf-core/util/type');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const View          = require('../view');
+const TypeUtil      = require('../../util/type');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const NativeNumberPicker    = requireClass("android.widget.NumberPicker");
 const NativeFrameLayout     = requireClass("android.widget.FrameLayout");

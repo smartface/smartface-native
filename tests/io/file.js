@@ -63,7 +63,7 @@ salep.test("sf-core/io/file Unit Test", function() {
     });
     
     this.case("[copy] function.", function() {
-        var result = testFile.copy(require("sf-core/io/path").DataDirectory + '/myImage.png');
+        var result = testFile.copy(require("../../io/path").DataDirectory + '/myImage.png');
         assert.isBoolean(result, 'copy() must be boolean');
         assert.isTrue(result, 'copy() must be true');
     });
@@ -83,7 +83,7 @@ salep.test("sf-core/io/file Unit Test", function() {
     this.case("[remove] function.", function() {
         var result = testFile.remove(true);
         assert.isBoolean(result, 'remove() must be boolean');
-        assert.isFalse(result, 'remove() must be true');
+        assert.isFalse(result, 'remove() must be false');
     });
     
     this.case("[getFiles] function.", function() {

@@ -1,8 +1,8 @@
 /*globals requireClass,string*/
-const Path                  = require("sf-core/io/path");
-const FileStream            = require("sf-core/io/filestream");
-const TypeUtil              = require("sf-core/util/type");
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
+const Path                  = require("../path");
+const FileStream            = require("../filestream");
+const TypeUtil              = require("../../util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
 const activity              = AndroidConfig.activity;
 
 const NativeFile            = requireClass('java.io.File');

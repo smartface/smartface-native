@@ -1,5 +1,5 @@
-const AndroidConfig             = require('sf-core/util/Android/androidconfig')
-const TypeUtil                  = require('sf-core/util/type')
+const AndroidConfig             = require('../../util/Android/androidconfig')
+const TypeUtil                  = require('../../util/type')
 const NativeCriteria            = requireClass('android.location.Criteria');
 const NativeLocationListener    = requireClass('android.location.LocationListener');
 

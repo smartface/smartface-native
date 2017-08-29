@@ -1,11 +1,11 @@
-const Label             = require('../label');
-const TypeUtil             = require('sf-core/util/type');
-const Color             = require('../color');
 const extend            = require('js-base/core/extend');
+const Label             = require('../label');
+const TypeUtil          = require('../../util/type');
+const Color             = require('../color');
 const KeyboardType      = require('../keyboardtype');
 const ActionKeyType     = require('../actionkeytype');
-const TextAlignment     = require('sf-core/ui/textalignment');
-const AndroidConfig     = require('sf-core/util/Android/androidconfig');
+const TextAlignment     = require('../textalignment');
+const AndroidConfig     = require('../../util/Android/androidconfig');
 
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
@@ -252,7 +252,7 @@ const TextBox = extend(Label)(
             },
             'text': {
                 get: function() {
-                    return self.nativeObject.getText();
+                    return string(self.nativeObject.getText());
                 },
                 set: function(text) {
                     _hasEventsLocked = true;
@@ -269,12 +269,14 @@ const TextBox = extend(Label)(
 
         });
         
+        var _hintTextColor;
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return new Color({ color: self.nativeObject.getHintTextColors().getDefaultColor() });
+                return _hintTextColor;
             },
             set: function(hintTextColor) {
-                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
+                _hintTextColor = hintTextColor;
+                self.nativeObject.setHintTextColor(int(hintTextColor.nativeObject));
             },
             enumerable: true
         });

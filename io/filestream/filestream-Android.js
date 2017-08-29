@@ -1,9 +1,9 @@
 /* globals requireClass */
-const File                  = require("sf-core/io/file");
-const Path                  = require("sf-core/io/path");
-const TypeUtil              = require("sf-core/util/type");
-const Blob                  = require('sf-core/blob');
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const File                  = require("../file");
+const Path                  = require("../path");
+const TypeUtil              = require("../../util/type");
+const Blob                  = require('../../blob');
+const AndroidConfig         = require("../../util/Android/androidconfig");
 
 function FileStream(params) {
     var fileObject;

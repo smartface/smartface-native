@@ -1,6 +1,6 @@
 /* global requireClass*/
-const File                  = require('sf-core/io/file');
-const Path                  = require('sf-core/io/path');
+const File                  = require('../../../io/file');
+const Path                  = require('../../../io/path');
 
 const NativeSQLiteDatabase      = requireClass('android.database.sqlite.SQLiteDatabase');
 
