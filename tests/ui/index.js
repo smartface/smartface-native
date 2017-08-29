@@ -26,6 +26,7 @@ require("./searchview");
 require("./slider");
 require("./sliderdrawer");
 require("./statusbar");
+require("./swipeview");
 require("./switch");
 require("./textbox");
 require("./videoview");
