@@ -16,6 +16,7 @@ require("./label");
 require("./listview");
 require("./listviewitem");
 require("./mapview");
+require("./menu");
 require("./menuitem");
 require("./navigator");
 require("./page");
