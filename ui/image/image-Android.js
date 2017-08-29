@@ -51,6 +51,15 @@ function Image (params) {
             }, 
             enumerable: true
         },
+        'toBlob':{
+            value: function() {
+                var bitmap = self.nativeObject.getBitmap();
+                var stream = new NativeByteArrayOutputStream();
+                bitmap.compress(CompressFormat[1], 100, stream);
+                return new Blob(array(stream.toByteArray), {type: "image"});
+            }, 
+            enumerable: true
+        },
         'resize':{
             value: function(width, height, onSuccess, onFailure){
                 var success = true;
