@@ -21,11 +21,11 @@ salep.on("skip", function(testCase) {
     // console.log("Skipped Case [" + testCase.name + "] in " + testCase.parent.name + ".");
 });
 
-// require("./application");
-// require("./device");
-require("./device/sound");
-// require("./io");
-// require("./ui");
+require("./application");
+require("./device");
+require("./net");
+require("./io");
+require("./ui");
 
 var result = salep.getResults();
 alert("Success: " + result.success + ", Fail: " + result.fail + ", Skip: " + result.skip + ", Total: " + result.total);
