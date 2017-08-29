@@ -1,11 +1,10 @@
-const extend = require('js-base/core/extend');
-const View   = require('../view');
-
-const NativeView         = requireClass("android.view.View");
-const NativeViewPager    = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
-const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
-const AndroidConfig = require("../../util/Android/androidconfig");
+const extend                        = require('js-base/core/extend');
+const View                          = require('../view');
+const AndroidConfig                 = require("../../util/Android/androidconfig");
+const NativeView                    = requireClass("android.view.View");
+const NativeViewPager               = requireClass("android.support.v4.view.ViewPager");
+const NativePagerAdapter            = requireClass("io.smartface.android.SFCorePagerAdapter");
+const NativeOnPageChangeListener    = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
 
