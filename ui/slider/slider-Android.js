@@ -1,7 +1,7 @@
 const extend        = require('js-base/core/extend');
-const View          = require('sf-core/ui/view');
-const Color         = require('sf-core/ui/color');
-const AndroidConfig = require('sf-core/util/Android/androidconfig');
+const View          = require('../view');
+const Color         = require('../color');
+const AndroidConfig = require('../../util/Android/androidconfig');
 
 const SDK_VERSION    = requireClass("android.os.Build").VERSION.SDK_INT;
 const PorterDuffMode = requireClass("android.graphics.PorterDuff").Mode.SRC_IN;
@@ -91,7 +91,7 @@ const Slider = extend(View)(
                     return _thumbImage;
                 },
                 set: function(thumbImage) {
-                    const Image = require("sf-core/ui/image");
+                    const Image = require("../image");
                     if(thumbImage instanceof Image && thumbImage.nativeObject){
                         _thumbImage = thumbImage;
                         this.nativeObject.setThumb(thumbImage.nativeObject);

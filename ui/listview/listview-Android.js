@@ -42,7 +42,7 @@ const ListView = extend(View)(
                     holderViewLayout = _onRowCreate();
                 }
                 catch(e){
-                    const Application = require("sf-core/application");
+                    const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
@@ -289,7 +289,7 @@ function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
 }
 
 function findConstructor(jsView){
-    return require("sf-core/ui/"+jsView.toString().toLowerCase());
+    return require("../"+jsView.toString().toLowerCase());
 }
 
 function cloneObject(jsView, nativeObject, nativeInner){

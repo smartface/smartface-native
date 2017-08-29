@@ -1,5 +1,5 @@
-const TypeUtil = require("sf-core/util/type");
-const Exception = require("sf-core/util/exception");
+const TypeUtil  = require("../../util/type");
+const Exception = require("../../util/exception");
 
 function Menu(params) {
     
@@ -33,7 +33,7 @@ function Menu(params) {
         },
         'show':{
             value:function(page) {
-                if(!(page instanceof require("sf-core/ui/page"))){
+                if(!(page instanceof require("../page"))){
                     throw new TypeError('Parameter must be instance of page');
                 }
                 var layout = page.layout;

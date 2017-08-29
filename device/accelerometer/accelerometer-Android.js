@@ -1,4 +1,4 @@
-const AndroidConfig             = require('sf-core/util/Android/androidconfig')
+const AndroidConfig             = require('../../util/Android/androidconfig')
 const NativeSensor              = requireClass('android.hardware.Sensor');
 const NativeSensorEventListener = requireClass('android.hardware.SensorEventListener');
 // Context.SENSOR_SERVICE

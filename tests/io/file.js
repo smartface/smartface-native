@@ -63,7 +63,7 @@ salep.test("sf-core/io/file Unit Test", function() {
     });
     
     this.case("[copy] function.", function() {
-        var result = testFile.copy(require("sf-core/io/path").DataDirectory + '/myImage.png');
+        var result = testFile.copy(require("../../io/path").DataDirectory + '/myImage.png');
         assert.isBoolean(result, 'copy() must be boolean');
         assert.isTrue(result, 'copy() must be true');
     });

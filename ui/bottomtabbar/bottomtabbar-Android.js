@@ -1,5 +1,5 @@
-const Color      = require("sf-core/ui/color");
-const TabBarItem = require("sf-core/ui/tabbaritem");
+const Color      = require("../color");
+const TabBarItem = require("../tabbaritem");
 
 const MAXITEMCOUNT = 5;
 
@@ -20,7 +20,6 @@ function BottomTabBar(params) {
                     if(_itemCount === this.android.maxItemCount) {
                         throw new Error("Maximum number of items supported by BottomTabBar is 5.");
                     }
-                    const TabBarItem = require("sf-core/ui/tabbaritem");
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
                         _itemCount++;

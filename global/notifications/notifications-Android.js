@@ -1,7 +1,7 @@
-const TypeUtil                  = require("sf-core/util/type");
-const AndroidConfig             = require("sf-core/util/Android/androidconfig");
-const Application               = require("sf-core/application");
-const Color                     = require("sf-core/ui/color");
+const TypeUtil                  = require("../../util/type");
+const AndroidConfig             = require("../../util/Android/androidconfig");
+const Application               = require("../../application");
+const Color                     = require("../../ui/color");
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
@@ -93,7 +93,7 @@ Notifications.LocalNotification = function(params) {
             },
             set: function(value) {
                 if (TypeUtil.isString(value)) {
-                    const Image = require("sf-core/ui/image");
+                    const Image = require("../../ui/image");
                     var largeImage = Image.createFromFile(value);
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();

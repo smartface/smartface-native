@@ -92,7 +92,7 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("sf-core/ui/router");
+                    const Router = require("../router");
                     Router.goBack(null, true);
                 }
             }
@@ -125,9 +125,9 @@ function Page(params) {
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
-            const Contacts = require("sf-core/device/contacts");
-            const Multimedia = require("sf-core/device/multimedia");
-            const Sound = require("sf-core/device/sound");
+            const Contacts = require("../../device/contacts");
+            const Multimedia = require("../../device/multimedia");
+            const Sound = require("../../device/sound");
             
             var requestCode = int(nativeRequestCode);
             var resultCode = int(nativeResultCode)
@@ -399,7 +399,7 @@ function Page(params) {
                 self.headerBar.leftItemColor = color;
                 for(var i = 0; i < _headerBarItems.length; i++)
                     _headerBarItems[i].color = color;
-                const HeaderBarItem = require("sf-core/ui/headerbaritem");
+                const HeaderBarItem = require("../headerbaritem");
                 HeaderBarItem.itemColor = color;
             }
         },
@@ -465,7 +465,7 @@ function Page(params) {
             return _headerBarLogo;
         },
         set: function(image) {
-            const Image = require("sf-core/ui/image");
+            const Image = require("../image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
                 actionBar.setLogo(_headerBarLogo.nativeObject);
@@ -494,7 +494,7 @@ function Page(params) {
             var result = 0;
             var activity = AndroidConfig.activity;
             
-            const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+            const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = int(activity.getResources().getIdentifier(string("design_bottom_navigation_height"), string("dimen"), packageName));
             if (resourceId > 0) {
@@ -559,7 +559,7 @@ function Page(params) {
         if(bottomNavigationView) 
             return;
         const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
-        const Color = require("sf-core/ui/color");
+        const Color = require("../color");
         
         bottomNavigationView = new BottomNavigationView(activity);
         var tab = _parentTab;
@@ -616,7 +616,7 @@ function Page(params) {
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
                 var key = Object.keys(tab.items)[tab.currentIndex];
-                const Navigator = require("sf-core/ui/navigator");
+                const Navigator = require("../navigator");
                 var navigator = tab.items[key].route;
                 if(navigator instanceof Navigator) {
                     // Router.removeFromHistory(navigator.switchCounter);
@@ -655,7 +655,7 @@ function Page(params) {
 
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
-        const HeaderBarItem = require("sf-core/ui/headerbaritem");
+        const HeaderBarItem = require("../headerbaritem");
         view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
@@ -687,7 +687,7 @@ function Page(params) {
         }
 
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         // to fix supportRTL padding bug, we should set this manually.

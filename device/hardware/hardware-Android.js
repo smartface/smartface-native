@@ -1,4 +1,4 @@
-const AndroidConfig     = require('sf-core/util/Android/androidconfig')
+const AndroidConfig     = require('../../util/Android/androidconfig')
 const NativeSettings    = requireClass('android.provider.Settings');
 const NativeBuild       = requireClass('android.os.Build');
 // Context.TELEPHONY_SERVICE
@@ -21,7 +21,6 @@ Object.defineProperty(Hardware.android, 'IMEI', {
 
 Object.defineProperty(Hardware, 'UID', {
     get: function () {
-        const AndroidConfig = require("sf-core/util/Android/androidconfig");
         var activity = AndroidConfig.activity;
         var contentResolver = activity.getContentResolver();
 

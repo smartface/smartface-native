@@ -1,10 +1,10 @@
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
-const Color = require("sf-core/ui/color");
-const Image = require("sf-core/ui/image");
-const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
-const AndroidConfig        = require("sf-core/util/Android/androidconfig");
+const Color = require("../color");
+const Image = require("../image");
+const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+const AndroidConfig        = require("../../util/Android/androidconfig");
 
 function HeaderBarItem(params) {
     var _title = "";

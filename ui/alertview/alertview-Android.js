@@ -1,6 +1,6 @@
 /*globals requireClass,string,bool,int*/
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
-const Type                  = require("sf-core/util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const Type                  = require("../../util/type");
 const NativeAlertDialog     = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 

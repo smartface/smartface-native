@@ -1,4 +1,4 @@
-const Base64Util = require("sf-core/util/base64");
+const Base64Util = require("../..//util/base64");
 
 function Blob (parts, properties) {
     var _type = null;
@@ -46,6 +46,9 @@ function Blob (parts, properties) {
     }
 }
 
+/** @todo 
+ * Error: Attempt to invoke virtual method 'int io.smartface.ExposingEngine.FastArray.size()' on a null object reference
+ */
 Blob.createFromBase64 = function(base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
     var byteArray = array(NativeBase64.decode(string(base64String), NativeBase64.DEFAULT));

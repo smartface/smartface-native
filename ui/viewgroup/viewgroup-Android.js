@@ -26,7 +26,7 @@ const ViewGroup = extend(View)(
                 value: function(view){
                     view.parent = this;
                     this.childViews[view.id] = view;
-                    if(this instanceof require("sf-core/ui/flexlayout")){
+                    if(this instanceof require("../flexlayout")){
                         this.nativeObject.addView(view.nativeObject, view.yogaNode);
                     }
                 },

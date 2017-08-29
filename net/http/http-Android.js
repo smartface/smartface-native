@@ -6,7 +6,7 @@ const NativeInteger         = requireClass("java.lang.Integer");
 const NativeString          = requireClass("java.lang.String");
 const NativeBase64          = requireClass("android.util.Base64");
 
-const Blob = require("sf-core/blob");
+const Blob = require("../../blob");
 
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 
@@ -79,7 +79,7 @@ http.requestString = function(url, onLoad, onError) {
 http.requestImage = function(url, onLoad, onError) {
     var responseListener = VolleyResponse.Listener.implement({
         onResponse: function(response) {
-            const Image = require("sf-core/ui/image");
+            const Image = require("../../ui/image");
             var image = new Image({bitmap: response});
             onLoad(image);
         }
@@ -294,7 +294,7 @@ function getHeaderHashMap(params) {
     return headers;
 }
 function checkInternet() {
-    const Network = require("sf-core/device/network");
+    const Network = require("../../device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;

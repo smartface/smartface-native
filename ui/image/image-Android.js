@@ -4,10 +4,10 @@ const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-const Blob = require('sf-core/blob');
-const File = require('sf-core/io/file');
-const Path = require("sf-core/io/path");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const Blob = require('../../blob');
+const File = require('../../io/file');
+const Path = require("../../io/path");
 
 const CompressFormat = [
     NativeBitmap.CompressFormat.JPEG,

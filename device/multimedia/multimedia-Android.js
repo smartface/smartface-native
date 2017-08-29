@@ -1,12 +1,12 @@
-const AndroidConfig         = require('sf-core/util/Android/androidconfig')
+const AndroidConfig         = require('../../util/Android/androidconfig')
 const NativeMediaStore      = requireClass("android.provider.MediaStore");
 const NativeIntent          = requireClass("android.content.Intent");
 const NativeBitmapFactory   = requireClass("android.graphics.BitmapFactory");
 const NativeContentValues   = requireClass("android.content.ContentValues");
 const NativeBuild           = requireClass("android.os.Build");
 
-const File = require("sf-core/io/file");
-const Image = require("sf-core/ui/image");
+const File = require("../../io/file");
+const Image = require("../../ui/image");
 
 const Type = {
     IMAGE: 0,
@@ -53,7 +53,7 @@ var _action = 0;
 var _fileURI = null;
 
 Multimedia.startCamera = function(params) {
-    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params || (params.page instanceof require("../../ui/page")))){
         throw new TypeError('Page parameter required');
     }
     
@@ -97,7 +97,7 @@ function startCameraWithExtraField() {
 }
 
 Multimedia.pickFromGallery = function(params) {
-    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params || (params.page instanceof require("../../ui/page")))){
         throw new TypeError('Page parameter required');
     }
     _pickParams = params;

@@ -1,8 +1,8 @@
-const AndroidConfig             = require("sf-core/util/Android/androidconfig");
-const Label                     = require("sf-core/ui/label");
-const Color                     = require("sf-core/ui/color");
+const AndroidConfig             = require("../../util/Android/androidconfig");
+const Label                     = require("../label");
+const Color                     = require("../color");
 const extend                    = require('js-base/core/extend');
-const TypeUtil                  = require("sf-core/util/type");
+const TypeUtil                  = require("../../util/type");
 
 const NativeButton              = requireClass("android.widget.Button");
 const NativeView                = requireClass("android.view.View");

@@ -127,7 +127,7 @@ Sound.android.pick = function(params) {
     var intent = new NativeIntent();
     intent.setType("audio/*");
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params && (params.page instanceof require("../../ui/page")))){
         getCurrentPageFragment().startActivityForResult(intent, Sound.PICK_SOUND);
     }
     else{
@@ -159,7 +159,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function getCurrentPageFragment() {
-    const Router = require("sf-core/router");
+    const Router = require("../../router");
     return Router.getCurrentPage().page.nativeObject;
 }
 

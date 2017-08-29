@@ -1,7 +1,7 @@
 const extend            = require('js-base/core/extend');
-const View              = require('sf-core/ui/view');
-const Exception         = require("sf-core/util/exception");
-const AndroidConfig     = require('sf-core/util/Android/androidconfig');
+const View              = require('../view');
+const Exception         = require("../../util/exception");
+const AndroidConfig     = require('../../util/Android/androidconfig');
 const NativeVideoView   = requireClass('android.widget.VideoView');
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 
@@ -12,6 +12,9 @@ const VideoView = extend(View)(
             // To solve stretching due to yoga, we will wrap with RelativeLayout.
             this.nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
             var layoutParams = new NativeRelativeLayout.LayoutParams(-1,-1);
+            /** @todo
+             * layoutParams.addRule is not a function 
+             */
             // CENTER_IN_PARENT, TRUE
             layoutParams.addRule(13, -1);
             this.nativeInner = new NativeVideoView(AndroidConfig.activity);
@@ -62,8 +65,8 @@ const VideoView = extend(View)(
             },
             'loadFile': {
                 value: function(file) {
-                    const File = require("sf-core/io/file");
-                    const Path = require("sf-core/io/path");
+                    const File = require("../../io/file");
+                    const Path = require("../../io/path");
                     
                     if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
