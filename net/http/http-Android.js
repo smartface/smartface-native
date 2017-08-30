@@ -160,8 +160,9 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             var responseHeaders = getResponseHeaders(response.headers());
             if(response.body()) {
                 var bytes = [];
-                for(var byte in array(response.body().bytes()))
+                for(var byte in array(response.body().bytes())) {
                     bytes.push(int(byte));
+                }
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
@@ -232,7 +233,7 @@ function createRequest(params, isMultipart) {
 
 function createRequestBody(body, contentType, isMultipart) {
     if(!body) {
-        return RequestBody.create(null, []);
+        return RequestBody.create(null, array([]));
     }
     if(!isMultipart || body instanceof Blob) {
         var mediaType = null;
