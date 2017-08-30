@@ -160,12 +160,9 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             var responseHeaders = getResponseHeaders(response.headers());
             if(response.body()) {
                 var bytes = [];
-                console.log("--- before array");
                 for(var byte in array(response.body().bytes())) {
-                    console.log("byte");
                     bytes.push(int(byte));
                 }
-                console.log("--- after array");
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
