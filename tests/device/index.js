@@ -7,3 +7,4 @@ require("./screen");
 require("./system");
 require("./location");
 require("./sound");
+require("./contacts");
