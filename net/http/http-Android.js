@@ -109,7 +109,7 @@ http.prototype.requestJSON = function(params) {
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
         if(e && e.body) {
-            e.body = JSON.parse(e.body);
+            e.JSON = JSON.parse(e.string);
         }
         requestOnLoad && runOnUiThread(requestOnLoad, e);
     };
@@ -185,7 +185,8 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                     params.onError, {
                         statusCode: statusCode,
                         headers: responseHeaders,
-                        message: response.message()
+                        message: response.message(),
+                        body: responseBody
                     });
             }
         }
