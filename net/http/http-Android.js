@@ -160,16 +160,15 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             var responseHeaders = getResponseHeaders(response.headers());
             if(response.body()) {
                 var bytes = [];
-                console.log("--- before array");
-                for(var byte in array(response.body().bytes())) {
-                    console.log("byte");
-                    bytes.push(int(byte));
+                var nativeBytes = array(response.body().bytes());
+                for(var i = 0; i < nativeBytes.length; i++) {
+                    let currentByte = nativeBytes[i];
+                    bytes.push(byte(currentByte));
                 }
-                console.log("--- after array");
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
-            if(response.isSuccessful()) {
+            if(bool(response.isSuccessful())) {
                 if(params && params.onLoad) {
                     if(isRunOnBackgroundThread) {
                         params.onLoad({ 
@@ -228,15 +227,19 @@ function createRequest(params, isMultipart) {
     }
     
     if(params.method) {
-        var body = createRequestBody(params.body, contentType, isMultipart);
-        builder = builder.method(params.method, body);
+        if (params.method === "GET") {
+            builder = builder.method(params.method, null);
+        } else {
+            var body = createRequestBody(params.body, contentType, isMultipart);
+            builder = builder.method(params.method, body);
+        }
     }
     return builder.build();
 }
 
 function createRequestBody(body, contentType, isMultipart) {
     if(!body) {
-        return RequestBody.create(null, array([]));
+        return RequestBody.create(null, array([], "java.lang.Byte"));
     }
     if(!isMultipart || body instanceof Blob) {
         var mediaType = null;

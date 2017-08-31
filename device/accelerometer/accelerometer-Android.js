@@ -18,9 +18,6 @@ Object.defineProperties(Accelerometer, {
             _sensorListener = NativeSensorEventListener.implement({
                 onAccuracyChanged: function(sensor, accuracy) {},
                 onSensorChanged: function(event) {
-                    /** @todo
-                     * System.err: java.lang.ClassCastException: float[] cannot be cast to java.lang.Object[]
-                     */
                     var eventData = array(event.values);
                     _callback && _callback({
                         x: float(eventData[0]),
