@@ -66,7 +66,7 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
-                return _itemCount;
+                return int(_itemCount);
             }
         },null);
 
