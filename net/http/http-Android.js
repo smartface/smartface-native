@@ -109,7 +109,7 @@ http.prototype.requestJSON = function(params) {
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
         if(e && e.body) {
-            e.body = JSON.parse(e.body);
+            e.JSON = JSON.parse(e.body);
         }
         requestOnLoad && runOnUiThread(requestOnLoad, e);
     };
