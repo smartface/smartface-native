@@ -223,8 +223,12 @@ function createRequest(params, isMultipart) {
     }
     
     if(params.method) {
-        var body = createRequestBody(params.body, contentType, isMultipart);
-        builder = builder.method(params.method, body);
+        if (params.method === "GET") {
+            builder = builder.method(params.method, null);
+        } else {
+            var body = createRequestBody(params.body, contentType, isMultipart);
+            builder = builder.method(params.method, body);
+        }
     }
     return builder.build();
 }
