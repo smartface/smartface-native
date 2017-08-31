@@ -39,9 +39,30 @@ salep.test("sf-core/application Unit Test", function() {
         assert.doesNotThrow(function(){ Application.restart(); }, Error);
     });
     
-    salep.skipNext();
     this.case("[checkUpdate] function.", function() {
-        assert.doesNotThrow(function(){ Application.checkUpdate(function(){}); }, Error);
+        assert.doesNotThrow(function(){ 
+            Application.checkUpdate(function(err, result) {
+                if (err) {
+                    console.log("check update error: " + err);
+                } else {
+                    result.download(function(err, downloadFinish) {
+                        if (err) {
+                            console.log("download error: " + err);
+                        } else {
+                            downloadFinish.updateAll(function(err) {
+                                if (err) {
+                                    console.log("update all error: " + err);
+                                } else {
+                                    console.log(downloadFinish.meta);
+                                    Application.restart();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            
+        }, Error);
     });
     
     this.case("[android.packageName] getter.", function() {
