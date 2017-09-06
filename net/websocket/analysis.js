@@ -11,7 +11,7 @@ function WebSocket(params) {
      
     /**
      * @param {Object} params 
-     * @param {int} params.code
+     * @param {Number} params.code
      * @param {String} params.reason
      */
     this.close = function(params){};
@@ -22,12 +22,6 @@ function WebSocket(params) {
      * @return {Boolean}
      */
     this.send = function(params) {};
-    
-    /**
-     * @param {Object} params 
-     * @param {Blob} params.data
-     */
-    this.ping = function() {};
     
     /**
      * @param {Object} params 
@@ -44,7 +38,7 @@ function WebSocket(params) {
     
     /**
      * @param {Object} e 
-     * @param {int} e.code
+     * @param {Number} e.code
      * @param {String} e.reason
      * @callback
      */
@@ -57,13 +51,6 @@ function WebSocket(params) {
      * @callback
      */
     this.onFailure = function(e){};
-    
-    /**
-     * @param {Object} e 
-     * @param {Blob} e.blob
-     * @callback
-     */
-    this.onPong = function(e){};
 }
 
 module.exports = WebSocket;
