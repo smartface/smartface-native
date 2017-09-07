@@ -109,7 +109,7 @@ const WebView = extend(View)(
             'loadFile': {
                 value: function(file) {
                     if(file instanceof File){
-                        if(file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSET){
+                        if(file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS){
                             //Generate FILE PATH
                             this.nativeObject.loadUrl("file:///" + file.fullPath);
                         }
@@ -203,23 +203,34 @@ const WebView = extend(View)(
                     return overrideURLChange(url, _canOpenLinkInside);
                 };
             }
-    
-            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
-                overrideMethods.onReceivedError = function(webView, webResourceRequest, webResourceError) {
+            
+            // SDK version check will not work because implement engine does not supports types
+            overrideMethods.onReceivedError = function() {
+                if(arguments.count === 3){
+                    /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
+                     * arguments[0] = webView
+                     * arguments[1] = webResourceRequest
+                     * arguments[2] = webResourceError
+                     */
                     const NativeString = requireClass('java.lang.String');
-                    var uri = webResourceRequest.getUrl();
-                    var url = NativeString.valueOf(uri);
-                    var code = webResourceError.getErrorCode();
-                    var message = webResourceError.getDescription();
+                    var uri = arguments[1].getUrl();
+                    var url = string(NativeString.valueOf(uri));
+                    var code = string(arguments[2].getErrorCode());
+                    var message = string(arguments[2].getDescription());
     
-                    _onError && _onError({message: string(message), code: string(code), url: string(url)});
-                };
-            } else {
-                overrideMethods.onReceivedError = function(view, errorCode, description, failingUrl) {
-                    _onError && _onError({message: string(description), code: int(errorCode), url: string(failingUrl)});
-                };
-            }
-            try{
+                    _onError && _onError({message: message, code: code, url: url});
+                }
+                else{
+                    /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
+                     * arguments[0] = webView, 
+                     * arguments[1] = errorCode, 
+                     * arguments[2] = description, 
+                     * arguments[3] = failingUrl, 
+                     */
+                    _onError && _onError({message: string(arguments[2]), code: int(arguments[1]), url: string(arguments[3])});
+                }
+            };
+    
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
             var nativeWebClient = NativeWebClient.extend(string("SFWebClient"), overrideMethods, null);
             this.nativeObject.setWebViewClient(nativeWebClient);
@@ -234,10 +245,7 @@ const WebView = extend(View)(
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
             settings.setLoadsImagesAutomatically(true);
-            }
-            catch(e)
-            {require("../../application").onUnhandledError(e);}
-            
+
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
