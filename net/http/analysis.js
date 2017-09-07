@@ -5,22 +5,21 @@
  * 
  *     @example
  *     const Http = require("sf-core/net/http");
- *     Http.request(
- *         {
- *             'url':'YOUR_URL_HERE',
- *             'headers': {
- *                 // YOUR_HEADER_HERE',
- *             },
- *             'method':'HTTP_METHOD_HERE',
- *             'body': 'YOUR_BODY_HERE',
- *         },
- *         function(response){
+ *     var http = new Http();
+ *     http.request({
+ *         'url':'YOUR_URL_HERE',
+ *         'headers': {
+ *             // YOUR_HEADER_HERE'
+ *          },
+ *         'method':'HTTP_METHOD_HERE',
+ *         'body': 'YOUR_BODY_HERE',
+ *         onLoad: function(response){
  *             // Handling image request response 
  *             myImageView.image = Image.createFromBlob(response.body);
  *             // Handling text request response
  *             myLabel.text = response.body.toString();
  *         },
- *         function(e){
+ *         onError: function(e){
  *             // Handle error like:
  *             if(e.statusCode === 500){
  *                 console.log("Internal Server Error Occurred.");
@@ -29,118 +28,188 @@
  *                 console.log("Server responsed with: " + e.statusCode + ". Message is: " + e.message);
  *             }
  *         }
- *     );
+ *     });
  */
-var http = {};
+var Http = function(params){
+    
+    /*
+     * Gets/sets the request timout.
+     *
+     * @property {Number} timeout
+     * @android
+     * @ios
+    */
+    this.timeout;
+    
+    /**
+     * Gets/sets request headers.
+     *
+     * @property {Object} headers
+     * @android
+     * @ios
+     */
+    this.headers = {};
+    
+    /**
+     * Cancels all requests.
+     *
+     * @method cancelAll
+     * @android
+     * @ios
+     */
+    this.cancelAll = function(){};
+    /**
+     * @method requestFile
+     * 
+     * Sends an http request to given url and saves response file
+     * to temp directory of application. If request ends successfully
+     * onLoad callback will be called with received File object.
+     * 
+     * @param {Object} params 
+     * @param {String} params.url URL of file
+     * @param {String} params.fileName File name
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {IO.File} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {String} params.onError.e.message
+     * @param {Object} params.onError.e.body
+     * @param {Number} params.onError.e.statusCode
+     * @param {Object} params.onError.e.headers
+     * @return {Net.Http.Request}
+     * @since 0.1
+     */
+    this.requestFile = function(params) {};
+    /*
+     * @param {Object} params 
+     * @param {String} params.url URL
+     * @param {Object} params.headers Headers
+     * @param {String} params.method Http request method 
+     * @param {Object[]|Blob} params.body 
+     * @param {String} params.body.name
+     * @param {String} params.body.fileName
+     * @param {String} params.body.contentType
+     * @param {Blob} params.body.value
+     * @param {String} params.user Username for authorization if needed
+     * @param {String} params.password Password for authorization if needed
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {Blob} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {Object} params.onError.e.body Body of the error
+     * @param {Number} params.onError.e.statusCode Error status code
+     * @param {Object} params.onError.e.headers Headers sent with error
+    */
+    this.upload = function(params) {};
+    
+    
+    /**
+     * @method requestImage
+     * 
+     * Sends an http request to given url. If request ends successfully
+     * onLoad callback will be called with received UI.Image object.
+     * 
+     * @param {Object} params 
+     * @param {String} params.url URL of file
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {UI.Image} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {String} params.onError.e.message
+     * @param {Object} params.onError.e.body
+     * @param {Number} params.onError.e.statusCode
+     * @param {Object} params.onError.e.headers
+     * @return {Net.Http.Request}
+     * @since 0.1
+     */
+    this.requestImage = function(params) {};
 
-/**
- * @method requestFile
- * 
- * Sends an http request to given url and saves response file
- * to temp directory of application. If request ends successfully
- * onLoad callback will be called with received File object.
- * 
- * @param {String} url URL of file
- * @param {String} fileName File name
- * @param {Function} onLoad Callback for success case
- * @param {IO.File} onLoad.e
- * @param {Function} onError Callback for error case
- * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {Object} onError.params.body
- * @param {String} onError.params.statusCode
- * @param {Object} onError.params.headers
- * @return {Net.Http.Request}
- * @since 0.1
- */
-http.requestFile = function(url, fileName, onLoad, onError) {};
+    /**
+     * @method requestString
+     * 
+     * Sends an http request to given url. If request ends successfully
+     * onLoad callback will be called with received string.
+     * 
+     * @param {Object} params 
+     * @param {String} params.url URL of file
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {String} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {String} params.onError.e.message
+     * @param {Object} params.onError.e.body
+     * @param {Number} params.onError.e.statusCode
+     * @param {Object} params.onError.e.headers
+     * @return {Net.Http.Request}
+     * @since 0.1
+     */
+    this.requestString = function(params) {};
 
-/**
- * @method requestImage
- * 
- * Sends an http request to given url. If request ends successfully
- * onLoad callback will be called with received UI.Image object.
- * 
- * @param {String} url URL of Image
- * @param {Function} onLoad Callback for success case
- * @param {UI.Image} onLoad.e
- * @param {Function} onError Callback for error case
- * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {Object} onError.params.body
- * @param {String} onError.params.statusCode
- * @param {Object} onError.params.headers
- * @return {Net.Http.Request}
- * @since 0.1
- */
-http.requestImage = function(url, onLoad, onError) {}
+    /**
+     * @method requestJSON
+     * 
+     * Sends an http request to given url. If request ends successfully
+     * onLoad callback will be called with received JSON object.
+     * 
+     * @param {Object} params 
+     * @param {String} params.url URL of file
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {String} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {String} params.onError.e.message
+     * @param {Object} params.onError.e.body
+     * @param {Number} params.onError.e.statusCode
+     * @param {Object} params.onError.e.headers
+     * @return {Net.Http.Request}
+     * @since 0.1
+     */
+    this.requestJSON = function(params) {};
 
-/**
- * @method requestString
- * 
- * Sends an http request to given url. If request ends successfully
- * onLoad callback will be called with received string.
- * 
- * @param {String} url URL
- * @param {Function} onLoad Callback for success case
- * @param {String} onLoad.e
- * @param {Function} onError Callback for error case
- * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {Object} onError.params.body
- * @param {String} onError.params.statusCode
- * @param {Object} onError.params.headers
- * @return {Net.Http.Request}
- * @since 0.1
- */
-http.requestString = function(url, onLoad, onError) {}
+    /**
+     * @method request
+     * 
+     * Sends an http request defined with parameters.
+     * 
+     * @param {Object} params Parameters
+     * @param {String} params.url URL
+     * @param {Object} params.headers Headers
+     * @param {String} params.method Http request method
+     * @param {String} params.body Http request body
+     * @param {String} params.user Username for authorization if needed
+     * @param {String} params.password Password for authorization if needed
+     * @param {Function} params.onLoad Callback for success case
+     * @param {Object} params.onLoad.e
+     * @param {Blob} params.onLoad.e.body
+     * @param {Number} params.onLoad.e.statusCode
+     * @param {Object} params.onLoad.e.headers
+     * @param {Function} params.onError Callback for error case
+     * @param {Object} params.onError.e 
+     * @param {String} params.onError.e.message Message of the error
+     * @param {Object} params.onError.e.body Body of the error
+     * @param {Number} params.onError.e.statusCode Error status code
+     * @param {Object} params.onError.e.headers Headers sent with error
+     * @return {Net.Http.Request}
+     * @since 0.1
+     */
+    this.request = function(params) {};
+};
 
-/**
- * @method requestJSON
- * 
- * Sends an http request to given url. If request ends successfully
- * onLoad callback will be called with received JSON object.
- * 
- * @param {String} url URL
- * @param {Function} onLoad Callback for success case
- * @param {String} onLoad.e
- * @param {Function} onError Callback for error case
- * @param {Object} onError.params 
- * @param {String} onError.params.message
- * @param {Object} onError.params.body
- * @param {String} onError.params.statusCode
- * @param {Object} onError.params.headers
- * @return {Net.Http.Request}
- * @since 0.1
- */
-http.requestJSON = function(url, onLoad, onError) {}
-
-/**
- * @method request
- * 
- * Sends an http request defined with parameters.
- * 
- * @param {Object} params Parameters
- * @param {String} params.url URL
- * @param {Object} params.headers Headers
- * @param {String} params.method Http request method
- * @param {String} params.body Http request body
- * @param {String} params.user Username for authorization if needed
- * @param {String} params.password Password for authorization if needed
- * @param {Function} onLoad Callback for success case
- * @param {Object} onLoad.params
- * @param {Blob} onLoad.params.body
- * @param {Number} onLoad.params.statusCode
- * @param {Object} onLoad.params.headers
- * @param {Function} onError Callback for error case
- * @param {Object} onError.params 
- * @param {Object} onError.params.body Body of the error
- * @param {String} onError.params.statusCode Error status code
- * @param {Object} onError.params.headers Headers sent with error
- * @return {Net.Http.Request}
- * @since 0.1
- */
-http.request = function(params, onLoad, onError) {};
 
 /**
  * @class Net.Http.Request
@@ -151,7 +220,7 @@ http.request = function(params, onLoad, onError) {};
  *     const http = require("sf-core/net/http");
  *
  *     var myImageUrl = your-image-url;
- *     var request = http.requestImage(myImageUrl, onLoad, onError);
+ *     var request = http.requestImage({url: myImageUrl, onLoad: onLoad, onError: onError});
  *     request.cancel();
  * 
  */
@@ -166,4 +235,4 @@ function Request(){}
  */
 Request.prototype.cancel = function(){};
 
-module.exports = http;
+module.exports = Http;
