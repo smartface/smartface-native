@@ -245,7 +245,8 @@ function View(params) {
             set: function(onTouch) {
                 _onTouch = onTouch.bind(this);
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'onTouchEnded': {
             get: function() {
@@ -254,7 +255,8 @@ function View(params) {
             set: function(onTouchEnded) {
                 _onTouchEnded = onTouchEnded.bind(this);
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         },
         'visible': {
             get: function() {

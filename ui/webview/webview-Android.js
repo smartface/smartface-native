@@ -1,8 +1,16 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
+const extend        = require('js-base/core/extend');
+const View          = require('sf-core/ui/view');
 const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const File = require('sf-core/io/file');
-const Path = require('sf-core/io/path');
+const File          = require('sf-core/io/file');
+const Path          = require('sf-core/io/path');
+const NativeView    = requireClass("android.view.View");
+
+// MotionEvent.ACTION_UP
+const ACTION_UP = 1;
+// MotionEvent.ACTION_DOWN
+const ACTION_DOWN = 0;
+// MotionEvent.ACTION_MOVE
+const ACTION_MOVE = 2;
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -30,6 +38,8 @@ const WebView = extend(View)(
         var _onLoad;
         var _onChangedURL;
         var _scrollBarEnabled = true;
+        var _scrollEnabled = true;
+        var _onTouch, _onTouchEnded;
         Object.defineProperties(this, {
             'scrollBarEnabled': {
                 get: function() {
@@ -94,6 +104,15 @@ const WebView = extend(View)(
                 },
                 set: function(enabled) {
                     this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
+                },
+                enumerable: true
+            },
+            'scrollEnabled': {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(enabled) {
+                    _scrollEnabled = enabled;
                 },
                 enumerable: true
             },
@@ -177,6 +196,25 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             },
+            // Overriden for touch events
+            'onTouch': {
+                get: function() {
+                    return _onTouch;
+                },
+                set: function(onTouch) {
+                    _onTouch = onTouch.bind(this);
+                },
+                enumerable: true
+            },
+            'onTouchEnded': {
+                get: function() {
+                    return _onTouchEnded;
+                },
+                set: function(onTouchEnded) {
+                    _onTouchEnded = onTouchEnded.bind(this);
+                },
+                enumerable: true
+            },
             'toString': {
                 value: function(){
                     return 'WebView';
@@ -240,6 +278,19 @@ const WebView = extend(View)(
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
+            
+            this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+                onTouch: function(view, event) {
+                    if(this.touchEnabled && (_onTouch || _onTouchEnded)){
+                        if (event.getAction() === ACTION_UP) {
+                            _onTouchEnded && _onTouchEnded();
+                        } else if(event.getAction() === ACTION_DOWN) {
+                            _onTouch && _onTouch();
+                        }
+                    }
+                    return ( (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled));
+                }.bind(this)
+            }));
         }
 
         // Assign parameters given in constructor
