@@ -65,7 +65,7 @@ function View(params) {
                     return true;
                 }
             }
-            return false;
+            return !self.touchEnabled;
         }
     }));
     
