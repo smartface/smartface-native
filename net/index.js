@@ -1,4 +1,4 @@
 module.exports = {
-    Http: require('./http')
+    Http: require('./http'),
     WebSocket: require('./websocket')
 };
