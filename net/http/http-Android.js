@@ -109,7 +109,7 @@ http.prototype.requestJSON = function(params) {
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
         if(e && e.body) {
-            e.JSON = JSON.parse(e.body);
+            e.JSON = JSON.parse(e.string);
         }
         requestOnLoad && runOnUiThread(requestOnLoad, e);
     };
@@ -119,6 +119,7 @@ http.prototype.requestJSON = function(params) {
 http.prototype.requestFile = function(params) {
     if(!params)
         throw new Error("Required request parameters.");
+
     var requestOnLoad = params.onLoad;
     params.onLoad = function(e) {
         const IO = require("sf-core/io");
@@ -189,7 +190,8 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                     params.onError, {
                         statusCode: statusCode,
                         headers: responseHeaders,
-                        message: string(response.message())
+                        message: string(response.message()),
+                        body: responseBody
                     });
             }
         }

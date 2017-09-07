@@ -39,6 +39,15 @@ Image.prototype.height = 0;
 Image.prototype.width = 0;
 
 /**
+ * Returns a Blob instance.
+ *
+ * @method toBlob
+ * @return Blob
+ * @since 0.1
+ */
+Image.prototype.toBlob = function() {};
+
+/**
  * Creates a new image from existing image with specified width and height.
  * onSuccess and onFailure are optional parameters.
  * 

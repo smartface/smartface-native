@@ -327,8 +327,8 @@ Object.defineProperties(ApplicationWrapper.android, {
         value: function(permission){
             if(!TypeUtil.isString(permission)){
                 throw new Error('Permission must be Application.Permission type');
-            }
-            return bool(AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
+            } 
+            return bool( ((AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) && activity.shouldShowRequestPermissionRationale(permission)));
         },
         enumerable: true
     },
