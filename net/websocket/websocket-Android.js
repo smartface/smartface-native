@@ -103,17 +103,15 @@ function WebSocket(params) {
                 _onOpenCallback && _onOpenCallback();
             },
             onMessage: function(webSocket, data) {
-                if (typeof(data) === "string") {
+                if (typeof(data) === "string" || !data) {
                     _onMessageCallback && _onMessageCallback({string: data});
                 }
                 else {
-                    _onMessageCallback && _onMessageCallback({blob: new Blob(data, { type: "" }) });
+                    // TODO: onMessage doesn't invoke with bytestring parameter. 
+                    // Check this implementation after AND-2702 bug is resolved.
+                    _onMessageCallback && _onMessageCallback({blob: new Blob(data.toByteArray(), { type: "" }) });
                 }
             },
-            // onMessage: function(webSocket, bytes) {
-            //     var Blob = require("../../blob");
-            //     _onMessageCallback && _onMessageCallback({blob: new Blob(bytes, {type: ""})});
-            // },
             onClosing: function(webSocket, code, reason) {
                 _onCloseCallback && _onCloseCallback({ code: code, reason: reason });
             },
