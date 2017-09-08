@@ -64,7 +64,7 @@ function WebSocket(params) {
     this.onOpen = function(){};
     
     /**
-     * Invoked when a message has been received.
+     * Invoked when a message has been received. 
      * @param {Object} params 
      * @param {String} params.string
      * @param {Blob} params.blob
@@ -86,7 +86,7 @@ function WebSocket(params) {
     /**
      * Invoked when an error occured on reading or writing to the network.
      * @param {Object} e 
-     * @param {String} [e.message]
+     * @param {String} e.message
      * @param {Number} e.code
      * @event
      * @since 1.1.17
