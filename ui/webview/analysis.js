@@ -46,6 +46,16 @@ WebView.prototype.openLinkInside = true;
 /**
  * Sets/Gets the visibility of scrollbar.
  *
+ * @property {Boolean} scrollEnabled
+ * @android
+ * @ios
+ * @since 1.1.16
+ */
+WebView.prototype.scrollEnabled = true;
+
+/**
+ * Sets/Gets the visibility of scrollbar.
+ *
  * @property {Boolean} scrollBarEnabled
  * @android
  * @ios
