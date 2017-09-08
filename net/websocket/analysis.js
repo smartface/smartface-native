@@ -2,20 +2,29 @@
  * 
  * WebSocket creates a web socket client. It connects to a WebSocket server and then sending 
  * and receiving data on the connection. {@link Net.WebSocket#url url}  parameter must be passed in constructor.
- * @class Net.WebSocket
- * @since 1.1.17
  * 
  *     @example
- *     const WebSocket = require(sf-core/net/websocket);
+ *     const WebSocket = require("sf-core/net/websocket");
  * 
  *     var myWebSocket = new WebSocket({url: "your-server-url"});
  *     myWebSocket.onOpen = function() {
+ *         console.log("Web socket opened.");
+ *         console.log("Send string.");
  *         myWebSocket.send("some data");
  *     };
  * 
+ *     myWebSocket.onClose = function(e) {
+ *         console.log("Socket closed.");
+ *     }
+ * 
  *     myWebSocket.onMessage = function(e) {
+ *         console.log("Message received.");
+ *         console.log("Close socket connection.");
  *         myWebSocket.close({code: 1000});
  *     };
+ * 
+ * @class Net.WebSocket
+ * @since 1.1.17
  */
 function WebSocket(params) {
     /**
