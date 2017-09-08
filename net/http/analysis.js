@@ -30,15 +30,14 @@
  *         }
  *     });
  */
-var Http = function(params){
-    
-    /*
-     * Gets/sets the request timout.
+var Http = function(params){    
+    /**
+     * Gets/sets request timeout.
      *
      * @property {Number} timeout
      * @android
      * @ios
-    */
+     */
     this.timeout;
     
     /**
@@ -70,7 +69,7 @@ var Http = function(params){
      * @param {String} params.fileName File name
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
-     * @param {IO.File} params.onLoad.e.body
+     * @param {IO.File} params.onLoad.e.file
      * @param {Number} params.onLoad.e.statusCode
      * @param {Object} params.onLoad.e.headers
      * @param {Function} params.onError Callback for error case
@@ -119,7 +118,7 @@ var Http = function(params){
      * @param {String} params.url URL of file
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
-     * @param {UI.Image} params.onLoad.e.body
+     * @param {UI.Image} params.onLoad.e.image
      * @param {Number} params.onLoad.e.statusCode
      * @param {Object} params.onLoad.e.headers
      * @param {Function} params.onError Callback for error case
@@ -143,7 +142,7 @@ var Http = function(params){
      * @param {String} params.url URL of file
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
-     * @param {String} params.onLoad.e.body
+     * @param {String} params.onLoad.e.string
      * @param {Number} params.onLoad.e.statusCode
      * @param {Object} params.onLoad.e.headers
      * @param {Function} params.onError Callback for error case
@@ -167,7 +166,7 @@ var Http = function(params){
      * @param {String} params.url URL of file
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
-     * @param {String} params.onLoad.e.body
+     * @param {String} params.onLoad.e.JSON
      * @param {Number} params.onLoad.e.statusCode
      * @param {Object} params.onLoad.e.headers
      * @param {Function} params.onError Callback for error case
@@ -217,8 +216,9 @@ var Http = function(params){
  * Http Request CANNOT be initialized. Use http's request methods instead.
  * 
  *     @example
- *     const http = require("sf-core/net/http");
+ *     const Http = require("sf-core/net/http");
  *
+ *     var http = new Http();
  *     var myImageUrl = your-image-url;
  *     var request = http.requestImage({url: myImageUrl, onLoad: onLoad, onError: onError});
  *     request.cancel();
