@@ -190,16 +190,16 @@ const WebView = extend(View)(
                     var callbackValue = true;
                     _onChangedURL && (callbackValue = _onChangedURL({url: string(url)}));
                     if(!callbackValue)
-                        return true;
+                        return bool(true);
                     return overrideURLChange(url, _canOpenLinkInside);
                     
                 };
             } else {
                 overrideMethods.shouldOverrideUrlLoading = function(view, url) {
                     var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
+                    _onChangedURL && (callbackValue = _onChangedURL({url: string(url)}));
                     if(!callbackValue)
-                        return true;
+                        return bool(true);
                     return overrideURLChange(url, _canOpenLinkInside);
                 };
             }
