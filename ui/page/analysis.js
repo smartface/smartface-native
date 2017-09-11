@@ -147,6 +147,8 @@ Page.prototype.orientation = UI.Page.Orientation.PORTRAIT;
 
 /**
  * This event will be called when orientation of the Page changes.
+ * iOS fires this event before orientation changed but Android fires after changed.
+ * 
  *
  * @event onOrientationChange
  * @android

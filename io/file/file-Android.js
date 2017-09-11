@@ -268,10 +268,12 @@ function File(params) {
                 if(resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists){
                     var allJSFiles = [];
                     var allNativeFiles = this.nativeObject.listFiles();
-                    allNativeFiles.foreach(function(tmpFile){
-                        allJSFiles.push(new File({path: tmpFile.getAbsolutePath()}));
-                    });
-                    return allJSFiles;
+                    if(allNativeFiles){
+                        for(var i=0 ; i<allNativeFiles.length ; i++){
+                            allJSFiles.push(new File({path: allNativeFiles[i].getAbsolutePath()}));
+                		}
+                        return allJSFiles;
+                    }
                 }
                 return null;
             },

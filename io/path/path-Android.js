@@ -6,7 +6,7 @@ const NativeEnvironment     = requireClass('android.os.Environment');
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
 const emulatorPath = Android.getActivity().getExternalCacheDir().getAbsolutePath();
-
+const playerRauPath = Android.getActivity().getFilesDir().getAbsolutePath();
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
 var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
@@ -112,7 +112,6 @@ function getResolvedPath(path){
             if(!checkFileExistsInPath(resolvedPaths[path].fullPath)){
                 resolvedPaths[path].type = Path.FILE_TYPE.ASSET;
                 resolvedPaths[path].fullPath = path;
-                
             }
         }
     }
@@ -132,14 +131,9 @@ function getResolvedPath(path){
             resolvedPaths[path].fullPath = findDrawableAtDirectory(getEmulatorDrawablePath(), fileName);
         }
         else{
-            // This is player. Check RAU
-            resolvedPaths[path].type = Path.FILE_TYPE.RAU_DRAWABLE;
-            resolvedPaths[path].fullPath = findDrawableAtDirectory(getRauDrawablePath(), fileName);
-            if(!resolvedPaths[path].fullPath){
-                // drawable not exists in RAU get it from apk
-                resolvedPaths[path].type = Path.FILE_TYPE.DRAWABLE;
-                resolvedPaths[path].fullPath = path;
-            }
+            // This is player and does not supports RAU drawable get it from apk
+            resolvedPaths[path].type = Path.FILE_TYPE.DRAWABLE;
+            resolvedPaths[path].fullPath = path;
         }
     }
     else{
@@ -158,10 +152,7 @@ function getEmulatorDrawablePath(){
     return emulatorPath + "/res";
 }
 function getRauAssetsPath(){
-    return emulatorPath + "/system/rau/assets/";
-}
-function getRauDrawablePath(){
-    return emulatorPath + "/system/rau/res/";
+    return playerRauPath + "/system/rau/assets";
 }
 
 function findDrawableAtDirectory(path,drawableName){
