@@ -789,27 +789,37 @@ function Page(params) {
     }
 }
 
-Page.Orientation = {};
+Object.defineProperty(Page, "Orientation", {
+    value: {},
+    enumerable: true
+});
 Object.defineProperty(Page.Orientation, "PORTRAIT", {
-    value: 1
+    value: 1,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "UPSIDEDOWN", {
-    value: 2
+    value: 2,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTOPORTRAIT", {
-    value: 3
+    value: 3,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "LANDSCAPELEFT", {
-    value: 4
+    value: 4,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "LANDSCAPERIGHT", {
-    value: 8
+    value: 8,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTOLANDSCAPE", {
-    value: 12
+    value: 12,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTO", {
-    value: 15
+    value: 15,
+    enumerable: true
 });
 
 

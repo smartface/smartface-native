@@ -246,7 +246,7 @@ function File(params) {
                 }
                 return false;
             },
-            enumarable: true
+            enumerable: true
         },
         'createDirectory' : {
             value: function(createParents){
@@ -255,13 +255,13 @@ function File(params) {
                 }
                 return false;
             },
-            enumarable: true
+            enumerable: true
         },
         'remove' : {
             value: function(withChilds){
                 return (resolvedPath.type === Path.FILE_TYPE.FILE) && removeFile(this,withChilds);
             },
-            enumarable: true
+            enumerable: true
         },
         'getFiles': {
             value: function(){
@@ -277,7 +277,7 @@ function File(params) {
                 }
                 return null;
             },
-            enumarable: true
+            enumerable: true
         },
         'move' : {
             value: function(destination){
@@ -305,13 +305,13 @@ function File(params) {
                 }
                 return false;
             },
-            enumarable: true
+            enumerable: true
         },
         'openStream': { 
             value: function(streamType, contentMode){
                 return new FileStream({source: this, streamType: streamType, contentMode: contentMode})
             },
-            enumarable: true
+            enumerable: true
         },
         'rename': {
             value: function(newName){
@@ -326,7 +326,7 @@ function File(params) {
                 }
                 return  false;
             },
-            enumarable: true
+            enumerable: true
         }
     });
     

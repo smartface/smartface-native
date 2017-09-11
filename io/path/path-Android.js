@@ -21,7 +21,7 @@ Object.defineProperties(Path, {
     'ImagesUriScheme': {
         value: 'images://',
         writable: false,
-        enumarable: true
+        enumerable: true
     },
     'AssetsUriScheme': {
         value: 'assets://',

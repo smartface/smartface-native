@@ -4,8 +4,7 @@
  * @since 0.1
  *
  */
-
-var OrientationType = {};
+const OrientationType = {};
 
 /**
  * @property {String} PORTRAIT
@@ -15,7 +14,7 @@ var OrientationType = {};
  */
 Object.defineProperty(OrientationType, 'PORTRAIT', {
   value: "portrait",
-  writable: false
+  enumerable: true
 });
 
 /**
@@ -26,7 +25,7 @@ Object.defineProperty(OrientationType, 'PORTRAIT', {
  */
 Object.defineProperty(OrientationType, 'UPSIDEDOWN', {
   value: "upsidedown",
-  writable: false
+  enumerable: true
 });
 
 /**
@@ -37,7 +36,7 @@ Object.defineProperty(OrientationType, 'UPSIDEDOWN', {
  */
 Object.defineProperty(OrientationType, 'LANDSCAPELEFT', {
   value: "landspaceleft",
-  writable: false
+  enumerable: true
 });
 
 /**
@@ -48,7 +47,7 @@ Object.defineProperty(OrientationType, 'LANDSCAPELEFT', {
  */
 Object.defineProperty(OrientationType, 'LANDSCAPERIGHT', {
   value: "landspaceright",
-  writable: false
+  enumerable: true
 });
 
 module.exports = OrientationType;

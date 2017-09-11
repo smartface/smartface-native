@@ -47,13 +47,13 @@ function Database(params){
     Object.defineProperties(this,{
         'file':{
             value: _file,
-            enumarable: true
+            enumerable: true
         },
         'close': {
             value: function(){
                 this.nativeObject.close();
             },
-            enumarable: true
+            enumerable: true
         },
         'execute': {
             value: function(sqlCommand){
@@ -61,7 +61,7 @@ function Database(params){
                     this.nativeObject.execSQL(sqlCommand);
                 }
             },
-            enumarable: true
+            enumerable: true
         },
         'query': {
             value: function(sqlCommand){
@@ -73,7 +73,7 @@ function Database(params){
                     
                 }
             },
-            enumarable: true
+            enumerable: true
         }
     });
 }
@@ -153,7 +153,7 @@ Database.DatabaseObject = function(params){
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getString");
                 }
             },
-            enumarable: true
+            enumerable: true
         },
         'getInteger': {
             value: function(columnName){
@@ -168,7 +168,7 @@ Database.DatabaseObject = function(params){
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getInteger");
                 }
             },
-            enumarable: true
+            enumerable: true
         },
         'getBoolean': {
             value: function(columnName){
@@ -183,7 +183,7 @@ Database.DatabaseObject = function(params){
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getBoolean");
                 }
             },
-            enumarable: true
+            enumerable: true
         },
         'getFloat': {
             value: function(columnName){
@@ -198,7 +198,7 @@ Database.DatabaseObject = function(params){
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getFloat");
                 }
             },
-            enumarable: true
+            enumerable: true
         },
     });
 };

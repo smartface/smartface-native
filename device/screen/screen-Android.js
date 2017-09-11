@@ -67,6 +67,11 @@ Object.defineProperty(Screen, 'orientation', {
     configurable: false
 });
 
+Object.defineProperty(Screen, 'OrientationType', {
+    value: require("./orientationtype"),
+    enumerable: true
+});
+
 Screen.capture = function() {
     var activity = Android.getActivity();
 
