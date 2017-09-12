@@ -2,6 +2,7 @@ const HTTP = require("sf-core/net/http");
 const Path = require('sf-core/io/path');
 const File = require('sf-core/io/file');
 const FileStream = require('sf-core/io/filestream');
+const sessionManager = new HTTP();
 
 const RemoteUpdateService = {};
 RemoteUpdateService.firstUrl  = "";
@@ -15,13 +16,12 @@ if (Device.deviceOS === "iOS") {
 }
 
 RemoteUpdateService.checkUpdate = function(callback) {
-    HTTP.request(
+    sessionManager.request(
         {
-            'url': "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
-            'method':'POST',
-            'body': RAU.getRequestBody(),
-        },
-        function(response) {
+        url: "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
+        method:'POST',
+        body: RAU.getRequestBody(),
+        onLoad: function(response) {
             if (response.statusCode === 200) { // Has update
                 var responseString = response.body.toString();
                 var responseJSON = JSON.parse(responseString);
@@ -41,7 +41,7 @@ RemoteUpdateService.checkUpdate = function(callback) {
                 callback("Unknown Response", null); // Unknown Response
             }
         },
-        function(error) {
+        onError: function(error) {
             if (error.statusCode === 304) { // No update for iOS
                 callback("No update", null);
             } else if (error.statusCode === 404 || error.statusCode == 406 || error.statusCode == 400) {
@@ -50,18 +50,17 @@ RemoteUpdateService.checkUpdate = function(callback) {
             } else {
                 callback("Unknown Error", null);
             }
-        }
+        }}
     );
 };
 
 function download(callback) {
     // TODO: enable firstURL request after IOS-2283
-    HTTP.request(
+    sessionManager.request(
         {
-            url: RemoteUpdateService.secondUrl,
-            method: "GET"
-        },
-        function(response) {
+        url: RemoteUpdateService.secondUrl,
+        method: "GET",
+        onLoad: function(response) {
             var zipFile = new File({ path: zipPath });
             zipFile.createFile(true);
             var zipFileStream = zipFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
@@ -73,9 +72,9 @@ function download(callback) {
                 updateCancel: updateCancel
             });
         },
-        function(error) {
+        onError: function(error) {
             callback("An error occured while downloding", null);
-        }
+        }}
     );
 };
 
