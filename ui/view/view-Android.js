@@ -66,26 +66,10 @@ function View(params) {
     this.isCloned = false;
     this.__backgroundImages = null;
     this._borderColor = Color.BLACK;
-    
     this.didSetTouchHandler = false;
     this._touchEnabled = true;
     this._onTouch;
     this._onTouchEnded;
-    
-    // self.android = {};
-    // Object.defineProperties(self.android, {
-    //     'elevation': {
-    //         get: function(){
-    //             return float(NativeViewCompat.getElevation(self.nativeObject));
-    //         },
-    //         set: function(value){
-    //             NativeViewCompat.setElevation(self.nativeObject, float(value));
-    //         },
-    //         enumerable: true,
-    //         configurable: true
-    //     },
-    // });
-    
     // YOGA PROPERTIES
     this._borderWidth = 0;
     
@@ -742,7 +726,7 @@ View.prototype.setTouchHandlers = function() {
                     return bool(true);
                 }
             }
-            return bool(false);
+            return bool(!this.touchEnabled);
         }.bind(this)
     }));
     this.didSetTouchHandler = true;
