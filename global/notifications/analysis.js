@@ -322,7 +322,7 @@ Notifications.LocalNotification.prototype.cancel = function(){};
  * 
  * Priority for the notification.
  * 
- * @deprecated 1.1.17 Use {@link Notifications.Android.Priority} instead.
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority} instead.
  */
 Notifications.Priority = {};
 
@@ -331,6 +331,7 @@ Notifications.Priority = {};
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#MIN} instead.
  */
 Notifications.Priority.MIN = -2;
 
@@ -339,6 +340,7 @@ Notifications.Priority.MIN = -2;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#LOW} instead.
  */
 Notifications.Priority.LOW = -1;
 
@@ -347,6 +349,7 @@ Notifications.Priority.LOW = -1;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#DEFAULT} instead.
  */
 Notifications.Priority.DEFAULT = 0;
 
@@ -355,6 +358,7 @@ Notifications.Priority.DEFAULT = 0;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#HIGH} instead.
  */
 Notifications.Priority.HIGH = 1;
 
@@ -363,6 +367,7 @@ Notifications.Priority.HIGH = 1;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#MAX} instead.
  */
 Notifications.Priority.MAX = 2;
 
@@ -372,6 +377,14 @@ Notifications.Priority.MAX = 2;
  * @since 1.1.18
  */
 Notifications.Android = {};
+
+/** 
+ * @enum {Number} Notifications.Android.Priority 
+ * @since 1.1.18
+ * 
+ * Priority for the notification.
+ */
+Notifications.Android.Priority = {};
 
 /**
  * @property {Number} MIN
