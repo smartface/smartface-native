@@ -70,6 +70,29 @@ Sound.prototype.totalDuration;
  */
 Sound.prototype.currentDuration;
 
+
+/**
+ * Loads the source.
+ *
+ * @method loadFile
+ * @param {IO.File} file
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Sound.prototype.loadFile = function(file){};
+
+/**
+ * Loads the source.
+ *
+ * @method loadURL
+ * @param {String} url
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Sound.prototype.loadURL = function(url){};
+
 /**
  * Seeks to specified time position.
  *
