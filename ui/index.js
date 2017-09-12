@@ -39,5 +39,6 @@ module.exports = {
     Router: require('./router'),
     BottomTabBar: require('./bottomtabbar'),
     TabBarItem: require('./tabbaritem'),
-    Navigator: require('./navigator')
+    Navigator: require('./navigator'),
+    SwipeView: require('./swipeview')
 };

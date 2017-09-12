@@ -309,29 +309,22 @@ Object.defineProperties(Notifications,{
     },
 });
 
-Notifications.Priority = {};
-Object.defineProperties(Notifications.Priority, {
-    'MIN': {
-        value: -2, // NotificationCompat.PRIORITY_MIN
-        enumerable: true
-    },
-    'LOW': {
-        value: -1, // NotificationCompat.PRIORITY_DEFAULT
-        enumerable: true
-    },
-    'DEFAULT': {
-        value: 0, // NotificationCompat.PRIORITY_MIN
-        enumerable: true
-    },
-    'HIGH': {
-        value: 1, // NotificationCompat.PRIORITY_HIGH
-        enumerable: true
-    },
-    'MAX': {
-        value: 2, // NotificationCompat.PRIORITY_MAX
-        enumerable: true
-    },
-})
+Object.defineProperty(Notifications, "Priority",{
+    value: require("./priority"),
+    enumerable: true
+});
+
+Object.defineProperty(Notifications, "Android",{
+    value: {},
+    enumerable: true
+});
+
+Object.defineProperty(Notifications.Android, "Priority",{
+    value: require("./priority"),
+    enumerable: true
+});
+
+
 // Generate unique random number
 function getNewNotificationId(){
     var randomnumber = Math.ceil(Math.random()*1000 + 1000);

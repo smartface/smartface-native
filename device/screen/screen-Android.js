@@ -62,6 +62,11 @@ Object.defineProperty(Screen, 'orientation', {
     configurable: false
 });
 
+Object.defineProperty(Screen, 'OrientationType', {
+    value: require("./orientationtype"),
+    enumerable: true
+});
+
 Screen.capture = function() {
     var content = NativeR.id.content;
     var rootView = AndroidConfig.activity.findViewById(content).getRootView();
