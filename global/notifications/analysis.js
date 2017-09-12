@@ -321,9 +321,10 @@ Notifications.LocalNotification.prototype.cancel = function(){};
  * @since 0.1
  * 
  * Priority for the notification.
+ * 
+ * @deprecated 1.1.17 Use {@link Notifications.Android.Priority} instead.
  */
 Notifications.Priority = {};
-
 
 /**
  * @property {Number} MIN
@@ -364,5 +365,52 @@ Notifications.Priority.HIGH = 1;
  * @since 0.1
  */
 Notifications.Priority.MAX = 2;
+
+/**
+ * Android Specific Properties.
+ * @class Notifications.Android
+ * @since 1.1.18
+ */
+Notifications.Android = {};
+
+/**
+ * @property {Number} MIN
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.MIN = -2;
+
+/**
+ * @property {Number} LOW
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.LOW = -1;
+
+/**
+ * @property {Number} DEFAULT
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.DEFAULT = 0;
+
+/**
+ * @property {Number} HIGH
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.HIGH = 1;
+
+/**
+ * @property {Number} MAX
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.MAX = 2;
 
 module.exports = Notifications;

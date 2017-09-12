@@ -52,7 +52,6 @@ Object.defineProperty(Screen, 'capture', {
   enumerable: true
 });
 
-
 Object.defineProperty(Screen, 'dpi', {
   get: function() {
           if (__SF_UIScreen.mainScreen().scale === 2){
@@ -64,6 +63,11 @@ Object.defineProperty(Screen, 'dpi', {
           }
      },
      enumerable: true
+});
+
+Object.defineProperty(Screen, 'OrientationType', {
+    value: require("./orientationtype"),
+    enumerable: true
 });
 
 module.exports = Screen;

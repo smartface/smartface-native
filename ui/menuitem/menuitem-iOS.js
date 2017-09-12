@@ -58,15 +58,15 @@ Object.defineProperty(MenuItem.ios, "Style",{
 Object.defineProperties(MenuItem.ios.Style, {
     'DEFAULT': {
         value: 0,
-        enumarable: true
+        enumerable: true
     },
     'CANCEL': {
         value: 1,
-        enumarable: true
+        enumerable: true
     },
     'DESTRUCTIVE': {
         value: 2,
-        enumarable: true
+        enumerable: true
     }
 });
 
