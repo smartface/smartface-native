@@ -5,8 +5,8 @@ const NativeEnvironment     = requireClass('android.os.Environment');
 
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
-const emulatorPath = string(Android.getActivity().getExternalCacheDir().getAbsolutePath());
-const playerRauPath = string(Android.getActivity().getFilesDir().getAbsolutePath());
+const emulatorPath = string(AndroidConfig.activity.getExternalCacheDir().getAbsolutePath());
+const playerRauPath = string(AndroidConfig.activity.getFilesDir().getAbsolutePath());
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
 var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
