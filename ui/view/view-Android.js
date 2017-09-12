@@ -739,10 +739,10 @@ View.prototype.setTouchHandlers = function() {
                     this._onTouch && this._onTouch();
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                     // So we should consume ACTION_DOWN event.
-                    return true;
+                    return bool(true);
                 }
             }
-            return false;
+            return bool(false);
         }.bind(this)
     }));
     this.didSetTouchHandler = true;

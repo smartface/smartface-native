@@ -64,12 +64,12 @@ const Picker = extend(View)(
                     var doneListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             if(done)
-                                done({index: int(self.currentIndex)});
+                                done({index: self.currentIndex});
                         }
                     });
                     
                     const NativeRString = requireClass("android.R").string;
-                    var builder = new NativeAlertDialog.Builder(Android.getActivity());
+                    var builder = new NativeAlertDialog.Builder(AndroidConfig.activity);
                     builder = builder.setView(layout);
                     builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
                     builder = builder.setPositiveButton(NativeRString.ok, doneListener);
@@ -107,7 +107,7 @@ const Picker = extend(View)(
                 onScrollStateChange: function(picker, scrollState) {
                     if(scrollState === NativeNumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
                         if(_onSelected)
-                            _onSelected(int(self.currentIndex));
+                            _onSelected(self.currentIndex);
                     }
                 }
             }));
@@ -139,7 +139,7 @@ function setNumberPicker(nativeObject, _items) {
 }
 
 function addViewToLayout(nativeObject) {
-    var layout = new NativeFrameLayout(Android.getActivity());
+    var layout = new NativeFrameLayout(AndroidConfig.activity);
     var parent = nativeObject.getParent();
     if(parent) {
         parent.removeView(nativeObject);

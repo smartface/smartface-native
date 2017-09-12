@@ -29,7 +29,7 @@ const Pages = function(params) {
         'popTo': {
             value: function(tag) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(fragmentManager.getBackStackEntryCount() > 0){
+                if(int(fragmentManager.getBackStackEntryCount()) > 0){
                     return fragmentManager.popBackStackImmediate(tag, 0);
                 }
                 return false;
@@ -136,13 +136,13 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
 function isSliderDrawerOpen(_sliderDrawer) {
     if(_sliderDrawer){
         const SliderDrawer = require('../sliderdrawer');
-        if(_sliderDrawer.position === SliderDrawer.Position.RIGHT){
+        if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
-            return mDrawerLayout.isDrawerOpen(int(5));
+            return bool(mDrawerLayout.isDrawerOpen(int(5)));
         }
         else{
             // Gravity.LEFT
-            return mDrawerLayout.isDrawerOpen(int(3));
+            return bool(mDrawerLayout.isDrawerOpen(int(3)));
         }
     }
     return false;
@@ -189,7 +189,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
 function pop(){
     var fragmentManager = activity.getSupportFragmentManager();
     if(int(fragmentManager.getBackStackEntryCount()) > 0){
-        return fragmentManager.popBackStackImmediate();
+        return bool(fragmentManager.popBackStackImmediate());
     }
     return false;
 }
@@ -200,7 +200,7 @@ function registerOnBackKeyPressed(pagesStack){
     mDrawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if( keyCode === 4 && keyEvent.getAction() === 0) {
+            if( int(keyCode) === 4 && int(keyEvent.getAction()) === 0) {
                 const Router = require("../router");
                 var currentHistoryObject = Router.getCurrentPage();
                 if (currentHistoryObject && currentHistoryObject.page) {

@@ -110,7 +110,7 @@ AlertView.prototype.addButton = function(params){
     this.nativeObject.setButton(int(nativeButtonIndex), string(params.text),
         NativeDialogInterface.OnClickListener.implement({
            onClick: function(dialog,which){
-               switch(which){
+               switch(int(which)){
                     case -1:
                         this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE] && this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE]();
                         break;
