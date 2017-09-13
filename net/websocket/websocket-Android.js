@@ -5,6 +5,9 @@ const ByteString        = requireClass("okio.ByteString");
 
 const Blob = require("../../blob");
 
+const activity = Android.getActivity();
+const Runnable = requireClass("java.lang.Runnable");
+
 function WebSocket(params) {
     if(!params || !params.url) {
         throw new Error("url must be initialized.");
@@ -99,27 +102,27 @@ function WebSocket(params) {
     function createWebSocketListener() {
         _listener = WebSocketListener.extend("SFWebSocketListener", {
             onOpen: function(webSocket, response) {
-                _onOpenCallback && _onOpenCallback();
+                _onOpenCallback && runOnUiThread(_onOpenCallback);
             },
             onMessage: function(webSocket, data) {
                 if (typeof(data) === "string" || !data) {
-                    _onMessageCallback && _onMessageCallback({string: data});
+                    _onMessageCallback && runOnUiThread(_onMessageCallback, {string: data});
                 }
                 else {
                     // TODO: onMessage doesn't invoke with bytestring parameter. 
                     // Check this implementation after AND-2702 bug is resolved.
-                    _onMessageCallback && _onMessageCallback({blob: new Blob(data.toByteArray(), { type: "" }) });
+                    _onMessageCallback && runOnUiThread(_onMessageCallback, {blob: new Blob(data.toByteArray(), { type: "" }) });
                 }
             },
             onClosing: function(webSocket, code, reason) {
-                _onCloseCallback && _onCloseCallback({ code: code, reason: reason });
+                _onCloseCallback && runOnUiThread(_onCloseCallback, { code: code, reason: reason });
             },
             onFailure: function(webSocket, throwable, response) {
                 if (response)
                     var code = response.code();
                 if (throwable)
                     var reason = throwable.getMessage();
-                _onFailureCallback && _onFailureCallback({ code: code, reason: reason });
+                _onFailureCallback && runOnUiThread(_onFailureCallback, { code: code, reason: reason });
             }
         }, null);
     }
@@ -130,6 +133,15 @@ function WebSocket(params) {
             this[param] = params[param];
         }
     }
+    
 }
 
+function runOnUiThread(callback, params) {
+    var runnable = Runnable.implement({
+        run : function(){
+            callback(params);
+        }
+    });
+    activity.runOnUiThread(runnable);
+}
 module.exports = WebSocket;
