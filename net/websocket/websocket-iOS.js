@@ -96,20 +96,46 @@ var webSocket = function WebSocket(params){
     });
     
     self.close = function (params) {
-        if (params && params.code) {
-            var invocationcloseWithCode = __SF_NSInvocation.createInvocationWithSelectorInstance("closeWithCode:reason:", self.nativeObject);
-            if (invocationcloseWithCode) {
-                invocationcloseWithCode.target = self.nativeObject;
-                invocationcloseWithCode.setSelectorWithString("closeWithCode:reason:");
-                invocationcloseWithCode.retainArguments();
-                invocationcloseWithCode.setNSIntegerArgumentAtIndex(params.code,2); 
-                if (params.reason) {
-                    invocationcloseWithCode.setNSStringArgumentAtIndex(params.reason,3); 
-                }else{
-                    invocationcloseWithCode.setNSStringArgumentAtIndex(undefined,3); 
-                }
+        var readyState;
+        var invocationReadyState = __SF_NSInvocation.createInvocationWithSelectorInstance("readyState", self.nativeObject);
+        if (invocationReadyState) {
+            invocationReadyState.target = self.nativeObject;
+            invocationReadyState.setSelectorWithString("readyState");
+            invocationReadyState.retainArguments();
             
-                invocationcloseWithCode.invoke();
+            invocationReadyState.invoke();
+            readyState = invocationReadyState.getNSIntegerReturnValue();
+        }
+        
+        if (params && params.code){
+            if (readyState === SRReadyState.SR_CONNECTING) {
+                var invocationDelegate = __SF_NSInvocation.createInvocationWithSelectorInstance("setDelegate:", socket);
+                if (invocationDelegate) {
+                    invocationDelegate.target = socket;
+                    invocationDelegate.setSelectorWithString("setDelegate:");
+                    invocationDelegate.retainArguments();
+                    invocationDelegate.setNSObjectArgumentAtIndex(undefined,2);
+                    
+                    invocationDelegate.invoke();
+                }
+                if (typeof self.onClose === 'function') {
+                    self.onClose({code: params.code, reason: params.reason});
+                }
+            }else{
+                var invocationcloseWithCode = __SF_NSInvocation.createInvocationWithSelectorInstance("closeWithCode:reason:", self.nativeObject);
+                if (invocationcloseWithCode) {
+                    invocationcloseWithCode.target = self.nativeObject;
+                    invocationcloseWithCode.setSelectorWithString("closeWithCode:reason:");
+                    invocationcloseWithCode.retainArguments();
+                    invocationcloseWithCode.setNSIntegerArgumentAtIndex(params.code,2); 
+                    if (params.reason) {
+                        invocationcloseWithCode.setNSStringArgumentAtIndex(params.reason,3); 
+                    }else{
+                        invocationcloseWithCode.setNSStringArgumentAtIndex(undefined,3); 
+                    }
+                
+                    invocationcloseWithCode.invoke();
+                }
             }
         }else{
             throw new Error('Code parameter cannot be null');
