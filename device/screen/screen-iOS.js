@@ -14,7 +14,13 @@ Screen.ios = {};
 */
 Object.defineProperty(Screen, 'orientation', {
   get: function() {
-    return __SF_UIDevice.currentDevice().orientation;
+    if (__SF_UIDevice.currentDevice().orientation === 5) {
+      return 1;
+    }else if (__SF_UIDevice.currentDevice().orientation === 6){
+      return 2;
+    }else{
+      return __SF_UIDevice.currentDevice().orientation;
+    }
   },
   enumerable: true
 });
