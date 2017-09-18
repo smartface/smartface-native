@@ -159,7 +159,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
         onResponse: function(call, response) {
             var statusCode = response.code();
             var responseHeaders = getResponseHeaders(response.headers());
-            if(response.body()) {
+            if(statusCode != 304 && response.body()) { // 304 MUST NOT include response body. Okhttp library doesn't handle this case.
                 var bytes = response.body().bytes();
                 var responseBody = new Blob(bytes, {type: {}});
             }
