@@ -13,8 +13,9 @@ Screen.ios = {};
     6 faceDown
 */
 Object.defineProperty(Screen, 'orientation', {
-  value: __SF_UIDevice.currentDevice().orientation,  
-  writable: false,
+  get: function() {
+    return __SF_UIDevice.currentDevice().orientation;
+  },
   enumerable: true
 });
 
