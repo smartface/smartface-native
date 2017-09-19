@@ -84,10 +84,10 @@ function applyLayoutInners(rootLayout) {
 
 function addInnerNativeViewGroups(viewGroup, viewGroups) {
     var viewGroupClass = requireClass("android.view.ViewGroup");
-    for (var i = 0; i < int(viewGroup.getChildCount()); i++) {
-        var innerView = viewGroup.getChildAt(int(i));
+    for (var i = 0; i < viewGroup.getChildCount(); i++) {
+        var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
-        if(bool(viewGroupClass.isAssignableFrom(innerClass))) {
+        if(viewGroupClass.isAssignableFrom(innerClass)) {
             addInnerNativeViewGroups(innerView, viewGroups);
             viewGroups.push(innerView);
         }

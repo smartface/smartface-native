@@ -46,8 +46,8 @@ function createIntent(params) {
         var locale = Locale.getDefault();
         _intent.putExtra(string("android.speech.extra.LANGUAGE"), locale); 
     }
-    _intent.putExtra(string("android.speech.extra.DICTATION_MODE"), bool(true));
-    _intent.putExtra(string("android.speech.extra.PARTIAL_RESULTS"), bool(true));
+    _intent.putExtra(string("android.speech.extra.DICTATION_MODE"), true);
+    _intent.putExtra(string("android.speech.extra.PARTIAL_RESULTS"), true);
 }
 
 function createRecognizerListener(params) {

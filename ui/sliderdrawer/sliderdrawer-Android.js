@@ -51,7 +51,7 @@ const SliderDrawer = extend(FlexLayout)(
                 set: function(enabled){
                     _enabled = enabled;
                     if(this.attachedPages){
-                        this.attachedPages.setDrawerLocked(bool(!enabled));
+                        this.attachedPages.setDrawerLocked(!enabled);
                     }
                 },
                 enumerable: true,
@@ -164,7 +164,7 @@ const SliderDrawer = extend(FlexLayout)(
             // setting default values
             this.width = 200;
             this.nativeObject.setLayoutParams (drawerLayoutParams);
-            this.nativeObject.setFitsSystemWindows(bool(true));
+            this.nativeObject.setFitsSystemWindows(true);
         }
         
         

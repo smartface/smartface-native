@@ -27,7 +27,7 @@ function Image (params) {
             self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
         }
         else if(params.path){
-            var bitmap = NativeBitmapFactory.decodeFile(string(params.path));
+            var bitmap = NativeBitmapFactory.decodeFile(params.path);
             self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
         }
         else{
@@ -41,13 +41,13 @@ function Image (params) {
     Object.defineProperties(this, {
         'height': {
             get: function() {
-                return int(self.nativeObject.getBitmap().getHeight());
+                return self.nativeObject.getBitmap().getHeight();
             }, 
             enumerable: true
         },
         'width': {
             get: function() {
-                return int(self.nativeObject.getBitmap().getWidth());
+                return self.nativeObject.getBitmap().getWidth();
             }, 
             enumerable: true
         },
@@ -56,7 +56,7 @@ function Image (params) {
                 var bitmap = self.nativeObject.getBitmap();
                 var stream = new NativeByteArrayOutputStream();
                 bitmap.compress(CompressFormat[1], 100, stream);
-                return new Blob(array(stream.toByteArray), {type: "image"});
+                return new Blob(stream.toByteArray(), {type: "image"});
             }, 
             enumerable: true
         },
@@ -65,7 +65,7 @@ function Image (params) {
                 var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
-                    var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, int(width), int(height), bool(false));  
+                    var newBitmap = NativeBitmap.createScaledBitmap(originalBitmap, width, height, false);  
                 }
                 catch(err) {
                     success = false;
@@ -88,7 +88,7 @@ function Image (params) {
                 var success = true;
                 try {
                     var originalBitmap = self.nativeObject.getBitmap();
-                    var newBitmap = NativeBitmap.createBitmap(originalBitmap, int(x), int(y), int(width), int(height));
+                    var newBitmap = NativeBitmap.createBitmap(originalBitmap, x, y, width, height);
                 }
                 catch(err) {
                     success = false;
@@ -111,10 +111,10 @@ function Image (params) {
                 var success = true;
                 try {
                     var matrix = new NativeMatrix();
-                    matrix.postRotate(float(angle));
+                    matrix.postRotate(angle);
                     var bitmap = self.nativeObject.getBitmap();
                     var width = bitmap.getWidth(), height = bitmap.getHeight();
-                    var newBitmap = NativeBitmap.createBitmap(bitmap, int(0), int(0), width, height, matrix, bool(true));  
+                    var newBitmap = NativeBitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);  
                 }
                 catch(err) {
                     success = false;
@@ -138,7 +138,7 @@ function Image (params) {
                 try {
                     var out = new NativeByteArrayOutputStream();
                     var bitmap = self.nativeObject.getBitmap();
-                    bitmap.compress(CompressFormat[format], int(quality), out);
+                    bitmap.compress(CompressFormat[format], quality, out);
                     var byteArray = out.toByteArray();
                 }
                 catch(err) {
@@ -191,7 +191,7 @@ Object.defineProperties(Image,{
                     bitmap = imageFile.nativeObject;
                 }
                 else{
-                    bitmap = NativeBitmapFactory.decodeFile(string(imageFile.fullPath));
+                    bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
                 }
                 return (new Image({bitmap: bitmap}));
             }
@@ -201,7 +201,7 @@ Object.defineProperties(Image,{
     },
     'createFromBlob': {
         value: function(blob) {
-            var newBitmap = NativeBitmapFactory.decodeByteArray(array(blob.parts), int(0), int(blob.size));
+            var newBitmap = NativeBitmapFactory.decodeByteArray(array(blob.parts, "byte"), 0, blob.size);
             if(newBitmap)
                 return (new Image({bitmap: newBitmap}));
             return null;

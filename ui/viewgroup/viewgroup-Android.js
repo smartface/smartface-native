@@ -51,7 +51,7 @@ const ViewGroup = extend(View)(
             },
             'getChildCount': {
                 value: function(){
-                    return int(this.nativeObject.getChildCount());
+                    return this.nativeObject.getChildCount();
                 },
                 enumerable: true
             },

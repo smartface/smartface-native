@@ -3,7 +3,7 @@ const activity = require("./androidconfig").activity;
 function AndroidUnitConverter(){}
 
 AndroidUnitConverter.displayMetrics = activity.getResources().getDisplayMetrics();
-AndroidUnitConverter.density = float(AndroidUnitConverter.displayMetrics.density);
+AndroidUnitConverter.density = AndroidUnitConverter.displayMetrics.density;
 
 AndroidUnitConverter.pixelToDp = function(pixel) {
     if(isNaN(pixel) || typeof pixel !== "number") return Number.NaN;

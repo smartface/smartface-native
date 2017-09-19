@@ -1,4 +1,4 @@
-/*globals float,int,bool,array,requireClass,string */
+/*globals array,requireClass */
 const AndroidUnitConverter      = require("../../util/Android/unitconverter.js");
 const AndroidConfig             = require("../../util/Android/androidconfig");
 const TypeUtil                  = require("../../util/type");
@@ -43,7 +43,7 @@ function View(params) {
         this.yogaNode = new NativeYogaNode();
     }
     else {
-        if(string(this.nativeObject.toString()).indexOf("YogaLayout") !== -1){
+        if(this.nativeObject.toString().indexOf("YogaLayout") !== -1){
             this.yogaNode = this.nativeObject.getYogaNode();
         }
         else{
@@ -54,13 +54,12 @@ function View(params) {
     this.backgroundDrawable = new NativeGradientDrawable(); 
     this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     
-    this._borderRadius = float(0);
-    var floatZero = float(0);
-    this.radii = array([floatZero, floatZero, floatZero, floatZero, floatZero, floatZero, floatZero, floatZero]);
-    this.rectF = new NativeRectF(floatZero, floatZero, floatZero, floatZero);
+    this._borderRadius = 0;
+    this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
+    this.rectF = new NativeRectF(0, 0, 0, 0);
     this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
     this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
-    this.borderShapeDrawable.getPaint().setColor(int(0));
+    this.borderShapeDrawable.getPaint().setColor(0);
     
     this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable,this.borderShapeDrawable]);
     this.isCloned = false;
@@ -91,11 +90,11 @@ function View(params) {
 View.prototype = {
     get alpha() {
         // Avoiding integer-float conflics of engine
-        return float(this.nativeObject.getAlpha());
+        return this.nativeObject.getAlpha();
     },
     set alpha(alpha) {
         // Avoiding integer-float conflics of engine
-        this.nativeObject.setAlpha(float(alpha));
+        this.nativeObject.setAlpha(alpha);
     },
     get backgroundImage() {
         return this.__backgroundImages;
@@ -105,10 +104,10 @@ View.prototype = {
         this.setBackgroundImage();
     },
     get id() {
-        return int(this.nativeObject.getId());
+        return this.nativeObject.getId();
     },
     set id(id) {
-        this.nativeObject.setId(int(id));
+        this.nativeObject.setId(id);
     },
     get backgroundColor() {
         return this._backgroundColor;
@@ -125,10 +124,10 @@ View.prototype = {
         this.setBorder();
     },
     get borderRadius() {
-        return AndroidUnitConverter.pixelToDp(float(this._borderRadius));
+        return AndroidUnitConverter.pixelToDp(this._borderRadius);
     },
     set borderRadius(borderRadius) {
-        this._borderRadius = float(AndroidUnitConverter.dpToPixel(borderRadius));
+        this._borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
         this.setBorder();
         if(this.__backgroundImages){
             this.setBackgroundImage();
@@ -138,58 +137,58 @@ View.prototype = {
         }
     },
     get rotation() {
-        return float(this.nativeObject.getRotation());
+        return this.nativeObject.getRotation();
     },
     set rotation(value) {
         if(TypeUtil.isNumeric(value)){
-            this.nativeObject.setRotation(float(value));
+            this.nativeObject.setRotation(value);
         }
     },
     get rotationX() {
-        return float(this.nativeObject.getRotationX());
+        return this.nativeObject.getRotationX();
     },
     set rotationX(value) {
         if(TypeUtil.isNumeric(value)){
-            this.nativeObject.setRotationX(float(value));
+            this.nativeObject.setRotationX(value);
         }
     },
     get rotationY() {
-        return float(this.nativeObject.getRotationY());
+        return this.nativeObject.getRotationY();
     },
     set rotationY(value) {
         if(TypeUtil.isNumeric(value)){
-            this.nativeObject.setRotationY(float(value));
+            this.nativeObject.setRotationY(value);
         }
     },
     get scaleX() {
-        return float(this.nativeObject.getScaleX());
+        return this.nativeObject.getScaleX();
     },
     set scaleX(value) {
         if(TypeUtil.isNumeric(value)){
-            this.nativeObject.setScaleX(float(value));
+            this.nativeObject.setScaleX(value);
         }
     },
     get scaleY() {
-        return float(this.nativeObject.getScaleY());
+        return this.nativeObject.getScaleY();
     },
     set scaleY(value) {
         if(TypeUtil.isNumeric(value)){
-            this.nativeObject.setScaleY(float(value));
+            this.nativeObject.setScaleY(value);
         }
     },
     get enabled() {
-        return bool(this.nativeObject.isEnabled());
+        return this.nativeObject.isEnabled();
     },
     set enabled(enabled) {
         if(TypeUtil.isBoolean(enabled)){
-            this.nativeObject.setEnabled(bool(enabled));
+            this.nativeObject.setEnabled(enabled);
         }
     },
     get touchEnabled() {
-        return bool(this._touchEnabled);
+        return this._touchEnabled;
     },
     set touchEnabled(value) {
-        this._touchEnabled = bool(value);
+        this._touchEnabled = value;
     },
     get onTouch() {
         return this._onTouch;
@@ -207,15 +206,15 @@ View.prototype = {
     },
     get visible() {
         // View.VISIBLE is 0
-        return int(this.nativeObject.getVisibility()) === 0;
+        return this.nativeObject.getVisibility() === 0;
     },
     set visible(visible) {
         if(visible)
             // View.VISIBLE is 0
-            this.nativeObject.setVisibility(int(0));
+            this.nativeObject.setVisibility(0);
         else
             // View.INVISIBLE is 4
-            this.nativeObject.setVisibility(int(4));
+            this.nativeObject.setVisibility(4);
     },
     bringToFront: function(){
         this.nativeObject.bringToFront();
@@ -245,58 +244,58 @@ View.prototype = {
         return 'View';
     },
     get left() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.LEFT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.LEFT).value);
     },
     set left(left) {
-        this.yogaNode.setPosition(YogaEdge.LEFT, float(AndroidUnitConverter.dpToPixel(left)));
+        this.yogaNode.setPosition(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(left));
     },
     get top() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.TOP).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.TOP).value);
     },
     set top(top) {
-        this.yogaNode.setPosition(YogaEdge.TOP, float(AndroidUnitConverter.dpToPixel(top)));
+        this.yogaNode.setPosition(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(top));
     },
     get right() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.RIGHT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.RIGHT).value);
     },
     set right(right) {
-        this.yogaNode.setPosition(YogaEdge.RIGHT, float(AndroidUnitConverter.dpToPixel(right)));
+        this.yogaNode.setPosition(YogaEdge.RIGHT, AndroidUnitConverter.dpToPixel(right));
     },
     get bottom() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.BOTTOM).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.BOTTOM).value);
     },
     set bottom(bottom) {
-        this.yogaNode.setPosition(YogaEdge.BOTTOM, float(AndroidUnitConverter.dpToPixel(bottom)));
+        this.yogaNode.setPosition(YogaEdge.BOTTOM, AndroidUnitConverter.dpToPixel(bottom));
     },
     get start() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.START).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.START).value);
     },
     set start(start) {
-        this.yogaNode.setPosition(YogaEdge.START, float(AndroidUnitConverter.dpToPixel(start)));
+        this.yogaNode.setPosition(YogaEdge.START, AndroidUnitConverter.dpToPixel(start));
     },
     get end() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPosition(YogaEdge.END).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.END).value);
     },
     set end(end) {
-        this.yogaNode.setPosition(YogaEdge.END, float(AndroidUnitConverter.dpToPixel(end)));
+        this.yogaNode.setPosition(YogaEdge.END, AndroidUnitConverter.dpToPixel(end));
     },
     get height() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getHeight().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getHeight().value);
     },
     set height(height) {
-        this.yogaNode.setHeight(float(AndroidUnitConverter.dpToPixel(height)));
+        this.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
          // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
         const ScrollView = require("../scrollview");
         if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL){
             var layoutParams = this.nativeObject.getLayoutParams();
-            layoutParams && (layoutParams.height = float(-2));
+            layoutParams && (layoutParams.height = -2);
         }
     },
     get width() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getWidth().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getWidth().value);
     },
     set width(width) {
-        this.yogaNode.setWidth(float(AndroidUnitConverter.dpToPixel(width)));
+        this.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
         const ScrollView = require("../scrollview");
         if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL){
@@ -305,144 +304,144 @@ View.prototype = {
         }
     },
     get minWidth() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMinWidth().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMinWidth().value);
     },
     set minWidth(minWidth) {
-        this.yogaNode.setMinWidth(float(AndroidUnitConverter.dpToPixel(minWidth)));
+        this.yogaNode.setMinWidth(AndroidUnitConverter.dpToPixel(minWidth));
     },
     get minHeight() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMinHeight().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMinHeight().value);
     },
     set minHeight(minHeight) {
-        this.yogaNode.setMinHeight(float(AndroidUnitConverter.dpToPixel(minHeight)));
+        this.yogaNode.setMinHeight(AndroidUnitConverter.dpToPixel(minHeight));
     },
     get maxWidth() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMaxWidth().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMaxWidth().value);
     },
     set maxWidth(maxWidth) {
-        this.yogaNode.setMaxWidth(float(AndroidUnitConverter.dpToPixel(maxWidth)));
+        this.yogaNode.setMaxWidth(AndroidUnitConverter.dpToPixel(maxWidth));
     },
     get maxHeight() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMaxHeight().value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMaxHeight().value);
     },
     set maxHeight(maxHeight) {
-        this.yogaNode.setMaxHeight(float(AndroidUnitConverter.dpToPixel(maxHeight)));
+        this.yogaNode.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
     },
     get paddingTop() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.TOP).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
     },
     set paddingTop(paddingTop) {
-        this.yogaNode.setPadding(YogaEdge.TOP, float(AndroidUnitConverter.dpToPixel(paddingTop)));
+        this.yogaNode.setPadding(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(paddingTop));
     },
     get paddingBottom() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.BOTTOM).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.BOTTOM).value);
     },
     set paddingBottom(paddingBottom) {
-        this.yogaNode.setPadding(YogaEdge.BOTTOM, float(AndroidUnitConverter.dpToPixel(paddingBottom)));
+        this.yogaNode.setPadding(YogaEdge.BOTTOM, AndroidUnitConverter.dpToPixel(paddingBottom));
     },
     get paddingStart() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.START).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.START).value);
     },
     set paddingStart(paddingStart) {
-        this.yogaNode.setPadding(YogaEdge.START, float(AndroidUnitConverter.dpToPixel(paddingStart)));
+        this.yogaNode.setPadding(YogaEdge.START, AndroidUnitConverter.dpToPixel(paddingStart));
     },
     get paddingEnd() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.END).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.END).value);
     },
     set paddingEnd(paddingEnd) {
-        this.yogaNode.setPadding(YogaEdge.END, float(AndroidUnitConverter.dpToPixel(paddingEnd)));
+        this.yogaNode.setPadding(YogaEdge.END, AndroidUnitConverter.dpToPixel(paddingEnd));
     },
     get paddingLeft() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.LEFT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.LEFT).value);
     },
     set paddingLeft(paddingLeft) {
-        this.yogaNode.setPadding(YogaEdge.LEFT, float(AndroidUnitConverter.dpToPixel(paddingLeft)));
+        this.yogaNode.setPadding(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(paddingLeft));
     },
     get paddingRight() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.RIGHT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.RIGHT).value);
     },
     set paddingRight(paddingRight) {
-        this.yogaNode.setPadding(YogaEdge.RIGHT, float(AndroidUnitConverter.dpToPixel(paddingRight)));
+        this.yogaNode.setPadding(YogaEdge.RIGHT, AndroidUnitConverter.dpToPixel(paddingRight));
     },
     get paddingHorizontal() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.HORIZONTAL).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.HORIZONTAL).value);
     },
     set paddingHorizontal(paddingHorizontal) {
-        this.yogaNode.setPadding(YogaEdge.HORIZONTAL, float(AndroidUnitConverter.dpToPixel(paddingHorizontal)));
+        this.yogaNode.setPadding(YogaEdge.HORIZONTAL, AndroidUnitConverter.dpToPixel(paddingHorizontal));
     },
     get paddingVertical() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.VERTICAL).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.VERTICAL).value);
     },
     set paddingVertical(paddingVertical) {
-        this.yogaNode.setPadding(YogaEdge.VERTICAL, float(AndroidUnitConverter.dpToPixel(paddingVertical)));
+        this.yogaNode.setPadding(YogaEdge.VERTICAL, AndroidUnitConverter.dpToPixel(paddingVertical));
     },
     get padding() {
         // YogaEdge.ALL not working on YogaCore. We are getting what we set.
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getPadding(YogaEdge.TOP).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPadding(YogaEdge.TOP).value);
     },
     set padding(padding) {
         // YogaEdge.ALL not working on YogaCore. We are setting border to all.
-        var db_padding = float(AndroidUnitConverter.dpToPixel(padding));
+        var db_padding = AndroidUnitConverter.dpToPixel(padding);
         this.yogaNode.setPadding(YogaEdge.TOP, db_padding);
         this.yogaNode.setPadding(YogaEdge.BOTTOM, db_padding);
         this.yogaNode.setPadding(YogaEdge.LEFT, db_padding);
         this.yogaNode.setPadding(YogaEdge.RIGHT, db_padding);
     },
     get marginTop() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.TOP).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
     },
     set marginTop(marginTop) {
-        this.yogaNode.setMargin(YogaEdge.TOP, float(AndroidUnitConverter.dpToPixel(marginTop)));
+        this.yogaNode.setMargin(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(marginTop));
     },
     get marginBottom() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.BOTTOM).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.BOTTOM).value);
     },
     set marginBottom(marginBottom) {
-        this.yogaNode.setMargin(YogaEdge.BOTTOM, float(AndroidUnitConverter.dpToPixel(marginBottom)));
+        this.yogaNode.setMargin(YogaEdge.BOTTOM, AndroidUnitConverter.dpToPixel(marginBottom));
     },
     get marginStart() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.START).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.START).value);
     },
     set marginStart(marginStart) {
-        this.yogaNode.setMargin(YogaEdge.START, float(AndroidUnitConverter.dpToPixel(marginStart)));
+        this.yogaNode.setMargin(YogaEdge.START, AndroidUnitConverter.dpToPixel(marginStart));
     },
     get marginEnd() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.END).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.END).value);
     },
     set marginEnd(marginEnd) {
-        this.yogaNode.setMargin(YogaEdge.END, float(AndroidUnitConverter.dpToPixel(marginEnd)));
+        this.yogaNode.setMargin(YogaEdge.END, AndroidUnitConverter.dpToPixel(marginEnd));
     },
     get marginLeft() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.LEFT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.LEFT).value);
     },
     set marginLeft(marginLeft) {
-        this.yogaNode.setMargin(YogaEdge.LEFT, float(AndroidUnitConverter.dpToPixel(marginLeft)));
+        this.yogaNode.setMargin(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(marginLeft));
     },
     get marginRight() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.RIGHT).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.RIGHT).value);
     },
     set marginRight(marginRight) {
-        this.yogaNode.setMargin(YogaEdge.RIGHT, float(AndroidUnitConverter.dpToPixel(marginRight)));
+        this.yogaNode.setMargin(YogaEdge.RIGHT, AndroidUnitConverter.dpToPixel(marginRight));
     },
     get marginHorizontal() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.HORIZONTAL).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.HORIZONTAL).value);
     },
     set marginHorizontal(marginHorizontal) {
-        this.yogaNode.setMargin(YogaEdge.HORIZONTAL, float(AndroidUnitConverter.dpToPixel(marginHorizontal)));
+        this.yogaNode.setMargin(YogaEdge.HORIZONTAL, AndroidUnitConverter.dpToPixel(marginHorizontal));
     },
     get marginVertical() {
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.VERTICAL).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.VERTICAL).value);
     },
     set marginVertical(marginVertical) {
-        this.yogaNode.setMargin(YogaEdge.VERTICAL, float(AndroidUnitConverter.dpToPixel(marginVertical)));
+        this.yogaNode.setMargin(YogaEdge.VERTICAL, AndroidUnitConverter.dpToPixel(marginVertical));
     },
     get margin() {
         // YogaEdge.ALL not working on YogaCore. We are getting what we set.
-        return AndroidUnitConverter.pixelToDp(float(this.yogaNode.getMargin(YogaEdge.TOP).value));
+        return AndroidUnitConverter.pixelToDp(this.yogaNode.getMargin(YogaEdge.TOP).value);
     },
     set margin(margin) {
         // YogaEdge.ALL not working on YogaCore. We are setting border to all.
-        var db_margin = float(AndroidUnitConverter.dpToPixel(margin));
+        var db_margin = AndroidUnitConverter.dpToPixel(margin);
         this.yogaNode.setMargin(YogaEdge.TOP, db_margin);
         this.yogaNode.setMargin(YogaEdge.BOTTOM, db_margin);
         this.yogaNode.setMargin(YogaEdge.LEFT, db_margin);
@@ -493,7 +492,7 @@ View.prototype = {
     },
     set borderWidth(borderWidth) {
         this._borderWidth = borderWidth;
-        var dp_borderWidth = float(AndroidUnitConverter.dpToPixel(borderWidth));
+        var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
         
         this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
         this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
@@ -502,10 +501,10 @@ View.prototype = {
         this.setBorder();
     },
     get flexGrow() {
-        return float(this.yogaNode.getFlexGrow());
+        return this.yogaNode.getFlexGrow();
     },
     set flexGrow(flexGrow) {
-        this.yogaNode.setFlexGrow(float(flexGrow));
+        this.yogaNode.setFlexGrow(flexGrow);
         if(flexGrow > 0){
             this.flexBasis = 1;
         }
@@ -514,16 +513,16 @@ View.prototype = {
         }
     },
     get flexShrink() {
-        return float(this.yogaNode.getFlexShrink());
+        return this.yogaNode.getFlexShrink();
     },
     set flexShrink(flexShrink) {
-        this.yogaNode.setFlexShrink(float(flexShrink));
+        this.yogaNode.setFlexShrink(flexShrink);
     },
     get flexBasis() {
-        return float(this.yogaNode.getFlexBasis().value);
+        return this.yogaNode.getFlexBasis().value;
     },
     set flexBasis(flexBasis) {
-        this.yogaNode.setFlexBasis(float(flexBasis));
+        this.yogaNode.setFlexBasis(flexBasis);
     },
     get alignSelf() {
         return this.yogaNode.getAlignSelf();
@@ -549,6 +548,7 @@ View.prototype.setBackgroundImage = function() {
     var bitmap;
     if(this.__backgroundImages instanceof Image) {
         bitmap = this.__backgroundImages.nativeObject.getBitmap();
+        release(this.backgroundDrawable);
         this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap); 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
         this.setBackground(0);
@@ -557,6 +557,7 @@ View.prototype.setBackgroundImage = function() {
         if(this.__backgroundImages) {
             var stateDrawable;
             var image;
+            release(this.backgroundDrawable);
             this.backgroundDrawable = new NativeStateListDrawable();
             if(this.__backgroundImages.normal) {
                 image = this.__backgroundImages.normal;
@@ -600,15 +601,18 @@ View.prototype.setBackgroundImage = function() {
     
 View.prototype.setBackgroundColor = function() {
     if(this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
+        release(this.backgroundDrawable);
         this.backgroundDrawable = this._backgroundColor.nativeObject; 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
     else if(this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
+        release(this.backgroundDrawable)
         this.backgroundDrawable = new NativeGradientDrawable(); 
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
     else {
+        release(this.backgroundDrawable);
         this.backgroundDrawable = new NativeStateListDrawable();
         var stateDrawable;
         // state can be transparent. so we should check state exists.
@@ -677,9 +681,9 @@ View.prototype.setBorder = function(){
     // so we should use created drawables.
     if(dp_borderWidth >= 0)  {
         this.radii = array([this._borderRadius, this._borderRadius,this._borderRadius,this._borderRadius,
-                 this._borderRadius,this._borderRadius,this._borderRadius,this._borderRadius]);
+                 this._borderRadius,this._borderRadius,this._borderRadius,this._borderRadius], "float");
 
-        this.rectF = new NativeRectF(float(dp_borderWidth), float(dp_borderWidth), float(dp_borderWidth), float(dp_borderWidth));
+        this.rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
         this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
         this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
 
@@ -688,7 +692,7 @@ View.prototype.setBorder = function(){
             this.borderShapeDrawable.getPaint().setColor(this._borderColor.nativeObject);
         }
         else{
-            this.borderShapeDrawable.getPaint().setColor(int(0));
+            this.borderShapeDrawable.getPaint().setColor(0);
         }
         this.setBackground(1);
     }
@@ -699,11 +703,11 @@ View.prototype.setBackground = function(layerIndex){
     var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
     switch (layerIndex){
         case 0: 
-            layerDrawableNative.setDrawableByLayerId(int(0),this.backgroundDrawable);
+            layerDrawableNative.setDrawableByLayerId(0,this.backgroundDrawable);
             layerDrawableNative.invalidateDrawable(this.backgroundDrawable);
             break;
         case 1:
-            layerDrawableNative.setDrawableByLayerId(int(1),this.borderShapeDrawable);
+            layerDrawableNative.setDrawableByLayerId(1,this.borderShapeDrawable);
             layerDrawableNative.invalidateDrawable(this.borderShapeDrawable);
             break;
     }
@@ -717,20 +721,20 @@ View.prototype.setTouchHandlers = function() {
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
             if(this.touchEnabled && (this._onTouch || this._onTouchEnded)){
-                if (int(event.getAction()) === ACTION_UP) {
+                if (event.getAction() === ACTION_UP) {
                     this._onTouchEnded && this._onTouchEnded();
-                } else if(int(event.getAction()) === ACTION_DOWN) {
+                } else if(event.getAction() === ACTION_DOWN) {
                     this._onTouch && this._onTouch();
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                     // So we should consume ACTION_DOWN event.
-                    return bool(true);
+                    return true;
                 }
             }
-            return bool(!this.touchEnabled);
+            return !this.touchEnabled;
         }.bind(this)
     }));
     this.didSetTouchHandler = true;
-}
+};
 
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
@@ -738,24 +742,24 @@ View.State = {};
 
 View.State.STATE_NORMAL =  array([
     NativeR.attr.state_enabled,
-    int(-int(NativeR.attr.state_pressed)),
-    int(-int(NativeR.attr.state_selected))
-]);
+    -NativeR.attr.state_pressed,
+    -NativeR.attr.state_selected
+], "int");
 View.State.STATE_DISABLED = array([
-    int(-int(NativeR.attr.state_enabled)),
-]);
+    -NativeR.attr.state_enabled,
+], "int");
 View.State.STATE_SELECTED = array([
     NativeR.attr.state_enabled,
     NativeR.attr.state_selected
-]);
+], "int");
 View.State.STATE_PRESSED = array([
     NativeR.attr.state_pressed,
     NativeR.attr.state_enabled,
-]);
+], "int");
 View.State.STATE_FOCUSED = array([
     NativeR.attr.state_focused,
     NativeR.attr.state_enabled,
-]);
+], "int");
 
 function createNewLayerDrawable(drawables){
     var drawablesForObjectCreate = [];
@@ -767,8 +771,8 @@ function createNewLayerDrawable(drawables){
     
     var layerDrawable = new NativeLayerDrawable(array(drawablesForObjectCreate));
     for(i = 0 ; i < drawables.length ; i++){
-        layerDrawable.setId(int(i), int(i));
-        layerDrawable.setDrawableByLayerId(int(i),drawables[i]);
+        layerDrawable.setId(i, i);
+        layerDrawable.setDrawableByLayerId(i,drawables[i]);
     }
     
     return layerDrawable;

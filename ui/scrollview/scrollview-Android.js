@@ -11,9 +11,9 @@ const ScrollView = extend(ViewGroup)(
         if (!this.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
-                this.nativeObject = NativeHorizontalScroll.extend(string("SFHorizontalScroll"), {
+                this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
                     onScrollChanged: function(xObj, y, oldx, oldy) {
-                        var x = int(xObj);
+                        var x = xObj;
                         x = (x > 0)? x : 0; // negative values are provided as well
                         _contentOffset.x = UnitConverter.pixelToDp(x);
                         _callbackOnScroll && _callbackOnScroll();
@@ -21,9 +21,9 @@ const ScrollView = extend(ViewGroup)(
                 }, [activity]);
             } else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
-                this.nativeObject = NativeVerticalScroll.extend(string("SFVerticalScroll"), {
+                this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
                     onScrollChanged: function(x, yObj, oldx, oldy) {
-                        var y = int(y);
+                        var y = yObj;
                         y = (y > 0)? y : 0; // negative values are provided as well
                         _contentOffset.y = UnitConverter.pixelToDp(y);
                         _callbackOnScroll && _callbackOnScroll();
@@ -52,12 +52,12 @@ const ScrollView = extend(ViewGroup)(
             },
             'scrollBarEnabled': {
                 get: function() {
-                    return bool(this.nativeObject.isHorizontalScrollBarEnabled())
-                        || bool(this.nativeObject.isVerticalScrollBarEnabled());
+                    return this.nativeObject.isHorizontalScrollBarEnabled()
+                        || this.nativeObject.isVerticalScrollBarEnabled();
                 },
                 set: function(enabled) {
-                    this.nativeObject.setVerticalScrollBarEnabled(bool(enabled));
-                    this.nativeObject.setHorizontalScrollBarEnabled(bool(enabled));
+                    this.nativeObject.setVerticalScrollBarEnabled(enabled);
+                    this.nativeObject.setHorizontalScrollBarEnabled(enabled);
                 }
             },
             'scrollToCoordinate': {
@@ -66,8 +66,8 @@ const ScrollView = extend(ViewGroup)(
                         const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
-                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(int(coordinate), int(0));
-                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(int(0), int(coordinate));
+                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
+                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
                     }
                 }
             },

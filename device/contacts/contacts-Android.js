@@ -132,12 +132,12 @@ Contacts.getAll = function(params) {
             var emailAddresses = getEmailById(queryParams);
             var address = getAddressById(queryParams);
             contacts.push({
-                displayName: string(cursor.getString(index)),
+                displayName: cursor.getString(index),
                 phoneNumber: phoneNumber,
                 emailAddresses: emailAddresses,
                 address: address
             });
-        } while (bool(cursor.moveToNext()));
+        } while (cursor.moveToNext());
         
         if(params && params.onSuccess) {
             params.onSuccess(contacts);
@@ -162,12 +162,12 @@ function getContactDataById(params) {
     if(cursor !== null && int(cursor.getCount()) > 0) {
         cursor.moveToFirst();
         do {
-            var columnIndex = cursor.getColumnIndex(string(params.columnTag));
-            if(int(columnIndex) >= 0) {
-                data.push(string(cursor.getString(columnIndex)));
+            var columnIndex = cursor.getColumnIndex(params.columnTag);
+            if(columnIndex >= 0) {
+                data.push(cursor.getString(columnIndex));
                 return data;
             }
-        }while (bool(cursor.moveToNext()));
+        }while (cursor.moveToNext());
         cursor.close();
     }
     
@@ -198,8 +198,8 @@ function getContactDisplayName(contactUri) {
     if(cursor != null) {
         if (cursor.moveToFirst()) {
             var columnIndex = cursor.getColumnIndex(projection[0]);
-            if(int(columnIndex) >= 0)
-                contactName = string(cursor.getString(columnIndex));
+            if(columnIndex >= 0)
+                contactName = cursor.getString(columnIndex);
         }
     }
     
@@ -215,8 +215,8 @@ function getContactPhoneNumber(contactUri) {
     
     var columnIndex = cursor.getColumnIndex(projection[0]);
     var number = "";
-    if(int(columnIndex) >= 0)
-        number = string(cursor.getString(columnIndex));
+    if(columnIndex >= 0)
+        number = cursor.getString(columnIndex);
     return number;
 }
 

@@ -226,7 +226,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isBoolean(value)) {
                     _vibrate = true;
-                    self.nativeObject.setVibrate(array([long(1000)]));
+                    self.nativeObject.setVibrate(array([long(1000)], "long"));
                 }
             },
             enumerable: true

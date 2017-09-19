@@ -90,12 +90,12 @@ Object.defineProperties(Font, {
                         return font;
                     }
                     else {
-                        typeface = NativeTypeface.create(string(fontFamily), int(fontStyle));
+                        typeface = NativeTypeface.create(fontFamily, fontStyle);
                     }
                 }
             }
             else {
-                typeface = NativeTypeface.defaultFromStyle(int(fontStyle));
+                typeface = NativeTypeface.defaultFromStyle(fontStyle);
             }
         
             font = new Font({
@@ -117,7 +117,7 @@ Object.defineProperties(Font, {
                 if (fontFile.exists && fontFile.nativeObject) {
                     if (fontFile.type === Path.FILE_TYPE.ASSET) {
                         var assets = AndroidConfig.activity.getAssets();
-                        typeface = NativeTypeface.createFromAsset(assets, string(fontFile.name));
+                        typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
                     }
                     else {
                         typeface = NativeTypeface.createFromFile(fontFile.nativeObject);

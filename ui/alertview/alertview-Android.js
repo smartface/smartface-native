@@ -1,4 +1,4 @@
-/*globals requireClass,string,bool,int*/
+/*globals requireClass*/
 const AndroidConfig         = require("../../util/Android/androidconfig");
 const Type                  = require("../../util/type");
 const NativeAlertDialog     = requireClass("android.app.AlertDialog");
@@ -45,7 +45,7 @@ AlertView.prototype = {
     set title(title) {
         if(Type.isString(title)){
             this.__title = title;
-            this.nativeObject.setTitle(string(title));
+            this.nativeObject.setTitle(title);
         }
     },
     get message() {
@@ -54,7 +54,7 @@ AlertView.prototype = {
     set message(message) {
         if(Type.isString(message)){
             this.__message = message;
-            this.nativeObject.setMessage(string(message));
+            this.nativeObject.setMessage(message);
         }
     },
     get onDismiss() {
@@ -75,7 +75,7 @@ AlertView.prototype = {
 };
 
 AlertView.prototype.isShowing = function() {
-    return bool(this.nativeObject.isShowing());  
+    return this.nativeObject.isShowing();  
 };
 
 AlertView.prototype.show = function() {
@@ -107,10 +107,10 @@ AlertView.prototype.addButton = function(params){
             break;
     }
 
-    this.nativeObject.setButton(int(nativeButtonIndex), string(params.text),
+    this.nativeObject.setButton(nativeButtonIndex, params.text,
         NativeDialogInterface.OnClickListener.implement({
            onClick: function(dialog,which){
-               switch(int(which)){
+               switch(which){
                     case -1:
                         this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE] && this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE]();
                         break;
@@ -149,8 +149,8 @@ function AndroidSpesificProperties (alertview) {
         },
         set: function(cancellable) {
             _cancellable = cancellable;
-            alertview.nativeObject.setCancelable(bool(cancellable));
-            alertview.nativeObject.setCanceledOnTouchOutside(bool(cancellable));
+            alertview.nativeObject.setCancelable(cancellable);
+            alertview.nativeObject.setCanceledOnTouchOutside(cancellable);
         },
         enumerable: true
     });

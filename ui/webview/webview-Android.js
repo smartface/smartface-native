@@ -23,10 +23,10 @@ const WebView = extend(View)(
         
         var overrideMethods = {
             onPageFinished: function(view, url) {
-                _onShow && _onShow({url: string(url)});
+                _onShow && _onShow({url: url});
             },
             onPageStarted: function(view, url, favicon) {
-                _onLoad && _onLoad({url: string(url)});
+                _onLoad && _onLoad({url: url});
             }
         };
         var _canOpenLinkInside = true;
@@ -57,7 +57,7 @@ const WebView = extend(View)(
             },
             'bounceEnabled': {
                 get: function() {
-                    return (int(this.nativeObject.getOverScrollMode()) !== 2); // OVER_SCROLL_NEVER
+                    return (this.nativeObject.getOverScrollMode() !== 2); // OVER_SCROLL_NEVER
                 },
                 set: function(value) {
                     if (value) {
@@ -97,7 +97,7 @@ const WebView = extend(View)(
             },
             'zoomEnabled': {
                 get: function() {
-                    return bool(this.nativeObject.getSettings().getBuiltInZoomControls());
+                    return this.nativeObject.getSettings().getBuiltInZoomControls();
                 },
                 set: function(enabled) {
                     this.nativeObject.getSettings().setBuiltInZoomControls(enabled);
@@ -146,7 +146,7 @@ const WebView = extend(View)(
                         var valueCallback = ValueCallback.implement({
                             onReceiveValue: function(value) {
                                 if(callback)
-                                    callback(string(value));
+                                    callback(value);
                             }
                         });
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
@@ -226,18 +226,18 @@ const WebView = extend(View)(
                     var uri = request.getUrl();
                     var url = uri.toString();
                     var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({url: string(url)}));
+                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
                     if(!callbackValue)
-                        return bool(true);
+                        return true;
                     return overrideURLChange(url, _canOpenLinkInside);
                     
                 };
             } else {
                 overrideMethods.shouldOverrideUrlLoading = function(view, url) {
                     var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({url: string(url)}));
+                    _onChangedURL && (callbackValue = _onChangedURL({url: url}));
                     if(!callbackValue)
-                        return bool(true);
+                        return true;
                     return overrideURLChange(url, _canOpenLinkInside);
                 };
             }
@@ -252,9 +252,9 @@ const WebView = extend(View)(
                      */
                     const NativeString = requireClass('java.lang.String');
                     var uri = arguments[1].getUrl();
-                    var url = string(NativeString.valueOf(uri));
-                    var code = string(arguments[2].getErrorCode());
-                    var message = string(arguments[2].getDescription());
+                    var url = NativeString.valueOf(uri);
+                    var code = arguments[2].getErrorCode();
+                    var message = arguments[2].getDescription();
     
                     _onError && _onError({message: message, code: code, url: url});
                 }
@@ -265,12 +265,12 @@ const WebView = extend(View)(
                      * arguments[2] = description, 
                      * arguments[3] = failingUrl, 
                      */
-                    _onError && _onError({message: string(arguments[2]), code: int(arguments[1]), url: string(arguments[3])});
+                    _onError && _onError({message: arguments[2], code: arguments[1], url: arguments[3]});
                 }
             };
     
             const NativeWebClient = requireClass('android.webkit.WebViewClient');
-            var nativeWebClient = NativeWebClient.extend(string("SFWebClient"), overrideMethods, null);
+            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
             this.nativeObject.setWebViewClient(nativeWebClient);
             this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
             this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
@@ -291,13 +291,13 @@ const WebView = extend(View)(
             this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
                 onTouch: function(view, event) {
                     if(this.touchEnabled && (_onTouch || _onTouchEnded)){
-                        if (int(event.getAction()) === ACTION_UP) {
+                        if (event.getAction() === ACTION_UP) {
                             _onTouchEnded && _onTouchEnded();
-                        } else if(int(event.getAction()) === ACTION_DOWN) {
+                        } else if(event.getAction() === ACTION_DOWN) {
                             _onTouch && _onTouch();
                         }
                     }
-                    return ( (int(event.getAction() === ACTION_MOVE)) && (!this.scrollEnabled));
+                    return  (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
                 }.bind(this)
             }));
         }
@@ -307,10 +307,9 @@ const WebView = extend(View)(
                 this[param] = params[param];
             }
         }
-        
-        
     }
 );
+
 function overrideURLChange(url, _canOpenLinkInside) {
     if (_canOpenLinkInside) {
         return false;

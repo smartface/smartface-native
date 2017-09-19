@@ -34,10 +34,10 @@ const ListViewItem = extend(FlexLayout)(
             // Added due to problem in row height for RecyclerView
             'height': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(int(this.nativeObject.getLayoutParams().height));
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
                 },
                 set: function(height) {
-                    this.nativeObject.getLayoutParams().height = int(AndroidUnitConverter.dpToPixel(height));
+                    this.nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(height);
                 },
                 enumerable: true,
                 configurable: true
@@ -45,10 +45,10 @@ const ListViewItem = extend(FlexLayout)(
             // Added due to problem in row width for RecyclerView
             'width': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(int(this.nativeObject.getLayoutParams().width));
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
                 },
                 set: function(width) {
-                    this.nativeObject.getLayoutParams().width = int(AndroidUnitConverter.dpToPixel(width));
+                    this.nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(width);
                 },
                 enumerable: true,
                 configurable: true

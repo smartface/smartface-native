@@ -15,7 +15,7 @@ function Timer(params) {
 
         this.nativeObject = NativeRunnable.implement({
             run: runnableTask.bind(this)
-        }); 
+        });
         Timer.handler.postDelayed(this.nativeObject, long(this.delay));
     }
 }

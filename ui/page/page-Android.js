@@ -56,9 +56,9 @@ function Page(params) {
     var optionsMenu = null;
     self.contextMenu = {};
 
-    self.nativeObject = NativeFragment.extend(string("SFFragment"), {
+    self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
-            self.nativeObject.setHasOptionsMenu(bool(true));
+            self.nativeObject.setHasOptionsMenu(true);
             if (!isCreated) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
@@ -86,8 +86,8 @@ function Page(params) {
             _onOrientationChange && _onOrientationChange();
         },
         onOptionsItemSelected: function(menuItem) {
-            var itemId = int(menuItem.getItemId());
-            if (itemId === int(NativeAndroidR.id.home)) {
+            var itemId = menuItem.getItemId();
+            if (itemId === NativeAndroidR.id.home) {
                 if (_headerBarLeftItem) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
@@ -118,7 +118,7 @@ function Page(params) {
             }
         },
         onContextItemSelected: function(item) {
-            var itemId = int(item.getItemId());
+            var itemId = item.getItemId();
             var items = self.contextMenu.items;
             if (itemId >= 0) {
                 items[itemId].onSelected();
@@ -129,8 +129,8 @@ function Page(params) {
             const Multimedia = require("../../device/multimedia");
             const Sound = require("../../device/sound");
             
-            var requestCode = int(nativeRequestCode);
-            var resultCode = int(nativeResultCode)
+            var requestCode = nativeRequestCode;
+            var resultCode = nativeResultCode
 
             // todo: Define a method to register request and its callback 
             // for better performance. Remove if statement.
@@ -258,10 +258,10 @@ function Page(params) {
             _visible = visible;
             var window = activity.getWindow();
             if (visible) {
-                window.clearFlags(int(FLAG_FULLSCREEN));
+                window.clearFlags(FLAG_FULLSCREEN);
             }
             else {
-                window.addFlags(int(FLAG_FULLSCREEN));
+                window.addFlags(FLAG_FULLSCREEN);
             }
         },
         enumerable: true, configurable: true
@@ -275,9 +275,9 @@ function Page(params) {
         },
         set: function(color) {
             _color = color;
-            if (int(NativeBuildVersion.VERSION.SDK_INT) >= MINAPILEVEL_STATUSBARCOLOR) {
+            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
                 var window = activity.getWindow();
-                window.addFlags(int(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS));
+                window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.setStatusBarColor(color.nativeObject);
             }
         },
@@ -287,9 +287,9 @@ function Page(params) {
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
             var result = 0;
-            var resourceId = int(activity.getResources().getIdentifier(string("status_bar_height"), string("dimen"), string("android")));
+            var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                result = int(activity.getResources().getDimensionPixelSize(int(resourceId)));
+                result = activity.getResources().getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -331,7 +331,7 @@ function Page(params) {
         set: function(leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                actionBar.setDisplayHomeAsUpEnabled(bool(_leftItemEnabled));
+                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true, configurable: true
@@ -340,7 +340,7 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
-            return AndroidUnitConverter.pixelToDp(float(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material)));
+            return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
         },
         enumerable: true, configurable: true
     });
@@ -351,10 +351,10 @@ function Page(params) {
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                toolbar.setTitle(string(text));
+                toolbar.setTitle(text);
             }
             else {
-                toolbar.setTitle(string(""));
+                toolbar.setTitle("");
             }
         },
         enumerable: true, configurable: true
@@ -409,22 +409,22 @@ function Page(params) {
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             // View.VISIBLE
-            return int(toolbar.getVisibility()) === 0;
+            return toolbar.getVisibility() === 0;
         },
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
                     if(self.isBottomTabBarPage) {
                         // View.GONE
-                        toolbar.setVisibility(int(8));
+                        toolbar.setVisibility(8);
                     } else {
                         // View.VISIBLE
-                        toolbar.setVisibility(int(0));
+                        toolbar.setVisibility(0);
                     }
                 }
                 else {
                     // View.GONE
-                    toolbar.setVisibility(int(8));
+                    toolbar.setVisibility(8);
                 }
             }
         },
@@ -437,10 +437,10 @@ function Page(params) {
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
-                toolbar.setSubtitle(string(text));
+                toolbar.setSubtitle(text);
             }
             else {
-                toolbar.setSubtitle(string(""));
+                toolbar.setSubtitle("");
             }
         },
         enumerable: true, configurable: true
@@ -482,7 +482,7 @@ function Page(params) {
         set: function(logoEnabled) {
             if (TypeUtil.isBoolean(logoEnabled)) {
                 _headerBarLogoEnabled = logoEnabled;
-                actionBar.setDisplayUseLogoEnabled(bool(_headerBarLogoEnabled));
+                actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
         enumerable: true, configurable: true
@@ -496,9 +496,9 @@ function Page(params) {
             
             const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
-            var resourceId = int(activity.getResources().getIdentifier(string("design_bottom_navigation_height"), string("dimen"), packageName));
+            var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
-                result = float(activity.getResources().getDimensionPixelSize(int(resourceId)));
+                result = activity.getResources().getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -545,9 +545,9 @@ function Page(params) {
             if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
                 for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
                     if(i === _selectedIndex) {
-                        menu.getItem(int(i)).setChecked(bool(true));
+                        menu.getItem(int(i)).setChecked(true);
                     }else {
-                        menu.getItem(int(i)).setChecked(bool(false));
+                        menu.getItem(int(i)).setChecked(false);
                     }
                 }
             }
@@ -568,8 +568,8 @@ function Page(params) {
             disableShiftMode();
         }
         
-        var params = new RelativeLayoutLayoutParams(int(-1), int(-2));
-        params.addRule(int(12));
+        var params = new RelativeLayoutLayoutParams(-1, -2);
+        params.addRule(12);
         bottomNavigationView.setLayoutParams(params);
         var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
         bottomLayout.addView(bottomNavigationView);
@@ -585,7 +585,7 @@ function Page(params) {
         var menu = bottomNavigationView.getMenu();
         var keys = Object.keys(tab.items);
         for(var i = 0; i < keys.length; i++) {
-            var menuitem = menu.add(int(0), int(i), int(0), string(tab.items[keys[i]].title)); 
+            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
             var icon = tab.items[keys[i]].icon;
             if(icon)  
                 menuitem.setIcon(icon.nativeObject);
@@ -593,17 +593,17 @@ function Page(params) {
         // Don't merge upper loop. It doesn't work inside upper loop.
         for(i = 0; i < keys.length; i++) {
             if(i === _selectedIndex)
-                menu.getItem(int(i)).setChecked(bool(true));
+                menu.getItem(i).setChecked(true);
             else
-                menu.getItem(int(i)).setChecked(bool(false));
+                menu.getItem(i).setChecked(false);
         }
         
         if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
             const NativeR = requireClass("android.R");
-            var states = array([array([NativeR.attr.state_checked]), array([])]);
+            var states = array([array([NativeR.attr.state_checked], "int"), array([])]);
     
             const ColorStateList = requireClass("android.content.res.ColorStateList");
-            var colors = array([tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject]);
+            var colors = array([tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
             bottomNavigationView.setItemTextColor(statelist);
             bottomNavigationView.setItemIconTintList(statelist);
@@ -623,7 +623,7 @@ function Page(params) {
                     // navigator.switchCounter = 0;
                 }
                 
-                var index = int(item.getItemId());
+                var index = item.getItemId();
                 self.parentTab.currentIndex = index;
                 var fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index]);
                 fragment.selectedIndex = index;
@@ -640,14 +640,14 @@ function Page(params) {
     }
     
     function disableShiftMode() {
-        var menuView = bottomNavigationView.getChildAt(int(0));
-        var shiftingMode = menuView.getClass().getDeclaredField(string("mShiftingMode"));
-        shiftingMode.setAccessible(bool(true));
-        shiftingMode.setBoolean(menuView, bool(false));
-        shiftingMode.setAccessible(bool(false));
-        for (var i = 0; i < int(menuView.getChildCount()); i++) {
-            var item = menuView.getChildAt(int(i));
-            item.setShiftingMode(bool(false));
+        var menuView = bottomNavigationView.getChildAt(0);
+        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+        shiftingMode.setAccessible(true);
+        shiftingMode.setBoolean(menuView, false);
+        shiftingMode.setAccessible(false);
+        for (var i = 0; i < menuView.getChildCount(); i++) {
+            var item = menuView.getChildAt(i);
+            item.setShiftingMode(false);
             var checked = (item.getItemData()).isChecked();
             item.setChecked(checked);
         }
@@ -710,14 +710,14 @@ function Page(params) {
                 item.setValues();
             }
             if(itemView) { 
-                itemView.setBackgroundColor(int(Color.TRANSPARENT.nativeObject));
+                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
                 itemView.setPadding(
-                    int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal),
-                    int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                 );
-                item.menuItem = optionsMenu.add(int(0), int(itemID++), int(0), string(item.title));
-                item.menuItem.setEnabled(bool(item.enabled));
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
                 item.menuItem.setActionView(itemView);
             }
@@ -746,7 +746,7 @@ function Page(params) {
     self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function(view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if(int(keyCode) === 4 && (int(keyEvent.getAction()) === 0)) {
+            if(keyCode === 4 && (keyEvent.getAction() === 0)) {
                    typeof self.android.onBackButtonPressed === "function" && 
                             self.android.onBackButtonPressed();
             }
@@ -756,18 +756,18 @@ function Page(params) {
     
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus){
-            if (bool(hasFocus))  {
+            if (hasFocus)  {
                 var focusedView = activity.getCurrentFocus();
                 var windowToken = focusedView.getWindowToken();
                 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
-                inputMethodManager.hideSoftInputFromWindow(windowToken, int(0));
+                inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
             }
         }
     }));
 
-    self.layout.nativeObject.setFocusable(bool(true));
-    self.layout.nativeObject.setFocusableInTouchMode(bool(true));
+    self.layout.nativeObject.setFocusable(true);
+    self.layout.nativeObject.setFocusableInTouchMode(true);
 
     // Default values
     if (!params.skipDefaults) {

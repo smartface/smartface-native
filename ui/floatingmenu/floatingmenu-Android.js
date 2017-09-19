@@ -26,15 +26,15 @@ function FloatingMenu(params) {
             return _items.length;
         },
         getViews: function(context, position) {
-            position = reposition(int(position), _items.length);
+            position = reposition(position, _items.length);
             
             var item = new NativeMenuItem();
             _items[position].icon  && (item.iconDrawable = _items[position].icon.nativeObject);
             if (_items[position].title) {
-                var spannedTitle = new NativeSpannableString(string(_items[position].title));
+                var spannedTitle = new NativeSpannableString(_items[position].title);
                 var foregroundColor = new NativeForegroundColor(_items[position].titleColor.nativeObject);
                 var titleLength = spannedTitle.length();
-                spannedTitle.setSpan(foregroundColor, int(0), titleLength, int(17)); // 17 means SPAN_INCLUSIVE_EXCLUSIVE
+                spannedTitle.setSpan(foregroundColor, 0, titleLength, 17); // 17 means SPAN_INCLUSIVE_EXCLUSIVE
 
                 var labelView = new NativeTextView(AndroidConfig.activity);
                 labelView.setText(spannedTitle);
@@ -43,20 +43,20 @@ function FloatingMenu(params) {
             return item;
         },
         getBackgroundColour: function(position) {
-            position = reposition(int(position), _items.length);
+            position = reposition(position, _items.length);
 
             var color = Color.GRAY;
             (_items[position].color) && (color = _items[position].color);
             return color.nativeObject;
         },
         onMenuItemClick: function(position) {
-            position = reposition(int(position), _items.length);
+            position = reposition(position, _items.length);
 
             _items[position].onClick && _items[position].onClick();
-            return bool(true);
+            return true;
         },
         rotateFab: function() {
-            return bool(_items.length > 0 && _rotateEnabled);
+            return _items.length > 0 && _rotateEnabled;
         }
     }, null);
     
@@ -84,10 +84,10 @@ function FloatingMenu(params) {
         
         this.yogaNode = new NativeYogaNode();
         this.yogaNode.setPositionType(NativeYogaPositionType.ABSOLUTE);
-        this.yogaNode.setPosition(NativeYogaEdge.TOP, float(0));
-        this.yogaNode.setPosition(NativeYogaEdge.LEFT, float(0));
-        this.yogaNode.setPosition(NativeYogaEdge.RIGHT, float(0));
-        this.yogaNode.setPosition(NativeYogaEdge.BOTTOM, float(0));
+        this.yogaNode.setPosition(NativeYogaEdge.TOP, 0);
+        this.yogaNode.setPosition(NativeYogaEdge.LEFT, 0);
+        this.yogaNode.setPosition(NativeYogaEdge.RIGHT, 0);
+        this.yogaNode.setPosition(NativeYogaEdge.BOTTOM, 0);
 
         this.nativeObject = new NativeFloatingButton(AndroidConfig.activity);
         this.nativeObject.setMenuAdapter(menuAdapter);
@@ -173,13 +173,13 @@ function FloatingMenu(params) {
         },
         'visible': {
             get: function() {
-                return (int(nativeObject.getVisibility()) === 0); // View.VISIBLE
+                return (nativeObject.getVisibility() === 0); // View.VISIBLE
             },
             set: function(visibility) {
                 if (visibility === true) {
-                    nativeObject.setVisibility(int(0)); // View.VISIBLE
+                    nativeObject.setVisibility(0); // View.VISIBLE
                 } else {
-                    nativeObject.setVisibility(int(4)); // View.INVISIBLE    
+                    nativeObject.setVisibility(4); // View.INVISIBLE    
                 }
             }
         }

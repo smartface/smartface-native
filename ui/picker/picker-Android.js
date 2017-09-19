@@ -34,10 +34,10 @@ const Picker = extend(View)(
             },
             'currentIndex': {
                 get: function() {
-                    return int(self.nativeObject.getValue());
+                    return self.nativeObject.getValue();
                 },
                 set: function(currentIndex) {
-                    self.nativeObject.setValue(int(currentIndex));
+                    self.nativeObject.setValue(currentIndex);
                 },
                 enumerable: true
             },
@@ -91,13 +91,13 @@ const Picker = extend(View)(
         });
         Object.defineProperty(this.android, 'enabled', {
             get: function() {
-                return bool(self.nativeObject.isEnabled());  
+                return self.nativeObject.isEnabled();  
             }, 
             set: function(value) {
                 if(!TypeUtil.isBoolean(value)){
                     throw new TypeError("Value should be boolean for enabled.");
                 }
-                self.nativeObject.setEnabled(bool(value));
+                self.nativeObject.setEnabled(value);
             },
             enumerable: true
         });
@@ -125,16 +125,16 @@ const Picker = extend(View)(
 function setNumberPicker(nativeObject, _items) {
     if(_items.length > 0) {
         nativeObject.setDisplayedValues(null);
-        nativeObject.setMaxValue(int(_items.length-1));
-        nativeObject.setMinValue(int(0));
+        nativeObject.setMaxValue(_items.length-1);
+        nativeObject.setMinValue(0);
         nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
         var items = [];
         for(var item in _items) {
-            items.push(string(item));
+            items.push(item);
         }
         
         nativeObject.setDisplayedValues(array(items));
-        nativeObject.setWrapSelectorWheel(bool(false));
+        nativeObject.setWrapSelectorWheel(false);
     }
 }
 
@@ -145,9 +145,9 @@ function addViewToLayout(nativeObject) {
         parent.removeView(nativeObject);
     }
     layout.addView(nativeObject, new NativeFrameLayout.LayoutParams(
-        int(-1) , // FrameLayout.LayoutParams.MATCH_PARENT
-        int(-2) , // FrameLayout.LayoutParams.WRAP_CONTENT
-        int(17))); // Gravity.CENTER
+        -1 , // FrameLayout.LayoutParams.MATCH_PARENT
+        -2 , // FrameLayout.LayoutParams.WRAP_CONTENT
+        17)); // Gravity.CENTER
     return layout;
 }
 

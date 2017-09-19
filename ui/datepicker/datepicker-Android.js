@@ -10,9 +10,9 @@ function DatePicker(params) {
     if(!this.nativeObject){
         this.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
             onDateSet: function(datePicker, year, month, day) {
-                _onDateSelected && _onDateSelected(new Date(int(year), int(month), int(day)));
+                _onDateSelected && _onDateSelected(new Date(year, month, day));
             }
-        }), int(today.getFullYear()), int(today.getMonth()), int(today.getDate()));
+        }), today.getFullYear(), today.getMonth(), today.getDate());
     }
     
     var _onDateSelected;
@@ -56,7 +56,7 @@ function DatePicker(params) {
         'setDate': {
             value: function(date) {
                 if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
-                    this.nativeObject.updateDate(int(date.getFullYear()), int(date.getMonth()), int(date.getDate()));
+                    this.nativeObject.updateDate(date.getFullYear(), date.getMonth(), date.getDate());
                 }
             }
         },

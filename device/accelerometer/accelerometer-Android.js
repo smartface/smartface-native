@@ -18,7 +18,7 @@ Object.defineProperties(Accelerometer, {
             _sensorListener = NativeSensorEventListener.implement({
                 onAccuracyChanged: function(sensor, accuracy) {},
                 onSensorChanged: function(event) {
-                    var eventData = array(event.values);
+                    var eventData = event.values;
                     _callback && _callback({
                         x: float(eventData[0]),
                         y: float(eventData[1]),

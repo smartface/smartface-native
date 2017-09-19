@@ -53,11 +53,11 @@ function HeaderBarItem(params) {
                 _title = value;
                 if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
-                    this.nativeObject.setText(string(_title));
+                    this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                     this.nativeObject.setPadding(
-                        int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal), 
-                        int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                     );
                     
                     this.color = _color;
@@ -66,7 +66,7 @@ function HeaderBarItem(params) {
                         this.menuItem.setActionView(this.nativeObject);
                 }
                 else if(!this.imageButton) {
-                    this.nativeObject.setText(string(_title));
+                    this.nativeObject.setText(_title);
                     this.color = _color;
                 }
             },
@@ -91,8 +91,8 @@ function HeaderBarItem(params) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                         this.nativeObject.setPadding(
-                            int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal), 
-                            int(HeaderBarItemPadding.vertical), int(HeaderBarItemPadding.horizontal)
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
+                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
                     
                         this.imageButton = true;
@@ -140,7 +140,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 _enabled = !!value;
                 if (this.nativeObject) {
-                    this.nativeObject.setEnabled(bool(_enabled));
+                    this.nativeObject.setEnabled(_enabled);
                 }
             },
             enumerable: true

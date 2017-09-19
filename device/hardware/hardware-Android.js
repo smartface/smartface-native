@@ -14,7 +14,7 @@ Hardware.ios.microphone.requestRecordPermission = function(){};
 Object.defineProperty(Hardware.android, 'IMEI', {
     get: function () {
         var telephonyManager = AndroidConfig.getSystemService(TELEPHONY_SERVICE, TELEPHONY_MANAGER);
-        return string(telephonyManager.getDeviceId());
+        return telephonyManager.getDeviceId();
     },
     configurable: false
 });
@@ -24,28 +24,28 @@ Object.defineProperty(Hardware, 'UID', {
         var activity = AndroidConfig.activity;
         var contentResolver = activity.getContentResolver();
 
-        return string(NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID));
+        return NativeSettings.Secure.getString(contentResolver, NativeSettings.Secure.ANDROID_ID);
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware, 'brandName', {
     get: function () {
-        return string(NativeBuild.BRAND);
+        return NativeBuild.BRAND;
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware, 'brandModel', {
     get: function () {
-        return string(NativeBuild.MODEL);
+        return NativeBuild.MODEL;
     },
     configurable: false
 });
 
 Object.defineProperty(Hardware.android, 'vendorID', {
     get: function () {
-        return string(NativeBuild.SERIAL);
+        return NativeBuild.SERIAL;
     },
     configurable: false
 });

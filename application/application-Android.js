@@ -39,8 +39,8 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     },
     onRequestPermissionsResult: function(requestCode, permission, grantResult){
         var permissionResults = {};
-        permissionResults['requestCode'] = int(requestCode);
-        permissionResults['result'] = (int(grantResult) === 0);
+        permissionResults['requestCode'] = requestCode;
+        permissionResults['result'] = (grantResult === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
     }
 });
@@ -54,7 +54,7 @@ Object.defineProperties(ApplicationWrapper, {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
             var UID = AndroidConfig.activity.getApplicationInfo().uid;
-            return long(NativeTrafficStats.getUidRxBytes(UID)) / (1024 * 1024);
+            return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
     },
@@ -62,7 +62,7 @@ Object.defineProperties(ApplicationWrapper, {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
             var UID = AndroidConfig.activity.getApplicationInfo().uid;
-            return long(NativeTrafficStats.getUidTxBytes(UID)) / (1024 * 1024);
+            return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
     },
@@ -146,7 +146,7 @@ Object.defineProperties(ApplicationWrapper, {
             
             var packageManager = AndroidConfig.activity.getPackageManager();
             var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if(int(activitiesCanHandle.size()) > 0){
+            if(activitiesCanHandle.size() > 0){
                 if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title); 
@@ -281,7 +281,7 @@ Object.defineProperties(ApplicationWrapper, {
 
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
-        value: string(AndroidConfig.activity.getPackageName()),
+        value: AndroidConfig.activity.getPackageName(),
         enumerable: true
     },
     'checkPermission':{
@@ -293,12 +293,12 @@ Object.defineProperties(ApplicationWrapper.android, {
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
-                return int(NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission)) === 0;
+                return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission) === 0;
             }
             else{
                 var packageManager = AndroidConfig.activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
-                return int(packageManager.checkPermission(permission, ApplicationWrapper.android.packageName)) == 0;
+                return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
             }
             
         },
@@ -328,7 +328,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             if(!TypeUtil.isString(permission)){
                 throw new Error('Permission must be Application.Permission type');
             } 
-            return bool(((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && bool(AndroidConfig.activity.shouldShowRequestPermissionRationale(permission))));
+            return ((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
         },
         enumerable: true
     },

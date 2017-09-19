@@ -1,4 +1,4 @@
-/*globals requireClass,string*/
+/*globals requireClass*/
 const extend            = require('js-base/core/extend');
 const AndroidConfig     = require("../../util/Android/androidconfig");
 const View              = require('../view');

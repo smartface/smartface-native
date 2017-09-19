@@ -53,7 +53,7 @@ const ListView = extend(View)(
                 if(_onRowBind){
                     // @todo make performance improvements
                     var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
-                    var rowPosition = int(position);
+                    var rowPosition = position;
                     _onRowBind(_holderViewLayout, rowPosition);
                     if (typeof _onRowSelected === "function") {
                         nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
@@ -66,7 +66,7 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
-                return int(_itemCount);
+                return _itemCount;
             }
         },null);
 
@@ -104,7 +104,7 @@ const ListView = extend(View)(
             },
             'verticalScrollBarEnabled': {
                 get: function() {
-                    return bool(this.nativeInner.isVerticalScrollBarEnabled());
+                    return this.nativeInner.isVerticalScrollBarEnabled();
                 },
                 set: function(verticalScrollBarEnabled) {
                     if(TypeUtil.isBoolean(verticalScrollBarEnabled)){
@@ -115,7 +115,7 @@ const ListView = extend(View)(
             },
             'refreshEnabled': {
                 get: function() {
-                    return bool(this.nativeObject.isEnabled());
+                    return this.nativeObject.isEnabled();
                 },
                 set: function(refreshEnabled) {
                     if(TypeUtil.isBoolean(refreshEnabled)){
@@ -127,13 +127,13 @@ const ListView = extend(View)(
             //methods
             'getLastVisibleIndex': {
                 value: function(colors) {
-                    return int(this.nativeInner.getLayoutManager().findLastVisibleItemPosition());
+                    return this.nativeInner.getLayoutManager().findLastVisibleItemPosition();
                 },
                 enumerable: true
             },
             'getFirstVisibleIndex': {
                 value: function() {
-                    return int(this.nativeInner.getLayoutManager().findFirstVisibleItemPosition());
+                    return this.nativeInner.getLayoutManager().findFirstVisibleItemPosition();
                 },
                 enumerable: true
             },
@@ -154,13 +154,13 @@ const ListView = extend(View)(
                 value: function(colors) {
                     var nativeColors = [];
                     colors.forEach(function(element){
-                        nativeColors.push(int(element.nativeObject));
+                        nativeColors.push(element.nativeObject);
                     })
                     /** @todo
                      * Error: Method setColorSchemeColors with 1 parameters couldn\'t found.
                      * Invoking method with varargs parameter maybe caused this. 
                     */
-                    this.nativeObject.setColorSchemeColors(array(nativeColors));
+                    this.nativeObject.setColorSchemeColors(array(nativeColors, "int"));
                 },
                 enumerable: true
             },

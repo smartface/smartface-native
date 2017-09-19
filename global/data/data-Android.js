@@ -5,13 +5,13 @@ function Data(){}
 
 var activity = AndroidConfig.activity;
 // Context.MODE_PRIVATE
-var jsSharedPreferences = activity.getSharedPreferences(string("JS"),int(0));
+var jsSharedPreferences = activity.getSharedPreferences("JS", 0);
 
 Object.defineProperties(Data, {
     'getStringVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
-                return string(jsSharedPreferences.getString(string(key), null));
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
+                return jsSharedPreferences.getString(key, null);
             }
             return null;
         },
@@ -19,8 +19,8 @@ Object.defineProperties(Data, {
     },
     'getBooleanVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
-                return bool(jsSharedPreferences.getBoolean(string(key), bool(false)));
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
+                return jsSharedPreferences.getBoolean(key, false);
             }
             return null;
         },
@@ -28,8 +28,8 @@ Object.defineProperties(Data, {
     },
     'getIntVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
-                return int(jsSharedPreferences.getInt(string(key), int(-1)));
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+                return jsSharedPreferences.getInt(key, -1);
             }
             return null;
         },
@@ -37,8 +37,8 @@ Object.defineProperties(Data, {
     },
     'getFloatVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
-                return float(jsSharedPreferences.getFloat(string(key), float(-1)));
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+                return jsSharedPreferences.getFloat(key, -1);
             }
             return null;
         },
@@ -46,8 +46,8 @@ Object.defineProperties(Data, {
     },
     'getLongVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  bool(jsSharedPreferences.contains(string(key)))){
-                return long(jsSharedPreferences.getLong(string(key), long(-1)));
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+                return jsSharedPreferences.getLong(key, -1);
             }
             return null;
         },
@@ -56,7 +56,7 @@ Object.defineProperties(Data, {
     'setStringVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isString(value)){
-                jsSharedPreferences.edit().putString(string(key), string(value)).commit();
+                jsSharedPreferences.edit().putString(key, value).commit();
             }
         },
         enumerable: true
@@ -64,7 +64,7 @@ Object.defineProperties(Data, {
     'setBooleanVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isBoolean(value)){
-                jsSharedPreferences.edit().putBoolean(string(key), bool(value)).commit();
+                jsSharedPreferences.edit().putBoolean(key, value).commit();
             }
         },
         enumerable: true
@@ -72,7 +72,7 @@ Object.defineProperties(Data, {
     'setIntVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
-                jsSharedPreferences.edit().putInt(string(key), int(value)).commit();
+                jsSharedPreferences.edit().putInt(key, value).commit();
             }
         },
         enumerable: true
@@ -80,7 +80,7 @@ Object.defineProperties(Data, {
     'setFloatVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
-                jsSharedPreferences.edit().putFloat(string(key), float(value)).commit();
+                jsSharedPreferences.edit().putFloat(key, value).commit();
             }
         },
         enumerable: true
@@ -88,7 +88,7 @@ Object.defineProperties(Data, {
     'setLongVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
-                jsSharedPreferences.edit().putLong(string(key), long(value)).commit();
+                jsSharedPreferences.edit().putLong(key, long(value)).commit();
             }
         },
         enumerable: true
@@ -96,7 +96,7 @@ Object.defineProperties(Data, {
     'containsVariable': {
         value: function(key){
             if(TypeUtil.isString(key)){
-                return bool(jsSharedPreferences.contains(string(key)));
+                return jsSharedPreferences.contains(key);
             }
             return false;
         },
@@ -105,7 +105,7 @@ Object.defineProperties(Data, {
     'removeVariable': {
         value: function(key){
             if(TypeUtil.isString(key)){
-                jsSharedPreferences.edit().remove(string(key)).commit();
+                jsSharedPreferences.edit().remove(key).commit();
             }
         },
         enumerable: true

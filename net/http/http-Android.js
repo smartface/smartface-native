@@ -153,23 +153,23 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
     var callback = OkHttpCallback.implement({
         onFailure: function(call, e) {
             if(e)
-                var message = string(e.getMessage());
+                var message = e.getMessage();
             params && params.onError && runOnUiThread(params.onError, {message: message});
         },
         onResponse: function(call, response) {
-            var statusCode = int(response.code());
+            var statusCode = response.code();
             var responseHeaders = getResponseHeaders(response.headers());
             if(response.body()) {
                 var bytes = [];
-                var nativeBytes = array(response.body().bytes());
+                var nativeBytes = response.body().bytes();
                 for(var i = 0; i < nativeBytes.length; i++) {
                     let currentByte = nativeBytes[i];
-                    bytes.push(byte(currentByte));
+                    bytes.push(currentByte);
                 }
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
-            if(bool(response.isSuccessful())) {
+            if(response.isSuccessful()) {
                 if(params && params.onLoad) {
                     if(isRunOnBackgroundThread) {
                         params.onLoad({ 
@@ -190,7 +190,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                     params.onError, {
                         statusCode: statusCode,
                         headers: responseHeaders,
-                        message: string(response.message()),
+                        message: response.message(),
                         body: responseBody
                     });
             }
@@ -241,7 +241,7 @@ function createRequest(params, isMultipart) {
 
 function createRequestBody(body, contentType, isMultipart) {
     if(!body) {
-        return RequestBody.create(null, array([], "java.lang.Byte"));
+        return RequestBody.create(null, array([], "byte"));
     }
     if(!isMultipart || body instanceof Blob) {
         var mediaType = null;
@@ -249,9 +249,9 @@ function createRequestBody(body, contentType, isMultipart) {
              mediaType = MediaType.parse(contentType);
         var content = null;
         if(body instanceof Blob)
-            content = array(body.parts);
+            content = array(body.parts, "byte");
         else if(typeof(body) === "string")
-            content = string(body);
+            content = body;
         return RequestBody.create(mediaType, content);
     }
     else {
@@ -270,7 +270,7 @@ function createMultipartBody(bodies) {
         if(bodies[i].contentType)
             var mediaType = MediaType.parse(bodies[i].contentType);
         if(bodies[i].value)
-            var body = RequestBody.create(mediaType, array(bodies[i].value.parts));
+            var body = RequestBody.create(mediaType, array(bodies[i].value.parts, "byte"));
         if(!body) {
             throw new Error("Upload method must include request body.");
         }
@@ -284,8 +284,8 @@ function createMultipartBody(bodies) {
 
 function getResponseHeaders(headers) {
     var responseHeaders = {};
-    for(var i = 0; i < int(headers.size()); i++) {
-        responseHeaders[string(headers.name(i))] = string(headers.value(i));
+    for(var i = 0; i < headers.size(); i++) {
+        responseHeaders[headers.name(i)] = headers.value(i);
     }
     return responseHeaders;
 }

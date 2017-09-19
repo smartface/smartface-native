@@ -90,7 +90,7 @@ Object.defineProperties(System, {
         get: function() {
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
                 var fingerprintManager = AndroidConfig.getSystemService(FINGERPRINT_SERVICE, FINGERPRINT_MANAGER);
-                return fingerprintManager && bool(fingerprintManager.isHardwareDetected()) && bool(fingerprintManager.hasEnrolledFingerprints());
+                return fingerprintManager && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
             }
             return false;
         },
@@ -149,7 +149,7 @@ Object.defineProperties(System.android, {
     },
     'menuKeyAvaliable': {
         get: function() {
-            return bool(NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey());
+            return NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey();
         },
         enumerable: true
     },

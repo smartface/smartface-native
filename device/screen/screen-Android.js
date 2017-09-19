@@ -48,7 +48,7 @@ Object.defineProperty(Screen, 'width', {
 Object.defineProperty(Screen, 'touchSupported', {
     get: function () {
         var packageManager = AndroidConfig.activity.getPackageManager();
-        return bool(packageManager.hasSystemFeature("android.hardware.touchscreen"));
+        return packageManager.hasSystemFeature("android.hardware.touchscreen");
     },
     configurable: false
 });

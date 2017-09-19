@@ -76,10 +76,10 @@ const TextBox = extend(Label)(
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
-                    return string(self.nativeObject.getHint());
+                    return self.nativeObject.getHint().toString();
                 },
                 set: function(hint) {
-                    self.nativeObject.setHint(string(hint));
+                    self.nativeObject.setHint(hint);
                 },
                 enumerable: true,
                 configurable: true
@@ -121,7 +121,7 @@ const TextBox = extend(Label)(
                 },
                 set: function(actionKeyType) {
                     _actionKeyType = actionKeyType;
-                    self.nativeObject.setImeOptions(int(NativeActionKeyType[_actionKeyType]));
+                    self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
                 },
                 enumerable: true,
                 configurable: true
@@ -143,7 +143,7 @@ const TextBox = extend(Label)(
                     this.nativeObject.requestFocus();
                     // Due to the requirements we should show keyboard when focus requested.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(int(SHOW_FORCED), int(HIDE_IMPLICIT_ONLY));
+                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
                 },
                 enumerable: true
             },
@@ -153,7 +153,7 @@ const TextBox = extend(Label)(
                     // Due to the requirements we should hide keyboard when focus cleared.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
                     var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, int(0));
+                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
                 },
                 enumerable: true
             },
@@ -179,7 +179,7 @@ const TextBox = extend(Label)(
                                     var insertedText = (_oldText.length >= this.text.length)? "": this.text.replace(_oldText,'');
                                     if(_onTextChanged){
                                         _onTextChanged({
-                                            location: Math.abs(int(start)+int(before)),
+                                            location: Math.abs(start+before),
                                             insertedText: insertedText
                                         });
                                     }
@@ -208,7 +208,7 @@ const TextBox = extend(Label)(
                                 }
                                 else {
                                     _onEditEnds && _onEditEnds();
-                                    this.nativeObject.setSelection(int(0),int(0));
+                                    this.nativeObject.setSelection(0,0);
                                 }
                             }.bind(this)
                         }));
@@ -231,7 +231,7 @@ const TextBox = extend(Label)(
                                 }
                                 else {
                                     _onEditEnds && _onEditEnds();
-                                    this.nativeObject.setSelection(int(0),int(0));
+                                    this.nativeObject.setSelection(0,0);
                                 }
                             }.bind(this)
                         }));
@@ -252,14 +252,14 @@ const TextBox = extend(Label)(
             },
             'text': {
                 get: function() {
-                    return string(self.nativeObject.getText());
+                    return self.nativeObject.getText().toString();
                 },
                 set: function(text) {
                     _hasEventsLocked = true;
                     if (text === null || text === undefined) text = "";
 
-                    self.nativeObject.setText(string("" + text));
-                    self.nativeObject.setSelection(int(text.length));
+                    self.nativeObject.setText("" + text);
+                    self.nativeObject.setSelection(text.length);
 
                     _hasEventsLocked = false;
                 },
@@ -276,7 +276,7 @@ const TextBox = extend(Label)(
             },
             set: function(hintTextColor) {
                 _hintTextColor = hintTextColor;
-                self.nativeObject.setHintTextColor(int(hintTextColor.nativeObject));
+                self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
             },
             enumerable: true
         });
@@ -287,7 +287,7 @@ const TextBox = extend(Label)(
         if(!this.isNotSetDefaults){
             // Don't use self.multiline = false due to AND-2725 bug.
             // setMovementMethod in label-Android.js file removes the textbox cursor. 
-            self.nativeObject.setSingleLine(bool(true));
+            self.nativeObject.setSingleLine(true);
             
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
@@ -296,7 +296,7 @@ const TextBox = extend(Label)(
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event){
-                    if (int(actionId) === NativeActionKeyType[_actionKeyType])  {
+                    if (actionId === NativeActionKeyType[_actionKeyType])  {
                         _onActionButtonPress && _onActionButtonPress({actionKeyType: _actionKeyType});
                     }
                     return false;
@@ -306,7 +306,7 @@ const TextBox = extend(Label)(
             self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
                 onKey: function( view, keyCode, keyEvent) {
                     // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if(int(keyCode) === 4 && int(keyEvent.getAction()) === 1) {
+                    if(keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
                     }
                     return false;
@@ -320,11 +320,11 @@ const TextBox = extend(Label)(
             onTouch: function(view, event) {
                 if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
                     // MotionEvent.ACTION_UP
-                    if (int(event.getAction()) === 1) {
+                    if (event.getAction() === 1) {
                         self.onTouchEnded && self.onTouchEnded();
                     } 
                     // MotionEvent.ACTION_DOWN
-                    else if(int(event.getAction()) === 0) {
+                    else if(event.getAction() === 0) {
                         self.onTouch && self.onTouch();
                     }
                 }
@@ -342,12 +342,13 @@ const TextBox = extend(Label)(
 );
 
 function setKeyboardType(self){
-    self.nativeObject.setInputType(int(NativeKeyboardType[self.keyboardType]));
+    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
     
     if(self.isPassword){
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
         var passwordMethod = new NativePasswordTransformationMethod();
         self.nativeObject.setTransformationMethod(passwordMethod);
+        release(passwordMethod);
     }
     else{
         self.nativeObject.setTransformationMethod(null);

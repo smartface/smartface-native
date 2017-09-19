@@ -21,18 +21,18 @@ const SwipeView = extend(View)(
             self.nativeObject.setAdapter(pagerAdapter);
             self.nativeObject.addOnPageChangeListener(NativeOnPageChangeListener.implement({
                 onPageScrollStateChanged: function(state) {
-                    if (int(state) === 0) { // SCROLL_STATE_IDLE
+                    if (state === 0) { // SCROLL_STATE_IDLE
                         _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
-                    } else if (int(state) === 1) { // SCROLL_STATE_DRAGGING
+                    } else if (state === 1) { // SCROLL_STATE_DRAGGING
                         _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.DRAGGING);
                     }
                 },
                 onPageSelected: function(position) {
-                    _callbackOnPageSelected && _callbackOnPageSelected(int(position));
+                    _callbackOnPageSelected && _callbackOnPageSelected(position);
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
-                    var intPosition = int(position);
-                    if (_lastIndex !== intPosition && float(positionOffset) === 0 && int(positionOffsetPixels) === 0) {
+                    var intPosition = position;
+                    if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
                         _lastIndex = intPosition;
                         _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
                     }
@@ -96,13 +96,13 @@ const SwipeView = extend(View)(
             },
             "currentIndex" : {
                 get: function() {
-                    return int(self.nativeObject.getCurrentItem());
+                    return self.nativeObject.getCurrentItem();
                 }
             },
             "swipeToIndex": {
                 value: function(index, animated) {
                     animated = (animated)? true : false; // not to pass null to native method
-                    self.nativeObject.setCurrentItem(int(index), bool(animated));
+                    self.nativeObject.setCurrentItem(index, animated);
                 }
             }
         });

@@ -53,10 +53,10 @@ const Switch = extend(View)(
             },
             'toggle': {
                 get: function() {
-                    return bool(this.nativeObject.isChecked());
+                    return this.nativeObject.isChecked();
                 },
                 set: function(toggle) {
-                    this.nativeObject.setChecked(bool(toggle));
+                    this.nativeObject.setChecked(toggle);
                 },
                 enumerable: true
             },
@@ -71,7 +71,7 @@ const Switch = extend(View)(
                             onCheckedChanged: function(buttonView, isChecked){
                                 setThumbColor(self);
                                 setTrackColor(self);
-                                onToggleChangedCallback && onToggleChangedCallback(bool(isChecked));
+                                onToggleChangedCallback && onToggleChangedCallback(isChecked);
                             }
                         }));
                         this.__didSetOnCheckedChangeListener = true;

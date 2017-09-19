@@ -29,7 +29,7 @@ Object.defineProperties(Network, {
     },
     'SMSEnabled': {
         get: function() {
-            return int(getTelephonyManager().getDataState()) === int(NativeTelephonyManager.DATA_CONNECTED);
+            return getTelephonyManager().getDataState() === NativeTelephonyManager.DATA_CONNECTED;
         },
         configurable: false
     },
@@ -56,9 +56,9 @@ Object.defineProperties(Network, {
             if (activeInternet === null) {
                 return Network.ConnectionType.None;
             } else {
-                if (int(activeInternet.getType()) === int(NativeConnectivityManager.TYPE_WIFI)) {
+                if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
                     return Network.ConnectionType.WIFI;
-                } else if (int(activeInternet.getType()) === int(NativeConnectivityManager.TYPE_MOBILE)) {
+                } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
                     return Network.ConnectionType.Mobile;
                 } else {
                     return Network.ConnectionType.None;
@@ -72,7 +72,7 @@ Object.defineProperties(Network, {
             if (Network.connectionType === Network.ConnectionType.WIFI) {
                 var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
-                var ipAddress = int(wifiInfo.getIpAddress());
+                var ipAddress = wifiInfo.getIpAddress();
                 return (ipAddress & 0xff) 
                     + "." + ((ipAddress >> 8)  & 0xff)
                     + "." + ((ipAddress >> 16) & 0xff)

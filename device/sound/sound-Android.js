@@ -23,7 +23,7 @@ function Sound(params) {
     
     Object.defineProperty(this, 'isLooping', {
         get: function() {
-            return bool(this.nativeObject.isLooping());
+            return this.nativeObject.isLooping();
         }, 
         set: function(isLooping) {
             this.nativeObject.setLooping(isLooping);
@@ -33,7 +33,7 @@ function Sound(params) {
     
     Object.defineProperty(this, 'isPlaying', {
         get: function() {
-            return bool(this.nativeObject.isPlaying());
+            return this.nativeObject.isPlaying();
         },
         enumerable: true
     });

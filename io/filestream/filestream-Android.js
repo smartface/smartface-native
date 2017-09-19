@@ -36,12 +36,12 @@ function FileStream(params) {
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
         
         if(_contentMode === FileStream.ContentMode.TEXT){
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,bool(true));
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,true);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else{
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, bool(true));
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
@@ -65,7 +65,7 @@ function FileStream(params) {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             
-            var inputStream = AndroidConfig.activity.getResources().openRawResource(int(fileObject.drawableResourceId));
+            var inputStream = AndroidConfig.activity.getResources().openRawResource(fileObject.drawableResourceId);
             if(_contentMode === FileStream.ContentMode.TEXT){
                 var inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
@@ -100,12 +100,12 @@ function FileStream(params) {
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
         
         if(_contentMode === FileStream.ContentMode.TEXT){
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, bool(false));
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else{
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, bool(true));
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
@@ -160,7 +160,7 @@ function FileStream(params) {
                 }
                 else{
                     const NativeString = requireClass("java.lang.String");
-                    return new Blob(array(new NativeString(string(fileContent)).getBytes()), {type:"file"});
+                    return new Blob(new NativeString(fileContent).getBytes(), {type:"file"});
                 }
             },
             enumerable: true
@@ -171,18 +171,18 @@ function FileStream(params) {
                     throw new Error("FileStream already closed or streamType is not READ");
                 }
                 if(_contentMode === FileStream.ContentMode.TEXT){
-                    var readLine = string(this.nativeObject.readLine());
+                    var readLine = this.nativeObject.readLine();
                     var fileContent = "";
                     while (readLine != null) {
                         fileContent += readLine + '\n';
-                        readLine = string(this.nativeObject.readLine());
+                        readLine = this.nativeObject.readLine();
                     }
                     return fileContent;
                 }
                 else{
                     var input = null;
                     var bytes = [];
-                    while((input = int(this.nativeObject.read())) !== -1){
+                    while((input = this.nativeObject.read()) !== -1){
                         bytes.push(input);
                     }
                     return new Blob(bytes, {type:"file"});
@@ -199,13 +199,13 @@ function FileStream(params) {
                     if(!(data instanceof Blob)){
                         throw new Error("Parameter must be Blob")
                     }
-                    this.nativeObject.write(array(data.parts));
+                    this.nativeObject.write(array(data.parts, "byte"));
                 }
                 else{
                     if(!TypeUtil.isString(data)){
                         throw new Error("Parameter must be string")
                     }
-                    this.nativeObject.write(string(data));
+                    this.nativeObject.write(data);
                 }
             },
             enumerable: true

@@ -117,7 +117,7 @@ Multimedia.android = {};
 
 Multimedia.android.getAllGalleryItems = function(params) {
     try {
-        var projection = array([ int(NativeMediaStore.MediaColumns.DATA) ]);
+        var projection = array([ NativeMediaStore.MediaColumns.DATA ], "int");
         var result = {};
         var uri;
         if(params && params.type === Multimedia.Type.VIDEO) {
@@ -220,8 +220,8 @@ function getRealPathFromID(uri, action) {
                     query(contentUri, projection, selection, [ id ], null);
     var filePath = null;
     if(cursor) {
-        var columnIndex = int(cursor.getColumnIndex(projection[0]));
-        if (bool(cursor.moveToFirst())) {
+        var columnIndex = cursor.getColumnIndex(projection[0]);
+        if (cursor.moveToFirst()) {
             filePath = string(cursor.getString(columnIndex));
         }
 
@@ -288,8 +288,8 @@ function getAllMediaFromUri(params) {
     var cursor = contentResolver.query(params.uri, params.projection, null, null, null);
     var files = [];
     if (cursor) {
-        while (bool(cursor.moveToNext())) {
-            var path = string(cursor.getString(0));
+        while (cursor.moveToNext()) {
+            var path = cursor.getString(0);
             if(params.type === Multimedia.Type.IMAGE) {
                 var image = new Image.createFromFile(path);
                 files.push(image);

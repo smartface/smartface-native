@@ -29,7 +29,7 @@ const Pages = function(params) {
         'popTo': {
             value: function(tag) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(int(fragmentManager.getBackStackEntryCount()) > 0){
+                if(fragmentManager.getBackStackEntryCount() > 0){
                     return fragmentManager.popBackStackImmediate(tag, 0);
                 }
                 return false;
@@ -121,14 +121,14 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
     if(_sliderDrawer){
         if(isLocked){
             // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-            mDrawerLayout.setDrawerLockMode(int(1));
+            mDrawerLayout.setDrawerLockMode(1);
             if(Pages.isSliderDrawerOpen){
                 Pages.hideSliderDrawer();
             }
         }
         else{
             // DrawerLayout.LOCK_MODE_UNLOCKED
-            mDrawerLayout.setDrawerLockMode(int(0));
+            mDrawerLayout.setDrawerLockMode(0);
         }
     }
 }
@@ -138,11 +138,11 @@ function isSliderDrawerOpen(_sliderDrawer) {
         const SliderDrawer = require('../sliderdrawer');
         if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
-            return bool(mDrawerLayout.isDrawerOpen(int(5)));
+            return mDrawerLayout.isDrawerOpen(5);
         }
         else{
             // Gravity.LEFT
-            return bool(mDrawerLayout.isDrawerOpen(int(3)));
+            return mDrawerLayout.isDrawerOpen(3);
         }
     }
     return false;
@@ -165,42 +165,42 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
             pageAnimationsCache = {};
             var packageName = activity.getPackageName();
             var resources =  activity.getResources();
-            pageAnimationsCache.leftEnter = int(resources.getIdentifier(string("slide_left_enter"),string("anim"),string(packageName)));
-            pageAnimationsCache.leftExit = int(resources.getIdentifier(string("slide_left_exit"),string("anim"),string(packageName)));
-            pageAnimationsCache.rightEnter = int(resources.getIdentifier(string("slide_right_enter"),string("anim"),string(packageName)));
-            pageAnimationsCache.rightExit = int(resources.getIdentifier(string("slide_right_exit"),string("anim"),string(packageName)));
+            pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter","anim",packageName);
+            pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit","anim",packageName);
+            pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter","anim",packageName);
+            pageAnimationsCache.rightExit = resources.getIdentifier("slide_right_exit","anim",packageName);
         }
         
         if(pageAnimationsCache.leftEnter !== 0 && pageAnimationsCache.leftExit !== 0 
                 && pageAnimationsCache.rightEnter !== 0 && pageAnimationsCache.rightExit !== 0){
-            fragmentTransaction.setCustomAnimations(int(pageAnimationsCache.leftEnter),
-                                                    int(pageAnimationsCache.leftExit),
-                                                    int(pageAnimationsCache.rightEnter),
-                                                    int(pageAnimationsCache.rightExit));
+            fragmentTransaction.setCustomAnimations(pageAnimationsCache.leftEnter,
+                                                    pageAnimationsCache.leftExit,
+                                                    pageAnimationsCache.rightEnter,
+                                                    pageAnimationsCache.rightExit);
         }
     }
     // Following line should be opened and following line should be removed
     // fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(string(tag));
-    fragmentTransaction.replace(rootViewId, page.nativeObject).addToBackStack(string(tag));
+    fragmentTransaction.replace(rootViewId, page.nativeObject).addToBackStack(tag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }
 
 function pop(){
     var fragmentManager = activity.getSupportFragmentManager();
-    if(int(fragmentManager.getBackStackEntryCount()) > 0){
-        return bool(fragmentManager.popBackStackImmediate());
+    if(fragmentManager.getBackStackEntryCount() > 0){
+        return fragmentManager.popBackStackImmediate();
     }
     return false;
 }
 
 function registerOnBackKeyPressed(pagesStack){
-    mDrawerLayout.setFocusableInTouchMode(bool(true));
+    mDrawerLayout.setFocusableInTouchMode(true);
     mDrawerLayout.requestFocus();
     mDrawerLayout.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if( int(keyCode) === 4 && int(keyEvent.getAction()) === 0) {
+            if( keyCode === 4 && keyEvent.getAction() === 0) {
                 const Router = require("../router");
                 var currentHistoryObject = Router.getCurrentPage();
                 if (currentHistoryObject && currentHistoryObject.page) {

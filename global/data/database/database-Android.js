@@ -164,9 +164,9 @@ Database.DatabaseObject = function(params){
         'getBoolean': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
+                    var index = this.nativeObject.getColumnIndex(columnName);
                     if(index != -1){
-                        return bool(this.nativeObject.getBoolean(int(index)));
+                        return this.nativeObject.getBoolean(index);
                     }
                     return null;
                 }

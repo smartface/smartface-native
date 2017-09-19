@@ -1,13 +1,13 @@
 function AndroidConfig() {}
 
 const SpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity").getActivity();
-const packageName = string(SpratAndroidActivity.getPackageName());
+const packageName = SpratAndroidActivity.getPackageName();
 const NativeBuildConfig = requireClass(packageName + ".BuildConfig");
 const NativeBuild = requireClass("android.os.Build");
 
-AndroidConfig.isEmulator = (string(NativeBuildConfig.FLAVOR.toLowerCase()).indexOf("emulator") !== -1);
+AndroidConfig.isEmulator = (NativeBuildConfig.FLAVOR.toLowerCase().indexOf("emulator") !== -1);
 AndroidConfig.packageName = packageName;
-AndroidConfig.sdkVersion = int(NativeBuild.VERSION.SDK_INT);
+AndroidConfig.sdkVersion = NativeBuild.VERSION.SDK_INT;
 
 AndroidConfig.SDK = {};
 AndroidConfig.SDK.SDK_NOUGAT = 24;
@@ -25,7 +25,7 @@ AndroidConfig.getClass = function(className){
         return classesCache[className];
     }
     const NativeClass = requireClass('java.lang.Class');
-    classesCache[className] = NativeClass.forName(string(className));
+    classesCache[className] = NativeClass.forName(className);
     return classesCache[className];
 }
 
@@ -36,7 +36,7 @@ AndroidConfig.getSystemService = function(serviceName, serviceClassName){
             servicesCache[serviceName] = activity.getSystemService(serviceClass);
         }
         else{
-            servicesCache[serviceName] = activity.getSystemService(string(serviceName));
+            servicesCache[serviceName] = activity.getSystemService(serviceName);
         }
     }
     return servicesCache[serviceName];
