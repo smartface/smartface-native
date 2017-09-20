@@ -37,7 +37,26 @@ function Image(params) {
       value: self.nativeObject.size.width,
       writable: false
     });
-
+    
+    Object.defineProperty(self, 'resizableImageWithCapInsets', {
+      value: function(capinsets, resizingMode){
+          var image;
+          var invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance("resizableImageWithCapInsets:resizingMode:", self.nativeObject);
+          if (invocationInit) {
+              invocationInit.target = self.nativeObject;
+              invocationInit.setSelectorWithString("resizableImageWithCapInsets:resizingMode:");
+              invocationInit.retainArguments();
+              invocationInit.setUIEdgeInsetsArgumentAtIndex(capinsets,2);    
+              invocationInit.setNSIntegerArgumentAtIndex(resizingMode,3);  
+              
+              invocationInit.invoke();
+              image = invocationInit.getReturnValue();
+          }
+          return Image.createFromImage(image);
+      },
+      writable: false
+    });
+    
     Object.defineProperty(self, 'resize', {
       value: function(width, height, onSuccess, onFailure){
           if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)){
