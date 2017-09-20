@@ -183,7 +183,7 @@ Object.defineProperties(Image,{
             if(imageFile && imageFile.nativeObject){
                 var bitmap;
                 if(imageFile.type === Path.FILE_TYPE.ASSET){
-                    var assetsInputStream = Android.getActivity().getAssets().open(imageFile.nativeObject);
+                    var assetsInputStream = AndroidConfig.activity.getAssets().open(imageFile.nativeObject);
                     bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
                     assetsInputStream.close();
                 }
