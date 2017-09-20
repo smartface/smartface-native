@@ -94,7 +94,7 @@ View.prototype = {
     },
     set alpha(alpha) {
         // Avoiding integer-float conflics of engine
-        this.nativeObject.setAlpha(alpha);
+        this.nativeObject.setAlpha(float(alpha));
     },
     get backgroundImage() {
         return this.__backgroundImages;
