@@ -70,7 +70,6 @@ const ListView = extend(View)(
                     // var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
                     // _onRowBind(_holderViewLayout,position);
                     
-                    console.log("onBindViewHolder index " + position);
                     _onRowBind(_holderViewLayout,position);
                     // nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                     //     onClick: function(view) {
@@ -83,6 +82,9 @@ const ListView = extend(View)(
             },
             getItemCount: function(){
                 return _itemCount;
+            },
+            getItemViewType: function(position){
+                return position;
             }
         },null);
 
@@ -294,7 +296,6 @@ ListView.iOS = {};
 
 function createFromTemplate(jsView){
     if(jsView.childViews){
-        console.log("jsView.childViews " + jsView.childViews);
         // var _childViews = {};
         
         // Object.keys(jsView.childViews).forEach(function(key){
@@ -304,7 +305,6 @@ function createFromTemplate(jsView){
         // });
         
         for (var child in jsView.childs){
-            console.log("jsView.childs[child].id " + jsView.childs[child].id);
              if (jsView.childs[child].id){
                 jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
                 createFromTemplate(jsView.childs[child]);
