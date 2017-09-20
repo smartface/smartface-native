@@ -41,16 +41,16 @@ function Image(params) {
     Object.defineProperty(self, 'resizableImageWithCapInsets', {
       value: function(capinsets, resizingMode){
           var image;
-          var invocationInit = __SF_NSInvocation.createInvocationWithSelectorInstance("resizableImageWithCapInsets:resizingMode:", self.nativeObject);
-          if (invocationInit) {
-              invocationInit.target = self.nativeObject;
-              invocationInit.setSelectorWithString("resizableImageWithCapInsets:resizingMode:");
-              invocationInit.retainArguments();
-              invocationInit.setUIEdgeInsetsArgumentAtIndex(capinsets,2);    
-              invocationInit.setNSIntegerArgumentAtIndex(resizingMode,3);  
+          var invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance("resizableImageWithCapInsets:resizingMode:", self.nativeObject);
+          if (invocationResizeable) {
+              invocationResizeable.target = self.nativeObject;
+              invocationResizeable.setSelectorWithString("resizableImageWithCapInsets:resizingMode:");
+              invocationResizeable.retainArguments();
+              invocationResizeable.setUIEdgeInsetsArgumentAtIndex(capinsets,2);    
+              invocationResizeable.setNSIntegerArgumentAtIndex(resizingMode,3);  
               
-              invocationInit.invoke();
-              image = invocationInit.getReturnValue();
+              invocationResizeable.invoke();
+              image = invocationResizeable.getReturnValue();
           }
           return Image.createFromImage(image);
       },
