@@ -71,13 +71,13 @@ const ListView = extend(View)(
                     // _onRowBind(_holderViewLayout,position);
                     
                     _onRowBind(_holderViewLayout,position);
-                    // nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                    //     onClick: function(view) {
-                    //         holderViewLayout.nativeObject = view;
-                    //         var clickedView = createFromTemplate(holderViewLayout);
-                    //         _onRowSelected && _onRowSelected(clickedView, position);
-                    //     }
-                    // }));
+                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
+                        onClick: function(view) {
+                            holderViewLayout.nativeObject = view;
+                            var clickedView = createFromTemplate(holderViewLayout);
+                            _onRowSelected && _onRowSelected(clickedView, position);
+                        }
+                    }));
                 }
             },
             getItemCount: function(){
