@@ -49,15 +49,15 @@ Object.defineProperties(System, {
     },
     'isBatteryCharged': {
         get: function() {
-            var batteryStatus = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_STATUS, -1));
-            return batteryStatus === int(NativeBatteryManager.BATTERY_STATUS_CHARGING);
+            var batteryStatus = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_STATUS, -1);
+            return batteryStatus === NativeBatteryManager.BATTERY_STATUS_CHARGING;
         },
         enumerable: true
     },
     'batteryLevel': {
         get: function() {
-            var level = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_LEVEL, -1));
-            var scale = int(getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_SCALE, -1));
+            var level = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_LEVEL, -1);
+            var scale = getBatteryIntent().getIntExtra(NativeBatteryManager.EXTRA_SCALE, -1);
             return (level / scale) * 100;
         },
         enumerable: true
@@ -143,7 +143,7 @@ Object.defineProperties(System, {
 Object.defineProperties(System.android, {
     'apiLevel': {
         get: function() {
-            return int(NativeBuild.VERSION.SDK_INT);
+            return NativeBuild.VERSION.SDK_INT;
         },
         enumerable: true
     },
@@ -156,7 +156,7 @@ Object.defineProperties(System.android, {
     'isApplicationInstalled': {
         value: function(packageName) {
             var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
-            for (var i = 0; i < int(packageList.size()); i++) {
+            for (var i = 0; i < packageList.size(); i++) {
                 if(string(packageList.get(i).packageName) === packageName) {
                     return true;
                 }
