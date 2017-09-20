@@ -252,6 +252,32 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
+        
+        /////////// ADDED FOR CHAT EXAMPLE ///////////////
+        // Move to view class after dissuccsing with ios team
+        this.frame = {};
+        Object.defineProperties(this.frame, {
+            // properties
+            'height': {
+                get: function() {
+                    var totalHeight = 0;
+                    var mAdapter = this.nativeInner.getAdapter();
+                    for (var i = 0; i < _itemCount; i++) {
+                        var mView = mAdapter.getView(i, null,this.nativeInner);
+                        mView.measure(
+                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                
+                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                
+                        totalHeight += mView.getMeasuredHeight();
+                     }
+                     
+                     const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
+                     return AndroidUnitConverter.pixelToDp(totalHeight);
+                }
+            }
+        });
+        ///////////////////////////////////////////////
 
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
