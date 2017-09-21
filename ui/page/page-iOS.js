@@ -90,10 +90,11 @@ function Page(params) {
 
     self.checkOrientation = function(){
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
-
         if (self.orientation.indexOf(currentOrientation) === -1){
             __SF_UIDevice.changeOrientation(self.orientation[0]);
+            self.layout.applyLayout();
         }
+        
     };
     
     Object.defineProperty(this, 'orientation', {
@@ -123,7 +124,9 @@ function Page(params) {
         },
         enumerable: true
     });
-
+    
+    self.onShow = function(e){};
+    
     self.onHideHandler = function(){
         self.layout.nativeObject.endEditing(true);
         if (typeof self.onHide === "function"){

@@ -257,23 +257,23 @@ function createColorStateList(textColors) {
     var colorsSets = [];
     if(textColors.normal){
         statesSet.push(View.State.STATE_NORMAL);
-        colorsSets.push(textColors.normal);
+        colorsSets.push(textColors.normal.nativeObject);
     }
     if(textColors.disabled){
         statesSet.push(View.State.STATE_DISABLED);
-        colorsSets.push(textColors.disabled);
+        colorsSets.push(textColors.disabled.nativeObject);
     }
     if(textColors.selected){
         statesSet.push(View.State.STATE_SELECTED);
-        colorsSets.push(textColors.selected);
+        colorsSets.push(textColors.selected.nativeObject);
     }
     if(textColors.pressed){
         statesSet.push(View.State.STATE_PRESSED);
-        colorsSets.push(textColors.pressed);
+        colorsSets.push(textColors.pressed.nativeObject);
     }
     if(textColors.focused){
         statesSet.push(View.State.STATE_FOCUSED);
-        colorsSets.push(textColors.focused);
+        colorsSets.push(textColors.focused.nativeObject);
     }
     return (new NativeColorStateList (array(statesSet), array(colorsSets, "int")));
 }

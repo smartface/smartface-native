@@ -13,8 +13,15 @@ Screen.ios = {};
     6 faceDown
 */
 Object.defineProperty(Screen, 'orientation', {
-  value: __SF_UIDevice.currentDevice().orientation,  
-  writable: false,
+  get: function() {
+    if (__SF_UIDevice.currentDevice().orientation === 5) {
+      return 1;
+    }else if (__SF_UIDevice.currentDevice().orientation === 6){
+      return 2;
+    }else{
+      return __SF_UIDevice.currentDevice().orientation;
+    }
+  },
   enumerable: true
 });
 
