@@ -17,6 +17,19 @@
 function Font() {}
 
 /**
+ * This method returns the string size
+ *
+ * @param {String} string
+ * @param {Number} maxWidth
+ * @method sizeOfString
+ * @android
+ * @ios
+ * @return {Object} &emsp;width : Number <br />&emsp;height : Number
+ * @since 1.1.9
+ */
+Font.prototype.sizeOfString = function(string,maxWidth) { }
+
+/**
  * @method create
  * @android
  * @ios
