@@ -128,7 +128,7 @@ ListView.prototype.onRowCreate = function onRowCreate(){};
  * @android
  * @ios
  * @return {Number}
- * @since 1.1.9
+ * @since 1.1.18
  */
 ListView.prototype.onRowHeight = function onRowHeight(){};
 

@@ -25,7 +25,7 @@ function Font() {}
  * @android
  * @ios
  * @return {Object} &emsp;width : Number <br />&emsp;height : Number
- * @since 1.1.9
+ * @since 1.1.18
  */
 Font.prototype.sizeOfString = function(string,maxWidth) { }
 
