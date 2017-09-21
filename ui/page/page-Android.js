@@ -5,7 +5,6 @@ const AndroidConfig         = require("sf-core/util/Android/androidconfig");
 const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
 const Router                = require("sf-core/ui/router");
 const PorterDuff            = requireClass("android.graphics.PorterDuff");
-
 const NativeView         = requireClass('android.view.View');
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
@@ -13,13 +12,11 @@ const NativeAndroidR     = requireClass("android.R");
 const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
-
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
 // WindowManager.LayoutParams.FLAG_FULLSCREEN
 const FLAG_FULLSCREEN = 1024;
-
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -33,8 +30,8 @@ const OrientationDictionary = {
     8: 8,
     // Page.Orientation.AUTOLANDSCAPE: ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
     12: 6,
-    // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_SENSOR
-    15: 4
+    // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
+    15: 10
 };
 
 function Page(params) {
@@ -55,7 +52,6 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-
     self.nativeObject = NativeFragment.extend("SFFragment", {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -83,7 +79,8 @@ function Page(params) {
             return true;
         },
         onConfigurationChanged: function(newConfig) {
-            _onOrientationChange && _onOrientationChange();
+            const Screen = require("../../device/screen");
+            _onOrientationChange && _onOrientationChange({orientation: Screen.orientation});
         },
         onOptionsItemSelected: function(menuItem) {
             if (menuItem.getItemId() === NativeAndroidR.id.home) {
@@ -109,7 +106,6 @@ function Page(params) {
             if (self.contextMenu.headerTitle !== "") {
                 menu.setHeaderTitle(headerTitle);
             }
-
             var i;
             for (i = 0; i < items.length; i++) {
                 var menuTitle = items[i].android.spanTitle();
@@ -127,7 +123,6 @@ function Page(params) {
             const Contacts = require("sf-core/device/contacts");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
-
             // todo: Define a method to register request and its callback 
             // for better performance. Remove if statement.
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
@@ -140,19 +135,15 @@ function Page(params) {
                 Sound.onActivityResult(requestCode, resultCode, data);
             }
         }
-
     }, null);
-
     Object.defineProperty(this, 'layout', {
         get: function() {
             return rootLayout;
         },
         enumerable: true
     });
-
     self.headerBar = {};
     self.headerBar.android = {};
-
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
         get: function() {
@@ -163,7 +154,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     var onShowCallback;
     Object.defineProperty(this, 'onShow', {
         get: function() {
@@ -179,7 +169,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     var onHideCallback;
     Object.defineProperty(this, 'onHide', {
         get: function() {
@@ -190,7 +179,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     var _onOrientationChange;
     Object.defineProperty(this, 'onOrientationChange', {
         get: function() {
@@ -201,7 +189,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     var _orientation = Page.Orientation.PORTRAIT;
     Object.defineProperty(this, 'orientation', {
         get: function() {
@@ -216,9 +203,7 @@ function Page(params) {
         },
         enumerable: true
     });
-
     this.android = {};
-
     var _onBackButtonPressed;
     Object.defineProperty(this.android, 'onBackButtonPressed', {
         get: function() {
@@ -230,7 +215,6 @@ function Page(params) {
         enumerable: true
     });
     
-
     var _isBottomTabBarPage = false;
     Object.defineProperty(self, 'isBottomTabBarPage', {
         get: function() {
@@ -243,7 +227,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     this.statusBar = {};
     var _visible;
     Object.defineProperty(this.statusBar, 'visible', {
@@ -262,7 +245,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     this.statusBar.android = {};
     var _color;
     Object.defineProperty(this.statusBar.android, 'color', {
@@ -279,7 +261,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
             var result = 0;
@@ -291,7 +272,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarColor; // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
@@ -304,7 +284,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarImage = null;
     Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
@@ -318,7 +297,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
@@ -332,7 +310,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
@@ -340,7 +317,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return toolbar.getTitle();
@@ -355,7 +331,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarTitleColor;
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
@@ -401,7 +376,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             // View.VISIBLE
@@ -426,7 +400,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
             return toolbar.getSubtitle();
@@ -441,7 +414,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarSubtitleColor;
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
@@ -454,7 +426,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarLogo = null;
     Object.defineProperty(self.headerBar.android, 'logo', {
         get: function() {
@@ -469,7 +440,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
@@ -500,7 +470,6 @@ function Page(params) {
         },
         enumerable: true, configurable: true
     });
-
     var _parentTab;
     var _selectedIndex;
     var bottomNavigationView;
@@ -530,7 +499,6 @@ function Page(params) {
             enumerable: true
         }
     );
-
     Object.defineProperty(this, 'selectedIndex', {
         get: function() {
             return _selectedIndex;
@@ -550,7 +518,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
     function createBottomNavigationView(pageLayout) {
         if(bottomNavigationView) 
             return;
@@ -648,7 +615,6 @@ function Page(params) {
             item.setChecked(checked);
         }
     }
-
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("sf-core/ui/headerbaritem");
@@ -666,7 +632,6 @@ function Page(params) {
             self.headerBar.setItems(_headerBarItems);
         }
     };
-
     var _headerBarItems = [];
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
@@ -676,12 +641,10 @@ function Page(params) {
             optionsMenu.clear();
             return;
         }
-
         _headerBarItems = items;
         if (optionsMenu == null) {
             return;
         }
-
         const NativeMenuItem = requireClass("android.view.MenuItem");
         const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
@@ -690,7 +653,6 @@ function Page(params) {
         // @todo this values are hard coded. Find typed arrays
         
         optionsMenu.clear();
-
         var itemID = 1;
         items.forEach(function(item) {
             var itemView;
@@ -719,7 +681,6 @@ function Page(params) {
             }
         });
     };
-
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
@@ -761,10 +722,8 @@ function Page(params) {
             }
         }
     }));
-
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
-
     // Default values
     if (!params.skipDefaults) {
         self.statusBar.visible = true;
@@ -776,11 +735,9 @@ function Page(params) {
         self.headerBar.android.subtitleColor = Color.WHITE;
         self.headerBar.visible = true;
     }
-
     //Handling ios value
     self.statusBar.ios = {};
     self.statusBar.ios.style = null;
-
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -788,7 +745,6 @@ function Page(params) {
         }
     }
 }
-
 Page.Orientation = {};
 Object.defineProperty(Page.Orientation, "PORTRAIT", {
     value: 1
@@ -811,6 +767,4 @@ Object.defineProperty(Page.Orientation, "AUTOLANDSCAPE", {
 Object.defineProperty(Page.Orientation, "AUTO", {
     value: 15
 });
-
-
 module.exports = Page;
