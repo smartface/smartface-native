@@ -6,6 +6,7 @@
  */
 
 var OrientationType = {};
+OrientationType.ios = {};
 /**
  * @property {String} PORTRAIT
  * @static
@@ -65,7 +66,7 @@ Object.defineProperty(OrientationType, 'LANDSCAPERIGHT', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(OrientationType, 'FACEUP', {
+Object.defineProperty(OrientationType.ios, 'FACEUP', {
   value: "faceup",
   writable: false
 });
@@ -77,7 +78,7 @@ Object.defineProperty(OrientationType, 'FACEUP', {
  * @readonly
  * @since 0.1
  */
-Object.defineProperty(OrientationType, 'FACEDOWN', {
+Object.defineProperty(OrientationType.ios, 'FACEDOWN', {
   value: "facedown",
   writable: false
 });
