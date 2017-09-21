@@ -33,7 +33,11 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 10
 };
-
+const NativeOrientationDictionary = {
+    0: "undefined",
+    1: "portrait",
+    2: "landscape"
+};
 function Page(params) {
     (!params) && (params = {});
     var self = this;

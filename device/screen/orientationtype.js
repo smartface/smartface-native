@@ -6,10 +6,11 @@
  */
 
 var OrientationType = {};
-
 /**
  * @property {String} PORTRAIT
  * @static
+ * @ios
+ * @android
  * @readonly
  * @since 0.1
  */
@@ -21,6 +22,8 @@ Object.defineProperty(OrientationType, 'PORTRAIT', {
 /**
  * @property {String} UPSIDEDOWN
  * @static
+ * @ios
+ * @android
  * @readonly
  * @since 0.1
  */
@@ -32,6 +35,8 @@ Object.defineProperty(OrientationType, 'UPSIDEDOWN', {
 /**
  * @property {String} LANDSCAPELEFT
  * @static
+ * @ios
+ * @android
  * @readonly
  * @since 0.1
  */
@@ -43,11 +48,37 @@ Object.defineProperty(OrientationType, 'LANDSCAPELEFT', {
 /**
  * @property {String} LANDSCAPERIGHT
  * @static
+ * @ios
+ * @android
  * @readonly
  * @since 0.1
  */
 Object.defineProperty(OrientationType, 'LANDSCAPERIGHT', {
   value: "landspaceright",
+  writable: false
+});
+
+/**
+ * @property {String} FACEUP
+ * @static
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(OrientationType, 'FACEUP', {
+  value: "faceup",
+  writable: false
+});
+
+/**
+ * @property {String} FACEDOWN
+ * @static
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Object.defineProperty(OrientationType, 'FACEDOWN', {
+  value: "facedown",
   writable: false
 });
 
