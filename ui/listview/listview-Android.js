@@ -62,14 +62,6 @@ const ListView = extend(View)(
                 }
                 
                 if(_onRowBind){
-                    // @todo make performance improvements
-                    // holderViewLayout.nativeInner = nativeHolderView;
-                    // holderViewLayout.nativeObject = nativeHolderView.itemView;
-                    
-                    // createFromTemplate(holderViewLayout);
-                    // var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
-                    // _onRowBind(_holderViewLayout,position);
-                    
                     _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
@@ -252,32 +244,6 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-        
-        /////////// ADDED FOR CHAT EXAMPLE ///////////////
-        // Move to view class after dissuccsing with ios team
-        this.frame = {};
-        Object.defineProperties(this.frame, {
-            // properties
-            'height': {
-                get: function() {
-                    var totalHeight = 0;
-                    var mAdapter = this.nativeInner.getAdapter();
-                    for (var i = 0; i < _itemCount; i++) {
-                        var mView = mAdapter.getView(i, null,this.nativeInner);
-                        mView.measure(
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                
-                                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                
-                        totalHeight += mView.getMeasuredHeight();
-                     }
-                     
-                     const AndroidUnitConverter      = require("sf-core/util/Android/unitconverter.js");
-                     return AndroidUnitConverter.pixelToDp(totalHeight);
-                }
-            }
-        });
-        ///////////////////////////////////////////////
 
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
             onScrolled : function(recyclerView, dx, dy){
@@ -322,49 +288,13 @@ ListView.iOS = {};
 
 function createFromTemplate(jsView){
     if(jsView.childViews){
-        // var _childViews = {};
-        
-        // Object.keys(jsView.childViews).forEach(function(key){
-        //     // _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, jsView);
-        //     jsView.childViews[key].nativeObject = jsView.nativeObject.findViewById(parseInt(key));
-        //     createFromTemplate(jsView.childViews[key]);
-        // });
-        
         for (var child in jsView.childs){
              if (jsView.childs[child].id){
                 jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
                 createFromTemplate(jsView.childs[child]);
              }
         }
-        
-        // jsView.childViews = _childViews;
     }
-}
-
-function findConstructor(jsView){
-    return require("sf-core/ui/"+jsView.toString().toLowerCase());
-}
-
-function cloneObject(jsView, nativeObject, nativeInner){
-    const extend = require('js-base/core/extend');
-    var jsViewConstructorCopy = extend(findConstructor(jsView))(
-        function (_super, params) {
-            this.nativeObject = params.nativeObject;
-            this.nativeInner = params.nativeInner;
-            this.isNotSetDefaults = true;
-            _super(this);
-            
-            if (params) {
-                for (var param in params) {
-                    this[param] = params[param];
-                }
-            }
-        }
-    );
-    return new jsViewConstructorCopy({
-        nativeObject: nativeObject,
-        nativeInner: nativeInner
-    });
 }
 
 module.exports = ListView;
