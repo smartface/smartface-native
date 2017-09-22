@@ -153,12 +153,10 @@ Multimedia.android.getAllGalleryItems = function(params) {
 };
 
 Multimedia.onActivityResult = function(requestCode, resultCode, data) {
-    console.log("Multimedia.onActivityResult");
     if(requestCode === Multimedia.CAMERA_REQUEST) {
         getCameraData(resultCode, data);
     }
     else if(requestCode === Multimedia.PICK_FROM_GALLERY) {
-        console.log("Multimedia pickFromGallery");
         pickFromGallery(resultCode, data);   
     }
 };
@@ -171,14 +169,11 @@ function pickFromGallery(resultCode, data) {
             var uri = data.getData();
             var realPath;
             if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
-                console.log("SDK_INT >= NOUGAT");
                 realPath = getRealPathFromID(uri, _pickParams.type);
             }
             else {
-                console.log("SDK_INT < NOUGAT");
                 realPath = getRealPathFromURI(uri);
             }
-            console.log("RealPath: " + realPath);
         }
         catch (err) {
             success = false;
@@ -206,13 +201,7 @@ function pickFromGallery(resultCode, data) {
 
 function getRealPathFromID(uri, action) {
     const NativeDocumentsContract = requireClass("android.provider.DocumentsContract");
-    console.log("Before getDocumentId(). Uri: " + uri);
-    try {
-        var docId = NativeDocumentsContract.getDocumentId(uri);
-        console.log("After getDocumentId(). DocId: " + docId);
-    } catch(e) {
-        console.log("Exception: " + e);
-    }
+    var docId = NativeDocumentsContract.getDocumentId(uri);
     var id = docId.split(":")[1]; 
     
     var projection = [ "_data" ]; // MediaStore.Images.Media.DATA 
@@ -229,18 +218,13 @@ function getRealPathFromID(uri, action) {
     else {
         throw new Error("Unexpected type: " + _pickParams.type);
     }
-    console.log("Before query");
     var cursor = contentResolver.
                     query(contentUri, projection, selection, [ id ], null);
-    console.log("After query. Cursor: " + cursor);
     var filePath = null;
     if(cursor) {
         var columnIndex = cursor.getColumnIndex(projection[0]);
-        console.log("columnIndex: " + columnIndex);
         if (cursor.moveToFirst()) {
-            console.log("cursor.moveToFirst");
             filePath = cursor.getString(columnIndex);
-            console.log("filePath: " + filePath);
         }
 
         cursor.close();
