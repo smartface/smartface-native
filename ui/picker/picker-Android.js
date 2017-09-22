@@ -130,10 +130,10 @@ function setNumberPicker(nativeObject, _items) {
         nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
         var items = [];
         for(var item in _items) {
-            items.push(item);
+            items.push(_items[item]);
         }
         
-        nativeObject.setDisplayedValues(array(items));
+        nativeObject.setDisplayedValues(array(items, "java.lang.String"));
         nativeObject.setWrapSelectorWheel(false);
     }
 }
