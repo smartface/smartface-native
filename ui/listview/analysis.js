@@ -337,7 +337,7 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * 
  * @event onRowSwiped
  * @param {UI.ListView.iOS.SwipeDirection} swipeDirection
- * @param {Object} expansionSettings
+ * @param {Object} expansionSettings &emsp;buttonIndex : Number - Index of the expandable button (in the left or right buttons arrays) <br />&emsp;fillOnTrigger : Boolean - if true the button fills the cell on trigger, else it bounces back to its initial position <br /> &emsp;threshold : Number - Size proportional threshold to trigger the expansion button. Default value 1.5
  * @ios
  * @since 0.1
  * 
