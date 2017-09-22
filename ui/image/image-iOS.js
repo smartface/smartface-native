@@ -9,6 +9,7 @@ const Format = {
 
 function Image(params) {
     var self = this;
+    self.ios = {};
     
     if (params.path){
       if (params.path.includes(".app")) {
@@ -38,7 +39,7 @@ function Image(params) {
       writable: false
     });
     
-    Object.defineProperty(self, 'resizableImageWithCapInsets', {
+    Object.defineProperty(self.ios, 'resizableImageWithCapInsetsResizingMode', {
       value: function(capinsets, resizingMode){
           var image;
           var invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance("resizableImageWithCapInsets:resizingMode:", self.nativeObject);
