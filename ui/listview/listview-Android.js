@@ -48,17 +48,25 @@ const ListView = extend(View)(
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
-                holderViewLayout.height = self.rowHeight;
+                
+                if(self.rowHeight){
+                    holderViewLayout.height = self.rowHeight;
+                }
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView,position){
+                var _holderViewLayout = self.createTemplate(nativeHolderView);
+                
+                if(!self.rowHeight && _onRowHeight){
+                    _holderViewLayout.height = _onRowHeight(position);
+                }
+                
                 if(_onRowBind){
-                    // @todo make performance improvements
-                    var _holderViewLayout = createFromTemplate(holderViewLayout,nativeHolderView.itemView, nativeHolderView,self);
                     _onRowBind(_holderViewLayout,position);
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
-                            var clickedView = createFromTemplate(holderViewLayout,view, nativeHolderView,self);
+                            holderViewLayout.nativeObject = view;
+                            var clickedView = createFromTemplate(holderViewLayout);
                             _onRowSelected && _onRowSelected(clickedView, position);
                         }
                     }));
@@ -66,14 +74,18 @@ const ListView = extend(View)(
             },
             getItemCount: function(){
                 return _itemCount;
+            },
+            getItemViewType: function(position){
+                return position;
             }
         },null);
 
         var _onScroll;
-        var _rowHeight = 0;
+        var _rowHeight;
         var _onRowCreate;
         var _onRowSelected;
         var _onPullRefresh;
+        var _onRowHeight;
         var _onRowBind;
         var _itemCount = 0;
         Object.defineProperties(this, {
@@ -147,6 +159,7 @@ const ListView = extend(View)(
                 value: function() {
                     this.nativeInner.setLayoutManager(linearLayoutManager);
                     this.nativeInner.setAdapter(dataAdapter);
+                    // dataAdapter.notifyDataSetChanged();
                 },
                 enumerable: true
             },
@@ -187,6 +200,15 @@ const ListView = extend(View)(
                 },
                 set: function(onRowSelected) {
                     _onRowSelected = onRowSelected.bind(this);
+                },
+                enumerable: true
+            },
+            'onRowHeight': {
+                get: function() {
+                    return _onRowHeight;
+                },
+                set: function(onRowHeight) {
+                    _onRowHeight = onRowHeight.bind(this);
                 },
                 enumerable: true
             },
@@ -246,6 +268,13 @@ const ListView = extend(View)(
                 }
             }));
         }
+        
+        self.createTemplate = function(e){
+            holderViewLayout.nativeObject = e.itemView;
+            holderViewLayout.nativeInner = e;
+            createFromTemplate(holderViewLayout);
+            return holderViewLayout;
+        };
 
         if (params) {
             for (var param in params) {
@@ -257,47 +286,15 @@ const ListView = extend(View)(
 
 ListView.iOS = {};
 
-function createFromTemplate(jsView, nativeObject, nativeInner, parentJsView){
-    jsView.isCloned = true;
-    jsView.nativeObject = nativeObject;
-    jsView.nativeInner = nativeInner;
-    jsView.parent = parentJsView;
-    
+function createFromTemplate(jsView){
     if(jsView.childViews){
-        var _childViews = {};
-        
-        Object.keys(jsView.childViews).forEach(function(key){
-            _childViews[key] = createFromTemplate(jsView.childViews[key],nativeObject.findViewById(parseInt(key)), null, jsView);
-        });
-        jsView.childViews = _childViews;
-    }
-    return jsView;
-}
-
-function findConstructor(jsView){
-    return require("sf-core/ui/"+jsView.toString().toLowerCase());
-}
-
-function cloneObject(jsView, nativeObject, nativeInner){
-    const extend = require('js-base/core/extend');
-    var jsViewConstructorCopy = extend(findConstructor(jsView))(
-        function (_super, params) {
-            this.nativeObject = params.nativeObject;
-            this.nativeInner = params.nativeInner;
-            this.isNotSetDefaults = true;
-            _super(this);
-            
-            if (params) {
-                for (var param in params) {
-                    this[param] = params[param];
-                }
-            }
+        for (var child in jsView.childs){
+             if (jsView.childs[child].id){
+                jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
+                createFromTemplate(jsView.childs[child]);
+             }
         }
-    );
-    return new jsViewConstructorCopy({
-        nativeObject: nativeObject,
-        nativeInner: nativeInner
-    });
+    }
 }
 
 module.exports = ListView;

@@ -522,7 +522,7 @@ function View(params) {
     Object.defineProperties(this, {
         'left': {
             get: function() {
-                return AndroidUnitConverter.pixelToDp(self.yogaNode.getPosition(YogaEdge.LEFT).value);
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getLeft());
             },
             set: function(left) {
                 self.yogaNode.setPosition(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(left));
@@ -531,7 +531,7 @@ function View(params) {
         },
         'top': {
             get: function() {
-                return AndroidUnitConverter.pixelToDp(self.yogaNode.getPosition(YogaEdge.TOP).value);
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getTop());
             },
             set: function(top) {
                 self.yogaNode.setPosition(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(top));
@@ -576,7 +576,7 @@ function View(params) {
         },
         'height': {
             get: function() {
-                return AndroidUnitConverter.pixelToDp(self.yogaNode.getHeight().value);
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight());
             },
             set: function(height) {
                 self.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
@@ -592,7 +592,7 @@ function View(params) {
         },
         'width': {
             get: function() {
-                return AndroidUnitConverter.pixelToDp(self.yogaNode.getWidth().value);
+                return AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth());
             },
             set: function(width) {
                 self.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
