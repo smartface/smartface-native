@@ -321,9 +321,11 @@ const SearchView = extend(View)(
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query){
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                    return false;
                 },
                 onQueryTextChange: function(newText){
                     _onTextChangedCallback && _onTextChangedCallback(newText);
+                    return false;
                 }
             }));
         }
@@ -344,7 +346,7 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint){
     if(icon && icon.nativeObject){
         const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder")
         const NativeImageSpan = requireClass("android.text.style.ImageSpan")
-        var textSize = parseInt(int(mSearchSrcTextView.getTextSize()) * 1.25);
+        var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
         icon.nativeObject.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");
         var imageSpan = new NativeImageSpan(icon.nativeObject);
