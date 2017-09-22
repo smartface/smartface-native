@@ -93,7 +93,7 @@ Object.defineProperties(Color,{
                 return new Color({ color: NativeColor.rgb(param1,param2,param3) });
             } 
             else if (arguments.length === 4) {
-                return new Color({ color: NativeColor.argb(param1,param2,param3,param4) });
+                return new Color({ color: NativeColor.argb(int(param1),int(param2),int(param3),int(param4)) });
             }
         },
         enumerable: true
