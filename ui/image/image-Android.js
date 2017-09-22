@@ -20,6 +20,11 @@ const Format = {
 
 function Image (params) {
     var self = this;
+    self.ios = {};
+    self.ios.resizableImageWithCapInsetsResizingMode = function(){
+        return self.nativeObject;
+    }
+    
     var androidResources = Android.getActivity().getResources();
     if (params) {
         if(params.bitmap){
