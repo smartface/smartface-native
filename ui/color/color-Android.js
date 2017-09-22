@@ -1,4 +1,4 @@
-const TypeUtil               = require("sf-core/util/type");
+const TypeUtil               = require("../../util/type");
 const NativeColor            = requireClass("android.graphics.Color");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 
@@ -11,7 +11,7 @@ function Color (params) {
         if(params.direction)
             index = params.direction;
         this.colors = colors;
-        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], [params.startColor.nativeObject, params.endColor.nativeObject]);
+        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], array([params.startColor.nativeObject, params.endColor.nativeObject], "int"));
     } else {
         this.nativeObject = params.color;
     }
@@ -100,41 +100,41 @@ Object.defineProperties(Color,{
     },
     'red': {
         value: function(color){ 
-            var colorParam = color.nativeObject;
-            if(!TypeUtil.isNumeric(colorParam)){
-                colorParam = NativeColor.parseColor(colorParam);
-            }
-            return NativeColor.red(colorParam);
+            // var colorParam = color.nativeObject;
+            // if(!TypeUtil.isNumeric(int(colorParam))){
+            //     colorParam = NativeColor.parseColor(colorParam);
+            // }
+            return NativeColor.red(color.nativeObject);
         },
         enumerable: true
     },
     'green': {
         value: function(color){ 
-            var colorParam = color.nativeObject;
-            if(!TypeUtil.isNumeric(colorParam)){
-                colorParam = NativeColor.parseColor(colorParam);
-            }
-            return NativeColor.green(colorParam);
+            // var colorParam = color.nativeObject;
+            // if(!TypeUtil.isNumeric(colorParam)){
+            //     colorParam = NativeColor.parseColor(colorParam);
+            // }
+            return NativeColor.green(color.nativeObject);
         },
         enumerable: true
     },
     'blue': {
         value: function(color){
-            var colorParam = color.nativeObject;
-            if(!TypeUtil.isNumeric(colorParam)){
-                colorParam = NativeColor.parseColor(colorParam);
-            }
-            return NativeColor.blue(colorParam);
+            // var colorParam = color.nativeObject;
+            // if(!TypeUtil.isNumeric(colorParam)){
+            //     colorParam = NativeColor.parseColor(colorParam);
+            // }
+            return NativeColor.blue(color.nativeObject);
         },
         enumerable: true
     },
     'alpha': {
         value: function(color){
-            var colorParam = color.nativeObject;
-            if(!TypeUtil.isNumeric(colorParam)){
-                colorParam = NativeColor.parseColor(colorParam);
-            }
-            return NativeColor.alpha(colorParam);
+            // var colorParam = color.nativeObject;
+            // if(!TypeUtil.isNumeric(colorParam)){
+            //     colorParam = NativeColor.parseColor(colorParam);
+            // }
+            return NativeColor.alpha(color.nativeObject);
         },
         enumerable: true
     }

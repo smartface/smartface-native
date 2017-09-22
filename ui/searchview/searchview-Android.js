@@ -1,12 +1,12 @@
-const View                  = require('sf-core/ui/view');
+const View                  = require('../view');
 const extend                = require('js-base/core/extend');
-const Font                  = require('sf-core/ui/font');
-const TypeUtil              = require('sf-core/util/type');
-const Color                 = require('sf-core/ui/color');
-const KeyboardType          = require('sf-core/ui/keyboardtype');
-const TextAlignment         = require('sf-core/ui/textalignment');
-const AndroidConfig         = require('sf-core/util/Android/androidconfig');
-const Exception             = require("sf-core/util/exception");
+const Font                  = require('../font');
+const TypeUtil              = require('../../util/type');
+const Color                 = require('../color');
+const KeyboardType          = require('../keyboardtype');
+const TextAlignment         = require('../textalignment');
+const AndroidConfig         = require('../../util/Android/androidconfig');
+const Exception             = require("../../util/exception");
 
 const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
 const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
@@ -59,10 +59,9 @@ const NativeTextAlignment = [
 
 const SearchView = extend(View)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
+
         if(!this.nativeObject){
-            this.nativeObject = new NativeSearchView(activity);
+            this.nativeObject = new NativeSearchView(AndroidConfig.activity);
             this.nativeObject.onActionViewExpanded();
             // Prevent gain focus when SearchView appear.
             this.nativeObject.clearFocus();
@@ -84,7 +83,7 @@ const SearchView = extend(View)(
         {
             'text' : {
                 get: function() {
-                    return mSearchSrcTextView.getText();
+                    return string(mSearchSrcTextView.getText());
                 },
                 set: function(text) {
                     if(text){
@@ -124,7 +123,7 @@ const SearchView = extend(View)(
                 },
                 set: function(iconImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(iconImage == null || iconImage instanceof require("sf-core/ui/image")){
+                    if(iconImage == null || iconImage instanceof require("../image")){
                         _iconImage = iconImage;
                         updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
@@ -247,6 +246,7 @@ const SearchView = extend(View)(
                     if(!(hintTextColor instanceof Color)){
                         throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                     }
+                    _hintTextColor = hintTextColor;
                     mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
                 },
                 enumerable: true
@@ -258,7 +258,7 @@ const SearchView = extend(View)(
                 set: function(keyboardType) {
                     _keyboardType = keyboardType; 
                     this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
-                },
+                }.bind(this),
                 enumerable: true
             },
             'font' : {
@@ -290,7 +290,7 @@ const SearchView = extend(View)(
                 },
                 set: function(closeImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(closeImage == null || closeImage instanceof require("sf-core/ui/image")){
+                    if(closeImage == null || closeImage instanceof require("../image")){
                         _closeImage = closeImage;
                         mCloseButton.setImageDrawable(closeImage.nativeObject);
                     }
@@ -344,7 +344,7 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint){
     if(icon && icon.nativeObject){
         const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder")
         const NativeImageSpan = requireClass("android.text.style.ImageSpan")
-        var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
+        var textSize = parseInt(int(mSearchSrcTextView.getTextSize()) * 1.25);
         icon.nativeObject.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");
         var imageSpan = new NativeImageSpan(icon.nativeObject);

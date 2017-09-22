@@ -1,7 +1,6 @@
-const extend = require('js-base/core/extend');
-
-const TextBox = require("../textbox");
-const TextAlignment = require('sf-core/ui/textalignment');
+const extend        = require('js-base/core/extend');
+const TextBox       = require("../textbox");
+const TextAlignment = require('../textalignment');
 
 const TextArea = extend(TextBox)(
     function (_super, params) {

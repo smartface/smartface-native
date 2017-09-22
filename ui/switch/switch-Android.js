@@ -1,6 +1,7 @@
-const View = require('sf-core/ui/view');
-const Color = require("sf-core/ui/color");
+const View = require('../view');
+const Color = require("../color");
 const extend = require('js-base/core/extend');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const NativeSwitch = requireClass("android.widget.Switch");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
@@ -10,7 +11,7 @@ const Switch = extend(View)(
     function (_super, params) {
         var self = this;
         if(!this.nativeObject){
-            this.nativeObject = new NativeSwitch(Android.getActivity());
+            this.nativeObject = new NativeSwitch(AndroidConfig.activity);
         }
         _super(this);
 
@@ -65,6 +66,16 @@ const Switch = extend(View)(
                 },
                 set: function(onToggleChanged) {
                     onToggleChangedCallback = onToggleChanged.bind(this);
+                    if (!this.__didSetOnCheckedChangeListener) {
+                        this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
+                            onCheckedChanged: function(buttonView, isChecked){
+                                setThumbColor(self);
+                                setTrackColor(self);
+                                onToggleChangedCallback && onToggleChangedCallback(isChecked);
+                            }
+                        }));
+                        this.__didSetOnCheckedChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -109,13 +120,6 @@ const Switch = extend(View)(
             this.thumbOffColor = Color.GRAY;
             this.toggleOnColor = Color.GRAY;
             this.android.toggleOffColor = Color.GRAY;
-            this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
-                onCheckedChanged: function(buttonView, isChecked){
-                    setThumbColor(self);
-                    setTrackColor(self);
-                    onToggleChangedCallback && onToggleChangedCallback(isChecked);
-                }
-            }));
         }
 
         // Assign parameters given in constructor
@@ -128,7 +132,7 @@ const Switch = extend(View)(
 );
 
 function setThumbColor(self){
-    if(self.nativeObject.isChecked()){
+    if(self.toggle){
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{
@@ -137,7 +141,7 @@ function setThumbColor(self){
 }
 
 function setTrackColor(self){
-    if(self.nativeObject.isChecked()){
+    if(self.toggle){
         self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else{

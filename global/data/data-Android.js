@@ -1,15 +1,16 @@
-const TypeUtil = require("sf-core/util/type");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const TypeUtil = require("../../util/type");
 
 function Data(){}
 
-var activity = Android.getActivity();
+var activity = AndroidConfig.activity;
 // Context.MODE_PRIVATE
-var jsSharedPreferences = activity.getSharedPreferences("JS",0);
+var jsSharedPreferences = activity.getSharedPreferences("JS", 0);
 
 Object.defineProperties(Data, {
     'getStringVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getString(key, null);
             }
             return null;
@@ -18,7 +19,7 @@ Object.defineProperties(Data, {
     },
     'getBooleanVariable': {
         value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getBoolean(key, false);
             }
             return null;
@@ -87,7 +88,7 @@ Object.defineProperties(Data, {
     'setLongVariable': {
         value: function(key, value){
             if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
-                jsSharedPreferences.edit().putLong(key, value).commit();
+                jsSharedPreferences.edit().putLong(key, long(value)).commit();
             }
         },
         enumerable: true

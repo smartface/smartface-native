@@ -1,9 +1,9 @@
-const FlexLayout            = require("sf-core/ui/flexlayout");
-const Color                 = require("sf-core/ui/color");
-const TypeUtil              = require("sf-core/util/type");
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
-const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
-const Router                = require("sf-core/ui/router");
+const FlexLayout            = require("../flexlayout");
+const Color                 = require("../color");
+const TypeUtil              = require("../../util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
+const Router                = require("../../router");
 const PorterDuff            = requireClass("android.graphics.PorterDuff");
 const NativeView         = requireClass('android.view.View');
 const NativeFragment     = requireClass("android.support.v4.app.Fragment");
@@ -37,7 +37,7 @@ const OrientationDictionary = {
 function Page(params) {
     (!params) && (params = {});
     var self = this;
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
@@ -83,17 +83,18 @@ function Page(params) {
             _onOrientationChange && _onOrientationChange({orientation: Screen.orientation});
         },
         onOptionsItemSelected: function(menuItem) {
-            if (menuItem.getItemId() === NativeAndroidR.id.home) {
+            var itemId = menuItem.getItemId();
+            if (itemId === NativeAndroidR.id.home) {
                 if (_headerBarLeftItem) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("sf-core/ui/router");
+                    const Router = require("../router");
                     Router.goBack(null, true);
                 }
             }
-            else if (_headerBarItems[menuItem.getItemId()]) {
-                var item = _headerBarItems[menuItem.getItemId()];
+            else if (_headerBarItems[itemId]) {
+                var item = _headerBarItems[itemId];
                 if (item.onPress instanceof Function) {
                     item.onPress();
                 }
@@ -119,10 +120,14 @@ function Page(params) {
                 items[itemId].onSelected();
             }
         },
-        onActivityResult: function(requestCode, resultCode, data) {
-            const Contacts = require("sf-core/device/contacts");
-            const Multimedia = require("sf-core/device/multimedia");
-            const Sound = require("sf-core/device/sound");
+        onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
+            const Contacts = require("../../device/contacts");
+            const Multimedia = require("../../device/multimedia");
+            const Sound = require("../../device/sound");
+            
+            var requestCode = nativeRequestCode;
+            var resultCode = nativeResultCode
+
             // todo: Define a method to register request and its callback 
             // for better performance. Remove if statement.
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
@@ -319,7 +324,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return toolbar.getTitle();
+            return string(toolbar.getTitle());
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
@@ -370,7 +375,7 @@ function Page(params) {
                 self.headerBar.leftItemColor = color;
                 for(var i = 0; i < _headerBarItems.length; i++)
                     _headerBarItems[i].color = color;
-                const HeaderBarItem = require("sf-core/ui/headerbaritem");
+                const HeaderBarItem = require("../headerbaritem");
                 HeaderBarItem.itemColor = color;
             }
         },
@@ -402,7 +407,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return toolbar.getSubtitle();
+            return string(toolbar.getSubtitle());
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
@@ -432,7 +437,7 @@ function Page(params) {
             return _headerBarLogo;
         },
         set: function(image) {
-            const Image = require("sf-core/ui/image");
+            const Image = require("../image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
                 actionBar.setLogo(_headerBarLogo.nativeObject);
@@ -458,9 +463,9 @@ function Page(params) {
     Object.defineProperty(this.bottomTabBar, 'height', {
         get: function() {
             var result = 0;
-            var activity = Android.getActivity();
+            var activity = AndroidConfig.activity;
             
-            const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+            const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
@@ -509,9 +514,9 @@ function Page(params) {
             if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
                 for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
                     if(i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
+                        menu.getItem(int(i)).setChecked(true);
                     }else {
-                        menu.getItem(i).setChecked(false);
+                        menu.getItem(int(i)).setChecked(false);
                     }
                 }
             }
@@ -521,8 +526,8 @@ function Page(params) {
     function createBottomNavigationView(pageLayout) {
         if(bottomNavigationView) 
             return;
-        const RelativeLayout = requireClass("android.widget.RelativeLayout");
-        const Color = require("sf-core/ui/color");
+        const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
+        const Color = require("../color");
         
         bottomNavigationView = new BottomNavigationView(activity);
         var tab = _parentTab;
@@ -531,7 +536,7 @@ function Page(params) {
             disableShiftMode();
         }
         
-        var params = new RelativeLayout.LayoutParams(-1, -2);
+        var params = new RelativeLayoutLayoutParams(-1, -2);
         params.addRule(12);
         bottomNavigationView.setLayoutParams(params);
         var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
@@ -563,10 +568,10 @@ function Page(params) {
         
         if(tab && tab.itemColor && ('checked' in tab.itemColor && 'normal' in tab.itemColor)) {
             const NativeR = requireClass("android.R");
-            var states = [[NativeR.attr.state_checked], []];
+            var states = array([array([NativeR.attr.state_checked], "int"), array([])]);
     
             const ColorStateList = requireClass("android.content.res.ColorStateList");
-            var colors = [tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject];
+            var colors = array([tab.itemColor.checked.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
             bottomNavigationView.setItemTextColor(statelist);
             bottomNavigationView.setItemIconTintList(statelist);
@@ -579,7 +584,7 @@ function Page(params) {
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
                 var key = Object.keys(tab.items)[tab.currentIndex];
-                const Navigator = require("sf-core/ui/navigator");
+                const Navigator = require("../navigator");
                 var navigator = tab.items[key].route;
                 if(navigator instanceof Navigator) {
                     // Router.removeFromHistory(navigator.switchCounter);
@@ -617,7 +622,7 @@ function Page(params) {
     }
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
-        const HeaderBarItem = require("sf-core/ui/headerbaritem");
+        const HeaderBarItem = require("../headerbaritem");
         view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
@@ -646,7 +651,7 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         // to fix supportRTL padding bug, we should set this manually.
@@ -703,7 +708,7 @@ function Page(params) {
     self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function(view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if( keyCode === 4 && keyEvent.getAction() === 0) {
+            if(keyCode === 4 && (keyEvent.getAction() === 0)) {
                    typeof self.android.onBackButtonPressed === "function" && 
                             self.android.onBackButtonPressed();
             }
@@ -745,26 +750,37 @@ function Page(params) {
         }
     }
 }
-Page.Orientation = {};
+
+Object.defineProperty(Page, "Orientation", {
+    value: {},
+    enumerable: true
+});
 Object.defineProperty(Page.Orientation, "PORTRAIT", {
-    value: 1
+    value: 1,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "UPSIDEDOWN", {
-    value: 2
+    value: 2,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTOPORTRAIT", {
-    value: 3
+    value: 3,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "LANDSCAPELEFT", {
-    value: 4
+    value: 4,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "LANDSCAPERIGHT", {
-    value: 8
+    value: 8,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTOLANDSCAPE", {
-    value: 12
+    value: 12,
+    enumerable: true
 });
 Object.defineProperty(Page.Orientation, "AUTO", {
-    value: 15
+    value: 15,
+    enumerable: true
 });
 module.exports = Page;
