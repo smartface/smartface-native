@@ -109,7 +109,6 @@ const ListView = extend(View)(
                 set: function(itemCount) {
                     if(TypeUtil.isNumeric(itemCount)){
                         _itemCount = itemCount;
-                        this.refreshData();
                     }
                 },
                 enumerable: true
@@ -157,9 +156,10 @@ const ListView = extend(View)(
             },
             'refreshData': {
                 value: function() {
-                    this.nativeInner.setLayoutManager(linearLayoutManager);
-                    this.nativeInner.setAdapter(dataAdapter);
+                    // this.nativeInner.setLayoutManager(linearLayoutManager);
+                    // this.nativeInner.setAdapter(dataAdapter);
                     // dataAdapter.notifyDataSetChanged();
+                    dataAdapter.notifyDataSetChanged();
                 },
                 enumerable: true
             },
