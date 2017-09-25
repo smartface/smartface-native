@@ -51,7 +51,7 @@ function Page(params) {
     }
 
     self.nativeObject.onViewDidAppear = function(){
-       self.calculatePosition();
+      self.calculatePosition();
     }
 
     var _onOrientationChange;
@@ -158,6 +158,9 @@ function Page(params) {
         },
         set: function(value) {
             self.nativeObject.onShow = (function() {
+                __SF_UIView.animation(0,0,function(){
+                self.layout.nativeObject.endEditing(true);
+                },{});
                 self.checkOrientation();
                 if (value instanceof Function) {
                     value.call(this, this.__pendingParameters);
@@ -171,7 +174,10 @@ function Page(params) {
     self.onShow = function(e){};
     
     self.onHideHandler = function(){
-        self.layout.nativeObject.endEditing(true);
+        __SF_UIView.animation(0,0,function(){
+            self.layout.nativeObject.endEditing(true);
+        },{});
+        
         if (typeof self.onHide === "function"){
             self.onHide();
         }
