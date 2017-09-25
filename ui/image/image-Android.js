@@ -4,9 +4,10 @@ const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeMatrix = requireClass("android.graphics.Matrix");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
-const Blob = require('sf-core/blob');
-const File = require('sf-core/io/file');
-const Path = require("sf-core/io/path");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const Blob = require('../../blob');
+const File = require('../../io/file');
+const Path = require("../../io/path");
 
 const CompressFormat = [
     NativeBitmap.CompressFormat.JPEG,
@@ -23,9 +24,9 @@ function Image (params) {
     self.ios = {};
     self.ios.resizableImageWithCapInsetsResizingMode = function(){
         return self.nativeObject;
-    }
+    };
     
-    var androidResources = Android.getActivity().getResources();
+    var androidResources = AndroidConfig.activity.getResources();
     if (params) {
         if(params.bitmap){
             self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
@@ -52,6 +53,15 @@ function Image (params) {
         'width': {
             get: function() {
                 return self.nativeObject.getBitmap().getWidth();
+            }, 
+            enumerable: true
+        },
+        'toBlob':{
+            value: function() {
+                var bitmap = self.nativeObject.getBitmap();
+                var stream = new NativeByteArrayOutputStream();
+                bitmap.compress(CompressFormat[1], 100, stream);
+                return new Blob(stream.toByteArray(), {type: "image"});
             }, 
             enumerable: true
         },
@@ -178,7 +188,7 @@ Object.defineProperties(Image,{
             if(imageFile && imageFile.nativeObject){
                 var bitmap;
                 if(imageFile.type === Path.FILE_TYPE.ASSET){
-                    var assetsInputStream = Android.getActivity().getAssets().open(imageFile.nativeObject);
+                    var assetsInputStream = AndroidConfig.activity.getAssets().open(imageFile.nativeObject);
                     bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
                     assetsInputStream.close();
                 }
@@ -196,7 +206,7 @@ Object.defineProperties(Image,{
     },
     'createFromBlob': {
         value: function(blob) {
-            var newBitmap = NativeBitmapFactory.decodeByteArray(blob.parts, 0, blob.size);
+            var newBitmap = NativeBitmapFactory.decodeByteArray(array(blob.parts, "byte"), 0, blob.size);
             if(newBitmap)
                 return (new Image({bitmap: newBitmap}));
             return null;

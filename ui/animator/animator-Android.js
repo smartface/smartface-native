@@ -4,7 +4,6 @@ const NativeTransitionSet     = requireClass('android.support.transition.Transit
 const NativeAutoTransition    = requireClass('android.support.transition.AutoTransition');
 const NativeAlphaTransition   = requireClass('io.smartface.android.anims.AlphaTransition');
 const NativeRotateTransition  = requireClass('io.smartface.android.anims.RotateTransition');
-const NativeClass             = requireClass("java.lang.Class");
 
 function Animator(params) {
     var _layout       = params.layout;
@@ -32,7 +31,7 @@ function Animator(params) {
                 transitionSet.addTransition(autoTransition);
                 transitionSet.addTransition(alphaTransition);
                 transitionSet.addTransition(rotateTransition);
-                transitionSet.setDuration(_duration);
+                transitionSet.setDuration(long(_duration));
                 transitionSet.addListener(NativeTransition.TransitionListener.implement({
                     onTransitionStart:  function(transition) {},
                     onTransitionCancel: function(transition) {},
@@ -84,7 +83,7 @@ function applyLayoutInners(rootLayout) {
 }
 
 function addInnerNativeViewGroups(viewGroup, viewGroups) {
-    var viewGroupClass = NativeClass.forName("android.view.ViewGroup");
+    var viewGroupClass = requireClass("android.view.ViewGroup");
     for (var i = 0; i < viewGroup.getChildCount(); i++) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();

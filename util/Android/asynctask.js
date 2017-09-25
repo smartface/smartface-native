@@ -13,7 +13,7 @@ const NativeAsynTask    = requireClass('android.os.AsyncTask');
  * NOTE: Not working due to COR-1281. 
  */
 function AsyncTask(params){
-    var asyncTask = NativeAsynTask.extend("SFAsyncTask", {
+    var asyncTask = NativeAsynTask.extend(string("SFAsyncTask"), {
         onPreExecute: function(){
             _onPreExecute && _onPreExecute();
         },

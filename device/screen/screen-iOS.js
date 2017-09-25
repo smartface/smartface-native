@@ -1,4 +1,15 @@
 const Image = require("sf-core/ui/image");
+const OrientationType = require('sf-core/device/screen/orientationtype');
+
+const orientationArray = [
+    "unknown",
+    OrientationType.PORTRAIT,
+    OrientationType.UPSIDEDOWN,
+    OrientationType.LANDSCAPELEFT,
+    OrientationType.LANDSCAPERIGHT,
+    OrientationType.ios.FACEUP,
+    OrientationType.ios.FACEDOWN
+];
 
 function Screen() {}
 
@@ -14,13 +25,7 @@ Screen.ios = {};
 */
 Object.defineProperty(Screen, 'orientation', {
   get: function() {
-    if (__SF_UIDevice.currentDevice().orientation === 5) {
-      return 1;
-    }else if (__SF_UIDevice.currentDevice().orientation === 6){
-      return 2;
-    }else{
-      return __SF_UIDevice.currentDevice().orientation;
-    }
+    return orientationArray[__SF_UIDevice.currentDevice().orientation];
   },
   enumerable: true
 });
@@ -59,7 +64,6 @@ Object.defineProperty(Screen, 'capture', {
   enumerable: true
 });
 
-
 Object.defineProperty(Screen, 'dpi', {
   get: function() {
           if (__SF_UIScreen.mainScreen().scale === 2){
@@ -71,6 +75,11 @@ Object.defineProperty(Screen, 'dpi', {
           }
      },
      enumerable: true
+});
+
+Object.defineProperty(Screen, 'OrientationType', {
+    value: require("./orientationtype"),
+    enumerable: true
 });
 
 module.exports = Screen;

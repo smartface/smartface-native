@@ -4,11 +4,12 @@ const OkHttpRequest = requireClass("okhttp3.Request");
 const RequestBody = requireClass("okhttp3.RequestBody");
 const TimeUnit = requireClass("java.util.concurrent.TimeUnit");
 const MediaType = requireClass("okhttp3.MediaType");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
-const Blob = require("sf-core/blob");
+const Blob = require("../../blob");
 
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
-var activity = Android.getActivity();
+var activity = AndroidConfig.activity;
 
 const Request = function() {
     Object.defineProperties(this, {
@@ -75,7 +76,6 @@ http.prototype.upload = function(params) {
 http.prototype.requestString = function(params) {
     if(!params)
         throw new Error("Required request parameters.");
-    
     var requestOnLoad = params.onLoad;
     params.onLoad = function (e) {
         if(e && e.body)
@@ -119,7 +119,7 @@ http.prototype.requestJSON = function(params) {
 http.prototype.requestFile = function(params) {
     if(!params)
         throw new Error("Required request parameters.");
-        
+
     var requestOnLoad = params.onLoad;
     params.onLoad = function(e) {
         const IO = require("sf-core/io");
@@ -160,7 +160,12 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             var statusCode = response.code();
             var responseHeaders = getResponseHeaders(response.headers());
             if(response.body()) {
-                var bytes = response.body().bytes();
+                var bytes = [];
+                var nativeBytes = response.body().bytes();
+                for(var i = 0; i < nativeBytes.length; i++) {
+                    let currentByte = nativeBytes[i];
+                    bytes.push(currentByte);
+                }
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
@@ -204,11 +209,12 @@ function createRequest(params, isMultipart) {
     var builder = new OkHttpRequest.Builder();
     builder = builder.url(params.url);
     
+    var contentType = null;
     if(params.headers) {
         var keys = Object.keys(params.headers);
         for(var i = 0; i < keys.length; i++) {
             if(keys[i].toUpperCase() === CONTENT_TYPE_KEY)
-                var contentType = params.headers[keys[i]];
+                contentType = params.headers[keys[i]];
             builder.addHeader(keys[i], params.headers[keys[i]]);
         }
     }
@@ -217,7 +223,7 @@ function createRequest(params, isMultipart) {
         var keys = Object.keys(this.defaultHeaders);
         for(var i = 0; i < keys.length; i++) {
             if(keys[i].toUpperCase() === CONTENT_TYPE_KEY)
-                var contentType = this.defaultHeaders[keys[i]];
+                contentType = this.defaultHeaders[keys[i]];
             builder.addHeader(keys[i], this.defaultHeaders[keys[i]]);
         }
     }
@@ -235,15 +241,15 @@ function createRequest(params, isMultipart) {
 
 function createRequestBody(body, contentType, isMultipart) {
     if(!body) {
-        return RequestBody.create(null, []);
+        return RequestBody.create(null, array([], "byte"));
     }
     if(!isMultipart || body instanceof Blob) {
         var mediaType = null;
         if(contentType)
              mediaType = MediaType.parse(contentType);
-        var content;
+        var content = null;
         if(body instanceof Blob)
-            content = body.parts;
+            content = array(body.parts, "byte");
         else if(typeof(body) === "string")
             content = body;
         return RequestBody.create(mediaType, content);
@@ -264,7 +270,7 @@ function createMultipartBody(bodies) {
         if(bodies[i].contentType)
             var mediaType = MediaType.parse(bodies[i].contentType);
         if(bodies[i].value)
-            var body = RequestBody.create(mediaType, bodies[i].value.parts);
+            var body = RequestBody.create(mediaType, array(bodies[i].value.parts, "byte"));
         if(!body) {
             throw new Error("Upload method must include request body.");
         }
@@ -285,7 +291,7 @@ function getResponseHeaders(headers) {
 }
 
 function checkInternet() {
-    const Network = require("sf-core/device/network");
+    const Network = require("../../device/network");
     if(Network.connectionType === Network.ConnectionType.None)
         return false;
     return true;

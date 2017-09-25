@@ -10,7 +10,7 @@
  *     myLabel.text = "Smartface";
  *     myLabel.textAlignment = TextAlignment.TOPRIGHT;
  */
-function TextAlignment(){}
+const TextAlignment = {};
 
 /**
  * Gets the text alignment to the top left.

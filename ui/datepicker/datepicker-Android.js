@@ -1,7 +1,8 @@
-const TypeUtil = require('sf-core/util/type');
+const TypeUtil      = require('../../util/type');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 function DatePicker(params) {
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
 
     const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
     var today = new Date();
@@ -38,7 +39,7 @@ function DatePicker(params) {
                     var milliTime = date.getTime();
 
                     var nativeDatePicker = this.nativeObject.getDatePicker();
-                    nativeDatePicker.setMinDate(milliTime);
+                    nativeDatePicker.setMinDate(long(milliTime));
                 }
             }
         },
@@ -48,7 +49,7 @@ function DatePicker(params) {
                     var milliTime = date.getTime();
 
                     var nativeDatePicker = this.nativeObject.getDatePicker();
-                    nativeDatePicker.setMaxDate(milliTime);
+                    nativeDatePicker.setMaxDate(long(milliTime));
                 }
             }
         },

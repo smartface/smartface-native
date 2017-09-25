@@ -1,16 +1,17 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const TypeUtil = require('sf-core/util/type');
+const extend        = require('js-base/core/extend');
+const View          = require('../view');
+const TypeUtil      = require('../../util/type');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
-const NativeNumberPicker = requireClass("android.widget.NumberPicker");
-const NativeFrameLayout = requireClass("android.widget.FrameLayout");
-const NativeAlertDialog = requireClass("android.app.AlertDialog");
+const NativeNumberPicker    = requireClass("android.widget.NumberPicker");
+const NativeFrameLayout     = requireClass("android.widget.FrameLayout");
+const NativeAlertDialog     = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 const Picker = extend(View)(
     function (_super, params) {
         var self = this;
-        var activity = Android.getActivity();
+        const activity = AndroidConfig.activity;
         if(!self.nativeObject) {
             self.nativeObject = new NativeNumberPicker(activity);
         }
@@ -68,7 +69,7 @@ const Picker = extend(View)(
                     });
                     
                     const NativeRString = requireClass("android.R").string;
-                    var builder = new NativeAlertDialog.Builder(Android.getActivity());
+                    var builder = new NativeAlertDialog.Builder(AndroidConfig.activity);
                     builder = builder.setView(layout);
                     builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
                     builder = builder.setPositiveButton(NativeRString.ok, doneListener);
@@ -124,16 +125,21 @@ const Picker = extend(View)(
 function setNumberPicker(nativeObject, _items) {
     if(_items.length > 0) {
         nativeObject.setDisplayedValues(null);
-        nativeObject.setMaxValue(_items.length -1);
+        nativeObject.setMaxValue(_items.length-1);
         nativeObject.setMinValue(0);
         nativeObject.setDescendantFocusability(NativeNumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        nativeObject.setDisplayedValues(_items);
+        var items = [];
+        for(var item in _items) {
+            items.push(_items[item]);
+        }
+        
+        nativeObject.setDisplayedValues(array(items, "java.lang.String"));
         nativeObject.setWrapSelectorWheel(false);
     }
 }
 
 function addViewToLayout(nativeObject) {
-    var layout = new NativeFrameLayout(Android.getActivity());
+    var layout = new NativeFrameLayout(AndroidConfig.activity);
     var parent = nativeObject.getParent();
     if(parent) {
         parent.removeView(nativeObject);
