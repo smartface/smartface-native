@@ -21,7 +21,7 @@
  *     myPage.layout.addChild(myTextBox);
  *
  */
-var ActionKeyType = { };
+const ActionKeyType = { };
 
 /**
  * @property {Number} DEFAULT

@@ -151,10 +151,13 @@ Page.prototype.orientation = UI.Page.Orientation.PORTRAIT;
  * 
  *
  * @event onOrientationChange
+ * @param {Object} e
+ * @param {UI.Page.Orientation} e.orientation 
  * @android
  * @ios
+ * @since 0.1
  */
-Page.prototype.onOrientationChange = function (){};
+Page.prototype.onOrientationChange = function (e){};
 
 /**
  * @enum {Number} UI.Page.Orientation

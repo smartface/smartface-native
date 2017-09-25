@@ -1,8 +1,8 @@
 const extend        = require('js-base/core/extend');
-const View          = require('sf-core/ui/view');
-const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const File          = require('sf-core/io/file');
-const Path          = require('sf-core/io/path');
+const View          = require('../view');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const File          = require('../../io/file');
+const Path          = require('../../io/path');
 const NativeView    = requireClass("android.view.View");
 
 // MotionEvent.ACTION_UP
@@ -14,11 +14,9 @@ const ACTION_MOVE = 2;
 
 const WebView = extend(View)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
         if (!this.nativeObject) {
             const NativeWebView = requireClass('android.webkit.WebView');
-            this.nativeObject = new NativeWebView(activity);
+            this.nativeObject = new NativeWebView(AndroidConfig.activity);
         }
         
         _super(this);
@@ -31,7 +29,6 @@ const WebView = extend(View)(
                 _onLoad && _onLoad({url: url});
             }
         };
-
         var _canOpenLinkInside = true;
         var _onError;
         var _onShow;
@@ -152,7 +149,6 @@ const WebView = extend(View)(
                                     callback(value);
                             }
                         });
-
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
                     } else {
                         this.nativeObject.loadUrl("javascript:"+ javascript);
@@ -278,14 +274,16 @@ const WebView = extend(View)(
             this.nativeObject.setWebViewClient(nativeWebClient);
             this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
             this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
-
             var settings = this.nativeObject.getSettings();
+            /** @todo causes exception 
+             * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
+             */
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
             settings.setLoadsImagesAutomatically(true);
-            
+
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
@@ -299,19 +297,16 @@ const WebView = extend(View)(
                             _onTouch && _onTouch();
                         }
                     }
-                    return ( (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled));
+                    return  (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
                 }.bind(this)
             }));
         }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-        
-        
     }
 );
 
@@ -324,9 +319,8 @@ function overrideURLChange(url, _canOpenLinkInside) {
         var action = NativeIntent.ACTION_VIEW;
         var uri = NativeURI.parse(url);
         var intent = new NativeIntent(action, uri);
-        Android.getActivity().startActivity(intent);
+        AndroidConfig.activity.startActivity(intent);
         return true;
     }
 }
-
 module.exports = WebView;

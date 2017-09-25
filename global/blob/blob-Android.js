@@ -1,4 +1,4 @@
-const Base64Util = require("sf-core/util/base64");
+const Base64Util = require("../..//util/base64");
 
 function Blob (parts, properties) {
     var _type = null;
@@ -21,7 +21,6 @@ function Blob (parts, properties) {
         }
     });
     
-    
     Object.defineProperty(this, 'size', {
         get: function() {
             return _parts ? _parts.length : null;
@@ -33,17 +32,23 @@ function Blob (parts, properties) {
         return new Blob(_parts.slice(start, end), {type : type });
     };
     
+    /** @todo check this for 
+     *      java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.Class java.lang.Object.getClass()' on a null object reference
+     *      System.err  W  at io.smartface.ExposingEngine.JsObjectConversions.ToArray(JsObjectConversions.java:97) 
+     */
     this.toBase64 = function() {
         const NativeBase64 = requireClass("android.util.Base64");
-        var encodedString = NativeBase64.encodeToString(_parts, 0, _parts.length, NativeBase64.DEFAULT);
-        return encodedString;
+        return NativeBase64.encodeToString(array(_parts, "byte"), 0, _parts.length, NativeBase64.DEFAULT);
     };
     
     this.toString = function() {
-        return Base64Util.Utf8ArrayToStr( _parts);
+        return Base64Util.Utf8ArrayToStr(_parts);
     }
 }
 
+/** @todo 
+ * Error: Attempt to invoke virtual method 'int io.smartface.ExposingEngine.FastArray.size()' on a null object reference
+ */
 Blob.createFromBase64 = function(base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
     var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);

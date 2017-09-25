@@ -1,12 +1,12 @@
-const AndroidConfig         = require("sf-core/util/Android/androidconfig");
-const TypeUtil              = require("sf-core/util/type");
+const AndroidConfig         = require("../../util/Android/androidconfig");
+const TypeUtil              = require("../../util/type");
 const NativeFile            = requireClass('java.io.File');
 const NativeEnvironment     = requireClass('android.os.Environment');
 
 const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved': false};
 const resolvedPaths = {};
-const emulatorPath = Android.getActivity().getExternalCacheDir().getAbsolutePath();
-const playerRauPath = Android.getActivity().getFilesDir().getAbsolutePath();
+const emulatorPath = AndroidConfig.activity.getExternalCacheDir().getAbsolutePath();
+const playerRauPath = AndroidConfig.activity.getFilesDir().getAbsolutePath();
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
 var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
@@ -21,7 +21,7 @@ Object.defineProperties(Path, {
     'ImagesUriScheme': {
         value: 'images://',
         writable: false,
-        enumarable: true
+        enumerable: true
     },
     'AssetsUriScheme': {
         value: 'assets://',
@@ -35,7 +35,7 @@ Object.defineProperties(Path, {
     },
     'DataDirectory': {
         get: function(){
-            var filesDir = Android.getActivity().getFilesDir();
+            var filesDir = AndroidConfig.activity.getFilesDir();
             if(filesDir){
                 return filesDir.getAbsolutePath();
             }
@@ -234,7 +234,7 @@ function setScreenConfigs(){
     const NativeDisplayMetrics  = requireClass("android.util.DisplayMetrics")
     const NativeConfiguration   = requireClass("android.content.res.Configuration");
 
-    var configuration = Android.getActivity().getResources().getConfiguration();
+    var configuration = AndroidConfig.activity.getResources().getConfiguration();
     if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
         desiredDrawableSizeIndex = 0;
     } 
@@ -248,7 +248,7 @@ function setScreenConfigs(){
         desiredDrawableSizeIndex = 1;
     }
     
-    var metrics = Android.getActivity().getResources().getDisplayMetrics();
+    var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
     
     if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_LOW) {
         desiredDrawableDensityIndex = 0;

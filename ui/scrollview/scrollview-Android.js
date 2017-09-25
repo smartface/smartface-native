@@ -1,17 +1,19 @@
 const ViewGroup = require('../viewgroup');
-const UnitConverter = require("sf-core/util/Android/unitconverter.js");
+const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
+const AndroidConfig = require("../../util/Android/androidconfig");
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
 
-        var _align = params.align ? params.align : ScrollView.Align.VERTICAL;
+        var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
         if (!this.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
                 this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
-                    onScrollChanged: function(x, y, oldx, oldy) {
+                    onScrollChanged: function(xObj, y, oldx, oldy) {
+                        var x = xObj;
                         x = (x > 0)? x : 0; // negative values are provided as well
                         _contentOffset.x = UnitConverter.pixelToDp(x);
                         _callbackOnScroll && _callbackOnScroll();
@@ -20,7 +22,8 @@ const ScrollView = extend(ViewGroup)(
             } else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
                 this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
-                    onScrollChanged: function(x, y, oldx, oldy) {
+                    onScrollChanged: function(x, yObj, oldx, oldy) {
+                        var y = yObj;
                         y = (y > 0)? y : 0; // negative values are provided as well
                         _contentOffset.y = UnitConverter.pixelToDp(y);
                         _callbackOnScroll && _callbackOnScroll();
@@ -30,7 +33,7 @@ const ScrollView = extend(ViewGroup)(
         }
         
         _super(this);
-        const FlexLayout = require("sf-core/ui/flexlayout");
+        const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
         _layout.parent = this;
@@ -60,7 +63,7 @@ const ScrollView = extend(ViewGroup)(
             'scrollToCoordinate': {
                 value: function(coordinate) {
                     if (coordinate) {
-                        const UnitConverter = require('sf-core/util/Android/unitconverter');
+                        const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
@@ -129,11 +132,11 @@ const ScrollView = extend(ViewGroup)(
 Object.defineProperties(ScrollView, {
     'Align': {
         value: require('./scrollview-align'),
-        enumarable: true
+        enumerable: true
     },
     'Edge': {
         value: require('./scrollview-edge'),
-        enumarable: true
+        enumerable: true
     }
 });
 
