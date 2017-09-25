@@ -163,7 +163,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                 var bytes = [];
                 var nativeBytes = response.body().bytes();
                 for(var i = 0; i < nativeBytes.length; i++) {
-                    let currentByte = nativeBytes[i];
+                    var currentByte = nativeBytes[i];
                     bytes.push(currentByte);
                 }
                 var responseBody = new Blob(bytes, {type: {}});
