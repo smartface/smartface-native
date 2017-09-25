@@ -65,7 +65,6 @@ function Sound(params) {
     };
     
     this.play = function() {
-        this.nativeObject.prepare();
         this.nativeObject.start();
     };
     
@@ -105,10 +104,12 @@ function Sound(params) {
     
     this.loadFile = function(file) {
         this.nativeObject.setDataSource(file.fullPath);
+        this.nativeObject.prepare();
     };
     
     this.loadURL = function(url) {
         this.nativeObject.setDataSource(url);
+        this.nativeObject.prepare();
     };
     
     // Assign parameters given in constructor
