@@ -2,6 +2,8 @@ const FlexLayout = require('sf-core/ui/flexlayout');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
+const Screen = require('sf-core/device/screen');
+const OrientationType = require('sf-core/device/screen/orientationtype');
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -65,7 +67,24 @@ function Page(params) {
     
     self.onOrientationChangeHandler = function(){
         if (typeof self.onOrientationChange === "function"){
-             self.onOrientationChange();
+            var tempOrientation;
+            switch (Screen.orientation) {
+                case OrientationType.PORTRAIT:
+                    tempOrientation = Page.Orientation.PORTRAIT;
+                    break; 
+                case OrientationType.UPSIDEDOWN:
+                    tempOrientation = Page.Orientation.UPSIDEDOWN;
+                    break; 
+                case OrientationType.LANDSCAPELEFT:
+                    tempOrientation = Page.Orientation.LANDSCAPELEFT;
+                    break; 
+                case OrientationType.LANDSCAPERIGHT:
+                    tempOrientation = Page.Orientation.LANDSCAPERIGHT;
+                    break; 
+                default: 
+                   tempOrientation = Page.Orientation.PORTRAIT;
+            }
+            self.onOrientationChange({orientation : tempOrientation});
         }
     }
     
@@ -90,11 +109,36 @@ function Page(params) {
 
     self.checkOrientation = function(){
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
-
         if (self.orientation.indexOf(currentOrientation) === -1){
             __SF_UIDevice.changeOrientation(self.orientation[0]);
+            self.layout.applyLayout();
         }
+        
     };
+    
+    Object.defineProperty(this, 'currentOrientation', {
+        get: function() {
+            var tempOrientation;
+            switch (__SF_UIApplication.sharedApplication().statusBarOrientation) {
+                case 1:
+                    tempOrientation = Page.Orientation.PORTRAIT;
+                    break; 
+                case 2:
+                    tempOrientation = Page.Orientation.UPSIDEDOWN;
+                    break; 
+                case 3:
+                    tempOrientation = Page.Orientation.LANDSCAPELEFT;
+                    break; 
+                case 4:
+                    tempOrientation = Page.Orientation.LANDSCAPERIGHT;
+                    break; 
+                default: 
+                   tempOrientation = Page.Orientation.PORTRAIT;
+            }
+            return tempOrientation;
+        },
+        enumerable: true
+    });
     
     Object.defineProperty(this, 'orientation', {
         get: function() {
@@ -123,7 +167,9 @@ function Page(params) {
         },
         enumerable: true
     });
-
+    
+    self.onShow = function(e){};
+    
     self.onHideHandler = function(){
         self.layout.nativeObject.endEditing(true);
         if (typeof self.onHide === "function"){

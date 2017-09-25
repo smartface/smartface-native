@@ -11,7 +11,6 @@ module.exports = {
     Page: require('./page'),
     Pages: require('./pages'),
     HeaderBarItem: require('./headerbaritem'),
-    AbsoluteLayout: require('./absolutelayout'),
     FlexLayout: require('./flexlayout'),
     Slider: require('./slider'),
     ImageView: require('./imageview'),
@@ -40,5 +39,6 @@ module.exports = {
     Router: require('./router'),
     BottomTabBar: require('./bottomtabbar'),
     TabBarItem: require('./tabbaritem'),
-    Navigator: require('./navigator')
+    Navigator: require('./navigator'),
+    SwipeView: require('./swipeview')
 };

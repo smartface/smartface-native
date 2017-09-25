@@ -432,7 +432,7 @@ View.prototype.bringToFront = function(){};
  *     const Label = require('sf-core/ui/label');
  *
  *     var myFlexLayout = new FlexLayout();
- *     myAbsoluteLayout.id = 5432;
+ *     myFlexLayout.id = 5432;
  *
  *     var myLabel = new Label({
  *          text: "Smartface Label"
@@ -471,12 +471,16 @@ View.prototype.onTouch = function onTouch(){ }
 View.prototype.onTouchEnded = function onTouchEnded(){ }
 
 /**
- * Gets/Sets the elevation of the view.
+ * Gets/Sets the elevation of the view. For the views that has 
+ * StateListAnimator natively like Button, will lost its own 
+ * StateListAnimation when elevation value changed.
  * For details : https://developer.android.com/training/material/shadows-clipping.html
  *
  * @property {Number} elevation
  * @android
  * @member UI.View
+ * @see https://developer.android.com/training/material/shadows-clipping.html
+ * @see https://developer.android.com/reference/android/view/View.html#setStateListAnimator(android.animation.StateListAnimator)
  * @since 1.1.12
  */
 View.prototype.android.elevation;

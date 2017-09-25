@@ -1,6 +1,6 @@
+const TypeUtil = require("../util/type");
+const AndroidConfig = require("../util/Android/androidconfig");
 const RAU = require("./RAU");
-const TypeUtil = require("sf-core/util/type");
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 
 function ApplicationWrapper() {}
@@ -15,8 +15,8 @@ var _onMaximize;
 var _onExit;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
-var activity = Android.getActivity();
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
+
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
@@ -53,8 +53,7 @@ Object.defineProperties(ApplicationWrapper, {
     'byteReceived': {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var applicationInfo = activity.getApplicationInfo();
-            var UID = applicationInfo.uid;
+            var UID = AndroidConfig.activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
@@ -62,8 +61,7 @@ Object.defineProperties(ApplicationWrapper, {
     'byteSent': {
         get: function(){
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var applicationInfo = activity.getApplicationInfo();
-            var UID = applicationInfo.uid;
+            var UID = AndroidConfig.activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
@@ -146,14 +144,14 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             }
             
-            var packageManager = activity.getPackageManager();
+            var packageManager = AndroidConfig.activity.getPackageManager();
             var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
             if(activitiesCanHandle.size() > 0){
                 if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title); 
                     try{
-                        activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
                     }
                     catch(e){
                         onFailure && onFailure();
@@ -162,7 +160,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
                 else{
                     try{
-                        activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
                     }
                     catch(e){
                         onFailure && onFailure();
@@ -178,15 +176,15 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'exit': {
         value: function(){
-            activity.finish();
+            AndroidConfig.activity.finish();
         },
         enumerable: true
     },
     'restart': {
         value: function(){
-            var spratIntent = activity.getIntent();
-            activity.finish();
-            activity.startActivity(spratIntent);
+            var spratIntent = AndroidConfig.activity.getIntent();
+            AndroidConfig.activity.finish();
+            AndroidConfig.activity.startActivity(spratIntent);
         },
         enumerable: true
     },
@@ -283,7 +281,7 @@ Object.defineProperties(ApplicationWrapper, {
 
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
-        value: activity.getPackageName(),
+        value: AndroidConfig.activity.getPackageName(),
         enumerable: true
     },
     'checkPermission':{
@@ -295,10 +293,10 @@ Object.defineProperties(ApplicationWrapper.android, {
             if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
-                return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
+                return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission) === 0;
             }
             else{
-                var packageManager = activity.getPackageManager();
+                var packageManager = AndroidConfig.activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
             }
@@ -319,7 +317,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 });
             }
             else{
-                activity.requestPermissions([permissions], requestCode);
+                AndroidConfig.activity.requestPermissions(array([string(permissions)]), requestCode);
             }
             
         },
@@ -329,8 +327,8 @@ Object.defineProperties(ApplicationWrapper.android, {
         value: function(permission){
             if(!TypeUtil.isString(permission)){
                 throw new Error('Permission must be Application.Permission type');
-            }
-            return activity.shouldShowRequestPermissionRationale(permission);
+            } 
+            return ((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
         },
         enumerable: true
     },

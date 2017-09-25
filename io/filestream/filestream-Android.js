@@ -1,8 +1,9 @@
 /* globals requireClass */
-const File                  = require("sf-core/io/file");
-const Path                  = require("sf-core/io/path");
-const TypeUtil              = require("sf-core/util/type");
-const Blob                  = require('sf-core/blob');
+const File                  = require("../file");
+const Path                  = require("../path");
+const TypeUtil              = require("../../util/type");
+const Blob                  = require('../../blob');
+const AndroidConfig         = require("../../util/Android/androidconfig");
 
 function FileStream(params) {
     var fileObject;
@@ -40,7 +41,7 @@ function FileStream(params) {
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else{
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,true);
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
@@ -50,7 +51,7 @@ function FileStream(params) {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             
-            var assetsStreamObject = Android.getActivity().getAssets().open(fileObject.nativeObject);
+            var assetsStreamObject = AndroidConfig.activity.getAssets().open(fileObject.nativeObject);
             if(_contentMode === FileStream.ContentMode.TEXT){
                 var inputStreamReader = new NativeInputStreamReader(assetsStreamObject);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
@@ -64,7 +65,7 @@ function FileStream(params) {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             
-            var inputStream = Android.getActivity().getResources().openRawResource(fileObject.drawableResourceId);
+            var inputStream = AndroidConfig.activity.getResources().openRawResource(fileObject.drawableResourceId);
             if(_contentMode === FileStream.ContentMode.TEXT){
                 var inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
@@ -99,7 +100,7 @@ function FileStream(params) {
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
         
         if(_contentMode === FileStream.ContentMode.TEXT){
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,false);
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
@@ -124,13 +125,13 @@ function FileStream(params) {
         },
         'isReadable': {
             get: function(){
-                return this.nativeObject && _closed && (_streamType === FileStream.StreamType.READ);
+                return this.nativeObject && !_closed && (_streamType === FileStream.StreamType.READ);
             },
             enumerable: true
         },
         'isWritable': {
             get: function(){
-                return this.nativeObject && _closed && (_streamType !== FileStream.StreamType.READ);
+                return this.nativeObject && !_closed && (_streamType !== FileStream.StreamType.READ);
             },
             enumerable: true
         },
@@ -155,7 +156,7 @@ function FileStream(params) {
                 }
                 var fileContent = this.readToEnd();
                 if(_contentMode === FileStream.ContentMode.BINARY){
-                    return fileContent;
+                    return new Blob(fileContent, {type:"file"});
                 }
                 else{
                     const NativeString = requireClass("java.lang.String");
@@ -194,20 +195,18 @@ function FileStream(params) {
                 if(_closed || (_streamType === FileStream.StreamType.READ)){
                     throw new Error("FileStream already closed or streamType is READ");
                 }
-                var dataToWrite;
                 if(_contentMode === FileStream.ContentMode.BINARY){
                     if(!(data instanceof Blob)){
                         throw new Error("Parameter must be Blob")
                     }
-                    dataToWrite = data.parts;
+                    this.nativeObject.write(array(data.parts, "byte"));
                 }
                 else{
                     if(!TypeUtil.isString(data)){
                         throw new Error("Parameter must be string")
                     }
-                    dataToWrite = data;
+                    this.nativeObject.write(data);
                 }
-                this.nativeObject.write(dataToWrite);
             },
             enumerable: true
         }

@@ -1,6 +1,6 @@
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
-const AndroidUnitConverter  = require('sf-core/util/Android/unitconverter.js');
+const AndroidUnitConverter  = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
 const SliderDrawer = extend(FlexLayout)(
@@ -113,10 +113,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'height': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.height);
+                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.height));
                 },
                 set: function(height) {
-                    drawerLayoutParams.height = AndroidUnitConverter.dpToPixel(height);
+                    drawerLayoutParams.height = int(AndroidUnitConverter.dpToPixel(height));
                 },
                 enumerable: true,
                 configurable: true
@@ -124,10 +124,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'width': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.width);
+                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.width));
                 },
                 set: function(width) {
-                    drawerLayoutParams.width = AndroidUnitConverter.dpToPixel(width);
+                    drawerLayoutParams.width = int(AndroidUnitConverter.dpToPixel(width));
                 },
                 enumerable: true,
                 configurable: true
@@ -154,7 +154,7 @@ const SliderDrawer = extend(FlexLayout)(
                 
             },
             'onDrawerStateChanged': function(newState){
-                if (newState === 1) { // STATE_DRAGGING
+                if (int(newState) === 1) { // STATE_DRAGGING
                     _state = SliderDrawer.State.DRAGGED;
                 }
             }

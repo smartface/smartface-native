@@ -86,7 +86,7 @@ function TimePicker(params) {
                 self.onTimeSelected && self.onTimeSelected({hour: hour, minute: minute});
             }
         }), hour, minutes, _is24HourFormat);
-        self.nativeObject.setTitle("");
+        self.nativeObject.setTitle(string(""));
     }
     
     // Assign parameters given in constructor

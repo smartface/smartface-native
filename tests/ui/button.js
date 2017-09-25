@@ -1,72 +1,57 @@
-var expect  = require("chai").expect;
-var assert  = require("chai").assert;
+var expect = require("chai").expect;
+var assert = require("chai").assert;
 
-const Button        = require('sf-core/ui/button');
-const Color         = require('sf-core/ui/color');
-const StateList     = require('sf-core/util/statelist');
-const TextAlignment = require('sf-core/ui/textalignment');
+const Button = require('../../ui/button');
+const Color = require('../../ui/color');
+const Font = require('../../ui/font');
+const Image = require('../../ui/image');
+const TextAlignment = require('../../ui/textalignment');
 
-const colorList1 = new StateList({
-    normal:   Color.WHITE,
-    disabled: Color.BLACK,
-    selected: Color.LIGHTGRAY,
-    pressed:  Color.DARKGRAY,
-    focused:  Color.DARKGRAY
-});
+salep.test("sf-core/ui/label Unit Test", function() {
+    var testObject = null;
 
-const colorList2 = new StateList({
-    normal:   Color.RED,
-    disabled: Color.WHITE,
-    selected: Color.GRAY,
-    pressed:  Color.BLUE,
-    focused:  Color.YELLOW
-});
-
-const imageList = new StateList({
-    normal:   "assets://normal.png",
-    disabled: "assets://disabled.png",
-    selected: "assets://selected.png",
-    pressed:  "assets://pressed.png",
-    focused:  "assets://focused.png"
-});
-
-salep.test("sf-core/ui/label Unit Test", function () {
-    this.case("[backgroundColors] setter/getter.", function () {
-        var myButton = new Button();
-        myButton.backgroundColors = colorList1;
-        assert.deepEqual(myButton.backgroundColors, colorList1, "mismatch in color list.");
-        assert.notDeepEqual(myButton.backgroundColors, colorList2, "colorList2 cannot be equal to backgroundColors");
+    this.beforeEach(function() {
+        testObject = new Button();
     });
 
-    this.case("[backgroundImages] setter/getter.", function () {
-        var myButton = new Button();
-        myButton.backgroundImages = imageList;
-        assert.deepEqual(myButton.backgroundImages, imageList, "mismatch in image list.");
+    this.afterEach(function() {
+        testObject = null;
     });
 
-    this.case("[text] setter/getter.", function () {
-        var myButton = new Button();
-        var defaultValue = myButton.text;
-        assert.equal(myButton.text, defaultValue, "mismatch in defaultValue.");
-        assert.equal(myButton.text, defaultValue, "default value must be empty string.");
-
-        myButton.text = "one salep pls";
-        assert.equal   (myButton.text, "one salep pls", "text must be 'one salep pls'.");
-        assert.notEqual(myButton.text, defaultValue   , "text cannot be defaultValue.");
+    this.case("[backgroundColor] getter/setter.", function() {
+        assert.doesNotThrow(function() { testObject.backgroundColor = Color.RED; }, Error);
+        assert.equal(testObject.backgroundColor, Color.RED, "backgroundColor must be Color.RED");
     });
 
-    this.case("[textAlignment] setter/getter.", function () {
-        var myButton = new Button();
-        myButton.textAlignment = TextAlignment.MIDCENTER;
-        assert.equal   (myButton.textAlignment, TextAlignment.MIDCENTER, "mismatching textalignment.");
-        assert.notEqual(myButton.textAlignment, TextAlignment.TOPLEFT  , "alignment cannot be TOPLEFT.");
+    this.case("[backgroundImage] getter/setter.", function() {
+        var myImage = Image.createFromFile("images://smartface.png");
+        assert.doesNotThrow(function() { testObject.backgroundImage = myImage; }, Error);
+        assert.equal(testObject.backgroundImage, myImage, "backgroundImage must be myImage");
     });
 
-    salep.skipNext(); // TODO: fails with array index
-    this.case("[textColors] setter/getter.", function () {
-        var myButton = new Button();
-        myButton.textColors = colorList1;
-        assert.deepEqual   (myButton.textColors, colorList1, "textColors must match with colorList1");
-        assert.notDeepEqual(myButton.textColors, colorList2, "textColors CANNOT match with colorList2");
+    this.case("[enabled] getter/setter.", function() {
+        assert.doesNotThrow(function() { testObject.enabled = false; }, Error);
+        assert.isFalse(testObject.enabled, "enabled must be false");
+    });
+
+    this.case("[font] getter/setter.", function() {
+        var myFont = Font.create(Font.DEFAUL, 17, Font.NORMAL);
+        assert.doesNotThrow(function() { testObject.font = myFont; }, Error);
+        assert.equal(testObject.font, myFont, "font must be myFont");
+    });
+
+    this.case("[text] getter/setter.", function() {
+        assert.doesNotThrow(function() { testObject.text = "Smartface"; }, Error);
+        assert.equal(testObject.text, "Smartface", "text must be 'Smartface'");
+    });
+
+    this.case("[textAlignment] getter/setter.", function() {
+        assert.doesNotThrow(function() { testObject.textAlignment = TextAlignment.BOTTOMCENTER; }, Error);
+        assert.equal(testObject.textAlignment, TextAlignment.BOTTOMCENTER, "textAlignment must be TextAlignment.BOTTOMCENTER");
+    });
+
+    this.case("[textColor] getter/setter.", function() {
+        assert.doesNotThrow(function() { testObject.textColor = Color.BLACK; }, Error);
+        assert.equal(testObject.textColor, Color.BLACK, "textColor must be Color.BLACK");
     });
 });

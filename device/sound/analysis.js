@@ -9,9 +9,11 @@
  *     @example
  *     const Sound = require("sf-core/device/sound");
  *     var mySound = new Sound();
- *     mySound.loadURL(your-url);
+ *     mySound.onReady = function() {
+ *         mySound.play();
+ *     };
  *     mySound.isLooping = true;
- *     mySound.play();
+ *     mySound.loadURL(your-url);
  * 
  */
 function Sound() {}
@@ -69,6 +71,29 @@ Sound.prototype.totalDuration;
  * @since 0.1
  */
 Sound.prototype.currentDuration;
+
+
+/**
+ * Loads the source. {@link Application.Android.Permissions#READ_EXTERNAL_STORAGE} permission is required to load local files.
+ *
+ * @method loadFile
+ * @param {IO.File} file
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Sound.prototype.loadFile = function(file){};
+
+/**
+ * Loads the source.
+ *
+ * @method loadURL
+ * @param {String} url
+ * @android
+ * @ios
+ * @since 0.1
+ */
+Sound.prototype.loadURL = function(url){};
 
 /**
  * Seeks to specified time position.

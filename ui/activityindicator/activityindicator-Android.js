@@ -1,41 +1,18 @@
-const View = require('sf-core/ui/view');
+const View = require('../view');
 const extend = require('js-base/core/extend');
 
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-const Color = require('sf-core/ui/color');
+const Color = require('../color');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 const ActivityIndicator = extend(View)(
     function(_super, params) {
-        var _color = null;
-        
         if (!this.nativeObject) {
-            this.nativeObject = new NativeProgressBar(Android.getActivity());
+            this.nativeObject = new NativeProgressBar(AndroidConfig.activity);
         }
         
         _super(this);
-        
-        Object.defineProperties(this, {
-            'color': {
-                get: function() {
-                    return _color;
-                },
-                set: function(color) {
-                    if (_color !== color) {
-                        _color = color;
-                        this.nativeObject.getIndeterminateDrawable().setColorFilter(_color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-                    }
-                },
-                enumerable: true
-            },
-            'toString': {
-                value: function(){
-                    return 'ActivityIndicator';
-                },
-                enumerable: true, 
-                configurable: true
-            }
-        });
 
         // Handling ios specific properties.
         this.ios = {}; 
@@ -51,6 +28,28 @@ const ActivityIndicator = extend(View)(
                 this[param] = params[param];
             }
         }
+    },
+    function(prop) {
+        prop.__color = null;
+        
+        Object.defineProperties(prop, {
+            'color': {
+                get: function() {
+                    return this.__color;
+                },
+                set: function(color) {
+                    if (this.__color !== color) {
+                        this.__color = color;
+                        this.nativeObject.getIndeterminateDrawable().setColorFilter(this.__color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+                    }
+                },
+                enumerable: true
+            }
+        });
+        
+        prop.toString = function() {
+            return 'ActivityIndicator';
+        };
     }
 );
 

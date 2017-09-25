@@ -321,15 +321,17 @@ Notifications.LocalNotification.prototype.cancel = function(){};
  * @since 0.1
  * 
  * Priority for the notification.
+ * 
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority} instead.
  */
 Notifications.Priority = {};
-
 
 /**
  * @property {Number} MIN
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#MIN} instead.
  */
 Notifications.Priority.MIN = -2;
 
@@ -338,6 +340,7 @@ Notifications.Priority.MIN = -2;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#LOW} instead.
  */
 Notifications.Priority.LOW = -1;
 
@@ -346,6 +349,7 @@ Notifications.Priority.LOW = -1;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#DEFAULT} instead.
  */
 Notifications.Priority.DEFAULT = 0;
 
@@ -354,6 +358,7 @@ Notifications.Priority.DEFAULT = 0;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#HIGH} instead.
  */
 Notifications.Priority.HIGH = 1;
 
@@ -362,7 +367,63 @@ Notifications.Priority.HIGH = 1;
  * @static
  * @readonly
  * @since 0.1
+ * @deprecated 1.1.18 Use {@link Notifications.Android.Priority#MAX} instead.
  */
 Notifications.Priority.MAX = 2;
+
+/**
+ * Android Specific Properties.
+ * @class Notifications.Android
+ * @since 1.1.18
+ */
+Notifications.Android = {};
+
+/** 
+ * @enum {Number} Notifications.Android.Priority 
+ * @since 1.1.18
+ * 
+ * Priority for the notification.
+ */
+Notifications.Android.Priority = {};
+
+/**
+ * @property {Number} MIN
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.MIN = -2;
+
+/**
+ * @property {Number} LOW
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.LOW = -1;
+
+/**
+ * @property {Number} DEFAULT
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.DEFAULT = 0;
+
+/**
+ * @property {Number} HIGH
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.HIGH = 1;
+
+/**
+ * @property {Number} MAX
+ * @static
+ * @readonly
+ * @since 1.1.18
+ */
+Notifications.Android.Priority.MAX = 2;
 
 module.exports = Notifications;

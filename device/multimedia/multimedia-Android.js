@@ -1,11 +1,12 @@
-const NativeMediaStore = requireClass("android.provider.MediaStore");
-const NativeIntent = requireClass("android.content.Intent");
-const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
-const NativeContentValues = requireClass("android.content.ContentValues");
-const NativeBuild = requireClass("android.os.Build");
+const AndroidConfig         = require('../../util/Android/androidconfig')
+const NativeMediaStore      = requireClass("android.provider.MediaStore");
+const NativeIntent          = requireClass("android.content.Intent");
+const NativeBitmapFactory   = requireClass("android.graphics.BitmapFactory");
+const NativeContentValues   = requireClass("android.content.ContentValues");
+const NativeBuild           = requireClass("android.os.Build");
 
-const File = require("sf-core/io/file");
-const Image = require("sf-core/ui/image");
+const File = require("../../io/file");
+const Image = require("../../ui/image");
 
 const Type = {
     IMAGE: 0,
@@ -49,12 +50,10 @@ var _captureParams = {};
 var _pickParams = {};
 var _action = 0;
 
-const NOUGAT = 24;
-
 var _fileURI = null;
 
 Multimedia.startCamera = function(params) {
-    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params || (params.page instanceof require("../../ui/page")))){
         throw new TypeError('Page parameter required');
     }
     
@@ -63,7 +62,7 @@ Multimedia.startCamera = function(params) {
     }
     _captureParams = params;
     
-    if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
+    if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
     }
     else {
@@ -73,14 +72,13 @@ Multimedia.startCamera = function(params) {
 };
 
 function startCameraWithExtraField() {
-    var activity = Android.getActivity();
     var takePictureIntent = new NativeIntent(NativeAction[_action]);
-    var packageManager = activity.getPackageManager();
+    var packageManager = AndroidConfig.activity.getPackageManager();
     
     if (takePictureIntent.resolveActivity(packageManager)) {
         var contentUri;
         var contentValues = new NativeContentValues();
-        var contentResolver = activity.getContentResolver();
+        var contentResolver = AndroidConfig.activity.getContentResolver();
         if(_action === ActionType.IMAGE_CAPTURE) {
             contentUri = NativeMediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             _fileURI = contentResolver.insert(contentUri, contentValues);
@@ -99,7 +97,7 @@ function startCameraWithExtraField() {
 }
 
 Multimedia.pickFromGallery = function(params) {
-    if(!(params || (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params || (params.page instanceof require("../../ui/page")))){
         throw new TypeError('Page parameter required');
     }
     _pickParams = params;
@@ -108,7 +106,10 @@ Multimedia.pickFromGallery = function(params) {
     if(params && (params.type !== undefined))
         type = params.type;
     intent.setType(_types[type]);
-    intent.setAction(NativeIntent.ACTION_GET_CONTENT);
+    intent.setAction(NativeIntent.ACTION_PICK);
+    /** @todo
+     * An error occured
+     */
     params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
 };
 
@@ -116,7 +117,7 @@ Multimedia.android = {};
 
 Multimedia.android.getAllGalleryItems = function(params) {
     try {
-        var projection = [ NativeMediaStore.MediaColumns.DATA ];
+        var projection = array([ NativeMediaStore.MediaColumns.DATA ], "int");
         var result = {};
         var uri;
         if(params && params.type === Multimedia.Type.VIDEO) {
@@ -162,33 +163,35 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function pickFromGallery(resultCode, data) {
-    var activity = Android.getActivity();
-    if (resultCode === activity.RESULT_OK) {
+    var success = true;
+    if (resultCode === AndroidConfig.activity.RESULT_OK) {
         try {
             var uri = data.getData();
             var realPath;
-            if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                 realPath = getRealPathFromID(uri, _pickParams.type);
             }
             else {
                 realPath = getRealPathFromURI(uri);
             }
-            
-            if(_pickParams.onSuccess) {
-                if (_pickParams.type === Multimedia.Type.IMAGE) {
-                    var inputStream = activity.getContentResolver().openInputStream(uri);
-                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                    var image = new Image({bitmap: bitmap});
-                    _pickParams.onSuccess({image: image});
-                } else {
-                    var file = new File({path: realPath});
-                    _pickParams.onSuccess({video: file});
-                }
-            }
+
         }
         catch (err) {
+            success = false;
             if(_pickParams.onFailure)
                 _pickParams.onFailure({message: err});
+        }
+        
+        if(success && _pickParams.onSuccess) {
+            if (_pickParams.type === Multimedia.Type.IMAGE) {
+                var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
+                var bitmap = NativeBitmapFactory.decodeStream(inputStream);
+                var image = new Image({bitmap: bitmap});
+                _pickParams.onSuccess({image: image});
+            } else {
+                var file = new File({path: realPath});
+                _pickParams.onSuccess({video: file});
+            }
         }
     }
     else {
@@ -200,11 +203,11 @@ function pickFromGallery(resultCode, data) {
 function getRealPathFromID(uri, action) {
     const NativeDocumentsContract = requireClass("android.provider.DocumentsContract");
     var docId = NativeDocumentsContract.getDocumentId(uri);
-    var id = docId.split(":")[1];
+    var id = docId.split(":")[1]; 
     
     var projection = [ "_data" ]; // MediaStore.Images.Media.DATA 
     var selection = "_id" + "=?"; // MediaStore.Images.Media._ID
-    var contentResolver = Android.getActivity().getContentResolver();
+    var contentResolver = AndroidConfig.activity.getContentResolver();
     var contentUri;
     
     if (_pickParams.type === Multimedia.Type.IMAGE) {
@@ -222,7 +225,7 @@ function getRealPathFromID(uri, action) {
     if(cursor) {
         var columnIndex = cursor.getColumnIndex(projection[0]);
         if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex);
+            filePath = string(cursor.getString(columnIndex));
         }
 
         cursor.close();
@@ -234,25 +237,24 @@ function getRealPathFromURI(uri) {
     var projection = [
         "_data" //NativeMediaStore.MediaColumns.DATA
     ];
-    var contentResolver = Android.getActivity().getContentResolver();
+    var contentResolver = AndroidConfig.activity.getContentResolver();
     var cursor = contentResolver.query(uri, projection, null, null, null);
     if (cursor === null) { 
-        return uri.getPath();
+        return string(uri.getPath());
     } else {
         cursor.moveToFirst();
         var idx = cursor.getColumnIndex(projection[0]);
-        var realPath = cursor.getString(idx);
+        var realPath = string(cursor.getString(idx));
         cursor.close();
         return realPath;
     }
 }
 
 function getCameraData(resultCode, data) {
-    var activity = Android.getActivity();
-    if (resultCode === activity.RESULT_OK) {
+    if (resultCode === AndroidConfig.activity.RESULT_OK) {
         try {
             var uri;
-            if(NativeBuild.VERSION.SDK_INT >= NOUGAT) {
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                 uri = _fileURI;
             }
             else {
@@ -262,7 +264,7 @@ function getCameraData(resultCode, data) {
             if(_captureParams.onSuccess) {
                 if(_action === ActionType.IMAGE_CAPTURE) {
                     
-                    var inputStream = activity.getContentResolver().openInputStream(uri);
+                    var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
                     var bitmap = NativeBitmapFactory.decodeStream(inputStream);
                     var image = new Image({bitmap: bitmap});
                     _captureParams.onSuccess({image: image});
@@ -285,8 +287,7 @@ function getCameraData(resultCode, data) {
 }
 
 function getAllMediaFromUri(params) {
-    var activity = Android.getActivity();
-    var contentResolver = activity.getContentResolver();
+    var contentResolver = AndroidConfig.activity.getContentResolver();
     var cursor = contentResolver.query(params.uri, params.projection, null, null, null);
     var files = [];
     if (cursor) {

@@ -3,8 +3,9 @@ const Pages = require('sf-core/ui/pages');
 function RouterViewModel(params) {
     var self = this;
     
-    var routerView = new RouterView();
     var routerBrain = new RouterModel();
+    // var routerView = new RouterView({viewModel : self});
+    var routerView = null;
     
     // Properties
     Object.defineProperty(self, 'sliderDrawer', {
@@ -84,6 +85,10 @@ function RouterViewModel(params) {
         if (pageToGo) {
             var pageInfo = {};
             
+            if (routerView === null) {
+                routerView = new RouterView({viewModel : self});
+            }
+                
             switch (pageToGo.type) {
                 case 'TabBarFlow': {
                     pageToGo.go(routes[1],parameters,_animated)
@@ -126,6 +131,20 @@ function RouterViewModel(params) {
             var isShowed = routerView.show(pageInfo);
             if (isShowed) {
                 routerBrain.currentPage = pageToGo;
+                
+                var nativeObject = null;
+                switch (pageToGo.type) {
+                    case 'TabBarFlow':
+                        nativeObject = pageToGo.tabBarView.nativeObject;
+                        break;
+                    case 'Navigator':
+                        nativeObject = pageToGo.view.nativeObject;
+                        break;
+                    default:
+                        nativeObject = pageToGo.nativeObject;
+                        break;
+                }
+                routerView.currentPageChanged(nativeObject);
                 
                 var pageIndex = routerBrain.history.indexOf(pageToGo);
                 if (pageIndex == -1) {
@@ -173,9 +192,10 @@ function RouterViewModel(params) {
 
 function RouterView(params) {
     var self = this;
+    self.viewModel = params.viewModel;
     
     const Page = require('sf-core/ui/page');
-    var rootPage = new Page();
+    var rootPage = new Page({orientation : Page.Orientation.AUTO});
     
     self.nativeObject = rootPage.nativeObject;
 
@@ -247,6 +267,11 @@ function RouterView(params) {
     this.makeVisible = function () {
         SF.requireClass("UIApplication").sharedApplication().keyWindow.rootViewController = self.nativeObject;
         SF.requireClass("UIApplication").sharedApplication().keyWindow.makeKeyAndVisible();
+    };
+    this.currentPageChanged = function(nativeObject){
+        if(self.nativeObject.constructor.name === "SMFNative.SMFUIViewController"){
+            self.nativeObject.currentPage = nativeObject;
+        }
     };
     
     this.makeVisible();
