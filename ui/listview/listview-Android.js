@@ -78,7 +78,7 @@ const ListView = extend(View)(
         },null);
 
         var _onScroll;
-        var _rowHeight = 0;
+        var _rowHeight;
         var _onRowCreate;
         var _onRowSelected;
         var _onPullRefresh;
@@ -155,6 +155,7 @@ const ListView = extend(View)(
                 value: function() {
                     this.nativeInner.setLayoutManager(linearLayoutManager);
                     this.nativeInner.setAdapter(dataAdapter);
+                    // dataAdapter.notifyDataSetChanged();
                 },
                 enumerable: true
             },
@@ -209,6 +210,15 @@ const ListView = extend(View)(
                 },
                 set: function(onRowSelected) {
                     _onRowSelected = onRowSelected.bind(this);
+                },
+                enumerable: true
+            },
+            'onRowHeight': {
+                get: function() {
+                    return _onRowHeight;
+                },
+                set: function(onRowHeight) {
+                    _onRowHeight = onRowHeight.bind(this);
                 },
                 enumerable: true
             },
