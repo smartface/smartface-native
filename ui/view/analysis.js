@@ -432,7 +432,7 @@ View.prototype.bringToFront = function(){};
  *     const Label = require('sf-core/ui/label');
  *
  *     var myFlexLayout = new FlexLayout();
- *     myAbsoluteLayout.id = 5432;
+ *     myFlexLayout.id = 5432;
  *
  *     var myLabel = new Label({
  *          text: "Smartface Label"

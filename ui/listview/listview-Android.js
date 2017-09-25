@@ -1,8 +1,8 @@
-const View                  = require('../view');
-const extend                = require('js-base/core/extend');
-const TypeUtil              = require("sf-core/util/type");
-const ListViewItem          = require("sf-core/ui/listviewitem");
-const AndroidConfig             = require("sf-core/util/Android/androidconfig");
+const View                          = require('../view');
+const extend                        = require('js-base/core/extend');
+const ListViewItem                  = require("../listviewitem");
+const TypeUtil                      = require("../../util/type");
+const AndroidConfig                 = require("../../util/Android/androidconfig");
 const NativeView                    = requireClass("android.view.View");
 const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout      = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -14,41 +14,38 @@ const ListView = extend(View)(
     function (_super, params) {
 
         var self = this;
-        var activity = Android.getActivity();
-        
+
         if(!this.nativeObject){
-            this.nativeObject = new NativeSwipeRefreshLayout(activity);
+            this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
         
         if(!this.nativeInner){
             // For creating RecyclerView with android:scrollbar=vertical attribute
             if(NativeR.style.ScrollBarRecyclerView){
-                var themeWrapper = new NativeContextThemeWrapper(activity, NativeR.style.ScrollBarRecyclerView);
+                var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
                 this.nativeInner = new NativeRecyclerView(themeWrapper);
             }
             else{
-                this.nativeInner = new NativeRecyclerView(activity);
+                this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
         }
 
-        var linearLayoutManager = new NativeLinearLayoutManager(activity);
+        var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
         this.nativeInner.setLayoutManager(linearLayoutManager);
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
-
         var holderViewLayout;
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
+        var dataAdapter = NativeRecyclerView.Adapter.extend(string("SFAdapter"),{
             onCreateViewHolder: function(parent,viewType){
                 try{
                     holderViewLayout = _onRowCreate();
                 }
                 catch(e){
-                    const Application = require("sf-core/application");
+                    const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
-                
                 if(self.rowHeight){
                     holderViewLayout.height = self.rowHeight;
                 }
@@ -98,7 +95,6 @@ const ListView = extend(View)(
                     if(TypeUtil.isNumeric(rowHeight)){
                         _rowHeight = rowHeight;
                     }
-                    
                 },
                 enumerable: true
             },
@@ -165,7 +161,21 @@ const ListView = extend(View)(
             },
             'setPullRefreshColors': {
                 value: function(colors) {
-                    this.nativeObject.setColorSchemeColors(colors);
+                    var nativeColors = [];
+                    colors.forEach(function(element){
+                        nativeColors.push(element.nativeObject);
+                    })
+                    /** @todo
+                     * Error: Method setColorSchemeColors with 1 parameters couldn\'t found.
+                     * Invoking method with varargs parameter maybe caused this. 
+                    */
+                    this.nativeObject.setColorSchemeColors(array(nativeColors, "int"));
+                },
+                enumerable: true
+            },
+            'startRefresh': {
+                value: function() {
+                    this.nativeObject.setRefreshing(true);
                 },
                 enumerable: true
             },
@@ -275,7 +285,7 @@ const ListView = extend(View)(
             createFromTemplate(holderViewLayout);
             return holderViewLayout;
         };
-
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

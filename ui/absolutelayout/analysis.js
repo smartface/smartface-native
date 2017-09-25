@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
  * @class UI.AbsoluteLayout
  * @since 0.1
  * @extends UI.ViewGroup
- * @deprecated since 1.1.10, you may use UI.FlexLayout.PositionType#ABSOLUTE instead
+ * @removed since 1.1.18, you should use UI.FlexLayout.PositionType#ABSOLUTE instead
  * 
  * AbsoluteLayout is a layout that lets you specify the exact positions of its child views.
  *

@@ -1,8 +1,8 @@
-const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
-const FlexLayout            = require('sf-core/ui/flexlayout');
+const FlexLayout            = require('../flexlayout');
 const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
-const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout'); 
+const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
 
 const ListViewItem = extend(FlexLayout)(
     function (_super, params) {
@@ -13,12 +13,24 @@ const ListViewItem = extend(FlexLayout)(
                 this.nativeInner = params.nativeInner;
             }
             else{
-                this.nativeInner = NativeRecyclerView.ViewHolder.extend("SFViewHolder",{},[this.nativeObject]);
-                this.nativeInner.itemView = this.nativeObject;
+                this.nativeInner = NativeRecyclerView.ViewHolder.extend(string("SFViewHolder"),{},[this.nativeObject]);
+                // this.nativeInner.itemView = this.nativeObject;
             }
         }
 
-        Object.defineProperties(this, {
+        if(!this.isNotSetDefaults){
+            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
+            this.nativeObject.setLayoutParams(layoutParams);
+        }
+
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(listViewItemPrototype) {
+        Object.defineProperties(listViewItemPrototype, {
             // Added due to problem in row height for RecyclerView
             'height': {
                 get: function() {
@@ -49,16 +61,6 @@ const ListViewItem = extend(FlexLayout)(
                 configurable: true
             }
         });
-
-        if(!this.isNotSetDefaults){
-            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
-            this.nativeObject.setLayoutParams(layoutParams);
-        }
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
     }
 );
 

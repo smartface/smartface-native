@@ -1,1 +1,1 @@
-module.exports = require("sf-core/router");
+module.exports = require("../router");

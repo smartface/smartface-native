@@ -1,9 +1,13 @@
 const extend                        = require('js-base/core/extend');
-const View                          = require('sf-core/ui/view');
-const Color                         = require("sf-core/ui/color");
-const TextAlignment                 = require("sf-core/ui/textalignment");
-const TypeUtil                      = require("sf-core/util/type");
-const AndroidUnitConverter          = require("sf-core/util/Android/unitconverter.js");
+const View                          = require('../view');
+const Color                         = require("../color");
+const TextAlignment                 = require("../textalignment");
+const TypeUtil                      = require("../../util/type");
+const AndroidUnitConverter          = require("../../util/Android/unitconverter.js");
+const AndroidConfig                 = require("../../util/Android/androidconfig.js");
+
+const NativeTextView = requireClass("android.widget.TextView");
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
 const TextAlignmentDic = {};
 TextAlignmentDic[TextAlignment.TOPLEFT] = 48 | 3;// Gravity.TOP | Gravity.LEFT
@@ -16,41 +20,58 @@ TextAlignmentDic[TextAlignment.BOTTOMLEFT] = 80 | 3; // Gravity.BOTTOM | Gravity
 TextAlignmentDic[TextAlignment.BOTTOMCENTER] = 80 | 1; // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
 TextAlignmentDic[TextAlignment.BOTTOMRIGHT] = 80 | 5; // Gravity.BOTTOM | Gravity.RIGHT
 
+const activity = AndroidConfig.activity;
+const INT_16_3 = 16 | 3;
+const INT_17 = 17;
+
 const Label = extend(View)(
     function (_super, params) {
         var self = this;
-        var _textAlignment;
-        var viewNativeDefaultTextAlignment;
-        var activity = Android.getActivity();
-        var fontInitial;
-        var _textColor = Color.BLACK;
         
         // Is Label Check
         if(!self.nativeObject){
-            const NativeTextView = requireClass("android.widget.TextView");
             self.nativeObject = new NativeTextView(activity);
-            _textAlignment = TextAlignment.MIDLEFT;
+            this._textAlignment = TextAlignment.MIDLEFT;
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
-            self.nativeObject.setGravity(16 | 3);
-            viewNativeDefaultTextAlignment = 16 | 3;
+            self.nativeObject.setGravity(INT_16_3);
+            this.viewNativeDefaultTextAlignment = INT_16_3;
             
         }
         else{
             if(!this.isNotSetDefaults){
-                _textAlignment = TextAlignment.MIDCENTER;
+                this._textAlignment = TextAlignment.MIDCENTER;
                 // Gravity.CENTER
-                self.nativeObject.setGravity(17);
-                viewNativeDefaultTextAlignment = 17;
-                this.padding = 0;
+                self.nativeObject.setGravity(INT_17);
+                this.viewNativeDefaultTextAlignment = INT_17;
+                // this.padding = 0;
             }
         }
         
         _super(this);
-
-        Object.defineProperties(this, {
+        
+        // Handling iOS-specific properties
+        this.ios = {};
+        
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(labelPrototype) {
+        labelPrototype.fontInitial = null;
+        labelPrototype._textAlignment = null;
+        labelPrototype.viewNativeDefaultTextAlignment = null;
+        labelPrototype._textColor = Color.BLACK;
+        labelPrototype.toString = function() {
+            return 'Label';
+        };
+        
+        Object.defineProperties(labelPrototype, {
             'htmlText': {
                 get: function() {
-                    var text = self.nativeObject.getText();
+                    var text = this.nativeObject.getText();
                     if(text){
                         const NativeHtml = requireClass("android.text.Html");
                         var htmlText = NativeHtml.toHtml(text);
@@ -64,103 +85,103 @@ const Label = extend(View)(
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                    self.nativeObject.setText(htmlTextNative);
+                    this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
             },
             'font': {
                 get: function() {
-                    return fontInitial;
+                    return this.fontInitial;
                 },
                 set: function(font) {
                     if(font){
-                        fontInitial = font;
-                        self.nativeObject.setTypeface(font.nativeObject);
+                        this.fontInitial = font;
+                        this.nativeObject.setTypeface(font.nativeObject);
                         if(font.size && TypeUtil.isNumeric(font.size))
-                           self.nativeObject.setTextSize(font.size);
+                          this.nativeObject.setTextSize(font.size);
                         }
                 },
                 enumerable: true
             },
             'multiline': {
                 get: function() {
-                    return self.nativeObject.getLineCount() !== 1;
+                    return this.nativeObject.getMaxLines() !== 1;
                 },
                 set: function(multiline) {
-                    self.nativeObject.setSingleLine(!multiline);
+                    this.nativeObject.setSingleLine(!multiline);
                     // Integer.MAX_VALUE
                     // const NativeInteger = requireClass("java.lang.Integer");
-                    self.nativeObject.setMaxLines (multiline ? 1000 : 1);
+                    this.nativeObject.setMaxLines (multiline ? 1000 : 1);
                     if(multiline){
                         const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
                         var movementMethod = new NativeScrollingMovementMethod();
-                        self.nativeObject.setMovementMethod(movementMethod);
+                        this.nativeObject.setMovementMethod(movementMethod);
                     }
                     else{
-                        self.nativeObject.setMovementMethod(null);
+                        this.nativeObject.setMovementMethod(null);
                     }
                 },
                 enumerable: true
             },
             'selectable': {
                 get: function() {
-                    return self.nativeObject.isTextSelectable();
+                    return this.nativeObject.isTextSelectable();
                 },
                 set: function(value) {
                     if(TypeUtil.isBoolean(value)){
-                        self.nativeObject.setTextIsSelectable(value);
+                        this.nativeObject.setTextIsSelectable(value);
                     }
                 },
                 enumerable: true
             },
             'text': {
                 get: function() {
-                    return self.nativeObject.getText();
+                    return this.nativeObject.getText().toString();
                 },
                 set: function(text) {
-                    self.nativeObject.setText("" + text);
+                    this.nativeObject.setText("" + text);
                 },
                 enumerable: true,
                 configurable: true
             },
             'textAlignment': {
                 get: function() {
-                    return _textAlignment;
+                    return this._textAlignment;
                 },
                 set: function(textAlignment) {
                     if(textAlignment in TextAlignmentDic){
-                        _textAlignment = textAlignment;
+                        this._textAlignment = textAlignment;
                     }
                     else{
-                        _textAlignment = viewNativeDefaultTextAlignment;
+                        this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
-                    self.nativeObject.setGravity(TextAlignmentDic[_textAlignment]);
+                    this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
                 },
                 enumerable: true
             },
             'textColor': {
                 get: function() {
-                    return _textColor;
+                    return this._textColor;
                 },
                 set: function(textColor) {
-                    if(TypeUtil.isNumeric(textColor.nativeObject)) {
-                        _textColor = textColor;
-                        self.nativeObject.setTextColor(textColor.nativeObject);
+                    if(textColor.nativeObject) {
+                        this._textColor = textColor;
+                        this.nativeObject.setTextColor(textColor.nativeObject);
                     }
                     else if(TypeUtil.isObject(textColor)) {
-                        _textColor = textColor;
+                        this._textColor = textColor;
                         var textColorStateListDrawable = createColorStateList(textColor);
-                        self.nativeObject.setTextColor(textColorStateListDrawable);
+                        this.nativeObject.setTextColor(textColorStateListDrawable);
                     }
                 },
                 enumerable: true
             },
             'padding': {
                 get: function() {
-                    return self.paddingLeft;
+                    return this.paddingLeft;
                 },
                 set: function(padding) {
-                    self.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(padding),
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(padding),
                                                 AndroidUnitConverter.dpToPixel(padding),
                                                 AndroidUnitConverter.dpToPixel(padding),
                                                 AndroidUnitConverter.dpToPixel(padding));
@@ -169,13 +190,13 @@ const Label = extend(View)(
             },
             'paddingLeft': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(self.nativeObject.getPaddingLeft());
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingLeft());
                 },
                 set: function(paddingLeft) {
-                    var paddingBottom = self.paddingBottom;
-                    var paddingRight = self.paddingRight;
-                    var paddingTop = self.paddingTop;
-                    self.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    var paddingBottom = this.paddingBottom;
+                    var paddingRight = this.paddingRight;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
                                                 AndroidUnitConverter.dpToPixel(paddingTop),
                                                 AndroidUnitConverter.dpToPixel(paddingRight),
                                                 AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -184,13 +205,13 @@ const Label = extend(View)(
             },
             'paddingRight': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(self.nativeObject.getPaddingRight());
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingRight());
                 },
                 set: function(paddingRight) {
-                    var paddingLeft = self.paddingLeft;
-                    var paddingBottom = self.paddingBottom;
-                    var paddingTop = self.paddingTop;
-                    self.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    var paddingLeft = this.paddingLeft;
+                    var paddingBottom = this.paddingBottom;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
                                                 AndroidUnitConverter.dpToPixel(paddingTop),
                                                 AndroidUnitConverter.dpToPixel(paddingRight),
                                                 AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -199,13 +220,13 @@ const Label = extend(View)(
             },
             'paddingTop': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(self.nativeObject.getPaddingTop());
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingTop());
                 },
                 set: function(paddingTop) {
-                    var paddingLeft = self.paddingLeft;
-                    var paddingRight = self.paddingRight;
-                    var paddingBottom = self.paddingBottom;
-                    self.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    var paddingLeft = this.paddingLeft;
+                    var paddingRight = this.paddingRight;
+                    var paddingBottom = this.paddingBottom;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
                                                 AndroidUnitConverter.dpToPixel(paddingTop),
                                                 AndroidUnitConverter.dpToPixel(paddingRight),
                                                 AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -214,42 +235,24 @@ const Label = extend(View)(
             },
             'paddingBottom': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(self.nativeObject.getPaddingBottom());
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingBottom());
                 },
                 set: function(paddingBottom) {
-                    var paddingLeft = self.paddingLeft;
-                    var paddingRight = self.paddingRight;
-                    var paddingTop = self.paddingTop;
-                    self.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    var paddingLeft = this.paddingLeft;
+                    var paddingRight = this.paddingRight;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
                                                 AndroidUnitConverter.dpToPixel(paddingTop),
                                                 AndroidUnitConverter.dpToPixel(paddingRight),
                                                 AndroidUnitConverter.dpToPixel(paddingBottom));
                 },
                 enumerable: true
-            },
-            'toString': {
-                value: function(){
-                    return 'Label';
-                },
-                enumerable: true, 
-                configurable: true
             }
         });
-        
-        // Handling iOS-specific properties
-        this.ios = {};
-        
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
     }
 );
 
 function createColorStateList(textColors) {
-    const NativeColorStateList = requireClass("android.content.res.ColorStateList");
     var statesSet = [];
     var colorsSets = [];
     if(textColors.normal){
@@ -272,7 +275,7 @@ function createColorStateList(textColors) {
         statesSet.push(View.State.STATE_FOCUSED);
         colorsSets.push(textColors.focused.nativeObject);
     }
-    return (new NativeColorStateList (statesSet, colorsSets));
+    return (new NativeColorStateList (array(statesSet), array(colorsSets, "int")));
 }
 
 module.exports = Label;

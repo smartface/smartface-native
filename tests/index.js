@@ -1,6 +1,8 @@
 require("salep");
 
 salep.on("success", function(testCase) {
+    log("Case Success : [" + testCase.name + "].");
+    console.log("Case Success : [" + testCase.name + "].");
 });
 salep.on("fail", function(testCase) {
     log("Case Failed : [" + testCase.name + "]. Reason : " + testCase.reason);
@@ -19,6 +21,10 @@ salep.on("skip", function(testCase) {
     // console.log("Skipped Case [" + testCase.name + "] in " + testCase.parent.name + ".");
 });
 
+require("./application");
+require("./device");
+require("./net");
+require("./io");
 require("./ui");
 
 var result = salep.getResults();

@@ -1,9 +1,10 @@
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
-const Color = require("sf-core/ui/color");
-const Image = require("sf-core/ui/image");
-const HeaderBarItemPadding = require("sf-core/util/Android/headerbaritempadding");
+const Color = require("../color");
+const Image = require("../image");
+const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+const AndroidConfig        = require("../../util/Android/androidconfig");
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -14,7 +15,7 @@ function HeaderBarItem(params) {
     var _searchView = null;
     var _imageButton = false;
     var _menuItem = null;
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
     
     Object.defineProperties(this, {
         'color': {
@@ -53,7 +54,7 @@ function HeaderBarItem(params) {
                 if(!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
-                    this.nativeObject.setBackgroundColor((Color.TRANSPARENT).nativeObject);
+                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                     this.nativeObject.setPadding(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
@@ -88,7 +89,7 @@ function HeaderBarItem(params) {
                     _image = value;
                     if(!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
-                        this.nativeObject.setBackgroundColor((Color.TRANSPARENT).nativeObject);
+                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                         this.nativeObject.setPadding(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal, 
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal

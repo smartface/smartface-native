@@ -1,5 +1,5 @@
-const BottomTabBar = require("sf-core/ui/bottomtabbar");
-// const Router = require("sf-core/router");
+const BottomTabBar = require("../bottomtabbar");
+// const Router = require("../../router");
 
 function Navigator(params) {
         var _items = {};
@@ -63,7 +63,7 @@ function Navigator(params) {
                             if(!_items[splittedPath[0]])
                                 throw new Error(splittedPath[0] + ' is not in routes.');
                             var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-                            if(_items[splittedPath[0]] instanceof require("sf-core/ui/navigator")) {
+                            if(_items[splittedPath[0]] instanceof require("../navigator")) {
                                 alert(splittedPath[0] + " is a Navigator. We don't implement nested navigation.");
                                 return null;
                             }

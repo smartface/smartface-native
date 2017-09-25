@@ -1,15 +1,15 @@
 const NativeDialog = requireClass("android.app.Dialog");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
-const Color = require("sf-core/ui/color");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const Color = require("../color");
 
 function Dialog(params) {
-    const Flex = require("sf-core/ui/flexlayout");
+    const Flex = require("../flexlayout");
     var _layout = new Flex({backgroundColor: Color.TRANSPARENT});
     
-    var activity = Android.getActivity();
     if(!this.nativeObject){
         // 16974065 = android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen
-        this.nativeObject = new NativeDialog(activity, 16974065); 
+        this.nativeObject = new NativeDialog(AndroidConfig.activity, int(16974065)); 
     }
     
     Object.defineProperties(this, {
@@ -37,12 +37,14 @@ function Dialog(params) {
     });
     
     if(!this.isNotSetDefaults){
-        this.nativeObject.requestWindowFeature(1); // 1 = android.View.Window.FEATURE_NO_TITLE
+        // View.Window.FEATURE_NO_TITLE
+        this.nativeObject.requestWindowFeature(int(1));
         this.nativeObject.setContentView(_layout.nativeObject);
         var dialogWindow = this.nativeObject.getWindow();
         var colorDrawable = new NativeColorDrawable((Color.create(150, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
-        dialogWindow.setLayout(-1, -1); // -1 = android.View.WindowManager.LayoutParams.MATCH_PARENT
+        // View.WindowManager.LayoutParams.MATCH_PARENT
+        dialogWindow.setLayout(int(-1), int(-1));
     }
         
     // Assign parameters given in constructor

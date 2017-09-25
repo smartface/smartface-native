@@ -1,18 +1,15 @@
-const NativeView            = requireClass("android.view.View");
-const NativeSpannableString = requireClass("android.text.SpannableString");
-const NativeForegroundColor = requireClass("android.text.style.ForegroundColorSpan");
-const NativeTextView        = requireClass("android.widget.TextView");
-
-const NativeClickListener = NativeView.OnClickListener;
-const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
-
+const NativeClickListener    = requireClass("android.view.View$OnClickListener");
+const NativeSpannableString  = requireClass("android.text.SpannableString");
+const NativeForegroundColor  = requireClass("android.text.style.ForegroundColorSpan");
+const NativeTextView         = requireClass("android.widget.TextView");
+const NativeYogaNode         = requireClass('com.facebook.yoga.YogaNode');
 const NativeFloatingButton   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
-const NativeOnOpenListener   = NativeFloatingButton.OnSpeedDialOpenListener;
-const NativeOnCloseListener  = NativeFloatingButton.OnSpeedDialCloseListener;
+const NativeOnOpenListener   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
+const NativeOnCloseListener  = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
 const NativeSpeedDialAdapter = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter");
-const NativeMenuItem = NativeSpeedDialAdapter.MenuItem;
-
-const Color = require("sf-core/ui/color");
+const NativeMenuItem         = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
+const Color                  = require("../color");
+const AndroidConfig          = require("../../util/Android/androidconfig");
 
 function FloatingMenu(params) {
     var nativeObject;
@@ -39,7 +36,7 @@ function FloatingMenu(params) {
                 var titleLength = spannedTitle.length();
                 spannedTitle.setSpan(foregroundColor, 0, titleLength, 17); // 17 means SPAN_INCLUSIVE_EXCLUSIVE
 
-                var labelView = new NativeTextView(Android.getActivity());
+                var labelView = new NativeTextView(AndroidConfig.activity);
                 labelView.setText(spannedTitle);
                 item.labelView = labelView;
             }
@@ -92,7 +89,7 @@ function FloatingMenu(params) {
         this.yogaNode.setPosition(NativeYogaEdge.RIGHT, 0);
         this.yogaNode.setPosition(NativeYogaEdge.BOTTOM, 0);
 
-        this.nativeObject = new NativeFloatingButton(Android.getActivity());
+        this.nativeObject = new NativeFloatingButton(AndroidConfig.activity);
         this.nativeObject.setMenuAdapter(menuAdapter);
         this.nativeObject.setBackgroundColour(_color.nativeObject);
         this.nativeObject.setOnClickListener(clickListener);
@@ -108,8 +105,12 @@ function FloatingMenu(params) {
                 return _items;
             },
             set: function(items) {
+                try {
                 _items = items;
-                nativeObject.rebuildSpeedDialMenu();
+                this.nativeObject.rebuildSpeedDialMenu();
+                    
+                }catch(e) {}
+                
             }
         },
         'icon': {
@@ -117,7 +118,7 @@ function FloatingMenu(params) {
                 return _icon;
             },
             set: function(image) {
-                if (image && image.nativeObject && (image instanceof require("sf-core/ui/image"))) {
+                if (image && image.nativeObject && (image instanceof require("../image"))) {
                     _icon = image;
                     nativeObject.setIcon(image.nativeObject);
                 } else {
@@ -131,7 +132,7 @@ function FloatingMenu(params) {
             },
             set: function(color) {
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
-                                                        // It causes exception.
+                    _color = color;                      // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
                 } else {
                     throw new Error("Provide floatingMenu's color with a UI.Color.");

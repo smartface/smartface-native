@@ -1,9 +1,9 @@
-const File           = require('sf-core/io/file');
-const Path           = require('sf-core/io/path');
+const File           = require('../../io/file');
+const Path           = require('../../io/path');
+const AndroidConfig  = require("../../util/Android/androidconfig.js");
 const NativeTypeface = requireClass("android.graphics.Typeface");
-const AndroidUnitConverter          = require("sf-core/util/Android/unitconverter.js");
 
-const activity = Android.getActivity();
+const activity = AndroidConfig.activity;
 const View = requireClass("android.view.View");
 
 function Font(params) {
@@ -31,7 +31,7 @@ function Font(params) {
             enumerable: true, 
             configurable: true
         }
-    })
+    });
     
     // Assign parameters given in constructor
     if (params) {
@@ -40,6 +40,10 @@ function Font(params) {
         }
     }
 }
+
+Font.prototype.toString = function() {
+    return 'Font';
+};
 
 Object.defineProperties(Font, {
     // Properties
@@ -139,9 +143,9 @@ Object.defineProperties(Font, {
                 var fontFile = new File({
                     path: path
                 });
-                if (fontFile.nativeObject) {
+                if (fontFile.exists && fontFile.nativeObject) {
                     if (fontFile.type === Path.FILE_TYPE.ASSET) {
-                        var assets = Android.getActivity().getAssets();
+                        var assets = AndroidConfig.activity.getAssets();
                         typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
                     }
                     else {
@@ -149,7 +153,7 @@ Object.defineProperties(Font, {
                     }
                 }
             }
-        
+            
             return new Font({
                 "nativeObject": typeface,
                 "size": size

@@ -37,11 +37,13 @@ SFApplication.checkUpdate = function(callback){
 };
 
 SFApplication.android = {};
+SFApplication.Android = {};
 SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
 SFApplication.android.shouldShowRequestPermissionRationale = function(){};
 SFApplication.android.onRequestPermissionsResult = function(){};
 SFApplication.android.Permissions = {};
+SFApplication.Android.Permissions = {};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set:function(value){
