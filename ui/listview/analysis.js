@@ -121,6 +121,18 @@ function ListView(params) {}
 ListView.prototype.onRowCreate = function onRowCreate(){};
 
 /**
+ * This event is called when a ListView starts to create a ListViewItem.
+ * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
+ *
+ * @event onRowHeight
+ * @android
+ * @ios
+ * @return {Number}
+ * @since 1.1.18
+ */
+ListView.prototype.onRowHeight = function onRowHeight(){};
+
+/**
  * This event is called when a UI.ListViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *

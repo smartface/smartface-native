@@ -244,13 +244,13 @@ View.prototype = {
         return 'View';
     },
     get left() {
-        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.LEFT).value);
+        return AndroidUnitConverter.pixelToDp(this.nativeObject.getLeft());
     },
     set left(left) {
         this.yogaNode.setPosition(YogaEdge.LEFT, AndroidUnitConverter.dpToPixel(left));
     },
     get top() {
-        return AndroidUnitConverter.pixelToDp(this.yogaNode.getPosition(YogaEdge.TOP).value);
+        return AndroidUnitConverter.pixelToDp(this.nativeObject.getTop());
     },
     set top(top) {
         this.yogaNode.setPosition(YogaEdge.TOP, AndroidUnitConverter.dpToPixel(top));
@@ -280,7 +280,7 @@ View.prototype = {
         this.yogaNode.setPosition(YogaEdge.END, AndroidUnitConverter.dpToPixel(end));
     },
     get height() {
-        return AndroidUnitConverter.pixelToDp(this.yogaNode.getHeight().value);
+        return AndroidUnitConverter.pixelToDp(this.nativeObject.getHeight());
     },
     set height(height) {
         this.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
@@ -292,7 +292,7 @@ View.prototype = {
         }
     },
     get width() {
-        return AndroidUnitConverter.pixelToDp(this.yogaNode.getWidth().value);
+        return AndroidUnitConverter.pixelToDp(this.nativeObject.getWidth());
     },
     set width(width) {
         this.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));

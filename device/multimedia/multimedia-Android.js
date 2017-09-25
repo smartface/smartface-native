@@ -163,6 +163,7 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function pickFromGallery(resultCode, data) {
+    var success = true;
     if (resultCode === AndroidConfig.activity.RESULT_OK) {
         try {
             var uri = data.getData();
@@ -173,22 +174,24 @@ function pickFromGallery(resultCode, data) {
             else {
                 realPath = getRealPathFromURI(uri);
             }
-            
-            if(_pickParams.onSuccess) {
-                if (_pickParams.type === Multimedia.Type.IMAGE) {
-                    var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
-                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                    var image = new Image({bitmap: bitmap});
-                    _pickParams.onSuccess({image: image});
-                } else {
-                    var file = new File({path: realPath});
-                    _pickParams.onSuccess({video: file});
-                }
-            }
+
         }
         catch (err) {
+            success = false;
             if(_pickParams.onFailure)
                 _pickParams.onFailure({message: err});
+        }
+        
+        if(success && _pickParams.onSuccess) {
+            if (_pickParams.type === Multimedia.Type.IMAGE) {
+                var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
+                var bitmap = NativeBitmapFactory.decodeStream(inputStream);
+                var image = new Image({bitmap: bitmap});
+                _pickParams.onSuccess({image: image});
+            } else {
+                var file = new File({path: realPath});
+                _pickParams.onSuccess({video: file});
+            }
         }
     }
     else {
@@ -200,7 +203,7 @@ function pickFromGallery(resultCode, data) {
 function getRealPathFromID(uri, action) {
     const NativeDocumentsContract = requireClass("android.provider.DocumentsContract");
     var docId = NativeDocumentsContract.getDocumentId(uri);
-    var id = docId.split(":")[1];
+    var id = docId.split(":")[1]; 
     
     var projection = [ "_data" ]; // MediaStore.Images.Media.DATA 
     var selection = "_id" + "=?"; // MediaStore.Images.Media._ID

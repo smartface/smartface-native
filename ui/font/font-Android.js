@@ -3,7 +3,36 @@ const Path           = require('../../io/path');
 const AndroidConfig  = require("../../util/Android/androidconfig.js");
 const NativeTypeface = requireClass("android.graphics.Typeface");
 
+const activity = AndroidConfig.activity;
+const View = requireClass("android.view.View");
+
 function Font(params) {
+    
+    Object.defineProperties(this,{
+        'sizeOfString': {
+            value: function(text, maxWidthDp){
+                const TextView = requireClass("android.widget.TextView");
+                const TypedValue = requireClass("android.util.TypedValue");
+                
+                var textView = new TextView(activity);
+                textView.setText(text);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.size);
+                var widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(maxWidthDp, View.MeasureSpec.AT_MOST);
+                var heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                textView.measure(widthMeasureSpec, heightMeasureSpec);
+                return {width: textView.getMeasuredWidth(), height: textView.getMeasuredHeight()};
+            },
+            enumerable: true
+        },
+        'toString': {
+            value: function(){
+                return 'Font';
+            },
+            enumerable: true, 
+            configurable: true
+        }
+    });
+    
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
