@@ -53,14 +53,11 @@ function KeyboardAnimationDelegate (params) {
                         _topDistance = keyboardHeight;
                     }
                 }
-                
-                __SF_UIView.animation(230,0,function(){
-                    var frame = self.getParentViewController().view.frame;
-                    frame.y = self.getParentViewController().view.yoga.top - _topDistance;
-                    self.getParentViewController().view.frame = frame;
-                },function(){
-                    _isKeyboadAnimationCompleted = true;
-                });
+            
+                var frame = self.getParentViewController().view.frame;
+                frame.y = self.getParentViewController().view.yoga.top - _topDistance;
+                self.getParentViewController().view.frame = frame;
+                _isKeyboadAnimationCompleted = true;
             }else{
                 if (self.getParentViewController().view.frame.y !== 0){
                     self.keyboardHideAnimation();
@@ -73,20 +70,10 @@ function KeyboardAnimationDelegate (params) {
     self.keyboardHideAnimation = function(){
         if(self.getParentViewController()){
             if (_isKeyboadAnimationCompleted){
-                __SF_UIView.animation(130,0,function(){
                     var frame = self.getParentViewController().view.frame;
                     frame.y = self.getParentViewController().view.yoga.top;
                     self.getParentViewController().view.frame = frame;
-                },function(){
-                    
-                });
-            }else{
-                self.getParentViewController().view.layer.removeAllAnimations();
-                var frame = self.getParentViewController().view.frame;
-                frame.y = self.getParentViewController().view.yoga.top;
-                self.getParentViewController().view.frame = frame;
             }
-            
         }
     }
 }
