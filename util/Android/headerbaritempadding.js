@@ -1,4 +1,4 @@
-const AndroidUnitConverter  = require("sf-core/util/Android/unitconverter.js");
+const AndroidUnitConverter  = require("./unitconverter.js");
 
 var HearBarItemPadding = {};
 HearBarItemPadding.horizontal = AndroidUnitConverter.dpToPixel(12);

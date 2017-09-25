@@ -9,6 +9,7 @@ const Format = {
 
 function Image(params) {
     var self = this;
+    self.ios = {};
     
     if (params.path){
       if (params.path.includes(".app")) {
@@ -37,7 +38,26 @@ function Image(params) {
       value: self.nativeObject.size.width,
       writable: false
     });
-
+    
+    Object.defineProperty(self.ios, 'resizableImageWithCapInsetsResizingMode', {
+      value: function(capinsets, resizingMode){
+          var image;
+          var invocationResizeable = __SF_NSInvocation.createInvocationWithSelectorInstance("resizableImageWithCapInsets:resizingMode:", self.nativeObject);
+          if (invocationResizeable) {
+              invocationResizeable.target = self.nativeObject;
+              invocationResizeable.setSelectorWithString("resizableImageWithCapInsets:resizingMode:");
+              invocationResizeable.retainArguments();
+              invocationResizeable.setUIEdgeInsetsArgumentAtIndex(capinsets,2);    
+              invocationResizeable.setNSIntegerArgumentAtIndex(resizingMode,3);  
+              
+              invocationResizeable.invoke();
+              image = invocationResizeable.getReturnValue();
+          }
+          return Image.createFromImage(image);
+      },
+      writable: false
+    });
+    
     Object.defineProperty(self, 'resize', {
       value: function(width, height, onSuccess, onFailure){
           if (TypeUtil.isNumeric(width) && TypeUtil.isNumeric(height)){

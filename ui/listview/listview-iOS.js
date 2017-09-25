@@ -33,7 +33,7 @@ const ListView = extend(View)(
 
         self.onRowBind = function (listViewItem, index){};
         self.onRowSelected = function (listViewItem, index){};
-        
+        self.onRowHeight = function (index){return 0};
 
         self.ios = {}
         
@@ -112,7 +112,11 @@ const ListView = extend(View)(
                 self.nativeObject.tableRowHeight = value;
             },
             enumerable: true
-          });
+        });
+        
+        self.nativeObject.heightForRowAtIndex = function(e){
+            return self.onRowHeight(e.index);
+        };
 
         self.nativeObject.cellForRowAt = function(e){
              var listItem = self.createTemplate(e);

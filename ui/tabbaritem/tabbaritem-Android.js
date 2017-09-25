@@ -24,7 +24,7 @@ function TabBarItem(params) {
                 return _icon;
             },
             set: function(icon) {
-                const Image = require("sf-core/ui/image");
+                const Image = require("../image");
                 if(icon instanceof Image || icon === null) {
                     _icon = icon;
                 } else {
@@ -50,7 +50,7 @@ function TabBarItem(params) {
                 return _route;
             },
             set: function(route) {
-                const Navigator = require("sf-core/ui/navigator");
+                const Navigator = require("../navigator");
                 if(route instanceof Navigator) {
                     _page = route.items[route.index];
                     _route = route;

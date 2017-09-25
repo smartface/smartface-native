@@ -1,8 +1,8 @@
-const AndroidConfig         = require('sf-core/util/Android/androidconfig');
+const AndroidConfig         = require('../../util/Android/androidconfig');
 const NativeView            = requireClass("android.view.View");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');
 
-var activity = Android.getActivity();
+var activity = AndroidConfig.activity;
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 var pageAnimationsCache;
 
@@ -91,7 +91,7 @@ Object.defineProperties(Pages,{
 
 function showSliderDrawer(_sliderDrawer){
     if(_sliderDrawer && _sliderDrawer.enabled){
-        const SliderDrawer = require('sf-core/ui/sliderdrawer');
+        const SliderDrawer = require('../sliderdrawer');
         if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT 
             mDrawerLayout.openDrawer(5);
@@ -105,7 +105,7 @@ function showSliderDrawer(_sliderDrawer){
 
 function hideSliderDrawer(_sliderDrawer) {
    if(_sliderDrawer){
-        const SliderDrawer = require('sf-core/ui/sliderdrawer');
+        const SliderDrawer = require('../sliderdrawer');
         if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             mDrawerLayout.closeDrawer(5);
@@ -135,8 +135,8 @@ function setDrawerLocked(_sliderDrawer, isLocked) {
 
 function isSliderDrawerOpen(_sliderDrawer) {
     if(_sliderDrawer){
-        const SliderDrawer = require('sf-core/ui/sliderdrawer');
-        if(_sliderDrawer.position === SliderDrawer.Position.RIGHT){
+        const SliderDrawer = require('../sliderdrawer');
+        if(_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT){
             // Gravity.RIGHT
             return mDrawerLayout.isDrawerOpen(5);
         }
@@ -179,7 +179,9 @@ function push(self, rootViewId, page, animated, pagesStack, tag){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    fragmentTransaction.replace(rootViewId, page.nativeObject, tag).addToBackStack(tag);
+    // Following line should be opened and following line should be removed
+    // fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(string(tag));
+    fragmentTransaction.replace(rootViewId, page.nativeObject).addToBackStack(tag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }
@@ -199,7 +201,7 @@ function registerOnBackKeyPressed(pagesStack){
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if( keyCode === 4 && keyEvent.getAction() === 0) {
-                const Router = require("sf-core/router");
+                const Router = require("../router");
                 var currentHistoryObject = Router.getCurrentPage();
                 if (currentHistoryObject && currentHistoryObject.page) {
                    currentHistoryObject.page.android.onBackButtonPressed && 

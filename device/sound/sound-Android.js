@@ -1,11 +1,11 @@
 const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 var _pickParams = {};
 
 function Sound(params) {
-    var self = this;
-    self.nativeObject = new NativeMediaPlayer();
+    this.nativeObject = new NativeMediaPlayer();
     
     var _volume = 1.0;
     Object.defineProperty(this, 'volume', {
@@ -15,7 +15,7 @@ function Sound(params) {
         set: function(volume) {
             if(0.0 >= volume && volume <= 1.0) {
                 _volume = volume;
-                self.nativeObject.setVolume(volume, volume);
+                this.nativeObject.setVolume(volume, volume);
             }
         },
         enumerable: true
@@ -23,50 +23,49 @@ function Sound(params) {
     
     Object.defineProperty(this, 'isLooping', {
         get: function() {
-            return self.nativeObject.isLooping();
+            return this.nativeObject.isLooping();
         }, 
         set: function(isLooping) {
-            self.nativeObject.setLooping(isLooping);
+            this.nativeObject.setLooping(isLooping);
         },
         enumerable: true
     });
     
     Object.defineProperty(this, 'isPlaying', {
         get: function() {
-            return self.nativeObject.isPlaying();
+            return this.nativeObject.isPlaying();
         },
         enumerable: true
     });
     
     Object.defineProperty(this, 'currentDuration', {
         get: function() {
-            return self.nativeObject.getCurrentPosition();
+            return int(this.nativeObject.getCurrentPosition());
         },
         enumerable: true
     });
     
     Object.defineProperty(this, 'totalDuration', {
         get: function() {
-            return self.nativeObject.getDuration();
+            return int(this.nativeObject.getDuration());
         },
         enumerable: true
     });
     
-    self.pause = function() {
-        self.nativeObject.pause();
+    this.pause = function() {
+        this.nativeObject.pause();
     };
     
-    self.seekTo = function(milliseconds) {
-        self.nativeObject.seekTo(milliseconds);
+    this.seekTo = function(milliseconds) {
+        this.nativeObject.seekTo(milliseconds);
     };
     
-    self.stop = function() {
-        self.nativeObject.stop();
+    this.stop = function() {
+        this.nativeObject.stop();
     };
     
-    self.play = function() {
-        self.nativeObject.prepare();
-        self.nativeObject.start();
+    this.play = function() {
+        this.nativeObject.start();
     };
     
     var _onReadyCallback;
@@ -91,24 +90,26 @@ function Sound(params) {
         enumerable: true
     });
     
-    self.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
+    this.nativeObject.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
         onPrepared : function(view){
             _onReadyCallback && _onReadyCallback();
         }
     }));
     
-    self.nativeObject.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
+    this.nativeObject.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
         onCompletion : function(view){
             _onFinishCallback && _onFinishCallback();
         }
     }));
     
     this.loadFile = function(file) {
-        self.nativeObject.setDataSource(file.fullPath);
+        this.nativeObject.setDataSource(file.fullPath);
+        this.nativeObject.prepare();
     };
     
     this.loadURL = function(url) {
-        self.nativeObject.setDataSource(url);
+        this.nativeObject.setDataSource(url);
+        this.nativeObject.prepare();
     };
     
     // Assign parameters given in constructor
@@ -127,7 +128,7 @@ Sound.android.pick = function(params) {
     var intent = new NativeIntent();
     intent.setType("audio/*");
     intent.setAction(NativeIntent.ACTION_GET_CONTENT);
-    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params && (params.page instanceof require("../../ui/page")))){
         getCurrentPageFragment().startActivityForResult(intent, Sound.PICK_SOUND);
     }
     else{
@@ -136,9 +137,9 @@ Sound.android.pick = function(params) {
 };
 
 Sound.onActivityResult = function(requestCode, resultCode, data) {
-    if(requestCode === Sound.PICK_SOUND) {
-        var fragmentActivity = Android.getActivity();
-        if (resultCode === fragmentActivity.RESULT_OK) {
+    if(int(requestCode) === Sound.PICK_SOUND) {
+        var fragmentActivity = AndroidConfig.activity;
+        if (int(resultCode) === -1) { // Activity.RESULT_OK = 1
             try {
                 var uri = data.getData();
                 var sound = new Sound();
@@ -148,7 +149,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
             }
             catch (err) {
                 if(_pickParams.onFailure)
-                    _pickParams.onFailure({message: err});
+                    _pickParams.onFailure({message: string(err.toString())});
             }
         }
         else {
@@ -159,7 +160,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function getCurrentPageFragment() {
-    const Router = require("sf-core/router");
+    const Router = require("../../router");
     return Router.getCurrentPage().page.nativeObject;
 }
 

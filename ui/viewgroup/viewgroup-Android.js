@@ -1,5 +1,5 @@
 const View              = require('../view');
-const TypeUtil          = require("sf-core/util/type");
+const TypeUtil          = require("../../util/type");
 const extend            = require('js-base/core/extend');
 const NativeViewGroup   = requireClass("android.view.ViewGroup");
 
@@ -11,23 +11,22 @@ const ViewGroup = extend(View)(
         this.childViews = {};
         _super(this);
         
-        this.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
-            'onChildViewAdded': function(parent, child){
-                this.onViewAdded && this.onViewAdded();
-            }.bind(this),
-            'onChildViewRemoved': function(parent, child){
-                this.onViewRemoved && this.onViewRemoved();
-            }.bind(this),
-        }));
-        
-        var _onViewAdded;
-        var _onViewRemoved;
-        Object.defineProperties(this, {
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(viewGroupPrototype) {
+        viewGroupPrototype._onViewAdded = null;
+        viewGroupPrototype._onViewRemoved = null;
+        Object.defineProperties(viewGroupPrototype, {
             'addChild': {
                 value: function(view){
                     view.parent = this;
                     this.childViews[view.id] = view;
-                    if(this instanceof require("sf-core/ui/flexlayout")){
+                    if(this instanceof require("../flexlayout")){
                         this.nativeObject.addView(view.nativeObject, view.yogaNode);
                     }
                 },
@@ -64,22 +63,24 @@ const ViewGroup = extend(View)(
             },
             'onViewAdded': {
                 get: function(){
-                    return _onViewAdded;
+                    return this._onViewAdded;
                 },
                 set: function(callback){
                     if(TypeUtil.isFunction(callback)){
-                        _onViewAdded = callback;
+                        this._onViewAdded = callback;
+                        if (!this.didSetHierarchyChangeListener) setHierarchyChangeListener(this);
                     }
                 },
                 enumerable: true
             },
             'onViewRemoved': {
                 get: function(){
-                    return _onViewRemoved;
+                    return this._onViewRemoved;
                 },
                 set: function(callback){
                     if(TypeUtil.isFunction(callback)){
-                        _onViewRemoved = callback;
+                        this._onViewRemoved = callback;
+                        if (!this.didSetHierarchyChangeListener) setHierarchyChangeListener(this);
                     }
                 },
                 enumerable: true
@@ -92,14 +93,20 @@ const ViewGroup = extend(View)(
                 configurable: true
             }
         });
-
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
     }
 );
+
+function setHierarchyChangeListener(object) {
+    object.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
+        'onChildViewAdded': function(parent, child){
+            this.onViewAdded && this.onViewAdded();
+        }.bind(object),
+        'onChildViewRemoved': function(parent, child){
+            this.onViewRemoved && this.onViewRemoved();
+        }.bind(object),
+    }));
+    
+    object.didSetHierarchyChangeListener = true;
+}
 
 module.exports = ViewGroup;

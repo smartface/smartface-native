@@ -1,5 +1,5 @@
-const TypeUtil             = require("sf-core/util/type");
-const AndroidConfig        = require('sf-core/util/Android/androidconfig')
+const TypeUtil             = require('../../util/type');
+const AndroidConfig        = require('../../util/Android/androidconfig')
 const NativeBuild          = requireClass('android.os.Build');
 const NativeIntentFilter   = requireClass('android.content.IntentFilter');
 const NativeBatteryManager = requireClass('android.os.BatteryManager');
@@ -31,7 +31,7 @@ System.android = {};
 Object.defineProperties(System, {
     'language': {
         get: function() {
-            return NativeLocale.getDefault().getDisplayLanguage();
+            return string(NativeLocale.getDefault().getDisplayLanguage());
         },
         enumerable: true
     },
@@ -43,7 +43,7 @@ Object.defineProperties(System, {
     },
     'OSVersion': {
         get: function() {
-            return NativeBuild.VERSION.RELEASE;
+            return string(NativeBuild.VERSION.RELEASE);
         },
         enumerable: true
     },
@@ -67,7 +67,7 @@ Object.defineProperties(System, {
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
-                return storedData.getItemAt(0).getText();
+                return string(storedData.getItemAt(0).getText());
             } else {
                 return null;
             }
@@ -82,7 +82,7 @@ Object.defineProperties(System, {
     'vibrate': {
         value: function() {
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
-            vibrator.vibrate(500);
+            vibrator.vibrate(long(500));
         },
         enumerable: true
     },
@@ -102,32 +102,31 @@ Object.defineProperties(System, {
                 const NativeFingerprintAuthenticationDialogFragment = requireClass("com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment");
                 const NativeFingerPrintListener = requireClass("com.android.fingerprintdialog.FingerPrintListener");
                 
-                var activity = Android.getActivity();
-                var fragmentManager = activity.getFragmentManager();
+                var fragmentManager = AndroidConfig.activity.getFragmentManager();
                 var fragment = new NativeFingerprintAuthenticationDialogFragment();
                 
                 var listeners = NativeFingerPrintListener.implement({
                     'onError': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onAuthenticated': function() {
-                        params.onSuccess && params.onSuccess();
+                        params && params.onSuccess && params.onSuccess();
                     },
                     'onTimeout': function(){
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onCancel': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     },
                     'onLockout': function() {
-                        params.onError && params.onError();
+                        params && params.onError && params.onError();
                     }
                 });
                 
-                if(TypeUtil.isString(params.message)){
+                if(params && TypeUtil.isString(params.message)){
                     fragment.setMessage(params.message);
                 }
-                if(TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
+                if(params && TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
                     fragment.setTitle(params.android.title);
                 }
                 
@@ -135,7 +134,7 @@ Object.defineProperties(System, {
                 fragment.show(fragmentManager, DIALOG_FRAGMENT_TAG);
                 return;
             }
-            params.onError && params.onError();
+            params && params.onError && params.onError();
         },
         enumerable: true
     }
@@ -150,16 +149,15 @@ Object.defineProperties(System.android, {
     },
     'menuKeyAvaliable': {
         get: function() {
-            var activity = Android.getActivity();
-            return NativeViewConfig.get(activity).hasPermanentMenuKey();
+            return NativeViewConfig.get(AndroidConfig.activity).hasPermanentMenuKey();
         },
         enumerable: true
     },
     'isApplicationInstalled': {
         value: function(packageName) {
-            var packageList = Android.getActivity().getPackageManager().getInstalledApplications(0);
+            var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
             for (var i = 0; i < packageList.size(); i++) {
-                if(packageList.get(i).packageName === packageName) {
+                if(string(packageList.get(i).packageName) === packageName) {
                     return true;
                 }
             }
@@ -171,7 +169,7 @@ Object.defineProperties(System.android, {
 
 function getBatteryIntent() {
     var intentFilter = new NativeIntentFilter(ACTION_BATTERY_CHANGED);
-    return Android.getActivity().registerReceiver(null, intentFilter);
+    return AndroidConfig.activity.registerReceiver(null, intentFilter);
 };
 
 // iOS specifics

@@ -1,3 +1,5 @@
+/*globals requireClass*/
+const AndroidConfig             = require("../../util/Android/androidconfig")
 const ViewGroup                 = require('../viewgroup');
 const extend                    = require('js-base/core/extend');
 
@@ -10,18 +12,26 @@ const NativeYogaWrap            = requireClass('com.facebook.yoga.YogaWrap');
 const NativeYogaOverflow        = requireClass('com.facebook.yoga.YogaOverflow');
 const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionType');
 
+const activity = AndroidConfig.activity;
+
 const FlexLayout = extend(ViewGroup)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
         if(!this.nativeObject){
             this.nativeObject = new NativeYogaLayout(activity);
         }
-
+        
         _super(this);
         
-        var _flexWrap;
-        Object.defineProperties(this, {
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(flexLayoutPrototype) {
+        flexLayoutPrototype._flexWrap = null;
+        Object.defineProperties(flexLayoutPrototype, {
             // direction values same as native
             'direction': {
                 get: function() {
@@ -75,10 +85,10 @@ const FlexLayout = extend(ViewGroup)(
             // flexWrap values same as native 
             'flexWrap': {
                 get: function() {
-                    return _flexWrap;
+                    return this._flexWrap;
                 },
                 set: function(flexWrap) {
-                    _flexWrap = flexWrap;
+                    this._flexWrap = flexWrap;
                     this.yogaNode.setWrap(flexWrap);
                 },
                 enumerable: true
@@ -93,21 +103,11 @@ const FlexLayout = extend(ViewGroup)(
                 },
                 enumerable: true
             },
-            'toString': {
-                value: function(){
-                    return 'FlexLayout';
-                },
-                enumerable: true, 
-                configurable: true
-            }
         });
         
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
+        flexLayoutPrototype.toString = function() {
+            return 'FlexLayout';
+        };
     }
 );
 
@@ -126,12 +126,12 @@ Object.defineProperty(FlexLayout.Direction, 'INHERIT', {
     value: NativeYogaDirection.INHERIT,
     enumerable: true
 });
-Object.defineProperty(FlexLayout.Direction, 'LTR', {
-    value: NativeYogaDirection.LTR,
-    enumerable: true
-});
 Object.defineProperty(FlexLayout.Direction, 'RTL', {
     value: NativeYogaDirection.RTL,
+    enumerable: true
+});
+Object.defineProperty(FlexLayout.Direction, 'LTR', {
+    value: NativeYogaDirection.LTR,
     enumerable: true
 });
 

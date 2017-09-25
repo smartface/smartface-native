@@ -121,6 +121,18 @@ function ListView(params) {}
 ListView.prototype.onRowCreate = function onRowCreate(){};
 
 /**
+ * This event is called when a ListView starts to create a ListViewItem.
+ * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
+ *
+ * @event onRowHeight
+ * @android
+ * @ios
+ * @return {Number}
+ * @since 1.1.18
+ */
+ListView.prototype.onRowHeight = function onRowHeight(){};
+
+/**
  * This event is called when a UI.ListViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
@@ -337,7 +349,7 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * 
  * @event onRowSwiped
  * @param {UI.ListView.iOS.SwipeDirection} swipeDirection
- * @param {Object} expansionSettings
+ * @param {Object} expansionSettings &emsp;buttonIndex : Number - Index of the expandable button (in the left or right buttons arrays) <br />&emsp;fillOnTrigger : Boolean - if true the button fills the cell on trigger, else it bounces back to its initial position <br /> &emsp;threshold : Number - Size proportional threshold to trigger the expansion button. Default value 1.5
  * @ios
  * @since 0.1
  * 

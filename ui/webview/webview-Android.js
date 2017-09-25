@@ -1,16 +1,22 @@
-const extend = require('js-base/core/extend');
-const View = require('sf-core/ui/view');
-const AndroidConfig = require('sf-core/util/Android/androidconfig');
-const File = require('sf-core/io/file');
-const Path = require('sf-core/io/path');
+const extend        = require('js-base/core/extend');
+const View          = require('../view');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const File          = require('../../io/file');
+const Path          = require('../../io/path');
+const NativeView    = requireClass("android.view.View");
+
+// MotionEvent.ACTION_UP
+const ACTION_UP = 1;
+// MotionEvent.ACTION_DOWN
+const ACTION_DOWN = 0;
+// MotionEvent.ACTION_MOVE
+const ACTION_MOVE = 2;
 
 const WebView = extend(View)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
         if (!this.nativeObject) {
             const NativeWebView = requireClass('android.webkit.WebView');
-            this.nativeObject = new NativeWebView(activity);
+            this.nativeObject = new NativeWebView(AndroidConfig.activity);
         }
         
         _super(this);
@@ -23,13 +29,14 @@ const WebView = extend(View)(
                 _onLoad && _onLoad({url: url});
             }
         };
-
         var _canOpenLinkInside = true;
         var _onError;
         var _onShow;
         var _onLoad;
         var _onChangedURL;
         var _scrollBarEnabled = true;
+        var _scrollEnabled = true;
+        var _onTouch, _onTouchEnded;
         Object.defineProperties(this, {
             'scrollBarEnabled': {
                 get: function() {
@@ -97,6 +104,15 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             },
+            'scrollEnabled': {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(enabled) {
+                    _scrollEnabled = enabled;
+                },
+                enumerable: true
+            },
             'loadURL': {
                 value: function(url) {
                     this.nativeObject.loadUrl(url);
@@ -133,7 +149,6 @@ const WebView = extend(View)(
                                     callback(value);
                             }
                         });
-
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
                     } else {
                         this.nativeObject.loadUrl("javascript:"+ javascript);
@@ -174,6 +189,25 @@ const WebView = extend(View)(
                 },
                 set: function(callback) {
                     _onShow = callback;
+                },
+                enumerable: true
+            },
+            // Overriden for touch events
+            'onTouch': {
+                get: function() {
+                    return _onTouch;
+                },
+                set: function(onTouch) {
+                    _onTouch = onTouch.bind(this);
+                },
+                enumerable: true
+            },
+            'onTouchEnded': {
+                get: function() {
+                    return _onTouchEnded;
+                },
+                set: function(onTouchEnded) {
+                    _onTouchEnded = onTouchEnded.bind(this);
                 },
                 enumerable: true
             },
@@ -240,27 +274,39 @@ const WebView = extend(View)(
             this.nativeObject.setWebViewClient(nativeWebClient);
             this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
             this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
-
             var settings = this.nativeObject.getSettings();
+            /** @todo causes exception 
+             * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
+             */
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
             settings.setLoadsImagesAutomatically(true);
-            
+
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
             }
+            
+            this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+                onTouch: function(view, event) {
+                    if(this.touchEnabled && (_onTouch || _onTouchEnded)){
+                        if (event.getAction() === ACTION_UP) {
+                            _onTouchEnded && _onTouchEnded();
+                        } else if(event.getAction() === ACTION_DOWN) {
+                            _onTouch && _onTouch();
+                        }
+                    }
+                    return  (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
+                }.bind(this)
+            }));
         }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-        
-        
     }
 );
 
@@ -273,9 +319,8 @@ function overrideURLChange(url, _canOpenLinkInside) {
         var action = NativeIntent.ACTION_VIEW;
         var uri = NativeURI.parse(url);
         var intent = new NativeIntent(action, uri);
-        Android.getActivity().startActivity(intent);
+        AndroidConfig.activity.startActivity(intent);
         return true;
     }
 }
-
 module.exports = WebView;
