@@ -256,9 +256,10 @@ const TextBox = extend(Label)(
                 },
                 set: function(text) {
                     _hasEventsLocked = true;
-                    if (text === null || text === undefined) text = "";
+                    if (typeof text !== "string") text = "";
 
                     self.nativeObject.setText("" + text);
+
                     self.nativeObject.setSelection(text.length);
 
                     _hasEventsLocked = false;
