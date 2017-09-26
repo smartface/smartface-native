@@ -4,8 +4,9 @@ const WebSocketListener = requireClass("okhttp3.WebSocketListener");
 const ByteString        = requireClass("okio.ByteString");
 
 const Blob = require("../../blob");
+const AndroidConfig = require("../../util/Android/androidconfig");
 
-const activity = Android.getActivity();
+const activity = AndroidConfig.activity;
 const Runnable = requireClass("java.lang.Runnable");
 
 function WebSocket(params) {
