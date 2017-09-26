@@ -107,7 +107,9 @@ View.prototype = {
         return this.nativeObject.getId();
     },
     set id(id) {
-        this.nativeObject.setId(id);
+        if (typeof(id) === "number" && !isNaN(id)) {
+            this.nativeObject.setId(id);
+        }
     },
     get backgroundColor() {
         return this._backgroundColor;
