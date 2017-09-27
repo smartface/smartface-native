@@ -150,7 +150,7 @@ const ListView = extend(View)(
             },
             'scrollTo': {
                 value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index + 1);
+                    this.nativeInner.smoothScrollToPosition(index);
                 },
                 enumerable: true
             },
