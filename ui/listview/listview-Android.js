@@ -105,7 +105,6 @@ const ListView = extend(View)(
                 set: function(itemCount) {
                     if(TypeUtil.isNumeric(itemCount)){
                         _itemCount = itemCount;
-                        this.refreshData();
                     }
                 },
                 enumerable: true
@@ -153,9 +152,10 @@ const ListView = extend(View)(
             },
             'refreshData': {
                 value: function() {
-                    this.nativeInner.setLayoutManager(linearLayoutManager);
-                    this.nativeInner.setAdapter(dataAdapter);
-                    // dataAdapter.notifyDataSetChanged();
+                    // this.nativeInner.setLayoutManager(linearLayoutManager);
+                    // this.nativeInner.setAdapter(dataAdapter);
+                    dataAdapter.notifyDataSetChanged();
+                    // dataAdapter.notifyItemInserted(_itemCount);
                 },
                 enumerable: true
             },
@@ -301,6 +301,7 @@ function createFromTemplate(jsView){
         for (var child in jsView.childs){
              if (jsView.childs[child].id){
                 jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
+                
                 createFromTemplate(jsView.childs[child]);
              }
         }
