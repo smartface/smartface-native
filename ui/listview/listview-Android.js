@@ -55,7 +55,7 @@ const ListView = extend(View)(
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView,position){
-                var _holderViewLayout = self.createTemplate(nativeHolderView, position);
+                var _holderViewLayout = self.createTemplate(nativeHolderView);
                 
                 if(!self.rowHeight && _onRowHeight){
                     _holderViewLayout.height = _onRowHeight(position);
@@ -269,7 +269,7 @@ const ListView = extend(View)(
             }));
         }
         
-        self.createTemplate = function(e, position){
+        self.createTemplate = function(e){
             holderViewLayout.nativeObject = e.itemView;
             holderViewLayout.nativeInner = e;
             createFromTemplate(holderViewLayout);
