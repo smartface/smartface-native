@@ -55,7 +55,7 @@ const ListView = extend(View)(
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView,position){
-                var _holderViewLayout = self.createTemplate(nativeHolderView);
+                var _holderViewLayout = self.createTemplate(nativeHolderView, position);
                 
                 if(!self.rowHeight && _onRowHeight){
                     _holderViewLayout.height = _onRowHeight(position);
@@ -150,7 +150,7 @@ const ListView = extend(View)(
             },
             'scrollTo': {
                 value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                    this.nativeInner.smoothScrollToPosition(index + 1);
                 },
                 enumerable: true
             },
@@ -158,8 +158,8 @@ const ListView = extend(View)(
                 value: function() {
                     // this.nativeInner.setLayoutManager(linearLayoutManager);
                     // this.nativeInner.setAdapter(dataAdapter);
-                    // dataAdapter.notifyDataSetChanged();
                     dataAdapter.notifyDataSetChanged();
+                    // dataAdapter.notifyItemInserted(_itemCount);
                 },
                 enumerable: true
             },
@@ -269,7 +269,7 @@ const ListView = extend(View)(
             }));
         }
         
-        self.createTemplate = function(e){
+        self.createTemplate = function(e, position){
             holderViewLayout.nativeObject = e.itemView;
             holderViewLayout.nativeInner = e;
             createFromTemplate(holderViewLayout);
@@ -291,6 +291,7 @@ function createFromTemplate(jsView){
         for (var child in jsView.childs){
              if (jsView.childs[child].id){
                 jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
+                
                 createFromTemplate(jsView.childs[child]);
              }
         }
