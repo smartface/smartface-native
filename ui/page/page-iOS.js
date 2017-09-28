@@ -168,7 +168,8 @@ function Page(params) {
                 }
             }).bind(this);
         },
-        enumerable: true
+        enumerable: true,
+        configurable : true
     });
     
     self.onShow = function(e){};
