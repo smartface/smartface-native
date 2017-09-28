@@ -28,6 +28,7 @@ const ListView = extend(View)(
             else{
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
+            this.nativeInner.setItemViewCacheSize(0);
         }
 
         var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
