@@ -53,7 +53,7 @@ Object.defineProperties(Network, {
     'connectionType': {
         get: function() {
             var activeInternet = getActiveInternet();
-            if (activeInternet === null) {
+            if (activeInternet == null) { // undefined or null
                 return Network.ConnectionType.None;
             } else {
                 if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
