@@ -317,7 +317,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 });
             }
             else{
-                AndroidConfig.activity.requestPermissions(array([string(permissions)]), requestCode);
+                AndroidConfig.activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
             
         },
