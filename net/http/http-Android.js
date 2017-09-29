@@ -161,12 +161,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             var responseHeaders = getResponseHeaders(response.headers());
 
             if(statusCode != 304 && response.body()) {
-                var bytes = [];
-                var nativeBytes = response.body().bytes();
-                for(var i = 0; i < nativeBytes.length; i++) {
-                    var currentByte = nativeBytes[i];
-                    bytes.push(currentByte);
-                }
+                var bytes = response.body().bytes();
                 var responseBody = new Blob(bytes, {type: {}});
             }
             
