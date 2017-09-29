@@ -11,6 +11,7 @@ const NativeEditText    = requireClass("android.widget.EditText");
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView    = requireClass("android.widget.TextView");
+const Typeface          = requireClass("android.graphics.Typeface");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -44,7 +45,9 @@ const NativeKeyboardType = [
     1 | 64,			// TYPE_TEXT_VARIATION_SHORT_MESSAGE										
     4 | 32,			// TYPE_DATETIME_VARIATION_TIME												
     1 | 32,		    // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
-]
+];
+
+const IndexOfNumberKeyboardType = [1, 2, 3, 7, 8, 20];
 
 // NativeActionKeyType corresponds android action key type.
 const NativeActionKeyType = [
@@ -343,11 +346,16 @@ const TextBox = extend(Label)(
 );
 
 function setKeyboardType(self){
-    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
-    
     if(self.isPassword){
+        var typeface = self.nativeObject.getTypeface();
+        if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
+            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
+        } else {
+            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 16); // 16 = TYPE_NUMBER_VARIATION_PASSWORD
+        }
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
         var passwordMethod = new NativePasswordTransformationMethod();
+        self.nativeObject.setTypeface(typeface);
         self.nativeObject.setTransformationMethod(passwordMethod);
         release(passwordMethod);
     }
