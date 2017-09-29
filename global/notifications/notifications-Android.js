@@ -385,9 +385,9 @@ function startNotificationIntent(self, params){
     /** @todo throw exception here 
      * Error: An exception occured
     */
-    var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
+    var nativeNotificationReceiverClass = requireClass("io.smartface.android.notifications.LocalNotificationReceiver");
     var notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
-    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED",string(""));
+    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED","");
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
