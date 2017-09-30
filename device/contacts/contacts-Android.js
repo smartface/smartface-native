@@ -105,6 +105,7 @@ Contacts.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 Contacts.getAll = function(params) {
+    var success = true;
     try {
         var contentResolver = AndroidConfig.activity.getContentResolver();
         var projection = [
@@ -112,7 +113,7 @@ Contacts.getAll = function(params) {
             string("display_name")// ContactsContract.Contacts.DISPLAY_NAME
         ];
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
-        var cursor = contentResolver.query(uri, array(projection), null, null, null);
+        var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
         if(cursor === null)
             throw new Error("query returns null.");
         cursor.moveToFirst();
@@ -139,27 +140,29 @@ Contacts.getAll = function(params) {
             });
         } while (cursor.moveToNext());
         
-        if(params && params.onSuccess) {
-            params.onSuccess(contacts);
-        }
     }
     catch(error) {
+        success = false;
         if(params && params.onFailure) {
             params.onFailure(error);
         }
+    }
+        
+    if(success && params && params.onSuccess) {
+        params.onSuccess(contacts);
     }
 };
 
 function getContactDataById(params) {
     var cursor = params.contentResolver.query(
         params.uri,
-        array(params.projection),
+        array(params.projection, "java.lang.String"),
         CONTACT_ID + " = ?", 
-        array([params.id]), null
+        array([params.id], "java.lang.String"), null
     );
     
     var data = [];
-    if(cursor !== null && int(cursor.getCount()) > 0) {
+    if(cursor !== null && cursor.getCount() > 0) {
         cursor.moveToFirst();
         do {
             var columnIndex = cursor.getColumnIndex(params.columnTag);
@@ -194,7 +197,7 @@ function getContactDisplayName(contactUri) {
     var context = activity.getApplicationContext();
     var contentResolver = context.getContentResolver();
     var projection = [string("display_name")];
-    var cursor = contentResolver.query(contactUri, array(projection), null, null, null);
+    var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     if(cursor != null) {
         if (cursor.moveToFirst()) {
             var columnIndex = cursor.getColumnIndex(projection[0]);
@@ -210,7 +213,7 @@ function getContactDisplayName(contactUri) {
 function getContactPhoneNumber(contactUri) {
     var contentResolver = activity.getContentResolver();
     var projection = [ string(Phone_NUMBER) ];
-    var cursor = contentResolver.query(contactUri, array(projection), null, null, null);
+    var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     cursor.moveToFirst();
     
     var columnIndex = cursor.getColumnIndex(projection[0]);
