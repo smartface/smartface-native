@@ -59,8 +59,8 @@ Object.defineProperties(Location, {
                 var initialLocationFromProvider = locationManager.getLastKnownLocation(selectedProvider);
                 if (initialLocationFromProvider != null) {
                     _onLocationChanged && _onLocationChanged({
-                        latitude: double(initialLocationFromProvider.getLatitude()),
-                        longitude: double(initialLocationFromProvider.getLongitude())
+                        latitude: initialLocationFromProvider.getLatitude(),
+                        longitude: initialLocationFromProvider.getLongitude()
                     });
                 }
             }
