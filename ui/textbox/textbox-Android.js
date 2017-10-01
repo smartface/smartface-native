@@ -360,6 +360,7 @@ function setKeyboardType(self){
         release(passwordMethod);
     }
     else{
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
         self.nativeObject.setTransformationMethod(null);
     }
 }
