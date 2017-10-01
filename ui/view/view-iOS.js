@@ -374,7 +374,10 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            if(value > 0){
+            if (isNaN(value)) {
+                self.flexBasis = NaN;
+            }
+            else if(value > 0){
                 self.flexBasis = 1;
             }
             else{
