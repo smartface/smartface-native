@@ -692,10 +692,11 @@ function Page(params) {
         if (leftItem instanceof HeaderBarItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
-        }
-        else {
+        } else if(leftItem == null) { // null or undefined
             _headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
+        } else {
+            throw new Error("leftItem must be null or an instance of HeaderBarItem");
         }
     };
      
