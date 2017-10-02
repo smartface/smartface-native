@@ -696,7 +696,7 @@ function Page(params) {
             _headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         } else {
-            throw new Error("leftItem must be null or an instance of HeaderBarItem");
+            throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
         }
     };
      
