@@ -1,4 +1,5 @@
 const Screen = require('sf-core/device/screen');
+const System = require('sf-core/device/system');
 
 function KeyboardAnimationDelegate (params) {
     var self = this;
@@ -33,7 +34,7 @@ function KeyboardAnimationDelegate (params) {
     
     var _isKeyboadAnimationCompleted = true;
     var _topDistance = 0;
-    self.keyboardShowAnimation = function(keyboardHeight){
+    self.keyboardShowAnimation = function(keyboardHeight,e){
         var controlValue = 0;
         var height = self.nativeObject.frame.height;
         var top = getViewTop(self.nativeObject);
@@ -53,26 +54,80 @@ function KeyboardAnimationDelegate (params) {
                         _topDistance = keyboardHeight;
                     }
                 }
-            
-                var frame = self.getParentViewController().view.frame;
-                frame.y = self.getParentViewController().view.yoga.top - _topDistance;
-                self.getParentViewController().view.frame = frame;
-                _isKeyboadAnimationCompleted = true;
+                if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
+                    var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
+                    var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
+                    var animationOptions = animationCurve << 16;
+                    
+                    var invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance("animateWithDuration:delay:options:animations:completion:", "UIView");
+                     if (invocationAnimation) {
+                         invocationAnimation.setClassTargetFromString("UIView");
+                         invocationAnimation.setSelectorWithString("animateWithDuration:delay:options:animations:completion:");
+                         invocationAnimation.retainArguments();
+                         invocationAnimation.setDoubleArgumentAtIndex(animatonDuration,2);
+                         invocationAnimation.setDoubleArgumentAtIndex(0,3);
+                         invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
+                         invocationAnimation.setVoidBlockArgumentAtIndex(function(){
+                            var frame = self.getParentViewController().view.frame;
+                            frame.y = self.getParentViewController().view.yoga.top - _topDistance;
+                            self.getParentViewController().view.frame = frame;
+                         },5); 
+                         invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
+                              _isKeyboadAnimationCompleted = true;
+                         },6); 
+                         invocationAnimation.invoke();
+                     }
+                }else{
+                    var frame = self.getParentViewController().view.frame;
+                    frame.y = self.getParentViewController().view.yoga.top - _topDistance;
+                    self.getParentViewController().view.frame = frame;
+                    _isKeyboadAnimationCompleted = true;
+                }
             }else{
-                if (self.getParentViewController().view.frame.y !== 0){
-                    self.keyboardHideAnimation();
+                if (self.getParentViewController().view.frame.y !== self.getParentViewController().view.yoga.top){
+                    if (e && e.userInfo) {
+                        self.keyboardHideAnimation({userInfo : e.userInfo});
+                    }else{
+                        self.keyboardHideAnimation();
+                    }
                 }
             }
                 
         }
      }
     
-    self.keyboardHideAnimation = function(){
+    self.keyboardHideAnimation = function(e){
         if(self.getParentViewController()){
             if (_isKeyboadAnimationCompleted){
+                if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
+                    var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
+                    var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
+                    var animationOptions = animationCurve << 16;
+                    
+                    var invocationAnimation = __SF_NSInvocation.createClassInvocationWithSelectorInstance("animateWithDuration:delay:options:animations:completion:", "UIView");
+                     if (invocationAnimation) {
+                         invocationAnimation.setClassTargetFromString("UIView");
+                         invocationAnimation.setSelectorWithString("animateWithDuration:delay:options:animations:completion:");
+                         invocationAnimation.retainArguments();
+                         invocationAnimation.setDoubleArgumentAtIndex(animatonDuration,2);
+                         invocationAnimation.setDoubleArgumentAtIndex(0,3);
+                         invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
+                         invocationAnimation.setVoidBlockArgumentAtIndex(function(){
+                            var frame = self.getParentViewController().view.frame;
+                            frame.y = self.getParentViewController().view.yoga.top;
+                            self.getParentViewController().view.frame = frame;
+                         },5); 
+                         invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
+                             
+                         },6); 
+                         invocationAnimation.invoke();
+                     }
+                }else{
                     var frame = self.getParentViewController().view.frame;
                     frame.y = self.getParentViewController().view.yoga.top;
                     self.getParentViewController().view.frame = frame;
+                }
+                    
             }
         }
     }

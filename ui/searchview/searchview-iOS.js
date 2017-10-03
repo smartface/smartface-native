@@ -40,7 +40,7 @@ const SearchView = extend(View)(
                 return;
             }
             if(self.nativeObject.superview.className() != "UINavigationBar"){
-                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
+                self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight,e);
             }
         }
            
@@ -49,7 +49,7 @@ const SearchView = extend(View)(
                 return;
             }
             if(self.nativeObject.superview.className() != "UINavigationBar"){
-                self.keyboardanimationdelegate.keyboardHideAnimation();
+                self.keyboardanimationdelegate.keyboardHideAnimation(e);
             }
         }
         
