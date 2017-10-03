@@ -92,16 +92,16 @@ Object.defineProperties(Color,{
             } 
             else if (arguments.length === 3) {
                 if(NativeBuild.VERSION.SDK_INT >= 26) {
-                    return new Color({ color: int(NativeColor.rgb(float(param1/255), float(param2/255), float(param3/255))) });
+                    return new Color({ color: NativeColor.rgb(float(param1/255), float(param2/255), float(param3/255)) });
                 } else {
-                    return new Color({ color: int(NativeColor.rgb(param1, param2, param3)) });
+                    return new Color({ color: NativeColor.rgb(param1, param2, param3) });
                 }
             } 
             else if (arguments.length === 4) {
                 if(NativeBuild.VERSION.SDK_INT >= 26) {
-                    return new Color({ color: int(NativeColor.argb(float(param1/255), float(param2/255), float(param3/255), float(param4/255))) });
+                    return new Color({ color: NativeColor.argb(float(param1/255), float(param2/255), float(param3/255), float(param4/255)) });
                 } else {
-                    return new Color({ color: int(NativeColor.argb(param1, param2, param3, param4)) });
+                    return new Color({ color: NativeColor.argb(int(param1), int(param2), int(param3), int(param4)) });
                 }
             }
         },
