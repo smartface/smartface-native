@@ -689,7 +689,7 @@ function Page(params) {
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
-        if(!(leftItem instanceof HeaderBarItem || leftItem == null))
+        if(!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
         if(leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
