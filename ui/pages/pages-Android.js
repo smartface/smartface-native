@@ -179,9 +179,10 @@ function push(self, rootViewId, page, animated, pagesStack, tag, addToStack){
                                                     pageAnimationsCache.rightExit);
         }
     }
-    // Following line should be opened and following line should be removed
-    // fragmentTransaction.replace(rootViewId, page.nativeObject, string(tag)).addToBackStack(string(tag));
-    fragmentTransaction.replace(rootViewId, page.nativeObject).addToBackStack(tag);
+    fragmentTransaction.replace(rootViewId, page.nativeObject, tag);
+    if(addToStack) {
+        fragmentTransaction.addToBackStack(tag); // for Backcompability
+    }
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 }

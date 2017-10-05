@@ -203,10 +203,8 @@ function getRoute(to) {
             throw new Error(splittedPath[0] + ' is not in routes.');
             
         var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-        if (((routes[splittedPath[0]].pageObject) instanceof require("../../ui/navigator")) ||
-            ((routes[splittedPath[0]].pageObject) instanceof BottomTabBar)) {
-                
-            var page = routes[splittedPath[0]].pageObject.getRoute(subPath, routes[splittedPath[0]].isSingleton);
+        if ((routes[splittedPath[0]].pageObject) instanceof require("sf-core/ui/navigator")) {
+            var page = routes[splittedPath[0]].pageObject.go(subPath, routes[splittedPath[0]].isSingleton, true);
             if(!routes[splittedPath[0]].pageObject.tag) 
                 routes[splittedPath[0]].pageObject.tag = splittedPath[0];
             return {to: splittedPath[0], controller: routes[splittedPath[0]].pageObject, page: page};

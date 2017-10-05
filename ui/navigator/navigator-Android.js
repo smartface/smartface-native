@@ -1,5 +1,4 @@
-const BottomTabBar = require("../bottomtabbar");
-// const Router = require("../../router");
+const BottomTabBar = require("sf-core/ui/bottomtabbar");
 
 function Navigator(params) {
         var _items = {};

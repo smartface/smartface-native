@@ -232,6 +232,29 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    var _firstPageInNavigator;
+    Object.defineProperty(self, 'firstPageInNavigator', {
+        get: function() {
+            return _firstPageInNavigator;
+        },
+        set: function(value) {
+            _firstPageInNavigator = value;
+        },
+        enumerable: true
+    });
+    
+    var _isShown;
+    Object.defineProperty(self, 'isShown', {
+        get: function() {
+            return _isShown;
+        },
+        set: function(value) {
+            _isShown = value;
+        },
+        enumerable: true
+    });
+    
 
     this.statusBar = {};
     var _visible;
