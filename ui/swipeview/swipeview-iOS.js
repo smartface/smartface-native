@@ -129,11 +129,19 @@ const SwipeView = extend(View)(
         };
         
         self.onPageSelectedHandler = function(e){
-            var selectedIndex = _pageNativeObjectArray.indexOf(self.pageController.viewControllers[0]);
-            if (currentIndex != selectedIndex){
+            var selectedIndex;
+            if (e.index) {
+                selectedIndex = e.index;
+            }else if (e.completed) {
+                selectedIndex = pendingViewControllerIndex;
+            }else{
+                selectedIndex = previousViewControllerIndex;
+            }
+            
+            if (selectedIndex != currentIndex) {
                 currentIndex = selectedIndex;
                 if (typeof self.onPageSelected === "function"){
-                    self.onPageSelected(selectedIndex); 
+                    self.onPageSelected(currentIndex); 
                 }
             }
         }
@@ -167,7 +175,7 @@ const SwipeView = extend(View)(
                     self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Reverse,_animated,function(){
                         _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
-                                self.onPageSelectedHandler();
+                                self.onPageSelectedHandler({completed : true, index: value});
                             });
                         });
                     });
@@ -176,7 +184,7 @@ const SwipeView = extend(View)(
                         self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Forward,_animated,function(){
                             _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
-                                self.onPageSelectedHandler();
+                                self.onPageSelectedHandler({completed : true, index: value});
                              });
                          });
                     });
@@ -185,16 +193,20 @@ const SwipeView = extend(View)(
         }
         
         self.pageControllerDelegate = new __SF_UIPageViewControllerDelegate();
-                
+        
+        var pendingViewControllerIndex;       
         self.pageControllerDelegate.willTransitionToViewControllers = function(e){ //e.pendingViewControllers
+            pendingViewControllerIndex = _pageNativeObjectArray.indexOf(e.pendingViewControllers[0]);
             _isPageTransaction = true;
             self.onStateChangedHandler({state : SwipeView.State.DRAGGING});
         };
         
+        var previousViewControllerIndex;   
         self.pageControllerDelegate.didFinishAnimating = function(e){ //e.previousViewControllers
+        previousViewControllerIndex = _pageNativeObjectArray.indexOf(e.previousViewControllers[0]);
             __SF_Dispatch.mainAsyncAfter(function(){
                     _isPageTransaction = false;
-                    self.onPageSelectedHandler();
+                    self.onPageSelectedHandler(e);
                     self.onStateChangedHandler({state : SwipeView.State.IDLE});
             },50);
         };
