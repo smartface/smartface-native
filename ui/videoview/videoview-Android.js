@@ -1,20 +1,23 @@
 const extend            = require('js-base/core/extend');
-const View              = require('sf-core/ui/view');
-const Exception         = require("sf-core/util/exception");
+const View              = require('../view');
+const Exception         = require("../../util/exception");
+const AndroidConfig     = require('../../util/Android/androidconfig');
 const NativeVideoView   = requireClass('android.widget.VideoView');
 const NativeRelativeLayout = requireClass('android.widget.RelativeLayout');
 
 const VideoView = extend(View)(
     function (_super, params) {
-        var activity = Android.getActivity();
-        
+
         if(!this.nativeObject){
             // To solve stretching due to yoga, we will wrap with RelativeLayout.
-            this.nativeObject = new NativeRelativeLayout(activity);
+            this.nativeObject = new NativeRelativeLayout(AndroidConfig.activity);
             var layoutParams = new NativeRelativeLayout.LayoutParams(-1,-1);
+            /** @todo
+             * layoutParams.addRule is not a function 
+             */
             // CENTER_IN_PARENT, TRUE
             layoutParams.addRule(13, -1);
-            this.nativeInner = new NativeVideoView(activity);
+            this.nativeInner = new NativeVideoView(AndroidConfig.activity);
             this.nativeObject.addView(this.nativeInner, layoutParams);
             this.nativeObject.setGravity(17);
         }
@@ -62,8 +65,8 @@ const VideoView = extend(View)(
             },
             'loadFile': {
                 value: function(file) {
-                    const File = require("sf-core/io/file");
-                    const Path = require("sf-core/io/path");
+                    const File = require("../../io/file");
+                    const Path = require("../../io/path");
                     
                     if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
@@ -81,17 +84,17 @@ const VideoView = extend(View)(
             },
             'seekTo': {
                 value: function(milliseconds) {
-                    _nativeMediaPlayer.seekTo(milliseconds);
+                    _nativeMediaPlayer && _nativeMediaPlayer.seekTo(milliseconds);
                 }
             },
             'totalDuration': {
                 get: function() {
-                    return (_nativeMediaPlayer)? _nativeMediaPlayer.getDuration() : -1;
+                    return (_nativeMediaPlayer) ? int(_nativeMediaPlayer.getDuration()) : -1;
                 }
             },
             'currentDuration': {
                 get: function() {
-                    return (_nativeMediaPlayer)? _nativeMediaPlayer.getCurrentPosition() : -1;
+                    return (_nativeMediaPlayer) ? int(_nativeMediaPlayer.getCurrentPosition()) : -1;
                 }
             },
             'setVolume': {
@@ -101,8 +104,7 @@ const VideoView = extend(View)(
             },
             'setControllerEnabled': {
                 value: function(enabled) {
-                    // TODO: implement after yoga fix.
-                    var controller = enabled ? new NativeMediaController(activity) : null;
+                    var controller = enabled ? new NativeMediaController(AndroidConfig.activity) : null;
                     this.nativeInner.setMediaController(controller);
                 }
             },

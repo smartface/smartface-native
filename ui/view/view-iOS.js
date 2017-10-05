@@ -374,7 +374,10 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            if(value > 0){
+            if (isNaN(value)) {
+                self.flexBasis = NaN;
+            }
+            else if(value > 0){
                 self.flexBasis = 1;
             }
             else{
@@ -410,7 +413,7 @@ function View(params) {
 
     Object.defineProperty(self, 'left', {
         get: function() {
-            return self.nativeObject.yoga.left;
+            return self.nativeObject.frame.x;
         },
         set: function(value) {
             if (typeof value === "number"){
@@ -424,7 +427,7 @@ function View(params) {
 
     Object.defineProperty(self, 'top', {
         get: function() {
-            return self.nativeObject.yoga.top;
+            return self.nativeObject.frame.y;
         },
         set: function(value) {
             if (typeof value === "number"){
@@ -779,7 +782,7 @@ function View(params) {
 
     Object.defineProperty(self, 'width', {
         get: function() {
-            return self.nativeObject.yoga.width;
+            return self.nativeObject.frame.width;
         },
         set: function(value) {
             if (typeof value === "number"){
@@ -793,7 +796,7 @@ function View(params) {
 
     Object.defineProperty(self, 'height', {
         get: function() {
-            return self.nativeObject.yoga.height;
+            return self.nativeObject.frame.height;
         },
         set: function(value) {
             if (typeof value === "number"){

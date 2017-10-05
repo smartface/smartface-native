@@ -1,16 +1,17 @@
-const Label             = require('../label');
-const TypeUtil             = require('sf-core/util/type');
-const Color             = require('../color');
 const extend            = require('js-base/core/extend');
+const Label             = require('../label');
+const TypeUtil          = require('../../util/type');
+const Color             = require('../color');
 const KeyboardType      = require('../keyboardtype');
 const ActionKeyType     = require('../actionkeytype');
-const TextAlignment     = require('sf-core/ui/textalignment');
-const AndroidConfig     = require('sf-core/util/Android/androidconfig');
+const TextAlignment     = require('../textalignment');
+const AndroidConfig     = require('../../util/Android/androidconfig');
 
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView    = requireClass("android.widget.TextView");
+const Typeface          = requireClass("android.graphics.Typeface");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -44,7 +45,9 @@ const NativeKeyboardType = [
     1 | 64,			// TYPE_TEXT_VARIATION_SHORT_MESSAGE										
     4 | 32,			// TYPE_DATETIME_VARIATION_TIME												
     1 | 32,		    // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
-]
+];
+
+const IndexOfNumberKeyboardType = [1, 2, 3, 7, 8, 20];
 
 // NativeActionKeyType corresponds android action key type.
 const NativeActionKeyType = [
@@ -58,7 +61,7 @@ const NativeActionKeyType = [
 const TextBox = extend(Label)(
     function (_super, params) {
         var self = this;
-        var activity = Android.getActivity();
+        var activity = AndroidConfig.activity;
         if(!self.nativeObject){
             self.nativeObject = new NativeEditText(activity);
         }
@@ -72,10 +75,11 @@ const TextBox = extend(Label)(
         var _onEditEnds;
         var _onActionButtonPress;
         var _hasEventsLocked = false;
+        var _oldText = "";
         Object.defineProperties(this, {
             'hint': {
                 get: function() {
-                    return self.nativeObject.getHint();
+                    return self.nativeObject.getHint().toString();
                 },
                 set: function(hint) {
                     self.nativeObject.setHint(hint);
@@ -119,7 +123,7 @@ const TextBox = extend(Label)(
                     return _actionKeyType;
                 },
                 set: function(actionKeyType) {
-                    _actionKeyType = actionKeyType; 
+                    _actionKeyType = actionKeyType;
                     self.nativeObject.setImeOptions(NativeActionKeyType[_actionKeyType]);
                 },
                 enumerable: true,
@@ -169,6 +173,27 @@ const TextBox = extend(Label)(
                 },
                 set: function(onTextChanged) {
                     _onTextChanged = onTextChanged.bind(this);
+                    if (!this.__didAddTextChangedListener) {
+                        this.__didAddTextChangedListener = true;
+                        this.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
+                            // todo: Control insertedText after resolving story/AND-2508 issue.
+                            onTextChanged: function(charSequence, start, before, count){
+                                if (!_hasEventsLocked) {
+                                    var insertedText = (_oldText.length >= this.text.length)? "": this.text.replace(_oldText,'');
+                                    if(_onTextChanged){
+                                        _onTextChanged({
+                                            location: Math.abs(start+before),
+                                            insertedText: insertedText
+                                        });
+                                    }
+                                }
+                            }.bind(this),
+                            beforeTextChanged: function(charSequence, start, count, after) {
+                                _oldText = this.text;
+                            }.bind(this),
+                            afterTextChanged: function(editable){}
+                        }));
+                    }
                 },
                 enumerable: true
             },
@@ -178,6 +203,20 @@ const TextBox = extend(Label)(
                 },
                 set: function(onEditBegins) {
                     _onEditBegins = onEditBegins.bind(this);
+                    if (!this.__didSetOnFocusChangeListener) {
+                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                            onFocusChange: function(view, hasFocus){
+                                if (hasFocus)  {
+                                    _onEditBegins && _onEditBegins();
+                                }
+                                else {
+                                    _onEditEnds && _onEditEnds();
+                                    this.nativeObject.setSelection(0,0);
+                                }
+                            }.bind(this)
+                        }));
+                        this.__didSetOnFocusChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -187,6 +226,20 @@ const TextBox = extend(Label)(
                 },
                 set: function(onEditEnds) {
                     _onEditEnds = onEditEnds.bind(this);
+                    if (!this.__didSetOnFocusChangeListener) {
+                        this.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+                            onFocusChange: function(view, hasFocus){
+                                if (hasFocus)  {
+                                    _onEditBegins && _onEditBegins();
+                                }
+                                else {
+                                    _onEditEnds && _onEditEnds();
+                                    this.nativeObject.setSelection(0,0);
+                                }
+                            }.bind(this)
+                        }));
+                        this.__didSetOnFocusChangeListener = true;
+                    }
                 },
                 enumerable: true
             },
@@ -202,12 +255,14 @@ const TextBox = extend(Label)(
             },
             'text': {
                 get: function() {
-                    return self.nativeObject.getText();
+                    return self.nativeObject.getText().toString();
                 },
                 set: function(text) {
                     _hasEventsLocked = true;
+                    if (typeof text !== "string") text = "";
 
                     self.nativeObject.setText("" + text);
+
                     self.nativeObject.setSelection(text.length);
 
                     _hasEventsLocked = false;
@@ -218,11 +273,13 @@ const TextBox = extend(Label)(
 
         });
         
+        var _hintTextColor;
         Object.defineProperty(this.android, 'hintTextColor', {
             get: function() {
-                return new Color({ color: self.nativeObject.getHintTextColors().getDefaultColor() });
+                return _hintTextColor;
             },
             set: function(hintTextColor) {
+                _hintTextColor = hintTextColor;
                 self.nativeObject.setHintTextColor(hintTextColor.nativeObject);
             },
             enumerable: true
@@ -239,38 +296,7 @@ const TextBox = extend(Label)(
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
             self.padding = 0;
-            
-            var _oldText = "";
-            self.nativeObject.addTextChangedListener(NativeTextWatcher.implement({
-                // todo: Control insertedText after resolving story/AND-2508 issue.
-                onTextChanged: function(charSequence, start, before, count){
-                    if (!_hasEventsLocked) {
-                        var insertedText = (_oldText.length >= self.text.length)? "": self.text.replace(_oldText,'');
-                        if(_onTextChanged){
-                            _onTextChanged({
-                                location: Math.abs(start+before),
-                                insertedText: insertedText
-                            });
-                        }
-                    }
-                }.bind(self),
-                beforeTextChanged: function(charSequence, start, count, after){
-                    _oldText = self.text;
-                },
-                afterTextChanged: function(editable){}
-            }));
-            
-            self.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                onFocusChange: function(view, hasFocus){
-                    if (hasFocus)  {
-                        _onEditBegins && _onEditBegins();
-                    }
-                    else {
-                        _onEditEnds && _onEditEnds();
-                        this.nativeObject.setSelection(0,0);
-                    }
-                }.bind(this)
-            }));
+
         
             self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                 onEditorAction: function(textView, actionId, event){
@@ -320,14 +346,21 @@ const TextBox = extend(Label)(
 );
 
 function setKeyboardType(self){
-    self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
-    
     if(self.isPassword){
+        var typeface = self.nativeObject.getTypeface();
+        if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
+            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
+        } else {
+            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 16); // 16 = TYPE_NUMBER_VARIATION_PASSWORD
+        }
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
         var passwordMethod = new NativePasswordTransformationMethod();
+        self.nativeObject.setTypeface(typeface);
         self.nativeObject.setTransformationMethod(passwordMethod);
+        release(passwordMethod);
     }
     else{
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
         self.nativeObject.setTransformationMethod(null);
     }
 }

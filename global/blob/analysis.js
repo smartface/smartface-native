@@ -47,6 +47,14 @@ Blob.prototype.slice = function(start, end, type) {};
 Blob.prototype.toBase64 = function() {};
 
 /**
+ * Returns a utf8 String
+ *
+ * @method toString
+ * @since 0.1
+ */
+Blob.prototype.toString = function() {};
+
+/**
  * Creates a blob object from given a base64String.
  *
  * @param {String} base64String
@@ -56,5 +64,16 @@ Blob.prototype.toBase64 = function() {};
  * @since 0.1
  */
 Blob.createFromBase64 = function(base64) { };
+
+/**
+ * Creates a blob object from given a utf8 string.
+ *
+ * @param {String} utf8String
+ * @method createFromUTF8String
+ * @return Blob
+ * @static
+ * @since 0.1
+ */
+Blob.createFromUTF8String = function(utf8String) { };
 
 module.exports = Blob;

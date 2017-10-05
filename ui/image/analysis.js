@@ -39,6 +39,31 @@ Image.prototype.height = 0;
 Image.prototype.width = 0;
 
 /**
+ * Returns a Blob instance.
+ *
+ * @method toBlob
+ * @return Blob
+ * @since 0.1
+ */
+Image.prototype.toBlob = function() {};
+
+/**
+ * Specifies the possible resizing modes for an image.
+ *
+ * @method resizableImageWithCapInsetsResizingMode
+ * @ios
+ * @param {Object} insets
+ * @param {Number} insets.top
+ * @param {Number} insets.left
+ * @param {Number} insets.width
+ * @param {Number} insets.height
+ * @param {Number} mode &emsp;UIImageResizingModeTile = 0 <br />&emsp;UIImageResizingModeStretch = 1
+ * @return UI.Image
+ * @since 1.1.18
+ */
+Image.prototype.resizableImageWithCapInsetsResizingMode = function(insets,mode) {};
+
+/**
  * Creates a new image from existing image with specified width and height.
  * onSuccess and onFailure are optional parameters.
  * 

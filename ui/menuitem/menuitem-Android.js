@@ -1,6 +1,6 @@
-const Color     = require("sf-core/ui/color");
-const TypeUtil  = require("sf-core/util/type");
-const Exception = require("sf-core/util/exception");
+const Color     = require("../color");
+const TypeUtil  = require("../../util/type");
+const Exception = require("../../util/exception");
 
 const NativeSpannable = requireClass("android.text.Spanned");
 const NativeColorSpan = requireClass("android.text.style.ForegroundColorSpan");
@@ -61,12 +61,12 @@ function MenuItem(params) {
         },
         'spanTitle': {
             value: function() {
-                var spannableStringBuilder = new NativeSpannableStringBuilder("");
+                var spannableStringBuilder = new NativeSpannableStringBuilder(string(""));
                 if (_title) {
-                    spannableStringBuilder = new NativeSpannableStringBuilder(_title);
+                    spannableStringBuilder = new NativeSpannableStringBuilder(string(_title));
                     if (_titleColor) {
                         var colorSpan = new NativeColorSpan(_titleColor.nativeObject);
-                        spannableStringBuilder.setSpan(colorSpan, 0, _title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        spannableStringBuilder.setSpan(colorSpan, int(0), int(_title.length), NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
                         return spannableStringBuilder;
                     }
                 }
@@ -89,6 +89,6 @@ MenuItem.ios = {
         CANCEL: 1,
         DESTRUCTIVE: 2
     }
-}
+};
 
 module.exports = MenuItem;

@@ -1,8 +1,6 @@
 const Color      = require("sf-core/ui/color");
 const TabBarItem = require("sf-core/ui/tabbaritem");
-
 const MAXITEMCOUNT = 5;
-
 function BottomTabBar(params) {
         var _items = {};
         var _itemInstances = [];
@@ -23,21 +21,8 @@ function BottomTabBar(params) {
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
                         _itemCount++;
-                        var page;
-                        if(typeof(item.route) !== 'function') {
-                            page = item.route.getRoute(null, true);
-                            if(!item.firstPageIsSet) {
-                                item.firstPageIsSet = true;
-                                page.firstPageInNavigator = true;
-                            }
-                        } else {
-                            page = new _items[path].page();
-                            page.isBottomTabBarPage = true;
-                        }
-                        
                         if(!_index)
                             _index = path;
-                        _itemInstances.push(page);
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
@@ -61,6 +46,18 @@ function BottomTabBar(params) {
                     return _itemColors;
                 },
                 enumerable: true
+            },
+            'createPage' : {
+                value: function(path) {
+                    var page;
+                    if(typeof(_items[path].route) !== 'function') {
+                        page = _items[path].route.getRoute(null, true);
+                    } else {
+                        page = new _items[path].page();
+                        page.isBottomTabBarPage = true;
+                    }
+                    return page;
+                }
             },
             'backgroundColor': {
                 set: function(color) {
@@ -112,6 +109,8 @@ function BottomTabBar(params) {
                     if(!to) {
                         if(typeof(_items[_index].page) === 'function') {
                             var keys = Object.keys(_items);
+                            if(!_itemInstances[keys.indexOf(_index)])
+                                _itemInstances[keys.indexOf(_index)] = this.createPage(_index);
                             var page = _itemInstances[keys.indexOf(_index)];
                             this.setPageProperties(page, to, _index);
                             return page; // TODO Add isSingleton control.
@@ -189,7 +188,6 @@ function BottomTabBar(params) {
             },
             enumerable: true
         });
-
         this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
                                             // elevation doesn't work with default background white color.
         
@@ -200,5 +198,4 @@ function BottomTabBar(params) {
             }
         }
 }
-
 module.exports = BottomTabBar;

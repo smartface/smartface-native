@@ -1,21 +1,22 @@
-const extend = require('js-base/core/extend');
-const View   = require('sf-core/ui/view');
+const extend                        = require('js-base/core/extend');
+const View                          = require('../view');
+const AndroidConfig                 = require("../../util/Android/androidconfig");
+const NativeView                    = requireClass("android.view.View");
+const NativeViewPager               = requireClass("android.support.v4.view.ViewPager");
+const NativePagerAdapter            = requireClass("io.smartface.android.SFCorePagerAdapter");
+const NativeOnPageChangeListener    = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
-const NativeView         = requireClass("android.view.View");
-const NativeViewPager    = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
-const NativeOnPageChangeListener = NativeViewPager.OnPageChangeListener;
+const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
 
 const SwipeView = extend(View)(
     function (_super, params) {
         var self = this;
-        var fragmentManager = Android.getActivity().getSupportFragmentManager();
         var pagerAdapter = new NativePagerAdapter(fragmentManager);
         
         var _lastIndex = -1;
         if(!self.nativeObject) {
             var viewID = NativeView.generateViewId();
-            self.nativeObject = new NativeViewPager(Android.getActivity());
+            self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             self.nativeObject.setId(viewID);
             self.nativeObject.setAdapter(pagerAdapter);
             self.nativeObject.addOnPageChangeListener(NativeOnPageChangeListener.implement({
@@ -30,9 +31,10 @@ const SwipeView = extend(View)(
                     _callbackOnPageSelected && _callbackOnPageSelected(position);
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
-                    if (_lastIndex !== position && positionOffset === 0 && positionOffsetPixels === 0) {
-                        _lastIndex = position;
-                        _pageInstances[position].onShowSwipeView && _pageInstances[position].onShowSwipeView();
+                    var intPosition = position;
+                    if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
+                        _lastIndex = intPosition;
+                        _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
                     }
                 }
             }));
@@ -70,7 +72,7 @@ const SwipeView = extend(View)(
                             _pageInstances.push(pageInstance);
                             nativeFragments.push(pageInstance.nativeObject);
                         });
-                        pagerAdapter.setFragments(nativeFragments);
+                        pagerAdapter.setFragments(array(nativeFragments));
                     }
                 }
             },

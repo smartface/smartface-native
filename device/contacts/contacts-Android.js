@@ -1,10 +1,12 @@
 const NativeContactsContract = requireClass("android.provider.ContactsContract");
 const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
-var NativeIntent = requireClass("android.content.Intent");
+const NativeIntent = requireClass("android.content.Intent");
+const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 var contentProviderOperation;
 var uri;
+const activity = AndroidConfig.activity;
 var RAW_CONTACT_ID = "raw_contact_id"; // ContactsContract.DataColumns.RAW_CONTACT_ID;
 var CONTACT_ID = "contact_id"; // ContactsContract.RawContactsColumns.CONTACT_ID
 var MIMETYPE = "mimetype"; // ContactsContract.DataColumns.MIMETYPE;
@@ -33,7 +35,6 @@ Contacts.add = function(params) {
         _onSuccess = params.onSuccess;
         _onFailure = params.onFailure;
     }
-    var activity = Android.getActivity();
     var contentResolver = activity.getContentResolver();
     
     try {
@@ -67,7 +68,7 @@ Contacts.add = function(params) {
 };
 
 Contacts.pick = function(params) {
-    if(!(params && (params.page instanceof require("sf-core/ui/page")))){
+    if(!(params && (params.page instanceof require("../../ui/page")))){
         throw new TypeError('Page parameter required');
     }
     _onSuccess = params.onSuccess;
@@ -104,15 +105,17 @@ Contacts.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 Contacts.getAll = function(params) {
+    var success = true;
     try {
-        var contentResolver = Android.getActivity().getContentResolver();
+        var contentResolver = AndroidConfig.activity.getContentResolver();
         var projection = [
-            "_id", // BaseColumns._ID,
-            "display_name"// ContactsContract.Contacts.DISPLAY_NAME
+            string("_id"), // BaseColumns._ID,
+            string("display_name")// ContactsContract.Contacts.DISPLAY_NAME
         ];
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
-        var cursor = contentResolver.query(uri, projection, null, null, null);
-        
+        var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
+        if(cursor === null)
+            throw new Error("query returns null.");
         cursor.moveToFirst();
         var contacts = [];
         do {
@@ -121,50 +124,56 @@ Contacts.getAll = function(params) {
             index = cursor.getColumnIndex(projection[1]);
             var queryParams = {
                 id: id,
-                projection: [CommonColumns_DATA],
+                projection: [string(CommonColumns_DATA)],
                 contentResolver: contentResolver,
                 columnTag: CommonColumns_DATA, 
                 uri: uri
             };
-            
+            var phoneNumber = getPhonesById(queryParams);
+            var emailAddresses = getEmailById(queryParams);
+            var address = getAddressById(queryParams);
             contacts.push({
                 displayName: cursor.getString(index),
-                phoneNumber: getPhonesById(queryParams),
-                emailAddresses: getEmailById(queryParams),
-                address: getAddressById(queryParams)
+                phoneNumber: phoneNumber,
+                emailAddresses: emailAddresses,
+                address: address
             });
         } while (cursor.moveToNext());
         
-        if(params && params.onSuccess) {
-            params.onSuccess(contacts);
-        }
     }
     catch(error) {
+        success = false;
         if(params && params.onFailure) {
             params.onFailure(error);
         }
+    }
+        
+    if(success && params && params.onSuccess) {
+        params.onSuccess(contacts);
     }
 };
 
 function getContactDataById(params) {
     var cursor = params.contentResolver.query(
         params.uri,
-        params.projection,
+        array(params.projection, "java.lang.String"),
         CONTACT_ID + " = ?", 
-        [params.id], null
+        array([params.id], "java.lang.String"), null
     );
     
     var data = [];
-    if(cursor != null && cursor.getCount() > 0) {
+    if(cursor !== null && cursor.getCount() > 0) {
         cursor.moveToFirst();
         do {
             var columnIndex = cursor.getColumnIndex(params.columnTag);
             if(columnIndex >= 0) {
                 data.push(cursor.getString(columnIndex));
+                return data;
             }
         }while (cursor.moveToNext());
         cursor.close();
     }
+    
     return data;
 }
 
@@ -185,13 +194,10 @@ function getPhonesById(params) {
 
 function getContactDisplayName(contactUri) {
     var contactName = "";
-    var activity = Android.getActivity();
     var context = activity.getApplicationContext();
     var contentResolver = context.getContentResolver();
-    var projection = [ 
-        NativeContactsContract.ContactsColumns.DISPLAY_NAME
-    ];
-    var cursor = contentResolver.query(contactUri, projection, null, null, null);
+    var projection = [string("display_name")];
+    var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     if(cursor != null) {
         if (cursor.moveToFirst()) {
             var columnIndex = cursor.getColumnIndex(projection[0]);
@@ -205,10 +211,9 @@ function getContactDisplayName(contactUri) {
 }
 
 function getContactPhoneNumber(contactUri) {
-    var activity = Android.getActivity();
     var contentResolver = activity.getContentResolver();
-    var projection = [ Phone_NUMBER ];
-    var cursor = contentResolver.query(contactUri, projection, null, null, null);
+    var projection = [ string(Phone_NUMBER) ];
+    var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     cursor.moveToFirst();
     
     var columnIndex = cursor.getColumnIndex(projection[0]);

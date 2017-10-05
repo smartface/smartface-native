@@ -119,6 +119,27 @@ const SliderDrawer = extend(Page)(
             }
         });
         
+        Object.defineProperty(self, 'onShow', {
+            get: function() {
+                return self.nativeObject.onShow;
+            },
+            set: function(value) {
+                self.nativeObject.onShow = (function() {
+                    __SF_UIView.animation(0,0,function(){
+                    self.layout.nativeObject.endEditing(true);
+                    },{});
+                    if (value instanceof Function) {
+                        value.call(this, this.__pendingParameters);
+                        delete this.__pendingParameters;
+                    }
+                }).bind(this);
+            },
+            enumerable: true,
+            configurable : true
+        });
+        
+        self.onShow = function(e){};
+        
         this.show = function(){
             self.nativeObject.show();
         };
@@ -126,7 +147,7 @@ const SliderDrawer = extend(Page)(
         this.hide = function(){
             self.nativeObject.hide();
         };
-        
+                
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

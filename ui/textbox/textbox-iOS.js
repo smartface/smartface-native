@@ -428,11 +428,11 @@ const TextBox = extend(View)(
         });
         
         self.nativeObject.onShowKeyboard = function(e){
-            self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight);
+            self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight,e);
         }
            
         self.nativeObject.onHideKeyboard = function(e){
-            self.keyboardanimationdelegate.keyboardHideAnimation();
+            self.keyboardanimationdelegate.keyboardHideAnimation(e);
         }
         
         if (params) {

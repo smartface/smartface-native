@@ -1,6 +1,6 @@
-const Pages = require("sf-core/ui/pages");
-const Navigator = require("sf-core/ui/navigator");
-const BottomTabBar = require("sf-core/ui/bottomtabbar");
+const Pages = require("../../ui/pages");
+const Navigator = require("../../ui/navigator");
+const BottomTabBar = require("../../ui/bottomtabbar");
 
 function Router(){}
 
@@ -48,7 +48,7 @@ Object.defineProperty(Router, 'sliderDrawer', {
     },
     set: function(sliderDrawerValue) 
     {
-        const SliderDrawer = require('sf-core/ui/sliderdrawer');
+        const SliderDrawer = require('../../ui/sliderdrawer');
         if (sliderDrawerValue instanceof SliderDrawer) 
         {
             if (pagesInstance) 
@@ -68,7 +68,7 @@ Router.add = function(to, page, isSingleton) {
     if (typeof(to) !== "string") {
         throw TypeError("add takes string and Page as parameters");
     }
-    
+
     if(typeof(page) !== 'function') {
         if (!routes[to]) {
             routes[to] = {
@@ -76,8 +76,7 @@ Router.add = function(to, page, isSingleton) {
                 pageObject: page,
             };
         }
-    }
-    else if (!routes[to]) {
+    } else if (!routes[to]) {
         routes[to] = {
             pageClass: page,
             isSingleton: true,//!!isSingleton,
@@ -204,8 +203,10 @@ function getRoute(to) {
             throw new Error(splittedPath[0] + ' is not in routes.');
             
         var subPath = to.substring(splittedPath[0].length + 1, to.length); // +1 is for /
-        if ((routes[splittedPath[0]].pageObject) instanceof require("sf-core/ui/navigator")) {
-            var page = routes[splittedPath[0]].pageObject.go(subPath, routes[splittedPath[0]].isSingleton, true);
+        if (((routes[splittedPath[0]].pageObject) instanceof require("../../ui/navigator")) ||
+            ((routes[splittedPath[0]].pageObject) instanceof BottomTabBar)) {
+                
+            var page = routes[splittedPath[0]].pageObject.getRoute(subPath, routes[splittedPath[0]].isSingleton);
             if(!routes[splittedPath[0]].pageObject.tag) 
                 routes[splittedPath[0]].pageObject.tag = splittedPath[0];
             return {to: splittedPath[0], controller: routes[splittedPath[0]].pageObject, page: page};

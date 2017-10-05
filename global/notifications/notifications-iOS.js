@@ -176,6 +176,10 @@ Application.ios = {};
 Application.ios.registeredRemoteWithSuccessCallback = null;
 Application.ios.registeredRemoteWithFailureCallback = null;
 
+Notifications.Priority = {};
+Notifications.Android = {};
+Notifications.Android.Priority = {};
+
 Notifications.registerForPushNotifications = function(onSuccess, onFailure){
     Application.ios.registeredRemoteWithSuccessCallback = onSuccess;
     Application.ios.registeredRemoteWithFailureCallback = onFailure;

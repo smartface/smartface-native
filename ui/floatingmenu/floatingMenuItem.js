@@ -1,4 +1,4 @@
-const Color = require("sf-core/ui/color");
+const Color = require("../color");
 
 function FloatingMenuItem(params) {
     var _title;
@@ -21,7 +21,7 @@ function FloatingMenuItem(params) {
                 return _titleColor;
             },
             set: function(color) {
-                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                if (color && color.nativeObject && (color instanceof Color)) {
                     _titleColor = color;
                 } else {
                     throw new Error("Provide FloatingMenuItem's color with a UI.Color.");
@@ -33,7 +33,7 @@ function FloatingMenuItem(params) {
                 return _icon;
             },
             set: function(image) {
-                if (image && image.nativeObject && (image instanceof require("sf-core/ui/image"))) {
+                if (image && image.nativeObject && (image instanceof require("../image"))) {
                     _icon = image;
                 } else {
                     throw new Error("Provide FloatingMenuItem's icon with a UI.Image.");
@@ -45,7 +45,7 @@ function FloatingMenuItem(params) {
                 return _color;
             },
             set: function(color) {
-                if (color && color.nativeObject && (color instanceof require("sf-core/ui/color"))) {
+                if (color && color.nativeObject && (color instanceof require("../color"))) {
                     _color = color;
                 } else {
                     throw new Error("Provide FloatingMenuItem's color with a UI.Color.");

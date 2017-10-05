@@ -1,7 +1,7 @@
-const TypeUtil                  = require("sf-core/util/type");
-const AndroidConfig             = require("sf-core/util/Android/androidconfig");
-const Application               = require("sf-core/application");
-const Color                     = require("sf-core/ui/color");
+const TypeUtil                  = require("../../util/type");
+const AndroidConfig             = require("../../util/Android/androidconfig");
+const Application               = require("../../application");
+const Color                     = require("../../ui/color");
 const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
 const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
@@ -16,7 +16,6 @@ const ALARM_MANAGER             = "android.app.AlarmManager";
 
 const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 
-var activity = Android.getActivity();
 var selectedNotificationIds = [];
 var senderID = null;
 var notificationListener =  NativeNotificationListener.implement({
@@ -40,7 +39,7 @@ Notifications.LocalNotification = function(params) {
     this.mPendingIntent = null;
     this.mNotification = null;
 
-    this.nativeObject = new NativeNotificationCompat.Builder(activity);
+    this.nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
     this.nativeObject = self.nativeObject.setSmallIcon(NativeR.drawable.icon);
     
     var _id = getNewNotificationId();
@@ -94,12 +93,12 @@ Notifications.LocalNotification = function(params) {
             },
             set: function(value) {
                 if (TypeUtil.isString(value)) {
-                    const Image = require("sf-core/ui/image");
+                    const Image = require("../../ui/image");
                     var largeImage = Image.createFromFile(value);
                     if(largeImage && largeImage.nativeObject){
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();
                         if(largeImageBitmap){
-                            self.nativeObject.setLargeIcon(largeImage.nativeObject);
+                            self.nativeObject.setLargeIcon(largeImageBitmap);
                             _launchImage = value;
                         }
                     }
@@ -217,6 +216,9 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
+        /** @todo it looks like we got problems with primitive arrays
+         * method android.support.v4.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
+        * */
         'vibrate' : {
             get: function() {
                 return _vibrate;
@@ -224,7 +226,7 @@ Notifications.LocalNotification = function(params) {
             set: function(value) {
                 if (TypeUtil.isBoolean(value)) {
                     _vibrate = true;
-                    self.nativeObject.setVibrate([1000]);
+                    self.nativeObject.setVibrate(array([long(1000)], "long"));
                 }
             },
             enumerable: true
@@ -307,29 +309,22 @@ Object.defineProperties(Notifications,{
     },
 });
 
-Notifications.Priority = {};
-Object.defineProperties(Notifications.Priority, {
-    'MIN': {
-        value: -2, // NotificationCompat.PRIORITY_MIN
-        enumerable: true
-    },
-    'LOW': {
-        value: -1, // NotificationCompat.PRIORITY_DEFAULT
-        enumerable: true
-    },
-    'DEFAULT': {
-        value: 0, // NotificationCompat.PRIORITY_MIN
-        enumerable: true
-    },
-    'HIGH': {
-        value: 1, // NotificationCompat.PRIORITY_HIGH
-        enumerable: true
-    },
-    'MAX': {
-        value: 2, // NotificationCompat.PRIORITY_MAX
-        enumerable: true
-    },
-})
+Object.defineProperty(Notifications, "Priority",{
+    value: require("./priority"),
+    enumerable: true
+});
+
+Object.defineProperty(Notifications, "Android",{
+    value: {},
+    enumerable: true
+});
+
+Object.defineProperty(Notifications.Android, "Priority",{
+    value: require("./priority"),
+    enumerable: true
+});
+
+
 // Generate unique random number
 function getNewNotificationId(){
     var randomnumber = Math.ceil(Math.random()*1000 + 1000);
@@ -345,7 +340,7 @@ function unregisterPushNotification(){
     if(TypeUtil.isString(senderID) && senderID !== ""){
         const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.unregisterPushNotification(activity);
+        NativeGCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
         if(notificationListener){
             NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
@@ -362,11 +357,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
     }
     if(TypeUtil.isString(senderID) && senderID !== '' ){
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.registerPushNotification(senderID, activity, {
+        NativeGCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
             onSuccess: function(token){
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback({ 'token' : token });
+                onSuccessCallback && onSuccessCallback({ 'token' : string(token) });
             },
             onFailure: function(){
                 onFailureCallback && onFailureCallback();
@@ -387,17 +382,18 @@ function readSenderIDFromProjectJson(){
 function startNotificationIntent(self, params){
     const NativeIntent = requireClass('android.content.Intent');
     const NativePendingIntent = requireClass('android.app.PendingIntent')
-    var nativeNotificationReceiverClass = AndroidConfig.getClass("io.smartface.android.notifications.LocalNotificationReceiver");
-    var notificationIntent = new NativeIntent(activity, nativeNotificationReceiverClass);
+    /** @todo throw exception here 
+     * Error: An exception occured
+    */
+    var nativeNotificationReceiverClass = requireClass("io.smartface.android.notifications.LocalNotificationReceiver");
+    var notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
     notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED","");
-    
     Object.keys(params).forEach(function(key){
         notificationIntent.putExtra(key.toString(), params[key]);
     });
-    
+
     // PendingIntent.FLAG_ONE_SHOT
-    self.mPendingIntent = NativePendingIntent.getBroadcast(activity, 0, notificationIntent, 1073741824);
-    
+    self.mPendingIntent = NativePendingIntent.getBroadcast(AndroidConfig.activity, 0, notificationIntent, 1073741824);
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     var fireDate = params.fireDate ? params.fireDate : 0;
     if(params.repeatInterval){
