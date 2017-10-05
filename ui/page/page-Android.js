@@ -689,15 +689,15 @@ function Page(params) {
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
-        if (leftItem instanceof HeaderBarItem && leftItem.image) {
+        if(!(leftItem instanceof HeaderBarItem || leftItem == null))
+            throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
+        if(leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
-        } else if(leftItem == null) { // null or undefined
+        } else { // null or undefined
             _headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
-        } else {
-            throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
-        }
+        } 
     };
      
     // Added to solve AND-2713 bug.
