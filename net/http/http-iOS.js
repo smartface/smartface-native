@@ -57,13 +57,13 @@ var http = function Http(params){
                         // Native returns file path first.
                         // Convert to sf-core file object.
                         e.file = new File({path:e.file});
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }
@@ -85,13 +85,13 @@ var http = function Http(params){
                         // Convert to sf-core Image object.
                         const Image = require('sf-core/ui/image');
                         e.image = Image.createFromImage(e.image);
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }
@@ -109,13 +109,13 @@ var http = function Http(params){
                 self.nativeObject.requestString(
                     url,
                     function(e){
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }
@@ -133,13 +133,13 @@ var http = function Http(params){
                 self.nativeObject.requestJSON(
                     url,
                     function(e){
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }
@@ -157,13 +157,13 @@ var http = function Http(params){
                     params,
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }
@@ -189,13 +189,13 @@ var http = function Http(params){
                     params,
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onLoad) {
+                        if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
                         e.body = new Blob(e.body);
-                        if (onError) {
+                        if (typeof onError === "function") {
                         	onError(e);
                         }
                     }

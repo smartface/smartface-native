@@ -154,7 +154,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
         onFailure: function(call, e) {
             if(e)
                 var message = e.getMessage();
-            params && params.onError && runOnUiThread(params.onError, {message: message});
+            params && typeof params.onError === "function" && runOnUiThread(params.onError, {message: message});
         },
         onResponse: function(call, response) {
             var statusCode = response.code();
@@ -170,7 +170,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             }
             
             if(response.isSuccessful()) {
-                if(params && params.onLoad) {
+                if(params && typeof params.onLoad === "function") {
                     if(isRunOnBackgroundThread) {
                         params.onLoad({ 
                             statusCode: statusCode, 
@@ -186,7 +186,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                     }
                 }
             } else {
-                params && params.onError && runOnUiThread(
+                params && typeof params.onError === "function" && runOnUiThread(
                     params.onError, {
                         statusCode: statusCode,
                         headers: responseHeaders,
