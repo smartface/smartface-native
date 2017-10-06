@@ -607,8 +607,9 @@ function Page(params) {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
-                const Navigator = require("sf-core/ui/navigator");
                 var fragment;
+                const Navigator = require("../navigator");
+                
                 var index = item.getItemId();
                 self.parentTab.currentIndex = index;
                 var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
