@@ -71,10 +71,10 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
-                return _itemCount;
+                return int(_itemCount);
             },
             getItemViewType: function(position){
-                return position;
+                return int(position);
             }
         },null);
 
