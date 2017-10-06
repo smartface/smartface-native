@@ -56,13 +56,20 @@ var http = function Http(params){
                         const File = require('sf-core/io/file');
                         // Native returns file path first.
                         // Convert to sf-core file object.
-                        e.file = new File({path:e.file});
+                        if (e.file) {
+                            e.file = new File({path:e.file});
+                        }
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
@@ -83,14 +90,22 @@ var http = function Http(params){
                     function(e){
                         // Native returns UIImage instance.
                         // Convert to sf-core Image object.
-                        const Image = require('sf-core/ui/image');
-                        e.image = Image.createFromImage(e.image);
+                        if (e.image) {
+                            const Image = require('sf-core/ui/image');
+                            e.image = Image.createFromImage(e.image);
+                        }
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
+
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
@@ -109,12 +124,17 @@ var http = function Http(params){
                 self.nativeObject.requestString(
                     url,
                     function(e){
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
@@ -133,12 +153,17 @@ var http = function Http(params){
                 self.nativeObject.requestJSON(
                     url,
                     function(e){
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
@@ -156,13 +181,17 @@ var http = function Http(params){
                 self.nativeObject.request(
                     params,
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
@@ -188,13 +217,17 @@ var http = function Http(params){
                 self.nativeObject.upload(
                     params,
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onLoad === "function") {
                         	onLoad(e);
                         }
                     },
                     function(e){
-                        e.body = new Blob(e.body);
+                        if (e.body) {
+                            e.body = new Blob(e.body);
+                        }
                         if (typeof onError === "function") {
                         	onError(e);
                         }
