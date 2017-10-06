@@ -130,7 +130,7 @@ const SwipeView = extend(View)(
         
         self.onPageSelectedHandler = function(e){
             var selectedIndex;
-            if (e.index) {
+            if (e.index !== undefined) {
                 selectedIndex = e.index;
             }else if (e.completed) {
                 selectedIndex = pendingViewControllerIndex;
