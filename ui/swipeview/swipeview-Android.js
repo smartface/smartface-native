@@ -28,7 +28,7 @@ const SwipeView = extend(View)(
                     }
                 },
                 onPageSelected: function(position) {
-                    _callbackOnPageSelected && _callbackOnPageSelected(position);
+                    _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
                     var intPosition = position;
