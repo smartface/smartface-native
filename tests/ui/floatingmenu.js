@@ -67,10 +67,6 @@ salep.test("sf-core/ui/floatingmenu Unit Test", function() {
         testObject = new FloatingMenu();
     });
     
-    this.afterEach(function(){
-        testObject = null;
-    });
-    
     this.case("[color] getter/setter.", function() {
     	assert.doesNotThrow( function(){ testObject.color = Color.RED; }, Error);
     	assert.equal(testObject.color, Color.RED, "color must be Color.RED");
@@ -98,10 +94,31 @@ salep.test("sf-core/ui/floatingmenu Unit Test", function() {
     });
     
     this.case("[open] function.", function() {
-    	assert.doesNotThrow( function(){ testObject.open(); }, Error);
+        
+        const Page = require("../../ui/page");
+        const extend = require('js-base/core/extend');
+        const Router = require("../../router");
+        const page1 = extend(Page)(
+            function (_super, params) {
+                _super(this), {
+                    onShow: function() {
+    	                assert.doesNotThrow( function(){ testObject.open(); }, Error);
+    
+                        this.case("[close] function.", function() {
+                        	assert.doesNotThrow( function(){ testObject.close(); }, Error);
+                        });
+                    },
+                    onLoad: function() {
+                        this.layout.addChild(testObject);
+                    }
+                };
+            }
+        );
+        Router.add('pageFloationMenu', page1);
+        Router.go('pageFloationMenu');
     });
     
-    this.case("[close] function.", function() {
-    	assert.doesNotThrow( function(){ testObject.close(); }, Error);
+    this.afterEach(function(){
+        testObject = null;
     });
 });
