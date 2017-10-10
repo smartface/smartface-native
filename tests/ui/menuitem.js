@@ -13,6 +13,6 @@ salep.test("MenuItem Unit Test", function () {
     
     this.case("MenuItem titleColor property", function () {
         Creator.menuItem.titleColor = Color.YELLOW;
-        assert.equal(int(Creator.menuItem.titleColor.nativeObject), int(Color.YELLOW.nativeObject), "titleColor must be equal to Color.YELLOW.");
+        assert.equal(Creator.menuItem.titleColor.nativeObject, Color.YELLOW.nativeObject, "titleColor must be equal to Color.YELLOW.");
     });
 });

@@ -23,9 +23,6 @@ salep.test("sf-core/ui/page Unit Test", function() {
     });
     
     this.case("Page headerBar getter.", function() {
-        assert.doesNotThrow(function(){Router.add("page1", page1);}, Error);
-        assert.doesNotThrow(function(){Router.go("page1");}, Error);
-        
         assert.isNotNull(pageInstance.headerBar, "headerBar cannot be null.");
     });
     
