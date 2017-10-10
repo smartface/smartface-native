@@ -121,6 +121,7 @@ const ListView = extend(View)(
         self.nativeObject.cellForRowAt = function(e){
              var listItem = self.createTemplate(e);
              self.onRowBind(listItem,e.index);
+             listItem.nativeObject.layer.removeAllAnimations();
              listItem.applyLayout();
          }
 
