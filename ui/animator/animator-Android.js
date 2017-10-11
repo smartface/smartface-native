@@ -5,8 +5,6 @@ const NativeAutoTransition    = requireClass('android.support.transition.AutoTra
 const NativeAlphaTransition   = requireClass('io.smartface.android.anims.AlphaTransition');
 const NativeRotateTransition  = requireClass('io.smartface.android.anims.RotateTransition');
 
-const AndroidConfig = require("sf-core/util/Android/androidconfig");
-
 function Animator(params) {
     var _layout       = params.layout;
     var _duration     = params.duration;
@@ -26,30 +24,27 @@ function Animator(params) {
     Object.defineProperties(this, {
         'perform': {
             value: function() {
-                var task = function() {
-                    var autoTransition = new NativeAutoTransition();
-                    var alphaTransition = new NativeAlphaTransition();
-                    var rotateTransition = new NativeRotateTransition();
-                    var transitionSet = new NativeTransitionSet();
-                    transitionSet.addTransition(autoTransition);
-                    transitionSet.addTransition(alphaTransition);
-                    transitionSet.addTransition(rotateTransition);
-                    transitionSet.setDuration(long(_duration));
-                    transitionSet.addListener(NativeTransition.TransitionListener.implement({
-                        onTransitionStart:  function(transition) {},
-                        onTransitionCancel: function(transition) {},
-                        onTransitionPause:  function(transition) {},
-                        onTransitionResume: function(transition) {},
-                        onTransitionEnd:    function(transition) {
-                            _onComplete();
-                        }
-                    }));
-                    NativeTransitionManager.beginDelayedTransition(_layout.nativeObject, transitionSet);
-                    _animFunction();
-                    _layout.applyLayout();
-                    applyLayoutInners(_layout);  
-                };
-                runOnUiThread(task);
+                var autoTransition = new NativeAutoTransition();
+                var alphaTransition = new NativeAlphaTransition();
+                var rotateTransition = new NativeRotateTransition();
+                var transitionSet = new NativeTransitionSet();
+                transitionSet.addTransition(autoTransition);
+                transitionSet.addTransition(alphaTransition);
+                transitionSet.addTransition(rotateTransition);
+                transitionSet.setDuration(long(_duration));
+                transitionSet.addListener(NativeTransition.TransitionListener.implement({
+                    onTransitionStart:  function(transition) {},
+                    onTransitionCancel: function(transition) {},
+                    onTransitionPause:  function(transition) {},
+                    onTransitionResume: function(transition) {},
+                    onTransitionEnd:    function(transition) {
+                        _onComplete();
+                    }
+                }));
+                NativeTransitionManager.beginDelayedTransition(_layout.nativeObject, transitionSet);
+                _animFunction();
+                _layout.applyLayout();
+                applyLayoutInners(_layout);  
             }
         },
         'then': {
@@ -76,16 +71,6 @@ function Animator(params) {
             configurable: true
         }
     });
-}
-
-function runOnUiThread(task) {
-    const Runnable = requireClass("java.lang.Runnable");
-    var runnable = Runnable.implement({
-        run : function(){
-            task && task();
-        }
-    });
-    AndroidConfig.activity.runOnUiThread(runnable);
 }
 
 function applyLayoutInners(rootLayout) {
