@@ -18,6 +18,6 @@ salep.test("HeaderBarItem Unit Test", function () {
     
     this.case("HeaderBarItem color property", function () {
         Creator.headerBarItem.color = Color.YELLOW;
-        assert.equal(int(Creator.headerBarItem.color.nativeObject), int(Color.YELLOW.nativeObject), "color must be equal to Color.YELLOW.");
+        assert.equal(Creator.headerBarItem.color.nativeObject, Color.YELLOW.nativeObject, "color must be equal to Color.YELLOW.");
     });
 });

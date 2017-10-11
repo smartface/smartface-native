@@ -84,7 +84,7 @@ Database.QueryResult = function(params){
     Object.defineProperties(this,{
         'count': {
             value: function(){
-                return int(this.nativeObject.getCount());
+                return this.nativeObject.getCount();
             }
         },
         'getFirst': {
@@ -134,9 +134,9 @@ Database.DatabaseObject = function(params){
         'getString': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
+                    var index = this.nativeObject.getColumnIndex(columnName);
                     if(index != -1){
-                        return string(this.nativeObject.getString(int(index)));
+                        return this.nativeObject.getString(index);
                     }
                     return null;
                 }
@@ -149,9 +149,9 @@ Database.DatabaseObject = function(params){
         'getInteger': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
+                    var index = this.nativeObject.getColumnIndex(string(columnName));
                     if(index != -1){
-                        return int(this.nativeObject.getInt(int(index)));
+                        return this.nativeObject.getInt(index);
                     }
                     return null;
                 }
@@ -179,9 +179,9 @@ Database.DatabaseObject = function(params){
         'getFloat': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = int(this.nativeObject.getColumnIndex(string(columnName)));
+                    var index = this.nativeObject.getColumnIndex(columnName);
                     if(index != -1){
-                        return float(this.nativeObject.getFloat(int(index)));
+                        return this.nativeObject.getFloat(index);
                     }
                     return null;
                 }

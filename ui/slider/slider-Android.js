@@ -38,7 +38,7 @@ const Slider = extend(View)(
                         value = _maxValue;
                     }
                     
-                    this.nativeObject.setProgress(value - _minValue);
+                    this.nativeObject.setProgress(int(value - _minValue));
                 },
                 enumerable: true
             },
@@ -48,7 +48,7 @@ const Slider = extend(View)(
                 }, 
                 set: function(value) {
                     _minValue = value;
-                    this.nativeObject.setMax(_maxValue - _minValue);
+                    this.nativeObject.setMax(int(_maxValue - _minValue));
                 },
                 enumerable: true
             },
@@ -58,7 +58,7 @@ const Slider = extend(View)(
                 }, 
                 set: function(value) {
                     _maxValue = value;
-                    this.nativeObject.setMax(_maxValue - _minValue);
+                    this.nativeObject.setMax(int(_maxValue - _minValue));
                 },
                 enumerable: true
             },

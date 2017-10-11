@@ -40,14 +40,14 @@ function Sound(params) {
     
     Object.defineProperty(this, 'currentDuration', {
         get: function() {
-            return int(this.nativeObject.getCurrentPosition());
+            return this.nativeObject.getCurrentPosition();
         },
         enumerable: true
     });
     
     Object.defineProperty(this, 'totalDuration', {
         get: function() {
-            return int(this.nativeObject.getDuration());
+            return this.nativeObject.getDuration();
         },
         enumerable: true
     });

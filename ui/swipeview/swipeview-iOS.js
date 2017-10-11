@@ -61,6 +61,7 @@ const SwipeView = extend(View)(
         self.nativeObject.addSubview(self.pageController.view);
         
         var _pageArray = [];
+        var _instanceArray = [];
         var _pageNativeObjectArray = [];
         Object.defineProperty(self, 'pages', {
             get: function() {
@@ -71,10 +72,12 @@ const SwipeView = extend(View)(
                     return;
                 }
                 _pageNativeObjectArray = [];
+                _instanceArray = [];
                 for (var i = 0; i < value.length; i++) {
                     var page = new value[i]();
                     bypassPageSpecificProperties(page);
                     if (page.nativeObject.constructor.name === "SMFNative.SMFUIViewController"){
+                        _instanceArray.push(page);
                         _pageNativeObjectArray.push(page.nativeObject);
                     }else{
                         return;
@@ -130,7 +133,7 @@ const SwipeView = extend(View)(
         
         self.onPageSelectedHandler = function(e){
             var selectedIndex;
-            if (e.index) {
+            if (e.index !== undefined) {
                 selectedIndex = e.index;
             }else if (e.completed) {
                 selectedIndex = pendingViewControllerIndex;
@@ -141,7 +144,7 @@ const SwipeView = extend(View)(
             if (selectedIndex != currentIndex) {
                 currentIndex = selectedIndex;
                 if (typeof self.onPageSelected === "function"){
-                    self.onPageSelected(currentIndex); 
+                    self.onPageSelected(currentIndex,_instanceArray[currentIndex]); 
                 }
             }
         }

@@ -13,8 +13,9 @@ const extend = require('js-base/core/extend');
  *       page: currentPage,
  *       width:300, height:300,
  *       pages: [require("../ui/ui_swipePage1"), require("../ui/ui_swipePage2"), require("../ui/ui_swipePage3")],
- *       onPageSelected: function(index) {
- *         console.log("Selected Page: " + index);
+ *       onPageSelected: function(index,page) {
+ *         console.log("Selected Page Index : " + index);
+ *         console.log("Selected Page Instance : " + page);
  *       },
  *       onStateChanged: function(state) {
  *         if (SwipeView.State.DRAGGING === state) {
@@ -46,11 +47,12 @@ function SwipeView() {
      *
      * @event onPageSelected
      * @param index
+     * @param page Selected page instance
      * @android
      * @ios
      * @since 1.1.10
      */
-    this.onPageSelected = function(index){};
+    this.onPageSelected = function(index,page){};
     /**
      * Gets/Sets the callback trigged during swipe actions.
      *
