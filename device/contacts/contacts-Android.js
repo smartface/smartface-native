@@ -89,6 +89,8 @@ Contacts.pick = function(params) {
 };
 
 Contacts.onActivityResult = function(requestCode, resultCode, data) {
+    if (!data) _onFailure(new Error("User cancelled Contacts operation"));
+    
     var contactUri = data.getData();
     var contact = {};
     try {
@@ -109,8 +111,8 @@ Contacts.getAll = function(params) {
     try {
         var contentResolver = AndroidConfig.activity.getContentResolver();
         var projection = [
-            string("_id"), // BaseColumns._ID,
-            string("display_name")// ContactsContract.Contacts.DISPLAY_NAME
+            "_id", // BaseColumns._ID,
+            "display_name"// ContactsContract.Contacts.DISPLAY_NAME
         ];
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
         var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
@@ -124,7 +126,7 @@ Contacts.getAll = function(params) {
             index = cursor.getColumnIndex(projection[1]);
             var queryParams = {
                 id: id,
-                projection: [string(CommonColumns_DATA)],
+                projection: [CommonColumns_DATA],
                 contentResolver: contentResolver,
                 columnTag: CommonColumns_DATA, 
                 uri: uri
