@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const Color     = require("../color");
 const TypeUtil  = require("../../util/type");
 const Exception = require("../../util/exception");
@@ -61,12 +62,12 @@ function MenuItem(params) {
         },
         'spanTitle': {
             value: function() {
-                var spannableStringBuilder = new NativeSpannableStringBuilder(string(""));
+                var spannableStringBuilder = new NativeSpannableStringBuilder("");
                 if (_title) {
-                    spannableStringBuilder = new NativeSpannableStringBuilder(string(_title));
+                    spannableStringBuilder = new NativeSpannableStringBuilder(_title);
                     if (_titleColor) {
                         var colorSpan = new NativeColorSpan(_titleColor.nativeObject);
-                        spannableStringBuilder.setSpan(colorSpan, int(0), int(_title.length), NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        spannableStringBuilder.setSpan(colorSpan, 0, _title.length, NativeSpannable.SPAN_INCLUSIVE_INCLUSIVE);
                         return spannableStringBuilder;
                     }
                 }

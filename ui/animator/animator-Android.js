@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeTransitionManager = requireClass('android.support.transition.TransitionManager');
 const NativeTransition        = requireClass('android.support.transition.Transition');
 const NativeTransitionSet     = requireClass('android.support.transition.TransitionSet');

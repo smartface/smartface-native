@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeDialog = requireClass("android.app.Dialog");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -9,7 +10,7 @@ function Dialog(params) {
     
     if(!this.nativeObject){
         // 16974065 = android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen
-        this.nativeObject = new NativeDialog(AndroidConfig.activity, int(16974065)); 
+        this.nativeObject = new NativeDialog(AndroidConfig.activity, 16974065); 
     }
     
     Object.defineProperties(this, {
@@ -38,13 +39,13 @@ function Dialog(params) {
     
     if(!this.isNotSetDefaults){
         // View.Window.FEATURE_NO_TITLE
-        this.nativeObject.requestWindowFeature(int(1));
+        this.nativeObject.requestWindowFeature(1);
         this.nativeObject.setContentView(_layout.nativeObject);
         var dialogWindow = this.nativeObject.getWindow();
         var colorDrawable = new NativeColorDrawable((Color.create(150, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
-        dialogWindow.setLayout(int(-1), int(-1));
+        dialogWindow.setLayout(-1, -1);
     }
         
     // Assign parameters given in constructor

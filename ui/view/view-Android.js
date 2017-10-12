@@ -1,4 +1,4 @@
-/*globals array,requireClass */
+/*globals array,requireClass,release */
 const AndroidUnitConverter      = require("../../util/Android/unitconverter.js");
 const AndroidConfig             = require("../../util/Android/androidconfig");
 const TypeUtil                  = require("../../util/type");
@@ -13,7 +13,6 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
-const NativeViewCompat          = requireClass("android.support.v4.view.ViewCompat");
 
 
 // MotionEvent.ACTION_UP

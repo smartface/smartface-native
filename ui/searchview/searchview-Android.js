@@ -1,7 +1,7 @@
+/*globals requireClass*/
 const View                  = require('../view');
 const extend                = require('js-base/core/extend');
 const Font                  = require('../font');
-const TypeUtil              = require('../../util/type');
 const Color                 = require('../color');
 const KeyboardType          = require('../keyboardtype');
 const TextAlignment         = require('../textalignment');
@@ -42,7 +42,7 @@ const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
     1 | 64,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE
     4 | 32,         // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
     1 | 32          // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-]
+];
 
 // TextAlignment values to Android Gravity Values.
 const NativeTextAlignment = [
@@ -55,7 +55,7 @@ const NativeTextAlignment = [
     80 | 3, // Gravity.BOTTOM | Gravity.LEFT == TextAlignment.MIDLEFT
     80 | 1, // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL == TextAlignment.MIDLEFT
     80 | 5  // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
-]
+];
 
 const SearchView = extend(View)(
     function (_super, params) {
@@ -83,7 +83,7 @@ const SearchView = extend(View)(
         {
             'text' : {
                 get: function() {
-                    return string(mSearchSrcTextView.getText());
+                    return mSearchSrcTextView.getText();
                 },
                 set: function(text) {
                     if(text){
@@ -344,8 +344,8 @@ SearchView.iOS.Style = {};
 
 function updateQueryHint(self, mSearchSrcTextView, icon, hint){
     if(icon && icon.nativeObject){
-        const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder")
-        const NativeImageSpan = requireClass("android.text.style.ImageSpan")
+        const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
+        const NativeImageSpan = requireClass("android.text.style.ImageSpan");
         var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
         icon.nativeObject.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");

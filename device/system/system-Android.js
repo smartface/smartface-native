@@ -1,5 +1,5 @@
 const TypeUtil             = require('../../util/type');
-const AndroidConfig        = require('../../util/Android/androidconfig')
+const AndroidConfig        = require('../../util/Android/androidconfig');
 const NativeBuild          = requireClass('android.os.Build');
 const NativeIntentFilter   = requireClass('android.content.IntentFilter');
 const NativeBatteryManager = requireClass('android.os.BatteryManager');
@@ -23,7 +23,7 @@ const VIBRATOR_MANAGER = 'android.os.Vibrator';
 const FINGERPRINT_SERVICE = 'fingerprint';
 const FINGERPRINT_MANAGER = 'android.hardware.fingerprint.FingerprintManager';
 
-const DIALOG_FRAGMENT_TAG = "myFragment"
+const DIALOG_FRAGMENT_TAG = "myFragment";
 
 const System = {};
 System.android = {};
@@ -31,7 +31,7 @@ System.android = {};
 Object.defineProperties(System, {
     'language': {
         get: function() {
-            return string(NativeLocale.getDefault().getDisplayLanguage());
+            return NativeLocale.getDefault().getDisplayLanguage();
         },
         enumerable: true
     },
@@ -43,7 +43,7 @@ Object.defineProperties(System, {
     },
     'OSVersion': {
         get: function() {
-            return string(NativeBuild.VERSION.RELEASE);
+            return NativeBuild.VERSION.RELEASE;
         },
         enumerable: true
     },
@@ -67,7 +67,7 @@ Object.defineProperties(System, {
             var clipboard = AndroidConfig.getSystemService(CLIPBOARD_SERVICE, CLIPBOARD_MANAGER);
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
-                return string(storedData.getItemAt(0).getText());
+                return storedData.getItemAt(0).getText().toString();
             } else {
                 return null;
             }
@@ -82,7 +82,7 @@ Object.defineProperties(System, {
     'vibrate': {
         value: function() {
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
-            vibrator.vibrate(long(500));
+            vibrator.vibrate(500);
         },
         enumerable: true
     },
@@ -157,7 +157,7 @@ Object.defineProperties(System.android, {
         value: function(packageName) {
             var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
             for (var i = 0; i < packageList.size(); i++) {
-                if(string(packageList.get(i).packageName) === packageName) {
+                if(packageList.get(i).packageName.toString() === packageName) {
                     return true;
                 }
             }

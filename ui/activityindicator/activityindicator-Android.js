@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const View = require('../view');
 const extend = require('js-base/core/extend');
 

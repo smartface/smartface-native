@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const extend            = require('js-base/core/extend');
 const Label             = require('../label');
 const TypeUtil          = require('../../util/type');

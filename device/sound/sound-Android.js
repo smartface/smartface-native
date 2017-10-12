@@ -137,9 +137,9 @@ Sound.android.pick = function(params) {
 };
 
 Sound.onActivityResult = function(requestCode, resultCode, data) {
-    if(int(requestCode) === Sound.PICK_SOUND) {
+    if(requestCode === Sound.PICK_SOUND) {
         var fragmentActivity = AndroidConfig.activity;
-        if (int(resultCode) === -1) { // Activity.RESULT_OK = 1
+        if (resultCode === -1) { // Activity.RESULT_OK = 1
             try {
                 var uri = data.getData();
                 var sound = new Sound();
@@ -149,7 +149,7 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
             }
             catch (err) {
                 if(_pickParams.onFailure)
-                    _pickParams.onFailure({message: string(err.toString())});
+                    _pickParams.onFailure({message: err.toString()});
             }
         }
         else {

@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const TypeUtil      = require('../../util/type');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
@@ -75,6 +76,6 @@ function DatePicker(params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 module.exports = DatePicker;

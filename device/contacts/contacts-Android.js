@@ -89,7 +89,12 @@ Contacts.pick = function(params) {
 };
 
 Contacts.onActivityResult = function(requestCode, resultCode, data) {
-    if (!data) _onFailure(new Error("User cancelled Contacts operation"));
+    if (!data) {
+        if (typeof _onFailure === "function") {
+            _onFailure(new Error("User cancelled Contacts operation"));
+        }
+        return;
+    }
     
     var contactUri = data.getData();
     var contact = {};
@@ -198,7 +203,7 @@ function getContactDisplayName(contactUri) {
     var contactName = "";
     var context = activity.getApplicationContext();
     var contentResolver = context.getContentResolver();
-    var projection = [string("display_name")];
+    var projection = ["display_name"];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     if(cursor != null) {
         if (cursor.moveToFirst()) {
@@ -214,7 +219,7 @@ function getContactDisplayName(contactUri) {
 
 function getContactPhoneNumber(contactUri) {
     var contentResolver = activity.getContentResolver();
-    var projection = [ string(Phone_NUMBER) ];
+    var projection = [ Phone_NUMBER ];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     cursor.moveToFirst();
     
