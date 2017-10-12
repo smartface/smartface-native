@@ -64,8 +64,8 @@ const ListView = extend(View)(
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
                             holderViewLayout.nativeObject = view;
-                            var clickedView = createFromTemplate(holderViewLayout);
-                            _onRowSelected && _onRowSelected(clickedView, position);
+                            createFromTemplate(holderViewLayout);
+                            _onRowSelected && _onRowSelected(holderViewLayout, position);
                         }
                     }));
                 }
@@ -299,11 +299,11 @@ ListView.iOS = {};
 
 function createFromTemplate(jsView){
     if(jsView.childViews){
-        for (var child in jsView.childs){
-             if (jsView.childs[child].id){
-                jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
+        for (var child in jsView.childViews){
+             if (jsView.childViews[child].id){
+                jsView.childViews[child].nativeObject = jsView.nativeObject.findViewById(jsView.childViews[child].id);
                 
-                createFromTemplate(jsView.childs[child]);
+                createFromTemplate(jsView.childViews[child]);
              }
         }
     }
