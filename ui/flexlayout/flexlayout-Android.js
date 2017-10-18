@@ -1,5 +1,5 @@
 /*globals requireClass*/
-const AndroidConfig             = require("../../util/Android/androidconfig")
+const AndroidConfig             = require("../../util/Android/androidconfig");
 const ViewGroup                 = require('../viewgroup');
 const extend                    = require('js-base/core/extend');
 

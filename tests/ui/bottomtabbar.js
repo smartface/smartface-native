@@ -29,7 +29,9 @@ salep.test("sf-core/ui/bottomtabbar Unit Test", function() {
     });
     
     this.case("[android.maxItemCount] getter/setter.", function() {
-    	assert.isNumber(testObject.android.maxItemCount, "android.maxItemCount must be number");
+        if (Device.deviceOS === "Android") {
+    	    assert.isNumber(testObject.android.maxItemCount, "android.maxItemCount must be number");
+        }
     });
     
     this.case("[add] getter/setter.", function() {

@@ -361,7 +361,7 @@ function registerPushNotification(onSuccessCallback, onFailureCallback){
             onSuccess: function(token){
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback({ 'token' : string(token) });
+                onSuccessCallback && onSuccessCallback({ 'token' : token });
             },
             onFailure: function(){
                 onFailureCallback && onFailureCallback();

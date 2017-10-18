@@ -1,4 +1,4 @@
-const AndroidConfig   = require('../../util/Android/androidconfig')
+const AndroidConfig   = require('../../util/Android/androidconfig');
 const UnitConverter   = require('../../util/Android/unitconverter');
 const Image           = require('../../ui/image');
 const OrientationType = require('./orientationtype');

@@ -66,19 +66,37 @@ salep.test("sf-core/application Unit Test", function() {
     });
     
     this.case("[android.packageName] getter.", function() {
-        assert.isString(Application.android.packageName, 'android.packageName must be number');
+        if (Device.deviceOS === "iOS") {
+            assert.isUndefined(Application.android.packageName, 'android.packageName expected to be undefined on iOS');
+        } else {
+            assert.isString(Application.android.packageName, 'android.packageName must be number');
+        }
     });
     
     this.case("[android.checkPermission] function.", function() {
-        assert.isBoolean(Application.android.checkPermission(Application.Android.Permissions.READ_CALENDAR) , 'android.checkPermission must be boolean');
+        if (Device.deviceOS === "iOS") {
+            assert.doesNotThrow(function(){  Application.android.checkPermission(Application.Android.Permissions.READ_CALENDAR); });
+        } else {
+            assert.isBoolean(Application.android.checkPermission(Application.Android.Permissions.READ_CALENDAR) , 'android.checkPermission must be boolean');
+        }
     });
     
     this.case("[android.requestPermissions] function.", function() {
-        assert.doesNotThrow(function(){ Application.android.requestPermissions(1234, Application.android.Permissions.RECORD_AUDIO); }, Error);
+        if (Device.deviceOS === "iOS") {
+            assert.doesNotThrow(function(){  Application.android.requestPermissions(Application.Android.Permissions.READ_CALENDAR); });
+        } else {
+            assert.doesNotThrow(function(){ Application.android.requestPermissions(1234, Application.android.Permissions.RECORD_AUDIO); }, Error);
+        }
     });
     
     this.case("[android.shouldShowRequestPermissionRationale] function.", function() {
-        assert.isBoolean(Application.android.shouldShowRequestPermissionRationale(Application.Android.Permissions.READ_CALENDAR) , 'android.shouldShowRequestPermissionRationale must be boolean');
+        if (Device.deviceOS === "iOS") {
+            assert.doesNotThrow(function() {
+                Application.android.shouldShowRequestPermissionRationale(Application.Android.Permissions.READ_CALENDAR);
+            });
+        } else {
+            assert.isBoolean(Application.android.shouldShowRequestPermissionRationale(Application.Android.Permissions.READ_CALENDAR) , 'android.shouldShowRequestPermissionRationale must be boolean');
+        }
     });
     
 });

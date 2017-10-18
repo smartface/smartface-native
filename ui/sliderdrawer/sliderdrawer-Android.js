@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
 const AndroidUnitConverter  = require('../../util/Android/unitconverter.js');
@@ -113,10 +114,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'height': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.height));
+                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.height);
                 },
                 set: function(height) {
-                    drawerLayoutParams.height = int(AndroidUnitConverter.dpToPixel(height));
+                    drawerLayoutParams.height = AndroidUnitConverter.dpToPixel(height);
                 },
                 enumerable: true,
                 configurable: true
@@ -124,10 +125,10 @@ const SliderDrawer = extend(FlexLayout)(
             // Added due to using DrawerLayout as a parent
             'width': {
                 get: function() {
-                    return AndroidUnitConverter.pixelToDp(int(drawerLayoutParams.width));
+                    return AndroidUnitConverter.pixelToDp(drawerLayoutParams.width);
                 },
                 set: function(width) {
-                    drawerLayoutParams.width = int(AndroidUnitConverter.dpToPixel(width));
+                    drawerLayoutParams.width = AndroidUnitConverter.dpToPixel(width);
                 },
                 enumerable: true,
                 configurable: true
@@ -154,7 +155,7 @@ const SliderDrawer = extend(FlexLayout)(
                 
             },
             'onDrawerStateChanged': function(newState){
-                if (int(newState) === 1) { // STATE_DRAGGING
+                if (newState === 1) { // STATE_DRAGGING
                     _state = SliderDrawer.State.DRAGGED;
                 }
             }

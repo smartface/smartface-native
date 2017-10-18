@@ -8,7 +8,7 @@ function Dialog(params) {
     self.dialogView = new FlexLayout();
     self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds; 
     self.dialogView.backgroundColor = Color.create(150,0,0,0);
-    
+    self.dialogView.alpha = 0;
     
     self.calculatePosition = function(){
         self.dialogView.left = self.dialogView.nativeObject.frame.x;

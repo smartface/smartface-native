@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const View                          = require('../view');
 const extend                        = require('js-base/core/extend');
 const ListViewItem                  = require("../listviewitem");
@@ -37,7 +38,7 @@ const ListView = extend(View)(
 
         _super(this);
         var holderViewLayout;
-        var dataAdapter = NativeRecyclerView.Adapter.extend(string("SFAdapter"),{
+        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
             onCreateViewHolder: function(parent,viewType){
                 try{
                     holderViewLayout = _onRowCreate();
@@ -71,10 +72,10 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
-                return int(_itemCount);
+                return _itemCount;
             },
             getItemViewType: function(position){
-                return int(position);
+                return position;
             }
         },null);
 

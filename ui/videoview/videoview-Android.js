@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const extend            = require('js-base/core/extend');
 const View              = require('../view');
 const Exception         = require("../../util/exception");
@@ -89,12 +90,12 @@ const VideoView = extend(View)(
             },
             'totalDuration': {
                 get: function() {
-                    return (_nativeMediaPlayer) ? int(_nativeMediaPlayer.getDuration()) : -1;
+                    return (_nativeMediaPlayer) ? _nativeMediaPlayer.getDuration() : -1;
                 }
             },
             'currentDuration': {
                 get: function() {
-                    return (_nativeMediaPlayer) ? int(_nativeMediaPlayer.getCurrentPosition()) : -1;
+                    return (_nativeMediaPlayer) ? _nativeMediaPlayer.getCurrentPosition() : -1;
                 }
             },
             'setVolume': {

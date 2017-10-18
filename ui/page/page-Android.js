@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const FlexLayout            = require("../flexlayout");
 const Color                 = require("../color");
 const TypeUtil              = require("../../util/type");
@@ -348,7 +349,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return string(toolbar.getTitle());
+            return toolbar.getTitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
@@ -431,7 +432,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return string(toolbar.getSubtitle());
+            return toolbar.getSubtitle();
         },
         set: function(text) {
             if (TypeUtil.isString(text)) {
@@ -538,9 +539,9 @@ function Page(params) {
             if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
                 for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
                     if(i === _selectedIndex) {
-                        menu.getItem(int(i)).setChecked(true);
+                        menu.getItem(i).setChecked(true);
                     }else {
-                        menu.getItem(int(i)).setChecked(false);
+                        menu.getItem(i).setChecked(false);
                     }
                 }
             }

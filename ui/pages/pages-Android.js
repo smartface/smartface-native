@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const AndroidConfig         = require('../../util/Android/androidconfig');
 const NativeView            = requireClass("android.view.View");
 const NativeR               = requireClass(AndroidConfig.packageName + '.R');

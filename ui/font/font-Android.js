@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const File           = require('../../io/file');
 const Path           = require('../../io/path');
 const AndroidConfig  = require("../../util/Android/androidconfig.js");
