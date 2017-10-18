@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const AndroidConfig             = require("../../util/Android/androidconfig");
 const Label                     = require("../label");
 const Color                     = require("../color");

@@ -1,3 +1,4 @@
+/*globals array,requireClass,release */
 const extend        = require('js-base/core/extend');
 const View          = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');

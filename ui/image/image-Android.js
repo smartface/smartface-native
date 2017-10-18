@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeBitmapFactory  = requireClass("android.graphics.BitmapFactory");
 const NativeBitmapDrawable = requireClass("android.graphics.drawable.BitmapDrawable");
 const NativeBitmap = requireClass("android.graphics.Bitmap");
@@ -159,15 +160,6 @@ function Image (params) {
                     else 
                         return (new Blob(byteArray, {type:"image"}));
                 }
-            }, 
-            enumerable: true
-        },
-        'toBlob':{
-            value: function() {
-                var bitmap = self.nativeObject.getBitmap();
-                var stream = new NativeByteArrayOutputStream();
-                bitmap.compress(CompressFormat[1], 100, stream);
-                return new Blob(stream.toByteArray(), {type: "image"});
             }, 
             enumerable: true
         },

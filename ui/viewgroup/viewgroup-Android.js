@@ -1,3 +1,4 @@
+/*globals array,requireClass,release */
 const View              = require('../view');
 const TypeUtil          = require("../../util/type");
 const extend            = require('js-base/core/extend');

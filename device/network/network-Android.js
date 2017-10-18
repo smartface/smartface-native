@@ -23,7 +23,7 @@ const MARSHMALLOW = 23;
 Object.defineProperties(Network, {
     'IMSI': {
         get: function() {
-            return getTelephonyManager().getSubscriberId() ? string(getTelephonyManager().getSubscriberId()) : null; 
+            return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null; 
         },
         configurable: false
     },
@@ -39,14 +39,14 @@ Object.defineProperties(Network, {
             if (bluetoothAdapter === null) {
                 return "null";
             } else {
-                return string(bluetoothAdapter.getAddress());
+                return bluetoothAdapter.getAddress();
             }
         },
         configurable: false
     },
     'carrier': {
         get: function() {
-            return string(getTelephonyManager().getNetworkOperatorName());
+            return getTelephonyManager().getNetworkOperatorName();
         },
         configurable: false
     },
@@ -87,7 +87,7 @@ Object.defineProperties(Network, {
         get: function() {
             var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
             var wifiInfo = wifiManager.getConnectionInfo();
-            return string(wifiInfo.getMacAddress());
+            return wifiInfo.getMacAddress();
         },
         configurable: false
     }

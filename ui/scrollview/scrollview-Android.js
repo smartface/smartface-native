@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const ViewGroup = require('../viewgroup');
 const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');

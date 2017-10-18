@@ -43,15 +43,21 @@ salep.test("sf-core/device/system Unit Test", function() {
     });
     
     this.case("[apiLevel] getter.", function() {
-        assert.isNumber(System.android.apiLevel, 'apiLevel must be number');
+        if (Device.deviceOS === "Android") {
+            assert.isNumber(System.android.apiLevel, 'apiLevel must be number');
+        }
     });
     
     this.case("[menuKeyAvaliable] getter.", function() {
-        assert.isBoolean(System.android.menuKeyAvaliable, 'menuKeyAvaliable must be boolean');
+        if (Device.deviceOS === "Android") {
+            assert.isBoolean(System.android.menuKeyAvaliable, 'menuKeyAvaliable must be boolean');
+        }
     });
     
     this.case("[isApplicationInstalled] getter.", function() {
-        assert.isBoolean(System.android.isApplicationInstalled('io.smartface.SmartfaceApp'), 'isApplicationInstalled must be boolean');
+        if (Device.deviceOS === "Android") {
+            assert.isBoolean(System.android.isApplicationInstalled('io.smartface.SmartfaceApp'), 'isApplicationInstalled must be boolean');
+        }
     });
     
 });

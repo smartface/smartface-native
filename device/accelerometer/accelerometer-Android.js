@@ -20,9 +20,9 @@ Object.defineProperties(Accelerometer, {
                 onSensorChanged: function(event) {
                     var eventData = event.values;
                     _callback && _callback({
-                        x: float(eventData[0]),
-                        y: float(eventData[1]),
-                        z: float(eventData[2])
+                        x: eventData[0],
+                        y: eventData[1],
+                        z: eventData[2]
                     });
                 }
             });

@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeClickListener    = requireClass("android.view.View$OnClickListener");
 const NativeSpannableString  = requireClass("android.text.SpannableString");
 const NativeForegroundColor  = requireClass("android.text.style.ForegroundColorSpan");
@@ -199,12 +200,12 @@ function FloatingMenu(params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 // Position must match with iOS
 function reposition(position, arrayLength) {
     return (arrayLength - 1) - position;
-};
+}
 
 FloatingMenu.Item = require("./floatingMenuItem");
 

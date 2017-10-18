@@ -89,6 +89,13 @@ Contacts.pick = function(params) {
 };
 
 Contacts.onActivityResult = function(requestCode, resultCode, data) {
+    if (!data) {
+        if (typeof _onFailure === "function") {
+            _onFailure(new Error("User cancelled Contacts operation"));
+        }
+        return;
+    }
+    
     var contactUri = data.getData();
     var contact = {};
     try {
@@ -109,8 +116,8 @@ Contacts.getAll = function(params) {
     try {
         var contentResolver = AndroidConfig.activity.getContentResolver();
         var projection = [
-            string("_id"), // BaseColumns._ID,
-            string("display_name")// ContactsContract.Contacts.DISPLAY_NAME
+            "_id", // BaseColumns._ID,
+            "display_name"// ContactsContract.Contacts.DISPLAY_NAME
         ];
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
         var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
@@ -124,7 +131,7 @@ Contacts.getAll = function(params) {
             index = cursor.getColumnIndex(projection[1]);
             var queryParams = {
                 id: id,
-                projection: [string(CommonColumns_DATA)],
+                projection: [CommonColumns_DATA],
                 contentResolver: contentResolver,
                 columnTag: CommonColumns_DATA, 
                 uri: uri
@@ -196,7 +203,7 @@ function getContactDisplayName(contactUri) {
     var contactName = "";
     var context = activity.getApplicationContext();
     var contentResolver = context.getContentResolver();
-    var projection = [string("display_name")];
+    var projection = ["display_name"];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     if(cursor != null) {
         if (cursor.moveToFirst()) {
@@ -212,7 +219,7 @@ function getContactDisplayName(contactUri) {
 
 function getContactPhoneNumber(contactUri) {
     var contentResolver = activity.getContentResolver();
-    var projection = [ string(Phone_NUMBER) ];
+    var projection = [ Phone_NUMBER ];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     cursor.moveToFirst();
     

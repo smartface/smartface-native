@@ -1,3 +1,4 @@
+/*globals array,requireClass,release */
 const TypeUtil          = require("sf-core/util/type");
 const NativeAsynTask    = requireClass('android.os.AsyncTask');
 
@@ -13,7 +14,7 @@ const NativeAsynTask    = requireClass('android.os.AsyncTask');
  * NOTE: Not working due to COR-1281. 
  */
 function AsyncTask(params){
-    var asyncTask = NativeAsynTask.extend(string("SFAsyncTask"), {
+    var asyncTask = NativeAsynTask.extend("SFAsyncTask", {
         onPreExecute: function(){
             _onPreExecute && _onPreExecute();
         },

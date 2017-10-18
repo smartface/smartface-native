@@ -1,3 +1,4 @@
+/*globals array,requireClass,release */
 function AndroidConfig() {}
 
 const SpratAndroidActivity = requireClass("io.smartface.android.SpratAndroidActivity").getActivity();
@@ -27,7 +28,7 @@ AndroidConfig.getClass = function(className){
     const NativeClass = requireClass('java.lang.Class');
     classesCache[className] = NativeClass.forName(className);
     return classesCache[className];
-}
+};
 
 AndroidConfig.getSystemService = function(serviceName, serviceClassName){
     if(!servicesCache[serviceName]){
@@ -40,6 +41,6 @@ AndroidConfig.getSystemService = function(serviceName, serviceClassName){
         }
     }
     return servicesCache[serviceName];
-}
+};
 
 module.exports = AndroidConfig;

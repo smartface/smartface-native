@@ -53,7 +53,7 @@ function Database(params){
         'execute': {
             value: function(sqlCommand){
                 if(typeof sqlCommand === 'string'){
-                    this.nativeObject.execSQL(string(sqlCommand));
+                    this.nativeObject.execSQL(sqlCommand);
                 }
             },
             enumerable: true
@@ -63,7 +63,7 @@ function Database(params){
                 if(typeof sqlCommand === 'string'){
                     return new Database.QueryResult({
                         'isInternal': true,
-                        'cursor': this.nativeObject.rawQuery(string(sqlCommand), null)
+                        'cursor': this.nativeObject.rawQuery(sqlCommand, null)
                     });
                     
                 }
@@ -149,7 +149,7 @@ Database.DatabaseObject = function(params){
         'getInteger': {
             value: function(columnName){
                 if(typeof columnName === 'string'){
-                    var index = this.nativeObject.getColumnIndex(string(columnName));
+                    var index = this.nativeObject.getColumnIndex(columnName);
                     if(index != -1){
                         return this.nativeObject.getInt(index);
                     }

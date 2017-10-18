@@ -1,5 +1,8 @@
+/*globals requireClass*/
+const AndroidConfig     = require('../../util/Android/androidconfig');
+
 function TimePicker(params) {
-    var activity = Android.getActivity();
+    var activity = AndroidConfig.activity;
     const NativeTimePickerDialog = requireClass('android.app.TimePickerDialog');
     var _is24HourFormat = true;
     var _onTimeSelected;
@@ -86,7 +89,7 @@ function TimePicker(params) {
                 self.onTimeSelected && self.onTimeSelected({hour: hour, minute: minute});
             }
         }), hour, minutes, _is24HourFormat);
-        self.nativeObject.setTitle(string(""));
+        self.nativeObject.setTitle("");
     }
     
     // Assign parameters given in constructor

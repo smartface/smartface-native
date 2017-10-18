@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const OkHttpRequest     = requireClass("okhttp3.Request");
 const OkHttpClient      = requireClass("okhttp3.OkHttpClient");
 const WebSocketListener = requireClass("okhttp3.WebSocketListener");
