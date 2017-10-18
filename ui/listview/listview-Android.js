@@ -72,6 +72,10 @@ const ListView = extend(View)(
                 }
             },
             getItemCount: function(){
+                if(isNaN(_itemCount))
+                    return 0;
+                else if(typeof(_itemCount) !== "number")
+                    throw new Error("itemCount must be an number.");
                 return _itemCount;
             },
             getItemViewType: function(position){
