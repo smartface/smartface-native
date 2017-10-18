@@ -72,14 +72,14 @@ Router.add = function(to, page, isSingleton) {
     if(typeof(page) !== 'function') {
         if (!routes[to]) {
             routes[to] = {
-                isSingleton: true,//!!isSingleton,
+                isSingleton: !!isSingleton,
                 pageObject: page,
             };
         }
     } else if (!routes[to]) {
         routes[to] = {
             pageClass: page,
-            isSingleton: true,//!!isSingleton,
+            isSingleton: !!isSingleton,
             pageObject: null
         };
     }
