@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeTransitionManager = requireClass('android.support.transition.TransitionManager');
 const NativeTransition        = requireClass('android.support.transition.Transition');
 const NativeTransitionSet     = requireClass('android.support.transition.TransitionSet');
@@ -19,8 +20,8 @@ function Animator(params) {
             _completeFunction();
             _layout.applyLayout();
         }
-    }
-
+    };
+    
     Object.defineProperties(this, {
         'perform': {
             value: function() {
@@ -44,7 +45,7 @@ function Animator(params) {
                 NativeTransitionManager.beginDelayedTransition(_layout.nativeObject, transitionSet);
                 _animFunction();
                 _layout.applyLayout();
-                applyLayoutInners(_layout);
+                applyLayoutInners(_layout);  
             }
         },
         'then': {
@@ -71,7 +72,7 @@ function Animator(params) {
             configurable: true
         }
     });
-};
+}
 
 function applyLayoutInners(rootLayout) {
     var innerGroups = [];

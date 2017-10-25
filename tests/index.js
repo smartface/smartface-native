@@ -1,8 +1,8 @@
 require("salep");
 
 salep.on("success", function(testCase) {
-    log("Case Success : [" + testCase.name + "].");
-    console.log("Case Success : [" + testCase.name + "].");
+    // log("Case Success : [" + testCase.name + "].");
+    // console.log("Case Success : [" + testCase.name + "].");
 });
 salep.on("fail", function(testCase) {
     log("Case Failed : [" + testCase.name + "]. Reason : " + testCase.reason);

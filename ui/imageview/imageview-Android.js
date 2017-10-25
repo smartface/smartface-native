@@ -52,7 +52,7 @@ const ImageView = extend(View)(
                     if (!(fillType in ImageFillTypeDic)){
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    this._fillType = fillType
+                    this._fillType = fillType;
                     this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
                 },
                 enumerable: true

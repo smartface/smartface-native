@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const extend                        = require('js-base/core/extend');
 const View                          = require('../view');
 const Color                         = require('../color');
@@ -47,7 +48,7 @@ const MapView = extend(View)(
                 googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                     onMarkerClick: function(marker) {
                         _pins.forEach(function(pin) {
-                            if (int(pin.nativeObject.getId()) === int(marker.getId())) {
+                            if (pin.nativeObject.getId() === marker.getId()) {
                                 pin.onPress && pin.onPress();
                             }
                         });
@@ -58,8 +59,8 @@ const MapView = extend(View)(
                 googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
                     onMapClick: function(location) {
                         _onPress && _onPress({
-                            latitude: double(location.latitude),
-                            longitude: double(location.longitude),
+                            latitude: location.latitude,
+                            longitude: location.longitude,
                         });
                     }
                 }));
@@ -67,8 +68,8 @@ const MapView = extend(View)(
                 googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
                     onMapLongClick: function(location) {
                         _onLongPress && _onLongPress({
-                            latitude: double(location.latitude),
-                            longitude: double(location.longitude)
+                            latitude: location.latitude,
+                            longitude: location.longitude
                         });
                     }
                 }));
@@ -189,7 +190,7 @@ const MapView = extend(View)(
                         _zoomLevel = value;
                         if(self.nativeObject.isShown()){
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value + 2)
+                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value + 2);
                             _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
                         }
                     }
@@ -420,15 +421,15 @@ Object.defineProperties(MapView, {
 
 Object.defineProperties(MapView.Type,{
     'NORMAL': {
-        value: int(NativeGoogleMap.MAP_TYPE_NORMAL),
+        value: NativeGoogleMap.MAP_TYPE_NORMAL,
         enumerable: true
     },
     'SATELLITE': {
-        value: int(NativeGoogleMap.MAP_TYPE_SATELLITE),
+        value: NativeGoogleMap.MAP_TYPE_SATELLITE,
         enumerable: true
     },
     'HYBRID': {
-        value: int(NativeGoogleMap.MAP_TYPE_HYBRID),
+        value: NativeGoogleMap.MAP_TYPE_HYBRID,
         enumerable: true
     },
     'contains': {

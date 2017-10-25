@@ -22,6 +22,6 @@ function QuickLook (params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 module.exports = QuickLook;

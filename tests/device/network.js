@@ -6,7 +6,7 @@ const Network = require("../../device/network");
 salep.test("sf-core/device/network Unit Test", function() {
     
     this.case("[IMSI] getter.", function() {
-        assert((Network.IMSI === null || (typeof Network.IMSI === "string")), 'IMSI must be string');
+        assert((Network.IMSI === undefined || (typeof Network.IMSI === "string")), 'IMSI must be string');
     });
     
     this.case("[SMSEnabled] getter.", function() {

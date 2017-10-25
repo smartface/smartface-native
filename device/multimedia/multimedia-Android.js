@@ -1,4 +1,4 @@
-const AndroidConfig         = require('../../util/Android/androidconfig')
+const AndroidConfig         = require('../../util/Android/androidconfig');
 const NativeMediaStore      = requireClass("android.provider.MediaStore");
 const NativeIntent          = requireClass("android.content.Intent");
 const NativeBitmapFactory   = requireClass("android.graphics.BitmapFactory");
@@ -225,7 +225,7 @@ function getRealPathFromID(uri, action) {
     if(cursor) {
         var columnIndex = cursor.getColumnIndex(projection[0]);
         if (cursor.moveToFirst()) {
-            filePath = string(cursor.getString(columnIndex));
+            filePath = cursor.getString(columnIndex);
         }
 
         cursor.close();
@@ -239,12 +239,12 @@ function getRealPathFromURI(uri) {
     ];
     var contentResolver = AndroidConfig.activity.getContentResolver();
     var cursor = contentResolver.query(uri, projection, null, null, null);
-    if (cursor === null) { 
-        return string(uri.getPath());
+    if (cursor === null) {
+        return uri.getPath();
     } else {
         cursor.moveToFirst();
         var idx = cursor.getColumnIndex(projection[0]);
-        var realPath = string(cursor.getString(idx));
+        var realPath = cursor.getString(idx);
         cursor.close();
         return realPath;
     }

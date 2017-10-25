@@ -1,5 +1,5 @@
-const AndroidConfig             = require('../../util/Android/androidconfig')
-const TypeUtil                  = require('../../util/type')
+const AndroidConfig             = require('../../util/Android/androidconfig');
+const TypeUtil                  = require('../../util/type');
 const NativeCriteria            = requireClass('android.location.Criteria');
 const NativeLocationListener    = requireClass('android.location.LocationListener');
 
@@ -9,7 +9,7 @@ const LOCATION_MANAGER = 'android.location.LocationManager';
 // android.location.LocationManager.GPS_PROVIDER
 const GPS_PROVIDER = 'gps';
 // android.location.LocationManager.NETWORK_PROVIDER
-const NETWORK_PROVIDER = 'network'
+const NETWORK_PROVIDER = 'network';
 const locationManager = AndroidConfig.getSystemService(LOCATION_SERVICE, LOCATION_MANAGER);
 
 const criteria = new NativeCriteria();

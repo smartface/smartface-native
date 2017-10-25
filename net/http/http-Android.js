@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const OkHttpClient = requireClass("okhttp3.OkHttpClient");
 const OkHttpCallback = requireClass("okhttp3.Callback");
 const OkHttpRequest = requireClass("okhttp3.Request");

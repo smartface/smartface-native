@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const AndroidConfig         = require("../../util/Android/androidconfig");
 const TypeUtil              = require("../../util/type");
 const NativeFile            = requireClass('java.io.File');

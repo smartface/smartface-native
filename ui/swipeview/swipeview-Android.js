@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const extend                        = require('js-base/core/extend');
 const View                          = require('../view');
 const AndroidConfig                 = require("../../util/Android/androidconfig");
@@ -28,7 +29,7 @@ const SwipeView = extend(View)(
                     }
                 },
                 onPageSelected: function(position) {
-                    _callbackOnPageSelected && _callbackOnPageSelected(position);
+                    _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
                     var intPosition = position;

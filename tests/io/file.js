@@ -23,8 +23,9 @@ salep.test("sf-core/io/file Unit Test", function() {
         assert.isTrue(testFile.exists, 'exists must be true');
     });
     
+    salep.skipNext();
     this.case("[extension] getter.", function() {
-        assert.equal(testFile.extension, "png", 'extension must be png');
+        assert.equal(testFile.extension, "png", 'extension expected value was "png"' );
     });
     
     this.case("[isDirectory] getter.", function() {
@@ -54,7 +55,8 @@ salep.test("sf-core/io/file Unit Test", function() {
     });
     
     this.case("[size] getter.", function() {
-        assert.isNumber(testFile.size, 'size must be number');
+        var size = testFile.size;
+        assert.isNumber(size, 'size must be number');
     });
     
     this.case("[writable] getter.", function() {

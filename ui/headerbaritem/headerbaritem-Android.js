@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');

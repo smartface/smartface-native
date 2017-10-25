@@ -1,3 +1,4 @@
+/*globals requireClass*/
 const View                          = require('../view');
 const extend                        = require('js-base/core/extend');
 const ListViewItem                  = require("../listviewitem");
@@ -37,7 +38,7 @@ const ListView = extend(View)(
 
         _super(this);
         var holderViewLayout;
-        var dataAdapter = NativeRecyclerView.Adapter.extend(string("SFAdapter"),{
+        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
             onCreateViewHolder: function(parent,viewType){
                 try{
                     holderViewLayout = _onRowCreate();
@@ -64,17 +65,21 @@ const ListView = extend(View)(
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
                             holderViewLayout.nativeObject = view;
-                            var clickedView = createFromTemplate(holderViewLayout);
-                            _onRowSelected && _onRowSelected(clickedView, position);
+                            createFromTemplate(holderViewLayout);
+                            _onRowSelected && _onRowSelected(holderViewLayout, position);
                         }
                     }));
                 }
             },
             getItemCount: function(){
-                return int(_itemCount);
+                if(isNaN(_itemCount))
+                    return 0;
+                else if(typeof(_itemCount) !== "number")
+                    throw new Error("itemCount must be an number.");
+                return _itemCount;
             },
             getItemViewType: function(position){
-                return int(position);
+                return position;
             }
         },null);
 
@@ -299,11 +304,11 @@ ListView.iOS = {};
 
 function createFromTemplate(jsView){
     if(jsView.childViews){
-        for (var child in jsView.childs){
-             if (jsView.childs[child].id){
-                jsView.childs[child].nativeObject = jsView.nativeObject.findViewById(jsView.childs[child].id);
+        for (var child in jsView.childViews){
+             if (jsView.childViews[child].id){
+                jsView.childViews[child].nativeObject = jsView.nativeObject.findViewById(jsView.childViews[child].id);
                 
-                createFromTemplate(jsView.childs[child]);
+                createFromTemplate(jsView.childViews[child]);
              }
         }
     }
