@@ -26,8 +26,8 @@ function checkUpdateFromCache(callback) {
     delete body.binary;
 
     sessionManager.request(
-        {
-        url: "https://dev-portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
+    {
+        url: "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
         method:'POST',
         body: JSON.stringify(body),
         headers: {
@@ -72,8 +72,8 @@ function checkUpdateFromCache(callback) {
 
 function checkUpdateWithFiles(callback) {
     sessionManager.request(
-        {
-        url: "https://dev-portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
+    {
+        url: "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
         method:'POST',
         body: RAU.getRequestBody(),
         onLoad: function(response) {
