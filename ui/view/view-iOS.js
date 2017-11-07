@@ -1,6 +1,7 @@
-const TypeUtil = require("sf-core/util/type");
-const Exception = require("sf-core/util").Exception;
-const Color = require('sf-core/ui/color');
+const TypeUtil      = require("sf-core/util/type");
+const Exception     = require("sf-core/util").Exception;
+const Color         = require('sf-core/ui/color');
+const Invocation    = require('sf-core/util').Invocation;
 
 function View(params) {
 
@@ -192,11 +193,22 @@ function View(params) {
         self.width = position.width;
         self.height = position.height;
     }
-
+    
+    //Issue: IOS-2340
     this.bringToFront = function(){
         var parent = self.getParent();
         if (parent) {
-            parent.nativeObject.bringSubviewToFront(self.nativeObject);
+            var maxZPosition = 0;
+            for (var subview in parent.nativeObject.subviews) {
+               var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer,"zPosition",[],"CGFloat");
+               if (zPosition > maxZPosition) {
+                   maxZPosition = zPosition
+               }
+            }
+            var argZPosition = new Invocation.Argument({
+                    type: "CGFloat",
+                    value: maxZPosition + 1});
+            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setZPosition:",[argZPosition]);
         }
     };
 
