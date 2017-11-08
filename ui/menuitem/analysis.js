@@ -48,6 +48,14 @@ MenuItem.prototype.ios.style = "";
 MenuItem.prototype.onSelected = function onSelected(){ };
 
 MenuItem.ios = {};
+
+/**
+ * @enum {Number} UI.MenuItem.ios.Style
+ * @since 0.1
+ * 
+ * MenuItem's style is used to specify behaviour and appearance of the item. This enumeration
+ * describes available styles for iOS.
+ */
 MenuItem.ios.Style = {};
 
 /**
