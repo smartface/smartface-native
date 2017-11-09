@@ -1,6 +1,7 @@
 const Color = require('sf-core/ui/color');
 const Image = require("sf-core/ui/image");
 const TypeUtil = require("sf-core/util/type");
+const Invocation    = require('sf-core/util').Invocation;
 
 const FloatyOpenAnimationType = {
      pop : 0,
@@ -11,6 +12,11 @@ const FloatyOpenAnimationType = {
      none : 5,
 }
 
+const UIUserInterfaceLayoutDirection = {
+    leftToRight : 0,
+    rightToLeft : 1
+}
+
 function FloatingMenu(params) {
     
     var self = this;
@@ -19,17 +25,27 @@ function FloatingMenu(params) {
         self.nativeObject = new __SF_Floaty();
     }
     //Defaults
+    self.layoutDirection = Invocation.invokeInstanceMethod(__SF_UIApplication.sharedApplication(),"userInterfaceLayoutDirection",[],"int");
+    
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.yoga.position = 1;
-    self.nativeObject.yoga.right = 14;
+    
+    if (self.layoutDirection == UIUserInterfaceLayoutDirection.rightToLeft) {
+        self.nativeObject.yoga.right = NaN;
+        self.nativeObject.yoga.left = 14;
+    }else{
+        self.nativeObject.yoga.left = NaN;
+        self.nativeObject.yoga.right = 14;
+    }
+    
     self.nativeObject.yoga.bottom = 14;
     self.nativeObject.yoga.width = 56;
     self.nativeObject.yoga.height = 56;
     self.nativeObject.buttonColor = Color.create("#00A1F1").nativeObject;
     self.nativeObject.openAnimationType = FloatyOpenAnimationType.slideUp;
     self.nativeObject.plusColor = Color.create("#00A1F1").nativeObject;
-    
     self.nativeObject.rotationDegrees = 45;
+    
     self.floatyDelegate = new __SF_FloatyDelegate();
     
     self.floatyDelegate.emptyFloatySelected = function(){
@@ -39,6 +55,15 @@ function FloatingMenu(params) {
     };
     
     self.floatyDelegate.floatyOpened = function(){
+        var items = self.items;
+        for (var item in items) {
+            if (self.layoutDirection == UIUserInterfaceLayoutDirection.rightToLeft) {
+                items[item].nativeObject.alignment = UIUserInterfaceLayoutDirection.rightToLeft;
+            }else{
+                items[item].nativeObject.alignment = UIUserInterfaceLayoutDirection.leftToRight;
+            }
+        }
+
         if (typeof self.onMenuOpen === "function"){
             self.onMenuOpen();
         }
