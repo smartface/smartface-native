@@ -124,13 +124,14 @@ ListView.prototype.onRowCreate = function onRowCreate(){};
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
  *
+ * @param {Number} index
  * @event onRowHeight
  * @android
  * @ios
  * @return {Number}
  * @since 1.1.18
  */
-ListView.prototype.onRowHeight = function onRowHeight(){};
+ListView.prototype.onRowHeight = function onRowHeight(index){};
 
 /**
  * This event is called when a UI.ListViewItem created at specified row index.
@@ -148,6 +149,8 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
 /**
  * This event is called when user selects a row at specific index.
  *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
  * @event onRowSelected
  * @android
  * @ios

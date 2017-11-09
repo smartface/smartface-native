@@ -1,6 +1,7 @@
 const View = require('../view');
 const Exception = require("sf-core/util").Exception;
 const extend = require('js-base/core/extend');
+const Page = require("sf-core/ui/page");
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -77,6 +78,7 @@ const SwipeView = extend(View)(
                     var page = new value[i]();
                     bypassPageSpecificProperties(page);
                     if (page.nativeObject.constructor.name === "SMFNative.SMFUIViewController"){
+                        page.orientation = Page.Orientation.AUTO;
                         _instanceArray.push(page);
                         _pageNativeObjectArray.push(page.nativeObject);
                     }else{
