@@ -4,6 +4,8 @@ const Image = require('sf-core/ui/image');
 const Color = require('sf-core/ui/color');
 const Screen = require('sf-core/device/screen');
 const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
+const Invocation = require('sf-core/util').Invocation;
+const System = require('sf-core/device/system');
 
 const UISearchBarStyle = {
     default : 0,
@@ -28,6 +30,22 @@ const SearchView = extend(View)(
         
         _super(this);
         
+        if(parseInt(System.OSVersion) >= 11){
+            var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject,"heightAnchor",[],"NSObject");
+            
+            var argConstant= new Invocation.Argument({
+                type:"CGFloat",
+                value: 44
+            });
+            var layoutConstraint = Invocation.invokeInstanceMethod(heightAnchor,"constraintLessThanOrEqualToConstant:",[argConstant],"NSObject");
+
+            var argIsActive = new Invocation.Argument({
+                type:"BOOL",
+                value: true
+            });
+            Invocation.invokeInstanceMethod(layoutConstraint,"setActive:",[argIsActive]);
+        }
+        
         self.textfield = self.nativeObject.valueForKey("searchField");
         self.textfield.addKeyboardObserver();
         
@@ -39,7 +57,7 @@ const SearchView = extend(View)(
             if (_isAddedHeaderBar) {
                 return;
             }
-            if(self.nativeObject.superview.className() != "UINavigationBar"){
+            if(self.nativeObject.superview.className().indexOf("UINavigationBar") === -1){
                 self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight,e);
             }
         }
@@ -48,11 +66,10 @@ const SearchView = extend(View)(
             if (_isAddedHeaderBar) {
                 return;
             }
-            if(self.nativeObject.superview.className() != "UINavigationBar"){
+            if(self.nativeObject.superview.className().indexOf("UINavigationBar") === -1){
                 self.keyboardanimationdelegate.keyboardHideAnimation(e);
             }
         }
-        
         
         Object.defineProperty(this, 'text', {
             get: function() {
@@ -132,6 +149,7 @@ const SearchView = extend(View)(
         
         this.removeFromHeaderBar = function(page){
             _isAddedHeaderBar = false;
+            self.removeFocus();
             page.nativeObject.navigationItem.titleView = undefined;
         };
         
