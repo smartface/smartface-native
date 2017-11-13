@@ -147,7 +147,8 @@ http.prototype.requestFile = function(params) {
 
 http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) {
     if(!checkInternet()) {
-        throw new Error("No network connection.");
+        params && typeof params.onError === "function" && runOnUiThread(params.onError, {message: "No network connection"});
+        return;
     }
     
     var request = new Request();
