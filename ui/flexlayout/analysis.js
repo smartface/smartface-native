@@ -136,7 +136,7 @@ FlexLayout.prototype.overFlow = UI.FlexLayout.Overflow.VISIBLE;
 /**
  * This functions recalculates the positioning parameters.
  * It is useful to call this method when you want to change layout parameters on runtime.
- * If you change view's position, you should call applyLayout from its parent not from the Page.
+ * If you change view's position, you should call applyLayout from the Page.layout. You shouldn't call applyLayout from its parent or itself
  *
  * @method applyLayout
  * @android
