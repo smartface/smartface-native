@@ -117,8 +117,9 @@ function Page(params) {
         onContextItemSelected: function(item) {
             var itemId = item.getItemId();
             var items = self.contextMenu.items;
-            if (itemId >= 0) {
+            if (items && itemId >= 0) {
                 items[itemId].onSelected();
+                return true;
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
