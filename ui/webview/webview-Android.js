@@ -298,6 +298,8 @@ const WebView = extend(View)(
                             _onTouch && _onTouch();
                         }
                     }
+                    if(!this.touchEnabled)
+                        return true;
                     return  (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
                 }.bind(this)
             }));
