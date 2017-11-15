@@ -1,6 +1,7 @@
 const Color      = require("sf-core/ui/color");
 const TabBarItem = require("sf-core/ui/tabbaritem");
 const MAXITEMCOUNT = 5;
+
 function BottomTabBar(params) {
         var _items = {};
         var _itemInstances = [];
@@ -14,7 +15,6 @@ function BottomTabBar(params) {
         Object.defineProperties(this, {
             'add': {
                 value: function(path, item){
-                    const TabBarItem = require("sf-core/ui/tabbaritem");
                     if(_itemCount === this.android.maxItemCount) {
                         throw new Error("Maximum number of items supported by BottomTabBar is 5.");
                     }
