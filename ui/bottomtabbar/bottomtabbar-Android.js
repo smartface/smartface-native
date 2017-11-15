@@ -14,28 +14,16 @@ function BottomTabBar(params) {
         Object.defineProperties(this, {
             'add': {
                 value: function(path, item){
+                    const TabBarItem = require("sf-core/ui/tabbaritem");
                     if(_itemCount === this.android.maxItemCount) {
                         throw new Error("Maximum number of items supported by BottomTabBar is 5.");
                     }
-                    const TabBarItem = require("sf-core/ui/tabbaritem");
+                    
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
                         _itemCount++;
-                        var page;
-                        if(typeof(item.route) !== 'function') {
-                            page = item.route.getRoute(null, true);
-                            if(!item.firstPageIsSet) {
-                                item.firstPageIsSet = true;
-                                page.firstPageInNavigator = true;
-                            }
-                        } else {
-                            page = new _items[path].page();
-                            page.isBottomTabBarPage = true;
-                        }
-                        
                         if(!_index)
                             _index = path;
-                        _itemInstances.push(page);
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
