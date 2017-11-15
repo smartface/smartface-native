@@ -19,14 +19,14 @@ const extend = require('js-base/core/extend');
  *
  *     const Label = require('sf-core/ui/label');
  *     const Color = require('sf-core/ui/color');
- *     var myLabel1 = new UI.Label({
+ *     var myLabel1 = new Label({
  *         width: 100,
  *         height: 50,
  *         text: "First label",
  *         backgroundColor: Color.RED
  *     });
  *     myFlexLayout.addChild(myLabel1);
- *     var myLabel2 = new UI.Label({
+ *     var myLabel2 = new Label({
  *         width: 100,
  *         height: 50,
  *         text: "Second label",
