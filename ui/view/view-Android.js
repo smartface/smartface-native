@@ -13,6 +13,7 @@ const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateL
 const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeRectF               = requireClass("android.graphics.RectF");
+const NativeViewCompat          = requireClass("android.support.v4.view.ViewCompat");
 
 
 // MotionEvent.ACTION_UP
@@ -86,6 +87,7 @@ function View(params) {
     }
 }
 
+var _android = {};
 View.prototype = {
     get alpha() {
         // Avoiding integer-float conflics of engine
@@ -537,10 +539,25 @@ View.prototype = {
     set positionType(position) {
         this.yogaNode.setPositionType(position);
     },
+    get android() {
+        return _android;
+    },
     'dirty':  function(){
         this.yogaNode.dirty();
     }
-}
+};
+
+View.prototype.android = {
+    get elevation() {
+        return NativeViewCompat.getElevation(this.nativeObject);
+    },
+    set elevation(value) {
+        NativeViewCompat.setElevation(this.nativeObject, value);
+        if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
+            this.nativeObject.setStateListAnimator(null);
+        }
+    }
+};
 
 View.prototype.setBackgroundImage = function() {
     var resources = AndroidConfig.activity.getResources();

@@ -91,6 +91,7 @@ function SwipeView() {
  *
  * @event onTouch
  * @android
+ * @deprecated 2.0.4
  * @member UI.SwipeView
  * @since 1.1.10
  */
@@ -101,6 +102,7 @@ SwipeView.prototype.onTouch = function onTouch(){ }
  *
  * @event onTouchEnded
  * @android
+ * @deprecated 2.0.4
  * @member UI.SwipeView
  * @since 1.1.10
  */

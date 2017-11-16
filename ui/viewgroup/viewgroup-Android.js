@@ -40,12 +40,18 @@ const ViewGroup = extend(View)(
                     if(this.childViews[view.id]){
                         delete this.childViews[view.id];
                     }
+                    view.parent = undefined;
                 },
                 enumerable: true
             },
             'removeAll': {
                 value: function(){
                     this.nativeObject.removeAllViews();
+                    
+                    var ids = Object.keys(this.childViews);
+                    for(var i = 0; i < ids.length; i++) {
+                        this.childViews[ids[i]].parent = undefined;
+                    }
                     this.childViews = {};
                 },
                 enumerable: true
