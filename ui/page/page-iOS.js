@@ -4,6 +4,7 @@ const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
 const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
+const Invocation    = require('sf-core/util').Invocation;
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -201,6 +202,11 @@ function Page(params) {
         set: function(value) {
             self.nativeObject.statusBarHidden = !value;
             self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+            var parentViewController = getParentViewController(self.nativeObject);
+            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
+                parentViewController.statusBarHidden = self.nativeObject.statusBarHidden;
+                parentViewController.setNeedsStatusBarAppearanceUpdate();
+            }
         },
         enumerable: true,configurable : true
     });
@@ -213,10 +219,24 @@ function Page(params) {
         set: function(value) {
             self.nativeObject.statusBarStyle = value;
             self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+            var parentViewController = getParentViewController(self.nativeObject);
+            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
+                parentViewController.statusBarStyle = self.nativeObject.statusBarStyle;
+                parentViewController.setNeedsStatusBarAppearanceUpdate();
+            }
+            
         },
         enumerable: true,configurable : true
     });
-
+    
+    function getParentViewController(controller){
+        var parent = Invocation.invokeInstanceMethod(controller,"parentViewController",[],"NSObject");
+        if (parent) {
+            return getParentViewController(parent);
+        }else{
+            return controller;
+        }
+    }
     // Prevent undefined is not an object error
     this.statusBar.android = {};
     // Prevent undefined is not an object error
