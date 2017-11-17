@@ -202,6 +202,11 @@ function Page(params) {
         set: function(value) {
             self.nativeObject.statusBarHidden = !value;
             self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+            var parentViewController = getParentViewController(self.nativeObject);
+            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
+                parentViewController.statusBarHidden = self.nativeObject.statusBarHidden;
+                parentViewController.setNeedsStatusBarAppearanceUpdate();
+            }
         },
         enumerable: true,configurable : true
     });
