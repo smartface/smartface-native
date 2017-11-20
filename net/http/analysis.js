@@ -166,7 +166,7 @@ var Http = function(params){
      * @param {String} params.url URL of file
      * @param {Function} params.onLoad Callback for success case
      * @param {Object} params.onLoad.e
-     * @param {String} params.onLoad.e.JSON
+     * @param {Object} params.onLoad.e.JSON
      * @param {Number} params.onLoad.e.statusCode
      * @param {Object} params.onLoad.e.headers
      * @param {Function} params.onError Callback for error case
