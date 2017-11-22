@@ -138,5 +138,21 @@ Network.ConnectionType.Mobile = 1;
  * @since 0.1
  */
 Network.ConnectionType.WIFI   = 2;
+/**
+ *
+ * @property {Number} MOBILE
+ * @readonly
+ * @static 
+ * @since 2.0.4
+ */
+Network.ConnectionType.MOBILE = 3;
+/**
+ *
+ * @property {Number} NONE
+ * @readonly
+ * @static 
+ * @since 2.0.4
+ */
+Network.ConnectionType.MOBILE = 4;
 
 module.exports = Network;
