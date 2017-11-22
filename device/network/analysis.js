@@ -145,7 +145,7 @@ Network.ConnectionType.WIFI   = 2;
  * @static 
  * @since 2.0.4
  */
-Network.ConnectionType.MOBILE = 3;
+Network.ConnectionType.MOBILE = 1;
 /**
  *
  * @property {Number} NONE
@@ -153,6 +153,6 @@ Network.ConnectionType.MOBILE = 3;
  * @static 
  * @since 2.0.4
  */
-Network.ConnectionType.MOBILE = 4;
+Network.ConnectionType.NONE = 0;
 
 module.exports = Network;
