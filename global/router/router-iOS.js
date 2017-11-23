@@ -99,8 +99,6 @@ function RouterViewModel(params) {
                 case 'Navigator': {
                     if (routes[1]) {
                         pageToGo.go(routes[1], parameters ,_animated);
-                    } else {
-                        pageToGo.goBack(null, parameters, _animated);
                     }
                     pageInfo.nativeObject = pageToGo.view.nativeObject;
                     pageInfo.animated = _animated;
