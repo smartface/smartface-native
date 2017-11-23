@@ -3,6 +3,13 @@ const Exception     = require("sf-core/util").Exception;
 const Color         = require('sf-core/ui/color');
 const Invocation    = require('sf-core/util').Invocation;
 
+const YGUnit = {
+  Undefined : 0,
+  Point : 1,
+  Percent : 2,
+  tAuto : 3
+};
+
 function View(params) {
 
     var self = this;
@@ -414,7 +421,7 @@ function View(params) {
             return self.nativeObject.yoga.flexBasis;
         },
         set: function(value) {
-            self.nativeObject.yoga.flexBasis = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"flexBasis");
         },
         enumerable: true
     });
@@ -429,7 +436,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.left = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"left");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -443,7 +450,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.top = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"top");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -457,7 +464,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.right = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"right");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -471,7 +478,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.bottom = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"bottom");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -484,7 +491,7 @@ function View(params) {
             return self.nativeObject.yoga.start;
         },
         set: function(value) {
-            self.nativeObject.yoga.start = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"start");
         },
         enumerable: true
     });
@@ -494,7 +501,7 @@ function View(params) {
             return self.nativeObject.yoga.end;
         },
         set: function(value) {
-            self.nativeObject.yoga.end = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"end");
         },
         enumerable: true
     });
@@ -505,7 +512,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginLeft = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginLeft");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -519,7 +526,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginTop = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginTop");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -533,7 +540,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginRight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginRight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -547,7 +554,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginBottom = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginBottom");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -561,7 +568,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginStart = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginStart");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -575,7 +582,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginEnd = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginEnd");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -589,7 +596,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginHorizontal = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginHorizontal");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -603,7 +610,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginVertical = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginVertical");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -617,7 +624,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.margin = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"margin");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -630,7 +637,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingLeft;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingLeft = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingLeft");
         },
         enumerable: true
     });
@@ -640,7 +647,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingTop;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingTop = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingTop");
         },
         enumerable: true
     });
@@ -650,7 +657,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingRight;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingRight = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingRight");
         },
         enumerable: true
     });
@@ -660,7 +667,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingBottom;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingBottom = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingBottom");
         },
         enumerable: true
     });
@@ -670,7 +677,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingStart;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingStart = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingStart");
         },
         enumerable: true
     });
@@ -680,7 +687,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingEnd;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingEnd = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingEnd");
         },
         enumerable: true
     });
@@ -690,7 +697,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingHorizontal;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingHorizontal = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingHorizontal");
         },
         enumerable: true
     });
@@ -700,7 +707,7 @@ function View(params) {
             return self.nativeObject.yoga.paddingVertical;
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingVertical = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingVertical");
         },
         enumerable: true
     });
@@ -710,7 +717,7 @@ function View(params) {
             return self.nativeObject.yoga.padding;
         },
         set: function(value) {
-            self.nativeObject.yoga.padding = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"padding");
         },
         enumerable: true
     });
@@ -798,7 +805,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.width = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"width");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -812,7 +819,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.height = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"height");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -826,7 +833,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.minWidth = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minWidth");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -840,7 +847,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.minHeight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minHeight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -854,7 +861,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.maxWidth = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxWidth");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -868,7 +875,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.maxHeight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxHeight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
