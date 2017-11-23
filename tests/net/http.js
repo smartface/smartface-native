@@ -12,7 +12,7 @@ salep.test("sf-core/net/http Unit Test", function () {
     
     this.case("Http timeout property", function() {
         httpManager.timeout = 2000;
-        assert.equal(httpManager.timeout, 2000, "timeout must be equal to 30000.");
+        assert.equal(httpManager.timeout, 2000, "timeout must be equal to 2000.");
     });
     
     salep.skipNext();
