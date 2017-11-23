@@ -2,6 +2,7 @@ const View = require('../view');
 const Exception = require("sf-core/util").Exception;
 const extend = require('js-base/core/extend');
 const Page = require("sf-core/ui/page");
+const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -221,13 +222,13 @@ const SwipeView = extend(View)(
                 
         Object.defineProperty(self, 'width', {
             get: function() {
-                return self.nativeObject.yoga.width;
+                return self.nativeObject.frame.width;
             },
             set: function(value) {
                 if (typeof value === "number"){
-                    self.nativeObject.yoga.width = value;
-                    self.nativeObject.yoga.maxWidth = value;
-                    self.nativeObject.yoga.minWidth = value;
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"width");
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxWidth");
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minWidth");
                 }else{
                     throw new TypeError(Exception.TypeError.NUMBER);
                 }
@@ -237,13 +238,13 @@ const SwipeView = extend(View)(
     
         Object.defineProperty(self, 'height', {
             get: function() {
-                return self.nativeObject.yoga.height;
+                return self.nativeObject.frame.height;
             },
             set: function(value) {
                 if (typeof value === "number"){
-                    self.nativeObject.yoga.height = value;
-                    self.nativeObject.yoga.maxHeight = value;
-                    self.nativeObject.yoga.minHeight = value;
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"height");
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxHeight");
+                    self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minHeight");
                 }else{
                     throw new TypeError(Exception.TypeError.NUMBER);
                 }

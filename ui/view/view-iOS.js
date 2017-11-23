@@ -2,13 +2,7 @@ const TypeUtil      = require("sf-core/util/type");
 const Exception     = require("sf-core/util").Exception;
 const Color         = require('sf-core/ui/color');
 const Invocation    = require('sf-core/util').Invocation;
-
-const YGUnit = {
-  Undefined : 0,
-  Point : 1,
-  Percent : 2,
-  tAuto : 3
-};
+const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
 
 function View(params) {
 
