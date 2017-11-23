@@ -115,7 +115,7 @@ Network.onConnectionTypeChanged = function(connectionType) {};
 Network.ConnectionType = {};
 
 /**
- * @deprecated Use NONE instead 
+ * @deprecated Use {@link Device.Network.ConnectionType#NONE} instead 
  * @property {Number} None
  * @readonly
  * @static
@@ -123,7 +123,7 @@ Network.ConnectionType = {};
  */
 Network.ConnectionType.None   = 0;
 /**
- * @deprecated Use MOBILE instead
+ * @deprecated Use {@link Device.Network.ConnectionType#MOBILE} instead
  * @property {Number} Mobile
  * @readonly
  * @static
