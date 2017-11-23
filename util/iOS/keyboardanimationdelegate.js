@@ -69,7 +69,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
                             var frame = self.getParentViewController().view.frame;
-                            frame.y = self.getParentViewController().view.yoga.top - _topDistance;
+                            frame.y = self.getParentViewController().view.yoga.getYGValueForKey("top") - _topDistance;
                             self.getParentViewController().view.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
@@ -79,7 +79,7 @@ function KeyboardAnimationDelegate (params) {
                      }
                 }else{
                     var frame = self.getParentViewController().view.frame;
-                    frame.y = self.getParentViewController().view.yoga.top - _topDistance;
+                    frame.y = self.getParentViewController().view.yoga.getYGValueForKey("top") - _topDistance;
                     self.getParentViewController().view.frame = frame;
                     _isKeyboadAnimationCompleted = true;
                 }
@@ -114,7 +114,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
                             var frame = self.getParentViewController().view.frame;
-                            frame.y = self.getParentViewController().view.yoga.top;
+                            frame.y = self.getParentViewController().view.yoga.getYGValueForKey("top");
                             self.getParentViewController().view.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
@@ -124,7 +124,7 @@ function KeyboardAnimationDelegate (params) {
                      }
                 }else{
                     var frame = self.getParentViewController().view.frame;
-                    frame.y = self.getParentViewController().view.yoga.top;
+                    frame.y = self.getParentViewController().view.yoga.getYGValueForKey("top");
                     self.getParentViewController().view.frame = frame;
                 }
                     
