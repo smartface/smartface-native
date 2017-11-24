@@ -198,7 +198,7 @@ Object.defineProperties(Image,{
     },
     'createFromBlob': {
         value: function(blob) {
-            var newBitmap = NativeBitmapFactory.decodeByteArray(array(blob.parts, "byte"), 0, blob.size);
+            var newBitmap = NativeBitmapFactory.decodeByteArray(blob.nativeObject.toByteArray(), 0, blob.size);
             if(newBitmap)
                 return (new Image({bitmap: newBitmap}));
             return null;

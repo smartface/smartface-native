@@ -83,7 +83,7 @@ function WebSocket(params) {
         if(this.nativeObject && params) {
             if((params.data) instanceof Blob) {
                 var bytes = params.data.parts;
-                var byteString = ByteString.of(bytes, 0, bytes.length);
+                var byteString = ByteString.of(bytes, 0, arrayLength(bytes));
                 return this.nativeObject.send(byteString);
             } else if(typeof(params.data) === "string") {
                 return this.nativeObject.send(params.data);
