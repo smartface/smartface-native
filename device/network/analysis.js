@@ -115,7 +115,7 @@ Network.onConnectionTypeChanged = function(connectionType) {};
 Network.ConnectionType = {};
 
 /**
- *
+ * @deprecated Use {@link Device.Network.ConnectionType#NONE} instead 
  * @property {Number} None
  * @readonly
  * @static
@@ -123,7 +123,7 @@ Network.ConnectionType = {};
  */
 Network.ConnectionType.None   = 0;
 /**
- *
+ * @deprecated Use {@link Device.Network.ConnectionType#MOBILE} instead
  * @property {Number} Mobile
  * @readonly
  * @static
@@ -138,5 +138,21 @@ Network.ConnectionType.Mobile = 1;
  * @since 0.1
  */
 Network.ConnectionType.WIFI   = 2;
+/**
+ *
+ * @property {Number} MOBILE
+ * @readonly
+ * @static 
+ * @since 2.0.4
+ */
+Network.ConnectionType.MOBILE = 1;
+/**
+ *
+ * @property {Number} NONE
+ * @readonly
+ * @static 
+ * @since 2.0.4
+ */
+Network.ConnectionType.NONE = 0;
 
 module.exports = Network;

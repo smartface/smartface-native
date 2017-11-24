@@ -18,6 +18,9 @@ Network.ConnectionType.None   = 0;
 Network.ConnectionType.Mobile = 1;
 Network.ConnectionType.WIFI   = 2;
 
+Network.ConnectionType.NONE = 0;
+Network.ConnectionType.MOBILE = 1; 
+
 const MARSHMALLOW = 23;
 
 Object.defineProperties(Network, {
@@ -54,14 +57,14 @@ Object.defineProperties(Network, {
         get: function() {
             var activeInternet = getActiveInternet();
             if (activeInternet == null) { // undefined or null
-                return Network.ConnectionType.None;
+                return Network.ConnectionType.NONE;
             } else {
                 if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
                     return Network.ConnectionType.WIFI;
                 } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
-                    return Network.ConnectionType.Mobile;
+                    return Network.ConnectionType.MOBILE;
                 } else {
-                    return Network.ConnectionType.None;
+                    return Network.ConnectionType.NONE;
                 }
             }
         },
