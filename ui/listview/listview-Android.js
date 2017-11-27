@@ -74,14 +74,15 @@ const ListView = extend(View)(
 
                     nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                         onLongClick: function(view) {
-                            
-                            if(_onRowLongSelected == null)
-                                return false
-                                
-                            holderViewLayout.nativeObject = view;
-                            createFromTemplate(holderViewLayout);
-                            _onRowLongSelected && _onRowLongSelected(holderViewLayout, position);
-                            return true;
+
+                            if (typeof _onRowLongSelected === 'function') {
+                                holderViewLayout.nativeObject = view;
+                                createFromTemplate(holderViewLayout);
+                                _onRowLongSelected && _onRowLongSelected(holderViewLayout, position);
+                                return true;
+                            }
+                            return false
+
                         }
                     }));
                 }
@@ -235,15 +236,6 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
-            'onRowLongSelected': {
-                get: function() {
-                    return _onRowLongSelected;
-                },
-                set: function(onRowLongSelected) {
-                    _onRowLongSelected = onRowLongSelected.bind(this);
-                },
-                enumerable: true
-            },
             'onRowHeight': {
                 get: function() {
                     return _onRowHeight;
@@ -292,6 +284,19 @@ const ListView = extend(View)(
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         }, null);
+
+        // android-only properties
+        this.android = {};
+        Object.defineProperty(this.android, 'onRowLongSelected', {
+            get: function() {
+                return _onRowLongSelected;
+            },
+            set: function(onRowLongSelected) {
+                _onRowLongSelected = onRowLongSelected.bind(this);
+            },
+            enumerable: true
+        });
+
 
         // ios-only properties
         this.ios = {};
