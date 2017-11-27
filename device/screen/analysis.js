@@ -100,4 +100,69 @@ Screen.ios.forceTouchAvaliable;
  */
 Screen.capture = function() {};
 
+/**
+ * @enum {String} Device.Screen.OrientationType
+ * @static
+ * @since 0.1
+ */
+Screen.OrientationType = {};
+
+/**
+ * @property {String} PORTRAIT
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.PORTRAIT = "portrait";
+
+/**
+ * @property {String} UPSIDEDOWN
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.UPSIDEDOWN = "upsidedown";
+
+/**
+ * @property {String} LANDSCAPELEFT
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.LANDSCAPELEFT = "landspaceleft";
+
+/**
+ * @property {String} LANDSCAPERIGHT
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.LANDSCAPERIGHT = "landspaceright";
+
+/**
+ * @property {String} FACEUP
+ * @static
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.FACEUP = "faceup";
+
+/**
+ * @property {String} FACEDOWN
+ * @static
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Screen.OrientationType.FACEDOWN = "facedown";
+
 module.exports = Screen;
