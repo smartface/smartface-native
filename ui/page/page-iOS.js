@@ -31,7 +31,7 @@ function Page(params) {
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
-        self.pageView.applyLayout();
+        self.layout.applyLayout();
     }
 
     self.nativeObject.onViewLoad  = function(){
