@@ -120,6 +120,7 @@ function ListView(params) {}
  */
 ListView.prototype.onRowCreate = function onRowCreate(){};
 
+
 /**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
@@ -157,6 +158,17 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
  * @since 0.1
  */
 ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){};
+
+/**
+ * This event is called when user long selects a row at specific index.
+ *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
+ * @event onRowLongSelected
+ * @android
+ * @since 2.0.4
+ */
+ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index){};
 
 /**
  * Gets/sets the number of rows that will be shown in a ListView.
