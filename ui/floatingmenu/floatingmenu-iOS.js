@@ -1,7 +1,8 @@
-const Color = require('sf-core/ui/color');
-const Image = require("sf-core/ui/image");
-const TypeUtil = require("sf-core/util/type");
+const Color         = require('sf-core/ui/color');
+const Image         = require("sf-core/ui/image");
+const TypeUtil      = require("sf-core/util/type");
 const Invocation    = require('sf-core/util').Invocation;
+const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
 
 const FloatyOpenAnimationType = {
      pop : 0,
@@ -31,16 +32,16 @@ function FloatingMenu(params) {
     self.nativeObject.yoga.position = 1;
     
     if (self.layoutDirection == UIUserInterfaceLayoutDirection.rightToLeft) {
-        self.nativeObject.yoga.right = NaN;
-        self.nativeObject.yoga.left = 14;
+        self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"right");
+        self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"left");
     }else{
-        self.nativeObject.yoga.left = NaN;
-        self.nativeObject.yoga.right = 14;
+        self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"left");
+        self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"right");
     }
     
-    self.nativeObject.yoga.bottom = 14;
-    self.nativeObject.yoga.width = 56;
-    self.nativeObject.yoga.height = 56;
+    self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"bottom");
+    self.nativeObject.yoga.setYGValueUnitForKey(56,YGUnit.Point,"width");
+    self.nativeObject.yoga.setYGValueUnitForKey(56,YGUnit.Point,"height");
     self.nativeObject.buttonColor = Color.create("#00A1F1").nativeObject;
     self.nativeObject.openAnimationType = FloatyOpenAnimationType.slideUp;
     self.nativeObject.plusColor = Color.create("#00A1F1").nativeObject;

@@ -2,6 +2,7 @@ const TypeUtil      = require("sf-core/util/type");
 const Exception     = require("sf-core/util").Exception;
 const Color         = require('sf-core/ui/color');
 const Invocation    = require('sf-core/util').Invocation;
+const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
 
 function View(params) {
 
@@ -411,10 +412,10 @@ function View(params) {
 
     Object.defineProperty(self, 'flexBasis', {
         get: function() {
-            return self.nativeObject.yoga.flexBasis;
+            return self.nativeObject.yoga.getYGValueForKey("flexBasis");
         },
         set: function(value) {
-            self.nativeObject.yoga.flexBasis = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"flexBasis");
         },
         enumerable: true
     });
@@ -429,7 +430,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.left = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"left");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -443,7 +444,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.top = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"top");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -453,11 +454,11 @@ function View(params) {
 
     Object.defineProperty(self, 'right', {
         get: function() {
-            return self.nativeObject.yoga.right;
+            return self.nativeObject.yoga.getYGValueForKey("right");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.right = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"right");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -467,11 +468,11 @@ function View(params) {
 
     Object.defineProperty(self, 'bottom', {
         get: function() {
-            return self.nativeObject.yoga.bottom;
+            return self.nativeObject.yoga.getYGValueForKey("bottom");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.bottom = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"bottom");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -481,31 +482,31 @@ function View(params) {
 
     Object.defineProperty(self, 'start', {
         get: function() {
-            return self.nativeObject.yoga.start;
+            return self.nativeObject.yoga.getYGValueForKey("start");
         },
         set: function(value) {
-            self.nativeObject.yoga.start = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"start");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'end', {
         get: function() {
-            return self.nativeObject.yoga.end;
+            return self.nativeObject.yoga.getYGValueForKey("end");
         },
         set: function(value) {
-            self.nativeObject.yoga.end = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"end");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'marginLeft', {
         get: function() {
-            return self.nativeObject.yoga.marginLeft;
+            return self.nativeObject.yoga.getYGValueForKey("marginLeft");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginLeft = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginLeft");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -515,11 +516,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginTop', {
         get: function() {
-            return self.nativeObject.yoga.marginTop;
+            return self.nativeObject.yoga.getYGValueForKey("marginTop");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginTop = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginTop");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -529,11 +530,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginRight', {
         get: function() {
-            return self.nativeObject.yoga.marginRight;
+            return self.nativeObject.yoga.getYGValueForKey("marginRight");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginRight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginRight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -543,11 +544,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginBottom', {
         get: function() {
-            return self.nativeObject.yoga.marginBottom;
+            return self.nativeObject.yoga.getYGValueForKey("marginBottom");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginBottom = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginBottom");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -557,11 +558,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginStart', {
         get: function() {
-            return self.nativeObject.yoga.marginStart;
+            return self.nativeObject.yoga.getYGValueForKey("marginStart");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginStart = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginStart");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -571,11 +572,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginEnd', {
         get: function() {
-            return self.nativeObject.yoga.marginEnd;
+            return self.nativeObject.yoga.getYGValueForKey("marginEnd");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginEnd = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginEnd");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -585,11 +586,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginHorizontal', {
         get: function() {
-            return self.nativeObject.yoga.marginHorizontal;
+            return self.nativeObject.yoga.getYGValueForKey("marginHorizontal");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginHorizontal = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginHorizontal");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -599,11 +600,11 @@ function View(params) {
 
     Object.defineProperty(self, 'marginVertical', {
         get: function() {
-            return self.nativeObject.yoga.marginVertical;
+            return self.nativeObject.yoga.getYGValueForKey("marginVertical");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.marginVertical = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginVertical");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -613,11 +614,11 @@ function View(params) {
 
     Object.defineProperty(self, 'margin', {
         get: function() {
-            return self.nativeObject.yoga.margin;
+            return self.nativeObject.yoga.getYGValueForKey("margin");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.margin = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"margin");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -627,90 +628,90 @@ function View(params) {
 
     Object.defineProperty(self, 'paddingLeft', {
         get: function() {
-            return self.nativeObject.yoga.paddingLeft;
+            return self.nativeObject.yoga.getYGValueForKey("paddingLeft");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingLeft = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingLeft");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingTop', {
         get: function() {
-            return self.nativeObject.yoga.paddingTop;
+            return self.nativeObject.yoga.getYGValueForKey("paddingTop");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingTop = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingTop");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingRight', {
         get: function() {
-            return self.nativeObject.yoga.paddingRight;
+            return self.nativeObject.yoga.getYGValueForKey("paddingRight");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingRight = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingRight");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingBottom', {
         get: function() {
-            return self.nativeObject.yoga.paddingBottom;
+            return self.nativeObject.yoga.getYGValueForKey("paddingBottom");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingBottom = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingBottom");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingStart', {
         get: function() {
-            return self.nativeObject.yoga.paddingStart;
+            return self.nativeObject.yoga.getYGValueForKey("paddingStart");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingStart = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingStart");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingEnd', {
         get: function() {
-            return self.nativeObject.yoga.paddingEnd;
+            return self.nativeObject.yoga.getYGValueForKey("paddingEnd");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingEnd = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingEnd");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingHorizontal', {
         get: function() {
-            return self.nativeObject.yoga.paddingHorizontal;
+            return self.nativeObject.yoga.getYGValueForKey("paddingHorizontal");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingHorizontal = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingHorizontal");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'paddingVertical', {
         get: function() {
-            return self.nativeObject.yoga.paddingVertical;
+            return self.nativeObject.yoga.getYGValueForKey("paddingVertical");
         },
         set: function(value) {
-            self.nativeObject.yoga.paddingVertical = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingVertical");
         },
         enumerable: true
     });
 
     Object.defineProperty(self, 'padding', {
         get: function() {
-            return self.nativeObject.yoga.padding;
+            return self.nativeObject.yoga.getYGValueForKey("padding");
         },
         set: function(value) {
-            self.nativeObject.yoga.padding = value;
+            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"padding");
         },
         enumerable: true
     });
@@ -798,7 +799,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.width = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"width");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -812,7 +813,7 @@ function View(params) {
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.height = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"height");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -822,11 +823,11 @@ function View(params) {
 
     Object.defineProperty(self, 'minWidth', {
         get: function() {
-            return self.nativeObject.yoga.minWidth;
+            return self.nativeObject.yoga.getYGValueForKey("minWidth");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.minWidth = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minWidth");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -836,11 +837,11 @@ function View(params) {
 
     Object.defineProperty(self, 'minHeight', {
         get: function() {
-            return self.nativeObject.yoga.minHeight;
+            return self.nativeObject.yoga.getYGValueForKey("minHeight");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.minHeight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minHeight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -850,11 +851,11 @@ function View(params) {
 
     Object.defineProperty(self, 'maxWidth', {
         get: function() {
-            return self.nativeObject.yoga.maxWidth;
+            return self.nativeObject.yoga.getYGValueForKey("maxWidth");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.maxWidth = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxWidth");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
@@ -864,11 +865,11 @@ function View(params) {
 
     Object.defineProperty(self, 'maxHeight', {
         get: function() {
-            return self.nativeObject.yoga.maxHeight;
+            return self.nativeObject.yoga.getYGValueForKey("maxHeight");
         },
         set: function(value) {
             if (typeof value === "number"){
-                self.nativeObject.yoga.maxHeight = value;
+                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxHeight");
             }else{
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
