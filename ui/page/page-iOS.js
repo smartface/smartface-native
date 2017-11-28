@@ -17,6 +17,8 @@ const UIInterfaceOrientation = {
 function Page(params) {
     var self = this;
 
+    self.routerPath = null;
+
     if(!self.nativeObject){
         self.nativeObject = new __SF_UIViewController();
     }
