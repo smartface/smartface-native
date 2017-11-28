@@ -168,7 +168,15 @@ function RouterViewModel(params) {
         }
     };
     this.getCurrent = function () {
-        return routerBrain.currentPage;
+        var retval = null;
+        if (routerBrain.currentPage) {
+        	if (routerBrain.currentPage.type) {
+        		retval = routerBrain.currentPage.routerPath + routerBrain.currentPage.getCurrent();
+        	} else {
+        		retval = routerBrain.currentPage.routerPath;
+        	}
+        }
+        return retval;
     };
     
     ////////////////////////////////////////////////////////////////////////////
@@ -326,11 +334,14 @@ function RouterModel(params) {
     };
     this.getPageInstance = function (key) {
         if (objects[key]) {
+        	var retval = null;
             if (objects[key].isSingleton) {
-                return objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
             } else {
-                return objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (objects[key].pageClass)();
             }
+            retval.routerPath = key;
+            return retval;
         } else {
             throw Error(key + " is not in routes");
         }
