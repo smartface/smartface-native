@@ -6,6 +6,7 @@ const Animator = require('sf-core/ui/animator');
 const Color = require('sf-core/ui/color');
 const Screen = require('sf-core/device/screen');
 const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -407,7 +408,15 @@ const TextBox = extend(View)(
         });
         
         this.showKeyboard = function(){
-           self.nativeObject.becomeFirstResponder();
+           var argBlock= new Invocation.Argument({
+                type:"VoidBlock",
+                value: function(){
+                    __SF_Dispatch.mainAsync(function(){
+                        self.nativeObject.becomeFirstResponder();
+                    });
+                }
+            });
+            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
         };
        
         this.hideKeyboard = function(){
@@ -415,7 +424,15 @@ const TextBox = extend(View)(
         };
        
         this.requestFocus = function(){
-           self.nativeObject.becomeFirstResponder();
+            var argBlock= new Invocation.Argument({
+                type:"VoidBlock",
+                value: function(){
+                    __SF_Dispatch.mainAsync(function(){
+                        self.nativeObject.becomeFirstResponder();
+                    });
+                }
+            });
+            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
         };
        
         this.removeFocus = function(){

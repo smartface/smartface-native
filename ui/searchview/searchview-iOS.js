@@ -154,7 +154,15 @@ const SearchView = extend(View)(
         };
         
         this.showKeyboard = function(){
-            self.nativeObject.becomeFirstResponder();
+            var argBlock= new Invocation.Argument({
+                type:"VoidBlock",
+                value: function(){
+                    __SF_Dispatch.mainAsync(function(){
+                        self.nativeObject.becomeFirstResponder();
+                    });
+                }
+            });
+            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
         };
        
         this.hideKeyboard = function(){
@@ -162,7 +170,15 @@ const SearchView = extend(View)(
         };
         
         this.requestFocus = function(){
-            self.nativeObject.becomeFirstResponder();
+            var argBlock= new Invocation.Argument({
+                type:"VoidBlock",
+                value: function(){
+                    __SF_Dispatch.mainAsync(function(){
+                        self.nativeObject.becomeFirstResponder();
+                    });
+                }
+            });
+            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
         };
        
         this.removeFocus = function(){
