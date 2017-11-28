@@ -51,6 +51,7 @@ const TextBox = extend(View)(
         
         self.nativeObject.textBoxDelegate = function(method) {
             if (method.name === "textFieldShouldBeginEditing") {
+                self.keyboardanimationdelegate.textFieldShouldBeginEditing();
                 self.onEditBegins();
             }
             else if (method.name === "textFieldShouldEndEditing") {
