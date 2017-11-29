@@ -5,6 +5,7 @@ const System = require('sf-core/device/system');
 const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
 const Invocation    = require('sf-core/util').Invocation;
+const HeaderBarItem = require('sf-core/ui/headerbaritem');
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -366,10 +367,14 @@ function Page(params) {
     var _leftItem;
     self.headerBar.setLeftItem = function(value){
         if(value){
-            if(self.headerBar.leftItemEnabled){
-                self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            if (value instanceof HeaderBarItem) {
+                if(self.headerBar.leftItemEnabled){
+                    self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+                }
+                _leftItem = value.nativeObject;
+            }else{
+                throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
             }
-            _leftItem = value.nativeObject;
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
