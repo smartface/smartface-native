@@ -21,7 +21,8 @@ KeyboardAnimationDelegate.offsetFromTop = function (self) {
 
 KeyboardAnimationDelegate.statusBarFrames = function(self){
     if (!self.getParentViewController()) {
-        return {frame : 0, windowRect : 0, viewRect : 0};
+        var frame = {x:0, y:0, height:0, width:0};
+        return {frame : frame, windowRect : frame, viewRect : frame};
     };
     var view = self.getParentViewController().view;
     var statusBarFrame = __SF_UIApplication.sharedApplication().statusBarFrame;
@@ -55,7 +56,7 @@ function KeyboardAnimationDelegate (params) {
     
     self.nativeObject = params.nativeObject;
  
-   self.getParentViewController = function(){
+    self.getParentViewController = function(){
         return self.nativeObject.parentViewController();
     }  
     
@@ -67,6 +68,13 @@ function KeyboardAnimationDelegate (params) {
             }else if (view.superview.constructor.name === "SMFNative.SMFUIScrollView") {
                 _top += view.frame.y - view.superview.contentOffset.y ;
             }
+            
+            if (view.superview.constructor.name === "UIWindow") { // Check Dialog
+                self.parentDialog = view;
+            }else{
+                self.parentDialog = undefined;
+            }
+            
             if (view.superview.superview){
                 if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
                     return getViewTop(view.superview);
@@ -90,23 +98,26 @@ function KeyboardAnimationDelegate (params) {
         var controlValue = 0;
         var height = self.nativeObject.frame.height;
         var top = getViewTop(self.nativeObject);
-        
-        if(self.getParentViewController()){
+
+        if(self.getParentViewController() || self.parentDialog){
             controlValue = top + height;
 
             if (controlValue + KeyboardAnimationDelegate.offsetFromTop(self) > Screen.height - keyboardHeight) {
                 _isKeyboadAnimationCompleted = false;
                 _topDistance =  controlValue - (Screen.height - keyboardHeight);
                 
-                if (self.getParentViewController().tabBarController) {
-                    if (_topDistance +  self.getParentViewController().tabBarController.tabBar.frame.height > keyboardHeight) {
-                        _topDistance = keyboardHeight - self.getParentViewController().tabBarController.tabBar.frame.height;
-                    }
-                }else{
-                    if (_topDistance > keyboardHeight) {
-                        _topDistance = keyboardHeight;
+                if (!self.parentDialog) {
+                    if (self.getParentViewController().tabBarController) {
+                        if (_topDistance +  self.getParentViewController().tabBarController.tabBar.frame.height > keyboardHeight) {
+                            _topDistance = keyboardHeight - self.getParentViewController().tabBarController.tabBar.frame.height;
+                        }
+                    }else{
+                        if (_topDistance > keyboardHeight) {
+                            _topDistance = keyboardHeight;
+                        }
                     }
                 }
+                
                 
                 if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
                     var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
@@ -122,9 +133,10 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setDoubleArgumentAtIndex(0,3);
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
-                            var frame = self.getParentViewController().view.frame;
+                            var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                            var frame = parent.frame;
                             frame.y = -_topDistance;
-                            self.getParentViewController().view.frame = frame;
+                            parent.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
                               _isKeyboadAnimationCompleted = true;
@@ -132,17 +144,28 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.invoke();
                      }
                 }else{
-                    var frame = self.getParentViewController().view.frame;
+                    var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                    var frame = parent.frame;
                     frame.y = -_topDistance;
-                    self.getParentViewController().view.frame = frame;
+                    parent.frame = frame;
                     _isKeyboadAnimationCompleted = true;
                 }
             }else{
-                if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.statusBarFrames(self) && self.getParentViewController().view.frame.y !== 0){
-                    if (e && e.userInfo) {
-                        self.keyboardHideAnimation({userInfo : e.userInfo});
-                    }else{
-                        self.keyboardHideAnimation();
+                if (self.getParentViewController()) {
+                    if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
+                        if (e && e.userInfo) {
+                            self.keyboardHideAnimation({userInfo : e.userInfo});
+                        }else{
+                            self.keyboardHideAnimation();
+                        }
+                    }
+                }else{
+                    if (self.parentDialog && self.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
+                        if (e && e.userInfo) {
+                            self.keyboardHideAnimation({userInfo : e.userInfo});
+                        }else{
+                            self.keyboardHideAnimation();
+                        }
                     }
                 }
             }
@@ -158,7 +181,7 @@ function KeyboardAnimationDelegate (params) {
 
     self.keyboardHideAnimation = function(e){
         KeyboardAnimationDelegate.isKeyboardVisible = false;
-        if(self.getParentViewController()){
+        if(self.getParentViewController() || self.parentDialog){
             if (_isKeyboadAnimationCompleted){
                 if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
                     var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
@@ -174,9 +197,10 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setDoubleArgumentAtIndex(0,3);
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
-                            var frame = self.getParentViewController().view.frame;
+                            var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                            var frame = parent.frame;
                             frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
-                            self.getParentViewController().view.frame = frame;
+                            parent.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
                              
@@ -184,9 +208,10 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.invoke();
                      }
                 }else{
-                    var frame = self.getParentViewController().view.frame;
+                    var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                    var frame = parent.frame;
                     frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
-                    self.getParentViewController().view.frame = frame;
+                    parent.frame = frame;
                 }
                     
             }
