@@ -152,15 +152,15 @@ function KeyboardAnimationDelegate (params) {
                 }
             }else{
                 if (self.getParentViewController()) {
-                    if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
+                    if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self) && self.getParentViewController().view.frame.y != 0){
                         if (e && e.userInfo) {
                             self.keyboardHideAnimation({userInfo : e.userInfo});
                         }else{
                             self.keyboardHideAnimation();
                         }
                     }
-                }else{
-                    if (self.parentDialog && self.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
+                }else if (self.parentDialog){
+                    if (self.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
                         if (e && e.userInfo) {
                             self.keyboardHideAnimation({userInfo : e.userInfo});
                         }else{
