@@ -64,9 +64,6 @@ function http(params) {
     }
 }
 
-var httpInstance = new http();
-httpInstance.varx
-
 http.prototype.cancelAll = function() {
     var dispatcher = this.client.dispatcher();
     dispatcher && dispatcher.cancelAll();
