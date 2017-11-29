@@ -55,9 +55,6 @@ function http(params) {
     });
 
     this.client = this.clientBuilder.build();
-    /**
-     * @default
-     */
     this.timeout = 60000;
     // Assign parameters given in constructor
     if (params) {
