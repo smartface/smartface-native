@@ -38,7 +38,7 @@ var Http = function(params){
      * @android
      * @ios
      */
-    this.timeout;
+    this.timeout = 60000;
     
     /**
      * Gets/sets request headers.
