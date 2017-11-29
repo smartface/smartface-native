@@ -35,7 +35,7 @@ var Http = function(params){
      * Gets/sets request timeout.
      *
      * @property {Number} timeout
-     * @default Defaults to 60 second
+     * @default
      * @android
      * @ios
      */
