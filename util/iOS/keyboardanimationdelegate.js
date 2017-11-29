@@ -138,7 +138,7 @@ function KeyboardAnimationDelegate (params) {
                     _isKeyboadAnimationCompleted = true;
                 }
             }else{
-                if (self.getParentViewController().view.frame.y !== self.getParentViewController().view.yoga.top){
+                if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.statusBarFrames(self) && self.getParentViewController().view.frame.y !== 0){
                     if (e && e.userInfo) {
                         self.keyboardHideAnimation({userInfo : e.userInfo});
                     }else{

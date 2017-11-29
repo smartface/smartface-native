@@ -408,15 +408,7 @@ const TextBox = extend(View)(
         });
         
         this.showKeyboard = function(){
-           var argBlock= new Invocation.Argument({
-                type:"VoidBlock",
-                value: function(){
-                    __SF_Dispatch.mainAsync(function(){
-                        self.nativeObject.becomeFirstResponder();
-                    });
-                }
-            });
-            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
+            self.nativeObject.becomeFirstResponder();
         };
        
         this.hideKeyboard = function(){
@@ -424,15 +416,7 @@ const TextBox = extend(View)(
         };
        
         this.requestFocus = function(){
-            var argBlock= new Invocation.Argument({
-                type:"VoidBlock",
-                value: function(){
-                    __SF_Dispatch.mainAsync(function(){
-                        self.nativeObject.becomeFirstResponder();
-                    });
-                }
-            });
-            Invocation.invokeClassMethod("CATransaction","setCompletionBlock:",[argBlock]);
+            self.nativeObject.becomeFirstResponder();
         };
        
         this.removeFocus = function(){
