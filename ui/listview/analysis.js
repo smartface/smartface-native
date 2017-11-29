@@ -401,6 +401,30 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
 ListView.createSwipeItem = function(title,color,padding,action){};
 
 /**
+ * 
+ * This method is create swipe item with icon
+ * 
+ *      @example
+ *      var iconSwipeItem = ListView.iOS.createSwipeItemWithIcon(undefined,Image.createFromFile("images://icon.png"),Color.RED,30,function(e){
+ *          console.log("Icon "+ e.index);
+ *      });
+ * 
+ * @param {String} title
+ * @param {UI.Image} icon
+ * @param {UI.Color} color
+ * @param {Number} padding
+ * @param {Function} action Callback for button click action
+ * 
+ * @method createSwipeItemWithIcon
+ * @static
+ * @ios
+ * @since 2.0.4
+ * 
+ 
+ */
+ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action){};
+
+/**
  * iOS Specific Properties.
  * @class UI.ListView.iOS
  */
