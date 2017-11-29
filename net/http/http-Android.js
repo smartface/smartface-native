@@ -26,7 +26,7 @@ const Request = function() {
 function http(params) {
     this.clientBuilder = new OkHttpClient.Builder();
     
-    var _timeout = 10000, // default OkHttp timeout. There is no way getting timout for public method.
+    var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
     Object.defineProperty(this, "timeout", {
         get: function() {
@@ -56,6 +56,7 @@ function http(params) {
     
     this.client = this.clientBuilder.build();
     
+    this.timeout = 60000;
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -63,6 +64,9 @@ function http(params) {
         }
     }
 }
+
+var httpInstance = new http();
+httpInstance.varx 
 
 http.prototype.cancelAll = function() {
     var dispatcher = this.client.dispatcher();
