@@ -102,7 +102,12 @@ function Page(params) {
             return self.nativeObject.onLoad;
         },
         set: function(value) {
-            self.nativeObject.onLoad = value.bind(this);
+            self.nativeObject.onLoad = (function() {
+                self.headerBar.itemColor = Color.BLACK;
+                if (value instanceof Function) {
+                    value.call(this);
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -300,7 +305,7 @@ function Page(params) {
         },
         enumerable: true,configurable : true
     });
-
+    
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             var retval = null;
