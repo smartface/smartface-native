@@ -34,14 +34,8 @@ function Page(params) {
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
-        self.pageView.left = self.pageView.nativeObject.frame.x;
-        self.pageView.top = self.pageView.nativeObject.frame.y;
-        self.pageView.width = self.pageView.nativeObject.frame.width;
-        self.pageView.height = self.pageView.nativeObject.frame.height;
-
-        self.pageView.applyLayout();
+        self.layout.applyLayout();
     }
-    self.calculatePosition();
 
     self.nativeObject.onViewLoad  = function(){
         self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
@@ -49,15 +43,13 @@ function Page(params) {
     }
 
     self.nativeObject.onViewLayoutSubviews = function(){
-        if (parseInt(System.OSVersion) >= 10) {
-            self.calculatePosition();
-        }
+        self.calculatePosition();
     }
 
     self.nativeObject.onViewDidAppear = function(){
-      self.calculatePosition();
-    }
 
+    }
+    
     var _onOrientationChange;
     Object.defineProperty(this, 'onOrientationChange', {
         get: function() {
@@ -101,6 +93,10 @@ function Page(params) {
         enumerable: true
     });
 
+    self.layout.applyLayout = function(){
+        self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+    }
+    
     Object.defineProperty(self, 'onLoad', {
         get: function() {
             return self.nativeObject.onLoad;
