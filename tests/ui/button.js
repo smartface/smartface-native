@@ -54,14 +54,4 @@ salep.test("sf-core/ui/label Unit Test", function() {
         assert.doesNotThrow(function() { testObject.textColor = Color.BLACK; }, Error);
         assert.equal(testObject.textColor, Color.BLACK, "textColor must be Color.BLACK");
     });
-    
-    this.case("[withheight] getter/setter", function() {
-        assert.doesNotThrow(function() { testObject.withheight = 70 }, Error);
-        assert.equal(testObject.withheight, 70, "withheight must be equal to 70");
-    });
-    
-     this.case("[AND-3034] [height] getter/setter", function() {
-        assert.doesNotThrow(function() { testObject.height = 70 }, Error);
-        assert.equal(testObject.height, 70, "height must be equal to 70");
-    });
 });
