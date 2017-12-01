@@ -2,6 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 const Color = require('sf-core/ui/color');
+const Image = require('sf-core/ui/image');
 
 const UITableViewRowAnimation = {
     fade : 0,
@@ -219,5 +220,17 @@ ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
 ListView.iOS.createSwipeItem = function(title,color,padding,action){
     return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
 }
-        
+
+ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action){
+    if(!(icon instanceof Image)){
+        throw new TypeError('icon must be a UI.Image');
+    }
+
+    if (!title) {
+        title = "";
+    }
+    
+    return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title,icon.nativeObject,color.nativeObject,padding,action);
+}       
+
 module.exports = ListView;

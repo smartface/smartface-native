@@ -5,6 +5,7 @@ const System = require('sf-core/device/system');
 const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
 const Invocation    = require('sf-core/util').Invocation;
+const HeaderBarItem = require('sf-core/ui/headerbaritem');
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -16,6 +17,8 @@ const UIInterfaceOrientation = {
 
 function Page(params) {
     var self = this;
+
+    self.routerPath = null;
 
     if(!self.nativeObject){
         self.nativeObject = new __SF_UIViewController();
@@ -31,14 +34,8 @@ function Page(params) {
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
-        self.pageView.left = self.pageView.nativeObject.frame.x;
-        self.pageView.top = self.pageView.nativeObject.frame.y;
-        self.pageView.width = self.pageView.nativeObject.frame.width;
-        self.pageView.height = self.pageView.nativeObject.frame.height;
-
-        self.pageView.applyLayout();
+        self.layout.applyLayout();
     }
-    self.calculatePosition();
 
     self.nativeObject.onViewLoad  = function(){
         self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
@@ -46,15 +43,13 @@ function Page(params) {
     }
 
     self.nativeObject.onViewLayoutSubviews = function(){
-        if (parseInt(System.OSVersion) >= 10) {
-            self.calculatePosition();
-        }
+        self.calculatePosition();
     }
 
     self.nativeObject.onViewDidAppear = function(){
-      self.calculatePosition();
-    }
 
+    }
+    
     var _onOrientationChange;
     Object.defineProperty(this, 'onOrientationChange', {
         get: function() {
@@ -98,12 +93,21 @@ function Page(params) {
         enumerable: true
     });
 
+    self.layout.applyLayout = function(){
+        self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+    }
+    
     Object.defineProperty(self, 'onLoad', {
         get: function() {
             return self.nativeObject.onLoad;
         },
         set: function(value) {
-            self.nativeObject.onLoad = value.bind(this);
+            self.nativeObject.onLoad = (function() {
+                self.headerBar.itemColor = Color.BLACK;
+                if (value instanceof Function) {
+                    value.call(this);
+                }
+            }).bind(this);
         },
         enumerable: true
     });
@@ -301,7 +305,7 @@ function Page(params) {
         },
         enumerable: true,configurable : true
     });
-
+    
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             var retval = null;
@@ -364,10 +368,14 @@ function Page(params) {
     var _leftItem;
     self.headerBar.setLeftItem = function(value){
         if(value){
-            if(self.headerBar.leftItemEnabled){
-                self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+            if (value instanceof HeaderBarItem) {
+                if(self.headerBar.leftItemEnabled){
+                    self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+                }
+                _leftItem = value.nativeObject;
+            }else{
+                throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
             }
-            _leftItem = value.nativeObject;
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }

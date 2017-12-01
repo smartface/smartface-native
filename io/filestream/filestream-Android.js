@@ -199,7 +199,7 @@ function FileStream(params) {
                     if(!(data instanceof Blob)){
                         throw new Error("Parameter must be Blob")
                     }
-                    this.nativeObject.write(array(data.parts, "byte"));
+                    this.nativeObject.write(data.nativeObject.toByteArray());
                 }
                 else{
                     if(!TypeUtil.isString(data)){

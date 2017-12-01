@@ -11,21 +11,14 @@ function Dialog(params) {
     self.dialogView.alpha = 0;
     
     self.calculatePosition = function(){
-        self.dialogView.left = self.dialogView.nativeObject.frame.x;
-        self.dialogView.top = self.dialogView.nativeObject.frame.y;
-        self.dialogView.width = self.dialogView.nativeObject.frame.width;
-        self.dialogView.height = self.dialogView.nativeObject.frame.height;
+        self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
 
         self.dialogView.applyLayout();
     }
     
     self.dialogView.nativeObject.addObserver(function(){
-                    self.dialogView.left =  __SF_UIApplication.sharedApplication().keyWindow.frame.x;
-                    self.dialogView.top =  __SF_UIApplication.sharedApplication().keyWindow.frame.y;
-                    self.dialogView.width =  __SF_UIApplication.sharedApplication().keyWindow.frame.width;
-                    self.dialogView.height =  __SF_UIApplication.sharedApplication().keyWindow.frame.height;
                     __SF_UIView.animation(__SF_UIApplication.sharedApplication().statusBarOrientationAnimationDuration,0,function(){
-                        self.dialogView.applyLayout();
+                        self.calculatePosition();
                     },function(){
                         
                     });
@@ -39,6 +32,10 @@ function Dialog(params) {
         },
         enumerable: true
     });
+    
+    self.layout.applyLayout = function(){
+        self.dialogView.nativeObject.yoga.applyLayoutPreservingOrigin(true);
+    }
     
     self.hide = function (){
         __SF_UIView.animation(0.2,0,function(){

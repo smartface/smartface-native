@@ -1,4 +1,3 @@
-const UI = require("../");
 const Color = require("sf-core/ui/color");
 
 function HeaderBarItem(params) {

@@ -4,6 +4,7 @@ function TabBarFlowViewModel(params) {
     self.android = {};
     
     self.type = "TabBarFlow";
+    self.routerPath = null;
     
     var _tabBarView = null;
     Object.defineProperty(self, 'tabBarView', {
@@ -147,7 +148,15 @@ function TabBarFlowViewModel(params) {
         }
     };
     this.getCurrent = function () {
-        return self.tabBarBrain.getCurrentPage();
+        var retval = null;
+        if (self.tabBarBrain.getCurrentPage()) {
+            if (self.tabBarBrain.getCurrentPage().type) {
+                retval = "/" + self.tabBarBrain.getCurrentPage().routerPath + self.tabBarBrain.getCurrentPage().getCurrent();
+            } else {
+                retval = "/" + self.tabBarBrain.getCurrentPage().routerPath;
+            }
+        }
+        return retval;
     };
     
     // From view's delegate
@@ -283,10 +292,12 @@ function TabBarFlowModel(argument) {
             if (objects[i].values.isSingleton) {
                 if (objects[i].values.pageInstance === null) {
                     objects[i].values.pageInstance = new (objects[i].values.pageClass)();
+                    objects[i].values.pageInstance.routerPath = objects[i].key;
                 }
             } else {
                 if (objects[i].values.pageClass !== null){
                     objects[i].values.pageInstance = new (objects[i].values.pageClass)();
+                    objects[i].values.pageInstance.routerPath = objects[i].key;
                 }
                 refreshNeeded = true;
             }

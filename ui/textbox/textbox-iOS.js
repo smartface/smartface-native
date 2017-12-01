@@ -6,6 +6,7 @@ const Animator = require('sf-core/ui/animator');
 const Color = require('sf-core/ui/color');
 const Screen = require('sf-core/device/screen');
 const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const IOSKeyboardTypes = {
     default: 0, // Default type for the current input method.
@@ -51,6 +52,7 @@ const TextBox = extend(View)(
         
         self.nativeObject.textBoxDelegate = function(method) {
             if (method.name === "textFieldShouldBeginEditing") {
+                self.keyboardanimationdelegate.textFieldShouldBeginEditing();
                 self.onEditBegins();
             }
             else if (method.name === "textFieldShouldEndEditing") {
@@ -406,7 +408,7 @@ const TextBox = extend(View)(
         });
         
         this.showKeyboard = function(){
-           self.nativeObject.becomeFirstResponder();
+            self.nativeObject.becomeFirstResponder();
         };
        
         this.hideKeyboard = function(){
@@ -414,7 +416,7 @@ const TextBox = extend(View)(
         };
        
         this.requestFocus = function(){
-           self.nativeObject.becomeFirstResponder();
+            self.nativeObject.becomeFirstResponder();
         };
        
         this.removeFocus = function(){
