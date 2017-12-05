@@ -624,7 +624,11 @@ View.prototype.setBackgroundColor = function() {
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
     else if(this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
-        release(this.backgroundDrawable)
+        const WebView = require("sf-core/ui/webview");
+        if(this instanceof WebView) {
+            console.log("Webview color !isGradient");
+        }
+        // release(this.backgroundDrawable)
         this.backgroundDrawable = new NativeGradientDrawable(); 
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
@@ -728,6 +732,10 @@ View.prototype.setBackground = function(layerIndex){
             layerDrawableNative.setDrawableByLayerId(1,this.borderShapeDrawable);
             layerDrawableNative.invalidateDrawable(this.borderShapeDrawable);
             break;
+    }
+    const Webview = require("../webview");
+    if(this instanceof Webview) {
+        this.nativeObject.setBackgroundColor(0);
     }
     
     this.nativeObject.setBackground(layerDrawableNative);
