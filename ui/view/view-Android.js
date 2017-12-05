@@ -729,6 +729,7 @@ View.prototype.setBackground = function(layerIndex){
             layerDrawableNative.invalidateDrawable(this.borderShapeDrawable);
             break;
     }
+    // This check is added for COR-1562
     const Webview = require("../webview");
     if(this instanceof Webview) {
         this.nativeObject.setBackgroundColor(0);
