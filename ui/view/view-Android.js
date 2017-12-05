@@ -624,11 +624,7 @@ View.prototype.setBackgroundColor = function() {
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
     else if(this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
-        const WebView = require("sf-core/ui/webview");
-        if(this instanceof WebView) {
-            console.log("Webview color !isGradient");
-        }
-        // release(this.backgroundDrawable)
+        release(this.backgroundDrawable);
         this.backgroundDrawable = new NativeGradientDrawable(); 
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
