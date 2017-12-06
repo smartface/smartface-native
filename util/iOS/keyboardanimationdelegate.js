@@ -57,7 +57,10 @@ function KeyboardAnimationDelegate (params) {
     self.nativeObject = params.nativeObject;
  
     self.getParentViewController = function(){
-        return self.nativeObject.parentViewController();
+        if (self.parentView) {
+            return self.parentView.parentViewController();
+        }
+        return undefined;
     }  
     
     var _top = 0;
@@ -78,6 +81,8 @@ function KeyboardAnimationDelegate (params) {
             if (view.superview.superview){
                 if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
                     return getViewTop(view.superview);
+                }else{
+                    self.parentView = view.superview;
                 }
             }
         }
@@ -133,7 +138,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setDoubleArgumentAtIndex(0,3);
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
-                            var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                            var parent = self.parentDialog ? self.parentDialog :  self.parentView;
                             var frame = parent.frame;
                             frame.y = -_topDistance;
                             parent.frame = frame;
@@ -144,7 +149,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.invoke();
                      }
                 }else{
-                    var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                    var parent = self.parentDialog ? self.parentDialog :  self.parentView;
                     var frame = parent.frame;
                     frame.y = -_topDistance;
                     parent.frame = frame;
@@ -197,7 +202,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.setDoubleArgumentAtIndex(0,3);
                          invocationAnimation.setNSUIntegerArgumentAtIndex(animationOptions,4); 
                          invocationAnimation.setVoidBlockArgumentAtIndex(function(){
-                            var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                            var parent = self.parentDialog ? self.parentDialog :  self.parentView;
                             var frame = parent.frame;
                             frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
                             parent.frame = frame;
@@ -208,7 +213,7 @@ function KeyboardAnimationDelegate (params) {
                          invocationAnimation.invoke();
                      }
                 }else{
-                    var parent = self.parentDialog ? self.parentDialog :  self.getParentViewController().view;
+                    var parent = self.parentDialog ? self.parentDialog :  self.parentView;
                     var frame = parent.frame;
                     frame.y = KeyboardAnimationDelegate.offsetFromTop(self);
                     parent.frame = frame;
