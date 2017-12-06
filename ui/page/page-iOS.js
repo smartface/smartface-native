@@ -357,8 +357,8 @@ function Page(params) {
 
     self.headerBar.setItems = function(value){
         var nativeObjectArray = [];
-
-        for (var i = 0; i < value.length; i++) {
+        
+        for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
             nativeObjectArray.push(value[i].nativeObject);
         }
 
