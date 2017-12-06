@@ -349,6 +349,7 @@ const TextBox = extend(Label)(
 function setKeyboardType(self){
     if(self.isPassword){
         var typeface = self.nativeObject.getTypeface();
+        // BUG/AND-3012
         self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         /*
         if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
