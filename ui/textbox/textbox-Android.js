@@ -349,11 +349,14 @@ const TextBox = extend(Label)(
 function setKeyboardType(self){
     if(self.isPassword){
         var typeface = self.nativeObject.getTypeface();
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        /*
         if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
             self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
         } else {
             self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 16); // 16 = TYPE_NUMBER_VARIATION_PASSWORD
         }
+        */
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
         var passwordMethod = new NativePasswordTransformationMethod();
         self.nativeObject.setTypeface(typeface);
