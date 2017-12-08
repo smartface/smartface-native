@@ -161,6 +161,8 @@ function RouterViewModel(params) {
         } else {
             if (routerBrain.currentPage.type == "Navigator") {
                 routerBrain.currentPage.goBack();
+            } else if (routerBrain.currentPage.type == "TabBarFlow" && routerBrain.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
+                routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack();
             } else {
                 routerBrain.history.pop();
                 this.go(routerBrain.history[routerBrain.history.length - 1]);
