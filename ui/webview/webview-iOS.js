@@ -1,5 +1,6 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
+const Color = require('sf-core/ui/color');
 const File = require('sf-core/io/file');
 
 const WebView = extend(View)(
@@ -12,6 +13,9 @@ const WebView = extend(View)(
          
         _super(this);
     
+        self.nativeObject.setValueForKey(false,"opaque");
+        self.backgroundColor = Color.WHITE;
+        
         Object.defineProperty(self, 'loadURL', {
             value: function(value) {
                 var nsURL = __SF_NSURL.URLWithString(value);

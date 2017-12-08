@@ -130,8 +130,12 @@ function NavigatorViewModel(params) {
         if (key) {
             this.go(key, parameters, animated);
         } else {
-            self.model.history.pop();
-            this.go(self.model.history[self.model.history.length - 1]);
+            if (self.model.currentPage.type == "TabBarFlow" && self.model.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
+                self.model.currentPage.tabBarBrain.getCurrentPage().goBack();
+            } else {
+                self.model.history.pop();
+                this.go(self.model.history[self.model.history.length - 1]);
+            }
         }
     };
     this.getCurrent = function () {

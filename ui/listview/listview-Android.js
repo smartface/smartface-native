@@ -1,32 +1,33 @@
 /*globals requireClass*/
-const View                          = require('../view');
-const extend                        = require('js-base/core/extend');
-const ListViewItem                  = require("../listviewitem");
-const TypeUtil                      = require("../../util/type");
-const AndroidConfig                 = require("../../util/Android/androidconfig");
-const NativeView                    = requireClass("android.view.View");
-const NativeRecyclerView            = requireClass("android.support.v7.widget.RecyclerView");
-const NativeSwipeRefreshLayout      = requireClass("android.support.v4.widget.SwipeRefreshLayout");
-const NativeLinearLayoutManager     = requireClass("android.support.v7.widget.LinearLayoutManager");
-const NativeContextThemeWrapper     = requireClass("android.view.ContextThemeWrapper");
-const NativeR                       = requireClass(AndroidConfig.packageName + ".R");
+const View = require('../view');
+const extend = require('js-base/core/extend');
+const ListViewItem = require("../listviewitem");
+const TypeUtil = require("../../util/type");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const NativeView = requireClass("android.view.View");
+const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
+const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const NativeLinearLayoutManager = requireClass("android.support.v7.widget.LinearLayoutManager");
+const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
+
+const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const ListView = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
 
         var self = this;
 
-        if(!this.nativeObject){
+        if (!this.nativeObject) {
             this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
-        
-        if(!this.nativeInner){
+
+        if (!this.nativeInner) {
             // For creating RecyclerView with android:scrollbar=vertical attribute
-            if(NativeR.style.ScrollBarRecyclerView){
+            if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
                 this.nativeInner = new NativeRecyclerView(themeWrapper);
             }
-            else{
+            else {
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
             this.nativeInner.setItemViewCacheSize(0);
@@ -38,30 +39,31 @@ const ListView = extend(View)(
 
         _super(this);
         var holderViewLayout;
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter",{
-            onCreateViewHolder: function(parent,viewType){
-                try{
+        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
+            onCreateViewHolder: function(parent, viewType) {
+                try {
                     holderViewLayout = _onRowCreate();
                 }
-                catch(e){
+                catch (e) {
                     const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
-                if(self.rowHeight){
+                if (self.rowHeight) {
                     holderViewLayout.height = self.rowHeight;
                 }
                 return holderViewLayout.nativeInner;
             },
-            onBindViewHolder: function(nativeHolderView,position){
+            onBindViewHolder: function(nativeHolderView, position) {
                 var _holderViewLayout = self.createTemplate(nativeHolderView);
-                
-                if(!self.rowHeight && _onRowHeight){
+
+                if (!self.rowHeight && _onRowHeight) {
                     _holderViewLayout.height = _onRowHeight(position);
                 }
-                
-                if(_onRowBind){
-                    _onRowBind(_holderViewLayout,position);
+
+                if (_onRowBind) {
+                    _onRowBind(_holderViewLayout, position);
+
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
                             holderViewLayout.nativeObject = view;
@@ -69,24 +71,39 @@ const ListView = extend(View)(
                             _onRowSelected && _onRowSelected(holderViewLayout, position);
                         }
                     }));
+
+                    nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
+                        onLongClick: function(view) {
+
+                            if (typeof _onRowLongSelected === 'function') {
+                                holderViewLayout.nativeObject = view;
+                                createFromTemplate(holderViewLayout);
+                                _onRowLongSelected && _onRowLongSelected(holderViewLayout, position);
+                                return true;
+                            }
+                            return false
+
+                        }
+                    }));
                 }
             },
-            getItemCount: function(){
-                if(isNaN(_itemCount))
+            getItemCount: function() {
+                if (isNaN(_itemCount))
                     return 0;
-                else if(typeof(_itemCount) !== "number")
+                else if (typeof(_itemCount) !== "number")
                     throw new Error("itemCount must be an number.");
                 return _itemCount;
             },
-            getItemViewType: function(position){
+            getItemViewType: function(position) {
                 return position;
             }
-        },null);
+        }, null);
 
         var _onScroll;
         var _rowHeight;
         var _onRowCreate;
         var _onRowSelected;
+        var _onRowLongSelected;
         var _onPullRefresh;
         var _onRowHeight;
         var _onRowBind;
@@ -98,7 +115,7 @@ const ListView = extend(View)(
                     return _rowHeight;
                 },
                 set: function(rowHeight) {
-                    if(TypeUtil.isNumeric(rowHeight)){
+                    if (TypeUtil.isNumeric(rowHeight)) {
                         _rowHeight = rowHeight;
                     }
                 },
@@ -109,7 +126,7 @@ const ListView = extend(View)(
                     return _itemCount;
                 },
                 set: function(itemCount) {
-                    if(TypeUtil.isNumeric(itemCount)){
+                    if (TypeUtil.isNumeric(itemCount)) {
                         _itemCount = itemCount;
                     }
                 },
@@ -120,7 +137,7 @@ const ListView = extend(View)(
                     return this.nativeInner.isVerticalScrollBarEnabled();
                 },
                 set: function(verticalScrollBarEnabled) {
-                    if(TypeUtil.isBoolean(verticalScrollBarEnabled)){
+                    if (TypeUtil.isBoolean(verticalScrollBarEnabled)) {
                         this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
                     }
                 },
@@ -131,7 +148,7 @@ const ListView = extend(View)(
                     return this.nativeObject.isEnabled();
                 },
                 set: function(refreshEnabled) {
-                    if(TypeUtil.isBoolean(refreshEnabled)){
+                    if (TypeUtil.isBoolean(refreshEnabled)) {
                         this.nativeObject.setEnabled(refreshEnabled);
                     }
                 },
@@ -168,13 +185,13 @@ const ListView = extend(View)(
             'setPullRefreshColors': {
                 value: function(colors) {
                     var nativeColors = [];
-                    colors.forEach(function(element){
+                    colors.forEach(function(element) {
                         nativeColors.push(element.nativeObject);
                     })
                     /** @todo
                      * Error: Method setColorSchemeColors with 1 parameters couldn\'t found.
                      * Invoking method with varargs parameter maybe caused this. 
-                    */
+                     */
                     this.nativeObject.setColorSchemeColors(array(nativeColors, "int"));
                 },
                 enumerable: true
@@ -234,10 +251,10 @@ const ListView = extend(View)(
                 },
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
-                    if(onScroll){
+                    if (onScroll) {
                         this.nativeInner.setOnScrollListener(onScrollListener);
                     }
-                    else{
+                    else {
                         this.nativeInner.removeOnScrollListener(onScrollListener);
                     }
                 },
@@ -253,45 +270,57 @@ const ListView = extend(View)(
                 enumerable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'ListView';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });
 
-        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener",{
-            onScrolled : function(recyclerView, dx, dy){
-                    _onScroll && _onScroll();
-                },
-            onScrollStateChanged: function(recyclerView, newState){
+        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
+            onScrolled: function(recyclerView, dx, dy) {
+                _onScroll && _onScroll();
             },
-        },null);
+            onScrollStateChanged: function(recyclerView, newState) {},
+        }, null);
+
+        // android-only properties
+        this.android = {};
+        Object.defineProperty(this.android, 'onRowLongSelected', {
+            get: function() {
+                return _onRowLongSelected;
+            },
+            set: function(onRowLongSelected) {
+                _onRowLongSelected = onRowLongSelected.bind(this);
+            },
+            enumerable: true
+        });
+
 
         // ios-only properties
         this.ios = {};
         this.ios.swipeItems = {};
-        this.ios.swipeItem = function(title,action){
+        this.ios.swipeItem = function(title, action) {
             return {};
         };
-        
-        if(!this.isNotSetDefaults){
+
+        if (!this.isNotSetDefaults) {
             this.nativeInner.setAdapter(dataAdapter);
             this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
-                onRefresh: function(){
+                onRefresh: function() {
                     _onPullRefresh && _onPullRefresh();
                 }
             }));
         }
-        
-        self.createTemplate = function(e){
+
+        self.createTemplate = function(e) {
             holderViewLayout.nativeObject = e.itemView;
             holderViewLayout.nativeInner = e;
             createFromTemplate(holderViewLayout);
             return holderViewLayout;
         };
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
@@ -302,14 +331,14 @@ const ListView = extend(View)(
 
 ListView.iOS = {};
 
-function createFromTemplate(jsView){
-    if(jsView.childViews){
-        for (var child in jsView.childViews){
-             if (jsView.childViews[child].id){
+function createFromTemplate(jsView) {
+    if (jsView.childViews) {
+        for (var child in jsView.childViews) {
+            if (jsView.childViews[child].id) {
                 jsView.childViews[child].nativeObject = jsView.nativeObject.findViewById(jsView.childViews[child].id);
-                
+
                 createFromTemplate(jsView.childViews[child]);
-             }
+            }
         }
     }
 }
