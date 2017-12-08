@@ -25,6 +25,8 @@ function File(params) {
             // Checking assets list loaded.
             if(!nativeAssetsList){
                 nativeAssetsList = activity.getAssets().list("");
+                if(nativeAssetsList)
+                    nativeAssetsList = toJSArray(nativeAssetsList);
             }
 
             nativeAssetsList.forEach(function(assetName) {

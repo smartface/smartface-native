@@ -66,7 +66,7 @@ const SpeechRecognizer = {};
  * Starts speech recognition service. {@link Application.Android.Permissions#RECORD_AUDIO} is required for Android platform.
  * 
  * @param {Object} params Object describing callbacks
- * @param {String} [params.locale] IETF language tag for example "en-US"
+ * @param {String} [params.locale] IETF language tag for example "en_US"
  * @param {Function} params.onResult Triggers when partial recognition results are available.
  * @param {String} params.onResult.result
  * @param {Function} params.onFinish Triggers when recognition result is ready.

@@ -1,6 +1,13 @@
 /////////////////////////////////////////////////////////
 // YOGA ENUMS
 /////////////////////////////////////////////////////////
+const YGUnit = {
+  Undefined : 0,
+  Point : 1,
+  Percent : 2,
+  tAuto : 3
+};
+
 const YGDirection = {
     Inherit : 0,
     LTR : 1,
@@ -65,6 +72,7 @@ module.exports = {
     YGPositionType  :YGPositionType,
     YGWrap          :YGWrap,
     YGOverflow      :YGOverflow,
-    YGDisplay       :YGDisplay
+    YGDisplay       :YGDisplay,
+    YGUnit          :YGUnit
 };
 

@@ -164,7 +164,7 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
 
 function pickFromGallery(resultCode, data) {
     var success = true;
-    if (resultCode === AndroidConfig.activity.RESULT_OK) {
+    if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             var uri = data.getData();
             var realPath;
@@ -251,7 +251,7 @@ function getRealPathFromURI(uri) {
 }
 
 function getCameraData(resultCode, data) {
-    if (resultCode === AndroidConfig.activity.RESULT_OK) {
+    if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             var uri;
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {

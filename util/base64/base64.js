@@ -7,39 +7,37 @@
  */
 const Base64Util = {};
 
-Base64Util.Utf8ArrayToStr = function (array) {
-    var out, i, len, c;
-    var char2, char3;
-
-    out = "";
-    len = array.length;
-    i = 0;
-    while(i < len) {
-    c = array[i++];
-    switch(c >> 4)
-    { 
-      case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-        // 0xxxxxxx
-        out += String.fromCharCode(c);
-        break;
-      case 12: case 13:
-        // 110x xxxx   10xx xxxx
-        char2 = array[i++];
-        out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
-        break;
-      case 14:
-        // 1110 xxxx  10xx xxxx  10xx xxxx
-        char2 = array[i++];
-        char3 = array[i++];
-        out += String.fromCharCode(((c & 0x0F) << 12) |
-                       ((char2 & 0x3F) << 6) |
-                       ((char3 & 0x3F) << 0));
-        break;
+// Taken from https://weblog.rogueamoeba.com/2017/02/27/javascript-correctly-converting-a-byte-array-to-a-utf-8-string/
+Base64Util.Utf8ArrayToStr = function (data) {
+    const extraByteMap = [ 1, 1, 1, 1, 2, 2, 3, 0 ];
+    var count = data.length;
+    var str = "";
+    
+    for (var index = 0;index < count;)
+    {
+        var ch = data[index++];
+        if (ch & 0x80)
+        {
+            var extra = extraByteMap[(ch >> 3) & 0x07];
+            if (!(ch & 0x40) || !extra || ((index + extra) > count))
+                return null;
+            
+            ch = ch & (0x3F >> extra);
+            for (;extra > 0;extra -= 1)
+            {
+                var chx = data[index++];
+                if ((chx & 0xC0) != 0x80)
+                return null;
+                
+                ch = (ch << 6) | (chx & 0x3F);
+            }
+        }
+        
+        str += String.fromCharCode(ch);
     }
-    }
-
-    return out;
-}
+    
+    return str;  
+};
 
 Base64Util.StrToUtf8Array = function(str) {
     var utf8 = [];

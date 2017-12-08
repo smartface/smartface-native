@@ -1,49 +1,48 @@
 const Base64Util = require("../..//util/base64");
 
-function Blob (parts, properties) {
+const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
+
+function Blob(parts, properties) {
+    var self = this;
     var _type = null;
-    var _parts = null;
-    if(parts && properties && properties.type) {
+    if (parts && properties && properties.type) {
         _type = properties.type;
-        _parts = parts;
+        
+        self.nativeObject = new NativeByteArrayOutputStream();
+        self.nativeObject.write(parts);
     }
-    
+
     Object.defineProperty(this, 'type', {
         get: function() {
             return _type;
         },
         enumerable: true
     });
-    
-    Object.defineProperty(this, 'parts', {
-        get: function() {
-            return _parts;
-        }
-    });
-    
+
     Object.defineProperty(this, 'size', {
         get: function() {
-            return _parts ? _parts.length : null;
+            return self.nativeObject && arrayLength(self.nativeObject.toByteArray());
         },
         enumerable: true
     });
-    
+
     this.slice = function(start, end, type) {
-        return new Blob(_parts.slice(start, end), {type : type });
+        var newBlob = new Blob();
+        var byteArray = self.nativeObject.toByteArray();
+        newBlob.nativeObject.write(byteArray, arrayLength(byteArray) - start, end - start); //  write(byte[] b, int off, int len)
+        return newBlob;
     };
-    
-    /** @todo check this for 
-     *      java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.Class java.lang.Object.getClass()' on a null object reference
-     *      System.err  W  at io.smartface.ExposingEngine.JsObjectConversions.ToArray(JsObjectConversions.java:97) 
-     */
+
     this.toBase64 = function() {
         const NativeBase64 = requireClass("android.util.Base64");
-        return NativeBase64.encodeToString(array(_parts, "byte"), 0, _parts.length, NativeBase64.DEFAULT);
+        var byteArray = self.nativeObject.toByteArray();
+        var encodedString = NativeBase64.encodeToString(byteArray, NativeBase64.DEFAULT);
+        return encodedString;
     };
-    
+
     this.toString = function() {
-        return Base64Util.Utf8ArrayToStr(_parts);
-    }
+        return this.nativeObject.toString();
+    };
 }
 
 /** @todo 
@@ -52,13 +51,13 @@ function Blob (parts, properties) {
 Blob.createFromBase64 = function(base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
     var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);
-    var newBlob = new Blob(byteArray, {type:"image"});
+    var newBlob = new Blob(byteArray, { type: "image" });
     return newBlob;
 };
 
 Blob.createFromUTF8String = function(str) { // utf string or string
     var utf8Array = Base64Util.StrToUtf8Array(str);
-    return new Blob(utf8Array, {type: "text"});
+    return new Blob(array(utf8Array, "byte"), { type: "text" });
 };
 
 module.exports = Blob;

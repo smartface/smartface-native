@@ -54,6 +54,7 @@ function ScrollView(){}
  * @property {UI.ScrollView.Align} [align = UI.ScrollView.Align.VERTICAL]
  * @android
  * @ios
+ * @readonly
  * @since 0.1
  */
 ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL; 

@@ -190,8 +190,8 @@ const MapView = extend(View)(
                         _zoomLevel = value;
                         if(self.nativeObject.isShown()){
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                            var zoomCameraUpdateFactory = new NativeCameraUpdateFactory.zoomTo(value + 2);
-                            _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
+                            var zoomCameraUpdateFactory = NativeCameraUpdateFactory.zoomTo(value + 2);
+                            _nativeGoogleMap && _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
                         }
                     }
                 },

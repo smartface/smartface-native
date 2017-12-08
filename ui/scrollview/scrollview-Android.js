@@ -36,7 +36,15 @@ const ScrollView = extend(ViewGroup)(
         _super(this);
         const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
+        // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
+        // So, the user have to set width and height for the layout of scrollview. 
+        // If the issue is fixed, you can try below lines.
+        
+        // const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
+        // var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
+        // this.nativeObject.addView(_layout.nativeObject, layoutParams);
         this.nativeObject.addView(_layout.nativeObject);
+        
         _layout.parent = this;
         var _callbackOnScroll = null;
         var _contentOffset = {x: 0, y: 0};

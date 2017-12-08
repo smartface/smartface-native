@@ -33,15 +33,16 @@ const ViewGroup = extend(View)(
 
         this.removeChild = function(view){
             delete self.childs[view.uniqueId];
+            view.parent = undefined;
             view.nativeObject.removeFromSuperview();  
         };
 
         this.removeAll = function(){
-            self.childs = {};
-            var subviews = self.nativeObject.subviews;
-            for (var i = 0; i < subviews.length; i++) { 
-                 subviews[i].removeFromSuperview();
+            for (var child in self.childs) {
+                self.childs[child].parent = undefined;
+                self.childs[child].nativeObject.removeFromSuperview();
             }
+            self.childs = {};
         };
 
 

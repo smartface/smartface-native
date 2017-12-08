@@ -19,14 +19,14 @@ const extend = require('js-base/core/extend');
  *
  *     const Label = require('sf-core/ui/label');
  *     const Color = require('sf-core/ui/color');
- *     var myLabel1 = new UI.Label({
+ *     var myLabel1 = new Label({
  *         width: 100,
  *         height: 50,
  *         text: "First label",
  *         backgroundColor: Color.RED
  *     });
  *     myFlexLayout.addChild(myLabel1);
- *     var myLabel2 = new UI.Label({
+ *     var myLabel2 = new Label({
  *         width: 100,
  *         height: 50,
  *         text: "Second label",
@@ -60,7 +60,7 @@ FlexLayout.prototype.direction = UI.FlexLayout.Direction.INHERIT;
  * This property specifies how children will be placed(horizontally or vertical) in FlexLayout.
  * It defines the main axis.
  * It works like flex-direction on CSS.
- * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
  *
  *
  * @property {UI.FlexLayout.FlexDirection} [flexDirection = UI.FlexLayout.FlexDirection.ROW]
@@ -97,7 +97,7 @@ FlexLayout.prototype.alignContent = UI.FlexLayout.AlignContent.STRETCH;
  * This property aligns children along the cross-axis of their container.
  * If UI.FlexLayout.FlexDirection is row, this property controls the alignment in vertical direction.
  * It works like align-items on CSS.
- * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
  *
  * @property {UI.FlexLayout.AlignItems} [alignItems = UI.FlexLayout.AlignItems.STRETCH]
  * @android
@@ -136,7 +136,7 @@ FlexLayout.prototype.overFlow = UI.FlexLayout.Overflow.VISIBLE;
 /**
  * This functions recalculates the positioning parameters.
  * It is useful to call this method when you want to change layout parameters on runtime.
- * If you change view's position, you should call applyLayout from its parent not from the Page.
+ * If you change view's position, you should call applyLayout from the Page.layout. You shouldn't call applyLayout from its parent or itself
  *
  * @method applyLayout
  * @android

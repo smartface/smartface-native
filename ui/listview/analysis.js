@@ -120,17 +120,19 @@ function ListView(params) {}
  */
 ListView.prototype.onRowCreate = function onRowCreate(){};
 
+
 /**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
  *
+ * @param {Number} index
  * @event onRowHeight
  * @android
  * @ios
  * @return {Number}
  * @since 1.1.18
  */
-ListView.prototype.onRowHeight = function onRowHeight(){};
+ListView.prototype.onRowHeight = function onRowHeight(index){};
 
 /**
  * This event is called when a UI.ListViewItem created at specified row index.
@@ -148,12 +150,25 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
 /**
  * This event is called when user selects a row at specific index.
  *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
  * @event onRowSelected
  * @android
  * @ios
  * @since 0.1
  */
 ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){};
+
+/**
+ * This event is called when user long selects a row at specific index.
+ *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
+ * @event onRowLongSelected
+ * @android
+ * @since 2.0.4
+ */
+ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index){};
 
 /**
  * Gets/sets the number of rows that will be shown in a ListView.
@@ -396,6 +411,30 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  
  */
 ListView.createSwipeItem = function(title,color,padding,action){};
+
+/**
+ * 
+ * This method is create swipe item with icon
+ * 
+ *      @example
+ *      var iconSwipeItem = ListView.iOS.createSwipeItemWithIcon(undefined,Image.createFromFile("images://icon.png"),Color.RED,30,function(e){
+ *          console.log("Icon "+ e.index);
+ *      });
+ * 
+ * @param {String} title
+ * @param {UI.Image} icon
+ * @param {UI.Color} color
+ * @param {Number} padding
+ * @param {Function} action Callback for button click action
+ * 
+ * @method createSwipeItemWithIcon
+ * @static
+ * @ios
+ * @since 2.0.4
+ * 
+ 
+ */
+ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action){};
 
 /**
  * iOS Specific Properties.

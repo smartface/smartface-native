@@ -3,6 +3,7 @@ function NavigatorViewModel(params) {
     
     // Identifier
     self.type = "Navigator";
+    self.routerPath = null;
     ////////////////////////////////////////////////////////////////////////////
     
     // System Specific
@@ -129,12 +130,25 @@ function NavigatorViewModel(params) {
         if (key) {
             this.go(key, parameters, animated);
         } else {
-            self.model.history.pop();
-            this.go(self.model.history[self.model.history.length - 1]);
+            if (self.model.currentPage.type == "TabBarFlow" && self.model.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
+                self.model.currentPage.tabBarBrain.getCurrentPage().goBack();
+            } else {
+                self.model.history.pop();
+                this.go(self.model.history[self.model.history.length - 1]);
+            }
         }
     };
     this.getCurrent = function () {
-        return self.model.currentPage;
+        var retval = null;
+        if (self.model.currentPage) {
+            if (self.model.currentPage.type) {
+                retval = "/" + self.model.currentPage.routerPath + self.model.currentPage.getCurrent();
+            } else {
+                retval = "/" + self.model.currentPage.routerPath;
+            }
+        }
+        
+        return retval;
     };
     ////////////////////////////////////////////////////////////////////////////
     
@@ -243,11 +257,14 @@ function NavigatorModel(params) {
     };
     this.getPageInstance = function (key) {
         if (objects[key]) {
+            var retval = null;
             if (objects[key].isSingleton) {
-                return objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
             } else {
-                return objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (objects[key].pageClass)();
             }
+            retval.routerPath = key;
+            return retval;
         } else {
             throw Error(key + " is not in routes");
         }

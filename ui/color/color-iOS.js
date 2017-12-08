@@ -87,6 +87,8 @@ Color.createGradient = function(params) {
             x: 0,
             y: 1
         })});
+    }else{
+        throw new TypeError('direction parameter must be a UI.Color.GradientDirection');
     }
 };
 
