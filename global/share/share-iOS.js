@@ -1,3 +1,6 @@
+const Invocation = require('sf-core/util/iOS/invocation.js');
+const UIActivityViewController = SF.requireClass("UIActivityViewController");
+
 const Share = {};
 
 const UIActivityType = {
@@ -17,18 +20,33 @@ const UIActivityType = {
     print : "com.apple.UIKit.activity.Print",
     saveToCameraRoll : "com.apple.UIKit.activity.SaveToCameraRoll"
 }
-          
+
+Share.createActivity = function(activityItems){
+    var alloc = UIActivityViewController.alloc();
+
+    var argActivityItems = new Invocation.Argument({
+        type:"id",
+        value: activityItems
+    });
+    var argApplicationActivities = new Invocation.Argument({
+        type:"NSObject",
+        value: undefined
+    });
+
+    return Invocation.invokeInstanceMethod(alloc,"initWithActivityItems:applicationActivities:",[argActivityItems,argApplicationActivities],"id");
+}
+
 Object.defineProperties(Share, {
     'shareText': {
         value: function(text, page, blacklist) {
-            var activity = new __SF_UIActivityViewController([text],undefined);
+            var activity = Share.createActivity([text]);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }
     },
     'shareImage': {
         value: function(image, page, blacklist) {
-            var activity = new __SF_UIActivityViewController([image.nativeObject],undefined);
+            var activity = Share.createActivity([image.nativeObject]);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }
@@ -37,7 +55,7 @@ Object.defineProperties(Share, {
         value: function(file, page ,blacklist) {
             var actualPath = file.nativeObject.getActualPath();
             var url = __SF_NSURL.fileURLWithPath(actualPath);
-            var activity = new __SF_UIActivityViewController([url],undefined);
+            var activity = Share.createActivity([url]);
             activity.excludedActivityTypes = blacklist;
             page.nativeObject.presentViewController(activity);
         }
