@@ -259,4 +259,32 @@ System.vibrate = function() {};
  */
 System.isApplicationInstalled = function(packageName) {};
 
+/**
+ * @enum {String} Device.System.OSType
+ * @static
+ * @since 2.0.7
+ */
+System.OSType = {};
+
+/**
+ * @property {String} ANDROID
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 2.0.7
+ */
+System.OSType.ANDROID;
+
+/**
+ * @property {String} IOS
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 2.0.7
+ */
+System.OSType.IOS;
+
+
 module.exports = System;

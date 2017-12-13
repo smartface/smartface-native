@@ -6,7 +6,7 @@ const NativeBatteryManager = requireClass('android.os.BatteryManager');
 const NativeClipData       = requireClass('android.content.ClipData');
 const NativeViewConfig     = requireClass('android.view.ViewConfiguration');
 const NativeLocale         = requireClass('java.util.Locale');
-
+const OSType = require('./OSType');
 //NativeIntent.ACTION_BATTERY_CHANGED
 const ACTION_BATTERY_CHANGED = 'android.intent.action.BATTERY_CHANGED';
 
@@ -37,7 +37,7 @@ Object.defineProperties(System, {
     },
     'OS': {
         get: function() {
-            return "Android";
+            return OSType.ANDROID;
         },
         enumerable: true
     },
@@ -46,6 +46,9 @@ Object.defineProperties(System, {
             return NativeBuild.VERSION.RELEASE;
         },
         enumerable: true
+    },
+    'OSType': {
+        value: OSType
     },
     'isBatteryCharged': {
         get: function() {
