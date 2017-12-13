@@ -13,9 +13,7 @@ const WebView = extend(View)(
         }
          
         _super(this);
-        
-        self.android = {};
-        self.ios = {};
+    
         self.android.clearHistory = function(){};
         self.android.clearFormData = function(){};
         

@@ -23,10 +23,6 @@ const WebView = extend(View)(
         }
         
         _super(this);
-        
-        this.android = {};
-        this.ios = {};
-        
         var overrideMethods = {
             onPageFinished: function(view, url) {
                 _onShow && _onShow({url: url});
@@ -230,16 +226,13 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             },
-            'clearFormData': {
+            'clearAllData': {
                 value: function() {
-                    this.nativeObject.clearFormData();
-                },
-                enumerable: true
-            },
-            'clearHistory': {
-                value: function() {
-                    this.nativeObject.clearHistory();
-                },
+                    this.clearCache(true);
+                    this.clearCookie();
+                    this.android.clearHistory();
+                    this.android.clearFormData();
+                }.bind(this),
                 enumerable: true
             },
             'clearCookie': {
@@ -258,6 +251,28 @@ const WebView = extend(View)(
                 enumerable: true
             }
         });
+        
+        // android-only properties
+        Object.defineProperty(this.android, 'clearHistory', {
+            value: function() {
+                   this.nativeObject.clearHistory();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        });
+        
+        // android-only properties
+        Object.defineProperty(this.android, 'clearFormData', {
+            value: function() {
+                   this.nativeObject.clearFormData();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        });
+        
+        
+        
+        
         
         if(!this.isNotSetDefaults){
             if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
