@@ -556,7 +556,9 @@ View.prototype.android = {
         if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
             this.nativeObject.setStateListAnimator(null);
         }
-    }
+    },
+    enumerable: true,
+    configurable: true
 };
 
 View.prototype.setBackgroundImage = function() {
