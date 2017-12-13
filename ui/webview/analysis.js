@@ -250,7 +250,6 @@ WebView.prototype.clearCache = function(deleteDiskFiles) {};
  *
  * @method clearFormData
  * @android
- * @ios
  * @since 2.0.7
  */
 WebView.prototype.clearFormData = function() {};
@@ -260,7 +259,6 @@ WebView.prototype.clearFormData = function() {};
  *
  * @method clearHistory
  * @android
- * @ios
  * @since 2.0.7
  */
 WebView.prototype.clearHistory = function() {};
