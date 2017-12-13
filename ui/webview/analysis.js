@@ -275,4 +275,14 @@ WebView.prototype.clearHistory = function() {};
  */
 WebView.prototype.clearCookie = function() {};
 
+/**
+ * This method clear all data from webview.
+ *
+ * @method clearAllData
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+WebView.prototype.clearAllData = function() {};
+
 module.exports = WebView;
