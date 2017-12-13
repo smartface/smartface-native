@@ -24,6 +24,9 @@ const WebView = extend(View)(
         
         _super(this);
         
+        this.android = {};
+        this.ios = {};
+        
         var overrideMethods = {
             onPageFinished: function(view, url) {
                 _onShow && _onShow({url: url});

@@ -13,7 +13,10 @@ const WebView = extend(View)(
         }
          
         _super(this);
-    
+        
+        self.android = {};
+        self.ios = {};
+        
         self.nativeObject.setValueForKey(false,"opaque");
         self.backgroundColor = Color.WHITE;
         
