@@ -286,7 +286,6 @@ const ListView = extend(View)(
         }, null);
 
         // android-only properties
-        this.android = {};
         Object.defineProperty(this.android, 'onRowLongSelected', {
             get: function() {
                 return _onRowLongSelected;
@@ -294,7 +293,8 @@ const ListView = extend(View)(
             set: function(onRowLongSelected) {
                 _onRowLongSelected = onRowLongSelected.bind(this);
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         });
 
 
