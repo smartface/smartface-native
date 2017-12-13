@@ -16,6 +16,8 @@ const WebView = extend(View)(
         
         self.android = {};
         self.ios = {};
+        self.android.clearHistory = function(){};
+        self.android.clearFormData = function(){};
         
         self.nativeObject.setValueForKey(false,"opaque");
         self.backgroundColor = Color.WHITE;
