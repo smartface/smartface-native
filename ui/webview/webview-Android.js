@@ -5,6 +5,8 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File          = require('../../io/file');
 const Path          = require('../../io/path');
 const NativeView    = requireClass("android.view.View");
+const NativeCookieManager   = requireClass("android.webkit.CookieManager");
+const NativeBuild            = requireClass("android.os.Build");
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -218,6 +220,39 @@ const WebView = extend(View)(
                 },
                 enumerable: true, 
                 configurable: true
+            },
+            'clearCache': {
+                value: function(deleteDiskFiles) {
+                    this.nativeObject.clearCache(deleteDiskFiles);
+                },
+                enumerable: true
+            },
+            'clearFormData': {
+                value: function() {
+                    this.nativeObject.clearFormData();
+                },
+                enumerable: true
+            },
+            'clearHistory': {
+                value: function() {
+                    this.nativeObject.clearHistory();
+                },
+                enumerable: true
+            },
+            'clearCookie': {
+                value: function() {
+                    
+                    var cookieManager = NativeCookieManager.getInstance();
+    
+                    if (NativeBuild.VERSION.SDK_INT >= 23) {
+                        cookieManager.removeAllCookies(null);
+                    }
+                    else {
+                        cookieManager.removeAllCookie();
+                    }
+                    
+                },
+                enumerable: true
             }
         });
         
