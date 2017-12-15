@@ -77,11 +77,5 @@ function writeImageToFile(image) {
 };
 
 Share.ios = {};
-Share.ios.Facebook = "";
-Share.ios.Twitter = "";
-Share.ios.Flickr = "";
-Share.ios.Message = "";
-Share.ios.Mail = "";
-Share.ios.Vimeo = "";
 
 module.exports = Share;
