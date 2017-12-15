@@ -167,13 +167,12 @@ function pickFromGallery(resultCode, data) {
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
             var uri = data.getData();
-            var newGoogleAppUri = "com.google.android.apps.photos.contentprovider";
             var realPath;
             
             realPath = getRealPathFromURI(uri);
             
-            //realPath = getRealPathFromID(uri, _pickParams.type);
-            /*         if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT && (""+uri).indexOf(newGoogleAppUri) == -1) {
+            /*         
+            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT && (""+uri).indexOf(newGoogleAppUri) == -1) {
                 realPath = getRealPathFromID(uri, _pickParams.type);
             }
             else {
