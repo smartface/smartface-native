@@ -88,7 +88,8 @@ StatusBar.prototype.ios.style = StatusBarStyle.DEFAULT;
 
 /**
  * Gets/sets status bar style.
- *
+ * Android support is api level 23 and later.
+ * 
  *     @example
  *     const Page = require('sf-core/ui/page');
  *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
