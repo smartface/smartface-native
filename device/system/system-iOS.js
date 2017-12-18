@@ -1,61 +1,79 @@
-function System() {}
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
+function System() {}
 System.android = {}
-System.android.isApplicationInstalled = function(){}
+System.android.isApplicationInstalled = function() {}
 
 System.ios = {}
 
 const UIDeviceBatteryState = {
-    unknown : 0,
-    unplugged : 1,// on battery, discharging
-    charging : 2,// plugged in, less than 100%
-    full : 3// plugged in, at 100%
+  unknown: 0,
+  unplugged: 1, // on battery, discharging
+  charging: 2, // plugged in, less than 100%
+  full: 3 // plugged in, at 100%
 }
 
+Object.defineProperty(System, 'region', {
+  get: function() {
+    var argCountryCode = new Invocation.Argument({
+      type: "NSString",
+      value: "kCFLocaleCountryCodeKey"
+    });
+    return Invocation.invokeInstanceMethod(__SF_NSLocale.currentLocale(), "objectForKey:", [argCountryCode], "NSString")
+  },
+  enumerable: true
+});
+
 Object.defineProperty(System, 'language', {
-  value: __SF_NSLocale.currentLocale().identifier,  
-  writable: false,
+  get: function() {
+    var argLanguageCode = new Invocation.Argument({
+      type: "NSString",
+      value: "kCFLocaleLanguageCodeKey"
+    });
+    return Invocation.invokeInstanceMethod(__SF_NSLocale.currentLocale(), "objectForKey:", [argLanguageCode], "NSString")
+  },
   enumerable: true
 });
 
 Object.defineProperty(System, 'batteryLevel', {
   get: function() {
-      __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
-      return __SF_UIDevice.currentDevice().batteryLevel;
+    __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
+    return __SF_UIDevice.currentDevice().batteryLevel;
   },
   enumerable: true
 });
 
 Object.defineProperty(System, 'isBatteryCharged', {
   get: function() {
-      __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
-      if(__SF_UIDevice.currentDevice().batteryState === 2 || __SF_UIDevice.currentDevice().batteryState === 3){
-        return true;
-      }else if (__SF_UIDevice.currentDevice().batteryState === 1){
-        return false;
-      }
+    __SF_UIDevice.currentDevice().batteryMonitoringEnabled = true;
+    if (__SF_UIDevice.currentDevice().batteryState === 2 || __SF_UIDevice.currentDevice().batteryState === 3) {
+      return true;
+    }
+    else if (__SF_UIDevice.currentDevice().batteryState === 1) {
       return false;
+    }
+    return false;
   },
   enumerable: true
 });
 
 Object.defineProperty(System, 'OS', {
-  value: "iOS",  
+  value: "iOS",
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(System, 'OSVersion', {
-  value: __SF_UIDevice.currentDevice().systemVersion,  
+  value: __SF_UIDevice.currentDevice().systemVersion,
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(System, 'clipboard', {
   get: function() {
-      return __SF_UIPasteboard.generalPasteboard().string;
+    return __SF_UIPasteboard.generalPasteboard().string;
   },
-  set : function(value){
+  set: function(value) {
     __SF_UIPasteboard.generalPasteboard().string = value;
   },
   enumerable: true
@@ -63,44 +81,45 @@ Object.defineProperty(System, 'clipboard', {
 
 Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   get: function() {
-      return System.fingerPrintAvailable;
+    return System.fingerPrintAvailable;
   },
   enumerable: true
 });
 
 Object.defineProperty(System, 'fingerPrintAvailable', {
   get: function() {
-      var context = new __SF_LAContext();
-      return context.canEvaluatePolicy();
+    var context = new __SF_LAContext();
+    return context.canEvaluatePolicy();
   },
   enumerable: true
 });
 
 Object.defineProperty(System, 'vibrate', {
-  value:function(){
-     __SF_UIDevice.vibrate();
-  },  
+  value: function() {
+    __SF_UIDevice.vibrate();
+  },
   writable: false,
   enumerable: true
 });
 
-System.ios.validateFingerPrint = function(params){
-    System.validateFingerPrint(params);
+System.ios.validateFingerPrint = function(params) {
+  System.validateFingerPrint(params);
 };
 
 Object.defineProperty(System, 'validateFingerPrint', {
-    value: function(params){
-        var context = new __SF_LAContext();
-        context.evaluatePolicy(params.message,params.onSuccess,params.onError);
-    },  
-    enumerable: true
+  value: function(params) {
+    var context = new __SF_LAContext();
+    context.evaluatePolicy(params.message, params.onSuccess, params.onError);
+  },
+  enumerable: true
 });
 
 System.isApplicationInstalled = function(packageName) {
   var url = __SF_NSURL.URLWithString(packageName);
-  if (__SF_UIApplication.sharedApplication().canOpenURL(url)){
+  if (__SF_UIApplication.sharedApplication().canOpenURL(url)) {
     return true;
-  }else{
+  }
+  else {
     return false;
   }
 };
