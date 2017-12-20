@@ -73,7 +73,7 @@ function RouterViewModel(params) {
             pageToGo = routerBrain.getPageInstance(routes[0]);
         }
         
-        if (parameters) {
+        if (typeof (parameters) != 'undefined' && parameters != null) {
             pageToGo.__pendingParameters = parameters; 
         }
         
