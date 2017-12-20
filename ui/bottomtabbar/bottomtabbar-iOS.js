@@ -108,7 +108,7 @@ function TabBarFlowViewModel(params) {
         if (pageToGo) {
             self.tabBarBrain.setIndexWithKey(routes[0]);
             
-            if (parameters) {
+            if (typeof (parameters) != 'undefined' && parameters != null) {
                 pageToGo.__pendingParameters = parameters; 
             }
             
