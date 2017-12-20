@@ -68,6 +68,7 @@ const TextBox = extend(Label)(
         }
         _super(this);
 
+        var _touchEnabled = true;
         var _isPassword = false;
         var _keyboardType = KeyboardType.DEFAULT;
         var _actionKeyType = ActionKeyType.DEFAULT;
@@ -78,6 +79,18 @@ const TextBox = extend(Label)(
         var _hasEventsLocked = false;
         var _oldText = "";
         Object.defineProperties(this, {
+            'touchEnabled': {
+                get: function() {
+                    return _touchEnabled;
+                },
+                set: function(touchEnabled) {
+                    _touchEnabled = touchEnabled;
+                    self.nativeObject.setFocusable(touchEnabled);
+                    self.nativeObject.setFocusableInTouchMode(touchEnabled);
+                },
+                enumerable: true,
+                configurable: true
+            },
             'hint': {
                 get: function() {
                     return self.nativeObject.getHint().toString();
@@ -323,7 +336,7 @@ const TextBox = extend(Label)(
         // It will not broke events on scrollable parents. Solves: AND-2798
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {
-                if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
+                if(_touchEnabled && (self.onTouch || self.onTouchEnded)){
                     // MotionEvent.ACTION_UP
                     if (event.getAction() === 1) {
                         self.onTouchEnded && self.onTouchEnded();
