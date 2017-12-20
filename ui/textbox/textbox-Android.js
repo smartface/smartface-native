@@ -86,7 +86,7 @@ const TextBox = extend(Label)(
                 set: function(touchEnabled) {
                     _touchEnabled = touchEnabled;
                     self.nativeObject.setFocusable(touchEnabled);
-                    self.nativeObject.setFocusableInTouchMode(touchEnabled);
+                    self.nativeObject.setFocusableInTouchMode(touchEnabled); 
                 },
                 enumerable: true,
                 configurable: true
