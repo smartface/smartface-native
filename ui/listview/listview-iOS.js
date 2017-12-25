@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const UITableViewRowAnimation = {
     fade : 0,
@@ -141,7 +142,32 @@ const ListView = extend(View)(
             setAllChilds(templateItem);
             return templateItem;
         }
-
+        
+        self.listViewItemByIndex = function(index){
+            var argActivityItems = new Invocation.Argument({
+                type:"NSInteger",
+                value: index
+            });
+            var argApplicationActivities = new Invocation.Argument({
+                type:"NSInteger",
+                value: 0
+            });
+            
+            var indexPath = Invocation.invokeClassMethod("NSIndexPath","indexPathForRow:inSection:",[argActivityItems,argApplicationActivities],"NSObject");
+            
+            var argIndexPath = new Invocation.Argument({
+                type:"NSObject",
+                value: indexPath
+            });
+            
+            var cell = Invocation.invokeInstanceMethod(self.nativeObject,"cellForRowAtIndexPath:",[argIndexPath],"NSObject")
+            if (cell) {
+                return self.createTemplate({contentView : cell.contentView.subviews[0]});
+            }
+            
+            return undefined
+        }
+        
         function setAllChilds(item){
             for (var child in item.childs){
                  if (item.childs[child].id){
