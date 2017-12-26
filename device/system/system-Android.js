@@ -6,7 +6,7 @@ const NativeBatteryManager = requireClass('android.os.BatteryManager');
 const NativeClipData       = requireClass('android.content.ClipData');
 const NativeViewConfig     = requireClass('android.view.ViewConfiguration');
 const NativeLocale         = requireClass('java.util.Locale');
-const OSType = require('./OSType');
+const OSType = require('./ostype');
 //NativeIntent.ACTION_BATTERY_CHANGED
 const ACTION_BATTERY_CHANGED = 'android.intent.action.BATTERY_CHANGED';
 
