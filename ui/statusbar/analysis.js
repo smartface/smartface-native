@@ -81,8 +81,29 @@ StatusBar.prototype.android.color = Color.create("#FF757575");
  * @property {UI.StatusBarStyle} style
  * @ios
  * @since 0.1
+ * @deprecated 2.0.7 Use {@link UI.statusBar#style} instead.
  */
 StatusBar.prototype.ios = {};
 StatusBar.prototype.ios.style = StatusBarStyle.DEFAULT;
+
+/**
+ * Gets/sets status bar style.
+ * Android support is api level 23 and later.
+ * 
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+ *     var myPage = new Page({
+ *         onShow: function() {
+ *             this.statusBar.style = StatusBarStyle.DEFAULT;
+ *         }
+ *     });
+ *
+ * @property {UI.StatusBarStyle} style
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+StatusBar.prototype.style = StatusBarStyle.DEFAULT;
 
 module.exports = StatusBar;

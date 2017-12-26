@@ -110,6 +110,36 @@ const ListView = extend(View)(
         var _itemCount = 0;
         Object.defineProperties(this, {
             // properties
+            'listViewItemByIndex': {
+                value: function(_index) {
+                    
+                    var view = self.nativeInner.getLayoutManager().findViewByPosition(_index);
+                    if(view == undefined){
+                        return undefined;
+                    }
+                    
+                    
+                    var holderViewLayout;
+                    try {
+                        holderViewLayout = _onRowCreate();
+                    }
+                    catch (e) {
+                        const Application = require("../../application");
+                        Application.onUnhandledError && Application.onUnhandledError(e);
+                        holderViewLayout = new ListViewItem();
+                    }
+                    if (self.rowHeight) {
+                        holderViewLayout.height = self.rowHeight;
+                    }
+ 
+                    holderViewLayout.nativeObject = view;
+                    createFromTemplate(holderViewLayout);
+                    
+                    return holderViewLayout;
+                    
+                },
+                enumerable: true
+            },
             'rowHeight': {
                 get: function() {
                     return _rowHeight;

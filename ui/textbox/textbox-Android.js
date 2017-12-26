@@ -68,6 +68,7 @@ const TextBox = extend(Label)(
         }
         _super(this);
 
+        var _touchEnabled = true;
         var _isPassword = false;
         var _keyboardType = KeyboardType.DEFAULT;
         var _actionKeyType = ActionKeyType.DEFAULT;
@@ -78,6 +79,18 @@ const TextBox = extend(Label)(
         var _hasEventsLocked = false;
         var _oldText = "";
         Object.defineProperties(this, {
+            'touchEnabled': {
+                get: function() {
+                    return _touchEnabled;
+                },
+                set: function(touchEnabled) {
+                    _touchEnabled = touchEnabled;
+                    self.nativeObject.setFocusable(touchEnabled);
+                    self.nativeObject.setFocusableInTouchMode(touchEnabled); 
+                },
+                enumerable: true,
+                configurable: true
+            },
             'hint': {
                 get: function() {
                     return self.nativeObject.getHint().toString();
@@ -323,7 +336,7 @@ const TextBox = extend(Label)(
         // It will not broke events on scrollable parents. Solves: AND-2798
         this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
             onTouch: function(view, event) {
-                if(self.touchEnabled && (self.onTouch || self.onTouchEnded)){
+                if(_touchEnabled && (self.onTouch || self.onTouchEnded)){
                     // MotionEvent.ACTION_UP
                     if (event.getAction() === 1) {
                         self.onTouchEnded && self.onTouchEnded();
@@ -349,11 +362,15 @@ const TextBox = extend(Label)(
 function setKeyboardType(self){
     if(self.isPassword){
         var typeface = self.nativeObject.getTypeface();
+        // BUG/AND-3012
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        /*
         if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
             self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
         } else {
             self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 16); // 16 = TYPE_NUMBER_VARIATION_PASSWORD
         }
+        */
         const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
         var passwordMethod = new NativePasswordTransformationMethod();
         self.nativeObject.setTypeface(typeface);

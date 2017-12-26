@@ -2,6 +2,7 @@ const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 const Color = require('sf-core/ui/color');
 const File = require('sf-core/io/file');
+const Invocation = require('sf-core/util').Invocation;
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -13,6 +14,9 @@ const WebView = extend(View)(
          
         _super(this);
     
+        self.android.clearHistory = function(){};
+        self.android.clearFormData = function(){};
+        
         self.nativeObject.setValueForKey(false,"opaque");
         self.backgroundColor = Color.WHITE;
         
@@ -173,6 +177,88 @@ const WebView = extend(View)(
             enumerable: true
          });
          
+        self.clearCache = function(deleteDiskFiles){
+            var dataTypes = ["WKWebsiteDataTypeMemoryCache"];
+            if (deleteDiskFiles) {
+                dataTypes.push("WKWebsiteDataTypeDiskCache");
+            }
+            var nsSetDataTypes = dataTypesToNSSet(dataTypes);
+            removeDataOfTypes(nsSetDataTypes);
+        }
+        
+        self.clearCookie = function(){
+            var dataTypes = ["WKWebsiteDataTypeCookies"];
+            var nsSetDataTypes = dataTypesToNSSet(dataTypes);
+            removeDataOfTypes(nsSetDataTypes);
+        }
+        
+        self.clearAllData = function(){
+            WebView.removeAllData();
+        }
+        
+        function dataTypesToNSSet(dataTypes){
+            var alloc = Invocation.invokeClassMethod("NSSet","alloc",[],"id");
+            var argDataTypes = new Invocation.Argument({
+                type:"id",
+                value: dataTypes
+            });
+            return Invocation.invokeInstanceMethod(alloc,"initWithArray:",[argDataTypes],"id");
+        }
+        
+        function removeDataOfTypes(dataTypes){
+            var defaultDataStore;
+            var invocationDefaultDataStore = __SF_NSInvocation.createClassInvocationWithSelectorInstance("defaultDataStore","WKWebsiteDataStore");
+            if (invocationDefaultDataStore) {
+                invocationDefaultDataStore.setClassTargetFromString("WKWebsiteDataStore");
+                invocationDefaultDataStore.setSelectorWithString("defaultDataStore");
+                invocationDefaultDataStore.retainArguments();
+                
+                invocationDefaultDataStore.invoke();
+                defaultDataStore = invocationDefaultDataStore.getReturnValue();
+             }
+         
+            var nsdate;
+            var invocationNSDate = __SF_NSInvocation.createClassInvocationWithSelectorInstance("dateWithTimeIntervalSince1970:", "NSDate");
+            if (invocationNSDate) {
+                invocationNSDate.setClassTargetFromString("NSDate");
+                invocationNSDate.setSelectorWithString("dateWithTimeIntervalSince1970:");
+                invocationNSDate.retainArguments();
+                invocationNSDate.setDoubleArgumentAtIndex(0,2);
+                
+                invocationNSDate.invoke();
+                nsdate = invocationNSDate.getReturnValue();
+            }
+                
+            var invocationFetchDataRecordsOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("fetchDataRecordsOfTypes:completionHandler:",defaultDataStore);
+            if (invocationFetchDataRecordsOfTypes) {
+                var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setIDBlockArgument:atIndex:",invocationFetchDataRecordsOfTypes);
+                if (invocationCheck) {
+                    invocationFetchDataRecordsOfTypes.target = defaultDataStore;
+                    invocationFetchDataRecordsOfTypes.setSelectorWithString("fetchDataRecordsOfTypes:completionHandler:");
+                    invocationFetchDataRecordsOfTypes.retainArguments();
+                    invocationFetchDataRecordsOfTypes.setNSObjectArgumentAtIndex(dataTypes,2);
+                    invocationFetchDataRecordsOfTypes.setIDBlockArgumentAtIndex(function(result){},3);
+                    
+                    invocationFetchDataRecordsOfTypes.invoke();
+                }
+            }
+             
+            var invocationRemoveDataOfTypes = __SF_NSInvocation.createInvocationWithSelectorInstance("removeDataOfTypes:modifiedSince:completionHandler:",defaultDataStore);
+            if (invocationRemoveDataOfTypes) {
+                var invocationCheck = __SF_NSInvocation.createInvocationWithSelectorInstance("setVoidBlockArgument:atIndex:",invocationRemoveDataOfTypes);
+                if (invocationCheck) {
+                    invocationRemoveDataOfTypes.target = defaultDataStore;
+                    invocationRemoveDataOfTypes.setSelectorWithString("removeDataOfTypes:modifiedSince:completionHandler:");
+                    invocationRemoveDataOfTypes.retainArguments();
+                    invocationRemoveDataOfTypes.setNSObjectArgumentAtIndex(dataTypes,2);
+                    invocationRemoveDataOfTypes.setIDArgumentAtIndex(nsdate,3);
+                    invocationRemoveDataOfTypes.setVoidBlockArgumentAtIndex(function(){},4);
+                    
+                    invocationRemoveDataOfTypes.invoke();
+                }
+             }
+        }
+        
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

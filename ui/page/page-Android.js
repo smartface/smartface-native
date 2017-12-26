@@ -1,19 +1,22 @@
 /*globals requireClass*/
-const FlexLayout            = require("../flexlayout");
-const Color                 = require("../color");
-const TypeUtil              = require("../../util/type");
-const AndroidConfig         = require("../../util/Android/androidconfig");
-const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
-const Router                = require("../../router");
-const PorterDuff            = requireClass("android.graphics.PorterDuff");
-const NativeView         = requireClass('android.view.View');
-const NativeFragment     = requireClass("android.support.v4.app.Fragment");
+const FlexLayout = require("../flexlayout");
+const Color = require("../color");
+const TypeUtil = require("../../util/type");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const Router = require("../../router");
+const PorterDuff = requireClass("android.graphics.PorterDuff");
+const NativeView = requireClass('android.view.View');
+const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
-const NativeAndroidR     = requireClass("android.R");
-const NativeSFR          = requireClass(AndroidConfig.packageName + ".R");
-const NativeSupportR     = requireClass("android.support.v7.appcompat.R");
+const NativeAndroidR = requireClass("android.R");
+const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
+const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
+const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const MINAPILEVEL_STATUSBARCOLOR = 21;
+const MINAPILEVEL_STATUSBARICONCOLOR = 23;
+
 // WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
 // WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -72,7 +75,7 @@ function Page(params) {
             }));
         },
         onCreateOptionsMenu: function(menu) {
-            if(!optionsMenu)
+            if (!optionsMenu)
                 optionsMenu = menu;
             if (_headerBarItems.length > 0) {
                 self.headerBar.setItems(_headerBarItems);
@@ -81,7 +84,7 @@ function Page(params) {
         },
         onConfigurationChanged: function(newConfig) {
             const Screen = require("../../device/screen");
-            _onOrientationChange && _onOrientationChange({orientation: Screen.orientation});
+            _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
         },
         onOptionsItemSelected: function(menuItem) {
             var itemId = menuItem.getItemId();
@@ -126,7 +129,7 @@ function Page(params) {
             const Contacts = require("../../device/contacts");
             const Multimedia = require("../../device/multimedia");
             const Sound = require("../../device/sound");
-            
+
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode
 
@@ -221,7 +224,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     var _isBottomTabBarPage = false;
     Object.defineProperty(self, 'isBottomTabBarPage', {
         get: function() {
@@ -229,12 +232,12 @@ function Page(params) {
         },
         set: function(isBottomTabBarPage) {
             _isBottomTabBarPage = isBottomTabBarPage;
-            if(_isBottomTabBarPage)
+            if (_isBottomTabBarPage)
                 this.headerBar.visible = false;
         },
         enumerable: true
     });
-    
+
     var _firstPageInNavigator;
     Object.defineProperty(self, 'firstPageInNavigator', {
         get: function() {
@@ -245,7 +248,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     var _isShown;
     Object.defineProperty(self, 'isShown', {
         get: function() {
@@ -256,9 +259,34 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
 
     this.statusBar = {};
+
+    var statusBarStyle;
+    Object.defineProperty(self.statusBar, 'style', {
+        get: function() {
+            return statusBarStyle;
+        },
+        set: function(value) {
+            statusBarStyle = value;
+            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
+                if (statusBarStyle == StatusBarStyle.DEFAULT) {
+                    // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
+                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
+                }
+                else {
+                    //STATUS_BAR_VISIBLE = 0
+                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
+                }
+            }
+
+
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     var _visible;
     Object.defineProperty(this.statusBar, 'visible', {
         get: function() {
@@ -274,7 +302,8 @@ function Page(params) {
                 window.addFlags(FLAG_FULLSCREEN);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     this.statusBar.android = {};
     var _color;
@@ -290,7 +319,8 @@ function Page(params) {
                 window.setStatusBarColor(color.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
@@ -301,7 +331,8 @@ function Page(params) {
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarColor; // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
@@ -313,7 +344,8 @@ function Page(params) {
                 toolbar.setBackgroundColor(color.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarImage = null;
     Object.defineProperty(self.headerBar, 'backgroundImage', {
@@ -326,7 +358,8 @@ function Page(params) {
                 toolbar.setBackground(image.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
@@ -339,14 +372,16 @@ function Page(params) {
                 actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = activity.getResources();
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
@@ -360,7 +395,8 @@ function Page(params) {
                 toolbar.setTitle("");
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarTitleColor;
     Object.defineProperty(self.headerBar, 'titleColor', {
@@ -373,9 +409,10 @@ function Page(params) {
                 toolbar.setTitleTextColor(color.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _leftItemColor = Color.WHITE;
     Object.defineProperty(self.headerBar, 'leftItemColor', {
         get: function() {
@@ -384,14 +421,15 @@ function Page(params) {
         set: function(color) {
             if (color instanceof Color) {
                 var drawable = toolbar.getNavigationIcon();
-                if(drawable)
+                if (drawable)
                     drawable.setColorFilter(color.nativeObject, PorterDuff.Mode.SRC_ATOP);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
-    var _itemColor = Color.WHITE; 
+
+    var _itemColor = Color.WHITE;
     Object.defineProperty(self.headerBar, 'itemColor', {
         get: function() {
             return _itemColor;
@@ -399,13 +437,14 @@ function Page(params) {
         set: function(color) {
             if (color instanceof Color) {
                 self.headerBar.leftItemColor = color;
-                for(var i = 0; i < _headerBarItems.length; i++)
+                for (var i = 0; i < _headerBarItems.length; i++)
                     _headerBarItems[i].color = color;
                 const HeaderBarItem = require("../headerbaritem");
                 HeaderBarItem.itemColor = color;
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
@@ -415,10 +454,11 @@ function Page(params) {
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
-                    if(self.isBottomTabBarPage) {
+                    if (self.isBottomTabBarPage) {
                         // View.GONE
                         toolbar.setVisibility(8);
-                    } else {
+                    }
+                    else {
                         // View.VISIBLE
                         toolbar.setVisibility(0);
                     }
@@ -429,7 +469,8 @@ function Page(params) {
                 }
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
@@ -443,7 +484,8 @@ function Page(params) {
                 toolbar.setSubtitle("");
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarSubtitleColor;
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
@@ -455,7 +497,8 @@ function Page(params) {
                 toolbar.setSubtitleTextColor(color.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarLogo = null;
     Object.defineProperty(self.headerBar.android, 'logo', {
@@ -469,7 +512,8 @@ function Page(params) {
                 actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
@@ -482,16 +526,17 @@ function Page(params) {
                 actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     this.bottomTabBar = {};
     Object.defineProperty(this.bottomTabBar, 'height', {
         get: function() {
             var result = 0;
             var activity = AndroidConfig.activity;
-            
-            const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
+
+            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
@@ -499,14 +544,15 @@ function Page(params) {
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
     var _parentTab;
     var _selectedIndex;
     var bottomNavigationView;
     var rootLayoutID = NativeSFR.id.rootLayout;
-    
-    Object.defineProperty(this, 
+
+    Object.defineProperty(this,
         'parentTab', {
             get: function() {
                 return _parentTab;
@@ -519,7 +565,7 @@ function Page(params) {
         }
     );
     var _tag;
-    Object.defineProperty(this, 
+    Object.defineProperty(this,
         'tag', {
             get: function() {
                 return _tag;
@@ -537,11 +583,12 @@ function Page(params) {
         set: function(index) {
             _selectedIndex = index;
             var menu;
-            if(bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for(var i = 0; i < Object.keys(_parentTab.items).length; i++) {
-                    if(i === _selectedIndex) {
+            if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
+                for (var i = 0; i < Object.keys(_parentTab.items).length; i++) {
+                    if (i === _selectedIndex) {
                         menu.getItem(i).setChecked(true);
-                    }else {
+                    }
+                    else {
                         menu.getItem(i).setChecked(false);
                     }
                 }
@@ -549,53 +596,61 @@ function Page(params) {
         },
         enumerable: true
     });
+
     function createBottomNavigationView(pageLayout) {
-        if(bottomNavigationView) 
+        if (bottomNavigationView)
             return;
         const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
         const Color = require("../color");
-        
+
         bottomNavigationView = new BottomNavigationView(activity);
         var tab = _parentTab;
-        if(bottomNavigationView && bottomNavigationView.getMenu()) {
+        if (bottomNavigationView && bottomNavigationView.getMenu()) {
             setPropertiesOfTabBarItems();
             disableShiftMode();
         }
-        
+
         var params = new RelativeLayoutLayoutParams(-1, -2);
         params.addRule(12);
         bottomNavigationView.setLayoutParams(params);
         var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
         bottomLayout.addView(bottomNavigationView);
-            
-        if(tab.backgroundColor instanceof Color) 
+
+        if (tab.backgroundColor instanceof Color)
             bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
-        
+
         rootLayout.paddingBottom = self.bottomTabBar.height;
     }
-    
+
     function setPropertiesOfTabBarItems() {
         var tab = _parentTab;
         var menu = bottomNavigationView.getMenu();
         var keys = Object.keys(tab.items);
-        for(var i = 0; i < keys.length; i++) {
-            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title); 
+        for (var i = 0; i < keys.length; i++) {
+            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title);
             var icon = tab.items[keys[i]].icon;
-            if(icon)  
-                menuitem.setIcon(icon.nativeObject);
+            if (icon) {
+                const Image = require("../image");
+                if (icon instanceof Image || icon === null) {
+                    menuitem.setIcon(icon.nativeObject);
+                }
+                else { // if object
+                    menuitem.setIcon(icon);
+                }
+            }
         }
         // Don't merge upper loop. It doesn't work inside upper loop.
-        for(i = 0; i < keys.length; i++) {
-            if(i === _selectedIndex)
+        for (i = 0; i < keys.length; i++) {
+            if (i === _selectedIndex)
                 menu.getItem(i).setChecked(true);
             else
                 menu.getItem(i).setChecked(false);
         }
-        
-        if(tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
+
+        if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
             const NativeR = requireClass("android.R");
             var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
-    
+
             const ColorStateList = requireClass("android.content.res.ColorStateList");
             var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
@@ -604,36 +659,37 @@ function Page(params) {
         }
         setBottomTabBarOnClickListener();
     }
-    
+
     function setBottomTabBarOnClickListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
                 var tab = self.parentTab;
                 var fragment;
                 const Navigator = require("../navigator");
-                
+
                 var index = item.getItemId();
                 self.parentTab.currentIndex = index;
                 var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
-                if(!fragment)
+                if (!fragment)
                     fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index], true); // isSingleton is true for tab switching
-                
+
                 fragment.selectedIndex = index;
                 fragment.parentTab = self.parentTab;
-                
-                if(!fragment.tag)
+
+                if (!fragment.tag)
                     fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
-                
-                if(fragment.isBottomTabBarPage || fragment.firstPageInNavigator) {
+
+                if (fragment.isBottomTabBarPage || fragment.firstPageInNavigator) {
                     Router.pagesInstance.push(fragment, false, fragment.tag, false);
-                } else if(tabItem instanceof Navigator) {
+                }
+                else if (tabItem instanceof Navigator) {
                     tabItem.push(fragment, fragment.tag, false, true);
                 }
                 return true;
             }
         }));
     }
-    
+
     function disableShiftMode() {
         var menuView = bottomNavigationView.getChildAt(0);
         var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
@@ -683,7 +739,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
-        
+
         optionsMenu.clear();
         var itemID = 1;
         items.forEach(function(item) {
@@ -692,14 +748,14 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                if(item.image && item.image.nativeObject)
+                if (item.image && item.image.nativeObject)
                     item.nativeObject = new NativeImageButton(activity);
-                else 
+                else
                     item.nativeObject = new NativeTextButton(activity);
                 itemView = item.nativeObject;
                 item.setValues();
             }
-            if(itemView) { 
+            if (itemView) {
                 itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
                 itemView.setPadding(
@@ -716,40 +772,41 @@ function Page(params) {
     var _headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
-        if(!leftItem && !(leftItem instanceof HeaderBarItem))
+        if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
-        if(leftItem && leftItem.image) {
+        if (leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
-        } else { // null or undefined
+        }
+        else { // null or undefined
             _headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
-        } 
+        }
     };
-     
+
     // Added to solve AND-2713 bug.
     self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-        onLongClick : function(view){
+        onLongClick: function(view) {
             return true;
         }
     }));
     self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function(view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if(keyCode === 4 && (keyEvent.getAction() === 0)) {
-                   typeof self.android.onBackButtonPressed === "function" && 
-                            self.android.onBackButtonPressed();
+            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                typeof self.android.onBackButtonPressed === "function" &&
+                    self.android.onBackButtonPressed();
             }
             return true;
         }
     }));
-    
+
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-        onFocusChange: function(view, hasFocus){
-            if (hasFocus)  {
+        onFocusChange: function(view, hasFocus) {
+            if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
                 var windowToken = focusedView.getWindowToken();
-                
+
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
                 inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
             }
