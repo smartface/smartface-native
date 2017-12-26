@@ -5,6 +5,7 @@ const Label = require("../../ui/label");
 const Color = require('../../ui/color');
 const TextAlignment = require('../../ui/textalignment');
 const Font = require('../../ui/font');
+const FlexLayout = require("../../ui/flexlayout");
 
 salep.test("sf-core/ui/label Unit Test", function() {
     var testObject = null;
@@ -53,5 +54,16 @@ salep.test("sf-core/ui/label Unit Test", function() {
     this.case("[textColor] setter/getter.", function() {
         assert.doesNotThrow(function(){ testObject.textColor = Color.RED; }, Error);
         assert.equal(testObject.textColor, Color.RED, "textColor must be Color.RED");
+    });
+    this.case("[getParent] getter. ",function() {
+        var flexlayout = new FlexLayout();
+        flexlayout.id = 15;
+        flexlayout.addChild(testObject);
+        
+        assert.equal(testObject.getParent().id, 15, "Parent ID must be equal to parent id of flexlayout");
+        assert.doesNotThrow(function() {flexlayout.removeChild(testObject); }, Error);
+        assert.equal(testObject.getParent(), null, "After removeChild Parent ID must be null");
+        
+        flexlayout = null;
     });
 });

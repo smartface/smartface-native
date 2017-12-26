@@ -1,20 +1,29 @@
-var assert  = require("chai").assert;
+var assert = require("chai").assert;
 
 const Http = require('../../net/http');
 
 var httpManager;
 
-salep.test("sf-core/net/http Unit Test", function () {
+salep.test("sf-core/net/http Unit Test", function() {
+    var sessionManager = null;
     
-    this.case("Http constructor test", function() {
-        assert.doesNotThrow(function() {httpManager = new Http();}, Error);
+    this.beforeEach(function(){
+        sessionManager = new Http();
     });
     
+    this.afterEach(function(){
+       sessionManager = null; 
+    });
+
+    this.case("Http constructor test", function() {
+        assert.doesNotThrow(function() { httpManager = new Http(); }, Error);
+    });
+
     this.case("Http timeout property", function() {
         httpManager.timeout = 2000;
         assert.equal(httpManager.timeout, 2000, "timeout must be equal to 2000.");
     });
-    
+
     salep.skipNext();
     this.case("Http request function", function() {
         var params = {
@@ -27,6 +36,11 @@ salep.test("sf-core/net/http Unit Test", function () {
                 alert("onError " + JSON.stringify(e));
             }
         };
-        assert.doesNotThrow(function() {httpManager.request(params);}, Error);
+        assert.doesNotThrow(function() { httpManager.request(params); }, Error);
     });
+
+    this.case("Http timeout default", function() {
+        assert.equal(sessionManager.timeout, 60000, "default timeout must be equal to 60000");
+    });
+
 });

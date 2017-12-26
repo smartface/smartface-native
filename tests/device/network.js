@@ -32,4 +32,9 @@ salep.test("sf-core/device/network Unit Test", function() {
     this.case("[wirelessMacAddress] getter.", function() {
         assert.isString(Network.wirelessMacAddress, 'wirelessMacAddress must be string');
     });
+    this.case("[COR-1407] Network.ConnectionType.[MOBILE],[WIFI],[NONE]", function() {
+       assert.equal(Network.ConnectionType.MOBILE, 1, "Network.ConnectionType.MOBILE must be equal to 1");
+       assert.equal(Network.ConnectionType.WIFI, 2, "Network.ConnectionType.WIFI must be equal to 2");
+       assert.equal(Network.ConnectionType.NONE, 0, "Network.ConnectionType.NONE must be equal to 0");
+    });
 });
