@@ -1,6 +1,7 @@
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
-function System() {}
+const OSType = require('./ostype');
+
 System.android = {}
 System.android.isApplicationInstalled = function() {}
 
@@ -58,13 +59,19 @@ Object.defineProperty(System, 'isBatteryCharged', {
 });
 
 Object.defineProperty(System, 'OS', {
-  value: "iOS",
+  value: OSType.IOS,  
   writable: false,
   enumerable: true
 });
 
 Object.defineProperty(System, 'OSVersion', {
   value: __SF_UIDevice.currentDevice().systemVersion,
+  writable: false,
+  enumerable: true
+});
+
+Object.defineProperty(System, 'OSType', {
+  value: OSType,  
   writable: false,
   enumerable: true
 });
