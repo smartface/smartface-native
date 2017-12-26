@@ -437,6 +437,18 @@ ListView.createSwipeItem = function(title,color,padding,action){};
 ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action){};
 
 /**
+ * This method returns ListViewItem
+ *
+ * @return {UI.ListViewItem}
+ * @method listViewItemByIndex
+ * @param {Number} index
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.listViewItemByIndex = function(index){};
+
+/**
  * iOS Specific Properties.
  * @class UI.ListView.iOS
  */

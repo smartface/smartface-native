@@ -629,8 +629,19 @@ function Page(params) {
         for (var i = 0; i < keys.length; i++) {
             var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title);
             var icon = tab.items[keys[i]].icon;
+<<<<<<< HEAD
             if (icon)
                 menuitem.setIcon(icon.nativeObject);
+=======
+            if(icon){
+                const Image = require("../image");
+                if(!(icon instanceof Image) && icon !== null){
+                    menuitem.setIcon(icon);
+                }else{
+                    menuitem.setIcon(icon.nativeObject);
+                }
+            }  
+>>>>>>> develop
         }
         // Don't merge upper loop. It doesn't work inside upper loop.
         for (i = 0; i < keys.length; i++) {

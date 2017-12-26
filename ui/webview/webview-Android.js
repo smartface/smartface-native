@@ -5,6 +5,8 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File          = require('../../io/file');
 const Path          = require('../../io/path');
 const NativeView    = requireClass("android.view.View");
+const NativeCookieManager   = requireClass("android.webkit.CookieManager");
+const NativeBuild            = requireClass("android.os.Build");
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -21,7 +23,6 @@ const WebView = extend(View)(
         }
         
         _super(this);
-        
         var overrideMethods = {
             onPageFinished: function(view, url) {
                 _onShow && _onShow({url: url});
@@ -218,8 +219,60 @@ const WebView = extend(View)(
                 },
                 enumerable: true, 
                 configurable: true
+            },
+            'clearCache': {
+                value: function(deleteDiskFiles) {
+                    this.nativeObject.clearCache(deleteDiskFiles);
+                },
+                enumerable: true
+            },
+            'clearAllData': {
+                value: function() {
+                    this.clearCache(true);
+                    this.clearCookie();
+                    this.android.clearHistory();
+                    this.android.clearFormData();
+                }.bind(this),
+                enumerable: true
+            },
+            'clearCookie': {
+                value: function() {
+                    
+                    var cookieManager = NativeCookieManager.getInstance();
+    
+                    if (NativeBuild.VERSION.SDK_INT >= 23) {
+                        cookieManager.removeAllCookies(null);
+                    }
+                    else {
+                        cookieManager.removeAllCookie();
+                    }
+                    
+                },
+                enumerable: true
             }
         });
+        
+        // android-only properties
+        Object.defineProperty(this.android, 'clearHistory', {
+            value: function() {
+                   this.nativeObject.clearHistory();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        });
+        
+        // android-only properties
+        Object.defineProperty(this.android, 'clearFormData', {
+            value: function() {
+                   this.nativeObject.clearFormData();
+            }.bind(this),
+            enumerable: true,
+            configurable: true
+        });
+        
+        
+        
+        
         
         if(!this.isNotSetDefaults){
             if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
