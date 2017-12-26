@@ -108,7 +108,7 @@ function TabBarFlowViewModel(params) {
         if (pageToGo) {
             self.tabBarBrain.setIndexWithKey(routes[0]);
             
-            if (parameters) {
+            if (typeof (parameters) != 'undefined' && parameters != null) {
                 pageToGo.__pendingParameters = parameters; 
             }
             
@@ -319,9 +319,24 @@ function TabBarFlowModel(argument) {
             } else {
                 tabItem = objects[i].values.pageInstance.nativeObject.tabBarItem;
             }
-            tabItem.title = objects[i].values.title;
-            tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
             
+            // Set appearance of tabBarItem
+            tabItem.title = objects[i].values.title;
+            if (objects[i].values.icon && (objects[i].values.icon.normal || objects[i].values.icon.selected)) {
+                if (typeof objects[i].values.icon.normal === "object") {
+                    tabItem.image = objects[i].values.icon.normal.nativeObject;
+                } else {
+                    tabItem.image = undefined;
+                }
+                
+                if (typeof objects[i].values.icon.selected === "object") {
+                    tabItem.selectedImage = objects[i].values.icon.selected.nativeObject;
+                } else {
+                    tabItem.selectedImage = undefined;
+                }
+            } else {
+                tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
+            }
             
             if (objects[i].values.pageInstance.type !== undefined) {
                 switch (objects[i].values.pageInstance.type) {

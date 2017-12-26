@@ -24,9 +24,15 @@ function TabBarItem(params) {
                 const Image = require("../image");
                 if(icon instanceof Image || icon === null) {
                     _icon = icon;
-                } else {
-                    throw new Error("icon should be an instance of Image.");
+                } else if(icon instanceof Object &&
+                        icon.normal instanceof Image && 
+                        icon.selected instanceof Image ){
+                     _icon = makeSelector(icon.normal,icon.selected);
                 }
+                else {
+                     throw new Error("icon should be an instance of Image or Object.");
+                }
+              
             },
             enumerable: true
         },
@@ -84,6 +90,17 @@ function TabBarItem(params) {
         for (var param in params) {
             this[param] = params[param];
         }
+    }
+    
+    function makeSelector(normalImage, selectedImage) {
+        const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+        const NativeR = requireClass('android.R');
+        
+        var res = new NativeStateListDrawable();
+        res.addState(array([ NativeR.attr.state_checked ], "int"), selectedImage.nativeObject);
+        res.addState(array([], "int"), normalImage.nativeObject);
+        
+        return res;
     }
 }
 

@@ -29,9 +29,15 @@ const System = {};
 System.android = {};
 
 Object.defineProperties(System, {
+    'region': {
+        get: function() {
+            return NativeLocale.getDefault().getCountry();
+        },
+        enumerable: true
+    },
     'language': {
         get: function() {
-            return NativeLocale.getDefault().getDisplayLanguage();
+            return  NativeLocale.getDefault().getLanguage().toString();
         },
         enumerable: true
     },

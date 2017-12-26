@@ -77,7 +77,7 @@ function NavigatorViewModel(params) {
             pageToGo = self.model.getPageInstance(routes[0]);
         }
         
-        if (parameters) {
+        if (typeof (parameters) != 'undefined' && parameters != null) {
             pageToGo.__pendingParameters = parameters; 
         }
         
