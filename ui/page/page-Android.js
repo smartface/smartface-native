@@ -262,7 +262,7 @@ function Page(params) {
 
 
     this.statusBar = {};
-    
+
     var statusBarStyle;
     Object.defineProperty(self.statusBar, 'style', {
         get: function() {
@@ -629,19 +629,15 @@ function Page(params) {
         for (var i = 0; i < keys.length; i++) {
             var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title);
             var icon = tab.items[keys[i]].icon;
-<<<<<<< HEAD
-            if (icon)
-                menuitem.setIcon(icon.nativeObject);
-=======
-            if(icon){
+            if (icon) {
                 const Image = require("../image");
-                if(!(icon instanceof Image) && icon !== null){
-                    menuitem.setIcon(icon);
-                }else{
+                if (icon instanceof Image || icon === null) {
                     menuitem.setIcon(icon.nativeObject);
                 }
-            }  
->>>>>>> develop
+                else { // if object
+                    menuitem.setIcon(icon);
+                }
+            }
         }
         // Don't merge upper loop. It doesn't work inside upper loop.
         for (i = 0; i < keys.length; i++) {
