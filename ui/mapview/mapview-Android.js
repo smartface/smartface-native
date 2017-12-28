@@ -1,26 +1,26 @@
 /*globals requireClass*/
-const extend                        = require('js-base/core/extend');
-const View                          = require('../view');
-const Color                         = require('../color');
-const TypeUtil                      = require('../../util/type');
-const AndroidConfig                 = require('../../util/Android/androidconfig');
-const NativeDescriptorFactory       = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
-const NativeMapView                 = requireClass('com.google.android.gms.maps.MapView');
-const NativeGoogleMap               = requireClass('com.google.android.gms.maps.GoogleMap');
-const NativeOnMarkerClickListener   = NativeGoogleMap.OnMarkerClickListener;
-const NativeOnMapClickListener      = NativeGoogleMap.OnMapClickListener;
-const NativeOnMapLongClickListener  = NativeGoogleMap.OnMapLongClickListener;
+const extend = require('js-base/core/extend');
+const View = require('../view');
+const Color = require('../color');
+const TypeUtil = require('../../util/type');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
+const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
+const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
+const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
+const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
+const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 
 const hueDic = {};
-hueDic[Color.BLUE]    = NativeDescriptorFactory.HUE_BLUE;
-hueDic[Color.CYAN]    = NativeDescriptorFactory.HUE_CYAN;
-hueDic[Color.GREEN]   = NativeDescriptorFactory.HUE_GREEN;
+hueDic[Color.BLUE] = NativeDescriptorFactory.HUE_BLUE;
+hueDic[Color.CYAN] = NativeDescriptorFactory.HUE_CYAN;
+hueDic[Color.GREEN] = NativeDescriptorFactory.HUE_GREEN;
 hueDic[Color.MAGENTA] = NativeDescriptorFactory.HUE_MAGENTA;
-hueDic[Color.RED]     = NativeDescriptorFactory.HUE_RED;
-hueDic[Color.YELLOW]  = NativeDescriptorFactory.HUE_YELLOW;
+hueDic[Color.RED] = NativeDescriptorFactory.HUE_RED;
+hueDic[Color.YELLOW] = NativeDescriptorFactory.HUE_YELLOW;
 
 const MapView = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
 
         var self = this;
         if (!self.nativeObject) {
@@ -28,7 +28,7 @@ const MapView = extend(View)(
             var activityIntent = AndroidConfig.activity.getIntent();
             var savedBundles = activityIntent.getExtras();
             self.nativeObject.onCreate(savedBundles);
-        } 
+        }
         _super(self);
 
         const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
@@ -38,13 +38,13 @@ const MapView = extend(View)(
 
                 self.nativeObject.onStart();
                 self.nativeObject.onResume();
-                
+
                 const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                 const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                 var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
                 var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                 googleMap.moveCamera(cameraUpdate);
-                
+
                 googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                     onMarkerClick: function(marker) {
                         _pins.forEach(function(pin) {
@@ -55,7 +55,7 @@ const MapView = extend(View)(
                         return false;
                     }
                 }));
-                
+
                 googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
                     onMapClick: function(location) {
                         _onPress && _onPress({
@@ -75,18 +75,18 @@ const MapView = extend(View)(
                 }));
                 self.centerLocation = _centerLocation;
                 self.compassEnabled = _compassEnabled;
-                self.rotateEnabled = _rotateEnabled; 
+                self.rotateEnabled = _rotateEnabled;
                 self.scrollEnabled = _scrollEnabled;
                 self.zoomEnabled = _zoomEnabled;
                 self.userLocationEnabled = _userLocationEnabled;
                 self.type = _type;
                 self.zoomLevel = _zoomLevel;
 
-                _pendingPins.forEach(function(element){
+                _pendingPins.forEach(function(element) {
                     self.addPin(element);
                 });
                 _pendingPins = [];
-                
+
                 _onCreate && _onCreate();
             }
         }));
@@ -97,7 +97,7 @@ const MapView = extend(View)(
         var _onLongPress;
         var _pins = [];
         var _pendingPins = [];
-        var _centerLocation = {latitude: 40.7828647, longitude: -73.9675491};
+        var _centerLocation = { latitude: 40.7828647, longitude: -73.9675491 };
         var _compassEnabled = true;
         var _rotateEnabled = true;
         var _scrollEnabled = true;
@@ -106,6 +106,19 @@ const MapView = extend(View)(
         var _type = MapView.Type.NORMAL;
         var _zoomLevel;
         Object.defineProperties(self, {
+            'getVisiblePins': {
+                value: function() {
+                    var result = [];
+                    var latLongBounds = _nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
+                    for (var i = 0; i < _pins.length; i++) {
+                        if (latLongBounds.contains(_pins[i].nativeObject.getPosition())){
+                            result.push(_pins[i]);
+                        }
+                    }
+                    return result;
+                },
+                enumerable: true
+            },
             'centerLocation': {
                 get: function() {
                     return _centerLocation;
@@ -113,10 +126,10 @@ const MapView = extend(View)(
                 set: function(location) {
                     if (location && TypeUtil.isNumeric(location.latitude) && TypeUtil.isNumeric(location.longitude)) {
                         _centerLocation = location;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                             const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                            
+
                             var target = new NativeLatLng(location.latitude, location.longitude);
                             var cameraUpdate = NativeCameraUpdateFactory.newLatLng(target);
                             _nativeGoogleMap.moveCamera(cameraUpdate);
@@ -132,7 +145,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _compassEnabled = enabled;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.getUiSettings().setCompassEnabled(enabled);
                         }
                     }
@@ -146,7 +159,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _rotateEnabled = enabled;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.getUiSettings().setRotateGesturesEnabled(enabled);
                         }
                     }
@@ -160,7 +173,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _scrollEnabled = enabled;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.getUiSettings().setScrollGesturesEnabled(enabled);
                         }
                     }
@@ -174,7 +187,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _zoomEnabled = enabled;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
                         }
                     }
@@ -188,7 +201,7 @@ const MapView = extend(View)(
                 set: function(value) {
                     if (TypeUtil.isNumeric(value)) {
                         _zoomLevel = value;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                             var zoomCameraUpdateFactory = NativeCameraUpdateFactory.zoomTo(value + 2);
                             _nativeGoogleMap && _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
@@ -204,7 +217,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _userLocationEnabled = enabled;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.setMyLocationEnabled(enabled);
                         }
                     }
@@ -216,9 +229,9 @@ const MapView = extend(View)(
                     return _type;
                 },
                 set: function(type) {
-                    if(MapView.Type.contains(type)){
+                    if (MapView.Type.contains(type)) {
                         _type = type;
-                        if(self.nativeObject.isShown()){
+                        if (self.nativeObject.isShown()) {
                             _nativeGoogleMap.setMapType(type);
                         }
                     }
@@ -227,36 +240,37 @@ const MapView = extend(View)(
             },
             'addPin': {
                 value: function(pin) {
-                    if(pin instanceof MapView.Pin){
-                        if(self.nativeObject.isShown()){
+                    if (pin instanceof MapView.Pin) {
+                        if (self.nativeObject.isShown()) {
                             if (!pin.nativeObject) {
                                 const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
                                 var marker = new NativeMarkerOptions();
-                                pin.title    && marker.title(pin.title);
+                                pin.title && marker.title(pin.title);
                                 pin.subtitle && marker.snippet(pin.subtitle);
-                                pin.visible  && marker.visible(pin.visible);
-        
+                                pin.visible && marker.visible(pin.visible);
+
                                 if (pin.location && pin.location.latitude && pin.location.longitude) {
                                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                                     var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
                                     marker.position(position);
                                 }
-        
+
                                 if (pin.image) {
                                     var iconBitmap = pin.image.nativeObject.getBitmap();
                                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
                                     marker.icon(icon);
-                                } else if (pin.color) {
+                                }
+                                else if (pin.color) {
                                     var colorHUE = hueDic[pin.color];
                                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
                                     marker.icon(colorDrawable);
                                 }
-        
+
                                 pin.nativeObject = _nativeGoogleMap.addMarker(marker);
                                 _pins.push(pin);
                             }
                         }
-                        else{
+                        else {
                             _pendingPins.push(pin);
                         }
                     }
@@ -265,16 +279,16 @@ const MapView = extend(View)(
             },
             'removePin': {
                 value: function(pin) {
-                    if(pin instanceof MapView.Pin){
-                        if(self.nativeObject.isShown()){
-                            if(_pins.indexOf(pin) !== -1){
+                    if (pin instanceof MapView.Pin) {
+                        if (self.nativeObject.isShown()) {
+                            if (_pins.indexOf(pin) !== -1) {
                                 _pins.splice(_pins.indexOf(pin), 1);
                                 pin.nativeObject.remove();
                                 pin.nativeObject = null;
                             }
                         }
-                        else{
-                            if(_pendingPins.indexOf(pin) !== -1){
+                        else {
+                            if (_pendingPins.indexOf(pin) !== -1) {
                                 _pendingPins.splice(_pendingPins.indexOf(pin), 1);
                                 pin.nativeObject = null;
                                 pin.nativeObject = null;
@@ -312,10 +326,10 @@ const MapView = extend(View)(
                 enumerable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'MapView';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });
@@ -331,9 +345,9 @@ const MapView = extend(View)(
 
 function Pin(params) {
     var self = this;
-    
+
     self.nativeObject = null;
-    
+
     var _color;
     var _image;
     var _location;
@@ -419,7 +433,7 @@ Object.defineProperties(MapView, {
     }
 });
 
-Object.defineProperties(MapView.Type,{
+Object.defineProperties(MapView.Type, {
     'NORMAL': {
         value: NativeGoogleMap.MAP_TYPE_NORMAL,
         enumerable: true
@@ -433,8 +447,8 @@ Object.defineProperties(MapView.Type,{
         enumerable: true
     },
     'contains': {
-        value: function(key){
-            return (key === MapView.Type.NORMAL) || (key === MapView.Type.SATELLITE) || (key === MapView.Type.HYBRID); 
+        value: function(key) {
+            return (key === MapView.Type.NORMAL) || (key === MapView.Type.SATELLITE) || (key === MapView.Type.HYBRID);
         }
     }
 });
