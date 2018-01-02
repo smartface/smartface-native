@@ -108,7 +108,8 @@ const Label = extend(View)(
             set: function(value) {
                 self.nativeObject.text = value;
             },
-            enumerable: true
+            enumerable: true,
+            configurable: true
         });
 
         Object.defineProperty(self, 'textAlignment', {
