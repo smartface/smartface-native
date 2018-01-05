@@ -17,7 +17,7 @@
  *         onShow: function() {
  *             this.statusBar.visible = true;
  *             this.statusBar.android.color = Color.create("#FF757575");
- *             this.statusBar.ios.style = StatusBarStyle.DEFAULT;
+ *             this.statusBar.style = StatusBarStyle.DEFAULT;
  *          }
  *     });
  */
