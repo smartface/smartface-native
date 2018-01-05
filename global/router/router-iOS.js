@@ -328,9 +328,7 @@ function RouterModel(params) {
             }
         }
         
-        if (objects[newObject.key].pageInstance === null) {
-            self.usingOldStyle = true;
-        } else {
+        if (objects[newObject.key].pageInstance !== null) {
             self.usingOldStyle = false;
         }
     };
