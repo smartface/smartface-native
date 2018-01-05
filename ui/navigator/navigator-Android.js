@@ -163,7 +163,7 @@ function Navigator(params) {
                         Router.pagesInstance = {page: current.page, tag: current.tag};
                     
                     current.page.__pendingParameters = parameters;
-                    Router.pagesInstance.push(current.page, false, current.page.to);
+                    Router.pagesInstance.push(current.page, false, current.page.tag);
                     return true;
                 },
                 enumerable: true
