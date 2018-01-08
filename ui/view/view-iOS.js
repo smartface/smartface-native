@@ -21,6 +21,67 @@ function View(params) {
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
     
+    Object.defineProperty(self.ios, 'shadowOffset', {
+        get: function() {
+            var size = Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowOffset",[],"CGSize");
+            return {x:size.width,y:size.height};
+        },
+        set: function(shadowOffset) {
+            var argShadowOffset = new Invocation.Argument({
+                type:"CGSize",
+                value: {
+                    width : shadowOffset.x,
+                    height : shadowOffset.y
+                }
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOffset:",[argShadowOffset]);
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.ios, 'shadowRadius', {
+        get: function() {
+            return Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowRadius",[],"CGFloat");
+        },
+        set: function(shadowRadius) {
+            var argShadowRadius = new Invocation.Argument({
+                type:"CGFloat",
+                value: shadowRadius
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowRadius:",[argShadowRadius]);
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.ios, 'shadowOpacity', {
+        get: function() {
+            return Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowOpacity",[],"float");
+        },
+        set: function(shadowOpacity) {
+            var argShadowOpacity = new Invocation.Argument({
+                type:"float",
+                value: shadowOpacity
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOpacity:",[argShadowOpacity]);
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.ios, 'shadowColor', {
+        get: function() {
+            var color = Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowColor",[],"CGColor");
+            return new Color({color : color});
+        },
+        set: function(shadowColor) {
+            var argShadowColor = new Invocation.Argument({
+                type:"CGColor",
+                value: shadowColor.nativeObject
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowColor:",[argShadowColor]);
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self.ios, 'masksToBounds', {
         get: function() {
             return self.nativeObject.layer.masksToBounds;

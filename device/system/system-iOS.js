@@ -2,6 +2,8 @@ const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const OSType = require('./ostype');
 
+function System() {}
+
 System.android = {}
 System.android.isApplicationInstalled = function() {}
 

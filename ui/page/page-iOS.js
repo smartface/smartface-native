@@ -30,7 +30,11 @@ function Page(params) {
                     self.layout.nativeObject.endEditing(true);
                 },__SF_UIApplicationWillResignActiveNotification);
                 
-    self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    self.pageView.left = 0;
+    self.pageView.top = 0;
+    self.pageView.right = 0;
+    self.pageView.bottom = 0;
+    
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
