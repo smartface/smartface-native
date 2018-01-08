@@ -243,11 +243,15 @@ ListView.iOS = {};
 
 ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
 
-ListView.iOS.createSwipeItem = function(title,color,padding,action){
-    return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
+ListView.iOS.createSwipeItem = function(title,color,padding,action,isAutoHide){
+    if (isAutoHide === undefined) {
+        return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
+    }else{
+        return __SF_MGSwipeButton.createMGSwipeButtonWithTitleColorPaddingJsActionIsAutoHide(title,color.nativeObject,padding,action,isAutoHide ? true : false);
+    }
 }
 
-ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action){
+ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAutoHide){
     if(!(icon instanceof Image)){
         throw new TypeError('icon must be a UI.Image');
     }
@@ -256,7 +260,11 @@ ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action)
         title = "";
     }
     
-    return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title,icon.nativeObject,color.nativeObject,padding,action);
+    if (isAutoHide === undefined) {
+        return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title,icon.nativeObject,color.nativeObject,padding,action);
+    }else{
+        return __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(title,icon.nativeObject,color.nativeObject,padding,action,isAutoHide ? true : false);
+    }
 }       
 
 module.exports = ListView;
