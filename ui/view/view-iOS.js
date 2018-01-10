@@ -451,7 +451,7 @@ function View(params) {
             if(value > 0){
                 self.flexBasis = 1;
             }
-            else if(value === 0){ // WorkAround Bug-IOS-2406
+            else if(value === 0){ // Workaround Bug iOS / IOS-2406
                 self.flexBasis = NaN;
                 if(self.nativeObject.superview && self.nativeObject.superview.yoga.isEnabled){
                     if (self.nativeObject.superview.yoga.flexDirection === 0 ||  self.nativeObject.superview.yoga.flexDirection === 1){
