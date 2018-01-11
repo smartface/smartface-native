@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
 const Location = require('sf-core/device/location');
+const Invocation    = require('sf-core/util').Invocation;
 
 const MapView = extend(View)(
     function (_super, params) {
@@ -227,6 +228,26 @@ const MapView = extend(View)(
             // use the zoom level to compute the region
             var span = coordinateSpanWithCenterCoordinate(centerLocation,zoomLevel);
             self.nativeObject.centerLocation = {latitudeDelta : span.latitudeDelta,longitudeDelta : span.longitudeDelta,latitude : centerLocation.latitude, longitude : centerLocation.longitude,animated : animated};
+        }
+        
+        self.getVisiblePins = function(){
+            var annotationVisibleRect = Invocation.invokeInstanceMethod(self.nativeObject,"visibleMapRect",[],"CGRect");
+            
+            var argAnnotationVisibleRect = new Invocation.Argument({
+                type:"CGRect",
+                value: annotationVisibleRect
+            });
+            
+            var annotationSet = Invocation.invokeInstanceMethod(self.nativeObject,"annotationsInMapRect:",[argAnnotationVisibleRect],"id");
+            
+            var annotationArray = Invocation.invokeInstanceMethod(annotationSet,"allObjects",[],"id");
+            var pinArray = [];
+            for (var i in annotationArray) {
+                var pin = new Pin();
+                pin.nativeObject = annotationArray[i];
+                pinArray.push(pin);
+            }
+            return pinArray;
         }
         
         if (params) {

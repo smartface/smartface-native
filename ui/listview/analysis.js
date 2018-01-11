@@ -402,6 +402,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * @param {UI.Color} color
  * @param {Number} padding
  * @param {Function} action Callback for button click action
+ * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
  * 
  * @method createSwipeItem
  * @static
@@ -410,7 +411,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * 
  
  */
-ListView.createSwipeItem = function(title,color,padding,action){};
+ListView.createSwipeItem = function(title,color,padding,action,isAutoHide){};
 
 /**
  * 
@@ -426,6 +427,7 @@ ListView.createSwipeItem = function(title,color,padding,action){};
  * @param {UI.Color} color
  * @param {Number} padding
  * @param {Function} action Callback for button click action
+ * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
  * 
  * @method createSwipeItemWithIcon
  * @static
@@ -434,7 +436,19 @@ ListView.createSwipeItem = function(title,color,padding,action){};
  * 
  
  */
-ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action){};
+ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAutoHide){};
+
+/**
+ * This method returns ListViewItem
+ *
+ * @return {UI.ListViewItem}
+ * @method listViewItemByIndex
+ * @param {Number} index
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.listViewItemByIndex = function(index){};
 
 /**
  * iOS Specific Properties.

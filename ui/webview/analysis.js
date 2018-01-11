@@ -234,4 +234,53 @@ WebView.prototype.onError = function(event) {};
  */
 WebView.prototype.onShow = function(event) {};
 
+/**
+ * Clears the resource cache.
+ *
+ * @method clearCache
+ * @param {Boolean} deleteDiskFiles
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+WebView.prototype.clearCache = function(deleteDiskFiles) {};
+
+/**
+ * Removes the autocomplete popup from the currently focused form field, if present.
+ *
+ * @method clearFormData
+ * @android
+ * @since 2.0.7
+ */
+WebView.prototype.clearFormData = function() {};
+
+/**
+ * Tells this WebView to clear its internal back/forward list.
+ *
+ * @method clearHistory
+ * @android
+ * @since 2.0.7
+ */
+WebView.prototype.clearHistory = function() {};
+
+/**
+ * Tells this WebView to clear its Cookie.
+ *
+ * @method clearCookie
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+WebView.prototype.clearCookie = function() {};
+
+/**
+ * This method clear all data from webview.
+ *
+ * @method clearAllData
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+WebView.prototype.clearAllData = function() {};
+
 module.exports = WebView;

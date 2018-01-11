@@ -1,13 +1,13 @@
 function TabBarItem(params) {
     var _title, _icon, _page, _route, _firstPageIsSet;
-    
+
     Object.defineProperties(this, {
         'title': {
             get: function() {
                 return _title;
             },
-            set: function(title){
-                if(typeof(title) === "string") {
+            set: function(title) {
+                if (typeof(title) === "string") {
                     _title = title;
                 }
                 else {
@@ -22,11 +22,30 @@ function TabBarItem(params) {
             },
             set: function(icon) {
                 const Image = require("../image");
-                if(icon instanceof Image || icon === null) {
-                    _icon = icon;
-                } else {
-                    throw new Error("icon should be an instance of Image.");
+                const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
+
+                var EmptyImage = {
+                    nativeObject: NativeDrawable.createFromPath(null)
                 }
+
+                if (icon instanceof Image || icon === null) {
+                    _icon = icon;
+                }
+                else if (icon instanceof Object) {
+                    if (icon.normal instanceof Image && icon.selected instanceof Image) {
+                        _icon = makeSelector(icon.normal, icon.selected);
+                    }
+                    else if (icon.normal instanceof Image) {
+                        _icon = makeSelector(icon.normal, EmptyImage);
+                    }
+                    else if (icon.selected instanceof Image) {
+                        _icon = makeSelector(EmptyImage, icon.selected);
+                    }
+                }
+                else {
+                    throw new Error("icon should be an instance of Image or Object.");
+                }
+
             },
             enumerable: true
         },
@@ -44,9 +63,9 @@ function TabBarItem(params) {
                 return _page;
             },
             set: function(page) {
-                if(typeof(page) === 'function')
+                if (typeof(page) === 'function')
                     _page = page;
-                else 
+                else
                     throw new Error("page should be a function.");
             },
             enumerable: true
@@ -57,33 +76,45 @@ function TabBarItem(params) {
             },
             set: function(route) {
                 const Navigator = require("../navigator");
-                if(route instanceof Navigator) {
+                if (route instanceof Navigator) {
                     _page = route.items[route.index];
                     _route = route;
                 }
-                else if(typeof(route) === 'function') {
+                else if (typeof(route) === 'function') {
                     _page = route;
                     _route = route;
-                } else {
+                }
+                else {
                     throw new Error("page should be an instance of Page or Navigator.");
                 }
             },
             enumerable: true
         },
         'toString': {
-            value: function(){
+            value: function() {
                 return 'TabBarItem';
             },
-            enumerable: true, 
+            enumerable: true,
             configurable: true
         }
     });
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
+    }
+
+    function makeSelector(normalImage, selectedImage) {
+        const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+        const NativeR = requireClass('android.R');
+
+        var res = new NativeStateListDrawable();
+        res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
+        res.addState(array([], "int"), normalImage.nativeObject);
+
+        return res;
     }
 }
 

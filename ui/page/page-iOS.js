@@ -30,7 +30,11 @@ function Page(params) {
                     self.layout.nativeObject.endEditing(true);
                 },__SF_UIApplicationWillResignActiveNotification);
                 
-    self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    self.pageView.left = 0;
+    self.pageView.top = 0;
+    self.pageView.right = 0;
+    self.pageView.bottom = 0;
+    
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
@@ -216,7 +220,25 @@ function Page(params) {
     });
 
     this.statusBar.ios = {};
+    // Deprecated self.statusBar.ios.style use : self.statusBar.style 
     Object.defineProperty(self.statusBar.ios, 'style', {
+        get: function() {
+            return self.nativeObject.statusBarStyle;
+        },
+        set: function(value) {
+            self.nativeObject.statusBarStyle = value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+            var parentViewController = getParentViewController(self.nativeObject);
+            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
+                parentViewController.statusBarStyle = self.nativeObject.statusBarStyle;
+                parentViewController.setNeedsStatusBarAppearanceUpdate();
+            }
+            
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return self.nativeObject.statusBarStyle;
         },

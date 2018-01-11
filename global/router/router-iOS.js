@@ -73,7 +73,7 @@ function RouterViewModel(params) {
             pageToGo = routerBrain.getPageInstance(routes[0]);
         }
         
-        if (parameters) {
+        if (typeof (parameters) != 'undefined' && parameters != null) {
             pageToGo.__pendingParameters = parameters; 
         }
         
@@ -328,9 +328,7 @@ function RouterModel(params) {
             }
         }
         
-        if (objects[newObject.key].pageInstance === null) {
-            self.usingOldStyle = true;
-        } else {
+        if (objects[newObject.key].pageInstance !== null) {
             self.usingOldStyle = false;
         }
     };
