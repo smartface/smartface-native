@@ -127,6 +127,17 @@ MapView.prototype.zoomLevel = 15;
 MapView.prototype.centerLocation;
 
 /**
+ * Get visible pins on MapView.
+ *
+ * @return {UI.MapView.Pin[]} Visible pin array.
+ * @android
+ * @ios
+ * @method getVisiblePins
+ * @since 0.1
+ */
+MapView.prototype.getVisiblePins = function(){};
+
+/**
  * Adds a UI.MapView.Pin on the map.
  *
  * @param {UI.MapView.Pin} pin
