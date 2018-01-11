@@ -184,4 +184,6 @@ function addToCache(family, style, font) {
     fontCache[family][style] = font;
 }
 
+Font.ios = {};
+
 module.exports = Font;
