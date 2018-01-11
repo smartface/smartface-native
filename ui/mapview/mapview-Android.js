@@ -111,7 +111,7 @@ const MapView = extend(View)(
                     var result = [];
                     var latLongBounds = _nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
                     for (var i = 0; i < _pins.length; i++) {
-                        if (latLongBounds.contains(_pins[i].nativeObject.getPosition())){
+                        if (latLongBounds.contains(_pins[i].nativeObject.getPosition())) {
                             result.push(_pins[i]);
                         }
                     }
@@ -126,7 +126,7 @@ const MapView = extend(View)(
                 set: function(location) {
                     if (location && TypeUtil.isNumeric(location.latitude) && TypeUtil.isNumeric(location.longitude)) {
                         _centerLocation = location;
-                        if (self.nativeObject.isShown()) {
+                        if (self.nativeObject) {
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                             const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
 
@@ -145,7 +145,7 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _compassEnabled = enabled;
-                        if (self.nativeObject.isShown()) {
+                        if (self.nativeObject) {
                             _nativeGoogleMap.getUiSettings().setCompassEnabled(enabled);
                         }
                     }
@@ -159,7 +159,8 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _rotateEnabled = enabled;
-                        if (self.nativeObject.isShown()) {
+
+                        if (self.nativeObject) {
                             _nativeGoogleMap.getUiSettings().setRotateGesturesEnabled(enabled);
                         }
                     }
@@ -173,7 +174,8 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _scrollEnabled = enabled;
-                        if (self.nativeObject.isShown()) {
+
+                        if (self.nativeObject) {
                             _nativeGoogleMap.getUiSettings().setScrollGesturesEnabled(enabled);
                         }
                     }
@@ -187,7 +189,8 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _zoomEnabled = enabled;
-                        if (self.nativeObject.isShown()) {
+
+                        if (self.nativeObject) {
                             _nativeGoogleMap.getUiSettings().setZoomGesturesEnabled(enabled);
                         }
                     }
@@ -201,7 +204,8 @@ const MapView = extend(View)(
                 set: function(value) {
                     if (TypeUtil.isNumeric(value)) {
                         _zoomLevel = value;
-                        if (self.nativeObject.isShown()) {
+
+                        if (self.nativeObject) {
                             const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                             var zoomCameraUpdateFactory = NativeCameraUpdateFactory.zoomTo(value + 2);
                             _nativeGoogleMap && _nativeGoogleMap.animateCamera(zoomCameraUpdateFactory);
@@ -217,7 +221,8 @@ const MapView = extend(View)(
                 set: function(enabled) {
                     if (TypeUtil.isBoolean(enabled)) {
                         _userLocationEnabled = enabled;
-                        if (self.nativeObject.isShown()) {
+
+                        if (self.nativeObject) {
                             _nativeGoogleMap.setMyLocationEnabled(enabled);
                         }
                     }
@@ -231,7 +236,7 @@ const MapView = extend(View)(
                 set: function(type) {
                     if (MapView.Type.contains(type)) {
                         _type = type;
-                        if (self.nativeObject.isShown()) {
+                        if (self.nativeObject) {
                             _nativeGoogleMap.setMapType(type);
                         }
                     }
@@ -241,7 +246,7 @@ const MapView = extend(View)(
             'addPin': {
                 value: function(pin) {
                     if (pin instanceof MapView.Pin) {
-                        if (self.nativeObject.isShown()) {
+                        if (self.nativeObject) {
                             if (!pin.nativeObject) {
                                 const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
                                 var marker = new NativeMarkerOptions();
@@ -280,7 +285,7 @@ const MapView = extend(View)(
             'removePin': {
                 value: function(pin) {
                     if (pin instanceof MapView.Pin) {
-                        if (self.nativeObject.isShown()) {
+                        if (self.nativeObject) {
                             if (_pins.indexOf(pin) !== -1) {
                                 _pins.splice(_pins.indexOf(pin), 1);
                                 pin.nativeObject.remove();
@@ -420,7 +425,7 @@ function Pin(params) {
             this[param] = params[param];
         }
     }
-};
+}
 
 Object.defineProperties(MapView, {
     'Type': {
