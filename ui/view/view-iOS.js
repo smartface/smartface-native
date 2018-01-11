@@ -448,13 +448,25 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            if (isNaN(value)) {
-                self.flexBasis = NaN;
-            }
-            else if(value > 0){
+            if(value > 0){
                 self.flexBasis = 1;
             }
-            else{
+            else if(value === 0){ // Workaround Bug iOS / IOS-2406
+                self.flexBasis = NaN;
+                if(self.nativeObject.superview && self.nativeObject.superview.yoga.isEnabled){
+                    if (self.nativeObject.superview.yoga.flexDirection === 0 ||  self.nativeObject.superview.yoga.flexDirection === 1){
+                        var height = self.nativeObject.yoga.getYGValueForKey("height");
+                        if (isNaN(height)) {
+                            self.nativeObject.frame = {x: self.left, y: self.top, width: self.width, height: 0};
+                        }
+                    }else{
+                        var width = self.nativeObject.yoga.getYGValueForKey("width");
+                        if (isNaN(width)) {
+                            self.nativeObject.frame = {x: self.left, y: self.top, width: 0, height: self.height};
+                        }
+                    }
+                }
+            }else{
                 self.flexBasis = NaN;
             }
         },
