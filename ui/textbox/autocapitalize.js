@@ -17,16 +17,7 @@ var AutoCapitalize = {};
  * @since 2.8
  */
 AutoCapitalize.NONE = 0;
-/**
- * @property {Number} SENTENCES
- * Capitalize the first character of each sentence.
- * @ios
- * @android
- * @static
- * @readonly
- * @since 2.8
- */
-AutoCapitalize.SENTENCES = 1;
+
 /**
  * @property {Number} WORDS
  * Capitalize the first character of each word.
@@ -36,7 +27,19 @@ AutoCapitalize.SENTENCES = 1;
  * @readonly
  * @since 2.8
  */
-AutoCapitalize.WORDS = 2;
+AutoCapitalize.WORDS = 1;
+
+/**
+ * @property {Number} SENTENCES
+ * Capitalize the first character of each sentence.
+ * @ios
+ * @android
+ * @static
+ * @readonly
+ * @since 2.8
+ */
+AutoCapitalize.SENTENCES = 2;
+
 /**
  * @property {Number} CHARACTER
  * Capitalize the first character of all characters.
