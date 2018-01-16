@@ -32,6 +32,7 @@ AutoCapitalize.WORDS = 1;
 /**
  * @property {Number} SENTENCES
  * Capitalize the first character of each sentence.
+ * 
  * @ios
  * @android
  * @static
@@ -50,7 +51,6 @@ AutoCapitalize.SENTENCES = 2;
  * @since 2.8
  */
 AutoCapitalize.CHARACTERS = 3;
-
 
 Object.freeze(AutoCapitalize);
 
