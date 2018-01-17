@@ -1,5 +1,7 @@
+
 /**
- * @enum {Number} UI.Textbox.AutoCapitalize
+ * @enum {Number} UI.TextBox.AutoCapitalize
+ *
  * Automatically capitalize certain characters.
  * @static
  * @since 2.8
