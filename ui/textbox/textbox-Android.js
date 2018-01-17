@@ -7,12 +7,12 @@ const KeyboardType      = require('../keyboardtype');
 const ActionKeyType     = require('../actionkeytype');
 const TextAlignment     = require('../textalignment');
 const AndroidConfig     = require('../../util/Android/androidconfig');
+const AutoCapitalize    = require("./autocapitalize");
 
 const NativeEditText    = requireClass("android.widget.EditText"); 
 const NativeView        = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView    = requireClass("android.widget.TextView");
-const Typeface          = requireClass("android.graphics.Typeface");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -48,7 +48,12 @@ const NativeKeyboardType = [
     1 | 32,		    // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
 ];
 
-const IndexOfNumberKeyboardType = [1, 2, 3, 7, 8, 20];
+var NativeAutoCapitalize = [
+    0,
+    8192, // TYPE_TEXT_FLAG_CAP_WORDS
+    16384, // TYPE_TEXT_FLAG_CAP_SENTENCES
+    4096, // TYPE_TEXT_FLAG_CAP_CHARACTERS
+];
 
 // NativeActionKeyType corresponds android action key type.
 const NativeActionKeyType = [
@@ -78,6 +83,7 @@ const TextBox = extend(Label)(
         var _onActionButtonPress;
         var _hasEventsLocked = false;
         var _oldText = "";
+        var _autoCapitalize = 0;
         Object.defineProperties(this, {
             'touchEnabled': {
                 get: function() {
@@ -111,7 +117,7 @@ const TextBox = extend(Label)(
                 },
                 set: function(isPassword) {
                     _isPassword = isPassword;
-                    setKeyboardType(this);
+                    setKeyboardType(this, _autoCapitalize);
                 },
                 enumerable: true,
                 configurable: true
@@ -127,7 +133,7 @@ const TextBox = extend(Label)(
                     else{
                         _keyboardType = keyboardType;
                     }
-                    setKeyboardType(this);
+                    setKeyboardType(this, _autoCapitalize);
                 },
                 enumerable: true,
                 configurable: true
@@ -284,6 +290,17 @@ const TextBox = extend(Label)(
                 enumerable: true,
                 configurable: true
             },
+            'autoCapitalize': {
+                get: function() {
+                    return _autoCapitalize;
+                },
+                set: function(autoCapitalize) {
+                    _autoCapitalize = autoCapitalize;
+                    setKeyboardType(this, _autoCapitalize);
+                },
+                enumerable: true,
+                configurable: true
+            },
 
         });
         
@@ -359,11 +376,11 @@ const TextBox = extend(Label)(
     }
 );
 
-function setKeyboardType(self){
+function setKeyboardType(self, autoCapitalize){
     if(self.isPassword){
         var typeface = self.nativeObject.getTypeface();
         // BUG/AND-3012
-        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144 | NativeAutoCapitalize[autoCapitalize]); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
         /*
         if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
             self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
@@ -378,9 +395,10 @@ function setKeyboardType(self){
         release(passwordMethod);
     }
     else{
-        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType]);
+        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | NativeAutoCapitalize[autoCapitalize]);
         self.nativeObject.setTransformationMethod(null);
     }
 }
 
+TextBox.AutoCapitalize = AutoCapitalize;
 module.exports = TextBox;
