@@ -96,6 +96,9 @@ Router.prototype.go = function(to, parameters, animated) {};
  * it will navigate to last page in history. To pass to last page, first parameter
  * should be null.
  * 
+ * If this function used to going back to specific page which is not a singleton,
+ * goBack() returns new instance of this targeted page.
+ *
  * @method goBack
  * @param {String} to Optional, route path to navigate back
  * @param {Object} parameters Parameters to be passed UI.Page.onShow callback of
