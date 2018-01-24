@@ -542,6 +542,12 @@ View.prototype = {
     get android() {
         return _android;
     },
+    get zIndex() {
+        return this.nativeObject.getZ();
+    },
+    set zIndex(index) {
+        this.nativeObject.setZ(index);
+    },
     'dirty':  function(){
         this.yogaNode.dirty();
     }
