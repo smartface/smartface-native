@@ -486,7 +486,7 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
 View.prototype.android.elevation;
 
 /**
- * Gets/sets the depth location of the view relative to its elevation. If you place a view over a button, 
+ * Gets/sets the depth location of the view relative to its elevation. To put view over button, 
  * you have to change zIndex value after Android Lollipop. On android, default elevation value of a button is bigger than other view.
  * This property works after Android Lollipop. Don't forget to check api level before use this property.
  *
