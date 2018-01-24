@@ -542,12 +542,6 @@ View.prototype = {
     get android() {
         return _android;
     },
-    get zIndex() {
-        return this.nativeObject.getZ();
-    },
-    set zIndex(index) {
-        this.nativeObject.setZ(index);
-    },
     'dirty':  function(){
         this.yogaNode.dirty();
     }
@@ -562,6 +556,12 @@ View.prototype.android = {
         if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
             this.nativeObject.setStateListAnimator(null);
         }
+    },
+    get zIndex() {
+        return this.nativeObject.getZ();
+    },
+    set zIndex(index) {
+        this.nativeObject.setZ(index);
     },
     enumerable: true,
     configurable: true

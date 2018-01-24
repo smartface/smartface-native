@@ -473,7 +473,7 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
 /**
  * Gets/Sets the elevation of the view. For the views that has 
  * StateListAnimator natively like Button, will lost its own 
- * StateListAnimation when elevation value changed.
+ * StateListAnimation when elevation value changed. This property works after Android Lollipop.
  * For details : https://developer.android.com/training/material/shadows-clipping.html
  *
  * @property {Number} elevation
@@ -484,6 +484,18 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
  * @since 1.1.12
  */
 View.prototype.android.elevation;
+
+/**
+ * Gets/sets the depth location of the view relative to its elevation. If you place a view over a button, 
+ * you have to change zIndex value after Android Lollipop. On android, default elevation value of a button is bigger than other view.
+ * This property works after Android Lollipop. Don't forget to check api level before use this property.
+ *
+ * @property {Number} zIndex
+ * @android
+ * @member UI.View
+ * @since 2.0.8
+ */
+View.prototype.android.zIndex;
 
 /**
  * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
