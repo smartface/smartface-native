@@ -561,6 +561,8 @@ View.prototype.android = {
         return this.nativeObject.getZ();
     },
     set zIndex(index) {
+        if(!TypeUtil.isNumeric(index))
+            throw new Error("zIndex value must be a number.");
         this.nativeObject.setZ(index);
     },
     enumerable: true,
