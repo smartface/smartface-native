@@ -568,7 +568,7 @@ View.prototype.setBackgroundImage = function() {
     var bitmap;
     if(this.__backgroundImages instanceof Image) {
         bitmap = this.__backgroundImages.nativeObject.getBitmap();
-        release(this.backgroundDrawable);
+        // release(this.backgroundDrawable);
         this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap); 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
         this.setBackground(0);
@@ -621,7 +621,7 @@ View.prototype.setBackgroundImage = function() {
     
 View.prototype.setBackgroundColor = function() {
     if(this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
-        release(this.backgroundDrawable);
+        // release(this.backgroundDrawable);
         this.backgroundDrawable = this._backgroundColor.nativeObject; 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
