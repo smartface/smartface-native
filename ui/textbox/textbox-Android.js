@@ -90,6 +90,12 @@ const TextBox = extend(Label)(
                 },
                 set: function(value) {
                     if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
+                        if(value.start > self.text.length){
+                            value.start = 0;
+                        }
+                        if(value.end > self.text.length){
+                            value.end = 0;
+                        }
                         self.nativeObject.setSelection(value.start, value.end);
                     }
                 },
