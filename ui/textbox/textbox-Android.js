@@ -84,6 +84,18 @@ const TextBox = extend(Label)(
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
         Object.defineProperties(this, {
+            'cursorPosition': {
+                get: function() {
+                    return {start : self.nativeObject.getSelectionStart(), end: self.nativeObject.getSelectionEnd()};
+                },
+                set: function(value) {
+                    if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
+                        self.nativeObject.setSelection(value.start, value.end);
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            },
             'touchEnabled': {
                 get: function() {
                     return _touchEnabled;
