@@ -76,7 +76,7 @@ Object.defineProperties(Font, {
                 return fromCache;
             }
 
-            var fontStyle = 1;
+            var fontStyle = Font.NORMAL;
             var fontSuffix = "";
             var fontSuffix2 = "";
                 
