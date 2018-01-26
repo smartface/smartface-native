@@ -473,7 +473,7 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
 /**
  * Gets/Sets the elevation of the view. For the views that has 
  * StateListAnimator natively like Button, will lost its own 
- * StateListAnimation when elevation value changed. This property works after Android Lollipop.
+ * StateListAnimation when elevation value changed.
  * For details : https://developer.android.com/training/material/shadows-clipping.html
  *
  * @property {Number} elevation
@@ -487,8 +487,8 @@ View.prototype.android.elevation;
 
 /**
  * Gets/sets the depth location of the view relative to its elevation. To put view over button, 
- * you have to change zIndex value after Android Lollipop. On android, default elevation value of a button is bigger than other view.
- * This property works after Android Lollipop. Don't forget to check api level before use this property.
+ * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+ * This property affects after Android Lollipop. No-op before api level 21.
  *
  * @property {Number} zIndex
  * @android
