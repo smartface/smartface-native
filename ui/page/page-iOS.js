@@ -37,6 +37,47 @@ function Page(params) {
     
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
+    
+    var _safeAreaPaddingObject = {
+        "top" : 0,
+        "bottom" : 0,
+        "left" : 0,
+        "right" : 0
+    };
+    
+    function calculateSafeAreaPaddings(paddingObject) {
+        self.pageView.paddingTop = paddingObject.top;
+        self.pageView.paddingBottom = paddingObject.bottom;
+        self.pageView.paddingLeft = paddingObject.left;
+        self.pageView.paddingRight = paddingObject.right;
+    }
+    
+    var _safeAreaLayoutMode = false;
+    Object.defineProperty(self, 'safeArealayoutMode', {
+        get: function() {
+            return _safeAreaLayoutMode;
+        },
+        set: function(value) {
+            if (_safeAreaLayoutMode !== value) { // Prevents unnecessary applyLayout() calls.
+                _safeAreaLayoutMode = value;
+                if (_safeAreaLayoutMode === true) {
+                    calculateSafeAreaPaddings(_safeAreaPaddingObject);
+                } else {
+                    calculateSafeAreaPaddings({ "top" : 0, "bottom" : 0, "left" : 0, "right" : 0 });
+                }
+                self.layout.applyLayout();
+            }
+        },
+        enumerable: true
+    });
+    
+    self.nativeObject.onViewSafeAreaInsetsDidChange = function (e) {
+        _safeAreaPaddingObject = e;
+        if (_safeAreaLayoutMode) {
+            calculateSafeAreaPaddings(_safeAreaPaddingObject);
+        }
+    }
+    
     self.calculatePosition = function(){
         self.layout.applyLayout();
     }
