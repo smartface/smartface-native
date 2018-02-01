@@ -61,16 +61,17 @@ Multimedia.startCamera = function(params) {
         _action = params.action;
     }
     _captureParams = params;
+    var page = _captureParams.page;
     
     if(_action === ActionType.IMAGE_CAPTURE) {
         var takePictureIntent = new NativeIntent(NativeAction[_action]);
-        AndroidConfig.activity.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
     }
     else {
         takePictureIntent = new NativeIntent(NativeAction[_action]);
-        AndroidConfig.activity.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
 };
 
@@ -94,7 +95,7 @@ function startCameraWithExtraField() {
         if (_fileURI) {
             var output = NativeMediaStore.EXTRA_OUTPUT;
             takePictureIntent.putExtra(output, _fileURI);
-            AndroidConfig.activity.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+            _captureParams.page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
         }
     }
 }
@@ -113,7 +114,7 @@ Multimedia.pickFromGallery = function(params) {
     /** @todo
      * An error occured
      */
-    AndroidConfig.activity.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
+    params.page.nativeObject.startActivityForResult(intent, Multimedia.PICK_FROM_GALLERY);
 };
 
 Multimedia.android = {};
@@ -276,13 +277,13 @@ function getCameraData(resultCode, data) {
             }
         }
         catch (err) {
-            var success = false;
+            var failure = true;
             if (_captureParams.onFailure)
                 _captureParams.onFailure({ message: err });
         }
         
 
-        if (success && _captureParams.onSuccess) {
+        if (!failure && _captureParams.onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
                 var extras = data.getExtras();
                 var bitmap = extras.get("data");
