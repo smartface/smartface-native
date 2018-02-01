@@ -9,7 +9,11 @@ function Blob(parts, properties) {
         _type = properties.type;
         
         self.nativeObject = new NativeByteArrayOutputStream();
-        self.nativeObject.write(parts);
+        if(Array.isArray(parts)) {
+            self.nativeObject.write(array(parts, "byte"));
+        } else {
+            self.nativeObject.write(parts);
+        }
     }
 
     Object.defineProperty(this, 'type', {
