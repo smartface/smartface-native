@@ -61,13 +61,17 @@ Multimedia.startCamera = function(params) {
         _action = params.action;
     }
     _captureParams = params;
-
-    if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+    var page = _captureParams.page;
+    
+    if(_action === ActionType.IMAGE_CAPTURE) {
+        var takePictureIntent = new NativeIntent(NativeAction[_action]);
+        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+    } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
     }
     else {
-        var takePictureIntent = new NativeIntent(NativeAction[_action]);
-        params.page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+        takePictureIntent = new NativeIntent(NativeAction[_action]);
+        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
     }
 };
 
@@ -262,32 +266,35 @@ function getRealPathFromURI(uri) {
 function getCameraData(resultCode, data) {
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
-            var uri;
-            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-                uri = _fileURI;
-            }
-            else {
-                uri = data.getData();
-            }
-
-            if (_captureParams.onSuccess) {
-                if (_action === ActionType.IMAGE_CAPTURE) {
-
-                    var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
-                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                    var image = new Image({ bitmap: bitmap });
-                    _captureParams.onSuccess({ image: image });
+            if(_action !== ActionType.IMAGE_CAPTURE) {
+                var uri;
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+                    uri = _fileURI;
                 }
                 else {
-                    var realPath = getRealPathFromURI(uri);
-                    var file = new File({ path: realPath });
-                    _captureParams.onSuccess({ video: file });
+                    uri = data.getData();
                 }
             }
         }
         catch (err) {
+            var failure = true;
             if (_captureParams.onFailure)
                 _captureParams.onFailure({ message: err });
+        }
+        
+
+        if (!failure && _captureParams.onSuccess) {
+            if (_action === ActionType.IMAGE_CAPTURE) {
+                var extras = data.getExtras();
+                var bitmap = extras.get("data");
+                var image = new Image({ bitmap: bitmap });
+                _captureParams.onSuccess({ image: image });
+            }
+            else {
+                var realPath = getRealPathFromURI(uri);
+                var file = new File({ path: realPath });
+                _captureParams.onSuccess({ video: file });
+            }
         }
     }
     else {

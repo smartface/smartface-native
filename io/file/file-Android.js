@@ -25,11 +25,11 @@ function File(params) {
             // Checking assets list loaded.
             if (!nativeAssetsList) {
                 nativeAssetsList = activity.getAssets().list("");
-                if (nativeAssetsList)
+                if(nativeAssetsList)
                     nativeAssetsList = toJSArray(nativeAssetsList);
             }
 
-            nativeAssetsList.forEach(function(assetName) {
+            nativeAssetsList && nativeAssetsList.forEach(function(assetName) {
                 if (this.resolvedPath.name === assetName) {
                     this.nativeObject = this.resolvedPath.name;
                 }
@@ -234,7 +234,7 @@ File.prototype.getFiles = function() {
     if (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject && this.exists) {
         var allJSFiles = [];
         var allNativeFiles = toJSArray(this.nativeObject.listFiles());
-        allNativeFiles.forEach(function(tmpFile) {
+        allNativeFiles && allNativeFiles.forEach(function(tmpFile) {
             allJSFiles.push(new File({ path: tmpFile.getAbsolutePath() }));
         });
 
@@ -288,6 +288,8 @@ File.prototype.rename = function(newName) {
 
 function copyDirectory(sourceDirectory, destinationDirectory) {
     var sourceFiles = toJSArray(sourceDirectory.getFiles());
+    if(!sourceFiles)
+        return false;
     sourceFiles.forEach(function(tmpFile) {
         if (tmpFile.isFile) {
             var destinationFile = new File({ path: destinationDirectory.path + "/" + tmpFile.name });
