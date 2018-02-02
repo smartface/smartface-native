@@ -7,6 +7,7 @@ module.exports = {
     Share: require('./share'),
     Timer: require('./timer'),
     Data: require('./data'),
+    SecureData: require('./securedata'),
     Application: require('./application'),
     Router: require('./router'),
 };
