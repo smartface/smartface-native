@@ -110,9 +110,6 @@ const MapView = extend(View)(
         var _zoomLevel;
         var _maxZoomLevel;
         var _minZoomLevel;
-        
-//         mMap.setMinZoomPreference(6.0f);
-// mMap.setMaxZoomPreference(14.0f);
 
         Object.defineProperties(self, {
             'getVisiblePins': {

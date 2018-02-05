@@ -109,7 +109,7 @@ MapView.prototype.minZoomLevel;
 
 /**
  * Gets/sets minimum zoom level.
- * @property {Number} [maxZoomLevel = 0]
+ * @property {Number} [maxZoomLevel = 19]
  * @android
  * @ios
  * @since 2.0.8
