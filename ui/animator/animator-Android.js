@@ -84,12 +84,15 @@ function applyLayoutInners(rootLayout) {
 }
 
 function addInnerNativeViewGroups(viewGroup, viewGroups) {
-    var viewGroupClass = requireClass("android.view.ViewGroup");
+    const NativeViewGroup = requireClass("android.view.ViewGroup");
+    const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
     for (var i = 0; i < viewGroup.getChildCount(); i++) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
-        if(viewGroupClass.isAssignableFrom(innerClass)) {
-            addInnerNativeViewGroups(innerView, viewGroups);
+        
+        if(NativeViewGroup.isAssignableFrom(innerClass)) {
+            if(!NativeMapView.isAssignableFrom(innerClass))
+                addInnerNativeViewGroups(innerView, viewGroups);
             viewGroups.push(innerView);
         }
     }
