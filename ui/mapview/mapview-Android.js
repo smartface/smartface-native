@@ -82,6 +82,8 @@ const MapView = extend(View)(
                 self.userLocationEnabled = _userLocationEnabled;
                 self.type = _type;
                 self.zoomLevel = _zoomLevel;
+                self.maxZoomLevel = _maxZoomLevel;
+                self.minZoomLevel = _minZoomLevel;
 
                 _pendingPins.forEach(function(element) {
                     self.addPin(element);
@@ -106,6 +108,12 @@ const MapView = extend(View)(
         var _userLocationEnabled = false;
         var _type = MapView.Type.NORMAL;
         var _zoomLevel;
+        var _maxZoomLevel;
+        var _minZoomLevel;
+        
+//         mMap.setMinZoomPreference(6.0f);
+// mMap.setMaxZoomPreference(14.0f);
+
         Object.defineProperties(self, {
             'getVisiblePins': {
                 value: function() {
@@ -200,9 +208,39 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
+            'maxZoomLevel': {
+                get: function() {
+                    return _maxZoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _maxZoomLevel = value;
+
+                        if (_nativeGoogleMap) {
+                            _nativeGoogleMap && _nativeGoogleMap.setMaxZoomPreference(value+2);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'minZoomLevel': {
+                get: function() {
+                    return _minZoomLevel;
+                },
+                set: function(value) {
+                    if (TypeUtil.isNumeric(value)) {
+                        _minZoomLevel = value;
+
+                        if (_nativeGoogleMap) {
+                            _nativeGoogleMap && _nativeGoogleMap.setMinZoomPreference(value+2);
+                        }
+                    }
+                },
+                enumerable: true
+            },
             'zoomLevel': {
                 get: function() {
-                    return _zoomLevel;
+                    return _nativeGoogleMap ? (_nativeGoogleMap.getCameraPosition().zoom - 2) : undefined;
                 },
                 set: function(value) {
                     if (TypeUtil.isNumeric(value)) {
