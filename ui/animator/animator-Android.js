@@ -90,11 +90,10 @@ function addInnerNativeViewGroups(viewGroup, viewGroups) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
         
-        if(NativeViewGroup.isAssignableFrom(innerClass)) {
-            if(!NativeMapView.isAssignableFrom(innerClass))
-                addInnerNativeViewGroups(innerView, viewGroups);
-            viewGroups.push(innerView);
+        if(NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
+            addInnerNativeViewGroups(innerView, viewGroups);
         }
+        viewGroups.push(innerView);
     }
 }
 
