@@ -35,6 +35,15 @@ TextBox.prototype.font = null;
 TextBox.prototype.text = "";
 
 /**
+ * Gets/sets automatically capitalization of the TextBox.
+ * @property {UI.TextBox.AutoCapitalize} [autoCapitalize = UI.TextBox.AutoCapitalize.NONE]
+ * @android
+ * @ios
+ * @since 2.8
+ */
+TextBox.prototype.autoCapitalize = "";
+
+/**
  * Gets/sets the text alignment of the TextBox.
  * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
  * @android

@@ -80,10 +80,6 @@ const Switch = extend(View)(
                 },
                 enumerable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
             'toString': {
                 value: function(){
                     return 'Switch';

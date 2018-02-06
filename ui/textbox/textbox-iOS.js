@@ -38,6 +38,13 @@ const IOSReturnKeyType = {
     continue: 11 // @available(iOS 9.0, *)
 };
 
+const UITextAutocapitalizationType = {
+    None: 0,
+    Words: 1,
+    Sentences: 2,
+    AllCharactes: 3
+};
+
 const TextBox = extend(View)(
     function(_super, params) {
         var self = this;
@@ -238,7 +245,21 @@ const TextBox = extend(View)(
             },
             enumerable: true,configurable : true
         });
-
+        
+        Object.defineProperty(self, 'autoCapitalize', {
+            get: function() {
+                return Invocation.invokeInstanceMethod(self.nativeObject,"autocapitalizationType",[],"NSInteger");
+            },
+            set: function(value) {
+                var argCapitalizationType = new Invocation.Argument({
+                    type:"NSInteger",
+                    value: value
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject,"setAutocapitalizationType:",[argCapitalizationType]);
+            },
+            enumerable: true,configurable : true
+        });
+        
         this.ios = {};
         Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
             get: function() {
@@ -445,5 +466,7 @@ const TextBox = extend(View)(
 
     }
 );
+
+TextBox.AutoCapitalize = require("./autocapitalize");
 
 module.exports = TextBox;

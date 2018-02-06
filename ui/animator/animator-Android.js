@@ -84,14 +84,17 @@ function applyLayoutInners(rootLayout) {
 }
 
 function addInnerNativeViewGroups(viewGroup, viewGroups) {
-    var viewGroupClass = requireClass("android.view.ViewGroup");
+    const NativeViewGroup = requireClass("android.view.ViewGroup");
+    const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
     for (var i = 0; i < viewGroup.getChildCount(); i++) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
-        if(viewGroupClass.isAssignableFrom(innerClass)) {
+        
+        // !NativeMapView.isAssignableFrom(innerClass) added for AND-3120
+        if(NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
             addInnerNativeViewGroups(innerView, viewGroups);
-            viewGroups.push(innerView);
         }
+        viewGroups.push(innerView);
     }
 }
 

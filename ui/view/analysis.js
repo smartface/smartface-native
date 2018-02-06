@@ -486,6 +486,18 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
 View.prototype.android.elevation;
 
 /**
+ * Gets/sets the depth location of the view relative to its elevation. To put view over button, 
+ * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+ * This property affects after Android Lollipop. No-op before api level 21.
+ *
+ * @property {Number} zIndex
+ * @android
+ * @member UI.View
+ * @since 2.0.8
+ */
+View.prototype.android.zIndex;
+
+/**
  * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
  *
  * @property {Boolean} [masksToBounds = true]
