@@ -115,6 +115,28 @@ const MapView = extend(View)(
             enumerable: true
         });
         
+        var _minZoomLevel = 0;
+        Object.defineProperty(self, 'minZoomLevel', {
+            get: function() {
+                return _minZoomLevel;
+            },
+            set: function(value) {
+                _minZoomLevel = value;
+            },
+            enumerable: true
+        });
+        
+        var _maxZoomLevel = 19;
+        Object.defineProperty(self, 'maxZoomLevel', {
+            get: function() {
+                return _maxZoomLevel;
+            },
+            set: function(value) {
+                _maxZoomLevel = value;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'compassEnabled', {
             get: function() {
                 return self.nativeObject.showsCompass;
@@ -209,16 +231,42 @@ const MapView = extend(View)(
         }
         
         var _zoomLevel = 15; //Default Zoom Level
-        
         Object.defineProperty(self, 'zoomLevel', {
             get: function() {
-                return _zoomLevel;
+                var region = self.nativeObject.getRegion();
+            
+                var centerPixelX = longitudeToPixelSpaceX(region.center.longitude);
+                var topLeftPixelX = longitudeToPixelSpaceX(region.center.longitude - region.span.longitudeDelta / 2);
+                
+                var scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
+                var mapSizeInPixels = self.nativeObject.bounds;
+                var zoomScale = scaledMapWidth / mapSizeInPixels.width;
+                var zoomExponent = Math.log(zoomScale) / Math.log(2);
+                var zoomLevel = 20 - zoomExponent.toFixed(2);
+
+                return zoomLevel - 1;
             },
             set: function(value) {
-                self.setZoomLevelWithAnimated(self.centerLocation,value,true);
+                self.setZoomLevelWithAnimated(self.centerLocation,value + 1,true);
             },
             enumerable: true
         });
+        
+        self.nativeObject.regionDidChangeAnimated = function(){
+            if (self.minZoomLevel > self.maxZoomLevel) {
+                return;
+            }
+            if (self.minZoomLevel == self.maxZoomLevel) {
+                self.zoomLevel = self.minZoomLevel
+                return;
+            }
+            
+            if (self.minZoomLevel > 0 && self.zoomLevel < self.minZoomLevel) {
+                self.zoomLevel = self.minZoomLevel;
+            }else if(self.maxZoomLevel < 19 && self.zoomLevel > self.maxZoomLevel){
+                self.zoomLevel = self.maxZoomLevel
+            }
+        }
         
         self.setZoomLevelWithAnimated = function(centerLocation,zoomLevel,animated){
             // clamp large numbers to 28
