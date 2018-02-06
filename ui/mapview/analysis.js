@@ -99,7 +99,6 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.centerLocation;
 
 /**
-<<<<<<< HEAD
  * Gets/sets minimum zoom level.
  * @property {Number} [minZoomLevel = 0]
  * @android
