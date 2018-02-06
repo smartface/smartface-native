@@ -518,6 +518,13 @@ View.prototype.ios.clipsToBounds = 0;
 /**
  * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
  *
+ *     @example
+ *     view.ios.masksToBounds = false;
+ *     view.ios.shadowOffset = {x:10,y:10};
+ *     view.ios.shadowRadius = 5;
+ *     view.ios.shadowOpacity = 0.5;
+ *     view.ios.shadowColor = Color.GRAY;
+ * 
  * @property {Object} [shadowOffset = {x: 0.0,y: -3.0}]
  * @property {Number} shadowOffset.x
  * @property {Number} shadowOffset.y

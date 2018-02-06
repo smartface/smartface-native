@@ -42,7 +42,7 @@ Multimedia.createImagePickerController = function(e){
             if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image){
                 e.onSuccess({image : Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"])});
             }else if(param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video){
-                var videoURL = param.info["UIImagePickerControllerReferenceURL"];
+                var videoURL = param.info["UIImagePickerControllerMediaURL"];
                 var file = new File({path:videoURL.absoluteString});
                 e.onSuccess({video : file});
             }
