@@ -99,6 +99,24 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.centerLocation;
 
 /**
+ * Gets/sets minimum zoom level.
+ * @property {Number} [minZoomLevel = 0]
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.minZoomLevel;
+
+/**
+ * Gets/sets minimum zoom level.
+ * @property {Number} [maxZoomLevel = 19]
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.maxZoomLevel;
+
+/**
  * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
  *
  * @property {Number} [zoomLevel = 15]

@@ -63,6 +63,18 @@ TextBox.prototype.textAlignment = UI.TextAlignment.MIDLEFT;
 TextBox.prototype.textColor = UI.Color.BLACK;
 
 /**
+ * Gets/sets the cursor position of TextBox.
+ * 
+ * @property {Object} cursorPosition
+ * @property {Number} cursorPosition.start
+ * @property {Number} cursorPosition.end
+ * @android
+ * @ios
+ * @since 2.0.8
+ */
+TextBox.prototype.cursorPosition = {start: 0, end: 0};
+
+/**
  * Gets/sets hint text that will be displayed when TextBox is empty.
  *
  * @property {String} [hint = ""]
