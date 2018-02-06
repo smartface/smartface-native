@@ -103,7 +103,7 @@ MapView.prototype.centerLocation;
  * @property {Number} [minZoomLevel = 0]
  * @android
  * @ios
- * @since 2.0.8
+ * @since 2.0.9
  */
 MapView.prototype.minZoomLevel;
 
@@ -112,7 +112,7 @@ MapView.prototype.minZoomLevel;
  * @property {Number} [maxZoomLevel = 19]
  * @android
  * @ios
- * @since 2.0.8
+ * @since 2.0.9
  */
 MapView.prototype.maxZoomLevel;
 
