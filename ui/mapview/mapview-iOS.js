@@ -233,18 +233,21 @@ const MapView = extend(View)(
         var _zoomLevel = 15; //Default Zoom Level
         Object.defineProperty(self, 'zoomLevel', {
             get: function() {
-                var region = self.nativeObject.getRegion();
+                if (self.nativeObject.getRegion) {
+                    var region = self.nativeObject.getRegion();
             
-                var centerPixelX = longitudeToPixelSpaceX(region.center.longitude);
-                var topLeftPixelX = longitudeToPixelSpaceX(region.center.longitude - region.span.longitudeDelta / 2);
-                
-                var scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
-                var mapSizeInPixels = self.nativeObject.bounds;
-                var zoomScale = scaledMapWidth / mapSizeInPixels.width;
-                var zoomExponent = Math.log(zoomScale) / Math.log(2);
-                var zoomLevel = 20 - zoomExponent.toFixed(2);
-
-                return zoomLevel - 1;
+                    var centerPixelX = longitudeToPixelSpaceX(region.center.longitude);
+                    var topLeftPixelX = longitudeToPixelSpaceX(region.center.longitude - region.span.longitudeDelta / 2);
+                    
+                    var scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
+                    var mapSizeInPixels = self.nativeObject.bounds;
+                    var zoomScale = scaledMapWidth / mapSizeInPixels.width;
+                    var zoomExponent = Math.log(zoomScale) / Math.log(2);
+                    var zoomLevel = 20 - zoomExponent.toFixed(2);
+    
+                    return zoomLevel - 1;
+                }
+                return _zoomLevel;
             },
             set: function(value) {
                 self.setZoomLevelWithAnimated(self.centerLocation,value + 1,true);
