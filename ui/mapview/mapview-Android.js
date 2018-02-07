@@ -290,33 +290,19 @@ const MapView = extend(View)(
                             if (!pin.nativeObject) {
                                 const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
                                 var marker = new NativeMarkerOptions();
-                                // pin.title && marker.title(pin.title);
-                                // pin.subtitle && marker.snippet(pin.subtitle);
-                                // pin.visible && marker.visible(pin.visible);
-
+                                
+                                // pin location must set before adding to map.
                                 if (pin.location && pin.location.latitude && pin.location.longitude) {
                                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                                     var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
                                     marker.position(position);
                                 }
 
-                                // if (pin.image) {
-                                //     var iconBitmap = pin.image.nativeObject.getBitmap();
-                                //     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-                                //     marker.icon(icon);
-                                // }
-                                // else if (pin.color) {
-                                //     var colorHUE = hueDic[pin.color.nativeObject];
-                                //     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
-                                //     marker.icon(colorDrawable);
-                                // }
-
                                 pin.nativeObject = _nativeGoogleMap.addMarker(marker);
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
                                 pin.image && (pin.image = pin.image); 
                                 pin.color && (pin.color = pin.color);
-                                // pin.location && (pin.location = pin.location);
                                 pin.title = pin.title;
                                 pin.subtitle = pin.subtitle;
                                 pin.visible = pin.visible;
