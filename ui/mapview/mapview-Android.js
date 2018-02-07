@@ -448,7 +448,7 @@ function Pin(params) {
             },
             set: function(subtitle) {
                 if(!TypeUtil.isString(subtitle)) {
-                    throw new Error("Pin title must be a string.");
+                    throw new Error("subtitle must be a string.");
                 }
                 _subtitle = subtitle;
                 self.nativeObject && self.nativeObject.setSnippet(subtitle);
@@ -460,7 +460,7 @@ function Pin(params) {
             },
             set: function(title) {
                 if(!TypeUtil.isString(title)) {
-                    throw new Error("Pin title must be a string.");
+                    throw new Error("title must be a string.");
                 }
                 _title = title;
                 self.nativeObject && self.nativeObject.setTitle(title);
@@ -472,7 +472,7 @@ function Pin(params) {
             },
             set: function(visible) {
                 if(!TypeUtil.isBoolean(visible)) {
-                    throw new Error("Pin visible type must be an boolean.");
+                    throw new Error("visible type must be an boolean.");
                 }
                 _visible = visible;
                 self.nativeObject && self.nativeObject.setVisible(visible);
