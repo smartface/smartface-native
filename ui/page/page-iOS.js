@@ -312,6 +312,7 @@ function Page(params) {
     self.headerBar = {};
     
     self.headerBar.android = {};
+    self.headerBar.ios = {};
     
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
@@ -454,6 +455,23 @@ function Page(params) {
         },
         enumerable: true,configurable : true
     });
+    
+    var _largeTitleDisplayMode = 0;
+    Object.defineProperty(self.headerBar.ios, 'largeTitleDisplayMode', {
+        get: function() {
+            return _largeTitleDisplayMode;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+                const UINavigationItem = SF.requireClass("UINavigationItem");
+                if (UINavigationItem.instancesRespondToSelector("largeTitleDisplayMode")) {
+                    _largeTitleDisplayMode = value;
+                    self.nativeObject.navigationItem.largeTitleDisplayMode = _largeTitleDisplayMode;
+                }
+            }
+        },
+        enumerable: true
+    });
 
     if (params) {
         for (var param in params) {
@@ -483,6 +501,18 @@ Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
 });
 Object.defineProperty(Page.Orientation,"AUTO",{
     value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown,UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+});
+
+Page.iOS = {};
+Page.iOS.LargeTitleDisplayMode = {};
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"AUTOMATIC",{
+    value: 0
+});
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"ALWAYS",{
+    value: 1
+});
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"NEVER",{
+    value: 2
 });
 
 module.exports = Page;

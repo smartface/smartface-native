@@ -32,6 +32,21 @@ function NavigatorViewModel(params) {
     
     // Properties
     ////////////////////////////////////////////////////////////////////////////
+    var _prefersLargeTitles = false;
+    Object.defineProperty(self.ios, 'prefersLargeTitles', {
+        get: function() {
+            return _prefersLargeTitles;
+        },
+        set: function(value) {
+            if (typeof value === 'boolean') {
+                if (self.view) {
+                    var success = self.view.setPrefersLargeTitles(_prefersLargeTitles);
+                    _prefersLargeTitles = success ? value : false;
+                }
+            }
+        },
+        enumerable: true
+    });
     
     // Functions
     this.add = function (key, value, isSingleton) {
@@ -174,14 +189,27 @@ function NavigatorView(params) {
     var self = this;
     var viewModel = params.viewModel;
     
+    self.setPrefersLargeTitles = function(prefersLargeTitles) {
+        var retval = false;
+        if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
+            self.nativeObject.navigationBar.prefersLargeTitles = prefersLargeTitles;
+            retval = true;
+        } else {
+            retval = false;
+        }
+        return retval;
+    };
+    
     // It shouldnt create with rootPage
     if (typeof params.rootPage === 'object') {
         // Native object creation
         var nativeNavigationController = UINavigationController.new();
         nativeNavigationController.viewControllers = [params.rootPage];
         nativeNavigationController.navigationBar.translucent = false;
+
         // Assign as native object
         self.nativeObject = nativeNavigationController;
+        self.setPrefersLargeTitles(viewModel.ios.prefersLargeTitles); // It requires self.native object
         
         self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
             navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated){
@@ -226,6 +254,7 @@ function NavigatorView(params) {
         
         return isShowed;
     };
+    
     ////////////////////////////////////////////////////////////////////////////
 };
 
