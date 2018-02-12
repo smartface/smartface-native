@@ -39,9 +39,9 @@ function NavigatorViewModel(params) {
         },
         set: function(value) {
             if (typeof value === 'boolean') {
+                _prefersLargeTitles = value;
                 if (self.view) {
-                    var success = self.view.setPrefersLargeTitles(_prefersLargeTitles);
-                    _prefersLargeTitles = success ? value : false;
+                    self.view.setPrefersLargeTitles(_prefersLargeTitles);
                 }
             }
         },
@@ -190,14 +190,9 @@ function NavigatorView(params) {
     var viewModel = params.viewModel;
     
     self.setPrefersLargeTitles = function(prefersLargeTitles) {
-        var retval = false;
         if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
             self.nativeObject.navigationBar.prefersLargeTitles = prefersLargeTitles;
-            retval = true;
-        } else {
-            retval = false;
         }
-        return retval;
     };
     
     // It shouldnt create with rootPage
