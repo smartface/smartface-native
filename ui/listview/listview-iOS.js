@@ -62,14 +62,18 @@ const ListView = extend(View)(
           enumerable: true
         });
         
-        self.ios.onRowSwiped = function(swipeDirection,expansionSettings){};
+        self.ios.onRowSwiped = function(swipeDirection,expansionSettings,index){};
         
         self.ios.swipeItem = function(title,color,padding,action){
             return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){
-            return self.ios.onRowSwiped(e.direction,e.expansionSettings);
+            var index;
+            if (e.index != -1) {
+                index = e.index
+            }
+            return self.ios.onRowSwiped(e.direction,e.expansionSettings,index);
         }
 
         self.stopRefresh = function(){
