@@ -199,33 +199,6 @@ function RouterViewModel(params) {
     }
 };
 
-function statusBarFrames(self){
-    var view = self.nativeObject.view;
-    var statusBarFrame = __SF_UIApplication.sharedApplication().statusBarFrame;
-    var viewWindow = Invocation.invokeInstanceMethod(view,"window",[],"NSObject");
-    var argRect = new Invocation.Argument({
-        type:"CGRect",
-        value: statusBarFrame
-    });
-    var argWindow= new Invocation.Argument({
-        type:"NSObject",
-        value: undefined
-    });
-    var statusBarWindowRect = Invocation.invokeInstanceMethod(viewWindow,"convertRect:fromWindow:",[argRect,argWindow],"CGRect");
-    
-    var argRect1 = new Invocation.Argument({
-        type:"CGRect",
-        value: statusBarWindowRect
-    });
-    var argWindow1 = new Invocation.Argument({
-        type:"NSObject",
-        value: undefined
-    });
-    var statusBarViewRect = Invocation.invokeInstanceMethod(view,"convertRect:fromView:",[argRect1,argWindow1],"CGRect");
-    
-    return {frame : statusBarFrame, windowRect : statusBarWindowRect, viewRect : statusBarViewRect};
-}
-
 function RouterView(params) {
     var self = this;
     self.viewModel = params.viewModel;
