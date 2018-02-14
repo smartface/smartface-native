@@ -1,4 +1,5 @@
 const Pages = require('sf-core/ui/pages');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 function RouterViewModel(params) {
     var self = this;
@@ -198,6 +199,33 @@ function RouterViewModel(params) {
     }
 };
 
+function statusBarFrames(self){
+    var view = self.nativeObject.view;
+    var statusBarFrame = __SF_UIApplication.sharedApplication().statusBarFrame;
+    var viewWindow = Invocation.invokeInstanceMethod(view,"window",[],"NSObject");
+    var argRect = new Invocation.Argument({
+        type:"CGRect",
+        value: statusBarFrame
+    });
+    var argWindow= new Invocation.Argument({
+        type:"NSObject",
+        value: undefined
+    });
+    var statusBarWindowRect = Invocation.invokeInstanceMethod(viewWindow,"convertRect:fromWindow:",[argRect,argWindow],"CGRect");
+    
+    var argRect1 = new Invocation.Argument({
+        type:"CGRect",
+        value: statusBarWindowRect
+    });
+    var argWindow1 = new Invocation.Argument({
+        type:"NSObject",
+        value: undefined
+    });
+    var statusBarViewRect = Invocation.invokeInstanceMethod(view,"convertRect:fromView:",[argRect1,argWindow1],"CGRect");
+    
+    return {frame : statusBarFrame, windowRect : statusBarWindowRect, viewRect : statusBarViewRect};
+}
+
 function RouterView(params) {
     var self = this;
     self.viewModel = params.viewModel;
@@ -206,7 +234,17 @@ function RouterView(params) {
     var rootPage = new Page({orientation : Page.Orientation.AUTO});
     
     self.nativeObject = rootPage.nativeObject;
-
+    
+    self.nativeObject.view.addFrameObserver();
+    self.nativeObject.view.frameObserveHandler = function(e){
+        for (var child in self.nativeObject.childViewControllers){
+            self.nativeObject.childViewControllers[child].view.frame = {x:0,y:0,width:e.frame.width,height:e.frame.height};
+            if (self.nativeObject.childViewControllers[child].view.yoga.isEnabled) {
+                self.nativeObject.childViewControllers[child].view.yoga.applyLayoutPreservingOrigin(true);
+            }
+        }
+    }
+                
     this.show = function(info){
         var currentPage = info.currentPage;
         var viewController = info.nativeObject;
@@ -260,9 +298,7 @@ function RouterView(params) {
                 self.nativeObject.addChildViewController(viewController);
                 
                 if (viewController.view) {
-                    viewController.view.yoga.position = 1;
                     self.nativeObject.view.addSubview(viewController.view);
-                    self.nativeObject.view.yoga.applyLayoutPreservingOrigin(false);
                 }
                 
                 viewController.didMoveToParentViewController(self.nativeObject);   
