@@ -50,6 +50,7 @@ function Page(params) {
         self.pageView.paddingBottom = paddingObject.bottom;
         self.pageView.paddingLeft = paddingObject.left;
         self.pageView.paddingRight = paddingObject.right;
+        self.calculatePosition();
     }
     
     var _safeAreaLayoutMode = false;
