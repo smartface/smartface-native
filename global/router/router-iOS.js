@@ -208,6 +208,7 @@ function RouterView(params) {
     
     self.nativeObject = rootPage.nativeObject;
     
+    self.nativeObject.view.setValueForKey("RouterView","restorationIdentifier"); //for KeyboardAnimationDelegate 82:73
     self.nativeObject.view.addFrameObserver();
     self.nativeObject.view.frameObserveHandler = function(e){
         for (var child in self.nativeObject.childViewControllers){
