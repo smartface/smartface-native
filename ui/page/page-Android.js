@@ -153,6 +153,7 @@ function Page(params) {
     });
     self.headerBar = {};
     self.headerBar.android = {};
+    self.headerBar.ios = {};
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
         get: function() {
@@ -333,6 +334,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
     var _headerBarColor; // SmartfaceBlue
     Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
@@ -867,4 +869,8 @@ Object.defineProperty(Page.Orientation, "AUTO", {
     value: 15,
     enumerable: true
 });
+
+Page.iOS = {};
+Page.iOS.LargeTitleDisplayMode = {};
+
 module.exports = Page;
