@@ -1,4 +1,5 @@
 const Pages = require('sf-core/ui/pages');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 function RouterViewModel(params) {
     var self = this;
@@ -206,7 +207,18 @@ function RouterView(params) {
     var rootPage = new Page({orientation : Page.Orientation.AUTO});
     
     self.nativeObject = rootPage.nativeObject;
-
+    
+    self.nativeObject.view.setValueForKey("RouterView","restorationIdentifier"); //for KeyboardAnimationDelegate 82:73
+    self.nativeObject.view.addFrameObserver();
+    self.nativeObject.view.frameObserveHandler = function(e){
+        for (var child in self.nativeObject.childViewControllers){
+            self.nativeObject.childViewControllers[child].view.frame = {x:0,y:0,width:e.frame.width,height:e.frame.height};
+            if (self.nativeObject.childViewControllers[child].view.yoga.isEnabled) {
+                self.nativeObject.childViewControllers[child].view.yoga.applyLayoutPreservingOrigin(true);
+            }
+        }
+    }
+                
     this.show = function(info){
         var currentPage = info.currentPage;
         var viewController = info.nativeObject;
@@ -260,9 +272,7 @@ function RouterView(params) {
                 self.nativeObject.addChildViewController(viewController);
                 
                 if (viewController.view) {
-                    viewController.view.yoga.position = 1;
                     self.nativeObject.view.addSubview(viewController.view);
-                    self.nativeObject.view.yoga.applyLayoutPreservingOrigin(false);
                 }
                 
                 viewController.didMoveToParentViewController(self.nativeObject);   

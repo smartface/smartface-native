@@ -29,11 +29,6 @@ function Page(params) {
     self.pageView.nativeObject.addObserver(function(){
                     self.layout.nativeObject.endEditing(true);
                 },__SF_UIApplicationWillResignActiveNotification);
-                
-    self.pageView.left = 0;
-    self.pageView.top = 0;
-    self.pageView.right = 0;
-    self.pageView.bottom = 0;
     
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
