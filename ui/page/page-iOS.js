@@ -49,7 +49,7 @@ function Page(params) {
     }
     
     var _safeAreaLayoutMode = false;
-    Object.defineProperty(self, 'safeArealayoutMode', {
+    Object.defineProperty(self, 'safeAreaLayoutMode', {
         get: function() {
             return _safeAreaLayoutMode;
         },
