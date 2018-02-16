@@ -79,7 +79,8 @@ function KeyboardAnimationDelegate (params) {
             }
             
             if (view.superview.superview){
-                if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView"){
+                var isRootView = (view.superview.superview.valueForKey("restorationIdentifier") == "RouterView") ? true : false;
+                if (view.superview.superview.constructor.name !== "UIViewControllerWrapperView" && !isRootView){
                     return getViewTop(view.superview);
                 }else{
                     self.parentView = view.superview;
