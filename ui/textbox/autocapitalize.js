@@ -44,7 +44,7 @@ AutoCapitalize.WORDS = 1;
 AutoCapitalize.SENTENCES = 2;
 
 /**
- * @property {Number} CHARACTER
+ * @property {Number} CHARACTERS
  * Capitalize the first character of all characters.
  * @ios
  * @android
