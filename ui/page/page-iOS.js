@@ -72,6 +72,10 @@ function Page(params) {
         if (_safeAreaLayoutMode) {
             calculateSafeAreaPaddings(_safeAreaPaddingObject);
         }
+
+        if (typeof self.onSafeAreaPaddingChange === "function") {
+            self.onSafeAreaPaddingChange(_safeAreaPaddingObject);
+        }
     }
     
     self.calculatePosition = function(){
