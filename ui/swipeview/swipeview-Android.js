@@ -94,6 +94,16 @@ const SwipeView = extend(View)(
                     }
                 }
             },
+            "onPageScrolled" : {
+                get: function() {
+                    return _callbackOnPageScrolled;
+                },
+                set: function(callback) {
+                    if (typeof callback === "function") {
+                        _callbackOnPageScrolled = callback;
+                    }
+                }
+            },
             "onStateChanged" : {
                 get: function() {
                     return _callbackOnPageStateChanged;
