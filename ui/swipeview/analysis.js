@@ -58,7 +58,7 @@ function SwipeView() {
      *
      * @event onPageScrolled
      * @param index  Index of the first page from the left that is currently visible.
-     * @param offset Indicating the offset from position. Value from range [0, width of swipeview].
+     * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
      * @android
      * @ios
      * @since 2.0.10
