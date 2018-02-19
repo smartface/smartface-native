@@ -472,6 +472,29 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    Object.defineProperty(self.headerBar.ios, 'backBarButtonItem', {
+        get: function() {
+            var retval = undefined;
+            
+            var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
+            
+            if (nativeObject) {
+                var backBarButtonItem = new HeaderBarItem();
+                backBarButtonItem.nativeObject = nativeObject;
+                backBarButtonItem.nativeObject.target = nativeObject;
+                retval = backBarButtonItem;
+            }
+            
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                self.nativeObject.navigationItem.backBarButtonItem = value.nativeObject;
+            }
+        },
+        enumerable: true
+    });
 
     if (params) {
         for (var param in params) {
