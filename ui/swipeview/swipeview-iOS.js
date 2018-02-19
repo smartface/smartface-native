@@ -3,6 +3,7 @@ const Exception = require("sf-core/util").Exception;
 const extend = require('js-base/core/extend');
 const Page = require("sf-core/ui/page");
 const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const UIPageViewControllerTransitionStyle = {
     PageCurl: 0,
@@ -54,6 +55,23 @@ const SwipeView = extend(View)(
             },
             enumerable: true
         });
+        
+        self.didScrollHandler = function(e){
+            var point = Invocation.invokeInstanceMethod(this.pageController.scrollView,"contentOffset",[],"CGPoint");
+            var x = point.x - self.nativeObject.frame.width;
+            var index;
+            if (x >= 0) {
+                index = transactionIndex;
+            }else{
+                index = transactionIndex - 1;
+                x += self.nativeObject.frame.width;
+            }
+        	if (typeof self.onPageScrolled === 'function') {
+        	    self.onPageScrolled(index,x);
+        	}
+        }
+        
+        self.pageController.didScroll = self.didScrollHandler.bind(this);
         
         self.pageController.onViewWillLayoutSubviews = function(){
             self.pageController.setViewFrame({x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height});
@@ -115,9 +133,11 @@ const SwipeView = extend(View)(
         });
         
         self.pageControllerDatasource = new __SF_UIPageViewControllerDatasource();
-                
+        
+        var transactionIndex = 0;       
         self.pageControllerDatasource.viewControllerBeforeViewController = function(e){
             var index = _pageNativeObjectArray.indexOf(e.viewController);
+            transactionIndex = index;
             if (index > 0){
                 index--;
                 return _pageNativeObjectArray[index];
@@ -127,6 +147,7 @@ const SwipeView = extend(View)(
         
         self.pageControllerDatasource.viewControllerAfterViewController = function(e){
             var index = _pageNativeObjectArray.indexOf(e.viewController);
+            transactionIndex = index;
             if (index >= 0 && index < _pageNativeObjectArray.length - 1){
                 index++;
                 return _pageNativeObjectArray[index];
