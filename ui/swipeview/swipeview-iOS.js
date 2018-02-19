@@ -57,18 +57,20 @@ const SwipeView = extend(View)(
         });
         
         self.didScrollHandler = function(e){
-            var point = Invocation.invokeInstanceMethod(this.pageController.scrollView,"contentOffset",[],"CGPoint");
-            var x = point.x - self.nativeObject.frame.width;
-            var index;
-            if (x >= 0) {
-                index = transactionIndex;
-            }else{
-                index = transactionIndex - 1;
-                x += self.nativeObject.frame.width;
+            if (this.pageController.scrollView){
+                var point = Invocation.invokeInstanceMethod(this.pageController.scrollView,"contentOffset",[],"CGPoint");
+                var x = point.x - self.nativeObject.frame.width;
+                var index;
+                if (x >= 0) {
+                    index = transactionIndex;
+                }else{
+                    index = transactionIndex - 1;
+                    x += self.nativeObject.frame.width;
+                }
+            	if (typeof self.onPageScrolled === 'function') {
+            	    self.onPageScrolled(index,x);
+            	}
             }
-        	if (typeof self.onPageScrolled === 'function') {
-        	    self.onPageScrolled(index,x);
-        	}
         }
         
         self.pageController.didScroll = self.didScrollHandler.bind(this);
