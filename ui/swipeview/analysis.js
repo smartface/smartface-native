@@ -43,7 +43,7 @@ function SwipeView() {
      */
     this.pages = [];
     /**
-     * Gets/Sets the callback trigged when a page is selected after a swipe action.
+     * Gets/Sets the callback triggered when a page is selected after a swipe action.
      *
      * @event onPageSelected
      * @param index
@@ -54,7 +54,18 @@ function SwipeView() {
      */
     this.onPageSelected = function(index,page){};
     /**
-     * Gets/Sets the callback trigged during swipe actions.
+     * Gets/Sets the callback triggered when a page is scrolling.
+     *
+     * @event onPageScrolled
+     * @param index  Index of the first page currently being displayed. Page position+1 will be visible if offset is nonzero.
+     * @param offset
+     * @android
+     * @ios
+     * @since 2.0.10
+     */
+    this.onPageScrolled = function(index,offset){};
+    /**
+     * Gets/Sets the callback triggered during swipe actions.
      *
      * @event onStateChanged
      * @param {UI.SwipeView.State} state
