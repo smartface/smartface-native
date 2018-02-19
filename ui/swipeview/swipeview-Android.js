@@ -32,6 +32,12 @@ const SwipeView = extend(View)(
                     _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
                 },
                 onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
+                    if(_callbackOnPageScrolled) {
+                        var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
+                        
+                        var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
+                        _callbackOnPageScrolled(position, offsetPixels);
+                    }
                     var intPosition = position;
                     if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
                         _lastIndex = intPosition;
@@ -39,7 +45,7 @@ const SwipeView = extend(View)(
                     }
                 }
             }));
-        };
+        }
         _super(self);
 
         var _page;
@@ -47,6 +53,7 @@ const SwipeView = extend(View)(
         var _pageInstances = [];
         var _callbackOnPageSelected;
         var _callbackOnPageStateChanged;
+        var _callbackOnPageScrolled;
         Object.defineProperties(self, {
             "page": {
                 get: function() {
