@@ -61,7 +61,7 @@ function Image (params) {
             value: function() {
                 var bitmap = self.nativeObject.getBitmap();
                 var stream = new NativeByteArrayOutputStream();
-                bitmap.compress(CompressFormat[0], 100, stream); // PNG compress is too slow. Ignores it! 
+                bitmap.compress(CompressFormat[1], 100, stream);
                 return new Blob(stream.toByteArray(), {type: "image"});
             }, 
             enumerable: true
