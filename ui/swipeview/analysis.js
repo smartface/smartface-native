@@ -57,8 +57,8 @@ function SwipeView() {
      * Gets/Sets the callback triggered when a page is scrolling.
      *
      * @event onPageScrolled
-     * @param index  Index of the first page currently being displayed. Page position+1 will be visible if offset is nonzero.
-     * @param offset
+     * @param index  Index of the first page from the left that is currently visible.
+     * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
      * @android
      * @ios
      * @since 2.0.10
