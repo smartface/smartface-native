@@ -61,7 +61,7 @@ function Image (params) {
             value: function() {
                 var bitmap = self.nativeObject.getBitmap();
                 var stream = new NativeByteArrayOutputStream();
-                bitmap.compress(CompressFormat[0], 100, stream); // PNG compress is too slow. Ignores it!
+                bitmap.compress(CompressFormat[0], 100, stream); // PNG compress is too slow. Ignores it! 
                 return new Blob(stream.toByteArray(), {type: "image"});
             }, 
             enumerable: true
@@ -172,10 +172,10 @@ function Image (params) {
         }
     });
 }
-
+    
 Object.defineProperties(Image,{
     'createFromFile': {
-        value: function(path) {
+        value: function(path, width, height) {
             var imageFile = new File({path:path});
             if(imageFile && imageFile.nativeObject){
                 var bitmap;
@@ -188,7 +188,11 @@ Object.defineProperties(Image,{
                     bitmap = imageFile.nativeObject;
                 }
                 else{
-                    bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
+                    if(width && height) {
+                        bitmap = decodeSampledBitmapFromResource(imageFile.fullPath, width, height);
+                    } else {
+                        bitmap = NativeBitmapFactory.decodeFile(imageFile.fullPath);
+                    }
                 }
                 return (new Image({bitmap: bitmap}));
             }
@@ -210,5 +214,43 @@ Object.defineProperties(Image,{
         enumerable: true
     }
 });
+
+
+// Code taken from https://developer.android.com/topic/performance/graphics/load-bitmap.html
+function decodeSampledBitmapFromResource(filePath, reqWidth, reqHeight) {
+    // First decode with inJustDecodeBounds=true to check dimensions
+    var options = new NativeBitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    // BitmapFactory.decodeResource(res, resId, options);
+    NativeBitmapFactory.decodeFile(filePath, options);
+
+    // Calculate inSampleSize
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+    // Decode bitmap with inSampleSize set
+    options.inJustDecodeBounds = false;
+    return NativeBitmapFactory.decodeFile(filePath, options);
+}
+
+function calculateInSampleSize(options, reqWidth, reqHeight) {
+    // Raw height and width of image
+    var height = options.outHeight;
+    var width = options.outWidth;
+    var inSampleSize = 1;
+    
+    if (height > reqHeight || width > reqWidth) {
+        var halfHeight = height / 2;
+        var halfWidth = width / 2;
+    
+        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+        // height and width larger than the requested height and width.
+        while ((halfHeight / inSampleSize) >= reqHeight
+                && (halfWidth / inSampleSize) >= reqWidth) {
+            inSampleSize *= 2;
+        }
+    }
+    
+    return inSampleSize;
+}
 
 module.exports = Image;
