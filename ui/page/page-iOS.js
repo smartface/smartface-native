@@ -72,6 +72,10 @@ function Page(params) {
         if (_safeAreaLayoutMode) {
             calculateSafeAreaPaddings(_safeAreaPaddingObject);
         }
+
+        if (typeof self.onSafeAreaPaddingChange === "function") {
+            self.onSafeAreaPaddingChange(_safeAreaPaddingObject);
+        }
     }
     
     self.calculatePosition = function(){
@@ -464,6 +468,29 @@ function Page(params) {
                     _largeTitleDisplayMode = value;
                     self.nativeObject.navigationItem.largeTitleDisplayMode = _largeTitleDisplayMode;
                 }
+            }
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar.ios, 'backBarButtonItem', {
+        get: function() {
+            var retval = undefined;
+            
+            var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
+            
+            if (nativeObject) {
+                var backBarButtonItem = new HeaderBarItem();
+                backBarButtonItem.nativeObject = nativeObject;
+                backBarButtonItem.nativeObject.target = nativeObject;
+                retval = backBarButtonItem;
+            }
+            
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                self.nativeObject.navigationItem.backBarButtonItem = value.nativeObject;
             }
         },
         enumerable: true

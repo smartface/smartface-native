@@ -168,6 +168,29 @@ HeaderBar.prototype.android.logoEnabled = null;
 HeaderBar.prototype.android.subtitle = '';
 
 /**
+ * Gets/sets backBarButtonItem of the header bar.
+ * When it set, it will change the next page's back button appearance.
+ * This change can be observed only on the pages that added to navigator style router.
+ * Default value is undefined, it gets title value from previous page's header bar title property.
+ * Setting onPress callback of HeaderBarItem will not effect backBarButtonItem's onPress behaviour.
+ * This property will work only for iOS.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *	   const HeaderBarItem = require('sf-core/ui/headerbaritem');
+ *     var backBarButtonItem = new HeaderBarItem({
+ *          title : "Back",
+ *     });
+ *     myPage.headerBar.ios.backBarButtonItem = backBarButtonItem;
+ *
+ * @property {HeaderBarItem} backBarButtonItem
+ * @ios
+ * @since 0.1
+ */
+HeaderBar.prototype.ios.backBarButtonItem = undefined;
+
+/**
  * Gets/sets title of the header bar.
  *
  * @property {String} title

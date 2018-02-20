@@ -172,19 +172,24 @@ Image.prototype.rotate = function(angle, onSuccess, onFailure) {}
 Image.createFromBlob = function(blob) { }
 
 /**
- * Creates an Image instance from given file path.
+ * Creates an Image instance from given file path. Large bitmap loading causes OutOfMemory exception on Android. 
+ * width and height parameters works for only Android. No-op for iOS.
+ * These parameters are used loading large bitmaps efficiently. If you pass these parameters, the bitmap will scaled down.
  *  
  *     @example
  *     const Image = require('sf-core/ui/image');
  *     var myImage = Image.createFromFile("images://smartface.png");
  * 
  * @param {String} path Image file path
+ * @param {Number} width Thumbnail width
+ * @param {Number} height thumbnail height
  * @method createFromFile
  * @return {UI.Image} An Image instance.
  * @static
  * @since 0.1
+ * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
  */
-Image.createFromFile = function(path) { };
+Image.createFromFile = function(path, width, height) { };
 
 /**
  * @enum {Number} UI.Image.Format
