@@ -191,6 +191,22 @@ HeaderBar.prototype.android.subtitle = '';
 HeaderBar.prototype.ios.backBarButtonItem = undefined;
 
 /**
+ * Gets/sets the mode to use how to display title of header bar.
+ * This property will work only for iOS.
+ * If "prefersLargeTitles" property of navigator is false, this property has no effect and title will display as small title.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *     myPage.headerBar.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.ALWAYS;
+ *
+ * @property {Page.iOS.LargeTitleDisplayMode} largeTitleDisplayMode
+ * @ios
+ * @since 0.1
+ */
+HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.AUTOMATIC;
+
+/**
  * Gets/sets title of the header bar.
  *
  * @property {String} title
