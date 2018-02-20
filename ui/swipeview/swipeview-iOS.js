@@ -67,6 +67,9 @@ const SwipeView = extend(View)(
                     index = transactionIndex - 1;
                     x += self.nativeObject.frame.width;
                 }
+                if (point.x == 0 || point.x == self.nativeObject.frame.width * 2) {
+                    transactionIndex = pendingViewControllerIndex
+                }
             	if (typeof self.onPageScrolled === 'function') {
             	    self.onPageScrolled(index,x);
             	}
@@ -201,6 +204,7 @@ const SwipeView = extend(View)(
                 _isPageTransaction = true;
                 if(value < currentIndex){  
                     __SF_Dispatch.mainAsync(function(){
+                    pendingViewControllerIndex = value;
                     self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Reverse,_animated,function(){
                         _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
@@ -210,6 +214,7 @@ const SwipeView = extend(View)(
                     });
                 }else{
                     __SF_Dispatch.mainAsync(function(){
+                        pendingViewControllerIndex = value;
                         self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Forward,_animated,function(){
                             _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
