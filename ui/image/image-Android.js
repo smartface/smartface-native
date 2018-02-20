@@ -181,7 +181,10 @@ Object.defineProperties(Image,{
                 var bitmap;
                 if(imageFile.type === Path.FILE_TYPE.ASSET){
                     var assetsInputStream = AndroidConfig.activity.getAssets().open(imageFile.nativeObject);
-                    bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
+                    if(width && height)
+                        bitmap = decodeSampledBitmapFromResource(assetsInputStream, width, height);
+                    else
+                        bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
                     assetsInputStream.close();
                 }
                 else if(imageFile.type === Path.FILE_TYPE.DRAWABLE){
@@ -217,19 +220,20 @@ Object.defineProperties(Image,{
 
 
 // Code taken from https://developer.android.com/topic/performance/graphics/load-bitmap.html
-function decodeSampledBitmapFromResource(filePath, reqWidth, reqHeight) {
-    // First decode with inJustDecodeBounds=true to check dimensions
+function decodeSampledBitmapFromResource(file, reqWidth, reqHeight) {
     var options = new NativeBitmapFactory.Options();
     options.inJustDecodeBounds = true;
-    // BitmapFactory.decodeResource(res, resId, options);
-    NativeBitmapFactory.decodeFile(filePath, options);
+    if(typeof(file) === "string")
+        NativeBitmapFactory.decodeFile(file, options);
+    else // assetsInputStream for reading from assets
+        NativeBitmapFactory.decodeStream(file, null, options);
 
-    // Calculate inSampleSize
     options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-    // Decode bitmap with inSampleSize set
     options.inJustDecodeBounds = false;
-    return NativeBitmapFactory.decodeFile(filePath, options);
+    
+    if(typeof(file) === "string")
+        return NativeBitmapFactory.decodeFile(file, options);
+    return NativeBitmapFactory.decodeStream(file, null, options);
 }
 
 function calculateInSampleSize(options, reqWidth, reqHeight) {
