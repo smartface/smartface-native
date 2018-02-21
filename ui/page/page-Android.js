@@ -151,6 +151,7 @@ function Page(params) {
         },
         enumerable: true
     });
+    self.ios = {};
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};
