@@ -254,6 +254,11 @@ const MapView = extend(View)(
             },
             enumerable: true
         });
+        self.nativeObject.regionWillChangeAnimated = function(){
+            if (typeof self.onCameraMoveStarted === 'function') {
+                self.onCameraMoveStarted();
+            }
+        }
         
         self.nativeObject.regionDidChangeAnimated = function(){
             if (self.minZoomLevel > self.maxZoomLevel) {
@@ -268,6 +273,10 @@ const MapView = extend(View)(
                 self.zoomLevel = self.minZoomLevel;
             }else if(self.maxZoomLevel < 19 && self.zoomLevel > self.maxZoomLevel){
                 self.zoomLevel = self.maxZoomLevel
+            }
+            
+            if (typeof self.onCameraMoveEnded === 'function') {
+                self.onCameraMoveEnded();
             }
         }
         
