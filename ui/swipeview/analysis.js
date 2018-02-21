@@ -62,7 +62,7 @@ function SwipeView() {
      * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
      * @android
      * @ios
-     * @since 2.0.10
+     * @since 2.0.9
      */
     this.onPageScrolled = function(index,offset){};
     /**

@@ -48,8 +48,9 @@ function Page(params) {
         self.calculatePosition();
     }
     
+    self.ios = {};
     var _safeAreaLayoutMode = false;
-    Object.defineProperty(self, 'safeAreaLayoutMode', {
+    Object.defineProperty(self.ios, 'safeAreaLayoutMode', {
         get: function() {
             return _safeAreaLayoutMode;
         },
