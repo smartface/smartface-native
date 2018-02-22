@@ -74,8 +74,8 @@ function Page(params) {
             calculateSafeAreaPaddings(_safeAreaPaddingObject);
         }
 
-        if (typeof self.onSafeAreaPaddingChange === "function") {
-            self.onSafeAreaPaddingChange(_safeAreaPaddingObject);
+        if (typeof self.ios.onSafeAreaPaddingChange === "function") {
+            self.ios.onSafeAreaPaddingChange(_safeAreaPaddingObject);
         }
     }
     
