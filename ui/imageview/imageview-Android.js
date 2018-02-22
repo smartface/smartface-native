@@ -31,10 +31,17 @@ const ImageView = extend(View)(
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    return this.backgroundImage;
+                    return this._image;
                 },
                 set: function(image) {
-                    this.backgroundImage = image;
+                    // We don't use backgroundImage of view. Because, it breaks image fill type.
+                    if (image instanceof Image) {
+                        this._image = image;
+                        this.nativeObject.setImageDrawable(image.nativeObject);
+                    } else {
+                        this._image = null;
+                        this.nativeObject.setImageDrawable(null);
+                    }
                 },
                 enumerable: true
             },
