@@ -254,8 +254,17 @@ const MapView = extend(View)(
             },
             enumerable: true
         });
+        self.nativeObject.regionWillChangeAnimated = function(){
+            if (typeof self.onCameraMoveStarted === 'function') {
+                self.onCameraMoveStarted();
+            }
+        }
         
         self.nativeObject.regionDidChangeAnimated = function(){
+            if (typeof self.onCameraMoveEnded === 'function') {
+                self.onCameraMoveEnded();
+            }
+            
             if (self.minZoomLevel > self.maxZoomLevel) {
                 return;
             }

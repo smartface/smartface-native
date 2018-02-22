@@ -191,6 +191,26 @@ MapView.prototype.removePin = function(){};
 MapView.prototype.onPress;
 
 /**
+ * Gets/sets callback for dragging start.
+ *
+ * @event onCameraMoveStarted
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.onCameraMoveStarted;
+
+/**
+ * Gets/sets callback for dragging end.
+ *
+ * @event onCameraMoveEnded
+ * @android
+ * @ios
+ * @since 2.0.9
+ */
+MapView.prototype.onCameraMoveEnded;
+
+/**
  * Triggered when long pressed on the map and sends the location pressed on the map.
  *
  * @event onLongPress

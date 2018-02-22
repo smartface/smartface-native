@@ -10,6 +10,9 @@ const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
 const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
 const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
 const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
+const NativeOnCameraMoveStartedListener = NativeGoogleMap.OnCameraMoveStartedListener;
+const NativeOnCameraIdleListener = NativeGoogleMap.OnCameraIdleListener;
+
 
 const hueDic = {};
 hueDic[Color.BLUE.nativeObject] = NativeDescriptorFactory.HUE_BLUE;
@@ -73,7 +76,24 @@ const MapView = extend(View)(
                         });
                     }
                 }));
-                
+
+                var _isMoveStarted = false;
+                googleMap.setOnCameraMoveStartedListener(NativeOnCameraMoveStartedListener.implement({
+                    onCameraMoveStarted: function(reason) {
+                        _onCameraMoveStarted && _onCameraMoveStarted();
+                        _isMoveStarted = true;
+                    }
+                }));
+
+                googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
+                    onCameraIdle: function() {
+                        if (_isMoveStarted) {
+                            _onCameraMoveEnded && _onCameraMoveEnded();
+                            _isMoveStarted = false;
+                        }
+                    }
+                }));
+
                 self.centerLocation = _centerLocation;
                 self.compassEnabled = _compassEnabled;
                 self.rotateEnabled = _rotateEnabled;
@@ -98,6 +118,8 @@ const MapView = extend(View)(
         var _onCreate;
         var _onPress;
         var _onLongPress;
+        var _onCameraMoveStarted;
+        var _onCameraMoveEnded;
         var _pins = [];
         var _pendingPins = [];
         var _centerLocation = { latitude: 40.7828647, longitude: -73.9675491 };
@@ -115,7 +137,7 @@ const MapView = extend(View)(
             'getVisiblePins': {
                 value: function() {
                     var result = [];
-                    if(_nativeGoogleMap) {
+                    if (_nativeGoogleMap) {
                         var latLongBounds = _nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
                         for (var i = 0; i < _pins.length; i++) {
                             if (latLongBounds.contains(_pins[i].nativeObject.getPosition())) {
@@ -214,7 +236,7 @@ const MapView = extend(View)(
                         _maxZoomLevel = value;
 
                         if (_nativeGoogleMap) {
-                            _nativeGoogleMap && _nativeGoogleMap.setMaxZoomPreference(value+2);
+                            _nativeGoogleMap && _nativeGoogleMap.setMaxZoomPreference(value + 2);
                         }
                     }
                 },
@@ -229,7 +251,7 @@ const MapView = extend(View)(
                         _minZoomLevel = value;
 
                         if (_nativeGoogleMap) {
-                            _nativeGoogleMap && _nativeGoogleMap.setMinZoomPreference(value+2);
+                            _nativeGoogleMap && _nativeGoogleMap.setMinZoomPreference(value + 2);
                         }
                     }
                 },
@@ -277,7 +299,8 @@ const MapView = extend(View)(
                         if (_nativeGoogleMap) {
                             _nativeGoogleMap.setMapType(type);
                         }
-                    } else {
+                    }
+                    else {
                         throw new Error("type parameter must be a MapView.Type enum.");
                     }
                 },
@@ -290,7 +313,7 @@ const MapView = extend(View)(
                             if (!pin.nativeObject) {
                                 const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
                                 var marker = new NativeMarkerOptions();
-                                
+
                                 // pin location must set before adding to map.
                                 if (pin.location && pin.location.latitude && pin.location.longitude) {
                                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
@@ -301,7 +324,7 @@ const MapView = extend(View)(
                                 pin.nativeObject = _nativeGoogleMap.addMarker(marker);
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
-                                pin.image && (pin.image = pin.image); 
+                                pin.image && (pin.image = pin.image);
                                 pin.color && (pin.color = pin.color);
                                 pin.title = pin.title;
                                 pin.subtitle = pin.subtitle;
@@ -363,6 +386,25 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
+
+            'onCameraMoveStarted': {
+                get: function() {
+                    return _onCameraMoveStarted;
+                },
+                set: function(callback) {
+                    _onCameraMoveStarted = callback;
+                },
+                enumerable: true
+            },
+            'onCameraMoveEnded': {
+                get: function() {
+                    return _onCameraMoveEnded;
+                },
+                set: function(callback) {
+                    _onCameraMoveEnded = callback;
+                },
+                enumerable: true
+            },
             'toString': {
                 value: function() {
                     return 'MapView';
@@ -401,7 +443,7 @@ function Pin(params) {
             set: function(color) {
                 _color = color;
                 const Color = require("sf-core/ui/color");
-                if(self.nativeObject && (color instanceof Color)) {
+                if (self.nativeObject && (color instanceof Color)) {
                     console.log("Color changes");
                     var colorHUE = hueDic[color.nativeObject];
                     console.log("Color changes 1");
@@ -418,11 +460,11 @@ function Pin(params) {
             set: function(image) {
                 _image = image;
                 const Image = require("sf-core/ui/image");
-                if(self.nativeObject && image instanceof Image) {
+                if (self.nativeObject && image instanceof Image) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-                                
-                    self.nativeObject.setIcon (icon);
+
+                    self.nativeObject.setIcon(icon);
                 }
             }
         },
@@ -431,11 +473,11 @@ function Pin(params) {
                 return _location;
             },
             set: function(location) {
-                if(!location || !TypeUtil.isNumeric(location.latitude) || !TypeUtil.isNumeric(location.longitude)) {
+                if (!location || !TypeUtil.isNumeric(location.latitude) || !TypeUtil.isNumeric(location.longitude)) {
                     throw new Error("location property must be on object includes latitude and longitude keys.");
                 }
                 _location = location;
-                if(self.nativeObject) {
+                if (self.nativeObject) {
                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                     var position = new NativeLatLng(location.latitude, location.longitude);
                     self.nativeObject.setPosition(position);
@@ -447,7 +489,7 @@ function Pin(params) {
                 return _subtitle;
             },
             set: function(subtitle) {
-                if(!TypeUtil.isString(subtitle)) {
+                if (!TypeUtil.isString(subtitle)) {
                     throw new Error("subtitle must be a string.");
                 }
                 _subtitle = subtitle;
@@ -459,7 +501,7 @@ function Pin(params) {
                 return _title;
             },
             set: function(title) {
-                if(!TypeUtil.isString(title)) {
+                if (!TypeUtil.isString(title)) {
                     throw new Error("title must be a string.");
                 }
                 _title = title;
@@ -471,7 +513,7 @@ function Pin(params) {
                 return _visible;
             },
             set: function(visible) {
-                if(!TypeUtil.isBoolean(visible)) {
+                if (!TypeUtil.isBoolean(visible)) {
                     throw new Error("visible type must be an boolean.");
                 }
                 _visible = visible;
