@@ -110,7 +110,7 @@ const TextBox = extend(Label)(
                     _touchEnabled = touchEnabled;
                     self.nativeObject.setFocusable(touchEnabled);
                     self.nativeObject.setFocusableInTouchMode(touchEnabled);
-                    self.nativeObject.setLongClickable(touchEnabled);
+                    self.nativeObject.setLongClickable(touchEnabled); 
                 },
                 enumerable: true,
                 configurable: true
