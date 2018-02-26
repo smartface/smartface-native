@@ -220,7 +220,7 @@ SearchView.prototype.ios.onCancelButtonClicked = function() {};
 SearchView.prototype.onSearchBegin = function() {};
 
 /**
- * This event is called when user finishes editing by clicking search key or clicking outside of the SearchView.
+ * This event is called when searchview loses focus.
  *
  * @event onSearchEnd
  * @android
