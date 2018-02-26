@@ -255,12 +255,18 @@ const MapView = extend(View)(
             enumerable: true
         });
         self.nativeObject.regionWillChangeAnimated = function(){
+            if (_isFirstRender){
+                return;
+            }
             if (typeof self.onCameraMoveStarted === 'function') {
                 self.onCameraMoveStarted();
             }
         }
         
         self.nativeObject.regionDidChangeAnimated = function(){
+            if (_isFirstRender){
+                return;
+            }
             if (typeof self.onCameraMoveEnded === 'function') {
                 self.onCameraMoveEnded();
             }
