@@ -47,3 +47,16 @@ Navigator.prototype.add = function(to, page, isSingleton) {};
  * @since 1.1.10
  */
 Navigator.prototype.go = function(path) {};
+
+/**
+ * Gets/sets display format of page's header bar title.
+ *
+ * When this property is set to true,
+ * it allows to use larger format of header bar's title property depends on its "largeTitleDisplayMode" value.
+ *
+ * This property will work only for iOS.
+ * @property {Boolean} prefersLargeTitles
+ * @ios
+ * @since 0.1
+ */
+Navigator.prototype.ios.prefersLargeTitles = false;

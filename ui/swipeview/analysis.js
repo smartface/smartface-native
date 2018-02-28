@@ -43,7 +43,7 @@ function SwipeView() {
      */
     this.pages = [];
     /**
-     * Gets/Sets the callback trigged when a page is selected after a swipe action.
+     * Gets/Sets the callback triggered when a page is selected after a swipe action.
      *
      * @event onPageSelected
      * @param index
@@ -54,7 +54,19 @@ function SwipeView() {
      */
     this.onPageSelected = function(index,page){};
     /**
-     * Gets/Sets the callback trigged during swipe actions.
+     * Gets/Sets the callback triggered when a page is scrolling. When call swipeToIndex function, onPageScrolled will behave differently on iOS and Android.
+     * Click this link for SwipeToIndex and onPageScrolled use together: "https://developer.smartface.io/docs/swipeview-onpagescrolled-and-swipetoindex-together-usage"
+     *
+     * @event onPageScrolled
+     * @param index  Index of the first page from the left that is currently visible.
+     * @param offset Indicating the offset from index. Value from range [0, width of swipeview].
+     * @android
+     * @ios
+     * @since 2.0.9
+     */
+    this.onPageScrolled = function(index,offset){};
+    /**
+     * Gets/Sets the callback triggered during swipe actions.
      *
      * @event onStateChanged
      * @param {UI.SwipeView.State} state

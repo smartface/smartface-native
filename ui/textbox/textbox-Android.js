@@ -84,6 +84,24 @@ const TextBox = extend(Label)(
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
         Object.defineProperties(this, {
+            'cursorPosition': {
+                get: function() {
+                    return {start : self.nativeObject.getSelectionStart(), end: self.nativeObject.getSelectionEnd()};
+                },
+                set: function(value) {
+                    if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
+                        if(value.start > self.text.length){
+                            value.start = 0;
+                        }
+                        if(value.end > self.text.length){
+                            value.end = 0;
+                        }
+                        self.nativeObject.setSelection(value.start, value.end);
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            },
             'touchEnabled': {
                 get: function() {
                     return _touchEnabled;
@@ -92,6 +110,7 @@ const TextBox = extend(Label)(
                     _touchEnabled = touchEnabled;
                     self.nativeObject.setFocusable(touchEnabled);
                     self.nativeObject.setFocusableInTouchMode(touchEnabled);
+                    self.nativeObject.setLongClickable(touchEnabled); 
                 },
                 enumerable: true,
                 configurable: true

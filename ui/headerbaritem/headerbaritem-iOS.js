@@ -1,9 +1,7 @@
 const Color = require("sf-core/ui/color");
+const Image = require('sf-core/ui/image');
 
 function HeaderBarItem(params) {
-    var _title = "";
-    var _image = null;
-    var _enabled = true;
     var _onPress = null;
     
     var self = this;
@@ -20,19 +18,21 @@ function HeaderBarItem(params) {
                 if (typeof(value) !== "string") {
                     return;
                 }
-                _title = value;
-                self.nativeObject.title = _title;
+                self.nativeObject.title = value;
             },
             enumerable: true
         },
         'image': {
             get: function() {
-                return _image;
+                var retval = undefined;
+                if (self.nativeObject.image) {
+                    retval = Image.createFromImage(self.nativeObject.image);
+                }
+                return retval;
             },
             set: function(value) {
                 if (value) {
-                    _image = value;
-                    self.nativeObject.image = _image.nativeObject;
+                    self.nativeObject.image = value.nativeObject;
                 }
             },
             enumerable: true
@@ -50,11 +50,10 @@ function HeaderBarItem(params) {
         },
         'enabled': {
             get: function() {
-                return _enabled;
+                return self.nativeObject.enabled;
             },
             set: function(value) {
-                _enabled = value;
-                self.nativeObject.enabled = _enabled;
+                self.nativeObject.enabled = value;
             },
             enumerable: true
         },

@@ -75,7 +75,7 @@ const extend = require('js-base/core/extend');
  *     myListView.ios.leftToRightSwipeEnabled = true;
  *     myListView.ios.rightToLeftSwipeEnabled = true;
  *       
- *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *     myListView.ios.onRowSwiped = function(direction,expansionSettings,index){
  *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
  *             //Expansion button index. Default value 0
  *             expansionSettings.buttonIndex = -1;
@@ -334,7 +334,7 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  *     myListView.ios.leftToRightSwipeEnabled = true;
  *     myListView.ios.rightToLeftSwipeEnabled = true;
  *     
- *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *     myListView.ios.onRowSwiped = function(direction,expansionSettings,index){
  *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
  *             //Expansion button index. Default value 0
  *             expansionSettings.buttonIndex = -1;
@@ -364,12 +364,16 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * 
  * @event onRowSwiped
  * @param {UI.ListView.iOS.SwipeDirection} swipeDirection
- * @param {Object} expansionSettings &emsp;buttonIndex : Number - Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.) <br />&emsp;fillOnTrigger : Boolean - if true the button fills the cell on trigger, else it bounces back to its initial position <br /> &emsp;threshold : Number - Size proportional threshold to trigger the expansion button. Default value 1.5
+ * @param {Object} expansionSettings 
+ * @param {Number} expansionSettings.buttonIndex Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+ * @param {Boolean} expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+ * @param {Number} expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+ * @param {Number} index
  * @ios
  * @since 0.1
  * 
  */
-ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings){}
+ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,index){}
 
 /**
  * Gets/sets leftToRightSwipeEnabled
