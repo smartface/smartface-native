@@ -202,7 +202,8 @@ Image.createFromBlob = function(blob) { }
  * Creates a rounded image object from given path. This method works for only Android. It returns undefined for iOS. 
  *
  * @param {Object} params
- * @param {String} params.path
+ * @param {String} params.path Image path
+ * @param {Number} params.radius Image corner radius
  * @method createRoundedImage
  * @return UI.Image
  * @static
