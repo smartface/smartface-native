@@ -23,6 +23,8 @@ function Image(params) {}
 /**
  * Gets the height of image. 
  *
+ * @android
+ * @ios
  * @property {Number} height
  * @readonly
  * @since 0.1
@@ -32,6 +34,8 @@ Image.prototype.height = 0;
 /**
  * Gets the width of image. 
  *
+ * @android
+ * @ios
  * @property {Number} width
  * @readonly
  * @since 0.1
@@ -41,6 +45,8 @@ Image.prototype.width = 0;
 /**
  * Returns a Blob instance.
  *
+ * @android
+ * @ios
  * @method toBlob
  * @return Blob
  * @since 0.1
@@ -95,6 +101,8 @@ Image.prototype.resizableImageWithCapInsetsResizingMode = function(insets,mode) 
  * @param {Object} onFailure.params 
  * @param {String} onFailure.params.message Failure message 
  * @return UI.Image
+ * @android
+ * @ios
  * @since 0.1
  */
 Image.prototype.resize = function(width, height, onSuccess, onFailure) {}
@@ -115,6 +123,8 @@ Image.prototype.resize = function(width, height, onSuccess, onFailure) {}
  * @param {Object} onFailure.params 
  * @param {String} onFailure.params.message Failure message 
  * @return UI.Image
+ * @android
+ * @ios
  * @since 0.1
  */
 Image.prototype.crop = function(x, y, width, height, onSuccess, onFailure) {};
@@ -139,9 +149,22 @@ Image.prototype.crop = function(x, y, width, height, onSuccess, onFailure) {};
  * @param {Object} onFailure.params 
  * @param {String} onFailure.params.message Failure message 
  * @return Blob
+ * @android
+ * @ios
  * @since 0.1
  */
 Image.prototype.compress = function(format, quality, onSuccess, onFailure) {}
+
+/**
+ * Returns an image with rounded corners. This method returns the original image for iOS.
+ * 
+ * @method round
+ * @param {Number} radius Corner radius
+ * @return UI.Image
+ * @android
+ * @since 2.0.10
+ */
+Image.prototype.round = function(radius) {};
 
 /**
  * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
@@ -156,9 +179,11 @@ Image.prototype.compress = function(format, quality, onSuccess, onFailure) {}
  * @param {Object} onFailure.params 
  * @param {String} onFailure.params.message Failure message 
  * @return UI.Image
+ * @android
+ * @ios
  * @since 0.1
  */
-Image.prototype.rotate = function(angle, onSuccess, onFailure) {}
+Image.prototype.rotate = function(angle, onSuccess, onFailure) {};
 
 /**
  * Creates an image object from given a blob. 
@@ -167,9 +192,24 @@ Image.prototype.rotate = function(angle, onSuccess, onFailure) {}
  * @method createFromBlob
  * @return UI.Image
  * @static
+ * @android
+ * @ios
  * @since 0.1
  */
 Image.createFromBlob = function(blob) { }
+
+/**
+ * Creates a rounded image object from given path. This method works for only Android. It returns undefined for iOS. 
+ *
+ * @param {Object} params
+ * @param {String} params.path
+ * @method createRoundedImage
+ * @return UI.Image
+ * @static
+ * @android
+ * @since 2.0.10
+ */
+Image.android.createRoundedImage = function(params) {};
 
 /**
  * Creates an Image instance from given file path. Large bitmap loading causes OutOfMemory exception on Android. 
@@ -185,6 +225,8 @@ Image.createFromBlob = function(blob) { }
  * @param {Number} height thumbnail height
  * @method createFromFile
  * @return {UI.Image} An Image instance.
+ * @android
+ * @ios
  * @static
  * @since 0.1
  * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
