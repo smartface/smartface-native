@@ -10,6 +10,10 @@ const Format = {
 function Image(params) {
     var self = this;
     self.ios = {};
+    self.android = {};
+    self.android.round = function(radius) {
+      return self;
+    };
     
     if (params.path){
       if (params.path.includes(".app")) {
@@ -166,6 +170,9 @@ Image.createFromImage = function(image) {
 Image.createFromBlob = function(blob) {
      return new Image({"blob": blob});
 };
+
+Image.android = {};
+Image.android.createRoundedImage = function(){};
 
 Object.defineProperty(Image, 'Format', {
     value: Format,
