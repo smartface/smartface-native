@@ -182,6 +182,9 @@ function Image(params) {
     
     Object.defineProperty(self.android, 'round', {
         value: function(radius) {
+            if(typeof(radius) !== "number")
+                throw new Error("radius value must be a number.");
+                
             var roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
             return new Image({
                 roundedBitmapDrawable: roundedBitmapDrawable
@@ -242,18 +245,21 @@ Object.defineProperties(Image, {
 
 Object.defineProperty(Image.android, 'createRoundedImage', {
     value: function(params) {
-        if (params.path) {
-            var imageFile = new File({ path: params.path });
-            if ((imageFile.type === Path.FILE_TYPE.ASSET) || (imageFile.type === Path.FILE_TYPE.DRAWABLE)) {
-                var image = Image.createFromFile({ path: params.path });
-                return image.android.round(params.radius ? params.radius : 0);
-            }
-            else {
-                var roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius ? params.radius : 0);
-                return new Image({
-                    roundedBitmapDrawable: roundedBitmapDrawable
-                });
-            }
+        if(typeof(params.path) !== "string") 
+            throw new Error("path value must be a string.");
+        if(typeof(params.radius) !== "number")
+            throw new Error("radius value must be a number.");
+        
+        var imageFile = new File({ path: params.path });
+        if ((imageFile.type === Path.FILE_TYPE.ASSET) || (imageFile.type === Path.FILE_TYPE.DRAWABLE)) {
+            var image = Image.createFromFile({ path: params.path });
+            return image.android.round(params.radius);
+        }
+        else {
+            var roundedBitmapDrawable = getRoundedBitmapDrawable(imageFile.fullPath, params.radius);
+            return new Image({
+                roundedBitmapDrawable: roundedBitmapDrawable
+            });
         }
     },
     enumerable: true
