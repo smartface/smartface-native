@@ -151,7 +151,7 @@ MapView.prototype.centerLocation;
  * @android
  * @ios
  * @method getVisiblePins
- * @since 0.1
+ * @since 2.0.7
  */
 MapView.prototype.getVisiblePins = function(){};
 
