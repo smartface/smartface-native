@@ -76,4 +76,6 @@ function writeImageToFile(image) {
     return tempFile;
 };
 
+Share.ios = {};
+
 module.exports = Share;

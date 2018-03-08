@@ -51,6 +51,36 @@ function View(params) {
         }
     }
     
+    this.android = {};
+    var _nativeObject = this.nativeObject;
+    Object.defineProperties(this.android, {
+        'zIndex': {
+            get: function() {
+                return NativeViewCompat.getZ(_nativeObject);
+            },
+            set: function(index) {
+                if(!TypeUtil.isNumeric(index))
+                    throw new Error("zIndex value must be a number.");
+                NativeViewCompat.setZ(_nativeObject, index);
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'elevation': {
+            get: function() {
+                return NativeViewCompat.getElevation(_nativeObject);
+            },
+            set: function(value) {
+                NativeViewCompat.setElevation(_nativeObject, value);
+                if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
+                    _nativeObject.setStateListAnimator(null);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        }
+    });
+    
     this.backgroundDrawable = new NativeGradientDrawable(); 
     this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     
@@ -87,7 +117,6 @@ function View(params) {
     }
 }
 
-var _android = {};
 View.prototype = {
     get alpha() {
         // Avoiding integer-float conflics of engine
@@ -539,23 +568,8 @@ View.prototype = {
     set positionType(position) {
         this.yogaNode.setPositionType(position);
     },
-    get android() {
-        return _android;
-    },
     'dirty':  function(){
         this.yogaNode.dirty();
-    }
-};
-
-View.prototype.android = {
-    get elevation() {
-        return NativeViewCompat.getElevation(this.nativeObject);
-    },
-    set elevation(value) {
-        NativeViewCompat.setElevation(this.nativeObject, value);
-        if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
-            this.nativeObject.setStateListAnimator(null);
-        }
     }
 };
 
@@ -566,7 +580,7 @@ View.prototype.setBackgroundImage = function() {
     var bitmap;
     if(this.__backgroundImages instanceof Image) {
         bitmap = this.__backgroundImages.nativeObject.getBitmap();
-        release(this.backgroundDrawable);
+        // release(this.backgroundDrawable);
         this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap); 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
         this.setBackground(0);
@@ -619,12 +633,12 @@ View.prototype.setBackgroundImage = function() {
     
 View.prototype.setBackgroundColor = function() {
     if(this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
-        release(this.backgroundDrawable);
+        // release(this.backgroundDrawable);
         this.backgroundDrawable = this._backgroundColor.nativeObject; 
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
     else if(this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
-        release(this.backgroundDrawable)
+        release(this.backgroundDrawable);
         this.backgroundDrawable = new NativeGradientDrawable(); 
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
@@ -728,6 +742,11 @@ View.prototype.setBackground = function(layerIndex){
             layerDrawableNative.setDrawableByLayerId(1,this.borderShapeDrawable);
             layerDrawableNative.invalidateDrawable(this.borderShapeDrawable);
             break;
+    }
+    // This check is added for COR-1562
+    const Webview = require("../webview");
+    if(this instanceof Webview) {
+        this.nativeObject.setBackgroundColor(0);
     }
     
     this.nativeObject.setBackground(layerDrawableNative);

@@ -29,15 +29,55 @@ function Page(params) {
     self.pageView.nativeObject.addObserver(function(){
                     self.layout.nativeObject.endEditing(true);
                 },__SF_UIApplicationWillResignActiveNotification);
-                
-    // self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
-    
-    self.pageView.left = 0;
-    self.pageView.top = 0;
-    self.pageView.right = 0;
-    self.pageView.bottom = 0;
     
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
+    
+    
+    var _safeAreaPaddingObject = {
+        "top" : 0,
+        "bottom" : 0,
+        "left" : 0,
+        "right" : 0
+    };
+    
+    function calculateSafeAreaPaddings(paddingObject) {
+        self.pageView.paddingTop = paddingObject.top;
+        self.pageView.paddingBottom = paddingObject.bottom;
+        self.pageView.paddingLeft = paddingObject.left;
+        self.pageView.paddingRight = paddingObject.right;
+        self.calculatePosition();
+    }
+    
+    self.ios = {};
+    var _safeAreaLayoutMode = false;
+    Object.defineProperty(self.ios, 'safeAreaLayoutMode', {
+        get: function() {
+            return _safeAreaLayoutMode;
+        },
+        set: function(value) {
+            if (_safeAreaLayoutMode !== value) { // Prevents unnecessary applyLayout() calls.
+                _safeAreaLayoutMode = value;
+                if (_safeAreaLayoutMode === true) {
+                    calculateSafeAreaPaddings(_safeAreaPaddingObject);
+                } else {
+                    calculateSafeAreaPaddings({ "top" : 0, "bottom" : 0, "left" : 0, "right" : 0 });
+                }
+                self.layout.applyLayout();
+            }
+        },
+        enumerable: true
+    });
+    
+    self.nativeObject.onViewSafeAreaInsetsDidChange = function (e) {
+        _safeAreaPaddingObject = e;
+        if (_safeAreaLayoutMode) {
+            calculateSafeAreaPaddings(_safeAreaPaddingObject);
+        }
+
+        if (typeof self.ios.onSafeAreaPaddingChange === "function") {
+            self.ios.onSafeAreaPaddingChange(_safeAreaPaddingObject);
+        }
+    }
     
     self.calculatePosition = function(){
         
@@ -233,7 +273,25 @@ function Page(params) {
     });
 
     this.statusBar.ios = {};
+    // Deprecated self.statusBar.ios.style use : self.statusBar.style 
     Object.defineProperty(self.statusBar.ios, 'style', {
+        get: function() {
+            return self.nativeObject.statusBarStyle;
+        },
+        set: function(value) {
+            self.nativeObject.statusBarStyle = value;
+            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
+            var parentViewController = getParentViewController(self.nativeObject);
+            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
+                parentViewController.statusBarStyle = self.nativeObject.statusBarStyle;
+                parentViewController.setNeedsStatusBarAppearanceUpdate();
+            }
+            
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return self.nativeObject.statusBarStyle;
         },
@@ -266,6 +324,7 @@ function Page(params) {
     self.headerBar = {};
     
     self.headerBar.android = {};
+    self.headerBar.ios = {};
     
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
@@ -374,8 +433,8 @@ function Page(params) {
 
     self.headerBar.setItems = function(value){
         var nativeObjectArray = [];
-
-        for (var i = 0; i < value.length; i++) {
+        
+        for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
             nativeObjectArray.push(value[i].nativeObject);
         }
 
@@ -408,6 +467,46 @@ function Page(params) {
         },
         enumerable: true,configurable : true
     });
+    
+    var _largeTitleDisplayMode = 0;
+    Object.defineProperty(self.headerBar.ios, 'largeTitleDisplayMode', {
+        get: function() {
+            return _largeTitleDisplayMode;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+                const UINavigationItem = SF.requireClass("UINavigationItem");
+                if (UINavigationItem.instancesRespondToSelector("largeTitleDisplayMode")) {
+                    _largeTitleDisplayMode = value;
+                    self.nativeObject.navigationItem.largeTitleDisplayMode = _largeTitleDisplayMode;
+                }
+            }
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self.headerBar.ios, 'backBarButtonItem', {
+        get: function() {
+            var retval = undefined;
+            
+            var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
+            
+            if (nativeObject) {
+                var backBarButtonItem = new HeaderBarItem();
+                backBarButtonItem.nativeObject = nativeObject;
+                backBarButtonItem.nativeObject.target = nativeObject;
+                retval = backBarButtonItem;
+            }
+            
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                self.nativeObject.navigationItem.backBarButtonItem = value.nativeObject;
+            }
+        },
+        enumerable: true
+    });
 
     if (params) {
         for (var param in params) {
@@ -437,6 +536,18 @@ Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
 });
 Object.defineProperty(Page.Orientation,"AUTO",{
     value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown,UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+});
+
+Page.iOS = {};
+Page.iOS.LargeTitleDisplayMode = {};
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"AUTOMATIC",{
+    value: 0
+});
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"ALWAYS",{
+    value: 1
+});
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"NEVER",{
+    value: 2
 });
 
 module.exports = Page;

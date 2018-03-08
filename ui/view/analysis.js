@@ -486,6 +486,18 @@ View.prototype.onTouchEnded = function onTouchEnded(){ }
 View.prototype.android.elevation;
 
 /**
+ * Gets/sets the depth location of the view relative to its elevation. To put view over button, 
+ * you have to change zIndex value after Android Lollipop. On android, default elevation value of button is bigger than other view.
+ * This property affects after Android Lollipop. No-op before api level 21.
+ *
+ * @property {Number} zIndex
+ * @android
+ * @member UI.View
+ * @since 2.0.8
+ */
+View.prototype.android.zIndex;
+
+/**
  * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
  *
  * @property {Boolean} [masksToBounds = true]
@@ -502,5 +514,50 @@ View.prototype.ios.masksToBounds = 0;
  * @since 1.1.15
  */
 View.prototype.ios.clipsToBounds = 0;
+
+/**
+ * The offset (in points) of the shadow. "ios.masksToBounds" property must be false for shadow.
+ *
+ *     @example
+ *     view.ios.masksToBounds = false;
+ *     view.ios.shadowOffset = {x:10,y:10};
+ *     view.ios.shadowRadius = 5;
+ *     view.ios.shadowOpacity = 0.5;
+ *     view.ios.shadowColor = Color.GRAY;
+ * 
+ * @property {Object} [shadowOffset = {x: 0.0,y: -3.0}]
+ * @property {Number} shadowOffset.x
+ * @property {Number} shadowOffset.y
+ * @ios
+ * @since 2.0.6
+ */
+View.prototype.ios.shadowOffset = {x: 0.0,y: -3.0};
+
+/**
+ * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
+ *
+ * @property {Number} [shadowRadius = 3]
+ * @ios
+ * @since 2.0.6
+ */
+View.prototype.ios.shadowRadius = 3;
+
+/**
+ * The value in this property must be in the range 0.0 (transparent) to 1.0 (opaque). "ios.masksToBounds" property must be false for shadow.
+ *
+ * @property {Number} [shadowOpacity = 0]
+ * @ios
+ * @since 2.0.6
+ */
+View.prototype.ios.shadowOpacity = 0;
+
+/**
+ * The color of the shadow. "ios.masksToBounds" property must be false for shadow.
+ *
+ * @property {UI.Color} [shadowColor = UI.Color.BLACK]
+ * @ios
+ * @since 2.0.6
+ */
+View.prototype.ios.shadowColor = UI.Color.BLACK;;
 
 module.exports = View;

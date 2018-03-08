@@ -9,13 +9,13 @@
  *     const Router = require('sf-core/router');
  *     const Navigator = require('sf-core/ui/navigator');
  *     
- *     var navigator = new Navigator();
- *     navigator.add('pgProfile', require('pages/pgProfile'));
- *     navigator.add('pgMessages', require('pages/pgMessages'));
- *     navigator.go('pgProfile');
+ *     var myNavigator = new Navigator();
+ *     myNavigator.add('pgProfile', require('pages/pgProfile'));
+ *     myNavigator.add('pgMessages', require('pages/pgMessages'));
+ *     myNavigator.go('pgProfile');
  * 
+ *     Router.add('dashboard', myNavigator);
  *     Router.go('dashboard'); // Navigates the page named pgProfile.
- *     Router.go('dashboard/pgMessages'); // Navigates the page named pgMessages.
  */
 function Navigator() {}
 
@@ -30,7 +30,6 @@ function Navigator() {}
  * @param {UI.Page} page Page class to be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
  *                              and everytime that instance will be shown
- * @static
  * @android
  * @ios
  * @since 1.1.10
@@ -43,9 +42,21 @@ Navigator.prototype.add = function(to, page, isSingleton) {};
  * @method go
  * @param {String} to Route path to page class
  * 
- * @static
  * @android
  * @ios
  * @since 1.1.10
  */
 Navigator.prototype.go = function(path) {};
+
+/**
+ * Gets/sets display format of page's header bar title.
+ *
+ * When this property is set to true,
+ * it allows to use larger format of header bar's title property depends on its "largeTitleDisplayMode" value.
+ *
+ * This property will work only for iOS.
+ * @property {Boolean} prefersLargeTitles
+ * @ios
+ * @since 0.1
+ */
+Navigator.prototype.ios.prefersLargeTitles = false;

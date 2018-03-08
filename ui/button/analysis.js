@@ -162,6 +162,7 @@ Button.prototype.backgroundColor = {};
 
 /**
  * Gets/sets press event callback for a Button.
+ * If you set button's onTouch() or onTouchEnded() events, onPress() event does not work on Android.
  *
  * @since 0.1
  * @event onPress

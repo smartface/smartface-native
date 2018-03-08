@@ -76,6 +76,25 @@ Font.create = function(fontFamily, size, style) { }
 Font.createFromFile = function(path, size) { }
 
 /**
+ * @method allFontNames
+ * @ios
+ * Returns supported font names.
+ *
+ *     @example
+ *     const Font = require('sf-core/ui/font');
+ *     var fontNames = Font.ios.allFontNames();
+ *     for (var index in fontNames) {
+ *         console.log(fontNames[index]);
+ *     }
+ *
+ * @return {String} supported font name array.
+ * @since 0.1
+ *
+ * @static
+ */
+Font.ios.allFontNames = function() {}
+
+/**
  * Default font family. This might be different for Android and iOS.
  *
  * @property {String} DEFAULT

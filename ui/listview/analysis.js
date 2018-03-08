@@ -75,7 +75,7 @@ const extend = require('js-base/core/extend');
  *     myListView.ios.leftToRightSwipeEnabled = true;
  *     myListView.ios.rightToLeftSwipeEnabled = true;
  *       
- *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *     myListView.ios.onRowSwiped = function(direction,expansionSettings,index){
  *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
  *             //Expansion button index. Default value 0
  *             expansionSettings.buttonIndex = -1;
@@ -120,6 +120,7 @@ function ListView(params) {}
  */
 ListView.prototype.onRowCreate = function onRowCreate(){};
 
+
 /**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
@@ -157,6 +158,17 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
  * @since 0.1
  */
 ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){};
+
+/**
+ * This event is called when user long selects a row at specific index.
+ *
+ * @param {UI.ListViewItem} listViewItem
+ * @param {Number} index
+ * @event onRowLongSelected
+ * @android
+ * @since 2.0.4
+ */
+ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index){};
 
 /**
  * Gets/sets the number of rows that will be shown in a ListView.
@@ -322,7 +334,7 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  *     myListView.ios.leftToRightSwipeEnabled = true;
  *     myListView.ios.rightToLeftSwipeEnabled = true;
  *     
- *     myListView.ios.onRowSwiped = function(direction,expansionSettings){
+ *     myListView.ios.onRowSwiped = function(direction,expansionSettings,index){
  *        if (direction == ListView.iOS.SwipeDirection.LEFTTORIGHT) {
  *             //Expansion button index. Default value 0
  *             expansionSettings.buttonIndex = -1;
@@ -352,12 +364,16 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * 
  * @event onRowSwiped
  * @param {UI.ListView.iOS.SwipeDirection} swipeDirection
- * @param {Object} expansionSettings &emsp;buttonIndex : Number - Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.) <br />&emsp;fillOnTrigger : Boolean - if true the button fills the cell on trigger, else it bounces back to its initial position <br /> &emsp;threshold : Number - Size proportional threshold to trigger the expansion button. Default value 1.5
+ * @param {Object} expansionSettings 
+ * @param {Number} expansionSettings.buttonIndex Index of the expandable button (If you do not want any buttons to be expandable, set buttonIndex to -1.)
+ * @param {Boolean} expansionSettings.fillOnTrigger if true the button fills the cell on trigger, else it bounces back to its initial position
+ * @param {Number} expansionSettings.threshold Size proportional threshold to trigger the expansion button. Default value 1.5
+ * @param {Number} index
  * @ios
  * @since 0.1
  * 
  */
-ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings){}
+ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,index){}
 
 /**
  * Gets/sets leftToRightSwipeEnabled
@@ -390,6 +406,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * @param {UI.Color} color
  * @param {Number} padding
  * @param {Function} action Callback for button click action
+ * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
  * 
  * @method createSwipeItem
  * @static
@@ -398,7 +415,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * 
  
  */
-ListView.createSwipeItem = function(title,color,padding,action){};
+ListView.createSwipeItem = function(title,color,padding,action,isAutoHide){};
 
 /**
  * 
@@ -414,6 +431,7 @@ ListView.createSwipeItem = function(title,color,padding,action){};
  * @param {UI.Color} color
  * @param {Number} padding
  * @param {Function} action Callback for button click action
+ * @param {Boolean} isAutoHide Set false to doesn't autohide the SwipeItem. Default true.
  * 
  * @method createSwipeItemWithIcon
  * @static
@@ -422,7 +440,19 @@ ListView.createSwipeItem = function(title,color,padding,action){};
  * 
  
  */
-ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action){};
+ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAutoHide){};
+
+/**
+ * This method returns ListViewItem
+ *
+ * @return {UI.ListViewItem}
+ * @method listViewItemByIndex
+ * @param {Number} index
+ * @android
+ * @ios
+ * @since 0.1
+ */
+ListView.prototype.listViewItemByIndex = function(index){};
 
 /**
  * iOS Specific Properties.

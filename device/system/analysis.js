@@ -13,6 +13,7 @@
  *     console.log("Device.System.isBatteryCharged: "               + System.isBatteryCharged);
  *     console.log("Device.System.clipboard: "                      + System.clipboard);
  *     console.log("Device.System.language: "                       + System.language);
+ *     console.log("Device.System.region: "                         + System.region);
  *     console.log("Device.System.android.isApplicationInstalled: " + System.android.isApplicationInstalled('io.smartface.SmartfaceApp'));
  *     console.log("Device.System.vibrate(): "                      + System.vibrate());
  *     console.log("Device.System.android.menuKeyAvaliable: "       + System.android.menuKeyAvaliable);
@@ -32,6 +33,18 @@ function System() {}
  * @since 0.1
  */
 System.language;
+
+/**
+ *
+ * Returns the device's current region.
+ * @property {String} region
+ * @readonly
+ * @static
+ * @android
+ * @ios
+ * @since 2.0.7
+ */
+System.region;
 
 /**
  *
@@ -258,5 +271,33 @@ System.vibrate = function() {};
  * @since 0.1
  */
 System.isApplicationInstalled = function(packageName) {};
+
+/**
+ * @enum {String} Device.System.OSType
+ * @static
+ * @since 2.0.7
+ */
+System.OSType = {};
+
+/**
+ * @property {String} ANDROID
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 2.0.7
+ */
+System.OSType.ANDROID;
+
+/**
+ * @property {String} IOS
+ * @android
+ * @ios
+ * @static
+ * @readonly
+ * @since 2.0.7
+ */
+System.OSType.IOS;
+
 
 module.exports = System;

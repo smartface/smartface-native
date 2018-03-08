@@ -103,6 +103,26 @@ Page.prototype.android = {};
  */
 Page.prototype.android.onBackButtonPressed = function (){};
 
+Page.prototype.ios = {};
+/**
+ * Sets padding values to page's layout.
+ * This will override padding values of its layout. Padding values are defined by Apple for each orientation.
+ * 
+ * @ios
+ * @since 0.1
+ */
+Page.prototype.ios.safeAreaLayoutMode = false;
+
+/**
+ * This event will be triggered when padding values of layout changed.
+ *
+ * @event onSafeAreaPaddingChange
+ * @param {Object} paddingObject Includes top,left,right and bottom padding values. 
+ * @ios
+ * @since 0.1
+ */
+Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
+
 /**
  * Gets status bar object. This property is readonly, you can not set
  * status bar to a page but you can change properties of page's status bar.
@@ -245,5 +265,35 @@ Page.Orientation.AUTOLANDSCAPE = 12;
  * @since 0.1
  */
 Page.Orientation.AUTO = 15;
+
+/**
+ * Sets the previous page's header bar title display mode.
+ * 
+ * @property AUTOMATIC
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Page.iOS.LargeTitleDisplayMode.AUTOMATIC = 0;
+
+/**
+ * Always display large title mode.
+ * 
+ * @property ALWAYS
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
+
+/**
+ * Never display large title mode.
+ * 
+ * @property NEVER
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+Page.iOS.LargeTitleDisplayMode.NEVER = 2;
 
 module.exports = Page;

@@ -7,46 +7,58 @@ Font.create = function(fontFamily, size, style) {
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.systemFontOfSize(size);
         }else{
-            var font = getFileFont(fontFamily,size,"_n");
-            if (font) {
-                return font;
-            }else{
-                return __SF_UIFont.fontWithNameSize(fontFamily,size);
+            var retval = null;
+            if (getFileFont(fontFamily,size,"_n")) {
+                retval = getFileFont(fontFamily,size,"_n");
+            } else if (getFileFont(fontFamily,size,"-Regular")) {
+                retval = getFileFont(fontFamily,size,"-Regular");
+            } else {
+                retval = __SF_UIFont.fontWithNameSize(fontFamily,size);
             }
+            return retval;
         }
     }else if(style === this.BOLD){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.boldSystemFontOfSize(size);
         }else{
-            var font = getFileFont(fontFamily,size,"_b");
-            if (font) {
-                return font;
-            }else{
-                return __SF_UIFont.fontWithNameSize(fontFamily,size).bold();
+            var retval = null;
+            if (getFileFont(fontFamily,size,"_b")) {
+                retval = getFileFont(fontFamily,size,"_b");
+            } else if (getFileFont(fontFamily,size,"-Bold")) {
+                retval = getFileFont(fontFamily,size,"-Bold");
+            } else {
+                retval = __SF_UIFont.fontWithNameSize(fontFamily,size).bold();
             }
+            return retval;
         }
     }
     else if(style === this.ITALIC){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.italicSystemFontOfSize(size);
         }else{
-            var font = getFileFont(fontFamily,size,"_i");
-            if (font) {
-                return font;
-            }else{
-                return __SF_UIFont.fontWithNameSize(fontFamily,size).italic();
+            var retval = null;
+            if (getFileFont(fontFamily,size,"_i")) {
+                retval = getFileFont(fontFamily,size,"_i");
+            } else if (getFileFont(fontFamily,size,"-Italic")) {
+                retval = getFileFont(fontFamily,size,"-Italic");
+            } else {
+                retval = __SF_UIFont.fontWithNameSize(fontFamily,size).italic();
             }
+            return retval;
         }
     }else if(style === this.BOLD_ITALIC){
         if (fontFamily === Font.DEFAULT){
             return __SF_UIFont.systemFontOfSize(size).boldItalic();
         }else{
-            var font = getFileFont(fontFamily,size,"_bi");
-            if (font) {
-                return font;
-            }else{
-                return __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic();
+            var retval = null;
+            if (getFileFont(fontFamily,size,"_bi")) {
+                retval = getFileFont(fontFamily,size,"_bi");
+            } else if (getFileFont(fontFamily,size,"-BoldItalic")) {
+                retval = getFileFont(fontFamily,size,"-BoldItalic");
+            } else {
+                retval = __SF_UIFont.fontWithNameSize(fontFamily,size).boldItalic();
             }
+            return retval;
         }
     }else{
         if (fontFamily === Font.DEFAULT){
@@ -88,6 +100,20 @@ function getFileFont(fontFamily,size,fontSuffix){
     }
     
     return undefined;
+}
+
+Font.ios = {};
+Font.ios.allFontNames = function() {
+    var retval = [];
+    const UIFont = SF.requireClass("UIFont");
+    var familyNames = UIFont.familyNames()
+    for (var familyNameindex in familyNames) {
+        var fontNames = UIFont.fontNamesForFamilyName(familyNames[familyNameindex]);
+        for (var fontNameindex in fontNames) {
+            retval.push(fontNames[fontNameindex]);
+        }
+    }
+    return retval;
 }
 
 Font.createFromFile = function(path, size) {

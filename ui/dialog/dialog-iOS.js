@@ -22,7 +22,7 @@ function Dialog(params) {
                     },function(){
                         
                     });
-                },__SF_UIDeviceOrientationDidChangeNotification);
+                },__SF_UIApplicationDidChangeStatusBarOrientationNotification);
                 
     self.calculatePosition();
     

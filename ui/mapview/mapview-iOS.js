@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const Image = require("sf-core/ui/image");
 const Color = require('sf-core/ui/color');
 const Location = require('sf-core/device/location');
+const Invocation    = require('sf-core/util').Invocation;
 
 const MapView = extend(View)(
     function (_super, params) {
@@ -114,6 +115,28 @@ const MapView = extend(View)(
             enumerable: true
         });
         
+        var _minZoomLevel = 0;
+        Object.defineProperty(self, 'minZoomLevel', {
+            get: function() {
+                return _minZoomLevel;
+            },
+            set: function(value) {
+                _minZoomLevel = value;
+            },
+            enumerable: true
+        });
+        
+        var _maxZoomLevel = 19;
+        Object.defineProperty(self, 'maxZoomLevel', {
+            get: function() {
+                return _maxZoomLevel;
+            },
+            set: function(value) {
+                _maxZoomLevel = value;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'compassEnabled', {
             get: function() {
                 return self.nativeObject.showsCompass;
@@ -208,16 +231,60 @@ const MapView = extend(View)(
         }
         
         var _zoomLevel = 15; //Default Zoom Level
-        
         Object.defineProperty(self, 'zoomLevel', {
             get: function() {
+                if (self.nativeObject.getRegion) {
+                    var region = self.nativeObject.getRegion();
+            
+                    var centerPixelX = longitudeToPixelSpaceX(region.center.longitude);
+                    var topLeftPixelX = longitudeToPixelSpaceX(region.center.longitude - region.span.longitudeDelta / 2);
+                    
+                    var scaledMapWidth = (centerPixelX - topLeftPixelX) * 2;
+                    var mapSizeInPixels = self.nativeObject.bounds;
+                    var zoomScale = scaledMapWidth / mapSizeInPixels.width;
+                    var zoomExponent = Math.log(zoomScale) / Math.log(2);
+                    var zoomLevel = 20 - zoomExponent.toFixed(2);
+    
+                    return zoomLevel - 1;
+                }
                 return _zoomLevel;
             },
             set: function(value) {
-                self.setZoomLevelWithAnimated(self.centerLocation,value,true);
+                self.setZoomLevelWithAnimated(self.centerLocation,value + 1,true);
             },
             enumerable: true
         });
+        self.nativeObject.regionWillChangeAnimated = function(){
+            if (_isFirstRender){
+                return;
+            }
+            if (typeof self.onCameraMoveStarted === 'function') {
+                self.onCameraMoveStarted();
+            }
+        }
+        
+        self.nativeObject.regionDidChangeAnimated = function(){
+            if (_isFirstRender){
+                return;
+            }
+            if (typeof self.onCameraMoveEnded === 'function') {
+                self.onCameraMoveEnded();
+            }
+            
+            if (self.minZoomLevel > self.maxZoomLevel) {
+                return;
+            }
+            if (self.minZoomLevel == self.maxZoomLevel) {
+                self.zoomLevel = self.minZoomLevel
+                return;
+            }
+            
+            if (self.minZoomLevel > 0 && self.zoomLevel < self.minZoomLevel) {
+                self.zoomLevel = self.minZoomLevel;
+            }else if(self.maxZoomLevel < 19 && self.zoomLevel > self.maxZoomLevel){
+                self.zoomLevel = self.maxZoomLevel
+            }
+        }
         
         self.setZoomLevelWithAnimated = function(centerLocation,zoomLevel,animated){
             // clamp large numbers to 28
@@ -227,6 +294,26 @@ const MapView = extend(View)(
             // use the zoom level to compute the region
             var span = coordinateSpanWithCenterCoordinate(centerLocation,zoomLevel);
             self.nativeObject.centerLocation = {latitudeDelta : span.latitudeDelta,longitudeDelta : span.longitudeDelta,latitude : centerLocation.latitude, longitude : centerLocation.longitude,animated : animated};
+        }
+        
+        self.getVisiblePins = function(){
+            var annotationVisibleRect = Invocation.invokeInstanceMethod(self.nativeObject,"visibleMapRect",[],"CGRect");
+            
+            var argAnnotationVisibleRect = new Invocation.Argument({
+                type:"CGRect",
+                value: annotationVisibleRect
+            });
+            
+            var annotationSet = Invocation.invokeInstanceMethod(self.nativeObject,"annotationsInMapRect:",[argAnnotationVisibleRect],"id");
+            
+            var annotationArray = Invocation.invokeInstanceMethod(annotationSet,"allObjects",[],"id");
+            var pinArray = [];
+            for (var i in annotationArray) {
+                var pin = new Pin();
+                pin.nativeObject = annotationArray[i];
+                pinArray.push(pin);
+            }
+            return pinArray;
         }
         
         if (params) {

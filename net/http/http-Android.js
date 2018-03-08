@@ -9,6 +9,13 @@ const AndroidConfig = require("sf-core/util/Android/androidconfig");
 
 const Blob = require("../../blob");
 
+const WITHOUT_BODY_METHODS = {
+    "GET": 0,
+    "HEAD": 1,
+    "COPY": 2,
+    "PURGE": 3
+};
+
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 var activity = AndroidConfig.activity;
 
@@ -229,7 +236,7 @@ function createRequest(params, isMultipart) {
     }
 
     if (params.method) {
-        if (params.method === "GET") {
+        if (params.method in WITHOUT_BODY_METHODS) {
             builder = builder.method(params.method, null);
         }
         else {

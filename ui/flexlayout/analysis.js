@@ -60,7 +60,7 @@ FlexLayout.prototype.direction = UI.FlexLayout.Direction.INHERIT;
  * This property specifies how children will be placed(horizontally or vertical) in FlexLayout.
  * It defines the main axis.
  * It works like flex-direction on CSS.
- * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction
  *
  *
  * @property {UI.FlexLayout.FlexDirection} [flexDirection = UI.FlexLayout.FlexDirection.ROW]
@@ -97,7 +97,7 @@ FlexLayout.prototype.alignContent = UI.FlexLayout.AlignContent.STRETCH;
  * This property aligns children along the cross-axis of their container.
  * If UI.FlexLayout.FlexDirection is row, this property controls the alignment in vertical direction.
  * It works like align-items on CSS.
- * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/align-items
  *
  * @property {UI.FlexLayout.AlignItems} [alignItems = UI.FlexLayout.AlignItems.STRETCH]
  * @android

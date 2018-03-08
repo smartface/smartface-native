@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const UITableViewRowAnimation = {
     fade : 0,
@@ -61,14 +62,18 @@ const ListView = extend(View)(
           enumerable: true
         });
         
-        self.ios.onRowSwiped = function(swipeDirection,expansionSettings){};
+        self.ios.onRowSwiped = function(swipeDirection,expansionSettings,index){};
         
         self.ios.swipeItem = function(title,color,padding,action){
             return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
         }
 
         self.nativeObject.onRowSwiped = function(e){
-            return self.ios.onRowSwiped(e.direction,e.expansionSettings);
+            var index;
+            if (e.index != -1) {
+                index = e.index
+            }
+            return self.ios.onRowSwiped(e.direction,e.expansionSettings,index);
         }
 
         self.stopRefresh = function(){
@@ -141,7 +146,32 @@ const ListView = extend(View)(
             setAllChilds(templateItem);
             return templateItem;
         }
-
+        
+        self.listViewItemByIndex = function(index){
+            var argActivityItems = new Invocation.Argument({
+                type:"NSInteger",
+                value: index
+            });
+            var argApplicationActivities = new Invocation.Argument({
+                type:"NSInteger",
+                value: 0
+            });
+            
+            var indexPath = Invocation.invokeClassMethod("NSIndexPath","indexPathForRow:inSection:",[argActivityItems,argApplicationActivities],"NSObject");
+            
+            var argIndexPath = new Invocation.Argument({
+                type:"NSObject",
+                value: indexPath
+            });
+            
+            var cell = Invocation.invokeInstanceMethod(self.nativeObject,"cellForRowAtIndexPath:",[argIndexPath],"NSObject")
+            if (cell) {
+                return self.createTemplate({contentView : cell.contentView.subviews[0]});
+            }
+            
+            return undefined
+        }
+        
         function setAllChilds(item){
             for (var child in item.childs){
                  if (item.childs[child].id){
@@ -217,11 +247,15 @@ ListView.iOS = {};
 
 ListView.iOS.SwipeDirection = require('sf-core/ui/listview/direction');
 
-ListView.iOS.createSwipeItem = function(title,color,padding,action){
-    return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
+ListView.iOS.createSwipeItem = function(title,color,padding,action,isAutoHide){
+    if (isAutoHide === undefined) {
+        return __SF_MGSwipeButton.createMGSwipeButton(title,color.nativeObject,padding,action);
+    }else{
+        return __SF_MGSwipeButton.createMGSwipeButtonWithTitleColorPaddingJsActionIsAutoHide(title,color.nativeObject,padding,action,isAutoHide ? true : false);
+    }
 }
 
-ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action){
+ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAutoHide){
     if(!(icon instanceof Image)){
         throw new TypeError('icon must be a UI.Image');
     }
@@ -230,7 +264,11 @@ ListView.iOS.createSwipeItemWithIcon = function(title,icon,color,padding,action)
         title = "";
     }
     
-    return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title,icon.nativeObject,color.nativeObject,padding,action);
+    if (isAutoHide === undefined) {
+        return __SF_MGSwipeButton.createMGSwipeButtonWithIcon(title,icon.nativeObject,color.nativeObject,padding,action);
+    }else{
+        return __SF_MGSwipeButton.createMGSwipeButtonWithIconWithTitleIconColorPaddingJsActionIsAutoHide(title,icon.nativeObject,color.nativeObject,padding,action,isAutoHide ? true : false);
+    }
 }       
 
 module.exports = ListView;

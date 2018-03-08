@@ -35,6 +35,15 @@ TextBox.prototype.font = null;
 TextBox.prototype.text = "";
 
 /**
+ * Gets/sets automatically capitalization of the TextBox.
+ * @property {UI.TextBox.AutoCapitalize} [autoCapitalize = UI.TextBox.AutoCapitalize.NONE]
+ * @android
+ * @ios
+ * @since 2.8
+ */
+TextBox.prototype.autoCapitalize = "";
+
+/**
  * Gets/sets the text alignment of the TextBox.
  * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
  * @android
@@ -52,6 +61,18 @@ TextBox.prototype.textAlignment = UI.TextAlignment.MIDLEFT;
  * @since 0.1
  */
 TextBox.prototype.textColor = UI.Color.BLACK;
+
+/**
+ * Gets/sets the cursor position of TextBox.
+ * 
+ * @property {Object} cursorPosition
+ * @property {Number} cursorPosition.start
+ * @property {Number} cursorPosition.end
+ * @android
+ * @ios
+ * @since 2.0.8
+ */
+TextBox.prototype.cursorPosition = {start: 0, end: 0};
 
 /**
  * Gets/sets hint text that will be displayed when TextBox is empty.

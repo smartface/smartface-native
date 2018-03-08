@@ -17,64 +17,106 @@ salep.test("sf-core/ui/mapview Unit Test", function() {
         subtitle: '2nd Floor, 530 Lytton Ave, Palo Alto, CA 94301',
         color: require("../../ui/color").RED
     });
-    
+
     // @todo mapview needs to shown on the page but its crashing. We should find why its crashing. 
     // Router.add("mappage",extend(Page)(
     //     function(_super) {
     //         var self = this;
     //         _super(self);
     //         this.layout.addChild(testObject);
-            
+
     //     })
     // );
     // Router.go("mappage");
 
     this.case("[centerLocation] getter/setter.", function() {
-        var centerLocation = {latitude: 10.10, longitude: 10.10};
-        assert.doesNotThrow(function(){ testObject.centerLocation = centerLocation; }, Error);
+        var centerLocation = { latitude: 10.10, longitude: 10.10 };
+        assert.doesNotThrow(function() { testObject.centerLocation = centerLocation; }, Error);
         assert.equal(testObject.centerLocation, centerLocation, 'centerLocation must be latitude: 10.10, longitude: 10.10');
     });
-    
+
     this.case("[compassEnabled] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.compassEnabled = true; }, Error);
+        assert.doesNotThrow(function() { testObject.compassEnabled = true; }, Error);
         assert.isTrue(testObject.compassEnabled, 'compassEnabled must be true');
     });
-    
+
     this.case("[rotateEnabled] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.rotateEnabled = true; }, Error);
+        assert.doesNotThrow(function() { testObject.rotateEnabled = true; }, Error);
         assert.isTrue(testObject.rotateEnabled, 'rotateEnabled must be true');
     });
-    
+
     this.case("[scrollEnabled] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.scrollEnabled = true; }, Error);
+        assert.doesNotThrow(function() { testObject.scrollEnabled = true; }, Error);
         assert.isTrue(testObject.scrollEnabled, 'scrollEnabled must be true');
     });
-    
+
     this.case("[zoomEnabled] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.zoomEnabled = true; }, Error);
+        assert.doesNotThrow(function() { testObject.zoomEnabled = true; }, Error);
         assert.isTrue(testObject.zoomEnabled, 'zoomEnabled must be true');
     });
-    
+
     this.case("[zoomLevel] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.zoomLevel = 10; }, Error);
+        assert.doesNotThrow(function() { testObject.zoomLevel = 10; }, Error);
         assert.equal(testObject.zoomLevel, 10, 'zoomLevel must be 10');
     });
-    
+
     this.case("[userLocationEnabled] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.userLocationEnabled = true; }, Error);
+        assert.doesNotThrow(function() { testObject.userLocationEnabled = true; }, Error);
         assert.isTrue(testObject.userLocationEnabled, 'userLocationEnabled must be true');
     });
-    
+
     this.case("[type] getter/setter.", function() {
-        assert.doesNotThrow(function(){ testObject.type = MapView.Type.HYBRID; }, Error);
+        assert.doesNotThrow(function() { testObject.type = MapView.Type.HYBRID; }, Error);
         assert.equal(testObject.type, MapView.Type.HYBRID, 'type must be MapView.Type.HYBRID');
     });
-    
+
     this.case("[addPin] function.", function() {
-        assert.doesNotThrow(function(){ testObject.addPin(myPin); }, Error);
+        assert.doesNotThrow(function() { testObject.addPin(myPin); }, Error);
     });
-    
+
     this.case("[removePin] function.", function() {
-        assert.doesNotThrow(function(){testObject.removePin(myPin); }, Error);
+        assert.doesNotThrow(function() { testObject.removePin(myPin); }, Error);
     });
 });
+
+salep.test("sf-core/ui/mapview Unit Test Full Sample", function() {
+    const FlexLayout = require('sf-core/ui/flexlayout');
+
+    var Page1 = extend(Page)(
+        function(_super) {
+            _super(this, {
+                onShow: function(params) {
+                    this.statusBar.visible = false;
+                    this.headerBar.visible = false;
+                }
+            });
+
+            var myMapView = new MapView({
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                positionType: FlexLayout.PositionType.ABSOLUTE,
+                scrollEnabled: true,
+                rotateEnabled: true,
+                zoomEnabled: true,
+                compassEnabled: true,
+                type: MapView.Type.NORMAL,
+                zoomLevel: 6,
+                centerLocation: {
+                    latitude: 38.7828647,
+                    longitude: 28.9675491
+                },
+            });
+
+            this.layout.addChild(myMapView);
+        }
+    );
+
+    this.case("[mapview full example]", function() {
+        assert.doesNotThrow(function() {
+            Router.add("pgMapView", Page1);
+            Router.go("pgMapView");
+        }, Error);
+    });
+})

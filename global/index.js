@@ -4,5 +4,6 @@ module.exports = {
     Timer: require('./timer'),
     Share: require('./share'),
     Data: require('./data'),
+    SecureData: require('./securedata'),
     SpeechRecognizer: require('./speechrecognizer')
 };

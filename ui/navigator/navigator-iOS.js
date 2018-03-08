@@ -32,6 +32,21 @@ function NavigatorViewModel(params) {
     
     // Properties
     ////////////////////////////////////////////////////////////////////////////
+    var _prefersLargeTitles = false;
+    Object.defineProperty(self.ios, 'prefersLargeTitles', {
+        get: function() {
+            return _prefersLargeTitles;
+        },
+        set: function(value) {
+            if (typeof value === 'boolean') {
+                _prefersLargeTitles = value;
+                if (self.view) {
+                    self.view.setPrefersLargeTitles(_prefersLargeTitles);
+                }
+            }
+        },
+        enumerable: true
+    });
     
     // Functions
     this.add = function (key, value, isSingleton) {
@@ -77,7 +92,7 @@ function NavigatorViewModel(params) {
             pageToGo = self.model.getPageInstance(routes[0]);
         }
         
-        if (parameters) {
+        if (typeof (parameters) != 'undefined' && parameters != null) {
             pageToGo.__pendingParameters = parameters; 
         }
         
@@ -174,14 +189,22 @@ function NavigatorView(params) {
     var self = this;
     var viewModel = params.viewModel;
     
+    self.setPrefersLargeTitles = function(prefersLargeTitles) {
+        if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
+            self.nativeObject.navigationBar.prefersLargeTitles = prefersLargeTitles;
+        }
+    };
+    
     // It shouldnt create with rootPage
     if (typeof params.rootPage === 'object') {
         // Native object creation
         var nativeNavigationController = UINavigationController.new();
         nativeNavigationController.viewControllers = [params.rootPage];
         nativeNavigationController.navigationBar.translucent = false;
+
         // Assign as native object
         self.nativeObject = nativeNavigationController;
+        self.setPrefersLargeTitles(viewModel.ios.prefersLargeTitles); // It requires self.native object
         
         self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
             navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated){
@@ -231,6 +254,7 @@ function NavigatorView(params) {
         
         return isShowed;
     };
+    
     ////////////////////////////////////////////////////////////////////////////
 };
 

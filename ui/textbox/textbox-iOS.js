@@ -38,6 +38,13 @@ const IOSReturnKeyType = {
     continue: 11 // @available(iOS 9.0, *)
 };
 
+const UITextAutocapitalizationType = {
+    None: 0,
+    Words: 1,
+    Sentences: 2,
+    AllCharactes: 3
+};
+
 const TextBox = extend(View)(
     function(_super, params) {
         var self = this;
@@ -172,7 +179,110 @@ const TextBox = extend(View)(
             },
             enumerable: true
         });
+        
+        Object.defineProperty(self, 'cursorPosition', {
+            get: function() {
+                var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
+                
+                var startPosition;
+                var invocationStartPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
+                if (invocationStartPosition) {
+                    invocationStartPosition.target = selectedTextRange;
+                    invocationStartPosition.setSelectorWithString("start");
+                    invocationStartPosition.retainArguments();
+                    
+                    invocationStartPosition.invoke();
+                    startPosition = invocationStartPosition.getReturnValue();
+                }
+                
+                var endPosition;
+                var invocationEndPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
+                if (invocationEndPosition) {
+                    invocationEndPosition.target = selectedTextRange;
+                    invocationEndPosition.setSelectorWithString("end");
+                    invocationEndPosition.retainArguments();
+                    
+                    invocationEndPosition.invoke();
+                    endPosition = invocationEndPosition.getReturnValue();
+                }
+                
+                var beginningOfDocument = self.nativeObject.valueForKey("beginningOfDocument");
+                
+                var offsetStart = 0;
+                var invocationOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
+                if (invocationOffsetFromPosition) {
+                    invocationOffsetFromPosition.target = self.nativeObject;
+                    invocationOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
+                    invocationOffsetFromPosition.retainArguments();
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition,3);
+                    invocationOffsetFromPosition.invoke();
+                    offsetStart = invocationOffsetFromPosition.getNSIntegerReturnValue();
+                }
+                
+                var offsetEnd = 0;
+                var invocationEndOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
+                if (invocationEndOffsetFromPosition) {
+                    invocationEndOffsetFromPosition.target = self.nativeObject;
+                    invocationEndOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
+                    invocationEndOffsetFromPosition.retainArguments();
+                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
+                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
+                    invocationEndOffsetFromPosition.invoke();
+                    offsetEnd = invocationEndOffsetFromPosition.getNSIntegerReturnValue();
+                }
+                
+                return {start: offsetStart,end: offsetEnd};
+            },
+            set: function(value) {
+                if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
 
+                    var beginningOfDocument = self.nativeObject.valueForKey("beginningOfDocument");
+                    var startPosition;
+                    var invocationPositionFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
+                    if (invocationPositionFromPosition) {
+                        invocationPositionFromPosition.target = self.nativeObject;
+                        invocationPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
+                        invocationPositionFromPosition.retainArguments();
+                        invocationPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
+                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(value.start,3);
+    
+                        invocationPositionFromPosition.invoke();
+                        startPosition = invocationPositionFromPosition.getReturnValue();
+                    }
+                    
+                    var endPosition;
+                    var invocationEndPositionFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
+                    if (invocationEndPositionFromPosition) {
+                        invocationEndPositionFromPosition.target = self.nativeObject;
+                        invocationEndPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
+                        invocationEndPositionFromPosition.retainArguments();
+                        invocationEndPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
+                        invocationEndPositionFromPosition.setNSIntegerArgumentAtIndex(value.end,3);
+    
+                        invocationEndPositionFromPosition.invoke();
+                        endPosition = invocationEndPositionFromPosition.getReturnValue();
+                    }
+                    
+                    var characterRange;
+                    var invocationTextRangeFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
+                    if (invocationTextRangeFromPosition) {
+                        invocationTextRangeFromPosition.target = self.nativeObject;
+                        invocationTextRangeFromPosition.setSelectorWithString("textRangeFromPosition:toPosition:");
+                        invocationTextRangeFromPosition.retainArguments();
+                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
+                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
+                        
+                        invocationTextRangeFromPosition.invoke();
+                        characterRange = invocationTextRangeFromPosition.getReturnValue();
+                    }
+                    
+                    self.nativeObject.setValueForKey(characterRange,"selectedTextRange");
+                }
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'text', {
             get: function() {
                 return self.nativeObject.text;
@@ -238,7 +348,21 @@ const TextBox = extend(View)(
             },
             enumerable: true,configurable : true
         });
-
+        
+        Object.defineProperty(self, 'autoCapitalize', {
+            get: function() {
+                return Invocation.invokeInstanceMethod(self.nativeObject,"autocapitalizationType",[],"NSInteger");
+            },
+            set: function(value) {
+                var argCapitalizationType = new Invocation.Argument({
+                    type:"NSInteger",
+                    value: value
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject,"setAutocapitalizationType:",[argCapitalizationType]);
+            },
+            enumerable: true,configurable : true
+        });
+        
         this.ios = {};
         Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
             get: function() {
@@ -445,5 +569,7 @@ const TextBox = extend(View)(
 
     }
 );
+
+TextBox.AutoCapitalize = require("./autocapitalize");
 
 module.exports = TextBox;
