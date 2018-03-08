@@ -120,14 +120,31 @@ function RouterViewModel(params) {
                 pageInfo.pagesNativeInstance = routerBrain.pagesInstance.nativeObject;
             }
             
+            console.log("CURRENT PAGE CHECK");
             if (routerBrain.currentPage) {
-                pageInfo.currentPage = routerBrain.currentPage.nativeObject;
+                switch (routerBrain.currentPage.type) {
+                    case 'TabBarFlow': {
+                        pageInfo.currentPage = routerBrain.currentPage.tabBarView.nativeObject;
+                        break;
+                    }
+                    case 'Navigator': {
+                        pageInfo.currentPage = routerBrain.currentPage.view.nativeObject;
+                        break;
+                    }
+                    default: {
+                        pageInfo.currentPage = routerBrain.currentPage.nativeObject;
+                        break;
+                    }
+                }
+                console.log("CURRENT PAGE : " + pageInfo.currentPage);
             } else {
                 pageInfo.currentPage = null;
             }
             
             var isShowed = routerView.show(pageInfo);
             if (isShowed) {
+                console.log("HEEEEEYYY is SHOWED TRUE !!!");
+                
                 routerBrain.currentPage = pageToGo;
                 
                 var nativeObject = null;
@@ -156,16 +173,24 @@ function RouterViewModel(params) {
         }
     };
     this.goBack = function (to, parameters, animated) {
+        console.log("Router history before : " + routerBrain.history);
+        console.log("ROUTER GOBACK");
         if (to) {
+            console.log("ROUTER 1");
             this.go(to, parameters, animated);
         } else {
+            console.log("ROUTER 2");
             if (routerBrain.currentPage.type == "Navigator") {
+                console.log("ROUTER 3");
                 routerBrain.currentPage.goBack();
             } else if (routerBrain.currentPage.type == "TabBarFlow" && routerBrain.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
+                console.log("ROUTER 4");
                 routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack();
             } else {
+                console.log("ROUTER 5");
                 routerBrain.history.pop();
                 this.go(routerBrain.history[routerBrain.history.length - 1]);
+                console.log("Router history after : " + routerBrain.history);
             }
         }
     };
@@ -211,6 +236,8 @@ function RouterView(params) {
         var currentPage = info.currentPage;
         var viewController = info.nativeObject;
         
+        console.log("SHOW's current page : " + currentPage);
+        
         // Just for backward compability
         var tempSelfNativeObject = self.nativeObject;
         if (info.pagesNativeInstance) {
@@ -235,40 +262,98 @@ function RouterView(params) {
             }
         }
         
-        // Show
+        // New Show
         var isShowed = false;
-        if (viewControllerExists) {
-            if (info.pagesNativeInstance) {
+        if (info.pagesNativeInstance) {
+            // Old approach (only UINavigationController)
+            if (viewControllerExists) {
                 self.nativeObject.popToPage(viewController, info.animated);
             } else {
-                self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not
-                if (currentPage && currentPage !== viewController){
-                    currentPage.viewWillDisappear(info.animated);
-                }
-                viewController.viewWillAppear(info.animated);
-                viewController.viewDidAppear(info.animated);
-            }
-            isShowed = true;
-        } else {
-            if (info.pagesNativeInstance) {
                 self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
-            } else {
-                if (currentPage) {
-                    currentPage.viewWillDisappear(info.animated);
+            }
+        } else {
+            // ContainerViewController style
+            if (currentPage) {
+                console.log("WILL MAKE TRANSITION ANIMATION");
+                console.log("view controller to show : " + viewController);
+                if (currentPage != viewController) {
+                    self.nativeObject.addChildViewController(viewController);
+                    currentPage.willMoveToParentViewController(undefined);
+                    
+                    console.log("SUMMARY=======");
+                    console.log("SUMMARY======= self.nativeObject : " + self.nativeObject);
+                    console.log("SUMMARY======= currentPage : " + currentPage);
+                    console.log("SUMMARY======= viewController : " + viewController);
+                    console.log("SUMMARY END=======");
+                    
+                    self.nativeObject.transitionFromToDurationOptionsAnimationsCompletion(
+                        currentPage,
+                        viewController,
+                        1,
+                        0 << 16,
+                        function(){
+                            console.log("TRANSITION ANIMATIONS CALLED");
+                            if (viewController.view) {
+                                viewController.view.yoga.position = 1;
+                                self.nativeObject.view.addSubview(viewController.view);
+                            }
+                        },
+                        function(finished){
+                            console.log("TRANSITION ANIMATION FINISHED CALLED WITH : " + finished);
+                            console.log("view controller after show finished : " + viewController);
+                            self.nativeObject.view.yoga.applyLayoutPreservingOrigin(false);
+                            viewController.didMoveToParentViewController(self.nativeObject);
+                            currentPage.removeFromParentViewController();
+                        }
+                    );
                 }
-                viewController.willMoveToParentViewController(self.nativeObject);
+            } else {
+                console.log("WITHOUT TRANSITION ANIMATION");
                 self.nativeObject.addChildViewController(viewController);
-                
                 if (viewController.view) {
                     viewController.view.yoga.position = 1;
                     self.nativeObject.view.addSubview(viewController.view);
                     self.nativeObject.view.yoga.applyLayoutPreservingOrigin(false);
                 }
-                
-                viewController.didMoveToParentViewController(self.nativeObject);   
+                viewController.didMoveToParentViewController(self.nativeObject);
             }
-            isShowed = true;
         }
+        isShowed = true;
+        
+        // // Show
+        // var isShowed = false;
+        // if (viewControllerExists) {
+        //     if (info.pagesNativeInstance) {
+        //         self.nativeObject.popToPage(viewController, info.animated);
+        //     } else {
+        //         self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not
+        //         if (currentPage && currentPage !== viewController){
+        //             currentPage.viewWillDisappear(info.animated);
+        //         }
+        //         viewController.viewWillAppear(info.animated);
+        //         viewController.viewDidAppear(info.animated);
+        //     }
+        //     isShowed = true;
+        // } else {
+        //     if (info.pagesNativeInstance) {
+        //         self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
+        //     } else {
+        //         if (currentPage) {
+        //             currentPage.viewWillDisappear(info.animated);
+        //         }
+        //         viewController.willMoveToParentViewController(self.nativeObject);
+        //         self.nativeObject.addChildViewController(viewController);
+                
+        //         if (viewController.view) {
+        //             viewController.view.yoga.position = 1;
+        //             self.nativeObject.view.addSubview(viewController.view);
+        //             self.nativeObject.view.yoga.applyLayoutPreservingOrigin(false);
+        //         }
+                
+        //         viewController.didMoveToParentViewController(self.nativeObject);
+        //     }
+        //     isShowed = true;
+        // }
 
         return isShowed;
     };

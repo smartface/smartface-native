@@ -202,6 +202,9 @@ function NavigatorView(params) {
     
     // Functions
     this.show = function(info){
+        
+        console.log("HEEEEEYYY NAVIGATOR SHOW");
+        
         var viewController = info.nativeObject;
         
         // Check from native array
@@ -217,9 +220,11 @@ function NavigatorView(params) {
         // Show
         var isShowed = false;
         if (viewControllerExists) {
+            console.log("HEEEEEYYY NAVIGATOR SHOW viewControllerExists with animation : " + info.animated);
             self.nativeObject.popToViewControllerAnimated(viewController, info.animated);
             isShowed = true;
         } else {
+            console.log("HEEEEEYYY NAVIGATOR SHOW viewController NOT EXIST with animation : " + info.animated);
             self.nativeObject.pushViewControllerAnimated(viewController, info.animated);
             isShowed = true;
         }

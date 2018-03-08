@@ -30,11 +30,28 @@ function Page(params) {
                     self.layout.nativeObject.endEditing(true);
                 },__SF_UIApplicationWillResignActiveNotification);
                 
-    self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    // self.pageView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
+    
+    self.pageView.left = 0;
+    self.pageView.top = 0;
+    self.pageView.right = 0;
+    self.pageView.bottom = 0;
+    
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
     self.calculatePosition = function(){
+        
+        
+        // self.pageView.left = self.pageView.nativeObject.frame.x;
+        // self.pageView.top = self.pageView.nativeObject.frame.y;
+        
+        // self.pageView.width = self.pageView.nativeObject.frame.width;
+        // self.pageView.height = self.pageView.nativeObject.frame.height;
+        
         self.layout.applyLayout();
+        
+        console.log("Native width : " + self.pageView.nativeObject.frame.width);
+        console.log("Native height : " + self.pageView.nativeObject.frame.height);
     }
 
     self.nativeObject.onViewLoad  = function(){
