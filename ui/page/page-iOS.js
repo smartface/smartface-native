@@ -32,7 +32,6 @@ function Page(params) {
     
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
-    
     var _safeAreaPaddingObject = {
         "top" : 0,
         "bottom" : 0,
@@ -80,18 +79,7 @@ function Page(params) {
     }
     
     self.calculatePosition = function(){
-        
-        
-        // self.pageView.left = self.pageView.nativeObject.frame.x;
-        // self.pageView.top = self.pageView.nativeObject.frame.y;
-        
-        // self.pageView.width = self.pageView.nativeObject.frame.width;
-        // self.pageView.height = self.pageView.nativeObject.frame.height;
-        
         self.layout.applyLayout();
-        
-        console.log("Native width : " + self.pageView.nativeObject.frame.width);
-        console.log("Native height : " + self.pageView.nativeObject.frame.height);
     }
 
     self.nativeObject.onViewLoad  = function(){
