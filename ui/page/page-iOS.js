@@ -32,7 +32,6 @@ function Page(params) {
     
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
     
-    
     var _safeAreaPaddingObject = {
         "top" : 0,
         "bottom" : 0,
