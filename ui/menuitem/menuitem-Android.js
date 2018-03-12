@@ -9,6 +9,7 @@ const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringB
 
 function MenuItem(params) {
     this.android = {};
+    this.ios = {};
     this.android.titleSpanned;
 
     var _title;
