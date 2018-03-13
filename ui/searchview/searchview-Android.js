@@ -83,7 +83,7 @@ const SearchView = extend(View)(
         {
             'text' : {
                 get: function() {
-                    return mSearchSrcTextView.getText();
+                    return mSearchSrcTextView.getText().toString();
                 },
                 set: function(text) {
                     if(text){
