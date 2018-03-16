@@ -13,6 +13,7 @@ const NativeEditText = requireClass("android.widget.EditText");
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView = requireClass("android.widget.TextView");
+const NativeInputFilter = requireClass("android.text.InputFilter");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -83,6 +84,7 @@ const TextBox = extend(Label)(
         var _onActionButtonPress;
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
+        var _maxLength;
         Object.defineProperties(this, {
             'cursorPosition': {
                 get: function() {
@@ -111,6 +113,25 @@ const TextBox = extend(Label)(
                     self.nativeObject.setFocusable(touchEnabled);
                     self.nativeObject.setFocusableInTouchMode(touchEnabled);
                     self.nativeObject.setLongClickable(touchEnabled); 
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'maxLength': {
+                get: function() {
+                    return _maxLength;
+                },
+                set: function(value) {
+                    _maxLength = value;
+                    var filterArray = toJSArray(self.nativeObject.getFilters());
+                    for(var i = 0; i<filterArray.length ; i++){
+                        if((filterArray[i] + "").includes("android.text.InputFilter$LengthFilter")){
+                            filterArray.splice(i, 1);
+                            break;
+                        }
+                    }
+                    filterArray.push(new NativeInputFilter.LengthFilter(_maxLength));
+                    self.nativeObject.setFilters(array(filterArray,"android.text.InputFilter"));
                 },
                 enumerable: true,
                 configurable: true
