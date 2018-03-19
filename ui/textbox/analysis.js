@@ -98,7 +98,7 @@ TextBox.prototype.android.hintTextColor = UI.Color.LIGHTGRAY;
  * Set an input filter to constrain the text length to the specified number. This property works only for Android.
  *
  * @method maxLength
- * @property {Number}
+ * @param {Number} value
  * @android
  * @since 0.1
  */
