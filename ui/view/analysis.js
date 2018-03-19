@@ -479,7 +479,7 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
  * @android
  * @ios
  * @member UI.View
- * @since 0.1
+ * @since 2.0.10
  */
 View.prototype.onTouchMove = function onTouchMove(isInside){ };
 
@@ -490,7 +490,7 @@ View.prototype.onTouchMove = function onTouchMove(isInside){ };
  * @android
  * @ios
  * @member UI.View
- * @since 0.1
+ * @since 2.0.10
  */
 View.prototype.onTouchCancel = function onTouchCancel(){ };
 
