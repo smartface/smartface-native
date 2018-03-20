@@ -457,18 +457,42 @@ View.prototype.getParent = function(){};
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouch = function onTouch(){ }
+View.prototype.onTouch = function onTouch(){ };
 
 /**
  * This event is called when a touch screen motion event ends.
  *
  * @event onTouchEnded
+ * @param {Boolean} isInside
  * @android
  * @ios
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouchEnded = function onTouchEnded(){ }
+View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
+
+/**
+ * This event is called when a touch screen motion event moves.
+ *
+ * @event onTouchMove
+ * @param {Boolean} isInside
+ * @android
+ * @ios
+ * @member UI.View
+ * @since 2.0.10
+ */
+View.prototype.onTouchMove = function onTouchMove(isInside){ };
+
+/**
+ * This event is called when a touch screen motion event cancels.
+ *
+ * @event onTouchCancel
+ * @android
+ * @ios
+ * @member UI.View
+ * @since 2.0.10
+ */
+View.prototype.onTouchCancel = function onTouchCancel(){ };
 
 /**
  * Gets/Sets the elevation of the view. For the views that has 

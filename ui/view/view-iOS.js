@@ -277,31 +277,93 @@ function View(params) {
     this.getParent = function(){
         return self.parent ? self.parent : null;
     };
-
+    
+    var _onTouch;
     Object.defineProperty(self, 'onTouch', {
         get: function() {
-            return self.nativeObject.onTouch;
+            return _onTouch;
         },
         set: function(value) {
-            if (typeof value === 'function') {
-                self.nativeObject.onTouch = value.bind(this);
-            }
+            if (typeof value !== 'function') {
+                return;
+            };
+            _onTouch = value;
+            var onTouchHandler = function(e){
+                value.call(this);
+            };
+            self.nativeObject.onTouch = onTouchHandler.bind(this);
         },
         enumerable: true, configurable: true
     });
-
+    
+    var _onTouchEnded;
     Object.defineProperty(self, 'onTouchEnded', {
         get: function() {
-            return self.nativeObject.onTouchEnded;
+            return _onTouchEnded;
         },
         set: function(value) {
-            if (typeof value === 'function') {
-                self.nativeObject.onTouchEnded = value.bind(this);
-            }
+            if (typeof value !== 'function') {
+                return;
+            };
+            _onTouchEnded = value;
+            var onTouchEndedHandler = function(e){
+                if (e && e.point) {
+                    value.call(this,isInside(self.nativeObject.frame,e.point));
+                }else{
+                    value.call(this);
+                }
+            };
+            self.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
         },
         enumerable: true, configurable: true
     });
-
+    
+    var _onTouchMove;
+    Object.defineProperty(self, 'onTouchMove', {
+        get: function() {
+            return _onTouchMove;
+        },
+        set: function(value) {
+            if (typeof value !== 'function') {
+                return;
+            };
+            var onTouchMoveHandler = function(e){
+                if (e && e.point) {
+                    value.call(this,isInside(self.nativeObject.frame,e.point));
+                }else{
+                    value.call(this);
+                }
+            };
+            self.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
+        },
+        enumerable: true, configurable: true
+    });
+    
+    var _onTouchCancelled;
+    Object.defineProperty(self, 'onTouchCancelled', {
+        get: function() {
+            return _onTouchCancelled;
+        },
+        set: function(value) {
+            if (typeof value !== 'function') {
+                return;
+            };
+            var onTouchCancelledHandler = function(e){
+                value.call(this);
+            };
+            self.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
+        },
+        enumerable: true, configurable: true
+    });
+    
+    function isInside(frame,point){
+        var x = point.x;
+        var y = point.y;
+        var w = frame.width;
+        var h = frame.height;
+        return !(x > w || x < 0 || y > h || y < 0);
+    }
+    
     function guid() {
           function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
