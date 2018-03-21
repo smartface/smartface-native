@@ -475,13 +475,13 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
  * This event is called when a touch screen motion event moves.
  *
  * @event onTouchMove
- * @param {Boolean} isInside
+ * @param {Boolean} isInside 
  * @android
  * @ios
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchMove = function onTouchMove(isInside){ };
+View.prototype.onTouchMoved = function onTouchMoved(isInside){ };
 
 /**
  * This event is called when a touch screen motion event cancels.
@@ -492,7 +492,7 @@ View.prototype.onTouchMove = function onTouchMove(isInside){ };
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchCancel = function onTouchCancel(){ };
+View.prototype.onTouchCancelled = function onTouchCancelled(){ };
 
 /**
  * Gets/Sets the elevation of the view. For the views that has 
@@ -520,6 +520,16 @@ View.prototype.android.elevation;
  * @since 2.0.8
  */
 View.prototype.android.zIndex;
+
+/**
+ * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views. 
+ * The default value of this property is false
+ *
+ * @property {Boolean} [exclusiveTouch = false]
+ * @ios
+ * @since 2.0.10
+ */
+View.prototype.ios.exclusiveTouch = false;
 
 /**
  * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
