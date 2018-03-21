@@ -82,6 +82,20 @@ function View(params) {
         enumerable: true
     });
     
+    Object.defineProperty(self.ios, 'exclusiveTouch', {
+        get: function() {
+            return Invocation.invokeInstanceMethod(self.nativeObject,"isExclusiveTouch",[],"BOOL");
+        },
+        set: function(value) {
+            var argExclusiveTouch = new Invocation.Argument({
+                type:"BOOL",
+                value: value
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject,"setExclusiveTouch:",[argExclusiveTouch]);
+        },
+        enumerable: true
+    });
+    
     Object.defineProperty(self.ios, 'masksToBounds', {
         get: function() {
             return self.nativeObject.layer.masksToBounds;
@@ -319,7 +333,7 @@ function View(params) {
     });
     
     var _onTouchMove;
-    Object.defineProperty(self, 'onTouchMove', {
+    Object.defineProperty(self, 'onTouchMoved', {
         get: function() {
             return _onTouchMove;
         },

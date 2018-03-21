@@ -103,8 +103,8 @@ function View(params) {
     this._touchEnabled = true;
     this._onTouch;
     this._onTouchEnded;
-    this._onTouchMove;
-    this._onTouchCancel;
+    this._onTouchMoved;
+    this._onTouchCancelled;
     // YOGA PROPERTIES
     this._borderWidth = 0;
 
@@ -242,18 +242,18 @@ View.prototype = {
         this._onTouchEnded = onTouchEnded.bind(this);
         this.setTouchHandlers();
     },
-    get onTouchMove() {
-        return this._onTouchMove;
+    get onTouchMoved() {
+        return this._onTouchMoved;
     },
-    set onTouchMove(onTouchMove) {
-        this._onTouchMove = onTouchMove.bind(this);
+    set onTouchMoved(onTouchMoved) {
+        this._onTouchMoved = onTouchMoved.bind(this);
         this.setTouchHandlers();
     },
-    get onTouchCancel() {
-        return this._onTouchCancel;
+    get onTouchCancelled() {
+        return this._onTouchCancelled;
     },
-    set onTouchCancel(onTouchCancel) {
-        this._onTouchCancel = onTouchCancel.bind(this);
+    set onTouchCancelled(onTouchCancelled) {
+        this._onTouchCancelled = onTouchCancelled.bind(this);
         this.setTouchHandlers();
     },
     get visible() {
@@ -799,12 +799,12 @@ View.prototype.setTouchHandlers = function() {
                 }
                 else if (event.getAction() === ACTION_MOVE) { // MOVE
 
-                    this._onTouchMove && this._onTouchMove(isInside);
+                    this._onTouchMoved && this._onTouchMoved(isInside);
                     return true;
                 }
                 else if (event.getAction() === ACTION_CANCEL) { // CANCEL
 
-                    this._onTouchCancel && this._onTouchCancel();
+                    this._onTouchCancelled && this._onTouchCancelled();
                     return true;
                 }
             }
