@@ -481,7 +481,7 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchMoved = function onTouchMove(isInside){ };
+View.prototype.onTouchMoved = function onTouchMoved(isInside){ };
 
 /**
  * This event is called when a touch screen motion event cancels.
@@ -492,7 +492,7 @@ View.prototype.onTouchMoved = function onTouchMove(isInside){ };
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchCancelled = function onTouchCancel(){ };
+View.prototype.onTouchCancelled = function onTouchCancelled(){ };
 
 /**
  * Gets/Sets the elevation of the view. For the views that has 
