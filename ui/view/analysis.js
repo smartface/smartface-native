@@ -522,6 +522,16 @@ View.prototype.android.elevation;
 View.prototype.android.zIndex;
 
 /**
+ * Setting this property to TRUE causes the receiver to block the delivery of touch events to other views. 
+ * The default value of this property is false
+ *
+ * @property {Boolean} [exclusiveTouch = false]
+ * @ios
+ * @since 2.0.10
+ */
+View.prototype.ios.exclusiveTouch = false;
+
+/**
  * A Boolean indicating whether sublayers are clipped to the layer’s bounds.
  *
  * @property {Boolean} [masksToBounds = true]
