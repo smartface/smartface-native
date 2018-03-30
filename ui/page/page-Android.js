@@ -144,7 +144,8 @@ function Page(params) {
             }
             else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);
-            }else {
+                
+            }else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM )  {
                 Webview.onActivityResult(requestCode, resultCode, data);
             }
             
