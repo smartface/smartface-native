@@ -27,8 +27,6 @@ const NativeFile = requireClass('java.io.File');
 const Application = require("sf-core/application");
 var activity = AndroidConfig.activity;
 
-var REQUEST_CODE_LOLIPOP = 1111;
-var RESULT_CODE_ICE_CREAM = 2222;
 var mFilePathCallback;
 var mCameraPhotoPath;
 var mUploadMessage;
@@ -397,7 +395,7 @@ const WebView = extend(View)(
                         i.addCategory(NativeIntent.CATEGORY_OPENABLE);
                         i.setType("*/*");
                         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i, "File Browser"),
-                            RESULT_CODE_ICE_CREAM);
+                            WebView.RESULT_CODE_ICE_CREAM);
                     }
                     else {
                         mUploadMessage = uploadMsg;
@@ -405,7 +403,7 @@ const WebView = extend(View)(
                         i2.addCategory(NativeIntent.CATEGORY_OPENABLE);
                         i2.setType("image/*");
                         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i2, "File Browser"),
-                            RESULT_CODE_ICE_CREAM);
+                            WebView.RESULT_CODE_ICE_CREAM);
                     }
                 },
                 //For Android5.0+
@@ -449,7 +447,7 @@ const WebView = extend(View)(
                     chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
                     chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
 
-                    _page.nativeObject.startActivityForResult(chooserIntent, REQUEST_CODE_LOLIPOP);
+                    _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
                     return true;
 
                 }
@@ -469,9 +467,12 @@ const WebView = extend(View)(
     }
 );
 
+WebView.REQUEST_CODE_LOLIPOP = 1111;
+WebView.RESULT_CODE_ICE_CREAM = 2222;
+
 WebView.onActivityResult = function(requestCode, resultCode, data) {
 
-    if (requestCode == RESULT_CODE_ICE_CREAM) {
+    if (requestCode == WebView.RESULT_CODE_ICE_CREAM) {
         var uri = null;
         if (data != null) {
             uri = data.getData();
@@ -479,7 +480,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
         mUploadMessage.onReceiveValue(uri);
         mUploadMessage = null;
     }
-    else if (requestCode == REQUEST_CODE_LOLIPOP) {
+    else if (requestCode == WebView.REQUEST_CODE_LOLIPOP) {
         var results = null;
         // Check that the response is a good one
         if (resultCode == -1) { // Activity.RESULT_OK
