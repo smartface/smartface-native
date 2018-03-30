@@ -389,7 +389,7 @@ const WebView = extend(View)(
 
             var overrideMethodsWebChrome = {
                 openFileChooser: function(uploadMsg, acceptType, capture) {
-                    if (uploadMsg == !undefined && acceptType == !undefined && capture === undefined) {
+                    if (uploadMsg !== undefined && acceptType !== undefined && capture === undefined) {
                         mUploadMessage = uploadMsg;
                         var i = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
                         i.addCategory(NativeIntent.CATEGORY_OPENABLE);
