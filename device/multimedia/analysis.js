@@ -132,7 +132,7 @@ Multimedia.pickFromGallery = function(e) { };
 /**
  * @method requestGalleryAuthorization
  * 
- * @param {Function} callback Object
+ * @param {Function} callback
  * @param {Boolean} callback.status
  * @ios
  * @since 0.1
@@ -142,7 +142,7 @@ Multimedia.requestGalleryAuthorization = function(callback) { };
 /**
  * @method requestCameraAuthorization
  * 
- * @param {Function} callback Object
+ * @param {Function} callback
  * @param {Boolean} callback.status
  * @ios
  * @since 0.1
