@@ -1,6 +1,7 @@
 const Image = require("sf-core/ui/image");
 const File = require("sf-core/io/file");
 const Page = require('sf-core/ui/page');
+const Invocation = require('sf-core/util').Invocation;
 
 const UIImagePickerControllerSourceType = {
     photoLibrary : 0,
@@ -91,5 +92,81 @@ Multimedia.ActionType = { };
 Multimedia.ActionType.IMAGE_CAPTURE = [UIImagePickerMediaTypes.image];
 
 Multimedia.ActionType.VIDEO_CAPTURE = [UIImagePickerMediaTypes.video];
+
+Multimedia.ios = {};
+
+Multimedia.ios.requestGalleryAuthorization = function(callback){
+    Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function(status){
+        if (typeof callback == 'function') {
+            if (status == PHAuthorizationStatus.Authorized) {
+                callback(true);
+            }else{
+                callback(false);
+            }
+        }
+    });
+}
+
+Multimedia.ios.requestCameraAuthorization = function(callback){
+    Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType(function(status){
+        if (typeof callback == 'function') {
+            callback(status);
+        }
+    });
+}
+
+Multimedia.ios.native = {};
+
+const AVMediaType = {
+    Video : "vide"
+}
+
+const AVAuthorizationStatus = {
+    NotDetermined : 0,
+    Restricted : 1,
+    Denied : 2,
+    Authorized : 3,
+}
+
+Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback){
+    var argType = new Invocation.Argument({
+        type:"NSString",
+        value: AVMediaType.Video
+    });
+    var argCallback = new Invocation.Argument({
+        type:"BoolBlock",
+        value: callback
+    });
+    Invocation.invokeClassMethod("AVCaptureDevice","requestAccessForMediaType:completionHandler:",[argType,argCallback]);
+};
+
+Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType = function(){
+    var argType = new Invocation.Argument({
+        type:"NSString",
+        value: AVMediaType.Video
+    });
+    return Invocation.invokeClassMethod("AVCaptureDevice","authorizationStatusForMediaType:",[argType],"NSInteger");
+}
+
+const PHAuthorizationStatus = {
+    NotDetermined : 0, // User has not yet made a choice with regards to this application
+    Restricted : 1,        // This application is not authorized to access photo data.
+                                            // The user cannot change this application’s status, possibly due to active restrictions
+                                            //   such as parental controls being in place.
+    Denied : 2,            // User has explicitly denied this application access to photos data.
+    Authorized : 3      // User has authorized this application to access photos data.
+};
+
+Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback){
+    var argCallback = new Invocation.Argument({
+        type:"NSIntegerBlock",
+        value: callback
+    });
+    Invocation.invokeClassMethod("PHPhotoLibrary","requestAuthorization:",[argCallback]);
+};
+
+Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus = function(){
+    return Invocation.invokeClassMethod("PHPhotoLibrary","authorizationStatus",[],"NSInteger");
+}
 
 module.exports = Multimedia;
