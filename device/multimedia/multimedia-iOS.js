@@ -40,7 +40,12 @@ Multimedia.createImagePickerController = function(e){
         picker.dismissViewController();
         if (e.onSuccess){
             if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image){
-                e.onSuccess({image : Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"])});
+                var image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
+                if (image.nativeObject.fixOrientation) {
+                    var fixedImage = image.nativeObject.fixOrientation();
+                    image = Image.createFromImage(fixedImage);
+                }
+                e.onSuccess({image : image});
             }else if(param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video){
                 var videoURL = param.info["UIImagePickerControllerMediaURL"];
                 var file = new File({path:videoURL.absoluteString});
