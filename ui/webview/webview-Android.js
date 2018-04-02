@@ -24,13 +24,11 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
-const Application = require("sf-core/application");
 var activity = AndroidConfig.activity;
 
 var mFilePathCallback;
 var mCameraPhotoPath;
 var mUploadMessage;
-
 
 const WebView = extend(View)(
     function(_super, params) {
@@ -387,8 +385,6 @@ const WebView = extend(View)(
                     return (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
                 }.bind(this)
             }));
-
-            //-----------------
 
             var overrideMethodsWebChrome = {
                 openFileChooser: function(uploadMsg, acceptType, capture) {
