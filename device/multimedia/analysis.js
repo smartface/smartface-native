@@ -135,7 +135,7 @@ Multimedia.pickFromGallery = function(e) { };
  * @param {Function} callback
  * @param {Boolean} callback.status
  * @ios
- * @since 0.1
+ * @since 2.0.10
  */
 Multimedia.requestGalleryAuthorization = function(callback) { };
 
@@ -145,7 +145,7 @@ Multimedia.requestGalleryAuthorization = function(callback) { };
  * @param {Function} callback
  * @param {Boolean} callback.status
  * @ios
- * @since 0.1
+ * @since 2.0.10
  */
 Multimedia.requestCameraAuthorization = function(callback) { };
 
