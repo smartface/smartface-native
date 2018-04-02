@@ -122,13 +122,27 @@ function RouterViewModel(params) {
             }
             
             if (routerBrain.currentPage) {
-                pageInfo.currentPage = routerBrain.currentPage.nativeObject;
+                switch (routerBrain.currentPage.type) {
+                    case 'TabBarFlow': {
+                        pageInfo.currentPage = routerBrain.currentPage.tabBarView.nativeObject;
+                        break;
+                    }
+                    case 'Navigator': {
+                        pageInfo.currentPage = routerBrain.currentPage.view.nativeObject;
+                        break;
+                    }
+                    default: {
+                        pageInfo.currentPage = routerBrain.currentPage.nativeObject;
+                        break;
+                    }
+                }
             } else {
                 pageInfo.currentPage = null;
             }
             
             var isShowed = routerView.show(pageInfo);
             if (isShowed) {
+
                 routerBrain.currentPage = pageToGo;
                 
                 var nativeObject = null;
@@ -247,38 +261,47 @@ function RouterView(params) {
             }
         }
         
-        // Show
+        // New Show
         var isShowed = false;
-        if (viewControllerExists) {
-            if (info.pagesNativeInstance) {
+        if (info.pagesNativeInstance) {
+            // Old approach (only UINavigationController)
+            if (viewControllerExists) {
                 self.nativeObject.popToPage(viewController, info.animated);
             } else {
-                self.nativeObject.view.bringSubviewToFront(viewController.view); // Check willAppear and didAppear works or not
-                if (currentPage && currentPage !== viewController){
-                    currentPage.viewWillDisappear(info.animated);
-                }
-                viewController.viewWillAppear(info.animated);
-                viewController.viewDidAppear(info.animated);
-            }
-            isShowed = true;
-        } else {
-            if (info.pagesNativeInstance) {
                 self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
-            } else {
-                if (currentPage) {
-                    currentPage.viewWillDisappear(info.animated);
+            }
+        } else {
+            // ContainerViewController style
+            if (currentPage) {
+                if (currentPage != viewController) {
+                    self.nativeObject.addChildViewController(viewController);
+                    currentPage.willMoveToParentViewController(undefined);
+                    
+                    self.nativeObject.transitionFromToDurationOptionsAnimationsCompletion(
+                        currentPage,
+                        viewController,
+                        0,
+                        0 << 20,
+                        function(){
+                            if (viewController.view) {
+                                self.nativeObject.view.addSubview(viewController.view);
+                            }
+                        },
+                        function(finished){
+                            viewController.didMoveToParentViewController(self.nativeObject);
+                            currentPage.removeFromParentViewController();
+                        }
+                    );
                 }
-                viewController.willMoveToParentViewController(self.nativeObject);
+            } else {
                 self.nativeObject.addChildViewController(viewController);
-                
                 if (viewController.view) {
                     self.nativeObject.view.addSubview(viewController.view);
                 }
-                
-                viewController.didMoveToParentViewController(self.nativeObject);   
+                viewController.didMoveToParentViewController(self.nativeObject);
             }
-            isShowed = true;
         }
+        isShowed = true;
 
         return isShowed;
     };

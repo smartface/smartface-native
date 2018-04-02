@@ -1,56 +1,60 @@
 /*globals array,requireClass,release */
-const AndroidUnitConverter      = require("../../util/Android/unitconverter.js");
-const AndroidConfig             = require("../../util/Android/androidconfig");
-const TypeUtil                  = require("../../util/type");
-const Color                     = require("../color");
-const NativeR                   = requireClass("android.R");
-const NativeView                = requireClass("android.view.View");
-const NativeGradientDrawable    = requireClass("android.graphics.drawable.GradientDrawable");
-const NativeLayerDrawable       = requireClass("android.graphics.drawable.LayerDrawable");
-const NativeYogaNode            = requireClass('com.facebook.yoga.YogaNode');
-const NativeYogaEdge            = requireClass('com.facebook.yoga.YogaEdge');
-const NativeStateListDrawable   = requireClass("android.graphics.drawable.StateListDrawable");
-const NativeShapeDrawable       = requireClass("android.graphics.drawable.ShapeDrawable");
-const NativeRoundRectShape      = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-const NativeRectF               = requireClass("android.graphics.RectF");
-const NativeViewCompat          = requireClass("android.support.v4.view.ViewCompat");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const TypeUtil = require("../../util/type");
+const Color = require("../color");
+const NativeR = requireClass("android.R");
+const NativeView = requireClass("android.view.View");
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+const NativeLayerDrawable = requireClass("android.graphics.drawable.LayerDrawable");
+const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
+const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
+const NativeStateListDrawable = requireClass("android.graphics.drawable.StateListDrawable");
+const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
+const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
+const NativeRectF = requireClass("android.graphics.RectF");
+const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
 
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
 // MotionEvent.ACTION_DOWN
 const ACTION_DOWN = 0;
+// MotionEvent.ACTION_MOVE
+const ACTION_MOVE = 2;
+// MotionEvent.ACTION_CANCEL
+const ACTION_CANCEL = 3;
 
 const YogaEdge = {
-    "LEFT"          : NativeYogaEdge.LEFT,
-    "TOP"           : NativeYogaEdge.TOP,
-    "RIGHT"         : NativeYogaEdge.RIGHT,
-    "BOTTOM"        : NativeYogaEdge.BOTTOM,
-    "START"         : NativeYogaEdge.START,
-    "END"           : NativeYogaEdge.END,
-    "HORIZONTAL"    : NativeYogaEdge.HORIZONTAL,
-    "VERTICAL"      : NativeYogaEdge.VERTICAL,
-    "ALL"           : NativeYogaEdge.ALL
+    "LEFT": NativeYogaEdge.LEFT,
+    "TOP": NativeYogaEdge.TOP,
+    "RIGHT": NativeYogaEdge.RIGHT,
+    "BOTTOM": NativeYogaEdge.BOTTOM,
+    "START": NativeYogaEdge.START,
+    "END": NativeYogaEdge.END,
+    "HORIZONTAL": NativeYogaEdge.HORIZONTAL,
+    "VERTICAL": NativeYogaEdge.VERTICAL,
+    "ALL": NativeYogaEdge.ALL
 };
 
 const activity = AndroidConfig.activity;
 
 function View(params) {
     this.ios = {};
-    
-    if(!this.nativeObject){
+
+    if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
     }
     else {
-        if(this.nativeObject.toString().indexOf("YogaLayout") !== -1){
+        if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
             this.yogaNode = this.nativeObject.getYogaNode();
         }
-        else{
+        else {
             this.yogaNode = new NativeYogaNode();
         }
     }
-    
+
     this.android = {};
     var _nativeObject = this.nativeObject;
     Object.defineProperties(this.android, {
@@ -59,7 +63,7 @@ function View(params) {
                 return NativeViewCompat.getZ(_nativeObject);
             },
             set: function(index) {
-                if(!TypeUtil.isNumeric(index))
+                if (!TypeUtil.isNumeric(index))
                     throw new Error("zIndex value must be a number.");
                 NativeViewCompat.setZ(_nativeObject, index);
             },
@@ -72,7 +76,7 @@ function View(params) {
             },
             set: function(value) {
                 NativeViewCompat.setElevation(_nativeObject, value);
-                if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP){
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                     _nativeObject.setStateListAnimator(null);
                 }
             },
@@ -80,18 +84,18 @@ function View(params) {
             configurable: true
         }
     });
-    
-    this.backgroundDrawable = new NativeGradientDrawable(); 
+
+    this.backgroundDrawable = new NativeGradientDrawable();
     this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
-    
+
     this._borderRadius = 0;
     this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
     this.rectF = new NativeRectF(0, 0, 0, 0);
     this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
     this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
     this.borderShapeDrawable.getPaint().setColor(0);
-    
-    this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable,this.borderShapeDrawable]);
+
+    this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
     this.isCloned = false;
     this.__backgroundImages = null;
     this._borderColor = Color.BLACK;
@@ -99,16 +103,18 @@ function View(params) {
     this._touchEnabled = true;
     this._onTouch;
     this._onTouchEnded;
+    this._onTouchMoved;
+    this._onTouchCancelled;
     // YOGA PROPERTIES
     this._borderWidth = 0;
-    
+
     // Assign defaults
-    if(!this.isNotSetDefaults){
+    if (!this.isNotSetDefaults) {
         var idInitial = NativeView.generateViewId();
         this.nativeObject.setId(idInitial);
         this.nativeObject.setBackground(this.layerDrawable);
     }
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -128,7 +134,7 @@ View.prototype = {
     },
     get backgroundImage() {
         return this.__backgroundImages;
-    }, 
+    },
     set backgroundImage(backgroundImage) {
         this.__backgroundImages = backgroundImage;
         this.setBackgroundImage();
@@ -161,10 +167,10 @@ View.prototype = {
     set borderRadius(borderRadius) {
         this._borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
         this.setBorder();
-        if(this.__backgroundImages){
+        if (this.__backgroundImages) {
             this.setBackgroundImage();
         }
-        else{
+        else {
             this.setBackgroundColor();
         }
     },
@@ -172,7 +178,7 @@ View.prototype = {
         return this.nativeObject.getRotation();
     },
     set rotation(value) {
-        if(TypeUtil.isNumeric(value)){
+        if (TypeUtil.isNumeric(value)) {
             this.nativeObject.setRotation(value);
         }
     },
@@ -180,7 +186,7 @@ View.prototype = {
         return this.nativeObject.getRotationX();
     },
     set rotationX(value) {
-        if(TypeUtil.isNumeric(value)){
+        if (TypeUtil.isNumeric(value)) {
             this.nativeObject.setRotationX(value);
         }
     },
@@ -188,7 +194,7 @@ View.prototype = {
         return this.nativeObject.getRotationY();
     },
     set rotationY(value) {
-        if(TypeUtil.isNumeric(value)){
+        if (TypeUtil.isNumeric(value)) {
             this.nativeObject.setRotationY(value);
         }
     },
@@ -196,7 +202,7 @@ View.prototype = {
         return this.nativeObject.getScaleX();
     },
     set scaleX(value) {
-        if(TypeUtil.isNumeric(value)){
+        if (TypeUtil.isNumeric(value)) {
             this.nativeObject.setScaleX(value);
         }
     },
@@ -204,7 +210,7 @@ View.prototype = {
         return this.nativeObject.getScaleY();
     },
     set scaleY(value) {
-        if(TypeUtil.isNumeric(value)){
+        if (TypeUtil.isNumeric(value)) {
             this.nativeObject.setScaleY(value);
         }
     },
@@ -212,7 +218,7 @@ View.prototype = {
         return this.nativeObject.isEnabled();
     },
     set enabled(enabled) {
-        if(TypeUtil.isBoolean(enabled)){
+        if (TypeUtil.isBoolean(enabled)) {
             this.nativeObject.setEnabled(enabled);
         }
     },
@@ -236,43 +242,57 @@ View.prototype = {
         this._onTouchEnded = onTouchEnded.bind(this);
         this.setTouchHandlers();
     },
+    get onTouchMoved() {
+        return this._onTouchMoved;
+    },
+    set onTouchMoved(onTouchMoved) {
+        this._onTouchMoved = onTouchMoved.bind(this);
+        this.setTouchHandlers();
+    },
+    get onTouchCancelled() {
+        return this._onTouchCancelled;
+    },
+    set onTouchCancelled(onTouchCancelled) {
+        this._onTouchCancelled = onTouchCancelled.bind(this);
+        this.setTouchHandlers();
+    },
     get visible() {
         // View.VISIBLE is 0
         return this.nativeObject.getVisibility() === 0;
     },
     set visible(visible) {
-        if(visible)
+        if (visible)
             // View.VISIBLE is 0
             this.nativeObject.setVisibility(0);
         else
             // View.INVISIBLE is 4
             this.nativeObject.setVisibility(4);
     },
-    bringToFront: function(){
+    bringToFront: function() {
         this.nativeObject.bringToFront();
     },
-    getParent: function(){
+    getParent: function() {
         return this.parent ? this.parent : null;
     },
-    getPosition: function(){
-        return  {
-            width: this.width, 
-            height: this.height, 
-            top: this.top, 
+    getPosition: function() {
+        return {
+            width: this.width,
+            height: this.height,
+            top: this.top,
             left: this.left
-        }; 
+        };
     },
-    setPosition: function(position){
-        position.top    && (this.top    = position.top);
-        position.left   && (this.left   = position.left);
-        position.width  && (this.width  = position.width);
+    setPosition: function(position) {
+        position.top && (this.top = position.top);
+        position.left && (this.left = position.left);
+        position.width && (this.width = position.width);
         position.height && (this.height = position.height);
     },
-    applyLayout: function(){
+    applyLayout: function() {
         this.nativeObject.requestLayout();
         this.nativeObject.invalidate();
     },
-    toString: function(){
+    toString: function() {
         return 'View';
     },
     get left() {
@@ -316,9 +336,9 @@ View.prototype = {
     },
     set height(height) {
         this.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
-         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
+        // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
         const ScrollView = require("../scrollview");
-        if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL){
+        if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL) {
             var layoutParams = this.nativeObject.getLayoutParams();
             layoutParams && (layoutParams.height = -2);
         }
@@ -330,7 +350,7 @@ View.prototype = {
         this.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
         const ScrollView = require("../scrollview");
-        if(this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL){
+        if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL) {
             var layoutParams = this.nativeObject.getLayoutParams();
             layoutParams && (layoutParams.width = -2);
         }
@@ -525,7 +545,7 @@ View.prototype = {
     set borderWidth(borderWidth) {
         this._borderWidth = borderWidth;
         var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
-        
+
         this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
         this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
         this.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
@@ -537,10 +557,10 @@ View.prototype = {
     },
     set flexGrow(flexGrow) {
         this.yogaNode.setFlexGrow(flexGrow);
-        if(flexGrow > 0){
+        if (flexGrow > 0) {
             this.flexBasis = 1;
         }
-        else{
+        else {
             this.flexBasis = NaN;
         }
     },
@@ -568,7 +588,7 @@ View.prototype = {
     set positionType(position) {
         this.yogaNode.setPositionType(position);
     },
-    'dirty':  function(){
+    'dirty': function() {
         this.yogaNode.dirty();
     }
 };
@@ -578,68 +598,68 @@ View.prototype.setBackgroundImage = function() {
     const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
     const Image = require("../image");
     var bitmap;
-    if(this.__backgroundImages instanceof Image) {
+    if (this.__backgroundImages instanceof Image) {
         bitmap = this.__backgroundImages.nativeObject.getBitmap();
         // release(this.backgroundDrawable);
-        this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap); 
+        this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
         this.setBackground(0);
     }
     else {
-        if(this.__backgroundImages) {
+        if (this.__backgroundImages) {
             var stateDrawable;
             var image;
             release(this.backgroundDrawable);
             this.backgroundDrawable = new NativeStateListDrawable();
-            if(this.__backgroundImages.normal) {
+            if (this.__backgroundImages.normal) {
                 image = this.__backgroundImages.normal;
                 bitmap = image.nativeObject.getBitmap();
                 stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 stateDrawable.setCornerRadius(this._borderRadius);
                 this.backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
             }
-            if(this.__backgroundImages.disabled){
+            if (this.__backgroundImages.disabled) {
                 image = this.__backgroundImages.disabled;
                 bitmap = image.nativeObject.getBitmap();
                 stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 stateDrawable.setCornerRadius(this._borderRadius);
-                this.backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+                this.backgroundDrawable.addState(View.State.STATE_DISABLED, stateDrawable);
             }
-            if(this.__backgroundImages.selected){
+            if (this.__backgroundImages.selected) {
                 image = this.__backgroundImages.selected;
                 bitmap = image.nativeObject.getBitmap();
                 stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 stateDrawable.setCornerRadius(this._borderRadius);
                 this.backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
             }
-            if(this.__backgroundImages.pressed){
+            if (this.__backgroundImages.pressed) {
                 image = this.__backgroundImages.pressed;
                 bitmap = image.nativeObject.getBitmap();
                 stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 stateDrawable.setCornerRadius(this._borderRadius);
                 this.backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
             }
-            if(this.__backgroundImages.focused){
+            if (this.__backgroundImages.focused) {
                 image = this.__backgroundImages.focused;
                 bitmap = image.nativeObject.getBitmap();
                 stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 stateDrawable.setCornerRadius(this._borderRadius);
-                this.backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+                this.backgroundDrawable.addState(View.State.STATE_FOCUSED, stateDrawable);
             }
             this.setBackground(0);
         }
     }
 };
-    
+
 View.prototype.setBackgroundColor = function() {
-    if(this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
+    if (this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
         // release(this.backgroundDrawable);
-        this.backgroundDrawable = this._backgroundColor.nativeObject; 
+        this.backgroundDrawable = this._backgroundColor.nativeObject;
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
-    else if(this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
+    else if (this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
         release(this.backgroundDrawable);
-        this.backgroundDrawable = new NativeGradientDrawable(); 
+        this.backgroundDrawable = new NativeGradientDrawable();
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
         this.backgroundDrawable.setCornerRadius(this._borderRadius);
     }
@@ -648,123 +668,164 @@ View.prototype.setBackgroundColor = function() {
         this.backgroundDrawable = new NativeStateListDrawable();
         var stateDrawable;
         // state can be transparent. so we should check state exists.
-        if('normal' in this._backgroundColor){
-            if(this._backgroundColor.normal.isGradient) {
+        if ('normal' in this._backgroundColor) {
+            if (this._backgroundColor.normal.isGradient) {
                 stateDrawable = this._backgroundColor.normal.nativeObject;
             }
-            else if((this._backgroundColor.normal) instanceof Color) {
-                stateDrawable = new NativeGradientDrawable(); 
+            else if ((this._backgroundColor.normal) instanceof Color) {
+                stateDrawable = new NativeGradientDrawable();
                 stateDrawable.setColor(this._backgroundColor.normal.nativeObject);
             }
             stateDrawable.setCornerRadius(this._borderRadius);
-            this.backgroundDrawable.addState(View.State.STATE_NORMAL,stateDrawable);
+            this.backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
         }
-        if('disabled' in this._backgroundColor){
-            if(this._backgroundColor.disabled.isGradient) {
+        if ('disabled' in this._backgroundColor) {
+            if (this._backgroundColor.disabled.isGradient) {
                 stateDrawable = this._backgroundColor.disabled.nativeObject;
             }
-            else if((this._backgroundColor.disabled) instanceof Color) {
-                stateDrawable = new NativeGradientDrawable(); 
+            else if ((this._backgroundColor.disabled) instanceof Color) {
+                stateDrawable = new NativeGradientDrawable();
                 stateDrawable.setColor(this._backgroundColor.disabled.nativeObject);
             }
             stateDrawable.setCornerRadius(this._borderRadius);
-            this.backgroundDrawable.addState(View.State.STATE_DISABLED,stateDrawable);
+            this.backgroundDrawable.addState(View.State.STATE_DISABLED, stateDrawable);
         }
-        if('selected' in this._backgroundColor){
-            if(this._backgroundColor.selected.isGradient) {
+        if ('selected' in this._backgroundColor) {
+            if (this._backgroundColor.selected.isGradient) {
                 stateDrawable = this._backgroundColor.selected.nativeObject;
             }
-            else if((this._backgroundColor.selected) instanceof Color){
-                stateDrawable = new NativeGradientDrawable(); 
+            else if ((this._backgroundColor.selected) instanceof Color) {
+                stateDrawable = new NativeGradientDrawable();
                 stateDrawable.setColor(this._backgroundColor.selected.nativeObject);
             }
             stateDrawable.setCornerRadius(this._borderRadius);
             this.backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
         }
-        if('pressed' in this._backgroundColor){
-            if(this._backgroundColor.pressed.isGradient) {
+        if ('pressed' in this._backgroundColor) {
+            if (this._backgroundColor.pressed.isGradient) {
                 stateDrawable = this._backgroundColor.pressed.nativeObject;
             }
-            else if((this._backgroundColor.pressed) instanceof Color){
-                stateDrawable = new NativeGradientDrawable(); 
+            else if ((this._backgroundColor.pressed) instanceof Color) {
+                stateDrawable = new NativeGradientDrawable();
                 stateDrawable.setColor(this._backgroundColor.pressed.nativeObject);
             }
             stateDrawable.setCornerRadius(this._borderRadius);
-            this.backgroundDrawable.addState(View.State.STATE_PRESSED,stateDrawable);
+            this.backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
         }
-        if('focused' in this._backgroundColor){
-            if(this._backgroundColor.focused.isGradient) {
+        if ('focused' in this._backgroundColor) {
+            if (this._backgroundColor.focused.isGradient) {
                 stateDrawable = this._backgroundColor.focused.nativeObject;
             }
-            else if((this._backgroundColor.focused) instanceof Color){
-                stateDrawable = new NativeGradientDrawable(); 
+            else if ((this._backgroundColor.focused) instanceof Color) {
+                stateDrawable = new NativeGradientDrawable();
                 stateDrawable.setColor(this._backgroundColor.focused.nativeObject);
             }
             stateDrawable.setCornerRadius(this._borderRadius);
-            this.backgroundDrawable.addState(View.State.STATE_FOCUSED,stateDrawable);
+            this.backgroundDrawable.addState(View.State.STATE_FOCUSED, stateDrawable);
         }
     }
     this.setBackground(0);
 };
-    
-View.prototype.setBorder = function(){
+
+View.prototype.setBorder = function() {
     var dp_borderWidth = AndroidUnitConverter.dpToPixel(this.borderWidth);
     // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
     // so we should use created drawables.
-    if(dp_borderWidth >= 0)  {
-        this.radii = array([this._borderRadius, this._borderRadius,this._borderRadius,this._borderRadius,
-                 this._borderRadius,this._borderRadius,this._borderRadius,this._borderRadius], "float");
+    if (dp_borderWidth >= 0) {
+        this.radii = array([this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius,
+            this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius
+        ], "float");
 
         this.rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
         this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
         this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
 
         // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
-        if(dp_borderWidth !== 0){
+        if (dp_borderWidth !== 0) {
             this.borderShapeDrawable.getPaint().setColor(this._borderColor.nativeObject);
         }
-        else{
+        else {
             this.borderShapeDrawable.getPaint().setColor(0);
         }
         this.setBackground(1);
     }
 };
-    
-View.prototype.setBackground = function(layerIndex){
+
+View.prototype.setBackground = function(layerIndex) {
     var constantStateForCopy = this.nativeObject.getBackground().getConstantState();
     var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
-    switch (layerIndex){
-        case 0: 
-            layerDrawableNative.setDrawableByLayerId(0,this.backgroundDrawable);
+    switch (layerIndex) {
+        case 0:
+            layerDrawableNative.setDrawableByLayerId(0, this.backgroundDrawable);
             layerDrawableNative.invalidateDrawable(this.backgroundDrawable);
             break;
         case 1:
-            layerDrawableNative.setDrawableByLayerId(1,this.borderShapeDrawable);
+            layerDrawableNative.setDrawableByLayerId(1, this.borderShapeDrawable);
             layerDrawableNative.invalidateDrawable(this.borderShapeDrawable);
             break;
     }
     // This check is added for COR-1562
     const Webview = require("../webview");
-    if(this instanceof Webview) {
+    if (this instanceof Webview) {
         this.nativeObject.setBackgroundColor(0);
     }
-    
+
     this.nativeObject.setBackground(layerDrawableNative);
 };
 
 View.prototype.setTouchHandlers = function() {
     if (this.didSetTouchHandler) return;
-    
+
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-            if(this.touchEnabled && (this._onTouch || this._onTouchEnded)){
+
+            var x = event.getX();
+            var y = event.getY();
+
+            var w = view.getWidth();
+            var h = view.getHeight();
+
+            var isInside = !(x > w || x < 0 || y > h || y < 0);
+
+            if (this.touchEnabled && (this._onTouch || this._onTouchEnded)) {
+                var result;
+
                 if (event.getAction() === ACTION_UP) {
-                    this._onTouchEnded && this._onTouchEnded();
-                } else if(event.getAction() === ACTION_DOWN) {
-                    this._onTouch && this._onTouch();
+                    result = (this._onTouchEnded && this._onTouchEnded(isInside));
+                    if (result != undefined) {
+                        return result;
+                    }
+                }
+                else if (event.getAction() === ACTION_DOWN) {
+                    result = (this._onTouch && this._onTouch());
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                     // So we should consume ACTION_DOWN event.
-                    return true;
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else if (event.getAction() === ACTION_MOVE) { // MOVE
+
+                    result = (this._onTouchMoved && this._onTouchMoved(isInside));
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else if (event.getAction() === ACTION_CANCEL) { // CANCEL
+
+                    result = (this._onTouchCancelled && this._onTouchCancelled());
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
                 }
             }
             return !this.touchEnabled;
@@ -773,18 +834,15 @@ View.prototype.setTouchHandlers = function() {
     this.didSetTouchHandler = true;
 };
 
+
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
 View.State = {};
 
-View.State.STATE_NORMAL =  array([
-    NativeR.attr.state_enabled,
-    -NativeR.attr.state_pressed,
-    -NativeR.attr.state_selected
+View.State.STATE_NORMAL = array([
+    NativeR.attr.state_enabled, -NativeR.attr.state_pressed, -NativeR.attr.state_selected
 ], "int");
-View.State.STATE_DISABLED = array([
-    -NativeR.attr.state_enabled,
-], "int");
+View.State.STATE_DISABLED = array([-NativeR.attr.state_enabled, ], "int");
 View.State.STATE_SELECTED = array([
     NativeR.attr.state_enabled,
     NativeR.attr.state_selected
@@ -798,20 +856,20 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_enabled,
 ], "int");
 
-function createNewLayerDrawable(drawables){
+function createNewLayerDrawable(drawables) {
     var drawablesForObjectCreate = [];
-    var i = 0 ;
-    
-    for(i = 0 ; i < drawables.length ; i++){
+    var i = 0;
+
+    for (i = 0; i < drawables.length; i++) {
         drawablesForObjectCreate.push(drawables[0]);
     }
-    
+
     var layerDrawable = new NativeLayerDrawable(array(drawablesForObjectCreate));
-    for(i = 0 ; i < drawables.length ; i++){
+    for (i = 0; i < drawables.length; i++) {
         layerDrawable.setId(i, i);
-        layerDrawable.setDrawableByLayerId(i,drawables[i]);
+        layerDrawable.setDrawableByLayerId(i, drawables[i]);
     }
-    
+
     return layerDrawable;
 }
 

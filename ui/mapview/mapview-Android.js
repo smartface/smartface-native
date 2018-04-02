@@ -26,93 +26,100 @@ const MapView = extend(View)(
     function(_super, params) {
 
         var self = this;
+        var activityIntent = AndroidConfig.activity.getIntent();
+        var savedBundles = activityIntent.getExtras();
         if (!self.nativeObject) {
             self.nativeObject = new NativeMapView(AndroidConfig.activity);
-            var activityIntent = AndroidConfig.activity.getIntent();
-            var savedBundles = activityIntent.getExtras();
-            self.nativeObject.onCreate(savedBundles);
+            if(!params || !(params.lazyLoading))
+                self.nativeObject.onCreate(savedBundles);
         }
         _super(self);
-
-        const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
-        self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
-            onMapReady: function(googleMap) {
-                _nativeGoogleMap = googleMap;
-
-                self.nativeObject.onStart();
-                self.nativeObject.onResume();
-
-                const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
-                var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
-                googleMap.moveCamera(cameraUpdate);
-
-                googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
-                    onMarkerClick: function(marker) {
-                        _pins.forEach(function(pin) {
-                            if (pin.nativeObject.getId() === marker.getId()) {
-                                pin.onPress && pin.onPress();
-                            }
-                        });
-                        return false;
-                    }
-                }));
-
-                googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
-                    onMapClick: function(location) {
-                        _onPress && _onPress({
-                            latitude: location.latitude,
-                            longitude: location.longitude,
-                        });
-                    }
-                }));
-
-                googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
-                    onMapLongClick: function(location) {
-                        _onLongPress && _onLongPress({
-                            latitude: location.latitude,
-                            longitude: location.longitude
-                        });
-                    }
-                }));
-
-                var _isMoveStarted = false;
-                googleMap.setOnCameraMoveStartedListener(NativeOnCameraMoveStartedListener.implement({
-                    onCameraMoveStarted: function(reason) {
-                        _onCameraMoveStarted && _onCameraMoveStarted();
-                        _isMoveStarted = true;
-                    }
-                }));
-
-                googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
-                    onCameraIdle: function() {
-                        if (_isMoveStarted) {
-                            _onCameraMoveEnded && _onCameraMoveEnded();
-                            _isMoveStarted = false;
+        
+        function asyncMap () {
+            const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
+            self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
+                onMapReady: function(googleMap) {
+                    _nativeGoogleMap = googleMap;
+    
+                    self.nativeObject.onStart();
+                    self.nativeObject.onResume();
+    
+                    const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+                    var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
+                    var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
+                    googleMap.moveCamera(cameraUpdate);
+    
+                    googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
+                        onMarkerClick: function(marker) {
+                            _pins.forEach(function(pin) {
+                                if (pin.nativeObject.getId() === marker.getId()) {
+                                    pin.onPress && pin.onPress();
+                                }
+                            });
+                            return false;
                         }
-                    }
-                }));
-
-                self.centerLocation = _centerLocation;
-                self.compassEnabled = _compassEnabled;
-                self.rotateEnabled = _rotateEnabled;
-                self.scrollEnabled = _scrollEnabled;
-                self.zoomEnabled = _zoomEnabled;
-                self.userLocationEnabled = _userLocationEnabled;
-                self.type = _type;
-                self.zoomLevel = _zoomLevel;
-                self.maxZoomLevel = _maxZoomLevel;
-                self.minZoomLevel = _minZoomLevel;
-
-                _pendingPins.forEach(function(element) {
-                    self.addPin(element);
-                });
-                _pendingPins = [];
-
-                _onCreate && _onCreate();
-            }
-        }));
+                    }));
+    
+                    googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
+                        onMapClick: function(location) {
+                            _onPress && _onPress({
+                                latitude: location.latitude,
+                                longitude: location.longitude,
+                            });
+                        }
+                    }));
+    
+                    googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
+                        onMapLongClick: function(location) {
+                            _onLongPress && _onLongPress({
+                                latitude: location.latitude,
+                                longitude: location.longitude
+                            });
+                        }
+                    }));
+    
+                    var _isMoveStarted = false;
+                    googleMap.setOnCameraMoveStartedListener(NativeOnCameraMoveStartedListener.implement({
+                        onCameraMoveStarted: function(reason) {
+                            _onCameraMoveStarted && _onCameraMoveStarted();
+                            _isMoveStarted = true;
+                        }
+                    }));
+    
+                    googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
+                        onCameraIdle: function() {
+                            if (_isMoveStarted) {
+                                _onCameraMoveEnded && _onCameraMoveEnded();
+                                _isMoveStarted = false;
+                            }
+                        }
+                    }));
+    
+                    self.centerLocation = _centerLocation;
+                    self.compassEnabled = _compassEnabled;
+                    self.rotateEnabled = _rotateEnabled;
+                    self.scrollEnabled = _scrollEnabled;
+                    self.zoomEnabled = _zoomEnabled;
+                    self.userLocationEnabled = _userLocationEnabled;
+                    self.type = _type;
+                    self.zoomLevel = _zoomLevel;
+                    self.maxZoomLevel = _maxZoomLevel;
+                    self.minZoomLevel = _minZoomLevel;
+    
+                    _pendingPins.forEach(function(element) {
+                        self.addPin(element);
+                    });
+                    _pendingPins = [];
+    
+                    _onCreate && _onCreate();
+                }
+            }));
+        }
+        
+        if(!params || !(params.lazyLoading)) {
+            asyncMap();
+        }
 
         var _nativeGoogleMap;
         var _onCreate;
@@ -411,6 +418,16 @@ const MapView = extend(View)(
                 },
                 enumerable: true,
                 configurable: true
+            }
+        });
+        
+        Object.defineProperties(this.android, {
+            'prepareMapAsync': {
+                value: function() {
+                    self.nativeObject.onCreate(savedBundles);
+                    asyncMap();
+                },
+                enumerable: true
             }
         });
 
