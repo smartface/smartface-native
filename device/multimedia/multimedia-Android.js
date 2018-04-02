@@ -324,4 +324,9 @@ function getAllMediaFromUri(params) {
     return files;
 }
 
+Multimedia.ios = {};
+
+Multimedia.ios.requestGalleryAuthorization = function(){};
+Multimedia.ios.requestCameraAuthorization = function(){};
+
 module.exports = Multimedia;

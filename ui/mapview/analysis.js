@@ -117,6 +117,14 @@ MapView.prototype.minZoomLevel;
 MapView.prototype.maxZoomLevel;
 
 /**
+ * Prepare the map later. This parameter must be given in constructor.
+ * @property {Boolean} [lazyLoading = false]
+ * @android
+ * @since 2.0.10
+ */
+MapView.prototype.android.lazyLoading;
+
+/**
  * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
  *
  * @property {Number} [zoomLevel = 15]
@@ -154,6 +162,17 @@ MapView.prototype.centerLocation;
  * @since 2.0.7
  */
 MapView.prototype.getVisiblePins = function(){};
+
+
+/**
+ * Prepare the map asynchronously. You must call this method manually if you use lazyLoading as true in constructor. 
+ * Otherwise, you do not need to call this method.
+ * 
+ * @android
+ * @method prepareMapAsync
+ * @since 2.0.10
+ */
+MapView.prototype.android.prepareMapAsync = function(){};
 
 /**
  * Adds a UI.MapView.Pin on the map.

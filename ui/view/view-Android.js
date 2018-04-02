@@ -778,7 +778,7 @@ View.prototype.setTouchHandlers = function() {
 
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-            
+
             var x = event.getX();
             var y = event.getY();
 
@@ -788,24 +788,44 @@ View.prototype.setTouchHandlers = function() {
             var isInside = !(x > w || x < 0 || y > h || y < 0);
 
             if (this.touchEnabled && (this._onTouch || this._onTouchEnded)) {
+                var result;
+
                 if (event.getAction() === ACTION_UP) {
-                    this._onTouchEnded && this._onTouchEnded(isInside);
+                    result = (this._onTouchEnded && this._onTouchEnded(isInside));
+                    if (result != undefined) {
+                        return result;
+                    }
                 }
                 else if (event.getAction() === ACTION_DOWN) {
-                    this._onTouch && this._onTouch();
+                    result = (this._onTouch && this._onTouch());
                     // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                     // So we should consume ACTION_DOWN event.
-                    return true;
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
                 }
                 else if (event.getAction() === ACTION_MOVE) { // MOVE
 
-                    this._onTouchMoved && this._onTouchMoved(isInside);
-                    return true;
+                    result = (this._onTouchMoved && this._onTouchMoved(isInside));
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
                 }
                 else if (event.getAction() === ACTION_CANCEL) { // CANCEL
 
-                    this._onTouchCancelled && this._onTouchCancelled();
-                    return true;
+                    result = (this._onTouchCancelled && this._onTouchCancelled());
+                    if (result != undefined) {
+                        return result;
+                    }
+                    else {
+                        return true;
+                    }
                 }
             }
             return !this.touchEnabled;

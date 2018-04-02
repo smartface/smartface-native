@@ -74,6 +74,15 @@ WebView.prototype.scrollBarEnabled = true;
 WebView.prototype.bounceEnabled = true;
 
 /**
+ * Sets/Gets the current page which is contain webview.
+ *
+ * @property {UI.Page} page
+ * @android
+ * @since 2.0.10
+ */
+WebView.prototype.page = undefined;
+
+/**
  * Reloads the current page.
  *
  * @method refresh
