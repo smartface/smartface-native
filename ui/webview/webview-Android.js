@@ -56,7 +56,6 @@ const WebView = extend(View)(
         var _scrollBarEnabled = true;
         var _scrollEnabled = true;
         var _onTouch, _onTouchEnded;
-        var _page;
         Object.defineProperties(this, {
             'scrollBarEnabled': {
                 get: function() {
@@ -87,15 +86,6 @@ const WebView = extend(View)(
                     else {
                         this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
                     }
-                },
-                enumerable: true
-            },
-            'page': {
-                get: function() {
-                    return _page;
-                },
-                set: function(page) {
-                    _page = page;
                 },
                 enumerable: true
             },
@@ -280,6 +270,19 @@ const WebView = extend(View)(
                 },
                 enumerable: true
             }
+        });
+
+        var _page;
+        // android-only properties
+        Object.defineProperty(this.android, 'page', {
+            get: function() {
+                return _page;
+            },
+            set: function(page) {
+                _page = page;
+            },
+            enumerable: true,
+            configurable: true
         });
 
         // android-only properties
@@ -518,7 +521,7 @@ function createImageFile() {
         storageDir /* directory */
     );
     return imageFile;
-    
+
 }
 
 function overrideURLChange(url, _canOpenLinkInside) {
