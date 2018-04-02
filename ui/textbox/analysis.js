@@ -100,7 +100,7 @@ TextBox.prototype.android.hintTextColor = UI.Color.LIGHTGRAY;
  * @method maxLength
  * @param {Number} value
  * @android
- * @since 0.1
+ * @since 2.0.10
  */
 TextBox.prototype.android.maxLength = function(value){};
 
