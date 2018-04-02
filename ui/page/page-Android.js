@@ -126,24 +126,31 @@ function Page(params) {
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
-        const Contacts = require("sf-core/device/contacts");
-        const Multimedia = require("sf-core/device/multimedia");
-        const Sound = require("sf-core/device/sound");
-        
-        var requestCode = nativeRequestCode;
-        var resultCode = nativeResultCode;
-        // todo: Define a method to register request and its callback 
-        // for better performance. Remove if statement.
-        if (Contacts.PICK_REQUEST_CODE === requestCode) {
-            Contacts.onActivityResult(requestCode, resultCode, data);
+            
+            const Contacts = require("sf-core/device/contacts");
+            const Multimedia = require("sf-core/device/multimedia");
+            const Sound = require("sf-core/device/sound");
+            const Webview = require('sf-core/ui/webview');
+            
+            var requestCode = nativeRequestCode;
+            var resultCode = nativeResultCode;
+            // todo: Define a method to register request and its callback 
+            // for better performance. Remove if statement.
+            if (Contacts.PICK_REQUEST_CODE === requestCode) {
+                Contacts.onActivityResult(requestCode, resultCode, data);
+            }
+            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST) {
+                Multimedia.onActivityResult(requestCode, resultCode, data);
+            }
+            else if (requestCode === Sound.PICK_SOUND) {
+                Sound.onActivityResult(requestCode, resultCode, data);
+                
+            }else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM )  {
+                Webview.onActivityResult(requestCode, resultCode, data);
+            }
+            
+            
         }
-        else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST) {
-            Multimedia.onActivityResult(requestCode, resultCode, data);
-        }
-        else if (requestCode === Sound.PICK_SOUND) {
-            Sound.onActivityResult(requestCode, resultCode, data);
-        }
-    }
     }, null);
     Object.defineProperty(this, 'layout', {
         get: function() {
