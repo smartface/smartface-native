@@ -13,6 +13,7 @@ const NativeEditText = requireClass("android.widget.EditText");
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView = requireClass("android.widget.TextView");
+const NativeInputFilter = requireClass("android.text.InputFilter");
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -86,14 +87,14 @@ const TextBox = extend(Label)(
         Object.defineProperties(this, {
             'cursorPosition': {
                 get: function() {
-                    return {start : self.nativeObject.getSelectionStart(), end: self.nativeObject.getSelectionEnd()};
+                    return { start: self.nativeObject.getSelectionStart(), end: self.nativeObject.getSelectionEnd() };
                 },
                 set: function(value) {
                     if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
-                        if(value.start > self.text.length){
+                        if (value.start > self.text.length) {
                             value.start = 0;
                         }
-                        if(value.end > self.text.length){
+                        if (value.end > self.text.length) {
                             value.end = 0;
                         }
                         self.nativeObject.setSelection(value.start, value.end);
@@ -110,7 +111,7 @@ const TextBox = extend(Label)(
                     _touchEnabled = touchEnabled;
                     self.nativeObject.setFocusable(touchEnabled);
                     self.nativeObject.setFocusableInTouchMode(touchEnabled);
-                    self.nativeObject.setLongClickable(touchEnabled); 
+                    self.nativeObject.setLongClickable(touchEnabled);
                 },
                 enumerable: true,
                 configurable: true
@@ -226,7 +227,7 @@ const TextBox = extend(Label)(
                                     }
                                     if (_onTextChanged) {
                                         _onTextChanged({
-                                            location: (insertedText === "") ? Math.abs(start + before)-1 : Math.abs(start + before),
+                                            location: (insertedText === "") ? Math.abs(start + before) - 1 : Math.abs(start + before),
                                             insertedText: insertedText
                                         });
                                     }
@@ -337,6 +338,23 @@ const TextBox = extend(Label)(
             },
             enumerable: true
         });
+
+        Object.defineProperty(this.android, 'maxLength', {
+            value: function(value) {
+                var filterArray = toJSArray(self.nativeObject.getFilters());
+                for (var i = 0; i < filterArray.length; i++) {
+                    if ((filterArray[i] + "").includes("android.text.InputFilter$LengthFilter")) {
+                        filterArray.splice(i, 1);
+                        break;
+                    }
+                }
+                filterArray.push(new NativeInputFilter.LengthFilter(value));
+                self.nativeObject.setFilters(array(filterArray, "android.text.InputFilter"));
+            },
+            enumerable: true,
+            configurable: true
+        });
+
 
         // Handling ios specific properties
         self.ios = {};
