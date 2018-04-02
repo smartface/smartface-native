@@ -129,6 +129,26 @@ Multimedia.startCamera = function(e) { };
  */
 Multimedia.pickFromGallery = function(e) { };
 
+/**
+ * @method requestGalleryAuthorization
+ * 
+ * @param {Function} callback
+ * @param {Boolean} callback.status
+ * @ios
+ * @since 2.0.10
+ */
+Multimedia.requestGalleryAuthorization = function(callback) { };
+
+/**
+ * @method requestCameraAuthorization
+ * 
+ * @param {Function} callback
+ * @param {Boolean} callback.status
+ * @ios
+ * @since 2.0.10
+ */
+Multimedia.requestCameraAuthorization = function(callback) { };
+
 Multimedia.android = {};
 
 /**
