@@ -21,6 +21,8 @@ const MapView = extend(View)(
         
         self.nativeObject.setCenter(40.7828647,-73.9675491,false); //Default coordinate
                 
+        self.android = {};
+        self.android.prepareMapAsync = function(){};
         self.onPressHandler = function(e){
             var gesture = e.gesture;
             if (gesture.gestureRecognizerstate == 3){
