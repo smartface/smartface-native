@@ -32,7 +32,7 @@
  */
 var Http = function(params){    
     /**
-     * Gets/sets request timeout.
+     * Gets/sets request timeout. Time elapsed in millisecond.
      *
      * @property {Number} timeout
      * @android
