@@ -191,7 +191,7 @@ function TabBarFlowView(params) {
         self.nativeObject.viewControllers = array;
     };
     this.show = function(showingInfo){
-        if (showingInfo.selectedIndex) {
+        if (typeof showingInfo.selectedIndex === "number") {
             self.nativeObject.selectedIndex = showingInfo.selectedIndex;
         }
     };
