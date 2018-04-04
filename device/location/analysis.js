@@ -59,6 +59,17 @@ Location.stop = function(){};
 Location.onLocationChanged = function onLocationChanged(event){}
 
 /**
+ * Callback to capture authorization status changes.
+ * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
+ * 
+ * @event onChangeAuthorizationStatus
+ * @param {Boolean} status
+ * @ios
+ * @since 2.0.11
+ */
+Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status){}
+
+/**
  * Android Specific Properties.
  * @class Device.Location.Android
  * @since 1.1.16
