@@ -452,6 +452,7 @@ function Pin(params) {
     var _title = "";
     var _visible = true;
     var _onPress;
+    var _id = 0;
     Object.defineProperties(self, {
         'color': {
             get: function() {
@@ -468,6 +469,14 @@ function Pin(params) {
                     console.log("Color changes: " + colorDrawable);
                     self.nativeObject.setIcon(colorDrawable);
                 }
+            }
+        },
+        'id': {
+            get: function() {
+                return _id;
+            },
+            set: function(value) {
+                _id = value;
             }
         },
         'image': {
