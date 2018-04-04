@@ -55,6 +55,7 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
+Application.onReceivedNotification = function(){};
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
     set:function(value){
         Application.onReceivedNotification = value;
@@ -65,6 +66,7 @@ Object.defineProperty(SFApplication, 'onReceivedNotification', {
     enumerable: true
 });
 
+Application.onApplicationCallReceived = function(){};
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     set:function(value){
         Application.onApplicationCallReceived = value;

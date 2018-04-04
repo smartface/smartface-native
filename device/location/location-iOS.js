@@ -1,7 +1,10 @@
+const Invocation = require('sf-core/util').Invocation;
+
 function Location() {};
 
 Location.ios = {};
-Location.ios.authorizationStatus = {
+Location.ios.native = {};
+Location.ios.native.authorizationStatus = {
     NotDetermined : 0,
     Restricted : 1,
     Denied : 2,
@@ -9,10 +12,45 @@ Location.ios.authorizationStatus = {
     AuthorizedWhenInUse : 4
 };
 
+Location.ios.authorizationStatus = {
+    NotDetermined : 0,
+    Restricted : 1,
+    Denied : 2,
+    Authorized: 3
+};
+
 Location.changeLocationListener = function(e) {
     Location.onLocationChanged(e);
 }
 
+Location.ios.locationServicesEnabled = function(){
+    return __SF_CLLocationManager.locationServicesEnabled();
+}
+
+Location.ios.getAuthorizationStatus = function(){
+     var authorizationStatus = Invocation.invokeClassMethod("CLLocationManager","authorizationStatus",[],"int");
+     var status;
+     switch (authorizationStatus) {
+        case Location.ios.native.authorizationStatus.AuthorizedAlways:
+        case Location.ios.native.authorizationStatus.AuthorizedWhenInUse:
+            status = Location.ios.authorizationStatus.Authorized;
+            break;
+        case Location.ios.native.authorizationStatus.NotDetermined:
+            status = Location.ios.authorizationStatus.NotDetermined;
+            break;
+        case Location.ios.native.authorizationStatus.Restricted:
+            status = Location.ios.authorizationStatus.Restricted;
+            break;
+        case Location.ios.native.authorizationStatus.Denied:
+            status = Location.ios.authorizationStatus.Denied;
+            break;
+        default:
+            break;
+    }
+    return status;
+}
+
+var _authorizationStatus = Location.ios.authorizationStatus.NotDetermined;
 Location.start = function(){
     if (Location.nativeObject) {
         Location.stop();
@@ -25,12 +63,17 @@ Location.start = function(){
         Location.delegate.didUpdateLocations = Location.changeLocationListener;
         Location.delegate.didChangeAuthorizationStatus = function (status) {
             switch (status) {
-                case Location.ios.authorizationStatus.AuthorizedAlways:
-                case Location.ios.authorizationStatus.AuthorizedWhenInUse:
+                case Location.ios.native.authorizationStatus.AuthorizedAlways:
+                case Location.ios.native.authorizationStatus.AuthorizedWhenInUse:
                     Location.nativeObject.startUpdatingLocation();
                     break;
                 default:
                     break;
+            }
+            var authStatus = Location.ios.getAuthorizationStatus();
+            if (typeof Location.ios.onChangeAuthorizationStatus === 'function' && _authorizationStatus != authStatus) {
+                _authorizationStatus = authStatus;
+                Location.ios.onChangeAuthorizationStatus((authStatus === Location.ios.authorizationStatus.Authorized) ? true : false);
             }
         };
         
