@@ -242,6 +242,51 @@ MapView.prototype.onCameraMoveEnded;
  */
 MapView.prototype.onLongPress;
 
+
+/**
+ * onTouch event
+ *
+ * @event onTouch
+ * @android
+ * @ios
+ * @removed
+ * @since 2.0.9
+ */
+MapView.prototype.onTouch;
+
+/**
+ * onTouchEnded event
+ *
+ * @event onTouchEnded
+ * @android
+ * @ios
+ * @removed
+ * @since 2.0.9
+ */
+MapView.prototype.onTouchEnded;
+
+/**
+ * onTouchCancelled event
+ *
+ * @event onTouchCancelled
+ * @android
+ * @ios
+ * @removed
+ * @since 2.0.9
+ */
+MapView.prototype.onTouchCancelled;
+
+/**
+ * onTouchMoved event
+ *
+ * @event onTouchMoved
+ * @android
+ * @ios
+ * @removed
+ * @since 2.0.9
+ */
+MapView.prototype.onTouchMoved;
+
 /**
  * This event is called when map is ready to be used.
  *
