@@ -148,6 +148,7 @@ function bypassPageSpecificProperties(page) {
             get: function() {},
         });
     });
+    page.isSwipeViewPage = true;
     page.onShowSwipeView = page.onShow;
     page.onShow = function() {};
 }

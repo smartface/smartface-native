@@ -14,6 +14,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+const Pages = require("sf-core/ui/pages");
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
 
@@ -70,6 +71,9 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
+                    if(!isSwipeViewPage){
+                        Pages.currentPage = self;
+                    }
                     onShowCallback && onShowCallback();
                 }
             }));
@@ -169,6 +173,16 @@ function Page(params) {
         },
         set: function(onLoad) {
             onLoadCallback = onLoad.bind(this);
+        },
+        enumerable: true
+    });
+    var isSwipeViewPage = false;
+    Object.defineProperty(this, 'isSwipeViewPage', {
+        get: function() {
+            return isSwipeViewPage;
+        },
+        set: function(value) {
+            isSwipeViewPage = value;
         },
         enumerable: true
     });
