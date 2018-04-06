@@ -204,9 +204,10 @@ function registerOnBackKeyPressed(pagesStack){
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if( keyCode === 4 && keyEvent.getAction() === 0) {
                 
-                if (Pages.currentPage) {
-                   Pages.currentPage.android.onBackButtonPressed && 
-                            Pages.currentPage.android.onBackButtonPressed();
+                const Router = require("../../router");
+                if (Router.currentPage) {
+                   Router.currentPage.android.onBackButtonPressed && 
+                            Router.currentPage.android.onBackButtonPressed();
                 }
                 
                 // const Router = require("../router");
@@ -245,7 +246,5 @@ function detachSliderDrawer(sliderDrawer){
         }
     }
 }
-
-Pages.currentPage;
 
 module.exports = Pages;
