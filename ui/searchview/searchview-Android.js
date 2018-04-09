@@ -1,15 +1,16 @@
 /*globals requireClass*/
-const View                  = require('../view');
-const extend                = require('js-base/core/extend');
-const Font                  = require('../font');
-const Color                 = require('../color');
-const KeyboardType          = require('../keyboardtype');
-const TextAlignment         = require('../textalignment');
-const AndroidConfig         = require('../../util/Android/androidconfig');
-const Exception             = require("../../util/exception");
+const View = require('../view');
+const extend = require('js-base/core/extend');
+const Font = require('../font');
+const Color = require('../color');
+const KeyboardType = require('../keyboardtype');
+const TextAlignment = require('../textalignment');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const Exception = require("../../util/exception");
+const PorterDuff = requireClass('android.graphics.PorterDuff');
 
-const NativeSearchView      = requireClass('android.support.v7.widget.SearchView'); 
-const NativeSupportR        = requireClass('android.support.v7.appcompat.R');
+const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
+const NativeSupportR = requireClass('android.support.v7.appcompat.R');
 
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -20,28 +21,28 @@ const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
 const HIDE_IMPLICIT_ONLY = 1;
 
-const NativeKeyboardType = [1,  // InputType.TYPE_CLASS_TEXT
-    2,              //InputType.TYPE_CLASS_NUMBER
-    2 | 8192,       // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-    3,              // InputType.TYPE_CLASS_PHONE
-    1 | 16,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI
-    1,              // InputType.TYPE_CLASS_TEXT
-    1,              // InputType.TYPE_CLASS_TEXT
-    4,              // InputType.TYPE_CLASS_DATETIME
-    2 | 4096,       // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
-    2 | 8192 | 4096,// InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED 
-    1 | 65536,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
-    1 | 32768,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
-    1 | 4096,       // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
-    1 | 16384,      // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-    1 | 8192,       // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS
-    1 | 48,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT
-    1 | 80,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE
-    1 | 524288,     // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-    1 | 96,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME
-    1 | 64,         // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE
-    4 | 32,         // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
-    1 | 32          // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+const NativeKeyboardType = [1, // InputType.TYPE_CLASS_TEXT
+    2, //InputType.TYPE_CLASS_NUMBER
+    2 | 8192, // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+    3, // InputType.TYPE_CLASS_PHONE
+    1 | 16, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI
+    1, // InputType.TYPE_CLASS_TEXT
+    1, // InputType.TYPE_CLASS_TEXT
+    4, // InputType.TYPE_CLASS_DATETIME
+    2 | 4096, // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
+    2 | 8192 | 4096, // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED 
+    1 | 65536, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
+    1 | 32768, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT
+    1 | 4096, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+    1 | 16384, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+    1 | 8192, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS
+    1 | 48, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT
+    1 | 80, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE
+    1 | 524288, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+    1 | 96, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+    1 | 64, // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE
+    4 | 32, // InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_TIME
+    1 | 32 // InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 ];
 
 // TextAlignment values to Android Gravity Values.
@@ -50,25 +51,30 @@ const NativeTextAlignment = [
     48 | 1, // Gravity.TOP | Gravity.CENTER_HORIZONTAL == TextAlignment.TOPCENTER
     48 | 5, // Gravity.TOP | Gravity.RIGHT == TextAlignment.TOPRIGHT
     16 | 3, // Gravity.CENTER_VERTICAL | Gravity.LEFT == TextAlignment.MIDLEFT
-    17,     // Gravity.CENTER == TextAlignment.CENTER
+    17, // Gravity.CENTER == TextAlignment.CENTER
     16 | 5, // Gravity.CENTER_VERTICAL | Gravity.RIGHT == TextAlignment.MIDLEFT
     80 | 3, // Gravity.BOTTOM | Gravity.LEFT == TextAlignment.MIDLEFT
     80 | 1, // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL == TextAlignment.MIDLEFT
-    80 | 5  // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
+    80 | 5 // Gravity.BOTTOM | Gravity.RIGHT == TextAlignment.MIDLEFT
 ];
 
 const SearchView = extend(View)(
-    function (_super, params) {
-
-        if(!this.nativeObject){
+    function(_super, params) {
+        if (!this.nativeObject) {
             this.nativeObject = new NativeSearchView(AndroidConfig.activity);
             this.nativeObject.onActionViewExpanded();
             // Prevent gain focus when SearchView appear.
             this.nativeObject.clearFocus();
         }
+        
+        var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
+        var _defaultUnderlineColorFocus = Color.create("#ff444444");
+        
         var mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
         var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
         var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
+        var mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
+        mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
 
         _super(this);
 
@@ -79,25 +85,24 @@ const SearchView = extend(View)(
         var _onSearchBeginCallback;
         var _onSearchEndCallback;
         var _onSearchButtonClickedCallback;
-        Object.defineProperties(this, 
-        {
-            'text' : {
+        Object.defineProperties(this, {
+            'text': {
                 get: function() {
                     return mSearchSrcTextView.getText().toString();
                 },
                 set: function(text) {
-                    if(text){
+                    if (text) {
                         mSearchSrcTextView.setText("" + text);
                     }
                 },
                 enumerable: true
             },
-            'hint' : {
+            'hint': {
                 get: function() {
                     return _hint;
                 },
                 set: function(hint) {
-                    if(hint){
+                    if (hint) {
                         _hint = "" + hint;
                         updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
@@ -109,7 +114,7 @@ const SearchView = extend(View)(
                     return _textColor;
                 },
                 set: function(textColor) {
-                    if(!(textColor instanceof Color)){
+                    if (!(textColor instanceof Color)) {
                         throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                     }
                     _textColor = textColor;
@@ -123,7 +128,7 @@ const SearchView = extend(View)(
                 },
                 set: function(iconImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(iconImage == null || iconImage instanceof require("../image")){
+                    if (iconImage == null || iconImage instanceof require("../image")) {
                         _iconImage = iconImage;
                         updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
@@ -134,38 +139,38 @@ const SearchView = extend(View)(
                 value: {},
                 enumerable: true
             },
-            
+
             // methods
             'addToHeaderBar': {
-                value: function(page){
-                    if(page){
+                value: function(page) {
+                    if (page) {
                         page.headerBar.addViewToHeaderBar(this);
                     }
                 },
                 enumerable: true
             },
             'removeFromHeaderBar': {
-                value: function(page){
-                    if(page){
+                value: function(page) {
+                    if (page) {
                         page.headerBar.removeViewFromHeaderBar(this);
                     }
                 },
                 enumerable: true
             },
             'showKeyboard': {
-                value: function(){
+                value: function() {
                     this.requestFocus();
                 },
                 enumerable: true
             },
             'hideKeyboard': {
-                value: function(){
+                value: function() {
                     this.removeFocus();
                 },
                 enumerable: true
             },
             'requestFocus': {
-                value: function(){
+                value: function() {
                     mSearchSrcTextView.requestFocus();
                     // Due to the requirements we should show keyboard when focus requested.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
@@ -174,7 +179,7 @@ const SearchView = extend(View)(
                 enumerable: true
             },
             'removeFocus': {
-                value: function(){
+                value: function() {
                     mSearchSrcTextView.clearFocus();
                     // Due to the requirements we should hide keyboard when focus cleared.
                     var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
@@ -183,15 +188,15 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            
+
             'toString': {
-                value: function(){
+                value: function() {
                     return 'SearchView';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             },
-            
+
             // events
             'onSearchBegin': {
                 get: function() {
@@ -230,20 +235,37 @@ const SearchView = extend(View)(
                 enumerable: true
             }
         });
-        
+
         var _hintTextColor = Color.LIGHTGRAY;
         var _keyboardType = KeyboardType.DEFAULT;
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
         var _closeImage = null;
-        Object.defineProperties(this.android, 
-        {
+
+        var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
+
+        Object.defineProperties(this.android, {
+            // 'underlineColor': {
+            //     get: function() {
+            //         return _underlineColor;
+            //     },
+            //     set: function(underlineColor) {
+            //         if ( ('normal' in underlineColor) && ('focus' in underlineColor)) {
+            //             _underlineColor = underlineColor;
+            //             mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
+            //         }else {
+            //             throw new Error("underlineColor must include normal and focus property.");
+            //         }
+
+            //     },
+            //     enumerable: true
+            // },
             'hintTextColor': {
                 get: function() {
                     return _hintTextColor;
                 },
                 set: function(hintTextColor) {
-                    if(!(hintTextColor instanceof Color)){
+                    if (!(hintTextColor instanceof Color)) {
                         throw new TypeError(Exception.TypeError.DEFAULT + "Color");
                     }
                     _hintTextColor = hintTextColor;
@@ -256,17 +278,17 @@ const SearchView = extend(View)(
                     return _keyboardType;
                 },
                 set: function(keyboardType) {
-                    _keyboardType = keyboardType; 
+                    _keyboardType = keyboardType;
                     this.nativeObject.setInputType(NativeKeyboardType[_keyboardType]);
                 }.bind(this),
                 enumerable: true
             },
-            'font' : {
+            'font': {
                 get: function() {
                     return _font;
                 },
                 set: function(font) {
-                    if(font instanceof Font){
+                    if (font instanceof Font) {
                         _font = font;
                         mSearchSrcTextView.setTypeface(font.nativeObject);
                         mSearchSrcTextView.setTextSize(font.size);
@@ -290,7 +312,7 @@ const SearchView = extend(View)(
                 },
                 set: function(closeImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if(closeImage == null || closeImage instanceof require("../image")){
+                    if (closeImage == null || closeImage instanceof require("../image")) {
                         _closeImage = closeImage;
                         mCloseButton.setImageDrawable(closeImage.nativeObject);
                     }
@@ -298,38 +320,40 @@ const SearchView = extend(View)(
                 enumerable: true
             },
         });
-        
+
         // Handling ios specific properties
         this.ios = {};
-        
-        if(!this.isNotSetDefaults){
-            const NativePorterDuff  = requireClass('android.graphics.PorterDuff');
+
+        if (!this.isNotSetDefaults) {
+            const NativePorterDuff = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
-            mSearchButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
-            mCloseButton.getDrawable().setColorFilter((Color.WHITE).nativeObject,NativePorterDuff.Mode.SRC_IN);
+            mSearchButton.getDrawable().setColorFilter((Color.WHITE).nativeObject, NativePorterDuff.Mode.SRC_IN);
+            mCloseButton.getDrawable().setColorFilter((Color.WHITE).nativeObject, NativePorterDuff.Mode.SRC_IN);
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                onFocusChange: function(view, hasFocus){
-                    if (hasFocus)  {
+                onFocusChange: function(view, hasFocus) {
+                    if (hasFocus) {
                         _onSearchBeginCallback && _onSearchBeginCallback();
+                        mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
                     }
                     else {
                         _onSearchEndCallback && _onSearchEndCallback();
+                        mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
                         this.removeFocus();
                     }
                 }.bind(this)
             }));
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-                onQueryTextSubmit: function(query){
+                onQueryTextSubmit: function(query) {
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
                     return false;
                 },
-                onQueryTextChange: function(newText){
+                onQueryTextChange: function(newText) {
                     _onTextChangedCallback && _onTextChangedCallback(newText);
                     return false;
                 }
             }));
         }
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -342,8 +366,8 @@ const SearchView = extend(View)(
 SearchView.iOS = {};
 SearchView.iOS.Style = {};
 
-function updateQueryHint(self, mSearchSrcTextView, icon, hint){
-    if(icon && icon.nativeObject){
+function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
+    if (icon && icon.nativeObject) {
         const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
         const NativeImageSpan = requireClass("android.text.style.ImageSpan");
         var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
@@ -355,10 +379,10 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint){
         ssb.append(hint);
         mSearchSrcTextView.setHint(ssb);
     }
-    else{
+    else {
         self.nativeObject.setQueryHint(hint);
     }
-    
+
 }
 
 module.exports = SearchView;
