@@ -69,6 +69,9 @@ const SwipeView = extend(View)(
                 },
                 set: function(pages) {
                     if (pages instanceof Array) {
+                        if(pages.length < 1){
+                            throw new TypeError("Array parameter cannot be empty.");
+                        }
                         _pages = pages;
                         
                         var nativeFragments = [];
