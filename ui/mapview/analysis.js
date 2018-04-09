@@ -349,6 +349,16 @@ Pin.prototype.subtitle;
 Pin.prototype.color;
 
 /**
+ * This property sets pin id.
+ *
+ * @property {Number} id
+ * @android
+ * @ios
+ * @since 2.0.11
+ */
+Pin.prototype.id;
+
+/**
  * This property sets an image as pin instead of default pin.
  *
  * @property {UI.Image} image
