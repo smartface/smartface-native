@@ -348,6 +348,16 @@ function Pin(params) {
             enumerable: true
     });
     
+    Object.defineProperty(self, 'id', {
+            get: function() {
+                return self.nativeObject.tag;
+            },
+            set: function(value) {
+                self.nativeObject.tag = value;
+            },
+            enumerable: true
+    });
+    
     Object.defineProperty(self, 'title', {
             get: function() {
                 return self.nativeObject.title;
