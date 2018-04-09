@@ -83,7 +83,10 @@ const SwipeView = extend(View)(
                             _pageInstances.push(pageInstance);
                             nativeFragments.push(pageInstance.nativeObject);
                         });
+  
+                        pagerAdapter = new NativePagerAdapter(fragmentManager);
                         pagerAdapter.setFragments(array(nativeFragments));
+                        self.nativeObject.setAdapter(pagerAdapter);
                     }
                 }
             },
