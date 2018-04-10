@@ -34,7 +34,7 @@ const extend = require('js-base/core/extend');
  */
 function SwipeView() {
     /**
-     * Gets/Sets the array of the page classes will be displayed inside SwipeView. 
+     * Gets/Sets the array of the page classes will be displayed inside SwipeView. Pages parameter cannot be empty.
      *
      * @property {Array} pages
      * @android
