@@ -8,7 +8,8 @@ var pagesInstance = null;
 var routes = {};
 var history = [];
 
-    
+Router.currentPage;
+
 Object.defineProperty(Router, 'routes', {
     get: function() {
         return routes;
@@ -186,7 +187,7 @@ Router.getCurrent = function() {
 
 // Added for android.
 Router.getCurrentPage = function() {
-    return history[history.length-1];
+    return Router.currentPage;
 };
 
 Router.removeFromHistory = function(count) {

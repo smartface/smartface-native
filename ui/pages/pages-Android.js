@@ -203,12 +203,19 @@ function registerOnBackKeyPressed(pagesStack){
         onKey: function( view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if( keyCode === 4 && keyEvent.getAction() === 0) {
-                const Router = require("../router");
-                var currentHistoryObject = Router.getCurrentPage();
-                if (currentHistoryObject && currentHistoryObject.page) {
-                   currentHistoryObject.page.android.onBackButtonPressed && 
-                            currentHistoryObject.page.android.onBackButtonPressed();
+                
+                const Router = require("../../router");
+                if (Router.currentPage) {
+                   Router.currentPage.android.onBackButtonPressed && 
+                            Router.currentPage.android.onBackButtonPressed();
                 }
+                
+                // const Router = require("../router");
+                // var currentHistoryObject = Router.getCurrentPage();
+                // if (currentHistoryObject && currentHistoryObject.page) {
+                //   currentHistoryObject.page.android.onBackButtonPressed && 
+                //             currentHistoryObject.page.android.onBackButtonPressed();
+                // }
             }
             return true;
         }
