@@ -70,6 +70,9 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
+                    if(!self.isSwipeViewPage){
+                        Router.currentPage = self;
+                    }
                     onShowCallback && onShowCallback();
                 }
             }));
@@ -152,6 +155,9 @@ function Page(params) {
             
         }
     }, null);
+    
+    this.isSwipeViewPage = false;
+     
     Object.defineProperty(this, 'layout', {
         get: function() {
             return rootLayout;
