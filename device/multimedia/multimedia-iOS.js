@@ -120,6 +120,14 @@ Multimedia.ios.requestCameraAuthorization = function(callback){
     });
 }
 
+Multimedia.ios.getGalleryAuthorizationStatus = function(){
+    return Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus();
+}
+
+Multimedia.ios.getCameraAuthorizationStatus = function(){
+    return Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType();
+}
+
 Multimedia.ios.native = {};
 
 const AVMediaType = {
@@ -132,6 +140,8 @@ const AVAuthorizationStatus = {
     Denied : 2,
     Authorized : 3,
 }
+
+Multimedia.ios.cameraAuthorizationStatus = AVAuthorizationStatus;
 
 Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback){
     var argType = new Invocation.Argument({
@@ -161,6 +171,8 @@ const PHAuthorizationStatus = {
     Denied : 2,            // User has explicitly denied this application access to photos data.
     Authorized : 3      // User has authorized this application to access photos data.
 };
+
+Multimedia.ios.galleryAuthorizationStatus = PHAuthorizationStatus;
 
 Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback){
     var argCallback = new Invocation.Argument({
