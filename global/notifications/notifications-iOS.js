@@ -1,3 +1,5 @@
+const Invocation    = require('sf-core/util').Invocation;
+
 var Notifications = {};
 
 Notifications.LocalNotification = function LocalNotification(params) {
@@ -191,6 +193,34 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){
 
 Notifications.unregisterForPushNotifications = function(){
     __SF_UIApplication.sharedApplication().unregisterForRemoteNotifications();
+}
+
+const UNAuthorizationStatus = {
+    // The user has not yet made a choice regarding whether the application may post user notifications.
+    NotDetermined : 0,
+    
+    // The application is not authorized to post user notifications.
+    Denied : 1,
+    
+    // The application is authorized to post user notifications.
+    Authorized : 2
+};
+
+Notifications.ios.authorizationStatus = UNAuthorizationStatus;
+
+Notifications.ios.getAuthorizationStatus = function(callback){
+    var current = Invocation.invokeClassMethod("UNUserNotificationCenter","currentNotificationCenter",[],"id");
+    
+    var argBlock = new Invocation.Argument({
+        type:"IDBlock",
+        value: function(settings){
+            var status = Invocation.invokeInstanceMethod(settings,"authorizationStatus",[],"NSInteger");
+            if (typeof callback === 'function') {
+                callback(status);
+            }
+        }
+    });
+    Invocation.invokeInstanceMethod(current,"getNotificationSettingsWithCompletionHandler:",[argBlock]);
 }
 
 module.exports = Notifications;
