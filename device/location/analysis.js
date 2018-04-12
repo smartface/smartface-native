@@ -70,6 +70,28 @@ Location.onLocationChanged = function onLocationChanged(event){}
 Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status){}
 
 /**
+ * Gets authorization status.
+ * 
+ * @method getAuthorizationStatus
+ * @return {Device.Location.authorizationStatus} status
+ * @ios
+ * @static
+ * @since 2.0.11
+ */
+Location.getAuthorizationStatus = function() {};
+
+/**
+ * Returns a Boolean value indicating whether location services are enabled on the device.
+ * 
+ * @method locationServicesEnabled
+ * @return {Boolean} status
+ * @ios
+ * @static
+ * @since 2.0.11
+ */
+Location.locationServicesEnabled = function() {};
+
+/**
  * Android Specific Properties.
  * @class Device.Location.Android
  * @since 1.1.16
@@ -119,5 +141,56 @@ Location.Android.Provider.GPS;
  * @since 1.1.16
  */
 Location.Android.Provider.NETWORK;
+
+/** 
+ * @enum {Number} Device.Location.authorizationStatus 
+ * @since 2.0.11
+ * @ios
+ */
+Location.authorizationStatus = {};
+
+/**
+ * The user has not yet made a choice regarding whether this app can use location services.
+ * 
+ * @property {Number} NotDetermined
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Location.authorizationStatus.NotDetermined = 0;
+
+/**
+ * This app is not authorized to use location services.
+ * 
+ * @property {Number} Denied
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Location.authorizationStatus.Restricted = 1;
+
+/**
+ * The user explicitly denied the use of location services for this app or location services are currently disabled in Settings.
+ * 
+ * @property {Number} Denied
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Location.authorizationStatus.Denied = 2;
+
+/**
+ * This app is authorized to use location services.
+ * 
+ * @property {Number} Authorized
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Location.authorizationStatus.Authorized = 3;
 
 module.exports = Location;
