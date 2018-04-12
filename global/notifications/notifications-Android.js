@@ -417,5 +417,7 @@ function cancelNotificationIntent(self){
 
 // Handling iOS specific properties
 Notifications.ios = {};
+Notifications.ios.authorizationStatus = {};
+Notifications.ios.getAuthorizationStatus = function(){};
 
 module.exports = Notifications;
