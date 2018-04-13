@@ -1,6 +1,6 @@
 /*globals requireClass */
 const WebBrowser = function() {};
-WebBrowser.open = function(page, options) {
+WebBrowser.show = function(page, options) {
     
     if (!(options && options.url && (options.url.startsWith("https://") || options.url.startsWith("http://")))) {
         throw new Error("The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.");
