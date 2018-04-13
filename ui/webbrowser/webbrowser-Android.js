@@ -10,18 +10,18 @@ WebBrowser.show = function(page, options) {
         // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
         // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");
         const NativeUri = requireClass("android.net.Uri");
-        const NativeIntent = requireClass("android.content.Intent");
+        // const NativeIntent = requireClass("android.content.Intent");
         const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
-        const NativePendingIntent = requireClass("android.app.PendingIntent");
+        // const NativePendingIntent = requireClass("android.app.PendingIntent");
 
         var builder = new NativeCustomTabsIntent.Builder();
         builder.setToolbarColor(options.barColor.nativeObject);
         builder.setShowTitle(true);
 
-        var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(NativeIntent.EXTRA_TEXT, options.url);
-        builder.addMenuItem("Share", NativePendingIntent.getActivity(spratAndroidActivityInstance, 0, shareIntent, 0));
+        // var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
+        // shareIntent.setType("text/plain");
+        // shareIntent.putExtra(NativeIntent.EXTRA_TEXT, options.url);
+        // builder.addMenuItem("Share", NativePendingIntent.getActivity(spratAndroidActivityInstance, 0, shareIntent, 0));
 
         try {
             var customTabsIntent = builder.build();
