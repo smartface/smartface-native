@@ -1,13 +1,12 @@
 /*globals array,requireClass */
 
 
-const WebBrowserOptions = function() {
+const WebBrowserOptions = function(params) {
     
     const Color = require('sf-core/ui/color');
     var _url = "";
     var _barColor = Color.WHITE;
     var _itemColor = Color.BLACK;
-    var _dismissButtonStyle;
     var _statusBarVisible = true;
     
     Object.defineProperties(this, {
@@ -42,15 +41,6 @@ const WebBrowserOptions = function() {
             },
             enumerable: true
         },
-        'dismissButtonStyle': {
-            get: function() {
-                return _dismissButtonStyle;
-            },
-            set: function(value) {
-                _dismissButtonStyle = value;
-            },
-            enumerable: true
-        },
         'statusBarVisible': {
             get: function() {
                 return _statusBarVisible;
@@ -61,6 +51,13 @@ const WebBrowserOptions = function() {
             enumerable: true
         }
     });
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 };
 
 
