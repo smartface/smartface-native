@@ -1,6 +1,3 @@
-/*globals array,requireClass */
-
-
 const WebBrowserOptions = function(params) {
     
     const Color = require('sf-core/ui/color');
