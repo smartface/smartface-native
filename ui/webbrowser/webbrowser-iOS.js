@@ -4,6 +4,9 @@ const Options = require('sf-core/ui/webbrowser/webbrowseroptions');
 function WebBrowser () {}
 
 WebBrowser.open = function(page,options){
+    if (!(options && options.url && (options.url.startsWith("https://")  || options.url.startsWith("http://")))) {
+        throw new Error("The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.");
+    };
     var nsURL = __SF_NSURL.URLWithString(options.url);
     var argURL = new Invocation.Argument({
         type:"NSObject",
