@@ -2,7 +2,7 @@
 
 const WebBrowser = function() {};
 
-WebBrowser.Open = function(page,options) {
+WebBrowser.open = function(page,options) {
     const NativeCustomTabsIntent = requireClass("android.support.customtabs.CustomTabsIntent");
     // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
     // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");

@@ -7,7 +7,6 @@ const WebBrowserOptions = function(params) {
     var _url = "";
     var _barColor = Color.WHITE;
     var _itemColor = Color.BLACK;
-    var _dismissButtonStyle;
     var _statusBarVisible = true;
     
     Object.defineProperties(this, {
@@ -39,15 +38,6 @@ const WebBrowserOptions = function(params) {
             },
             set: function(value) {
                 _itemColor = value;
-            },
-            enumerable: true
-        },
-        'dismissButtonStyle': {
-            get: function() {
-                return _dismissButtonStyle;
-            },
-            set: function(value) {
-                _dismissButtonStyle = value;
             },
             enumerable: true
         },
