@@ -1,6 +1,6 @@
 function WebBrowser(params) {}
 
-WebBrowser.Open = function(options) {};
+WebBrowser.Open = function(page,options) {};
 WebBrowser.Options = function(options) {};
 
 WebBrowser.Options.prototype.url = null;

@@ -1,7 +1,7 @@
 /*globals array,requireClass */
 
 
-const WebBrowserOptions = function() {
+const WebBrowserOptions = function(params) {
     
     const Color = require('sf-core/ui/color');
     var _url = "";
@@ -61,6 +61,13 @@ const WebBrowserOptions = function() {
             enumerable: true
         }
     });
+    
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 };
 
 

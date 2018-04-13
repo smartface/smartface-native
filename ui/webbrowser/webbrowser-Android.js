@@ -1,57 +1,33 @@
 /*globals array,requireClass */
 
-const WebBrowser = function() {
+const WebBrowser = function() {};
 
-    var _url;
-    var _headerColor;
-    Object.defineProperties(this, {
-        'url': {
-            get: function() {
-                return _url;
-            },
-            set: function(value) {
-                _url = value;
-            },
-            enumerable: true
-        },
-        'headerColor': {
-            get: function() {
-                return _headerColor;
-            },
-            set: function(value) {
-                _headerColor = value;
-            },
-            enumerable: true
-        },
-        'open': {
-            value: function() {
+WebBrowser.Open = function(page,options) {
+    const NativeCustomTabsIntent = requireClass("android.support.customtabs.CustomTabsIntent");
+    // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
+    // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");
+    const NativeUri = requireClass("android.net.Uri");
+    const NativeIntent = requireClass("android.content.Intent");
+    const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
+    const NativePendingIntent = requireClass("android.app.PendingIntent");
+    
+    var builder = new NativeCustomTabsIntent.Builder();
+    builder.setToolbarColor(options.barColor.nativeObject);
+    builder.setShowTitle(true);
 
-                const NativeCustomTabsIntent = requireClass("android.support.customtabs.CustomTabsIntent");
-                // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
-                // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");
-                const NativeUri = requireClass("android.net.Uri");
-                const NativeIntent = requireClass("android.content.Intent");
-                const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
-                
-                var builder = new NativeCustomTabsIntent.Builder();
-                builder.setToolbarColor(_headerColor.nativeObject);
-                builder.setShowTitle(true);
-                
-                var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(NativeIntent.EXTRA_TEXT, _url);
-                var customTabsIntent = builder.build();
-
-                try {
-                    customTabsIntent.launchUrl(spratAndroidActivityInstance, NativeUri.parse(_url));
-                }
-                catch (e) {
-                    throw new Error("" + e);
-                }
-            }
-        }
-    });
+    var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
+    shareIntent.setType("text/plain");
+    shareIntent.putExtra(NativeIntent.EXTRA_TEXT, options.url);
+    builder.addMenuItem("Share", NativePendingIntent.getActivity(spratAndroidActivityInstance, 0, shareIntent, 0));
+    
+    try {
+         var customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(spratAndroidActivityInstance, NativeUri.parse(options.url));
+    }
+    catch (e) {
+        throw new Error("" + e);
+    }
 };
 
-
+WebBrowser.Options = require("./webbrowseroptions");
 module.exports = WebBrowser;
