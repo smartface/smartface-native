@@ -180,6 +180,8 @@ function TabBarFlowView(params) {
     self.nativeObject = SF.requireClass("UITabBarController").new();
     self.nativeObject.tabBar.translucent = false;
     
+    //////////////////////////////////////////////////////////////////
+    
     var nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>',{
         tabBarControllerDidSelectViewController : function (tabBarController, viewController){
             viewModel.indexChanged(tabBarController.selectedIndex);
@@ -199,6 +201,48 @@ function TabBarFlowView(params) {
         SF.requireClass("UIApplication").sharedApplication().keyWindow.rootViewController = self.nativeObject;
         SF.requireClass("UIApplication").sharedApplication().keyWindow.makeKeyAndVisible();
     };
+    
+    this.configureTabbar = function (){
+        var objects = viewModel.tabBarBrain.getObjectsArray();
+        for (var i = 0; i < objects.length; i++) {
+            
+            // TabbarItem configuration
+            const UITabBarItem = SF.requireClass("UITabBarItem");
+            
+            var tabItem = null;
+            if (objects[i].values.pageInstance.type !== undefined) {
+                switch (objects[i].values.pageInstance.type) {
+                    case 'Navigator': {
+                        tabItem = objects[i].values.pageInstance.view.nativeObject.tabBarItem;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            } else {
+                tabItem = objects[i].values.pageInstance.nativeObject.tabBarItem;
+            }
+            
+            // Set appearance of tabBarItem
+            tabItem.title = objects[i].values.title;
+            if (objects[i].values.icon && (objects[i].values.icon.normal || objects[i].values.icon.selected)) {
+                if (typeof objects[i].values.icon.normal === "object") {
+                    tabItem.image = objects[i].values.icon.normal.nativeObject;
+                } else {
+                    tabItem.image = undefined;
+                }
+                
+                if (typeof objects[i].values.icon.selected === "object") {
+                    tabItem.selectedImage = objects[i].values.icon.selected.nativeObject;
+                } else {
+                    tabItem.selectedImage = undefined;
+                }
+            } else {
+                tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
+            }
+        }
+    }
     
     Object.defineProperty(self, 'tintColor', {
         set: function(colorsObject) {
@@ -225,6 +269,10 @@ function TabBarFlowView(params) {
         enumerable: true
     });
     
+    //////////////////////////////////////////////////////////////////
+    
+    self.configureTabbar();
+    
     if (params) {
         if (params.currentIndex) {
             self.nativeObject.selectedIndex = params.currentIndex;
@@ -247,6 +295,9 @@ function TabBarFlowModel(argument) {
     };
     self.backgroundColor = undefined;
     
+    this.getObjectsArray = function() {
+        return objects;
+    }
     this.addObject = function (newObject) {
         objects.push(newObject);
     };
@@ -300,42 +351,6 @@ function TabBarFlowModel(argument) {
                     objects[i].values.pageInstance.routerPath = objects[i].key;
                 }
                 refreshNeeded = true;
-            }
-            
-            // TabbarItem configuration
-            const UITabBarItem = SF.requireClass("UITabBarItem");
-            
-            var tabItem = null;
-            if (objects[i].values.pageInstance.type !== undefined) {
-                switch (objects[i].values.pageInstance.type) {
-                    case 'Navigator': {
-                        tabItem = objects[i].values.pageInstance.view.nativeObject.tabBarItem;
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-            } else {
-                tabItem = objects[i].values.pageInstance.nativeObject.tabBarItem;
-            }
-            
-            // Set appearance of tabBarItem
-            tabItem.title = objects[i].values.title;
-            if (objects[i].values.icon && (objects[i].values.icon.normal || objects[i].values.icon.selected)) {
-                if (typeof objects[i].values.icon.normal === "object") {
-                    tabItem.image = objects[i].values.icon.normal.nativeObject;
-                } else {
-                    tabItem.image = undefined;
-                }
-                
-                if (typeof objects[i].values.icon.selected === "object") {
-                    tabItem.selectedImage = objects[i].values.icon.selected.nativeObject;
-                } else {
-                    tabItem.selectedImage = undefined;
-                }
-            } else {
-                tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
             }
             
             if (objects[i].values.pageInstance.type !== undefined) {
