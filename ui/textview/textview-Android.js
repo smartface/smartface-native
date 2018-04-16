@@ -25,7 +25,7 @@ const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
 
-const Label = extend(View)(
+const TextView = extend(View)(
     function (_super, params) {
         var self = this;
         
@@ -279,4 +279,4 @@ function createColorStateList(textColors) {
     return (new NativeColorStateList (array(statesSet), array(colorsSets, "int")));
 }
 
-module.exports = Label;
+module.exports = TextView;
