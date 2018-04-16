@@ -3,7 +3,7 @@ const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
 
-const Label = extend(View)(
+const TextView = extend(View)(
     function (_super, params) {
         var self = this;
         
@@ -148,4 +148,4 @@ const Label = extend(View)(
     }
 );
 
-module.exports = Label;
+module.exports = TextView;
