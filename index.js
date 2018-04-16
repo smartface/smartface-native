@@ -10,4 +10,5 @@ module.exports = {
     SecureData: require('./securedata'),
     Application: require('./application'),
     Router: require('./router'),
+    AttributedString: require('./attributedstring'),
 };

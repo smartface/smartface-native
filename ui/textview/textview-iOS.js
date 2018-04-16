@@ -2,6 +2,14 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
+const Invocation    = require('sf-core/util').Invocation;
+
+const NSUnderlineStyle = {
+    None : 0,
+    Single : 1,
+    Thick : 2,
+    Double : 9
+};
 
 const TextView = extend(View)(
     function (_super, params) {
@@ -22,6 +30,116 @@ const TextView = extend(View)(
     	self.nativeObject.textContainer.lineBreakMode = 0;
     	self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
     	
+    	var _attributedText = [];
+        Object.defineProperty(self, 'attributedText', {
+            get: function() {
+                return _attributedText;
+            },
+            set: function(value) {
+                if (Array.isArray(value)) {
+                    _attributedText = value;
+                    setText(value);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        });
+        
+        var _onClick = undefined;
+        Object.defineProperty(self, 'onClick', {
+            get: function() {
+                return _onClick;
+            },
+            set: function(value) {
+                _onClick = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        
+        var _letterSpacing = 0;
+        Object.defineProperty(self, 'letterSpacing', {
+            get: function() {
+                return _letterSpacing;
+            },
+            set: function(value) {
+                _letterSpacing = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        
+        self.nativeObject.didTapLinkWithURL = function(e){
+            if (typeof self.onClick == 'function') {
+                self.onClick(e.URL);
+            }
+        };
+        
+        var _lineSpacing = 0;
+        Object.defineProperty(self, 'lineSpacing', {
+            get: function() {
+                return _lineSpacing;
+            },
+            set: function(value) {
+                _lineSpacing = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        
+        function setText(value){
+            var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle","alloc",[],"id");
+            var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc,"init",[],"NSObject");
+            var argLineSpacing = new Invocation.Argument({
+                type:"CGFloat",
+                value: self.lineSpacing
+            });
+            Invocation.invokeInstanceMethod(paragraphStyle,"setLineSpacing:",[argLineSpacing]);
+
+            var alloc = Invocation.invokeClassMethod("NSMutableAttributedString","alloc",[],"id");
+            var mutableString = Invocation.invokeInstanceMethod(alloc,"init",[],"NSObject");
+
+            for (var i in value) {
+                var attributeString = value[i];
+                
+                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString","alloc",[],"id");
+        
+                var argString = new Invocation.Argument({
+                    type:"NSString",
+                    value: attributeString.string
+                });
+                    
+                var argAttributes = new Invocation.Argument({
+                    type:"id",
+                    value: {
+                        "NSColor" : attributeString.foregroundColor.nativeObject,
+                        "NSFont" : attributeString.font,
+                        "NSUnderline" : attributeString.underline ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSLink": attributeString.link,
+                        "NSBackgroundColor" : attributeString.backgroundColor.nativeObject,
+                        "NSUnderlineColor" : attributeString.ios.underlineColor.nativeObject,
+                        "NSKern" : self.letterSpacing,
+                        "NSParagraphStyle" : paragraphStyle
+                    }
+                });
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString,"initWithString:attributes:",[argString,argAttributes],"NSObject");
+                
+                var argAppend = new Invocation.Argument({
+                        type:"NSObject",
+                        value: nativeAttributeString
+                    });
+                Invocation.invokeInstanceMethod(mutableString,"appendAttributedString:",[argAppend]);
+            }
+
+            var argAttributeString = new Invocation.Argument({
+                type:"NSObject",
+                value: mutableString
+            });
+            
+            Invocation.invokeInstanceMethod(self.nativeObject,"setAttributedText:",[argAttributeString]);
+            self.textAlignment = self.textAlignment;
+        }
+        
     	var _selectable = false;			
     	Object.defineProperty(self, 'selectable', {
             get:function() {
