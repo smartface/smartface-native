@@ -175,12 +175,12 @@ function RouterViewModel(params) {
             this.go(to, parameters, animated);
         } else {
             if (routerBrain.currentPage.type == "Navigator") {
-                routerBrain.currentPage.goBack();
+                routerBrain.currentPage.goBack(to, parameters, animated);
             } else if (routerBrain.currentPage.type == "TabBarFlow" && routerBrain.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
-                routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack();
+                routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack(to, parameters, animated);
             } else {
                 routerBrain.history.pop();
-                this.go(routerBrain.history[routerBrain.history.length - 1]);
+                this.go(routerBrain.history[routerBrain.history.length - 1], parameters, animated);
             }
         }
     };
