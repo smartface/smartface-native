@@ -2,7 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class UI.TextView
- * @since 0.1
+ * @since 3.0.0
  * @extends UI.View
  * TextView is a view that displays read-only text on the screen.
  *
@@ -28,7 +28,7 @@ function TextView(params) {}
  * @property {UI.Color} [backgroundColor = UI.Color.TRANSPARENT]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.backgroundColor = UI.Color.TRANSPARENT;
 
@@ -45,7 +45,7 @@ TextView.prototype.backgroundColor = UI.Color.TRANSPARENT;
  * @property {String} [htmlText = ""]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.htmlText = "";
 
@@ -65,7 +65,7 @@ TextView.prototype.htmlText = "";
  * @property {UI.Font} [font = null]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.font = null;
 
@@ -76,7 +76,7 @@ TextView.prototype.font = null;
  * @property {Boolean} [multiline = false]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.multiline = false;
 
@@ -87,7 +87,7 @@ TextView.prototype.multiline = false;
  * @property {Boolean} [selectable = false]
  * @android
  * @ios
- * @since 1.1.8
+ * @since 3.0.0
  */
 TextView.prototype.selectable = false;
 
@@ -97,7 +97,7 @@ TextView.prototype.selectable = false;
  * @property {String} [text = ""]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.text = "";
 
@@ -114,7 +114,7 @@ TextView.prototype.text = "";
  * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.textAlignment = UI.TextAlignment.MIDLEFT;
 
@@ -124,7 +124,7 @@ TextView.prototype.textAlignment = UI.TextAlignment.MIDLEFT;
  * @property {UI.Color} [textColor = UI.Color.BLACK]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.textColor = UI.Color.BLACK;
 
@@ -133,7 +133,7 @@ TextView.prototype.textColor = UI.Color.BLACK;
  *
  * @property {Boolean} [showScrollBar = false]
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 TextView.prototype.ios.showScrollBar = false;
 
@@ -142,7 +142,7 @@ TextView.prototype.ios.showScrollBar = false;
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 1.1.12
+ * @since 3.0.0
  */
 TextView.prototype.ios.scrollEnabled = true;
 
@@ -193,6 +193,7 @@ TextView.prototype.ios.scrollEnabled = true;
  * @property {Array} [attributedText = []]
  * @android
  * @ios
+ * @since 3.0.0
  */
 TextView.prototype.attributedText = "";
 
@@ -208,6 +209,7 @@ TextView.prototype.attributedText = "";
  * @event onClick
  * @android
  * @ios
+ * @since 3.0.0
  */
 TextView.prototype.onClick = function(e) {};
 
@@ -228,6 +230,7 @@ TextView.prototype.onClick = function(e) {};
  * @property {Number} [letterSpacing = 0]
  * @android
  * @ios
+ * @since 3.0.0
  */
 TextView.prototype.letterSpacing = 0;
 
@@ -237,6 +240,7 @@ TextView.prototype.letterSpacing = 0;
  * @property {Number} [lineSpacing = 0]
  * @android
  * @ios
+ * @since 3.0.0
  */
 TextView.prototype.lineSpacing = 0;
 
