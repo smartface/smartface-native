@@ -197,7 +197,7 @@ TextView.prototype.ios.scrollEnabled = true;
 TextView.prototype.attributedText = "";
 
 /**
- * This event is called when user click link string.
+ * This event is called when user click link string. onClick just work with attributedText.
  *
  *     @example
  *     myTextView.onClick: function(e) {
@@ -212,7 +212,7 @@ TextView.prototype.attributedText = "";
 TextView.prototype.onClick = function(e) {};
 
 /**
- * Gets/sets letterSpacing on TextView.
+ * Gets/sets letterSpacing on TextView. letterSpacing just work with attributedText.
  * 
  * For iOS,
  * This value specifies the number of points by which to adjust kern-pair characters. 
@@ -232,9 +232,9 @@ TextView.prototype.onClick = function(e) {};
 TextView.prototype.letterSpacing = 0;
 
 /**
- * Gets/sets lineSpacing on TextView.
+ * Gets/sets lineSpacing on TextView. lineSpacing just work with attributedText.
  * 
- * @property {Number} [letterSpacing = 0]
+ * @property {Number} [lineSpacing = 0]
  * @android
  * @ios
  */
