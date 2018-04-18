@@ -87,15 +87,15 @@ const Label = extend(View)(
                     this.nativeObject.setSingleLine(!multiline);
                     // Integer.MAX_VALUE
                     // const NativeInteger = requireClass("java.lang.Integer");
-                    this.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                    if(multiline){
-                        const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                        var movementMethod = new NativeScrollingMovementMethod();
-                        this.nativeObject.setMovementMethod(movementMethod);
-                    }
-                    else{
-                        this.nativeObject.setMovementMethod(null);
-                    }
+                    // this.nativeObject.setMaxLines (multiline ? 1000 : 1);
+                    // if(multiline){
+                    //     const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
+                    //     var movementMethod = new NativeScrollingMovementMethod();
+                    //     this.nativeObject.setMovementMethod(movementMethod);
+                    // }
+                    // else{
+                    //     this.nativeObject.setMovementMethod(null);
+                    // }
                 },
                 enumerable: true
             },
