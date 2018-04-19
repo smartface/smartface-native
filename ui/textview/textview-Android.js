@@ -348,7 +348,7 @@ const TextView = extend(View)(
                         self.onClick(value.link);
                     },
                     updateDrawState: function(ds) {
-                        ds.setUnderlineText(false);
+                        ds.setUnderlineText(value.underline);
                     }
                 };
                 var clickSpan = NativeClickableSpan.extend("NativeClickableSpan", clickableSpanOverrideMethods, null);
