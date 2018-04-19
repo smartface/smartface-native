@@ -1,5 +1,6 @@
 const Color = require("sf-core/ui/color");
 const Image = require('sf-core/ui/image');
+const Invocation = require('sf-core/util').Invocation;
 
 function HeaderBarItem(params) {
     var _onPress = null;
@@ -8,6 +9,7 @@ function HeaderBarItem(params) {
     
     self.nativeObject = new __SF_UIBarButtonItem();
     self.nativeObject.target = self.nativeObject;
+    var _badge ={};
     
     Object.defineProperties(this, {
         'title': {
@@ -66,6 +68,99 @@ function HeaderBarItem(params) {
                     _onPress = value.bind(this);
                     self.nativeObject.addJSAction(_onPress);
                 }
+            },
+            enumerable: true
+        },
+        'badge': {
+            get: function(){
+                return _badge;
+            },
+            enumerable: true
+        }
+    });
+    
+    var _visible = false;
+    var _backgroundColor;
+    var _font;
+    var _textColor;
+    Object.defineProperties(_badge, {
+        'setText': {
+            value: function(text){
+                __SF_Dispatch.mainAsyncAfter(function(){
+                            self.nativeObject.pp_addBadgeWithText(text);
+                            _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
+                            _backgroundColor ? self.badge.setBackgroundColor(_backgroundColor) : 0;
+                            _textColor ? self.badge.setTextColor(_textColor) : 0;
+                            _font ? self.badge.setFont(_font) : 0;
+                },1);
+            },
+            enumerable: true
+        },
+        'setVisible': {
+            value: function(value){
+                _visible = value;
+                if (value) {
+                    self.nativeObject.pp_showBadge();
+                }else{
+                    self.nativeObject.pp_hiddenBadge();
+                }
+            },
+            enumerable: true
+        },
+        'setHeight': {
+            value: function(value){
+                self.nativeObject.pp_setBadgeHeight(value);
+            },
+            enumerable: true
+        },
+        'setBackgroundColor' : {
+            value: function(value){
+                _backgroundColor = value;
+                var argIDBlock= new Invocation.Argument({
+                    type:"IDBlock",
+                    value: function(label){
+                        var argColor= new Invocation.Argument({
+                            type:"NSObject",
+                            value: value.nativeObject
+                        });
+                        Invocation.invokeInstanceMethod(label,"setBackgroundColor:",[argColor]);
+                    }
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+            },
+            enumerable: true
+        },
+        'setTextColor' : {
+            value: function(value){
+                _textColor = value;
+                var argIDBlock= new Invocation.Argument({
+                    type:"IDBlock",
+                    value: function(label){
+                        var argColor= new Invocation.Argument({
+                            type:"NSObject",
+                            value: value.nativeObject
+                        });
+                        Invocation.invokeInstanceMethod(label,"setTextColor:",[argColor]);
+                    }
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+            },
+            enumerable: true
+        },
+        'setFont' : {
+            value: function(value){
+                _font = value;
+                var argIDBlock= new Invocation.Argument({
+                    type:"IDBlock",
+                    value: function(label){
+                        var argFont= new Invocation.Argument({
+                            type:"NSObject",
+                            value: value
+                        });
+                        Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
+                    }
+                });
+                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
             },
             enumerable: true
         }
