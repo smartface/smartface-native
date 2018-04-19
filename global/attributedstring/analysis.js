@@ -1,6 +1,8 @@
 /**
- * @class AttributedString.
- *
+ * @class AttributedString
+ * @since 3.0.0
+ * A string that has associated attributes for portions of its text.
+ * 
  *     @example
  *     const AttributedString = require('sf-extension-extendedlabel/attributedstring');
  *     var attributeString = new AttributedString();
@@ -19,6 +21,7 @@ function AttributedString(params) {}
  * @property {String} [string = ""]
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.string = "";
 
@@ -28,6 +31,7 @@ AttributedString.prototype.string = "";
  * @property {UI.Font} [font = null]
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.font = null;
 
@@ -37,6 +41,7 @@ AttributedString.prototype.font = null;
  * @property {UI.Color} foregroundColor
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.foregroundColor = Color.BLACK;
 
@@ -46,6 +51,7 @@ AttributedString.prototype.foregroundColor = Color.BLACK;
  * @property {boolean} [underline = false]
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.underline = false;
 
@@ -54,6 +60,7 @@ AttributedString.prototype.underline = false;
  *
  * @property {UI.Color} underlineColor
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.underlineColor = Color.WHITE;
 
@@ -64,6 +71,7 @@ AttributedString.prototype.underlineColor = Color.WHITE;
  * @property {UI.Color} backgroundColor
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.backgroundColor = Color.WHITE;
 
@@ -73,6 +81,7 @@ AttributedString.prototype.backgroundColor = Color.WHITE;
  * @property {String} link
  * @android
  * @ios
+ * @since 3.0.0
  */
 AttributedString.prototype.link = undefined;
 
