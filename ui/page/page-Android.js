@@ -768,13 +768,10 @@ function Page(params) {
             }
             else {
                 var badgeContainer = new NativeRelativeLayout(activity);
-                // var badgeLayoutParams = new NativeRelativeLayout.LayoutParams(-2, -2);
-                //badgeContainer.setLayoutParams(badgeLayoutParams);
-                if (item.image && item.image.nativeObject) {
-                    // var layoutParams = new NativeRelativeLayout.LayoutParams(AndroidUnitConverter.dpToPixel(50), AndroidUnitConverter.dpToPixel(50));
+                badgeContainer.setId(98);
 
+                if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    // item.nativeObject.setLayoutParams(layoutParams);
                     badgeContainer.addView(item.nativeObject);
                 }
                 else {
@@ -787,6 +784,7 @@ function Page(params) {
                     const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
                     const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
                     const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
+
                     //Default value
                     ((!item.badge.textColor) ? item.badge.setTextColor(Color.WHITE) : null);
                     if (!item.badge.font) {
@@ -797,14 +795,11 @@ function Page(params) {
                         ((item.badge.font.size && TypeUtil.isNumeric(item.badge.font.size)) ? item.badge.nativeObject.setTextSize(item.badge.font.size) : null);
                     }
 
-                    // item.badge.nativeObject.setShadowLayer(0, 0, 0, 0);
-                    // NativeViewCompat.setElevation(item.badge.nativeObject, 0);
-                    // console.log(" test " + item.badge.nativeObject.getElevation());
-
                     var sizeObject = item.badge.font.sizeOfString(item.badge.text, 500);
-                    console.log("sizeObject  " + sizeObject.height + " sizeObject width " + sizeObject.width);
+                    var height = ((sizeObject.height < 15) ? 15 : sizeObject.height);
+                    var width = ((sizeObject.width < 15) ? 15 : sizeObject.width);
 
-                    var layoutParams = new NativeRelativeLayout.LayoutParams(AndroidUnitConverter.dpToPixel(15), AndroidUnitConverter.dpToPixel(15));
+                    var layoutParams = new NativeRelativeLayout.LayoutParams(AndroidUnitConverter.dpToPixel(width), AndroidUnitConverter.dpToPixel(height));
                     item.nativeObject.setId(99);
                     layoutParams.addRule(19, item.nativeObject.getId());
                     layoutParams.addRule(6, item.nativeObject.getId());
@@ -812,9 +807,9 @@ function Page(params) {
                     NativeViewCompat.setZ(item.badge.nativeObject, 20);
                     NativeViewCompat.setZ(item.badge.nativeObject, 20);
 
-                    layoutParams.setMargins(0, 10, 0, 0);
+                    layoutParams.setMargins(0, 6, 5, 0);
 
-                    var _borderRadius = AndroidUnitConverter.dpToPixel(7);
+                    var _borderRadius = AndroidUnitConverter.dpToPixel(height / 2);
                     var _radii = array([_borderRadius, _borderRadius, _borderRadius, _borderRadius,
                         _borderRadius, _borderRadius, _borderRadius, _borderRadius
                     ], "float");
@@ -822,14 +817,13 @@ function Page(params) {
                     var nativeRoundRectShape = new NativeRoundRectShape(_radii, null, null);
                     var nativeShapeDrawable = new NativeShapeDrawable(nativeRoundRectShape);
 
-                    nativeShapeDrawable.getPaint().setColor(Color.WHITE.nativeObject);
+                    nativeShapeDrawable.getPaint().setColor(item.badge.backgroundColor.nativeObject);
 
-                    item.badge.nativeObject.setBackgroundColor(Color.WHITE.nativeObject);
-                    //item.badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
+                    item.badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
 
                     item.badge.nativeObject.setLayoutParams(layoutParams);
-                    
-                    if (items.length > badgeContainer.getChildCount()) {
+
+                    if (!item.badge.nativeObject.getParent()) {
                         badgeContainer.addView(item.badge.nativeObject);
                     }
                 }
