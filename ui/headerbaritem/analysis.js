@@ -110,7 +110,7 @@ HeaderBarItem.Badge = {};
  * @param {String} text
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.Badge.prototype.setText = function(text){}
 
@@ -121,7 +121,7 @@ HeaderBarItem.Badge.prototype.setText = function(text){}
  * @param {Boolean} visible
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.Badge.prototype.setVisible = function(visible){}
 
@@ -132,7 +132,7 @@ HeaderBarItem.Badge.prototype.setVisible = function(visible){}
  * @param {UI.Color} color
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.Badge.prototype.setBackgroundColor = function(color){}
 
@@ -143,7 +143,7 @@ HeaderBarItem.Badge.prototype.setBackgroundColor = function(color){}
  * @param {UI.Color} color
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.Badge.prototype.setTextColor = function(color){}
 
@@ -154,7 +154,7 @@ HeaderBarItem.Badge.prototype.setTextColor = function(color){}
  * @param {UI.Font} font
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.Badge.prototype.setFont = function(font){}
 
