@@ -752,7 +752,7 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+        //const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
@@ -781,21 +781,17 @@ function Page(params) {
 
                 if (item.badge.visible && item.badge.nativeObject) {
 
-                    var sizeObject = item.badge.font.sizeOfString(item.badge.text, 500);
-                    var height = ((sizeObject.height < 15) ? 15 : sizeObject.height);
-                    var width = ((sizeObject.width < 15) ? 15 : sizeObject.width);
-
                     item.badge.nativeObject.setPadding(13, 0, 13, 0);
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
-                    item.nativeObject.setId(99);
+                    item.nativeObject.setId(NativeView.generateViewId());
                     layoutParams.addRule(19, item.nativeObject.getId());
                     layoutParams.addRule(6, item.nativeObject.getId());
                     //item badge text view must be over the given view
                     NativeViewCompat.setZ(item.badge.nativeObject, 10);
                     NativeViewCompat.setZ(item.badge.nativeObject, 20);
 
-                    layoutParams.setMargins(0, 6, 5, 0);
+                    layoutParams.setMargins(AndroidUnitConverter.dpToPixel(-100), AndroidUnitConverter.dpToPixel(2), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(-50));
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
@@ -803,7 +799,6 @@ function Page(params) {
                         nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
                     else {
-                        var child = item.badge.nativeObject.getParent().findViewById(item.nativeObject.getId());
                         var parentOfNativeObject = item.badge.nativeObject.getParent();
                         parentOfNativeObject.removeAllViews();
                         nativeBadgeContainer.addView(item.badge.nativeObject);
