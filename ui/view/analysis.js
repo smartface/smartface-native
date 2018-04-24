@@ -452,7 +452,7 @@ View.prototype.getParent = function(){};
  * This event is called when a touch screen motion event starts.
  *
  * @event onTouch
- * @return {Boolean} True if the listener has consumed the event, false otherwise.
+ * @return {Boolean} (Android Only) True if the listener has consumed the event, false otherwise.
  * @android
  * @ios
  * @member UI.View
@@ -464,7 +464,7 @@ View.prototype.onTouch = function onTouch(){ };
  * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
  *
  * @event onTouchEnded
- * @return {Boolean} True if the listener has consumed the event, false otherwise.
+ * @return {Boolean} (Android Only) True if the listener has consumed the event, false otherwise.
  * @param {Boolean} isInside
  * @android
  * @ios
@@ -477,7 +477,7 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
  * This event is called when changed touch position. If touch position inside this view, isInside parameter will be true.
  *
  * @event onTouchMoved
- * @return {Boolean} True if the listener has consumed the event, false otherwise.
+ * @return {Boolean} (Android Only) True if the listener has consumed the event, false otherwise.
  * @param {Boolean} isInside 
  * @android
  * @ios
@@ -490,7 +490,7 @@ View.prototype.onTouchMoved = function onTouchMoved(isInside){ };
  * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
  *
  * @event onTouchCancelled
- * @return {Boolean} True if the listener has consumed the event, false otherwise.
+ * @return {Boolean} (Android Only) True if the listener has consumed the event, false otherwise.
  * @android
  * @ios
  * @member UI.View

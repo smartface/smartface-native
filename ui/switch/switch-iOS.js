@@ -65,7 +65,13 @@ const Switch = extend(View)(
             },
             set: function(value) {
                 _onToggleChanged = value.bind(this);
-                self.nativeObject.addJSTarget(_onToggleChanged,UIControlEvents.valueChanged);
+                var onToggleChangedHandler = function(){
+                    if (typeof _onToggleChanged === 'function') {
+                        var state = self.toggle;
+                        _onToggleChanged(state);
+                    }
+                };
+                self.nativeObject.addJSTarget(onToggleChangedHandler,UIControlEvents.valueChanged);
             },
             enumerable: true
         });
