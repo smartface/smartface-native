@@ -92,7 +92,19 @@ function Page(params) {
     }
 
     self.nativeObject.onViewDidAppear = function(){
-
+        if (self.nativeObject.navigationController) { //COR-1627 for iOS 11 badge
+            var subviews = Invocation.invokeInstanceMethod(self.nativeObject.navigationController.navigationBar,"subviews",[],"id");
+            for (var i = 0; i < subviews.length; i++) {
+                if (subviews[i].constructor.name == "_UINavigationBarContentView") {
+                    var argConstant= new Invocation.Argument({
+                        type:"BOOL",
+                        value: false
+                    });
+                    Invocation.invokeInstanceMethod(subviews[i],"setClipsToBounds:",[argConstant]);
+                    break;
+                }
+            }
+        }
     }
     
     var _onOrientationChange;

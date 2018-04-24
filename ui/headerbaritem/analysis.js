@@ -76,4 +76,97 @@ HeaderBarItem.prototype.onPress = null;
  */
 HeaderBarItem.prototype.color = null;
 
+/**
+ * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ *
+ *     @example
+ *     var headerBarItem = new HeaderBarItem();
+ *     headerBarItem.title = "Item";
+ *     headerBarItem.badge.setText("5");
+ *     headerBarItem.badge.setVisible(true);
+ *     page.headerBar.setItems([headerBarItem]);
+ * 
+ * @property {UI.HeaderBarItem.Badge} badge
+ * @android
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+HeaderBarItem.prototype.badge = {};
+
+/**
+ * @class UI.HeaderBarItem.Badge
+ * @since 3.0.0
+ * 
+ * Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ * 
+ */
+HeaderBarItem.Badge = {};
+
+/**
+ * Sets text of header bar item badge.
+ *
+ * @property {Function} setText
+ * @param {String} text
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.setText = function(text){}
+
+/**
+ * Sets visible of header bar item badge.
+ *
+ * @property {Function} setVisible
+ * @param {Boolean} visible
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.setVisible = function(visible){}
+
+/**
+ * Sets backgroundColor of header bar item badge.
+ *
+ * @property {Function} setBackgroundColor
+ * @param {UI.Color} color
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.setBackgroundColor = function(color){}
+
+/**
+ * Sets textColor of header bar item badge.
+ *
+ * @property {Function} setTextColor
+ * @param {UI.Color} color
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.setTextColor = function(color){}
+
+/**
+ * Sets font of header bar item badge.
+ *
+ * @property {Function} setFont
+ * @param {UI.Font} font
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.setFont = function(font){}
+
+/**
+ * Set Badge offset, Badge center point defaults to the top right corner of its parent.
+ *
+ * @property {Function} move
+ * @param {Number} x
+ * @param {Number} y
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.move = function(x,y){}
+
 module.exports = HeaderBarItem;

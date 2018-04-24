@@ -1,5 +1,6 @@
 /*globals requireClass*/
 const FlexLayout = require("../flexlayout");
+const Label = require('../label');
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -14,6 +15,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
 
@@ -70,7 +72,7 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
-                    if(!self.isSwipeViewPage){
+                    if (!self.isSwipeViewPage) {
                         Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -129,12 +131,12 @@ function Page(params) {
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
-            
+
             const Contacts = require("sf-core/device/contacts");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
-            
+
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
             // todo: Define a method to register request and its callback 
@@ -147,17 +149,18 @@ function Page(params) {
             }
             else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);
-                
-            }else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM )  {
+
+            }
+            else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
             }
-            
-            
+
+
         }
     }, null);
-    
+
     this.isSwipeViewPage = false;
-     
+
     Object.defineProperty(this, 'layout', {
         get: function() {
             return rootLayout;
@@ -749,9 +752,11 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+        //const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
+        const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+        const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -763,20 +768,52 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                if (item.image && item.image.nativeObject)
+                var nativeBadgeContainer = new NativeRelativeLayout(activity);
+                if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                else
+                    nativeBadgeContainer.addView(item.nativeObject);
+                }
+                else {
                     item.nativeObject = new NativeTextButton(activity);
-                itemView = item.nativeObject;
+                    nativeBadgeContainer.addView(item.nativeObject);
+                }
+                item.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject)
+
+                if (item.badge.visible && item.badge.nativeObject) {
+
+                    item.badge.nativeObject.setPadding(13, 0, 13, 0);
+
+                    var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
+                    item.nativeObject.setId(NativeView.generateViewId());
+                    layoutParams.addRule(19, item.nativeObject.getId());
+                    layoutParams.addRule(6, item.nativeObject.getId());
+                    //item badge text view must be over the given view
+                    NativeViewCompat.setZ(item.badge.nativeObject, 10);
+                    NativeViewCompat.setZ(item.badge.nativeObject, 20);
+
+                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(2), AndroidUnitConverter.dpToPixel(1), 0);
+                    item.badge.layoutParams = layoutParams;
+                    item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
+
+                    if (!item.badge.nativeObject.getParent()) {
+                        nativeBadgeContainer.addView(item.badge.nativeObject);
+                    }
+                    else {
+                        var parentOfNativeObject = item.badge.nativeObject.getParent();
+                        parentOfNativeObject.removeAllViews();
+                        nativeBadgeContainer.addView(item.badge.nativeObject);
+                    }
+                }
+                itemView = nativeBadgeContainer;
                 item.setValues();
             }
             if (itemView) {
                 itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
-                itemView.setPadding(
-                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                    HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-                );
+                // itemView.setPadding(
+                //     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                //     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+                // );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -789,6 +826,7 @@ function Page(params) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
+
         if (leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
@@ -886,5 +924,7 @@ Object.defineProperty(Page.Orientation, "AUTO", {
 
 Page.iOS = {};
 Page.iOS.LargeTitleDisplayMode = {};
+
+
 
 module.exports = Page;
