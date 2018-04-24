@@ -158,4 +158,15 @@ HeaderBarItem.Badge.prototype.setTextColor = function(color){}
  */
 HeaderBarItem.Badge.prototype.setFont = function(font){}
 
+/**
+ * Set Badge offset, Badge center point defaults to the top right corner of its parent.
+ *
+ * @property {Function} move
+ * @param {Number} x
+ * @param {Number} y
+ * @ios
+ * @since 3.0.0
+ */
+HeaderBarItem.Badge.prototype.move = function(x,y){}
+
 module.exports = HeaderBarItem;

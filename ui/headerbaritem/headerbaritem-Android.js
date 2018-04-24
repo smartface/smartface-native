@@ -205,6 +205,9 @@ function HeaderBarItem(params) {
     });
 
     var _badge = {};
+    _badge.ios = {};
+    _badge.ios.move = function(x,y){};
+    
     _badge.nativeObject = new NativeTextView(activity);
     _badge.layoutParams;
     Object.defineProperties(_badge, {

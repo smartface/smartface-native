@@ -10,6 +10,7 @@ function HeaderBarItem(params) {
     self.nativeObject = new __SF_UIBarButtonItem();
     self.nativeObject.target = self.nativeObject;
     var _badge ={};
+    _badge.ios = {};
     
     Object.defineProperties(this, {
         'title': {
@@ -161,6 +162,17 @@ function HeaderBarItem(params) {
                     }
                 });
                 Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+            },
+            enumerable: true
+        }
+    });
+    
+    Object.defineProperties(_badge.ios, {
+        'move' : {
+            value: function(x,y){
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    self.nativeObject.pp_moveBadgeWithXY(x,y);
+                },1);
             },
             enumerable: true
         }
