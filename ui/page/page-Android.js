@@ -932,5 +932,4 @@ Page.iOS.LargeTitleDisplayMode = {};
 
 
 
-module.exports = Page;      �
-Hv�� p�      � Hv�� p�
+module.exports = Page;
