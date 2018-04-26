@@ -28,7 +28,7 @@ Color.create = function(alpha, red, green, blue) {
         return new Color({color : __SF_UIColor.hexColor(alpha)});
     }
     else if (arguments.length === 3) {
-        return  new Color({color : new __SF_UIColor(alpha / 255, red / 255, green / 255, 1)}); // 1 = 255/255
+        return  new Color({color : new __SF_UIColor(alpha / 100, red / 255, green / 255, 1)}); // 1 = 255/255
     }
     else if (arguments.length === 4) {
         return new Color({color : new __SF_UIColor(red / 255, green / 255, blue / 255, alpha / 255)});
