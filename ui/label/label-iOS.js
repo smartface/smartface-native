@@ -14,6 +14,9 @@ const Label = extend(View)(
         
         _super(this);
         
+        //Defaults
+        self.touchEnabled = true;
+        
         Object.defineProperty(self, 'font', {
             get:function() {
                 return self.nativeObject.font;
