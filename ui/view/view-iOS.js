@@ -498,16 +498,6 @@ function View(params) {
         enumerable: true
     });
 
-    Object.defineProperty(self, 'overflow', {
-        get: function() {
-            return self.nativeObject.yoga.overflow;
-        },
-        set: function(value) {
-            self.nativeObject.yoga.overflow = value;
-        },
-        enumerable: true
-    });
-
     Object.defineProperty(self, 'display', {
         get: function() {
             return self.nativeObject.yoga.display;
