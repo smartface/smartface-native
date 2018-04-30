@@ -752,10 +752,12 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+        //const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+        const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -767,67 +769,43 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                var badgeContainer = new NativeRelativeLayout(activity);
-                badgeContainer.setId(98);
-
+                var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    badgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainer.addView(item.nativeObject);
                 }
                 else {
                     item.nativeObject = new NativeTextButton(activity);
-                    badgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainer.addView(item.nativeObject);
                 }
                 item.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject)
 
                 if (item.badge.visible && item.badge.nativeObject) {
-                    const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
-                    const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-                    const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
 
-                    //Default value
-                    ((!item.badge.textColor) ? item.badge.setTextColor(Color.WHITE) : null);
-                    if (!item.badge.font) {
-                        const Font = require('../font');
-                        item.badge.font = Font.create("Arial", 11, Font.NORMAL);
+                    item.badge.nativeObject.setPadding(13, 0, 13, 0);
 
-                        item.badge.nativeObject.setTypeface(item.badge.font.nativeObject);
-                        ((item.badge.font.size && TypeUtil.isNumeric(item.badge.font.size)) ? item.badge.nativeObject.setTextSize(item.badge.font.size) : null);
-                    }
-
-                    var sizeObject = item.badge.font.sizeOfString(item.badge.text, 500);
-                    var height = ((sizeObject.height < 15) ? 15 : sizeObject.height);
-                    var width = ((sizeObject.width < 15) ? 15 : sizeObject.width);
-
-                    var layoutParams = new NativeRelativeLayout.LayoutParams(AndroidUnitConverter.dpToPixel(width), AndroidUnitConverter.dpToPixel(height));
-                    item.nativeObject.setId(99);
+                    var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
+                    item.nativeObject.setId(NativeView.generateViewId());
                     layoutParams.addRule(19, item.nativeObject.getId());
                     layoutParams.addRule(6, item.nativeObject.getId());
                     //item badge text view must be over the given view
+                    NativeViewCompat.setZ(item.badge.nativeObject, 10);
                     NativeViewCompat.setZ(item.badge.nativeObject, 20);
-                    NativeViewCompat.setZ(item.badge.nativeObject, 20);
 
-                    layoutParams.setMargins(0, 6, 5, 0);
-
-                    var _borderRadius = AndroidUnitConverter.dpToPixel(height / 2);
-                    var _radii = array([_borderRadius, _borderRadius, _borderRadius, _borderRadius,
-                        _borderRadius, _borderRadius, _borderRadius, _borderRadius
-                    ], "float");
-
-                    var nativeRoundRectShape = new NativeRoundRectShape(_radii, null, null);
-                    var nativeShapeDrawable = new NativeShapeDrawable(nativeRoundRectShape);
-
-                    nativeShapeDrawable.getPaint().setColor(item.badge.backgroundColor.nativeObject);
-
-                    item.badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
-
-                    item.badge.nativeObject.setLayoutParams(layoutParams);
+                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(2), AndroidUnitConverter.dpToPixel(1), 0);
+                    item.badge.layoutParams = layoutParams;
+                    item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
                     if (!item.badge.nativeObject.getParent()) {
-                        badgeContainer.addView(item.badge.nativeObject);
+                        nativeBadgeContainer.addView(item.badge.nativeObject);
+                    }
+                    else {
+                        var parentOfNativeObject = item.badge.nativeObject.getParent();
+                        parentOfNativeObject.removeAllViews();
+                        nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
                 }
-                itemView = badgeContainer;
+                itemView = nativeBadgeContainer;
                 item.setValues();
             }
             if (itemView) {

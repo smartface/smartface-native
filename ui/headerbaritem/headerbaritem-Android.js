@@ -5,11 +5,17 @@ const NativeImageButton = requireClass('android.widget.ImageButton');
 const Color = require("../color");
 const Image = require("../image");
 const View = require('../view');
+const Font = require('../font');
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
+const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
+const NativeRectF = requireClass("android.graphics.RectF");
 const TypeUtil = require("../../util/type");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -199,13 +205,21 @@ function HeaderBarItem(params) {
     });
 
     var _badge = {};
+    _badge.ios = {};
+    _badge.ios.move = function(x,y){};
+    
     _badge.nativeObject = new NativeTextView(activity);
-    //Default values
-    _badge.backgroundColor = Color.RED;
+    _badge.layoutParams;
     Object.defineProperties(_badge, {
         'setVisible': {
             value: function(visible) {
                 _badge.visible = visible;
+                if (visible) {
+                    _badge.nativeObject.setVisibility(0);
+                }
+                else {
+                    _badge.nativeObject.setVisibility(4);
+                }
             }
         },
         'setText': {
@@ -220,15 +234,26 @@ function HeaderBarItem(params) {
         'setBackgroundColor': {
             value: function(color) {
                 _badge.backgroundColor = color;
-                if (_badge.nativeObject) {
-                    _badge.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                if (_badge.nativeObject && color) {
+                    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
+                    var _radii = array([_borderRadius, _borderRadius, _borderRadius, _borderRadius,
+                        _borderRadius, _borderRadius, _borderRadius, _borderRadius
+                    ], "float");
+                    
+                    var _rectF  = new NativeRectF(0, 0, 0, 0);
+                    var nativeRoundRectShape = new NativeRoundRectShape(_radii, _rectF, _radii);
+                    var nativeShapeDrawable = new NativeShapeDrawable(nativeRoundRectShape);
+
+                    nativeShapeDrawable.getPaint().setColor(_badge.backgroundColor.nativeObject);
+
+                    _badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
                 }
             }
         },
         'setTextColor': {
             value: function(color) {
                 _badge.textColor = color;
-                if (_badge.nativeObject) {
+                if (_badge.nativeObject && color) {
                     if (color.nativeObject) {
                         _badge.nativeObject.setTextColor(color.nativeObject);
                     }
@@ -242,7 +267,7 @@ function HeaderBarItem(params) {
         'setFont': {
             value: function(font) {
                 _badge.font = font;
-                if (_badge.nativeObject) {
+                if (_badge.nativeObject && font) {
                     _badge.nativeObject.setTypeface(font.nativeObject);
                     if (font.size && TypeUtil.isNumeric(font.size)) {
                         _badge.nativeObject.setTextSize(font.size);
@@ -251,6 +276,15 @@ function HeaderBarItem(params) {
             }
         }
     });
+    if (_badge.nativeObject) {
+        //sets default values
+        if (!_badge.backgroundColor)
+            _badge.setBackgroundColor(Color.RED);
+        if (!_badge.font)
+            _badge.setFont(Font.create("Arial", 11, Font.NORMAL));
+        if (!_badge.textColor)
+            _badge.setTextColor(Color.WHITE);
+    }
 
     if (!_color) {
         if (HeaderBarItem.itemColor) {
