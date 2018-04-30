@@ -97,7 +97,7 @@ const ScrollView = extend(ViewGroup)(
                 value: function(view){
                     this.nativeObject.removeView(_layout.nativeObject);
                     view.parent = this;
-                    this.childViews[view.id] = view;
+                    _layout.childViews[view.id] = view;
                     this.nativeObject.addView(view.nativeObject);
                 },
                 enumerable: true,

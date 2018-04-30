@@ -11,15 +11,9 @@ const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
 const TextAlignmentDic = {};
-TextAlignmentDic[TextAlignment.TOPLEFT] = 48 | 3;// Gravity.TOP | Gravity.LEFT
-TextAlignmentDic[TextAlignment.TOPCENTER] = 48 | 1; //Gravity.TOP | Gravity.CENTER_HORIZONTAL
-TextAlignmentDic[TextAlignment.TOPRIGHT] = 48 | 5; //Gravity.TOP | Gravity.RIGHT
 TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
 TextAlignmentDic[TextAlignment.MIDCENTER] = 17; // Gravity.CENTER
 TextAlignmentDic[TextAlignment.MIDRIGHT] = 16 | 5; // Gravity.CENTER_VERTICAL | Gravity.RIGHT
-TextAlignmentDic[TextAlignment.BOTTOMLEFT] = 80 | 3; // Gravity.BOTTOM | Gravity.LEFT
-TextAlignmentDic[TextAlignment.BOTTOMCENTER] = 80 | 1; // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
-TextAlignmentDic[TextAlignment.BOTTOMRIGHT] = 80 | 5; // Gravity.BOTTOM | Gravity.RIGHT
 
 const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
@@ -70,26 +64,6 @@ const Label = extend(View)(
         };
         
         Object.defineProperties(labelPrototype, {
-            'htmlText': {
-                get: function() {
-                    var text = this.nativeObject.getText();
-                    if(text){
-                        const NativeHtml = requireClass("android.text.Html");
-                        var htmlText = NativeHtml.toHtml(text);
-                        return htmlText.toString();
-                    }
-                    else{
-                        return "";
-                    }
-                    
-                }, 
-                set: function(htmlText) {
-                    const NativeHtml = requireClass("android.text.Html");
-                    var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                    this.nativeObject.setText(htmlTextNative);
-                },
-                enumerable: true
-            },
             'font': {
                 get: function() {
                     return this.fontInitial;
@@ -112,26 +86,15 @@ const Label = extend(View)(
                     this.nativeObject.setSingleLine(!multiline);
                     // Integer.MAX_VALUE
                     // const NativeInteger = requireClass("java.lang.Integer");
-                    this.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                    if(multiline){
-                        const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                        var movementMethod = new NativeScrollingMovementMethod();
-                        this.nativeObject.setMovementMethod(movementMethod);
-                    }
-                    else{
-                        this.nativeObject.setMovementMethod(null);
-                    }
-                },
-                enumerable: true
-            },
-            'selectable': {
-                get: function() {
-                    return this.nativeObject.isTextSelectable();
-                },
-                set: function(value) {
-                    if(TypeUtil.isBoolean(value)){
-                        this.nativeObject.setTextIsSelectable(value);
-                    }
+                    // this.nativeObject.setMaxLines (multiline ? 1000 : 1);
+                    // if(multiline){
+                    //     const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
+                    //     var movementMethod = new NativeScrollingMovementMethod();
+                    //     this.nativeObject.setMovementMethod(movementMethod);
+                    // }
+                    // else{
+                    //     this.nativeObject.setMovementMethod(null);
+                    // }
                 },
                 enumerable: true
             },
@@ -150,13 +113,13 @@ const Label = extend(View)(
                     return this._textAlignment;
                 },
                 set: function(textAlignment) {
-                    if(textAlignment in TextAlignmentDic){
+                    if(textAlignment === TextAlignment.MIDLEFT || textAlignment === TextAlignment.MIDCENTER || textAlignment === TextAlignment.MIDRIGHT){
                         this._textAlignment = textAlignment;
+                        this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
                     }
                     else{
-                        this._textAlignment = this.viewNativeDefaultTextAlignment;
+                       throw new Error("Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.");
                     }
-                    this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
                 },
                 enumerable: true
             },
