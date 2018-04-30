@@ -47,7 +47,6 @@ const Label = extend(View)(
         // Handling iOS-specific properties
         this.ios = {};
         
-        this.multiline = false;
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -121,7 +120,6 @@ const Label = extend(View)(
                     else{
                        throw new Error("Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.");
                     }
-                    
                 },
                 enumerable: true
             },
@@ -139,6 +137,78 @@ const Label = extend(View)(
                         var textColorStateListDrawable = createColorStateList(textColor);
                         this.nativeObject.setTextColor(textColorStateListDrawable);
                     }
+                },
+                enumerable: true
+            },
+            'padding': {
+                get: function() {
+                    return this.paddingLeft;
+                },
+                set: function(padding) {
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(padding),
+                                                AndroidUnitConverter.dpToPixel(padding),
+                                                AndroidUnitConverter.dpToPixel(padding),
+                                                AndroidUnitConverter.dpToPixel(padding));
+                },
+                enumerable: true
+            },
+            'paddingLeft': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingLeft());
+                },
+                set: function(paddingLeft) {
+                    var paddingBottom = this.paddingBottom;
+                    var paddingRight = this.paddingRight;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                                                AndroidUnitConverter.dpToPixel(paddingTop),
+                                                AndroidUnitConverter.dpToPixel(paddingRight),
+                                                AndroidUnitConverter.dpToPixel(paddingBottom));
+                },
+                enumerable: true
+            },
+            'paddingRight': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingRight());
+                },
+                set: function(paddingRight) {
+                    var paddingLeft = this.paddingLeft;
+                    var paddingBottom = this.paddingBottom;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                                                AndroidUnitConverter.dpToPixel(paddingTop),
+                                                AndroidUnitConverter.dpToPixel(paddingRight),
+                                                AndroidUnitConverter.dpToPixel(paddingBottom));
+                },
+                enumerable: true
+            },
+            'paddingTop': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingTop());
+                },
+                set: function(paddingTop) {
+                    var paddingLeft = this.paddingLeft;
+                    var paddingRight = this.paddingRight;
+                    var paddingBottom = this.paddingBottom;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                                                AndroidUnitConverter.dpToPixel(paddingTop),
+                                                AndroidUnitConverter.dpToPixel(paddingRight),
+                                                AndroidUnitConverter.dpToPixel(paddingBottom));
+                },
+                enumerable: true
+            },
+            'paddingBottom': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getPaddingBottom());
+                },
+                set: function(paddingBottom) {
+                    var paddingLeft = this.paddingLeft;
+                    var paddingRight = this.paddingRight;
+                    var paddingTop = this.paddingTop;
+                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                                                AndroidUnitConverter.dpToPixel(paddingTop),
+                                                AndroidUnitConverter.dpToPixel(paddingRight),
+                                                AndroidUnitConverter.dpToPixel(paddingBottom));
                 },
                 enumerable: true
             }
