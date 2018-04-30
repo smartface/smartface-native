@@ -757,6 +757,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
         const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 

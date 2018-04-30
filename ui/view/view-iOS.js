@@ -36,7 +36,7 @@ function View(params) {
             });
             Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOffset:",[argShadowOffset]);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
     
     Object.defineProperty(self.ios, 'shadowRadius', {
@@ -50,7 +50,7 @@ function View(params) {
             });
             Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowRadius:",[argShadowRadius]);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
     
     Object.defineProperty(self.ios, 'shadowOpacity', {
@@ -64,7 +64,7 @@ function View(params) {
             });
             Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOpacity:",[argShadowOpacity]);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
     
     Object.defineProperty(self.ios, 'shadowColor', {
@@ -79,7 +79,7 @@ function View(params) {
             });
             Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowColor:",[argShadowColor]);
         },
-        enumerable: true
+        enumerable: true, configurable: true
     });
     
     Object.defineProperty(self.ios, 'exclusiveTouch', {
