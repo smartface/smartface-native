@@ -167,7 +167,7 @@ function HeaderBarItem(params) {
         }
     });
     
-    Object.defineProperties(_badge.ios, {
+    Object.defineProperties(_badge, {
         'move' : {
             value: function(x,y){
                 __SF_Dispatch.mainAsyncAfter(function(){

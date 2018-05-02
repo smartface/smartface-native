@@ -791,7 +791,7 @@ function Page(params) {
                     NativeViewCompat.setZ(item.badge.nativeObject, 10);
                     NativeViewCompat.setZ(item.badge.nativeObject, 20);
 
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(2), AndroidUnitConverter.dpToPixel(1), 0);
+                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 2), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
