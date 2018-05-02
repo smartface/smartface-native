@@ -99,6 +99,7 @@ Object.defineProperties(Color,{
                 }
             } 
             else if (arguments.length === 4) {
+                param1 = ( (param1 / 100) * 255 );
                 if(NativeBuild.VERSION.SDK_INT >= 26) {
                     return new Color({ color: NativeColor.argb(float(param1/255), float(param2/255), float(param3/255), float(param4/255)) });
                 } else {
