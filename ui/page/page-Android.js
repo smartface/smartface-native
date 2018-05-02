@@ -752,7 +752,7 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        //const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
+        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
@@ -781,7 +781,7 @@ function Page(params) {
 
                 if (item.badge.visible && item.badge.nativeObject) {
 
-                    item.badge.nativeObject.setPadding(13, 0, 13, 0);
+                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), 0, AndroidUnitConverter.dpToPixel(5), 0);
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
@@ -810,10 +810,10 @@ function Page(params) {
             if (itemView) {
                 itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                 // left, top, right, bottom
-                // itemView.setPadding(
-                //     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                //     HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-                // );
+                itemView.setPadding(
+                    0, 0,
+                    HeaderBarItemPadding.vertical, 0
+                );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
