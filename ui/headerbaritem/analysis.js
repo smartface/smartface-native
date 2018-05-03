@@ -164,6 +164,7 @@ HeaderBarItem.Badge.prototype.setFont = function(font){}
  * @property {Function} move
  * @param {Number} x
  * @param {Number} y
+ * @android
  * @ios
  * @since 3.0.0
  */

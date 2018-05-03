@@ -205,8 +205,8 @@ function HeaderBarItem(params) {
     });
 
     var _badge = {};
-    _badge.ios = {};
-    _badge.ios.move = function(x,y){};
+    // _badge.ios = {};
+    // _badge.ios.move = function(x,y){};
     
     _badge.nativeObject = new NativeTextView(activity);
     _badge.layoutParams;
@@ -273,6 +273,12 @@ function HeaderBarItem(params) {
                         _badge.nativeObject.setTextSize(font.size);
                     }
                 }
+            }
+        },
+        'move' : {
+            value :function(x,y){
+                _badge.x = (x < 0 ? x * -1 : x );
+                _badge.y = (y < 0 ? y : y );
             }
         }
     });
