@@ -121,19 +121,6 @@ FlexLayout.prototype.alignItems = UI.FlexLayout.AlignItems.STRETCH;
 FlexLayout.prototype.flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP;
 
 /**
- * This property controls child views will be measured and displayed.
- * If set to scroll, child views will be measured independently of FlexLayout's main axis.
- * It works like overflow on CSS.
- * See:  https://developer.mozilla.org/en-US/docs/Web/CSS/overflow
- *
- * @property {UI.FlexLayout.Overflow} [overFlow = UI.FlexLayout.Overflow.VISIBLE]
- * @android
- * @ios
- * @since 0.1
- */
-FlexLayout.prototype.overFlow = UI.FlexLayout.Overflow.VISIBLE;
-
-/**
  * This functions recalculates the positioning parameters.
  * It is useful to call this method when you want to change layout parameters on runtime.
  * If you change view's position, you should call applyLayout from the Page.layout. You shouldn't call applyLayout from its parent or itself
@@ -518,48 +505,6 @@ FlexLayout.Direction.LTR = 1;
  * @since 0.1
  */
 FlexLayout.Direction.RTL = 2;
-
-/**
- * @enum {Number} UI.FlexLayout.Overflow
- * @static
- * @android
- * @ios
- * @readonly
- * @since 0.1
- *
- */
-FlexLayout.Overflow = {};
-/**
- * @property {Number} VISIBLE
- * // @todo add description.
- *
- * @static
- * @android
- * @ios
- * @readonly
- * @since 0.1
- */
-FlexLayout.Overflow.VISIBLE = 0;
-
-/**
- * @property {Number} HIDDEN
- * @static
- * @android
- * @ios
- * @readonly
- * @since 0.1
- */
-FlexLayout.Overflow.HIDDEN = 1;
-
-/**
- * @property {Number} SCROLL
- * @static
- * @android
- * @ios
- * @readonly
- * @since 0.1
- */
-FlexLayout.Overflow.SCROLL = 2;
 
 /**
  * @enum UI.FlexLayout.PositionType

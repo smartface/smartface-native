@@ -54,6 +54,18 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){};
 Notifications.unregisterForPushNotifications = function(){};
 
 /**
+ * Gets authorization status.
+ * 
+ * @method getAuthorizationStatus
+ * @param {Function} callback
+ * @param {Notifications.authorizationStatus} callback.status
+ * @ios
+ * @static
+ * @since 2.0.11
+ */
+Notifications.getAuthorizationStatus = function(callback) {};
+
+/**
  * Gets/sets badge number of the application. This number will be displayed as the application's icon badge. 
  * 
  * @property {Number} applicationIconBadgeNumber
@@ -61,7 +73,7 @@ Notifications.unregisterForPushNotifications = function(){};
  * @static
  * @since 0.1
  */
-Notifications.ios.applicationIconBadgeNumber = 0;
+Notifications.applicationIconBadgeNumber = 0;
 
 /**
  * Gets scheduled local notifications. 
@@ -72,7 +84,47 @@ Notifications.ios.applicationIconBadgeNumber = 0;
  * @static
  * @since 0.1
  */
-Notifications.ios.scheduledLocalNotifications = null;
+Notifications.scheduledLocalNotifications = null;
+
+/** 
+ * @enum {Number} Notifications.authorizationStatus 
+ * @since 2.0.11
+ * @ios
+ */
+Notifications.authorizationStatus = {};
+
+/**
+ * The user has not yet made a choice regarding whether the application may post user notifications.
+ * 
+ * @property {Number} NotDetermined
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Notifications.authorizationStatus.NotDetermined = 0;
+
+/**
+ * The application is not authorized to post user notifications.
+ * 
+ * @property {Number} Denied
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Notifications.authorizationStatus.Denied = 1;
+
+/**
+ * The application is authorized to post user notifications.
+ * 
+ * @property {Number} Authorized
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Notifications.authorizationStatus.Authorized = 2;
 
 /**
  * @class Notifications.LocalNotification

@@ -92,17 +92,7 @@ const FlexLayout = extend(ViewGroup)(
                     this.yogaNode.setWrap(flexWrap);
                 },
                 enumerable: true
-            },
-            // overFlow values same as native 
-            'overFlow': {
-                get: function() {
-                    return convertFlexJavaEnumToJsEnum(this.yogaNode.getOverflow(), FlexLayout.Overflow);
-                },
-                set: function(overFlow) {
-                    this.yogaNode.setOverflow(overFlow);
-                },
-                enumerable: true
-            },
+            }
         });
         
         flexLayoutPrototype.toString = function() {
@@ -204,20 +194,6 @@ Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
 });
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
     value : NativeYogaWrap.WRAP,
-    enumerable: true
-});
-
-FlexLayout.Overflow = {};
-Object.defineProperty(FlexLayout.Overflow, 'VISIBLE', {
-    value : NativeYogaOverflow.VISIBLE,
-    enumerable: true
-});
-Object.defineProperty(FlexLayout.Overflow, 'HIDDEN', {
-    value : NativeYogaOverflow.HIDDEN,
-    enumerable: true
-});
-Object.defineProperty(FlexLayout.Overflow, 'SCROLL', {
-    value : NativeYogaOverflow.SCROLL,
     enumerable: true
 });
 

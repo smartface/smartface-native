@@ -172,6 +172,24 @@ Multimedia.android = {};
 Multimedia.android.getAllGalleryItems = function(e) { };
 
 /**
+ * @method getGalleryAuthorizationStatus
+ * 
+ * @return {Device.Multimedia.galleryAuthorizationStatus} status
+ * @ios
+ * @since 2.0.11
+ */
+Multimedia.getGalleryAuthorizationStatus = function(){};
+
+/**
+ * @method getCameraAuthorizationStatus
+ * 
+ * @return {Device.Multimedia.cameraAuthorizationStatus} status
+ * @ios
+ * @since 2.0.11
+ */
+Multimedia.getCameraAuthorizationStatus = function(){};
+
+/**
  * @enum {Number} Device.Multimedia.Type
  * @since 0.1
  * @android
@@ -231,5 +249,109 @@ ActionType.IMAGE_CAPTURE = 0;
  * @since 0.1
  */
 ActionType.VIDEO_CAPTURE = 1;
+
+/** 
+ * @enum {Number} Device.Multimedia.galleryAuthorizationStatus 
+ * @since 2.0.11
+ * @ios
+ */
+Multimedia.galleryAuthorizationStatus = {};
+
+/**
+ * User has not yet made a choice with regards to this application.
+ * 
+ * @property {Number} NotDetermined
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.galleryAuthorizationStatus.NotDetermined = 0;
+
+/**
+ * This application is not authorized to access photo data.
+ * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+ * 
+ * @property {Number} Restricted
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.galleryAuthorizationStatus.Restricted = 1;
+
+/**
+ * User has explicitly denied this application access to photos data.
+ * 
+ * @property {Number} Denied
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.galleryAuthorizationStatus.Denied = 2;
+
+/**
+ * User has authorized this application to access photos data.
+ * 
+ * @property {Number} Authorized
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.galleryAuthorizationStatus.Authorized = 3;
+
+/** 
+ * @enum {Number} Device.Multimedia.cameraAuthorizationStatus 
+ * @since 2.0.11
+ * @ios
+ */
+Multimedia.cameraAuthorizationStatus = {};
+
+/**
+ * User has not yet made a choice with regards to this application.
+ * 
+ * @property {Number} NotDetermined
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.cameraAuthorizationStatus.NotDetermined = 0;
+
+/**
+ * This application is not authorized to access camera.
+ * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+ * 
+ * @property {Number} Restricted
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.cameraAuthorizationStatus.Restricted = 1;
+
+/**
+ * User has explicitly denied this application access to camera.
+ * 
+ * @property {Number} Denied
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.cameraAuthorizationStatus.Denied = 2;
+
+/**
+ * User has authorized this application to access camera.
+ * 
+ * @property {Number} Authorized
+ * @static
+ * @ios
+ * @readonly
+ * @since 2.0.11
+ */
+Multimedia.cameraAuthorizationStatus.Authorized = 3;
 
 module.exports = Multimedia;

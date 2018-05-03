@@ -69,6 +69,9 @@ const SwipeView = extend(View)(
                 },
                 set: function(pages) {
                     if (pages instanceof Array) {
+                        if(pages.length < 1){
+                            throw new TypeError("Array parameter cannot be empty.");
+                        }
                         _pages = pages;
                         
                         var nativeFragments = [];
@@ -80,7 +83,10 @@ const SwipeView = extend(View)(
                             _pageInstances.push(pageInstance);
                             nativeFragments.push(pageInstance.nativeObject);
                         });
+  
+                        pagerAdapter = new NativePagerAdapter(fragmentManager);
                         pagerAdapter.setFragments(array(nativeFragments));
+                        self.nativeObject.setAdapter(pagerAdapter);
                     }
                 }
             },
@@ -148,6 +154,7 @@ function bypassPageSpecificProperties(page) {
             get: function() {},
         });
     });
+    page.isSwipeViewPage = true;
     page.onShowSwipeView = page.onShow;
     page.onShow = function() {};
 }

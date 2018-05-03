@@ -16,6 +16,11 @@ const criteria = new NativeCriteria();
 
 const Location = {};
 
+Location.ios = {};
+Location.ios.locationServicesEnabled = function(){};
+Location.ios.getAuthorizationStatus = function(){};
+Location.ios.authorizationStatus = {};
+
 var _locationListener;
 var _onLocationChanged;
 Object.defineProperties(Location, {

@@ -328,5 +328,9 @@ Multimedia.ios = {};
 
 Multimedia.ios.requestGalleryAuthorization = function(){};
 Multimedia.ios.requestCameraAuthorization = function(){};
+Multimedia.ios.getGalleryAuthorizationStatus = function(){};
+Multimedia.ios.getCameraAuthorizationStatus = function(){};
+Multimedia.ios.cameraAuthorizationStatus = {};
+Multimedia.ios.galleryAuthorizationStatus = {};
 
 module.exports = Multimedia;

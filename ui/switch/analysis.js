@@ -106,10 +106,11 @@ Switch.prototype.toggle = false;
  * This event is called when the state of switch changes from ON to OFF or vice versa.
  *
  * @event onToggleChanged
+ * @param {Boolean} state
  * @android
  * @ios
  * @since 0.1
  */
-Switch.prototype.onToggleChanged = function() {};
+Switch.prototype.onToggleChanged = function(state) {};
 
 module.exports = Switch;

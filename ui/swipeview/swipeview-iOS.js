@@ -93,8 +93,11 @@ const SwipeView = extend(View)(
                 return _pageArray;
             },
             set: function(value) {
-                if(!value instanceof Array || value.length < 1){
+                if(!value instanceof Array){
                     return;
+                }
+                if(value.length < 1){
+                    throw new TypeError("Array parameter cannot be empty.");
                 }
                 _pageNativeObjectArray = [];
                 _instanceArray = [];

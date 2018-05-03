@@ -18,7 +18,7 @@ function Font(params) {
                 var textView = new TextView(activity);
                 textView.setText(text);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.size);
-                var widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(maxWidthDp, View.MeasureSpec.AT_MOST);
+                var widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(parseInt(maxWidthDp), View.MeasureSpec.AT_MOST);
                 var heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
                 textView.measure(widthMeasureSpec, heightMeasureSpec);
                 return { width: textView.getMeasuredWidth(), height: textView.getMeasuredHeight() };

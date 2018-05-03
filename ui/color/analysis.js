@@ -237,7 +237,7 @@ Color.blue = function(color){ return color.blue };
  *     console.log(alpha);
  *
  * @param {UI.Color} color A color instance.
- * @return {Number} An integer between 0-255.
+ * @return {Number} An integer between 0-100.
  * @static
  * @method alpha
  * @android

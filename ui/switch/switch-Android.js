@@ -9,9 +9,9 @@ const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 
 const Switch = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
-        if(!this.nativeObject){
+        if (!this.nativeObject) {
             this.nativeObject = new NativeSwitch(AndroidConfig.activity);
         }
         _super(this);
@@ -67,24 +67,14 @@ const Switch = extend(View)(
                 },
                 set: function(onToggleChanged) {
                     onToggleChangedCallback = onToggleChanged.bind(this);
-                    if (!this.__didSetOnCheckedChangeListener) {
-                        this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
-                            onCheckedChanged: function(buttonView, isChecked){
-                                setThumbColor(self);
-                                setTrackColor(self);
-                                onToggleChangedCallback && onToggleChangedCallback(isChecked);
-                            }
-                        }));
-                        this.__didSetOnCheckedChangeListener = true;
-                    }
                 },
                 enumerable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'Switch';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });
@@ -111,8 +101,16 @@ const Switch = extend(View)(
                 enumerable: true
             }
         });
-        
-        if(!this.isNotSetDefaults){
+
+        this.nativeObject.setOnCheckedChangeListener(NativeCompoundButton.OnCheckedChangeListener.implement({
+            onCheckedChanged: function(buttonView, isChecked) {
+                setThumbColor(self);
+                setTrackColor(self);
+                onToggleChangedCallback && onToggleChangedCallback(isChecked);
+            }
+        }));
+
+        if (!this.isNotSetDefaults) {
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
             this.toggleOnColor = Color.GRAY;
@@ -128,20 +126,20 @@ const Switch = extend(View)(
     }
 );
 
-function setThumbColor(self){
-    if(self.toggle){
+function setThumbColor(self) {
+    if (self.toggle) {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
-    else{
+    else {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 
-function setTrackColor(self){
-    if(self.toggle){
+function setTrackColor(self) {
+    if (self.toggle) {
         self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
-    else{
+    else {
         self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }

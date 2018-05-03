@@ -1,6 +1,6 @@
 /*globals requireClass*/
 const extend = require('js-base/core/extend');
-const Label = require('../label');
+const TextView = require('../textview');
 const TypeUtil = require('../../util/type');
 const Color = require('../color');
 const KeyboardType = require('../keyboardtype');
@@ -65,7 +65,7 @@ const NativeActionKeyType = [
     4 // EditorInfo.IME_ACTION_SEND
 ];
 
-const TextBox = extend(Label)(
+const TextBox = extend(TextView)(
     function(_super, params) {
         var self = this;
         var activity = AndroidConfig.activity;
