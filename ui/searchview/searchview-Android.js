@@ -91,7 +91,7 @@ const SearchView = extend(View)(
                     return mSearchSrcTextView.getText().toString();
                 },
                 set: function(text) {
-                    if (text) {
+                    if (text || text === "") {
                         mSearchSrcTextView.setText("" + text);
                     }
                 },
