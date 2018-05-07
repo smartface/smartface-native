@@ -49,6 +49,8 @@ const MapView = extend(View)(
                     var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
+                    
+                    _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(_myLocationButton);//sets visibility of my location button
 
                     googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                         onMarkerClick: function(marker) {
@@ -135,7 +137,7 @@ const MapView = extend(View)(
         var _scrollEnabled = true;
         var _zoomEnabled = true;
         var _userLocationEnabled = false;
-        var _myLocationButton = false;
+        var _myLocationButton = true;
         var _type = MapView.Type.NORMAL;
         var _zoomLevel;
         var _maxZoomLevel = 19;
@@ -436,7 +438,7 @@ const MapView = extend(View)(
                     return _myLocationButton;
                 },
                 set: function(value) {
-                    if (typeof value === 'boolean') {
+                    if (typeof value === 'boolean' && _nativeGoogleMap) {
                         _myLocationButton = value;
                         _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
                     }

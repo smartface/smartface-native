@@ -128,7 +128,7 @@ MapView.prototype.android.lazyLoading;
  * This property sets visibility of my location button.
  * @property {Boolean} [myLocationButtonVisible = false]
  * @android
- * @since 3.0.0
+ * @since 3.0.1
  */
 MapView.prototype.android.myLocationButtonVisible;
 
