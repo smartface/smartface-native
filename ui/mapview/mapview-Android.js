@@ -30,26 +30,26 @@ const MapView = extend(View)(
         var savedBundles = activityIntent.getExtras();
         if (!self.nativeObject) {
             self.nativeObject = new NativeMapView(AndroidConfig.activity);
-            if(!params || !(params.lazyLoading))
+            if (!params || !(params.lazyLoading))
                 self.nativeObject.onCreate(savedBundles);
         }
         _super(self);
-        
-        function asyncMap () {
+
+        function asyncMap() {
             const NativeMapReadyCallback = requireClass('com.google.android.gms.maps.OnMapReadyCallback');
             self.nativeObject.getMapAsync(NativeMapReadyCallback.implement({
                 onMapReady: function(googleMap) {
                     _nativeGoogleMap = googleMap;
-    
+
                     self.nativeObject.onStart();
                     self.nativeObject.onResume();
-    
+
                     const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                     var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
-    
+
                     googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                         onMarkerClick: function(marker) {
                             _pins.forEach(function(pin) {
@@ -60,7 +60,7 @@ const MapView = extend(View)(
                             return false;
                         }
                     }));
-    
+
                     googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
                         onMapClick: function(location) {
                             _onPress && _onPress({
@@ -69,7 +69,7 @@ const MapView = extend(View)(
                             });
                         }
                     }));
-    
+
                     googleMap.setOnMapLongClickListener(NativeOnMapLongClickListener.implement({
                         onMapLongClick: function(location) {
                             _onLongPress && _onLongPress({
@@ -78,7 +78,7 @@ const MapView = extend(View)(
                             });
                         }
                     }));
-    
+
                     var _isMoveStarted = false;
                     googleMap.setOnCameraMoveStartedListener(NativeOnCameraMoveStartedListener.implement({
                         onCameraMoveStarted: function(reason) {
@@ -86,7 +86,7 @@ const MapView = extend(View)(
                             _isMoveStarted = true;
                         }
                     }));
-    
+
                     googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
                         onCameraIdle: function() {
                             if (_isMoveStarted) {
@@ -95,7 +95,7 @@ const MapView = extend(View)(
                             }
                         }
                     }));
-    
+
                     self.centerLocation = _centerLocation;
                     self.compassEnabled = _compassEnabled;
                     self.rotateEnabled = _rotateEnabled;
@@ -106,18 +106,18 @@ const MapView = extend(View)(
                     self.zoomLevel = _zoomLevel;
                     self.maxZoomLevel = _maxZoomLevel;
                     self.minZoomLevel = _minZoomLevel;
-    
+
                     _pendingPins.forEach(function(element) {
                         self.addPin(element);
                     });
                     _pendingPins = [];
-    
+
                     _onCreate && _onCreate();
                 }
             }));
         }
-        
-        if(!params || !(params.lazyLoading)) {
+
+        if (!params || !(params.lazyLoading)) {
             asyncMap();
         }
 
@@ -135,10 +135,12 @@ const MapView = extend(View)(
         var _scrollEnabled = true;
         var _zoomEnabled = true;
         var _userLocationEnabled = false;
+        var _myLocationButton = false;
         var _type = MapView.Type.NORMAL;
         var _zoomLevel;
         var _maxZoomLevel = 19;
         var _minZoomLevel = 0;
+
 
         Object.defineProperties(self, {
             'getVisiblePins': {
@@ -420,12 +422,24 @@ const MapView = extend(View)(
                 configurable: true
             }
         });
-        
+
         Object.defineProperties(this.android, {
             'prepareMapAsync': {
                 value: function() {
                     self.nativeObject.onCreate(savedBundles);
                     asyncMap();
+                },
+                enumerable: true
+            },
+            'myLocationButtonVisible': {
+                get: function() {
+                    return _myLocationButton;
+                },
+                set: function(value) {
+                    if (typeof value === 'boolean') {
+                        _myLocationButton = value;
+                        _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
+                    }
                 },
                 enumerable: true
             }
