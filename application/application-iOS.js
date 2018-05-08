@@ -55,6 +55,17 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
+Application.onExit = function(){};
+Object.defineProperty(SFApplication, 'onExit', {
+    set:function(value){
+        Application.onExit = value;
+    },
+    get: function() {
+        return Application.onExit;
+    },
+    enumerable: true
+});
+
 Application.onReceivedNotification = function(){};
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
     set:function(value){
