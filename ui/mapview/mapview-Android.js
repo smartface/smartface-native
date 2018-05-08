@@ -50,8 +50,6 @@ const MapView = extend(View)(
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
 
-                    _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(_myLocationButton); //sets visibility of my location button
-
                     googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                         onMarkerClick: function(marker) {
                             _pins.forEach(function(pin) {
@@ -108,6 +106,7 @@ const MapView = extend(View)(
                     self.zoomLevel = _zoomLevel;
                     self.maxZoomLevel = _maxZoomLevel;
                     self.minZoomLevel = _minZoomLevel;
+                    self.locationButtonVisible = _locationButtonVisible;
 
                     _pendingPins.forEach(function(element) {
                         self.addPin(element);
@@ -137,7 +136,7 @@ const MapView = extend(View)(
         var _scrollEnabled = true;
         var _zoomEnabled = true;
         var _userLocationEnabled = false;
-        var _myLocationButton = true;
+        var _locationButtonVisible = true;
         var _type = MapView.Type.NORMAL;
         var _zoomLevel;
         var _maxZoomLevel = 19;
@@ -433,14 +432,15 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
-            'myLocationButtonVisible': {
+            'locationButtonVisible': {
                 get: function() {
-                    return _myLocationButton;
+                    return _locationButtonVisible;
                 },
                 set: function(value) {
-                    _myLocationButton = value;
-                    if (typeof value === 'boolean' && _nativeGoogleMap) {
-                        _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
+                    if (typeof value === 'boolean') {
+                        _locationButtonVisible = value;
+                        if (_nativeGoogleMap)
+                            _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
                     }
                 },
                 enumerable: true
