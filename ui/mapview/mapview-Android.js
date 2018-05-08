@@ -438,9 +438,10 @@ const MapView = extend(View)(
                     return _myLocationButton;
                 },
                 set: function(value) {
-                    _myLocationButton = value;
-                    if (typeof value === 'boolean' && _nativeGoogleMap) {
-                        _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
+                    if (typeof value === 'boolean') {
+                        _myLocationButton = value;
+                        if (_nativeGoogleMap)
+                            _nativeGoogleMap.getUiSettings().setMyLocationButtonEnabled(value);
                     }
                 },
                 enumerable: true
