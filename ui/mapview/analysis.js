@@ -125,6 +125,14 @@ MapView.prototype.maxZoomLevel;
 MapView.prototype.android.lazyLoading;
 
 /**
+ * This property sets visibility of my location button.
+ * @property {Boolean} [locationButtonVisible = false]
+ * @android
+ * @since 3.0.1
+ */
+MapView.prototype.android.locationButtonVisible;
+
+/**
  * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
  *
  * @property {Number} [zoomLevel = 15]
