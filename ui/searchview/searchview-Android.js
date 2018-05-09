@@ -66,10 +66,10 @@ const SearchView = extend(View)(
             // Prevent gain focus when SearchView appear.
             this.nativeObject.clearFocus();
         }
-        
+
         var _defaultUnderlineColorNormal = Color.create("#ffcccccc");
         var _defaultUnderlineColorFocus = Color.create("#ff444444");
-        
+
         var mSearchSrcTextView = this.nativeObject.findViewById(NativeSupportR.id.search_src_text);
         var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
         var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
@@ -91,7 +91,7 @@ const SearchView = extend(View)(
                     return mSearchSrcTextView.getText().toString();
                 },
                 set: function(text) {
-                    if (text || text === "") {
+                    if (typeof text === "string") {
                         mSearchSrcTextView.setText("" + text);
                     }
                 },
