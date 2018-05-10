@@ -140,7 +140,7 @@ const WebView = extend(View)(
             },
             'loadHTML': {
                 value: function(htmlText) {
-                    this.nativeObject.loadData(htmlText, "text/html", null);
+                    this.nativeObject.loadDataWithBaseURL(null, htmlText, "text/html", null, null);
                 },
                 enumerable: true
             },
