@@ -78,6 +78,31 @@ Application.smartfaceAppName;
 Application.version;
 
 /**
+ * Checks URL’s scheme can be handled or not by some app that installed on the device.
+ * 
+ * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
+ * 
+ *     @example for Google Maps (Info.plist entry)
+ * 
+ *      <key>LSApplicationQueriesSchemes</key>
+ *      <array>
+ *          <string>comgooglemaps</string>
+ *      </array>
+ *     
+ *      After entry add on, urlScheme can be check;
+ *      const Application = require("sf-core/application");
+ *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
+ * 
+ * @method call
+ * @param {String} url
+ * @return {Boolean}
+ * @ios
+ * @static
+ * @since 3.0.1
+ */
+Application.ios.canOpenUrl = function(url) {};
+
+/**
  * Launches another application and passes data. For Android, you can open application chooser with 
  * isShowChooser parameter and set chooser dialog title with chooserTitle.
  * If an app can open a given URL resource onSuccess callback will be triggered otherwise onFailure will be triggered.
