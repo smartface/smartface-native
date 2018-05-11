@@ -98,7 +98,7 @@ Application.version;
  * @return {Boolean}
  * @ios
  * @static
- * @since 0.1
+ * @since 3.0.1
  */
 Application.ios.canOpenUrl = function(url) {};
 
