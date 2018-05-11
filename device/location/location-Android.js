@@ -58,7 +58,7 @@ Object.defineProperties(Location, {
                         });
                     }
                 });
-                if (typeof provider === 'object') {
+                if (Array.isArray(provider)) {
                     provider.forEach((provider) => {
                         if (!(provider === Location.android.Provider.AUTO))
                             locationManager.requestLocationUpdates(provider, 1000, 0, _locationListener);
