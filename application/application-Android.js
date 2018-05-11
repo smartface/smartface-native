@@ -279,6 +279,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+ApplicationWrapper.ios = {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: AndroidConfig.activity.getPackageName(),

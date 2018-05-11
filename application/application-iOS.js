@@ -36,6 +36,11 @@ SFApplication.checkUpdate = function(callback){
     RAU.checkUpdate(callback);
 };
 
+SFApplication.ios = {};
+SFApplication.ios.canOpenUrl = function (url) {
+    return SMFApplication.canOpenUrl(url);
+}
+
 SFApplication.android = {};
 SFApplication.Android = {};
 SFApplication.android.checkPermission = function(){};
