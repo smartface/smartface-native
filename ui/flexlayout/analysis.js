@@ -118,7 +118,7 @@ FlexLayout.prototype.alignItems = UI.FlexLayout.AlignItems.STRETCH;
  * @ios
  * @since 0.1
  */
-FlexLayout.prototype.flexWrap = UI.FlexLayout.FlexWrap.NO_WRAP;
+FlexLayout.prototype.flexWrap = UI.FlexLayout.FlexWrap.NOWRAP;
 
 /**
  * This functions recalculates the positioning parameters.
