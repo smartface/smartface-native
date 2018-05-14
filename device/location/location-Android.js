@@ -61,11 +61,11 @@ Object.defineProperties(Location, {
                 if (Array.isArray(provider)) {
                     provider.forEach((provider) => {
                         if (!(provider === Location.android.Provider.AUTO))
-                            locationManager.requestLocationUpdates(provider, 1000, 0, _locationListener);
+                            locationManager.requestLocationUpdates(provider, 1000, 1, _locationListener);
                     });
                 }
                 else {
-                    locationManager.requestLocationUpdates(selectedProvider, 1000, 0, _locationListener);
+                    locationManager.requestLocationUpdates(selectedProvider, 1000, 1, _locationListener);
                 }
                 // firing initial location because we dont have "getLastKnownLocation" for one time location
                 // Implemented twice to enable to cache location on different providers 
