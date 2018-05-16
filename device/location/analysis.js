@@ -26,7 +26,7 @@ function Location() {}
  * use for location; Gps, Network or Auto. iOS will ignore this provider.
  *
  * @method start
- * @param {Enum[]|Location.Android.Provider} provider 
+ * @param {Location.Android.Provider[]|Location.Android.Provider} provider 
  * @android
  * @ios
  * @static
