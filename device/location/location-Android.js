@@ -1,7 +1,7 @@
-const AndroidConfig             = require('../../util/Android/androidconfig');
-const TypeUtil                  = require('../../util/type');
-const NativeCriteria            = requireClass('android.location.Criteria');
-const NativeLocationListener    = requireClass('android.location.LocationListener');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const TypeUtil = require('../../util/type');
+const NativeCriteria = requireClass('android.location.Criteria');
+const NativeLocationListener = requireClass('android.location.LocationListener');
 
 // Context.LOCATION_SERVICE
 const LOCATION_SERVICE = 'location';
@@ -17,8 +17,8 @@ const criteria = new NativeCriteria();
 const Location = {};
 
 Location.ios = {};
-Location.ios.locationServicesEnabled = function(){};
-Location.ios.getAuthorizationStatus = function(){};
+Location.ios.locationServicesEnabled = function() {};
+Location.ios.getAuthorizationStatus = function() {};
 Location.ios.authorizationStatus = {};
 
 var _locationListener;
@@ -37,12 +37,12 @@ Object.defineProperties(Location, {
             if (_locationListener) {
                 locationManager.removeUpdates(_locationListener);
             }
-            
+
             var selectedProvider;
-            if(TypeUtil.isString(provider) && !(provider === Location.android.Provider.AUTO)){
+            if (TypeUtil.isString(provider) && !(provider === Location.android.Provider.AUTO)) {
                 selectedProvider = provider;
             }
-            else{
+            else {
                 selectedProvider = locationManager.getBestProvider(criteria, false);
             }
 
@@ -58,14 +58,23 @@ Object.defineProperties(Location, {
                         });
                     }
                 });
-                locationManager.requestLocationUpdates(selectedProvider, 1000, 1, _locationListener);
-                
+                if (Array.isArray(provider)) {
+                    provider.forEach(function(provider) {
+                        if (!(provider === Location.android.Provider.AUTO))
+                            locationManager.requestLocationUpdates(provider, 1000, 1, _locationListener);
+                    });
+                }
+                else {
+                    locationManager.requestLocationUpdates(selectedProvider, 1000, 1, _locationListener);
+                }
                 // firing initial location because we dont have "getLastKnownLocation" for one time location
-                var initialLocationFromProvider = locationManager.getLastKnownLocation(selectedProvider);
-                if (initialLocationFromProvider != null) {
+                // Implemented twice to enable to cache location on different providers 
+                var initialNetworkLocationFromProvider = locationManager.getLastKnownLocation(NETWORK_PROVIDER);
+                var initialGPSLocationFromProvider = locationManager.getLastKnownLocation(GPS_PROVIDER);
+                if (initialNetworkLocationFromProvider != null && initialGPSLocationFromProvider != null) {
                     _onLocationChanged && _onLocationChanged({
-                        latitude: initialLocationFromProvider.getLatitude(),
-                        longitude: initialLocationFromProvider.getLongitude()
+                        latitude: initialGPSLocationFromProvider.getLatitude() || initialNetworkLocationFromProvider.getLatitude(),
+                        longitude: initialGPSLocationFromProvider.getLongitude() || initialNetworkLocationFromProvider.getLongitude()
                     });
                 }
             }
@@ -84,7 +93,7 @@ Object.defineProperties(Location, {
             return _onLocationChanged;
         },
         set: function(callback) {
-            if(TypeUtil.isFunction(callback)){
+            if (TypeUtil.isFunction(callback)) {
                 _onLocationChanged = callback;
             }
         }

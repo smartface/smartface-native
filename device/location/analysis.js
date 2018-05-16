@@ -8,7 +8,7 @@
  *     const Timer    = require("sf-core/timer");
  *     const Location = require('sf-core/device/location'); 
  * 
- *     Location.start(Location.Android.Provider.AUTO);
+ *     Location.start([Location.Android.Provider.NETWORK,Location.Android.Provider.GPS]);
  *     Location.onLocationChanged = function(event) {
  *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
  *     };
@@ -26,7 +26,7 @@ function Location() {}
  * use for location; Gps, Network or Auto. iOS will ignore this provider.
  *
  * @method start
- * @param {Location.Android.Provider} provider
+ * @param {Location.Android.Provider[]|Location.Android.Provider} provider 
  * @android
  * @ios
  * @static
