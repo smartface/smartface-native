@@ -59,7 +59,7 @@ Object.defineProperties(Location, {
                     }
                 });
                 if (Array.isArray(provider)) {
-                    provider.forEach((provider) => {
+                    provider.forEach(function(provider) {
                         if (!(provider === Location.android.Provider.AUTO))
                             locationManager.requestLocationUpdates(provider, 1000, 1, _locationListener);
                     });
