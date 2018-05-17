@@ -199,19 +199,36 @@ TextView.prototype.attributedText = "";
 
 /**
  * This event is called when user click link string. onClick just work with attributedText.
- *
+ * onClick deprecated on 3.0.1 version.Use onLinkClick instead.
+ * 
  *     @example
- *     myTextView.onClick: function(e) {
- *         console.log(e.string);
+ *     myTextView.onClick = function(string) {
+ *         console.log(string);
  *     };
  *
- * @param {String} e.string
+ * @param {String} string
  * @event onClick
  * @android
  * @ios
  * @since 3.0.0
  */
-TextView.prototype.onClick = function(e) {};
+TextView.prototype.onClick = function(string) {};
+
+/**
+ * This event is called when user click link string. onLinkClick just work with attributedText.
+ *
+ *     @example
+ *     myTextView.onLinkClick = function(string) {
+ *         console.log(string);
+ *     };
+ *
+ * @param {String} string
+ * @event onLinkClick
+ * @android
+ * @ios
+ * @since 3.0.0
+ */
+TextView.prototype.onLinkClick = function(string) {};
 
 /**
  * Gets/sets letterSpacing on TextView. letterSpacing just work with attributedText.
