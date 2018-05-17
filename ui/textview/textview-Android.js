@@ -49,7 +49,8 @@ const TextView = extend(Label)(
     function(labelPrototype) {
         
         var _spanArray = [];
-        var _onClick = undefined;
+        var _onClick = undefined;//Deprecated : Please use self.onLinkClic
+        var _onLinkClick = undefined;
         var _letterSpacing = 0;
         var _lineSpacing = 0;
         
@@ -125,12 +126,22 @@ const TextView = extend(Label)(
                 enumerable: true,
                 configurable: true
             },
-            'onClick': {
+            'onClick': { 
                 get: function() {
                     return _onClick;
                 },
                 set: function(value) {
                     _onClick = value;
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'onLinkClick' :{
+                get: function() {
+                    return _onLinkClick;
+                },
+                set: function(value) {
+                    _onLinkClick = value;
                 },
                 enumerable: true,
                 configurable: true
@@ -196,6 +207,7 @@ const TextView = extend(Label)(
                 var clickableSpanOverrideMethods = {
                     onClick: function(view) {
                         self.onClick(value.link);
+                        self.onLinkClick(value.link);
                     },
                     updateDrawState: function(ds) {
                         ds.setUnderlineText(value.underline);
