@@ -216,7 +216,9 @@ Notifications.ios.getAuthorizationStatus = function(callback){
         value: function(settings){
             var status = Invocation.invokeInstanceMethod(settings,"authorizationStatus",[],"NSInteger");
             if (typeof callback === 'function') {
-                callback(status);
+                __SF_Dispatch.mainAsync(function(){
+                    callback(status);
+                });
             }
         }
     });
