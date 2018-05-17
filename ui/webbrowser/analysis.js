@@ -11,7 +11,7 @@
  *       webOptions.barColor = Color.RED;
  *       webOptions.ios.itemColor = Color.BLUE;
  *       webOptions.ios.statusBarVisible = false;
- *       WebBrowser.show(page,options);
+ *       WebBrowser.show(page,webOptions);
  */
 function WebBrowser(params) {}
 
