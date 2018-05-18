@@ -844,16 +844,17 @@ function Page(params) {
             return true;
         }
     }));
-    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-        onKey: function(view, keyCode, keyEvent) {
-            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                typeof self.android.onBackButtonPressed === "function" &&
-                    self.android.onBackButtonPressed();
-            }
-            return true;
-        }
-    }));
+    //Commetted because of volume control keys cannot behave as super behavior.
+    // self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+    //     onKey: function(view, keyCode, keyEvent) {
+    //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+    //         if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+    //             typeof self.android.onBackButtonPressed === "function" &&
+    //                 self.android.onBackButtonPressed();
+    //         }
+    //         return true;
+    //     }
+    // }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
