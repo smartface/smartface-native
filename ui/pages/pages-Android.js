@@ -216,6 +216,8 @@ function registerOnBackKeyPressed(pagesStack) {
                 //   currentHistoryObject.page.android.onBackButtonPressed && 
                 //             currentHistoryObject.page.android.onBackButtonPressed();
                 // }
+                
+                return true;
             }
             else {
                 //'return false' to enable to control behavior of volume button as super.
