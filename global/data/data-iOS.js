@@ -88,7 +88,7 @@ Data.setLongVariable = function(key, value){
 Data.containsVariable = function(key){
     if (typeof key === 'string'){
         var retval = false;
-        if(Data.ios.getNativeObject().objectForKey(key)){
+        if(Data.ios.getNativeObject().objectForKey(key) != undefined){
             retval = true;
         }
         return retval;
