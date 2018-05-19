@@ -9,6 +9,7 @@ function Dialog(params) {
     self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds; 
     self.dialogView.backgroundColor = Color.create(150,0,0,0);
     self.dialogView.alpha = 0;
+    self.dialogView.id = Dialog.iOS.ID;
     
     self.calculatePosition = function(){
         self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds;
@@ -60,5 +61,8 @@ function Dialog(params) {
         }
     }
 };
+
+Dialog.iOS = {};
+Dialog.iOS.ID = 1453;
 
 module.exports = Dialog;

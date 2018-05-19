@@ -1,5 +1,6 @@
 const Pages = require('sf-core/ui/pages');
 const Invocation = require('sf-core/util/iOS/invocation.js');
+const Dialog = require("sf-core/ui/dialog");
 
 function RouterViewModel(params) {
     var self = this;
@@ -306,9 +307,19 @@ function RouterView(params) {
         return isShowed;
     };
     this.makeVisible = function () {
-        SF.requireClass("UIApplication").sharedApplication().keyWindow.rootViewController = self.nativeObject;
-        SF.requireClass("UIApplication").sharedApplication().keyWindow.makeKeyAndVisible();
+        var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+        sfWindow.rootViewController = self.nativeObject;
+        sfWindow.makeKeyAndVisible();
+        this.removeUnnecessaryViews(sfWindow);
     };
+    this.removeUnnecessaryViews = function (view) {
+        // For dialog object
+        for (var i in view.subviews) {
+            if (view.subviews[i] && view.subviews[i].tag == Dialog.iOS.ID) {
+                view.subviews[i].removeFromSuperview();
+            }
+        }
+    }
     this.currentPageChanged = function(nativeObject){
         if(self.nativeObject.constructor.name === "SMFNative.SMFUIViewController"){
             self.nativeObject.currentPage = nativeObject;
