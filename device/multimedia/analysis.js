@@ -56,6 +56,7 @@ function Multimedia() {}
  * @param {Object} params Object describing parameters for the function.
  * @param {UI.Page} params.page
  * @param {Device.Multimedia.ActionType} params.action Camera action.
+ * @param {Boolean} params.allowsEditing opens editing screen of selected content.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
