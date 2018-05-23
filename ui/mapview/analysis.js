@@ -81,6 +81,27 @@ MapView.prototype.compassEnabled;
 MapView.prototype.userLocationEnabled;
 
 /**
+ * Enables/Disables clusterEnabled on map.
+ *
+ * @property {Boolean} [clusterEnabled = false]
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterEnabled;
+
+/**
+ * Gets cluster object.
+ *
+ * @property {UI.Mapview.Cluster} cluster
+ * @android
+ * @ios
+ * @readonly
+ * @since 3.0.1
+ */
+MapView.prototype.cluster;
+
+/**
  * This property sets center location of the map to the given latitude & longitude.
  *
  *     @example
@@ -442,6 +463,88 @@ Pin.prototype.visible;
 Pin.prototype.onPress;
 
 MapView.Pin = Pin;
+
+/**
+ * @class UI.MapView.Cluster
+ * @since 3.0.1
+ * Cluster is placed on UI.MapView.
+ *
+ *     @example
+ */
+function Cluster() {}
+
+/**
+ * This property sets cluster fillColor.
+ *
+ * @property {UI.Color} fillColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.fillColor;
+
+/**
+ * This property sets cluster borderColor.
+ *
+ * @property {UI.Color} borderColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.borderColor;
+
+/**
+ * This property sets cluster textColor.
+ *
+ * @property {UI.Color} textColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.textColor;
+
+/**
+ * This property sets cluster borderWidth.
+ *
+ * @property {Number} borderWidth
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.borderWidth;
+
+/**
+ * This property sets cluster font.
+ *
+ * @property {UI.Font} font
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.font;
+
+/**
+ * This property sets cluster size.
+ *
+ * @property {Number} size
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.size;
+
+/**
+ * Triggered when pressed on the cluster.
+ *
+ * @event onPress
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+Cluster.prototype.onPress;
+
+MapView.Cluster = Cluster;
 
 /**
  * @enum UI.MapView.Type
