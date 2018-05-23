@@ -568,10 +568,10 @@ function Cluster(params) {
     
     Object.defineProperty(self, 'size', { //cant set after added mapview
             get: function() {
-                return self.nativeObject.size;
+                return self.nativeObject.size.width;
             },
             set: function(value) {
-                self.nativeObject.size = value;
+                self.nativeObject.size = {width: value, height: value};
             },
             enumerable: true
     });
