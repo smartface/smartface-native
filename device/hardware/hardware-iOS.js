@@ -37,4 +37,9 @@ Hardware.ios.microphone.requestRecordPermission = function(callback){
   });
 };
 
+
+Hardware.getDeviceModelName = function() {
+    return Hardware.brandName + " " + Hardware.brandModel;
+};
+
 module.exports = Hardware;

@@ -30,7 +30,7 @@ function checkUpdateFromCache(callback, userInfo) {
     delete body.binary;
     if(userInfo) {
         body.user = userInfo;
-        body.brand = Hardware.brandModel;
+        body.brand = Hardware.getDeviceModelName();
         body.osVersion = System.OSVersion;
     }
 
