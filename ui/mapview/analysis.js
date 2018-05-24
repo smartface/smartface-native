@@ -81,7 +81,7 @@ MapView.prototype.compassEnabled;
 MapView.prototype.userLocationEnabled;
 
 /**
- * Enables/Disables clusterEnabled on map.
+ * Enables/Disables clusterEnabled on map. Cluster works on Android & iOS 11.0+.
  *
  * @property {Boolean} [clusterEnabled = false]
  * @android
@@ -91,7 +91,7 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.clusterEnabled;
 
 /**
- * Gets cluster object.
+ * Gets cluster object. Cluster works on Android & iOS 11.0+.
  *
  * @property {UI.Mapview.Cluster} cluster
  * @android
@@ -467,7 +467,8 @@ MapView.Pin = Pin;
 /**
  * @class UI.MapView.Cluster
  * @since 3.0.1
- * Cluster is placed on UI.MapView.
+ * @
+ * Cluster is placed on UI.MapView. Cluster works on Android & iOS 11.0+.
  *
  *     @example
  *     const MapView = require('sf-core/ui/mapview');
