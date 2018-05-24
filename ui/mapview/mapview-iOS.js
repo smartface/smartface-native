@@ -451,6 +451,8 @@ function Pin(params) {
 function Cluster(params) {
 
     var self = this;
+    self.ios = {};
+    
     if(params && params.nativeObject === undefined){
         self.nativeObject = __SF_Cluster.createCluster();
     }
@@ -495,7 +497,7 @@ function Cluster(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'borderWidth', { //cant set after added mapview
+    Object.defineProperty(self.ios, 'borderWidth', { //cant set after added mapview
             get: function() {
                 return self.nativeObject.borderWidth;
             },
@@ -566,7 +568,7 @@ function Cluster(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'size', { //cant set after added mapview
+    Object.defineProperty(self.ios, 'size', { //cant set after added mapview
             get: function() {
                 return self.nativeObject.size.width;
             },

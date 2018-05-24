@@ -470,6 +470,40 @@ MapView.Pin = Pin;
  * Cluster is placed on UI.MapView.
  *
  *     @example
+ *     const MapView = require('sf-core/ui/mapview');
+ *     var myMapView = new MapView({
+ *         clusterEnabled: true,
+ *         flexGrow: 1,
+ *         onCreate: function() {
+ *             myMapView.centerLocation = {
+ *                 latitude: 37.4488259,
+ *                 longitude: -122.1600047
+ *             };
+ *             for (var i = 0; i < 10; i++) {
+ *                     var myPin = new MapView.Pin({
+ *                     location: {
+ *                         latitude: 37.4488259 + i * 0.01,
+ *                         longitude: -122.1600047
+ *                     },
+ *                     title: 'Title ' + i,
+ *                     subtitle: 'Subtitle',
+ *                     color: Color.RED,
+ *                     onPress: function(index) {
+ *                         console.log("Index : " + index);
+ *                     }.bind(myPin,i)
+ *                 });
+ *                 myMapView.addPin(myPin);
+ *             }
+ *        }
+ *     });
+ *     
+ *     myMapView.cluster.onPress = function(pins){
+ *          for (var i = 0; i < pins.length; i++) {
+ *              console.log("Title : " + pins[i].title);
+ *          }
+ *     };
+ *     myPage.layout.addChild(myMapView);
+ * 
  */
 function Cluster() {}
 
@@ -504,10 +538,9 @@ Cluster.prototype.borderColor;
 Cluster.prototype.textColor;
 
 /**
- * This property sets cluster borderWidth.
+ * This property sets cluster borderWidth. Only works on ios.
  *
  * @property {Number} borderWidth
- * @android
  * @ios
  * @since 3.0.1
  */
@@ -524,10 +557,9 @@ Cluster.prototype.borderWidth;
 Cluster.prototype.font;
 
 /**
- * This property sets cluster size.
+ * This property sets cluster size. Only works on ios.
  *
  * @property {Number} size
- * @android
  * @ios
  * @since 3.0.1
  */
