@@ -84,7 +84,7 @@ Hardware.ios.microphone.requestRecordPermission = function(callback){
 
 
 Hardware.getDeviceModelName = function() {
-    return Hardware.brandName + " " + Hardware.brandModel;
+    return Hardware.ios.modelName;
 };
 
 module.exports = Hardware;
