@@ -20,19 +20,11 @@ RemoteUpdateService.checkUpdate = function(callback, userInfo) {
     checkUpdateFromCache(callback, userInfo);
 };
 
-function checkUpdateFromCache(callback, userInfo) {
-    if(userInfo && (typeof(userInfo) !== "string"))
-        throw new Error("user parameter must be a string");
-        
-    const Hardware = require('sf-core/device/hardware');
+function checkUpdateFromCache(callback, userInfo) {    
     var body = JSON.parse(RAU.getRequestBody());
     delete body.files;
     delete body.binary;
-    if(userInfo) {
-        body.user = userInfo;
-        body.brand = Hardware.getDeviceModelName();
-        body.osVersion = System.OSVersion;
-    }
+    body = addFieldsForUserInfo(body, userInfo);
 
     sessionManager.request(
     {
@@ -59,14 +51,14 @@ function checkUpdateFromCache(callback, userInfo) {
             } else if (response.statusCode === 304) { // No update for Android
                 callback("No update", null);
             } else if (response.statusCode === 204) { // There is update but not found in cache
-                checkUpdateWithFiles(callback);
+                checkUpdateWithFiles(callback, userInfo);
             } else {
                 callback("Unknown Response", null); // Unknown Response
             }
         },
         onError: function(error) {
             if (error.statusCode === 204) {
-                checkUpdateWithFiles(callback);
+                checkUpdateWithFiles(callback, userInfo);
             } else if (error.statusCode === 304) { // No update for iOS
                 callback("No update", null);
             } else if (error.statusCode === 404 || error.statusCode == 406 || error.statusCode == 400) {
@@ -79,12 +71,13 @@ function checkUpdateFromCache(callback, userInfo) {
     );
 }
 
-function checkUpdateWithFiles(callback) {
+function checkUpdateWithFiles(callback, userInfo) {
+    var body = addFieldsForUserInfo(JSON.parse(RAU.getRequestBody()), userInfo);
     sessionManager.request(
     {
         url: "https://portalapi.smartface.io/api/v1/rau/check?v=" + Math.floor(Math.random() * 100000), // to avoid response cache
         method:'POST',
-        body: RAU.getRequestBody(),
+        body: JSON.stringify(body),
         onLoad: function(response) {
             if (response.statusCode === 200) { // Has update
                 var responseString = response.body.toString();
@@ -116,6 +109,20 @@ function checkUpdateWithFiles(callback) {
             }
         }}
     );
+}
+
+function addFieldsForUserInfo(body, userInfo){
+    if(userInfo && (typeof(userInfo) !== "string"))
+        throw new Error("user parameter must be a string");
+
+    const Hardware = require('sf-core/device/hardware');
+    if(userInfo) {
+        body.user = userInfo;
+        body.brand = Hardware.getDeviceModelName();
+        body.osVersion = System.OSVersion;
+    }
+
+    return body;
 }
 
 function download(callback) {
