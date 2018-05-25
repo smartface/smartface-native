@@ -16,8 +16,8 @@ if (System.OS === "iOS") {
     zipPath = Path.android.storages.internal + "/Android/data/AndroidRAU.zip";
 }
 
-RemoteUpdateService.checkUpdate = function(callback) {
-    checkUpdateFromCache(callback);
+RemoteUpdateService.checkUpdate = function(callback, userInfo) {
+    checkUpdateFromCache(callback, userInfo);
 };
 
 function checkUpdateFromCache(callback, userInfo) {
