@@ -20,10 +20,19 @@ RemoteUpdateService.checkUpdate = function(callback) {
     checkUpdateFromCache(callback);
 };
 
-function checkUpdateFromCache(callback) {
+function checkUpdateFromCache(callback, userInfo) {
+    if(userInfo && (typeof(userInfo) !== "string"))
+        throw new Error("user parameter must be a string");
+        
+    const Hardware = require('sf-core/device/hardware');
     var body = JSON.parse(RAU.getRequestBody());
     delete body.files;
     delete body.binary;
+    if(userInfo) {
+        body.user = userInfo;
+        body.brand = Hardware.getDeviceModelName();
+        body.osVersion = System.OSVersion;
+    }
 
     sessionManager.request(
     {

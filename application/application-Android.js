@@ -189,9 +189,9 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'checkUpdate': {
-        value: function(callback){
+        value: function(callback, user){
             if(TypeUtil.isFunction(callback)){
-                RAU.checkUpdate(callback);
+                RAU.checkUpdate(callback, user);
             }
         },
         enumerable: true

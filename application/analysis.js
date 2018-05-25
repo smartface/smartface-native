@@ -265,13 +265,14 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  * @param {Function} callback.result.download.downloadFinish.cancel Clears all staged files.
  * @param {Object} callback.result.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument will be null.
  * @param {Function} callback.result.download.downloadFinish.meta  Meta in rau.json as object parsed.
+ * @param {String} [user] User information
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Application.checkUpdate = function(callback){};
+Application.checkUpdate = function(callback, user){};
 
 /**
  * Triggered before exiting application.

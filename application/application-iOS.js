@@ -32,8 +32,8 @@ SFApplication.restart = function(){
     SMFApplication.restart();
 };
 
-SFApplication.checkUpdate = function(callback){
-    RAU.checkUpdate(callback);
+SFApplication.checkUpdate = function(callback, user){
+    RAU.checkUpdate(callback, user);
 };
 
 SFApplication.ios = {};
