@@ -79,7 +79,7 @@ Object.defineProperties(Font, {
             var fontStyle = NativeTypeface.NORMAL;
             var fontSuffix = "";
             var fontSuffix2 = "";
-                
+
             if (style !== undefined) {
                 switch (style) {
                     case Font.NORMAL:
@@ -100,7 +100,7 @@ Object.defineProperties(Font, {
                     case Font.BOLD_ITALIC:
                         fontStyle = NativeTypeface.BOLD_ITALIC;
                         fontSuffix = "_bi";
-                        fontSuffix2 = "-BoldItalic"; 
+                        fontSuffix2 = "-BoldItalic";
                         break;
                 }
             }
@@ -113,38 +113,38 @@ Object.defineProperties(Font, {
                 var convertedFontName2 = base + fontSuffix2 + ".ttf";
                 var convertedFontName3 = base + fontSuffix + ".otf";
                 var convertedFontName4 = base + fontSuffix2 + ".otf";
- 
+
                 var selectedFont = undefined;
-                
+
                 var fontFile = new File({
                     path: "assets://" + convertedFontName
                 });
-                
+
                 var fontFile2 = new File({
                     path: "assets://" + convertedFontName2
                 });
-                
+
                 var fontFile3 = new File({
                     path: "assets://" + convertedFontName3
                 });
-                
+
                 var fontFile4 = new File({
                     path: "assets://" + convertedFontName4
                 });
-                
-                if(fontFile.exists){
+
+                if (fontFile.exists) {
                     selectedFont = fontFile;
                 }
-                else if(fontFile2.exists){
-                    selectedFont = fontFile2;  
+                else if (fontFile2.exists) {
+                    selectedFont = fontFile2;
                 }
-                else if(fontFile3.exists){
-                    selectedFont = fontFile3;  
+                else if (fontFile3.exists) {
+                    selectedFont = fontFile3;
                 }
-                else if(fontFile4.exists){
-                    selectedFont = fontFile4;  
+                else if (fontFile4.exists) {
+                    selectedFont = fontFile4;
                 }
-                
+
                 if (selectedFont !== undefined) {
                     font = Font.createFromFile(selectedFont.fullPath, size);
                     addToCache(fontFamily, style, font);
@@ -160,7 +160,8 @@ Object.defineProperties(Font, {
 
             font = new Font({
                 "nativeObject": typeface,
-                "size": size
+                "size": size,
+                "style": fontStyle
             });
             addToCache(fontFamily, style, font);
             return font;
