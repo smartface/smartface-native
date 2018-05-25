@@ -91,15 +91,73 @@ MapView.prototype.userLocationEnabled;
 MapView.prototype.clusterEnabled;
 
 /**
- * Gets cluster object. Cluster works on Android & iOS 11.0+.
+ * This property sets cluster fillColor. Cluster works on Android & iOS 11.0+.
  *
- * @property {UI.Mapview.Cluster} cluster
+ * @property {UI.Color} clusterFillColor
  * @android
  * @ios
- * @readonly
  * @since 3.0.1
  */
-MapView.prototype.cluster;
+MapView.prototype.clusterFillColor;
+
+/**
+ * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterBorderColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderColor;
+
+/**
+ * This property sets cluster textColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterTextColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterTextColor;
+
+/**
+ * This property sets cluster borderWidth. Only works on ios.
+ *
+ * @property {Number} clusterBorderWidth
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderWidth;
+
+/**
+ * This property sets cluster font. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Font} clusterFont
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterFont;
+
+/**
+ * This property sets cluster size. Only works on ios.
+ *
+ * @property {Number} clusterSize
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterSize;
+
+/**
+ * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
+ *
+ * @event onClusterPress
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.onClusterPress;
 
 /**
  * This property sets center location of the map to the given latitude & longitude.
@@ -463,121 +521,6 @@ Pin.prototype.visible;
 Pin.prototype.onPress;
 
 MapView.Pin = Pin;
-
-/**
- * @class UI.MapView.Cluster
- * @since 3.0.1
- * @
- * Cluster is placed on UI.MapView. Cluster works on Android & iOS 11.0+.
- *
- *     @example
- *     const MapView = require('sf-core/ui/mapview');
- *     var myMapView = new MapView({
- *         clusterEnabled: true,
- *         flexGrow: 1,
- *         onCreate: function() {
- *             myMapView.centerLocation = {
- *                 latitude: 37.4488259,
- *                 longitude: -122.1600047
- *             };
- *             for (var i = 0; i < 10; i++) {
- *                     var myPin = new MapView.Pin({
- *                     location: {
- *                         latitude: 37.4488259 + i * 0.01,
- *                         longitude: -122.1600047
- *                     },
- *                     title: 'Title ' + i,
- *                     subtitle: 'Subtitle',
- *                     color: Color.RED,
- *                     onPress: function(index) {
- *                         console.log("Index : " + index);
- *                     }.bind(myPin,i)
- *                 });
- *                 myMapView.addPin(myPin);
- *             }
- *        }
- *     });
- *     
- *     myMapView.cluster.onPress = function(pins){
- *          for (var i = 0; i < pins.length; i++) {
- *              console.log("Title : " + pins[i].title);
- *          }
- *     };
- *     myPage.layout.addChild(myMapView);
- * 
- */
-function Cluster() {}
-
-/**
- * This property sets cluster fillColor.
- *
- * @property {UI.Color} fillColor
- * @android
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.fillColor;
-
-/**
- * This property sets cluster borderColor.
- *
- * @property {UI.Color} borderColor
- * @android
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.borderColor;
-
-/**
- * This property sets cluster textColor.
- *
- * @property {UI.Color} textColor
- * @android
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.textColor;
-
-/**
- * This property sets cluster borderWidth. Only works on ios.
- *
- * @property {Number} borderWidth
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.borderWidth;
-
-/**
- * This property sets cluster font.
- *
- * @property {UI.Font} font
- * @android
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.font;
-
-/**
- * This property sets cluster size. Only works on ios.
- *
- * @property {Number} size
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.size;
-
-/**
- * Triggered when pressed on the cluster.
- *
- * @event onPress
- * @param {Array<UI.MapView.Pin>} pins
- * @android
- * @ios
- * @since 3.0.1
- */
-Cluster.prototype.onPress;
-
-MapView.Cluster = Cluster;
 
 /**
  * @enum UI.MapView.Type
