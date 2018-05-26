@@ -160,9 +160,9 @@ const MapView = extend(View)(
                 }
             }));
 
-            self.cluster.setDefaultClusterRenderer();
+            var clusterRender = self.cluster.setDefaultClusterRenderer();
 
-            _nativeClusterManager.setRenderer(self.cluster.getDefaultClusterRenderer);
+            _nativeClusterManager.setRenderer(clusterRender);
 
             for (let i in _pins) {
                 var createdItem = createItem(_pins[i]);
@@ -204,6 +204,10 @@ const MapView = extend(View)(
         var _zoomLevel;
         var _maxZoomLevel = 19;
         var _minZoomLevel = 0;
+        var _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
+        var _fillColor = Color.RED;
+        var _borderColor = Color.WHITE;
+        var _textColor = Color.WHITE;
 
         var _nativeCustomMarkerRenderer = null;
 
@@ -390,6 +394,54 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
+            'clusterFont': { //cant set after added mapview
+                get: function() {
+                    return _font;
+                },
+                set: function(value) {
+                    if (value instanceof Font)
+                        _font = value;
+                        console.log("font setted  " + value);
+                },
+                enumerable: true
+            },
+            'clusterTextColor': {
+                get: function() {
+                    return _textColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _textColor = value;
+                }
+            },
+            'clusterBorderColor': { //cant set after added mapview
+                get: function() {
+                    return _borderColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _borderColor = value;
+                }
+            },
+            'clusterFillColor': { //cant set after added mapview
+                get: function() {
+                    return _fillColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _fillColor = value
+                },
+                enumerable: true
+            },
+            'onClusterPress': {
+                get: function() {
+                    return _clusterOnPress;
+                },
+                set: function(callback) {
+                    _clusterOnPress = callback;
+                },
+                enumerable: true
+            },
             'type': {
                 get: function() {
                     return _type;
@@ -560,29 +612,21 @@ const MapView = extend(View)(
             }
         }
 
-        var _nativeDefaultClusterRenderer;
         var _clusterOnPress;
 
         function Cluster(params) {
 
-            const self = this;
-
-            //default values
-            var _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
-            var _fillColor = Color.RED;
-            var _borderColor = Color.WHITE;
-            var _textColor = Color.WHITE;
-
             function setDefaultClusterRenderer() {
                 const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.DefaultClusterRendererCustom');
+                
+                console.log(" self.clusterFont.style " + self.clusterFont.style);
+                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
+                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
+                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
+                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
+                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
 
-                NativeDefaultClusterRendererCustom.clusterTextColor = self.textColor && self.textColor;
-                NativeDefaultClusterRendererCustom.clusterTextSize = self.font.size && self.font.size;
-                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.borderColor && self.borderColor;
-                NativeDefaultClusterRendererCustom.clusterTypeface = self.font.nativeObject && self.font.nativeObject;
-                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = ((self.font.style === undefined) ? Font.BOLD : self.font.style); //BOLD  style is undefined 
-
-                _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
+                var _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
 
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
 
@@ -600,85 +644,25 @@ const MapView = extend(View)(
                         return cluster.getSize() > 1;
                     },
                     getColor: function(cluster) {
-                        return self.fillColor && self.fillColor;
+                        return self.clusterFillColor && self.clusterFillColor;
                     }
                 }, [spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager]);
 
+                return _nativeDefaultClusterRenderer;
+
             }
 
-            Object.defineProperties(self, {
-                'font': { //cant set after added mapview
-                    get: function() {
-                        return _font;
-                    },
-                    set: function(value) {
-                        if (value instanceof Font)
-                            _font = value;
-                    },
-                    enumerable: true
+            Object.defineProperty(this, 'setDefaultClusterRenderer', {
+                value: function() {
+                    var nativeDefaultClusterRenderer = setDefaultClusterRenderer();
+                    return nativeDefaultClusterRenderer;
                 },
-                'textColor': {
-                    get: function() {
-                        return _textColor.nativeObject;
-                    },
-                    set: function(value) {
-                        if (value instanceof Color)
-                            _textColor = value;
-                    }
-                },
-                'borderColor': { //cant set after added mapview
-                    get: function() {
-                        return _borderColor.nativeObject;
-                    },
-                    set: function(value) {
-                        if (value instanceof Color)
-                            _borderColor = value;
-                    }
-                },
-                'fillColor': { //cant set after added mapview
-                    get: function() {
-                        return _fillColor.nativeObject;
-                    },
-                    set: function(value) {
-                        if (value instanceof Color)
-                            _fillColor = value
-                    },
-                    enumerable: true
-                },
-                'clusterItemImage': { //cant set after added mapview
-                    get: function() {
-                        return _clusterItemImage;
-                    },
-                    set: function(value) {
-                        _clusterItemImage = value
-                    },
-                    enumerable: true
-                },
-                'setDefaultClusterRenderer': {
-                    value: function() {
-                        setDefaultClusterRenderer();
-                    },
-                    enumerable: true
-                },
-                'getDefaultClusterRenderer': {
-                    get: function() {
-                        return _nativeDefaultClusterRenderer;
-                    },
-                    enumerable: true
-                },
-                'onPress': {
-                    get: function() {
-                        return _clusterOnPress;
-                    },
-                    set: function(callback) {
-                        _clusterOnPress = callback;
-                    },
-                    enumerable: true
-                }
-            });
+                enumerable: true
+            })
         }
     }
 );
+
 var _clusterItemImage;
 var _clusterItemOnPress;
 var _clusterEnabled = false;
