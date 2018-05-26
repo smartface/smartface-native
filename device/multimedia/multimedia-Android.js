@@ -7,6 +7,7 @@ const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage')
 
 const File = require("../../io/file");
 const Image = require("../../ui/image");
+const Page = require("../../ui/page");
 
 const Type = {
     IMAGE: 0,
@@ -186,10 +187,23 @@ function cropImage(resultCode, data) {
     if (resultCode === Multimedia.CropImage.RESULT_OK) {
         var resultUri = result.getUri();
         var croppedImage = Image.createFromFile(resultUri.getPath());
-        _captureParams.onSuccess && _captureParams.onSuccess({ image: croppedImage });
+        if (_captureParams.allowsEditing) {
+            _captureParams.onSuccess && _captureParams.onSuccess({ image: croppedImage });
+        }
+        else if (_pickParams.allowsEditing) {
+            _pickParams.onSuccess && _pickParams.onSuccess({ image: croppedImage });
+        }
     }
     else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
         throw Error('Unexpected error occured while cropping image');
+    }
+}
+
+function cropPickedFromGallery(uri) {
+    if (uri) {
+        var cropImageActivity = NativeCropImage.activity(uri);
+        var activity = AndroidConfig.activity
+        cropImageActivity.start(activity, _pickParams.page.nativeObject);
     }
 }
 
@@ -220,11 +234,15 @@ function pickFromGallery(resultCode, data) {
         if (success && _pickParams.onSuccess) {
             if (_pickParams.type === Multimedia.Type.IMAGE) {
 
-                var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
-                var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                var image = new Image({ bitmap: bitmap });
-                _pickParams.onSuccess({ image: image });
-
+                if (!_pickParams.allowsEditing) {
+                    var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
+                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
+                    var image = new Image({ bitmap: bitmap });
+                    _pickParams.onSuccess({ image: image });
+                }
+                else {
+                    cropPickedFromGallery(uri);
+                }
             }
             else {
                 var file = new File({ path: realPath });
