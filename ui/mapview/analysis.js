@@ -81,6 +81,85 @@ MapView.prototype.compassEnabled;
 MapView.prototype.userLocationEnabled;
 
 /**
+ * Enables/Disables clusterEnabled on map. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {Boolean} [clusterEnabled = false]
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterEnabled;
+
+/**
+ * This property sets cluster fillColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterFillColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterFillColor;
+
+/**
+ * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterBorderColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderColor;
+
+/**
+ * This property sets cluster textColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterTextColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterTextColor;
+
+/**
+ * This property sets cluster borderWidth. Only works on ios.
+ *
+ * @property {Number} clusterBorderWidth
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderWidth;
+
+/**
+ * This property sets cluster font. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Font} clusterFont
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterFont;
+
+/**
+ * This property sets cluster size. Only works on ios.
+ *
+ * @property {Number} clusterSize
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterSize;
+
+/**
+ * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
+ *
+ * @event onClusterPress
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.onClusterPress;
+
+/**
  * This property sets center location of the map to the given latitude & longitude.
  *
  *     @example

@@ -187,17 +187,108 @@ const MapView = extend(View)(
             enumerable: true
         });
         
+        Object.defineProperty(self, 'clusterFillColor', {
+            get: function() {
+                return new Color({color : self.cluster.nativeObject.fillColor});
+            },
+            set: function(value) {
+                self.cluster.nativeObject.fillColor = value.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'clusterBorderColor', { //cant set after added mapview
+            get: function() {
+                return new Color({color : self.cluster.nativeObject.borderColor});
+            },
+            set: function(value) {
+                self.cluster.nativeObject.borderColor = value.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self.ios, 'clusterBorderWidth', { //cant set after added mapview
+            get: function() {
+                return self.cluster.nativeObject.borderWidth;
+            },
+            set: function(value) {
+                self.cluster.nativeObject.borderWidth = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'clusterTextColor', { //cant set after added mapview
+            get: function() {
+                return new Color({color : self.cluster.nativeObject.textColor});
+            },
+            set: function(value) {
+                self.cluster.nativeObject.textColor = value.nativeObject;
+            },
+            enumerable: true
+        });
+    
+        
+        Object.defineProperty(self, 'clusterFont', { //cant set after added mapview
+            get: function() {
+                return self.cluster.nativeObject.font;
+            },
+            set: function(value) {
+                self.cluster.nativeObject.font = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self.ios, 'clusterSize', { //cant set after added mapview
+            get: function() {
+                return self.cluster.nativeObject.size.width;
+            },
+            set: function(value) {
+                self.cluster.nativeObject.size = {width: value, height: value};
+            },
+            enumerable: true
+        });
+        
+        var _onClusterPress;
+        Object.defineProperty(self, 'onClusterPress', {
+            get: function() {
+                return _onClusterPress;
+            },
+            set: function(value) {
+                _onClusterPress = value;
+                var _onPressHandler = function(e){
+                    if (typeof value === 'function') {
+                        var pinArray = [];
+                        for (var i in e.memberAnnotations) {
+                            pinArray.push(_pinArray[e.memberAnnotations[i].uuid]);
+                        }
+                        value.call(this,pinArray);
+                    };
+                };
+                self.cluster.nativeObject.onPress = _onPressHandler.bind(this);
+            },
+            enumerable: true
+        });
+    
+        var _pinArray = {};
         Object.defineProperty(self, 'addPin', {
             value: function(value){
-                value.parentMapView = self;
-                self.nativeObject.addAnnotation(value.nativeObject);
+                if (value instanceof MapView.Pin) {
+                    value.parentMapView = self;
+                    var uuid = value.nativeObject.uuid;
+                    _pinArray[uuid] = value;
+                    self.nativeObject.addAnnotation(value.nativeObject);
+                }
             },
             configurable: false
         });
         
         Object.defineProperty(self, 'removePin', {
             value: function(value){
-                self.nativeObject.removeAnnotation(value.nativeObject);
+                if (value instanceof MapView.Pin) {
+                    var uuid = value.nativeObject.uuid;
+                    delete _pinArray[uuid];
+                    self.nativeObject.removeAnnotation(value.nativeObject);
+                }
             },
             configurable: false
         });
@@ -333,9 +424,9 @@ const MapView = extend(View)(
             var annotationArray = Invocation.invokeInstanceMethod(annotationSet,"allObjects",[],"id");
             var pinArray = [];
             for (var i in annotationArray) {
-                var pin = new Pin();
-                pin.nativeObject = annotationArray[i];
-                pinArray.push(pin);
+                if (annotationArray[i].toString() !== "[object MKClusterAnnotation]") { //Check cluster
+                    pinArray.push(_pinArray[annotationArray[i].uuid]);
+                }
             }
             return pinArray;
         }
@@ -451,19 +542,11 @@ function Pin(params) {
 function Cluster(params) {
 
     var self = this;
+    self.ios = {};
+    
     if(params && params.nativeObject === undefined){
         self.nativeObject = __SF_Cluster.createCluster();
     }
-
-    Object.defineProperty(self, 'fillColor', {
-            get: function() {
-                return new Color({color : self.nativeObject.fillColor});
-            },
-            set: function(value) {
-                self.nativeObject.fillColor = value.nativeObject;
-            },
-            enumerable: true
-    });
     
     Object.defineProperty(self, 'title', {
             get: function() {
@@ -485,67 +568,6 @@ function Cluster(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'borderColor', { //cant set after added mapview
-            get: function() {
-                return new Color({color : self.nativeObject.borderColor});
-            },
-            set: function(value) {
-                self.nativeObject.borderColor = value.nativeObject;
-            },
-            enumerable: true
-    });
-    
-    Object.defineProperty(self, 'borderWidth', { //cant set after added mapview
-            get: function() {
-                return self.nativeObject.borderWidth;
-            },
-            set: function(value) {
-                self.nativeObject.borderWidth = value;
-            },
-            enumerable: true
-    });
-    
-    Object.defineProperty(self, 'textColor', { //cant set after added mapview
-            get: function() {
-                return new Color({color : self.nativeObject.textColor});
-            },
-            set: function(value) {
-                self.nativeObject.textColor = value.nativeObject;
-            },
-            enumerable: true
-    });
-    
-    Object.defineProperty(self, 'font', { //cant set after added mapview
-            get: function() {
-                return self.nativeObject.font;
-            },
-            set: function(value) {
-                self.nativeObject.font = value;
-            },
-            enumerable: true
-    });
-    
-    Object.defineProperty(self, 'onPress', {
-            get: function() {
-                return self.nativeObject.onPress;
-            },
-            set: function(value) {
-                var _onPressHandler = function(e){
-                    if (typeof value === 'function') {
-                        var pinArray = [];
-                        for (var i in e.memberAnnotations) {
-                            var pin = new Pin();
-                            pin.nativeObject = e.memberAnnotations[i];
-                            pinArray.push(pin);
-                        }
-                        value.call(this,pinArray);
-                    };
-                };
-                self.nativeObject.onPress = _onPressHandler.bind(this);
-            },
-            enumerable: true
-    });
-    
     Object.defineProperty(self, 'canShowCallout', { //cant set after added mapview
             get: function() {
                 return self.nativeObject.canShowCallout;
@@ -562,16 +584,6 @@ function Cluster(params) {
             },
             set: function(value) {
                 self.nativeObject.count = value;
-            },
-            enumerable: true
-    });
-    
-    Object.defineProperty(self, 'size', { //cant set after added mapview
-            get: function() {
-                return self.nativeObject.size.width;
-            },
-            set: function(value) {
-                self.nativeObject.size = {width: value, height: value};
             },
             enumerable: true
     });
