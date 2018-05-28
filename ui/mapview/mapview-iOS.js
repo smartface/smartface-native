@@ -196,8 +196,9 @@ const MapView = extend(View)(
             },
             enumerable: true
         });
+        self.clusterFillColor = Color.RED; //Default cluster Color
         
-        Object.defineProperty(self, 'clusterBorderColor', { //cant set after added mapview
+        Object.defineProperty(self, 'clusterBorderColor', {
             get: function() {
                 return new Color({color : self.cluster.nativeObject.borderColor});
             },
@@ -207,7 +208,7 @@ const MapView = extend(View)(
             enumerable: true
         });
         
-        Object.defineProperty(self.ios, 'clusterBorderWidth', { //cant set after added mapview
+        Object.defineProperty(self.ios, 'clusterBorderWidth', {
             get: function() {
                 return self.cluster.nativeObject.borderWidth;
             },
@@ -217,7 +218,7 @@ const MapView = extend(View)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'clusterTextColor', { //cant set after added mapview
+        Object.defineProperty(self, 'clusterTextColor', {
             get: function() {
                 return new Color({color : self.cluster.nativeObject.textColor});
             },
@@ -228,7 +229,7 @@ const MapView = extend(View)(
         });
     
         
-        Object.defineProperty(self, 'clusterFont', { //cant set after added mapview
+        Object.defineProperty(self, 'clusterFont', {
             get: function() {
                 return self.cluster.nativeObject.font;
             },
@@ -238,7 +239,7 @@ const MapView = extend(View)(
             enumerable: true
         });
         
-        Object.defineProperty(self.ios, 'clusterSize', { //cant set after added mapview
+        Object.defineProperty(self.ios, 'clusterSize', {
             get: function() {
                 return self.cluster.nativeObject.size.width;
             },
@@ -491,7 +492,7 @@ function Pin(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'color', { //cant set after added mapview
+    Object.defineProperty(self, 'color', {
             get: function() {
                 return new Color({color : self.nativeObject.color});
             },
@@ -501,7 +502,7 @@ function Pin(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'image', { //cant set after added mapview
+    Object.defineProperty(self, 'image', {
             get: function() {
                 return Image.createFromImage(self.nativeObject.image);
             },
@@ -511,7 +512,7 @@ function Pin(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'visible', { //cant set after added mapview
+    Object.defineProperty(self, 'visible', {
             get: function() {
                 return !self.nativeObject.visible;
             },
@@ -568,7 +569,7 @@ function Cluster(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'canShowCallout', { //cant set after added mapview
+    Object.defineProperty(self, 'canShowCallout', {
             get: function() {
                 return self.nativeObject.canShowCallout;
             },
@@ -578,7 +579,7 @@ function Cluster(params) {
             enumerable: true
     });
     
-    Object.defineProperty(self, 'count', { //cant set after added mapview
+    Object.defineProperty(self, 'count', {
             get: function() {
                 return self.nativeObject.count;
             },
