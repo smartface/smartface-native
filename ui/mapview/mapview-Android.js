@@ -51,17 +51,19 @@ const MapView = extend(View)(
                     var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
-
-                    // googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
-                    //     onMarkerClick: function(marker) {
-                    //         _pins.forEach(function(pin) {
-                    //             if (pin.nativeObject.getId() === marker.getId()) {
-                    //                 pin.onPress && pin.onPress();
-                    //             }
-                    //         });
-                    //         return false;
-                    //     }
-                    // }));
+                    
+                    if(!_clusterEnabled){
+                    googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
+                        onMarkerClick: function(marker) {
+                            _pins.forEach(function(pin) {
+                                if (pin.nativeObject.getId() === marker.getId()) {
+                                    pin.onPress && pin.onPress();
+                                }
+                            });
+                            return false;
+                        }
+                    }));
+                    }
 
                     googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
                         onMapClick: function(location) {
