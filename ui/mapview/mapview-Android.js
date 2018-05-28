@@ -51,18 +51,18 @@ const MapView = extend(View)(
                     var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
-                    
-                    if(!_clusterEnabled){
-                    googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
-                        onMarkerClick: function(marker) {
-                            _pins.forEach(function(pin) {
-                                if (pin.nativeObject.getId() === marker.getId()) {
-                                    pin.onPress && pin.onPress();
-                                }
-                            });
-                            return false;
-                        }
-                    }));
+
+                    if (!_clusterEnabled) {
+                        googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
+                            onMarkerClick: function(marker) {
+                                _pins.forEach(function(pin) {
+                                    if (pin.nativeObject.getId() === marker.getId()) {
+                                        pin.onPress && pin.onPress();
+                                    }
+                                });
+                                return false;
+                            }
+                        }));
                     }
 
                     googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
@@ -150,10 +150,8 @@ const MapView = extend(View)(
 
             _nativeClusterManager.setOnClusterClickListener(NativeClusterManager.OnClusterClickListener.implement({
                 onClusterClick: function(cluster) {
-                    console.log("cluster.getPosition().latitude  " + cluster.getPosition().latitude);
                     var pinArray = [];
                     var clusterArray = toJSArray(cluster.getItems().toArray());
-                    console.log("clusterArray " + clusterArray.length);
                     for (var i = 0; i < clusterArray.length; i++) {
                         pinArray.push(_pinArray[clusterArray[i]]);
                     }
@@ -165,12 +163,6 @@ const MapView = extend(View)(
             var clusterRender = self.cluster.setDefaultClusterRenderer();
 
             _nativeClusterManager.setRenderer(clusterRender);
-
-            for (let i in _pins) {
-                var createdItem = createItem(_pins[i]);
-                _nativeClusterManager.addItem(createdItem);
-            }
-            //_nativeClusterManager.cluster();
         }
 
         var _pinArray = {}; // Contains unique cluster obj ref as property and assigned values is pin
@@ -403,7 +395,6 @@ const MapView = extend(View)(
                 set: function(value) {
                     if (value instanceof Font)
                         _font = value;
-                        console.log("font setted  " + value);
                 },
                 enumerable: true
             },
@@ -477,6 +468,10 @@ const MapView = extend(View)(
                                         marker.position(position);
                                     }
                                     pin.nativeObject = _nativeGoogleMap.addMarker(marker);
+                                }
+                                else {
+                                        var createdItem = createItem(pin);
+                                        _nativeClusterManager.addItem(createdItem);
                                 }
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
@@ -620,8 +615,7 @@ const MapView = extend(View)(
 
             function setDefaultClusterRenderer() {
                 const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.DefaultClusterRendererCustom');
-                
-                console.log(" self.clusterFont.style " + self.clusterFont.style);
+
                 NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
                 NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
                 NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
@@ -798,7 +792,6 @@ function Pin(params) {
                 }
             },
             set: function(callback) {
-                console.log("_clusterEnabled");
                 if (!_clusterEnabled) {
                     _onPress = callback;
                 }

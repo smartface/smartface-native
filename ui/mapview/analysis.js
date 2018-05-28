@@ -140,7 +140,7 @@ MapView.prototype.clusterBorderWidth;
 MapView.prototype.clusterFont;
 
 /**
- * This property sets cluster size. Only works on ios.
+ * This property sets cluster size. Only works on ios. In Android, wraps the content according to font properties.
  *
  * @property {Number} clusterSize
  * @ios
