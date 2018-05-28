@@ -115,12 +115,13 @@ function addFieldsForUserInfo(body, userInfo){
     if(userInfo && (typeof(userInfo) !== "string"))
         throw new Error("user parameter must be a string");
 
-    const Hardware = require('sf-core/device/hardware');
     if(userInfo) {
         body.user = userInfo;
-        body.brand = Hardware.getDeviceModelName();
-        body.osVersion = System.OSVersion;
     }
+    
+    const Hardware = require('sf-core/device/hardware');
+    body.brand = Hardware.getDeviceModelName();
+    body.osVersion = System.OSVersion;
 
     return body;
 }
