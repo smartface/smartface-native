@@ -1,5 +1,6 @@
 const RAU = require("./RAU");
 const WebView = require('sf-core/ui/webview');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 var SFApplication = {};
 
@@ -30,6 +31,15 @@ SFApplication.exit = function(){
 
 SFApplication.restart = function(){
     SMFApplication.restart();
+};
+
+SFApplication.hideKeyboard = function(){
+    var keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
+    var argForce = new Invocation.Argument({
+        type:"BOOL",
+        value: true
+    });
+    Invocation.invokeInstanceMethod(keyWindow,"endEditing:",[argForce],"BOOL");
 };
 
 SFApplication.checkUpdate = function(callback, user){
