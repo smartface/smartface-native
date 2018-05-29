@@ -160,8 +160,7 @@ Object.defineProperties(Font, {
 
             font = new Font({
                 "nativeObject": typeface,
-                "size": size,
-                "style": fontStyle
+                "size": size
             });
             addToCache(fontFamily, style, font);
             return font;
