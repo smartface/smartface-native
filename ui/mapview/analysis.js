@@ -501,7 +501,7 @@ Pin.prototype.id;
 Pin.prototype.image;
 
 /**
- * Gets/Sets visibility of a pin.
+ * Gets/Sets visibility of a pin. In Android if cluster is enable, visible property cannot be assigned. 
  *
  * @property {Boolean} visible
  * @android

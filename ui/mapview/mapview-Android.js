@@ -144,7 +144,7 @@ const MapView = extend(View)(
                             _pinArray[i].onPress && _pinArray[i].onPress();
                         }
                     }
-                    return true;
+                    return false;
                 }
             }));
 
@@ -169,6 +169,7 @@ const MapView = extend(View)(
         var _itemArray = [];
 
         function createItem(item) {
+            console.log("item.title, item.subtitle " + item.title + "   " + item.subtitle);
             var clusterItemObj = new NativeClusterItem(item.location.latitude, item.location.longitude, item.title, item.subtitle);
             _pinArray[clusterItemObj] = item;
             _itemArray.push(clusterItemObj);
@@ -470,8 +471,8 @@ const MapView = extend(View)(
                                     pin.nativeObject = _nativeGoogleMap.addMarker(marker);
                                 }
                                 else {
-                                        var createdItem = createItem(pin);
-                                        _nativeClusterManager.addItem(createdItem);
+                                    var createdItem = createItem(pin);
+                                    _nativeClusterManager.addItem(createdItem);
                                 }
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
@@ -625,15 +626,16 @@ const MapView = extend(View)(
                 var _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
 
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
-
                         if (_clusterItemImage) {
                             var iconBitmap = _clusterItemImage.nativeObject.getBitmap();
                             var clusterIcon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-                            markerOptions.icon(clusterIcon);
+                            markerOptions.icon(clusterIcon)
                         }
                         else if (_clusterColor) {
                             markerOptions.icon(_clusterColor);
                         }
+                        markerOptions.snippet(clusterItemObj.getSnippet());
+                        markerOptions.title(clusterItemObj.getTitle());
                     },
                     shouldRenderAsCluster: function(cluster) { // Parameter => Cluster<T> cluster
                         //as a default value
@@ -721,7 +723,7 @@ function Pin(params) {
                 _image = image;
                 _clusterItemImage = image;
                 const Image = require("sf-core/ui/image");
-                if (self.nativeObject && image instanceof Image) {
+                if (self.nativeObject && image instanceof Image && !_clusterEnabled) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
 
@@ -739,7 +741,7 @@ function Pin(params) {
                     throw new Error("location property must be on object includes latitude and longitude keys.");
                 }
                 _location = location;
-                if (self.nativeObject) {
+                if (self.nativeObject && !_clusterEnabled) {
                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                     var position = new NativeLatLng(location.latitude, location.longitude);
                     self.nativeObject.setPosition(position);
@@ -755,7 +757,9 @@ function Pin(params) {
                     throw new Error("subtitle must be a string.");
                 }
                 _subtitle = subtitle;
-                self.nativeObject && self.nativeObject.setSnippet(subtitle);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setSnippet(subtitle);
+                }
             }
         },
         'title': {
@@ -767,7 +771,9 @@ function Pin(params) {
                     throw new Error("title must be a string.");
                 }
                 _title = title;
-                self.nativeObject && self.nativeObject.setTitle(title);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setTitle(title);
+                }
             }
         },
         'visible': {
@@ -779,7 +785,9 @@ function Pin(params) {
                     throw new Error("visible type must be an boolean.");
                 }
                 _visible = visible;
-                self.nativeObject && self.nativeObject.setVisible(visible);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setVisible(visible);
+                }
             }
         },
         'onPress': {
