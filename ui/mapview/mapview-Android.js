@@ -169,7 +169,6 @@ const MapView = extend(View)(
         var _itemArray = [];
 
         function createItem(item) {
-            console.log("item.title, item.subtitle " + item.title + "   " + item.subtitle);
             var clusterItemObj = new NativeClusterItem(item.location.latitude, item.location.longitude, item.title, item.subtitle);
             _pinArray[clusterItemObj] = item;
             _itemArray.push(clusterItemObj);
