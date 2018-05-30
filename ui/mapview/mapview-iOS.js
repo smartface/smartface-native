@@ -196,7 +196,6 @@ const MapView = extend(View)(
             },
             enumerable: true
         });
-        self.clusterFillColor = Color.RED; //Default cluster Color
         
         Object.defineProperty(self, 'clusterBorderColor', {
             get: function() {
@@ -204,6 +203,16 @@ const MapView = extend(View)(
             },
             set: function(value) {
                 self.cluster.nativeObject.borderColor = value.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self.ios, 'clusterPadding', {
+            get: function() {
+                return self.cluster.nativeObject.padding;
+            },
+            set: function(value) {
+                self.cluster.nativeObject.padding = value;
             },
             enumerable: true
         });

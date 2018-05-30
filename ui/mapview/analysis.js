@@ -123,7 +123,7 @@ MapView.prototype.clusterTextColor;
 /**
  * This property sets cluster borderWidth. Only works on ios.
  *
- * @property {Number} clusterBorderWidth
+ * @property {Number} [clusterBorderWidth = 2]
  * @ios
  * @since 3.0.1
  */
@@ -140,13 +140,22 @@ MapView.prototype.clusterBorderWidth;
 MapView.prototype.clusterFont;
 
 /**
- * This property sets cluster size. Only works on ios. In Android, wraps the content according to font properties.
+ * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
  *
- * @property {Number} clusterSize
+ * @property {Number} [clusterSize = 0]
  * @ios
  * @since 3.0.1
  */
 MapView.prototype.clusterSize;
+
+/**
+ * This property sets clusterPadding. Work when cluster size is 0. Only works on ios.
+ *
+ * @property {Number} [clusterPadding = 15]
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterPadding;
 
 /**
  * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
