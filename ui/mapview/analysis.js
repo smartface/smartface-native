@@ -149,7 +149,7 @@ MapView.prototype.clusterFont;
 MapView.prototype.clusterSize;
 
 /**
- * This property sets clusterPadding. Work when cluster size is 0. Only works on ios.
+ * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
  *
  * @property {Number} [clusterPadding = 15]
  * @ios

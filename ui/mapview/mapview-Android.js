@@ -139,11 +139,7 @@ const MapView = extend(View)(
 
             _nativeClusterManager.setOnClusterItemClickListener(NativeClusterManager.OnClusterItemClickListener.implement({
                 onClusterItemClick: function(item) {
-                    for (let i in _pinArray) {
-                        if (i == item) { //determines the unique ref of item obj.
-                            _pinArray[i].onPress && _pinArray[i].onPress();
-                        }
-                    }
+                    _pinArray[item].onPress && _pinArray[item].onPress();
                     return false;
                 }
             }));
