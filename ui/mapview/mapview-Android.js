@@ -633,8 +633,7 @@ const MapView = extend(View)(
                         markerOptions.snippet(clusterItemObj.getSnippet());
                         markerOptions.title(clusterItemObj.getTitle());
                     },
-                    shouldRenderAsCluster: function(cluster) { // Parameter => Cluster<T> cluster
-                        //as a default value
+                    shouldRenderAsCluster: function(cluster) {
                         return cluster.getSize() > 1;
                     },
                     getColor: function(cluster) {
