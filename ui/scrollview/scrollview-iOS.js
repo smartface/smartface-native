@@ -52,7 +52,7 @@ const ScrollView = extend(ViewGroup)(
         self.layout.applyLayout = function(){
             self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
             
-            var rect = {x:0,y:0,width:0,height:0}
+            var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height}
             var subviews = self.layout.nativeObject.subviews;
             for (var i = 0; i < subviews.length; i++) {
                 var frame = subviews[i].frame;
