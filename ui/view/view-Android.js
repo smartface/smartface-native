@@ -292,6 +292,10 @@ View.prototype = {
         position.height && (this.height = position.height);
     },
     applyLayout: function() {
+        if(this.isScrollViewMainLayout) {
+            calculateLayoutAutoSize(this);
+        }
+       
         this.nativeObject.requestLayout();
         this.nativeObject.invalidate();
     },
@@ -338,22 +342,25 @@ View.prototype = {
         return AndroidUnitConverter.pixelToDp(this.nativeObject.getHeight());
     },
     set height(height) {
+        this.assignedHeight = height;
         this.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
-        const ScrollView = require("../scrollview");
-        if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL) {
-            var layoutParams = this.nativeObject.getLayoutParams();
-            layoutParams && (layoutParams.height = -2);
-        }
+        // const ScrollView = require("../scrollview");
+        // if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL) {
+        //     var layoutParams = this.nativeObject.getLayoutParams();
+        //     layoutParams && (layoutParams.height = -2);
+        // }
     },
     get width() {
         return AndroidUnitConverter.pixelToDp(this.nativeObject.getWidth());
     },
     set width(width) {
+        this.assignedWidth = width;
         this.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
         // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
         const ScrollView = require("../scrollview");
         if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL) {
+            alert("layoutParams.width = -2");
             var layoutParams = this.nativeObject.getLayoutParams();
             layoutParams && (layoutParams.width = -2);
         }
@@ -874,6 +881,37 @@ function createNewLayerDrawable(drawables) {
     }
 
     return layerDrawable;
+}
+
+
+function calculateLayoutAutoSize(view) {
+    const ScrollView = require("sf-core/ui/scrollview");
+    const FlexLayout = require("sf-core/ui/flexlayout");
+    if((view.scrollAlign === ScrollView.Align.VERTICAL)) {
+        if(view.flexDirection === FlexLayout.FlexDirection.ROW) {
+            view.height = view.parent.height;
+            return;
+        }
+        
+        var totalHeight = 0;
+        for (var id in view.childViews) {
+            totalHeight += view.childViews[id].assignedHeight;
+        }
+        view.height = totalHeight;
+        alert("totalHeight: " + totalHeight);
+    } else if((view.scrollAlign === ScrollView.Align.HORIZONTAL)) {
+            if(view.flexDirection === FlexLayout.FlexDirection.COLUMN) {
+                view.width = view.parent.width;
+                return;
+            }
+            
+            var totalWidth = 0;
+            for (var id in view.childViews) {
+                totalWidth += view.childViews[id].assignedWidth;
+            }
+            view.width = totalWidth;
+            alert("totalWidth: " + totalWidth);
+        }
 }
 
 module.exports = View;
