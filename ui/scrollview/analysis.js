@@ -40,6 +40,7 @@
  *     });
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
+ *     scrollView.layout.applyLayout();
  */
 function ScrollView(){}
 
