@@ -14,6 +14,7 @@ const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
 const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 const NativeOnCameraMoveStartedListener = NativeGoogleMap.OnCameraMoveStartedListener;
 const NativeOnCameraIdleListener = NativeGoogleMap.OnCameraIdleListener;
+const NativeClusterItem = requireClass("io.smartface.android.mapcluster.MapClusterItem");
 
 
 const hueDic = {};
@@ -126,7 +127,7 @@ const MapView = extend(View)(
             }));
         }
 
-        const NativeClusterItem = requireClass("io.smartface.android.MapClusterItem");
+
         var _nativeClusterManager;
 
         function startCluster() {
@@ -610,7 +611,7 @@ const MapView = extend(View)(
         function Cluster(params) {
 
             function setDefaultClusterRenderer() {
-                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.DefaultClusterRendererCustom');
+                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
 
                 NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
                 NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
