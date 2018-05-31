@@ -4,8 +4,6 @@
  * @since 0.1
  *
  * ScrollView enables user to view pages with large content exceeding screen size via scroll action.
- * ScrollView can have only one child layout. The layout should be added if there are child views more 
- * than one.
  *    
  *     @example
  *     const FlexLayout = require('sf-core/ui/flexlayout');
@@ -18,27 +16,26 @@
  *        backgroundColor: Color.GREEN,
  *        alignSelf: FlexLayout.AlignSelf.STRETCH
  *     });
- *     scrollView.layout.height = 2000;
  *     scrollView.layout.backgroundColor = Color.RED;
  *     scrollView.layout.alignItems = FlexLayout.AlignItems.CENTER;
  *     var buttonTop = new Button({
  *       height: 100,
- *       width: 100,
+ *       width: 200,
  *       top:10,
- *       text: "Scroll to 1100",
+ *       text: "Scroll to Bottom",
  *       backgroundColor: Color.BLUE,
  *       onPress: function(){
- *           scrollView.scrollToCoordinate(1100);
+ *           scrollView.scrollToEdge(ScrollView.Edge.BOTTOM);
  *       }
  *     });
  *     var buttonBottom = new Button({
  *       height: 100,
- *       width: 100,
+ *       width: 200,
  *       top: 1000,
- *       text: "Scroll to 10",
+ *       text: "Scroll to Top",
  *       backgroundColor: Color.BLUE,
  *       onPress: function(){
- *           scrollView.scrollToCoordinate(10);
+ *           scrollView.scrollToEdge(ScrollView.Edge.TOP);
  *       }
  *     });
  *     scrollView.layout.addChild(buttonTop);
