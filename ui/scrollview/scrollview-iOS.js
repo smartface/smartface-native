@@ -147,8 +147,10 @@ const ScrollView = extend(ViewGroup)(
             set: function(value) {
                 if (value === ScrollViewAlign.HORIZONTAL) {
                     _align = ScrollType.horizontal;
+                    self.layout.flexDirection = FlexLayout.FlexDirection.ROW;
                 }else{
                     _align = ScrollType.vertical;
+                    self.layout.flexDirection = FlexLayout.FlexDirection.COLUMN;
                 }
             },
             enumerable: true
