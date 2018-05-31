@@ -54,6 +54,10 @@ function View(params) {
             this.yogaNode = new NativeYogaNode();
         }
     }
+    // Below two variable added for fixing COR-1662
+    // https://smartface.atlassian.net/browse/COR-1662
+    this.assignedHeight = 0;
+    this.assignedWidth = 0;
 
     this.android = {};
     var _nativeObject = this.nativeObject;
@@ -344,12 +348,6 @@ View.prototype = {
     set height(height) {
         this.assignedHeight = height;
         this.yogaNode.setHeight(AndroidUnitConverter.dpToPixel(height));
-        // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
-        // const ScrollView = require("../scrollview");
-        // if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.HORIZONTAL) {
-        //     var layoutParams = this.nativeObject.getLayoutParams();
-        //     layoutParams && (layoutParams.height = -2);
-        // }
     },
     get width() {
         return AndroidUnitConverter.pixelToDp(this.nativeObject.getWidth());
@@ -357,13 +355,6 @@ View.prototype = {
     set width(width) {
         this.assignedWidth = width;
         this.yogaNode.setWidth(AndroidUnitConverter.dpToPixel(width));
-        // To sove AND-2693. We should give -2 to the bound for not stretching when user set height. 
-        const ScrollView = require("../scrollview");
-        if (this.parent instanceof ScrollView && this.parent.align === ScrollView.Align.VERTICAL) {
-            alert("layoutParams.width = -2");
-            var layoutParams = this.nativeObject.getLayoutParams();
-            layoutParams && (layoutParams.width = -2);
-        }
     },
     get minWidth() {
         return AndroidUnitConverter.pixelToDp(this.yogaNode.getMinWidth().value);
@@ -898,7 +889,6 @@ function calculateLayoutAutoSize(view) {
             totalHeight += view.childViews[id].assignedHeight;
         }
         view.height = totalHeight;
-        alert("totalHeight: " + totalHeight);
     } else if((view.scrollAlign === ScrollView.Align.HORIZONTAL)) {
             if(view.flexDirection === FlexLayout.FlexDirection.COLUMN) {
                 view.width = view.parent.width;
