@@ -23,14 +23,11 @@ const ScrollView = extend(ViewGroup)(
             self.contentLayout = new FlexLayout();
             self.contentLayout.nativeObject.addFrameObserver();
             self.contentLayout.nativeObject.frameObserveHandler = function(e){
+                self.changeContentSize(e.frame);
                 if (typeof self.gradientColorFrameObserver === 'function') {
                     self.gradientColorFrameObserver(e);
                 }
             }; 
-            self.nativeObject.addFrameObserver();
-            self.nativeObject.frameObserveHandler = function(e){
-                self.layout.applyLayout();
-            };
             self.nativeObject.addSubview(self.contentLayout.nativeObject);
         }
         
@@ -48,33 +45,6 @@ const ScrollView = extend(ViewGroup)(
             },
             enumerable: true
         });
-
-        self.layout.applyLayout = function(){
-            self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-            
-            var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height}
-            var subviews = self.layout.nativeObject.subviews;
-            for (var i = 0; i < subviews.length; i++) {
-                var frame = subviews[i].frame;
-                rect.x = frame.x < rect.x ? frame.x : rect.x;
-                rect.y = frame.y < rect.y ? frame.y : rect.y;
-                var width = frame.x + frame.width;
-                rect.width = width > rect.width ? width : rect.width;
-                var height = frame.y + frame.height;
-                rect.height = height > rect.height ? height : rect.height;
-            }
-            if (_align === ScrollType.horizontal){
-                rect.height = self.nativeObject.frame.height;
-            }else{
-                rect.width = self.nativeObject.frame.width;
-            }
-
-            self.layout.width = rect.width;
-            self.layout.height = rect.height;
-            self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-            
-            self.changeContentSize(rect);
-        };
         
         Object.defineProperty(self, 'onScroll', {
             set: function(value) {
@@ -147,11 +117,11 @@ const ScrollView = extend(ViewGroup)(
             set: function(value) {
                 if (value === ScrollViewAlign.HORIZONTAL) {
                     _align = ScrollType.horizontal;
-                    self.layout.flexDirection = FlexLayout.FlexDirection.ROW;
                 }else{
                     _align = ScrollType.vertical;
-                    self.layout.flexDirection = FlexLayout.FlexDirection.COLUMN;
                 }
+                self.autoSize();
+                self.changeContentSize(self.layout.nativeObject.frame);
             },
             enumerable: true
          });
@@ -179,14 +149,35 @@ const ScrollView = extend(ViewGroup)(
                  self.nativeObject.setContentOffsetAnimated({x : 0,y : coordinate},true);
              }
         };
+    
+        self.autoSize = function(){
+            if (nativeObjectViewSubviewCount() === 1) { 
+                return;
+            }
+            self.applyLayout();
+            self.nativeObject.autoContentSize(_align);
+        };
         
         self.changeContentSize = function(frame){
-            if (_align === ScrollType.vertical) {
+            if (nativeObjectViewSubviewCount() ===  2) { 
+                return;
+            }
+            if (_align ==- ScrollType.vertical) {
                 self.nativeObject.contentSize = {width : 0, height : frame.height};
             }else{
                 self.nativeObject.contentSize = {width : frame.width, height : 0};
             }
         };
+        
+        function nativeObjectViewSubviewCount(){
+            var count = 0;
+            for (var subview in self.nativeObject.subviews) {
+                if(self.nativeObject.subviews[subview].constructor.name === "SMFNative.SMFUIView"){
+                    count++;
+                }
+            }
+            return count;
+        }
         
         if (params) {
             for (var param in params) {
