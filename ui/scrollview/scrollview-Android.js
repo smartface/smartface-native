@@ -134,6 +134,7 @@ const ScrollView = extend(ViewGroup)(
             else {
                 _layout.flexDirection = FlexLayout.FlexDirection.COLUMN;
             }
+            return _layout;
         }
 
         // Assign parameters given in constructor
