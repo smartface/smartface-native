@@ -60,7 +60,11 @@ const ListView = extend(View)(
             onBindViewHolder: function(nativeHolderView, position) {
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _listViewItems[itemHashCode];
-
+                
+                if (!self.rowHeight && _onRowHeight) {
+                    _holderViewLayout.height = _onRowHeight(position);
+                }
+                
                 if (_onRowBind) {
                     _onRowBind(_holderViewLayout, position);
 
