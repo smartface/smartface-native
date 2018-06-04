@@ -20,13 +20,14 @@ function WebBrowser(params) {}
  * This function shows WebBrowser on the given UI.Page.
  * 
  * @event show
+ * @param {UI.Page} page
  * @param {UI.WebBrowser.Options} options
  * @static
  * @android
  * @ios
  * @since 2.0.11
  */
-WebBrowser.show = function(options) {};
+WebBrowser.show = function(page,options) {};
 
 /**
  * @class UI.WebBrowser.Options
