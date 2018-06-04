@@ -37,7 +37,7 @@ const TextView = extend(Label)(
     function(_super, params) {
         self = this;
         _super(this);
-        
+
         this.myBuilder = new NativeSpannableStringBuilder();
         // Assign parameters given in constructor
         if (params) {
@@ -47,12 +47,13 @@ const TextView = extend(Label)(
         }
     },
     function(labelPrototype) {
-        
+
         var _spanArray = [];
-        var _onClick = undefined;
+        var _onClick = undefined; //Deprecated : Please use self.onLinkClick
+        var _onLinkClick = undefined;
         var _letterSpacing = 0;
         var _lineSpacing = 0;
-        
+
         Object.defineProperties(labelPrototype, {
             'htmlText': {
                 get: function() {
@@ -82,13 +83,13 @@ const TextView = extend(Label)(
                     this.nativeObject.setSingleLine(!multiline);
                     // Integer.MAX_VALUE
                     // const NativeInteger = requireClass("java.lang.Integer");
-                    this.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                    if(multiline){
+                    this.nativeObject.setMaxLines(multiline ? 1000 : 1);
+                    if (multiline) {
                         const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
                         var movementMethod = new NativeScrollingMovementMethod();
                         this.nativeObject.setMovementMethod(movementMethod);
                     }
-                    else{
+                    else {
                         this.nativeObject.setMovementMethod(null);
                     }
                 },
@@ -131,6 +132,16 @@ const TextView = extend(Label)(
                 },
                 set: function(value) {
                     _onClick = value;
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'onLinkClick': {
+                get: function() {
+                    return _onLinkClick;
+                },
+                set: function(value) {
+                    _onLinkClick = value;
                 },
                 enumerable: true,
                 configurable: true
@@ -195,7 +206,8 @@ const TextView = extend(Label)(
             if (value.link !== undefined) {
                 var clickableSpanOverrideMethods = {
                     onClick: function(view) {
-                        self.onClick(value.link);
+                        self.onClick && self.onClick(value.link);
+                        self.onLinkClick && self.onLinkClick(value.link);
                     },
                     updateDrawState: function(ds) {
                         ds.setUnderlineText(value.underline);

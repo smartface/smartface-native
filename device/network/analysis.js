@@ -99,16 +99,6 @@ Network.roamingEnabled;
 Network.connectionIP;
 
 /**
- * Callback function triggered when the connection type is changed on the device.
- * 
- * @event onConnectionTypeChanged
- * @static
- * @param {Device.Network.ConnectionType} connectionType
- * @since 0.1
- */
-Network.onConnectionTypeChanged = function(connectionType) {};
-
-/**
  * @enum {Number} Device.Network.ConnectionType
  * @since 0.1
  */

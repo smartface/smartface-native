@@ -5,6 +5,10 @@ const NativeActivityLifeCycleListener = requireClass("io.smartface.android.liste
 
 function ApplicationWrapper() {}
 
+//InputMethodManager to close softinput keyboard
+const INPUT_METHOD_SERVICE = 'input_method';
+const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+
 // Intent.ACTION_VIEW
 const ACTION_VIEW = "android.intent.action.VIEW";
 // Intent.FLAG_ACTIVITY_NEW_TASK
@@ -20,24 +24,24 @@ var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndro
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
-    onResume: function(){
-        if(_onMaximize) {
+    onResume: function() {
+        if (_onMaximize) {
             _onMaximize();
         }
     },
-    onPause: function(){
-        if(_onMinimize) {
+    onPause: function() {
+        if (_onMinimize) {
             _onMinimize();
         }
     },
     onStop: function() {},
     onStart: function() {},
     onDestroy: function() {
-        if(_onExit) {
+        if (_onExit) {
             _onExit();
         }
     },
-    onRequestPermissionsResult: function(requestCode, permission, grantResult){
+    onRequestPermissionsResult: function(requestCode, permission, grantResult) {
         var permissionResults = {};
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
@@ -51,7 +55,7 @@ spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleList
 Object.defineProperties(ApplicationWrapper, {
     // properties
     'byteReceived': {
-        get: function(){
+        get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
             var UID = AndroidConfig.activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
@@ -59,7 +63,7 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'byteSent': {
-        get: function(){
+        get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
             var UID = AndroidConfig.activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
@@ -68,53 +72,53 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'currentReleaseChannel': {
-        get: function(){
+        get: function() {
             return Application.currentReleaseChannel;
         },
         enumerable: true
     },
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'smartfaceAppName': {
-        get: function(){
+        get: function() {
             return Application.smartfaceAppName;
         },
         enumerable: true
     },
     // For publish case, project.json file will be encrypted we can not decrypt this file, we do not have a key so let SMFApplication handle this
     'version': {
-        get: function(){
+        get: function() {
             return Application.version;
         },
         enumerable: true
     },
-    'android':{
+    'android': {
         value: {},
         enumerable: true
     },
-        'Android':{
+    'Android': {
         value: {},
         enumerable: true
     },
     // methods
     'call': {
-        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle){
-            if(!TypeUtil.isString(uriScheme)){
+        value: function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {
+            if (!TypeUtil.isString(uriScheme)) {
                 throw new TypeError('uriScheme must be string');
             }
-            
+
             const NativeIntent = requireClass("android.content.Intent");
             const NativeUri = requireClass("android.net.Uri");
-            
+
             var intent = new NativeIntent(ACTION_VIEW);
 
-            if(TypeUtil.isObject(data)){
+            if (TypeUtil.isObject(data)) {
                 // we should use intent.putExtra but it causes native crash.
-                
+
                 var params = Object.keys(data).map(function(k) {
                     return k + '=' + data[k];
                 }).join('&');
                 var uriObject;
-                if(uriScheme.indexOf("|") !== -1){
+                if (uriScheme.indexOf("|") !== -1) {
                     var classActivityNameArray = uriScheme.split("|");
                     // JS string pass causes parameter mismatch
                     const NativeString = requireClass("java.lang.String");
@@ -123,14 +127,14 @@ Object.defineProperties(ApplicationWrapper, {
                     intent.setClassName(className, activityName);
                     uriObject = NativeUri.parse(params);
                 }
-                else{
+                else {
                     var uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
                 intent.setData(uriObject);
             }
-            else{
-                if(uriScheme.indexOf("|") !== -1){
+            else {
+                if (uriScheme.indexOf("|") !== -1) {
                     var classActivityNameArray = uriScheme.split("|");
                     // JS string pass causes parameter mismatch
                     const NativeString = requireClass("java.lang.String");
@@ -138,31 +142,31 @@ Object.defineProperties(ApplicationWrapper, {
                     var activityName = new NativeString(classActivityNameArray[1]);
                     intent.setClassName(className, activityName);
                 }
-                else{
+                else {
                     var uri = NativeUri.parse(uriScheme);
                     intent.setData(uri);
                 }
             }
-            
+
             var packageManager = AndroidConfig.activity.getPackageManager();
             var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
-            if(activitiesCanHandle.size() > 0){
-                if(TypeUtil.isBoolean(isShowChooser) && isShowChooser){
+            if (activitiesCanHandle.size() > 0) {
+                if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
-                    var chooserIntent = NativeIntent.createChooser(intent, title); 
-                    try{
+                    var chooserIntent = NativeIntent.createChooser(intent, title);
+                    try {
                         AndroidConfig.activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
                     }
-                    catch(e){
+                    catch (e) {
                         onFailure && onFailure();
                         return;
                     }
                 }
-                else{
-                    try{
+                else {
+                    try {
                         AndroidConfig.activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
                     }
-                    catch(e){
+                    catch (e) {
                         onFailure && onFailure();
                         return;
                     }
@@ -175,13 +179,13 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'exit': {
-        value: function(){
+        value: function() {
             AndroidConfig.activity.finish();
         },
         enumerable: true
     },
     'restart': {
-        value: function(){
+        value: function() {
             var spratIntent = AndroidConfig.activity.getIntent();
             AndroidConfig.activity.finish();
             AndroidConfig.activity.startActivity(spratIntent);
@@ -189,65 +193,74 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'checkUpdate': {
-        value: function(callback){
-            if(TypeUtil.isFunction(callback)){
-                RAU.checkUpdate(callback);
+        value: function(callback, user) {
+            if (TypeUtil.isFunction(callback)) {
+                RAU.checkUpdate(callback, user);
             }
+        },
+        enumerable: true
+    },
+    'hideKeyboard': {
+        value: function() {
+            var focusedView = AndroidConfig.activity.getCurrentFocus();
+            var windowToken = focusedView.getWindowToken();
+            var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+            inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
         },
         enumerable: true
     },
     // events
     // We can not handle application calls for now, so let SMFApplication handle this
     'onApplicationCallReceived': {
-        get: function(){
+        get: function() {
             return Application.onApplicationCallReceived;
         },
-        set: function(onApplicationCallReceived){
-            if(TypeUtil.isFunction(onApplicationCallReceived)){
+        set: function(onApplicationCallReceived) {
+            if (TypeUtil.isFunction(onApplicationCallReceived)) {
                 Application.onApplicationCallReceived = onApplicationCallReceived;
             }
         },
         enumerable: true
     },
     'onExit': {
-        get: function(){
+        get: function() {
             return _onExit;
         },
-        set: function(onExit){
-            if(TypeUtil.isFunction(onExit) || onExit === null){
+        set: function(onExit) {
+            if (TypeUtil.isFunction(onExit) || onExit === null) {
                 _onExit = onExit;
             }
         },
         enumerable: true
     },
     'onMaximize': {
-        get: function(){
+        get: function() {
             return _onMaximize;
         },
-        set: function(onMaximize){
-            if(TypeUtil.isFunction(onMaximize) || onMaximize === null){
+        set: function(onMaximize) {
+            if (TypeUtil.isFunction(onMaximize) || onMaximize === null) {
                 _onMaximize = onMaximize;
             }
         },
         enumerable: true
     },
     'onMinimize': {
-        get: function(){
+        get: function() {
             return _onMinimize;
         },
-        set: function(onMinimize){
-            if(TypeUtil.isFunction(onMinimize) || onMinimize === null){
+        set: function(onMinimize) {
+            if (TypeUtil.isFunction(onMinimize) || onMinimize === null) {
                 _onMinimize = onMinimize;
             }
         },
         enumerable: true
     },
     'onReceivedNotification': {
-        get: function(){
+        get: function() {
             return _onReceivedNotification;
         },
-        set: function(callback){
-            if(TypeUtil.isFunction(callback) || callback === null){
+        set: function(callback) {
+            if (TypeUtil.isFunction(callback) || callback === null) {
                 _onReceivedNotification = callback;
             }
         },
@@ -255,23 +268,23 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // We can not detect js exceptions, so let SMFApplication handle this
     'onUnhandledError': {
-        get: function(){
+        get: function() {
             return Application.onUnhandledError;
         },
-        set: function(onUnhandledError){
-            if(TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null){
+        set: function(onUnhandledError) {
+            if (TypeUtil.isFunction(onUnhandledError) || onUnhandledError === null) {
                 Application.onUnhandledError = onUnhandledError;
             }
         },
         enumerable: true
     },
-    
+
     'onApplicationCallReceived': {
-        get: function(){
+        get: function() {
             return Application.onApplicationCallReceived;
         },
-        set: function(_onApplicationCallReceived){
-            if(TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null){
+        set: function(_onApplicationCallReceived) {
+            if (TypeUtil.isFunction(_onApplicationCallReceived) || _onApplicationCallReceived === null) {
                 Application.onApplicationCallReceived = _onApplicationCallReceived;
             }
         },
@@ -279,69 +292,70 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+ApplicationWrapper.ios = {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: AndroidConfig.activity.getPackageName(),
         enumerable: true
     },
-    'checkPermission':{
-        value: function(permission){
-            if(!TypeUtil.isString(permission)){
+    'checkPermission': {
+        value: function(permission) {
+            if (!TypeUtil.isString(permission)) {
                 throw new Error('Permission must be Application.Permission type');
             }
-            
-            if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
+
+            if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
                 return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission) === 0;
             }
-            else{
+            else {
                 var packageManager = AndroidConfig.activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
             }
-            
+
         },
         enumerable: true
     },
     // @todo requestPermissions should accept permission array too, but due to AND- it accepts just one permission.
-    'requestPermissions':{
-        value: function(requestCode, permissions){
-            if(!TypeUtil.isNumeric(requestCode) || !(TypeUtil.isString(permissions))){
+    'requestPermissions': {
+        value: function(requestCode, permissions) {
+            if (!TypeUtil.isNumeric(requestCode) || !(TypeUtil.isString(permissions))) {
                 throw new Error('requestCode must be numeric or permission must be Application.Permission type or array of Application.Permission.');
             }
-            if(AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW){
+            if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult({
                     requestCode: requestCode,
                     result: this.checkPermission(permissions)
                 });
             }
-            else{
+            else {
                 AndroidConfig.activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
-            
+
         },
         enumerable: true
     },
-    'shouldShowRequestPermissionRationale':{
-        value: function(permission){
-            if(!TypeUtil.isString(permission)){
+    'shouldShowRequestPermissionRationale': {
+        value: function(permission) {
+            if (!TypeUtil.isString(permission)) {
                 throw new Error('Permission must be Application.Permission type');
-            } 
+            }
             return ((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
         },
         enumerable: true
     },
     'onRequestPermissionsResult': {
-        get: function(){
+        get: function() {
             return _onRequestPermissionsResult;
         },
-        set: function(callback){
-            if(TypeUtil.isFunction(callback) || callback === null){
+        set: function(callback) {
+            if (TypeUtil.isFunction(callback) || callback === null) {
                 _onRequestPermissionsResult = callback;
             }
         }
-        
+
     },
     'Permissions': {
         value: {},

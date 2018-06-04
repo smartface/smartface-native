@@ -81,6 +81,94 @@ MapView.prototype.compassEnabled;
 MapView.prototype.userLocationEnabled;
 
 /**
+ * Enables/Disables clusterEnabled on map. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {Boolean} [clusterEnabled = false]
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterEnabled;
+
+/**
+ * This property sets cluster fillColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterFillColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterFillColor;
+
+/**
+ * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterBorderColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderColor;
+
+/**
+ * This property sets cluster textColor. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Color} clusterTextColor
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterTextColor;
+
+/**
+ * This property sets cluster borderWidth. Only works on ios.
+ *
+ * @property {Number} [clusterBorderWidth = 2]
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterBorderWidth;
+
+/**
+ * This property sets cluster font. Cluster works on Android & iOS 11.0+.
+ *
+ * @property {UI.Font} clusterFont
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterFont;
+
+/**
+ * This property sets cluster size. Only works on ios. If cluster size is 0, wraps the content according to font properties. In Android, wraps the content according to font properties.
+ *
+ * @property {Number} [clusterSize = 0]
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterSize;
+
+/**
+ * This property sets cluster padding. Work when cluster size is 0. Only works on ios.
+ *
+ * @property {Number} [clusterPadding = 15]
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.clusterPadding;
+
+/**
+ * Triggered when pressed on the cluster. Cluster works on Android & iOS 11.0+.
+ *
+ * @event onClusterPress
+ * @param {Array<UI.MapView.Pin>} pins
+ * @android
+ * @ios
+ * @since 3.0.1
+ */
+MapView.prototype.onClusterPress;
+
+/**
  * This property sets center location of the map to the given latitude & longitude.
  *
  *     @example
@@ -123,6 +211,14 @@ MapView.prototype.maxZoomLevel;
  * @since 2.0.10
  */
 MapView.prototype.android.lazyLoading;
+
+/**
+ * This property sets visibility of my location button.
+ * @property {Boolean} [locationButtonVisible = false]
+ * @android
+ * @since 3.0.1
+ */
+MapView.prototype.android.locationButtonVisible;
 
 /**
  * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
@@ -414,7 +510,7 @@ Pin.prototype.id;
 Pin.prototype.image;
 
 /**
- * Gets/Sets visibility of a pin.
+ * Gets/Sets visibility of a pin. In Android if cluster is enable, visible property cannot be assigned. 
  *
  * @property {Boolean} visible
  * @android

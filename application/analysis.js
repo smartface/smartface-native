@@ -78,6 +78,31 @@ Application.smartfaceAppName;
 Application.version;
 
 /**
+ * Checks URL’s scheme can be handled or not by some app that installed on the device.
+ * 
+ * To pass this method, URL schemes must be declared into "Info.plist" file as "LSApplicationQueriesSchemes".
+ * 
+ *     @example for Google Maps (Info.plist entry)
+ * 
+ *      <key>LSApplicationQueriesSchemes</key>
+ *      <array>
+ *          <string>comgooglemaps</string>
+ *      </array>
+ *     
+ *      After entry add on, urlScheme can be check;
+ *      const Application = require("sf-core/application");
+ *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
+ * 
+ * @method call
+ * @param {String} url
+ * @return {Boolean}
+ * @ios
+ * @static
+ * @since 3.0.1
+ */
+Application.ios.canOpenUrl = function(url) {};
+
+/**
  * Launches another application and passes data. For Android, you can open application chooser with 
  * isShowChooser parameter and set chooser dialog title with chooserTitle.
  * If an app can open a given URL resource onSuccess callback will be triggered otherwise onFailure will be triggered.
@@ -240,13 +265,14 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  * @param {Function} callback.result.download.downloadFinish.cancel Clears all staged files.
  * @param {Object} callback.result.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument will be null.
  * @param {Function} callback.result.download.downloadFinish.meta  Meta in rau.json as object parsed.
+ * @param {String} [user] User information
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Application.checkUpdate = function(callback){};
+Application.checkUpdate = function(callback, user){};
 
 /**
  * Triggered before exiting application.
@@ -283,6 +309,17 @@ Application.onMaximize = function(){};
  * @since 0.1
  */
 Application.onMinimize = function(){};
+
+/**
+ * This function hides keyboard.
+ *
+ * @method hideKeyboard
+ * @android
+ * @ios
+ * @static
+ * @since 3.0.1
+ */
+Application.hideKeyboard = function(){};
 
 /**
  * Triggered after a push (remote) notification recieved. This event will be 

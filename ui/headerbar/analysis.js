@@ -176,11 +176,12 @@ HeaderBar.prototype.android.subtitle = '';
  * This property will work only for iOS.
  *
  *     @example
+ *      const HeaderBarItem = require('sf-core/ui/headerbaritem');
  *     const Page = require('sf-core/ui/page');
+ *
  *     var myPage = new Page();
- *	   const HeaderBarItem = require('sf-core/ui/headerbaritem');
  *     var backBarButtonItem = new HeaderBarItem({
- *          title : "Back",
+ *          title : "Back"
  *     });
  *     myPage.headerBar.ios.backBarButtonItem = backBarButtonItem;
  *

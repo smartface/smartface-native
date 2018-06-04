@@ -131,7 +131,6 @@ function Page(params) {
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
-
             const Contacts = require("sf-core/device/contacts");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
@@ -144,7 +143,7 @@ function Page(params) {
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
             }
-            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST) {
+            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
             }
             else if (requestCode === Sound.PICK_SOUND) {
@@ -844,16 +843,17 @@ function Page(params) {
             return true;
         }
     }));
-    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-        onKey: function(view, keyCode, keyEvent) {
-            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                typeof self.android.onBackButtonPressed === "function" &&
-                    self.android.onBackButtonPressed();
-            }
-            return true;
-        }
-    }));
+    //Commetted because of volume control keys cannot behave as super behavior.
+    // self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+    //     onKey: function(view, keyCode, keyEvent) {
+    //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+    //         if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+    //             typeof self.android.onBackButtonPressed === "function" &&
+    //                 self.android.onBackButtonPressed();
+    //         }
+    //         return true;
+    //     }
+    // }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
