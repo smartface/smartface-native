@@ -5,7 +5,6 @@ const extend = require('js-base/core/extend');
  * @since 0.1
  * @extends UI.View
  * ListView is a View that displays given items as a one-column vertical list.
- * ID is required for all children of {@link UI.ListViewItem items}
  *
  *     @example
  *     const Color = require('sf-core/ui/color');
@@ -13,58 +12,55 @@ const extend = require('js-base/core/extend');
  *     const ListViewItem = require('sf-core/ui/listviewitem');
  *     const Label = require('sf-core/ui/label');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
- * 
+ *     const TextAlignment     = require("sf-core/ui/textalignment");
+ *     
  *     var myDataSet = [
  *         {
- *             title: 'Smartface Title 1',
+ *             title: 'Title 0',
  *             backgroundColor: Color.RED
  *         },
  *         {
- *             title: 'Smartface Title 2',
+ *             title: 'Title 1',
  *             backgroundColor: Color.CYAN
  *         },
  *         {
- *             title: 'Smartface Title 3',
+ *             title: 'Title 2',
  *             backgroundColor: Color.YELLOW
  *         },
  *         {
- *             title: 'Smartface Title 4',
+ *             title: 'Title 3',
  *             backgroundColor: Color.GRAY
  *         }
  *     ];
- * 
  *     var myListView = new ListView({
  *         flexGrow:1,
  *         rowHeight: 60,
  *         backgroundColor: Color.LIGHTGRAY,
  *         itemCount: myDataSet.length,
  *     });
- * 
  *     myListView.onRowCreate = function(){
  *         var myListViewItem = new ListViewItem();
  *         var myLabelTitle = new Label({
- *             id: 102,
  *             height: 40,
  *             width: 100,
- *             alignSelf: FlexLayout.AlignSelf.CENTER
+ *             alignSelf: FlexLayout.AlignSelf.CENTER,
+ *             textAlignment : TextAlignment.MIDCENTER
  *         });
  *         myListViewItem.addChild(myLabelTitle);
+ *         myListViewItem.myLabelTitle = myLabelTitle;
+ *         
  *         return myListViewItem;
  *     };
- * 
  *     myListView.onRowBind = function(listViewItem,index){
- *         var myLabelTitle = listViewItem.findChildById(102);
- *         myLabelTitle.text = myDataSet[index].title;
- *         myLabelTitle.backgroundColor = myDataSet[index].backgroundColor;
+ *         listViewItem.myLabelTitle.text = myDataSet[index].title;
+ *         listViewItem.myLabelTitle.backgroundColor = myDataSet[index].backgroundColor;
  *     };
- * 
  *     myListView.onRowSelected = function(listViewItem,index){
  *         console.log("selected index = " + index)
  *     };
- * 
  *     myListView.onPullRefresh = function(){
  *         myDataSet.push({
- *             title: 'Smartface Title '+myDataSet.length,
+ *             title: 'Title '+ myDataSet.length,
  *             backgroundColor: Color.RED,
  *         })
  *         myListView.itemCount = myDataSet.length;

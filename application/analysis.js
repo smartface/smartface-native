@@ -311,6 +311,17 @@ Application.onMaximize = function(){};
 Application.onMinimize = function(){};
 
 /**
+ * This function hides keyboard.
+ *
+ * @method hideKeyboard
+ * @android
+ * @ios
+ * @static
+ * @since 3.0.1
+ */
+Application.hideKeyboard = function(){};
+
+/**
  * Triggered after a push (remote) notification recieved. This event will be 
  * fired only if application is active and running. 
  * 

@@ -469,6 +469,7 @@ const MapView = extend(View)(
                                 else {
                                     var createdItem = createItem(pin);
                                     _nativeClusterManager.addItem(createdItem);
+                                    _nativeClusterManager.cluster();
                                 }
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
@@ -511,6 +512,7 @@ const MapView = extend(View)(
                                     _itemArray.forEach(function(item) { //ToDo: Need optimization
                                         if (item == key) {
                                             _nativeClusterManager.removeItem(item);
+                                            _nativeClusterManager.cluster();
                                         }
                                     })
                                     delete _pinArray[key];

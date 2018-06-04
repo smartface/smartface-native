@@ -131,7 +131,6 @@ function Page(params) {
             }
         },
         onActivityResult: function(nativeRequestCode, nativeResultCode, data) {
-
             const Contacts = require("sf-core/device/contacts");
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
@@ -144,7 +143,7 @@ function Page(params) {
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
             }
-            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST) {
+            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
             }
             else if (requestCode === Sound.PICK_SOUND) {

@@ -3,10 +3,11 @@ const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
 const NativeContentValues = requireClass("android.content.ContentValues");
-const NativeBuild = requireClass("android.os.Build");
+const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage');
 
 const File = require("../../io/file");
 const Image = require("../../ui/image");
+const Page = require("../../ui/page");
 
 const Type = {
     IMAGE: 0,
@@ -24,9 +25,13 @@ const NativeAction = [
 ];
 
 function Multimedia() {}
+Multimedia.CropImage = {};
 
 Multimedia.CAMERA_REQUEST = 1002;
 Multimedia.PICK_FROM_GALLERY = 1003;
+Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
+Multimedia.CropImage.RESULT_OK = -1;
+Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE = 204
 
 Object.defineProperty(Multimedia, 'Type', {
     value: Type,
@@ -62,11 +67,19 @@ Multimedia.startCamera = function(params) {
     }
     _captureParams = params;
     var page = _captureParams.page;
-    
-    if(_action === ActionType.IMAGE_CAPTURE) {
-        var takePictureIntent = new NativeIntent(NativeAction[_action]);
-        page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
-    } else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+
+    if (_action === ActionType.IMAGE_CAPTURE) {
+        if (params.allowsEditing) {
+            var cropImageActivity = NativeCropImage.activity();
+            var activity = AndroidConfig.activity
+            cropImageActivity.start(activity, page.nativeObject);
+        }
+        else {
+            var takePictureIntent = new NativeIntent(NativeAction[_action]);
+            page.nativeObject.startActivityForResult(takePictureIntent, Multimedia.CAMERA_REQUEST);
+        }
+    }
+    else if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
         startCameraWithExtraField();
     }
     else {
@@ -164,7 +177,35 @@ Multimedia.onActivityResult = function(requestCode, resultCode, data) {
     else if (requestCode === Multimedia.PICK_FROM_GALLERY) {
         pickFromGallery(resultCode, data);
     }
+    else if (requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        cropImage(resultCode, data);
+    }
 };
+
+function cropImage(resultCode, data) {
+    var result = NativeCropImage.getActivityResult(data);
+    if (resultCode === Multimedia.CropImage.RESULT_OK) {
+        var resultUri = result.getUri();
+        var croppedImage = Image.createFromFile(resultUri.getPath());
+        if (_captureParams.allowsEditing) {
+            _captureParams.onSuccess && _captureParams.onSuccess({ image: croppedImage });
+        }
+        else if (_pickParams.allowsEditing) {
+            _pickParams.onSuccess && _pickParams.onSuccess({ image: croppedImage });
+        }
+    }
+    else if (resultCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+        throw Error('Unexpected error occured while cropping image');
+    }
+}
+
+function cropPickedFromGallery(uri) {
+    if (uri) {
+        var cropImageActivity = NativeCropImage.activity(uri);
+        var activity = AndroidConfig.activity
+        cropImageActivity.start(activity, _pickParams.page.nativeObject);
+    }
+}
 
 function pickFromGallery(resultCode, data) {
     var success = true;
@@ -172,9 +213,9 @@ function pickFromGallery(resultCode, data) {
         try {
             var uri = data.getData();
             var realPath;
-            
+
             realPath = getRealPathFromURI(uri);
-            
+
             /*         
             if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT && (""+uri).indexOf(newGoogleAppUri) == -1) {
                 realPath = getRealPathFromID(uri, _pickParams.type);
@@ -193,11 +234,15 @@ function pickFromGallery(resultCode, data) {
         if (success && _pickParams.onSuccess) {
             if (_pickParams.type === Multimedia.Type.IMAGE) {
 
-                var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
-                var bitmap = NativeBitmapFactory.decodeStream(inputStream);
-                var image = new Image({ bitmap: bitmap });
-                _pickParams.onSuccess({ image: image });
-                
+                if (!_pickParams.allowsEditing) {
+                    var inputStream = AndroidConfig.activity.getContentResolver().openInputStream(uri);
+                    var bitmap = NativeBitmapFactory.decodeStream(inputStream);
+                    var image = new Image({ bitmap: bitmap });
+                    _pickParams.onSuccess({ image: image });
+                }
+                else {
+                    cropPickedFromGallery(uri);
+                }
             }
             else {
                 var file = new File({ path: realPath });
@@ -266,7 +311,7 @@ function getRealPathFromURI(uri) {
 function getCameraData(resultCode, data) {
     if (resultCode === -1) { // -1 = Activity.RESULT_OK
         try {
-            if(_action !== ActionType.IMAGE_CAPTURE) {
+            if (_action !== ActionType.IMAGE_CAPTURE) {
                 var uri;
                 if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                     uri = _fileURI;
@@ -281,7 +326,7 @@ function getCameraData(resultCode, data) {
             if (_captureParams.onFailure)
                 _captureParams.onFailure({ message: err });
         }
-        
+
 
         if (!failure && _captureParams.onSuccess) {
             if (_action === ActionType.IMAGE_CAPTURE) {
@@ -326,10 +371,10 @@ function getAllMediaFromUri(params) {
 
 Multimedia.ios = {};
 
-Multimedia.ios.requestGalleryAuthorization = function(){};
-Multimedia.ios.requestCameraAuthorization = function(){};
-Multimedia.ios.getGalleryAuthorizationStatus = function(){};
-Multimedia.ios.getCameraAuthorizationStatus = function(){};
+Multimedia.ios.requestGalleryAuthorization = function() {};
+Multimedia.ios.requestCameraAuthorization = function() {};
+Multimedia.ios.getGalleryAuthorizationStatus = function() {};
+Multimedia.ios.getCameraAuthorizationStatus = function() {};
 Multimedia.ios.cameraAuthorizationStatus = {};
 Multimedia.ios.galleryAuthorizationStatus = {};
 
