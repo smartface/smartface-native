@@ -135,7 +135,6 @@ const ListView = extend(View)(
             }else{
                 self.onRowBind(_listItemArray[e.uuid],e.index);
             }
-             _listItemArray[e.uuid].nativeObject.layer.removeAllAnimations();
              _listItemArray[e.uuid].applyLayout();
          }
 
