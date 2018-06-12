@@ -168,10 +168,11 @@ SearchView.prototype.ios.cancelButtonColor;
  * Gets/sets the color of the hint text. This property works only for Android.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
+ * @ios
  * @android
  * @since 0.1
  */
-SearchView.prototype.android.hintTextColor = UI.Color.LIGHTGRAY
+SearchView.prototype.hintTextColor = UI.Color.LIGHTGRAY
 
 /**
  * Gets/sets the font of the SearchView. This property works only for Android.

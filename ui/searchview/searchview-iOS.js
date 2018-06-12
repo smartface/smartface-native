@@ -25,7 +25,7 @@ const SearchView = extend(View)(
         var self = this;
         
         if(!self.nativeObject) {
-            self.nativeObject = new __SF_UISearchBar();
+            self.nativeObject = new __SF_SMFUISearchBar();
         }
         
         _super(this);
@@ -71,6 +71,35 @@ const SearchView = extend(View)(
             }
         }
         
+        self.showLoading = function(){
+            self.nativeObject.activityIndicator.startAnimating();
+        };
+        
+        self.hideLoading = function(){
+            self.nativeObject.activityIndicator.stopAnimating();
+        };
+        
+        Object.defineProperty(this, 'loadingColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.activityIndicator.color});
+            },
+            set: function(color) {
+                self.nativeObject.activityIndicator.color = color.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(this, 'textFieldBackgroundColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.valueForKey("searchField").valueForKey("backgroundColor")});
+            },
+            set: function(color) {
+                self.nativeObject.valueForKey("searchField").setValueForKey(color.nativeObject,"backgroundColor");
+            },
+            enumerable: true
+        });
+        this.textFieldBackgroundColor = Color.create(222,222,222);
+        
         Object.defineProperty(this, 'text', {
             get: function() {
                 return self.nativeObject.text;
@@ -89,6 +118,19 @@ const SearchView = extend(View)(
             set: function(hint) {
                 _hint = hint;
                 self.nativeObject.placeholder = _hint;
+                self.hintTextColor = self.hintTextColor;
+            },
+            enumerable: true
+        });
+        
+        var _hintTextColor = Color.LIGHTGRAY;
+        Object.defineProperty(this, 'hintTextColor', {
+            get: function() {
+                return _hintTextColor;
+            },
+            set: function(color) {
+                _hintTextColor = color;
+                self.nativeObject.placeholderColor = color.nativeObject;
             },
             enumerable: true
         });
@@ -113,9 +155,37 @@ const SearchView = extend(View)(
             set: function(backgroundColor) {
                 _backgroundColor = backgroundColor.nativeObject;
                 self.nativeObject.barTintColor = _backgroundColor;
+                if (self.borderWidth === 0) {
+                    self.borderColor = backgroundColor;
+                }
             },
             enumerable: true
         });
+        this.backgroundColor = Color.WHITE;
+        
+        var _borderWidth = 0;
+        Object.defineProperty(self, 'borderWidth', {
+            get: function() {
+                return _borderWidth;
+            },
+            set: function(value) {
+                _borderWidth = value;
+                // Native object's layer must be updated!
+                // Yoga's borderWidth property only effects positioning of its child view.
+                if (_borderWidth === 0) {
+                    self.nativeObject.layer.borderWidth = 1;
+                    self.nativeObject.yoga.borderWidth = 1;
+                    self.borderColor = self.backgroundColor;
+                }else{
+                    self.nativeObject.layer.borderWidth = value;
+                    self.nativeObject.yoga.borderWidth = value;
+                }
+            },
+            enumerable: true,
+            configurable:true
+        });
+        self.borderWidth = 1;
+        self.borderColor = Color.create(222,222,222);
         
         var _backgroundImage;
         Object.defineProperty(this, 'backgroundImage', {
@@ -143,6 +213,7 @@ const SearchView = extend(View)(
         
         var _isAddedHeaderBar = false;
         this.addToHeaderBar = function(page){
+            self.borderWidth = 0;
             _isAddedHeaderBar = true;
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         };
@@ -295,9 +366,23 @@ const SearchView = extend(View)(
                     _onSearchEnd();
             }
         };
+        
+        var _constant = 0;
         self.searchBarDelegate.textDidChange = function(searchText){
             if (typeof _onTextChanged === "function"){
-                    _onTextChanged(searchText);
+                if (self.nativeObject.activityIndicatorTrailingConstraint) {
+                    var constant;
+                    (searchText === "") ? (constant = 0) : (constant = -20)
+                    if (constant != _constant) {
+                        _constant = constant
+                        var argConstant= new Invocation.Argument({
+                            type:"CGFloat",
+                            value: _constant
+                        });
+                        Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
+                    }
+                }
+                _onTextChanged(searchText);
             }
         };
         self.searchBarDelegate.searchButtonClicked = function(){
