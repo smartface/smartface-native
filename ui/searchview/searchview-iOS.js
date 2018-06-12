@@ -105,6 +105,18 @@ const SearchView = extend(View)(
                 return self.nativeObject.text;
             },
             set: function(text) {
+                if (self.nativeObject.activityIndicatorTrailingConstraint) {
+                    var constant;
+                    (text === "") ? (constant = 0) : (constant = -20)
+                    if (constant != _constant) {
+                        _constant = constant
+                        var argConstant= new Invocation.Argument({
+                            type:"CGFloat",
+                            value: _constant
+                        });
+                        Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
+                    }
+                }
                 self.nativeObject.text = text;
             },
             enumerable: true
@@ -369,19 +381,19 @@ const SearchView = extend(View)(
         
         var _constant = 0;
         self.searchBarDelegate.textDidChange = function(searchText){
-            if (typeof _onTextChanged === "function"){
-                if (self.nativeObject.activityIndicatorTrailingConstraint) {
-                    var constant;
-                    (searchText === "") ? (constant = 0) : (constant = -20)
-                    if (constant != _constant) {
-                        _constant = constant
-                        var argConstant= new Invocation.Argument({
-                            type:"CGFloat",
-                            value: _constant
-                        });
-                        Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
-                    }
+            if (self.nativeObject.activityIndicatorTrailingConstraint) {
+                var constant;
+                (searchText === "") ? (constant = 0) : (constant = -20)
+                if (constant != _constant) {
+                    _constant = constant
+                    var argConstant= new Invocation.Argument({
+                        type:"CGFloat",
+                        value: _constant
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject.activityIndicatorTrailingConstraint,"setConstant:",[argConstant]);
                 }
+            }
+            if (typeof _onTextChanged === "function"){
                 _onTextChanged(searchText);
             }
         };
