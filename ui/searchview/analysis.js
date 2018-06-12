@@ -120,6 +120,26 @@ SearchView.prototype.hideKeyboard = function(){};
 SearchView.prototype.requestFocus = function(){};
 
 /**
+ * This function show loading indicator.
+ *
+ * @method showLoading
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+SearchView.prototype.showLoading = function(){};
+
+/**
+ * This function hide loading indicator.
+ *
+ * @method hideLoading
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+SearchView.prototype.hideLoading = function(){};
+
+/**
  * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
  *
  * @method removeFocus
@@ -164,8 +184,9 @@ SearchView.prototype.ios.cursorColor;
  * @since 1.1.12
  */
 SearchView.prototype.ios.cancelButtonColor;
+
 /**
- * Gets/sets the color of the hint text. This property works only for Android.
+ * Gets/sets the color of the hint text.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
  * @ios
@@ -173,6 +194,26 @@ SearchView.prototype.ios.cancelButtonColor;
  * @since 0.1
  */
 SearchView.prototype.hintTextColor = UI.Color.LIGHTGRAY
+
+/**
+ * Gets/sets the color of the loading indicator.
+ *
+ * @property {UI.Color} loadingColor
+ * @ios
+ * @android
+ * @since 3.0.2
+ */
+SearchView.prototype.loadingColor = UI.Color.LIGHTGRAY
+
+/**
+ * Gets/sets the color of the textFieldBackgroundColor.
+ *
+ * @property {UI.Color} textFieldBackgroundColor
+ * @ios
+ * @android
+ * @since 3.0.2
+ */
+SearchView.prototype.textFieldBackgroundColor = UI.Color.LIGHTGRAY
 
 /**
  * Gets/sets the font of the SearchView. This property works only for Android.
