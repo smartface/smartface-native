@@ -130,22 +130,22 @@ const ListView = extend(View)(
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e){
             if (e.cell.contentView.subviews.length > 0) {
-                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row,e.cell.reuseIdentifier);
             }else{
-                _listItemArray[e.cell.uuid] = self.onRowCreate();
+                _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
-                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row,e.cell.reuseIdentifier);
             }
             //  _listItemArray[e.uuid].applyLayout();
          }
         
-        var _cellIdentifier = "cell";
+        // var _cellIdentifier = "cell";
         self.nativeObject.cellIdentifierWithIndexPath = function(e){
             // e.indexPath.row
             if (typeof self.onRowType === 'function') {
-                return _cellIdentifier + self.onRowType();
+                return self.onRowType(e.indexPath.row);
             }else{
-                return _cellIdentifier;
+                return "cell";
             }
         };
         
