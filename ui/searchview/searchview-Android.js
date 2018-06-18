@@ -74,7 +74,8 @@ const SearchView = extend(View)(
         var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
         var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
         var mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
-        mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
+        mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+        // mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
 
         _super(this);
 
@@ -85,6 +86,7 @@ const SearchView = extend(View)(
         var _onSearchBeginCallback;
         var _onSearchEndCallback;
         var _onSearchButtonClickedCallback;
+        
         Object.defineProperties(this, {
             'text': {
                 get: function() {
@@ -106,6 +108,19 @@ const SearchView = extend(View)(
                         _hint = "" + hint;
                         updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
+                },
+                enumerable: true
+            },
+            'hintTextColor': { // Added this property after sf-core 3.0.2 version.
+                get: function() {
+                    return _hintTextColor;
+                },
+                set: function(hintTextColor) {
+                    if (!(hintTextColor instanceof Color)) {
+                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                    }
+                    _hintTextColor = hintTextColor;
+                    mSearchSrcTextView.setHintTextColor(hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -132,6 +147,19 @@ const SearchView = extend(View)(
                         _iconImage = iconImage;
                         updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
                     }
+                },
+                enumerable: true
+            },
+            'textFieldBackgroundColor': {
+                get: function() {
+                    return _textFieldBackgroundColor;
+                },
+                set: function(value) {
+                    if (!(value instanceof Color)) {
+                        throw new TypeError(Exception.TypeError.DEFAULT + "Color");
+                    }
+                    _textFieldBackgroundColor = value;
+                    this.setTextFieldBackgroundDrawable();
                 },
                 enumerable: true
             },
@@ -241,6 +269,8 @@ const SearchView = extend(View)(
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
         var _closeImage = null;
+        var _textFieldBackgroundColor = Color.create(222,222,222);
+        var _textFieldBorderRadius = 15;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
@@ -312,23 +342,43 @@ const SearchView = extend(View)(
                 },
                 set: function(closeImage) {
                     // If setting null to icon, default search icon will be displayed.
-                    if (closeImage == null || closeImage instanceof require("../image")) {
+                    if (closeImage == null || closeImage instanceof require("sf-core/ui/image")) {
                         _closeImage = closeImage;
                         mCloseButton.setImageDrawable(closeImage.nativeObject);
                     }
                 },
                 enumerable: true
             },
+            'textFieldBorderRadius': {
+                get: function() {
+                    return _textFieldBorderRadius;
+                },
+                set: function(value) {
+                    _textFieldBorderRadius = value;
+                    this.setTextFieldBackgroundDrawable();
+                }
+            }
         });
+        
+        const GradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+        var textFieldBackgroundDrawable = new GradientDrawable();
+        this.setTextFieldBackgroundDrawable = function() {
+            textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
+            // gd.setStroke(2, Color.RED.nativeObject); 
+            textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
+            mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
+        };
 
         // Handling ios specific properties
         this.ios = {};
+        this.ios.showLoading = function(){};
+        this.ios.hideLoading = function(){};
 
         if (!this.isNotSetDefaults) {
             const NativePorterDuff = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
-            mSearchButton.getDrawable().setColorFilter((Color.WHITE).nativeObject, NativePorterDuff.Mode.SRC_IN);
-            mCloseButton.getDrawable().setColorFilter((Color.WHITE).nativeObject, NativePorterDuff.Mode.SRC_IN);
+            mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);
+            
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus) {
                     if (hasFocus) {
@@ -342,6 +392,7 @@ const SearchView = extend(View)(
                     }
                 }.bind(this)
             }));
+            
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query) {
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
@@ -352,6 +403,9 @@ const SearchView = extend(View)(
                     return false;
                 }
             }));
+            this.borderWidth = 1;
+            this.borderColor = _textFieldBackgroundColor;
+            this.textFieldBackgroundColor  = _textFieldBackgroundColor;
         }
 
         // Assign parameters given in constructor

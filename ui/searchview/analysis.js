@@ -77,6 +77,15 @@ SearchView.prototype.iconImage;
 SearchView.prototype.addToHeaderBar = function(page){};
 
 /**
+ * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
+ *
+ * @property {Number} [textFieldBorderRadius = 15]
+ * @android
+ * @since 3.0.2
+ */
+SearchView.prototype.textFieldBorderRadius; 
+
+/**
  * Removes SearchView from UI.Page's headerBar view.
  *
  * @method removeFromHeaderBar
