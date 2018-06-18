@@ -925,7 +925,8 @@ function View(params) {
             self.nativeObject.layer.borderWidth = value;
             self.nativeObject.yoga.borderWidth = value;
         },
-        enumerable: true
+        enumerable: true,
+        configurable:true
     });
 
     /*
