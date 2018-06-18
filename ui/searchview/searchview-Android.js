@@ -271,9 +271,10 @@ const SearchView = extend(View)(
         var _closeImage = null;
         var _textFieldBackgroundColor = Color.create(222,222,222);
         var _textFieldBorderRadius = 15;
+        var self = this;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
-
+        
         Object.defineProperties(this.android, {
             // 'underlineColor': {
             //     get: function() {
@@ -355,7 +356,7 @@ const SearchView = extend(View)(
                 },
                 set: function(value) {
                     _textFieldBorderRadius = value;
-                    this.setTextFieldBackgroundDrawable();
+                    self.setTextFieldBackgroundDrawable();
                 }
             }
         });
