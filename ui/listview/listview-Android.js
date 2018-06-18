@@ -96,8 +96,8 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if(_onRowTypeCallback)
-                    return _onRowTypeCallback(position);
+                if(_onRowType)
+                    return _onRowType(position);
                 return 1;
             }
         }, null);
