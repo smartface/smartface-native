@@ -110,7 +110,7 @@ const ListView = extend(View)(
         var _onPullRefresh;
         var _onRowHeight;
         var _onRowBind;
-        var _onRowTypeCallback;
+        var _onRowType;
         var _itemCount = 0;
         Object.defineProperties(this, {
             // properties
@@ -118,15 +118,6 @@ const ListView = extend(View)(
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
                     return _listViewItems[viewHolder.itemView.hashCode()];
-                },
-                enumerable: true
-            },
-            'onRowType': {
-                get: function() {
-                    return _onRowTypeCallback;
-                },
-                set: function(onRowTypeCallback) {
-                    _onRowTypeCallback = onRowTypeCallback.bind(this);
                 },
                 enumerable: true
             },
@@ -244,6 +235,15 @@ const ListView = extend(View)(
                 },
                 set: function(onRowBind) {
                     _onRowBind = onRowBind.bind(this);
+                },
+                enumerable: true
+            },
+            'onRowType': {
+                get: function() {
+                    return _onRowType;
+                },
+                set: function(onRowType) {
+                    _onRowType = onRowType.bind(this);
                 },
                 enumerable: true
             },
