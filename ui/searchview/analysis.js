@@ -123,7 +123,6 @@ SearchView.prototype.requestFocus = function(){};
  * This function show loading indicator.
  *
  * @method showLoading
- * @android
  * @ios
  * @since 3.0.2
  */
@@ -133,7 +132,6 @@ SearchView.prototype.showLoading = function(){};
  * This function hide loading indicator.
  *
  * @method hideLoading
- * @android
  * @ios
  * @since 3.0.2
  */
@@ -200,7 +198,6 @@ SearchView.prototype.hintTextColor = UI.Color.LIGHTGRAY
  *
  * @property {UI.Color} loadingColor
  * @ios
- * @android
  * @since 3.0.2
  */
 SearchView.prototype.loadingColor = UI.Color.LIGHTGRAY

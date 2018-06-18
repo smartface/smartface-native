@@ -71,24 +71,6 @@ const SearchView = extend(View)(
             }
         }
         
-        self.showLoading = function(){
-            self.nativeObject.activityIndicator.startAnimating();
-        };
-        
-        self.hideLoading = function(){
-            self.nativeObject.activityIndicator.stopAnimating();
-        };
-        
-        Object.defineProperty(this, 'loadingColor', {
-            get: function() {
-                return new Color({color : self.nativeObject.activityIndicator.color});
-            },
-            set: function(color) {
-                self.nativeObject.activityIndicator.color = color.nativeObject;
-            },
-            enumerable: true
-        });
-        
         Object.defineProperty(this, 'textFieldBackgroundColor', {
             get: function() {
                 return new Color({color : self.nativeObject.valueForKey("searchField").valueForKey("backgroundColor")});
@@ -253,6 +235,25 @@ const SearchView = extend(View)(
         };
         
         this.ios = {};
+        
+        self.ios.showLoading = function(){
+            self.nativeObject.activityIndicator.startAnimating();
+        };
+        
+        self.ios.hideLoading = function(){
+            self.nativeObject.activityIndicator.stopAnimating();
+        };
+        
+        Object.defineProperty(this.ios, 'loadingColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.activityIndicator.color});
+            },
+            set: function(color) {
+                self.nativeObject.activityIndicator.color = color.nativeObject;
+            },
+            enumerable: true
+        });
+        
         var _searchViewStyle = UISearchBarStyle.default;
         Object.defineProperty(this.ios, 'searchViewStyle', {
             get: function() {
