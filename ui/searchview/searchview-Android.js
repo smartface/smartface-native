@@ -406,6 +406,7 @@ const SearchView = extend(View)(
             this.borderWidth = 1;
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor  = _textFieldBackgroundColor;
+            this.backgroundColor = Color.WHITE;
         }
 
         // Assign parameters given in constructor
