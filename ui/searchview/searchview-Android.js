@@ -364,7 +364,6 @@ const SearchView = extend(View)(
         var textFieldBackgroundDrawable = new GradientDrawable();
         this.setTextFieldBackgroundDrawable = function() {
             textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
-            // gd.setStroke(2, Color.RED.nativeObject); 
             textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
             mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
         };
