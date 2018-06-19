@@ -130,11 +130,11 @@ const ListView = extend(View)(
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e){
             if (e.cell.contentView.subviews.length > 0) {
-                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row,e.cell.reuseIdentifier);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }else{
                 _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
-                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row,e.cell.reuseIdentifier);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }
             //  _listItemArray[e.uuid].applyLayout();
          }
