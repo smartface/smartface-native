@@ -86,6 +86,8 @@ const SearchView = extend(View)(
         var _onSearchBeginCallback;
         var _onSearchEndCallback;
         var _onSearchButtonClickedCallback;
+        var _font = null;
+        var _textalignment = TextAlignment.MIDLEFT;
         
         Object.defineProperties(this, {
             'text': {
@@ -261,13 +263,33 @@ const SearchView = extend(View)(
                     _onSearchButtonClickedCallback = onSearchButtonClicked.bind(this);
                 },
                 enumerable: true
+            },
+            'font': {
+                get: function() {
+                    return _font;
+                },
+                set: function(font) {
+                    if (font instanceof Font) {
+                        _font = font;
+                        mSearchSrcTextView.setTypeface(font.nativeObject);
+                        mSearchSrcTextView.setTextSize(font.size);
+                    }
+                },
+                enumerable: true
+            },'textalignment': {
+                get: function() {
+                    return _textalignment;
+                },
+                set: function(textalignment) {
+                    _textalignment = textalignment;
+                    mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
+                },
+                enumerable: true
             }
         });
 
         var _hintTextColor = Color.LIGHTGRAY;
         var _keyboardType = KeyboardType.DEFAULT;
-        var _font = null;
-        var _textalignment = TextAlignment.MIDLEFT;
         var _closeImage = null;
         var _textFieldBackgroundColor = Color.create(222,222,222);
         var _textFieldBorderRadius = 15;
@@ -406,6 +428,7 @@ const SearchView = extend(View)(
             this.borderWidth = 1;
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor  = _textFieldBackgroundColor;
+            this.backgroundColor = Color.WHITE;
         }
 
         // Assign parameters given in constructor
