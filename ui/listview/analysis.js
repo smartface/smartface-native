@@ -105,16 +105,29 @@ const extend = require('js-base/core/extend');
 function ListView(params) {}
 
 /**
+ * This event is called before onRowCreate callback. Returns item type you should use based on position.
+ *
+ * @event onRowType
+ * @param {Number} index
+ * @android
+ * @ios
+ * @return {Number}
+ * @since 3.0.2
+ */
+ListView.prototype.onRowType = function onRowType(index){};
+
+/**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can customize your UI(not data-binding) inside this callback.
  *
  * @event onRowCreate
+ * @param {Number} rowType
  * @android
  * @ios
  * @return {UI.ListViewItem}
  * @since 0.1
  */
-ListView.prototype.onRowCreate = function onRowCreate(){};
+ListView.prototype.onRowCreate = function onRowCreate(type){};
 
 
 /**

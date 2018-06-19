@@ -44,7 +44,7 @@ const ListView = extend(View)(
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
-                    holderViewLayout = _onRowCreate();
+                    holderViewLayout = _onRowCreate(viewType);
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -96,6 +96,8 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
+                if(_onRowType)
+                    return _onRowType(position);
                 return 1;
             }
         }, null);
@@ -108,6 +110,7 @@ const ListView = extend(View)(
         var _onPullRefresh;
         var _onRowHeight;
         var _onRowBind;
+        var _onRowType;
         var _itemCount = 0;
         Object.defineProperties(this, {
             // properties
@@ -232,6 +235,15 @@ const ListView = extend(View)(
                 },
                 set: function(onRowBind) {
                     _onRowBind = onRowBind.bind(this);
+                },
+                enumerable: true
+            },
+            'onRowType': {
+                get: function() {
+                    return _onRowType;
+                },
+                set: function(onRowType) {
+                    _onRowType = onRowType.bind(this);
                 },
                 enumerable: true
             },
