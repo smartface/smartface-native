@@ -222,19 +222,21 @@ SearchView.prototype.loadingColor = UI.Color.LIGHTGRAY
 SearchView.prototype.textFieldBackgroundColor = UI.Color.LIGHTGRAY
 
 /**
- * Gets/sets the font of the SearchView. This property works only for Android.
+ * Gets/sets the font of the SearchView.
  *
  * @property {UI.Font} [font = null]
  * @android
+ * @ios
  * @since 0.1
  */
 SearchView.prototype.android.font = null
 
 /**
- * Gets/sets text alignment of the SearchView. This property works only for Android.
+ * Gets/sets text alignment of the SearchView.
  *
  * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
  * @android
+ * @ios
  * @since 0.1
  */
 SearchView.prototype.android.textAlignment = UI.TextAlignment.MIDLEFT;

@@ -82,6 +82,52 @@ const SearchView = extend(View)(
         });
         this.textFieldBackgroundColor = Color.create(222,222,222);
         
+        Object.defineProperty(this, 'font', {
+            get: function() {
+                return self.textfield.valueForKey("font");
+            },
+            set: function(value) {
+                self.textfield.setValueForKey(value, "font");
+            },
+            enumerable: true
+        });
+        
+        var _textAligment = 3;
+        Object.defineProperty(this, 'textAlignment', {
+            get: function() {
+                return _textAligment;
+            },
+            set: function(value) {
+                _textAligment = value;
+
+                var vertical;
+                if (parseInt(value / 3) === 0) {
+                    vertical = 1;
+                }
+                else if (parseInt(value / 3) === 1) {
+                    vertical = 0;
+                }
+                else {
+                    vertical = 2;
+                }
+
+                var horizontal;
+                if (value % 3 === 0) {
+                    horizontal = 0;
+                }
+                else if (value % 3 === 1) {
+                    horizontal = 1;
+                }
+                else {
+                    horizontal = 2;
+                }
+                
+                self.textfield.setValueForKey(vertical,"contentVerticalAlignment");
+                self.textfield.setValueForKey(horizontal,"textAlignment");
+            },
+            enumerable: true,configurable: true
+        });
+        
         Object.defineProperty(this, 'text', {
             get: function() {
                 return self.nativeObject.text;
