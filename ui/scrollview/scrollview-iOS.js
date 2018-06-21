@@ -77,9 +77,9 @@ const ScrollView = extend(ViewGroup)(
                 
                 if (_align === ScrollType.horizontal){
                     //// PADDING CHECK ///////
-                    if (isNumber(self.layout.paddingLeft == 'number')) {
-                        rect.width = rect.width + self.layout.paddingLeft;
-                    }else if(isNumber(self.layout.padding == 'number')){
+                    if (isNumber(self.layout.paddingRight)) {
+                        rect.width = rect.width + self.layout.paddingRight;
+                    }else if(isNumber(self.layout.padding)){
                         rect.width = rect.width + self.layout.padding;
                     }
                     ///////////////////////////
