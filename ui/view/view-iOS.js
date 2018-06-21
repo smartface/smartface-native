@@ -16,6 +16,7 @@ function View(params) {
     }
     
     self.uniqueId = self.nativeObject.uuid;
+    
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
