@@ -1,6 +1,6 @@
-const AndroidConfig             = require('../../util/Android/androidconfig')
-const NativeBluetoothAdapter    = requireClass('android.bluetooth.BluetoothAdapter');
-const NativeTelephonyManager    = requireClass('android.telephony.TelephonyManager');
+const AndroidConfig = require('../../util/Android/androidconfig')
+const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
+const NativeTelephonyManager = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');
 // Context.WIFI_SERVICE
 const WIFI_SERVICE = 'wifi';
@@ -14,19 +14,21 @@ const TELEPHONY_MANAGER = 'android.telephony.TelephonyManager';
 
 const Network = {};
 Network.ConnectionType = {};
-Network.ConnectionType.None   = 0;
+Network.ConnectionType.None = 0;
 Network.ConnectionType.Mobile = 1;
-Network.ConnectionType.WIFI   = 2;
+Network.ConnectionType.WIFI = 2;
 
 Network.ConnectionType.NONE = 0;
-Network.ConnectionType.MOBILE = 1; 
+Network.ConnectionType.MOBILE = 1;
 
 const MARSHMALLOW = 23;
 
+var _connectionTypeCallback;
+var isReceiverInit = false;
 Object.defineProperties(Network, {
     'IMSI': {
         get: function() {
-            return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null; 
+            return getTelephonyManager().getSubscriberId() ? getTelephonyManager().getSubscriberId() : null;
         },
         configurable: false
     },
@@ -41,7 +43,8 @@ Object.defineProperties(Network, {
             var bluetoothAdapter = NativeBluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter === null) {
                 return "null";
-            } else {
+            }
+            else {
                 return bluetoothAdapter.getAddress();
             }
         },
@@ -58,12 +61,15 @@ Object.defineProperties(Network, {
             var activeInternet = getActiveInternet();
             if (activeInternet == null) { // undefined or null
                 return Network.ConnectionType.NONE;
-            } else {
+            }
+            else {
                 if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
                     return Network.ConnectionType.WIFI;
-                } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
+                }
+                else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
                     return Network.ConnectionType.MOBILE;
-                } else {
+                }
+                else {
                     return Network.ConnectionType.NONE;
                 }
             }
@@ -76,11 +82,12 @@ Object.defineProperties(Network, {
                 var wifiManager = AndroidConfig.getSystemService(WIFI_SERVICE, WIFI_MANAGER);
                 var wifiInfo = wifiManager.getConnectionInfo();
                 var ipAddress = wifiInfo.getIpAddress();
-                return (ipAddress & 0xff) 
-                    + "." + ((ipAddress >> 8)  & 0xff)
-                    + "." + ((ipAddress >> 16) & 0xff)
-                    + "." + ((ipAddress >> 24) & 0xff);
-            } else {
+                return (ipAddress & 0xff) +
+                    "." + ((ipAddress >> 8) & 0xff) +
+                    "." + ((ipAddress >> 16) & 0xff) +
+                    "." + ((ipAddress >> 24) & 0xff);
+            }
+            else {
                 return "0.0.0.0";
             }
         },
@@ -93,8 +100,38 @@ Object.defineProperties(Network, {
             return wifiInfo.getMacAddress();
         },
         configurable: false
+    },
+    'connectionTypeChanged': {
+        get: function() {
+            return _connectionTypeCallback;
+        },
+        set: function(connectionTypeCallback) {
+            if (!isReceiverInit) {
+                console.log("isReceiverInit true");
+                initConnectionTypeReceiver();
+            }
+            console.log("_connectionTypeCallback true");
+            _connectionTypeCallback = connectionTypeCallback;
+        }
     }
 });
+
+function initConnectionTypeReceiver() {
+    const NativeIntentFilter = requireClass("android.content.IntentFilter");
+    const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
+    const NativeBroadcastReceiver = requireClass("android.content.BroadcastReceiver");
+
+    var connectionFilter = new NativeIntentFilter();
+    connectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
+
+    var receiverObj = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
+        'onReceive': function(context, intent) {
+            var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+            console.log("on receive " + noConnectivity);
+            Network.connectionTypeChanged && Network.connectionTypeChanged(noConnectivity);
+        }
+    }, null);
+}
 
 function getActiveInternet() {
     var connectivityManager;
