@@ -70,8 +70,7 @@ const TextBox = extend(TextView)(
         var self = this;
         var activity = AndroidConfig.activity;
         if (!self.nativeObject) {
-          //  self.nativeObject = new NativeEditText(activity);
-            
+         
             self.nativeObject = NativeEditText.extend("SFEditText", {
                 'onKeyPreIme': function(keyCode, keyEvent){ //AND-3123: Due to the issue, hardware button listener added.
                     
@@ -392,7 +391,6 @@ const TextBox = extend(TextView)(
             // AND-3223: instead of setOnKeyListener , onKeyPreIme is implemented.  
             // self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
             //     onKey: function(view, keyCode, keyEvent) {
-            //         alert('in textview on key');
             //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             //         if (keyCode === 4 && keyEvent.getAction() === 1) {
             //             
