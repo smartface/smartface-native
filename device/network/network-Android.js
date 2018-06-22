@@ -106,11 +106,13 @@ Object.defineProperties(Network, {
             return _connectionTypeCallback;
         },
         set: function(connectionTypeCallback) {
+            if (typeof connectionTypeCallback !== 'function')
+                return;
+                
             if (!isReceiverInit) {
-                console.log("isReceiverInit true");
+                isReceiverInit = true;
                 initConnectionTypeReceiver();
             }
-            console.log("_connectionTypeCallback true");
             _connectionTypeCallback = connectionTypeCallback;
         }
     }
@@ -124,13 +126,14 @@ function initConnectionTypeReceiver() {
     var connectionFilter = new NativeIntentFilter();
     connectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
 
-    var receiverObj = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
-        'onReceive': function(context, intent) {
+    var broadcastReceiverObj = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
+        onReceive: function(context, intent) {
             var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-            console.log("on receive " + noConnectivity);
-            Network.connectionTypeChanged && Network.connectionTypeChanged(noConnectivity);
+            Network.connectionTypeChanged && Network.connectionTypeChanged(!noConnectivity);
         }
     }, null);
+
+    AndroidConfig.activity.registerReceiver(broadcastReceiverObj, connectionFilter);
 }
 
 function getActiveInternet() {
