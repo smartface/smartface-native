@@ -3,9 +3,9 @@ const ViewGroup = require('../viewgroup');
 const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
- 
+
 const ScrollView = extend(ViewGroup)(
-    function (_super, params) {
+    function(_super, params) {
         var activity = AndroidConfig.activity;
 
         var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
@@ -15,39 +15,46 @@ const ScrollView = extend(ViewGroup)(
                 this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
-                        x = (x > 0)? x : 0; // negative values are provided as well
-                        _contentOffset.x = UnitConverter.pixelToDp(x);
-                        _callbackOnScroll && _callbackOnScroll();
+                        x = (x > 0) ? x : 0; // negative values are provided as well
+                        x = UnitConverter.pixelToDp(x);
+                        y = UnitConverter.pixelToDp(y);
+                        _contentOffset.x = x;
+                        var translation = { x: x, y: y };
+                        _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
-            } else {
+            }
+            else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
                 this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
                     onScrollChanged: function(x, yObj, oldx, oldy) {
                         var y = yObj;
-                        y = (y > 0)? y : 0; // negative values are provided as well
-                        _contentOffset.y = UnitConverter.pixelToDp(y);
-                        _callbackOnScroll && _callbackOnScroll();
+                        y = (y > 0) ? y : 0; // negative values are provided as well
+                        y = UnitConverter.pixelToDp(y);
+                        var x = UnitConverter.pixelToDp(x);
+                        _contentOffset.y = y;
+                        var translation = { x: x, y: y };
+                        _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
             }
         }
-        
+
         _super(this);
         const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
         // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
         // So, the user have to set width and height for the layout of scrollview. 
         // If the issue is fixed, you can try below lines.
-        
+
         // const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
         // var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
         // this.nativeObject.addView(_layout.nativeObject, layoutParams);
         this.nativeObject.addView(_layout.nativeObject);
-        
+
         _layout.parent = this;
         var _callbackOnScroll = null;
-        var _contentOffset = {x: 0, y: 0};
+        var _contentOffset = { x: 0, y: 0 };
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -61,8 +68,8 @@ const ScrollView = extend(ViewGroup)(
             },
             'scrollBarEnabled': {
                 get: function() {
-                    return this.nativeObject.isHorizontalScrollBarEnabled()
-                        || this.nativeObject.isVerticalScrollBarEnabled();
+                    return this.nativeObject.isHorizontalScrollBarEnabled() ||
+                        this.nativeObject.isVerticalScrollBarEnabled();
                 },
                 set: function(enabled) {
                     this.nativeObject.setVerticalScrollBarEnabled(enabled);
@@ -76,7 +83,7 @@ const ScrollView = extend(ViewGroup)(
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
-                        (ScrollView.Align.VERTICAL   === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
+                        (ScrollView.Align.VERTICAL === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
                     }
                 }
             },
@@ -85,16 +92,16 @@ const ScrollView = extend(ViewGroup)(
                     if (edge) {
                         const NativeView = requireClass('android.view.View');
 
-                        (ScrollView.Edge.TOP    === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_UP);
+                        (ScrollView.Edge.TOP === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_UP);
                         (ScrollView.Edge.BOTTOM === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_DOWN);
-                        (ScrollView.Edge.LEFT   === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_LEFT);
-                        (ScrollView.Edge.RIGHT  === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_RIGHT);
+                        (ScrollView.Edge.LEFT === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_LEFT);
+                        (ScrollView.Edge.RIGHT === edge) && this.nativeObject.fullScroll(NativeView.FOCUS_RIGHT);
                     }
                 }
             },
             // // Overrided from ViewGroup due to difference between FlexLayout.
             'addChild': {
-                value: function(view){
+                value: function(view) {
                     this.nativeObject.removeView(_layout.nativeObject);
                     view.parent = this;
                     _layout.childViews[view.id] = view;
@@ -104,10 +111,10 @@ const ScrollView = extend(ViewGroup)(
                 configurable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'ScrollView';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             },
             'onScroll': {
@@ -117,14 +124,14 @@ const ScrollView = extend(ViewGroup)(
                 set: function(callback) {
                     _callbackOnScroll = callback;
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             },
             'contentOffset': {
                 get: function() {
                     return _contentOffset;
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });
