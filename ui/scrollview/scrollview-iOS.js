@@ -55,7 +55,7 @@ const ScrollView = extend(ViewGroup)(
         self.layout.applyLayout = function(){
             self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
             if (self.autoSizeEnabled) {
-                var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height}
+                var rect = {x:0,y:0,width:0,height:0}
                 var subviews = self.layout.nativeObject.subviews;
                 var widthAffectingView;
                 var heightAffectingView;
@@ -209,10 +209,8 @@ const ScrollView = extend(ViewGroup)(
             set: function(value) {
                 if (value === ScrollViewAlign.HORIZONTAL) {
                     _align = ScrollType.horizontal;
-                    self.layout.flexDirection = FlexLayout.FlexDirection.ROW;
                 }else{
                     _align = ScrollType.vertical;
-                    self.layout.flexDirection = FlexLayout.FlexDirection.COLUMN;
                 }
                if (!self.autoSizeEnabled) {
                     self.changeContentSize(self.layout.nativeObject.frame);
