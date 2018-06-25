@@ -304,6 +304,9 @@ ListView.prototype.stopRefresh = function(){};
  * necessary
  *
  * @event onScroll
+ * @param {Object} translation
+ * @param {Number} translation.x
+ * @param {Number} translation.y
  * @android
  * @ios
  * @since 0.1

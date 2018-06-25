@@ -32,8 +32,10 @@ const ScrollView = extend(ViewGroup)(
                         y = (y > 0) ? y : 0; // negative values are provided as well
                         y = UnitConverter.pixelToDp(y);
                         var x = UnitConverter.pixelToDp(x);
+                        var oldX = UnitConverter.pixelToDp(oldx);
+                        var oldY = UnitConverter.pixelToDp(oldy);
                         _contentOffset.y = y;
-                        var translation = { x: x, y: y };
+                        var translation = { x: (x - oldX), y: (y - oldY) };
                         _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);

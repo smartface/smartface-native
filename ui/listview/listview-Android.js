@@ -60,11 +60,11 @@ const ListView = extend(View)(
             onBindViewHolder: function(nativeHolderView, position) {
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _listViewItems[itemHashCode];
-                
+
                 if (!self.rowHeight && _onRowHeight) {
                     _holderViewLayout.height = _onRowHeight(position);
                 }
-                
+
                 if (_onRowBind) {
                     _onRowBind(_holderViewLayout, position);
 
@@ -96,7 +96,7 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if(_onRowType)
+                if (_onRowType)
                     return _onRowType(position);
                 return 1;
             }
@@ -297,10 +297,14 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-
+        
+        const UnitConverter = require('../../util/Android/unitconverter');
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
             onScrolled: function(recyclerView, dx, dy) {
-                _onScroll && _onScroll();
+                
+                 var ty = UnitConverter.pixelToDp(dy); 
+                 var tx = UnitConverter.pixelToDp(dx);
+                _onScroll && _onScroll({x: tx, y: ty});
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         }, null);
