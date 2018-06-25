@@ -129,20 +129,25 @@ const ListView = extend(View)(
         
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e){
-            if (!_listItemArray[e.uuid]) {
-                _listItemArray[e.uuid] = self.onRowCreate();
-                self.onRowBind(_listItemArray[e.uuid],e.index);
+            if (e.cell.contentView.subviews.length > 0) {
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }else{
-                self.onRowBind(_listItemArray[e.uuid],e.index);
+                _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
+                e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }
-             _listItemArray[e.uuid].nativeObject.layer.removeAllAnimations();
-             _listItemArray[e.uuid].applyLayout();
+            //  _listItemArray[e.uuid].applyLayout();
          }
-
-        self.nativeObject.onRowCreate =  function(e){
-            _listItemArray[e.uuid] = self.onRowCreate();
-            return _listItemArray[e.uuid].nativeObject;
-        }
+        
+        // var _cellIdentifier = "cell";
+        self.nativeObject.cellIdentifierWithIndexPath = function(e){
+            // e.indexPath.row
+            if (typeof self.onRowType === 'function') {
+                return self.onRowType(e.indexPath.row);
+            }else{
+                return "cell";
+            }
+        };
         
         self.listViewItemByIndex = function(index){
             var argActivityItems = new Invocation.Argument({
