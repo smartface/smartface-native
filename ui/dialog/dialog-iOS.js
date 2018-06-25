@@ -7,7 +7,7 @@ function Dialog(params) {
 
     self.dialogView = new FlexLayout();
     self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds; 
-    self.dialogView.backgroundColor = Color.create(150,0,0,0);
+    self.dialogView.backgroundColor = Color.create(58,0,0,0);
     self.dialogView.alpha = 0;
     self.dialogView.id = Dialog.iOS.ID;
     

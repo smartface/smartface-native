@@ -42,7 +42,7 @@ function Dialog(params) {
         this.nativeObject.requestWindowFeature(1);
         this.nativeObject.setContentView(_layout.nativeObject);
         var dialogWindow = this.nativeObject.getWindow();
-        var colorDrawable = new NativeColorDrawable((Color.create(150, 0, 0, 0)).nativeObject);
+        var colorDrawable = new NativeColorDrawable((Color.create(58, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
         dialogWindow.setLayout(-1, -1);
