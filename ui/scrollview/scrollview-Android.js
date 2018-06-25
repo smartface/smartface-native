@@ -10,7 +10,7 @@ const ScrollView = extend(ViewGroup)(
 
         var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
         if (!this.nativeObject) {
-            if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
+            if (_align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
                 this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
                     onScrollChanged: function(xObj, y, oldx, oldy) {
@@ -48,6 +48,7 @@ const ScrollView = extend(ViewGroup)(
         _layout.parent = this;
         var _callbackOnScroll = null;
         var _contentOffset = {x: 0, y: 0};
+        var _autoSizeEnabled = false;
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -106,6 +107,16 @@ const ScrollView = extend(ViewGroup)(
             'toString': {
                 value: function(){
                     return 'ScrollView';
+                },
+                enumerable: true, 
+                configurable: true
+            },
+            'autoSizeEnabled': {
+                get: function() {
+                    return _autoSizeEnabled;
+                },
+                set: function(value) {
+                    _autoSizeEnabled = value;
                 },
                 enumerable: true, 
                 configurable: true
