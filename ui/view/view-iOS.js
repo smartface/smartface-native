@@ -10,13 +10,13 @@ function View(params) {
 
     self.android = {};
     self.ios = {};
-    
-    self.uniqueId = guid();
 
     if(!self.nativeObject){
         self.nativeObject = new __SF_UIView();
     }
-
+    
+    self.uniqueId = self.nativeObject.uuid;
+    
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
