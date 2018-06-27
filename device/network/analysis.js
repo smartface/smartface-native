@@ -15,6 +15,10 @@
  *     console.log("Device.Network.connectionIP: "        + Network.connectionIP); 
  *     console.log("Device.Network.wirelessMacAddress: "  + Network.wirelessMacAddress);
  * 
+ *     Network.connectionTypeChanged = function(isConnect) {
+ *       console.log("Connection is " + isConnect);
+ *      }
+ * 
  */
 const Network = {};
 
@@ -144,5 +148,18 @@ Network.ConnectionType.MOBILE = 1;
  * @since 2.0.4
  */
 Network.ConnectionType.NONE = 0;
+
+
+/**
+ * This method trigger when connection is changed. 
+ * 
+ * @method connectionTypeChanged
+ * @param {Boolean} isConnect
+ * @ios
+ * @android
+ * @static 
+ * @since 3.0.1
+ */
+Network.connectionTypeChanged = function(isConnect){};
 
 module.exports = Network;
