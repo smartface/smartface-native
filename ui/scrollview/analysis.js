@@ -47,6 +47,15 @@
 function ScrollView(){}
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.OverScrollMode} [overScrollMode = UI.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.0.2
+ */
+ScrollView.prototype.overScrollMode = UI.OverScrollMode.ALWAYS;
+
+/**
  * Gets/sets the alignment of the scrollview. If alignment is HORIZONTAL, the ScrollView 
  * will scroll horizontally, otherwise will scroll vertically. 
  * It must be set as constructor parameter. This property cannot be set after the object is initialized.

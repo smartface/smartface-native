@@ -131,6 +131,15 @@ ListView.prototype.onRowCreate = function onRowCreate(type){};
 
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.OverScrollMode} [overScrollMode = UI.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.0.2
+ */
+ListView.prototype.overScrollMode = UI.OverScrollMode.ALWAYS;
+
+/**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
  *
