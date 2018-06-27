@@ -3,7 +3,6 @@ const ViewGroup = require('../viewgroup');
 const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
-const OverScrollMode = require("./scrollview-overscrollmode");
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
