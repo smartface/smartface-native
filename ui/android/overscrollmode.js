@@ -2,7 +2,7 @@
 * @enum {Number} UI.Android.OverScrollMode
 * @static
 * @readonly
- * @since 3.0.2
+* @since 3.0.2
 *
 * Indicates the over-scroll mode for this search view. 
 *
