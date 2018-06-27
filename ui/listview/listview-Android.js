@@ -304,17 +304,31 @@ const ListView = extend(View)(
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         }, null);
-
+        
+        var _overScrollMode = 0; 
         // android-only properties
-        Object.defineProperty(this.android, 'onRowLongSelected', {
-            get: function() {
-                return _onRowLongSelected;
+        Object.defineProperties(this.android, {
+            'onRowLongSelected': {
+                get: function() {
+                    return _onRowLongSelected;
+                },
+                set: function(onRowLongSelected) {
+                    _onRowLongSelected = onRowLongSelected.bind(this);
+                },
+                enumerable: true,
+                configurable: true
             },
-            set: function(onRowLongSelected) {
-                _onRowLongSelected = onRowLongSelected.bind(this);
-            },
-            enumerable: true,
-            configurable: true
+            'overScrollMode': {
+                get: function() {
+                    return _overScrollMode;
+                },
+                set: function(mode) {
+                    self.nativeInner.setOverScrollMode(mode);
+                    _overScrollMode = mode;
+                },
+                enumerable: true,
+                configurable: true
+            }
         });
 
 

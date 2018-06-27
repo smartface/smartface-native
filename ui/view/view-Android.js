@@ -57,6 +57,7 @@ function View(params) {
 
     this.android = {};
     var _nativeObject = this.nativeObject;
+    var _overScrollMode = 0;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -82,6 +83,17 @@ function View(params) {
                 // if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 //     _nativeObject.setStateListAnimator(null);
                 // }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'overScrollMode': {
+            get: function() {
+                return _overScrollMode;
+            },
+            set: function(mode) {
+                _nativeObject.setOverScrollMode(mode);
+                _overScrollMode = mode;
             },
             enumerable: true,
             configurable: true
