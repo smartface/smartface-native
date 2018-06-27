@@ -32,6 +32,19 @@ function StaggeredFlowLayout(params) {
     //     },
     //     enumerable: true
     // });
+    
+    var _scrollDirection = 0;
+    Object.defineProperty(sfSelf, 'scrollDirection', {
+        get: function() {
+            return _scrollDirection;
+        },
+        set: function(value) {
+            if (typeof value === "number") {
+                _scrollDirection = value;   
+            }
+        },
+        enumerable: true
+    });
      
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // METHODS

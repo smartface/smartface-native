@@ -1,5 +1,6 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
+const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const StaggeredFlowLayout = require("./layout");
 
@@ -15,13 +16,12 @@ const CollectionView = extend(View)(
    function (_super, params) {
         var sfSelf = this;
         
-        console.log("START!!");
-        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // NATIVE COLLECTION VIEW CONTROLLER CLASS IMPLEMENTATION
         var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController', 
         {
             viewDidLoad: function() {
+                self.valueForKey("collectionViewLayout").itemSize = {width: 75, height: 100};
                 self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
             },
             numberOfSectionsInCollectionView: function(collectionView) {
@@ -39,7 +39,6 @@ const CollectionView = extend(View)(
             collectionViewCellForItemAtIndexPath: function(collectionView, indexPath) {
                 // Cell dequeing for type
                 var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "Cell";
-                console.log("type: " + type );
                 var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
                 if (!cell) {
                     collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
@@ -61,10 +60,17 @@ const CollectionView = extend(View)(
                         if (sfSelf.onItemBind) {
                             sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                         }
-                        cell.contentView.yoga.applyLayoutPreservingOrigin(false);
                     });
                 }
                 return cell;
+            },
+            collectionViewDidSelectItemAtIndexPath : function(collectionView, indexPath){
+                var cell = collectionView.cellForItemAtIndexPath(indexPath);
+                if (cell) {
+                    if (sfSelf.onItemSelected) {
+                        sfSelf.onItemSelected(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
+                    }
+                }
             }
         });
         
@@ -82,6 +88,8 @@ const CollectionView = extend(View)(
         // INITIALIZATION
         if(!sfSelf.nativeObject){
             sfSelf.nativeObject = collectionViewController.valueForKey("collectionView");
+            
+            sfSelf.refreshControl = new __SF_UIRefreshControl();
         }
         
         var collectionViewItems = {};
@@ -116,9 +124,117 @@ const CollectionView = extend(View)(
             // },
             enumerable: true
         });
+        
+        var _scrollBarEnabled = true;
+        Object.defineProperty(sfSelf, 'scrollBarEnabled', {
+            get: function() {
+                return _scrollBarEnabled;
+            },
+            set: function(value) {
+                if (typeof value === "boolean") {
+                    if (typeof sfSelf.layout.scrollDirection === "number") {
+                        _scrollBarEnabled = value;
+                        switch (sfSelf.layout.scrollDirection) {
+                            case 0:
+                                sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
+                                break;
+                            case 1:
+                                sfSelf.nativeObject.showsHorizontalScrollIndicator = _scrollBarEnabled;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            },
+            enumerable: true
+        });
+        
+        var _refreshEnabled = false;
+        Object.defineProperty(sfSelf, 'refreshEnabled', {
+            get: function() {
+                return _refreshEnabled;
+            },
+            set: function(value) {
+                _refreshEnabled = value;
+                if (value){
+                    sfSelf.nativeObject.addSubview(sfSelf.refreshControl);
+                }else{
+                    sfSelf.refreshControl.removeFromSuperview();
+                }
+            },
+            enumerable: true
+        });
          
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // METHODS
+        
+        sfSelf.getFirstVisibleIndex = function(){
+            var retval;
+            var visibleIndexArray = sfSelf.nativeObject.indexPathsForVisibleItems();
+            
+            // visibleIndexArray unordered list needs to sort
+            visibleIndexArray.sort(function(a, b){return a.row - b.row});
+            visibleIndexArray.sort(function(a, b){return a.section - b.section});
+            
+            var visibleindex = sfSelf.nativeObject.indexPathsForVisibleItems()[0];
+            if (sfSelf.sectionCount > 1) {
+                retval = {
+                    index : visibleindex.row,
+                    section : visibleindex.section
+                };
+            } else {
+                retval = visibleindex.row;
+            }
+            return retval;
+        };
+        
+        sfSelf.getLastVisibleIndex = function(){
+            var retval;
+            var visibleIndexArray = sfSelf.nativeObject.indexPathsForVisibleItems();
+            
+            // visibleIndexArray unordered list needs to sort
+            visibleIndexArray.sort(function(a, b){return a.row - b.row});
+            visibleIndexArray.sort(function(a, b){return a.section - b.section});
+            
+            var visibleindex = visibleIndexArray[visibleIndexArray.length - 1];
+            if (sfSelf.sectionCount > 1) {
+                retval = {
+                    index : visibleindex.row,
+                    section : visibleindex.section
+                };
+            } else {
+                retval = visibleindex.row;
+            }
+            return retval;
+        };
+        
+        sfSelf.setPullRefreshColors = function(param){
+            if( Object.prototype.toString.call( param ) === '[object Array]' ) {
+                sfSelf.refreshControl.tintColor = param[0].nativeObject;
+            } else {
+                sfSelf.refreshControl.tintColor = param.nativeObject;
+            }
+        }
+        
+        sfSelf.refreshData = function(){
+            sfSelf.nativeObject.reloadData();
+        };
+        
+        sfSelf.scrollTo = function(index, section){
+            var indexPath;
+            if (typeof section === "number") {
+                indexPath = NSIndexPath.indexPathForRowInSection(index, section);
+            } else {
+                indexPath = NSIndexPath.indexPathForRowInSection(index, 0);
+            }
+            
+            sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, true); // 1 << 0 means UICollectionViewScrollPositionTop
+        };
+        
+        sfSelf.stopRefresh = function(){
+            sfSelf.refreshControl.endRefreshing();
+        }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // CALLBACKS
@@ -145,6 +261,26 @@ const CollectionView = extend(View)(
                 if (typeof value === "function") {
                     _onItemBind = value; 
                 }
+            },
+            enumerable: true
+        });
+        
+        var _onItemSelected = null;
+        Object.defineProperty(sfSelf, 'onItemSelected', {
+            get: function() {
+                return _onItemSelected;
+            },
+            set: function(value) {
+                if (typeof value === "function") {
+                    _onItemSelected = value; 
+                }
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(sfSelf, 'onPullRefresh', {
+            set: function(value) {
+                sfSelf.refreshControl.addJSTarget(value.bind(this),UIControlEvents.valueChanged);
             },
             enumerable: true
         });
