@@ -3,6 +3,7 @@ const ViewGroup = require('../viewgroup');
 const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
+const OverScrollMode = require("./scrollview-overscrollmode");
  
 const ScrollView = extend(ViewGroup)(
     function (_super, params) {
@@ -49,6 +50,7 @@ const ScrollView = extend(ViewGroup)(
         var _callbackOnScroll = null;
         var _contentOffset = {x: 0, y: 0};
         var _autoSizeEnabled = false;
+        var _overScrollMode = 0;
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -139,6 +141,18 @@ const ScrollView = extend(ViewGroup)(
                 configurable: true
             }
         });
+        var self = this;
+        Object.defineProperties(this.android, {
+            'overScrollMode': {
+                get: function() {
+                    return _overScrollMode;
+                },
+                set: function(mode) {
+                    self.nativeObject.setOverScrollMode(mode);
+                    _overScrollMode = mode;
+                }
+            }
+        });
 
         // Assign parameters given in constructor
         if (params) {
@@ -156,6 +170,10 @@ Object.defineProperties(ScrollView, {
     },
     'Edge': {
         value: require('./scrollview-edge'),
+        enumerable: true
+    },
+    'OverScrollMode': {
+        value: require('./scrollview-overscrollmode'),
         enumerable: true
     }
 });
