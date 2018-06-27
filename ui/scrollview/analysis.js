@@ -49,11 +49,11 @@ function ScrollView(){}
 /**
  * Gets/sets over-scroll mode for this view.
  *
- * @property {UI.OverScrollMode} [overScrollMode = UI.OverScrollMode.ALWAYS]
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
  * @android
  * @since 3.0.2
  */
-ScrollView.prototype.overScrollMode = UI.OverScrollMode.ALWAYS;
+ScrollView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
 
 /**
  * Gets/sets the alignment of the scrollview. If alignment is HORIZONTAL, the ScrollView 
