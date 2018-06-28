@@ -90,6 +90,16 @@ ScrollView.prototype.layout = UI.FlexLayout;
 ScrollView.prototype.scrollBarEnabled = true;
 
 /**
+ * Scrollview layout size will be calculated by device automatically when autoSizeEnabled is true. To do the automatic calculation, you need to set scrollview.autoSizeEnabled property true and need to call scrollview.layout.applyLayout() function after every change.
+ *
+ * @property {Boolean} [autoSizeEnabled = false]
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ScrollView.prototype.autoSizeEnabled = false;
+
+/**
  * This function adds a child view to a viewgroup.
  *
  * @deprecated 1.1.10
