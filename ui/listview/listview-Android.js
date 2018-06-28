@@ -302,9 +302,9 @@ const ListView = extend(View)(
         var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
             onScrolled: function(recyclerView, dx, dy) {
                 
-                 var ty = UnitConverter.pixelToDp(dy); 
-                 var tx = UnitConverter.pixelToDp(dx);
-                _onScroll && _onScroll({x: tx, y: ty});
+                 var dY = UnitConverter.pixelToDp(dy); 
+                 var dX = UnitConverter.pixelToDp(dx);
+                _onScroll && _onScroll({x: dX, y: dY});
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         }, null);

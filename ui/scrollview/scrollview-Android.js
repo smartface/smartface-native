@@ -9,6 +9,8 @@ const ScrollView = extend(ViewGroup)(
         var activity = AndroidConfig.activity;
 
         var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
+        var prevY, prevOldY, prevX, prevOldX;
+        var triggersTwice = false;
         if (!this.nativeObject) {
             if (params && params.align && params.align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
@@ -16,27 +18,40 @@ const ScrollView = extend(ViewGroup)(
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
                         x = (x > 0) ? x : 0; // negative values are provided as well
+                        oldx = ( oldx >0) ? oldx : 0;
                         x = UnitConverter.pixelToDp(x);
-                        y = UnitConverter.pixelToDp(y);
+                        var oldX = UnitConverter.pixelToDp(oldx);
+
+                        triggersTwice = (prevX === x && prevOldX === oldX ? true : false);//This is avoid unnecessary triggers
+                        prevX = x;
+                        prevOldX = oldX;
+
+                        var translation = { x: (x - oldX), y: (y - oldy) };
                         _contentOffset.x = x;
-                        var translation = { x: x, y: y };
-                        _callbackOnScroll && _callbackOnScroll(translation);
+
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
             }
             else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
+
                 this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
-                    onScrollChanged: function(x, yObj, oldx, oldy) {
+                    onScrollChanged: function(xObj, yObj, oldx, oldy) {
                         var y = yObj;
                         y = (y > 0) ? y : 0; // negative values are provided as well
+                        oldy = ( oldy >0) ? oldy : 0;
                         y = UnitConverter.pixelToDp(y);
-                        var x = UnitConverter.pixelToDp(x);
-                        var oldX = UnitConverter.pixelToDp(oldx);
                         var oldY = UnitConverter.pixelToDp(oldy);
+
+                        triggersTwice = (prevY === y && prevOldY === oldY ? true : false); //This is avoid unnecessary triggers
+                        prevY = y;
+                        prevOldY = oldY;
+
+                        var translation = { x: (xObj - oldx), y: (y - oldY) };
                         _contentOffset.y = y;
-                        var translation = { x: (x - oldX), y: (y - oldY) };
-                        _callbackOnScroll && _callbackOnScroll(translation);
+
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
             }
