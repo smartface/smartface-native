@@ -2,13 +2,12 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 
-const StaggeredFlowLayout = require("./layout");
+const StaggeredFlowLayout = require("./layout/staggeredflowlayout");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
 const UICollectionViewController = SF.requireClass("UICollectionView");
 const UICollectionView = SF.requireClass("UICollectionView");
-// const UICollectionViewCell = SF.requireClass("UICollectionViewCell");
 const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 const NSIndexPath = SF.requireClass("NSIndexPath");
 
@@ -18,12 +17,12 @@ const CollectionView = extend(View)(
         
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // NATIVE COLLECTION VIEW CONTROLLER CLASS IMPLEMENTATION
-        var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController', 
+        var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>',
         {
             viewDidLoad: function() {
-                self.valueForKey("collectionViewLayout").itemSize = {width: 75, height: 100};
                 self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
             },
+            // UICollectionViewDataSource
             numberOfSectionsInCollectionView: function(collectionView) {
                 return _sectionCount;
             },
@@ -64,13 +63,24 @@ const CollectionView = extend(View)(
                 }
                 return cell;
             },
-            collectionViewDidSelectItemAtIndexPath : function(collectionView, indexPath){
+            // UICollectionViewDelegate
+            collectionViewDidSelectItemAtIndexPath : function (collectionView, indexPath) {
                 var cell = collectionView.cellForItemAtIndexPath(indexPath);
                 if (cell) {
                     if (sfSelf.onItemSelected) {
                         sfSelf.onItemSelected(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                     }
                 }
+            },
+            // UIScrollViewDelegate
+            scrollViewDidScroll : function (scrollView) {
+                if (sfSelf.onScroll) {
+                    sfSelf.onScroll();
+                }
+            },
+            // UICollectionViewDelegateFlowLayout
+            collectionViewLayoutSizeForItemAtIndexPath : function (collectionView, collectionViewLayout, indexPath) {
+                return sfSelf.layout.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
             }
         });
         
@@ -88,6 +98,7 @@ const CollectionView = extend(View)(
         // INITIALIZATION
         if(!sfSelf.nativeObject){
             sfSelf.nativeObject = collectionViewController.valueForKey("collectionView");
+            defaultflowLayout.collectionView = collectionViewController.valueForKey("collectionView");
             
             sfSelf.refreshControl = new __SF_UIRefreshControl();
         }
@@ -120,6 +131,7 @@ const CollectionView = extend(View)(
             // set: function(value) {
             //     if (typeof value === "object") {
             //         _layout = value;   
+            //          sfSelf.layout.collectionView!!!!!!!!
             //     }
             // },
             enumerable: true
@@ -161,6 +173,20 @@ const CollectionView = extend(View)(
                     sfSelf.nativeObject.addSubview(sfSelf.refreshControl);
                 }else{
                     sfSelf.refreshControl.removeFromSuperview();
+                }
+            },
+            enumerable: true
+        });
+        
+        var _pagingEnabled = false;
+        Object.defineProperty(sfSelf, 'pagingEnabled', {
+            get: function() {
+                return _pagingEnabled;
+            },
+            set: function(value) {
+                if (typeof value === "boolean") {
+                    _pagingEnabled = value;
+                    sfSelf.nativeObject.pagingEnabled = _pagingEnabled;
                 }
             },
             enumerable: true
@@ -236,6 +262,22 @@ const CollectionView = extend(View)(
             sfSelf.refreshControl.endRefreshing();
         }
         
+        sfSelf.itemByIndex = function(index, section){
+            var _section = 0;
+            if (typeof section === "number") {
+                _section = section;
+            }
+            
+            var indexPath = NSIndexPath.indexPathForRowInSection(index, _section);
+            var cell = sfSelf.nativeObject.cellForItemAtIndexPath(indexPath);
+            
+            var retval = null;
+            if (cell) {
+                retval = collectionViewItems[cell.uuid];
+            }
+            return retval;
+        }
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // CALLBACKS
         
@@ -273,6 +315,19 @@ const CollectionView = extend(View)(
             set: function(value) {
                 if (typeof value === "function") {
                     _onItemSelected = value; 
+                }
+            },
+            enumerable: true
+        });
+        
+        var _onScroll = null;
+        Object.defineProperty(sfSelf, 'onScroll', {
+            get: function() {
+                return _onScroll;
+            },
+            set: function(value) {
+                if (typeof value === "function") {
+                    _onScroll = value; 
                 }
             },
             enumerable: true
