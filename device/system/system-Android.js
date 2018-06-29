@@ -183,10 +183,19 @@ function getBatteryIntent() {
 
 // iOS specifics
 System.ios = {};
+
 Object.defineProperties(System.ios, {
     'validateFingerPrint': {
         value: function(onSuccess, onError) {}
     }
 });
+
+Object.defineProperties(System.ios, {
+    'contextBiometricType': {
+        value: function(onSuccess, onError) {}
+    }
+});
+
+System.ios.LABiometryType = {};
 
 module.exports = System;
