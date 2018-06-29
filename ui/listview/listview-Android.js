@@ -38,11 +38,13 @@ const ListView = extend(View)(
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
-        var holderViewLayout;
+
+        var _listViewItems = {};
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
             onCreateViewHolder: function(parent, viewType) {
+                var holderViewLayout;
                 try {
-                    holderViewLayout = _onRowCreate();
+                    holderViewLayout = _onRowCreate(viewType);
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -52,23 +54,24 @@ const ListView = extend(View)(
                 if (self.rowHeight) {
                     holderViewLayout.height = self.rowHeight;
                 }
+                _listViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView, position) {
-                var _holderViewLayout = self.createTemplate(nativeHolderView);
-
+                var itemHashCode = nativeHolderView.itemView.hashCode();
+                var _holderViewLayout = _listViewItems[itemHashCode];
+                
                 if (!self.rowHeight && _onRowHeight) {
                     _holderViewLayout.height = _onRowHeight(position);
                 }
-
+                
                 if (_onRowBind) {
                     _onRowBind(_holderViewLayout, position);
 
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
-                            holderViewLayout.nativeObject = view;
-                            createFromTemplate(holderViewLayout);
-                            _onRowSelected && _onRowSelected(holderViewLayout, position);
+                            var selectedItem = _listViewItems[view.hashCode()];
+                            _onRowSelected && _onRowSelected(selectedItem, position);
                         }
                     }));
 
@@ -76,13 +79,11 @@ const ListView = extend(View)(
                         onLongClick: function(view) {
 
                             if (typeof _onRowLongSelected === 'function') {
-                                holderViewLayout.nativeObject = view;
-                                createFromTemplate(holderViewLayout);
-                                _onRowLongSelected && _onRowLongSelected(holderViewLayout, position);
+                                var selectedItem = _listViewItems[view.hashCode()];
+                                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
                                 return true;
                             }
-                            return false
-
+                            return false;
                         }
                     }));
                 }
@@ -95,7 +96,9 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                return position;
+                if(_onRowType)
+                    return _onRowType(position);
+                return 1;
             }
         }, null);
 
@@ -107,36 +110,14 @@ const ListView = extend(View)(
         var _onPullRefresh;
         var _onRowHeight;
         var _onRowBind;
+        var _onRowType;
         var _itemCount = 0;
         Object.defineProperties(this, {
             // properties
             'listViewItemByIndex': {
-                value: function(_index) {
-                    
-                    var view = self.nativeInner.getLayoutManager().findViewByPosition(_index);
-                    if(view == undefined){
-                        return undefined;
-                    }
-                    
-                    
-                    var holderViewLayout;
-                    try {
-                        holderViewLayout = _onRowCreate();
-                    }
-                    catch (e) {
-                        const Application = require("../../application");
-                        Application.onUnhandledError && Application.onUnhandledError(e);
-                        holderViewLayout = new ListViewItem();
-                    }
-                    if (self.rowHeight) {
-                        holderViewLayout.height = self.rowHeight;
-                    }
- 
-                    holderViewLayout.nativeObject = view;
-                    createFromTemplate(holderViewLayout);
-                    
-                    return holderViewLayout;
-                    
+                value: function(index) {
+                    var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
+                    return _listViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
             },
@@ -257,6 +238,15 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'onRowType': {
+                get: function() {
+                    return _onRowType;
+                },
+                set: function(onRowType) {
+                    _onRowType = onRowType.bind(this);
+                },
+                enumerable: true
+            },
             'onRowSelected': {
                 get: function() {
                     return _onRowSelected;
@@ -314,17 +304,31 @@ const ListView = extend(View)(
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         }, null);
-
+        
+        var _overScrollMode = 0; 
         // android-only properties
-        Object.defineProperty(this.android, 'onRowLongSelected', {
-            get: function() {
-                return _onRowLongSelected;
+        Object.defineProperties(this.android, {
+            'onRowLongSelected': {
+                get: function() {
+                    return _onRowLongSelected;
+                },
+                set: function(onRowLongSelected) {
+                    _onRowLongSelected = onRowLongSelected.bind(this);
+                },
+                enumerable: true,
+                configurable: true
             },
-            set: function(onRowLongSelected) {
-                _onRowLongSelected = onRowLongSelected.bind(this);
-            },
-            enumerable: true,
-            configurable: true
+            'overScrollMode': {
+                get: function() {
+                    return _overScrollMode;
+                },
+                set: function(mode) {
+                    self.nativeInner.setOverScrollMode(mode);
+                    _overScrollMode = mode;
+                },
+                enumerable: true,
+                configurable: true
+            }
         });
 
 
@@ -344,13 +348,6 @@ const ListView = extend(View)(
             }));
         }
 
-        self.createTemplate = function(e) {
-            holderViewLayout.nativeObject = e.itemView;
-            holderViewLayout.nativeInner = e;
-            createFromTemplate(holderViewLayout);
-            return holderViewLayout;
-        };
-
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
@@ -360,17 +357,5 @@ const ListView = extend(View)(
 );
 
 ListView.iOS = {};
-
-function createFromTemplate(jsView) {
-    if (jsView.childViews) {
-        for (var child in jsView.childViews) {
-            if (jsView.childViews[child].id) {
-                jsView.childViews[child].nativeObject = jsView.nativeObject.findViewById(jsView.childViews[child].id);
-
-                createFromTemplate(jsView.childViews[child]);
-            }
-        }
-    }
-}
 
 module.exports = ListView;

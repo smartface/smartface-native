@@ -32,7 +32,8 @@ Multimedia.createImagePickerController = function(e){
         picker.mediaTypes = e.type;
     }
     
-    picker.allowsEditing = false;
+    picker.allowsEditing = e.allowsEditing ? e.allowsEditing : false;
+    
     picker.sourceType = e.sourceType;
     picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
     
@@ -49,7 +50,14 @@ Multimedia.createImagePickerController = function(e){
         picker.dismissViewController();
         if (e.onSuccess){
             if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image){
-                var image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
+                
+                var image;
+                if (param.info["UIImagePickerControllerEditedImage"]) {
+                    image = Image.createFromImage(param.info["UIImagePickerControllerEditedImage"]);
+                } else {
+                    image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
+                }
+                
                 if (image.nativeObject.fixOrientation) {
                     var fixedImage = image.nativeObject.fixOrientation();
                     image = Image.createFromImage(fixedImage);

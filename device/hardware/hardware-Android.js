@@ -50,4 +50,10 @@ Object.defineProperty(Hardware.android, 'vendorID', {
     configurable: false
 });
 
+Hardware.MANUFACTURER = NativeBuild.MANUFACTURER;
+
+Hardware.getDeviceModelName = function() {
+    return Hardware.MANUFACTURER + " " + Hardware.brandName + " " + Hardware.brandModel;
+};
+
 module.exports = Hardware;

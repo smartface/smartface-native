@@ -3,6 +3,8 @@ const extend = require('js-base/core/extend');
 const View = require('../view');
 const Color = require('../color');
 const TypeUtil = require('../../util/type');
+const Font = require('../font');
+const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance().getApplicationContext();
 const AndroidConfig = require('../../util/Android/androidconfig');
 const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
@@ -12,6 +14,7 @@ const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
 const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 const NativeOnCameraMoveStartedListener = NativeGoogleMap.OnCameraMoveStartedListener;
 const NativeOnCameraIdleListener = NativeGoogleMap.OnCameraIdleListener;
+const NativeClusterItem = requireClass("io.smartface.android.mapcluster.MapClusterItem");
 
 
 const hueDic = {};
@@ -50,16 +53,18 @@ const MapView = extend(View)(
                     var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
                     googleMap.moveCamera(cameraUpdate);
 
-                    googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
-                        onMarkerClick: function(marker) {
-                            _pins.forEach(function(pin) {
-                                if (pin.nativeObject.getId() === marker.getId()) {
-                                    pin.onPress && pin.onPress();
-                                }
-                            });
-                            return false;
-                        }
-                    }));
+                    if (!_clusterEnabled) {
+                        googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
+                            onMarkerClick: function(marker) {
+                                _pins.forEach(function(pin) {
+                                    if (pin.nativeObject.getId() === marker.getId()) {
+                                        pin.onPress && pin.onPress();
+                                    }
+                                });
+                                return false;
+                            }
+                        }));
+                    }
 
                     googleMap.setOnMapClickListener(NativeOnMapClickListener.implement({
                         onMapClick: function(location) {
@@ -108,14 +113,63 @@ const MapView = extend(View)(
                     self.minZoomLevel = _minZoomLevel;
                     self.locationButtonVisible = _locationButtonVisible;
 
+
                     _pendingPins.forEach(function(element) {
                         self.addPin(element);
                     });
                     _pendingPins = [];
 
+                    if (self.clusterEnabled)
+                        startCluster();
+
                     _onCreate && _onCreate();
                 }
             }));
+        }
+
+
+        var _nativeClusterManager;
+
+        function startCluster() {
+            const NativeClusterManager = requireClass('com.google.maps.android.clustering.ClusterManager');
+
+            _nativeClusterManager = new NativeClusterManager(AndroidConfig.activity, _nativeGoogleMap);
+            _nativeGoogleMap.setOnCameraIdleListener(_nativeClusterManager);
+            _nativeGoogleMap.setOnMarkerClickListener(_nativeClusterManager);
+
+
+            _nativeClusterManager.setOnClusterItemClickListener(NativeClusterManager.OnClusterItemClickListener.implement({
+                onClusterItemClick: function(item) {
+                    _pinArray[item].onPress && _pinArray[item].onPress();
+                    return false;
+                }
+            }));
+
+            _nativeClusterManager.setOnClusterClickListener(NativeClusterManager.OnClusterClickListener.implement({
+                onClusterClick: function(cluster) {
+                    var pinArray = [];
+                    var clusterArray = toJSArray(cluster.getItems().toArray());
+                    for (var i = 0; i < clusterArray.length; i++) {
+                        pinArray.push(_pinArray[clusterArray[i]]);
+                    }
+                    _clusterOnPress && _clusterOnPress(pinArray);
+                    return true;
+                }
+            }));
+
+            var clusterRender = self.cluster.setDefaultClusterRenderer();
+
+            _nativeClusterManager.setRenderer(clusterRender);
+        }
+
+        var _pinArray = {}; // Contains unique cluster obj ref as property and assigned values is pin
+        var _itemArray = [];
+
+        function createItem(item) {
+            var clusterItemObj = new NativeClusterItem(item.location.latitude, item.location.longitude, item.title, item.subtitle);
+            _pinArray[clusterItemObj] = item;
+            _itemArray.push(clusterItemObj);
+            return clusterItemObj;
         }
 
         if (!params || !(params.lazyLoading)) {
@@ -141,7 +195,12 @@ const MapView = extend(View)(
         var _zoomLevel;
         var _maxZoomLevel = 19;
         var _minZoomLevel = 0;
+        var _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
+        var _fillColor = Color.RED;
+        var _borderColor = Color.WHITE;
+        var _textColor = Color.WHITE;
 
+        var _nativeCustomMarkerRenderer = null;
 
         Object.defineProperties(self, {
             'getVisiblePins': {
@@ -149,10 +208,19 @@ const MapView = extend(View)(
                     var result = [];
                     if (_nativeGoogleMap) {
                         var latLongBounds = _nativeGoogleMap.getProjection().getVisibleRegion().latLngBounds;
-                        for (var i = 0; i < _pins.length; i++) {
-                            if (latLongBounds.contains(_pins[i].nativeObject.getPosition())) {
-                                result.push(_pins[i]);
+                        if (!_clusterEnabled) {
+                            for (var i = 0; i < _pins.length; i++) {
+                                if (latLongBounds.contains(_pins[i].nativeObject.getPosition())) {
+                                    result.push(_pins[i]);
+                                }
                             }
+                        }
+                        else {
+                            _itemArray.forEach(function(itemObj) {
+                                if (_pinArray[itemObj] && latLongBounds.contains(itemObj.getPosition())) {
+                                    result.push(_pinArray[itemObj]);
+                                }
+                            });
                         }
                     }
                     return result;
@@ -299,6 +367,71 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
+            'clusterEnabled': {
+                get: function() {
+                    return _clusterEnabled;
+                },
+                set: function(value) {
+                    _clusterEnabled = value;
+                },
+                enumerable: true
+            },
+            'cluster': {
+                get: function() {
+                    if (_nativeCustomMarkerRenderer === null) {
+                        _nativeCustomMarkerRenderer = new Cluster();
+                    }
+                    return _nativeCustomMarkerRenderer;
+                },
+                enumerable: true
+            },
+            'clusterFont': { //cant set after added mapview
+                get: function() {
+                    return _font;
+                },
+                set: function(value) {
+                    if (value instanceof Font)
+                        _font = value;
+                },
+                enumerable: true
+            },
+            'clusterTextColor': {
+                get: function() {
+                    return _textColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _textColor = value;
+                }
+            },
+            'clusterBorderColor': { //cant set after added mapview
+                get: function() {
+                    return _borderColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _borderColor = value;
+                }
+            },
+            'clusterFillColor': { //cant set after added mapview
+                get: function() {
+                    return _fillColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _fillColor = value
+                },
+                enumerable: true
+            },
+            'onClusterPress': {
+                get: function() {
+                    return _clusterOnPress;
+                },
+                set: function(callback) {
+                    _clusterOnPress = callback;
+                },
+                enumerable: true
+            },
             'type': {
                 get: function() {
                     return _type;
@@ -321,17 +454,23 @@ const MapView = extend(View)(
                     if (pin instanceof MapView.Pin) {
                         if (self.nativeObject && _nativeGoogleMap) {
                             if (!pin.nativeObject) {
-                                const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
-                                var marker = new NativeMarkerOptions();
+                                if (!_clusterEnabled) {
+                                    const NativeMarkerOptions = requireClass('com.google.android.gms.maps.model.MarkerOptions');
+                                    var marker = new NativeMarkerOptions();
 
-                                // pin location must set before adding to map.
-                                if (pin.location && pin.location.latitude && pin.location.longitude) {
-                                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                                    var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
-                                    marker.position(position);
+                                    // pin location must set before adding to map.
+                                    if (pin.location && pin.location.latitude && pin.location.longitude) {
+                                        const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+                                        var position = new NativeLatLng(pin.location.latitude, pin.location.longitude);
+                                        marker.position(position);
+                                    }
+                                    pin.nativeObject = _nativeGoogleMap.addMarker(marker);
                                 }
-
-                                pin.nativeObject = _nativeGoogleMap.addMarker(marker);
+                                else {
+                                    var createdItem = createItem(pin);
+                                    _nativeClusterManager.addItem(createdItem);
+                                    _nativeClusterManager.cluster();
+                                }
                                 _pins.push(pin);
                                 // Sets pin properties. They don't affect until nativeObject is created.
                                 pin.image && (pin.image = pin.image);
@@ -351,19 +490,34 @@ const MapView = extend(View)(
             'removePin': {
                 value: function(pin) {
                     if (pin instanceof MapView.Pin) {
-                        if (self.nativeObject) {
-                            if (_pins.indexOf(pin) !== -1) {
-                                _pins.splice(_pins.indexOf(pin), 1);
-                                pin.nativeObject.remove();
-                                pin.nativeObject = null;
+                        if (!_clusterEnabled) {
+                            if (self.nativeObject) {
+                                if (_pins.indexOf(pin) !== -1) {
+                                    _pins.splice(_pins.indexOf(pin), 1);
+                                    pin.nativeObject.remove();
+                                    pin.nativeObject = null;
+                                }
+                            }
+                            else {
+                                if (_pendingPins.indexOf(pin) !== -1) {
+                                    _pendingPins.splice(_pendingPins.indexOf(pin), 1);
+                                    pin.nativeObject = null;
+                                    pin.nativeObject = null;
+                                }
                             }
                         }
                         else {
-                            if (_pendingPins.indexOf(pin) !== -1) {
-                                _pendingPins.splice(_pendingPins.indexOf(pin), 1);
-                                pin.nativeObject = null;
-                                pin.nativeObject = null;
-                            }
+                            Object.keys(_pinArray).forEach(function(key) {
+                                if (_pinArray[key] == pin) {
+                                    _itemArray.forEach(function(item) { //ToDo: Need optimization
+                                        if (item == key) {
+                                            _nativeClusterManager.removeItem(item);
+                                            _nativeClusterManager.cluster();
+                                        }
+                                    })
+                                    delete _pinArray[key];
+                                }
+                            });
                         }
                     }
                 },
@@ -453,8 +607,61 @@ const MapView = extend(View)(
                 this[param] = params[param];
             }
         }
+
+        var _clusterOnPress;
+
+        function Cluster(params) {
+
+            function setDefaultClusterRenderer() {
+                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
+
+                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
+                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
+                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
+                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
+                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
+
+                var _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
+
+                    onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
+                        if (_clusterItemImage) {
+                            var iconBitmap = _clusterItemImage.nativeObject.getBitmap();
+                            var clusterIcon = NativeDescriptorFactory.fromBitmap(iconBitmap);
+                            markerOptions.icon(clusterIcon)
+                        }
+                        else if (_clusterColor) {
+                            markerOptions.icon(_clusterColor);
+                        }
+                        markerOptions.snippet(clusterItemObj.getSnippet());
+                        markerOptions.title(clusterItemObj.getTitle());
+                    },
+                    shouldRenderAsCluster: function(cluster) {
+                        return cluster.getSize() > 1;
+                    },
+                    getColor: function(cluster) {
+                        return self.clusterFillColor && self.clusterFillColor;
+                    }
+                }, [spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager]);
+
+                return _nativeDefaultClusterRenderer;
+
+            }
+
+            Object.defineProperty(this, 'setDefaultClusterRenderer', {
+                value: function() {
+                    var nativeDefaultClusterRenderer = setDefaultClusterRenderer();
+                    return nativeDefaultClusterRenderer;
+                },
+                enumerable: true
+            })
+        }
     }
 );
+
+var _clusterItemImage;
+var _clusterItemOnPress;
+var _clusterEnabled = false;
+var _clusterColor;
 
 function Pin(params) {
     var self = this;
@@ -472,19 +679,29 @@ function Pin(params) {
     Object.defineProperties(self, {
         'color': {
             get: function() {
-                return _color;
+                if (!_clusterEnabled) {
+                    return _color;
+                }
+                else {
+                    return _clusterColor
+                }
             },
             set: function(color) {
                 _color = color;
+                // if (!_clusterEnabled) {
                 const Color = require("sf-core/ui/color");
-                if (self.nativeObject && (color instanceof Color)) {
-                    console.log("Color changes");
+                if (!_clusterEnabled && self.nativeObject && (color instanceof Color)) {
                     var colorHUE = hueDic[color.nativeObject];
-                    console.log("Color changes 1");
                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
-                    console.log("Color changes: " + colorDrawable);
                     self.nativeObject.setIcon(colorDrawable);
+
                 }
+                else if ((color instanceof Color)) {
+                    var clusterItemColorHUE = hueDic[color.nativeObject];
+                    var clusterItemColorDrawable = NativeDescriptorFactory.defaultMarker(clusterItemColorHUE)
+                    _clusterColor = clusterItemColorDrawable;
+                }
+
             }
         },
         'id': {
@@ -501,13 +718,15 @@ function Pin(params) {
             },
             set: function(image) {
                 _image = image;
+                _clusterItemImage = image;
                 const Image = require("sf-core/ui/image");
-                if (self.nativeObject && image instanceof Image) {
+                if (self.nativeObject && image instanceof Image && !_clusterEnabled) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
 
                     self.nativeObject.setIcon(icon);
                 }
+
             }
         },
         'location': {
@@ -519,7 +738,7 @@ function Pin(params) {
                     throw new Error("location property must be on object includes latitude and longitude keys.");
                 }
                 _location = location;
-                if (self.nativeObject) {
+                if (self.nativeObject && !_clusterEnabled) {
                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                     var position = new NativeLatLng(location.latitude, location.longitude);
                     self.nativeObject.setPosition(position);
@@ -535,7 +754,9 @@ function Pin(params) {
                     throw new Error("subtitle must be a string.");
                 }
                 _subtitle = subtitle;
-                self.nativeObject && self.nativeObject.setSnippet(subtitle);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setSnippet(subtitle);
+                }
             }
         },
         'title': {
@@ -547,7 +768,9 @@ function Pin(params) {
                     throw new Error("title must be a string.");
                 }
                 _title = title;
-                self.nativeObject && self.nativeObject.setTitle(title);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setTitle(title);
+                }
             }
         },
         'visible': {
@@ -559,18 +782,31 @@ function Pin(params) {
                     throw new Error("visible type must be an boolean.");
                 }
                 _visible = visible;
-                self.nativeObject && self.nativeObject.setVisible(visible);
+                if (!_clusterEnabled) {
+                    self.nativeObject && self.nativeObject.setVisible(visible);
+                }
             }
         },
         'onPress': {
             get: function() {
-                return _onPress;
+                if (!_clusterEnabled) {
+                    return _onPress;
+                }
+                else {
+                    return _clusterItemOnPress;
+                }
             },
             set: function(callback) {
-                _onPress = callback;
+                if (!_clusterEnabled) {
+                    _onPress = callback;
+                }
+                else {
+                    _clusterItemOnPress = callback;
+                }
             }
         }
     });
+
 
     // Assign parameters given in constructor
     if (params) {

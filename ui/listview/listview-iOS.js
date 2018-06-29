@@ -126,26 +126,28 @@ const ListView = extend(View)(
         self.nativeObject.heightForRowAtIndex = function(e){
             return self.onRowHeight(e.index);
         };
-
+        
+        var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e){
-             var listItem = self.createTemplate(e);
-             self.onRowBind(listItem,e.index);
-             listItem.nativeObject.layer.removeAllAnimations();
-             listItem.applyLayout();
+            if (e.cell.contentView.subviews.length > 0) {
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
+            }else{
+                _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
+                e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
+            }
+            //  _listItemArray[e.uuid].applyLayout();
          }
-
-         var templateItem;
-         self.nativeObject.onRowCreate =  function(e){
-             var lisviewItem = self.onRowCreate();
-             templateItem = lisviewItem;
-             return lisviewItem.nativeObject;
-         }
-
-        self.createTemplate = function(e){
-            templateItem.nativeObject = e.contentView;
-            setAllChilds(templateItem);
-            return templateItem;
-        }
+        
+        // var _cellIdentifier = "cell";
+        self.nativeObject.cellIdentifierWithIndexPath = function(e){
+            // e.indexPath.row
+            if (typeof self.onRowType === 'function') {
+                return self.onRowType(e.indexPath.row);
+            }else{
+                return "cell";
+            }
+        };
         
         self.listViewItemByIndex = function(index){
             var argActivityItems = new Invocation.Argument({
@@ -164,26 +166,17 @@ const ListView = extend(View)(
                 value: indexPath
             });
             
-            var cell = Invocation.invokeInstanceMethod(self.nativeObject,"cellForRowAtIndexPath:",[argIndexPath],"NSObject")
+            var cell = Invocation.invokeInstanceMethod(self.nativeObject,"cellForRowAtIndexPath:",[argIndexPath],"NSObject");
             if (cell) {
-                return self.createTemplate({contentView : cell.contentView.subviews[0]});
+                var uuid = Invocation.invokeInstanceMethod(cell,"uuid",[],"NSString");
+                return _listItemArray[uuid];
             }
             
             return undefined
         }
-        
-        function setAllChilds(item){
-            for (var child in item.childs){
-                 if (item.childs[child].id){
-                    item.childs[child].nativeObject = item.nativeObject.viewWithTag(item.childs[child].id);
-                    setAllChilds(item.childs[child]);
-                 }
-            }
-        }
 
         self.nativeObject.didSelectRowAt = function(e){
-           var listItem = self.createTemplate(e);
-           self.onRowSelected(listItem,e.index);
+           self.onRowSelected(_listItemArray[e.uuid],e.index);
         };
 
         self.refreshData = function(){

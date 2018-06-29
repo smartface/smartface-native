@@ -77,6 +77,15 @@ SearchView.prototype.iconImage;
 SearchView.prototype.addToHeaderBar = function(page){};
 
 /**
+ * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
+ *
+ * @property {Number} [textFieldBorderRadius = 15]
+ * @android
+ * @since 3.0.2
+ */
+SearchView.prototype.textFieldBorderRadius; 
+
+/**
  * Removes SearchView from UI.Page's headerBar view.
  *
  * @method removeFromHeaderBar
@@ -118,6 +127,24 @@ SearchView.prototype.hideKeyboard = function(){};
  * @since 1.1.8
  */
 SearchView.prototype.requestFocus = function(){};
+
+/**
+ * This function show loading indicator.
+ *
+ * @method showLoading
+ * @ios
+ * @since 3.0.2
+ */
+SearchView.prototype.showLoading = function(){};
+
+/**
+ * This function hide loading indicator.
+ *
+ * @method hideLoading
+ * @ios
+ * @since 3.0.2
+ */
+SearchView.prototype.hideLoading = function(){};
 
 /**
  * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
@@ -164,29 +191,52 @@ SearchView.prototype.ios.cursorColor;
  * @since 1.1.12
  */
 SearchView.prototype.ios.cancelButtonColor;
+
 /**
- * Gets/sets the color of the hint text. This property works only for Android.
+ * Gets/sets the color of the hint text.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
+ * @ios
  * @android
  * @since 0.1
  */
-SearchView.prototype.android.hintTextColor = UI.Color.LIGHTGRAY
+SearchView.prototype.hintTextColor = UI.Color.LIGHTGRAY
 
 /**
- * Gets/sets the font of the SearchView. This property works only for Android.
+ * Gets/sets the color of the loading indicator.
+ *
+ * @property {UI.Color} loadingColor
+ * @ios
+ * @since 3.0.2
+ */
+SearchView.prototype.loadingColor = UI.Color.LIGHTGRAY
+
+/**
+ * Gets/sets the color of the textFieldBackgroundColor.
+ *
+ * @property {UI.Color} textFieldBackgroundColor
+ * @ios
+ * @android
+ * @since 3.0.2
+ */
+SearchView.prototype.textFieldBackgroundColor = UI.Color.LIGHTGRAY
+
+/**
+ * Gets/sets the font of the SearchView.
  *
  * @property {UI.Font} [font = null]
  * @android
+ * @ios
  * @since 0.1
  */
 SearchView.prototype.android.font = null
 
 /**
- * Gets/sets text alignment of the SearchView. This property works only for Android.
+ * Gets/sets text alignment of the SearchView.
  *
  * @property {UI.TextAlignment} [textAlignment = UI.TextAlignment.MIDLEFT]
  * @android
+ * @ios
  * @since 0.1
  */
 SearchView.prototype.android.textAlignment = UI.TextAlignment.MIDLEFT;
