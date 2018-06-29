@@ -96,7 +96,7 @@ System.OSVersion;
 
 /**
  *
- * Returns the type of biometric authentication supported by the device.
+ * Returns the type of biometric authentication supported by the device. Works on iOS 11.0+.
  * @property {Device.System.LABiometryType} LAContextBiometricType
  * @readonly
  * @ios
@@ -315,13 +315,13 @@ System.OSType.IOS;
  * @since 3.0.2
  * @ios
  * 
- * The set of available biometric authentication types.
+ * The set of available biometric authentication types. Works on iOS 11.0+.
  * 
  */
 System.LABiometryType = {};
 
 /**
- * No biometry type is supported.
+ * No biometry type is supported. Works on iOS 11.0+.
  * 
  * @property {Number} NONE
  * @static
@@ -332,7 +332,7 @@ System.LABiometryType = {};
 System.LABiometryType.NONE = 0;
 
 /**
- * The device supports Touch ID.
+ * The device supports Touch ID. Works on iOS 11.0+.
  * 
  * @property {Number} TOUCHID
  * @static
@@ -343,7 +343,7 @@ System.LABiometryType.NONE = 0;
 System.LABiometryType.TOUCHID = 1;
 
 /**
- * The device supports Face ID.
+ * The device supports Face ID. Works on iOS 11.0+.
  * 
  * @property {Number} FACEID
  * @static
