@@ -95,6 +95,19 @@ Object.defineProperty(System.ios, 'fingerPrintAvaliable', {
   enumerable: true
 });
 
+Object.defineProperty(System.ios, 'LAContextBiometricType', {
+  get: function() {
+    if (parseFloat(System.OSVersion) >= 11.0) {
+      var context = new __SF_LAContext();
+      context.canEvaluatePolicy();
+      return Invocation.invokeInstanceMethod(context, "biometryType", [], "NSInteger");
+    }else{
+      throw new Error('System.ios.LAContextBiometricType property only available iOS 11.0+');
+    }
+  },
+  enumerable: true
+});
+
 Object.defineProperty(System, 'fingerPrintAvailable', {
   get: function() {
     var context = new __SF_LAContext();
@@ -132,5 +145,13 @@ System.isApplicationInstalled = function(packageName) {
     return false;
   }
 };
+
+System.ios.LABiometryType = {};
+
+System.ios.LABiometryType.NONE = 0;
+
+System.ios.LABiometryType.TOUCHID = 1;
+
+System.ios.LABiometryType.FACEID = 2;
 
 module.exports = System;

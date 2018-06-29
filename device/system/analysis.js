@@ -96,6 +96,17 @@ System.OSVersion;
 
 /**
  *
+ * Returns the type of biometric authentication supported by the device.
+ * @property {Device.System.LABiometryType} LAContextBiometricType
+ * @readonly
+ * @ios
+ * @static
+ * @since 3.0.2
+ */
+System.LAContextBiometricType;
+
+/**
+ *
  * Returns the api level of the Android system.
  * @property {String} apiLevel
  * @readonly
@@ -299,5 +310,47 @@ System.OSType.ANDROID;
  */
 System.OSType.IOS;
 
+/** 
+ * @enum {Number} Device.System.LABiometryType 
+ * @since 3.0.2
+ * @ios
+ * 
+ * The set of available biometric authentication types.
+ * 
+ */
+System.LABiometryType = {};
+
+/**
+ * No biometry type is supported.
+ * 
+ * @property {Number} NONE
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+System.LABiometryType.NONE = 0;
+
+/**
+ * The device supports Touch ID.
+ * 
+ * @property {Number} TOUCHID
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+System.LABiometryType.TOUCHID = 1;
+
+/**
+ * The device supports Face ID.
+ * 
+ * @property {Number} FACEID
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+System.LABiometryType.FACEID = 2;
 
 module.exports = System;
