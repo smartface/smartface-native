@@ -103,7 +103,7 @@ System.OSVersion;
  * @static
  * @since 3.0.2
  */
-System.contextBiometricType;
+System.LAContextBiometricType;
 
 /**
  *

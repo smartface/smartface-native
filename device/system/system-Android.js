@@ -191,7 +191,7 @@ Object.defineProperties(System.ios, {
 });
 
 Object.defineProperties(System.ios, {
-    'contextBiometricType': {
+    'LAContextBiometricType': {
         value: function(onSuccess, onError) {}
     }
 });
