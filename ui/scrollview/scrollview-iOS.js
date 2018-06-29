@@ -30,9 +30,13 @@ const ScrollView = extend(ViewGroup)(
                     self.gradientColorFrameObserver(e);
                 }
             }; 
+            var _frame = {};
             self.nativeObject.addFrameObserver();
             self.nativeObject.frameObserveHandler = function(e){
-                self.layout.applyLayout();
+                if (self.autoSizeEnabled && (JSON.stringify(_frame) != JSON.stringify(e.frame))) {
+                    _frame = e.frame;
+                    self.layout.applyLayout();
+                }
             };
             self.nativeObject.addSubview(self.contentLayout.nativeObject);
         }
