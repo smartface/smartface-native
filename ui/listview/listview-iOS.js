@@ -221,6 +221,13 @@ const ListView = extend(View)(
             }
         }
         
+        Object.defineProperty(self, 'contentOffset', {
+            get: function() {
+                return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'onScroll', {
             set: function(value) {
                 self.nativeObject.didScroll = value;
