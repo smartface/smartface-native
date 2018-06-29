@@ -97,7 +97,7 @@ System.OSVersion;
 /**
  *
  * Returns the type of biometric authentication supported by the device.
- * @property {Device.System.LABiometryType} contextBiometricType
+ * @property {Device.System.LABiometryType} LAContextBiometricType
  * @readonly
  * @ios
  * @static
