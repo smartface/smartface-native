@@ -150,16 +150,17 @@ Network.ConnectionType.MOBILE = 1;
 Network.ConnectionType.NONE = 0;
 
 
+Network.createNotifier = function(params){};
+
 /**
- * This method trigger when connection is changed. 
+ * This method trigger when connection type is changed. 
  * 
  * @method connectionTypeChanged
- * @param {Boolean} isConnect
+ * @param {Boolean} connectionType
  * @ios
  * @android
- * @static 
  * @since 3.0.1
  */
-Network.connectionTypeChanged = function(isConnect){};
+Network.createNotifier.connectionTypeChanged = function(connectionType){};
 
 module.exports = Network;

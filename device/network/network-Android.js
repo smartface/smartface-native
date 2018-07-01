@@ -23,8 +23,6 @@ Network.ConnectionType.MOBILE = 1;
 
 const MARSHMALLOW = 23;
 
-var _connectionTypeCallback;
-var isReceiverInit = false;
 Object.defineProperties(Network, {
     'IMSI': {
         get: function() {
@@ -100,40 +98,80 @@ Object.defineProperties(Network, {
             return wifiInfo.getMacAddress();
         },
         configurable: false
-    },
-    'connectionTypeChanged': {
-        get: function() {
-            return _connectionTypeCallback;
-        },
-        set: function(connectionTypeCallback) {
-            if (typeof connectionTypeCallback !== 'function')
-                return;
-                
-            if (!isReceiverInit) {
-                isReceiverInit = true;
-                initConnectionTypeReceiver();
-            }
-            _connectionTypeCallback = connectionTypeCallback;
-        }
     }
+    // 'connectionTypeChanged': {
+    //     get: function() {
+    //         return _connectionTypeCallback;
+    //     },
+    //     set: function(connectionTypeCallback) {
+    //         if (typeof connectionTypeCallback !== 'function')
+    //             return;
+
+    //         if (!isReceiverInit) {
+    //             isReceiverInit = true;
+    //             initConnectionTypeReceiver();
+    //         }
+    //         _connectionTypeCallback = connectionTypeCallback;
+    //     }
+    // }
 });
 
-function initConnectionTypeReceiver() {
+Network.createNotifier = function(params) {
     const NativeIntentFilter = requireClass("android.content.IntentFilter");
     const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
     const NativeBroadcastReceiver = requireClass("android.content.BroadcastReceiver");
 
-    var connectionFilter = new NativeIntentFilter();
-    connectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
+    const self = this;
 
-    var broadcastReceiverObj = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
-        onReceive: function(context, intent) {
-            var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
-            Network.connectionTypeChanged && Network.connectionTypeChanged(!noConnectivity);
+    if (!self.nativeObject) {
+        var nativeConnectionFilter = new NativeIntentFilter();
+        nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
+
+        self.nativeObject = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
+            onReceive: function(context, intent) {
+                // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+                self.connectionTypeChanged && self.connectionTypeChanged(Network.connectionType);
+            }
+        }, null);
+    }
+
+    var isReceiverCreated = false;
+    var _connectionTypeChanged;
+    Object.defineProperty(self, 'connectionTypeChanged', {
+        get: function() {
+            return _connectionTypeChanged
+        },
+        set: function(value) {
+            if (typeof value === 'function') {
+                _connectionTypeChanged = value;
+                if (!isReceiverCreated) {
+                    AndroidConfig.activity.registerReceiver(self.nativeObject, nativeConnectionFilter);
+                    isReceiverCreated = true;
+                }
+            }
+            else if (value === null) {
+                if (isReceiverCreated) {
+                    AndroidConfig.activity.unregisterReceiver(self.nativeObject);
+                    isReceiverCreated = false;
+                }
+            }
         }
-    }, null);
+    });
 
-    AndroidConfig.activity.registerReceiver(broadcastReceiverObj, connectionFilter);
+    self.subscribe = function(callback) {
+        self.connectionTypeChanged = callback;
+    }
+
+    self.unsubscribe = function() {
+        self.connectionTypeChanged = null;
+    }
+
+
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 function getActiveInternet() {
