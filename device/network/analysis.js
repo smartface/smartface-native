@@ -15,9 +15,6 @@
  *     console.log("Device.Network.connectionIP: "        + Network.connectionIP); 
  *     console.log("Device.Network.wirelessMacAddress: "  + Network.wirelessMacAddress);
  * 
- *     Network.connectionTypeChanged = function(isConnect) {
- *       console.log("Connection is " + isConnect);
- *      }
  * 
  */
 const Network = {};
@@ -103,6 +100,44 @@ Network.roamingEnabled;
 Network.connectionIP;
 
 /**
+ * @class Device.Network.createNotifier
+ * @since 3.0.1
+ *
+ * Provides an event to notify in case of connection is changed.  
+ * 
+ *     @example
+ *     const Network = require("sf-core/device/network");
+ *     var notifier = new Network.createNotifier();
+ * 
+ *     notifier.subscribe(function(connectionType) {
+ *      console.log("ConnectionType is " + connectionType);
+ *     });
+ *
+ */
+Network.createNotifier = function() {};
+
+/**
+ * Subcribed callback fires when connection action is changed. 
+ * 
+ * @method subscribe
+ * @param {Number}  connectionType
+ * @ios
+ * @android
+ * @since 3.0.1
+ */
+Network.createNotifier.subscribe = function(connectionType){};
+
+/**
+ * This method stops receiving subcribed callback.
+ * 
+ * @method unsubscribe
+ * @ios
+ * @android
+ * @since 3.0.1
+ */
+Network.createNotifier.unsubscribe = function(){};
+
+/**
  * @enum {Number} Device.Network.ConnectionType
  * @since 0.1
  */
@@ -149,18 +184,5 @@ Network.ConnectionType.MOBILE = 1;
  */
 Network.ConnectionType.NONE = 0;
 
-
-Network.createNotifier = function(params){};
-
-/**
- * This method trigger when connection type is changed. 
- * 
- * @method connectionTypeChanged
- * @param {Boolean} connectionType
- * @ios
- * @android
- * @since 3.0.1
- */
-Network.createNotifier.connectionTypeChanged = function(connectionType){};
 
 module.exports = Network;
