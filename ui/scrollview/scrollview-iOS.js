@@ -24,11 +24,21 @@ const ScrollView = extend(ViewGroup)(
             self.contentLayout = new FlexLayout();
             self.contentLayout.nativeObject.addFrameObserver();
             self.contentLayout.nativeObject.frameObserveHandler = function(e){
-                self.changeContentSize(e.frame);
+                if (!self.autoSizeEnabled) {
+                    self.changeContentSize(e.frame);
+                }
                 if (typeof self.gradientColorFrameObserver === 'function') {
                     self.gradientColorFrameObserver(e);
                 }
             }; 
+            var _frame = {};
+            self.nativeObject.addFrameObserver();
+            self.nativeObject.frameObserveHandler = function(e){
+                if (self.autoSizeEnabled && (JSON.stringify(_frame) != JSON.stringify(e.frame))) {
+                    _frame = e.frame;
+                    self.layout.applyLayout();
+                }
+            };
             self.nativeObject.addSubview(self.contentLayout.nativeObject);
         }
         
@@ -46,7 +56,93 @@ const ScrollView = extend(ViewGroup)(
             },
             enumerable: true
         });
+
+        self.layout.applyLayout = function(){
+            self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+            if (self.autoSizeEnabled) {
+                var rect = {x:0,y:0,width:0,height:0}
+                var subviews = self.layout.nativeObject.subviews;
+                var widthAffectingView;
+                var heightAffectingView;
+                for (var i = 0; i < subviews.length; i++) {
+                    var frame = subviews[i].frame;
+                    rect.x = frame.x < rect.x ? frame.x : rect.x;
+                    rect.y = frame.y < rect.y ? frame.y : rect.y;
+                    var width = frame.x + frame.width;
+                    if (width > rect.width) {
+                        rect.width = width;
+                        widthAffectingView = subviews[i];
+                    }
+                    var height = frame.y + frame.height;
+                    if (height > rect.height) {
+                        rect.height = height;
+                        heightAffectingView = subviews[i];
+                    }
+                }
+                
+                if (_align === ScrollType.horizontal){
+                    //// PADDING CHECK ///////
+                    if (isNumber(self.layout.paddingRight)) {
+                        rect.width = rect.width + self.layout.paddingRight;
+                    }else if(isNumber(self.layout.padding)){
+                        rect.width = rect.width + self.layout.padding;
+                    }
+                    ///////////////////////////
+                    
+                    //// MARGIN CHECK /////////
+                    if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("marginLeft"))) {
+                        rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("marginLeft");
+                    }else if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("margin"))) {
+                        rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("margin");
+                    }
+                    rect.height = self.nativeObject.frame.height;
+                    /////////////////////////////
+                }else{
+                    //// PADDING CHECK ///////
+                    if (isNumber(self.layout.paddingBottom)) {
+                        rect.height = rect.height + self.layout.paddingBottom;
+                    }else if(isNumber(self.layout.padding)){
+                        rect.height = rect.height + self.layout.padding;
+                    }
+                    ///////////////////////////
+                    
+                    //// MARGIN CHECK /////////
+                    if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("marginBottom"))) {
+                        rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("marginBottom");
+                    }else if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("margin"))) {
+                        rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("margin");
+                    }
+                    ///////////////////////////
+                    rect.width = self.nativeObject.frame.width;
+                    
+                }
+                
+                self.layout.width = rect.width;
+                self.layout.height = rect.height;
+                self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+                
+                self.changeContentSize(rect);
+            }
+        };
         
+        function isNumber(value){
+            if (!isNaN(value) && typeof value === 'number'){
+                return true;
+            }
+            return false;
+        };
+        
+         var _autoSizeEnabled = false;
+         Object.defineProperty(self, 'autoSizeEnabled', {
+            get: function() {
+                return _autoSizeEnabled;
+            },
+            set: function(value) {
+                _autoSizeEnabled = value;
+            },
+            enumerable: true
+         });
+         
         Object.defineProperty(self, 'onScroll', {
             set: function(value) {
                 self.nativeObject.didScroll = value;
@@ -140,8 +236,9 @@ const ScrollView = extend(ViewGroup)(
                 }else{
                     _align = ScrollType.vertical;
                 }
-                self.autoSize();
-                self.changeContentSize(self.layout.nativeObject.frame);
+               if (!self.autoSizeEnabled) {
+                    self.changeContentSize(self.layout.nativeObject.frame);
+                }
             },
             enumerable: true
          });
@@ -169,35 +266,14 @@ const ScrollView = extend(ViewGroup)(
                  self.nativeObject.setContentOffsetAnimated({x : 0,y : coordinate},true);
              }
         };
-    
-        self.autoSize = function(){
-            if (nativeObjectViewSubviewCount() === 1) { 
-                return;
-            }
-            self.applyLayout();
-            self.nativeObject.autoContentSize(_align);
-        };
         
         self.changeContentSize = function(frame){
-            if (nativeObjectViewSubviewCount() ===  2) { 
-                return;
-            }
-            if (_align ==- ScrollType.vertical) {
+            if (_align === ScrollType.vertical) {
                 self.nativeObject.contentSize = {width : 0, height : frame.height};
             }else{
                 self.nativeObject.contentSize = {width : frame.width, height : 0};
             }
         };
-        
-        function nativeObjectViewSubviewCount(){
-            var count = 0;
-            for (var subview in self.nativeObject.subviews) {
-                if(self.nativeObject.subviews[subview].constructor.name === "SMFNative.SMFUIView"){
-                    count++;
-                }
-            }
-            return count;
-        }
         
         if (params) {
             for (var param in params) {

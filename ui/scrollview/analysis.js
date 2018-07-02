@@ -47,6 +47,15 @@
 function ScrollView(){}
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.0.2
+ */
+ScrollView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
+/**
  * Gets/sets the alignment of the scrollview. If alignment is HORIZONTAL, the ScrollView 
  * will scroll horizontally, otherwise will scroll vertically. 
  * It must be set as constructor parameter. This property cannot be set after the object is initialized.
@@ -79,6 +88,16 @@ ScrollView.prototype.layout = UI.FlexLayout;
  * @since 0.1
  */
 ScrollView.prototype.scrollBarEnabled = true;
+
+/**
+ * Scrollview layout size will be calculated by device automatically when autoSizeEnabled is true. To do the automatic calculation, you need to set scrollview.autoSizeEnabled property true and need to call scrollview.layout.applyLayout() function after every change.
+ *
+ * @property {Boolean} [autoSizeEnabled = false]
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ScrollView.prototype.autoSizeEnabled = false;
 
 /**
  * This function adds a child view to a viewgroup.
