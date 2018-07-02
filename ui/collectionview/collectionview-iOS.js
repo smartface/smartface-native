@@ -80,7 +80,7 @@ const CollectionView = extend(View)(
             },
             // UICollectionViewDelegateFlowLayout
             collectionViewLayoutSizeForItemAtIndexPath : function (collectionView, collectionViewLayout, indexPath) {
-                return sfSelf.layout.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
+                return sfSelf.layoutManager.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
             }
         });
         
@@ -124,7 +124,7 @@ const CollectionView = extend(View)(
         });
         
         var _layout = defaultflowLayout;
-        Object.defineProperty(sfSelf, 'layout', {
+        Object.defineProperty(sfSelf, 'layoutManager', {
             get: function() {
                 return _layout;
             },
@@ -144,9 +144,9 @@ const CollectionView = extend(View)(
             },
             set: function(value) {
                 if (typeof value === "boolean") {
-                    if (typeof sfSelf.layout.scrollDirection === "number") {
+                    if (typeof sfSelf.layoutManager.scrollDirection === "number") {
                         _scrollBarEnabled = value;
-                        switch (sfSelf.layout.scrollDirection) {
+                        switch (sfSelf.layoutManager.scrollDirection) {
                             case 0:
                                 sfSelf.nativeObject.showsVerticalScrollIndicator = _scrollBarEnabled;
                                 break;

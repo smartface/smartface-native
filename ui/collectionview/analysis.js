@@ -70,15 +70,14 @@ CollectionView.prototype.itemCount = 0;
 
 /**
  * Class for CollectionView layout calculation.
- * The layout used to organize the collected view’s items.
- * Default layout type is StaggeredFlowLayout.
+ * The layoutManager used to organize the collected view’s items.
  *
- * @property {StaggeredFlowLayout} layout
+ * @property {StaggeredFlowLayout} layoutManager
  * @android
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.layout
+CollectionView.prototype.layoutManager;
 
 /**
  * Gets/sets the visibility of scroll bar of CollectionView.
