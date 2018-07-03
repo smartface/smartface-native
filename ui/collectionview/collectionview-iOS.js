@@ -250,12 +250,17 @@ const CollectionView = extend(View)(
         sfSelf.scrollTo = function(index, section){
             var indexPath;
             if (typeof section === "number") {
-                indexPath = NSIndexPath.indexPathForRowInSection(index, section);
+                indexPath = NSIndexPath.indexPathForItemInSection(index, section);
             } else {
-                indexPath = NSIndexPath.indexPathForRowInSection(index, 0);
+                indexPath = NSIndexPath.indexPathForItemInSection(index, 0);
             }
-            
-            sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, true); // 1 << 0 means UICollectionViewScrollPositionTop
+            if (sfSelf.layoutManager) {
+                if (sfSelf.layoutManager.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
+                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, true); // 1 << 0 means UICollectionViewScrollPositionTop
+                }else{
+                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 3, true); // 1 << 3 means UICollectionViewScrollPositionLeft
+                }
+            }
         };
         
         sfSelf.stopRefresh = function(){

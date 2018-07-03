@@ -47,6 +47,8 @@ function StaggeredFlowLayout(params) {
         },
         enumerable: true
     });
+    sfSelf.lineSpacing = 0;
+        
     
     var _itemSpacing = sfSelf.nativeObject.minimumInteritemSpacing;
     Object.defineProperty(sfSelf, 'itemSpacing', {
@@ -61,6 +63,7 @@ function StaggeredFlowLayout(params) {
         },
         enumerable: true
     });
+    sfSelf.itemSpacing = 0;
     
     var _contentInset = {top:0, left:0, bottom:0, right:0};
     Object.defineProperty(sfSelf, 'contentInset', {
@@ -116,6 +119,16 @@ function StaggeredFlowLayout(params) {
         enumerable: true
     });
     
+    var _itemLength = 50;
+    Object.defineProperty(sfSelf, 'itemLength', {
+        get: function() {
+            return _itemLength;
+        },
+        set: function(value) {
+            _itemLength = value;
+        },
+        enumerable: true
+    });
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // HIDDEN
     
@@ -149,9 +162,7 @@ function StaggeredFlowLayout(params) {
                                                             (sfSelf.itemSpacing * (columnCount - 1)) + 
                                                                 sfSelf.sectionInset.right + sfSelf.contentInset.right)) / columnCount;
             var itemHeight = 0;
-            if (sfSelf.onItemLengthForDirection) {
-                itemHeight = sfSelf.onItemLengthForDirection(indexPath.row, indexPath.section, itemWidth);
-            }
+            itemHeight = sfSelf.itemLength;
             
             retval.width = itemWidth;
             retval.height = itemHeight;
@@ -163,9 +174,7 @@ function StaggeredFlowLayout(params) {
                                                             (sfSelf.itemSpacing * (rowCount - 1)) + 
                                                                 sfSelf.sectionInset.bottom + sfSelf.contentInset.bottom)) / rowCount;
             var itemWidth = 0;
-            if (sfSelf.onItemLengthForDirection) {
-                itemWidth = sfSelf.onItemLengthForDirection(indexPath.row, indexPath.section, itemHeight);
-            }
+            itemWidth = sfSelf.itemLength;
             
             retval.width = itemWidth;
             retval.height = itemHeight;
