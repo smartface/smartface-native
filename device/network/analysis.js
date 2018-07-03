@@ -120,7 +120,7 @@ Network.createNotifier = function() {};
  * Subcribed callback fires when connection action is changed. 
  * 
  * @method subscribe
- * @param {Number}  connectionType
+ * @param {Device.Network.ConnectionType} connectionType
  * @ios
  * @android
  * @since 3.0.1
