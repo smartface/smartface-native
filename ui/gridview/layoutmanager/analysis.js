@@ -1,7 +1,7 @@
 /**
  * @class UI.LayoutManager
  * @since 3.2
- * Layout calculation class for CollectionView. It behaves iOS’s UICollectionViewFlowLayout and Android’s StaggeredGridLayout.
+ * Layout calculation class for GridView. It behaves iOS’s UICollectionViewFlowLayout and Android’s StaggeredGridLayout.
  *
  * spanCount and scrollDirection are 2 important parameters of this class.
  * 
@@ -9,7 +9,8 @@
  * For example; scrollDirection: vertical, spanCount: 2 means user can scroll vertically, object has 2 colons and width property of items are fixed numbers depends on colon count.
  * If user sets scrollDirection to “horizontal”, spanCount represents count of rows.
  * For example; scrollDirection: horizontal, spanCount : 2 means user can scroll horizontally, object has 2 rows and height property of items are fixed numbers depends on row count
-
+ */
+ 
 function LayoutManager(params) {}
 
 /**
@@ -46,7 +47,7 @@ LayoutManager.prototype.contentInset = {top:0, left:0, bottom:0, right:0};
 
 
 /**
- * The scroll direction of CollectionView.
+ * The scroll direction of GridView.
  *
  * @property {LayoutManager.ScrollDirection} [scrollDirection = 0]
  * @android

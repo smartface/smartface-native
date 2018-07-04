@@ -1,15 +1,15 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 /**
- * @class UI.CollectionViewItem
+ * @class UI.GridViewItem
  * @since 3.2
  * @extends UI.ViewGroup
  *
- * CollectionViewItem class can used for a item layout of the CollectionView.
+ * GridViewItem class can used for a item layout of the GridView.
  * 
- * For example usage you can look {@link UI.CollectionViewItem}.
+ * For example usage you can look {@link UI.GridViewItem}.
  *
  */
-function CollectionViewItem(params) {}
+function GridViewItem(params) {}
 
-module.exports = CollectionViewItem;
+module.exports = GridViewItem;
