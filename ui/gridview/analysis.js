@@ -1,64 +1,64 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
- * @class UI.CollectionView
+ * @class UI.GridView
  * @since 3.2
  * @extends UI.View
- * CollectionView is a View that presents given items using customizable layouts.
- *
+ * GridView is a View that presents given items using customizable layouts.
+ */
 
-function CollectionView(params) {}
+function GridView(params) {}
 
 /**
- * This event is called when a CollectionView starts to create a CollectionViewItem.
+ * This event is called when a GridView starts to create a GridViewItem.
  * You can customize your UI(not data-binding) inside this callback.
  *
  * @event onItemCreate
  * @android
  * @ios
- * @return {UI.CollectionViewItem}
+ * @return {UI.GridViewItem}
  * @since 3.2
  */
-CollectionView.prototype.onItemCreate = function onItemCreate(){};
+GridView.prototype.onItemCreate = function onItemCreate(){};
 
 /**
- * This event is called when a UI.CollectionViewItem created at specified row index.
+ * This event is called when a UI.GridViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
- * @param {UI.CollectionViewItem} collectionViewItem
+ * @param {UI.GridViewItem} gridViewItem
  * @param {Number} index
  * @event onItemBind
  * @android
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.onItemBind = function onItemBind(collectionViewItem, index){};
+GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
 
 /**
  * This event is called when user selects a item at specific index.
  *
- * @param {UI.CollectionViewItem} collectionViewItem
+ * @param {UI.GridViewItem} gridViewItem
  * @param {Number} index
  * @event onItemSelected
  * @android
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.onItemSelected = function onItemSelected(collectionViewItem, index){};
+GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index){};
 
 /**
  * This event is called when user long selects a item at specific index.
  *
- * @param {UI.CollectionViewItem} collectionViewItem
+ * @param {UI.GridViewItem} gridViewItem
  * @param {Number} index
  * @event onItemLongSelected
  * @android
  * @since 3.2
  */
-CollectionView.prototype.onItemLongSelected = function onItemLongSelected(collectionViewItem, index){};
+GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
 
 /**
- * Gets/sets the number of items that will be shown in a CollectionView.
+ * Gets/sets the number of items that will be shown in a GridView.
  * You should update this property after each data operation.
  *
  * @property {Number} [itemCount = 0]
@@ -66,10 +66,10 @@ CollectionView.prototype.onItemLongSelected = function onItemLongSelected(collec
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.itemCount = 0;
+GridView.prototype.itemCount = 0;
 
 /**
- * Class for CollectionView layout calculation.
+ * Class for GridView layout calculation.
  * The layoutManager used to organize the collected view’s items.
  *
  * @property {LayoutManager} layoutManager
@@ -77,11 +77,11 @@ CollectionView.prototype.itemCount = 0;
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.layoutManager;
+GridView.prototype.layoutManager;
 
 /**
- * Gets/sets the visibility of scroll bar of CollectionView.
- * If set to true, vertical or horizontal scroll bar will be shown depending on collectionview's
+ * Gets/sets the visibility of scroll bar of GridView.
+ * If set to true, vertical or horizontal scroll bar will be shown depending on gridview's
  * scroll direction.
  *
  * @property {Boolean} [scrollBarEnabled = false]
@@ -89,10 +89,10 @@ CollectionView.prototype.layoutManager;
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.scrollBarEnabled = false;
+GridView.prototype.scrollBarEnabled = false;
 
 /**
- * Enables/disables the refresh function of CollectionView. If set to false
+ * Enables/disables the refresh function of GridView. If set to false
  * onPullRefresh events will not be called.
  *
  * @property {Boolean} [refreshEnabled = true]
@@ -100,11 +100,11 @@ CollectionView.prototype.scrollBarEnabled = false;
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.refreshEnabled = true;
+GridView.prototype.refreshEnabled = true;
 
 /**
  * This method returns the index of item which is visible at
- * the top of a CollectionView at a given time.
+ * the top of a GridView at a given time.
  *
  * @return {Number}
  * @method getFirstVisibleIndex
@@ -112,11 +112,11 @@ CollectionView.prototype.refreshEnabled = true;
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.getFirstVisibleIndex = function(){};
+GridView.prototype.getFirstVisibleIndex = function(){};
 
 /**
  * This method returns the index of item which is visible at
- * the bottom of a CollectionView at a given time.
+ * the bottom of a GridView at a given time.
  *
  * @return {Number}
  * @method getLastVisibleIndex
@@ -124,7 +124,7 @@ CollectionView.prototype.getFirstVisibleIndex = function(){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.getLastVisibleIndex = function(){};
+GridView.prototype.getLastVisibleIndex = function(){};
 
 /**
  * Sets the colors used in the refresh animation. On Android the first color
@@ -137,11 +137,11 @@ CollectionView.prototype.getLastVisibleIndex = function(){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.setPullRefreshColors = function(colors){};
+GridView.prototype.setPullRefreshColors = function(colors){};
 
 /**
- * This method notify CollectionView for data changes. After this method is called
- * CollectionView refreshes itself and recreates the items. Do not forget to
+ * This method notify GridView for data changes. After this method is called
+ * GridView refreshes itself and recreates the items. Do not forget to
  * update itemCount property after data changes.
  *
  * @method refreshData
@@ -149,10 +149,10 @@ CollectionView.prototype.setPullRefreshColors = function(colors){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.refreshData = function(){};
+GridView.prototype.refreshData = function(){};
 
 /**
- * This method scrolls CollectionView to a specific index.
+ * This method scrolls GridView to a specific index.
  *
  * @param {Number} index
  * @method scrollTo
@@ -160,11 +160,11 @@ CollectionView.prototype.refreshData = function(){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.scrollTo = function(index){};
+GridView.prototype.scrollTo = function(index){};
 
 /**
  * This method cancels refresh operation and stops the refresh
- * indicator on a CollectionView. You should call this method after
+ * indicator on a GridView. You should call this method after
  * finishing event inside onPullRefresh otherwise refresh indicator
  * never stops.
  *
@@ -173,10 +173,10 @@ CollectionView.prototype.scrollTo = function(index){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.stopRefresh = function(){};
+GridView.prototype.stopRefresh = function(){};
 
 /**
- * This event is called when a CollectionView is scrolling.
+ * This event is called when a GridView is scrolling.
  * For better performance, don't set any callback if does not
  * necessary
  *
@@ -185,10 +185,10 @@ CollectionView.prototype.stopRefresh = function(){};
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.onScroll = function onScroll(){ }
+GridView.prototype.onScroll = function onScroll(){ }
 
 /**
- * This event is called when user pulls down and releases a CollectionView
+ * This event is called when user pulls down and releases a GridView
  * when scroll position is on the top.
  *
  * @event onPullRefresh
@@ -196,18 +196,18 @@ CollectionView.prototype.onScroll = function onScroll(){ }
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.onPullRefresh = function onPullRefresh(){}
+GridView.prototype.onPullRefresh = function onPullRefresh(){}
 
 /**
- * This method returns CollectionViewItem
+ * This method returns GridViewItem
  *
- * @return {UI.CollectionViewItem}
+ * @return {UI.GridViewItem}
  * @method itemByIndex
  * @param {Number} index
  * @android
  * @ios
  * @since 3.2
  */
-CollectionView.prototype.itemByIndex = function(index){};
+GridView.prototype.itemByIndex = function(index){};
 
-module.exports = CollectionView;
+module.exports = GridView;
