@@ -3,7 +3,7 @@ const Invocation = require('sf-core/util/iOS/invocation.js');
 const UICollectionView = SF.requireClass("UICollectionView");
 const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 
-function StaggeredFlowLayout(params) {
+function LayoutManager(params) {
     var sfSelf = this;
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ function StaggeredFlowLayout(params) {
         enumerable: true
     });
     
-    var _scrollDirection = StaggeredFlowLayout.ScrollDirection.VERTICAL;
+    var _scrollDirection = LayoutManager.ScrollDirection.VERTICAL;
     Object.defineProperty(sfSelf, 'scrollDirection', {
         get: function() {
             return _scrollDirection;
@@ -155,7 +155,7 @@ function StaggeredFlowLayout(params) {
     sfSelf.sizeForItemAtIndexPath = function (collectionView, collectionViewLayout, indexPath) {
         var retval = {width: 0, height: 0};
         
-        if (sfSelf.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) 
+        if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
         {
             var columnCount = sfSelf.spanCount;
             var itemWidth = (collectionView.frame.width - (sfSelf.contentInset.left + sfSelf.sectionInset.left + 
@@ -167,7 +167,7 @@ function StaggeredFlowLayout(params) {
             retval.width = itemWidth;
             retval.height = itemHeight;
         } 
-        else if (sfSelf.scrollDirection == StaggeredFlowLayout.ScrollDirection.HORIZONTAL) 
+        else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
         {
             var rowCount = sfSelf.spanCount;
             var itemHeight = (collectionView.frame.height - (sfSelf.contentInset.top + sfSelf.sectionInset.top + 
@@ -191,8 +191,8 @@ function StaggeredFlowLayout(params) {
     }
 }
 
-StaggeredFlowLayout.ScrollDirection = {};
-Object.defineProperties(StaggeredFlowLayout.ScrollDirection,{ 
+LayoutManager.ScrollDirection = {};
+Object.defineProperties(LayoutManager.ScrollDirection,{ 
     'VERTICAL': {
         value: 0,
         writable: false
@@ -203,4 +203,4 @@ Object.defineProperties(StaggeredFlowLayout.ScrollDirection,{
     }
 });
 
-module.exports = StaggeredFlowLayout;
+module.exports = LayoutManager;

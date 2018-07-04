@@ -2,7 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 
-const StaggeredFlowLayout = require("./layout/staggeredflowlayout");
+const LayoutManager = require("./layoutmanager");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
@@ -11,7 +11,7 @@ const UICollectionView = SF.requireClass("UICollectionView");
 const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 const NSIndexPath = SF.requireClass("NSIndexPath");
 
-const CollectionView = extend(View)(
+const GridView = extend(View)(
    function (_super, params) {
         var sfSelf = this;
         
@@ -84,7 +84,12 @@ const CollectionView = extend(View)(
             }
         });
         
-        var defaultflowLayout = new StaggeredFlowLayout();
+        var defaultflowLayout;
+        if (params && params.layoutManager) {
+            defaultflowLayout = params.layoutManager;
+        }else{
+            throw new Error('GridView constructor must have layoutManager.');
+        }
         
         // CollectionViewControllerClass Init Scope Using Invocation
         var alloc = Invocation.invokeClassMethod(CollectionViewControllerClass.name,"alloc",[],"id");
@@ -255,7 +260,7 @@ const CollectionView = extend(View)(
                 indexPath = NSIndexPath.indexPathForItemInSection(index, 0);
             }
             if (sfSelf.layoutManager) {
-                if (sfSelf.layoutManager.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
+                if (sfSelf.layoutManager.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
                     sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, true); // 1 << 0 means UICollectionViewScrollPositionTop
                 }else{
                     sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 3, true); // 1 << 3 means UICollectionViewScrollPositionLeft
@@ -396,4 +401,4 @@ const CollectionView = extend(View)(
         }
     }
 );
-module.exports = CollectionView;
+module.exports = GridView;

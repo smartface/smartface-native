@@ -72,7 +72,7 @@ CollectionView.prototype.itemCount = 0;
  * Class for CollectionView layout calculation.
  * The layoutManager used to organize the collected view’s items.
  *
- * @property {StaggeredFlowLayout} layoutManager
+ * @property {LayoutManager} layoutManager
  * @android
  * @ios
  * @since 3.2
