@@ -31,7 +31,7 @@ function Image(params) {
     };
     self.android = {};
 
-    var androidResources = AndroidConfig.activity.getResources();
+    var androidResources = AndroidConfig.activityResources;
     if (params) {
         if (params.bitmap) {
             self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
@@ -266,7 +266,7 @@ Object.defineProperty(Image.android, 'createRoundedImage', {
 });
 
 function getRoundedBitmapDrawable(bitmap, radius) {
-    var roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(AndroidConfig.activity.getResources(), bitmap);
+    var roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(AndroidConfig.activityResources, bitmap);
     roundedBitmapDrawable.setCornerRadius(AndroidUnitConverter.dpToPixel(radius));
     return roundedBitmapDrawable;
 }
