@@ -9,6 +9,16 @@
  * For example; scrollDirection: vertical, spanCount: 2 means user can scroll vertically, object has 2 colons and width property of items are fixed numbers depends on colon count.
  * If user sets scrollDirection to “horizontal”, spanCount represents count of rows.
  * For example; scrollDirection: horizontal, spanCount : 2 means user can scroll horizontally, object has 2 rows and height property of items are fixed numbers depends on row count
+ *
+ *      @example
+ *      var layoutManager = new LayoutManager({
+ *           spanCount: 2,
+ *           scrollDirection: LayoutManager.ScrollDirection.VERTICAL,
+ *           itemLength: 200
+ *      });
+ * 
+ * 
+ *
  */
  
 function LayoutManager(params) {}

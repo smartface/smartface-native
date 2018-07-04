@@ -5,6 +5,81 @@ const extend = require('js-base/core/extend');
  * @since 3.2
  * @extends UI.View
  * GridView is a View that presents given items using customizable layouts.
+ * 
+ *      @example
+ *      const Page = require("sf-core/ui/page");
+ *      const extend = require("js-base/core/extend");
+ *      const FlexLayout = require('sf-core/ui/flexlayout');
+ *      const Color = require('sf-core/ui/color');
+ *      const Label = require('sf-core/ui/label');
+ *      const ScrollView = require('sf-core/ui/scrollview');
+ *      const GridView = require("sf-core/ui/gridview");
+ *      const GridViewItem = require("sf-core/ui/gridviewitem");
+ *      const TextAlignment = require('sf-core/ui/textalignment');
+ *      const LayoutManager = require('sf-core/ui/gridview/layoutmanager');
+ *      
+ *      var Page1 = extend(Page)(
+ *          function(_super) {
+ *              _super(this, {
+ *                  onShow: function(params) {
+ *                      this.statusBar.visible = false;
+ *                      this.headerBar.visible = false;
+ *                  },onLoad: function(){
+ *                      var myDataSet = [];
+ *              
+ *                      for (var i = 0; i < 1000; i++) {
+ *                          myDataSet.push({
+ *                              title: 'Title ' + i,
+ *                              backgroundColor: Color.create(Math.floor((Math.random() * 255) + 1),Math.floor((Math.random() * 255) + 1),Math.floor((Math.random() * 255) + 1))
+ *                          });
+ *                      }
+ *                      
+ *                      var layoutManager = new LayoutManager({
+ *                          spanCount: 2,
+ *                          scrollDirection: LayoutManager.ScrollDirection.VERTICAL,
+ *                          itemLength: 200
+ *                      });
+ *                      
+ *                      var gridView = new GridView({
+ *                          layoutManager : layoutManager,
+ *                          refreshEnabled : true,
+ *                          backgroundColor: Color.TRANSPARENT,
+ *                          flexGrow : 1,
+ *                          itemCount : myDataSet.length,
+ *                          scrollBarEnabled : false,
+ *                          onItemCreate : function () {
+ *                              var gridViewViewItem = new GridViewItem();
+ *                              var myLabelTitle = new Label({
+ *                                  flexGrow : 1,
+ *                                  textAlignment : TextAlignment.MIDCENTER
+ *                              });
+ *                              gridViewViewItem.addChild(myLabelTitle);
+ *                              gridViewViewItem.myLabelTitle = myLabelTitle;
+ *                              gridViewViewItem.backgroundColor = Color.BLUE;
+ *                              return gridViewViewItem;
+ *                          },
+ *                          onItemBind : function (gridViewItem, index) {
+ *                              gridViewItem.myLabelTitle.text = myDataSet[index].title;
+ *                              gridViewItem.myLabelTitle.backgroundColor = myDataSet[index].backgroundColor;
+ *                          },
+ *                          onItemSelected : function (gridViewItem, index) {
+ *                              var item = gridViewItem.itemByIndex(index);
+ *                              console.log("Item title : " + item.myLabelTitle.text);
+ *                          },
+ *                          onPullRefresh : function () {
+ *                              console.log("GridView onPullRefresh..");
+ *                          },
+ *                          onScroll : function () {
+ *                              // console.log("GridView onScroll..");
+ *                          }
+ *                      });
+ *      
+ *                      this.layout.addChild(gridView);
+ *                  }
+ *              });
+ *          }
+ *      );
+ *      module.exports = Page1;
  */
 
 function GridView(params) {}
@@ -72,7 +147,7 @@ GridView.prototype.itemCount = 0;
  * Class for GridView layout calculation.
  * The layoutManager used to organize the collected view’s items.
  *
- * @property {LayoutManager} layoutManager
+ * @property {UI.LayoutManager} layoutManager
  * @android
  * @ios
  * @since 3.2
