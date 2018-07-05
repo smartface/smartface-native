@@ -1,5 +1,5 @@
 /*globals requireClass*/
-const AndroidUnitConverter = require("../../../util/Android/unitconverter.js");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeItemDecoration = requireClass("android.support.v7.widget.RecyclerView$ItemDecoration");
 const NativeStaggeredGridLayoutManager  = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
 

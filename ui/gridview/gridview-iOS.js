@@ -2,7 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 
-const LayoutManager = require("./layoutmanager");
+const LayoutManager = require("../layoutmanager");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');

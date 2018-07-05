@@ -16,7 +16,7 @@ const extend = require('js-base/core/extend');
  *      const GridView = require("sf-core/ui/gridview");
  *      const GridViewItem = require("sf-core/ui/gridviewitem");
  *      const TextAlignment = require('sf-core/ui/textalignment');
- *      const LayoutManager = require('sf-core/ui/gridview/layoutmanager');
+ *      const LayoutManager = require('sf-core/ui/layoutmanager');
  *      
  *      var Page1 = extend(Page)(
  *          function(_super) {
