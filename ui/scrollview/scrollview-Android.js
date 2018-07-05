@@ -75,6 +75,7 @@ const ScrollView = extend(ViewGroup)(
         var _callbackOnScroll = null;
         var _contentOffset = { x: 0, y: 0 };
         var _autoSizeEnabled = false;
+        var _contentInset = {};
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -84,6 +85,20 @@ const ScrollView = extend(ViewGroup)(
             'layout': {
                 get: function() {
                     return _layout;
+                }
+            },
+            'contentInset': {
+                get: function() {
+                    return _contentInset;
+                },
+                set: function(params) {
+                    _contentInset = params;
+                    if(params) {
+                        params.top && (this.layout.paddingTop = params.top);
+                        params.bottom && (this.layout.paddingBottom = params.bottom);
+                        params.left && (this.layout.paddingLeft = params.left);
+                        params.right && (this.layout.paddingRight = params.right);
+                    }
                 }
             },
             'scrollBarEnabled': {
