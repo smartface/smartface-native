@@ -33,9 +33,11 @@ const GridView = extend(View)(
             this.nativeInner.setItemViewCacheSize(0);
             //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
             this.nativeInner.setScrollBarStyle(50331648);
+            this.nativeInner.setHorizontalScrollBarEnabled(false);
+            this.nativeInner.setVerticalScrollBarEnabled(false);
         }
 
-        this._layout = params.layout;
+        this._layoutManager = params.layoutManager;
        
         this.nativeObject.addView(this.nativeInner);
 
@@ -60,11 +62,12 @@ const GridView = extend(View)(
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _gridViewItems[itemHashCode];
                 
-                if(self._layout && self._layout.onItemLengthForDirection) {
-                    if(self._layout.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
-                        _holderViewLayout.height = self._layout.onItemLengthForDirection(position);
+                if(self._layoutManager && (typeof(self._layoutManager.itemLength) === "number")) {
+                    if(self._layoutManager.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
+                        console.log("_holderViewLayout.height: " + self._layoutManager.itemLength);
+                        _holderViewLayout.height = self._layoutManager.itemLength;
                     } else {
-                        _holderViewLayout.width = self._layout.onItemLengthForDirection(position);
+                        _holderViewLayout.width = self._layoutManager.itemLength;
                     }
                 }
                 
@@ -110,20 +113,21 @@ const GridView = extend(View)(
         var _onPullRefresh;
         var _onItemBind;
         var _itemCount = 0;
+        var _scrollBarEnabled = false;
         Object.defineProperties(this, {
             // properties
-            'layout':{
+            'layoutManager':{
                 get: function() {
-                    return this._layout;
+                    return this._layoutManager;
                 },
-                set: function(layout) {
-                    if(this._layout) {
-                        this._layout.nativeRecyclerView = null;
+                set: function(layoutManager) {
+                    if(this._layoutManager) {
+                        this._layoutManager.nativeRecyclerView = null;
                     }
-                    this._layout = layout;
-                     if(this._layout) {
-                        this.nativeInner.setLayoutManager(this._layout.nativeObject);
-                        this._layout.nativeRecyclerView = this.nativeInner;
+                    this._layoutManager = layoutManager;
+                     if(this._layoutManager) {
+                        this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
+                        this._layoutManager.nativeRecyclerView = this.nativeInner;
                     }
                 },
                 enumerable: true
@@ -146,13 +150,20 @@ const GridView = extend(View)(
                 },
                 enumerable: true
             },
-            'verticalScrollBarEnabled': {
+            'scrollBarEnabled': {
                 get: function() {
-                    return this.nativeInner.isVerticalScrollBarEnabled();
+                    return _scrollBarEnabled;
                 },
-                set: function(verticalScrollBarEnabled) {
-                    if (TypeUtil.isBoolean(verticalScrollBarEnabled)) {
-                        this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+                set: function(value) {
+                    if (TypeUtil.isBoolean(value)) {
+                        _scrollBarEnabled = value;
+                        if(!this.layoutManager)
+                            return;
+                        if(this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
+                            this.nativeInner.setVerticalScrollBarEnabled(value);
+                        } else {
+                            this.nativeInner.setHorizontalScrollBarEnabled(value);
+                        }
                     }
                 },
                 enumerable: true
@@ -276,7 +287,7 @@ const GridView = extend(View)(
             },
             'toString': {
                 value: function() {
-                    return 'CollectionView';
+                    return 'GridView';
                 },
                 enumerable: true,
                 configurable: true

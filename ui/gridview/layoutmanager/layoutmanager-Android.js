@@ -1,13 +1,13 @@
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../../util/Android/unitconverter.js");
-const NativeStaggeredGridLayoutManager = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
 const NativeItemDecoration = requireClass("android.support.v7.widget.RecyclerView$ItemDecoration");
+const NativeStaggeredGridLayoutManager  = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
 
 function LayoutManager(params) {
     var self = this;
     this._lineDecoration = null;
     this._itemDecoration = null;
-    this._onItemLengthForDirection = params && params.onItemLengthForDirection;
+    this._itemLength = params && params.itemLength;
     this._spanCount = params && params.spanCount;
     this._lineSpacing = params && params.lineSpacing;
     this._itemSpacing = params && params.itemSpacing;
@@ -190,16 +190,13 @@ LayoutManager.prototype = {
             setContentInset(this);
         }
     },
-    get onItemLengthForDirection() {
-        return this._onItemLengthForDirection;
+    get itemLength() {
+        return this._itemLength;
     },
-    set onItemLengthForDirection(onItemLengthForDirection) {
-        this._onItemLengthForDirection = onItemLengthForDirection.bind(this);
-        if (this._nativeRecyclerView && this._nativeRecyclerView.getAdapter()) {
-            this._nativeRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+    set itemLength(value) {
+        this._itemLength = value;
     }
-}
+};
 
 Object.defineProperties(LayoutManager, {
     // properties
