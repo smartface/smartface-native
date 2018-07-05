@@ -64,7 +64,6 @@ const GridView = extend(View)(
                 
                 if(self._layoutManager && (typeof(self._layoutManager.itemLength) === "number")) {
                     if(self._layoutManager.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
-                        console.log("_holderViewLayout.height: " + self._layoutManager.itemLength);
                         _holderViewLayout.height = self._layoutManager.itemLength;
                     } else {
                         _holderViewLayout.width = self._layoutManager.itemLength;
