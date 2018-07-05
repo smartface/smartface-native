@@ -4,7 +4,7 @@ const extend = require('js-base/core/extend');
 const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
-const StaggeredFlowLayout = require('./layoutmanager');
+const GridViewLayoutManager = require('./layoutmanager');
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -63,7 +63,7 @@ const GridView = extend(View)(
                 var _holderViewLayout = _gridViewItems[itemHashCode];
                 
                 if(self._layoutManager && (typeof(self._layoutManager.itemLength) === "number")) {
-                    if(self._layoutManager.scrollDirection == StaggeredFlowLayout.ScrollDirection.VERTICAL) {
+                    if(self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
                         _holderViewLayout.height = self._layoutManager.itemLength;
                     } else {
                         _holderViewLayout.width = self._layoutManager.itemLength;
