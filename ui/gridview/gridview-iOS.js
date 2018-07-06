@@ -23,21 +23,24 @@ const GridView = extend(View)(
                 console.log("11111111");
                 self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
                 
-                var retval = {width: 0, height: 0};
-                if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
-                {
-                    retval.width = self.valueForKey("collectionView").frame.width / defaultflowLayout.spanCount;
-                    retval.height = defaultflowLayout.itemLength;
-                } 
-                else if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
-                {
-                    retval.width = defaultflowLayout.itemLength;
-                    retval.height = self.valueForKey("collectionView").frame.height / defaultflowLayout.spanCount;
-                }
+                // var retval = {width: 0, height: 0};
+                // if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
+                // {
+                //     retval.width = self.valueForKey("collectionView").frame.width / defaultflowLayout.spanCount;
+                //     retval.height = defaultflowLayout.itemLength;
+                // } 
+                // else if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
+                // {
+                //     retval.width = defaultflowLayout.itemLength;
+                //     retval.height = self.valueForKey("collectionView").frame.height / defaultflowLayout.spanCount;
+                // }
 
                 var argumentSize = new Invocation.Argument({
                     type:"CGSize",
-                    value: retval
+                    value: {
+                        width:100,
+                        height:100
+                    }
                 });
                 Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setEstimatedItemSize:",[argumentSize]);
             },
