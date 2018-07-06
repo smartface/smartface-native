@@ -158,9 +158,7 @@ function LayoutManager(params) {
         if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
         {
             var columnCount = sfSelf.spanCount;
-            var itemWidth = (collectionView.frame.width - (sfSelf.contentInset.left + sfSelf.sectionInset.left + 
-                                                            (sfSelf.itemSpacing * (columnCount - 1)) + 
-                                                                sfSelf.sectionInset.right + sfSelf.contentInset.right)) / columnCount;
+            var itemWidth = collectionView.frame.width / columnCount;
             var itemHeight = 0;
             itemHeight = sfSelf.itemLength;
             
@@ -170,9 +168,7 @@ function LayoutManager(params) {
         else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
         {
             var rowCount = sfSelf.spanCount;
-            var itemHeight = (collectionView.frame.height - (sfSelf.contentInset.top + sfSelf.sectionInset.top + 
-                                                            (sfSelf.itemSpacing * (rowCount - 1)) + 
-                                                                sfSelf.sectionInset.bottom + sfSelf.contentInset.bottom)) / rowCount;
+            var itemHeight = collectionView.frame.height / rowCount;
             var itemWidth = 0;
             itemWidth = sfSelf.itemLength;
             

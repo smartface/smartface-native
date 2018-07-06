@@ -20,7 +20,26 @@ const GridView = extend(View)(
         var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>',
         {
             viewDidLoad: function() {
+                console.log("11111111");
                 self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
+                
+                var retval = {width: 0, height: 0};
+                if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
+                {
+                    retval.width = self.valueForKey("collectionView").frame.width / defaultflowLayout.spanCount;
+                    retval.height = defaultflowLayout.itemLength;
+                } 
+                else if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
+                {
+                    retval.width = defaultflowLayout.itemLength;
+                    retval.height = self.valueForKey("collectionView").frame.height / defaultflowLayout.spanCount;
+                }
+
+                var argumentSize = new Invocation.Argument({
+                    type:"CGSize",
+                    value: retval
+                });
+                Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setEstimatedItemSize:",[argumentSize]);
             },
             // UICollectionViewDataSource
             numberOfSectionsInCollectionView: function(collectionView) {
@@ -77,11 +96,11 @@ const GridView = extend(View)(
                 if (sfSelf.onScroll) {
                     sfSelf.onScroll();
                 }
-            },
-            // UICollectionViewDelegateFlowLayout
-            collectionViewLayoutSizeForItemAtIndexPath : function (collectionView, collectionViewLayout, indexPath) {
-                return sfSelf.layoutManager.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
             }
+            // // UICollectionViewDelegateFlowLayout
+            // collectionViewLayoutSizeForItemAtIndexPath : function (collectionView, collectionViewLayout, indexPath) {
+            //     return sfSelf.layoutManager.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
+            // }
         });
         
         var defaultflowLayout;
@@ -128,6 +147,17 @@ const GridView = extend(View)(
             enumerable: true
         });
         
+        var _itemLength = 50;
+        Object.defineProperty(sfSelf, 'itemLength', {
+            get: function() {
+                return _itemLength;
+            },
+            set: function(value) {
+                _itemLength = value;
+            },
+            enumerable: true
+        });
+    
         var _layout = defaultflowLayout;
         Object.defineProperty(sfSelf, 'layoutManager', {
             get: function() {
