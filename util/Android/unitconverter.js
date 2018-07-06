@@ -1,8 +1,8 @@
-const activity = require("./androidconfig").activity;
+const AndroidConfig = require("./androidconfig");
 
 function AndroidUnitConverter(){}
 
-AndroidUnitConverter.displayMetrics = activity.getResources().getDisplayMetrics();
+AndroidUnitConverter.displayMetrics = AndroidConfig.activityResources.getDisplayMetrics();
 AndroidUnitConverter.density = AndroidUnitConverter.displayMetrics.density;
 
 AndroidUnitConverter.pixelToDp = function(pixel) {

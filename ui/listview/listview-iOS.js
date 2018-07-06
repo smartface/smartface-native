@@ -242,6 +242,7 @@ const ListView = extend(View)(
                         value: _contentInset
                     });
                     Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
+                    self.nativeObject.contentOffset = {x:0,y:-_contentInset.top};
                 }
             },
             enumerable: true

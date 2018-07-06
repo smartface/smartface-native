@@ -14,6 +14,12 @@ const UIImagePickerMediaTypes = {
     video : "public.movie"
 }
 
+const UIImagePickerControllerCameraFlashMode = {
+    off : -1,
+    auto : 0,
+    on : 1
+}
+
 function Multimedia() {}
 
 Multimedia.createImagePickerController = function(e){
@@ -29,6 +35,8 @@ Multimedia.createImagePickerController = function(e){
     picker.allowsEditing = e.allowsEditing ? e.allowsEditing : false;
     
     picker.sourceType = e.sourceType;
+    picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
+    
     this.pickerDelegate =  new __SF_UIImagePickerControllerDelegate();
           
     this.pickerDelegate.imagePickerControllerDidCancel = function(){
@@ -105,6 +113,12 @@ Multimedia.ActionType = { };
 Multimedia.ActionType.IMAGE_CAPTURE = [UIImagePickerMediaTypes.image];
 
 Multimedia.ActionType.VIDEO_CAPTURE = [UIImagePickerMediaTypes.video];
+
+Multimedia.iOS = {};
+Multimedia.iOS.CameraFlashMode = {};
+Multimedia.iOS.CameraFlashMode.OFF = [UIImagePickerControllerCameraFlashMode.off];
+Multimedia.iOS.CameraFlashMode.AUTO = [UIImagePickerControllerCameraFlashMode.auto];
+Multimedia.iOS.CameraFlashMode.ON = [UIImagePickerControllerCameraFlashMode.on];
 
 Multimedia.ios = {};
 

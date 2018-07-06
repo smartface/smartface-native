@@ -156,6 +156,12 @@ const EmulatorResetState = {
 Application.emulator = {};
 Application.emulator.globalObjectWillReset = function(state) {
     
+    const Network = require('sf-core/device/network');
+    if (Network.notifierInstance) {
+        Network.notifierInstance.stopNotifier();
+        Network.notifierInstance.removeObserver();
+    }
+    
     switch (state) {
         case EmulatorResetState.scan :
             break;

@@ -609,7 +609,7 @@ View.prototype = {
 };
 
 View.prototype.setBackgroundImage = function() {
-    var resources = AndroidConfig.activity.getResources();
+    var resources = AndroidConfig.activityResources;
     const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
     const Image = require("../image");
     var bitmap;
