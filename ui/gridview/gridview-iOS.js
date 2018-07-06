@@ -44,6 +44,8 @@ const GridView = extend(View)(
                 });
                 Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setEstimatedItemSize:",[argumentSize]);
                 Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setItemSize:",[argumentSize]);
+            },viewDidAppear:function(){
+                console.log("viewDidAppear");
             },
             // UICollectionViewDataSource
             numberOfSectionsInCollectionView: function(collectionView) {
