@@ -37,7 +37,7 @@ function File(params) {
             break;
         case Path.FILE_TYPE.DRAWABLE:
             // this.nativeObject will be Bitmap
-            var resources = activity.getResources();
+            var resources = AndroidConfig.activityResources;
             this.drawableResourceId = resources.getIdentifier(this.resolvedPath.name, "drawable", AndroidConfig.packageName);
             this.nativeObject = this.drawableResourceId !== 0 ? NativeBitmapFactory.decodeResource(resources, this.drawableResourceId) : null;
             break;
