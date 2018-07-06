@@ -28,6 +28,84 @@ Object.defineProperty(Network, 'connectionIP', {
      enumerable: true
 });
 
+Network.createNotifier = function(params) {
+      var self = this;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      // INITIALIZATION
+      if(!self.nativeObject){
+        self.nativeObject = __SF_SMFReachability.reachabilityForInternetConnection();
+        self.nativeObject.observeFromNotificationCenter();
+      }
+      
+      if (Network.notifierInstance) {
+        Network.notifierInstance.stopNotifier();
+        Network.notifierInstance.removeObserver();
+      }
+      Network.notifierInstance = self.nativeObject;
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      // LOGIC
+      if(self.nativeObject){
+        self.nativeObject.reachabilityChangedCallback = function(){
+          var sfStatus;
+          var status = self.nativeObject.currentReachabilityStatus();
+          switch (status) {
+            case 0:
+              sfStatus = Network.ConnectionType.None;
+              break;
+            case 1:
+              sfStatus = Network.ConnectionType.WIFI;
+              break;
+            case 2:
+              sfStatus = Network.ConnectionType.Mobile;
+              break;
+            default:
+              break;
+          }
+          
+          if (self.connectionTypeChanged) {
+            self.connectionTypeChanged(sfStatus);
+          }
+        }
+      }
+      
+      ////////////////////////////////////////////////////////////////////////////////
+      // CALLBACKS
+        
+      var _connectionTypeChanged = null;
+      Object.defineProperty(self, 'connectionTypeChanged', {
+        get: function() {
+            return _connectionTypeChanged;
+        },
+        set: function(value) {
+            if (typeof value === "function") {
+                _connectionTypeChanged = value;
+                self.nativeObject.startNotifier();
+            } 
+            else if (typeof value === "object") {
+                _connectionTypeChanged = value;
+                self.nativeObject.stopNotifier();
+            }
+        },
+        enumerable: true
+      });
+      
+      self.subscribe = function(callback){
+        self.connectionTypeChanged = callback;
+      }
+      
+      self.unsubscribe = function(){
+        self.connectionTypeChanged = null;
+      }
+      
+      if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+      }
+}
+
 
 
 module.exports = Network;

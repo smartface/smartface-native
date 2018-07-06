@@ -190,7 +190,7 @@ const TextView = extend(Label)(
         function lineSpacing() {
             var lineSpan = NativeLineHeightSpan.implement({
                 chooseHeight: function(text, start, end, spanstartv, v, fm) {
-                    fm.bottom += unitconverter.dpToPixel(_lineSpacing);
+                    fm.ascent -= unitconverter.dpToPixel(_lineSpacing);
                     fm.descent += unitconverter.dpToPixel(_lineSpacing);
                 }
             });

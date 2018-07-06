@@ -341,9 +341,9 @@ function Page(params) {
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
             var result = 0;
-            var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -394,7 +394,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
-            var resources = activity.getResources();
+            var resources = AndroidConfig.activityResources;
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
         },
         enumerable: true,
@@ -555,9 +555,9 @@ function Page(params) {
 
             const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
-            var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
+            var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },

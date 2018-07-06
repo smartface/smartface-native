@@ -70,7 +70,17 @@ const TextBox = extend(TextView)(
         var self = this;
         var activity = AndroidConfig.activity;
         if (!self.nativeObject) {
-            self.nativeObject = new NativeEditText(activity);
+         
+            self.nativeObject = NativeEditText.extend("SFEditText", {
+                'onKeyPreIme': function(keyCode, keyEvent){ //AND-3123: Due to the issue, hardware button listener added.
+                    
+                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                    if (keyCode === 4 && keyEvent.getAction() === 1) {
+                        self.nativeObject.clearFocus();
+                    }
+                    return false;
+                }
+            },[activity] )
         }
         _super(this);
 
@@ -377,16 +387,18 @@ const TextBox = extend(TextView)(
                     return false;
                 }
             }));
-
-            self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-                onKey: function(view, keyCode, keyEvent) {
-                    // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if (keyCode === 4 && keyEvent.getAction() === 1) {
-                        self.nativeObject.clearFocus();
-                    }
-                    return false;
-                }
-            }));
+            
+            // AND-3223: instead of setOnKeyListener , onKeyPreIme is implemented.  
+            // self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+            //     onKey: function(view, keyCode, keyEvent) {
+            //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            //         if (keyCode === 4 && keyEvent.getAction() === 1) {
+            //             
+            //             self.nativeObject.clearFocus();
+            //         }
+            //         return false;
+            //     }
+            // }));
         }
 
         // Always return false for using both touch and focus events. 
