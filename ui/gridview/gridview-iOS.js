@@ -46,20 +46,15 @@ const GridView = extend(View)(
                 
                 // onItemCreate and onItemBind callback pairs
                 if (cell.contentView.subviews.length > 0) {
-                    SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
                         if (sfSelf.onItemBind) {
                             sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                         }
-                    });
                 }else{
                     collectionViewItems[cell.uuid] = sfSelf.onItemCreate(cell.reuseIdentifier);
-                    
-                    SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
-                        cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
-                        if (sfSelf.onItemBind) {
-                            sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
-                        }
-                    });
+                    cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
+                    if (sfSelf.onItemBind) {
+                        sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
+                    }
                 }
                 return cell;
             },
@@ -256,7 +251,7 @@ const GridView = extend(View)(
             sfSelf.nativeObject.reloadData();
         };
         
-        sfSelf.scrollTo = function(index, section){
+        sfSelf.scrollTo = function(index, animate, section){
             var indexPath;
             if (typeof section === "number") {
                 indexPath = NSIndexPath.indexPathForItemInSection(index, section);
@@ -265,9 +260,9 @@ const GridView = extend(View)(
             }
             if (sfSelf.layoutManager) {
                 if (sfSelf.layoutManager.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
-                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, true); // 1 << 0 means UICollectionViewScrollPositionTop
+                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, (animate === false) ? false : true); // 1 << 0 means UICollectionViewScrollPositionTop
                 }else{
-                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 3, true); // 1 << 3 means UICollectionViewScrollPositionLeft
+                    sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 3, (animate === false) ? false : true); // 1 << 3 means UICollectionViewScrollPositionLeft
                 }
             }
         };
