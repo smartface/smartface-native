@@ -28,6 +28,7 @@ const ImageView = extend(View)(
     function(imageViewPrototype) {
         imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
         imageViewPrototype._image = null;
+        imageViewPrototype._adjustViewBounds = false;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -54,6 +55,10 @@ const ImageView = extend(View)(
                         fillType = ImageView.FillType.NORMAL;
                     }
                     this._fillType = fillType;
+                    if(fillType === ImageView.FillType.ASPECTFILL && !this._adjustViewBounds) {
+                        this.nativeObject.setAdjustViewBounds(true);
+                        this._adjustViewBounds = true;
+                    }
                     this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
                 },
                 enumerable: true
@@ -95,6 +100,10 @@ Object.defineProperties(ImageView.FillType,{
         value: 2,
         enumerable: true
     },
+    'ASPECTFILL':{
+        value: 3,
+        enumerable: true
+    },
     'ios':{
         value: {},
         enumerable: true
@@ -105,5 +114,6 @@ const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL]    = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH]   = NativeImageView.ScaleType.FIT_XY;
 ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
+ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP;
 
 module.exports = ImageView;
