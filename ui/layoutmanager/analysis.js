@@ -1,6 +1,6 @@
 /**
  * @class UI.LayoutManager
- * @since 3.2
+ * @since 3.0.2
  * Layout calculation class for GridView. It behaves iOS’s UICollectionViewFlowLayout and Android’s StaggeredGridLayout.
  *
  * spanCount and scrollDirection are 2 important parameters of this class.
@@ -30,7 +30,7 @@ function LayoutManager(params) {}
  * @property {Number} [itemLength = 50]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.prototype.itemLength = 50;
 
@@ -41,7 +41,7 @@ LayoutManager.prototype.itemLength = 50;
  * @property {Number} [spanCount = 1]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.prototype.spanCount = 1;
 
@@ -51,7 +51,7 @@ LayoutManager.prototype.spanCount = 1;
  * @property {Number} [contentInset = {top:0, left:0, bottom:0, right:0}]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.prototype.contentInset = {top:0, left:0, bottom:0, right:0};
 
@@ -62,7 +62,7 @@ LayoutManager.prototype.contentInset = {top:0, left:0, bottom:0, right:0};
  * @property {LayoutManager.ScrollDirection} [scrollDirection = 0]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.prototype.scrollDirection = LayoutManager.ScrollDirection.VERTICAL;
 
@@ -72,7 +72,7 @@ LayoutManager.prototype.scrollDirection = LayoutManager.ScrollDirection.VERTICAL
  * @class UI.LayoutManager.ScrollDirection
  * @readonly
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.ScrollDirection = {};
 
@@ -81,7 +81,7 @@ LayoutManager.ScrollDirection = {};
  * @ios
  * @static
  * @readonly
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.ScrollDirection.VERTICAL = 0;
 
@@ -90,7 +90,7 @@ LayoutManager.ScrollDirection.VERTICAL = 0;
  * @ios
  * @static
  * @readonly
- * @since 3.2
+ * @since 3.0.2
  */
 LayoutManager.ScrollDirection.HORIZONTAL = 1;
 

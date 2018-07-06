@@ -2,7 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 /**
  * @class UI.GridView
- * @since 3.2
+ * @since 3.0.2
  * @extends UI.View
  * GridView is a View that presents given items using customizable layouts.
  * 
@@ -92,7 +92,7 @@ function GridView(params) {}
  * @android
  * @ios
  * @return {UI.GridViewItem}
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onItemCreate = function onItemCreate(){};
 
@@ -105,7 +105,7 @@ GridView.prototype.onItemCreate = function onItemCreate(){};
  * @event onItemBind
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
 
@@ -117,7 +117,7 @@ GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
  * @event onItemSelected
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index){};
 
@@ -128,7 +128,7 @@ GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index)
  * @param {Number} index
  * @event onItemLongSelected
  * @android
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
 
@@ -139,7 +139,7 @@ GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem
  * @property {Number} [itemCount = 0]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.itemCount = 0;
 
@@ -150,7 +150,7 @@ GridView.prototype.itemCount = 0;
  * @property {UI.LayoutManager} layoutManager
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.layoutManager;
 
@@ -162,7 +162,7 @@ GridView.prototype.layoutManager;
  * @property {Boolean} [scrollBarEnabled = false]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.scrollBarEnabled = false;
 
@@ -173,7 +173,7 @@ GridView.prototype.scrollBarEnabled = false;
  * @property {Boolean} [refreshEnabled = true]
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.refreshEnabled = true;
 
@@ -185,7 +185,7 @@ GridView.prototype.refreshEnabled = true;
  * @method getFirstVisibleIndex
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.getFirstVisibleIndex = function(){};
 
@@ -197,7 +197,7 @@ GridView.prototype.getFirstVisibleIndex = function(){};
  * @method getLastVisibleIndex
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.getLastVisibleIndex = function(){};
 
@@ -210,7 +210,7 @@ GridView.prototype.getLastVisibleIndex = function(){};
  * @param {UI.Color[]} colors
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.setPullRefreshColors = function(colors){};
 
@@ -222,7 +222,7 @@ GridView.prototype.setPullRefreshColors = function(colors){};
  * @method refreshData
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.refreshData = function(){};
 
@@ -230,12 +230,13 @@ GridView.prototype.refreshData = function(){};
  * This method scrolls GridView to a specific index.
  *
  * @param {Number} index
+ * @param {Boolean} [animated = true]
  * @method scrollTo
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
-GridView.prototype.scrollTo = function(index){};
+GridView.prototype.scrollTo = function(index,animated){};
 
 /**
  * This method cancels refresh operation and stops the refresh
@@ -246,7 +247,7 @@ GridView.prototype.scrollTo = function(index){};
  * @method stopRefresh
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.stopRefresh = function(){};
 
@@ -258,7 +259,7 @@ GridView.prototype.stopRefresh = function(){};
  * @event onScroll
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onScroll = function onScroll(){ }
 
@@ -269,7 +270,7 @@ GridView.prototype.onScroll = function onScroll(){ }
  * @event onPullRefresh
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.onPullRefresh = function onPullRefresh(){}
 
@@ -281,7 +282,7 @@ GridView.prototype.onPullRefresh = function onPullRefresh(){}
  * @param {Number} index
  * @android
  * @ios
- * @since 3.2
+ * @since 3.0.2
  */
 GridView.prototype.itemByIndex = function(index){};
 

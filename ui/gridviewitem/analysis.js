@@ -2,7 +2,7 @@ const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
 /**
  * @class UI.GridViewItem
- * @since 3.2
+ * @since 3.0.2
  * @extends UI.ViewGroup
  *
  * GridViewItem class can used for a item layout of the GridView.
