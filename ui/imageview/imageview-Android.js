@@ -15,7 +15,7 @@ const ImageView = extend(View)(
 
         if(!this.isNotSetDefaults){
             // SET DEFAULTS
-            this.imageFillType = ImageView.FillType.CENTER;
+            this.imageFillType = ImageView.FillType.NORMAL;
         }
 
         // Assign parameters given in constructor
