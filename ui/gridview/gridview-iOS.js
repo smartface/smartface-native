@@ -20,32 +20,7 @@ const GridView = extend(View)(
         var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>',
         {
             viewDidLoad: function() {
-                console.log("11111111");
                 self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
-                
-                // var retval = {width: 0, height: 0};
-                // if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
-                // {
-                //     retval.width = self.valueForKey("collectionView").frame.width / defaultflowLayout.spanCount;
-                //     retval.height = defaultflowLayout.itemLength;
-                // } 
-                // else if (defaultflowLayout.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
-                // {
-                //     retval.width = defaultflowLayout.itemLength;
-                //     retval.height = self.valueForKey("collectionView").frame.height / defaultflowLayout.spanCount;
-                // }
-
-                var argumentSize = new Invocation.Argument({
-                    type:"CGSize",
-                    value: {
-                        width:100,
-                        height:100
-                    }
-                });
-                Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setEstimatedItemSize:",[argumentSize]);
-                Invocation.invokeInstanceMethod(defaultflowLayout.nativeObject,"setItemSize:",[argumentSize]);
-            },viewDidAppear:function(){
-                console.log("viewDidAppear");
             },
             // UICollectionViewDataSource
             numberOfSectionsInCollectionView: function(collectionView) {
@@ -164,17 +139,10 @@ const GridView = extend(View)(
             enumerable: true
         });
     
-        var _layout = defaultflowLayout;
         Object.defineProperty(sfSelf, 'layoutManager', {
             get: function() {
-                return _layout;
+                return defaultflowLayout;
             },
-            // set: function(value) {
-            //     if (typeof value === "object") {
-            //         _layout = value;   
-            //          sfSelf.layout.collectionView!!!!!!!!
-            //     }
-            // },
             enumerable: true
         });
         

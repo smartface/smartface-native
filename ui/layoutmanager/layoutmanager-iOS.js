@@ -13,26 +13,24 @@ function LayoutManager(params) {
       var flowLayout = SF.defineClass('SMFUICollectionViewFlowLayout : UICollectionViewFlowLayout',
     {
         prepareLayout: function() {
-            console.log("Preparrere");
-                            
-                var retval = {width: 0, height: 0};
-                if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
-                {
-                    retval.width = sfSelf.collectionView.frame.width / sfSelf.spanCount;
-                    retval.height = sfSelf.itemLength;
-                } 
-                else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
-                {
-                    retval.width = sfSelf.itemLength;
-                    retval.height = sfSelf.collectionView.frame.height / sfSelf.spanCount;
-                }
-
-                var argumentSize = new Invocation.Argument({
-                    type:"CGSize",
-                    value: retval
-                });
-                Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setEstimatedItemSize:",[argumentSize]);
-                Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
+            var retval = {width: 0, height: 0};
+            if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
+            {
+                retval.width = sfSelf.collectionView.frame.width / sfSelf.spanCount;
+                retval.height = sfSelf.itemLength;
+            } 
+            else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
+            {
+                retval.width = sfSelf.itemLength;
+                retval.height = sfSelf.collectionView.frame.height / sfSelf.spanCount;
+            }
+    
+            var argumentSize = new Invocation.Argument({
+                type:"CGSize",
+                value: retval
+            });
+            Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setEstimatedItemSize:",[argumentSize]);
+            Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
         }
     }).new();
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
