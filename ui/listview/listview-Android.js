@@ -3,6 +3,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const ListViewItem = require("../listviewitem");
 const TypeUtil = require("../../util/type");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
@@ -31,6 +32,7 @@ const ListView = extend(View)(
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
             this.nativeInner.setItemViewCacheSize(0);
+            this.nativeInner.setClipToPadding(false);
         }
 
         var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
@@ -112,6 +114,7 @@ const ListView = extend(View)(
         var _onRowBind;
         var _onRowType;
         var _itemCount = 0;
+        var _contentInset = {};
         Object.defineProperties(this, {
             // properties
             'listViewItemByIndex': {
@@ -256,6 +259,16 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'contentInset': {
+                get: function() {
+                    return _contentInset;
+                },
+                set: function(params) {
+                    _contentInset = params;
+                    setContentInset();
+                },
+                enumerable: true
+            },
             'onRowHeight': {
                 get: function() {
                     return _onRowHeight;
@@ -334,7 +347,24 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-
+        
+        function setContentInset() {
+            var topInset = 0;
+            var bottomInset = 0;
+            var contentInset = self.contentInset;
+            if (contentInset && self.nativeInner) {
+                if (contentInset.top) {
+                    topInset = AndroidUnitConverter.dpToPixel(contentInset.top);
+                }
+                if (contentInset.bottom) {
+                    bottomInset = AndroidUnitConverter.dpToPixel(contentInset.bottom);
+                }
+            }
+            
+            if (self.nativeInner) {
+                self.nativeInner.setPadding(0, topInset, 0, bottomInset);
+            }
+        }
 
         // ios-only properties
         this.ios = {};
