@@ -94,10 +94,18 @@ Object.defineProperties(ImageView.FillType,{
         value: 1,
         enumerable: true
     },
+    'ASPECTFILL':{
+        value: 2,
+        enumerable: true
+    },
     'ios':{
         value: {},
         enumerable: true
     },
+    'android':{
+        value: {},
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ImageView.FillType.ios,{
