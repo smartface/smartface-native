@@ -349,8 +349,6 @@ const ListView = extend(View)(
         });
         
         function setContentInset() {
-            var leftInset = 0;
-            var rightInset = 0;
             var topInset = 0;
             var bottomInset = 0;
             var contentInset = self.contentInset;
@@ -364,7 +362,7 @@ const ListView = extend(View)(
             }
             
             if (self.nativeInner) {
-                self.nativeInner.setPadding(leftInset, topInset, rightInset, bottomInset);
+                self.nativeInner.setPadding(0, topInset, 0, bottomInset);
             }
         }
 
