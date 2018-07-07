@@ -52,9 +52,9 @@ const ImageView = extend(View)(
         
         self.loadFromUrl = function(url, placeHolder){
             if (placeHolder){
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject);
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject,0.3);
             }else{
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url));
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),undefined,0.3);
             }
         };
         
