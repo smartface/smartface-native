@@ -1,35 +1,36 @@
-const TypeUtil                  = require("../../util/type");
-const AndroidConfig             = require("../../util/Android/androidconfig");
-const Application               = require("../../application");
-const Color                     = require("../../ui/color");
-const NativeR                   = requireClass(AndroidConfig.packageName + '.R');
-const NativeNotificationCompat  = requireClass("android.support.v4.app.NotificationCompat");
+const TypeUtil = require("../../util/type");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const Application = require("../../application");
+const Color = require("../../ui/color");
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
+const NativeNotificationCompat = requireClass("android.support.v4.app.NotificationCompat");
 const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 const NativeNotificationListener = requireClass('io.smartface.android.listeners.NotificationListener');
+const Runnable = requireClass("java.lang.Runnable");
 
 // android.content.Context.NOTIFICATION_SERVICE;
-const NOTIFICATION_SERVICE      = "notification";
-const NOTIFICATION_MANAGER      = 'android.app.NotificationManager';
+const NOTIFICATION_SERVICE = "notification";
+const NOTIFICATION_MANAGER = 'android.app.NotificationManager';
 // android.content.Context.ALARM_SERVICE;
-const ALARM_SERVICE             = "alarm";
-const ALARM_MANAGER             = "android.app.AlarmManager";
+const ALARM_SERVICE = "alarm";
+const ALARM_MANAGER = "android.app.AlarmManager";
 
 const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 
 var selectedNotificationIds = [];
 var senderID = null;
-var notificationListener =  NativeNotificationListener.implement({
-    onRemoteNotificationReceived: function(data){
-        Application.onReceivedNotification && Application.onReceivedNotification({ 'remote': JSON.parse(data) });
+var notificationListener = NativeNotificationListener.implement({
+    onRemoteNotificationReceived: function(data) {
+        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, { 'remote': JSON.parse(data) });
     },
-    onLocalNotificationReceived: function(data){
-        Application.onReceivedNotification && Application.onReceivedNotification({ 'local': JSON.parse(data) });
+    onLocalNotificationReceived: function(data) {
+        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, { 'local': JSON.parse(data) });
     }
 });
 
 NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
 
-function Notifications(){}
+function Notifications() {}
 
 Notifications.LocalNotification = function(params) {
     var self = this;
@@ -41,13 +42,11 @@ Notifications.LocalNotification = function(params) {
 
     this.nativeObject = new NativeNotificationCompat.Builder(AndroidConfig.activity);
     this.nativeObject = self.nativeObject.setSmallIcon(NativeR.drawable.icon);
-    
+
     var _id = getNewNotificationId();
     var _alertBody = "";
     var _alertAction = "";
     var _sound = "";
-    var _launchImage = null;
-    var _fireDate = Date.now();
     var _repeatInterval = 0;
     Object.defineProperties(this, {
         'alertBody': {
@@ -95,9 +94,9 @@ Notifications.LocalNotification = function(params) {
                 if (TypeUtil.isString(value)) {
                     const Image = require("../../ui/image");
                     var largeImage = Image.createFromFile(value);
-                    if(largeImage && largeImage.nativeObject){
+                    if (largeImage && largeImage.nativeObject) {
                         var largeImageBitmap = largeImage.nativeObject.getBitmap();
-                        if(largeImageBitmap){
+                        if (largeImageBitmap) {
                             self.nativeObject.setLargeIcon(largeImageBitmap);
                             _launchImage = value;
                         }
@@ -111,7 +110,7 @@ Notifications.LocalNotification = function(params) {
                 return _fireDate;
             },
             set: function(value) {
-                if(TypeUtil.isNumeric(value)){
+                if (TypeUtil.isNumeric(value)) {
                     _fireDate = value;
                 }
             },
@@ -128,8 +127,8 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'schedule' : {
-            value: function(){
+        'schedule': {
+            value: function() {
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
@@ -143,8 +142,8 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'present' : {
-            value: function(){
+        'present': {
+            value: function() {
                 self.mNotification = self.nativeObject.build();
                 startNotificationIntent(self, {
                     // LocalNotificationReceiver.NOTIFICATION_ID
@@ -156,22 +155,22 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'cancel' : {
-            value: function(){
-                if(self.mPendingIntent && self.mNotification){
+        'cancel': {
+            value: function() {
+                if (self.mPendingIntent && self.mNotification) {
                     cancelNotificationIntent(self);
                 }
             },
             enumerable: true
         },
         //Internal call only.
-        'getId' : {
-            value: function(){
+        'getId': {
+            value: function() {
                 return _id;
             }
         },
     });
-    
+
     var _color = 0;
     var _indeterminate = false;
     var _ticker = '';
@@ -179,8 +178,8 @@ Notifications.LocalNotification = function(params) {
     var _priority = Notifications.Priority.DEFAULT;
     var _subText = '';
     var _ongoing = false;
-    Object.defineProperties(this.android,{
-        'color' : {
+    Object.defineProperties(this.android, {
+        'color': {
             get: function() {
                 return _color;
             },
@@ -192,19 +191,19 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'indeterminate' : {
+        'indeterminate': {
             get: function() {
                 return _indeterminate;
             },
             set: function(value) {
-                if(TypeUtil.isBoolean(value)){
+                if (TypeUtil.isBoolean(value)) {
                     _indeterminate = value;
                     self.nativeObject.setProgress(0, 100, value);
                 }
             },
             enumerable: true
         },
-        'ticker' : {
+        'ticker': {
             get: function() {
                 return _ticker;
             },
@@ -218,8 +217,8 @@ Notifications.LocalNotification = function(params) {
         },
         /** @todo it looks like we got problems with primitive arrays
          * method android.support.v4.app.NotificationCompat$Builder.setVibrate argument 1 has type long[], got java.lang.Long[]"
-        * */
-        'vibrate' : {
+         * */
+        'vibrate': {
             get: function() {
                 return _vibrate;
             },
@@ -231,7 +230,7 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'priority' : {
+        'priority': {
             get: function() {
                 return _priority;
             },
@@ -243,7 +242,7 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'subText' : {
+        'subText': {
             get: function() {
                 return _subText;
             },
@@ -255,7 +254,7 @@ Notifications.LocalNotification = function(params) {
             },
             enumerable: true
         },
-        'ongoing' : {
+        'ongoing': {
             get: function() {
                 return _ongoing;
             },
@@ -268,10 +267,10 @@ Notifications.LocalNotification = function(params) {
             enumerable: true
         }
     });
-    
+
     // Handling iOS specific properties
-     self.ios = {};
-    
+    self.ios = {};
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -280,28 +279,28 @@ Notifications.LocalNotification = function(params) {
     }
 }
 
-Object.defineProperties(Notifications,{
+Object.defineProperties(Notifications, {
     'cancelAllLocalNotifications': {
-        value: function(){
+        value: function() {
             var notificationManager = AndroidConfig.getSystemService(NOTIFICATION_SERVICE, NOTIFICATION_MANAGER);
             notificationManager.cancelAll();
         },
         enumerable: true
     },
     'registerForPushNotifications': {
-        value: function(onSuccess, onFailure){
-            if(!AndroidConfig.isEmulator){
+        value: function(onSuccess, onFailure) {
+            if (!AndroidConfig.isEmulator) {
                 registerPushNotification(onSuccess, onFailure);
             }
-            else{
+            else {
                 onFailure && onFailure();
             }
         },
         enumerable: true
     },
     'unregisterForPushNotifications': {
-        value: function(){
-            if(!AndroidConfig.isEmulator){
+        value: function() {
+            if (!AndroidConfig.isEmulator) {
                 unregisterPushNotification();
             }
         },
@@ -309,86 +308,86 @@ Object.defineProperties(Notifications,{
     },
 });
 
-Object.defineProperty(Notifications, "Priority",{
+Object.defineProperty(Notifications, "Priority", {
     value: require("./priority"),
     enumerable: true
 });
 
-Object.defineProperty(Notifications, "Android",{
+Object.defineProperty(Notifications, "Android", {
     value: {},
     enumerable: true
 });
 
-Object.defineProperty(Notifications.Android, "Priority",{
+Object.defineProperty(Notifications.Android, "Priority", {
     value: require("./priority"),
     enumerable: true
 });
 
 
 // Generate unique random number
-function getNewNotificationId(){
-    var randomnumber = Math.ceil(Math.random()*1000 + 1000);
-    while(selectedNotificationIds.indexOf(randomnumber) !== -1){
-        randomnumber = Math.ceil(Math.random()*1000 + 1000);
+function getNewNotificationId() {
+    var randomnumber = Math.ceil(Math.random() * 1000 + 1000);
+    while (selectedNotificationIds.indexOf(randomnumber) !== -1) {
+        randomnumber = Math.ceil(Math.random() * 1000 + 1000);
     }
     selectedNotificationIds.push(randomnumber);
     return randomnumber;
 }
 
-function unregisterPushNotification(){
+function unregisterPushNotification() {
     // Implemented due to COR-1281
-    if(TypeUtil.isString(senderID) && senderID !== ""){
+    if (TypeUtil.isString(senderID) && senderID !== "") {
         const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
-        if(notificationListener){
+        if (notificationListener) {
             NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
     }
-    else{
+    else {
         throw Error("Not registered to push notification.");
     }
 }
 
-function registerPushNotification(onSuccessCallback, onFailureCallback){
+function registerPushNotification(onSuccessCallback, onFailureCallback) {
     // Checking sender id loaded
-    if(!senderID){
+    if (!senderID) {
         readSenderIDFromProjectJson();
     }
-    if(TypeUtil.isString(senderID) && senderID !== '' ){
+    if (TypeUtil.isString(senderID) && senderID !== '') {
         const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
         NativeGCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
-            onSuccess: function(token){
+            onSuccess: function(token) {
                 const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
                 NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
-                onSuccessCallback && onSuccessCallback({ 'token' : token });
+                onSuccessCallback && onSuccessCallback({ 'token': token });
             },
-            onFailure: function(){
+            onFailure: function() {
                 onFailureCallback && onFailureCallback();
             }
         });
     }
-    else{
+    else {
         onFailureCallback && onFailureCallback();
     }
 }
 
-function readSenderIDFromProjectJson(){
+function readSenderIDFromProjectJson() {
     // get from GCMRegisterUtil due to the project.json encryption
     const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
     senderID = NativeGCMRegisterUtil.getSenderID();
 }
 
-function startNotificationIntent(self, params){
+function startNotificationIntent(self, params) {
     const NativeIntent = requireClass('android.content.Intent');
     const NativePendingIntent = requireClass('android.app.PendingIntent')
     /** @todo throw exception here 
      * Error: An exception occured
-    */
+     */
     var nativeNotificationReceiverClass = requireClass("io.smartface.android.notifications.LocalNotificationReceiver");
     var notificationIntent = new NativeIntent(AndroidConfig.activity, nativeNotificationReceiverClass);
-    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED","");
-    Object.keys(params).forEach(function(key){
+    notificationIntent.putExtra("LOCAL_NOTIFICATION_RECEIVED", "");
+    Object.keys(params).forEach(function(key) {
         notificationIntent.putExtra(key.toString(), params[key]);
     });
 
@@ -396,17 +395,17 @@ function startNotificationIntent(self, params){
     self.mPendingIntent = NativePendingIntent.getBroadcast(AndroidConfig.activity, 0, notificationIntent, 1073741824);
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     var fireDate = params.fireDate ? params.fireDate : 0;
-    if(params.repeatInterval){
+    if (params.repeatInterval) {
         // AlarmManager.RTC_WAKEUP
         alarmManager.setRepeating(0, fireDate, params.repeatInterval, self.mPendingIntent);
     }
-    else{
+    else {
         // AlarmManager.ELAPSED_REALTIME_WAKEUP
-         alarmManager.set(2, fireDate, self.mPendingIntent);
+        alarmManager.set(2, fireDate, self.mPendingIntent);
     }
 }
 
-function cancelNotificationIntent(self){
+function cancelNotificationIntent(self) {
     // Cancel alarm.
     var alarmManager = AndroidConfig.getSystemService(ALARM_SERVICE, ALARM_MANAGER);
     alarmManager.cancel(self.mPendingIntent);
@@ -415,9 +414,18 @@ function cancelNotificationIntent(self){
     notificationManager.cancel(self.getId());
 }
 
+function runOnUiThread(callback, params) {
+    var runnable = Runnable.implement({
+        run: function() {
+            callback && callback(params);
+        }
+    });
+    AndroidConfig.activity.runOnUiThread(runnable);
+}
+
 // Handling iOS specific properties
 Notifications.ios = {};
 Notifications.ios.authorizationStatus = {};
-Notifications.ios.getAuthorizationStatus = function(){};
+Notifications.ios.getAuthorizationStatus = function() {};
 
 module.exports = Notifications;
