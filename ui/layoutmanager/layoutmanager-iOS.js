@@ -29,7 +29,6 @@ function LayoutManager(params) {
                 type:"CGSize",
                 value: retval
             });
-            Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setEstimatedItemSize:",[argumentSize]);
             Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
         }
     }).new();
