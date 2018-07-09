@@ -31,7 +31,7 @@ const ScrollView = extend(ViewGroup)(
                         var translation = { x: (x - oldX), y: (y - oldy) };
                         _contentOffset.x = x;
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({translation: translation, contentOffset: _contentOffset});
                     }
                 }, [activity]);
             }
@@ -53,7 +53,7 @@ const ScrollView = extend(ViewGroup)(
                         var translation = { x: (xObj - oldx), y: (y - oldY) };
                         _contentOffset.y = y;
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({translation: translation, contentOffset: _contentOffset});
                     }
                 }, [activity]);
             }
