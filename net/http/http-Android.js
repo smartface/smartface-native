@@ -292,7 +292,8 @@ function createMultipartBody(bodies) {
 
 function getResponseHeaders(headers) {
     var responseHeaders = {};
-    for (var i = 0; i < headers.size(); i++) {
+    var headersSize = headers.size();
+    for (var i = 0; i < headersSize; i++) {
         responseHeaders[headers.name(i)] = headers.value(i);
     }
     return responseHeaders;

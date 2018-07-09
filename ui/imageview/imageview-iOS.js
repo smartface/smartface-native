@@ -52,9 +52,9 @@ const ImageView = extend(View)(
         
         self.loadFromUrl = function(url, placeHolder){
             if (placeHolder){
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject);
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject,0.3);
             }else{
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url));
+                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),undefined,0.3);
             }
         };
         
@@ -94,10 +94,18 @@ Object.defineProperties(ImageView.FillType,{
         value: 1,
         enumerable: true
     },
+    'ASPECTFILL':{
+        value: 2,
+        enumerable: true
+    },
     'ios':{
         value: {},
         enumerable: true
     },
+    'android':{
+        value: {},
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ImageView.FillType.ios,{

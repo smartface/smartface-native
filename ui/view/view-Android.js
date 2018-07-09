@@ -306,19 +306,6 @@ View.prototype = {
     applyLayout: function() {
         this.nativeObject.requestLayout();
         this.nativeObject.invalidate();
-        const ScrollView = require("sf-core/ui/scrollview");
-        if(this.parent && (this.parent) instanceof ScrollView && (this.parent.autoSizeEnabled)) {
-            const Runnable = requireClass("java.lang.Runnable");
-            var scrollView = this.parent;
-            var runnable = Runnable.implement({
-                run: function() {
-                    calculateScrollViewSize(scrollView);
-                    scrollView.layout.nativeObject.requestLayout();
-                    scrollView.layout.nativeObject.invalidate();
-                }
-            });
-            scrollView.layout.nativeObject.post(runnable);
-        }
     },
     toString: function() {
         return 'View';
@@ -622,7 +609,7 @@ View.prototype = {
 };
 
 View.prototype.setBackgroundImage = function() {
-    var resources = AndroidConfig.activity.getResources();
+    var resources = AndroidConfig.activityResources;
     const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
     const Image = require("../image");
     var bitmap;
@@ -884,40 +871,6 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_enabled,
 ], "int");
 
-
-            
-function calculateScrollViewSize(scrollView) {
-    const ScrollView = require("sf-core/ui/scrollview");
-    var childViews = scrollView.layout.childViews;
-    var keys = Object.keys(childViews);
-    var arrayLenght = keys.length;
-    if(scrollView.align === ScrollView.Align.VERTICAL) {
-        var layoutHeight = 0;
-        for(var i = 0; i < arrayLenght; i++) {
-            var viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
-            var viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
-            var viewBottomMargin = childViews[keys[i]].marginBottom;
-            var layoutPaddingBottom = scrollView.layout.paddingBottom;
-            
-            var measuredHeight = viewY + viewHeight + viewBottomMargin + layoutPaddingBottom;
-            if(measuredHeight > layoutHeight)
-                layoutHeight = measuredHeight;
-        }
-        scrollView.layout.height = layoutHeight;
-    } else {
-        var layoutWidth = 0;
-        for(i = 0; i < arrayLenght; i++) {
-            var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
-            var viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
-            var viewRightMargin = childViews[keys[i]].marginRight;
-            var layoutPaddingRight = scrollView.layout.paddingRight;
-            var measuredWidth = viewX + viewWidth + viewRightMargin + layoutPaddingRight;
-            if(measuredWidth > layoutWidth)
-                layoutWidth = measuredWidth;
-        }
-        scrollView.layout.width = layoutWidth;
-    }
-}
 
 function createNewLayerDrawable(drawables) {
     var drawablesForObjectCreate = [];
