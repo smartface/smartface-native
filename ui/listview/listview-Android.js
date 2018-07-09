@@ -105,6 +105,7 @@ const ListView = extend(View)(
         }, null);
 
         var _onScroll;
+        var _contentOffset = {x: 0, y: 0};
         var _rowHeight;
         var _onRowCreate;
         var _onRowSelected;
@@ -115,6 +116,7 @@ const ListView = extend(View)(
         var _onRowType;
         var _itemCount = 0;
         var _contentInset = {};
+        var _onScrollListener;
         Object.defineProperties(this, {
             // properties
             'listViewItemByIndex': {
@@ -285,10 +287,10 @@ const ListView = extend(View)(
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
                     if (onScroll) {
-                        this.nativeInner.setOnScrollListener(onScrollListener);
+                        !_onScrollListener && (createAndSetScrollListener()); 
                     }
-                    else {
-                        this.nativeInner.removeOnScrollListener(onScrollListener);
+                    else if(_onScrollListener) {
+                        this.nativeInner.removeOnScrollListener(_onScrollListener);
                     }
                 },
                 enumerable: true
@@ -310,17 +312,6 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-        
-        const UnitConverter = require('../../util/Android/unitconverter');
-        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
-            onScrolled: function(recyclerView, dx, dy) {
-                
-                 var dY = UnitConverter.pixelToDp(dy); 
-                 var dX = UnitConverter.pixelToDp(dx);
-                _onScroll && _onScroll({x: dX, y: dY});
-            },
-            onScrollStateChanged: function(recyclerView, newState) {},
-        }, null);
         
         var _overScrollMode = 0; 
         // android-only properties
@@ -364,6 +355,23 @@ const ListView = extend(View)(
             if (self.nativeInner) {
                 self.nativeInner.setPadding(0, topInset, 0, bottomInset);
             }
+        }
+        
+        function createAndSetScrollListener() {
+            _onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
+                onScrolled: function(recyclerView, dx, dy) {
+                     var dY = AndroidUnitConverter.pixelToDp(dy); 
+                     var dX = AndroidUnitConverter.pixelToDp(dx);
+                     _contentOffset.x += dx;
+                     _contentOffset.y += dy;
+                     
+                     var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                     _onScroll && _onScroll({translation: {x: dX, y: dY}, contentOffset: {x: offsetX, y: offsetY}});
+                },
+                onScrollStateChanged: function(recyclerView, newState) {},
+            }, null);
+            self.nativeInner.setOnScrollListener(_onScrollListener);
         }
 
         // ios-only properties
