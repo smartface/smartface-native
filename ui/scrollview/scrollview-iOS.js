@@ -5,6 +5,7 @@ const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
 const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const ScrollType = {
     vertical : 0,
@@ -154,6 +155,25 @@ const ScrollView = extend(ViewGroup)(
         Object.defineProperty(self, 'contentOffset', {
             get: function() {
                 return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
+            },
+            enumerable: true
+        });
+        
+        var _contentInset = {top:0, left:0, bottom:0, right:0};
+        Object.defineProperty(self, 'contentInset', {
+            get: function() {
+                return _contentInset;
+            },
+            set: function(value) {
+                if (typeof value === "object") {
+                    _contentInset = value;
+                    
+                    var argContentInset = new Invocation.Argument({
+                        type:"UIEdgeInsets",
+                        value: _contentInset
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
+                }
             },
             enumerable: true
         });
