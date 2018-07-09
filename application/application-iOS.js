@@ -51,6 +51,20 @@ SFApplication.ios.canOpenUrl = function (url) {
     return SMFApplication.canOpenUrl(url);
 }
 
+SFApplication.ios = {};
+SFApplication.ios.canOpenUrl = function (url) {
+    return SMFApplication.canOpenUrl(url);
+}
+
+Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
+    get: function() {
+        var mainBundle = Invocation.invokeClassMethod("NSBundle","mainBundle",[],"NSObject");
+        var bundleIdentifier = Invocation.invokeInstanceMethod(mainBundle,"bundleIdentifier",[],"NSString");
+        return bundleIdentifier;
+    },
+    enumerable: true
+});
+
 SFApplication.android = {};
 SFApplication.Android = {};
 SFApplication.android.checkPermission = function(){};
