@@ -401,20 +401,6 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
 ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,index){}
 
 /**
- * Gets contentOffset of the ListView.
- * 
- * @property contentOffset
- * @android
- * @ios
- * @readonly
- * @return {Object}
- * @return {Number} return.x
- * @return {Number} return.y
- * @since 3.0.2
- */
-ListView.prototype.contentOffset = {};
-
-/**
  * Gets/Sets contentInset of the ListView.
  * 
  * @property {Object} [contentInset = {top: 0.0,bottom: 0.0}]
