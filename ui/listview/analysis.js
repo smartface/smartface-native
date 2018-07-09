@@ -403,14 +403,14 @@ ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,
 /**
  * Gets/Sets contentInset of the ListView.
  * 
- * @property {Object} [contentInset = {top: 0.0,bottom: 0.0}]
+ * @property {Object} [contentInset = {top: 0,bottom: 0}]
  * @property {Number} contentInset.top
  * @property {Number} contentInset.bottom
  * @android
  * @ios
  * @since 3.0.2
  */
-ListView.prototype.contentInset = {top: 0.0,bottom: 0.0};
+ListView.prototype.contentInset = {top: 0,bottom: 0};
 
 
 /**
