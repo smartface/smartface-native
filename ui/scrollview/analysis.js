@@ -224,6 +224,9 @@ ScrollView.prototype.onViewRemoved = function() {};
  * necessary.
  *
  * @event onScroll
+ * @param {Object} translation
+ * @param {Number} translation.x
+ * @param {Number} translation.y
  * @android
  * @ios
  * @since 1.1.13

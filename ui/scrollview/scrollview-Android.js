@@ -11,6 +11,8 @@ const ScrollView = extend(ViewGroup)(
         var activity = AndroidConfig.activity;
 
         var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
+        var prevY, prevOldY, prevX, prevOldX;
+        var triggersTwice = false;
         if (!this.nativeObject) {
             if (_align === ScrollView.Align.HORIZONTAL) {
                 const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
@@ -18,19 +20,40 @@ const ScrollView = extend(ViewGroup)(
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
                         x = (x > 0) ? x : 0; // negative values are provided as well
-                        _contentOffset.x = UnitConverter.pixelToDp(x);
-                        _callbackOnScroll && _callbackOnScroll();
+                        oldx = ( oldx >0) ? oldx : 0;
+                        x = UnitConverter.pixelToDp(x);
+                        var oldX = UnitConverter.pixelToDp(oldx);
+
+                        triggersTwice = (prevX === x && prevOldX === oldX ? true : false);//This is avoid unnecessary triggers
+                        prevX = x;
+                        prevOldX = oldX;
+
+                        var translation = { x: (x - oldX), y: (y - oldy) };
+                        _contentOffset.x = x;
+
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
             }
             else {
                 const NativeVerticalScroll = requireClass('android.widget.ScrollView');
+
                 this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
-                    onScrollChanged: function(x, yObj, oldx, oldy) {
+                    onScrollChanged: function(xObj, yObj, oldx, oldy) {
                         var y = yObj;
                         y = (y > 0) ? y : 0; // negative values are provided as well
-                        _contentOffset.y = UnitConverter.pixelToDp(y);
-                        _callbackOnScroll && _callbackOnScroll();
+                        oldy = ( oldy >0) ? oldy : 0;
+                        y = UnitConverter.pixelToDp(y);
+                        var oldY = UnitConverter.pixelToDp(oldy);
+
+                        triggersTwice = (prevY === y && prevOldY === oldY ? true : false); //This is avoid unnecessary triggers
+                        prevY = y;
+                        prevOldY = oldY;
+
+                        var translation = { x: (xObj - oldx), y: (y - oldY) };
+                        _contentOffset.y = y;
+
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll(translation);
                     }
                 }, [activity]);
             }
@@ -52,6 +75,7 @@ const ScrollView = extend(ViewGroup)(
         var _callbackOnScroll = null;
         var _contentOffset = { x: 0, y: 0 };
         var _autoSizeEnabled = false;
+        var _contentInset = {};
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -61,6 +85,20 @@ const ScrollView = extend(ViewGroup)(
             'layout': {
                 get: function() {
                     return _layout;
+                }
+            },
+            'contentInset': {
+                get: function() {
+                    return _contentInset;
+                },
+                set: function(params) {
+                    _contentInset = params;
+                    if(params) {
+                        params.top && (this.layout.paddingTop = params.top);
+                        params.bottom && (this.layout.paddingBottom = params.bottom);
+                        params.left && (this.layout.paddingLeft = params.left);
+                        params.right && (this.layout.paddingRight = params.right);
+                    }
                 }
             },
             'scrollBarEnabled': {
