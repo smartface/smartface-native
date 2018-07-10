@@ -857,17 +857,21 @@ function Page(params) {
             return true;
         }
     }));
-    //Commetted because of volume control keys cannot behave as super behavior.
-    // self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-    //     onKey: function(view, keyCode, keyEvent) {
-    //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-    //         if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-    //             typeof self.android.onBackButtonPressed === "function" &&
-    //                 self.android.onBackButtonPressed();
-    //         }
-    //         return true;
-    //     }
-    // }));
+    //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                typeof self.android.onBackButtonPressed === "function" &&
+                    self.android.onBackButtonPressed();
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
