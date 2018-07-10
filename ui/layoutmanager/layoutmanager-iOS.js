@@ -17,12 +17,12 @@ function LayoutManager(params) {
             if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
             {
                 retval.width = sfSelf.collectionView.frame.width / sfSelf.spanCount;
-                retval.height = sfSelf.itemLength;
+                retval.height = sfSelf.onItemLength(sfSelf.scrollDirection, retval.width);
             } 
             else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
             {
-                retval.width = sfSelf.itemLength;
                 retval.height = sfSelf.collectionView.frame.height / sfSelf.spanCount;
+                retval.width = sfSelf.onItemLength(sfSelf.scrollDirection, retval.height);
             }
     
             var argumentSize = new Invocation.Argument({
@@ -127,14 +127,16 @@ function LayoutManager(params) {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CALLBACKS
     
-    var _onItemLengthForDirection = null;
-    Object.defineProperty(sfSelf, 'onItemLengthForDirection', {
+    var _onItemLength = function(){
+    		return 50;
+    };
+    Object.defineProperty(sfSelf, 'onItemLength', {
         get: function() {
-            return _onItemLengthForDirection;
+            return _onItemLength;
         },
         set: function(value) {
             if (typeof value === "function") {
-                _onItemLengthForDirection = value;
+                _onItemLength = value;
             }
         },
         enumerable: true
@@ -181,7 +183,7 @@ function LayoutManager(params) {
             var columnCount = sfSelf.spanCount;
             var itemWidth = collectionView.frame.width / columnCount;
             var itemHeight = 0;
-            itemHeight = sfSelf.itemLength;
+            // itemHeight = sfSelf.onItemLength();
             
             retval.width = itemWidth;
             retval.height = itemHeight;
@@ -191,7 +193,7 @@ function LayoutManager(params) {
             var rowCount = sfSelf.spanCount;
             var itemHeight = collectionView.frame.height / rowCount;
             var itemWidth = 0;
-            itemWidth = sfSelf.itemLength;
+            // itemWidth = sfSelf.onItemLength();
             
             retval.width = itemWidth;
             retval.height = itemHeight;

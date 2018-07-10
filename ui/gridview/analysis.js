@@ -37,7 +37,7 @@ const extend = require('js-base/core/extend');
  *                      var layoutManager = new LayoutManager({
  *                          spanCount: 2,
  *                          scrollDirection: LayoutManager.ScrollDirection.VERTICAL,
- *                          itemLength: 200
+ *                          onItemLength: function(direction,itemLength){return 100;}
  *                      });
  *                      
  *                      var gridView = new GridView({

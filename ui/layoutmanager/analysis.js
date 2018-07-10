@@ -13,10 +13,8 @@
  *      @example
  *      var layoutManager = new LayoutManager({
  *           spanCount: 2,
- *           scrollDirection: LayoutManager.ScrollDirection.VERTICAL,
- *           itemLength: 200
+ *           scrollDirection: LayoutManager.ScrollDirection.VERTICAL
  *      });
- * 
  * 
  *
  */
@@ -27,12 +25,15 @@ function LayoutManager(params) {}
  * User must return a length value for scrollDirection that user lays out the objects.
  * If vertical, length value will be height of item. If horizontal, length value will be width of item.
  *
- * @property {Number} [itemLength = 50]
+ * @param {UI.LayoutManager.ScrollDirection} direction
+ * @param {Number} itemLength
+ * @event onItemLength
  * @android
  * @ios
+ * @return {Number} itemLength
  * @since 3.0.2
  */
-LayoutManager.prototype.itemLength = 50;
+LayoutManager.prototype.onItemLength = function(direction,itemLength){};
 
 /**
  * Gets/sets colon or row count depends on scrolling direction of layout.
