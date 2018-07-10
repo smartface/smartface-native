@@ -40,5 +40,6 @@ module.exports = {
     BottomTabBar: require('./bottomtabbar'),
     TabBarItem: require('./tabbaritem'),
     Navigator: require('./navigator'),
-    SwipeView: require('./swipeview')
+    SwipeView: require('./swipeview'),
+    LayoutManager: require("./layoutmanager")
 };
