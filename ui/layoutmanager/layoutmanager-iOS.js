@@ -55,7 +55,7 @@ function LayoutManager(params) {
         	var scale = __SF_UIScreen.mainScreen().scale;
         	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
         	var fixedSize = parseFloat(splitSize[0]) + decimal;
-        	insetSize = (collectionViewSize - fixedSize*spanCount);
+        	insetSize = roundDown(collectionViewSize - fixedSize*spanCount, 2);
             cellSize = parseFloat(fixedSize);
     	}
     	return {"cellSize" : cellSize, "insetSize" : insetSize};
