@@ -17,39 +17,19 @@ function LayoutManager(params) {
             var insetSize = 0;
             if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
             {
-            	var collectionViewWidth = sfSelf.collectionView.frame.width;
-            	var width = roundDown(collectionViewWidth / sfSelf.spanCount, 1);
-            	var splitWidth = (width + "").split(".");
-            	if (splitWidth[1] !== undefined) {
-	            	var precision = parseFloat(splitWidth[1]);
-	            	var scale = __SF_UIScreen.mainScreen().scale;
-	            	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
-	            	var fixedWidth = parseFloat(splitWidth[0]) + decimal;
-	            	insetSize = (collectionViewWidth - fixedWidth*sfSelf.spanCount);
-	                retval.width = parseFloat(fixedWidth);
-            	}else{
-            		retval.width = width;
-            	}
+            	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.width,sfSelf.spanCount);
+            	retval.width = calculatedSizes.cellSize;
                 retval.height = sfSelf.onItemLength(retval.width);
-                sfSelf.sectionInset = {top:0,left:insetSize/2,bottom:0,right:insetSize/2};
+                var insetSize = calculatedSizes.insetSize/2;
+                sfSelf.sectionInset = {top:0,left:insetSize,bottom:0,right:insetSize};
             } 
             else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
             {
-            	var collectionViewHeight = sfSelf.collectionView.frame.height;
-            	var height = roundDown(collectionViewHeight / sfSelf.spanCount, 1);
-            	var splitHeight = (height + "").split(".");
-            	if (splitHeight[1] !== undefined) {
-	            	var precision = parseFloat(splitHeight[1]);
-	            	var scale = __SF_UIScreen.mainScreen().scale;
-	            	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
-	            	var fixedHeight = parseFloat(splitHeight[0]) + decimal;
-	            	insetSize = (collectionViewHeight - fixedHeight*sfSelf.spanCount);
-	                retval.height = parseFloat(fixedHeight);
-            	}else{
-            		retval.height = height;
-            	}
+        	   	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.height,sfSelf.spanCount);
+            	retval.height = calculatedSizes.cellSize;
                 retval.width = sfSelf.onItemLength(retval.height);
-                sfSelf.sectionInset = {top:insetSize/2,left:0,bottom:insetSize/2,right:0};
+                var insetSize = calculatedSizes.insetSize/2;
+                sfSelf.sectionInset = {top:insetSize,left:0,bottom:insetSize,right:0};
             }
     
             var argumentSize = new Invocation.Argument({
@@ -63,6 +43,22 @@ function LayoutManager(params) {
     function roundDown(number, decimals) {
 	    decimals = decimals || 0;
 	    return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
+	}
+	
+	function calculateSize(collectionViewSize,spanCount){
+		var size = collectionViewSize;
+    	var cellSize = roundDown(collectionViewSize / spanCount, 1);
+    	var splitSize = (cellSize + "").split(".");
+    	var insetSize = 0;
+    	if (splitSize[1] !== undefined) {
+        	var precision = parseFloat(splitSize[1]);
+        	var scale = __SF_UIScreen.mainScreen().scale;
+        	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
+        	var fixedSize = parseFloat(splitSize[0]) + decimal;
+        	insetSize = (collectionViewSize - fixedSize*spanCount);
+            cellSize = parseFloat(fixedSize);
+    	}
+    	return {"cellSize" : cellSize, "insetSize" : insetSize};
 	}
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // INITIALIZATION
