@@ -25,7 +25,6 @@ function LayoutManager(params) {}
  * User must return a length value for scrollDirection that user lays out the objects.
  * If vertical, length value will be height of item. If horizontal, length value will be width of item.
  *
- * @param {UI.LayoutManager.ScrollDirection} direction
  * @param {Number} itemLength
  * @event onItemLength
  * @android
@@ -33,7 +32,7 @@ function LayoutManager(params) {}
  * @return {Number} itemLength
  * @since 3.0.2
  */
-LayoutManager.prototype.onItemLength = function(direction,itemLength){};
+LayoutManager.prototype.onItemLength = function(itemLength){};
 
 /**
  * Gets/sets colon or row count depends on scrolling direction of layout.

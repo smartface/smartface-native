@@ -17,12 +17,12 @@ function LayoutManager(params) {
             if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
             {
                 retval.width = sfSelf.collectionView.frame.width / sfSelf.spanCount;
-                retval.height = sfSelf.onItemLength(sfSelf.scrollDirection, retval.width);
+                retval.height = sfSelf.onItemLength(retval.width);
             } 
             else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
             {
                 retval.height = sfSelf.collectionView.frame.height / sfSelf.spanCount;
-                retval.width = sfSelf.onItemLength(sfSelf.scrollDirection, retval.height);
+                retval.width = sfSelf.onItemLength(retval.height);
             }
     
             var argumentSize = new Invocation.Argument({
