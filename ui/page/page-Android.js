@@ -293,14 +293,14 @@ function Page(params) {
 
     this.statusBar = {};
 
-    var statusBarStyle;
+    var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
     Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return statusBarStyle;
         },
         set: function(value) {
-            statusBarStyle = value;
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
+                statusBarStyle = value;
                 if (statusBarStyle == StatusBarStyle.DEFAULT) {
                     // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
@@ -310,7 +310,6 @@ function Page(params) {
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
                 }
             }
-
 
         },
         enumerable: true,
