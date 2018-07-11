@@ -187,8 +187,12 @@ const ListView = extend(View)(
                 enumerable: true
             },
             'scrollTo': {
-                value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                value: function(index, animate=true) {
+                    if(animate) {
+                        this.nativeInner.smoothScrollToPosition(index);
+                    } else {
+                        this.nativeInner.scrollToPosition(index);
+                    }
                 },
                 enumerable: true
             },

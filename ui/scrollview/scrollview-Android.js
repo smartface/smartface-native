@@ -74,13 +74,13 @@ const ScrollView = extend(ViewGroup)(
                 }
             },
             'scrollToCoordinate': {
-                value: function(coordinate) {
+                value: function(coordinate, animate=true) {
                     if (coordinate) {
                         const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
-                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
-                        (ScrollView.Align.VERTICAL === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
+                        (ScrollView.Align.HORIZONTAL === _align) && (animate ? this.nativeObject.smoothScrollTo(coordinate, 0) : this.nativeObject.scrollTo(coordinate, 0));
+                        (ScrollView.Align.VERTICAL === _align) && (animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate));
                     }
                 }
             },

@@ -74,10 +74,10 @@ const ImageView = extend(View)(
             if(TypeUtil.isString(url)){
             	   console.log("imageView height: " + this.nativeObject.getHeight())
                 if(placeHolder instanceof Image){
-                    NativePicasso.with(AndroidConfig.activity).load(url).fit().centerCrop().placeholder(placeHolder.nativeObject).into(this.nativeObject);
+                    NativePicasso.with(AndroidConfig.activity).load(url).fit().placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
                 else{
-                    NativePicasso.with(AndroidConfig.activity).load(url).fit().centerCrop().into(this.nativeObject);
+                    NativePicasso.with(AndroidConfig.activity).load(url).fit().into(this.nativeObject);
                 }
             }
         };

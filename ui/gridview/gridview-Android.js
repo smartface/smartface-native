@@ -55,6 +55,13 @@ const GridView = extend(View)(
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new GridViewItem();
                 }
+                if (self.itemLength) {
+                    if(self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+                        holderViewLayout.height = self._layoutManager.itemLength;
+                    } else {
+                        holderViewLayout.width = self._layoutManager.itemLength;
+                    }
+                }
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
                 return holderViewLayout.nativeInner;
             },
@@ -64,13 +71,16 @@ const GridView = extend(View)(
                 
                 if(self._layoutManager && ((typeof(self._layoutManager.itemLength) === "number") || self._layoutManager.onItemLength)) {
                     if(self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-                        _holderViewLayout.height = self._layoutManager.itemLength;
+                        if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.height) {
+                            _holderViewLayout.height = self._layoutManager.itemLength;
+                        }
                         if(self.width < _holderViewLayout.width) {
                           _holderViewLayout.width = self.width;
                         }
-                      
                     } else {
-                        _holderViewLayout.width = self._layoutManager.itemLength;
+                        if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.width) {
+                            _holderViewLayout.width = self._layoutManager.itemLength;
+                        }
                         if(self.height < _holderViewLayout.height) {
                           _holderViewLayout.height = self.height;
                         }
@@ -203,8 +213,12 @@ const GridView = extend(View)(
                 enumerable: true
             },
             'scrollTo': {
-                value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                value: function(index, animate=true) {
+                    if(animate) {
+                        this.nativeInner.smoothScrollToPosition(index);
+                    } else {
+                        this.nativeInner.scrollToPosition(index);
+                    }
                 },
                 enumerable: true
             },
