@@ -88,9 +88,6 @@ const GridView = extend(View)(
                 }
                 
                 
-                console.log("item height: " + _holderViewLayout.nativeInner.itemView.getHeight());
-                console.log("grid height: " + self.nativeInner.getHeight());
-                
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);
 
