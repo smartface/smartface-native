@@ -30,7 +30,7 @@ const GridView = extend(View)(
             else {
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
-            this.nativeInner.setItemViewCacheSize(0);
+            //this.nativeInner.setItemViewCacheSize(0);
             //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
             this.nativeInner.setScrollBarStyle(50331648);
             this.nativeInner.setHorizontalScrollBarEnabled(false);
@@ -62,13 +62,24 @@ const GridView = extend(View)(
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _gridViewItems[itemHashCode];
                 
-                if(self._layoutManager && (typeof(self._layoutManager.itemLength) === "number")) {
+                if(self._layoutManager && ((typeof(self._layoutManager.itemLength) === "number") || self._layoutManager.onItemLength)) {
                     if(self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
                         _holderViewLayout.height = self._layoutManager.itemLength;
+                        if(self.width < _holderViewLayout.width) {
+                          _holderViewLayout.width = self.width;
+                        }
+                      
                     } else {
                         _holderViewLayout.width = self._layoutManager.itemLength;
+                        if(self.height < _holderViewLayout.height) {
+                          _holderViewLayout.height = self.height;
+                        }
                     }
                 }
+                
+                
+                console.log("item height: " + _holderViewLayout.nativeInner.itemView.getHeight());
+                console.log("grid height: " + self.nativeInner.getHeight());
                 
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);

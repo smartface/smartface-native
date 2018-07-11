@@ -14,7 +14,7 @@ function LayoutManager(params) {
     this._scrollDirection = params && params.scrollDirection;
     this._contentInset = params && params.contentInset;
     this._nativeRecyclerView = null;
-
+				this._onItemLength = null;
     this._createAndAddItemSpacingDecoration = function() {
         if (self._itemDecoration && self._nativeRecyclerView) {
             self._nativeRecyclerView.removeItemDecoration(self._itemDecoration);
@@ -195,7 +195,13 @@ LayoutManager.prototype = {
     },
     set itemLength(value) {
         this._itemLength = value;
-    }
+    },
+    get: onItemLength() {
+        return this._onItemLength;
+    },
+    set onItemLength(onItemLength) {
+        this._onItemLength = onItemLength.bind(this);
+    },
 };
 
 Object.defineProperties(LayoutManager, {
