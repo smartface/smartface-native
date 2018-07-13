@@ -322,10 +322,9 @@ Application.onMaximize = function(){};
 Application.onMinimize = function(){};
 
 /**
- * This function hides keyboard. While using dialog, necessary to pass the dialog object as parameter. Otherwise you do not need to pass any parameter.
+ * This function hides keyboard.
  *
  * @method hideKeyboard
- * @param {Object} dialog 
  * @android
  * @ios
  * @static

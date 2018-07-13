@@ -201,17 +201,11 @@ Object.defineProperties(ApplicationWrapper, {
         enumerable: true
     },
     'hideKeyboard': {
-        value: function(dailog) {
-            const Dialog = require("sf-core/ui/dialog");
-            var windowToken;
-            if (dailog instanceof Dialog) {
-                windowToken = dailog.nativeObject.getWindow().getCurrentFocus().getWindowToken();
-            }
-            else {
-                var focusedView = AndroidConfig.activity.getCurrentFocus();
-                windowToken = focusedView.getWindowToken();
-            }
+        value: function() {
+            var focusedView = AndroidConfig.activity.getCurrentFocus();
+            var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+
             inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
         },
         enumerable: true

@@ -48,8 +48,8 @@ Dialog.prototype.layout = new FlexLayout();
  * @android
  * @ios
  * @since 0.1
-*/
-Dialog.prototype.hide = function (){};
+ */
+Dialog.prototype.hide = function() {};
 
 /**
  * Shows the dialog.
@@ -59,6 +59,18 @@ Dialog.prototype.hide = function (){};
  * @android
  * @ios
  */
-Dialog.prototype.show = function (){};
+Dialog.prototype.show = function() {};
+
+Dialog.prototype.android = {};
+/**
+ * This function hides keyboard.
+ *
+ * @method hideKeyboard
+ * @android
+ * @static
+ * @since 3.0.1
+ */
+Dialog.prototype.android.hideKeyboard = function() {};
+
 
 module.exports = Dialog;
