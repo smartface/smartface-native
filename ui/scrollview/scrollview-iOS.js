@@ -159,25 +159,6 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
         });
         
-        var _contentInset = {top:0, left:0, bottom:0, right:0};
-        Object.defineProperty(self, 'contentInset', {
-            get: function() {
-                return _contentInset;
-            },
-            set: function(value) {
-                if (typeof value === "object") {
-                    _contentInset = value;
-                    
-                    var argContentInset = new Invocation.Argument({
-                        type:"UIEdgeInsets",
-                        value: _contentInset
-                    });
-                    Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
-                }
-            },
-            enumerable: true
-        });
-        
         Object.defineProperty(self.layout, 'backgroundColor', {
             get: function() {
                 return new Color({color : self.layout.nativeObject.backgroundColor});
