@@ -132,7 +132,7 @@ const ListView = extend(View)(
             if (e.cell.contentView.subviews.length > 0) {
                 self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }else{
-                _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
+                _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
                 self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }
@@ -145,7 +145,7 @@ const ListView = extend(View)(
             if (typeof self.onRowType === 'function') {
                 return self.onRowType(e.indexPath.row);
             }else{
-                return "cell";
+                return 1;
             }
         };
         
