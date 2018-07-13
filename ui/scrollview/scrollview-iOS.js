@@ -5,6 +5,7 @@ const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
 const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
+const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const ScrollType = {
     vertical : 0,
@@ -33,7 +34,7 @@ const ScrollView = extend(ViewGroup)(
             var _frame = {};
             self.nativeObject.addFrameObserver();
             self.nativeObject.frameObserveHandler = function(e){
-                if (self.autoSizeEnabled && (JSON.stringify(_frame) != JSON.stringify(e.frame))) {
+                if ((JSON.stringify(_frame) != JSON.stringify(e.frame))) {
                     _frame = e.frame;
                     self.layout.applyLayout();
                 }
@@ -57,71 +58,73 @@ const ScrollView = extend(ViewGroup)(
         });
 
         self.layout.applyLayout = function(){
-            self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-            if (self.autoSizeEnabled) {
-                var rect = {x:0,y:0,width:0,height:0}
-                var subviews = self.layout.nativeObject.subviews;
-                var widthAffectingView;
-                var heightAffectingView;
-                for (var i = 0; i < subviews.length; i++) {
-                    var frame = subviews[i].frame;
-                    rect.x = frame.x < rect.x ? frame.x : rect.x;
-                    rect.y = frame.y < rect.y ? frame.y : rect.y;
-                    var width = frame.x + frame.width;
-                    if (width > rect.width) {
-                        rect.width = width;
-                        widthAffectingView = subviews[i];
-                    }
-                    var height = frame.y + frame.height;
-                    if (height > rect.height) {
-                        rect.height = height;
-                        heightAffectingView = subviews[i];
-                    }
-                }
-                
-                if (_align === ScrollType.horizontal){
-                    //// PADDING CHECK ///////
-                    if (isNumber(self.layout.paddingRight)) {
-                        rect.width = rect.width + self.layout.paddingRight;
-                    }else if(isNumber(self.layout.padding)){
-                        rect.width = rect.width + self.layout.padding;
-                    }
-                    ///////////////////////////
-                    
-                    //// MARGIN CHECK /////////
-                    if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("marginLeft"))) {
-                        rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("marginLeft");
-                    }else if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("margin"))) {
-                        rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("margin");
-                    }
-                    rect.height = self.nativeObject.frame.height;
-                    /////////////////////////////
-                }else{
-                    //// PADDING CHECK ///////
-                    if (isNumber(self.layout.paddingBottom)) {
-                        rect.height = rect.height + self.layout.paddingBottom;
-                    }else if(isNumber(self.layout.padding)){
-                        rect.height = rect.height + self.layout.padding;
-                    }
-                    ///////////////////////////
-                    
-                    //// MARGIN CHECK /////////
-                    if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("marginBottom"))) {
-                        rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("marginBottom");
-                    }else if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("margin"))) {
-                        rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("margin");
-                    }
-                    ///////////////////////////
-                    rect.width = self.nativeObject.frame.width;
-                    
-                }
-                
-                self.layout.width = rect.width;
-                self.layout.height = rect.height;
+            __SF_Dispatch.mainAsync(function(){
                 self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
-                
-                self.changeContentSize(rect);
-            }
+                if (self.autoSizeEnabled) {
+                    var rect = {x:0,y:0,width:0,height:0}
+                    var subviews = self.layout.nativeObject.subviews;
+                    var widthAffectingView;
+                    var heightAffectingView;
+                    for (var i = 0; i < subviews.length; i++) {
+                        var frame = subviews[i].frame;
+                        rect.x = frame.x < rect.x ? frame.x : rect.x;
+                        rect.y = frame.y < rect.y ? frame.y : rect.y;
+                        var width = frame.x + frame.width;
+                        if (width > rect.width) {
+                            rect.width = width;
+                            widthAffectingView = subviews[i];
+                        }
+                        var height = frame.y + frame.height;
+                        if (height > rect.height) {
+                            rect.height = height;
+                            heightAffectingView = subviews[i];
+                        }
+                    }
+                    
+                    if (_align === ScrollType.horizontal){
+                        //// PADDING CHECK ///////
+                        if (isNumber(self.layout.paddingRight)) {
+                            rect.width = rect.width + self.layout.paddingRight;
+                        }else if(isNumber(self.layout.padding)){
+                            rect.width = rect.width + self.layout.padding;
+                        }
+                        ///////////////////////////
+                        
+                        //// MARGIN CHECK /////////
+                        if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("marginLeft"))) {
+                            rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("marginLeft");
+                        }else if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("margin"))) {
+                            rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("margin");
+                        }
+                        rect.height = self.nativeObject.frame.height;
+                        /////////////////////////////
+                    }else{
+                        //// PADDING CHECK ///////
+                        if (isNumber(self.layout.paddingBottom)) {
+                            rect.height = rect.height + self.layout.paddingBottom;
+                        }else if(isNumber(self.layout.padding)){
+                            rect.height = rect.height + self.layout.padding;
+                        }
+                        ///////////////////////////
+                        
+                        //// MARGIN CHECK /////////
+                        if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("marginBottom"))) {
+                            rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("marginBottom");
+                        }else if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("margin"))) {
+                            rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("margin");
+                        }
+                        ///////////////////////////
+                        rect.width = self.nativeObject.frame.width;
+                        
+                    }
+                    
+                    self.layout.width = rect.width;
+                    self.layout.height = rect.height;
+                    self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
+                    
+                    self.changeContentSize(rect);
+                }
+            });
         };
         
         function isNumber(value){

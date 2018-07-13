@@ -14,15 +14,22 @@ function LayoutManager(params) {
     {
         prepareLayout: function() {
             var retval = {width: 0, height: 0};
+            var insetSize = 0;
             if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
             {
-                retval.width = sfSelf.collectionView.frame.width / sfSelf.spanCount;
+            	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.width,sfSelf.spanCount);
+            	retval.width = calculatedSizes.cellSize;
                 retval.height = sfSelf.onItemLength(retval.width);
+                var insetSize = calculatedSizes.insetSize/2;
+                sfSelf.sectionInset = {top:0,left:insetSize,bottom:0,right:insetSize};
             } 
             else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
             {
-                retval.height = sfSelf.collectionView.frame.height / sfSelf.spanCount;
+        	   	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.height,sfSelf.spanCount);
+            	retval.height = calculatedSizes.cellSize;
                 retval.width = sfSelf.onItemLength(retval.height);
+                var insetSize = calculatedSizes.insetSize/2;
+                sfSelf.sectionInset = {top:insetSize,left:0,bottom:insetSize,right:0};
             }
     
             var argumentSize = new Invocation.Argument({
@@ -32,6 +39,27 @@ function LayoutManager(params) {
             Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
         }
     }).new();
+    
+    function roundDown(number, decimals) {
+	    decimals = decimals || 0;
+	    return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
+	}
+	
+	function calculateSize(collectionViewSize,spanCount){
+		var size = collectionViewSize;
+    	var cellSize = roundDown(collectionViewSize / spanCount, 1);
+    	var splitSize = (cellSize + "").split(".");
+    	var insetSize = 0;
+    	if (splitSize[1] !== undefined) {
+        	var precision = parseFloat(splitSize[1]);
+        	var scale = __SF_UIScreen.mainScreen().scale;
+        	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
+        	var fixedSize = parseFloat(splitSize[0]) + decimal;
+        	insetSize = roundDown(collectionViewSize - fixedSize*spanCount, 2);
+            cellSize = parseFloat(fixedSize);
+    	}
+    	return {"cellSize" : cellSize, "insetSize" : insetSize};
+	}
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // INITIALIZATION
     if(!sfSelf.nativeObject){

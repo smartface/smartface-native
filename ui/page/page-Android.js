@@ -15,6 +15,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+const Application = require("../../application");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -66,6 +67,7 @@ function Page(params) {
                 isCreated = true;
             }
             self.orientation = _orientation;
+
             return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
@@ -76,6 +78,18 @@ function Page(params) {
                         Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
+
+                    var spratIntent = AndroidConfig.activity.getIntent();
+                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                        try {
+                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                        }
+                        catch (e) {
+                            new Error("An error occured while getting notification json");
+                        }
+                    }
                 }
             }));
         },
@@ -279,14 +293,14 @@ function Page(params) {
 
     this.statusBar = {};
 
-    var statusBarStyle;
+    var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
     Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return statusBarStyle;
         },
         set: function(value) {
-            statusBarStyle = value;
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
+                statusBarStyle = value;
                 if (statusBarStyle == StatusBarStyle.DEFAULT) {
                     // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
@@ -296,7 +310,6 @@ function Page(params) {
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
                 }
             }
-
 
         },
         enumerable: true,
@@ -843,17 +856,21 @@ function Page(params) {
             return true;
         }
     }));
-    //Commetted because of volume control keys cannot behave as super behavior.
-    // self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-    //     onKey: function(view, keyCode, keyEvent) {
-    //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-    //         if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-    //             typeof self.android.onBackButtonPressed === "function" &&
-    //                 self.android.onBackButtonPressed();
-    //         }
-    //         return true;
-    //     }
-    // }));
+    //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                typeof self.android.onBackButtonPressed === "function" &&
+                    self.android.onBackButtonPressed();
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
