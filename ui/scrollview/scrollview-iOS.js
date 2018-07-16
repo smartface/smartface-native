@@ -61,7 +61,7 @@ const ScrollView = extend(ViewGroup)(
             __SF_Dispatch.mainAsync(function(){
                 self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
                 if (self.autoSizeEnabled) {
-                    var rect = {x:0,y:0,width:0,height:0}
+                    var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height};
                     var subviews = self.layout.nativeObject.subviews;
                     var widthAffectingView;
                     var heightAffectingView;
