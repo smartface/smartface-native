@@ -31,6 +31,9 @@ const ListView = extend(View)(
             else {
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
+            //this.nativeInner.setItemViewCacheSize(0);
+            this.nativeInner.setHasFixedSize(true);
+            this.nativeInner.setDrawingCacheEnabled(true);
             this.nativeInner.setItemViewCacheSize(0);
             this.nativeInner.setClipToPadding(false);
         }
@@ -53,6 +56,7 @@ const ListView = extend(View)(
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
+                console.log("onCreateViewHolder  self.rowHeight: " + self.rowHeight); 
                 if (self.rowHeight) {
                     holderViewLayout.height = self.rowHeight;
                 }
@@ -64,7 +68,11 @@ const ListView = extend(View)(
                 var _holderViewLayout = _listViewItems[itemHashCode];
 
                 if (!self.rowHeight && _onRowHeight) {
-                    _holderViewLayout.height = _onRowHeight(position);
+                			 var rowHeight = _onRowHeight(position);
+                				console.log("onBindViewHolder  set _holderViewLayout: " + rowHeight); 
+                    _holderViewLayout.height = rowHeight;
+                } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
+                    _holderViewLayout.height = self.rowHeight;
                 }
 
                 if (_onRowBind) {
@@ -184,8 +192,12 @@ const ListView = extend(View)(
                 enumerable: true
             },
             'scrollTo': {
-                value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                value: function(index, animate=true) {
+                    if(animate) {
+                        this.nativeInner.smoothScrollToPosition(index);
+                    } else {
+                        this.nativeInner.scrollToPosition(index);
+                    }
                 },
                 enumerable: true
             },
