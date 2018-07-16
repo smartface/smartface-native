@@ -25,7 +25,8 @@ function Dialog(params) {
                 },__SF_UIApplicationDidChangeStatusBarOrientationNotification);
                 
     self.calculatePosition();
-    
+    //android specific property.
+    self.android = {};
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.dialogView;
