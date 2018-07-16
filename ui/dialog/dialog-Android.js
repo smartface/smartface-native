@@ -50,7 +50,7 @@ function Dialog(params) {
                 return;
             var windowToken = page.nativeObject.getWindow().getCurrentFocus().getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-            inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
+            inputManager.hideSoftInputFromWindow(windowToken, 0); 
         },
         enumerable: true
     });

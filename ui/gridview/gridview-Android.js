@@ -46,7 +46,6 @@ const GridView = extend(View)(
         var _gridViewItems = {};
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
             onCreateViewHolder: function(parent, viewType) {
-                console.log("onCreateViewHolder");
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onItemCreate();
@@ -85,8 +84,6 @@ const GridView = extend(View)(
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _gridViewItems[itemHashCode];
 
-
-                console.log("onBindViewHolder");
                 var spanSize = self._layoutManager.spanSize;
                 if (spanSize == 0) {
                     self._layoutManager.viewWidth = self.width;

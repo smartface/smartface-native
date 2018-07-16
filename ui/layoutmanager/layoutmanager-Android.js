@@ -280,13 +280,11 @@ LayoutManager.prototype = {
         this._spanSize = value;
     },
     set viewWidth(value) {
-        console.log("------------- set Width: " + value);
         if (value > 0 && this._scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
             setSpanSizeForVertical(this, value);
         }
     },
     set viewHeight(value) {
-        console.log("------------- set Height: " + value);
         if (value > 0) {
             setSpanSizeForHorizontal(this, value);
         }
