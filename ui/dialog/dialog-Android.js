@@ -34,16 +34,6 @@ function Dialog(params) {
                 this.nativeObject.dismiss();
             }
         },
-        'hideKeyboard': {
-            value: function() {
-                if (!this.nativeObject)
-                    return;
-                var windowToken = this.nativeObject.getWindow().getCurrentFocus().getWindowToken();
-                var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
-            },
-            enumerable: true
-        },
         'toString': {
             value: function() {
                 return 'Dialog';
