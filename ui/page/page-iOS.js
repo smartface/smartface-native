@@ -507,6 +507,29 @@ function Page(params) {
         },
         enumerable: true
     });
+    
+    var _borderVisibility = true;
+    Object.defineProperty(self.headerBar.ios, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (self.nativeObject.navigationController) {
+                    if (value) {
+                        self.nativeObject.navigationController.navigationBar.shadowImage = undefined;
+                        self.nativeObject.navigationController.navigationBar.setBackgroundImageForBarMetrics(undefined, 0);
+                    } else {
+                        var emptyImage = __SF_UIImage.getInstance();
+                        self.nativeObject.navigationController.navigationBar.shadowImage = emptyImage;
+                        self.nativeObject.navigationController.navigationBar.setBackgroundImageForBarMetrics(emptyImage, 0);
+                    }
+                    _borderVisibility = value;
+                }
+            }
+        },
+        enumerable: true,configurable : true
+    });
 
     if (params) {
         for (var param in params) {
