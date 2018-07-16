@@ -764,11 +764,11 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
-        const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+
+        const ALIGN_RIGHT = 7;
 
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
@@ -781,16 +781,25 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
+                var badgeLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
+                nativeBadgeContainer.setLayoutParams(badgeLayoutParams);
+
+                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
+                var nativeBadgeContainerButton = new NativeRelativeLayout(activity);
+                nativeBadgeContainerButton.setId(NativeView.generateViewId());
+                nativeBadgeContainerButton.setLayoutParams(badgeButtonLayoutParams);
+
                 if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainerButton.addView(item.nativeObject);
                 }
                 else {
                     item.nativeObject = new NativeTextButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainerButton.addView(item.nativeObject);
                 }
-                item.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject)
+                nativeBadgeContainer.addView(nativeBadgeContainerButton);
+                item.nativeObject.setBackground(null);// This must be set null in order to prevent unexpected size
 
                 if (item.badge.visible && item.badge.nativeObject) {
 
@@ -798,13 +807,9 @@ function Page(params) {
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(19, item.nativeObject.getId());
-                    layoutParams.addRule(6, item.nativeObject.getId());
-                    //item badge text view must be over the given view
-                    NativeViewCompat.setZ(item.badge.nativeObject, 10);
-                    NativeViewCompat.setZ(item.badge.nativeObject, 20);
+                    layoutParams.addRule(ALIGN_RIGHT, nativeBadgeContainerButton.getId());
 
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 2), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
+                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 1), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
@@ -821,12 +826,12 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                // itemView.setBackgroundColor(Color.BLACK.nativeObject);
                 // left, top, right, bottom
-                itemView.setPadding(
-                    0, 0,
-                    HeaderBarItemPadding.vertical, 0
-                );
+                // itemView.setPadding(
+                //     0, 0,
+                //     HeaderBarItemPadding.vertical, 0
+                // );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
