@@ -61,7 +61,7 @@ const ScrollView = extend(ViewGroup)(
             __SF_Dispatch.mainAsync(function(){
                 self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
                 if (self.autoSizeEnabled) {
-                    var rect = {x:0,y:0,width:0,height:0}
+                    var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height};
                     var subviews = self.layout.nativeObject.subviews;
                     var widthAffectingView;
                     var heightAffectingView;
@@ -155,25 +155,6 @@ const ScrollView = extend(ViewGroup)(
         Object.defineProperty(self, 'contentOffset', {
             get: function() {
                 return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
-            },
-            enumerable: true
-        });
-        
-        var _contentInset = {top:0, left:0, bottom:0, right:0};
-        Object.defineProperty(self, 'contentInset', {
-            get: function() {
-                return _contentInset;
-            },
-            set: function(value) {
-                if (typeof value === "object") {
-                    _contentInset = value;
-                    
-                    var argContentInset = new Invocation.Argument({
-                        type:"UIEdgeInsets",
-                        value: _contentInset
-                    });
-                    Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
-                }
             },
             enumerable: true
         });

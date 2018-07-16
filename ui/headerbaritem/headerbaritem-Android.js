@@ -100,7 +100,7 @@ function HeaderBarItem(params) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
-                        this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                        this.nativeObject.setBackground(null);
                         this.nativeObject.setPadding(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal

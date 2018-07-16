@@ -75,7 +75,6 @@ const ScrollView = extend(ViewGroup)(
         var _callbackOnScroll = null;
         var _contentOffset = { x: 0, y: 0 };
         var _autoSizeEnabled = false;
-        var _contentInset = {};
         Object.defineProperties(this, {
             'align': {
                 get: function() {
@@ -85,20 +84,6 @@ const ScrollView = extend(ViewGroup)(
             'layout': {
                 get: function() {
                     return _layout;
-                }
-            },
-            'contentInset': {
-                get: function() {
-                    return _contentInset;
-                },
-                set: function(params) {
-                    _contentInset = params;
-                    if(params) {
-                        params.top && (this.layout.paddingTop = params.top);
-                        params.bottom && (this.layout.paddingBottom = params.bottom);
-                        params.left && (this.layout.paddingLeft = params.left);
-                        params.right && (this.layout.paddingRight = params.right);
-                    }
                 }
             },
             'scrollBarEnabled': {
@@ -112,13 +97,13 @@ const ScrollView = extend(ViewGroup)(
                 }
             },
             'scrollToCoordinate': {
-                value: function(coordinate) {
+                value: function(coordinate, animate=true) {
                     if (coordinate) {
                         const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
-                        (ScrollView.Align.HORIZONTAL === _align) && this.nativeObject.smoothScrollTo(coordinate, 0);
-                        (ScrollView.Align.VERTICAL === _align) && this.nativeObject.smoothScrollTo(0, coordinate);
+                        (ScrollView.Align.HORIZONTAL === _align) && (animate ? this.nativeObject.smoothScrollTo(coordinate, 0) : this.nativeObject.scrollTo(coordinate, 0));
+                        (ScrollView.Align.VERTICAL === _align) && (animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate));
                     }
                 }
             },
@@ -189,7 +174,7 @@ const ScrollView = extend(ViewGroup)(
         }
 
         self.layout.applyLayout = function() {
-            if (self && (self.nativeObject) instanceof ScrollView && (self.autoSizeEnabled)) {
+            if (self.autoSizeEnabled) {
                 const Runnable = requireClass("java.lang.Runnable");
                 var scrollView = self.nativeObject;
                 var runnable = Runnable.implement({
@@ -201,7 +186,7 @@ const ScrollView = extend(ViewGroup)(
                 });
                 scrollView.layout.nativeObject.post(runnable);
             }
-        }
+        };
     }
 );
 
@@ -211,7 +196,7 @@ function calculateScrollViewSize(scrollView) {
     var keys = Object.keys(childViews);
     var arrayLenght = keys.length;
     if (scrollView.align === ScrollView.Align.VERTICAL) {
-        var layoutHeight = 0;
+        var layoutHeight = scrollView.height;
         for (var i = 0; i < arrayLenght; i++) {
             var viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
             var viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
@@ -225,7 +210,7 @@ function calculateScrollViewSize(scrollView) {
         scrollView.layout.height = layoutHeight;
     }
     else {
-        var layoutWidth = 0;
+        var layoutWidth = scrollView.width;
         for (i = 0; i < arrayLenght; i++) {
             var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
             var viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());

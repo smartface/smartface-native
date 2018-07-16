@@ -30,7 +30,7 @@ const GridView = extend(View)(
             else {
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
-            this.nativeInner.setItemViewCacheSize(0);
+            //this.nativeInner.setItemViewCacheSize(0);
             //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
             this.nativeInner.setScrollBarStyle(50331648);
             this.nativeInner.setHorizontalScrollBarEnabled(false);
@@ -38,7 +38,7 @@ const GridView = extend(View)(
         }
 
         this._layoutManager = params.layoutManager;
-       
+
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
@@ -55,21 +55,74 @@ const GridView = extend(View)(
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new GridViewItem();
                 }
+                var spanSize = self._layoutManager.spanSize;
+                if (spanSize == 0) {
+                    self._layoutManager.viewWidth = self.width;
+                    self._layoutManager.viewHeight = self.height;
+                    spanSize = self._layoutManager.spanSize;
+                }
+                if (self._layoutManager.onItemLength && spanSize) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+                        holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+                    }
+                    else {
+                        holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
+                    }
+                }
+                else if (self._layoutManager.itemLength) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+                        holderViewLayout.height = self._layoutManager.itemLength;
+                    }
+                    else {
+                        holderViewLayout.width = self._layoutManager.itemLength;
+                    }
+                }
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView, position) {
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _gridViewItems[itemHashCode];
-                
-                if(self._layoutManager && (typeof(self._layoutManager.itemLength) === "number")) {
-                    if(self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-                        _holderViewLayout.height = self._layoutManager.itemLength;
-                    } else {
-                        _holderViewLayout.width = self._layoutManager.itemLength;
+
+                var spanSize = self._layoutManager.spanSize;
+                if (spanSize == 0) {
+                    self._layoutManager.viewWidth = self.width;
+                    self._layoutManager.viewHeight = self.height;
+                    spanSize = self._layoutManager.spanSize;
+                }
+                if (self._layoutManager && ((typeof(self._layoutManager.itemLength) === "number") || self._layoutManager.onItemLength)) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+
+                        if (self._layoutManager.onItemLength) {
+                            var calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
+                            if (_holderViewLayout.height != calculatedItemHeight) {
+                                _holderViewLayout.height = calculatedItemHeight;
+                            }
+                        }
+                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.height) {
+                            _holderViewLayout.height = self._layoutManager.itemLength;
+                        }
+                        if (self.width < _holderViewLayout.width) {
+                            _holderViewLayout.width = self.width;
+                        }
+                    }
+                    else {
+                        if (self._layoutManager.onItemLength) {
+                            var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
+                            if (_holderViewLayout.width != calculatedItemWidth) {
+                                _holderViewLayout.width = calculatedItemWidth;
+                            }
+                        }
+                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.width) {
+                            _holderViewLayout.width = self._layoutManager.itemLength;
+                        }
+                        if (self.height < _holderViewLayout.height) {
+                            _holderViewLayout.height = self.height;
+                        }
                     }
                 }
-                
+
+
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);
 
@@ -115,16 +168,16 @@ const GridView = extend(View)(
         var _scrollBarEnabled = false;
         Object.defineProperties(this, {
             // properties
-            'layoutManager':{
+            'layoutManager': {
                 get: function() {
                     return this._layoutManager;
                 },
                 set: function(layoutManager) {
-                    if(this._layoutManager) {
+                    if (this._layoutManager) {
                         this._layoutManager.nativeRecyclerView = null;
                     }
                     this._layoutManager = layoutManager;
-                     if(this._layoutManager) {
+                    if (this._layoutManager) {
                         this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
                         this._layoutManager.nativeRecyclerView = this.nativeInner;
                     }
@@ -156,11 +209,12 @@ const GridView = extend(View)(
                 set: function(value) {
                     if (TypeUtil.isBoolean(value)) {
                         _scrollBarEnabled = value;
-                        if(!this.layoutManager)
+                        if (!this.layoutManager)
                             return;
-                        if(this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
+                        if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
                             this.nativeInner.setVerticalScrollBarEnabled(value);
-                        } else {
+                        }
+                        else {
                             this.nativeInner.setHorizontalScrollBarEnabled(value);
                         }
                     }
@@ -192,8 +246,13 @@ const GridView = extend(View)(
                 enumerable: true
             },
             'scrollTo': {
-                value: function(index) {
-                    this.nativeInner.smoothScrollToPosition(index);
+                value: function(index, animate = true) {
+                    if (animate) {
+                        this.nativeInner.smoothScrollToPosition(index);
+                    }
+                    else {
+                        this.nativeInner.scrollToPosition(index);
+                    }
                 },
                 enumerable: true
             },
