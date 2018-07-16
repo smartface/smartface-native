@@ -246,8 +246,8 @@ const GridView = extend(View)(
                 enumerable: true
             },
             'scrollTo': {
-                value: function(index, animate = true) {
-                    if (animate) {
+                value: function(index, animate) {
+                    if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
                     }
                     else {
