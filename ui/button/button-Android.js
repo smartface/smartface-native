@@ -50,13 +50,10 @@ const Button = extend(Label)(
                     return this._textAlignment;
                 },
                 set: function(textAlignment) {
-                    console.log("textAlignment " + textAlignment);
                     if (textAlignment in TextAlignmentDic) {
-                        console.log("textAlignment  if condition" + textAlignment);
                         this._textAlignment = textAlignment;
                     }
                     else {
-                        console.log("textAlignment else condition" + textAlignment);
                         this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
                     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
