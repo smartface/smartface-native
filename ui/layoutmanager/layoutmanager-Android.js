@@ -1,7 +1,8 @@
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeItemDecoration = requireClass("android.support.v7.widget.RecyclerView$ItemDecoration");
-const NativeStaggeredGridLayoutManager  = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
+const NativeStaggeredGridLayoutManager = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
+const LayoutChangeListener = requireClass("android.view.View$OnLayoutChangeListener");
 
 function LayoutManager(params) {
     var self = this;
@@ -13,7 +14,10 @@ function LayoutManager(params) {
     this._itemSpacing = params && params.itemSpacing;
     this._scrollDirection = params && params.scrollDirection;
     this._contentInset = params && params.contentInset;
+    this._onItemLength = params && params.onItemLength;
     this._nativeRecyclerView = null;
+    this._spanSize = 0;
+
     this._createAndAddItemSpacingDecoration = function() {
         if (self._itemDecoration && self._nativeRecyclerView) {
             self._nativeRecyclerView.removeItemDecoration(self._itemDecoration);
@@ -140,6 +144,73 @@ function setContentInset(self) {
     }
 }
 
+function setLayoutChangeListener(self) {
+    if (self._onItemLength) {
+        if (self._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
+            var initialHeight = self._nativeRecyclerView.getHeight();
+            if (initialHeight > 0) {
+                setSpanSizeForHorizontal(self, initialHeight);
+            }
+        }
+        else {
+            var initialWidth = self._nativeRecyclerView.getWidth();
+            if (initialWidth > 0) {
+                setSpanSizeForVertical(self, initialWidth);
+            }
+        }
+    }
+
+    self._nativeRecyclerView.addOnLayoutChangeListener(LayoutChangeListener.implement({
+        onLayoutChange: function(view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) {
+            if (self._onItemLength || self._spanSize == 0) {
+                if (self._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
+                    var oldHeight = oldBottom - oldTop;
+                    var newHeight = bottom - top;
+                    if (newHeight != oldHeight) {
+                        var heightInDp = AndroidUnitConverter.pixelToDp(newHeight);
+                        setSpanSizeForHorizontal(self, heightInDp);
+                    }
+                }
+                else {
+                    var oldWidth = oldRight - oldLeft;
+                    var newWidth = right - left;
+                    if (newWidth != oldWidth) {
+                        var widthInDp = AndroidUnitConverter.pixelToDp(newWidth);
+                        setSpanSizeForVertical(self, widthInDp);
+                    }
+                }
+            }
+        }
+    }))
+}
+
+function setSpanSizeForHorizontal(self, newHeight) {
+    var paddingsVertical = 0;
+    if (self._contentInset) {
+        if (self._contentInset.top) {
+            paddingsVertical += self._contentInset.top;
+        }
+        if (self._contentInset.bottom) {
+            paddingsVertical += self._contentInset.bottom;
+        }
+    }
+    self._spanSize = newHeight - (self._spanCount - 1) * self._itemSpacing - paddingsVertical;
+}
+
+function setSpanSizeForVertical(self, newWidth) {
+
+    var paddingsHorizontal = 0;
+    if (self._contentInset) {
+        if (self._contentInset.left) {
+            paddingsHorizontal += self._contentInset.left;
+        }
+        if (self._contentInset.right) {
+            paddingsHorizontal += self._contentInset.right;
+        }
+    }
+    self._spanSize = newWidth - (self._spanCount - 1) * self._itemSpacing - paddingsHorizontal;
+}
+
 
 LayoutManager.prototype = {
     get spanCount() {
@@ -184,6 +255,7 @@ LayoutManager.prototype = {
     set nativeRecyclerView(nativeRecyclerView) {
         this._nativeRecyclerView = nativeRecyclerView;
         if (nativeRecyclerView) {
+            setLayoutChangeListener(this);
             this._createAndAddItemSpacingDecoration();
             this._createAndAddLineSpacingDecoration();
             setContentInset(this);
@@ -194,6 +266,30 @@ LayoutManager.prototype = {
     },
     set itemLength(value) {
         this._itemLength = value;
+    },
+    get onItemLength() {
+        return this._onItemLength;
+    },
+    set onItemLength(value) {
+        this._onItemLength = value;
+    },
+    get spanSize() {
+        return this._spanSize;
+    },
+    set spanSize(value) {
+        this._spanSize = value;
+    },
+    set viewWidth(value) {
+        console.log("------------- set Width: " + value);
+        if (value > 0 && this._scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
+            setSpanSizeForVertical(this, value);
+        }
+    },
+    set viewHeight(value) {
+        console.log("------------- set Height: " + value);
+        if (value > 0) {
+            setSpanSizeForHorizontal(this, value);
+        }
     }
 };
 
