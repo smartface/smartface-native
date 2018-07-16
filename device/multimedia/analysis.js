@@ -57,6 +57,7 @@ function Multimedia() {}
  * @param {UI.Page} params.page
  * @param {Device.Multimedia.ActionType} params.action Camera action.
  * @param {Boolean} params.allowsEditing opens editing screen of selected content.
+ * @param {Device.Multimedia.CameraFlashMode} params.cameraFlashMode The flash mode used by the active camera.The default value is Multimedia.iOS.CameraFlashMode.AUTO.
  * @param {Function} params.onSuccess Callback for success situation.
  * @param {Object} params.onSuccess.params 
  * @param {UI.Image} params.onSuccess.params.image Captured image
@@ -355,5 +356,45 @@ Multimedia.cameraAuthorizationStatus.Denied = 2;
  * @since 2.0.11
  */
 Multimedia.cameraAuthorizationStatus.Authorized = 3;
+
+/** 
+ * @enum {Number} Device.Multimedia.CameraFlashMode 
+ * @since 3.0.2
+ * @ios
+ */
+Multimedia.CameraFlashMode = {};
+
+/**
+ * Specifies that flash illumination is always off, no matter what the ambient light conditions are.
+ * 
+ * @property {Number} OFF
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+Multimedia.CameraFlashMode.OFF;
+
+/**
+ * Specifies that the device should consider ambient light conditions to automatically determine whether or not to use flash illumination.
+ * 
+ * @property {Number} AUTO
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+Multimedia.CameraFlashMode.AUTO;
+
+/**
+ * Specifies that flash illumination is always on, no matter what the ambient light conditions are.
+ * 
+ * @property {Number} ON
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.0.2
+ */
+Multimedia.CameraFlashMode.ON;
 
 module.exports = Multimedia;

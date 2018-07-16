@@ -155,7 +155,7 @@ Object.defineProperties(ApplicationWrapper, {
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
-                        AndroidConfig.activity.startActivityForResult(chooserIntent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
                     }
                     catch (e) {
                         onFailure && onFailure();
@@ -164,7 +164,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
                 else {
                     try {
-                        AndroidConfig.activity.startActivityForResult(intent, REQUEST_CODE_CALL_APPLICATION);
+                        AndroidConfig.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
                     }
                     catch (e) {
                         onFailure && onFailure();
@@ -205,6 +205,7 @@ Object.defineProperties(ApplicationWrapper, {
             var focusedView = AndroidConfig.activity.getCurrentFocus();
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+
             inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
         },
         enumerable: true

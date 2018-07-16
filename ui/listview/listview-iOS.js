@@ -129,20 +129,25 @@ const ListView = extend(View)(
         
         var _listItemArray = {};
         self.nativeObject.cellForRowAt = function(e){
-            if (!_listItemArray[e.uuid]) {
-                _listItemArray[e.uuid] = self.onRowCreate();
-                self.onRowBind(_listItemArray[e.uuid],e.index);
+            if (e.cell.contentView.subviews.length > 0) {
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }else{
-                self.onRowBind(_listItemArray[e.uuid],e.index);
+                _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+                e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
+                self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }
-             _listItemArray[e.uuid].nativeObject.layer.removeAllAnimations();
-             _listItemArray[e.uuid].applyLayout();
+            //  _listItemArray[e.uuid].applyLayout();
          }
-
-        self.nativeObject.onRowCreate =  function(e){
-            _listItemArray[e.uuid] = self.onRowCreate();
-            return _listItemArray[e.uuid].nativeObject;
-        }
+        
+        // var _cellIdentifier = "cell";
+        self.nativeObject.cellIdentifierWithIndexPath = function(e){
+            // e.indexPath.row
+            if (typeof self.onRowType === 'function') {
+                return self.onRowType(e.indexPath.row);
+            }else{
+                return 1;
+            }
+        };
         
         self.listViewItemByIndex = function(index){
             var argActivityItems = new Invocation.Argument({
@@ -215,6 +220,33 @@ const ListView = extend(View)(
                 self.refreshControl.tintColor = param.nativeObject;
             }
         }
+        
+        Object.defineProperty(self, 'contentOffset', {
+            get: function() {
+                return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
+            },
+            enumerable: true
+        });
+        
+        var _contentInset = {top:0, left:0, bottom:0, right:0};
+        Object.defineProperty(self, 'contentInset', {
+            get: function() {
+                return _contentInset;
+            },
+            set: function(value) {
+                if (typeof value === "object") {
+                    _contentInset = value;
+                    
+                    var argContentInset = new Invocation.Argument({
+                        type:"UIEdgeInsets",
+                        value: _contentInset
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
+                    self.nativeObject.contentOffset = {x:0,y:-_contentInset.top};
+                }
+            },
+            enumerable: true
+        });
         
         Object.defineProperty(self, 'onScroll', {
             set: function(value) {

@@ -6,21 +6,24 @@
  *
  *
  *     @example
- *     const Menu    = require('sf-core/ui/menu');
- *     const MenuItem    = require('sf-core/ui/menuitem');
- *
+ *     const Menu = require('sf-core/ui/menu');
+ *     const MenuItem = require('sf-core/ui/menuitem');
+ *     
  *     var menu = new Menu();
  *     menu.headerTitle = "My Menu Title";
- *     var menuItem1    = new MenuItem({title : "Menu Item 1"});
- *     var menuItem2    = new MenuItem({title : "Menu Item 2"});
- *     menuItem1.onSelected = function(){
+ *     var menuItem1 = new MenuItem({ title: "Menu Item 1" });
+ *     var menuItem2 = new MenuItem({ title: "Menu Item 2" });
+ *     
+ *     menuItem1.ios.style = MenuItem.ios.Style.DEFAULT;
+ *     
+ *     menuItem1.onSelected = function() {
  *         console.log("Menu item 1 selected");
  *     };
- *
- *     menuItem2.onSelected = function(){
+ *     
+ *     menuItem2.onSelected = function() {
  *         console.log("Menu item 2 selected");
  *     };
- *
+ *     
  *     menu.items = [menuItem1, menuItem2];
  *     menu.show(myPage);
  */

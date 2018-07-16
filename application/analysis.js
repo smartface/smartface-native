@@ -18,6 +18,17 @@ function Application() {}
 Application.android.packageName;
 
 /**
+ * Application bundle identifier.
+ * 
+ * @property {String} bundleIdentifier
+ * @readonly
+ * @ios
+ * @static
+ * @since 3.0.2
+ */
+Application.ios.bundleIdentifier;
+
+/**
  * The received bytes from the application.
  * 
  * @property {Number} byteReceived
@@ -248,7 +259,7 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  *                 }
  *             });
  *         }
- *     });
+ *     },"user_name");
  * 
  * @method checkUpdate
  * @see https://developer.smartface.io/docs/remote-app-update
@@ -265,7 +276,7 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
  * @param {Function} callback.result.download.downloadFinish.cancel Clears all staged files.
  * @param {Object} callback.result.download.downloadFinish.cancel.err Error object of the clear operation. For a valid clear, err argument will be null.
  * @param {Function} callback.result.download.downloadFinish.meta  Meta in rau.json as object parsed.
- * @param {String} [user] User information
+ * @param {String} User information
  * @readonly
  * @android
  * @ios

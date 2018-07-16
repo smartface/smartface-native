@@ -23,7 +23,7 @@ const orientationArray = [
 
 Object.defineProperty(Screen, 'dpi', {
     get: function () {
-        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return metrics.densityDpi;
     },
     configurable: false
@@ -31,7 +31,7 @@ Object.defineProperty(Screen, 'dpi', {
 
 Object.defineProperty(Screen, 'height', {
     get: function () {
-        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return UnitConverter.pixelToDp(metrics.heightPixels);
     },
     configurable: false
@@ -39,7 +39,7 @@ Object.defineProperty(Screen, 'height', {
 
 Object.defineProperty(Screen, 'width', {
     get: function () {
-        var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+        var metrics = AndroidConfig.activityResources.getDisplayMetrics();
         return UnitConverter.pixelToDp(metrics.widthPixels);
     },
     configurable: false

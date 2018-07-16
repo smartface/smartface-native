@@ -117,6 +117,19 @@ ImageView.FillType.ios = {};
 ImageView.FillType.NORMAL;
 
 /**
+ * @property {Number} ASPECTFILL
+ * @android
+ * @ios
+ * The option to scale the content to fill the size of the view. Some portion of the content may be clipped to fill the view’s bounds.
+ * @static
+ * @readonly
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ImageView.FillType.ASPECTFILL;
+
+/**
  * @property {Number} STRETCH
  * @android
  * @ios

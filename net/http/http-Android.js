@@ -203,13 +203,13 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
             }
         }
     });
-    var okhttpRequest = createRequest(params, isMultipart);
+    var okhttpRequest = createRequest(params, isMultipart, this.headers);
     request.nativeObject = this.client.newCall(okhttpRequest);
     request.nativeObject.enqueue(callback);
     return request;
 };
 
-function createRequest(params, isMultipart) {
+function createRequest(params, isMultipart, httpManagerHeaders) {
     if (!params || !params.url) {
         throw new Error("URL parameter is required.");
     }
@@ -226,12 +226,12 @@ function createRequest(params, isMultipart) {
         }
     }
 
-    if (this.defaultHeaders) {
-        var keys = Object.keys(this.defaultHeaders);
+    if (httpManagerHeaders) {
+        keys = Object.keys(httpManagerHeaders);
         for (var i = 0; i < keys.length; i++) {
             if (keys[i].toUpperCase() === CONTENT_TYPE_KEY)
-                contentType = this.defaultHeaders[keys[i]];
-            builder.addHeader(keys[i], this.defaultHeaders[keys[i]]);
+                contentType = httpManagerHeaders[keys[i]];
+            builder.addHeader(keys[i], httpManagerHeaders[keys[i]]);
         }
     }
 
@@ -292,7 +292,8 @@ function createMultipartBody(bodies) {
 
 function getResponseHeaders(headers) {
     var responseHeaders = {};
-    for (var i = 0; i < headers.size(); i++) {
+    var headersSize = headers.size();
+    for (var i = 0; i < headersSize; i++) {
         responseHeaders[headers.name(i)] = headers.value(i);
     }
     return responseHeaders;

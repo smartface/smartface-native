@@ -1,19 +1,18 @@
 /*globals requireClass*/
 const View = require('../view');
 const extend = require('js-base/core/extend');
-const ListViewItem = require("../listviewitem");
+const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
-const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const GridViewLayoutManager = require('../layoutmanager');
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
-const NativeLinearLayoutManager = requireClass("android.support.v7.widget.LinearLayoutManager");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
-const ListView = extend(View)(
+const GridView = extend(View)(
     function(_super, params) {
 
         var self = this;
@@ -32,65 +31,114 @@ const ListView = extend(View)(
                 this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
             }
             //this.nativeInner.setItemViewCacheSize(0);
-            this.nativeInner.setHasFixedSize(true);
-            this.nativeInner.setDrawingCacheEnabled(true);
-            this.nativeInner.setItemViewCacheSize(0);
-            this.nativeInner.setClipToPadding(false);
+            //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
+            this.nativeInner.setScrollBarStyle(50331648);
+            this.nativeInner.setHorizontalScrollBarEnabled(false);
+            this.nativeInner.setVerticalScrollBarEnabled(false);
         }
 
-        var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
-        this.nativeInner.setLayoutManager(linearLayoutManager);
+        this._layoutManager = params.layoutManager;
+
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
 
-        var _listViewItems = {};
+        var _gridViewItems = {};
         var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
-                    holderViewLayout = _onRowCreate(viewType);
+                    holderViewLayout = _onItemCreate();
                 }
                 catch (e) {
                     const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
-                    holderViewLayout = new ListViewItem();
+                    holderViewLayout = new GridViewItem();
                 }
-                console.log("onCreateViewHolder  self.rowHeight: " + self.rowHeight); 
-                if (self.rowHeight) {
-                    holderViewLayout.height = self.rowHeight;
+                var spanSize = self._layoutManager.spanSize;
+                if (spanSize == 0) {
+                    self._layoutManager.viewWidth = self.width;
+                    self._layoutManager.viewHeight = self.height;
+                    spanSize = self._layoutManager.spanSize;
                 }
-                _listViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+                if (self._layoutManager.onItemLength && spanSize) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+                        holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+                    }
+                    else {
+                        holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
+                    }
+                }
+                else if (self._layoutManager.itemLength) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+                        holderViewLayout.height = self._layoutManager.itemLength;
+                    }
+                    else {
+                        holderViewLayout.width = self._layoutManager.itemLength;
+                    }
+                }
+                _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
                 return holderViewLayout.nativeInner;
             },
             onBindViewHolder: function(nativeHolderView, position) {
                 var itemHashCode = nativeHolderView.itemView.hashCode();
-                var _holderViewLayout = _listViewItems[itemHashCode];
+                var _holderViewLayout = _gridViewItems[itemHashCode];
 
-                if (!self.rowHeight && _onRowHeight) {
-                			 var rowHeight = _onRowHeight(position);
-                				console.log("onBindViewHolder  set _holderViewLayout: " + rowHeight); 
-                    _holderViewLayout.height = rowHeight;
-                } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
-                    _holderViewLayout.height = self.rowHeight;
+                var spanSize = self._layoutManager.spanSize;
+                if (spanSize == 0) {
+                    self._layoutManager.viewWidth = self.width;
+                    self._layoutManager.viewHeight = self.height;
+                    spanSize = self._layoutManager.spanSize;
+                }
+                if (self._layoutManager && ((typeof(self._layoutManager.itemLength) === "number") || self._layoutManager.onItemLength)) {
+                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+
+                        if (self._layoutManager.onItemLength) {
+                            var calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
+                            if (_holderViewLayout.height != calculatedItemHeight) {
+                                _holderViewLayout.height = calculatedItemHeight;
+                            }
+                        }
+                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.height) {
+                            _holderViewLayout.height = self._layoutManager.itemLength;
+                        }
+                        if (self.width < _holderViewLayout.width) {
+                            _holderViewLayout.width = self.width;
+                        }
+                    }
+                    else {
+                        if (self._layoutManager.onItemLength) {
+                            var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
+                            if (_holderViewLayout.width != calculatedItemWidth) {
+                                _holderViewLayout.width = calculatedItemWidth;
+                            }
+                        }
+                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.width) {
+                            _holderViewLayout.width = self._layoutManager.itemLength;
+                        }
+                        if (self.height < _holderViewLayout.height) {
+                            _holderViewLayout.height = self.height;
+                        }
+                    }
                 }
 
-                if (_onRowBind) {
-                    _onRowBind(_holderViewLayout, position);
+
+                if (_onItemBind) {
+                    _onItemBind(_holderViewLayout, position);
 
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
-                            var selectedItem = _listViewItems[view.hashCode()];
-                            _onRowSelected && _onRowSelected(selectedItem, position);
+                            var selectedItem = _gridViewItems[view.hashCode()];
+                            _onItemSelected && _onItemSelected(selectedItem, position);
                         }
                     }));
 
                     nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                         onLongClick: function(view) {
 
-                            if (typeof _onRowLongSelected === 'function') {
-                                var selectedItem = _listViewItems[view.hashCode()];
-                                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
+                            if (typeof _onItemLongSelected === 'function') {
+                                var selectedItem = _gridViewItems[view.hashCode()];
+                                _onItemLongSelected && _onItemLongSelected(selectedItem, position);
                                 return true;
                             }
                             return false;
@@ -106,42 +154,40 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if (_onRowType)
-                    return _onRowType(position);
                 return 1;
             }
         }, null);
 
         var _onScroll;
-        var _contentOffset = {x: 0, y: 0};
-        var _rowHeight;
-        var _onRowCreate;
-        var _onRowSelected;
-        var _onRowLongSelected;
+        var _onItemCreate;
+        var _onItemSelected;
+        var _onItemLongSelected;
         var _onPullRefresh;
-        var _onRowHeight;
-        var _onRowBind;
-        var _onRowType;
+        var _onItemBind;
         var _itemCount = 0;
-        var _contentInset = {};
-        var _onScrollListener;
+        var _scrollBarEnabled = false;
         Object.defineProperties(this, {
             // properties
-            'listViewItemByIndex': {
-                value: function(index) {
-                    var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
-                    return _listViewItems[viewHolder.itemView.hashCode()];
+            'layoutManager': {
+                get: function() {
+                    return this._layoutManager;
+                },
+                set: function(layoutManager) {
+                    if (this._layoutManager) {
+                        this._layoutManager.nativeRecyclerView = null;
+                    }
+                    this._layoutManager = layoutManager;
+                    if (this._layoutManager) {
+                        this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
+                        this._layoutManager.nativeRecyclerView = this.nativeInner;
+                    }
                 },
                 enumerable: true
             },
-            'rowHeight': {
-                get: function() {
-                    return _rowHeight;
-                },
-                set: function(rowHeight) {
-                    if (TypeUtil.isNumeric(rowHeight)) {
-                        _rowHeight = rowHeight;
-                    }
+            'itemByIndex': {
+                value: function(index) {
+                    var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
+                    return _gridViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
             },
@@ -156,13 +202,21 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
-            'verticalScrollBarEnabled': {
+            'scrollBarEnabled': {
                 get: function() {
-                    return this.nativeInner.isVerticalScrollBarEnabled();
+                    return _scrollBarEnabled;
                 },
-                set: function(verticalScrollBarEnabled) {
-                    if (TypeUtil.isBoolean(verticalScrollBarEnabled)) {
-                        this.nativeInner.setVerticalScrollBarEnabled(verticalScrollBarEnabled);
+                set: function(value) {
+                    if (TypeUtil.isBoolean(value)) {
+                        _scrollBarEnabled = value;
+                        if (!this.layoutManager)
+                            return;
+                        if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
+                            this.nativeInner.setVerticalScrollBarEnabled(value);
+                        }
+                        else {
+                            this.nativeInner.setHorizontalScrollBarEnabled(value);
+                        }
                     }
                 },
                 enumerable: true
@@ -195,7 +249,8 @@ const ListView = extend(View)(
                 value: function(index, animate) {
                     if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
-                    } else {
+                    }
+                    else {
                         this.nativeInner.scrollToPosition(index);
                     }
                 },
@@ -237,58 +292,30 @@ const ListView = extend(View)(
                 enumerable: true
             },
             // callbacks
-            'onRowCreate': {
+            'onItemCreate': {
                 get: function() {
-                    return _onRowCreate;
+                    return _onItemCreate;
                 },
-                set: function(onRowCreate) {
-                    _onRowCreate = onRowCreate.bind(this);
+                set: function(onItemCreate) {
+                    _onItemCreate = onItemCreate.bind(this);
                 },
                 enumerable: true
             },
-            'onRowBind': {
+            'onItemBind': {
                 get: function() {
-                    return _onRowBind;
+                    return _onItemBind;
                 },
-                set: function(onRowBind) {
-                    _onRowBind = onRowBind.bind(this);
+                set: function(onItemBind) {
+                    _onItemBind = onItemBind.bind(this);
                 },
                 enumerable: true
             },
-            'onRowType': {
+            'onItemSelected': {
                 get: function() {
-                    return _onRowType;
+                    return _onItemSelected;
                 },
-                set: function(onRowType) {
-                    _onRowType = onRowType.bind(this);
-                },
-                enumerable: true
-            },
-            'onRowSelected': {
-                get: function() {
-                    return _onRowSelected;
-                },
-                set: function(onRowSelected) {
-                    _onRowSelected = onRowSelected.bind(this);
-                },
-                enumerable: true
-            },
-            'contentInset': {
-                get: function() {
-                    return _contentInset;
-                },
-                set: function(params) {
-                    _contentInset = params;
-                    setContentInset();
-                },
-                enumerable: true
-            },
-            'onRowHeight': {
-                get: function() {
-                    return _onRowHeight;
-                },
-                set: function(onRowHeight) {
-                    _onRowHeight = onRowHeight.bind(this);
+                set: function(onItemSelected) {
+                    _onItemSelected = onItemSelected.bind(this);
                 },
                 enumerable: true
             },
@@ -299,10 +326,10 @@ const ListView = extend(View)(
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
                     if (onScroll) {
-                        !_onScrollListener && (createAndSetScrollListener()); 
+                        this.nativeInner.setOnScrollListener(onScrollListener);
                     }
-                    else if(_onScrollListener) {
-                        this.nativeInner.removeOnScrollListener(_onScrollListener);
+                    else {
+                        this.nativeInner.removeOnScrollListener(onScrollListener);
                     }
                 },
                 enumerable: true
@@ -318,73 +345,32 @@ const ListView = extend(View)(
             },
             'toString': {
                 value: function() {
-                    return 'ListView';
+                    return 'GridView';
                 },
                 enumerable: true,
                 configurable: true
             }
         });
-        
-        var _overScrollMode = 0; 
-        // android-only properties
-        Object.defineProperties(this.android, {
-            'onRowLongSelected': {
-                get: function() {
-                    return _onRowLongSelected;
-                },
-                set: function(onRowLongSelected) {
-                    _onRowLongSelected = onRowLongSelected.bind(this);
-                },
-                enumerable: true,
-                configurable: true
+
+        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
+            onScrolled: function(recyclerView, dx, dy) {
+                _onScroll && _onScroll();
             },
-            'overScrollMode': {
-                get: function() {
-                    return _overScrollMode;
-                },
-                set: function(mode) {
-                    self.nativeInner.setOverScrollMode(mode);
-                    _overScrollMode = mode;
-                },
-                enumerable: true,
-                configurable: true
-            }
+            onScrollStateChanged: function(recyclerView, newState) {},
+        }, null);
+
+        // android-only properties
+        Object.defineProperty(this.android, 'onItemLongSelected', {
+            get: function() {
+                return _onItemLongSelected;
+            },
+            set: function(onItemLongSelected) {
+                _onItemLongSelected = onItemLongSelected.bind(this);
+            },
+            enumerable: true,
+            configurable: true
         });
-        
-        function setContentInset() {
-            var topInset = 0;
-            var bottomInset = 0;
-            var contentInset = self.contentInset;
-            if (contentInset && self.nativeInner) {
-                if (contentInset.top) {
-                    topInset = AndroidUnitConverter.dpToPixel(contentInset.top);
-                }
-                if (contentInset.bottom) {
-                    bottomInset = AndroidUnitConverter.dpToPixel(contentInset.bottom);
-                }
-            }
-            
-            if (self.nativeInner) {
-                self.nativeInner.setPadding(0, topInset, 0, bottomInset);
-            }
-        }
-        
-        function createAndSetScrollListener() {
-            _onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
-                onScrolled: function(recyclerView, dx, dy) {
-                     var dY = AndroidUnitConverter.pixelToDp(dy); 
-                     var dX = AndroidUnitConverter.pixelToDp(dx);
-                     _contentOffset.x += dx;
-                     _contentOffset.y += dy;
-                     
-                     var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                     _onScroll && _onScroll({translation: {x: dX, y: dY}, contentOffset: {x: offsetX, y: offsetY}});
-                },
-                onScrollStateChanged: function(recyclerView, newState) {},
-            }, null);
-            self.nativeInner.setOnScrollListener(_onScrollListener);
-        }
+
 
         // ios-only properties
         this.ios = {};
@@ -410,6 +396,6 @@ const ListView = extend(View)(
     }
 );
 
-ListView.iOS = {};
+GridView.iOS = {};
 
-module.exports = ListView;
+module.exports = GridView;

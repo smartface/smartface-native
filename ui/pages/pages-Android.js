@@ -165,7 +165,7 @@ function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
         if (!pageAnimationsCache) {
             pageAnimationsCache = {};
             var packageName = activity.getPackageName();
-            var resources = activity.getResources();
+            var resources = AndroidConfig.activityResources;
             pageAnimationsCache.leftEnter = resources.getIdentifier("slide_left_enter", "anim", packageName);
             pageAnimationsCache.leftExit = resources.getIdentifier("slide_left_exit", "anim", packageName);
             pageAnimationsCache.rightEnter = resources.getIdentifier("slide_right_enter", "anim", packageName);
