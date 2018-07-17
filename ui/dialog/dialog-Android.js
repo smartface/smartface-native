@@ -3,6 +3,7 @@ const NativeDialog = requireClass("android.app.Dialog");
 const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawable");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Color = require("../color");
+const Flex = require("../flexlayout");
 
 //InputMethodManager to close softinput keyboard
 const INPUT_METHOD_SERVICE = 'input_method';
@@ -10,13 +11,20 @@ const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 function Dialog(params) {
     const page = this;
-    
-    const Flex = require("../flexlayout");
+
     var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
 
+
+    // Assign parameters given in constructor
+    page.android = {};
+    const defaultTheme = { themeStyle: Dialog.Style.ThemeDefault };
+    Object.keys((params && params.android) || defaultTheme)
+        .forEach(key => page.android[key] = (params && params.android) || defaultTheme[key]);
+
+    this.themeStyle = ((params && params.android && params.android.themeStyle) ? params.android.themeStyle : Dialog.Style.DEFAULT);
+
     if (!this.nativeObject) {
-        // 16974065 = android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen
-        this.nativeObject = new NativeDialog(AndroidConfig.activity, 16974065);
+        this.nativeObject = new NativeDialog(AndroidConfig.activity, this.android.themeStyle);
     }
 
     Object.defineProperties(page, {
@@ -50,7 +58,7 @@ function Dialog(params) {
                 return;
             var windowToken = page.nativeObject.getWindow().getCurrentFocus().getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-            inputManager.hideSoftInputFromWindow(windowToken, 0); 
+            inputManager.hideSoftInputFromWindow(windowToken, 0);
         },
         enumerable: true
     });
@@ -73,5 +81,13 @@ function Dialog(params) {
         }
     }
 }
+
+Dialog.Style = {
+    ThemeDefault: 16974065,
+    ThemeNoHeaderBar: 16973941,
+    ThemeNoHeaderBarWithOverscan: 16974302,
+    ThemeNoHeaderBarWithTranslucentDecor: 16974306
+};
+Object.freeze(Dialog.Style);
 
 module.exports = Dialog;
