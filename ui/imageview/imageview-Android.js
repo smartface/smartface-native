@@ -122,8 +122,8 @@ const ImageView = extend(View)(
 
 ImageView.CacheType = {};
 ImageView.CacheType["NETWORK"] = 0; // NONE
-ImageView.CacheType["DISK"] = 1; // NONE
-ImageView.CacheType["MEMORY"] = 2; // NONE
+ImageView.CacheType["DISK"] = 1; 
+ImageView.CacheType["MEMORY"] = 2; 
 
 
 Object.defineProperty(ImageView, "FillType", {
