@@ -57,4 +57,8 @@ function Dialog(params) {
 Dialog.iOS = {};
 Dialog.iOS.ID = 1453;
 
+//these are for android dialog style
+Dialog.Android = {}; 
+Dialog.Android.Style = {};
+
 module.exports = Dialog;

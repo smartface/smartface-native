@@ -17,11 +17,11 @@ function Dialog(params) {
 
     // Assign parameters given in constructor
     page.android = {};
-    const defaultTheme = { themeStyle: Dialog.Style.ThemeDefault };
+    const defaultTheme = { themeStyle: Dialog.Android.Style.ThemeDefault };
     Object.keys((params && params.android) || defaultTheme)
-        .forEach(key => page.android[key] = (params && params.android) || defaultTheme[key]);
-
-    this.themeStyle = ((params && params.android && params.android.themeStyle) ? params.android.themeStyle : Dialog.Style.DEFAULT);
+        .forEach(function(key) {
+            page.android[key] = (params && params.android[key]) || defaultTheme[key]
+        });
 
     if (!this.nativeObject) {
         this.nativeObject = new NativeDialog(AndroidConfig.activity, this.android.themeStyle);
@@ -82,12 +82,13 @@ function Dialog(params) {
     }
 }
 
-Dialog.Style = {
-    ThemeDefault: 16974065,
-    ThemeNoHeaderBar: 16973941,
-    ThemeNoHeaderBarWithOverscan: 16974302,
-    ThemeNoHeaderBarWithTranslucentDecor: 16974306
+Dialog.Android = {};
+Dialog.Android.Style = {
+    ThemeDefault: 16974065,  //Theme_Holo_Light_NoActionBar_Fullscreen
+    ThemeNoHeaderBar: 16973941, //Theme_Holo_Light_NoActionBar
+    ThemeNoHeaderBarWithOverscan: 16974302, //Theme_Holo_Light_NoActionBar_Overscan
+    ThemeNoHeaderBarWithTranslucentDecor: 16974306 //Theme_Holo_Light_NoActionBar_TranslucentDecor
 };
-Object.freeze(Dialog.Style);
+Object.freeze(Dialog.Android.Style);
 
 module.exports = Dialog;
