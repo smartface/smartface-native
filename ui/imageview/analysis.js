@@ -70,8 +70,8 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown
- * until image loaded.
+ * If you want better performance and automatically set image, don't set onSuccess and OnError parameter. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
  * @param {Object} object
