@@ -74,7 +74,7 @@ const ImageView = extend(View)(
         imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade){
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
-                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url).fit();
+                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (requestCreator = requestCreator.noFade());
                 if(placeHolder instanceof Image){
                     requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
