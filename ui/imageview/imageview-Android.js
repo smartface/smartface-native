@@ -72,7 +72,6 @@ const ImageView = extend(View)(
         imageViewPrototype.loadFromUrl = function(url, placeHolder){
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if(TypeUtil.isString(url)){
-            	   console.log("imageView height: " + this.nativeObject.getHeight())
                 if(placeHolder instanceof Image){
                     NativePicasso.with(AndroidConfig.activity).load(url).fit().placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
