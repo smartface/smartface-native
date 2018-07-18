@@ -108,7 +108,7 @@ const ListView = extend(View)(
             getItemViewType: function(position) {
                 if (_onRowType)
                     return _onRowType(position);
-                return 1;
+                return Number.MAX_SAFE_INTEGER;
             }
         }, null);
 

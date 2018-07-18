@@ -145,7 +145,7 @@ const ListView = extend(View)(
             if (typeof self.onRowType === 'function') {
                 return self.onRowType(e.indexPath.row);
             }else{
-                return 1;
+                return Number.MAX_SAFE_INTEGER;
             }
         };
         
