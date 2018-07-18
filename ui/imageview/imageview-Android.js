@@ -77,7 +77,7 @@ const ImageView = extend(View)(
                 if(params.onSuccess || params.onError) {
                     loadFromUrlWithCallback(params.url, params.placeholder, params.onSuccess, params.onError);
                 } else {
-                    loadFromUrl(this, params.url, params.placeHolder);
+                    loadFromUrl(this, params.url, params.placeholder);
                 }
             } else { // deprecated usage
                 loadFromUrl(this, arguments[0], arguments[1]);
