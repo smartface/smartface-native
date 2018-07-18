@@ -75,7 +75,7 @@ const ImageView = extend(View)(
             if(typeof(arguments[0]) === "object") {
                 var params = arguments[0];
                 if(params.onSuccess || params.onError) {
-                    loadFromUrlWithCallback(params.url, params.placeHolder, params.onSuccess, params.onError);
+                    loadFromUrlWithCallback(params.url, params.placeholder, params.onSuccess, params.onError);
                 } else {
                     loadFromUrl(this, params.url, params.placeHolder);
                 }
