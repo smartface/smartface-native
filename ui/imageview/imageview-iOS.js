@@ -50,12 +50,26 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
-        self.loadFromUrl = function(url, placeHolder){
-            if (placeHolder){
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject,0.3);
-            }else{
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),undefined,0.3);
-            }
+        self.loadFromUrl = function(url, placeholder){
+			if (typeof url === 'object') {
+				if (url.onSuccess || url.onError) {
+					self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url.url),url.placeholder.nativeObject,function(onSuccess,onError,image,error,cache,url){
+						if (!error) {
+							if (typeof onSuccess === "function") {
+								onSuccess(Image.createFromImage(image),cache);
+							}
+						}else{
+							if (typeof onError === "function") {
+								onError();
+							}
+						}
+					}.bind(self,url.onSuccess,url.onError));
+				}else{
+					self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url.url),url.placeholder ? url.placeholder.nativeObject : undefined,undefined);
+				}	
+			}else{ //Deprecated
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
+			}
         };
         
         Object.defineProperty(self, 'imageFillType', {

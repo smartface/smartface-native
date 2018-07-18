@@ -70,17 +70,22 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown
- * until image loaded.
+ * If you want better performance and automatically set image, don't pass onSuccess and OnError parameter. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
- * @param {String} url 
- * @param {UI.Image} placeHolder 
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Function} object.onSuccess
+ * @param {UI.Image} object.onSuccess.image
+ * @param {UI.ImageCacheType} object.onSuccess.cache
+ * @param {Function} object.onError
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.2
  */
-ImageView.prototype.loadFromUrl = function(url, placeHolder){};
+ImageView.prototype.loadFromUrl = function(object){};
 
 /**
  * @enum {Number} UI.ImageView.FillType
