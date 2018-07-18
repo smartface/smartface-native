@@ -71,53 +71,42 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
         
-        imageViewPrototype.loadFromUrl = function(){
-            if(typeof(arguments[0]) === "object") {
-                var params = arguments[0];
-                if(params.onSuccess || params.onError) {
-                    loadFromUrlWithCallback(params.url, params.placeholder, params.onSuccess, params.onError);
-                } else {
-                    loadFromUrl(this, params.url, params.placeholder);
+        imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade){
+            const NativePicasso = requireClass("com.squareup.picasso.Picasso");
+            if (TypeUtil.isString(url)) {
+                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url).fit();
+                (isFade === false) && (requestCreator = requestCreator.noFade());
+                if(placeHolder instanceof Image){
+                    requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
-            } else { // deprecated usage
-                loadFromUrl(this, arguments[0], arguments[1]);
+                else{
+                    requestCreator.into(this.nativeObject);
+                }
             }
         };
         
-        function loadFromUrl(self, url, placeHolder) {
-            const NativePicasso = requireClass("com.squareup.picasso.Picasso");
-            if (TypeUtil.isString(url)) {
-                if(placeHolder instanceof Image){
-                    NativePicasso.with(AndroidConfig.activity).load(url).fit().placeholder(placeHolder.nativeObject).into(self.nativeObject);
-                }
-                else{
-                    NativePicasso.with(AndroidConfig.activity).load(url).into(self.nativeObject);
-                }
-            }
-        }
-        
-        function loadFromUrlWithCallback (url, placeHolder, onSuccess, onError) {
+        imageViewPrototype.fetchFromUrl = function(params){
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             var target = NativeTarget.implement({
                 onBitmapLoaded: function(bitmap, from) {
-                    onSuccess && onSuccess(new Image({ bitmap: bitmap}), (from && ImageView.CacheType[from.name()]));
+                    params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap}), (from && ImageView.CacheType[from.name()]));
                 },
                 onBitmapFailed: function(errorDrawable) {
-                    onError && onError();
+                    params.onError && params.onError();
                 },
                 onPrepareLoad: function(placeHolderDrawable) {}
             });
 
-            if (TypeUtil.isString(url)) {
-                if (placeHolder instanceof Image) {
-                    NativePicasso.with(AndroidConfig.activity).load(url).placeholder(placeHolder.nativeObject).into(target);
+            if (TypeUtil.isString(params.url)) {
+                if ((params.placeholder) instanceof Image) {
+                    NativePicasso.with(AndroidConfig.activity).load(params.url).placeholder(params.placeholder.nativeObject).into(target);
                 }
                 else {
-                    NativePicasso.with(AndroidConfig.activity).load(url).into(target);
+                    NativePicasso.with(AndroidConfig.activity).load(params.url).into(target);
                 }
             }
-        }
+        };
     }
 );
 
