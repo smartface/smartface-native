@@ -56,11 +56,11 @@ const ImageView = extend(View)(
 					self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url.url),url.placeholder.nativeObject,function(onSuccess,onError,image,error,cache,url){
 						if (!error) {
 							if (typeof onSuccess === "function") {
-								onSuccess.call(this,Image.createFromImage(image),cache);
+								onSuccess(Image.createFromImage(image),cache);
 							}
 						}else{
 							if (typeof onError === "function") {
-								onError.call(this);
+								onError();
 							}
 						}
 					}.bind(self,url.onSuccess,url.onError));
