@@ -41,6 +41,7 @@ function Dialog(params) {}
  */
 Dialog.prototype.layout = new FlexLayout();
 
+
 /**
  * Hides the dialog.
  * 
@@ -62,6 +63,17 @@ Dialog.prototype.hide = function() {};
 Dialog.prototype.show = function() {};
 
 Dialog.prototype.android = {};
+
+/**
+ * Sets the theme style of dialog.
+ *
+ * @property {UI.Dialog.Android.Style} style
+ * @android
+ * @since 3.0.2
+ */
+Dialog.prototype.android.themeStyle = Dialog.Android.Style;
+
+
 /**
  * This function hides keyboard.
  *
@@ -74,19 +86,22 @@ Dialog.prototype.android.hideKeyboard = function() {};
 
 
 /** 
- * @enum Dialog.Android.Style
+ * @enum UI.Dialog.Android.Style
  * @android
  * @since 3.0.2
- * 
+ *
+ * According to your requirements, you should choose of the theme enums.  
+ *
  *     @example
  *     const Dialog = require("sf-core/ui/dialog");
  *     const Button = require("sf-core/ui/button");
  *     const Color = require("sf-core/ui/color");
+ *
  *     var myDialog = new Dialog({
  *      android: {
  *          themeStyle: Dialog.Style.ThemeNoHeaderBar
  *        }
- *      });
+ *     });
  *     
  *     var myButton = new Button({
  *         width: 100,
@@ -97,13 +112,13 @@ Dialog.prototype.android.hideKeyboard = function() {};
  *             myDialog.hide();
  *         }
  *     });
- * 
+ *     
  *     myDialog.layout.addChild(myButton);
  *     myDialog.layout.applyLayout();
  *     myDialog.show();
  *
  */
-Dialog.Android.Style = {};
+Dialog.prototype.Android.Style = {};
 
 
 /**
@@ -115,7 +130,7 @@ Dialog.Android.Style = {};
  * @readonly
  * @since 3.0.2
  */
-Dialog.Android.Style.ThemeDefault;
+Dialog.prototype.Android.Style.ThemeDefault;
 
 /**
  * This theme with no header bar.  
@@ -126,7 +141,7 @@ Dialog.Android.Style.ThemeDefault;
  * @readonly
  * @since 3.0.2
  */
-Dialog.Android.Style.ThemeNoHeaderBar;
+Dialog.prototype.Android.Style.ThemeNoHeaderBar;
 
 /**
  * This theme has no title bar and fills the entire screen and extends into the display overscan region. 
@@ -137,7 +152,7 @@ Dialog.Android.Style.ThemeNoHeaderBar;
  * @readonly
  * @since 3.0.2
  */
-Dialog.Android.Style.ThemeNoHeaderBarWithOverscan;
+Dialog.prototype.Android.Style.ThemeNoHeaderBarWithOverscan;
 
 /**
  * This theme  has no title bar and translucent system decor. 
@@ -148,7 +163,7 @@ Dialog.Android.Style.ThemeNoHeaderBarWithOverscan;
  * @readonly
  * @since 3.0.2
  */
-Dialog.Android.Style.ThemeNoHeaderBarWithTranslucentDecor;
+Dialog.prototype.Android.Style.ThemeNoHeaderBarWithTranslucentDecor;
 
 
 module.exports = Dialog;
