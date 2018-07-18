@@ -56,7 +56,7 @@ const ListView = extend(View)(
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
                 }
-                console.log("onCreateViewHolder  self.rowHeight: " + self.rowHeight); 
+
                 if (self.rowHeight) {
                     holderViewLayout.height = self.rowHeight;
                 }
@@ -68,10 +68,10 @@ const ListView = extend(View)(
                 var _holderViewLayout = _listViewItems[itemHashCode];
 
                 if (!self.rowHeight && _onRowHeight) {
-                			 var rowHeight = _onRowHeight(position);
-                				console.log("onBindViewHolder  set _holderViewLayout: " + rowHeight); 
+                    var rowHeight = _onRowHeight(position);
                     _holderViewLayout.height = rowHeight;
-                } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
+                }
+                else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
                     _holderViewLayout.height = self.rowHeight;
                 }
 
@@ -113,7 +113,7 @@ const ListView = extend(View)(
         }, null);
 
         var _onScroll;
-        var _contentOffset = {x: 0, y: 0};
+        var _contentOffset = { x: 0, y: 0 };
         var _rowHeight;
         var _onRowCreate;
         var _onRowSelected;
@@ -195,7 +195,8 @@ const ListView = extend(View)(
                 value: function(index, animate) {
                     if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
-                    } else {
+                    }
+                    else {
                         this.nativeInner.scrollToPosition(index);
                     }
                 },
@@ -299,9 +300,9 @@ const ListView = extend(View)(
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
                     if (onScroll) {
-                        !_onScrollListener && (createAndSetScrollListener()); 
+                        !_onScrollListener && (createAndSetScrollListener());
                     }
-                    else if(_onScrollListener) {
+                    else if (_onScrollListener) {
                         this.nativeInner.removeOnScrollListener(_onScrollListener);
                     }
                 },
@@ -324,8 +325,8 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-        
-        var _overScrollMode = 0; 
+
+        var _overScrollMode = 0;
         // android-only properties
         Object.defineProperties(this.android, {
             'onRowLongSelected': {
@@ -350,7 +351,7 @@ const ListView = extend(View)(
                 configurable: true
             }
         });
-        
+
         function setContentInset() {
             var topInset = 0;
             var bottomInset = 0;
@@ -363,23 +364,23 @@ const ListView = extend(View)(
                     bottomInset = AndroidUnitConverter.dpToPixel(contentInset.bottom);
                 }
             }
-            
+
             if (self.nativeInner) {
                 self.nativeInner.setPadding(0, topInset, 0, bottomInset);
             }
         }
-        
+
         function createAndSetScrollListener() {
             _onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
                 onScrolled: function(recyclerView, dx, dy) {
-                     var dY = AndroidUnitConverter.pixelToDp(dy); 
-                     var dX = AndroidUnitConverter.pixelToDp(dx);
-                     _contentOffset.x += dx;
-                     _contentOffset.y += dy;
-                     
-                     var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                     _onScroll && _onScroll({translation: {x: dX, y: dY}, contentOffset: {x: offsetX, y: offsetY}});
+                    var dY = AndroidUnitConverter.pixelToDp(dy);
+                    var dX = AndroidUnitConverter.pixelToDp(dx);
+                    _contentOffset.x += dx;
+                    _contentOffset.y += dy;
+
+                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                    _onScroll && _onScroll({ translation: { x: dX, y: dY }, contentOffset: { x: offsetX, y: offsetY } });
                 },
                 onScrollStateChanged: function(recyclerView, newState) {},
             }, null);
