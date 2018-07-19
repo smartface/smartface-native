@@ -803,7 +803,7 @@ function Page(params) {
 
                 if (item.badge.visible && item.badge.nativeObject) {
 
-                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), 0, AndroidUnitConverter.dpToPixel(5), 0);
+                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
