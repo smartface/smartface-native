@@ -159,6 +159,28 @@ HeaderBarItem.Badge.prototype.setTextColor = function(color){}
 HeaderBarItem.Badge.prototype.setFont = function(font){}
 
 /**
+ * Sets border color of header bar item badge.
+ *
+ * @property {Function} setBorderColor
+ * @param {UI.Color} color
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+HeaderBarItem.Badge.prototype.setBorderColor = function(color){}
+
+/**
+ * Sets border width of header bar item badge.
+ *
+ * @property {Function} setBorderWidth
+ * @param {Number} borderWidth
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+HeaderBarItem.Badge.prototype.setBorderWidth = function(borderWidth){}
+
+/**
  * Set Badge offset, Badge center point defaults to the top right corner of its parent.
  *
  * @property {Function} move
