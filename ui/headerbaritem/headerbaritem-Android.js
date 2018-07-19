@@ -199,6 +199,7 @@ function HeaderBarItem(params) {
         },
         'badge': {
             get: function() {
+                _badge.visible = true;
                 return _badge;
             },
             enumerable: true
@@ -220,7 +221,6 @@ function HeaderBarItem(params) {
     Object.defineProperties(_badge, {
         'setVisible': {
             value: function(visible) {
-                _badge.visible = visible;
                 if (visible) {
                     _badge.nativeObject.setVisibility(0);
                 }
