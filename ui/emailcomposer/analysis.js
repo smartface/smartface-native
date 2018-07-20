@@ -77,7 +77,7 @@ EmailComposer.prototype.addAttachmentForAndroid = function(file) {};
  * Attach the given file to email composer.
  *
  * @param {Blob} blob
- * @param {String} mimeType
+ * @param {String} mimeType mimeType's "image/jpeg","image/png","image/gif","image/tiff","image/tiff","application/pdf","application/vnd","text/plain",
  * @param {String} fileName
  * @ios
  * @method addAttachmentForiOS
