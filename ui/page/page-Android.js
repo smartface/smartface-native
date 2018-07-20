@@ -391,6 +391,20 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    
+    var _headerbarItemView;
+    Object.defineProperty(self.headerBar, 'itemView', {
+        get: function() {
+            return _headerbarItemView;
+        },
+        set: function(view) {
+            view && toolbar.addView(view.nativeObject);
+            _headerbarItemView = view;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
