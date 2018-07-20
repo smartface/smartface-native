@@ -69,8 +69,7 @@ function EmailComposer(params){
     }
 };
 
-EmailComposer.ios = {};
-EmailComposer.ios.canSendMail = function(){
+EmailComposer.canSendMail = function(){
     return __SF_MFMailComposeViewController.canSendMail();
 };
 

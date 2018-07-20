@@ -2,6 +2,9 @@ const TypeUtil = require("../../util/type");
 
 const NativeIntent = requireClass("android.content.Intent");
 const NativeUri = requireClass("android.net.Uri");
+const NativeHtml = requireClass("android.text.Html");
+
+
 
 var _closeCallback;
 var self;
@@ -37,7 +40,7 @@ function EmailComposer(params) {
                     self.nativeObject.putExtra(NativeIntent.EXTRA_TEXT, text);
                 }
                 else {
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_HTML_TEXT, text);
+                    self.nativeObject.putExtra(NativeIntent.EXTRA_TEXT, NativeHtml.fromHtml(text));
                 }
             }
         },
@@ -53,6 +56,11 @@ function EmailComposer(params) {
                 if (self.nativeObject && page) {
                     page.nativeObject.startActivityForResult(self.nativeObject, EmailComposer.EMAIL_REQUESTCODE);
                 }
+            }
+        },
+       'canSendMail': {
+            get: function() {
+                return true; //always return true
             }
         }
     });
@@ -86,7 +94,8 @@ EmailComposer.onActivityResult = function(requestCode, resultCode, data) {
     _closeCallback && self.onClose();
 }
 
-EmailComposer.ios = {};
-EmailComposer.ios.canSendMail = function(){};
+EmailComposer.canSendMail = function(){
+    return true;
+};
 
 module.exports = EmailComposer;

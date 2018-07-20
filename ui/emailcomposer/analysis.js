@@ -111,6 +111,7 @@ EmailComposer.prototype.onClose = function() {};
  *
  * @return {Boolean} canSendMail
  * @ios
+ * @android
  * @method canSendMail
  * @static
  * @since 3.0.3
