@@ -48,13 +48,14 @@ function EmailComposer(params){
     
     self.onClose = function(){};
     
+    self.ios = {};
     self.ios.addAttachmentForiOS = function(blob,mimeType,fileName){
         self.nativeObject.addAttachmentDataMimeTypeFileName(blob.nativeObject,mimeType,fileName);
     };
     
     self.mainViewControllerDelegate = new __SF_SMFMFMailComposeViewControllerDelegate();
     self.mainViewControllerDelegate.didFinishWithResult = function(e){
-        self.mailViewController.dismissViewController(function(){
+        self.nativeObject.dismissViewController(function(){
             self.onClose();
         });
     }
@@ -66,6 +67,11 @@ function EmailComposer(params){
             this[param] = params[param];
         }
     }
+};
+
+EmailComposer.ios = {};
+EmailComposer.ios.canSendMail = function(){
+    return __SF_MFMailComposeViewController.canSendMail();
 };
 
 module.exports = EmailComposer;

@@ -86,5 +86,7 @@ EmailComposer.onActivityResult = function(requestCode, resultCode, data) {
     _closeCallback && self.onClose();
 }
 
+EmailComposer.ios = {};
+EmailComposer.ios.canSendMail = function(){};
 
 module.exports = EmailComposer;
