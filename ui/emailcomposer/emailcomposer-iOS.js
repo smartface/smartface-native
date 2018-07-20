@@ -54,9 +54,9 @@ function EmailComposer(params){
     
     self.mainViewControllerDelegate = new __SF_SMFMFMailComposeViewControllerDelegate();
     self.mainViewControllerDelegate.didFinishWithResult = function(e){
-        console.log("result : " + e.result + " Error : " + e.error);
-        self.onClose(e.result);
-        self.mailViewController.dismissViewController();
+        self.mailViewController.dismissViewController(function(){
+            self.onClose();
+        });
     }
     
     self.nativeObject.mailComposeDelegate = self.mainViewControllerDelegate;

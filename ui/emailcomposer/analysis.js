@@ -1,11 +1,7 @@
 /**
  * @class UI.EmailComposer
  * @since 3.0.3
- * 
  * A standard interface for managing, editing, and sending an email message. When email composer is dismiss, page's onShow will be triggered.
- *
- *
- *     @example
  *    
  *     
  */
@@ -22,7 +18,6 @@ function EmailComposer(params) {}
  */
 EmailComposer.prototype.setCC = function(cc) {};
 
-
 /**
  * Sets the initial recipients to include in the email’s “BCC” field.
  *
@@ -34,7 +29,6 @@ EmailComposer.prototype.setCC = function(cc) {};
  */
 EmailComposer.prototype.setBCC = function(bcc) {};
 
-
 /**
  * Sets the initial recipients to include in the email’s “TO” field.
  *
@@ -45,7 +39,6 @@ EmailComposer.prototype.setBCC = function(bcc) {};
  * @since 3.0.3
  */
 EmailComposer.prototype.setTO = function(to) {};
-
 
 /**
  * Sets the initial body text to include in the email composer.
@@ -92,7 +85,6 @@ EmailComposer.prototype.addAttachmentForAndroid = function(file) {};
  */
 EmailComposer.prototype.addAttachmentForiOS = function(blob,mimeType,fileName) {};
 
-
 /**
  * This function shows email composer on the given UI.Page.
  *
@@ -104,18 +96,25 @@ EmailComposer.prototype.addAttachmentForiOS = function(blob,mimeType,fileName) {
  */
 EmailComposer.prototype.show = function(page) {};
 
-
 /**
  * This function will be triggered when email composer is closed.
  *
- * @param {UI.Page} page This is the page that email will be shown.
  * @android
  * @ios
  * @method onClose
  * @since 3.0.3
  */
-EmailComposer.prototype.onClose = function(result) {};
+EmailComposer.prototype.onClose = function() {};
 
-
+/**
+ * You should call this method before attempting to display the email composition interface. If it returns NO, you must not display the email composition interface.
+ *
+ * @return {Boolean} canSendMail
+ * @ios
+ * @method canSendMail
+ * @static
+ * @since 3.0.3
+ */
+EmailComposer.canSendMail = function() {};
 
 module.exports = EmailComposer;
