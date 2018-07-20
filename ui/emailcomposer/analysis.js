@@ -5,13 +5,15 @@
  *     
  *     @example
  *     const EmailComposer = require('sf-core/ui/emailcomposer');
+ *     const File = require('sf-core/io/file');
  * 
  *     var myFile = new File({
  *       path: 'images://icon.png'
  *     });
  * 
  *     var TO = "smartface@gmail.com";
- *     var CC = "smartface@gmail.com";
+ *     var CC = "smartfaceinfo@gmail.com";
+ *     var BCC = "smartfacex@gmail.com";
  *     emailComposer.setCC([CC]);
  *     emailComposer.setBCC([CC]);
  *     emailComposer.setTO([TO]);
