@@ -74,7 +74,7 @@ function EmailComposer(params) {
         value: function(attachment) {
             const File = require('sf-core/io/file');
             if (attachment instanceof File) {
-                let absulotePath = attachment.nativeObject.getAbsolutePath();
+                var absulotePath = attachment.nativeObject.getAbsolutePath();
                 self.nativeObject.putExtra(NativeIntent.EXTRA_STREAM, NativeUri.parse("file://" + absulotePath));
             }
         }
