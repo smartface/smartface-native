@@ -70,18 +70,6 @@ EmailComposer.prototype.setMessage = function(text, isHtmlText) {};
  */
 EmailComposer.prototype.setSubject = function(subject) {};
 
-
-/**
- * Sets the initial text for the subject line of the email composer.
- *
- * @param {String} subject
- * @android
- * @ios
- * @method setSubject
- * @since 3.0.3
- */
-EmailComposer.prototype.setSubject = function(subject) {};
-
 /**
  * Attach the given file to email composer.
  *
@@ -103,19 +91,6 @@ EmailComposer.prototype.addAttachmentForAndroid = function(file) {};
  * @since 3.0.3
  */
 EmailComposer.prototype.addAttachmentForiOS = function(blob,mimeType,fileName) {};
-
-
-
-/**
- * Sets the initial text for the subject line of the email.
- *
- * @param {String} subject
- * @android
- * @ios
- * @method setSubject
- * @since 3.0.3
- */
-EmailComposer.prototype.setSubject = function(subject) {};
 
 
 /**
