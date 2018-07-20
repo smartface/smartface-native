@@ -391,6 +391,24 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    
+    var _borderVisibility = true;
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            _borderVisibility = value;
+            if(value) {
+                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+            } else {
+                actionBar.setElevation(0);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
