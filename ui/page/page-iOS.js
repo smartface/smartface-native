@@ -509,7 +509,7 @@ function Page(params) {
     });
     
     var _borderVisibility = true;
-    Object.defineProperty(self.headerBar.ios, 'borderVisibility', {
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
         },
