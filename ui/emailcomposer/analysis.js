@@ -2,7 +2,28 @@
  * @class UI.EmailComposer
  * @since 3.0.3
  * A standard interface for managing, editing, and sending an email message. When email composer is dismiss, page's onShow will be triggered.
- *    
+ *     
+ *     @example
+ *     const EmailComposer = require('sf-core/ui/emailcomposer');
+ * 
+ *     var myFile = new File({
+ *       path: 'images://icon.png'
+ *     });
+ * 
+ *     var TO = "smartface@gmail.com";
+ *     var CC = "smartface@gmail.com";
+ *     emailComposer.setCC([CC]);
+ *     emailComposer.setBCC([CC]);
+ *     emailComposer.setTO([TO]);
+ *     emailComposer.setSubject("subject");
+ *     emailComposer.setMessage("Some content");
+ *     emailComposer.addAttachmentForAndroid(myFile);
+ *     emailComposer.show(page);
+ * 
+ *     console.log("Email can be send ? " + + EmailComposer.canSendMail());
+ *     emailComposer.onClose = function() {
+ *        console.log(" onClose is triggered ");
+ *     }
  *     
  */
 function EmailComposer(params) {}
