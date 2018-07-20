@@ -143,4 +143,4 @@ EmailComposer.prototype.onClose = function(result) {};
 
 
 
-module.exports = Email;
+module.exports = EmailComposer;
