@@ -4,27 +4,36 @@
  * A standard interface for managing, editing, and sending an email message. When email composer is dismiss, page's onShow will be triggered.
  *     
  *     @example
- *     const EmailComposer = require('sf-core/ui/emailcomposer');
  *     const File = require('sf-core/io/file');
- * 
- *     var myFile = new File({
- *       path: 'images://icon.png'
- *     });
- * 
- *     var TO = "smartface@gmail.com";
- *     var CC = "smartfaceinfo@gmail.com";
- *     var BCC = "smartfacex@gmail.com";
- *     emailComposer.setCC([CC]);
- *     emailComposer.setBCC([CC]);
- *     emailComposer.setTO([TO]);
- *     emailComposer.setSubject("subject");
- *     emailComposer.setMessage("Some content");
- *     emailComposer.android.addAttachmentForAndroid(myFile);
- *     emailComposer.show(page);
- * 
- *     console.log("Email can be send ? " + + EmailComposer.canSendMail());
- *     emailComposer.onClose = function() {
- *        console.log(" onClose is triggered ");
+ *     const FileStream = require('sf-core/io/filestream');
+ *     const EmailComposer = require('sf-core/ui/emailcomposer');
+ *     const System = require('sf-core/device/system');
+ *              
+ *     if (EmailComposer.canSendMail()) {
+ *         var emailcomposer = new EmailComposer();
+ *         emailcomposer.setBCC(["bcc@smartface.io","bcc2@smartface.io"]);
+ *         emailcomposer.setCC(["cc@smartface.io","cc2@smartface.io"]);
+ *         emailcomposer.setTO(["to@smartface.io","to2@smartface.io"]);
+ *         emailcomposer.setMessage("message");
+ *         emailcomposer.setSubject("subject");
+ *         emailcomposer.onClose = function(){
+ *             console.log("onClose");
+ *         };
+
+ *         var imageFile = new File({
+ *             path: 'assets://smartface.png'
+ *         });
+ *         
+ *         emailcomposer.android.addAttachmentForAndroid(imageFile);
+ *         
+ *         if (System.OS == "iOS") {
+ *             var imageFileStream = imageFile.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
+ *             var fileBlob = imageFileStream.readToEnd();
+ *             imageFileStream.close();
+ *             emailcomposer.ios.addAttachmentForiOS(fileBlob,"image/png","smartface.png");
+ *         }
+ *         
+ *         emailcomposer.show(page);
  *     }
  *     
  */
