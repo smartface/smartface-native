@@ -2,44 +2,65 @@ function EmailComposer(params){
     
     var self = this;
     
-    self.nativeObject = new __SF_MFMailComposeViewController();
-    
     self.android = {};
     self.android.addAttachmentForAndroid = function(){};
     
+    var _cc;
+    var _bcc;
+    var _to;
+    var _message;
+    var _subject;
+    var _attaches = [];
     Object.defineProperties(self,{
         "setCC" : {
             value : function(cc){
-                self.nativeObject.setCcRecipients(cc);
+                _cc = cc;
             },
             enumerable : true
         },
         "setBCC" : {
             value : function(bcc){
-                self.nativeObject.setBccRecipients(bcc);
+                _bcc = bcc;
             },
             enumerable : true
         },
         "setTO" : {
             value : function(to){
-                self.nativeObject.setToRecipients(to);
+                _to = to;
             },
             enumerable : true
         },
         "setMessage" : {
             value : function(message,isHtmlText){
-                self.nativeObject.setMessageBodyIsHTML(message,isHtmlText ? isHtmlText : false);
+                _message = {message:message,isHtmlText:isHtmlText};
             },
             enumerable : true
         },
         "setSubject" : {
             value : function(subject){
-                self.nativeObject.setSubject(subject);
+                _subject = subject;
             },
             enumerable : true
         },
         "show" : {
             value : function(page){
+                self.nativeObject = new __SF_MFMailComposeViewController();
+                if (_cc)        self.nativeObject.setCcRecipients(_cc); 
+                if (_bcc)       self.nativeObject.setBccRecipients(_bcc);
+                if (_to)        self.nativeObject.setToRecipients(_to);
+                if (_message)   self.nativeObject.setMessageBodyIsHTML(_message.message,_message.isHtmlText ? _message.isHtmlText : false);
+                if (_subject)   self.nativeObject.setSubject(_subject);
+                for (var i = 0; i < _attaches.length; i++) {
+                    self.nativeObject.addAttachmentDataMimeTypeFileName(_attaches[i].blob.nativeObject,_attaches[i].mimeType,_attaches[i].fileName);
+                }
+                self.nativeObjectDelegate = new __SF_SMFMFMailComposeViewControllerDelegate();
+                self.nativeObjectDelegate.didFinishWithResult = function(e){
+                    self.nativeObject.dismissViewController(function(){
+                        self.onClose();
+                    });
+                }
+                
+                self.nativeObject.mailComposeDelegate = self.nativeObjectDelegate;
                 page.nativeObject.presentViewController(self.nativeObject);
             },
             enumerable : true
@@ -50,17 +71,12 @@ function EmailComposer(params){
     
     self.ios = {};
     self.ios.addAttachmentForiOS = function(blob,mimeType,fileName){
-        self.nativeObject.addAttachmentDataMimeTypeFileName(blob.nativeObject,mimeType,fileName);
-    };
-    
-    self.mainViewControllerDelegate = new __SF_SMFMFMailComposeViewControllerDelegate();
-    self.mainViewControllerDelegate.didFinishWithResult = function(e){
-        self.nativeObject.dismissViewController(function(){
-            self.onClose();
+        _attaches.push({
+            blob:blob,
+            mimeType:mimeType,
+            fileName:fileName
         });
-    }
-    
-    self.nativeObject.mailComposeDelegate = self.mainViewControllerDelegate;
+    };
                 
     if (params) {
         for (var param in params) {
