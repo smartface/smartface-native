@@ -78,9 +78,9 @@ function EmailComposer(params) {
         },
         enumerable: true
     });
-
-
-    Object.defineProperty(self, 'addAttachmentForAndroid', {
+    
+    self.android = {};
+    Object.defineProperty(self.android, 'addAttachmentForAndroid', {
         value: function(attachment) {
             const File = require('sf-core/io/file');
             if (attachment instanceof File) {

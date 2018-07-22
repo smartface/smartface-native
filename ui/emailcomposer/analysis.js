@@ -19,7 +19,7 @@
  *     emailComposer.setTO([TO]);
  *     emailComposer.setSubject("subject");
  *     emailComposer.setMessage("Some content");
- *     emailComposer.addAttachmentForAndroid(myFile);
+ *     emailComposer.android.addAttachmentForAndroid(myFile);
  *     emailComposer.show(page);
  * 
  *     console.log("Email can be send ? " + + EmailComposer.canSendMail());
