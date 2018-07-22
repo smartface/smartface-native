@@ -14,7 +14,9 @@ function EmailComposer(params) {
     self.nativeObject = new NativeIntent(NativeIntent.ACTION_VIEW);
     self.nativeObject.setData(NativeUri.parse("mailto:"));
 
-
+    self.ios = {};
+    self.ios.addAttachmentForiOS = function(blob,mimeType,fileName){};
+    
     Object.defineProperties(self, {
         'setCC': {
             value: function(cc) {
