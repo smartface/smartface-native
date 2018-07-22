@@ -107,6 +107,7 @@ EmailComposer.prototype.addAttachmentForAndroid = function(file) {};
 
 /**
  * Attach the given file to email composer.
+ * For Images; if you have multiple sizes of image resource (e.g smartface@2x.png, smartface@3x.png); you should give exact path of an image file.
  *
  * @param {Blob} blob
  * @param {String} mimeType mimeType's "image/jpeg","image/png","image/gif","image/tiff","image/tiff","application/pdf","application/vnd","text/plain",
