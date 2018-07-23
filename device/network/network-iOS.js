@@ -6,6 +6,9 @@ Network.ConnectionType.None   = 0;
 Network.ConnectionType.Mobile = 1;
 Network.ConnectionType.WIFI   = 2;
 
+Network.ConnectionType.NONE = 0;
+Network.ConnectionType.MOBILE = 1;
+
 Object.defineProperty(Network, 'carrier', {
   get: function() {
       var info = new __SF_CTTelephonyNetworkInfo();
@@ -52,13 +55,13 @@ Network.createNotifier = function(params) {
           var status = self.nativeObject.currentReachabilityStatus();
           switch (status) {
             case 0:
-              sfStatus = Network.ConnectionType.None;
+              sfStatus = Network.ConnectionType.NONE;
               break;
             case 1:
               sfStatus = Network.ConnectionType.WIFI;
               break;
             case 2:
-              sfStatus = Network.ConnectionType.Mobile;
+              sfStatus = Network.ConnectionType.MOBILE;
               break;
             default:
               break;
