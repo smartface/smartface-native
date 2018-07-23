@@ -5,13 +5,20 @@ const NativeUri = requireClass("android.net.Uri");
 const NativeHtml = requireClass("android.text.Html");
 
 
+const EXTRA_CC = "android.intent.extra.CC";
+const EXTRA_BCC = "android.intent.extra.BCC";
+const EXTRA_EMAIL = "android.intent.extra.EMAIL";
+const EXTRA_TEXT = "android.intent.extra.TITLE";
+const EXTRA_SUBJECT = "android.intent.extra.SUBJECT";
+const EXTRA_STREAM = "android.intent.extra.STREAM";
+const ACTION_VIEW = "android.intent.action.VIEW";
 
 var _closeCallback;
 var self;
 function EmailComposer(params) {
 
     self = this;
-    self.nativeObject = new NativeIntent(NativeIntent.ACTION_VIEW);
+    self.nativeObject = new NativeIntent(ACTION_VIEW);
     self.nativeObject.setData(NativeUri.parse("mailto:"));
 
     self.ios = {};
@@ -21,35 +28,35 @@ function EmailComposer(params) {
         'setCC': {
             value: function(cc) {
                 if (typeof cc === "object")
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_CC, array(cc, "java.lang.String"));
+                    self.nativeObject.putExtra(EXTRA_CC, array(cc, "java.lang.String"));
             }
         },
         'setBCC': {
             value: function(bcc) {
                 if (typeof bcc === "object")
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_BCC, array(bcc, "java.lang.String"));
+                    self.nativeObject.putExtra(EXTRA_BCC, array(bcc, "java.lang.String"));
             }
         },
         'setTO': {
             value: function(to) {
                 if (typeof to === "object")
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_EMAIL, array(to, "java.lang.String"));
+                    self.nativeObject.putExtra(EXTRA_EMAIL, array(to, "java.lang.String"));
             }
         },
         'setMessage': {
             value: function(text, isHtmlText) {
                 if (!isHtmlText && typeof text === "string") {
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_TEXT, text);
+                    self.nativeObject.putExtra(EXTRA_TEXT, text);
                 }
                 else {
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_TEXT, NativeHtml.fromHtml(text));
+                    self.nativeObject.putExtra(EXTRA_TEXT, NativeHtml.fromHtml(text));
                 }
             }
         },
         'setSubject': {
             value: function(subject) {
                 if (typeof subject === "string") {
-                    self.nativeObject.putExtra(NativeIntent.EXTRA_SUBJECT, subject);
+                    self.nativeObject.putExtra(EXTRA_SUBJECT, subject);
                 }
             }
         },
@@ -85,7 +92,8 @@ function EmailComposer(params) {
             const File = require('sf-core/io/file');
             if (attachment instanceof File) {
                 var absulotePath = attachment.nativeObject.getAbsolutePath();
-                self.nativeObject.putExtra(NativeIntent.EXTRA_STREAM, NativeUri.parse("file://" + absulotePath));
+                console.log("absulotePath  " +absulotePath);
+                self.nativeObject.putExtra(EXTRA_STREAM, NativeUri.parse("file://" + absulotePath));
             }
         }
     });
