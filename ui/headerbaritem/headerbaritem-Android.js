@@ -13,6 +13,7 @@ const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
 const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
 const NativeRectF = requireClass("android.graphics.RectF");
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
@@ -198,6 +199,7 @@ function HeaderBarItem(params) {
         },
         'badge': {
             get: function() {
+                _badge.visible = true;
                 return _badge;
             },
             enumerable: true
@@ -205,15 +207,20 @@ function HeaderBarItem(params) {
     });
 
     var _badge = {};
-    // _badge.ios = {};
-    // _badge.ios.move = function(x,y){};
-    
+
+
+    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
+    var _borderWidth = AndroidUnitConverter.dpToPixel(2);
+
     _badge.nativeObject = new NativeTextView(activity);
+    var nativeGradientDrawable = new NativeGradientDrawable();
+    nativeGradientDrawable.setCornerRadius(_borderRadius);
+
     _badge.layoutParams;
+    var _borderColor = Color.WHITE;
     Object.defineProperties(_badge, {
         'setVisible': {
             value: function(visible) {
-                _badge.visible = visible;
                 if (visible) {
                     _badge.nativeObject.setVisibility(0);
                 }
@@ -233,21 +240,15 @@ function HeaderBarItem(params) {
         },
         'setBackgroundColor': {
             value: function(color) {
-                _badge.backgroundColor = color;
                 if (_badge.nativeObject && color) {
-                    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
-                    var _radii = array([_borderRadius, _borderRadius, _borderRadius, _borderRadius,
-                        _borderRadius, _borderRadius, _borderRadius, _borderRadius
-                    ], "float");
-                    
-                    var _rectF  = new NativeRectF(0, 0, 0, 0);
-                    var nativeRoundRectShape = new NativeRoundRectShape(_radii, _rectF, _radii);
-                    var nativeShapeDrawable = new NativeShapeDrawable(nativeRoundRectShape);
-
-                    nativeShapeDrawable.getPaint().setColor(_badge.backgroundColor.nativeObject);
-
-                    _badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
+                    _badge.backgroundColor = color;
+                    nativeGradientDrawable.setColor(_badge.backgroundColor.nativeObject);
                 }
+                else if (_badge.nativeObject) {
+                    nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
+                    nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
+                }
+                _badge.nativeObject.setBackground(nativeGradientDrawable);
             }
         },
         'setTextColor': {
@@ -275,10 +276,28 @@ function HeaderBarItem(params) {
                 }
             }
         },
-        'move' : {
-            value :function(x,y){
-                _badge.x = (x < 0 ? x * -1 : x );
-                _badge.y = (y < 0 ? y : y );
+        'setBorderWidth': {
+            value: function(borderWidth) {
+                if (typeof borderWidth !== 'number')
+                    return;
+
+                _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+                _badge.setBackgroundColor(); //re-set Drawable
+            }
+        },
+        'setBorderColor': {
+            value: function(borderColor) {
+                if (!borderColor instanceof Color)
+                    return;
+
+                _borderColor = borderColor;
+                _badge.setBackgroundColor(); //re-set Drawable
+            }
+        },
+        'move': {
+            value: function(x, y) {
+                _badge.x = (x < 0 ? x * -1 : x);
+                _badge.y = (y < 0 ? y : y);
             }
         }
     });

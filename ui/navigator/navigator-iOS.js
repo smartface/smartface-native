@@ -105,16 +105,26 @@ function NavigatorViewModel(params) {
             var pageInfo = {};
             
             if (self.view == null) {
+                
+                var nativeRootPage;
+                if (pageToGo.type == "TabBarFlow") {
+                    pageToGo.go(routes[1],parameters,_animated);
+                    nativeRootPage = pageToGo.tabBarView.nativeObject;
+                } else {
+                    nativeRootPage = pageToGo.nativeObject;
+                }
+                
                 self.view = new NavigatorView({
                     viewModel: self,
-                    rootPage : pageToGo.nativeObject
+                    rootPage : nativeRootPage
                 });
                 self.model.currentPage = pageToGo;
                 self.model.history.push(pageToGo);
+                
             } else {
                 switch (pageToGo.type) {
                     case 'TabBarFlow': {
-                        pageToGo.go(routes[1],parameters,_animated)
+                        pageToGo.go(routes[1],parameters,_animated);
                         pageInfo.nativeObject = pageToGo.tabBarView.nativeObject;
                         pageInfo.animated = _animated;
                         break;
