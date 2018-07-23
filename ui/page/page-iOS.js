@@ -344,6 +344,7 @@ function Page(params) {
         set: function(value) {
             if (typeof value === "object") {
                 _titleView = value;
+                _titleView.applyLayout();
                 
                 // These calls may need for different cases.
                 // _titleView.nativeObject.layoutIfNeeded();
