@@ -10,7 +10,8 @@ KeyboardAnimationDelegate.offsetFromTop = function (self) {
     var statusBar = KeyboardAnimationDelegate.statusBarFrames(self);
     if (self.getParentViewController().navigationController && self.getParentViewController().navigationController.navigationBar.visible) {
         if (!self.getParentViewController().statusBarHidden){
-            return (statusBar.viewRect.height > 20 ? 20 : statusBar.frame.height) + self.getParentViewController().navigationController.navigationBar.frame.height;
+            //44 point = iPhone X
+            return (statusBar.viewRect.height == 44 ? 44 : (statusBar.viewRect.height > 20 ? 20 : statusBar.frame.height)) + self.getParentViewController().navigationController.navigationBar.frame.height;
         }else{
             return self.getParentViewController().navigationController.navigationBar.frame.height;
         }

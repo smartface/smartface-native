@@ -149,6 +149,8 @@ function Page(params) {
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
+            const EmailComposer = require('sf-core/ui/emailcomposer');
+
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -166,6 +168,9 @@ function Page(params) {
             }
             else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
+            }
+            else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
+                EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
 
 
@@ -404,6 +409,24 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
+    var _borderVisibility = true;
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            _borderVisibility = value;
+            if(value) {
+                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+            } else {
+                actionBar.setElevation(0);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
 
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
@@ -813,7 +836,7 @@ function Page(params) {
                     nativeBadgeContainerButton.addView(item.nativeObject);
                 }
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
-                item.nativeObject.setBackground(null);// This must be set null in order to prevent unexpected size
+                item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
                 if (item.badge.visible && item.badge.nativeObject) {
 

@@ -42,5 +42,6 @@ module.exports = {
     TabBarItem: require('./tabbaritem'),
     Navigator: require('./navigator'),
     SwipeView: require('./swipeview'),
-    LayoutManager: require("./layoutmanager")
+    LayoutManager: require("./layoutmanager"),
+    EmailComposer: require("./emailcomposer")
 };
