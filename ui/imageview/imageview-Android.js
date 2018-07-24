@@ -5,6 +5,7 @@ const View              = require('../view');
 const TypeUtil          = require("../../util/type");
 const Image             = require("../image");
 const NativeImageView   = requireClass("android.widget.ImageView");
+const File              = require('../../io/file');
 
 const ImageView = extend(View)(
     function (_super, params) {
@@ -73,6 +74,13 @@ const ImageView = extend(View)(
                 else{
                      NativePicasso.with(AndroidConfig.activity).load(url).into(this.nativeObject);
                 }
+            }
+        };
+        imageViewPrototype.loadFromFile = function(path) {
+            const NativePicasso = requireClass("com.squareup.picasso.Picasso");
+            if(TypeUtil.isString(path)){
+                var imageFile = new File({ path: path });
+                NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
             }
         };
     }
