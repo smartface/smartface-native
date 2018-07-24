@@ -335,6 +335,27 @@ function Page(params) {
         },
         enumerable: true,configurable : true
     });
+    
+    var _titleView = true;
+    Object.defineProperty(self.headerBar, 'titleLayout', {
+        get: function() {
+            return _titleView;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                _titleView = value;
+                _titleView.applyLayout();
+                
+                // These calls may need for different cases.
+                // _titleView.nativeObject.layoutIfNeeded();
+                // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
+                _titleView.nativeObject.sizeToFit();
+                
+                self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
 
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
