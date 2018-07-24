@@ -393,7 +393,7 @@ function Page(params) {
     });
     
     var _headerbarItemView;
-    Object.defineProperty(self.headerBar, 'itemView', {
+    Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
             return _headerbarItemView;
         },

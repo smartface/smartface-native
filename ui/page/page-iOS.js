@@ -337,7 +337,7 @@ function Page(params) {
     });
     
     var _titleView = true;
-    Object.defineProperty(self.headerBar, 'titleView', {
+    Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
             return _titleView;
         },
