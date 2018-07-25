@@ -62,28 +62,22 @@ Location.start = function(){
         Location.nativeObject.delegate = Location.delegate;
         Location.delegate.didUpdateLocations = Location.changeLocationListener;
         Location.delegate.didChangeAuthorizationStatus = function (status) {
-            switch (status) {
-                case Location.ios.native.authorizationStatus.AuthorizedAlways:
-                case Location.ios.native.authorizationStatus.AuthorizedWhenInUse:
-                    Location.nativeObject.startUpdatingLocation();
-                    break;
-                default:
-                    break;
-            }
             var authStatus = Location.ios.getAuthorizationStatus();
             if (typeof Location.ios.onChangeAuthorizationStatus === 'function' && _authorizationStatus != authStatus) {
                 _authorizationStatus = authStatus;
-                Location.ios.onChangeAuthorizationStatus((authStatus === Location.ios.authorizationStatus.Authorized) ? true : false);
+                Location.ios.onChangeAuthorizationStatus((authStatus === Location.ios.authorizationStatus.Authorized));
             }
         };
         
         Location.nativeObject.requestWhenInUseAuthorization();
+        Location.nativeObject.startUpdatingLocation();
     }
 }
 
 Location.stop = function() {
     if (Location.nativeObject) {
         Location.nativeObject.stopUpdatingLocation();
+        Location.nativeObject.delegate = undefined;
         Location.nativeObject = undefined;
         Location.delegate = undefined;
     }
