@@ -120,6 +120,16 @@ SwipeView.prototype.onTouch = function onTouch(){ }
  */
 SwipeView.prototype.onTouchEnded = function onTouchEnded(){ }
 
+
+/**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.0.2
+ */
+SwipeView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
 /**
  * @enum UI.SwipeView.State
  * @static

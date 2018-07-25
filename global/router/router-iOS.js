@@ -387,7 +387,7 @@ function RouterModel(params) {
             retval.routerPath = key;
             return retval;
         } else {
-            throw Error(key + " is not in routes");
+			      __SF_Dispatch.mainAsync(function(){throw Error(key + " is not in routes");});
         }
     };
     this.createPagesInstanceWithRoot = function (page) {

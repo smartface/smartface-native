@@ -57,6 +57,7 @@ function View(params) {
 
     this.android = {};
     var _nativeObject = this.nativeObject;
+    var _overScrollMode = 0;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -82,6 +83,17 @@ function View(params) {
                 // if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 //     _nativeObject.setStateListAnimator(null);
                 // }
+            },
+            enumerable: true,
+            configurable: true
+        },
+        'overScrollMode': {
+            get: function() {
+                return _overScrollMode;
+            },
+            set: function(mode) {
+                _nativeObject.setOverScrollMode(mode);
+                _overScrollMode = mode;
             },
             enumerable: true,
             configurable: true
@@ -597,7 +609,7 @@ View.prototype = {
 };
 
 View.prototype.setBackgroundImage = function() {
-    var resources = AndroidConfig.activity.getResources();
+    var resources = AndroidConfig.activityResources;
     const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
     const Image = require("../image");
     var bitmap;
@@ -858,6 +870,7 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_focused,
     NativeR.attr.state_enabled,
 ], "int");
+
 
 function createNewLayerDrawable(drawables) {
     var drawablesForObjectCreate = [];

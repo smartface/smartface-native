@@ -1,7 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("sf-core/ui/image");
-
+const ImageCacheType = require('sf-core/ui/imagecachetype');
 
 const FillType = { 
     NORMAL: 0,
@@ -50,12 +50,37 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
-        self.loadFromUrl = function(url, placeHolder){
-            if (placeHolder){
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject);
-            }else{
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url));
-            }
+        self.loadFromUrl = function(url,placeholder,fade){
+        	if (fade === false) {
+        		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
+        	}else{
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder.nativeObject,function(image,error,cache,url){
+					if (!error) {
+						this.nativeObject.loadImage(image);
+						if (cache == ImageCacheType.NONE) {
+							var alpha = this.nativeObject.alpha;
+							this.nativeObject.alpha = 0;
+			                __SF_UIView.animation(0.3,0,function(){
+			                   this.nativeObject.alpha = alpha; 
+			                }.bind(this),function(){});
+						}
+					}
+				}.bind(self));
+        	}
+        }
+        
+        self.fetchFromUrl = function(object){
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder.nativeObject,function(onSuccess,onError,image,error,cache,url){
+				if (!error) {
+					if (typeof onSuccess === "function") {
+						onSuccess(Image.createFromImage(image),cache);
+					}
+				}else{
+					if (typeof onError === "function") {
+						onError();
+					}
+				}
+			}.bind(self,object.onSuccess,object.onError));
         };
         
         Object.defineProperty(self, 'imageFillType', {
@@ -94,10 +119,18 @@ Object.defineProperties(ImageView.FillType,{
         value: 1,
         enumerable: true
     },
+    'ASPECTFILL':{
+        value: 2,
+        enumerable: true
+    },
     'ios':{
         value: {},
         enumerable: true
     },
+    'android':{
+        value: {},
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ImageView.FillType.ios,{

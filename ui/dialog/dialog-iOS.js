@@ -7,8 +7,7 @@ function Dialog(params) {
 
     self.dialogView = new FlexLayout();
     self.dialogView.nativeObject.frame = __SF_UIScreen.mainScreen().bounds; 
-    self.dialogView.backgroundColor = Color.create(150,0,0,0);
-    self.dialogView.alpha = 0;
+    self.dialogView.backgroundColor = Color.create(58,0,0,0);
     self.dialogView.id = Dialog.iOS.ID;
     
     self.calculatePosition = function(){
@@ -26,7 +25,8 @@ function Dialog(params) {
                 },__SF_UIApplicationDidChangeStatusBarOrientationNotification);
                 
     self.calculatePosition();
-    
+    //android specific property.
+    self.android = {};
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.dialogView;
@@ -39,20 +39,12 @@ function Dialog(params) {
     }
     
     self.hide = function (){
-        __SF_UIView.animation(0.2,0,function(){
-            self.dialogView.alpha = 0;
-        },function(){
-            self.dialogView.nativeObject.removeFromSuperview();
-        });
+        self.dialogView.nativeObject.removeFromSuperview();
     };
     
     self.show = function (){
         __SF_UIApplication.sharedApplication().keyWindow.addSubview(self.dialogView.nativeObject);
-        __SF_UIView.animation(0.2,0,function(){
-            self.dialogView.alpha = 1;
-        },{
-
-        });
+        self.dialogView.applyLayout();
     };
     
      if (params) {
@@ -64,5 +56,9 @@ function Dialog(params) {
 
 Dialog.iOS = {};
 Dialog.iOS.ID = 1453;
+
+//these are for android dialog style
+Dialog.Android = {}; 
+Dialog.Android.Style = {};
 
 module.exports = Dialog;

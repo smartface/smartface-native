@@ -15,6 +15,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
+const Application = require("../../application");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -66,6 +67,7 @@ function Page(params) {
                 isCreated = true;
             }
             self.orientation = _orientation;
+
             return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
@@ -76,6 +78,18 @@ function Page(params) {
                         Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
+
+                    var spratIntent = AndroidConfig.activity.getIntent();
+                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                        try {
+                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                        }
+                        catch (e) {
+                            new Error("An error occured while getting notification json");
+                        }
+                    }
                 }
             }));
         },
@@ -135,6 +149,8 @@ function Page(params) {
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
+            const EmailComposer = require('sf-core/ui/emailcomposer');
+
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -152,6 +168,9 @@ function Page(params) {
             }
             else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
+            }
+            else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
+                EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
 
 
@@ -279,14 +298,14 @@ function Page(params) {
 
     this.statusBar = {};
 
-    var statusBarStyle;
+    var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
     Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return statusBarStyle;
         },
         set: function(value) {
-            statusBarStyle = value;
             if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
+                statusBarStyle = value;
                 if (statusBarStyle == StatusBarStyle.DEFAULT) {
                     // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
@@ -296,7 +315,6 @@ function Page(params) {
                     AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
                 }
             }
-
 
         },
         enumerable: true,
@@ -341,9 +359,9 @@ function Page(params) {
     Object.defineProperty(this.statusBar, 'height', {
         get: function() {
             var result = 0;
-            var resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+            var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -378,6 +396,38 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    
+    var _headerbarItemView;
+    Object.defineProperty(self.headerBar, 'titleLayout', {
+        get: function() {
+            return _headerbarItemView;
+        },
+        set: function(view) {
+            view && toolbar.addView(view.nativeObject);
+            _headerbarItemView = view;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    var _borderVisibility = true;
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            _borderVisibility = value;
+            if(value) {
+                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+            } else {
+                actionBar.setElevation(0);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
@@ -394,7 +444,7 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar, 'height', {
         get: function() {
-            var resources = activity.getResources();
+            var resources = AndroidConfig.activityResources;
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
         },
         enumerable: true,
@@ -555,9 +605,9 @@ function Page(params) {
 
             const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
-            var resourceId = activity.getResources().getIdentifier("design_bottom_navigation_height", "dimen", packageName);
+            var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
-                result = activity.getResources().getDimensionPixelSize(resourceId);
+                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
             }
             return AndroidUnitConverter.pixelToDp(result);
         },
@@ -751,11 +801,11 @@ function Page(params) {
             return;
         }
         const NativeMenuItem = requireClass("android.view.MenuItem");
-        const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
-        const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+
+        const ALIGN_RIGHT = 7;
 
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
@@ -768,30 +818,35 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
+                var badgeLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
+                nativeBadgeContainer.setLayoutParams(badgeLayoutParams);
+
+                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
+                var nativeBadgeContainerButton = new NativeRelativeLayout(activity);
+                nativeBadgeContainerButton.setId(NativeView.generateViewId());
+                nativeBadgeContainerButton.setLayoutParams(badgeButtonLayoutParams);
+
                 if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainerButton.addView(item.nativeObject);
                 }
                 else {
                     item.nativeObject = new NativeTextButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
+                    nativeBadgeContainerButton.addView(item.nativeObject);
                 }
-                item.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject)
+                nativeBadgeContainer.addView(nativeBadgeContainerButton);
+                item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
                 if (item.badge.visible && item.badge.nativeObject) {
 
-                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), 0, AndroidUnitConverter.dpToPixel(5), 0);
+                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(19, item.nativeObject.getId());
-                    layoutParams.addRule(6, item.nativeObject.getId());
-                    //item badge text view must be over the given view
-                    NativeViewCompat.setZ(item.badge.nativeObject, 10);
-                    NativeViewCompat.setZ(item.badge.nativeObject, 20);
+                    layoutParams.addRule(ALIGN_RIGHT, nativeBadgeContainerButton.getId());
 
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 2), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
+                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 1), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
@@ -808,12 +863,12 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                itemView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+                // itemView.setBackgroundColor(Color.BLACK.nativeObject);
                 // left, top, right, bottom
-                itemView.setPadding(
-                    0, 0,
-                    HeaderBarItemPadding.vertical, 0
-                );
+                // itemView.setPadding(
+                //     0, 0,
+                //     HeaderBarItemPadding.vertical, 0
+                // );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -843,17 +898,21 @@ function Page(params) {
             return true;
         }
     }));
-    //Commetted because of volume control keys cannot behave as super behavior.
-    // self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-    //     onKey: function(view, keyCode, keyEvent) {
-    //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-    //         if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-    //             typeof self.android.onBackButtonPressed === "function" &&
-    //                 self.android.onBackButtonPressed();
-    //         }
-    //         return true;
-    //     }
-    // }));
+    //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+        onKey: function(view, keyCode, keyEvent) {
+            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                typeof self.android.onBackButtonPressed === "function" &&
+                    self.android.onBackButtonPressed();
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {

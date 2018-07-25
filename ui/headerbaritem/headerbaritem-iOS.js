@@ -84,15 +84,25 @@ function HeaderBarItem(params) {
     var _backgroundColor;
     var _font;
     var _textColor;
+    var _borderColor;
+    var _borderWidth;
+    var _badgeHeight;
+    var _isBadgeFirstLoad = false;
     Object.defineProperties(_badge, {
         'setText': {
             value: function(text){
                 __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_addBadgeWithText(text);
-                            _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
-                            _backgroundColor ? self.badge.setBackgroundColor(_backgroundColor) : 0;
-                            _textColor ? self.badge.setTextColor(_textColor) : 0;
-                            _font ? self.badge.setFont(_font) : 0;
+                    self.nativeObject.pp_addBadgeWithText(text);
+                    if (!_isBadgeFirstLoad) {
+                        _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
+                        _backgroundColor ? self.badge.setBackgroundColor(_backgroundColor) : 0;
+                        _textColor ? self.badge.setTextColor(_textColor) : 0;
+                        _font ? self.badge.setFont(_font) : 0;
+                        _borderColor ? self.badge.setBorderColor(_borderColor) : 0;
+                        _borderWidth ? self.badge.setBorderWidth(_borderWidth) : 0;
+                        _badgeHeight !== undefined ? self.badge.setHeight(_badgeHeight) : 0;
+                    }
+                    _isBadgeFirstLoad = true;
                 },1);
             },
             enumerable: true
@@ -110,7 +120,22 @@ function HeaderBarItem(params) {
         },
         'setHeight': {
             value: function(value){
+                _badgeHeight = value;
                 self.nativeObject.pp_setBadgeHeight(value);
+            },
+            enumerable: true
+        },
+        'setBorderWidth': {
+            value: function(value){
+                _borderWidth = value;
+                self.nativeObject.pp_setBorderWidth(value);
+            },
+            enumerable: true
+        },
+        'setBorderColor': {
+            value: function(value){
+                _borderColor = value;
+                self.nativeObject.pp_setBorderColor(value.nativeObject);
             },
             enumerable: true
         },

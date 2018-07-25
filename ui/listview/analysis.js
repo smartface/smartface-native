@@ -131,6 +131,15 @@ ListView.prototype.onRowCreate = function onRowCreate(type){};
 
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.0.2
+ */
+ListView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
+/**
  * This event is called when a ListView starts to create a ListViewItem.
  * You can set different height to rows. If row Height property is assigned, this callback doesn't fire
  *
@@ -304,6 +313,13 @@ ListView.prototype.stopRefresh = function(){};
  * necessary
  *
  * @event onScroll
+ * @param {Object} params
+ * @param {Object} params.translation
+ * @param {Number} params.translation.x
+ * @param {Number} params.translation.y
+ * @param {Object} params.contentOffset
+ * @param {Number} params.contentOffset.x
+ * @param {Number} params.contentOffset.y
  * @android
  * @ios
  * @since 0.1
@@ -383,6 +399,19 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * 
  */
 ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,index){}
+
+/**
+ * Gets/Sets contentInset of the ListView.
+ * 
+ * @property {Object} [contentInset = {top: 0,bottom: 0}]
+ * @property {Number} contentInset.top
+ * @property {Number} contentInset.bottom
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ListView.prototype.contentInset = {top: 0,bottom: 0};
+
 
 /**
  * Gets/sets leftToRightSwipeEnabled

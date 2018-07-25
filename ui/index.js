@@ -2,6 +2,7 @@ module.exports = {
     View: require('./view'),
     Label: require('./label'),
     TextAlignment : require('./textalignment.js'),
+    ImageCacheType : require('./imagecachetype.js'),
     Font: require('./font'),
     Color: require('./color'),
     Button: require('./button'),
@@ -40,5 +41,7 @@ module.exports = {
     BottomTabBar: require('./bottomtabbar'),
     TabBarItem: require('./tabbaritem'),
     Navigator: require('./navigator'),
-    SwipeView: require('./swipeview')
+    SwipeView: require('./swipeview'),
+    LayoutManager: require("./layoutmanager"),
+    EmailComposer: require("./emailcomposer")
 };
