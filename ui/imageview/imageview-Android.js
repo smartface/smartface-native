@@ -5,6 +5,7 @@ const View = require('../view');
 const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
+const File = require('../../io/file');
 
 const ImageView = extend(View)(
     function(_super, params) {
@@ -29,7 +30,7 @@ const ImageView = extend(View)(
         imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
-        
+
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -70,27 +71,27 @@ const ImageView = extend(View)(
         imageViewPrototype.toString = function() {
             return 'ImageView';
         };
-        
-        imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade){
+
+        imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
                 var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (requestCreator = requestCreator.noFade());
-                if(placeHolder instanceof Image){
+                if (placeHolder instanceof Image) {
                     requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
-                else{
+                else {
                     requestCreator.into(this.nativeObject);
                 }
             }
         };
-        
-        imageViewPrototype.fetchFromUrl = function(params){
+
+        imageViewPrototype.fetchFromUrl = function(params) {
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             var target = NativeTarget.implement({
                 onBitmapLoaded: function(bitmap, from) {
-                    params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap}), (from && ImageView.CacheType[from.name()]));
+                    params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap }), (from && ImageView.CacheType[from.name()]));
                 },
                 onBitmapFailed: function(errorDrawable) {
                     params.onError && params.onError();
@@ -107,13 +108,20 @@ const ImageView = extend(View)(
                 }
             }
         };
+        imageViewPrototype.loadFromFile = function(path) {
+            const NativePicasso = requireClass("com.squareup.picasso.Picasso");
+            if (TypeUtil.isString(path)) {
+                var imageFile = new File({ path: path });
+                NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
+            }
+        };
     }
 );
 
 ImageView.CacheType = {};
 ImageView.CacheType["NETWORK"] = 0; // NONE
-ImageView.CacheType["DISK"] = 1; 
-ImageView.CacheType["MEMORY"] = 2; 
+ImageView.CacheType["DISK"] = 1;
+ImageView.CacheType["MEMORY"] = 2;
 
 
 Object.defineProperty(ImageView, "FillType", {
