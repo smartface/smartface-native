@@ -44,7 +44,7 @@ function AsyncTask(params){
                     self.onPreExecute();
                     
                     // Background
-                    SF.dispatch_async(SF.dispatch_get_global_queue(), function() {
+                    SF.dispatch_async(SF.dispatch_get_global_queue(0,0), function() {
                         self.doInBackground();
                         
                         // Main
