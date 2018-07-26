@@ -33,7 +33,7 @@ function File(params) {
                 if (this.resolvedPath.name === assetName) {
                     // this.nativeObject = this.resolvedPath.name;
                     this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
-                    copyFile(this.nativeObject, assetName);
+                    copyAssetFile(this.nativeObject, assetName);
                 }
             }.bind(this));
             break;
@@ -150,7 +150,7 @@ File.prototype.copy = function(destination) {
                     destinationFile = new File({ path: destination + "/" + this.name });
                 }
                 if (destinationFile.createFile(true)) {
-                    copyFile(destinationFile.nativeObject, this.resolvedPath.name);
+                    copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
                     return true;
                 }
 
@@ -279,7 +279,7 @@ File.prototype.rename = function(newName) {
     return false;
 };
 
-function copyFile(destinationFile, filename) {
+function copyAssetFile(destinationFile, filename) {
 
     const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
     const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
@@ -287,11 +287,13 @@ function copyFile(destinationFile, filename) {
     var assetsInputStream = activity.getAssets().open(filename);
     var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
     var destinationFileStream = new NativeFileOutputStream(destinationFile, false);
-    copyStream(assetsBufferedInputStream, destinationFileStream);
-    destinationFileStream.flush();
-    assetsBufferedInputStream.close();
-    assetsInputStream.close();
-    destinationFileStream.close();
+    copyStream(assetsBufferedInputStream, destinationFileStream).then(function(sourceFileStream, destinationFileStream) {
+        destinationFileStream.flush();
+        assetsBufferedInputStream.close();
+        assetsInputStream.close();
+        destinationFileStream.close();
+    });
+
 }
 
 function copyDirectory(sourceDirectory, destinationDirectory) {
@@ -333,13 +335,21 @@ function removeFile(fileToRemove, withChilds) {
 }
 
 function copyStream(sourceFileStream, destinationFileStream) {
-    var buffer = [];
-    buffer.length = 1024;
-    var len = sourceFileStream.read(array(buffer, "byte"));
-    while (len > 0) {
-        destinationFileStream.write(array(buffer, "byte"), 0, len);
-        len = sourceFileStream.read(array(buffer, "byte"));
-    }
+    return new Promise(function(resolve, reject) {
+        const NativeSpFile = requireClass("io.smartface.android.SpFile");
+
+        var nativeSpFile = new NativeSpFile(""); // ToDo: After fixing  AND-3271 issue, need to implement by Native Api Access
+        nativeSpFile.copyStream(sourceFileStream, destinationFileStream);
+
+        resolve(sourceFileStream, destinationFileStream);
+    });
+    // var buffer = [];
+    // buffer.length = 1024;
+    // var len = sourceFileStream.read(array(buffer, "byte"));
+    // while (len > 0) {
+    //     destinationFileStream.write(array(buffer, "byte"), 0, len);
+    //     len = sourceFileStream.read(array(buffer, "byte"));
+    // }
 }
 
 function copyFile(sourceFile, destinationFile) {
@@ -348,9 +358,10 @@ function copyFile(sourceFile, destinationFile) {
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         var sourceFileStream = new NativeFileInputStream(sourceFile.nativeObject);
         var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
-        copyStream(sourceFileStream, destinationFileStream);
-        sourceFileStream.close();
-        destinationFileStream.close();
+        copyStream(sourceFileStream, destinationFileStream).then(function(sourceFileStream, destinationFileStream) {
+            sourceFileStream.close();
+            destinationFileStream.close();
+        });
         return true;
     }
     return false;
