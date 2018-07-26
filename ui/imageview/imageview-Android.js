@@ -6,6 +6,7 @@ const TypeUtil          = require("../../util/type");
 const Image             = require("../image");
 const NativeImageView   = requireClass("android.widget.ImageView");
 const File              = require('../../io/file');
+const Path              = require('../../io/path');
 
 const ImageView = extend(View)(
     function (_super, params) {
@@ -76,11 +77,34 @@ const ImageView = extend(View)(
                 }
             }
         };
-        imageViewPrototype.loadFromFile = function(path) {
+        imageViewPrototype.loadFromFile = function(path, width, height) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if(TypeUtil.isString(path)){
-                var imageFile = new File({ path: path });
-                NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
+                var resolvedPath = Path.resolve(path);
+                if(!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
+                    var resources = AndroidConfig.activity.getResources();
+                    var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
+                    if(width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).resize(width, height).into(this.nativeObject);
+                    } else {
+                        NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).into(this.nativeObject);
+                    }
+                } else if(!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                    var assetPrefix = "file:///android_asset/";
+                    var assetFilePath = assetPrefix + resolvedPath.name;
+                     if(width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(assetFilePath).resize(width, height).into(this.nativeObject);
+                    } else {
+                        NativePicasso.with(AndroidConfig.activity).load(assetFilePath).into(this.nativeObject);
+                    }
+                } else {
+                    var imageFile = new File({ path: path });
+                    if(width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).resize(width, height).into(this.nativeObject);
+                    } else {
+                        NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
+                    }
+                }
             }
         };
     }
