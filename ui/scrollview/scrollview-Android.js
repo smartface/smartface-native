@@ -20,18 +20,18 @@ const ScrollView = extend(ViewGroup)(
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
                         x = (x > 0) ? x : 0; // negative values are provided as well
-                        oldx = ( oldx >0) ? oldx : 0;
+                        oldx = (oldx > 0) ? oldx : 0;
                         x = UnitConverter.pixelToDp(x);
                         var oldX = UnitConverter.pixelToDp(oldx);
 
-                        triggersTwice = (prevX === x && prevOldX === oldX ? true : false);//This is avoid unnecessary triggers
+                        triggersTwice = (prevX === x && prevOldX === oldX ? true : false); //This is avoid unnecessary triggers
                         prevX = x;
                         prevOldX = oldX;
 
                         var translation = { x: (x - oldX), y: (y - oldy) };
                         _contentOffset.x = x;
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({translation: translation, contentOffset: _contentOffset});
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
                     }
                 }, [activity]);
             }
@@ -42,7 +42,7 @@ const ScrollView = extend(ViewGroup)(
                     onScrollChanged: function(xObj, yObj, oldx, oldy) {
                         var y = yObj;
                         y = (y > 0) ? y : 0; // negative values are provided as well
-                        oldy = ( oldy >0) ? oldy : 0;
+                        oldy = (oldy > 0) ? oldy : 0;
                         y = UnitConverter.pixelToDp(y);
                         var oldY = UnitConverter.pixelToDp(oldy);
 
@@ -53,7 +53,7 @@ const ScrollView = extend(ViewGroup)(
                         var translation = { x: (xObj - oldx), y: (y - oldY) };
                         _contentOffset.y = y;
 
-                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({translation: translation, contentOffset: _contentOffset});
+                        !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
                     }
                 }, [activity]);
             }
@@ -101,7 +101,7 @@ const ScrollView = extend(ViewGroup)(
                     if (coordinate) {
                         const UnitConverter = require('../../util/Android/unitconverter');
                         coordinate = UnitConverter.dpToPixel(coordinate);
-                        
+
                         var _animate = animate;
                         if (typeof(animate) === "undefined") {
                             _animate = true;
@@ -181,7 +181,7 @@ const ScrollView = extend(ViewGroup)(
         self.layout.applyLayout = function() {
             if (self.autoSizeEnabled) {
                 const Runnable = requireClass("java.lang.Runnable");
-                var scrollView = self.nativeObject;
+                var scrollView = self;
                 var runnable = Runnable.implement({
                     run: function() {
                         calculateScrollViewSize(scrollView);
