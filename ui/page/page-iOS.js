@@ -161,12 +161,12 @@ function Page(params) {
         },
         set: function(value) {
             _onLoad = value;
-            self.nativeObject.onLoad = (function() {
+            self.nativeObject.onLoad = function() {
                 self.headerBar.itemColor = Color.BLACK;
                 if (_onLoad instanceof Function) {
                     _onLoad.call(this);
                 }
-            }).bind(this);
+            }.bind(this);
         },
         enumerable: true
     });
