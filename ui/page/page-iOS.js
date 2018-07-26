@@ -154,17 +154,19 @@ function Page(params) {
         self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     }
     
+    var _onLoad = function(){}.bind(this);
     Object.defineProperty(self, 'onLoad', {
         get: function() {
-            return self.nativeObject.onLoad;
+            return _onLoad;
         },
         set: function(value) {
-            self.nativeObject.onLoad = (function() {
+            _onLoad = value;
+            self.nativeObject.onLoad = function() {
                 self.headerBar.itemColor = Color.BLACK;
-                if (value instanceof Function) {
-                    value.call(this);
+                if (_onLoad instanceof Function) {
+                    _onLoad.call(this);
                 }
-            }).bind(this);
+            }.bind(this);
         },
         enumerable: true
     });
@@ -172,6 +174,7 @@ function Page(params) {
     self.checkOrientation = function(){
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
         if (self.orientation.indexOf(currentOrientation) === -1){
+            __SF_UIDevice.changeOrientation(currentOrientation); //Workaround for IOS-2580
             __SF_UIDevice.changeOrientation(self.orientation[0]);
             self.layout.applyLayout();
         }
@@ -214,27 +217,27 @@ function Page(params) {
     
     self.orientation = [UIInterfaceOrientation.portrait]; // Default Portrait
     
+    var _onShow = function(e){}.bind(this);
     Object.defineProperty(self, 'onShow', {
         get: function() {
-            return self.nativeObject.onShow;
+            return _onShow;
         },
         set: function(value) {
-            self.nativeObject.onShow = (function() {
+            _onShow = value;
+            self.nativeObject.onShow = function() {
                 __SF_UIView.animation(0,0,function(){
                 self.layout.nativeObject.endEditing(true);
                 },{});
                 self.checkOrientation();
-                if (value instanceof Function) {
-                    value.call(this, this.__pendingParameters);
+                if (_onShow instanceof Function) {
+                    _onShow.call(this, this.__pendingParameters);
                     delete this.__pendingParameters;
                 }
-            }).bind(this);
+            }.bind(this);
         },
         enumerable: true,
         configurable : true
     });
-    
-    self.onShow = function(e){};
     
     self.onHideHandler = function(){
         __SF_UIView.animation(0,0,function(){
@@ -332,6 +335,27 @@ function Page(params) {
         },
         set: function(value) {
             self.nativeObject.navigationItem.title = value;
+        },
+        enumerable: true,configurable : true
+    });
+    
+    var _titleView = true;
+    Object.defineProperty(self.headerBar, 'titleLayout', {
+        get: function() {
+            return _titleView;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                _titleView = value;
+                _titleView.applyLayout();
+                
+                // These calls may need for different cases.
+                // _titleView.nativeObject.layoutIfNeeded();
+                // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
+                _titleView.nativeObject.sizeToFit();
+                
+                self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
+            }
         },
         enumerable: true,configurable : true
     });
