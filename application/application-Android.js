@@ -205,6 +205,7 @@ Object.defineProperties(ApplicationWrapper, {
             var focusedView = AndroidConfig.activity.getCurrentFocus();
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+
             inputManager.hideSoftInputFromWindow(windowToken, 0); //2.parameter: Provides additional operating flags. Currently may be 0 
         },
         enumerable: true
@@ -327,7 +328,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult({
                     requestCode: requestCode,
-                    result: this.checkPermission(permissions)
+                    result: ApplicationWrapper.android.checkPermission(permissions)
                 });
             }
             else {
