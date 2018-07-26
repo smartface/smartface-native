@@ -4,7 +4,7 @@
  * A string that has associated attributes for portions of its text.
  * 
  *     @example
- *     const AttributedString = require('sf-extension-extendedlabel/attributedstring');
+ *     const AttributedString = require("sf-core/ui/attributedstring");
  *     var attributeString = new AttributedString();
  *     attributeString.string = " Third";
  *     attributeString.link = "Third Link";
