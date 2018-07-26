@@ -67,7 +67,7 @@ function TabBarFlowViewModel(params) {
             var pageObject = {
                 key : to,
                 values : {
-                    pageClass       : null,
+                    pageClassPath   : null,
                     title           : tabbaritem.title,
                     icon            : tabbaritem.icon,
                     pageInstance    : null,
@@ -75,8 +75,8 @@ function TabBarFlowViewModel(params) {
                 }
             };
             
-            if (typeof tabbaritem.route === 'function') {
-                pageObject.values.pageClass = tabbaritem.route;
+            if (typeof tabbaritem.route === 'string') {
+                pageObject.values.pageClassPath = tabbaritem.route;
             } else if (typeof tabbaritem.route === 'object') {
                 pageObject.values.pageInstance = tabbaritem.route;
             }
@@ -342,12 +342,12 @@ function TabBarFlowModel(argument) {
         for (var i = 0; i < objects.length; i++) { 
             if (objects[i].values.isSingleton) {
                 if (objects[i].values.pageInstance === null) {
-                    objects[i].values.pageInstance = new (objects[i].values.pageClass)();
+                    objects[i].values.pageInstance = new (require(objects[i].values.pageClassPath))();
                     objects[i].values.pageInstance.routerPath = objects[i].key;
                 }
             } else {
-                if (objects[i].values.pageClass !== null){
-                    objects[i].values.pageInstance = new (objects[i].values.pageClass)();
+                if (objects[i].values.pageClassPath !== null){
+                    objects[i].values.pageInstance = new (require(objects[i].values.pageClassPath))();
                     objects[i].values.pageInstance.routerPath = objects[i].key;
                 }
                 refreshNeeded = true;

@@ -65,14 +65,14 @@ function NavigatorViewModel(params) {
             var object = {
                 key : key,
                 value : {
-                    pageClass : null,
+                    pageClassPath : null,
                     pageInstance : null,
                     isSingleton : _isSingleton
                 }
             };
             
-            if (typeof value === 'function') {
-                object.value.pageClass = value;
+            if (typeof value === 'string') {
+                object.value.pageClassPath = value;
             } else if (typeof value === 'object') {
                 object.value.pageInstance = value;
             }
@@ -293,9 +293,9 @@ function NavigatorModel(params) {
         if (objects[key]) {
             var retval = null;
             if (objects[key].isSingleton) {
-                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (require(objects[key].pageClassPath))());
             } else {
-                retval = objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (require(objects[key].pageClassPath))();
             }
             retval.routerPath = key;
             return retval;

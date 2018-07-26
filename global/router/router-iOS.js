@@ -49,14 +49,14 @@ function RouterViewModel(params) {
             var pageObject = {
                 key : to,
                 values : {
-                    pageClass : null,
+                    pageClassPath : null,
                     pageInstance : null,
                     isSingleton : _isSingleton
                 }
             };
             
-            if (typeof page === 'function') {
-                pageObject.values.pageClass = page;
+            if (typeof page === 'string') {
+                pageObject.values.pageClassPath = page;
             } else if (typeof page === 'object') {
                 pageObject.values.pageInstance = page;
             }
@@ -366,7 +366,7 @@ function RouterModel(params) {
     this.addObject = function (newObject) {
         if (!objects[newObject.key]) {
             objects[newObject.key] = {
-                pageClass    : newObject.values.pageClass,
+                pageClassPath    : newObject.values.pageClassPath,
                 pageInstance : newObject.values.pageInstance,
                 isSingleton  : newObject.values.isSingleton
             }
@@ -380,9 +380,9 @@ function RouterModel(params) {
         if (objects[key]) {
         	var retval = null;
             if (objects[key].isSingleton) {
-                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (require(objects[key].pageClassPath))());
             } else {
-                retval = objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (require(objects[key].pageClassPath))();
             }
             retval.routerPath = key;
             return retval;
