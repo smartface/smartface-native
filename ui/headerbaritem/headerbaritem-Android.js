@@ -199,7 +199,6 @@ function HeaderBarItem(params) {
         },
         'badge': {
             get: function() {
-                _badge.visible = true;
                 return _badge;
             },
             enumerable: true
@@ -232,6 +231,7 @@ function HeaderBarItem(params) {
         'setText': {
             value: function(text) {
                 _badge.text = text;
+                _badge.visible = true;
                 if (_badge.nativeObject) {
                     _badge.nativeObject.setText("" + text);
                     _badge.nativeObject.setGravity(17);
