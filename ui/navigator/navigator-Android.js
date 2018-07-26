@@ -13,7 +13,7 @@ function Navigator(params) {
         
         Object.defineProperties(this, {
             'add': {
-                value: function(to, page){
+                value: function(to, page){ // second parameter is String
                     if(!_index) {
                         _index = to;
                         _rootPage = to;
@@ -74,14 +74,14 @@ function Navigator(params) {
                             throw new Error(to + ' in not in navigator.');
                         }
                         
-                        if(typeof(_items[to]) === 'function') {
+                        if(typeof(_items[to]) === 'string') {
                             if(!_itemInstances[to])
-                                _itemInstances[to] = new _items[to]();
+                                _itemInstances[to] = new (require(_items[to]))();
                             var page;
                             if(isSingleton) {
                                 page = _itemInstances[to];
                             } else {
-                                page = new _items[to]();
+                                page = new (require(_items[to]))();
                                 _itemInstances[to] = page;
                             }
                         

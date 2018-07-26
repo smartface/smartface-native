@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const FlexLayout = require("../flexlayout");
-const Label = require('../label');
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -8,7 +7,7 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const SFFragment   = requireClass('io.smartface.android.sfcore.Page');
 const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
@@ -59,7 +58,8 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    self.nativeObject = NativeFragment.extend("SFFragment", {
+    
+    var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             if (!isCreated) {
@@ -172,10 +172,10 @@ function Page(params) {
             else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
-
-
         }
-    }, null);
+    };
+    self.nativeObject = new SFFragment();
+    self.nativeObject.setCallbacks(callback);
 
     this.isSwipeViewPage = false;
 

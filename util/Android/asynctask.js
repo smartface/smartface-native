@@ -2,16 +2,6 @@
 const TypeUtil = require("sf-core/util/type");
 const SFAsyncTask = requireClass('io.smartface.android.asynctask.SFAsyncTask');
 
-/**
- * This is JS implementtation of Android AsyncTask. 
- * When any operation needs different thread, we can use this.
- * params.onPreExecute 
- * params.doInBackground: objects[]
- * params.onProgressUpdate: progresses
- * params.onPostExecute: result
- * For more information: https://developer.android.com/reference/android/os/AsyncTask.html
- * 
- */
 function AsyncTask(params) {
     var callbacks = {
         onPreExecute: function() {
@@ -27,8 +17,8 @@ function AsyncTask(params) {
             _onPostExecute && _onPostExecute();
         }
     };
-    var asyncTask = new SFAsyncTask();
-    asyncTask.setJsCallback(callbacks);
+    this.nativeObject = new SFAsyncTask();
+    this.nativeObject.setJsCallback(callbacks);
 
 
     var _onPreExecute;
@@ -79,10 +69,25 @@ function AsyncTask(params) {
         'execute': {
             value: function(params) {
                 if (TypeUtil.isArray(params)) {
-                    asyncTask.executeTask(array(params, "java.lang.Object"));
+                    this.nativeObject.executeTask(array(params, "java.lang.Object"));
                 } else {
-                    asyncTask.executeTask(null);
+                    this.nativeObject.executeTask(null);
                 }
+            }
+        },
+        'cancel': {
+            value: function() {
+                this.nativeObject.cancel();
+            }
+        },
+        'status': {
+            value: function() {
+                return this.nativeObject.getStatus();
+            }
+        },
+        'toString': {
+            value: function() {
+                return "AsyncTask";
             }
         }
     });
@@ -94,5 +99,11 @@ function AsyncTask(params) {
         }
     }
 }
+
+
+AsyncTask.Status = {};
+AsyncTask.Status.FINISHED = SFAsyncTask.Status.FINISHED;
+AsyncTask.Status.PENDING = SFAsyncTask.Status.PENDING;
+AsyncTask.Status.RUNNING = SFAsyncTask.Status.RUNNING;
 
 module.exports = AsyncTask;

@@ -51,10 +51,10 @@ function BottomTabBar(params) {
             'createPage' : {
                 value: function(path) {
                     var page;
-                    if(typeof(_items[path].route) !== 'function') {
+                    if(typeof(_items[path].route) !== 'string') {
                         page = _items[path].route.getRoute(null, true);
                     } else {
-                        page = new _items[path].page();
+                        page = new (require(_items[path].page))();
                         page.isBottomTabBarPage = true;
                     }
                     return page;
@@ -108,7 +108,7 @@ function BottomTabBar(params) {
             'getRoute': {
                 value: function(to, isSingleton, isGoing){
                     if(!to) {
-                        if(typeof(_items[_index].page) === 'function') {
+                        if(typeof(_items[_index].page) === 'string') {
                             var keys = Object.keys(_items);
                             if(!_itemInstances[keys.indexOf(_index)])
                                 _itemInstances[keys.indexOf(_index)] = this.createPage(_index);
@@ -137,7 +137,7 @@ function BottomTabBar(params) {
                             var keys = Object.keys(_items);
                             this.selectedIndex = keys.indexOf(to);
                             var page;
-                            if(typeof(_items[to].route) === 'function') {
+                            if(typeof(_items[to].route) === 'string') {
                                 page = _itemInstances[this.selectedIndex];
                             } else {
                                 page = _items[to].route.getRoute(null, true); 
