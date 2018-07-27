@@ -70,7 +70,7 @@ Router.add = function(to, page, isSingleton) {
         throw TypeError("add takes string and Page as parameters");
     }
 
-    if(typeof(page) !== 'function') {
+    if(typeof(page) !== 'string') {
         if (!routes[to]) {
             routes[to] = {
                 isSingleton: !!isSingleton,
@@ -243,11 +243,11 @@ function getRoute(to) {
     else {
         if (routes[to].isSingleton) {
             var page = (routes[to].pageObject ||
-                    (routes[to].pageObject = new (routes[to].pageClass)()));
+                    (routes[to].pageObject = new (require(routes[to].pageClass))()));
             page.tag = to;
             return {to: to, page : page};
         } else {
-            var page = new (routes[to].pageClass)();
+            var page = new (require(routes[to].pageClass))();
             page.tag = to;
             return {to: to, page: page};
         }
