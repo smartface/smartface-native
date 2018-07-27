@@ -54,7 +54,7 @@ const ImageView = extend(View)(
         	if (fade === false) {
         		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
         	}else{
-				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder.nativeObject,function(image,error,cache,url){
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,function(image,error,cache,url){
 					if (!error) {
 						this.nativeObject.loadImage(image);
 						if (cache == ImageCacheType.NONE) {
@@ -70,7 +70,7 @@ const ImageView = extend(View)(
         }
         
         self.fetchFromUrl = function(object){
-			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder.nativeObject,function(onSuccess,onError,image,error,cache,url){
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder ? object.placeholder.nativeObject : undefined,function(onSuccess,onError,image,error,cache,url){
 				if (!error) {
 					if (typeof onSuccess === "function") {
 						onSuccess(Image.createFromImage(image),cache);
