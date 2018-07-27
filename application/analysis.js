@@ -18,6 +18,17 @@ function Application() {}
 Application.android.packageName;
 
 /**
+ * Application bundle identifier.
+ * 
+ * @property {String} bundleIdentifier
+ * @readonly
+ * @ios
+ * @static
+ * @since 3.0.2
+ */
+Application.ios.bundleIdentifier;
+
+/**
  * The received bytes from the application.
  * 
  * @property {Number} byteReceived

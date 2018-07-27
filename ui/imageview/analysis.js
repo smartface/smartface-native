@@ -70,17 +70,36 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown
- * until image loaded.
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
- * @param {String} url 
- * @param {UI.Image} placeHolder 
+ * @param {String} url
+ * @param {UI.Image} placeholder
+ * @param {Boolean} [fade = true]
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.2
  */
-ImageView.prototype.loadFromUrl = function(url, placeHolder){};
+ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
+
+/**
+ * Fetch image from the server.
+ * If you want better performance and automatically set image, use loadFromUrl. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ *
+ * @method fetchFromUrl
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Function} object.onSuccess
+ * @param {UI.Image} object.onSuccess.image
+ * @param {UI.ImageCacheType} object.onSuccess.cache
+ * @param {Function} object.onError
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ImageView.prototype.fetchFromUrl = function(object){};
 
 /**
  * @enum {Number} UI.ImageView.FillType
@@ -115,6 +134,19 @@ ImageView.FillType.ios = {};
  * @since 0.1
  */
 ImageView.FillType.NORMAL;
+
+/**
+ * @property {Number} ASPECTFILL
+ * @android
+ * @ios
+ * The option to scale the content to fill the size of the view. Some portion of the content may be clipped to fill the view’s bounds.
+ * @static
+ * @readonly
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ImageView.FillType.ASPECTFILL;
 
 /**
  * @property {Number} STRETCH

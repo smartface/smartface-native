@@ -132,7 +132,7 @@ const ListView = extend(View)(
             if (e.cell.contentView.subviews.length > 0) {
                 self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }else{
-                _listItemArray[e.cell.uuid] = self.onRowCreate(e.cell.reuseIdentifier);
+                _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
                 self.onRowBind(_listItemArray[e.cell.uuid],e.indexPath.row);
             }
@@ -145,7 +145,7 @@ const ListView = extend(View)(
             if (typeof self.onRowType === 'function') {
                 return self.onRowType(e.indexPath.row);
             }else{
-                return "cell";
+                return "0";
             }
         };
         
@@ -220,6 +220,33 @@ const ListView = extend(View)(
                 self.refreshControl.tintColor = param.nativeObject;
             }
         }
+        
+        Object.defineProperty(self, 'contentOffset', {
+            get: function() {
+                return {x : self.nativeObject.contentOffset.x, y : self.nativeObject.contentOffset.y};
+            },
+            enumerable: true
+        });
+        
+        var _contentInset = {top:0, left:0, bottom:0, right:0};
+        Object.defineProperty(self, 'contentInset', {
+            get: function() {
+                return _contentInset;
+            },
+            set: function(value) {
+                if (typeof value === "object") {
+                    _contentInset = value;
+                    
+                    var argContentInset = new Invocation.Argument({
+                        type:"UIEdgeInsets",
+                        value: _contentInset
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject, "setContentInset:", [argContentInset]);
+                    self.nativeObject.contentOffset = {x:0,y:-_contentInset.top};
+                }
+            },
+            enumerable: true
+        });
         
         Object.defineProperty(self, 'onScroll', {
             set: function(value) {

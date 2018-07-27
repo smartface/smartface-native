@@ -235,7 +235,7 @@ function setScreenConfigs(){
     const NativeDisplayMetrics  = requireClass("android.util.DisplayMetrics")
     const NativeConfiguration   = requireClass("android.content.res.Configuration");
 
-    var configuration = AndroidConfig.activity.getResources().getConfiguration();
+    var configuration = AndroidConfig.activityResources.getConfiguration();
     if ( (configuration.screenLayout & NativeConfiguration.SCREENLAYOUT_SIZE_MASK) === NativeConfiguration.SCREENLAYOUT_SIZE_SMALL) {
         desiredDrawableSizeIndex = 0;
     } 
@@ -249,7 +249,7 @@ function setScreenConfigs(){
         desiredDrawableSizeIndex = 1;
     }
     
-    var metrics = AndroidConfig.activity.getResources().getDisplayMetrics();
+    var metrics = AndroidConfig.activityResources.getDisplayMetrics();
     
     if (metrics.densityDpi <= NativeDisplayMetrics.DENSITY_LOW) {
         desiredDrawableDensityIndex = 0;

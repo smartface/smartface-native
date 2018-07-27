@@ -65,7 +65,7 @@ function FileStream(params) {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             
-            var inputStream = AndroidConfig.activity.getResources().openRawResource(fileObject.drawableResourceId);
+            var inputStream = AndroidConfig.activityResources.openRawResource(fileObject.drawableResourceId);
             if(_contentMode === FileStream.ContentMode.TEXT){
                 var inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);

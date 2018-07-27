@@ -20,6 +20,7 @@ var classesCache = {};
 var servicesCache = {};
 var activity = SpratAndroidActivity;
 AndroidConfig.activity = SpratAndroidActivity;
+AndroidConfig.activityResources = AndroidConfig.activity.getResources();
 
 AndroidConfig.getClass = function(className){
     if(classesCache[className]){

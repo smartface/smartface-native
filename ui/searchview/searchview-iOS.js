@@ -253,7 +253,8 @@ const SearchView = extend(View)(
         
         var _isAddedHeaderBar = false;
         this.addToHeaderBar = function(page){
-            self.borderWidth = 0;
+            self.nativeObject.layer.borderWidth = 0;
+            self.nativeObject.yoga.borderWidth = 0;
             _isAddedHeaderBar = true;
             page.nativeObject.navigationItem.titleView = self.nativeObject;
         };

@@ -41,6 +41,17 @@
 function HeaderBar() {}
 
 /**
+ * Gets/sets border visibility of headerbar.
+ *
+ * @property {Boolean} [borderVisibility = true]
+ * @android
+ * @ios
+ * @since 3.0.3
+ */
+HeaderBar.prototype.borderVisibility = true;
+
+
+/**
  * Gets/sets background color of the header bar. If not set, header bar will have default
  * background color depending on device's OS and OS version.
  *
