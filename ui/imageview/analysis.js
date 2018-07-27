@@ -83,6 +83,18 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
 
 /**
+ * Load image from the file and place the returned image into the ImageView.
+ *
+ * @method loadFromFile
+ * @param {IO.File} file
+ * @param {Number} width
+ * @param {Number} height
+ * @android
+ * @since 3.0.3
+ */
+ImageView.prototype.loadFromFile = function(file, width, height){};
+
+/**
  * Fetch image from the server.
  * If you want better performance and automatically set image, use loadFromUrl. 
  * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
