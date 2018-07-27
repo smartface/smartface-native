@@ -80,48 +80,59 @@ function NavigatorViewModel(params) {
         }
         return retval;
     };
-    this.go = function (key, parameters, animated) {
-        
-        var pageToGo = null;
-        var routes = [];
-        
-        if (typeof(key) === "object") {
-            pageToGo = key;
-        } else if (typeof(key) === "string"){
-            routes = self.model.divideRoute(key);
-            pageToGo = self.model.getPageInstance(routes[0]);
-        }
-        
-        if (typeof (parameters) != 'undefined' && parameters != null) {
-            pageToGo.__pendingParameters = parameters; 
-        }
-        
-        var _animated = true;
-        if (typeof (animated) === "boolean") {
-            _animated = animated;
-        }
-        
-        if (pageToGo) {
-            var pageInfo = {};
+    this.go = function (key, parameters, animated, layoutNeeded) {
+        if (layoutNeeded) 
+        {
+            // console.log("key : " + key);
+            var pageToGo = null;
+            var routes = [];
             
-            if (self.view == null) {
-                
-                var nativeRootPage;
-                if (pageToGo.type == "TabBarFlow") {
-                    pageToGo.go(routes[1],parameters,_animated);
-                    nativeRootPage = pageToGo.tabBarView.nativeObject;
-                } else {
-                    nativeRootPage = pageToGo.nativeObject;
+            if (typeof(key) === "object") {
+                pageToGo = key;
+            } else if (typeof(key) === "string"){
+                routes = self.model.divideRoute(key);
+                pageToGo = self.model.getPageInstance(routes[0]);
+            }
+            
+            if (typeof (parameters) != 'undefined' && parameters != null) {
+                pageToGo.__pendingParameters = parameters; 
+            }
+            
+            var _animated = true;
+            if (typeof (animated) === "boolean") {
+                _animated = animated;
+            }
+            
+                if (self.view == null) {
+                    // console.log("view init..");
+                    var rootPage = self.model.getPageInstance(self.model.rootPage);
+                    var nativeRootPage;
+                    if (rootPage.type == "TabBarFlow") {
+                        rootPage.go(routes[1],parameters,_animated);
+                        nativeRootPage = rootPage.tabBarView.nativeObject;
+                    } else {
+                        nativeRootPage = rootPage.nativeObject;
+                    }
+                    
+                    self.view = new NavigatorView({
+                        viewModel: self,
+                        rootPage : nativeRootPage
+                    });
+                    self.model.currentPage = rootPage;
+                    self.model.history.push(rootPage);
                 }
+            
+            if (pageToGo) {
                 
-                self.view = new NavigatorView({
-                    viewModel: self,
-                    rootPage : nativeRootPage
-                });
-                self.model.currentPage = pageToGo;
-                self.model.history.push(pageToGo);
+                // console.log("routes[0] : " + routes[0]);
+                // console.log("routes[1] : " + routes[1]);
+                // console.log("self.model.rootPage : " + self.model.rootPage);
                 
-            } else {
+                if (routes[0] !== self.model.rootPage) {
+                
+                
+                // console.log("will show...");
+                var pageInfo = {};
                 switch (pageToGo.type) {
                     case 'TabBarFlow': {
                         pageToGo.go(routes[1],parameters,_animated);
@@ -148,18 +159,33 @@ function NavigatorViewModel(params) {
                         }
                     }
                 }
+                
+                
+                }
+                
+                
+                
+                
+                
+                
+                
             }
         }
+        else 
+        {
+            routes = self.model.divideRoute(key);
+            self.model.rootPage = routes[0];
+        }
     };
-    this.goBack = function (key, parameters, animated) {
+    this.goBack = function (key, parameters, animated, layoutNeeded) {
         if (key) {
-            this.go(key, parameters, animated);
+            this.go(key, parameters, animated, layoutNeeded);
         } else {
             if (self.model.currentPage.type == "TabBarFlow" && self.model.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
-                self.model.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated);
+                self.model.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated, layoutNeeded);
             } else {
                 self.model.history.pop();
-                this.go(self.model.history[self.model.history.length - 1], parameters, animated);
+                this.go(self.model.history[self.model.history.length - 1], parameters, animated, layoutNeeded);
             }
         }
     };
@@ -269,6 +295,7 @@ function NavigatorModel(params) {
     var objects = {};
     self.history = [];
     self.currentPage = null;
+    self.rootPage = null;
     
     // Functions
     this.addObject = function(object){

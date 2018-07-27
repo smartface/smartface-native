@@ -127,7 +127,8 @@ function TabBarFlowViewModel(params) {
             } else {
                 switch (pageToGo.type) {
                     case 'Navigator': {
-                        pageToGo.go(routes[1],parameters,_animated)
+                        // console.log("tabbar nav go..");
+                        pageToGo.go(routes[1],parameters,_animated,true);
                         break;
                     }
                     default: {
@@ -356,6 +357,8 @@ function TabBarFlowModel(argument) {
             if (objects[i].values.pageInstance.type !== undefined) {
                 switch (objects[i].values.pageInstance.type) {
                     case 'Navigator': {
+                        // console.log("Root page : " + objects[i].values.pageInstance.model.rootPage);
+                        objects[i].values.pageInstance.go(objects[i].values.pageInstance.model.rootPage, null, null, true);
                         instancesArray.push(objects[i].values.pageInstance.view.nativeObject);
                         break;
                     }
