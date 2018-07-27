@@ -40,7 +40,7 @@ Object.defineProperties(Path, {
         get: function(){
             var filesDir = AndroidConfig.activity.getFilesDir();
             if(filesDir){
-                return externalFilesDirPath;
+                return filesDir.getAbsolutePath();
             }
             else{
                 return null;

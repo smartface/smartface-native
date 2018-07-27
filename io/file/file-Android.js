@@ -287,13 +287,11 @@ function copyAssetFile(destinationFile, filename) {
     var assetsInputStream = activity.getAssets().open(filename);
     var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
     var destinationFileStream = new NativeFileOutputStream(destinationFile, false);
-    copyStream(assetsBufferedInputStream, destinationFileStream).then(function(sourceFileStream, destinationFileStream) {
-        destinationFileStream.flush();
-        assetsBufferedInputStream.close();
-        assetsInputStream.close();
-        destinationFileStream.close();
-    });
-
+    copyStream(assetsInputStream, destinationFileStream)
+    destinationFileStream.flush();
+    assetsBufferedInputStream.close();
+    assetsInputStream.close();
+    destinationFileStream.close();
 }
 
 function copyDirectory(sourceDirectory, destinationDirectory) {
@@ -335,14 +333,10 @@ function removeFile(fileToRemove, withChilds) {
 }
 
 function copyStream(sourceFileStream, destinationFileStream) {
-    return new Promise(function(resolve, reject) {
-        const NativeSpFile = requireClass("io.smartface.android.SpFile");
+    const NativeFileUtil = requireClass("io.smartface.android.utils.FileUtil");
 
-        var nativeSpFile = new NativeSpFile(""); // ToDo: After fixing  AND-3271 issue, need to implement by Native Api Access
-        nativeSpFile.copyStream(sourceFileStream, destinationFileStream);
+    NativeFileUtil.copyStream(sourceFileStream, destinationFileStream); // ToDo: After fixing  AND-3271 issue, need to implement by Native Api Access
 
-        resolve(sourceFileStream, destinationFileStream);
-    });
     // var buffer = [];
     // buffer.length = 1024;
     // var len = sourceFileStream.read(array(buffer, "byte"));
@@ -358,10 +352,10 @@ function copyFile(sourceFile, destinationFile) {
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         var sourceFileStream = new NativeFileInputStream(sourceFile.nativeObject);
         var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
-        copyStream(sourceFileStream, destinationFileStream).then(function(sourceFileStream, destinationFileStream) {
-            sourceFileStream.close();
-            destinationFileStream.close();
-        });
+        copyStream(sourceFileStream, destinationFileStream)
+        sourceFileStream.close();
+        destinationFileStream.close();
+        
         return true;
     }
     return false;
