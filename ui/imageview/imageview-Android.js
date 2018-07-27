@@ -28,7 +28,6 @@ const ImageView = extend(View)(
         }
     },
     function(imageViewPrototype) {
-        const self = this;
         //imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
@@ -78,7 +77,7 @@ const ImageView = extend(View)(
         imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
-                let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(url));
+                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(url));
                 (isFade === false) && (requestCreator = requestCreator.noFade());
                 if (placeHolder instanceof Image) {
                     requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
@@ -103,7 +102,7 @@ const ImageView = extend(View)(
             });
 
             if (TypeUtil.isString(params.url)) {
-                let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
+                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
                 if ((params.placeholder) instanceof Image) {
                     requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
@@ -119,27 +118,27 @@ const ImageView = extend(View)(
                 if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
                     var resources = AndroidConfig.activity.getResources();
                     var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
-                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(drawableResourceId));
+                    var requestCreatorDrawable = scaleImage(NativePicasso.with(AndroidConfig.activity).load(drawableResourceId));
                     if (width && height) {
                         NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
-                        requestCreator.load(drawableResourceId).into(this.nativeObject);
+                        requestCreatorDrawable.load(drawableResourceId).into(this.nativeObject);
                     }
                 }
                 else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
-                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(assetFilePath));
+                    var requestCreatorAsset = scaleImage(NativePicasso.with(AndroidConfig.activity).load(assetFilePath));
                     if (width && height) {
                         NativePicasso.with(AndroidConfig.activity).load(assetFilePath).resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
-                        requestCreator.into(this.nativeObject);
+                        requestCreatorAsset.into(this.nativeObject);
                     }
                 }
                 else {
-                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(file.nativeObject));
+                    var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(file.nativeObject));
                     if (width && height) {
                         NativePicasso.with(AndroidConfig.activity).load(file.nativeObject).resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
