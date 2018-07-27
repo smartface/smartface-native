@@ -6,6 +6,7 @@ const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
 const File = require('../../io/file');
+const Path = require('../../io/path');
 
 const ImageView = extend(View)(
     function(_super, params) {
@@ -27,10 +28,12 @@ const ImageView = extend(View)(
         }
     },
     function(imageViewPrototype) {
-        imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
+        const self = this;
+        //imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
 
+        var _fillType = null;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -51,18 +54,18 @@ const ImageView = extend(View)(
             },
             'imageFillType': {
                 get: function() {
-                    return this._fillType;
+                    return _fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)) {
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    this._fillType = fillType;
+                    _fillType = fillType;
                     if (fillType === ImageView.FillType.ASPECTFILL && !this._adjustViewBounds) {
                         this.nativeObject.setAdjustViewBounds(true);
                         this._adjustViewBounds = true;
                     }
-                    this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
+                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
                 },
                 enumerable: true
             }
@@ -75,7 +78,7 @@ const ImageView = extend(View)(
         imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
-                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
+                let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(url));
                 (isFade === false) && (requestCreator = requestCreator.noFade());
                 if (placeHolder instanceof Image) {
                     requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
@@ -100,21 +103,73 @@ const ImageView = extend(View)(
             });
 
             if (TypeUtil.isString(params.url)) {
+                let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
                 if ((params.placeholder) instanceof Image) {
-                    NativePicasso.with(AndroidConfig.activity).load(params.url).placeholder(params.placeholder.nativeObject).into(target);
+                    requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
                 else {
-                    NativePicasso.with(AndroidConfig.activity).load(params.url).into(target);
+                    requestCreator.into(target);
                 }
             }
         };
-        imageViewPrototype.loadFromFile = function(path) {
+        imageViewPrototype.loadFromFile = function(file, width, height) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
-            if (TypeUtil.isString(path)) {
-                var imageFile = new File({ path: path });
-                NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
+            if (file instanceof File) {
+                var resolvedPath = file.resolvedPath;
+                if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
+                    var resources = AndroidConfig.activity.getResources();
+                    var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
+                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(drawableResourceId));
+                    if (width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        requestCreator.load(drawableResourceId).into(this.nativeObject);
+                    }
+                }
+                else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                    var assetPrefix = "file:///android_asset/";
+                    var assetFilePath = assetPrefix + resolvedPath.name;
+                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(assetFilePath));
+                    if (width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(assetFilePath).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        requestCreator.into(this.nativeObject);
+                    }
+                }
+                else {
+                    let requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(file.nativeObject));
+                    if (width && height) {
+                        NativePicasso.with(AndroidConfig.activity).load(file.nativeObject).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        requestCreator.into(this.nativeObject);
+                    }
+                }
             }
         };
+
+        function scaleImage(loadedImage) {
+            if (loadedImage && _fillType !== null) {
+                switch (_fillType) {
+                    case ImageView.FillType.NORMAL:
+                        return loadedImage
+                        break;
+                    case ImageView.FillType.STRETCH:
+                        return loadedImage.fit();
+                        break;
+                    case ImageView.FillType.ASPECTFIT:
+                        return loadedImage.fit().centerInside();
+                        break;
+                    case ImageView.FillType.ASPECTFILL:
+                        return loadedImage.fit().centerCrop();
+                        break;
+                    default:
+                        return loadedImage;
+                }
+            }
+        }
     }
 );
 
@@ -154,7 +209,8 @@ Object.defineProperties(ImageView.FillType, {
 const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL] = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
-ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
-ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP;
+ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
+ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
+
 
 module.exports = ImageView;
