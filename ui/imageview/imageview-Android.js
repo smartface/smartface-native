@@ -168,6 +168,9 @@ const ImageView = extend(View)(
                         return loadedImage;
                 }
             }
+            else {
+                return loadedImage;
+            }
         }
     }
 );
