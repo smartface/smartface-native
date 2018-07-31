@@ -50,6 +50,12 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
+        self.loadFromFile = function(file, width, height){
+            var filePath = file.nativeObject.getActualPath();
+            var image = Image.createFromFile(filePath);
+            self.nativeObject.loadImage(image.nativeObject);
+        }
+        
         self.loadFromUrl = function(url,placeholder,fade){
         	if (fade === false) {
         		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
