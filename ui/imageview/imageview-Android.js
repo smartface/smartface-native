@@ -38,11 +38,18 @@ const ImageView = extend(View)(
                 get: function() {
                     return this._image;
                 },
-                set: function(image) {
+                set: function(value) {
                     // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (image instanceof Image) {
+                    if (value.constructor === Image) {
+                        var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
+                    }
+                    else if (typeof value === "string") {
+                        var imageFile = new File({
+                            path: value
+                        });
+                        this.loadFromFile(imageFile);
                     }
                     else {
                         this._image = null;
