@@ -123,7 +123,7 @@ const ImageView = extend(View)(
                         NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
-                        requestCreatorDrawable.load(drawableResourceId).into(this.nativeObject);
+                        requestCreatorDrawable.into(this.nativeObject);
                     }
                 }
                 else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
