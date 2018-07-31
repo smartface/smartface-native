@@ -29,7 +29,7 @@ const Button = extend(Label)(
         _super(this);
 
         // Default settings
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             this.nativeObject.setAllCaps(false); // enable lowercase texts
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;

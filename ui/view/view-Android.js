@@ -124,7 +124,7 @@ function View(params) {
     this._borderWidth = 0;
 
     // Assign defaults
-    if (!this.isNotSetDefaults) {
+    if (!this.skipDefaults) {
         var idInitial = NativeView.generateViewId();
         this.nativeObject.setId(idInitial);
         this.nativeObject.setBackground(this.layerDrawable);

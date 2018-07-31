@@ -301,7 +301,7 @@ const WebView = extend(View)(
             configurable: true
         });
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
                 overrideMethods.shouldOverrideUrlLoading = function(view, request) {
                     var uri = request.getUrl();
