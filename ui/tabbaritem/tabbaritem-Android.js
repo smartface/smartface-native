@@ -28,9 +28,9 @@ function TabBarItem(params) {
                     nativeObject: NativeDrawable.createFromPath(null)
                 }
                 var icon = valueObj;
-                if (typeof valueObj.normal === "string" && typeof valueObj.selected === "string") { //IDE requires this implementation.
-                    icon.normal = Image.createFromPath(valueObj.normal);
-                    icon.selected = Image.createFromPath(valueObj.selected);
+                if (typeof valueObj.normal === "string" || typeof valueObj.selected === "string") { //IDE requires this implementation.
+                    icon.normal =  valueObj.normal && Image.createFromFile(valueObj.normal);
+                    icon.selected = valueObj.selected && Image.createFromFile(valueObj.selected);
                 }
 
                 if (icon instanceof Image || icon === null) {
