@@ -10,9 +10,6 @@ const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
-const NativeRectF = requireClass("android.graphics.RectF");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
@@ -97,6 +94,10 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
+
+                if (typeof value === "string")
+                    value = Image.createFromPath(value); //IDE requires this implementation.
+
                 if (value === null || value instanceof Image) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
@@ -125,7 +126,7 @@ function HeaderBarItem(params) {
                     }
                 }
                 else {
-                    throw new TypeError("image must be Image instance.");
+                    throw new TypeError("image must be Image instance or image path should be given properly.");
                 }
             },
             enumerable: true
