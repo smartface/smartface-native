@@ -20,17 +20,18 @@ function TabBarItem(params) {
             get: function() {
                 return _icon;
             },
-            set: function(value) {
+            set: function(valueObj) {
                 const Image = require("../image");
                 const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
 
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
                 }
-                var icon = value;
-                if (typeof value === "string")
-                    icon = Image.createFromPath(value); //IDE requires this implementation.
-
+                var icon = valueObj;
+                if (typeof valueObj.normal === "string" && typeof valueObj.selected === "string") { //IDE requires this implementation.
+                    icon.normal = Image.createFromPath(valueObj.normal);
+                    icon.selected = Image.createFromPath(valueObj.selected);
+                }
 
                 if (icon instanceof Image || icon === null) {
                     _icon = icon;
