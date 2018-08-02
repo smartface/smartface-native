@@ -27,13 +27,20 @@ hueDic[Color.YELLOW.nativeObject] = NativeDescriptorFactory.HUE_YELLOW;
 
 const MapView = extend(View)(
     function(_super, params) {
-
         var self = this;
+        
+        // lazyLoading is true by default after sf-core 3.0.2 version.
+        // Beautify this implementation.
+        if(params)
+            params.lazyLoading = true;
+        else 
+            params = {lazyLoading: true};
+            
         var activityIntent = AndroidConfig.activity.getIntent();
         var savedBundles = activityIntent.getExtras();
         if (!self.nativeObject) {
             self.nativeObject = new NativeMapView(AndroidConfig.activity);
-            if (!params || !(params.lazyLoading))
+            if (!params || !(params.lazyLoading)) 
                 self.nativeObject.onCreate(savedBundles);
         }
         _super(self);
@@ -579,7 +586,15 @@ const MapView = extend(View)(
         });
 
         Object.defineProperties(this.android, {
-            'prepareMapAsync': {
+            'prepareMap': {
+                value: function() {
+                    self.nativeObject.onCreate(savedBundles);
+                    asyncMap();
+                },
+                enumerable: true
+            },
+            // TODO: Remove this function future version. prepareMap naming is better than prepareMapAsync.
+            'prepareMapAsync': { 
                 value: function() {
                     self.nativeObject.onCreate(savedBundles);
                     asyncMap();

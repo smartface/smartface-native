@@ -209,6 +209,7 @@ MapView.prototype.maxZoomLevel;
  * @property {Boolean} [lazyLoading = false]
  * @android
  * @since 2.0.10
+ * @deprecated
  */
 MapView.prototype.android.lazyLoading;
 
@@ -266,9 +267,21 @@ MapView.prototype.getVisiblePins = function(){};
  * 
  * @android
  * @method prepareMapAsync
+ * @deprecated
  * @since 2.0.10
  */
 MapView.prototype.android.prepareMapAsync = function(){};
+
+
+/**
+ * Prepare the map asynchronously. You must call this method manually. Use this method after page onShow callback.
+ * 
+ * @android
+ * @method prepareMap
+ * @deprecated
+ * @since 3.0.3
+ */
+MapView.prototype.android.prepareMap= function(){};
 
 /**
  * Adds a UI.MapView.Pin on the map.

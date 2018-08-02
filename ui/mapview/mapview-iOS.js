@@ -23,6 +23,7 @@ const MapView = extend(View)(
                 
         self.android = {};
         self.android.prepareMapAsync = function(){};
+        self.android.prepareMap = function(){};
         self.onPressHandler = function(e){
             var gesture = e.gesture;
             if (gesture.gestureRecognizerstate == 3){
