@@ -1,6 +1,5 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
-const RAU = require("./RAU");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 
 function ApplicationWrapper() {}
@@ -51,7 +50,6 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 
 // Attaching Activity Lifecycle event
 spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
-
 Object.defineProperties(ApplicationWrapper, {
     // properties
     'byteReceived': {
@@ -195,6 +193,7 @@ Object.defineProperties(ApplicationWrapper, {
     'checkUpdate': {
         value: function(callback, user) {
             if (TypeUtil.isFunction(callback)) {
+                const RAU = require("./RAU");
                 RAU.checkUpdate(callback, user);
             }
         },
