@@ -41,10 +41,15 @@ const ImageView = extend(View)(
                 return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                if (value) {
-                    self.nativeObject.loadImage(value.nativeObject);
-                }else{
-                    self.nativeObject.loadImage(undefined);
+                if (typeof value === "string") {
+                    var image = Image.createFromFile(value);
+                    self.nativeObject.loadImage(image.nativeObject);
+                } else {
+                    if (value) {
+                        self.nativeObject.loadImage(value.nativeObject);
+                    }else{
+                        self.nativeObject.loadImage(undefined);
+                    }
                 }
             },
             enumerable: true
