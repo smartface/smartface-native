@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const FlexLayout = require("../flexlayout");
-const Label = require('../label');
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -984,7 +983,5 @@ Object.defineProperty(Page.Orientation, "AUTO", {
 
 Page.iOS = {};
 Page.iOS.LargeTitleDisplayMode = {};
-
-
 
 module.exports = Page;
