@@ -55,18 +55,27 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
-        self.loadFromFile = function(file, fade, width, height){
-            var filePath = file.nativeObject.getActualPath();
-            var image = Image.createFromFile(filePath);
-            if (fade === false) {
-                self.nativeObject.loadImage(image.nativeObject);
-            } else {
-                self.nativeObject.loadImage(image.nativeObject);
-				var alpha = self.nativeObject.alpha;
-				self.nativeObject.alpha = 0;
-                __SF_UIView.animation(0.3,0,function(){
-                   self.nativeObject.alpha = alpha; 
-                }.bind(this),function(){});
+        self.loadFromFile = function(params){
+            if (params.file) {
+                var file = params.file;
+                var filePath = file.nativeObject.getActualPath();
+                var image = Image.createFromFile(filePath);
+                
+                var fade = true;
+                if (typeof params.fade === "boolean") {
+                    fade = params.fade;
+                }
+                
+                if (fade) {
+                    self.nativeObject.loadImage(image.nativeObject);
+    				var alpha = self.nativeObject.alpha;
+    				self.nativeObject.alpha = 0;
+                    __SF_UIView.animation(0.3,0,function(){
+                       self.nativeObject.alpha = alpha; 
+                    }.bind(this),function(){});
+                } else {
+                    self.nativeObject.loadImage(image.nativeObject);
+                }
             }
         }
         
