@@ -146,8 +146,6 @@ const Button = extend(Label)(
             }
         };
         this.setBackground = function(layerIndex) {
-            console.log("this.nativeObject.getBackground(): " + this.nativeObject.getBackground());
-            
             var constantStateForCopy = this.nativeObject.getBackground().getConstantState();
             var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
             switch (layerIndex) {
@@ -252,8 +250,6 @@ const Button = extend(Label)(
             set: function(value) {
                 this._backgroundColor = value;
                 this.setBackgroundColor();
-                
-                console.log("Button _backgroundColor");
             },
             enumerable: true,
             configurable: true
@@ -263,7 +259,6 @@ const Button = extend(Label)(
                 return this._borderColor;
             },
             set: function(value) {
-                console.log("Button borderColor");
                 this._borderColor = value;
                 this.setBorder();
             },
@@ -375,7 +370,6 @@ const Button = extend(Label)(
                     return this._backgroundColor;
                 },
                 set: function(backgroundColor) {
-                    console.log("Button backgroundColor: " + this);
                     this._backgroundColor = backgroundColor;
                     this.setBackgroundColor();
                 },
