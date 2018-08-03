@@ -19,7 +19,7 @@ const ListViewItem = extend(FlexLayout)(
             }
         }
 
-        if(!this.isNotSetDefaults){
+        if(!this.skipDefaults){
             var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
             this.nativeObject.setLayoutParams(layoutParams);
         }

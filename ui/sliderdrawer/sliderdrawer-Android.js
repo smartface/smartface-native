@@ -161,7 +161,7 @@ const SliderDrawer = extend(FlexLayout)(
             }
         });
         
-        if(!this.isNotSetDefaults){
+        if(!this.skipDefaults){
             // setting default values
             this.width = 200;
             this.nativeObject.setLayoutParams (drawerLayoutParams);

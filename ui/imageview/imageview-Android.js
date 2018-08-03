@@ -15,7 +15,7 @@ const ImageView = extend(View)(
         }
         _super(this);
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             // SET DEFAULTS
             this.imageFillType = ImageView.FillType.NORMAL;
         }
