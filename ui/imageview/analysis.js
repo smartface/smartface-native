@@ -39,7 +39,7 @@ function ImageView(params) {}
  *
  *     myPage.layout.addChild(myImageView);
  *
- * @property {UI.Image} || {String}  [image = null]
+ * @property {UI.Image | String}  [image = null]
  * @android
  * @ios
  * @since 0.1
