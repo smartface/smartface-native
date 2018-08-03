@@ -135,7 +135,7 @@ const Slider = extend(View)(
             }
         });
         
-        if(!this.isNotSetDefaults){
+        if(!this.skipDefaults){
             // SET DEFAULTS
             this.thumbColor = Color.GRAY;
             this.minTrackColor = Color.DARKGRAY;

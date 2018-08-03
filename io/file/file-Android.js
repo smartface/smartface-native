@@ -25,13 +25,15 @@ function File(params) {
             // Checking assets list loaded.
             if (!nativeAssetsList) {
                 nativeAssetsList = activity.getAssets().list("");
-                if(nativeAssetsList)
+                if (nativeAssetsList)
                     nativeAssetsList = toJSArray(nativeAssetsList);
             }
 
             nativeAssetsList && nativeAssetsList.forEach(function(assetName) {
                 if (this.resolvedPath.name === assetName) {
-                    this.nativeObject = this.resolvedPath.name;
+                    // this.nativeObject = this.resolvedPath.name;
+                    this.nativeObject = this.resolvedPath.fullPath ? new NativeFile(this.resolvedPath.fullPath) : null;
+                    copyAssetFile(this.nativeObject, assetName);
                 }
             }.bind(this));
             break;
@@ -148,16 +150,7 @@ File.prototype.copy = function(destination) {
                     destinationFile = new File({ path: destination + "/" + this.name });
                 }
                 if (destinationFile.createFile(true)) {
-                    const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
-                    const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
-                    var assetsInputStream = activity.getAssets().open(this.nativeObject);
-                    var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
-                    destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
-                    copyStream(assetsBufferedInputStream, destinationFileStream);
-                    destinationFileStream.flush();
-                    assetsBufferedInputStream.close();
-                    assetsInputStream.close();
-                    destinationFileStream.close();
+                    copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
                     return true;
                 }
 
@@ -286,9 +279,24 @@ File.prototype.rename = function(newName) {
     return false;
 };
 
+function copyAssetFile(destinationFile, filename) {
+
+    const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
+    const NativeBufferedInputStream = requireClass('java.io.BufferedInputStream');
+
+    var assetsInputStream = activity.getAssets().open(filename);
+    var assetsBufferedInputStream = new NativeBufferedInputStream(assetsInputStream);
+    var destinationFileStream = new NativeFileOutputStream(destinationFile, false);
+    copyStream(assetsInputStream, destinationFileStream)
+    destinationFileStream.flush();
+    assetsBufferedInputStream.close();
+    assetsInputStream.close();
+    destinationFileStream.close();
+}
+
 function copyDirectory(sourceDirectory, destinationDirectory) {
     var sourceFiles = toJSArray(sourceDirectory.getFiles());
-    if(!sourceFiles)
+    if (!sourceFiles)
         return false;
     sourceFiles.forEach(function(tmpFile) {
         if (tmpFile.isFile) {
@@ -325,13 +333,17 @@ function removeFile(fileToRemove, withChilds) {
 }
 
 function copyStream(sourceFileStream, destinationFileStream) {
-    var buffer = [];
-    buffer.length = 1024;
-    var len = sourceFileStream.read(array(buffer, "byte"));
-    while (len > 0) {
-        destinationFileStream.write(array(buffer, "byte"), 0, len);
-        len = sourceFileStream.read(array(buffer, "byte"));
-    }
+    const NativeFileUtil = requireClass("io.smartface.android.utils.FileUtil");
+
+    NativeFileUtil.copyStream(sourceFileStream, destinationFileStream); // ToDo: After fixing  AND-3271 issue, need to implement by Native Api Access
+
+    // var buffer = [];
+    // buffer.length = 1024;
+    // var len = sourceFileStream.read(array(buffer, "byte"));
+    // while (len > 0) {
+    //     destinationFileStream.write(array(buffer, "byte"), 0, len);
+    //     len = sourceFileStream.read(array(buffer, "byte"));
+    // }
 }
 
 function copyFile(sourceFile, destinationFile) {
@@ -340,9 +352,10 @@ function copyFile(sourceFile, destinationFile) {
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         var sourceFileStream = new NativeFileInputStream(sourceFile.nativeObject);
         var destinationFileStream = new NativeFileOutputStream(destinationFile.nativeObject, false);
-        copyStream(sourceFileStream, destinationFileStream);
+        copyStream(sourceFileStream, destinationFileStream)
         sourceFileStream.close();
         destinationFileStream.close();
+        
         return true;
     }
     return false;

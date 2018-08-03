@@ -19,7 +19,7 @@ const GridViewItem = extend(FlexLayout)(
             }
         }
 
-        if(!this.isNotSetDefaults){
+        if(!this.skipDefaults){
             var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
             this.nativeObject.setLayoutParams(layoutParams);
         }

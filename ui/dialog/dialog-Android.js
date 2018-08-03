@@ -63,7 +63,7 @@ function Dialog(params) {
         enumerable: true
     });
 
-    if (!this.isNotSetDefaults) {
+    if (!this.skipDefaults) {
         // View.Window.FEATURE_NO_TITLE
         this.nativeObject.requestWindowFeature(1);
         this.nativeObject.setContentView(_layout.nativeObject);
@@ -85,7 +85,7 @@ function Dialog(params) {
 Dialog.Android = {};
 Dialog.Android.Style = {
     ThemeDefault: 16974065,  //Theme_Holo_Light_NoActionBar_Fullscreen
-    ThemeNoHeaderBar: 16973941, //Theme_Holo_Light_NoActionBar
+    ThemeNoHeaderBar: 16974064, //Theme_Holo_Light_NoActionBar
     ThemeNoHeaderBarWithOverscan: 16974302, //Theme_Holo_Light_NoActionBar_Overscan
     ThemeNoHeaderBarWithTranslucentDecor: 16974306 //Theme_Holo_Light_NoActionBar_TranslucentDecor
 };

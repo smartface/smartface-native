@@ -50,11 +50,26 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
+        self.loadFromFile = function(file, fade, width, height){
+            var filePath = file.nativeObject.getActualPath();
+            var image = Image.createFromFile(filePath);
+            if (fade === false) {
+                self.nativeObject.loadImage(image.nativeObject);
+            } else {
+                self.nativeObject.loadImage(image.nativeObject);
+				var alpha = self.nativeObject.alpha;
+				self.nativeObject.alpha = 0;
+                __SF_UIView.animation(0.3,0,function(){
+                   self.nativeObject.alpha = alpha; 
+                }.bind(this),function(){});
+            }
+        }
+        
         self.loadFromUrl = function(url,placeholder,fade){
         	if (fade === false) {
         		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
         	}else{
-				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder.nativeObject,function(image,error,cache,url){
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,function(image,error,cache,url){
 					if (!error) {
 						this.nativeObject.loadImage(image);
 						if (cache == ImageCacheType.NONE) {
@@ -70,7 +85,7 @@ const ImageView = extend(View)(
         }
         
         self.fetchFromUrl = function(object){
-			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder.nativeObject,function(onSuccess,onError,image,error,cache,url){
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder ? object.placeholder.nativeObject : undefined,function(onSuccess,onError,image,error,cache,url){
 				if (!error) {
 					if (typeof onSuccess === "function") {
 						onSuccess(Image.createFromImage(image),cache);

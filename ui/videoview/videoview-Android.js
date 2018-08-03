@@ -153,7 +153,7 @@ const VideoView = extend(View)(
         // Handling ios specific properties
         this.ios = {};
         
-        if(!this.isNotSetDefaults){
+        if(!this.skipDefaults){
             this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
                 onPrepared: function(mediaPlayer) {
                     _nativeMediaPlayer = mediaPlayer;

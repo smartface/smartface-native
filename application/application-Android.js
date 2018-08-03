@@ -328,7 +328,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult({
                     requestCode: requestCode,
-                    result: this.checkPermission(permissions)
+                    result: ApplicationWrapper.android.checkPermission(permissions)
                 });
             }
             else {
