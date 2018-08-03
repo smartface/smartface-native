@@ -75,7 +75,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @method loadFromUrl
  * @param {String} url
  * @param {UI.Image} placeholder
- * @param {Boolean} [fade = true]
+ * @param {Boolean} fade = true
  * @android
  * @ios
  * @since 3.0.2
@@ -87,7 +87,7 @@ ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
  *
  * @method loadFromFile
  * @param {IO.File} file
- * @param {Boolean} [fade = true]
+ * @param {Boolean} fade = true
  * @param {Number} width
  * @param {Number} height
  * @android
