@@ -99,7 +99,6 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value === null || value instanceof Image) {
                     _image = value;
-                    console.log("test ");
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackground(null);
@@ -107,7 +106,6 @@ function HeaderBarItem(params) {
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
-                        console.log("test ");
                         this.imageButton = true;
                         if (this.menuItem) {
                             this.menuItem.setActionView(this.nativeObject);
@@ -115,12 +113,10 @@ function HeaderBarItem(params) {
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
-                            console.log("test ");
                             var imageCopy = _image.nativeObject.mutate();
                             this.nativeObject.setImageDrawable(imageCopy);
                         }
                         else {
-                            console.log("test ");
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
                             this.title = _title;
@@ -314,7 +310,7 @@ function HeaderBarItem(params) {
                     return;
 
                 _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
-                _badge.setBackgroundColor(); //re-set Drawable
+                _badge.backgroundColor = null; //re-set Drawable
             }
         },
         'borderColor': {
@@ -326,7 +322,7 @@ function HeaderBarItem(params) {
                     return;
 
                 _borderColor = borderColor;
-                _badge.setBackgroundColor(); //re-set Drawable
+                _badge.backgroundColor = null; ; //re-set Drawable
             }
         },
         'move': {
