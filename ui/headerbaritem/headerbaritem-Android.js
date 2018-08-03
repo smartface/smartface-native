@@ -99,6 +99,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value === null || value instanceof Image) {
                     _image = value;
+                    console.log("test ");
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackground(null);
@@ -106,7 +107,7 @@ function HeaderBarItem(params) {
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
-
+                        console.log("test ");
                         this.imageButton = true;
                         if (this.menuItem) {
                             this.menuItem.setActionView(this.nativeObject);
@@ -114,10 +115,12 @@ function HeaderBarItem(params) {
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
+                            console.log("test ");
                             var imageCopy = _image.nativeObject.mutate();
                             this.nativeObject.setImageDrawable(imageCopy);
                         }
                         else {
+                            console.log("test ");
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
                             this.title = _title;
@@ -217,7 +220,7 @@ function HeaderBarItem(params) {
 
     _badge.layoutParams;
     var _borderColor = Color.WHITE;
-    var _badgeVisible;
+    var _badgeVisible = false;
     var _badgeText;
     var _badgeBackgroundColor;
     var _badgeTextColor;
@@ -336,11 +339,11 @@ function HeaderBarItem(params) {
     if (_badge.nativeObject) {
         //sets default values
         if (!_badge.backgroundColor)
-            _badge.setBackgroundColor(Color.RED);
+            _badge.backgroundColor = Color.RED;
         if (!_badge.font)
-            _badge.setFont(Font.create("Arial", 11, Font.NORMAL));
+            _badge.font = Font.create("Arial", 11, Font.NORMAL);
         if (!_badge.textColor)
-            _badge.setTextColor(Color.WHITE);
+            _badge.textColor = Color.WHITE;
     }
 
     if (!_color) {
