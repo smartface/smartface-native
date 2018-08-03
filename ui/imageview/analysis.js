@@ -24,7 +24,8 @@ const View = require('../view');
 function ImageView(params) {}
 
 /**
- * Gets/sets the image set.
+ * Gets/sets the image. Image can be able to assign by providing Image Object or Image Path. The recommended one is 
+ * Image Path to overcome performance issues.
  *
  *     @example
  *     const Image = require('sf-core/ui/image');
@@ -34,11 +35,11 @@ function ImageView(params) {}
  *     var myImageView = new ImageView({
  *         width: 200, height: 200
  *     });
- *     myImageView.image = myImage;
+ *     myImageView.image = myImage; //OR myImageView.image = "images://smartface.png"
  *
  *     myPage.layout.addChild(myImageView);
  *
- * @property {UI.Image} [image = null]
+ * @property {UI.Image} || {String}  [image = null]
  * @android
  * @ios
  * @since 0.1
@@ -86,14 +87,16 @@ ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
  * Load image from the file and place the returned image into the ImageView.
  *
  * @method loadFromFile
- * @param {IO.File} file
- * @param {Boolean} fade = true
- * @param {Number} width
- * @param {Number} height
+ * @param {Object} object
+ * @param {IO.File} object.file
+ * @param {Boolean} object.fade = true
+ * @param {Number} object.width
+ * @param {Number} object.height
  * @android
+ * @ios
  * @since 3.1.0
  */
-ImageView.prototype.loadFromFile = function(file,fade, width, height){};
+ImageView.prototype.loadFromFile = function(object){};
 
 /**
  * Fetch image from the server.
