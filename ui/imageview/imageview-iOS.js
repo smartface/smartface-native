@@ -56,7 +56,12 @@ const ImageView = extend(View)(
                 var filePath = file.nativeObject.getActualPath();
                 var image = Image.createFromFile(filePath);
                 
-                if (typeof params.fade === "boolean" && params.fade) {
+                var fade = true;
+                if (typeof params.fade === "boolean") {
+                    fade = params.fade;
+                }
+                
+                if (fade) {
                     self.nativeObject.loadImage(image.nativeObject);
     				var alpha = self.nativeObject.alpha;
     				self.nativeObject.alpha = 0;
@@ -64,7 +69,7 @@ const ImageView = extend(View)(
                        self.nativeObject.alpha = alpha; 
                     }.bind(this),function(){});
                 } else {
-                    self.nativeObject.loadImage(image.nativeObject)
+                    self.nativeObject.loadImage(image.nativeObject);
                 }
             }
         }
