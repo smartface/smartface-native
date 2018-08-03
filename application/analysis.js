@@ -236,6 +236,18 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  */
 Application.android.shouldShowRequestPermissionRationale = function(permission){};
 
+
+/**
+ * Set the keyboard mode. That may be needed when intended to prevent keyboard to cover view or change actual behavior of shown keyboard . 
+ * 
+ * @property {Application.Android.KeyboardMode} keyboardMode
+ * @readonly
+ * @android
+ * @static
+ * @since 3.1.0
+ */
+Application.android.keyboardMode;
+
 /**
  * Checks if there is a new update.
  * 
@@ -668,5 +680,83 @@ Application.Android.Permissions.READ_EXTERNAL_STORAGE;
  * @since 1.1.16
  */
 Application.Android.Permissions.WRITE_EXTERNAL_STORAGE;
+
+
+/** 
+ * @enum Application.Android.KeyboardMode 
+ * @since 3.1.0
+ * 
+ * Enable to change keyboard mode.
+ * 
+ *     @example
+ *     const Application  =require("sf-core/application");
+ *     Application.android.keyboardMode = Application.Android.KeyboardMode.KeyboardAdjustResize;
+ * 
+ */
+Application.Android.KeyboardMode = {};
+
+
+/**
+ * Set to have a screen not adjust for a shown keyboard.
+ *
+ * @property KeyboardAdjustNothing
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.KeyboardAdjustNothing;
+
+/**
+ * Set to have a screen pan when an keyboard is shown, 
+ * so it doesn't need to deal with resizing but just panned by the framework to ensure the current input focus is visible.
+ *
+ * @property KeyboardAdjustPan
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.KeyboardAdjustPan
+
+
+/**
+ * Set to allow the screen to be resized when an keyboard is shown, 
+ * so that its contents are not covered by the keyboard.
+ *
+ * @property KeyboardAdjustResize
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.KeyboardAdjustResize
+
+/**
+ * Set as nothing specified. The system will try to pick one or the other depending on the contents of the screen.
+ *
+ * @property KeyboardAdjustUnspecified
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.KeyboardAdjustUnspecified
+
+/**
+ * Always make the keyboard visible when this window receives input focus.
+ *
+ * @property AlwaysVisible
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.AlwaysVisible
+
+/**
+ * Always hides any keyboard when this screen receives focus.
+ *
+ * @property AlwaysHidden
+ * @static
+ * @readonly
+ * @since 3.1.0
+ */
+Application.Android.KeyboardMode.AlwaysHidden
 
 module.exports = Application;
