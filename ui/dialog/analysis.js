@@ -99,7 +99,7 @@ Dialog.prototype.android.hideKeyboard = function() {};
  *
  *     var myDialog = new Dialog({
  *      android: {
- *          themeStyle: Dialog.Style.ThemeNoHeaderBar
+ *          themeStyle: Dialog.Android.Style.ThemeNoHeaderBar
  *        }
  *     });
  *     
