@@ -238,7 +238,7 @@ Application.android.shouldShowRequestPermissionRationale = function(permission){
 
 
 /**
- * Set the keyboard mode. That may be needed when intended to prevent keyboard to cover view or changed actual behavior of shown keyboard . 
+ * Set the keyboard mode. That may be needed when intended to prevent keyboard to cover view or change actual behavior of shown keyboard . 
  * 
  * @property {Application.Android.KeyboardMode} keyboardMode
  * @readonly
