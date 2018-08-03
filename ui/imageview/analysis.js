@@ -87,12 +87,13 @@ ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
  *
  * @method loadFromFile
  * @param {IO.File} file
+ * @param {Boolean} [fade = true]
  * @param {Number} width
  * @param {Number} height
  * @android
- * @since 3.0.3
+ * @since 3.1.0
  */
-ImageView.prototype.loadFromFile = function(file, width, height){};
+ImageView.prototype.loadFromFile = function(file,fade, width, height){};
 
 /**
  * Fetch image from the server.

@@ -118,7 +118,7 @@ const ImageView = extend(View)(
                 }
             }
         };
-        imageViewPrototype.loadFromFile = function(file, width, height) {
+        imageViewPrototype.loadFromFile = function(file, isFade, width, height) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (file instanceof File) {
                 var resolvedPath = file.resolvedPath;
@@ -126,8 +126,11 @@ const ImageView = extend(View)(
                     var resources = AndroidConfig.activity.getResources();
                     var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
                     var requestCreatorDrawable = scaleImage(NativePicasso.with(AndroidConfig.activity).load(drawableResourceId));
+                    (isFade === false) && (requestCreatorDrawable = requestCreatorDrawable.noFade());
                     if (width && height) {
-                        NativePicasso.with(AndroidConfig.activity).load(drawableResourceId).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                        var requestCreatorDrawableWithResize = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
+                        (isFade === false) && (requestCreatorDrawableWithResize = requestCreatorDrawableWithResize.noFade());
+                        requestCreatorDrawableWithResize.resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
                         requestCreatorDrawable.into(this.nativeObject);
@@ -137,8 +140,11 @@ const ImageView = extend(View)(
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
                     var requestCreatorAsset = scaleImage(NativePicasso.with(AndroidConfig.activity).load(assetFilePath));
+                    (isFade === false) && (requestCreatorAsset = requestCreatorAsset.noFade());
                     if (width && height) {
-                        NativePicasso.with(AndroidConfig.activity).load(assetFilePath).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                        var requestCreatorAssetWithResize = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
+                        (isFade === false) && (requestCreatorAssetWithResize = requestCreatorAssetWithResize.noFade());
+                        requestCreatorAssetWithResize.resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
                         requestCreatorAsset.into(this.nativeObject);
@@ -146,8 +152,11 @@ const ImageView = extend(View)(
                 }
                 else {
                     var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(file.nativeObject));
+                    (isFade === false) && (requestCreator = requestCreator.noFade());
                     if (width && height) {
-                        NativePicasso.with(AndroidConfig.activity).load(file.nativeObject).resize(width, height).onlyScaleDown().into(this.nativeObject);
+                        var requestCreatorWithResize = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
+                        (isFade === false) && (requestCreatorWithResize = requestCreatorWithResize.noFade());
+                        requestCreatorWithResize.resize(width, height).onlyScaleDown().into(this.nativeObject);
                     }
                     else {
                         requestCreator.into(this.nativeObject);
