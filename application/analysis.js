@@ -236,6 +236,18 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  */
 Application.android.shouldShowRequestPermissionRationale = function(permission){};
 
+
+/**
+ * Set the keyboard mode. That may be needed when intended to prevent keyboard to cover view. 
+ * 
+ * @property {Applicaton.Android.KeyboardMode} keyboardMode
+ * @readonly
+ * @android
+ * @static
+ * @since 3.1.0
+ */
+Application.android.keyboardMode;
+
 /**
  * Checks if there is a new update.
  * 
