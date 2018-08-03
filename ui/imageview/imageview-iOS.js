@@ -50,10 +50,19 @@ const ImageView = extend(View)(
             enumerable: true
         });
         
-        self.loadFromFile = function(file, width, height){
+        self.loadFromFile = function(file, fade, width, height){
             var filePath = file.nativeObject.getActualPath();
             var image = Image.createFromFile(filePath);
-            self.nativeObject.loadImage(image.nativeObject);
+            if (fade === false) {
+                self.nativeObject.loadImage(image.nativeObject);
+            } else {
+                self.nativeObject.loadImage(image.nativeObject);
+				var alpha = self.nativeObject.alpha;
+				self.nativeObject.alpha = 0;
+                __SF_UIView.animation(0.3,0,function(){
+                   self.nativeObject.alpha = alpha; 
+                }.bind(this),function(){});
+            }
         }
         
         self.loadFromUrl = function(url,placeholder,fade){
