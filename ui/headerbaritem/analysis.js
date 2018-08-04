@@ -90,7 +90,7 @@ HeaderBarItem.prototype.color = null;
  * @android
  * @ios
  * @readonly
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.prototype.badge = {};
 
@@ -109,7 +109,7 @@ HeaderBarItem.Badge = {};
  * @property {String} text
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.text = "";
 
@@ -119,7 +119,7 @@ HeaderBarItem.Badge.prototype.text = "";
  * @property {Boolean} visible
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.visible = false;
 
@@ -129,7 +129,7 @@ HeaderBarItem.Badge.prototype.visible = false;
  * @property {UI.Color} backgroundColor
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.backgroundColor = null;
 
@@ -139,7 +139,7 @@ HeaderBarItem.Badge.prototype.backgroundColor = null;
  * @property {UI.Color} textColor
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.textColor = null;
 
@@ -149,7 +149,7 @@ HeaderBarItem.Badge.prototype.textColor = null;
  * @property {UI.Font} font
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.font = null;
 
@@ -159,7 +159,7 @@ HeaderBarItem.Badge.prototype.font = null;
  * @property {UI.Color} borderColor
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.borderColor = null;
 
@@ -169,7 +169,7 @@ HeaderBarItem.Badge.prototype.borderColor = null;
  * @property {Number} borderWidth
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.0
  */
 HeaderBarItem.Badge.prototype.borderWidth = 0;
 
