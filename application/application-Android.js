@@ -1,3 +1,4 @@
+const Application = require("sf-core/application");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
@@ -18,7 +19,9 @@ var _onMaximize;
 var _onExit;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
+var _keyboardMode;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
+var activity = AndroidConfig.activity;
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -55,7 +58,7 @@ Object.defineProperties(ApplicationWrapper, {
     'byteReceived': {
         get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var UID = AndroidConfig.activity.getApplicationInfo().uid;
+            var UID = activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidRxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
@@ -63,7 +66,7 @@ Object.defineProperties(ApplicationWrapper, {
     'byteSent': {
         get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
-            var UID = AndroidConfig.activity.getApplicationInfo().uid;
+            var UID = activity.getApplicationInfo().uid;
             return NativeTrafficStats.getUidTxBytes(UID) / (1024 * 1024);
         },
         enumerable: true
@@ -146,14 +149,14 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             }
 
-            var packageManager = AndroidConfig.activity.getPackageManager();
+            var packageManager = activity.getPackageManager();
             var activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
             if (activitiesCanHandle.size() > 0) {
                 if (TypeUtil.isBoolean(isShowChooser) && isShowChooser) {
                     var title = TypeUtil.isString(chooserTitle) ? chooserTitle : "Select and application";
                     var chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
-                        AndroidConfig.activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
+                        activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
                     }
                     catch (e) {
                         onFailure && onFailure();
@@ -162,7 +165,7 @@ Object.defineProperties(ApplicationWrapper, {
                 }
                 else {
                     try {
-                        AndroidConfig.activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
+                        activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
                     }
                     catch (e) {
                         onFailure && onFailure();
@@ -178,15 +181,15 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'exit': {
         value: function() {
-            AndroidConfig.activity.finish();
+            activity.finish();
         },
         enumerable: true
     },
     'restart': {
         value: function() {
-            var spratIntent = AndroidConfig.activity.getIntent();
-            AndroidConfig.activity.finish();
-            AndroidConfig.activity.startActivity(spratIntent);
+            var spratIntent = activity.getIntent();
+            activity.finish();
+            activity.startActivity(spratIntent);
         },
         enumerable: true
     },
@@ -201,7 +204,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'hideKeyboard': {
         value: function() {
-            var focusedView = AndroidConfig.activity.getCurrentFocus();
+            var focusedView = activity.getCurrentFocus();
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -295,7 +298,7 @@ Object.defineProperties(ApplicationWrapper, {
 ApplicationWrapper.ios = {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
-        value: AndroidConfig.activity.getPackageName(),
+        value: activity.getPackageName(),
         enumerable: true
     },
     'checkPermission': {
@@ -307,10 +310,10 @@ Object.defineProperties(ApplicationWrapper.android, {
             if (AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
-                return NativeContextCompat.checkSelfPermission(AndroidConfig.activity, permission) === 0;
+                return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
             }
             else {
-                var packageManager = AndroidConfig.activity.getPackageManager();
+                var packageManager = activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
             }
@@ -331,7 +334,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 });
             }
             else {
-                AndroidConfig.activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
+                activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
 
         },
@@ -342,7 +345,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             if (!TypeUtil.isString(permission)) {
                 throw new Error('Permission must be Application.Permission type');
             }
-            return ((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && AndroidConfig.activity.shouldShowRequestPermissionRationale(permission));
+            return ((AndroidConfig.sdkVersion > AndroidConfig.SDK.SDK_MARSHMALLOW) && activity.shouldShowRequestPermissionRationale(permission));
         },
         enumerable: true
     },
@@ -360,7 +363,19 @@ Object.defineProperties(ApplicationWrapper.android, {
     'Permissions': {
         value: {},
         enumerable: true
-    }
+    },
+    'keyboardMode': {
+        get: function() {
+            return _keyboardMode;
+        },
+        set: function(modeEnum) {
+            if (!typeof modeEnum === 'enum')
+                return;
+            _keyboardMode = modeEnum;
+            activity.getWindow().setSoftInputMode(modeEnum);
+        },
+        enumerable: true
+    },
 });
 
 Object.defineProperties(ApplicationWrapper.Android, {
@@ -474,5 +489,15 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
 });
 
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
+
+ApplicationWrapper.Android.KeyboardMode = {
+    KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
+    KeyboardAdjustPan: 32,     //SOFT_INPUT_ADJUST_PAN
+    KeyboardAdjustResize: 16,  //SOFT_INPUT_ADJUST_RESIZE
+    KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
+    AlwaysVisible: 5,             //SOFT_INPUT_STATE_ALWAYS_VISIBLE
+    AlwaysHidden: 3               //SOFT_INPUT_STATE_ALWAYS_HIDDEN
+};
+Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
 module.exports = ApplicationWrapper;
