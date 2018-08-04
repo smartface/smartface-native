@@ -542,11 +542,11 @@ function Page(params) {
                 if (self.nativeObject.navigationController) {
                     if (value) {
                         self.nativeObject.navigationController.navigationBar.shadowImage = undefined;
-                        self.nativeObject.navigationController.navigationBar.setBackgroundImageForBarMetrics(undefined, 0);
+                        self.nativeObject.navigationController.navigationBar.backgroundImage = undefined;
                     } else {
                         var emptyImage = __SF_UIImage.getInstance();
                         self.nativeObject.navigationController.navigationBar.shadowImage = emptyImage;
-                        self.nativeObject.navigationController.navigationBar.setBackgroundImageForBarMetrics(emptyImage, 0);
+                        self.nativeObject.navigationController.navigationBar.backgroundImage = emptyImage;
                     }
                     _borderVisibility = value;
                 }
