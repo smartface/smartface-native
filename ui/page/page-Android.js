@@ -395,7 +395,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    
+
     var _headerbarItemView;
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
@@ -416,16 +416,17 @@ function Page(params) {
         },
         set: function(value) {
             _borderVisibility = value;
-            if(value) {
+            if (value) {
                 actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
-            } else {
+            }
+            else {
                 actionBar.setElevation(0);
             }
         },
         enumerable: true,
         configurable: true
     });
-    
+
 
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
@@ -837,8 +838,7 @@ function Page(params) {
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
-                if (item.badge.visible && item.badge.nativeObject) {
-
+                if (item.badge.text && item.badge.nativeObject) {
                     item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);

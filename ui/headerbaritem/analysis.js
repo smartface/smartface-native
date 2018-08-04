@@ -82,15 +82,15 @@ HeaderBarItem.prototype.color = null;
  *     @example
  *     var headerBarItem = new HeaderBarItem();
  *     headerBarItem.title = "Item";
- *     headerBarItem.badge.setText("5");
- *     headerBarItem.badge.setVisible(true);
+ *     headerBarItem.badge.text = "5";
+ *     headerBarItem.badge.visible = true;
  *     page.headerBar.setItems([headerBarItem]);
  * 
  * @property {UI.HeaderBarItem.Badge} badge
  * @android
  * @ios
  * @readonly
- * @since 0.1
+ * @since 3.0.0
  */
 HeaderBarItem.prototype.badge = {};
 
@@ -104,81 +104,74 @@ HeaderBarItem.prototype.badge = {};
 HeaderBarItem.Badge = {};
 
 /**
- * Sets text of header bar item badge.
+ * Gets/sets text of header bar item badge.
  *
- * @property {Function} setText
- * @param {String} text
+ * @property {String} text
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setText = function(text){}
+HeaderBarItem.Badge.prototype.text = "";
 
 /**
- * Sets visible of header bar item badge.
+ * Gets/sets visible of header bar item badge.
  *
- * @property {Function} setVisible
- * @param {Boolean} visible
+ * @property {Boolean} visible
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setVisible = function(visible){}
+HeaderBarItem.Badge.prototype.visible = false;
 
 /**
- * Sets backgroundColor of header bar item badge.
+ * Gets/sets backgroundColor of header bar item badge.
  *
- * @property {Function} setBackgroundColor
- * @param {UI.Color} color
+ * @property {UI.Color} backgroundColor
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setBackgroundColor = function(color){}
+HeaderBarItem.Badge.prototype.backgroundColor = null;
 
 /**
- * Sets textColor of header bar item badge.
+ * Gets/sets textColor of header bar item badge.
  *
- * @property {Function} setTextColor
- * @param {UI.Color} color
+ * @property {UI.Color} textColor
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setTextColor = function(color){}
+HeaderBarItem.Badge.prototype.textColor = null;
 
 /**
- * Sets font of header bar item badge.
+ * Gets/sets font of header bar item badge.
  *
- * @property {Function} setFont
- * @param {UI.Font} font
+ * @property {UI.Font} font
  * @android
  * @ios
- * @since 3.0.0
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setFont = function(font){}
+HeaderBarItem.Badge.prototype.font = null;
 
 /**
- * Sets border color of header bar item badge.
+ * Gets/sets border color of header bar item badge.
  *
- * @property {Function} setBorderColor
- * @param {UI.Color} color
+ * @property {UI.Color} borderColor
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setBorderColor = function(color){}
+HeaderBarItem.Badge.prototype.borderColor = null;
 
 /**
- * Sets border width of header bar item badge.
+ * Gets/sets border width of header bar item badge.
  *
- * @property {Function} setBorderWidth
- * @param {Number} borderWidth
+ * @property {Number} borderWidth
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.0
  */
-HeaderBarItem.Badge.prototype.setBorderWidth = function(borderWidth){}
+HeaderBarItem.Badge.prototype.borderWidth = 0;
 
 /**
  * Set Badge offset, Badge center point defaults to the top right corner of its parent.
