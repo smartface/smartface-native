@@ -374,6 +374,20 @@ const TextBox = extend(View)(
             enumerable: true,configurable : true
         });
 
+        var _keyboardLayout;
+        Object.defineProperty(this.ios, 'keyboardLayout', {
+            get: function() {
+                return _keyboardLayout;
+            },
+            set: function(value) {
+                if (typeof value === "object") {
+                    value.applyLayout();
+                    self.nativeObject.setValueForKey(value.nativeObject,"inputAccessoryView");
+                }
+            },
+            enumerable: true
+        });
+
         Object.defineProperty(this.ios, 'minimumFontSize', {
             get: function() {
                 return self.nativeObject.minimumFontSize;
