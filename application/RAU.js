@@ -1,7 +1,6 @@
 const HTTP = require("../net/http");
 const Path = require('../io/path');
 const File = require('../io/file');
-const FileStream = require('../io/filestream');
 const System = require('../device/system');
 const sessionManager = new HTTP();
 
@@ -133,8 +132,10 @@ function download(callback) {
         url: RemoteUpdateService.secondUrl,
         method: "GET",
         onLoad: function(response) {
+            const FileStream = require('../io/filestream');
             var zipFile = new File({ path: zipPath });
             zipFile.createFile(true);
+            
             var zipFileStream = zipFile.openStream(FileStream.StreamType.WRITE, FileStream.ContentMode.BINARY);
             zipFileStream.write(response.body);
             zipFileStream.close();
