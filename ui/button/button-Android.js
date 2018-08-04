@@ -47,6 +47,7 @@ const Button = extend(Label)(
             this.nativeObject = new NativeButton(AndroidConfig.activity);
         }
         
+        // TODO: If possible, move these methods to prototype of Button.
         this.setBackgroundColor = function () {
             if (this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
                 // release(this.backgroundDrawable);
@@ -241,8 +242,8 @@ const Button = extend(Label)(
         this._borderWidth = 0;
         this._borderColor = Color.BLACK;
         
-        
-    Object.defineProperties(this, {
+        // TODO: If possible, move these methods to prototype of Button.
+        Object.defineProperties(this, {
         'backgroundColor': {
             get: function() {
                 return this._backgroundColor;
@@ -362,16 +363,6 @@ const Button = extend(Label)(
                 set: function(onLongPress) {
                     this.__onLongPress = onLongPress.bind(this);
                     if (!this.__didSetOnLongClickListener) setOnLongClickListener(this);
-                },
-                enumerable: true
-            },
-            'backgroundColor': {
-                get: function() {
-                    return this._backgroundColor;
-                },
-                set: function(backgroundColor) {
-                    this._backgroundColor = backgroundColor;
-                    this.setBackgroundColor();
                 },
                 enumerable: true
             },

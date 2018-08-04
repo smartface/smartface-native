@@ -198,7 +198,6 @@ const TextView = extend(Label)(
         }
 
         function createSpannyText(value) {
-            var timeStart = new Date();
             self.myBuilder.append(value.string);
             var start = self.myBuilder.length() - value.string.length;
             var end = self.myBuilder.length();

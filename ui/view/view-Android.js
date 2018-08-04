@@ -138,6 +138,11 @@ function View(params) {
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
                 this.nativeObject.setBackground(this._gradientDrawable);
+                
+                this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
             },
             enumerable: true,
             configurable: true
