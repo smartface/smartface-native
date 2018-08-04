@@ -7,7 +7,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-// const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
@@ -16,7 +15,8 @@ const BottomNavigationView = requireClass("android.support.design.widget.BottomN
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 
-const SFFragment   = requireClass('io.smartface.android.sfcore.Page');
+// const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
