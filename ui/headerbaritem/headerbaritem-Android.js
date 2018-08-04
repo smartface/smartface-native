@@ -311,7 +311,8 @@ function HeaderBarItem(params) {
 
                 _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
                 _badge.backgroundColor = null; //re-set Drawable
-            }
+            },
+            enumerable: true
         },
         'borderColor': {
             get: function() {
@@ -323,7 +324,8 @@ function HeaderBarItem(params) {
 
                 _borderColor = borderColor;
                 _badge.backgroundColor = null; ; //re-set Drawable
-            }
+            },
+            enumerable: true
         },
         'move': {
             value: function(x, y) {
