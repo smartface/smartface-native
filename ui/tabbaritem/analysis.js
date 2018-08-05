@@ -15,7 +15,7 @@
  *     var myItem = new TabBarItem({
  *         title: "Home",
  *         icon: myHomeImage,
- *         route: require('pages/pgHome')
+ *         route: 'pages/pgHome'
  *     });
  *     myTab.add('home', myItem);
  */
@@ -49,7 +49,7 @@ TabBarItem.prototype.icon = null;
 /**
  * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown. 
  *
- * @property {UI.Page/UI.Navigator} route
+ * @property {String/UI.Navigator} route
  * @android
  * @ios
  * @since 1.1.10
