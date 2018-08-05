@@ -1,56 +1,50 @@
 /**
  * @class AsyncTask
  * @since 3.1.0
- * AsyncTask enables proper and easy use of the UI thread. 
- * This class allows you to perform background operations and publish results on the UI thread without having to manipulate threads and/or handlers.
- * 
-///////////////////////////////
-// TODO !!!!
-// NEEDS SAMPLE CODE
-//
-///////////////////////////////
+ * AsyncTask enables proper and easy use of concurrency to improve speed and performance.
  *
+ *     @example
+ *     const AsyncTask = require("sf-core/asynctask");
+ *     var asynctask = new AsyncTask();
+ *     asynctask.task = function () {
+ *         // do something
+ *     };
+ *     asynctask.onComplete = function () {
+ *         console.log("AsyncTask is completed.");
+ *     };
+ *     
+ *     asynctask.run();
  */
 function AsyncTask(params) {}
 
 /**
- * This event invokes on the UI thread before the task is executed.
+ * This event describes task of AsyncTask instance.
  *
- * @event onPreExecute
+ * @event task
  * @android
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.onPreExecute = function (){};
+AsyncTask.prototype.task = function (){};
 
 /**
- * This event invokes on the background thread immediately after onPreExecute() finishes executing.
+ * This event invokes when task is completed.
  *
- * @event doInBackground
+ * @event onComplete
  * @android
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.doInBackground = function (){};
+AsyncTask.prototype.onComplete = function (){};
 
 /**
- * This event invokes on the UI thread after the background computation finishes.
+ * Runs the task.
  *
- * @event onPostExecute
+ * @method run
  * @android
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.onPostExecute = function (){};
-
-/**
- * Executes the task.
- *
- * @event execute
- * @android
- * @ios
- * @since 3.1.0
- */
-AsyncTask.prototype.execute = function (){};
+AsyncTask.prototype.run = function (){};
 
 module.exports = AsyncTask;
