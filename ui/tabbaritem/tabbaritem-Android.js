@@ -20,12 +20,17 @@ function TabBarItem(params) {
             get: function() {
                 return _icon;
             },
-            set: function(icon) {
+            set: function(valueObj) {
                 const Image = require("../image");
                 const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
 
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
+                }
+                var icon = valueObj;
+                if (typeof valueObj.normal === "string" || typeof valueObj.selected === "string") { //IDE requires this implementation.
+                    icon.normal =  valueObj.normal && Image.createFromFile(valueObj.normal);
+                    icon.selected = valueObj.selected && Image.createFromFile(valueObj.selected);
                 }
 
                 if (icon instanceof Image || icon === null) {
@@ -43,7 +48,7 @@ function TabBarItem(params) {
                     }
                 }
                 else {
-                    throw new Error("icon should be an instance of Image or Object.");
+                    throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
 
             },

@@ -1,3 +1,5 @@
+const Image = require('sf-core/ui/image');
+
 function TabBarFlowViewModel(params) {
     var self = this;
     self.ios = {};
@@ -229,17 +231,28 @@ function TabBarFlowView(params) {
             if (objects[i].values.icon && (objects[i].values.icon.normal || objects[i].values.icon.selected)) {
                 if (typeof objects[i].values.icon.normal === "object") {
                     tabItem.image = objects[i].values.icon.normal.nativeObject;
+                } else if (typeof objects[i].values.icon.normal === "string") {
+                    var image = Image.createFromFile(objects[i].values.icon.normal);
+                    tabItem.image = image.nativeObject;
                 } else {
                     tabItem.image = undefined;
                 }
                 
                 if (typeof objects[i].values.icon.selected === "object") {
                     tabItem.selectedImage = objects[i].values.icon.selected.nativeObject;
+                } else if (typeof objects[i].values.icon.selected === "string") {
+                    var image = Image.createFromFile(objects[i].values.icon.selected);
+                    tabItem.selectedImage = image.nativeObject;
                 } else {
                     tabItem.selectedImage = undefined;
                 }
             } else {
-                tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
+                if (typeof objects[i].values.icon === "object") {
+                    tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
+                } else if (typeof objects[i].values.icon === "string"){
+                    var image = Image.createFromFile(objects[i].values.icon);
+                    tabItem.image = image.nativeObject ? image.nativeObject : undefined;
+                }
             }
         }
     }
