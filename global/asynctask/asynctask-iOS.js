@@ -32,11 +32,11 @@ function AsyncTask(params){
                 try{
                     // Background
                     SF.dispatch_async(SF.dispatch_get_global_queue(0,0), function() {
-                        self.doInBackground();
+                        self.task();
                         
                         // Main
                         SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
-                            self.onPostExecute();
+                            self.onComplete();
                         });
                     });
                 }
