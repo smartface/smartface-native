@@ -19,7 +19,7 @@
  *     var myProfileItem = new TabBarItem({
  *         title: "Profile",
  *         icon: myProfileIcon,
- *         page: require('./pages/pgProfile')
+ *         page: 'pages/pgProfile'
  *     });
  *      
  *     myTab.add('profile', myProfileItem);
