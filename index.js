@@ -11,4 +11,5 @@ module.exports = {
     Application: require('./application'),
     Router: require('./router'),
     AttributedString: require('./attributedstring'),
+    AsyncTask: require('./asynctask')
 };

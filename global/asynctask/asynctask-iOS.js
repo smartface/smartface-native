@@ -4,8 +4,8 @@ function AsyncTask(params){
     var self = this;
     
     var _onPreExecute;
-    var _doInBackground;
-    var _onPostExecute;
+    var _task;
+    var _onComplete;
     
     Object.defineProperties(self,{
         'onPreExecute': {
@@ -18,27 +18,27 @@ function AsyncTask(params){
                 }
             }
         },
-        'doInBackground': {
+        'task': {
             get: function(){
-                return _doInBackground;
+                return _task;
             },
             set: function(value){
                 if(TypeUtil.isFunction(value)){
-                    _doInBackground = value.bind(this);
+                    _task = value.bind(this);
                 }
             }
         },
-        'onPostExecute': {
+        'onComplete': {
             get: function(){
-                return _onPostExecute;
+                return _onComplete;
             },
             set: function(value){
                 if(TypeUtil.isFunction(value)){
-                    _onPostExecute = value.bind(this);
+                    _onComplete = value.bind(this);
                 }
             }
         },
-        'execute': {
+        'run': {
             value: function(){
                 try{
                     self.onPreExecute();
