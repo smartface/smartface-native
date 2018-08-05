@@ -14,7 +14,7 @@ const NativeClickableSpan = requireClass("android.text.style.ClickableSpan");
 const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const NativeAbsoluteSizeSpan = requireClass("android.text.style.AbsoluteSizeSpan");
 const NativeUnderlineSpan = requireClass("android.text.style.UnderlineSpan");
-const NativeTypefaceSpan = requireClass("android.text.style.TypefaceSpan");
+const NativeTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");
 const NativeTypeface = requireClass("android.graphics.Typeface");
 var SPAN_EXCLUSIVE_EXCLUSIVE = 33;
@@ -233,7 +233,7 @@ const TextView = extend(Label)(
                     applyCustomTypeFace(paint, newType);
                 }
             };
-            var typeSpan = NativeTypefaceSpan.extend("NativeTypefaceSpan", typeSpanOverrideMethods, ["SF"]);
+            var typeSpan = new NativeTypefaceSpan("SF", typeSpanOverrideMethods);
             self.myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
             // --------------------------------------------------------------------------------

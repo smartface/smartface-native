@@ -7,7 +7,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
@@ -15,6 +14,9 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
+
+// const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -58,7 +60,8 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    self.nativeObject = NativeFragment.extend("SFFragment", {
+    
+    var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             if (!isCreated) {
@@ -171,10 +174,10 @@ function Page(params) {
             else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
-
-
         }
-    }, null);
+    };
+    self.nativeObject = new SFFragment();
+    self.nativeObject.setCallbacks(callback);
 
     this.isSwipeViewPage = false;
 
