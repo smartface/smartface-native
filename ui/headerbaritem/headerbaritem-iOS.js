@@ -34,8 +34,13 @@ function HeaderBarItem(params) {
                 return retval;
             },
             set: function(value) {
-                if (value) {
-                    self.nativeObject.image = value.nativeObject;
+                if (typeof value === "string") {
+                    var image = Image.createFromFile(value);
+                    self.nativeObject.image = image.nativeObject;
+                } else {
+                    if (value) {
+                        self.nativeObject.image = value.nativeObject;
+                    }   
                 }
             },
             enumerable: true
