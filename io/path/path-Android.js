@@ -8,6 +8,8 @@ const storages = {'internal': null, 'external': null, 'usb': null, 'isResolved':
 const resolvedPaths = {};
 const emulatorPath = AndroidConfig.activity.getExternalCacheDir().getAbsolutePath();
 const playerRauPath = AndroidConfig.activity.getFilesDir().getAbsolutePath();
+const externalFilesDirPath = AndroidConfig.activity.getExternalFilesDir(null).getAbsolutePath();
+
 
 var drawableSizes = ['small', 'normal', 'large' ,'xlarge'];
 var drawableDensities = ['ldpi', 'mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi'];
@@ -112,7 +114,7 @@ function getResolvedPath(path){
             // if assets not exists in rau
             if(!checkFileExistsInPath(resolvedPaths[path].fullPath)){
                 resolvedPaths[path].type = Path.FILE_TYPE.ASSET;
-                resolvedPaths[path].fullPath = path;
+                resolvedPaths[path].fullPath = getExternalFilesDirPath() + "/" + fileName;
             }
         }
     }
@@ -145,7 +147,9 @@ function getResolvedPath(path){
     }
     return resolvedPaths[path];
 }
-
+function getExternalFilesDirPath(){
+    return externalFilesDirPath;
+}
 function getEmulatorAssetsPath(){
     return emulatorPath + "/assets";
 }

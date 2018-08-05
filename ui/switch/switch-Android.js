@@ -110,7 +110,7 @@ const Switch = extend(View)(
             }
         }));
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
             this.toggleOnColor = Color.GRAY;

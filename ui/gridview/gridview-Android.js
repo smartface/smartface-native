@@ -379,7 +379,7 @@ const GridView = extend(View)(
             return {};
         };
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             this.nativeInner.setAdapter(dataAdapter);
             this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
                 onRefresh: function() {

@@ -6,6 +6,7 @@ const TypeUtil = require("../../util/type");
 const Image = require("../image");
 const NativeImageView = requireClass("android.widget.ImageView");
 const File = require('../../io/file');
+const Path = require('../../io/path');
 
 const ImageView = extend(View)(
     function(_super, params) {
@@ -14,7 +15,7 @@ const ImageView = extend(View)(
         }
         _super(this);
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             // SET DEFAULTS
             this.imageFillType = ImageView.FillType.NORMAL;
         }
@@ -27,20 +28,28 @@ const ImageView = extend(View)(
         }
     },
     function(imageViewPrototype) {
-        imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
+        //imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
 
+        var _fillType = null;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
                     return this._image;
                 },
-                set: function(image) {
+                set: function(value) {
                     // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (image instanceof Image) {
+                    if (value.constructor === Image) {
+                        var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
+                    }
+                    else if (typeof value === "string") {
+                        var imageFile = new File({
+                            path: value
+                        });
+                        this.loadFromFile(imageFile);
                     }
                     else {
                         this._image = null;
@@ -51,18 +60,18 @@ const ImageView = extend(View)(
             },
             'imageFillType': {
                 get: function() {
-                    return this._fillType;
+                    return _fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)) {
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    this._fillType = fillType;
+                    _fillType = fillType;
                     if (fillType === ImageView.FillType.ASPECTFILL && !this._adjustViewBounds) {
                         this.nativeObject.setAdjustViewBounds(true);
                         this._adjustViewBounds = true;
                     }
-                    this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
+                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
                 },
                 enumerable: true
             }
@@ -75,12 +84,13 @@ const ImageView = extend(View)(
         imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
-                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                (isFade === false) && (requestCreator = requestCreator.noFade());
+                var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
+                (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
                 if (placeHolder instanceof Image) {
-                    requestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
+                    plainRequestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
                 }
                 else {
+                    var requestCreator = scaleImage(plainRequestCreator);
                     requestCreator.into(this.nativeObject);
                 }
             }
@@ -100,21 +110,90 @@ const ImageView = extend(View)(
             });
 
             if (TypeUtil.isString(params.url)) {
+                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
                 if ((params.placeholder) instanceof Image) {
-                    NativePicasso.with(AndroidConfig.activity).load(params.url).placeholder(params.placeholder.nativeObject).into(target);
+                    requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
                 else {
-                    NativePicasso.with(AndroidConfig.activity).load(params.url).into(target);
+                    requestCreator.into(target);
                 }
             }
         };
-        imageViewPrototype.loadFromFile = function(path) {
+        imageViewPrototype.loadFromFile = function(params) {
+            var file = params.file;
+            var isFade = params.fade;
+            var width = params.width;
+            var height = params.height;
+            var placeHolder = params.placeHolder;
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
-            if (TypeUtil.isString(path)) {
-                var imageFile = new File({ path: path });
-                NativePicasso.with(AndroidConfig.activity).load(imageFile.nativeObject).into(this.nativeObject);
+            if (file instanceof File) {
+                var resolvedPath = file.resolvedPath;
+                if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.DRAWABLE) {
+                    var resources = AndroidConfig.activity.getResources();
+                    var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
+                    var plainRequestCreatorDrawable = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
+                    (isFade === false) && (plainRequestCreatorDrawable = plainRequestCreatorDrawable.noFade());
+                    (placeHolder instanceof Image) && (plainRequestCreatorDrawable.placeholder(placeHolder.nativeObject));
+                    if (width && height) {
+                        plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        var requestCreatorDrawable = scaleImage(plainRequestCreatorDrawable);
+                        requestCreatorDrawable.into(this.nativeObject);
+                    }
+                }
+                else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                    var assetPrefix = "file:///android_asset/";
+                    var assetFilePath = assetPrefix + resolvedPath.name;
+                    var plaingRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
+                    (isFade === false) && (plaingRequestCreatorAsset = plaingRequestCreatorAsset.noFade());
+                    (placeHolder instanceof Image) && (plaingRequestCreatorAsset.placeholder(placeHolder.nativeObject));
+                    if (width && height) {
+                        plaingRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        var requestCreatorAsset = scaleImage(plaingRequestCreatorAsset);
+                        requestCreatorAsset.into(this.nativeObject);
+                    }
+                }
+                else {
+                    var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
+                    (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
+                    (placeHolder instanceof Image) && (plainRequestCreator.placeholder(placeHolder.nativeObject));
+                    if (width && height) {
+                        plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
+                    }
+                    else {
+                        var requestCreator = scaleImage(plainRequestCreator);
+                        requestCreator.into(this.nativeObject);
+                    }
+                }
             }
         };
+
+        function scaleImage(loadedImage) {
+            if (loadedImage && _fillType !== null) {
+                switch (_fillType) {
+                    case ImageView.FillType.NORMAL:
+                        return loadedImage
+                        break;
+                    case ImageView.FillType.STRETCH:
+                        return loadedImage.fit();
+                        break;
+                    case ImageView.FillType.ASPECTFIT:
+                        return loadedImage.fit().centerInside();
+                        break;
+                    case ImageView.FillType.ASPECTFILL:
+                        return loadedImage.fit().centerCrop();
+                        break;
+                    default:
+                        return loadedImage;
+                }
+            }
+            else {
+                return loadedImage;
+            }
+        }
     }
 );
 
@@ -154,7 +233,8 @@ Object.defineProperties(ImageView.FillType, {
 const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL] = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
-ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER;
-ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP;
+ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
+ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
+
 
 module.exports = ImageView;

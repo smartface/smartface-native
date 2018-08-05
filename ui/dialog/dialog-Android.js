@@ -63,7 +63,7 @@ function Dialog(params) {
         enumerable: true
     });
 
-    if (!this.isNotSetDefaults) {
+    if (!this.skipDefaults) {
         // View.Window.FEATURE_NO_TITLE
         this.nativeObject.requestWindowFeature(1);
         this.nativeObject.setContentView(_layout.nativeObject);

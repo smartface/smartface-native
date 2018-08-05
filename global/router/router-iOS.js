@@ -49,14 +49,14 @@ function RouterViewModel(params) {
             var pageObject = {
                 key : to,
                 values : {
-                    pageClass : null,
+                    pageClassPath : null,
                     pageInstance : null,
                     isSingleton : _isSingleton
                 }
             };
             
-            if (typeof page === 'function') {
-                pageObject.values.pageClass = page;
+            if (typeof page === 'string') {
+                pageObject.values.pageClassPath = page;
             } else if (typeof page === 'object') {
                 pageObject.values.pageInstance = page;
             }
@@ -100,7 +100,8 @@ function RouterViewModel(params) {
                 }
                 case 'Navigator': {
                     if (routes[1]) {
-                        pageToGo.go(routes[1], parameters ,_animated);
+                        var layoutNeeded = true;
+                        pageToGo.go(routes[1], parameters, _animated, layoutNeeded);
                     }
                     pageInfo.nativeObject = pageToGo.view.nativeObject;
                     pageInfo.animated = _animated;
@@ -176,9 +177,9 @@ function RouterViewModel(params) {
             this.go(to, parameters, animated);
         } else {
             if (routerBrain.currentPage.type == "Navigator") {
-                routerBrain.currentPage.goBack(null, parameters, animated);
+                routerBrain.currentPage.goBack(null, parameters, animated, true);
             } else if (routerBrain.currentPage.type == "TabBarFlow" && routerBrain.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
-                routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated);
+                routerBrain.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated, true);
             } else {
                 routerBrain.history.pop();
                 this.go(routerBrain.history[routerBrain.history.length - 1], parameters, animated);
@@ -366,7 +367,7 @@ function RouterModel(params) {
     this.addObject = function (newObject) {
         if (!objects[newObject.key]) {
             objects[newObject.key] = {
-                pageClass    : newObject.values.pageClass,
+                pageClassPath    : newObject.values.pageClassPath,
                 pageInstance : newObject.values.pageInstance,
                 isSingleton  : newObject.values.isSingleton
             }
@@ -380,9 +381,9 @@ function RouterModel(params) {
         if (objects[key]) {
         	var retval = null;
             if (objects[key].isSingleton) {
-                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (require(objects[key].pageClassPath))());
             } else {
-                retval = objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (require(objects[key].pageClassPath))();
             }
             retval.routerPath = key;
             return retval;

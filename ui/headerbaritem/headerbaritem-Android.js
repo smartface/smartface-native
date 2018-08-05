@@ -106,7 +106,6 @@ function HeaderBarItem(params) {
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
-
                         this.imageButton = true;
                         if (this.menuItem) {
                             this.menuItem.setActionView(this.nativeObject);
@@ -217,43 +216,64 @@ function HeaderBarItem(params) {
 
     _badge.layoutParams;
     var _borderColor = Color.WHITE;
+    var _badgeVisible = false;
+    var _badgeText;
+    var _badgeBackgroundColor;
+    var _badgeTextColor;
+    var _badgeFont;
     Object.defineProperties(_badge, {
-        'setVisible': {
-            value: function(visible) {
+        'visible': {
+            get: function() {
+                return _badgeVisible;
+            },
+            set: function(visible) {
+                _badgeVisible = visible;
                 if (visible) {
                     _badge.nativeObject.setVisibility(0);
                 }
                 else {
                     _badge.nativeObject.setVisibility(4);
                 }
-            }
+            },
+            enumerable: true
         },
-        'setText': {
-            value: function(text) {
-                _badge.text = text;
+        'text': {
+            get: function() {
+                return _badgeText;
+            },
+            set: function(text) {
+                _badgeText = text;
                 _badge.visible = true;
                 if (_badge.nativeObject) {
                     _badge.nativeObject.setText("" + text);
                     _badge.nativeObject.setGravity(17);
                 }
-            }
+            },
+            enumerable: true
         },
-        'setBackgroundColor': {
-            value: function(color) {
+        'backgroundColor': {
+            get: function() {
+                return _badgeBackgroundColor;
+            },
+            set: function(color) {
+                _badgeBackgroundColor = color;
                 if (_badge.nativeObject && color) {
-                    _badge.backgroundColor = color;
-                    nativeGradientDrawable.setColor(_badge.backgroundColor.nativeObject);
+                    nativeGradientDrawable.setColor(color.nativeObject);
                 }
                 else if (_badge.nativeObject) {
                     nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
                     nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
                 }
                 _badge.nativeObject.setBackground(nativeGradientDrawable);
-            }
+            },
+            enumerable: true
         },
-        'setTextColor': {
-            value: function(color) {
-                _badge.textColor = color;
+        'textColor': {
+            get: function() {
+                return _badgeTextColor;
+            },
+            set: function(color) {
+                _badgeTextColor = color;
                 if (_badge.nativeObject && color) {
                     if (color.nativeObject) {
                         _badge.nativeObject.setTextColor(color.nativeObject);
@@ -263,36 +283,49 @@ function HeaderBarItem(params) {
                         this.nativeObject.setTextColor(textColorStateListDrawable);
                     }
                 }
-            }
+            },
+            enumerable: true
         },
-        'setFont': {
-            value: function(font) {
-                _badge.font = font;
+        'font': {
+            get: function() {
+                return _badgeFont;
+            },
+            set: function(font) {
+                _badgeFont = font;
                 if (_badge.nativeObject && font) {
                     _badge.nativeObject.setTypeface(font.nativeObject);
                     if (font.size && TypeUtil.isNumeric(font.size)) {
                         _badge.nativeObject.setTextSize(font.size);
                     }
                 }
-            }
+            },
+            enumerable: true
         },
-        'setBorderWidth': {
-            value: function(borderWidth) {
+        'borderWidth': {
+            get: function() {
+                return _borderWidth;
+            },
+            set: function(borderWidth) {
                 if (typeof borderWidth !== 'number')
                     return;
 
                 _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
-                _badge.setBackgroundColor(); //re-set Drawable
-            }
+                _badge.backgroundColor = null; //re-set Drawable
+            },
+            enumerable: true
         },
-        'setBorderColor': {
-            value: function(borderColor) {
+        'borderColor': {
+            get: function() {
+                return _borderColor;
+            },
+            set: function(borderColor) {
                 if (!borderColor instanceof Color)
                     return;
 
                 _borderColor = borderColor;
-                _badge.setBackgroundColor(); //re-set Drawable
-            }
+                _badge.backgroundColor = null; ; //re-set Drawable
+            },
+            enumerable: true
         },
         'move': {
             value: function(x, y) {
@@ -304,11 +337,11 @@ function HeaderBarItem(params) {
     if (_badge.nativeObject) {
         //sets default values
         if (!_badge.backgroundColor)
-            _badge.setBackgroundColor(Color.RED);
+            _badge.backgroundColor = Color.RED;
         if (!_badge.font)
-            _badge.setFont(Font.create("Arial", 11, Font.NORMAL));
+            _badge.font = Font.create("Arial", 11, Font.NORMAL);
         if (!_badge.textColor)
-            _badge.setTextColor(Color.WHITE);
+            _badge.textColor = Color.WHITE;
     }
 
     if (!_color) {
