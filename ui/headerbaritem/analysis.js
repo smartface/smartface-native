@@ -33,11 +33,11 @@ function HeaderBarItem(params) {}
 HeaderBarItem.prototype.title = "";
 
 /**
- * Gets/sets image of header bar item. Image is set to null as default.
+ * Gets/sets Image Object or Image Path of header bar item. Image is set to null as default.
  *
  * If image is already set on HeaderBarItem, title should not be set for some native behaviours.
  * 
- * @property {UI.Image} image
+ * @property {UI.Image | String} image
  * @android
  * @ios
  * @since 0.1

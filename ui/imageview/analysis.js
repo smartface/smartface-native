@@ -24,8 +24,8 @@ const View = require('../view');
 function ImageView(params) {}
 
 /**
- * Gets/sets the image. Image can be able to assign by providing Image Object or Image Path. The recommended one is 
- * Image Path to overcome performance issues.
+ * Gets/sets the image. Path of image or Image object can be set. Setting "image path" 
+ * to this property will be beneficial in terms of performance.
  *
  *     @example
  *     const Image = require('sf-core/ui/image');

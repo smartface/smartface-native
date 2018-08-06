@@ -49,7 +49,7 @@ const ImageView = extend(View)(
                         var imageFile = new File({
                             path: value
                         });
-                        this.loadFromFile(imageFile);
+                        this.loadFromFile({ file: imageFile });
                     }
                     else {
                         this._image = null;

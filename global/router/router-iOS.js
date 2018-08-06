@@ -102,6 +102,9 @@ function RouterViewModel(params) {
                     if (routes[1]) {
                         var layoutNeeded = true;
                         pageToGo.go(routes[1], parameters, _animated, layoutNeeded);
+                    } else if (!routes[1] && pageToGo.model.rootPage) {
+                        var layoutNeeded = true;
+                        pageToGo.go(pageToGo.model.rootPage, parameters, _animated, layoutNeeded);
                     }
                     pageInfo.nativeObject = pageToGo.view.nativeObject;
                     pageInfo.animated = _animated;
