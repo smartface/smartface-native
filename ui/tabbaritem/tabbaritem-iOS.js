@@ -33,7 +33,7 @@ function TabBarItem(params) {
             return _route;
         },
         set: function(route) {
-            if (typeof route === 'function' || typeof route === 'object') {
+            if (typeof route === 'string' || typeof route === 'object') {
                 _route = route;
             }
         },
