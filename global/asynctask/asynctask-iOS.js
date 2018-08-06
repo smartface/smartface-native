@@ -3,53 +3,40 @@ const TypeUtil          = require("sf-core/util/type");
 function AsyncTask(params){
     var self = this;
     
-    var _onPreExecute;
-    var _doInBackground;
-    var _onPostExecute;
+    var _task;
+    var _onComplete;
     
     Object.defineProperties(self,{
-        'onPreExecute': {
+        'task': {
             get: function(){
-                return _onPreExecute;
+                return _task;
             },
             set: function(value){
                 if(TypeUtil.isFunction(value)){
-                    _onPreExecute = value.bind(this);
+                    _task = value.bind(this);
                 }
             }
         },
-        'doInBackground': {
+        'onComplete': {
             get: function(){
-                return _doInBackground;
+                return _onComplete;
             },
             set: function(value){
                 if(TypeUtil.isFunction(value)){
-                    _doInBackground = value.bind(this);
+                    _onComplete = value.bind(this);
                 }
             }
         },
-        'onPostExecute': {
-            get: function(){
-                return _onPostExecute;
-            },
-            set: function(value){
-                if(TypeUtil.isFunction(value)){
-                    _onPostExecute = value.bind(this);
-                }
-            }
-        },
-        'execute': {
+        'run': {
             value: function(){
                 try{
-                    self.onPreExecute();
-                    
                     // Background
                     SF.dispatch_async(SF.dispatch_get_global_queue(0,0), function() {
-                        self.doInBackground();
+                        self.task();
                         
                         // Main
                         SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
-                            self.onPostExecute();
+                            self.onComplete();
                         });
                     });
                 }

@@ -19,7 +19,7 @@
  *     var myProfileItem = new TabBarItem({
  *         title: "Profile",
  *         icon: myProfileIcon,
- *         page: require('./pages/pgProfile')
+ *         page: 'pages/pgProfile'
  *     });
  *      
  *     myTab.add('profile', myProfileItem);
@@ -42,7 +42,7 @@ function Router(){}
  *
  *     @example
  *     const Router = require('sf-core/router');
- *     Router.add('login', require('pages/pgLogin'));
+ *     Router.add('login', 'pages/pgLogin');
  *     Router.go('login');
  *     const SliderDrawer = require('sf-core/ui/sliderdrawer');
  *     var mySliderDrawer = new SliderDrawer();
@@ -63,8 +63,8 @@ Router.prototype.sliderDrawer = null;
  * created everytime when Router.go called.
  * 
  * @method add
- * @param {String} to Route path to page class
- * @param {UI.Page|Navigator|UI.BottomTabBar} route To be used for creating and showing instances
+ * @param {String} to Route tag to page class
+ * @param {String|Navigator|UI.BottomTabBar} route To be used for creating and showing instances
  * @param {Boolean} isSingleton If given as true, single instance will be created
  *                              and everytime that instance will be shown
  * @static

@@ -10,8 +10,8 @@
  *     const Navigator = require('sf-core/ui/navigator');
  *     
  *     var myNavigator = new Navigator();
- *     myNavigator.add('pgProfile', require('pages/pgProfile'));
- *     myNavigator.add('pgMessages', require('pages/pgMessages'));
+ *     myNavigator.add('pgProfile', 'pages/pgProfile');
+ *     myNavigator.add('pgMessages', 'pages/pgMessages');
  *     myNavigator.go('pgProfile');
  * 
  *     Router.add('dashboard', myNavigator);
@@ -26,8 +26,8 @@ function Navigator() {}
  * created everytime when Router.go called.
  * 
  * @method add
- * @param {String} to Route path to page class
- * @param {UI.Page} page Page class to be used for creating and showing instances
+ * @param {String} to Route tag to page class
+ * @param {String} page Page class path
  * @param {Boolean} isSingleton If given as true, single instance will be created
  *                              and everytime that instance will be shown
  * @android

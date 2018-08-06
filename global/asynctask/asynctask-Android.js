@@ -1,6 +1,6 @@
 /*globals array,requireClass,release */
 const TypeUtil = require("sf-core/util/type");
-const SFAsyncTask = requireClass('io.smartface.android.asynctask.SFAsyncTask');
+const SFAsyncTask = requireClass('io.smartface.android.SFAsyncTask');
 
 function AsyncTask(params) {
     var callbacks = {
@@ -8,13 +8,13 @@ function AsyncTask(params) {
             _onPreExecute && _onPreExecute();
         },
         doInBackground: function(objects) {
-            _doInBackground && _doInBackground(objects);
+            _task && _task(objects);
         },
         onProgressUpdate: function() {
             _onProgressUpdate && _onProgressUpdate();
         },
         onPostExecute: function() {
-            _onPostExecute && _onPostExecute();
+            _onComplete && _onComplete();
         }
     };
     this.nativeObject = new SFAsyncTask();
@@ -22,9 +22,9 @@ function AsyncTask(params) {
 
 
     var _onPreExecute;
-    var _doInBackground;
+    var _task;
     var _onProgressUpdate;
-    var _onPostExecute;
+    var _onComplete;
     Object.defineProperties(this, {
         'onPreExecute': {
             get: function() {
@@ -36,13 +36,13 @@ function AsyncTask(params) {
                 }
             }
         },
-        'doInBackground': {
+        'task': {
             get: function() {
-                return _doInBackground;
+                return _task;
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _doInBackground = value.bind(this);
+                    _task = value.bind(this);
                 }
             }
         },
@@ -56,17 +56,17 @@ function AsyncTask(params) {
                 }
             }
         },
-        'onPostExecute': {
+        'onComplete': {
             get: function() {
-                return _onPostExecute;
+                return _onComplete;
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _onPostExecute = value.bind(this);
+                    _onComplete = value.bind(this);
                 }
             }
         },
-        'execute': {
+        'run': {
             value: function(params) {
                 if (TypeUtil.isArray(params)) {
                     this.nativeObject.executeTask(array(params, "java.lang.Object"));

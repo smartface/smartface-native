@@ -85,119 +85,213 @@ function HeaderBarItem(params) {
         }
     });
     
-    var _visible = false;
-    var _backgroundColor;
-    var _font;
-    var _textColor;
-    var _borderColor;
-    var _borderWidth;
-    var _badgeHeight;
+    
+    var _badgeVisible = false;
+    var _badgeBackgroundColor = 0;
+    var _badgeFont = 0;
+    var _badgeTextColor = 0;
+    var _badgeBorderColor = 0;
+    var _badgeBorderWidth = 0;
+    var _badgeHeight = 0;
     var _isBadgeFirstLoad = false;
+    var _badgeText;
+    
     Object.defineProperties(_badge, {
-        'setText': {
-            value: function(text){
-                __SF_Dispatch.mainAsyncAfter(function(){
-                    self.nativeObject.pp_addBadgeWithText(text);
-                    if (!_isBadgeFirstLoad) {
-                        _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
-                        _backgroundColor ? self.badge.setBackgroundColor(_backgroundColor) : 0;
-                        _textColor ? self.badge.setTextColor(_textColor) : 0;
-                        _font ? self.badge.setFont(_font) : 0;
-                        _borderColor ? self.badge.setBorderColor(_borderColor) : 0;
-                        _borderWidth ? self.badge.setBorderWidth(_borderWidth) : 0;
-                        _badgeHeight !== undefined ? self.badge.setHeight(_badgeHeight) : 0;
-                    }
-                    _isBadgeFirstLoad = true;
-                },1);
+        'text': {
+            get: function(){
+                return _badgeText;
             },
-            enumerable: true
+            set: function(value){
+                if (typeof value === "string") {
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        __SF_Dispatch.mainAsyncAfter(function(){
+                            self.nativeObject.pp_addBadgeWithText(value);
+                        },1);
+                        if (!_isBadgeFirstLoad) {
+                            if (_badgeVisible) {
+                                self.badge.visible = _badgeVisible;
+                            }
+                            
+                            if (_badgeBackgroundColor) {
+                                self.badge.backgroundColor = _badgeBackgroundColor;
+                            }else{
+                                _badgeBackgroundColor = 0;
+                            }
+                            
+                            if (_badgeTextColor) {
+                                self.badge.textColor = _badgeTextColor;
+                            } else {
+                                _badgeTextColor = 0;
+                            }
+                            
+                            if (_badgeFont) {
+                                self.badge.font = _badgeFont;
+                            } else {
+                                _badgeFont = 0;
+                            }
+                            
+                            if (_badgeBorderColor) {
+                                self.badge.borderColor = _badgeBorderColor;
+                            } else {
+                                _badgeBorderColor = 0;
+                            }
+                            
+                            if (_badgeBorderWidth) {
+                                self.badge.borderWidth = _badgeBorderWidth;
+                            } else {
+                                _badgeBorderWidth = 0;
+                            }
+                            
+                            if (_badgeHeight) {
+                                self.badge.height = _badgeHeight;
+                            } else {
+                                _badgeHeight = 0;
+                            }
+                        }
+                        _isBadgeFirstLoad = true;
+                    },1);
+                }
+            }
         },
-        'setVisible': {
-            value: function(value){
-                _visible = value;
-                if (value) {
-                    self.nativeObject.pp_showBadge();
-                }else{
-                    self.nativeObject.pp_hiddenBadge();
+        'visible' : {
+            get : function(){
+                return _badgeVisible;
+            },
+            set : function(value){
+                if (typeof value === "boolean") {
+                    _badgeVisible = value;
+                    if (_badgeVisible) {
+                        
+                        __SF_Dispatch.mainAsyncAfter(function(){
+                            self.nativeObject.pp_showBadge();
+                        },1);
+                    } else {
+                        __SF_Dispatch.mainAsyncAfter(function(){
+                            self.nativeObject.pp_hiddenBadge();
+                        },1);
+                    }
                 }
             },
             enumerable: true
         },
-        'setHeight': {
-            value: function(value){
-                _badgeHeight = value;
-                self.nativeObject.pp_setBadgeHeight(value);
+        'height' : {
+            get : function(){
+                return _badgeHeight;
+            },
+            set : function(value){
+                if (typeof value === "number") {
+                    _badgeHeight = value;
+                    
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBadgeHeight(_badgeHeight);
+                    },1);
+                }
             },
             enumerable: true
         },
-        'setBorderWidth': {
-            value: function(value){
-                _borderWidth = value;
-                self.nativeObject.pp_setBorderWidth(value);
+        'borderWidth' : {
+            get : function(){
+                return _badgeBorderWidth;
+            },
+            set : function(value){
+                if (typeof value === "number") {
+                    _badgeBorderWidth = value;
+                    
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBorderWidth(_badgeBorderWidth);
+                    },1);
+                }
             },
             enumerable: true
         },
-        'setBorderColor': {
-            value: function(value){
-                _borderColor = value;
-                self.nativeObject.pp_setBorderColor(value.nativeObject);
+        'borderColor' : {
+            get : function(){
+                return _badgeBorderColor;
+            },
+            set : function(value){
+                if (typeof value === "object") {
+                    _badgeBorderColor = value;
+                    
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBorderColor(_badgeBorderColor.nativeObject);
+                    },1);
+                }
             },
             enumerable: true
         },
-        'setBackgroundColor' : {
-            value: function(value){
-                _backgroundColor = value;
-                var argIDBlock= new Invocation.Argument({
-                    type:"IDBlock",
-                    value: function(label){
-                        var argColor= new Invocation.Argument({
-                            type:"NSObject",
-                            value: value.nativeObject
+        'backgroundColor' : {
+            get : function(){
+                return _badgeBackgroundColor;
+            },
+            set : function(value){
+                if (typeof value === "object") {
+                    _badgeBackgroundColor = value;
+                    
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        var argIDBlock= new Invocation.Argument({
+                            type:"IDBlock",
+                            value: function(label){
+                                var argColor= new Invocation.Argument({
+                                    type:"NSObject",
+                                    value: _badgeBackgroundColor.nativeObject
+                                });
+                                Invocation.invokeInstanceMethod(label,"setBackgroundColor:",[argColor]);
+                            }
                         });
-                        Invocation.invokeInstanceMethod(label,"setBackgroundColor:",[argColor]);
-                    }
-                });
-                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                    },1);
+                }
             },
             enumerable: true
         },
-        'setTextColor' : {
-            value: function(value){
-                _textColor = value;
-                var argIDBlock= new Invocation.Argument({
-                    type:"IDBlock",
-                    value: function(label){
-                        var argColor= new Invocation.Argument({
-                            type:"NSObject",
-                            value: value.nativeObject
+        'textColor' : {
+            get : function(){
+                return _badgeTextColor;
+            },
+            set : function(value){
+                if (typeof value === "object") {
+                    _badgeTextColor = value;
+                    
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        var argIDBlock= new Invocation.Argument({
+                            type:"IDBlock",
+                            value: function(label){
+                                var argColor= new Invocation.Argument({
+                                    type:"NSObject",
+                                    value: _badgeTextColor.nativeObject
+                                });
+                                Invocation.invokeInstanceMethod(label,"setTextColor:",[argColor]);
+                            }
                         });
-                        Invocation.invokeInstanceMethod(label,"setTextColor:",[argColor]);
-                    }
-                });
-                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                    },1);
+                }
             },
             enumerable: true
         },
-        'setFont' : {
-            value: function(value){
-                _font = value;
-                var argIDBlock= new Invocation.Argument({
-                    type:"IDBlock",
-                    value: function(label){
-                        var argFont= new Invocation.Argument({
-                            type:"NSObject",
-                            value: value
-                        });
-                        Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
-                    }
-                });
-                Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+        'font' : {
+            get : function(){
+                return _badgeFont;
+            },
+            set : function(value){
+                _badgeFont = value;
+                
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    var argIDBlock= new Invocation.Argument({
+                        type:"IDBlock",
+                        value: function(label){
+                            var argFont= new Invocation.Argument({
+                                type:"NSObject",
+                                value: _badgeFont
+                            });
+                            Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
+                        }
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                },1);
             },
             enumerable: true
-        }
-    });
-    
-    Object.defineProperties(_badge, {
+        },
         'move' : {
             value: function(x,y){
                 __SF_Dispatch.mainAsyncAfter(function(){
@@ -205,7 +299,7 @@ function HeaderBarItem(params) {
                 },1);
             },
             enumerable: true
-        }
+        },
     });
     
     // Assign parameters given in constructor
