@@ -131,50 +131,49 @@ function NavigatorViewModel(params) {
                 {
                     pageToGo = self.model.getPageInstance(routes[0]);
                 }
-                
-                if (pageToGo) 
+            }
+            
+            if (pageToGo) 
+            {
+                if (typeof (parameters) != 'undefined' && parameters != null) 
                 {
-                    if (typeof (parameters) != 'undefined' && parameters != null) 
+                    pageToGo.__pendingParameters = parameters; 
+                }
+                
+                var pageInfo = {};
+                switch (pageToGo.type) 
+                {
+                    case 'TabBarFlow': 
                     {
-                        pageToGo.__pendingParameters = parameters; 
+                        pageToGo.go(routes[1],parameters,_animated);
+                        pageInfo.nativeObject = pageToGo.tabBarView.nativeObject;
+                        pageInfo.animated = _animated;
+                        break;
                     }
-                    
-                    var pageInfo = {};
-                    switch (pageToGo.type) 
+                    default: 
                     {
-                        case 'TabBarFlow': 
-                        {
-                            pageToGo.go(routes[1],parameters,_animated);
-                            pageInfo.nativeObject = pageToGo.tabBarView.nativeObject;
-                            pageInfo.animated = _animated;
-                            break;
-                        }
-                        default: 
-                        {
-                            pageInfo.nativeObject = pageToGo.nativeObject;
-                            pageInfo.animated = _animated;
-                            break;
-                        }
+                        pageInfo.nativeObject = pageToGo.nativeObject;
+                        pageInfo.animated = _animated;
+                        break;
                     }
-                    
-                    var isShowed = self.view.show(pageInfo);
-                    if (isShowed) 
+                }
+                
+                var isShowed = self.view.show(pageInfo);
+                if (isShowed) 
+                {
+                    self.model.currentPage = pageToGo;
+                    var pageIndex = self.model.history.indexOf(pageToGo);
+                    if (pageIndex == -1) 
                     {
-                        self.model.currentPage = pageToGo;
-                        var pageIndex = self.model.history.indexOf(pageToGo);
-                        if (pageIndex == -1) 
+                        self.model.history.push(pageToGo);
+                    } 
+                    else 
+                    {
+                        for (var i = self.model.history.length - 1; i > pageIndex; --i) 
                         {
-                            self.model.history.push(pageToGo);
-                        } 
-                        else 
-                        {
-                            for (var i = self.model.history.length - 1; i > pageIndex; --i) 
-                            {
-                                self.model.history.pop();
-                            }
+                            self.model.history.pop();
                         }
                     }
-
                 }
             }
         }
