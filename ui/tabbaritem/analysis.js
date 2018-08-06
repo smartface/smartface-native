@@ -36,9 +36,9 @@ TabBarItem.prototype.title = "";
 /**
  * Gets/sets the icon of tab item. 
  *
- * @property {UI.Image | Object} icon
- * @property {UI.Image} icon.normal 
- * @property {UI.Image} icon.selected
+ * @property {Object} icon
+ * @property {UI.Image | String} icon.normal 
+ * @property {UI.Image | String} icon.selected
  * @android
  * @ios
  * @since 1.1.10
