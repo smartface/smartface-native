@@ -1,4 +1,3 @@
-const Application = require("sf-core/application");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");

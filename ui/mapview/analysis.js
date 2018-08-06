@@ -278,7 +278,6 @@ MapView.prototype.android.prepareMapAsync = function(){};
  * 
  * @android
  * @method prepareMap
- * @deprecated
  * @since 3.1.0
  */
 MapView.prototype.android.prepareMap= function(){};
