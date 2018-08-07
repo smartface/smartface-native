@@ -136,6 +136,15 @@ TextBox.prototype.ios.minimumFontSize = 7;
 TextBox.prototype.ios.clearButtonEnabled = false;
 
 /**
+ * Gets/sets a layout to be displayed above the standard system keyboard
+ * when the textbox object became focus. This property works only for iOS only.
+ *
+ * @property {UI.FlexLayout} [keyboardLayout = null]
+ * @ios
+ */
+TextBox.prototype.ios.keyboardLayout = null;
+
+/**
  * Gets/sets the appearance style of the keyboard that is associated with the TextBox.
  * This property works only for iOS.
  *

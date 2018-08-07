@@ -1,7 +1,7 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("sf-core/ui/image");
-
+const ImageCacheType = require('sf-core/ui/imagecachetype');
 
 const FillType = { 
     NORMAL: 0,
@@ -41,21 +41,75 @@ const ImageView = extend(View)(
                 return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
-                if (value) {
-                    self.nativeObject.loadImage(value.nativeObject);
-                }else{
-                    self.nativeObject.loadImage(undefined);
+                if (typeof value === "string") {
+                    var image = Image.createFromFile(value);
+                    self.nativeObject.loadImage(image.nativeObject);
+                } else {
+                    if (value) {
+                        self.nativeObject.loadImage(value.nativeObject);
+                    }else{
+                        self.nativeObject.loadImage(undefined);
+                    }
                 }
             },
             enumerable: true
         });
         
-        self.loadFromUrl = function(url, placeHolder){
-            if (placeHolder){
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeHolder.nativeObject,0.3);
-            }else{
-                self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),undefined,0.3);
+        self.loadFromFile = function(params){
+            if (params.file) {
+                var file = params.file;
+                var filePath = file.nativeObject.getActualPath();
+                var image = Image.createFromFile(filePath);
+                
+                var fade = true;
+                if (typeof params.fade === "boolean") {
+                    fade = params.fade;
+                }
+                
+                if (fade) {
+                    self.nativeObject.loadImage(image.nativeObject);
+    				var alpha = self.nativeObject.alpha;
+    				self.nativeObject.alpha = 0;
+                    __SF_UIView.animation(0.3,0,function(){
+                       self.nativeObject.alpha = alpha; 
+                    }.bind(this),function(){});
+                } else {
+                    self.nativeObject.loadImage(image.nativeObject);
+                }
             }
+        }
+        
+        self.loadFromUrl = function(url,placeholder,fade){
+        	if (fade === false) {
+        		self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined);
+        	}else{
+				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,function(image,error,cache,url){
+					if (!error) {
+						this.nativeObject.loadImage(image);
+						if (cache == ImageCacheType.NONE) {
+							var alpha = this.nativeObject.alpha;
+							this.nativeObject.alpha = 0;
+			                __SF_UIView.animation(0.3,0,function(){
+			                   this.nativeObject.alpha = alpha; 
+			                }.bind(this),function(){});
+						}
+					}
+				}.bind(self));
+        	}
+        }
+        
+        self.fetchFromUrl = function(object){
+			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder ? object.placeholder.nativeObject : undefined,function(onSuccess,onError,image,error,cache,url){
+				if (!error) {
+					if (typeof onSuccess === "function") {
+						onSuccess(Image.createFromImage(image),cache);
+					}
+				}else{
+					if (typeof onError === "function") {
+						onError();
+					}
+				}
+			}.bind(self,object.onSuccess,object.onError));
         };
         
         Object.defineProperty(self, 'imageFillType', {

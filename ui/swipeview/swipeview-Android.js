@@ -12,7 +12,8 @@ const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
 const SwipeView = extend(View)(
     function (_super, params) {
         var self = this;
-        var pagerAdapter = new NativePagerAdapter(fragmentManager);
+        // TODO: Check this instance is required or not
+        var pagerAdapter = new NativePagerAdapter(fragmentManager, {});
         
         var _lastIndex = -1;
         if(!self.nativeObject) {
@@ -20,7 +21,7 @@ const SwipeView = extend(View)(
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             self.nativeObject.setId(viewID);
             self.nativeObject.setAdapter(pagerAdapter);
-            self.nativeObject.addOnPageChangeListener(NativeOnPageChangeListener.implement({
+            var listener = NativeOnPageChangeListener.implement({
                 onPageScrollStateChanged: function(state) {
                     if (state === 0) { // SCROLL_STATE_IDLE
                         _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
@@ -44,7 +45,8 @@ const SwipeView = extend(View)(
                         _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
                     }
                 }
-            }));
+            });
+            self.nativeObject.addOnPageChangeListener(listener);
         }
         _super(self);
 
@@ -73,19 +75,24 @@ const SwipeView = extend(View)(
                             throw new TypeError("Array parameter cannot be empty.");
                         }
                         _pages = pages;
+                        var callbacks = {
+                            getCount: function() {
+                                return pages.length;
+                            },
+                            getItem: function(position) {
+                                if(_pageInstances[position])
+                                    return (_pageInstances[position]).nativeObject;
+                                var pageClass = pages[position];
+                                var pageInstance = new pageClass({
+                                    skipDefaults: true
+                                });
+                                bypassPageSpecificProperties(pageInstance);
+                                _pageInstances[position] = (pageInstance);
+                                return (_pageInstances[position]).nativeObject;
+                            }
+                        };
                         
-                        var nativeFragments = [];
-                        pages.forEach(function(page){
-                            var pageInstance = new page({
-                                skipDefaults: true
-                            });
-                            bypassPageSpecificProperties(pageInstance);
-                            _pageInstances.push(pageInstance);
-                            nativeFragments.push(pageInstance.nativeObject);
-                        });
-  
-                        pagerAdapter = new NativePagerAdapter(fragmentManager);
-                        pagerAdapter.setFragments(array(nativeFragments));
+                        pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
                         self.nativeObject.setAdapter(pagerAdapter);
                     }
                 }

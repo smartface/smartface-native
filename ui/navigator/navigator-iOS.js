@@ -65,14 +65,14 @@ function NavigatorViewModel(params) {
             var object = {
                 key : key,
                 value : {
-                    pageClass : null,
+                    pageClassPath : null,
                     pageInstance : null,
                     isSingleton : _isSingleton
                 }
             };
             
-            if (typeof value === 'function') {
-                object.value.pageClass = value;
+            if (typeof value === 'string') {
+                object.value.pageClassPath = value;
             } else if (typeof value === 'object') {
                 object.value.pageInstance = value;
             }
@@ -80,46 +80,78 @@ function NavigatorViewModel(params) {
         }
         return retval;
     };
-    this.go = function (key, parameters, animated) {
-        
-        var pageToGo = null;
-        var routes = [];
-        
-        if (typeof(key) === "object") {
-            pageToGo = key;
-        } else if (typeof(key) === "string"){
-            routes = self.model.divideRoute(key);
-            pageToGo = self.model.getPageInstance(routes[0]);
-        }
-        
-        if (typeof (parameters) != 'undefined' && parameters != null) {
-            pageToGo.__pendingParameters = parameters; 
-        }
-        
-        var _animated = true;
-        if (typeof (animated) === "boolean") {
-            _animated = animated;
-        }
-        
-        if (pageToGo) {
-            var pageInfo = {};
+    this.go = function (key, parameters, animated, layoutNeeded) {
+        if (!layoutNeeded) 
+        {
+            // From navigator
+            self.model.rootPage = self.model.divideRoute(key)[0];
+        } 
+        else 
+        {
+            var pageToGo = null;
+            var routes = [];
             
-            if (self.view == null) {
-                self.view = new NavigatorView({
-                    viewModel: self,
-                    rootPage : pageToGo.nativeObject
-                });
-                self.model.currentPage = pageToGo;
-                self.model.history.push(pageToGo);
-            } else {
-                switch (pageToGo.type) {
-                    case 'TabBarFlow': {
-                        pageToGo.go(routes[1],parameters,_animated)
+            var _animated = true;
+            if (typeof (animated) === "boolean") 
+            {
+                _animated = animated;
+            }
+            
+            // Page stuff
+            if (typeof(key) === "object") 
+            {
+                pageToGo = key;
+            } 
+            else if (typeof(key) === "string")
+            {
+                routes = self.model.divideRoute(key);
+                
+                if (self.view === null) 
+                {
+                    var rootPage = self.model.getPageInstance(self.model.rootPage);
+                    var nativeRootPage;
+                    if (rootPage.type == "TabBarFlow") 
+                    {
+                        rootPage.go(routes[1],parameters,_animated);
+                        nativeRootPage = rootPage.tabBarView.nativeObject;
+                    } 
+                    else 
+                    {
+                        nativeRootPage = rootPage.nativeObject;
+                    }
+                    
+                    self.view = new NavigatorView({
+                        viewModel: self,
+                        rootPage : nativeRootPage
+                    });
+                    self.model.currentPage = rootPage;
+                    self.model.history.push(rootPage);
+                }
+                else if (routes[0] !== self.model.rootPage)
+                {
+                    pageToGo = self.model.getPageInstance(routes[0]);
+                }
+            }
+            
+            if (pageToGo) 
+            {
+                if (typeof (parameters) != 'undefined' && parameters != null) 
+                {
+                    pageToGo.__pendingParameters = parameters; 
+                }
+                
+                var pageInfo = {};
+                switch (pageToGo.type) 
+                {
+                    case 'TabBarFlow': 
+                    {
+                        pageToGo.go(routes[1],parameters,_animated);
                         pageInfo.nativeObject = pageToGo.tabBarView.nativeObject;
                         pageInfo.animated = _animated;
                         break;
                     }
-                    default: {
+                    default: 
+                    {
                         pageInfo.nativeObject = pageToGo.nativeObject;
                         pageInfo.animated = _animated;
                         break;
@@ -127,13 +159,18 @@ function NavigatorViewModel(params) {
                 }
                 
                 var isShowed = self.view.show(pageInfo);
-                if (isShowed) {
+                if (isShowed) 
+                {
                     self.model.currentPage = pageToGo;
                     var pageIndex = self.model.history.indexOf(pageToGo);
-                    if (pageIndex == -1) {
+                    if (pageIndex == -1) 
+                    {
                         self.model.history.push(pageToGo);
-                    } else {
-                        for (var i = self.model.history.length - 1; i > pageIndex; --i) {
+                    } 
+                    else 
+                    {
+                        for (var i = self.model.history.length - 1; i > pageIndex; --i) 
+                        {
                             self.model.history.pop();
                         }
                     }
@@ -141,15 +178,15 @@ function NavigatorViewModel(params) {
             }
         }
     };
-    this.goBack = function (key, parameters, animated) {
+    this.goBack = function (key, parameters, animated, layoutNeeded) {
         if (key) {
-            this.go(key, parameters, animated);
+            this.go(key, parameters, animated, layoutNeeded);
         } else {
             if (self.model.currentPage.type == "TabBarFlow" && self.model.currentPage.tabBarBrain.getCurrentPage().type == "Navigator") {
-                self.model.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated);
+                self.model.currentPage.tabBarBrain.getCurrentPage().goBack(null, parameters, animated, layoutNeeded);
             } else {
                 self.model.history.pop();
-                this.go(self.model.history[self.model.history.length - 1], parameters, animated);
+                this.go(self.model.history[self.model.history.length - 1], parameters, animated, layoutNeeded);
             }
         }
     };
@@ -259,6 +296,7 @@ function NavigatorModel(params) {
     var objects = {};
     self.history = [];
     self.currentPage = null;
+    self.rootPage = null;
     
     // Functions
     this.addObject = function(object){
@@ -283,9 +321,9 @@ function NavigatorModel(params) {
         if (objects[key]) {
             var retval = null;
             if (objects[key].isSingleton) {
-                retval = objects[key].pageInstance || (objects[key].pageInstance = new (objects[key].pageClass)());
+                retval = objects[key].pageInstance || (objects[key].pageInstance = new (require(objects[key].pageClassPath))());
             } else {
-                retval = objects[key].pageInstance || new (objects[key].pageClass)();
+                retval = objects[key].pageInstance || new (require(objects[key].pageClassPath))();
             }
             retval.routerPath = key;
             return retval;

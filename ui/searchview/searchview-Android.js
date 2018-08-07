@@ -396,7 +396,7 @@ const SearchView = extend(View)(
         this.ios.showLoading = function(){};
         this.ios.hideLoading = function(){};
 
-        if (!this.isNotSetDefaults) {
+        if (!this.skipDefaults) {
             const NativePorterDuff = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
             mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);

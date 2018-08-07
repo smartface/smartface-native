@@ -59,6 +59,11 @@ const ScrollView = extend(ViewGroup)(
 
         self.layout.applyLayout = function(){
             __SF_Dispatch.mainAsync(function(){
+                if (self.autoSizeEnabled) {
+                    self.layout.width = self.nativeObject.frame.width;
+                    self.layout.height = self.nativeObject.frame.height;
+                }
+                
                 self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
                 if (self.autoSizeEnabled) {
                     var rect = {x:0,y:0,width:self.nativeObject.frame.width,height:self.nativeObject.frame.height};

@@ -35,7 +35,11 @@ Multimedia.createImagePickerController = function(e){
     picker.allowsEditing = e.allowsEditing ? e.allowsEditing : false;
     
     picker.sourceType = e.sourceType;
-    picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
+    
+    if (picker.sourceType == UIImagePickerControllerSourceType.camera) {
+        picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;  
+    }
+    
     
     this.pickerDelegate =  new __SF_UIImagePickerControllerDelegate();
           

@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const FlexLayout = require("../flexlayout");
-const Label = require('../label');
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -8,7 +7,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
@@ -16,6 +14,9 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
+
+// const NativeFragment = requireClass("android.support.v4.app.Fragment");
+const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -59,7 +60,8 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    self.nativeObject = NativeFragment.extend("SFFragment", {
+    
+    var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             if (!isCreated) {
@@ -149,6 +151,8 @@ function Page(params) {
             const Multimedia = require("sf-core/device/multimedia");
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
+            const EmailComposer = require('sf-core/ui/emailcomposer');
+
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -167,10 +171,13 @@ function Page(params) {
             else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
             }
-
-
+            else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
+                EmailComposer.onActivityResult(requestCode, resultCode, data);
+            }
         }
-    }, null);
+    };
+    self.nativeObject = new SFFragment();
+    self.nativeObject.setCallbacks(callback);
 
     this.isSwipeViewPage = false;
 
@@ -391,6 +398,39 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
+    var _headerbarItemView;
+    Object.defineProperty(self.headerBar, 'titleLayout', {
+        get: function() {
+            return _headerbarItemView;
+        },
+        set: function(view) {
+            view && toolbar.addView(view.nativeObject);
+            _headerbarItemView = view;
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    var _borderVisibility = true;
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            _borderVisibility = value;
+            if (value) {
+                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+            }
+            else {
+                actionBar.setElevation(0);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
@@ -799,11 +839,10 @@ function Page(params) {
                     nativeBadgeContainerButton.addView(item.nativeObject);
                 }
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
-                item.nativeObject.setBackground(null);// This must be set null in order to prevent unexpected size
+                item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
-                if (item.badge.visible && item.badge.nativeObject) {
-
-                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), 0, AndroidUnitConverter.dpToPixel(5), 0);
+                if (item.badge.text && item.badge.nativeObject) {
+                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
@@ -947,7 +986,5 @@ Object.defineProperty(Page.Orientation, "AUTO", {
 
 Page.iOS = {};
 Page.iOS.LargeTitleDisplayMode = {};
-
-
 
 module.exports = Page;

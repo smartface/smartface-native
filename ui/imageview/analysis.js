@@ -24,7 +24,8 @@ const View = require('../view');
 function ImageView(params) {}
 
 /**
- * Gets/sets the image set.
+ * Gets/sets the image. Path of image or Image object can be set. Setting "image path" 
+ * to this property will be beneficial in terms of performance.
  *
  *     @example
  *     const Image = require('sf-core/ui/image');
@@ -34,11 +35,11 @@ function ImageView(params) {}
  *     var myImageView = new ImageView({
  *         width: 200, height: 200
  *     });
- *     myImageView.image = myImage;
+ *     myImageView.image = myImage; //OR myImageView.image = "images://smartface.png"
  *
  *     myPage.layout.addChild(myImageView);
  *
- * @property {UI.Image} [image = null]
+ * @property {UI.Image | String}  [image = null]
  * @android
  * @ios
  * @since 0.1
@@ -70,17 +71,51 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
 
 /**
  * Load image from the server and place the returned image into the ImageView.
- * If you pass any image to placeHolder parameter, placeHolder image will shown
- * until image loaded.
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
- * @param {String} url 
- * @param {UI.Image} placeHolder 
+ * @param {String} url
+ * @param {UI.Image} placeholder
+ * @param {Boolean} fade = true
  * @android
  * @ios
- * @since 0.1
+ * @since 3.0.2
  */
-ImageView.prototype.loadFromUrl = function(url, placeHolder){};
+ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
+
+/**
+ * Load image from the file and place the returned image into the ImageView.
+ *
+ * @method loadFromFile
+ * @param {Object} object
+ * @param {IO.File} object.file
+ * @param {Boolean} object.fade = true
+ * @param {Number} object.width
+ * @param {Number} object.height
+ * @android
+ * @ios
+ * @since 3.1.0
+ */
+ImageView.prototype.loadFromFile = function(object){};
+
+/**
+ * Fetch image from the server.
+ * If you want better performance and automatically set image, use loadFromUrl. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ *
+ * @method fetchFromUrl
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Function} object.onSuccess
+ * @param {UI.Image} object.onSuccess.image
+ * @param {UI.ImageCacheType} object.onSuccess.cache
+ * @param {Function} object.onError
+ * @android
+ * @ios
+ * @since 3.0.2
+ */
+ImageView.prototype.fetchFromUrl = function(object){};
 
 /**
  * @enum {Number} UI.ImageView.FillType

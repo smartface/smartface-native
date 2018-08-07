@@ -10,9 +10,7 @@ const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.RoundRectShape");
-const NativeShapeDrawable = requireClass("android.graphics.drawable.ShapeDrawable");
-const NativeRectF = requireClass("android.graphics.RectF");
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
@@ -96,6 +94,10 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
+
+                if (typeof value === "string")
+                    value = Image.createFromPath(value); //IDE requires this implementation.
+
                 if (value === null || value instanceof Image) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
@@ -105,7 +107,6 @@ function HeaderBarItem(params) {
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
-
                         this.imageButton = true;
                         if (this.menuItem) {
                             this.menuItem.setActionView(this.nativeObject);
@@ -124,7 +125,7 @@ function HeaderBarItem(params) {
                     }
                 }
                 else {
-                    throw new TypeError("image must be Image instance.");
+                    throw new TypeError("image must be Image instance or image path should be given properly.");
                 }
             },
             enumerable: true
@@ -205,54 +206,75 @@ function HeaderBarItem(params) {
     });
 
     var _badge = {};
-    // _badge.ios = {};
-    // _badge.ios.move = function(x,y){};
-    
+
+
+    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
+    var _borderWidth = AndroidUnitConverter.dpToPixel(2);
+
     _badge.nativeObject = new NativeTextView(activity);
+    var nativeGradientDrawable = new NativeGradientDrawable();
+    nativeGradientDrawable.setCornerRadius(_borderRadius);
+
     _badge.layoutParams;
+    var _borderColor = Color.WHITE;
+    var _badgeVisible = false;
+    var _badgeText;
+    var _badgeBackgroundColor;
+    var _badgeTextColor;
+    var _badgeFont;
     Object.defineProperties(_badge, {
-        'setVisible': {
-            value: function(visible) {
-                _badge.visible = visible;
+        'visible': {
+            get: function() {
+                return _badgeVisible;
+            },
+            set: function(visible) {
+                _badgeVisible = visible;
                 if (visible) {
                     _badge.nativeObject.setVisibility(0);
                 }
                 else {
                     _badge.nativeObject.setVisibility(4);
                 }
-            }
+            },
+            enumerable: true
         },
-        'setText': {
-            value: function(text) {
-                _badge.text = text;
+        'text': {
+            get: function() {
+                return _badgeText;
+            },
+            set: function(text) {
+                _badgeText = text;
+                _badge.visible = true;
                 if (_badge.nativeObject) {
                     _badge.nativeObject.setText("" + text);
                     _badge.nativeObject.setGravity(17);
                 }
-            }
+            },
+            enumerable: true
         },
-        'setBackgroundColor': {
-            value: function(color) {
-                _badge.backgroundColor = color;
+        'backgroundColor': {
+            get: function() {
+                return _badgeBackgroundColor;
+            },
+            set: function(color) {
+                _badgeBackgroundColor = color;
                 if (_badge.nativeObject && color) {
-                    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
-                    var _radii = array([_borderRadius, _borderRadius, _borderRadius, _borderRadius,
-                        _borderRadius, _borderRadius, _borderRadius, _borderRadius
-                    ], "float");
-                    
-                    var _rectF  = new NativeRectF(0, 0, 0, 0);
-                    var nativeRoundRectShape = new NativeRoundRectShape(_radii, _rectF, _radii);
-                    var nativeShapeDrawable = new NativeShapeDrawable(nativeRoundRectShape);
-
-                    nativeShapeDrawable.getPaint().setColor(_badge.backgroundColor.nativeObject);
-
-                    _badge.nativeObject.setBackgroundDrawable(nativeShapeDrawable);
+                    nativeGradientDrawable.setColor(color.nativeObject);
                 }
-            }
+                else if (_badge.nativeObject) {
+                    nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
+                    nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
+                }
+                _badge.nativeObject.setBackground(nativeGradientDrawable);
+            },
+            enumerable: true
         },
-        'setTextColor': {
-            value: function(color) {
-                _badge.textColor = color;
+        'textColor': {
+            get: function() {
+                return _badgeTextColor;
+            },
+            set: function(color) {
+                _badgeTextColor = color;
                 if (_badge.nativeObject && color) {
                     if (color.nativeObject) {
                         _badge.nativeObject.setTextColor(color.nativeObject);
@@ -262,34 +284,65 @@ function HeaderBarItem(params) {
                         this.nativeObject.setTextColor(textColorStateListDrawable);
                     }
                 }
-            }
+            },
+            enumerable: true
         },
-        'setFont': {
-            value: function(font) {
-                _badge.font = font;
+        'font': {
+            get: function() {
+                return _badgeFont;
+            },
+            set: function(font) {
+                _badgeFont = font;
                 if (_badge.nativeObject && font) {
                     _badge.nativeObject.setTypeface(font.nativeObject);
                     if (font.size && TypeUtil.isNumeric(font.size)) {
                         _badge.nativeObject.setTextSize(font.size);
                     }
                 }
-            }
+            },
+            enumerable: true
         },
-        'move' : {
-            value :function(x,y){
-                _badge.x = (x < 0 ? x * -1 : x );
-                _badge.y = (y < 0 ? y : y );
+        'borderWidth': {
+            get: function() {
+                return _borderWidth;
+            },
+            set: function(borderWidth) {
+                if (typeof borderWidth !== 'number')
+                    return;
+
+                _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+                _badge.backgroundColor = null; //re-set Drawable
+            },
+            enumerable: true
+        },
+        'borderColor': {
+            get: function() {
+                return _borderColor;
+            },
+            set: function(borderColor) {
+                if (!borderColor instanceof Color)
+                    return;
+
+                _borderColor = borderColor;
+                _badge.backgroundColor = null; ; //re-set Drawable
+            },
+            enumerable: true
+        },
+        'move': {
+            value: function(x, y) {
+                _badge.x = (x < 0 ? x * -1 : x);
+                _badge.y = (y < 0 ? y : y);
             }
         }
     });
     if (_badge.nativeObject) {
         //sets default values
         if (!_badge.backgroundColor)
-            _badge.setBackgroundColor(Color.RED);
+            _badge.backgroundColor = Color.RED;
         if (!_badge.font)
-            _badge.setFont(Font.create("Arial", 11, Font.NORMAL));
+            _badge.font = Font.create("Arial", 11, Font.NORMAL);
         if (!_badge.textColor)
-            _badge.setTextColor(Color.WHITE);
+            _badge.textColor = Color.WHITE;
     }
 
     if (!_color) {
