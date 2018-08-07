@@ -40,7 +40,7 @@ const ImageView = extend(View)(
                 },
                 set: function(value) {
                     // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (value.constructor === Image) {
+                    if (value instanceof Image) {
                         var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
