@@ -109,11 +109,21 @@ function View(params) {
             get: function() {
                 return this._backgroundColor;
             },
-            set: function(value) {
-                this._backgroundColor = value;
+            set: function(color) {
+                this._backgroundColor = color;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
-                this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
+                if(color.isGradient) {
+                    this._gradientDrawable.setOrientation(color.direction);
+                    this._gradientDrawable.setColors(array(color.colors, "int"));
+                    // this.borderRadius = this.borderRadius;
+                    // this.borderWidth = this.borderWidth;
+                    // this.borderColor = this.borderColor;
+                    this.nativeObject.setBackground(this._gradientDrawable);
+                    
+                } else {
+                    this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
+                    this.nativeObject.setBackground(this._gradientDrawable);
+                }
             },
             enumerable: true,
             configurable: true
