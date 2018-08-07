@@ -51,11 +51,15 @@ function View(params) {
 
     this.android = {};
     // Background drawable properties
-    this._backgroundColor;
+    this._backgroundColor = Color.TRANSPARENT;
     this._borderColor = Color.BLACK;
     this._borderRadius = 0;
     this._borderWidth = 0;
     this._gradientDrawable = null;
+    
+    this._gradientDrawable = createGradientDrawable();
+    this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
+    this.nativeObject.setBackground(this._gradientDrawable);
     
     var _nativeObject = this.nativeObject;
     var _overScrollMode = 0;
@@ -136,8 +140,10 @@ function View(params) {
                 this._borderWidth = value;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
-                this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
+                if(borderWidthPx >= 0) {
+                    this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
+                    this.nativeObject.setBackground(this._gradientDrawable);
+                }
                 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);

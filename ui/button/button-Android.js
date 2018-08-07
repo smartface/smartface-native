@@ -263,7 +263,7 @@ const Button = extend(Label)(
                 this._borderColor = value;
                 this.setBorder();
             },
-            enumerable: true,
+            enumerable: true, 
             configurable: true
         },
         'borderWidth': {
