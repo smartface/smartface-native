@@ -47,8 +47,153 @@ const Button = extend(Label)(
             this.nativeObject = new NativeButton(AndroidConfig.activity);
         }
         
-        // TODO: If possible, move these methods to prototype of Button.
-        this.setBackgroundColor = function () {
+        _super(this);
+
+        Object.defineProperties(this, {
+            'backgroundColor': {
+                get: function() {
+                    return this._backgroundColor;
+                },
+                set: function(backgroundColor) {
+                    this._backgroundColor = backgroundColor;
+                    this.setBackgroundColor();
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'backgroundImage': {
+                get: function() {
+                    return this.__backgroundImages;
+                },
+                set: function(backgroundImage) {
+                    this.__backgroundImages = backgroundImage;
+                    this.setBackgroundImage();
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'borderWidth': {
+                get: function() {
+                    return this._borderWidth;
+                },
+                set: function(borderWidth) {
+                    this._borderWidth = borderWidth;
+                    var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+            
+                    this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
+                    this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
+                    this.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
+                    this.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderWidth);
+                    this.setBorder();
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'borderRadius': {
+                get: function() {
+                    return AndroidUnitConverter.pixelToDp(this._borderRadius);
+                },
+                set: function(borderRadius) {
+                    this._borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
+                    this.setBorder();
+                    if (this.__backgroundImages) {
+                        this.setBackgroundImage();
+                    }
+                    else {
+                        this.setBackgroundColor();
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'borderColor': {
+                get: function() {
+                    return this._borderColor;
+                },
+                set: function(value) {
+                    this._borderColor = value;
+                    this.setBorder();
+                },
+                enumerable: true,
+                configurable: true
+            }
+        });
+    
+        this.backgroundDrawable = new NativeGradientDrawable();
+        this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
+    
+        this._borderRadius = 0;
+        this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
+        this.rectF = new NativeRectF(0, 0, 0, 0);
+        this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
+        this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
+        this.borderShapeDrawable.getPaint().setColor(0);
+    
+        this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
+        this.__backgroundImages = null;
+        this._borderColor = Color.BLACK;
+        this._borderWidth = 0;
+        // YOGA PROPERTIES
+    
+        this.setBackgroundImage = function() {
+            var resources = AndroidConfig.activityResources;
+            const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
+            const Image = require("../image");
+            var bitmap;
+            if (this.__backgroundImages instanceof Image) {
+                bitmap = this.__backgroundImages.nativeObject.getBitmap();
+                // release(this.backgroundDrawable);
+                this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                this.backgroundDrawable.setCornerRadius(this._borderRadius);
+                this.setBackground(0);
+            }
+            else {
+                if (this.__backgroundImages) {
+                    var stateDrawable;
+                    var image;
+                    release(this.backgroundDrawable);
+                    this.backgroundDrawable = new NativeStateListDrawable();
+                    if (this.__backgroundImages.normal) {
+                        image = this.__backgroundImages.normal;
+                        bitmap = image.nativeObject.getBitmap();
+                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                        stateDrawable.setCornerRadius(this._borderRadius);
+                        this.backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
+                    }
+                    if (this.__backgroundImages.disabled) {
+                        image = this.__backgroundImages.disabled;
+                        bitmap = image.nativeObject.getBitmap();
+                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                        stateDrawable.setCornerRadius(this._borderRadius);
+                        this.backgroundDrawable.addState(View.State.STATE_DISABLED, stateDrawable);
+                    }
+                    if (this.__backgroundImages.selected) {
+                        image = this.__backgroundImages.selected;
+                        bitmap = image.nativeObject.getBitmap();
+                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                        stateDrawable.setCornerRadius(this._borderRadius);
+                        this.backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
+                    }
+                    if (this.__backgroundImages.pressed) {
+                        image = this.__backgroundImages.pressed;
+                        bitmap = image.nativeObject.getBitmap();
+                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                        stateDrawable.setCornerRadius(this._borderRadius);
+                        this.backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
+                    }
+                    if (this.__backgroundImages.focused) {
+                        image = this.__backgroundImages.focused;
+                        bitmap = image.nativeObject.getBitmap();
+                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
+                        stateDrawable.setCornerRadius(this._borderRadius);
+                        this.backgroundDrawable.addState(View.State.STATE_FOCUSED, stateDrawable);
+                    }
+                    this.setBackground(0);
+                }
+            }
+        };
+    
+        this.setBackgroundColor = function() {
             if (this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
                 // release(this.backgroundDrawable);
                 this.backgroundDrawable = this._backgroundColor.nativeObject;
@@ -123,6 +268,7 @@ const Button = extend(Label)(
             }
             this.setBackground(0);
         };
+    
         this.setBorder = function() {
             var dp_borderWidth = AndroidUnitConverter.dpToPixel(this.borderWidth);
             // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
@@ -146,6 +292,7 @@ const Button = extend(Label)(
                 this.setBackground(1);
             }
         };
+    
         this.setBackground = function(layerIndex) {
             var constantStateForCopy = this.nativeObject.getBackground().getConstantState();
             var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
@@ -167,159 +314,15 @@ const Button = extend(Label)(
         
             this.nativeObject.setBackground(layerDrawableNative);
         };
-        this.setBackgroundImage = function() {
-            var resources = AndroidConfig.activityResources;
-            const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
-            const Image = require("../image");
-            var bitmap;
-            if (this.__backgroundImages instanceof Image) {
-                bitmap = this.__backgroundImages.nativeObject.getBitmap();
-                // release(this.backgroundDrawable);
-                this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                this.backgroundDrawable.setCornerRadius(this._borderRadius);
-                this.setBackground(0);
-            }
-            else {
-                if (this.__backgroundImages) {
-                    var stateDrawable;
-                    var image;
-                    release(this.backgroundDrawable);
-                    this.backgroundDrawable = new NativeStateListDrawable();
-                    if (this.__backgroundImages.normal) {
-                        image = this.__backgroundImages.normal;
-                        bitmap = image.nativeObject.getBitmap();
-                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                        stateDrawable.setCornerRadius(this._borderRadius);
-                        this.backgroundDrawable.addState(View.State.STATE_NORMAL, stateDrawable);
-                    }
-                    if (this.__backgroundImages.disabled) {
-                        image = this.__backgroundImages.disabled;
-                        bitmap = image.nativeObject.getBitmap();
-                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                        stateDrawable.setCornerRadius(this._borderRadius);
-                        this.backgroundDrawable.addState(View.State.STATE_DISABLED, stateDrawable);
-                    }
-                    if (this.__backgroundImages.selected) {
-                        image = this.__backgroundImages.selected;
-                        bitmap = image.nativeObject.getBitmap();
-                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                        stateDrawable.setCornerRadius(this._borderRadius);
-                        this.backgroundDrawable.addState(View.State.STATE_SELECTED, stateDrawable);
-                    }
-                    if (this.__backgroundImages.pressed) {
-                        image = this.__backgroundImages.pressed;
-                        bitmap = image.nativeObject.getBitmap();
-                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                        stateDrawable.setCornerRadius(this._borderRadius);
-                        this.backgroundDrawable.addState(View.State.STATE_PRESSED, stateDrawable);
-                    }
-                    if (this.__backgroundImages.focused) {
-                        image = this.__backgroundImages.focused;
-                        bitmap = image.nativeObject.getBitmap();
-                        stateDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
-                        stateDrawable.setCornerRadius(this._borderRadius);
-                        this.backgroundDrawable.addState(View.State.STATE_FOCUSED, stateDrawable);
-                    }
-                    this.setBackground(0);
-                }
-            }
-        };
-        
-        _super(this);
-
-        this.backgroundDrawable = new NativeGradientDrawable();
-        this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
     
-        this._borderRadius = 0;
-        this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
-        this.rectF = new NativeRectF(0, 0, 0, 0);
-        this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
-        this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
-        this.borderShapeDrawable.getPaint().setColor(0);
-    
-        this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
-        this.__backgroundImages = null;
-        this._borderWidth = 0;
-        this._borderColor = Color.BLACK;
-        
-        // TODO: If possible, move these methods to prototype of Button.
-        Object.defineProperties(this, {
-        'backgroundColor': {
-            get: function() {
-                return this._backgroundColor;
-            },
-            set: function(value) {
-                this._backgroundColor = value;
-                this.setBackgroundColor();
-            },
-            enumerable: true,
-            configurable: true
-        },
-        'borderColor': {
-            get: function() {
-                return this._borderColor;
-            },
-            set: function(value) {
-                this._borderColor = value;
-                this.setBorder();
-            },
-            enumerable: true,
-            configurable: true
-        },
-        'borderWidth': {
-            get: function() {
-                return this._borderWidth;
-            },
-            set: function(value) {
-                this._borderWidth = value;
-                var dp_borderWidth = AndroidUnitConverter.dpToPixel(value);
-                
-                this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
-                this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
-                this.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
-                this.yogaNode.setBorder(YogaEdge.BOTTOM, dp_borderWidth);
-                this.setBorder();
-            },
-            enumerable: true,
-            configurable: true
-        },
-        'borderRadius': {
-            get: function() {
-                return AndroidUnitConverter.pixelToDp(this._borderRadius);
-            },
-            set: function(borderRadius) {
-                this._borderRadius = AndroidUnitConverter.dpToPixel(borderRadius);
-                this.setBorder();
-                if (this.__backgroundImages) {
-                    this.setBackgroundImage();
-                }
-                else {
-                    this.setBackgroundColor();
-                }
-            },
-            enumerable: true,
-            configurable: true
-        },
-        'backgroundImage': {
-            get: function() {
-                return this.__backgroundImages;
-            },
-            set: function(backgroundImage) {
-                this.__backgroundImages = backgroundImage;
-                this.setBackgroundImage();
-            },
-            enumerable: true,
-            configurable: true
-        }
-    });
 
         // Default settings
         if (!this.skipDefaults) {
+            this.nativeObject.setBackground(this.layerDrawable);
             this.nativeObject.setAllCaps(false); // enable lowercase texts
             this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
             this.textColor = Color.WHITE;
             this.padding = 0;
-            this.nativeObject.setBackground(this.layerDrawable);
         }
 
         // Assign parameters given in constructor
