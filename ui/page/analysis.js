@@ -267,12 +267,26 @@ Page.Orientation.AUTOLANDSCAPE = 12;
 Page.Orientation.AUTO = 15;
 
 /**
+ * iOS Specific Properties.
+ * @class UI.Page.iOS
+ */
+Page.iOS = {};
+
+/**
+ * @enum {Number} UI.Page.iOS.LargeTitleDisplayMode
+ * @static
+ *
+ * LargeTitleDisplayMode is an enum that defines title style of header bar.
+ *
+ */
+Page.iOS.LargeTitleDisplayMode = {};
+
+/**
  * Sets the previous page's header bar title display mode.
  * 
  * @property AUTOMATIC
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.AUTOMATIC = 0;
 
@@ -282,7 +296,6 @@ Page.iOS.LargeTitleDisplayMode.AUTOMATIC = 0;
  * @property ALWAYS
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
 
@@ -292,7 +305,6 @@ Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
  * @property NEVER
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.NEVER = 2;
 
