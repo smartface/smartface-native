@@ -8,12 +8,13 @@ function Color (params) {
     this.isGradient = params && params.isGradient;
 
     if (this.isGradient) {
-        var colors = [params.startColor, params.endColor];
+        var colors = [params.startColor.nativeObject, params.endColor.nativeObject];
         var index = 0;
         if(params.direction)
             index = params.direction;
         this.colors = colors;
-        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], array([params.startColor.nativeObject, params.endColor.nativeObject], "int"));
+        this.direction = GradientDrawableDirection[index];
+        this.nativeObject = new NativeGradientDrawable(GradientDrawableDirection[index], array(colors, "int"));
     } else {
         this.nativeObject = params.color;
     }
