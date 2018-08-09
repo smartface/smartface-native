@@ -56,11 +56,11 @@ function View(params) {
     this._borderRadius = 0;
     this._borderWidth = 0;
     this._gradientDrawable = null;
-    
+
     this._gradientDrawable = createGradientDrawable();
     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
     this.nativeObject.setBackground(this._gradientDrawable);
-    
+
     var _nativeObject = this.nativeObject;
     var _overScrollMode = 0;
     Object.defineProperties(this.android, {
@@ -84,7 +84,7 @@ function View(params) {
                 NativeViewCompat.setElevation(_nativeObject, value);
                 // These ines cause AND-3183 bug. Don't need to remove state 
                 // list animator to set elevation property.
-                
+
                 // if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                 //     _nativeObject.setStateListAnimator(null);
                 // }
@@ -104,6 +104,7 @@ function View(params) {
             configurable: true
         }
     });
+    var _didRemove;
     Object.defineProperties(this, {
         'backgroundColor': {
             get: function() {
@@ -112,15 +113,16 @@ function View(params) {
             set: function(color) {
                 this._backgroundColor = color;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
-                if(color.isGradient) {
+                if (color.isGradient) {
                     this._gradientDrawable.setOrientation(color.direction);
                     this._gradientDrawable.setColors(array(color.colors, "int"));
                     // this.borderRadius = this.borderRadius;
                     // this.borderWidth = this.borderWidth;
                     // this.borderColor = this.borderColor;
                     this.nativeObject.setBackground(this._gradientDrawable);
-                    
-                } else {
+
+                }
+                else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                     this.nativeObject.setBackground(this._gradientDrawable);
                 }
@@ -150,11 +152,11 @@ function View(params) {
                 this._borderWidth = value;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
-                if(borderWidthPx >= 0) {
+                if (borderWidthPx >= 0) {
                     this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
                     this.nativeObject.setBackground(this._gradientDrawable);
                 }
-                
+
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
@@ -176,9 +178,18 @@ function View(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'didRemove': {
+            get: function() {
+                return _didRemove;
+            },
+            set: function(callback) {
+                if (TypeUtil.isFunction(callback))
+                    _didRemove = callback;
+            }
         }
     });
-    
+
     this.didSetTouchHandler = false;
     this.isCloned = false;
     this._touchEnabled = true;
@@ -685,7 +696,6 @@ View.prototype.setTouchHandlers = function() {
     }));
     this.didSetTouchHandler = true;
 };
-
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
 function createGradientDrawable() {

@@ -16,7 +16,7 @@ const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 
 // const NativeFragment = requireClass("android.support.v4.app.Fragment");
-const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
+const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -60,7 +60,7 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    
+
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -174,6 +174,9 @@ function Page(params) {
             else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
+        },
+        onDestroy: function() {
+            _onUnload && _onUnload();
         }
     };
     self.nativeObject = new SFFragment();
@@ -247,6 +250,17 @@ function Page(params) {
                 _orientation = Page.Orientation.PORTRAIT;
             }
             activity.setRequestedOrientation(OrientationDictionary[_orientation]);
+        },
+        enumerable: true
+    });
+    var _onUnload;
+    Object.defineProperty(this, 'onUnload', {
+        get: function() {
+            return _onUnload;
+        },
+        set: function(callback) {
+            if (TypeUtil.isFunction(callback))
+                _onUnload = callback;
         },
         enumerable: true
     });
