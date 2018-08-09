@@ -136,8 +136,14 @@ function View(params) {
                 this._borderColor = value;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
+                !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
                 this.nativeObject.setBackground(this._gradientDrawable);
+                
+                this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
+                this.yogaNode.setBorder(YogaEdge.BOTTOM, borderWidthPx);
             },
             enumerable: true,
             configurable: true
@@ -150,10 +156,10 @@ function View(params) {
                 this._borderWidth = value;
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
-                if(borderWidthPx >= 0) {
-                    this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                    this.nativeObject.setBackground(this._gradientDrawable);
-                }
+                
+                !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
+                this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
+                this.nativeObject.setBackground(this._gradientDrawable);
                 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -711,5 +717,6 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_focused,
     NativeR.attr.state_enabled,
 ], "int");
+
 
 module.exports = View;
