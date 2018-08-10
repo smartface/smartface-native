@@ -57,17 +57,17 @@ const ViewGroup = extend(View)(
         }
 
         self.onViewAddedHandler = function(e){
-            if (typeof self.onViewAdded === "function"){
+            if (typeof self.onChildViewAdded === "function"){
                 var view = self.childs[e.subview.uuid];
-                self.onViewAdded(view);
+                self.onChildViewAdded(view);
             }
         }
         self.nativeObject.didAddSubview = self.onViewAddedHandler;
         
         self.onViewRemovedHandler = function(e){
-            if (typeof self.onViewRemoved === "function"){
+            if (typeof self.onChildViewRemoved === "function"){
                 var view = self.childs[e.subview.uuid];
-                self.onViewRemoved(view);
+                self.onChildViewRemoved(view);
             }
         }
         self.nativeObject.willRemoveSubview = self.onViewRemovedHandler;
