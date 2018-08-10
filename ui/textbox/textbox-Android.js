@@ -77,7 +77,8 @@ const TextBox = extend(TextView)(
                     if (keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
                     }
-                    // Below code already exists in SFEditText 
+                    // TODO: Below code moved to SFEditText class implementation. 
+                    // But, I am not sure this implementation doesn't causes unexpected touch handling.
                     // return false; 
                 }
             };
