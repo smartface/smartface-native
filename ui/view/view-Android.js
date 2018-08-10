@@ -104,7 +104,6 @@ function View(params) {
             configurable: true
         }
     });
-    var _didRemove;
     Object.defineProperties(this, {
         'backgroundColor': {
             get: function() {
@@ -178,15 +177,6 @@ function View(params) {
             },
             enumerable: true,
             configurable: true
-        },
-        'didRemove': {
-            get: function() {
-                return _didRemove;
-            },
-            set: function(callback) {
-                if (TypeUtil.isFunction(callback))
-                    _didRemove = callback;
-            }
         }
     });
 
