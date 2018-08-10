@@ -210,8 +210,8 @@ const TextView = extend(Label)(
                     }
                 };
                 
-                const NativeClickableSpan = requireClass("io.smartface.android.sfcore.ui.textview.SFClickableSpan");
-                var clickSpan = new NativeClickableSpan(clickableSpanOverrideMethods);
+                const SFClickableSpan = requireClass("io.smartface.android.sfcore.ui.textview.SFClickableSpan");
+                var clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
                 self.myBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             // Foreground Color 
@@ -232,8 +232,8 @@ const TextView = extend(Label)(
                 }
             };
             
-            const NativeTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
-            var typeSpan = new NativeTypefaceSpan("SF", typeSpanOverrideMethods);
+            const SFTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
+            var typeSpan = new SFTypefaceSpan("SF", typeSpanOverrideMethods);
             self.myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
             // --------------------------------------------------------------------------------
