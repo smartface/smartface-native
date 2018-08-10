@@ -41,7 +41,6 @@ const ViewGroup = extend(View)(
                         delete this.childViews[view.id];
                     }
                     view.parent = undefined;
-                    view.didRemove && view.didRemove();
                 },
                 enumerable: true
             },
@@ -52,7 +51,6 @@ const ViewGroup = extend(View)(
                     var ids = Object.keys(this.childViews);
                     for (var i = 0; i < ids.length; i++) {
                         this.childViews[ids[i]].parent = undefined;
-                        this.childViews[ids[i]].didRemove && this.childViews[ids[i]].didRemove();
                     }
                     this.childViews = {};
                 },
@@ -70,7 +68,7 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
-            'onViewAdded': {
+            'onChildViewAdded': {
                 get: function() {
                     return this._onViewAdded;
                 },
@@ -82,7 +80,7 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
-            'onViewRemoved': {
+            'onChildViewRemoved': {
                 get: function() {
                     return this._onViewRemoved;
                 },
@@ -108,10 +106,10 @@ const ViewGroup = extend(View)(
 function setHierarchyChangeListener(object) {
     object.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
         'onChildViewAdded': function(parent, child) {
-            this.onViewAdded && this.onViewAdded();
+            this.onChildViewAdded && this.onChildViewAdded(this.childViews[child.getId()]);
         }.bind(object),
         'onChildViewRemoved': function(parent, child) {
-            this.onViewRemoved && this.onViewRemoved();
+            this.onChildViewRemoved && this.onChildViewRemoved(this.childViews[child.getId()]);
         }.bind(object),
     }));
 
