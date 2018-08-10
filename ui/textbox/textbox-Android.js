@@ -9,7 +9,6 @@ const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
 
-const NativeEditText = requireClass("android.widget.EditText");
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
 const NativeTextView = requireClass("android.widget.TextView");
@@ -70,17 +69,20 @@ const TextBox = extend(TextView)(
         var self = this;
         var activity = AndroidConfig.activity;
         if (!self.nativeObject) {
-         
-            self.nativeObject = NativeEditText.extend("SFEditText", {
-                'onKeyPreIme': function(keyCode, keyEvent){ //AND-3123: Due to the issue, hardware button listener added.
-                    
+            const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
+            //AND-3123: Due to the issue, hardware button listener added.
+            var callback = {
+                'onKeyPreIme': function(keyCode, keyEvent) { 
                     // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
                     if (keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
                     }
-                    return false;
+                    // TODO: Below code moved to SFEditText class implementation. 
+                    // But, I am not sure this implementation doesn't causes unexpected touch handling.
+                    // return false; 
                 }
-            },[activity] )
+            };
+            self.nativeObject = new SFEditText(activity, callback);
         }
         _super(this);
 
@@ -387,7 +389,7 @@ const TextBox = extend(TextView)(
                     return false;
                 }
             }));
-            
+
             // AND-3223: instead of setOnKeyListener , onKeyPreIme is implemented.  
             // self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
             //     onKey: function(view, keyCode, keyEvent) {
