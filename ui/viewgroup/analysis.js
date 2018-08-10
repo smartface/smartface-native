@@ -85,23 +85,21 @@ ViewGroup.prototype.findChildById = function(id){};
 /**
  * This event is called when a view added to this view's hierarchy.
  *
- * @event onChildViewAdded
+ * @event onViewAdded
  * @android
  * @ios
- * @param {UI.View} view The subview that will be added.
  * @since 1.1.8
  */
-ViewGroup.prototype.onChildViewAdded = function(view) {};
+ViewGroup.prototype.onViewAdded = function() {};
 
 /**
  * This event is called when a view removed from this view's hierarchy.
  *
- * @event onChildViewRemoved
+ * @event onViewRemoved
  * @android
  * @ios
- * @param {UI.View} view The subview that will be removed.
  * @since 1.1.8
  */
-ViewGroup.prototype.onChildViewRemoved = function(view) {};
+ViewGroup.prototype.onViewRemoved = function() {};
 
 module.exports = ViewGroup;

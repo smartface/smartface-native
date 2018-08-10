@@ -93,15 +93,6 @@ Page.prototype.onShow = function (parameters){};
  */
 Page.prototype.onHide = function (){};
 
-/**
- * This event is called when page is removed from router hierarchy.
- *
- * @event onUnload
- * @android
- * @ios
- */
-Page.prototype.onUnload = function (){};
-
 Page.prototype.android = {};
 /**
  * This event will be triggered when user clicks back button on the Device.
