@@ -67,6 +67,7 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
 
 SFApplication.android = {};
 SFApplication.Android = {};
+SFApplication.Android.KeyboardMode = {};
 SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
 SFApplication.android.shouldShowRequestPermissionRationale = function(){};
