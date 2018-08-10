@@ -45,7 +45,8 @@ const ListView = extend(View)(
         _super(this);
 
         var _listViewItems = {};
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
+        const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
+        var callbacks = {
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
@@ -110,7 +111,8 @@ const ListView = extend(View)(
                     return _onRowType(position);
                 return 0;
             }
-        }, null);
+        };
+        var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
         var _onScroll;
         var _contentOffset = { x: 0, y: 0 };
