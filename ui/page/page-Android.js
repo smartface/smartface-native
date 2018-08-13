@@ -115,7 +115,7 @@ function Page(params) {
                 }
                 else {
                     const Router = require("../router");
-                    Router.goBack(null, true);
+                    Router.goBack(null, this.__pendingParameters);
                 }
             }
             else if (_headerBarItems[itemId]) {
