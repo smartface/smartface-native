@@ -2,7 +2,6 @@
 const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
 const FlexLayout            = require('../flexlayout');
-const NativeRecyclerView    = requireClass("android.support.v7.widget.RecyclerView");
 const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
 
 const GridViewItem = extend(FlexLayout)(
@@ -14,8 +13,8 @@ const GridViewItem = extend(FlexLayout)(
                 this.nativeInner = params.nativeInner;
             }
             else{
-                this.nativeInner = NativeRecyclerView.ViewHolder.extend("SFViewHolder",{},[this.nativeObject]);
-                // this.nativeInner.itemView = this.nativeObject;
+                const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
+                this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
         }
 

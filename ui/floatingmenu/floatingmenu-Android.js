@@ -7,7 +7,6 @@ const NativeYogaNode         = requireClass('com.facebook.yoga.YogaNode');
 const NativeFloatingButton   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
 const NativeOnOpenListener   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
 const NativeOnCloseListener  = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
-const NativeSpeedDialAdapter = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter");
 const NativeMenuItem         = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
 const Color                  = require("../color");
 const AndroidConfig          = require("../../util/Android/androidconfig");
@@ -21,8 +20,9 @@ function FloatingMenu(params) {
     var _callbackClick;
     var _callbackOpen;
     var _callbackClose;
-
-    var menuAdapter = NativeSpeedDialAdapter.extend("FABMenuAdapter", {
+    
+    const SFSpeedDialAdapter = requireClass("io.smartface.android.sfcore.ui.floatingmenu.SFSpeedDialAdapter");
+    var overrideMethods = {
         getCount: function() {
             return _items.length;
         },
@@ -59,7 +59,8 @@ function FloatingMenu(params) {
         rotateFab: function() {
             return _items.length > 0 && _rotateEnabled;
         }
-    }, null);
+    };
+    var menuAdapter = new SFSpeedDialAdapter(overrideMethods);
     
     var clickListener = NativeClickListener.implement({
         onClick: function(view) {

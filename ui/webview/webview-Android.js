@@ -15,8 +15,6 @@ const ACTION_DOWN = 0;
 // MotionEvent.ACTION_MOVE
 const ACTION_MOVE = 2;
 
-
-const NativeWebChromeClient = requireClass('android.webkit.WebChromeClient');
 const NativeSimpleDateFormat = requireClass('java.text.SimpleDateFormat');
 const NativeDate = requireClass('java.util.Date');
 const NativeEnvironment = requireClass('android.os.Environment');
@@ -301,161 +299,159 @@ const WebView = extend(View)(
             configurable: true
         });
 
-        if (!this.skipDefaults) {
-            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-                overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                    var uri = request.getUrl();
-                    var url = uri.toString();
-                    var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
-                    if (!callbackValue)
-                        return true;
-                    return overrideURLChange(url, _canOpenLinkInside);
+        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
+            overrideMethods.shouldOverrideUrlLoading = function(view, request) {
+                var uri = request.getUrl();
+                var url = uri.toString();
+                var callbackValue = true;
+                _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
+                if (!callbackValue)
+                    return true;
+                return overrideURLChange(url, _canOpenLinkInside);
 
-                };
+            };
+        }
+        else {
+            overrideMethods.shouldOverrideUrlLoading = function(view, url) {
+                var callbackValue = true;
+                _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
+                if (!callbackValue)
+                    return true;
+                return overrideURLChange(url, _canOpenLinkInside);
+            };
+        }
+
+        // SDK version check will not work because implement engine does not supports types
+        overrideMethods.onReceivedError = function() {
+            if (arguments.count === 3) {
+                /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
+                 * arguments[0] = webView
+                 * arguments[1] = webResourceRequest
+                 * arguments[2] = webResourceError
+                 */
+                const NativeString = requireClass('java.lang.String');
+                var uri = arguments[1].getUrl();
+                var url = NativeString.valueOf(uri);
+                var code = arguments[2].getErrorCode();
+                var message = arguments[2].getDescription();
+
+                _onError && _onError({ message: message, code: code, url: url });
             }
             else {
-                overrideMethods.shouldOverrideUrlLoading = function(view, url) {
-                    var callbackValue = true;
-                    _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
-                    if (!callbackValue)
-                        return true;
-                    return overrideURLChange(url, _canOpenLinkInside);
-                };
+                /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
+                 * arguments[0] = webView, 
+                 * arguments[1] = errorCode, 
+                 * arguments[2] = description, 
+                 * arguments[3] = failingUrl, 
+                 */
+                _onError && _onError({ message: arguments[2], code: arguments[1], url: arguments[3] });
             }
+        };
 
-            // SDK version check will not work because implement engine does not supports types
-            overrideMethods.onReceivedError = function() {
-                if (arguments.count === 3) {
-                    /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                     * arguments[0] = webView
-                     * arguments[1] = webResourceRequest
-                     * arguments[2] = webResourceError
-                     */
-                    const NativeString = requireClass('java.lang.String');
-                    var uri = arguments[1].getUrl();
-                    var url = NativeString.valueOf(uri);
-                    var code = arguments[2].getErrorCode();
-                    var message = arguments[2].getDescription();
+        const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
+        var nativeWebClient = new SFWebViewClient(overrideMethods);
+        this.nativeObject.setWebViewClient(nativeWebClient);
+        this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
+        this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
+        var settings = this.nativeObject.getSettings();
+        /** @todo causes exception 
+         * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
+         */
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setLoadsImagesAutomatically(true);
 
-                    _onError && _onError({ message: message, code: code, url: url });
-                }
-                else {
-                    /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                     * arguments[0] = webView, 
-                     * arguments[1] = errorCode, 
-                     * arguments[2] = description, 
-                     * arguments[3] = failingUrl, 
-                     */
-                    _onError && _onError({ message: arguments[2], code: arguments[1], url: arguments[3] });
-                }
-            };
+        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+            settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
+        }
 
-            const NativeWebClient = requireClass('android.webkit.WebViewClient');
-            var nativeWebClient = NativeWebClient.extend("SFWebClient", overrideMethods, null);
-            this.nativeObject.setWebViewClient(nativeWebClient);
-            this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
-            this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
-            var settings = this.nativeObject.getSettings();
-            /** @todo causes exception 
-             * Error: Attempt to invoke virtual method 'boolean io.smartface.ExposingEngine.JsClass.isRejectedField(java.lang.String)' on a null object reference
-             */
-            settings.setJavaScriptEnabled(true);
-            settings.setDomStorageEnabled(true);
-            settings.setUseWideViewPort(true);
-            settings.setLoadWithOverviewMode(true);
-            settings.setLoadsImagesAutomatically(true);
-
-            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-                settings.setMixedContentMode(0); // android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW = 0
-            }
-
-            this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
-                onTouch: function(view, event) {
-                    if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
-                        if (event.getAction() === ACTION_UP) {
-                            _onTouchEnded && _onTouchEnded();
-                        }
-                        else if (event.getAction() === ACTION_DOWN) {
-                            _onTouch && _onTouch();
-                        }
+        this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+            onTouch: function(view, event) {
+                if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
+                    if (event.getAction() === ACTION_UP) {
+                        _onTouchEnded && _onTouchEnded();
                     }
-                    if (!this.touchEnabled)
-                        return true;
-                    return (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
-                }.bind(this)
-            }));
+                    else if (event.getAction() === ACTION_DOWN) {
+                        _onTouch && _onTouch();
+                    }
+                }
+                if (!this.touchEnabled)
+                    return true;
+                return (event.getAction() === ACTION_MOVE) && (!this.scrollEnabled);
+            }.bind(this)
+        }));
 
-            var overrideMethodsWebChrome = {
-                openFileChooser: function(uploadMsg, acceptType, capture) {
-                    if (uploadMsg !== undefined && acceptType !== undefined && capture === undefined) {
-                        mUploadMessage = uploadMsg;
-                        var i = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-                        i.addCategory(NativeIntent.CATEGORY_OPENABLE);
-                        i.setType("*/*");
-                        _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i, "File Browser"),
-                            WebView.RESULT_CODE_ICE_CREAM);
+        var overrideMethodsWebChrome = {
+            //For Android5.0+
+            onShowFileChooser: function(webView, filePathCallback, fileChooserParams) {
+                if (mFilePathCallback != null) {
+                    mFilePathCallback.onReceiveValue(null);
+                }
+                mFilePathCallback = filePathCallback;
+
+                var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+                    // Create the File where the photo should go
+                    var photoFile = null;
+                    photoFile = createImageFile();
+                    takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
+
+                    // Continue only if the File was successfully created
+                    if (photoFile != null) {
+                        mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
+                        takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
+                            NativeUri.fromFile(photoFile));
                     }
                     else {
-                        mUploadMessage = uploadMsg;
-                        var i2 = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-                        i2.addCategory(NativeIntent.CATEGORY_OPENABLE);
-                        i2.setType("image/*");
-                        _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i2, "File Browser"),
-                            WebView.RESULT_CODE_ICE_CREAM);
+                        takePictureIntent = null;
                     }
-                },
-                //For Android5.0+
-                onShowFileChooser: function(webView, filePathCallback, fileChooserParams) {
-                    if (mFilePathCallback != null) {
-                        mFilePathCallback.onReceiveValue(null);
-                    }
-                    mFilePathCallback = filePathCallback;
-
-                    var takePictureIntent = new NativeIntent(NativeMediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                        // Create the File where the photo should go
-                        var photoFile = null;
-                        photoFile = createImageFile();
-                        takePictureIntent.putExtra("PhotoPath", mCameraPhotoPath);
-
-                        // Continue only if the File was successfully created
-                        if (photoFile != null) {
-                            mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
-                            takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
-                                NativeUri.fromFile(photoFile));
-                        }
-                        else {
-                            takePictureIntent = null;
-                        }
-                    }
-
-                    var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-                    contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
-                    contentSelectionIntent.setType("image/*");
-
-                    var intentArray;
-                    var tempArr = [];
-                    if (takePictureIntent != null) {
-                        tempArr.push(takePictureIntent);
-                    }
-                    intentArray = array(tempArr, "android.content.Intent");
-
-                    var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
-                    chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
-                    chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
-                    chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
-
-                    _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
-                    return true;
-
                 }
-            };
 
-            var nativeWebChromeClient = NativeWebChromeClient.extend("SFWebChromeClient", overrideMethodsWebChrome, null);
-            this.nativeObject.setWebChromeClient(nativeWebChromeClient);
+                var contentSelectionIntent = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+                contentSelectionIntent.addCategory(NativeIntent.CATEGORY_OPENABLE);
+                contentSelectionIntent.setType("image/*");
 
-        }
+                var intentArray;
+                var tempArr = [];
+                if (takePictureIntent != null) {
+                    tempArr.push(takePictureIntent);
+                }
+                intentArray = array(tempArr, "android.content.Intent");
+
+                var chooserIntent = new NativeIntent(NativeIntent.ACTION_CHOOSER);
+                chooserIntent.putExtra(NativeIntent.EXTRA_INTENT, contentSelectionIntent);
+                chooserIntent.putExtra(NativeIntent.EXTRA_TITLE, "Image Chooser");
+                chooserIntent.putExtra(NativeIntent.EXTRA_INITIAL_INTENTS, intentArray);
+
+                _page.nativeObject.startActivityForResult(chooserIntent, WebView.REQUEST_CODE_LOLIPOP);
+                return true;
+
+            }
+            // openFileChooser: function(uploadMsg, acceptType, capture) {
+            //     if (uploadMsg !== undefined && acceptType !== undefined && capture === undefined) {
+            //         mUploadMessage = uploadMsg;
+            //         var i = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+            //         i.addCategory(NativeIntent.CATEGORY_OPENABLE);
+            //         i.setType("*/*");
+            //         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i, "File Browser"),
+            //             WebView.RESULT_CODE_ICE_CREAM);
+            //     }
+            //     else {
+            //         mUploadMessage = uploadMsg;
+            //         var i2 = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
+            //         i2.addCategory(NativeIntent.CATEGORY_OPENABLE);
+            //         i2.setType("image/*");
+            //         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i2, "File Browser"),
+            //             WebView.RESULT_CODE_ICE_CREAM);
+            //     }
+            // }
+        };
+        const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
+        var nativeWebChromeClient = new SFWebChromeClient(overrideMethodsWebChrome);
+        this.nativeObject.setWebChromeClient(nativeWebChromeClient);
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
