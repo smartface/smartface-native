@@ -44,8 +44,6 @@ const GridView = extend(View)(
         _super(this);
 
         var _gridViewItems = {};
-        var t0 = new Date();
-        
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
         var callbacks = {
             onCreateViewHolder: function(parent, viewType) {
@@ -161,7 +159,6 @@ const GridView = extend(View)(
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
-        console.log("NativeRecyclerView.Adapter.extend took: " + (new Date() - t0));
 
         var _onScroll;
         var _onItemCreate;
