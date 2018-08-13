@@ -1,7 +1,6 @@
 /*globals requireClass*/
 const OkHttpRequest     = requireClass("okhttp3.Request");
 const OkHttpClient      = requireClass("okhttp3.OkHttpClient");
-const WebSocketListener = requireClass("okhttp3.WebSocketListener");
 const ByteString        = requireClass("okio.ByteString");
 
 const Blob = require("../../blob");
@@ -102,7 +101,8 @@ function WebSocket(params) {
     }
     
     function createWebSocketListener() {
-        _listener = WebSocketListener.extend("SFWebSocketListener", {
+        var t0 = new Date();
+        var overrideMethods = {
             onOpen: function(webSocket, response) {
                 _onOpenCallback && runOnUiThread(_onOpenCallback);
             },
@@ -126,7 +126,11 @@ function WebSocket(params) {
                     var reason = throwable.getMessage();
                 _onFailureCallback && runOnUiThread(_onFailureCallback, { code: code, reason: reason });
             }
-        }, null);
+        };
+        
+        const SFWebSocketListener = requireClass("io.smartface.android.sfcore.net.SFWebSocketListener");
+        _listener = new SFWebSocketListener(overrideMethods);
+        console.log("WebSocketListener.extend took: " + (new Date() - t0));
     }
 
     // Assign parameters given in constructor
