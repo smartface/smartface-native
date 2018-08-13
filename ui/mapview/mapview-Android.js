@@ -628,16 +628,15 @@ const MapView = extend(View)(
         function Cluster(params) {
 
             function setDefaultClusterRenderer() {
-                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
+                const SFDefaultClusterRendererCustom = requireClass('io.smartface.android.sfcore.ui.mapview.SFDefaultClusterRendererCustom');
 
-                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
-                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
-                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
-                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
-                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
-
-                var _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
-
+                SFDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
+                SFDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
+                SFDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
+                SFDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
+                SFDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
+        
+                var callbacks = {
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
                         if (_clusterItemImage) {
                             var iconBitmap = _clusterItemImage.nativeObject.getBitmap();
@@ -656,10 +655,9 @@ const MapView = extend(View)(
                     getColor: function(cluster) {
                         return self.clusterFillColor && self.clusterFillColor;
                     }
-                }, [spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager]);
-
+                };
+                var _nativeDefaultClusterRenderer = new SFDefaultClusterRendererCustom(callbacks, spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager);
                 return _nativeDefaultClusterRenderer;
-
             }
 
             Object.defineProperty(this, 'setDefaultClusterRenderer', {
