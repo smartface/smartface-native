@@ -101,7 +101,6 @@ function WebSocket(params) {
     }
     
     function createWebSocketListener() {
-        var t0 = new Date();
         var overrideMethods = {
             onOpen: function(webSocket, response) {
                 _onOpenCallback && runOnUiThread(_onOpenCallback);
@@ -130,7 +129,6 @@ function WebSocket(params) {
         
         const SFWebSocketListener = requireClass("io.smartface.android.sfcore.net.SFWebSocketListener");
         _listener = new SFWebSocketListener(overrideMethods);
-        console.log("WebSocketListener.extend took: " + (new Date() - t0));
     }
 
     // Assign parameters given in constructor

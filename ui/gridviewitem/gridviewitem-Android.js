@@ -13,11 +13,8 @@ const GridViewItem = extend(FlexLayout)(
                 this.nativeInner = params.nativeInner;
             }
             else{
-                var t0 = new Date();
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
-                console.log("NativeRecyclerView.ViewHolder.extend took: " + (new Date() - t0));
-                // this.nativeInner.itemView = this.nativeObject;
             }
         }
 

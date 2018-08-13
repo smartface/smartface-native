@@ -348,10 +348,8 @@ const WebView = extend(View)(
             }
         };
 
-        var t0 = new Date();
         const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
         var nativeWebClient = new SFWebViewClient(overrideMethods);
-        console.log("NativeWebClient.extend took: " + (new Date() - t0));
         this.nativeObject.setWebViewClient(nativeWebClient);
         this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
         this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
@@ -450,11 +448,9 @@ const WebView = extend(View)(
             //     }
             // }
         };
-        var t0 = new Date();
         const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
         var nativeWebChromeClient = new SFWebChromeClient(overrideMethodsWebChrome);
         this.nativeObject.setWebChromeClient(nativeWebChromeClient);
-        console.log("NativeWebChromeClient.extend took: " + (new Date() - t0));
 
         // Assign parameters given in constructor
         if (params) {

@@ -356,7 +356,6 @@ const GridView = extend(View)(
                 configurable: true
             }
         });
-        var t1 = new Date();
         const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
         var overrideMethods = {
             onScrolled: function(recyclerView, dx, dy) {
@@ -365,7 +364,6 @@ const GridView = extend(View)(
             onScrollStateChanged: function(recyclerView, newState) {},
         };
         var onScrollListener = new SFOnScrollListener(overrideMethods);
-            console.log("NativeRecyclerView.OnScrollListener.extend took: " + ( new Date() - t0));
 
         // android-only properties
         Object.defineProperty(this.android, 'onItemLongSelected', {

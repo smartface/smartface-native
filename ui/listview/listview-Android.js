@@ -373,7 +373,6 @@ const ListView = extend(View)(
         }
 
         function createAndSetScrollListener() {
-            var t0 = new Date();
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
@@ -389,7 +388,6 @@ const ListView = extend(View)(
                 onScrollStateChanged: function(recyclerView, newState) {},
             };
             _onScrollListener = new SFOnScrollListener(overrideMethods);
-            console.log("NativeRecyclerView.OnScrollListener.extend took: " + ( new Date() - t0));
             self.nativeInner.setOnScrollListener(_onScrollListener);
         }
 

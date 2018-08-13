@@ -21,8 +21,6 @@ function FloatingMenu(params) {
     var _callbackOpen;
     var _callbackClose;
     
-    var t0 = new Date();
-    
     const SFSpeedDialAdapter = requireClass("io.smartface.android.sfcore.ui.floatingmenu.SFSpeedDialAdapter");
     var overrideMethods = {
         getCount: function() {
@@ -63,7 +61,6 @@ function FloatingMenu(params) {
         }
     };
     var menuAdapter = new SFSpeedDialAdapter(overrideMethods);
-    console.log("NativeSpeedDialAdapter.extend took: " + (new Date() - t0));
     
     var clickListener = NativeClickListener.implement({
         onClick: function(view) {

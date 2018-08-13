@@ -125,7 +125,6 @@ Network.createNotifier = function(params) {
     if (!self.nativeObject) {
         var nativeConnectionFilter = new NativeIntentFilter();
         nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
-        var t0 = new Date();
         var callbacks = {
             onReceive: function(context, intent) {
                 // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
@@ -134,7 +133,6 @@ Network.createNotifier = function(params) {
         };
         const SFBroadcastReceiver = requireClass("io.smartface.android.sfcore.device.network.SFBroadcastReceiver");
         self.nativeObject = new SFBroadcastReceiver(callbacks);
-        console.log("NativeBroadcastReceiver extend took: " + (new Date() - t0));
     }
 
     var isReceiverCreated = false;
