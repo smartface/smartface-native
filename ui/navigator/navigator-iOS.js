@@ -20,6 +20,15 @@ function NavigatorViewModel(params) {
         set: function(navigatorView) {
             if (typeof navigatorView === 'object') {
                 _navigatorView = navigatorView;
+                
+                //Invalidate
+                self.ios.prefersLargeTitles = _prefersLargeTitles;
+                if (typeof _backIndicatorImage !== "undefined") {
+                    self.ios.backIndicatorImage = _backIndicatorImage;
+                }
+                if (typeof _backIndicatorTransitionMaskImage !== "undefined") {
+                    self.ios.backIndicatorTransitionMaskImage = _backIndicatorTransitionMaskImage;
+                }
             }
         },
         enumerable: true
@@ -46,6 +55,40 @@ function NavigatorViewModel(params) {
             }
         },
         enumerable: true
+    });
+    
+    var _backIndicatorImage;
+    Object.defineProperty(self.ios, 'backIndicatorImage', {
+        get: function() {
+            return _backIndicatorImage;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                if (self.view) {
+                    self.view.setBackIndicatorImage(value);
+                }
+                _backIndicatorImage = value;
+                // General use
+                self.ios.backIndicatorTransitionMaskImage = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    var _backIndicatorTransitionMaskImage;
+    Object.defineProperty(self.ios, 'backIndicatorTransitionMaskImage', {
+        get: function() {
+            return _backIndicatorTransitionMaskImage;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                if (self.view) {
+                    self.view.setBackIndicatorTransitionMaskImage(value);
+                }
+                _backIndicatorTransitionMaskImage = value;
+            }
+        },
+        enumerable: true,configurable : true
     });
     
     // Functions
@@ -230,6 +273,14 @@ function NavigatorView(params) {
         if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
             self.nativeObject.navigationBar.prefersLargeTitles = prefersLargeTitles;
         }
+    };
+    
+    self.setBackIndicatorImage = function (backIndicatorImage) {
+        self.nativeObject.navigationBar.backIndicatorImage = backIndicatorImage.nativeObject;
+    };
+    
+    self.setBackIndicatorTransitionMaskImage = function (backIndicatorTransitionMaskImage) {
+        self.nativeObject.navigationBar.backIndicatorTransitionMaskImage = backIndicatorTransitionMaskImage.nativeObject;
     };
     
     // It shouldnt create with rootPage

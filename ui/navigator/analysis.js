@@ -60,3 +60,13 @@ Navigator.prototype.go = function(path) {};
  * @since 0.1
  */
 Navigator.prototype.ios.prefersLargeTitles = false;
+
+/**
+ * Gets/sets the image shown beside the back button.
+ *
+ * This property will work only for iOS.
+ * @property {UI.Image} backIndicatorImage
+ * @ios
+ * @since 3.1.1
+ */
+Navigator.prototype.ios.backIndicatorImage = null;

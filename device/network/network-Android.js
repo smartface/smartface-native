@@ -119,20 +119,20 @@ Object.defineProperties(Network, {
 Network.createNotifier = function(params) {
     const NativeIntentFilter = requireClass("android.content.IntentFilter");
     const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
-    const NativeBroadcastReceiver = requireClass("android.content.BroadcastReceiver");
 
     const self = this;
 
     if (!self.nativeObject) {
         var nativeConnectionFilter = new NativeIntentFilter();
         nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
-
-        self.nativeObject = NativeBroadcastReceiver.extend('SFBroadcastReceiver', {
+        var callbacks = {
             onReceive: function(context, intent) {
                 // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
                 self.connectionTypeChanged && self.connectionTypeChanged(Network.connectionType);
             }
-        }, null);
+        };
+        const SFBroadcastReceiver = requireClass("io.smartface.android.sfcore.device.network.SFBroadcastReceiver");
+        self.nativeObject = new SFBroadcastReceiver(callbacks);
     }
 
     var isReceiverCreated = false;
