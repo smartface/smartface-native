@@ -22,6 +22,8 @@ const ViewGroup = extend(View)(
     function(viewGroupPrototype) {
         viewGroupPrototype._onViewAdded = null;
         viewGroupPrototype._onViewRemoved = null;
+        viewGroupPrototype._onChildViewAdded = null;
+        viewGroupPrototype._onChildViewRemoved = null;
         Object.defineProperties(viewGroupPrototype, {
             'addChild': {
                 value: function(view) {
@@ -68,7 +70,7 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
-            'onChildViewAdded': {
+            'onViewAdded': { //ToDo: Remove when event emitter being implemented. 
                 get: function() {
                     return this._onViewAdded;
                 },
@@ -80,13 +82,37 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
-            'onChildViewRemoved': {
+            'onChildViewAdded': {
+                get: function() {
+                    return this._onChildViewAdded;
+                },
+                set: function(callback) {
+                    if (TypeUtil.isFunction(callback)) {
+                        this._onChildViewAdded = callback;
+                        if (!this.didSetHierarchyChangeListener) setHierarchyChangeListener(this);
+                    }
+                },
+                enumerable: true
+            },
+            'onViewRemoved': { //ToDo: Remove when event emitter being implemented. 
                 get: function() {
                     return this._onViewRemoved;
                 },
                 set: function(callback) {
                     if (TypeUtil.isFunction(callback)) {
                         this._onViewRemoved = callback;
+                        if (!this.didSetHierarchyChangeListener) setHierarchyChangeListener(this);
+                    }
+                },
+                enumerable: true
+            },
+            'onChildViewRemoved': {
+                get: function() {
+                    return this._onChildViewRemoved;
+                },
+                set: function(callback) {
+                    if (TypeUtil.isFunction(callback)) {
+                        this._onChildViewRemoved = callback;
                         if (!this.didSetHierarchyChangeListener) setHierarchyChangeListener(this);
                     }
                 },
@@ -107,9 +133,11 @@ function setHierarchyChangeListener(object) {
     object.nativeObject.setOnHierarchyChangeListener(NativeViewGroup.OnHierarchyChangeListener.implement({
         'onChildViewAdded': function(parent, child) {
             this.onChildViewAdded && this.onChildViewAdded(this.childViews[child.getId()]);
+            this.onViewAdded && this.onViewAdded(this.childViews[child.getId()]);
         }.bind(object),
         'onChildViewRemoved': function(parent, child) {
             this.onChildViewRemoved && this.onChildViewRemoved(this.childViews[child.getId()]);
+            this.onViewRemoved && this.onViewRemoved(this.childViews[child.getId()]);
         }.bind(object),
     }));
 
