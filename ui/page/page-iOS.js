@@ -258,6 +258,24 @@ function Page(params) {
          },
          enumerable: true,configurable : true
     });
+    
+    var _onUnload = function(){}.bind(this);
+    Object.defineProperty(self, 'onUnload', {
+        get: function() {
+            return _onUnload;
+        },
+        set: function(value) {
+            _onUnload = value;
+            self.nativeObject.didMoveParentViewController = function(parent) {
+                if (!parent) {
+                    if (_onUnload instanceof Function) {
+                        _onUnload.call(this);
+                    }
+                }
+            }.bind(this);
+        },
+        enumerable: true
+    });
 
     Object.defineProperty(self.statusBar, 'visible', {
         get: function() {
