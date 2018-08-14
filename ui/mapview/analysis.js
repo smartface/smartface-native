@@ -305,6 +305,16 @@ MapView.prototype.addPin = function(){};
 MapView.prototype.removePin = function(){};
 
 /**
+ * Removes all pins from the map.
+ *
+ * @method removeAllPins
+ * @android
+ * @ios
+ * @since 3.1.1
+ */
+MapView.prototype.removeAllPins = function(){};
+
+/**
  * Triggered when pressed on the map and sends the location pressed on the map.
  *
  * @event onPress
