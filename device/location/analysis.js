@@ -2,13 +2,13 @@
  * @class Device.Location
  * @since 0.1
  * 
- * Device.Location allows capturing location change events on the device.
+ * Device.Location allows capturing location change events on the device. In Android, ACCESS_FINE_LOCATION permission must be taken on run time for 23 api level and above.
  * 
  *     @example
  *     const Timer    = require("sf-core/timer");
  *     const Location = require('sf-core/device/location'); 
  * 
- *     Location.start([Location.Android.Provider.NETWORK,Location.Android.Provider.GPS]);
+ *     Location.start(Location.Android.Priority.HIGH_ACCURACY);
  *     Location.onLocationChanged = function(event) {
  *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
  *     };
@@ -22,17 +22,17 @@
 function Location() {}
 
 /**
- * Starts capturing. For android, you should define which provider you want to 
- * use for location; Gps, Network or Auto. iOS will ignore this provider.
+ * Starts capturing. For android, you should define which priority you want to 
+ * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
- * @param {Location.Android.Provider[]|Location.Android.Provider} provider 
+ * @param {Location.Android.Priority} priority 
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Location.start = function(provider){};
+Location.start = function(priority){};
 
 /**
  * Stops capturing.

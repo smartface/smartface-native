@@ -8,9 +8,6 @@ const NativeOnSuccessListener = requireClass("com.google.android.gms.tasks.OnSuc
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
 const LOCATION_INTERVAL = 1000 * 1;
-
-
-
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
@@ -57,7 +54,6 @@ Object.defineProperties(Location, {
             var locationRequest = NativeLocationRequest.create();
             locationRequest.setInterval(LOCATION_INTERVAL);
             locationRequest.setPriority(priority);
-
 
             locationCallback = {
                 onLocationResult: function(locationResult) {
