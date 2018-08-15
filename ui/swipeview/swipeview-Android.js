@@ -163,6 +163,7 @@ function bypassPageSpecificProperties(page) {
     });
     page.isSwipeViewPage = true;
     page.onShowSwipeView = page.onShow;
+    page.statusBar.android = {};
     page.onShow = function() {};
 }
 

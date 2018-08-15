@@ -298,6 +298,7 @@ function bypassPageSpecificProperties(page) {
             get: function() {},
         });
     });
+    page.statusBar.android = {};
     Object.keys(page.headerBar).forEach(function(key){
         Object.defineProperty(page.headerBar, key,{
             set: function() {},
