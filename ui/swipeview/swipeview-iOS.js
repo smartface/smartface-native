@@ -292,19 +292,8 @@ const SwipeView = extend(View)(
 });
 
 function bypassPageSpecificProperties(page) {
-    Object.keys(page.statusBar).forEach(function(key){
-        Object.defineProperty(page.statusBar, key,{
-            set: function() {},
-            get: function() {},
-        });
-    });
-    page.statusBar.android = {};
-    Object.keys(page.headerBar).forEach(function(key){
-        Object.defineProperty(page.headerBar, key,{
-            set: function() {},
-            get: function() {},
-        });
-    });
+   page.statusBar = { android: {}};
+   page.headerBar = {};
 }
 
   
