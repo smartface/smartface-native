@@ -58,7 +58,7 @@ Notifications.unregisterForPushNotifications = function(){};
  * 
  * @method getAuthorizationStatus
  * @param {Function} callback
- * @param {Notifications.authorizationStatus} callback.status
+ * @param {Notifications.iOS.AuthorizationStatus} callback.status
  * @ios
  * @static
  * @since 2.0.11
@@ -86,10 +86,58 @@ Notifications.applicationIconBadgeNumber = 0;
  */
 Notifications.scheduledLocalNotifications = null;
 
+/**
+ * iOS Specific Properties.
+ * @class Notifications.iOS
+ * @since 3.1.1
+ */
+Notifications.iOS = {};
+
+/** 
+ * @enum {Number} Notifications.iOS.AuthorizationStatus 
+ * @since 3.1.1
+ * @ios
+ */
+Notifications.iOS.AuthorizationStatus = {};
+
+/**
+ * The user has not yet made a choice regarding whether the application may post user notifications.
+ * 
+ * @property {Number} NOTDETERMINED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Notifications.iOS.AuthorizationStatus.NOTDETERMINED = 0;
+
+/**
+ * The application is not authorized to post user notifications.
+ * 
+ * @property {Number} DENIED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Notifications.iOS.AuthorizationStatus.DENIED = 1;
+
+/**
+ * The application is authorized to post user notifications.
+ * 
+ * @property {Number} AUTHORIZED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Notifications.iOS.AuthorizationStatus.AUTHORIZED = 2;
+
 /** 
  * @enum {Number} Notifications.authorizationStatus 
  * @since 2.0.11
  * @ios
+ * @deprecated 3.1.1 Use {@link Notifications.iOS.AuthorizationStatus}
  */
 Notifications.authorizationStatus = {};
 
