@@ -19,6 +19,7 @@ Location.ios.authorizationStatus = { //deprecated
     Authorized: 3
 };
 
+Location.iOS = {};
 Location.iOS.AuthorizationStatus = {
     NOTDETERMINED : 0,
     RESTRICTED : 1,
