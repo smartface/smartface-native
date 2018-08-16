@@ -78,11 +78,12 @@ Picker.prototype.onSelected = function onSelected(index){ };
  * @param {Object} ok.param
  * @param {Number} ok.param.index
  * @param {Function} cancel This event is called when user clicks cancel button.
+ * @param {String} title Title of picker object.
  * @method show
  * @android
  * @ios
  * @since 0.1
  */
-Picker.prototype.show = function(ok, cancel){};
+Picker.prototype.show = function(ok, cancel, title){};
 
 module.exports = Picker;
