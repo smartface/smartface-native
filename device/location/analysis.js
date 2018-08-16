@@ -73,7 +73,7 @@ Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(stat
  * Gets authorization status.
  * 
  * @method getAuthorizationStatus
- * @return {Device.Location.authorizationStatus} status
+ * @return {Device.Location.iOS.AuthorizationStatus} status
  * @ios
  * @static
  * @since 2.0.11
