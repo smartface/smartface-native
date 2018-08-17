@@ -17,6 +17,7 @@ const criteria = new NativeCriteria();
 const Location = {};
 
 Location.ios = {};
+Location.iOS = {};
 Location.ios.locationServicesEnabled = function() {};
 Location.ios.getAuthorizationStatus = function() {};
 Location.ios.authorizationStatus = {};

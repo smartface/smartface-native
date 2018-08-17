@@ -89,6 +89,7 @@ TextBox.prototype.hint = "";
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
  * @android
+ * @ios
  * @since 0.1
  */
 TextBox.prototype.android.hintTextColor = UI.Color.LIGHTGRAY;

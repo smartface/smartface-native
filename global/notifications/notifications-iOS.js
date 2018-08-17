@@ -206,7 +206,14 @@ const UNAuthorizationStatus = {
     Authorized : 2
 };
 
-Notifications.ios.authorizationStatus = UNAuthorizationStatus;
+Notifications.ios.authorizationStatus = UNAuthorizationStatus; //deprecated
+
+Notifications.iOS = {};
+Notifications.iOS.AuthorizationStatus = {
+    NOTDETERMINED : 0,
+    DENIED : 1,
+    AUTHORIZED : 2
+};
 
 Notifications.ios.getAuthorizationStatus = function(callback){
     var current = Invocation.invokeClassMethod("UNUserNotificationCenter","currentNotificationCenter",[],"id");

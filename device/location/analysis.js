@@ -73,7 +73,7 @@ Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(stat
  * Gets authorization status.
  * 
  * @method getAuthorizationStatus
- * @return {Device.Location.authorizationStatus} status
+ * @return {Device.Location.iOS.AuthorizationStatus} status
  * @ios
  * @static
  * @since 2.0.11
@@ -142,10 +142,69 @@ Location.Android.Provider.GPS;
  */
 Location.Android.Provider.NETWORK;
 
+/**
+ * iOS Specific Properties.
+ * @class Device.Location.iOS
+ * @since 3.1.1
+ */
+Location.iOS = {};
+
+/** 
+ * @enum {Number} Device.Location.iOS.AuthorizationStatus
+ * @since 3.1.1
+ * @ios
+ */
+Location.iOS.AuthorizationStatus = {};
+
+/**
+ * The user has not yet made a choice regarding whether this app can use location services.
+ * 
+ * @property {Number} NOTDETERMINED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Location.iOS.AuthorizationStatus.NOTDETERMINED = 0;
+
+/**
+ * This app is not authorized to use location services.
+ * 
+ * @property {Number} RESTRICTED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Location.iOS.AuthorizationStatus.RESTRICTED = 1;
+
+/**
+ * The user explicitly denied the use of location services for this app or location services are currently disabled in Settings.
+ * 
+ * @property {Number} DENIED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Location.iOS.AuthorizationStatus.DENIED = 2;
+
+/**
+ * This app is authorized to use location services.
+ * 
+ * @property {Number} AUTHORIZED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Location.iOS.AuthorizationStatus.AUTHORIZED = 3;
+
 /** 
  * @enum {Number} Device.Location.authorizationStatus 
  * @since 2.0.11
  * @ios
+ * @deprecated 3.1.1 Use {@link Device.Location.iOS.AuthorizationStatus}
  */
 Location.authorizationStatus = {};
 
@@ -163,7 +222,7 @@ Location.authorizationStatus.NotDetermined = 0;
 /**
  * This app is not authorized to use location services.
  * 
- * @property {Number} Denied
+ * @property {Number} Restricted
  * @static
  * @ios
  * @readonly
