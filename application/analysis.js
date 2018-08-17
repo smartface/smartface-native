@@ -104,7 +104,7 @@ Application.version;
  *      const Application = require("sf-core/application");
  *      var isAppAvaible = Application.ios.canOpenUrl("comgooglemaps://");
  * 
- * @method call
+ * @method canOpenUrl
  * @param {String} url
  * @return {Boolean}
  * @ios
