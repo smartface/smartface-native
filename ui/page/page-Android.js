@@ -16,7 +16,7 @@ const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 
 // const NativeFragment = requireClass("android.support.v4.app.Fragment");
-const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
+const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -60,7 +60,7 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    
+
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -297,6 +297,50 @@ function Page(params) {
         enumerable: true
     });
 
+    var popupWindow;
+    const NativePopupWindow = requireClass("android.widget.PopupWindow");
+    Object.defineProperties(self, {
+        'present': {
+            value: function(page, animation, onCompleteCallback) { // onCompleteCallback will be ignored
+                const NativeR = requireClass('android.R');
+
+                popupWindow = new NativePopupWindow(page.nativeObject.getView(), -1, -1);
+
+                if (animation === true)
+                    popupWindow.setAnimationStyle(NativeR.style.popup_window_animation);
+                else
+                    popupWindow.setAnimationStyle(0); //no animation
+
+                popupWindow.showAtLocation(page.layout.nativeObject, 17, 0, 0);
+
+            },
+            enumerable: true
+        },
+        'dismiss': {
+            value: function(onCompleteCallback) {
+                if (popupWindow)
+                    popupWindow.dismiss();
+
+                if (typeof onCompleteCallback === 'function') {
+                    popupWindow.setOnDismissListener(NativePopupWindow.OnDismissListener.implement({
+                        'onDismiss': function() {
+                            onCompleteCallback && onCompleteCallback();
+                        }
+                    }));
+                }
+
+            },
+            enumerable: true
+        }
+    });
+
+    Object.defineProperties(self, {
+        'dismiss': {
+            value: function(onCompleteCallback) {
+
+            }
+        }
+    });
 
     this.statusBar = {};
 
