@@ -97,5 +97,7 @@ Location.android = {};
 Location.Android = {};
 Location.android.Provider = {};
 Location.Android.Provider = {};
+Location.Android.Priority = {};
+
 
 module.exports = Location;

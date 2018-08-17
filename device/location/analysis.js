@@ -2,13 +2,13 @@
  * @class Device.Location
  * @since 0.1
  * 
- * Device.Location allows capturing location change events on the device.
+ * Device.Location allows capturing location change events on the device. In Android, ACCESS_FINE_LOCATION permission must be taken on run time for 23 api level and above.
  * 
  *     @example
  *     const Timer    = require("sf-core/timer");
  *     const Location = require('sf-core/device/location'); 
  * 
- *     Location.start([Location.Android.Provider.NETWORK,Location.Android.Provider.GPS]);
+ *     Location.start(Location.Android.Priority.HIGH_ACCURACY);
  *     Location.onLocationChanged = function(event) {
  *         console.log("Location latitude: " + event.latitude + "  Longitude: " + event.longitude);
  *     };
@@ -22,17 +22,17 @@
 function Location() {}
 
 /**
- * Starts capturing. For android, you should define which provider you want to 
- * use for location; Gps, Network or Auto. iOS will ignore this provider.
+ * Starts capturing. For android, you should define which priority you want to 
+ * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
- * @param {Location.Android.Provider[]|Location.Android.Provider} provider 
+ * @param {Location.Android.Priority} priority 
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Location.start = function(provider){};
+Location.start = function(priority){};
 
 /**
  * Stops capturing.
@@ -107,6 +107,8 @@ Location.Android = {};
  * but for better accuracy use GPS; for let the device decide to provider use Auto
  * or don't pass parameter.
  * Location.android.Provider deprecated since 1.1.16. Use Device.Location.Android.Provider instead.
+ * 
+ * @deprecated Use {@link Device.Location.Android.Priority} instead 
  */
 Location.Android.Provider = {};
 
@@ -141,6 +143,64 @@ Location.Android.Provider.GPS;
  * @since 1.1.16
  */
 Location.Android.Provider.NETWORK;
+
+
+/** 
+ * @enum Device.Location.Android.Priority
+ * @android
+ * @since 3.1.1
+ * 
+ * Location Priority enums indicates the quality of service for location updates. 
+ * For example, if your application wants high accuracy location it should start a location  with  Location.Android.Priority.HIGH_ACCURACY.
+ * 
+ */
+Location.Android.Priority = {};
+
+
+/**
+ * High accuracy. Least battery efficient. Uses GPS only. 
+ * 
+ * @property HIGH_ACCURACY
+ * @static
+ * @readonly
+ * @since 3.1.1
+ */
+Location.Android.Priority.HIGH_ACCURACY;
+
+
+/**
+ * Block level accuracy is considered to be about 100 meter accuracy.
+ * Using a coarse accuracy such as this often consumes less power.
+ * 
+ * @property BALANCED
+ * @static
+ * @readonly
+ * @since 3.1.1
+ */
+Location.Android.Priority.BALANCED;
+
+
+/**
+ * City level accuracy is considered to be about 10km accuracy. 
+ * Using a coarse accuracy such as this often consumes less power
+ * 
+ * @property LOW_POWER
+ * @static
+ * @readonly
+ * @since 3.1.1
+ */
+Location.Android.Priority.LOW_POWER;
+
+
+/**
+ * No locations will be returned unless a different client has requested location updates in which case this request will act as a passive listener to those locations.
+ * 
+ * @property NO_POWER
+ * @static
+ * @readonly
+ * @since 3.1.1
+ */
+Location.Android.Priority.NO_POWER;
 
 /**
  * iOS Specific Properties.
