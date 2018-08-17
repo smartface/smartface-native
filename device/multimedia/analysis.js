@@ -177,7 +177,7 @@ Multimedia.android.getAllGalleryItems = function(e) { };
 /**
  * @method getGalleryAuthorizationStatus
  * 
- * @return {Device.Multimedia.galleryAuthorizationStatus} status
+ * @return {Device.Multimedia.iOS.GalleryAuthorizationStatus} status
  * @ios
  * @since 2.0.11
  */
@@ -186,7 +186,7 @@ Multimedia.getGalleryAuthorizationStatus = function(){};
 /**
  * @method getCameraAuthorizationStatus
  * 
- * @return {Device.Multimedia.cameraAuthorizationStatus} status
+ * @return {Device.Multimedia.iOS.CameraAuthorizationStatus} status
  * @ios
  * @since 2.0.11
  */
@@ -257,6 +257,7 @@ ActionType.VIDEO_CAPTURE = 1;
  * @enum {Number} Device.Multimedia.galleryAuthorizationStatus 
  * @since 2.0.11
  * @ios
+ * @deprecated 3.1.1 Use {@link Device.Multimedia.iOS.GalleryAuthorizationStatus}
  */
 Multimedia.galleryAuthorizationStatus = {};
 
@@ -309,6 +310,7 @@ Multimedia.galleryAuthorizationStatus.Authorized = 3;
  * @enum {Number} Device.Multimedia.cameraAuthorizationStatus 
  * @since 2.0.11
  * @ios
+ * @deprecated 3.1.1 Use {@link Device.Multimedia.iOS.CameraAuthorizationStatus}
  */
 Multimedia.cameraAuthorizationStatus = {};
 
@@ -357,10 +359,58 @@ Multimedia.cameraAuthorizationStatus.Denied = 2;
  */
 Multimedia.cameraAuthorizationStatus.Authorized = 3;
 
+/**
+ * iOS Specific Properties.
+ * @class Device.Multimedia.iOS
+ * @since 3.1.1
+ */
+Multimedia.iOS = {};
+
+/** 
+ * @enum {Number} Device.Multimedia.iOS.CameraFlashMode
+ * @since 3.1.1
+ * @ios
+ */
+Multimedia.iOS.CameraFlashMode = {};
+
+/**
+ * Specifies that flash illumination is always off, no matter what the ambient light conditions are.
+ * 
+ * @property {Number} OFF
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraFlashMode.OFF;
+
+/**
+ * Specifies that the device should consider ambient light conditions to automatically determine whether or not to use flash illumination.
+ * 
+ * @property {Number} AUTO
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraFlashMode.AUTO;
+
+/**
+ * Specifies that flash illumination is always on, no matter what the ambient light conditions are.
+ * 
+ * @property {Number} ON
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraFlashMode.ON;
+
 /** 
  * @enum {Number} Device.Multimedia.CameraFlashMode 
  * @since 3.0.2
  * @ios
+ * @deprecated 3.1.1 Use {@link Device.Multimedia.iOS.CameraFlashMode}
  */
 Multimedia.CameraFlashMode = {};
 
@@ -396,5 +446,109 @@ Multimedia.CameraFlashMode.AUTO;
  * @since 3.0.2
  */
 Multimedia.CameraFlashMode.ON;
+
+/** 
+ * @enum {Number} Device.Multimedia.iOS.GalleryAuthorizationStatus
+ * @since 3.1.1
+ * @ios
+ */
+Multimedia.iOS.GalleryAuthorizationStatus = {};
+
+/**
+ * User has not yet made a choice with regards to this application.
+ * 
+ * @property {Number} NOTDETERMINED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.GalleryAuthorizationStatus.NOTDETERMINED = 0;
+
+/**
+ * This application is not authorized to access photo data.
+ * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+ * 
+ * @property {Number} RESTRICTED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.GalleryAuthorizationStatus.RESTRICTED = 1;
+
+/**
+ * User has explicitly denied this application access to photos data.
+ * 
+ * @property {Number} DENIED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.GalleryAuthorizationStatus.DENIED = 2;
+
+/**
+ * User has authorized this application to access photos data.
+ * 
+ * @property {Number} AUTHORIZED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.GalleryAuthorizationStatus.AUTHORIZED = 3;
+
+/** 
+ * @enum {Number} Device.Multimedia.iOS.CameraAuthorizationStatus
+ * @since 3.1.1
+ * @ios
+ */
+Multimedia.iOS.CameraAuthorizationStatus = {};
+
+/**
+ * User has not yet made a choice with regards to this application.
+ * 
+ * @property {Number} NOTDETERMINED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraAuthorizationStatus.NOTDETERMINED = 0;
+
+/**
+ * This application is not authorized to access camera.
+ * The user cannot change this application’s status, possibly due to active restrictions such as parental controls being in place.
+ * 
+ * @property {Number} RESTRICTED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraAuthorizationStatus.RESTRICTED = 1;
+
+/**
+ * User has explicitly denied this application access to camera.
+ * 
+ * @property {Number} DENIED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraAuthorizationStatus.DENIED = 2;
+
+/**
+ * User has authorized this application to access camera.
+ * 
+ * @property {Number} AUTHORIZED
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.1
+ */
+Multimedia.iOS.CameraAuthorizationStatus.AUTHORIZED = 3;
 
 module.exports = Multimedia;

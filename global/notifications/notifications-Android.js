@@ -425,6 +425,7 @@ function runOnUiThread(callback, params) {
 
 // Handling iOS specific properties
 Notifications.ios = {};
+Notifications.iOS = {};
 Notifications.ios.authorizationStatus = {};
 Notifications.ios.getAuthorizationStatus = function() {};
 
