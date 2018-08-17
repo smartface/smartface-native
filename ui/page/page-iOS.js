@@ -78,7 +78,7 @@ function Page(params) {
         }
     }
     
-    self.ios.present = function(page, animation, onComplete) {
+    self.present = function(page, animation, onComplete) {
         if (typeof page === "object") {
             var _animationNeed = animation ? animation : true;
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
@@ -101,8 +101,7 @@ function Page(params) {
         enumerable: true
     });
     
-    
-    self.ios.dismiss = function(onComplete) {
+    self.dismiss = function(onComplete) {
         var _completionBlock = onComplete ? function(){onComplete();} : undefined;
         self.nativeObject.dismissViewController(_completionBlock);
     }
