@@ -12,11 +12,19 @@ Location.ios.native.authorizationStatus = {
     AuthorizedWhenInUse : 4
 };
 
-Location.ios.authorizationStatus = {
+Location.ios.authorizationStatus = { //deprecated
     NotDetermined : 0,
     Restricted : 1,
     Denied : 2,
     Authorized: 3
+};
+
+Location.iOS = {};
+Location.iOS.AuthorizationStatus = {
+    NOTDETERMINED : 0,
+    RESTRICTED : 1,
+    DENIED : 2,
+    AUTHORIZED: 3
 };
 
 Location.changeLocationListener = function(e) {

@@ -16,7 +16,7 @@ const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 
 // const NativeFragment = requireClass("android.support.v4.app.Fragment");
-const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
+const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -60,7 +60,7 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    
+
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -115,7 +115,7 @@ function Page(params) {
                 }
                 else {
                     const Router = require("../router");
-                    Router.goBack(null, true);
+                    Router.goBack(null, this.__pendingParameters);
                 }
             }
             else if (_headerBarItems[itemId]) {

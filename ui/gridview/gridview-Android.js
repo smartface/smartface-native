@@ -44,7 +44,8 @@ const GridView = extend(View)(
         _super(this);
 
         var _gridViewItems = {};
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
+        const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
+        var callbacks = {
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
@@ -156,7 +157,8 @@ const GridView = extend(View)(
             getItemViewType: function(position) {
                 return 1;
             }
-        }, null);
+        };
+        var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
         var _onScroll;
         var _onItemCreate;
@@ -351,13 +353,14 @@ const GridView = extend(View)(
                 configurable: true
             }
         });
-
-        var onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
+        const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
+        var overrideMethods = {
             onScrolled: function(recyclerView, dx, dy) {
                 _onScroll && _onScroll();
             },
             onScrollStateChanged: function(recyclerView, newState) {},
-        }, null);
+        };
+        var onScrollListener = new SFOnScrollListener(overrideMethods);
 
         // android-only properties
         Object.defineProperty(this.android, 'onItemLongSelected', {

@@ -21,13 +21,12 @@ const ViewGroup = extend(View)(
             view.parent = self;
             var uniqueId = view.uniqueId;
             self.childs[uniqueId] = view;
-
         };
 
         this.removeChild = function(view){
+            view.nativeObject.removeFromSuperview();
             delete self.childs[view.uniqueId];
             view.parent = undefined;
-            view.nativeObject.removeFromSuperview();  
         };
 
         this.removeAll = function(){
@@ -59,14 +58,22 @@ const ViewGroup = extend(View)(
 
         self.onViewAddedHandler = function(e){
             if (typeof self.onViewAdded === "function"){
-                self.onViewAdded();
+                var view = self.childs[e.subview.uuid];
+                self.onViewAdded(view);
+                if (self.onChildViewAdded) {
+                    self.onChildViewAdded(view);
+                }
             }
         }
         self.nativeObject.didAddSubview = self.onViewAddedHandler;
         
         self.onViewRemovedHandler = function(e){
             if (typeof self.onViewRemoved === "function"){
-                self.onViewRemoved();
+                var view = self.childs[e.subview.uuid];
+                self.onViewRemoved(view);
+                if (self.onChildViewRemoved) {
+                    self.onChildViewRemoved(view);
+                }
             }
         }
         self.nativeObject.willRemoveSubview = self.onViewRemovedHandler;

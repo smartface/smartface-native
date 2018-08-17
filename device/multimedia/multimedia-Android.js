@@ -370,6 +370,7 @@ function getAllMediaFromUri(params) {
 }
 
 Multimedia.ios = {};
+Multimedia.iOS = {};
 
 Multimedia.ios.requestGalleryAuthorization = function() {};
 Multimedia.ios.requestCameraAuthorization = function() {};

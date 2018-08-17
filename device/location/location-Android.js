@@ -134,6 +134,7 @@ Object.assign(Location.android.Provider, Location.Android.Provider); //ToDo: Dep
 
 //iOS specific methods & properies
 Location.ios = {};
+Location.iOS = {};
 Location.ios.locationServicesEnabled = function() {};
 Location.ios.getAuthorizationStatus = function() {};
 Location.ios.authorizationStatus = {};

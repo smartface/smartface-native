@@ -258,7 +258,7 @@ function Page(params) {
          },
          enumerable: true,configurable : true
     });
-
+    
     Object.defineProperty(self.statusBar, 'visible', {
         get: function() {
             return !self.nativeObject.statusBarHidden;

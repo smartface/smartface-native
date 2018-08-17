@@ -28,19 +28,19 @@ hueDic[Color.YELLOW.nativeObject] = NativeDescriptorFactory.HUE_YELLOW;
 const MapView = extend(View)(
     function(_super, params) {
         var self = this;
-        
+
         // lazyLoading is true by default after sf-core 3.0.2 version.
         // Beautify this implementation.
-        if(params)
+        if (params)
             params.lazyLoading = true;
-        else 
-            params = {lazyLoading: true};
-            
+        else
+            params = { lazyLoading: true };
+
         var activityIntent = AndroidConfig.activity.getIntent();
         var savedBundles = activityIntent.getExtras();
         if (!self.nativeObject) {
             self.nativeObject = new NativeMapView(AndroidConfig.activity);
-            if (!params || !(params.lazyLoading)) 
+            if (!params || !(params.lazyLoading))
                 self.nativeObject.onCreate(savedBundles);
         }
         _super(self);
@@ -530,6 +530,22 @@ const MapView = extend(View)(
                 },
                 enumerable: true
             },
+            'removeAllPins': {
+                value: function() {
+                    if (_clusterEnabled && _nativeClusterManager) {
+                        _nativeClusterManager.clearItems();
+                        _nativeClusterManager.cluster();
+                        _pins = [];
+                    }
+                    else if (_pins.length > 0) {
+                        _pins.forEach(function(pin) {
+                            pin.nativeObject.remove();
+                        });
+                        _pins = [];
+                    }
+                },
+                enumerable: true
+            },
             'onCreate': {
                 get: function() {
                     return _onCreate;
@@ -594,7 +610,7 @@ const MapView = extend(View)(
                 enumerable: true
             },
             // TODO: Remove this function future version. prepareMap naming is better than prepareMapAsync.
-            'prepareMapAsync': { 
+            'prepareMapAsync': {
                 value: function() {
                     self.nativeObject.onCreate(savedBundles);
                     asyncMap();
@@ -628,16 +644,15 @@ const MapView = extend(View)(
         function Cluster(params) {
 
             function setDefaultClusterRenderer() {
-                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
+                const SFDefaultClusterRendererCustom = requireClass('io.smartface.android.sfcore.ui.mapview.SFDefaultClusterRendererCustom');
 
-                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
-                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
-                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
-                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
-                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
+                SFDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
+                SFDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
+                SFDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
+                SFDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
+                SFDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
 
-                var _nativeDefaultClusterRenderer = NativeDefaultClusterRendererCustom.extend('SFCustomMarkerRenderer', {
-
+                var callbacks = {
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
                         if (_clusterItemImage) {
                             var iconBitmap = _clusterItemImage.nativeObject.getBitmap();
@@ -656,10 +671,9 @@ const MapView = extend(View)(
                     getColor: function(cluster) {
                         return self.clusterFillColor && self.clusterFillColor;
                     }
-                }, [spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager]);
-
+                };
+                var _nativeDefaultClusterRenderer = new SFDefaultClusterRendererCustom(callbacks, spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager);
                 return _nativeDefaultClusterRenderer;
-
             }
 
             Object.defineProperty(this, 'setDefaultClusterRenderer', {

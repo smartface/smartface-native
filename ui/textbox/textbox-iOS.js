@@ -338,13 +338,41 @@ const TextBox = extend(View)(
             },
             enumerable: true,configurable: true
         });
-
+        
+        var _hint;
         Object.defineProperty(self, 'hint', {
             get: function() {
-                return self.nativeObject.placeholder;
+                return _hint;
             },
             set: function(value) {
-                self.nativeObject.placeholder = value;
+                _hint = value;
+                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString","alloc",[],"id");
+        
+                var argString = new Invocation.Argument({
+                    type:"NSString",
+                    value: value
+                });
+                    
+                var argAttributes = new Invocation.Argument({
+                    type:"id",
+                    value: {
+                        "NSColor" : _hintTextColor.nativeObject
+                    }
+                });
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString,"initWithString:attributes:",[argString,argAttributes],"NSObject");
+                self.nativeObject.setValueForKey(nativeAttributeString,"attributedPlaceholder");
+            },
+            enumerable: true,configurable : true
+        });
+        
+        var _hintTextColor = Color.create(199,199,205);
+        Object.defineProperty(self, 'hintTextColor', {
+            get: function() {
+                return _hintTextColor;
+            },
+            set: function(value) {
+                _hintTextColor = value;
+                self.hint = _hint;
             },
             enumerable: true,configurable : true
         });

@@ -167,7 +167,13 @@ const AVAuthorizationStatus = {
     Authorized : 3,
 }
 
-Multimedia.ios.cameraAuthorizationStatus = AVAuthorizationStatus;
+Multimedia.ios.cameraAuthorizationStatus = AVAuthorizationStatus; //deprecated
+Multimedia.iOS.CameraAuthorizationStatus = {
+    NOTDETERMINED : 0,
+    RESTRICTED : 1,
+    DENIED : 2,
+    AUTHORIZED: 3
+}
 
 Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback){
     var argType = new Invocation.Argument({
@@ -198,7 +204,13 @@ const PHAuthorizationStatus = {
     Authorized : 3      // User has authorized this application to access photos data.
 };
 
-Multimedia.ios.galleryAuthorizationStatus = PHAuthorizationStatus;
+Multimedia.ios.galleryAuthorizationStatus = PHAuthorizationStatus; //deprecated
+Multimedia.iOS.GalleryAuthorizationStatus = {
+    NOTDETERMINED : 0,
+    RESTRICTED : 1,
+    DENIED : 2,
+    AUTHORIZED: 3
+}
 
 Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback){
     var argCallback = new Invocation.Argument({
