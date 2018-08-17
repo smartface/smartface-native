@@ -47,6 +47,7 @@ function Page(params) {
     var self = this;
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
+    self.pageLayoutContainer = pageLayoutContainer;
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -311,38 +312,44 @@ function Page(params) {
         enumerable: true
     });
 
-    var popupWindow;
-    const NativePopupWindow = requireClass("android.widget.PopupWindow");
+    var popupPageTag = "popupWindow";
     Object.defineProperties(self, {
         'present': {
-            value: function(page, animation, onCompleteCallback) { // onCompleteCallback will be ignored
-                const NativeR = requireClass('android.R');
+            value: function(page, animation, onCompleteCallback) {
 
-                popupWindow = new NativePopupWindow(page.nativeObject.getView(), -1, -1);
+                var rootViewId = NativeSFR.id.page_container
 
-                if (animation === true)
-                    popupWindow.setAnimationStyle(NativeR.style.popup_window_animation);
-                else
-                    popupWindow.setAnimationStyle(0); //no animation
+                var pageLayout = page.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
+                page.pageLayoutContainer.removeView(pageLayout);
 
-                popupWindow.showAtLocation(page.layout.nativeObject, 17, 0, 0);
+                var fragmentManager = activity.getSupportFragmentManager();
+                var fragmentTransaction = fragmentManager.beginTransaction();
 
+                var pageAnimationsCache = {};
+                var packageName = activity.getPackageName();
+                var resources = AndroidConfig.activityResources;
+                pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+
+                if (animation)
+                    fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
+
+                fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
+
+                fragmentTransaction.addToBackStack(popupPageTag);
+                fragmentTransaction.commitAllowingStateLoss();
+                fragmentManager.executePendingTransactions();
+
+
+                onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
         },
         'dismiss': {
             value: function(onCompleteCallback) {
-                if (popupWindow)
-                    popupWindow.dismiss();
-
-                if (typeof onCompleteCallback === 'function') {
-                    popupWindow.setOnDismissListener(NativePopupWindow.OnDismissListener.implement({
-                        'onDismiss': function() {
-                            onCompleteCallback && onCompleteCallback();
-                        }
-                    }));
-                }
-
+                var fragmentManager = activity.getSupportFragmentManager();
+                fragmentManager.popBackStack();
+                onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
         }
