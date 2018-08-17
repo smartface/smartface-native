@@ -334,14 +334,6 @@ function Page(params) {
         }
     });
 
-    Object.defineProperties(self, {
-        'dismiss': {
-            value: function(onCompleteCallback) {
-
-            }
-        }
-    });
-
     this.statusBar = {};
 
     var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
