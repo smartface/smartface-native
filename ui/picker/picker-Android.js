@@ -68,13 +68,16 @@ const Picker = extend(View)(
                                 done({ index: self.currentIndex });
                         }
                     });
-                    
+
+
                     const NativeRString = requireClass("android.R").string;
                     var builder = new NativeAlertDialog.Builder(AndroidConfig.activity);
                     builder = builder.setView(layout);
-                    builder.setTitle(titleText || "");
                     builder = builder.setNegativeButton(NativeRString.cancel, cancelListener);
                     builder = builder.setPositiveButton(NativeRString.ok, doneListener);
+                    if (typeof titleText === 'string')
+                        builder = builder.setCustomTitle(creatTitleView(titleText));
+                        
                     builder.show();
                 },
                 enumerable: true
@@ -150,6 +153,23 @@ function addViewToLayout(nativeObject) {
         -2, // FrameLayout.LayoutParams.WRAP_CONTENT
         17)); // Gravity.CENTER
     return layout;
+}
+
+function creatTitleView(title) {
+    const NativeTextView = requireClass("android.widget.TextView");
+    const Color = require('sf-core/ui/color');
+
+    const CENTER = 17;
+
+    var titleTextView = new NativeTextView(AndroidConfig.activity);
+    titleTextView.setText(title);
+    titleTextView.setBackgroundColor(Color.WHITE.nativeObject);
+    titleTextView.setPadding(10, 15, 10, 10);
+    titleTextView.setGravity(CENTER);
+    titleTextView.setTextColor(Color.BLACK.nativeObject);
+    titleTextView.setTextSize(20);
+
+    return titleTextView;
 }
 
 module.exports = Picker;
