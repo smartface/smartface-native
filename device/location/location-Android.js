@@ -70,7 +70,7 @@ Object.defineProperties(Location, {
             //Last known location is necessary to get location without waiting for interval
             locationProviderClient.getLastLocation().addOnSuccessListener(NativeOnSuccessListener.implement({
                 onSuccess: function(location) {
-                    if (location) { //Location might return in some devices.
+                    if (location) { //Location might return null in some devices.
                         _onLocationChanged && _onLocationChanged({
                             latitude: location.getLatitude(),
                             longitude: location.getLongitude()
