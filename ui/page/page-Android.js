@@ -313,35 +313,43 @@ function Page(params) {
     });
 
     var popupPageTag = "popupWindow";
+    const GONE = 8;
     Object.defineProperties(self, {
         'present': {
             value: function(page, animation, onCompleteCallback) {
 
-                var rootViewId = NativeSFR.id.page_container
-
-                var pageLayout = page.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-                page.pageLayoutContainer.removeView(pageLayout);
-
-                var fragmentManager = activity.getSupportFragmentManager();
-                var fragmentTransaction = fragmentManager.beginTransaction();
-
-                var pageAnimationsCache = {};
-                var packageName = activity.getPackageName();
-                var resources = AndroidConfig.activityResources;
-                pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
-
-                if (animation)
-                    fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
-
-                fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-
-                fragmentTransaction.addToBackStack(popupPageTag);
-                fragmentTransaction.commitAllowingStateLoss();
-                fragmentManager.executePendingTransactions();
+                if (page instanceof Page) {
 
 
-                onCompleteCallback && onCompleteCallback();
+                    var rootViewId = NativeSFR.id.page_container
+
+                    var pageLayout = page.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
+                    pageLayout.setVisibility(GONE);
+
+                    var fragmentManager = activity.getSupportFragmentManager();
+                    var fragmentTransaction = fragmentManager.beginTransaction();
+
+                    var pageAnimationsCache = {};
+                    var packageName = activity.getPackageName();
+                    var resources = AndroidConfig.activityResources;
+                    pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                    pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+
+                    if (animation)
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
+
+                    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
+
+                    fragmentTransaction.addToBackStack(popupPageTag);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager.executePendingTransactions();
+
+
+                    onCompleteCallback && onCompleteCallback();
+
+                }
+                else
+                    throw Error("Page parameter mismatch, Parameter must be Page");
             },
             enumerable: true
         },
