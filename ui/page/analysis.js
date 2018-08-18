@@ -160,6 +160,7 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  * @ios
  * @static
  * @since 3.1.1
+ *
  */
 Page.prototype.present = function(page, animation, onCompleteCallback){};
 
@@ -167,7 +168,7 @@ Page.prototype.present = function(page, animation, onCompleteCallback){};
 /**
  * This function dismiss presently shown pop-up page.
  *
- * @method present
+ * @method dismiss
  * @param {Function} onCompleteCallback
  * @android
  * @ios
