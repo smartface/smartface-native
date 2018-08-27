@@ -51,11 +51,6 @@ SFApplication.ios.canOpenUrl = function (url) {
     return SMFApplication.canOpenUrl(url);
 }
 
-SFApplication.ios = {};
-SFApplication.ios.canOpenUrl = function (url) {
-    return SMFApplication.canOpenUrl(url);
-}
-
 Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     get: function() {
         var mainBundle = Invocation.invokeClassMethod("NSBundle","mainBundle",[],"NSObject");
