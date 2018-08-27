@@ -6,7 +6,6 @@ const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
 const Invocation    = require('sf-core/util').Invocation;
 const HeaderBarItem = require('sf-core/ui/headerbaritem');
-const Navigator = require("sf-core/ui/navigator");
 
 const UIInterfaceOrientation = {
     unknown : 0,
