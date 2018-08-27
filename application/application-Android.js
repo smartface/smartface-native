@@ -295,6 +295,8 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.ios = {};
+ApplicationWrapper.ios.canOpenUrl = function (url) {};
+
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
