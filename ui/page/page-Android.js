@@ -309,9 +309,6 @@ function Page(params) {
 
                     var rootViewId = NativeSFR.id.page_container
 
-                    var pageLayout = page.pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-                    pageLayout.setVisibility(GONE);
-
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
 
