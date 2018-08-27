@@ -82,8 +82,20 @@ function Page(params) {
         if (typeof page === "object") {
             var _animationNeed = animation ? animation : true;
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+
+            var alloc = Invocation.invokeClassMethod("UINavigationController","alloc",[],"id");
+            var argViewController= new Invocation.Argument({
+                type:"NSObject",
+                value: page.nativeObject
+            });
+            var navigationController = Invocation.invokeInstanceMethod(alloc,"initWithRootViewController:",[argViewController],"NSObject");
+  
+            navigationController.valueForKey("navigationBar").setValueForKey(false,"translucent");
+            if(parseInt(System.OSVersion) >= 11){
+                navigationController.valueForKey("navigationBar").setValueForKey(false,"prefersLargeTitles");
+            }
             
-            self.nativeObject.presentViewController(page.nativeObject, _completionBlock);
+            self.nativeObject.presentViewController(navigationController, _completionBlock);
         }
     }
     
