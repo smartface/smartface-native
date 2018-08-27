@@ -411,11 +411,13 @@ const TextBox = extend(View)(
                 if (typeof value === "object") {
                     value.applyLayout();
                     
+                    // Bug : IOS-2601
                     var oldOntouch = value.onTouch;
                     value.onTouch = function(){
                         var returnValue = oldOntouch && oldOntouch();
                         return (typeof returnValue) === "undefined" ? true : returnValue;
                     };
+                    //////////////////
                     
                     self.nativeObject.setValueForKey(value.nativeObject,"inputAccessoryView");
                 }
