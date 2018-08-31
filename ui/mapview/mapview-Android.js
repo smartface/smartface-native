@@ -645,13 +645,12 @@ const MapView = extend(View)(
 
             function setDefaultClusterRenderer() {
                 const SFDefaultClusterRendererCustom = requireClass('io.smartface.android.sfcore.ui.mapview.SFDefaultClusterRendererCustom');
-                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
-                
-                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
-                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
-                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
-                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
-                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
+
+                SFDefaultClusterRendererCustom.setClusterTextColor(self.clusterTextColor);
+                SFDefaultClusterRendererCustom.setClusterTextSize(self.clusterFont.size);
+                SFDefaultClusterRendererCustom.setClusterBackgroundColor(self.clusterBorderColor);
+                SFDefaultClusterRendererCustom.setClusterTypeface(self.clusterFont.nativeObject);
+                SFDefaultClusterRendererCustom.setClusterTypefaceStyle(null); //BOLD style is undefined 
 
                 var callbacks = {
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
