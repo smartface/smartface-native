@@ -85,7 +85,7 @@ const Picker = extend(View)(
             enumerable: true
         });
         
-        self.show = function(ok,cancel){
+        self.show = function(ok,cancel,title){
               var okFunc = function(e){
                 if (typeof ok === "function"){
                     ok({index : e.index});
@@ -96,7 +96,12 @@ const Picker = extend(View)(
                     cancel();
                 }
               };
-              self.nativeObject.show(self.nativeObject,cancelFunc,okFunc);
+              
+              if (typeof title === "undefined") {
+                self.nativeObject.show(self.nativeObject,"",cancelFunc,okFunc);
+              } else {
+                self.nativeObject.show(self.nativeObject,title,cancelFunc,okFunc);
+              }
         }
         // Assign parameters given in constructor
         if (params) {
