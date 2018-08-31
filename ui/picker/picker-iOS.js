@@ -130,7 +130,7 @@ const Picker = extend(View)(
         });
         
         var _cancelHighlightedColor;
-        Object.defineProperty(this, 'cancelHighlightedColor', {
+        Object.defineProperty(this.ios, 'cancelHighlightedColor', {
             get: function() {
                 return _cancelHighlightedColor;
             },
@@ -163,7 +163,7 @@ const Picker = extend(View)(
         });
         
         var _okHighlightedColor;
-        Object.defineProperty(this, 'okHighlightedColor', {
+        Object.defineProperty(this.ios, 'okHighlightedColor', {
             get: function() {
                 return _okHighlightedColor;
             },
@@ -203,10 +203,10 @@ const Picker = extend(View)(
                 self.titleColor ? self.titleColor.nativeObject : undefined,
                 self.titleFont ? self.titleFont : undefined,
                 self.cancelColor ? self.cancelColor.nativeObject : undefined,
-                self.cancelHighlightedColor ? self.cancelHighlightedColor.nativeObject : undefined,
+                self.ios.cancelHighlightedColor ? self.ios.cancelHighlightedColor.nativeObject : undefined,
                 self.cancelFont ? self.cancelFont : undefined,
                 self.okColor ? self.okColor.nativeObject : undefined,
-                self.okHighlightedColor ? self.okHighlightedColor.nativeObject : undefined,
+                self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
                 self.okFont ? self.okFont : undefined
                 );
         }
