@@ -201,7 +201,7 @@ const MapView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self, 'clusterBorderColor', {
+        Object.defineProperty(self.ios, 'clusterBorderColor', {
             get: function() {
                 return new Color({ color: self.cluster.nativeObject.borderColor });
             },
