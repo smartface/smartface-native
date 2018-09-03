@@ -670,8 +670,8 @@ const MapView = extend(View)(
                         var layoutParams = new NativeViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                         nativeSquareTextView.setLayoutParams(layoutParams);
                         var mDensity = spratAndroidActivityInstance.getResources().getDisplayMetrics().density;
-                        var twelveDpi = 6 * mDensity;
-                        nativeSquareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
+                        var twelveDpi = Math.round(6 * mDensity);
+                        nativeSquareTextView.setPadding(twelveDpi,twelveDpi, twelveDpi, twelveDpi);
 
                         return nativeSquareTextView;
                     }
