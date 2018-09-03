@@ -76,6 +76,7 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
  * @method add
  * @param {String} tag Tag of the tab bar item 
  * @param {UI.TabBarItem} tabBarItem Tab bar item
+ * @param {Boolean} eagerLoading Page constructor will work immediately. This property has no effect on iOS.
  * @android
  * @ios
  * @since 1.1.10

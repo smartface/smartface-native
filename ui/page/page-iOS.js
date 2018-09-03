@@ -78,6 +78,49 @@ function Page(params) {
         }
     }
     
+    self.present = function(page, animation, onComplete) {
+        if (typeof page === "object") {
+            var _animationNeed = animation ? animation : true;
+            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+                
+            var navigationController = page.nativeObject.valueForKey("navigationController");
+            if (!navigationController) {
+                var alloc = Invocation.invokeClassMethod("UINavigationController","alloc",[],"id");
+                var argViewController= new Invocation.Argument({
+                    type:"NSObject",
+                    value: page.nativeObject
+                });
+                navigationController = Invocation.invokeInstanceMethod(alloc,"initWithRootViewController:",[argViewController],"NSObject");
+      
+                navigationController.valueForKey("navigationBar").setValueForKey(false,"translucent");
+                if(parseInt(System.OSVersion) >= 11){
+                    navigationController.valueForKey("navigationBar").setValueForKey(false,"prefersLargeTitles");
+                }
+            }
+
+            self.nativeObject.presentViewController(navigationController, _completionBlock);
+        }
+    }
+    
+    var _presentationStyle = 0;
+    Object.defineProperty(self.ios, 'presentationStyle', {
+        get: function() {
+            return _presentationStyle;
+        },
+        set: function(value) {
+            if (typeof value === "number") {
+                _presentationStyle = value;
+                self.nativeObject.modalTransitionStyle = _presentationStyle;
+            }
+        },
+        enumerable: true
+    });
+    
+    self.dismiss = function(onComplete) {
+        var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+        self.nativeObject.dismissViewController(_completionBlock);
+    }
+    
     self.calculatePosition = function(){
         self.layout.applyLayout();
     }
@@ -258,7 +301,7 @@ function Page(params) {
          },
          enumerable: true,configurable : true
     });
-
+    
     Object.defineProperty(self.statusBar, 'visible', {
         get: function() {
             return !self.nativeObject.statusBarHidden;
@@ -595,6 +638,21 @@ Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"ALWAYS",{
 });
 Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"NEVER",{
     value: 2
+});
+
+Page.iOS = {};
+Page.iOS.PresentationStyle = {};
+Object.defineProperty(Page.iOS.PresentationStyle,"COVERVERTICAL",{
+    value: 0
+});
+Object.defineProperty(Page.iOS.PresentationStyle,"FLIPHORIZONTAL",{
+    value: 1
+});
+Object.defineProperty(Page.iOS.PresentationStyle,"CROSSDISSOLVE",{
+    value: 2
+});
+Object.defineProperty(Page.iOS.PresentationStyle,"PARTIALCURL",{
+    value: 3
 });
 
 module.exports = Page;

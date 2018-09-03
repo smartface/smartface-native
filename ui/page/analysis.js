@@ -123,6 +123,60 @@ Page.prototype.ios.safeAreaLayoutMode = false;
  */
 Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
 
+
+/**
+ * This function shows up the pop-up page. Pop-up pages behave exactly as UI.Page .
+ * 
+ *     @example
+ *     const self = this; //Current page 
+ *     const Color = require('sf-core/ui/color');
+ *
+ *     var popuPage = new Page();
+ *     popuPage.layout.backgroundColor = Color.BLUE;
+ *
+ *     const Button = require('sf-core/ui/button');
+ *     var myButton = new Button({
+ *     width: 150,
+ *     height: 80,
+ *     text: "Smartface Button",
+ *     onPress: function() {
+ *      self.dismiss(function() {
+ *      console.log("dismiss")
+ *      });
+ *     }
+ *     });
+ *     popuPage.layout.addChild(myButton);
+ *
+ *     self.popupBtn.onPress = function() {
+ *     self.present(popuPage, true, function() { console.log("Page3 presented..."); });
+ *     }
+ * 
+ *
+ * @method present
+ * @param {UI.Page} page
+ * @param {Boolean} animation
+ * @param {Function} onCompleteCallback
+ * @android
+ * @ios
+ * @static
+ * @since 3.1.1
+ *
+ */
+Page.prototype.present = function(page, animation, onCompleteCallback){};
+
+
+/**
+ * This function dismiss presently shown pop-up page.
+ *
+ * @method dismiss
+ * @param {Function} onCompleteCallback
+ * @android
+ * @ios
+ * @static
+ * @since 3.1.1
+ */
+Page.prototype.dismiss = function(onCompleteCallback){};
+
 /**
  * Gets status bar object. This property is readonly, you can not set
  * status bar to a page but you can change properties of page's status bar.
@@ -267,12 +321,26 @@ Page.Orientation.AUTOLANDSCAPE = 12;
 Page.Orientation.AUTO = 15;
 
 /**
+ * iOS Specific Properties.
+ * @class UI.Page.iOS
+ */
+Page.iOS = {};
+
+/**
+ * @enum {Number} UI.Page.iOS.LargeTitleDisplayMode
+ * @static
+ *
+ * LargeTitleDisplayMode is an enum that defines title style of header bar.
+ *
+ */
+Page.iOS.LargeTitleDisplayMode = {};
+
+/**
  * Sets the previous page's header bar title display mode.
  * 
  * @property AUTOMATIC
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.AUTOMATIC = 0;
 
@@ -282,7 +350,6 @@ Page.iOS.LargeTitleDisplayMode.AUTOMATIC = 0;
  * @property ALWAYS
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
 
@@ -292,7 +359,6 @@ Page.iOS.LargeTitleDisplayMode.ALWAYS = 1;
  * @property NEVER
  * @ios
  * @readonly
- * @since 0.1
  */
 Page.iOS.LargeTitleDisplayMode.NEVER = 2;
 

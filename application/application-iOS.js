@@ -51,11 +51,6 @@ SFApplication.ios.canOpenUrl = function (url) {
     return SMFApplication.canOpenUrl(url);
 }
 
-SFApplication.ios = {};
-SFApplication.ios.canOpenUrl = function (url) {
-    return SMFApplication.canOpenUrl(url);
-}
-
 Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     get: function() {
         var mainBundle = Invocation.invokeClassMethod("NSBundle","mainBundle",[],"NSObject");
@@ -67,6 +62,7 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
 
 SFApplication.android = {};
 SFApplication.Android = {};
+SFApplication.Android.KeyboardMode = {};
 SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
 SFApplication.android.shouldShowRequestPermissionRationale = function(){};

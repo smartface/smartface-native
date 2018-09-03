@@ -45,7 +45,8 @@ const ListView = extend(View)(
         _super(this);
 
         var _listViewItems = {};
-        var dataAdapter = NativeRecyclerView.Adapter.extend("SFAdapter", {
+        const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
+        var callbacks = {
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
@@ -110,7 +111,8 @@ const ListView = extend(View)(
                     return _onRowType(position);
                 return 0;
             }
-        }, null);
+        };
+        var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
         var _onScroll;
         var _contentOffset = { x: 0, y: 0 };
@@ -371,7 +373,8 @@ const ListView = extend(View)(
         }
 
         function createAndSetScrollListener() {
-            _onScrollListener = NativeRecyclerView.OnScrollListener.extend("SFScrollListener", {
+            const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
+            var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
@@ -383,7 +386,8 @@ const ListView = extend(View)(
                     _onScroll && _onScroll({ translation: { x: dX, y: dY }, contentOffset: { x: offsetX, y: offsetY } });
                 },
                 onScrollStateChanged: function(recyclerView, newState) {},
-            }, null);
+            };
+            _onScrollListener = new SFOnScrollListener(overrideMethods);
             self.nativeInner.setOnScrollListener(_onScrollListener);
         }
 

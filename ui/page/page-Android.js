@@ -16,7 +16,7 @@ const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 
 // const NativeFragment = requireClass("android.support.v4.app.Fragment");
-const SFFragment   = requireClass('io.smartface.android.sfcore.SFPage');
+const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -47,6 +47,7 @@ function Page(params) {
     var self = this;
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
+    self.pageLayoutContainer = pageLayoutContainer;
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -60,7 +61,7 @@ function Page(params) {
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
-    
+
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -115,7 +116,7 @@ function Page(params) {
                 }
                 else {
                     const Router = require("../router");
-                    Router.goBack(null, true);
+                    Router.goBack(null, this.__pendingParameters);
                 }
             }
             else if (_headerBarItems[itemId]) {
@@ -297,6 +298,53 @@ function Page(params) {
         enumerable: true
     });
 
+    var popupPageTag = "popupWindow";
+    const GONE = 8;
+    Object.defineProperties(self, {
+        'present': {
+            value: function(page, animation, onCompleteCallback) {
+
+                if (page instanceof Page) {
+
+
+                    var rootViewId = NativeSFR.id.page_container
+
+                    var fragmentManager = activity.getSupportFragmentManager();
+                    var fragmentTransaction = fragmentManager.beginTransaction();
+
+                    var pageAnimationsCache = {};
+                    var packageName = activity.getPackageName();
+                    var resources = AndroidConfig.activityResources;
+                    pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                    pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+
+                    if (animation)
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
+
+                    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
+
+                    fragmentTransaction.addToBackStack(popupPageTag);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager.executePendingTransactions();
+
+
+                    onCompleteCallback && onCompleteCallback();
+
+                }
+                else
+                    throw Error("Page parameter mismatch, Parameter must be Page");
+            },
+            enumerable: true
+        },
+        'dismiss': {
+            value: function(onCompleteCallback) {
+                var fragmentManager = activity.getSupportFragmentManager();
+                fragmentManager.popBackStack();
+                onCompleteCallback && onCompleteCallback();
+            },
+            enumerable: true
+        }
+    });
 
     this.statusBar = {};
 

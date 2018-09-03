@@ -13,10 +13,11 @@ const ScrollView = extend(ViewGroup)(
         var _align = (params && params.align) ? params.align : ScrollView.Align.VERTICAL;
         var prevY, prevOldY, prevX, prevOldX;
         var triggersTwice = false;
+        var callback = null;
         if (!this.nativeObject) {
             if (_align === ScrollView.Align.HORIZONTAL) {
-                const NativeHorizontalScroll = requireClass('android.widget.HorizontalScrollView');
-                this.nativeObject = NativeHorizontalScroll.extend("SFHorizontalScroll", {
+                const NativeHorizontalScroll = requireClass('io.smartface.android.SFHorizontalScrollView');
+                callback = {
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
                         x = (x > 0) ? x : 0; // negative values are provided as well
@@ -33,12 +34,12 @@ const ScrollView = extend(ViewGroup)(
 
                         !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
                     }
-                }, [activity]);
+                };
+                this.nativeObject = new NativeHorizontalScroll(activity, callback);
             }
             else {
-                const NativeVerticalScroll = requireClass('android.widget.ScrollView');
-
-                this.nativeObject = NativeVerticalScroll.extend("SFVerticalScroll", {
+                const NativeVerticalScroll = requireClass('io.smartface.android.SFScrollView');
+                callback = {
                     onScrollChanged: function(xObj, yObj, oldx, oldy) {
                         var y = yObj;
                         y = (y > 0) ? y : 0; // negative values are provided as well
@@ -55,7 +56,8 @@ const ScrollView = extend(ViewGroup)(
 
                         !triggersTwice && _callbackOnScroll && _callbackOnScroll({ translation: translation, contentOffset: _contentOffset });
                     }
-                }, [activity]);
+                };
+                this.nativeObject = new NativeVerticalScroll(activity, callback);
             }
         }
 

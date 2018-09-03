@@ -85,6 +85,105 @@ const Picker = extend(View)(
             enumerable: true
         });
         
+        var _title;
+        Object.defineProperty(this, 'title', {
+            get: function() {
+                return _title;
+            },
+            set: function(value) {
+                _title = value;
+            },
+            enumerable: true
+        });
+        
+        var _titleColor;
+        Object.defineProperty(this, 'titleColor', {
+            get: function() {
+                return _titleColor;
+            },
+            set: function(value) {
+                _titleColor = value;
+            },
+            enumerable: true
+        });
+        
+        var _titleFont;
+        Object.defineProperty(this, 'titleFont', {
+            get: function() {
+                return _titleFont;
+            },
+            set: function(value) {
+                _titleFont = value;
+            },
+            enumerable: true
+        });
+        
+        var _cancelColor;
+        Object.defineProperty(this, 'cancelColor', {
+            get: function() {
+                return _cancelColor;
+            },
+            set: function(value) {
+                _cancelColor = value;
+            },
+            enumerable: true
+        });
+        
+        var _cancelHighlightedColor;
+        Object.defineProperty(this.ios, 'cancelHighlightedColor', {
+            get: function() {
+                return _cancelHighlightedColor;
+            },
+            set: function(value) {
+                _cancelHighlightedColor = value;
+            },
+            enumerable: true
+        });
+        
+        var _cancelFont;
+        Object.defineProperty(this, 'cancelFont', {
+            get: function() {
+                return _cancelFont;
+            },
+            set: function(value) {
+                _cancelFont = value;
+            },
+            enumerable: true
+        });
+        
+        var _okColor;
+        Object.defineProperty(this, 'okColor', {
+            get: function() {
+                return _okColor;
+            },
+            set: function(value) {
+                _okColor = value;
+            },
+            enumerable: true
+        });
+        
+        var _okHighlightedColor;
+        Object.defineProperty(this.ios, 'okHighlightedColor', {
+            get: function() {
+                return _okHighlightedColor;
+            },
+            set: function(value) {
+                _okHighlightedColor = value;
+            },
+            enumerable: true
+        });
+        
+        var _okFont;
+        Object.defineProperty(this, 'okFont', {
+            get: function() {
+                return _okFont;
+            },
+            set: function(value) {
+                _okFont = value;
+            },
+            enumerable: true
+        });
+        
         self.show = function(ok,cancel){
               var okFunc = function(e){
                 if (typeof ok === "function"){
@@ -96,7 +195,20 @@ const Picker = extend(View)(
                     cancel();
                 }
               };
-              self.nativeObject.show(self.nativeObject,cancelFunc,okFunc);
+              
+              self.nativeObject.show(self.nativeObject,
+                (self.title === undefined) ? "" : self.title,
+                cancelFunc,
+                okFunc,
+                self.titleColor ? self.titleColor.nativeObject : undefined,
+                self.titleFont ? self.titleFont : undefined,
+                self.cancelColor ? self.cancelColor.nativeObject : undefined,
+                self.ios.cancelHighlightedColor ? self.ios.cancelHighlightedColor.nativeObject : undefined,
+                self.cancelFont ? self.cancelFont : undefined,
+                self.okColor ? self.okColor.nativeObject : undefined,
+                self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
+                self.okFont ? self.okFont : undefined
+                );
         }
         // Assign parameters given in constructor
         if (params) {
