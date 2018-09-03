@@ -14,16 +14,26 @@ function BottomTabBar(params) {
         
         Object.defineProperties(this, {
             'add': {
-                value: function(path, item){
+                value: function(path, item, preLoad){
                     if(_itemCount === this.android.maxItemCount) {
                         throw new Error("Maximum number of items supported by BottomTabBar is 5.");
                     }
                     
                     if(typeof(path) === "string" && item instanceof TabBarItem) { 
                         _items[path] = item;
-                        _itemCount++;
                         if(!_index)
                             _index = path;
+                        if(preLoad) {
+                            var page;
+                            if(typeof(item.route) !== 'string') {
+                                page = item.route.getRoute(null, true);
+                            } else {
+                                page = new _items[path].page();
+                                page.isBottomTabBarPage = true;
+                            }
+                            _itemInstances[_itemCount] = page;
+                        }
+                        _itemCount++;
                     }
                     else {
                         throw new Error('Parameters of add method must be a string and a TabBarItem.');
