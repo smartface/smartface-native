@@ -204,8 +204,8 @@ const MapView = extend(View)(
         var _minZoomLevel = 0;
         var _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
         var _fillColor = Color.RED;
-        var _borderColor = Color.WHITE;
         var _textColor = Color.WHITE;
+        var _borderColor = Color.WHITE;
 
         var _nativeCustomMarkerRenderer = null;
 
@@ -411,15 +411,6 @@ const MapView = extend(View)(
                         _textColor = value;
                 }
             },
-            'clusterBorderColor': { //cant set after added mapview
-                get: function() {
-                    return _borderColor.nativeObject;
-                },
-                set: function(value) {
-                    if (value instanceof Color)
-                        _borderColor = value;
-                }
-            },
             'clusterFillColor': { //cant set after added mapview
                 get: function() {
                     return _fillColor.nativeObject;
@@ -429,6 +420,15 @@ const MapView = extend(View)(
                         _fillColor = value
                 },
                 enumerable: true
+            },
+            'clusterBorderColor': { //cant set after added mapview
+                get: function() {
+                    return _borderColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _borderColor = value;
+                }
             },
             'onClusterPress': {
                 get: function() {
@@ -645,14 +645,12 @@ const MapView = extend(View)(
 
             function setDefaultClusterRenderer() {
                 const SFDefaultClusterRendererCustom = requireClass('io.smartface.android.sfcore.ui.mapview.SFDefaultClusterRendererCustom');
-                const NativeDefaultClusterRendererCustom = requireClass('io.smartface.android.mapcluster.DefaultClusterRendererCustom');
-                
-                NativeDefaultClusterRendererCustom.clusterTextColor = self.clusterTextColor && self.clusterTextColor;
-                NativeDefaultClusterRendererCustom.clusterTextSize = self.clusterFont.size && self.clusterFont.size;
-                NativeDefaultClusterRendererCustom.clusterBackgroundColor = self.clusterBorderColor && self.clusterBorderColor;
-                NativeDefaultClusterRendererCustom.clusterTypeface = self.clusterFont.nativeObject && self.clusterFont.nativeObject;
-                NativeDefaultClusterRendererCustom.clusterTypefaceStyle = null; //BOLD style is undefined 
+                const NativeSquareTextView = requireClass('com.google.maps.android.ui.SquareTextView');
+                const NativeViewGroup = requireClass('android.view.ViewGroup');
+                const NativeGoogleMapR = requireClass("com.google.maps.android.R");
 
+                const COMPLEX_UNIT_SP = 2;
+                const WRAP_CONTENT = -2;
                 var callbacks = {
                     onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
                         if (_clusterItemImage) {
@@ -671,10 +669,28 @@ const MapView = extend(View)(
                     },
                     getColor: function(cluster) {
                         return self.clusterFillColor && self.clusterFillColor;
+                    },
+                    makeSquareTextView: function(context) {
+                        var nativeSquareTextView = new NativeSquareTextView(context);
+                        nativeSquareTextView.setTextSize(COMPLEX_UNIT_SP, self.clusterFont.size);
+                        nativeSquareTextView.setTextColor(self.clusterTextColor);
+                        nativeSquareTextView.setTypeface(self.clusterFont.nativeObject);
+                        nativeSquareTextView.setId(NativeGoogleMapR.id.amu_text);
+
+                        var layoutParams = new NativeViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+                        nativeSquareTextView.setLayoutParams(layoutParams);
+                        var mDensity = spratAndroidActivityInstance.getResources().getDisplayMetrics().density;
+                        var twelveDpi = Math.round(6 * mDensity);
+                        nativeSquareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
+
+                        return nativeSquareTextView;
+                    },
+                    setOutlineColor: function() {
+                        return self.clusterBorderColor;
                     }
                 };
                 var _nativeDefaultClusterRenderer = new SFDefaultClusterRendererCustom(callbacks, spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager);
-                return _nativeDefaultClusterRenderer;
+                return _nativeDefaultClusterRenderer.getPersonRenderer();
             }
 
             Object.defineProperty(this, 'setDefaultClusterRenderer', {

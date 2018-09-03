@@ -104,8 +104,8 @@ MapView.prototype.clusterFillColor;
  * This property sets cluster borderColor. Cluster works on Android & iOS 11.0+.
  *
  * @property {UI.Color} clusterBorderColor
- * @android
  * @ios
+ * @android
  * @since 3.0.1
  */
 MapView.prototype.clusterBorderColor;
