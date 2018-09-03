@@ -205,6 +205,7 @@ const MapView = extend(View)(
         var _font = Font.create(Font.DEFAULT, 20, Font.BOLD);
         var _fillColor = Color.RED;
         var _textColor = Color.WHITE;
+        var _borderColor = Color.WHITE;
 
         var _nativeCustomMarkerRenderer = null;
 
@@ -419,6 +420,15 @@ const MapView = extend(View)(
                         _fillColor = value
                 },
                 enumerable: true
+            },
+            'clusterBorderColor': { //cant set after added mapview
+                get: function() {
+                    return _borderColor.nativeObject;
+                },
+                set: function(value) {
+                    if (value instanceof Color)
+                        _borderColor = value;
+                }
             },
             'onClusterPress': {
                 get: function() {
@@ -638,7 +648,7 @@ const MapView = extend(View)(
                 const NativeSquareTextView = requireClass('com.google.maps.android.ui.SquareTextView');
                 const NativeViewGroup = requireClass('android.view.ViewGroup');
                 const NativeGoogleMapR = requireClass("com.google.maps.android.R");
-            
+
                 const COMPLEX_UNIT_SP = 2;
                 const WRAP_CONTENT = -2;
                 var callbacks = {
@@ -671,9 +681,12 @@ const MapView = extend(View)(
                         nativeSquareTextView.setLayoutParams(layoutParams);
                         var mDensity = spratAndroidActivityInstance.getResources().getDisplayMetrics().density;
                         var twelveDpi = Math.round(6 * mDensity);
-                        nativeSquareTextView.setPadding(twelveDpi,twelveDpi, twelveDpi, twelveDpi);
+                        nativeSquareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
 
                         return nativeSquareTextView;
+                    },
+                    setOutlineColor: function() {
+                        return self.clusterBorderColor;
                     }
                 };
                 var _nativeDefaultClusterRenderer = new SFDefaultClusterRendererCustom(callbacks, spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager);

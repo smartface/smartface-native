@@ -105,6 +105,7 @@ MapView.prototype.clusterFillColor;
  *
  * @property {UI.Color} clusterBorderColor
  * @ios
+ * @android
  * @since 3.0.1
  */
 MapView.prototype.clusterBorderColor;
