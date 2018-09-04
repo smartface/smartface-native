@@ -221,7 +221,7 @@ const MapView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self, 'clusterBorderWidth', {
+        Object.defineProperty(self.ios, 'clusterBorderWidth', {
             get: function() {
                 return self.cluster.nativeObject.borderWidth;
             },
@@ -231,7 +231,7 @@ const MapView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self, 'clusterTextColor', {
+        Object.defineProperty(self.ios, 'clusterTextColor', {
             get: function() {
                 return new Color({ color: self.cluster.nativeObject.textColor });
             },
