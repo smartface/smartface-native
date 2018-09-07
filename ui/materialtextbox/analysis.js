@@ -96,4 +96,13 @@ MaterialTextBox.prototype.selectedLineHeight;
  */
 MaterialTextBox.prototype.selectedLineColor;
 
+/**
+ * Gets/sets the characterRestriction of the MaterialTextBox.
+ * @property {Number} characterRestriction
+ * @android
+ * @ios
+ * @since 3.1.1
+ */
+MaterialTextBox.prototype.characterRestriction;
+
 module.exports = MaterialTextBox;
