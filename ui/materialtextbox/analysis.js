@@ -17,15 +17,6 @@
 function MaterialTextBox(params){}
 
 /**
- * Gets/sets the title of the MaterialTextBox.
- * @property {String} title
- * @android
- * @ios
- * @since 3.1.1
- */
-MaterialTextBox.prototype.title;
-
-/**
  * Gets/sets the titleFont of the MaterialTextBox.
  * @property {UI.Font} titleFont
  * @android
@@ -44,13 +35,13 @@ MaterialTextBox.prototype.titleFont;
 MaterialTextBox.prototype.titleColor;
 
 /**
- * Gets/sets the selectedTitleColor of the MaterialTextBox.
- * @property {UI.Color} selectedTitleColor
+ * Gets/sets the selectedHintTextColor of the MaterialTextBox.
+ * @property {UI.Color} selectedHintTextColor
  * @android
  * @ios
  * @since 3.1.1
  */
-MaterialTextBox.prototype.selectedTitleColor;
+MaterialTextBox.prototype.selectedHintTextColor;
 
 /**
  * Gets/sets the lineColor of the MaterialTextBox.
@@ -64,7 +55,6 @@ MaterialTextBox.prototype.lineColor;
 /**
  * Gets/sets the errorColor of the MaterialTextBox.
  * @property {UI.Color} errorColor
- * @android
  * @ios
  * @since 3.1.1
  */

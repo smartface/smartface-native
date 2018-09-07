@@ -12,16 +12,6 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
-        Object.defineProperty(self, 'title', {
-            get: function() {
-                return self.nativeObject.title;
-            },
-            set: function(value) {
-                self.nativeObject.title = value;
-            },
-            enumerable: true
-        });
-        
         Object.defineProperty(self, 'titleFont', {
             get: function() {
                 return self.nativeObject.titleLabel.valueForKey("font");
@@ -42,7 +32,20 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'selectedTitleColor', {
+        var _hintTextColor = Color.create(199,199,205);
+        Object.defineProperty(self, 'hintTextColor', {
+            get: function() {
+                return _hintTextColor;
+            },
+            set: function(value) {
+                _hintTextColor = value;
+                self.titleColor = value;
+                self.hint = _hint;
+            },
+            enumerable: true,configurable : true
+        });
+        
+        Object.defineProperty(self, 'selectedHintTextColor', {
             get: function() {
                 return new Color({color : self.nativeObject.selectedTitleColor});
             },
@@ -62,7 +65,7 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'errorColor', {
+        Object.defineProperty(self.ios, 'errorColor', {
             get: function() {
                 return new Color({color : self.nativeObject.errorColor});
             },
