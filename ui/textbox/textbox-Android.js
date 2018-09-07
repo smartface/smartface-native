@@ -130,7 +130,7 @@ const TextBox = extend(TextView)(
             },
             'hint': {
                 get: function() {
-                    return self.nativeObject.getHint().toString();
+                    return self.nativeObject.getHint() && self.nativeObject.getHint().toString();
                 },
                 set: function(hint) {
                     self.nativeObject.setHint(hint);
