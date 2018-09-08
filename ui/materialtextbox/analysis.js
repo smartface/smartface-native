@@ -44,7 +44,7 @@ MaterialTextBox.prototype.titleColor;
 MaterialTextBox.prototype.selectedHintTextColor;
 
 /**
- * Gets/sets the lineColor of the MaterialTextBox.
+ * Gets/sets the lineColor of the MaterialTextBox. In Android, if error message appears then line color cannot be changed. 
  * @property {UI.Color} lineColor
  * @android
  * @ios
@@ -103,6 +103,14 @@ MaterialTextBox.prototype.selectedLineColor;
  * @since 3.1.1
  */
 MaterialTextBox.prototype.characterRestriction;
+
+/**
+ * Gets/sets the characterRestrictionColor of the MaterialTextBox.
+ * @property {Number} characterRestriction
+ * @android
+ * @since 3.1.1
+ */
+MaterialTextBox.prototype.characterRestrictionColor;
 
 
 /**
