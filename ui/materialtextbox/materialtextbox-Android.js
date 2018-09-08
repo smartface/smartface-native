@@ -290,6 +290,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 
             }
         }
+        
+        self.ios = {};
     }
 )
 function changeLineColor(editText, color) {
