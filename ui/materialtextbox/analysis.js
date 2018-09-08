@@ -104,4 +104,15 @@ MaterialTextBox.prototype.selectedLineColor;
  */
 MaterialTextBox.prototype.characterRestriction;
 
+
+/**
+ * Gets/sets the labelsFont of the MaterialTextBox. Set the font to hint and any other labels (such as error and counter labels).
+ * Given font size will not be taken in account. 
+ * 
+ * @property {UI.Font} labelsFont
+ * @android
+ * @since 3.1.1
+ */
+MaterialTextBox.prototype.labelsFont;
+
 module.exports = MaterialTextBox;
