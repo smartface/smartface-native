@@ -53,7 +53,7 @@ MaterialTextBox.prototype.selectedHintTextColor;
 MaterialTextBox.prototype.lineColor;
 
 /**
- * Gets/sets the errorColor of the MaterialTextBox.
+ * Gets/sets the errorColor of the MaterialTextBox. In Androi, underline color will also be same as error color. 
  * @property {UI.Color} errorColor
  * @ios
  * @since 3.1.1
