@@ -76,7 +76,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (!hintTextColor instanceof Color)
                         return;
                     _hintTextColor = hintTextColor;
-
+                    
                     reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject, _hintTextColor.nativeObject);
                 },
                 enumerable: true
@@ -89,7 +89,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (!hintFocusedTextColor instanceof Color)
                         return;
                     _hintFocusedTextColor = hintFocusedTextColor;
-
+                    
                     reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject, _hintFocusedTextColor.nativeObject);
                 },
                 enumerable: true
@@ -274,10 +274,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
                 var javaColorArray = array([color.nativeObject], 'int');
 
-                var nativeView = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
-                nativeView.setAccessible(true);
+                var requiredField = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
+                requiredField.setAccessible(true);
                 
-                var mNativeTextView = nativeView.get(nativeTextInputLayout);
+                var mNativeTextView = requiredField.get(nativeTextInputLayout);
                 
                 var nativeTextView = new NativeTextView(activity); 
                 var field = nativeTextView.getClass().getDeclaredField("mTextColor");// ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
