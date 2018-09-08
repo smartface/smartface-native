@@ -156,7 +156,9 @@ const MaterialTextbox = extend(TextBox)(
                 this[param] = params[param];
             }
         }
-
+        
+        //Handle android specific properties
+        self.android = {};
     }
 );
 
