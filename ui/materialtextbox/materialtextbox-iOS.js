@@ -22,28 +22,15 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'titleColor', {
-            get: function() {
-                return new Color({color : self.nativeObject.titleColor});
-            },
-            set: function(value) {
-                self.nativeObject.titleColor = value.nativeObject;
-            },
-            enumerable: true
-        });
-        
-        var _hintTextColor = Color.create(199,199,205);
-        Object.defineProperty(self, 'hintTextColor', {
-            get: function() {
-                return _hintTextColor;
-            },
-            set: function(value) {
-                _hintTextColor = value;
-                self.titleColor = value;
-                self.hint = _hint;
-            },
-            enumerable: true,configurable : true
-        });
+        // Object.defineProperty(self, 'titleColor', {
+        //     get: function() {
+        //         return new Color({color : self.nativeObject.titleColor});
+        //     },
+        //     set: function(value) {
+        //         self.nativeObject.titleColor = value.nativeObject;
+        //     },
+        //     enumerable: true
+        // });
         
         Object.defineProperty(self, 'selectedHintTextColor', {
             get: function() {
@@ -85,7 +72,7 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'lineHeight', {
+        Object.defineProperty(self.ios, 'lineHeight', {
             get: function() {
                 return self.nativeObject.lineHeight;
             },
@@ -95,7 +82,7 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'selectedLineHeight', {
+        Object.defineProperty(self.ios, 'selectedLineHeight', {
             get: function() {
                 return self.nativeObject.selectedLineHeight;
             },
@@ -123,6 +110,7 @@ const MaterialTextbox = extend(TextBox)(
             set: function(value) {
                 _hintTextColor = value;
                 self.nativeObject.placeholderColor = _hintTextColor.nativeObject;
+                self.titleColor = value;
             },
             enumerable: true,configurable : true
         });
