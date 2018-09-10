@@ -4,12 +4,12 @@ const View = require("../view");
 const Color = require("../color");
 const Font = require("../font");
 
-const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig.js");
 
 const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
 const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
@@ -23,6 +23,7 @@ const mErrorView = "mErrorView";
 const mCounterView = "mCounterView";
 
 const WRAP_CONTENT = -2;
+const MATCH_PARENT = -1;
 const state_focused = 16842908;
 const state_unfocused = -16842908;
 const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
@@ -31,18 +32,20 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         const self = this;
 
         var nativeTextInputLayout = new NativeTextInputLayout(activity);
-        nativeTextInputLayout.setLayoutParams(new NativeLinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
+        var layout = new NativeLinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        nativeTextInputLayout.setLayoutParams(layout);
 
         self.nativeObject = nativeTextInputLayout;
 
         var sfTextBox = new TextBox();
         var nativeTextInputEditText = new NativeTextInputEditText(nativeTextInputLayout.getContext());
-        
+        nativeTextInputEditText.setLayoutParams(new NativeLinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, float(1.0)));
+
         self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
 
         self.nativeObject.addView(nativeTextInputEditText);
-
+        
         var _hintTextColor;
         var _hintFocusedTextColor;
         var _enableCounterMaxLength = 10;
@@ -50,9 +53,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         var reflectionHelper = new SfReflectionHelper();
         var _lineColorObj;
         var _errorColor;
-        var enableErrorMessage = false;
         var _characterRestrictionColor;
         var enableCounter = false;
+        var _enableErrorMessage = false;
+        var _enableCharacterRestriction = false;
         Object.defineProperties(self, {
             'hint': {
                 get: function() {
@@ -98,7 +102,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _lineColorObj;
                 },
                 set: function(lineColorObj) {
-                    
+
                     if (typeof lineColorObj !== "object")
                         return;
                     _lineColorObj = lineColorObj;
@@ -123,6 +127,18 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 },
                 enumerable: true
             },
+            'enableCharacterRestriction': {
+                get: function() {
+                    return _enableCharacterRestriction;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                    _enableCharacterRestriction = value;
+                    self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
+                },
+                enumerable: true
+            },
             'characterRestriction': {
                 get: function() {
                     return self.nativeObject.isCounterEnabled();
@@ -132,7 +148,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                         return;
                     _enableCounterMaxLength = value;
                     enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
-                    self.nativeObject.setCounterEnabled(enableCounter);
+
+                    if (self.enableCharacterRestriction !== true)
+                        self.enableCharacterRestriction = true;
+
                     self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
                 },
                 enumerable: true
@@ -147,7 +166,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     _characterRestrictionColor = value;
 
                     if (enableCounter !== true)
-                        self.nativeObject.setCounterEnabled(true);
+                        self.enableCharacterRestriction = true;
 
                     changeViewColor(mCounterView, _characterRestrictionColor);
                 },
@@ -161,9 +180,23 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (typeof errorText !== 'string')
                         return;
                     _errorText = errorText;
-                    enableErrorMessage = (_errorText !== "" ? true : false);
-                    self.nativeObject.setErrorEnabled(enableErrorMessage);
+
+                    if (self.enableErrorMessage !== true)
+                        self.enableErrorMessage = true;
+
                     self.nativeObject.setError(_errorText);
+                },
+                enumerable: true
+            },
+            'enableErrorMessage': {
+                get: function() {
+                    return _enableErrorMessage;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                    _enableErrorMessage = value
+                    self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
                 enumerable: true
             },
@@ -176,37 +209,45 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                         return;
 
                     _errorColor = errorColor;
-                    if (enableErrorMessage !== true)
-                        self.nativeObject.setErrorEnabled(true);
+                    if (self.enableErrorMessage !== true)
+                        self.enableErrorMessage = true;
 
                     changeViewColor(mErrorView, _errorColor);
                 },
                 enumerable: true
             },
-            'height': {
-                get: function() {
-                    return nativeTextInputEditText.getHeight();
-                },
-                set: function(height) {
-                    if (typeof height !== 'number')
-                        return;
+            // 'height': {
+            //     get: function() {
+            //         return nativeTextInputEditText.getHeight();
+            //     },
+            //     set: function(height) {
+            //         if (typeof height !== 'number')
+            //             return;
+                        
+            //         var layoutHeight = AndroidUnitConverter.pixelToDp(nativeTextInputLayout.getHeight());
+            //         var textInputHeight = AndroidUnitConverter.pixelToDp(nativeTextInputEditText.getHeight());
+            //         console.log("layoutHeight " + layoutHeight + " textInputHeight " + textInputHeight );
+            //         var calculatedResult = height - (layoutHeight - textInputHeight) ;
+                    
+            //         console.log("calculatedResult " + calculatedResult);
+            //         nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(350));
+            //         nativeTextInputEditText.invalidate()
+            //         self.nativeObject.invalidate();
+            //     },
+            //     enumerable: true
+            // },
+            // 'maxHeight': {
+            //     get: function() {
+            //         return nativeTextInputEditText.getMaxHeight();
+            //     },
+            //     set: function(maxHeight) {
+            //         if (typeof maxHeight !== 'number')
+            //             return;
 
-                    nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
-                },
-                enumerable: true
-            },
-            'maxHeight': {
-                get: function() {
-                    return nativeTextInputEditText.getMaxHeight();
-                },
-                set: function(maxHeight) {
-                    if (typeof maxHeight !== 'number')
-                        return;
-
-                    nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
-                },
-                enumerable: true
-            }
+            //         nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
+            //     },
+            //     enumerable: true
+            // }
         });
 
         self.android = {};
@@ -289,6 +330,9 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         }
 
         self.ios = {};
+        
+        //Defaults 
+        sfTextBox.multiline = false;
     }
 )
 
