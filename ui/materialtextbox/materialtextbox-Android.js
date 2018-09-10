@@ -13,7 +13,7 @@ const NativeLinearLayout = requireClass("android.widget.LinearLayout");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
-const SfReflectionHelper = requireClass("io.smartface.android.reflections.ReflectionHelper");
+const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
 
