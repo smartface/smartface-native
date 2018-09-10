@@ -12,15 +12,15 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
-        // Object.defineProperty(self, 'titleColor', {
-        //     get: function() {
-        //         return new Color({color : self.nativeObject.titleColor});
-        //     },
-        //     set: function(value) {
-        //         self.nativeObject.titleColor = value.nativeObject;
-        //     },
-        //     enumerable: true
-        // });
+        Object.defineProperty(self.ios, 'titleColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.titleColor});
+            },
+            set: function(value) {
+                self.nativeObject.titleColor = value.nativeObject;
+            },
+            enumerable: true
+        });
         
         // var _hintFont;
         // Object.defineProperty(self, 'hintFont', {
@@ -137,7 +137,7 @@ const MaterialTextbox = extend(TextBox)(
             set: function(value) {
                 _hintTextColor = value;
                 self.nativeObject.placeholderColor = _hintTextColor.nativeObject;
-                self.titleColor = value;
+                self.ios.titleColor = value;
             },
             enumerable: true,configurable : true
         });
