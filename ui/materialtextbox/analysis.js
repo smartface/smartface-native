@@ -76,14 +76,6 @@ MaterialTextBox.prototype.lineHeight;
  */
 MaterialTextBox.prototype.selectedLineHeight;
 
-/**
- * Gets/sets the selectedLineColor of the MaterialTextBox.
- * @property {UI.Color} selectedLineColor
- * @android
- * @ios
- * @since 3.1.2
- */
-MaterialTextBox.prototype.selectedLineColor;
 
 /**
  * Gets/sets the characterRestriction of the MaterialTextBox.

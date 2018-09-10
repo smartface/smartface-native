@@ -10,11 +10,8 @@ const AndroidConfig = require("../../util/Android/androidconfig.js");
 const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
 const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-const NativeDrawableCompat = requireClass("android.support.v4.graphics.drawable.DrawableCompat");
-const NativeView = requireClass("android.view.View");
 const NativeTextView = requireClass("android.widget.TextView");
-const NativeColorStateList  =requireClass("android.content.res.ColorStateList");
-
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
 const SfReflectionHelper = requireClass("io.smartface.android.reflections.ReflectionHelper");
 
@@ -26,6 +23,8 @@ const mErrorView = "mErrorView";
 const mCounterView = "mCounterView";
 
 const WRAP_CONTENT = -2;
+const state_focused = 16842908;
+const state_unfocused = -16842908;
 const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
     function(_super, params) {
         _super(this);
@@ -38,7 +37,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         var sfTextBox = new TextBox();
         var nativeTextInputEditText = new NativeTextInputEditText(nativeTextInputLayout.getContext());
-
+        
+        self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
 
         self.nativeObject.addView(nativeTextInputEditText);
@@ -48,8 +48,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         var _enableCounterMaxLength = 10;
         var _errorText;
         var reflectionHelper = new SfReflectionHelper();
-        var _lineColor;
-        var _selectedLineColor;
+        var _lineColorObj;
         var _errorColor;
         var enableErrorMessage = false;
         var _characterRestrictionColor;
@@ -76,7 +75,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (!hintTextColor instanceof Color)
                         return;
                     _hintTextColor = hintTextColor;
-                    
+
                     reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject, _hintTextColor.nativeObject);
                 },
                 enumerable: true
@@ -89,40 +88,38 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (!hintFocusedTextColor instanceof Color)
                         return;
                     _hintFocusedTextColor = hintFocusedTextColor;
-                    
+
                     reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject, _hintFocusedTextColor.nativeObject);
                 },
                 enumerable: true
             },
             'lineColor': {
                 get: function() {
-                    return _lineColor;
+                    return _lineColorObj;
                 },
-                set: function(lineColor) {
-                    if (!lineColor instanceof Color)
+                set: function(lineColorObj) {
+                    
+                    if (typeof lineColorObj !== "object")
                         return;
-                    _lineColor = lineColor;
-                    changeLineColor(nativeTextInputEditText, _lineColor);
-                },
-                enumerable: true
-            },
-            'selectedLineColor': {
-                get: function() {
-                    return _selectedLineColor;
-                },
-                set: function(selectedLineColor) {
-                    if (!_selectedLineColor instanceof Color)
-                        return;
+                    _lineColorObj = lineColorObj;
 
-                    _selectedLineColor = selectedLineColor;
-                    nativeTextInputEditText.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
-                        onFocusChange: function(view, hasFocus) {
-                            if (hasFocus) {
-                                changeLineColor(nativeTextInputEditText, _selectedLineColor);
-                                view.setOnFocusChangeListener(null); //Only needed one time
-                            }
-                        }
-                    }));
+                    var jsColorArray = [];
+                    var jsStateArray = [];
+                    if (lineColorObj.normal) {
+                        jsColorArray.push(lineColorObj.normal.nativeObject);
+                        jsStateArray.push(array([state_unfocused], "int"));
+                    }
+
+                    if (lineColorObj.selected) {
+                        jsColorArray.push(lineColorObj.selected.nativeObject);
+                        jsStateArray.push(array([state_focused], "int"));
+                    }
+                    var javaTwoDimensionArray = array(jsStateArray);
+                    var javaColorArray = array(jsColorArray, 'int');
+
+                    var lineColorListState = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
+
+                    nativeTextInputEditText.setSupportBackgroundTintList(lineColorListState);
                 },
                 enumerable: true
             },
@@ -276,30 +273,23 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
                 var requiredField = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
                 requiredField.setAccessible(true);
-                
+
                 var mNativeTextView = requiredField.get(nativeTextInputLayout);
-                
-                var nativeTextView = new NativeTextView(activity); 
-                var field = nativeTextView.getClass().getDeclaredField("mTextColor");// ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
+
+                var nativeTextView = new NativeTextView(activity);
+                var field = nativeTextView.getClass().getDeclaredField("mTextColor"); // ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
                 field.setAccessible(true);
 
                 var myList = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
                 field.set(mNativeTextView, myList);
             }
             catch (e) {
-                
+
             }
         }
-        
+
         self.ios = {};
     }
 )
-function changeLineColor(editText, color) {
-    var buttonDrawable = editText.getBackground();
-    buttonDrawable = NativeDrawableCompat.wrap(buttonDrawable);
-    //the color is a direct color int and not a color resource
-    NativeDrawableCompat.setTint(buttonDrawable, color.nativeObject);
-    editText.setBackground(buttonDrawable);
-}
 
 module.exports = MaterialTextbox;
