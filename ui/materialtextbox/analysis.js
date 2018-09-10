@@ -1,6 +1,6 @@
 /**
  * @class UI.MaterialTextBox
- * @since 3.1.1
+ * @since 3.1.2
  * @extends UI.TextBox
  * MaterialTextBox is a UI which users can edit the text.
  * 
@@ -8,8 +8,7 @@
  *     const MaterialTextBox = require('sf-core/ui/materialtextbox');
  *     var materialtextbox = new MaterialTextBox({
  *         height : 50,
- *         hint : "Hint",
- *         title : "Title"
+ *         hint : "Hint"
  *     });
  *     myPage.layout.addChild(materialtextbox);
  *
@@ -17,37 +16,38 @@
 function MaterialTextBox(params){}
 
 /**
- * Gets/sets the titleFont of the MaterialTextBox.
+ * Gets/sets the titleFont of the MaterialTextBox. Error label and animated hint label are the same on iOS so this property make changes on both.
  * @property {UI.Font} titleFont
- * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.titleFont;
 
 /**
  * Gets/sets the selectedHintTextColor of the MaterialTextBox.
  * @property {UI.Color} selectedHintTextColor
- * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.selectedHintTextColor;
 
 /**
  * Gets/sets the lineColor of the MaterialTextBox. In Android, if error message appears then line color cannot be changed. 
- * @property {UI.Color} lineColor
+ * @property {Object} [lineColor = {}]
+ * @property {UI.Color} lineColor.normal
+ * @property {UI.Color} lineColor.selected
  * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.lineColor;
 
 /**
- * Gets/sets the errorColor of the MaterialTextBox. In Androi, underline color will also be same as error color. 
+ * Gets/sets the errorColor of the MaterialTextBox. In Android, underline color will also be same as error color. 
  * @property {UI.Color} errorColor
+ * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.errorColor;
 
@@ -56,7 +56,7 @@ MaterialTextBox.prototype.errorColor;
  * @property {String} errorMessage
  * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.errorMessage;
 
@@ -64,7 +64,7 @@ MaterialTextBox.prototype.errorMessage;
  * Gets/sets the lineHeight of the MaterialTextBox.
  * @property {Number} lineHeight
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.lineHeight;
 
@@ -72,7 +72,7 @@ MaterialTextBox.prototype.lineHeight;
  * Gets/sets the selectedLineHeight of the MaterialTextBox.
  * @property {Number} selectedLineHeight
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.selectedLineHeight;
 
@@ -81,7 +81,7 @@ MaterialTextBox.prototype.selectedLineHeight;
  * @property {UI.Color} selectedLineColor
  * @android
  * @ios
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.selectedLineColor;
 
@@ -89,7 +89,7 @@ MaterialTextBox.prototype.selectedLineColor;
  * Gets/sets the characterRestriction of the MaterialTextBox.
  * @property {Number} characterRestriction
  * @android
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.characterRestriction;
 
@@ -97,7 +97,7 @@ MaterialTextBox.prototype.characterRestriction;
  * Gets/sets the characterRestrictionColor of the MaterialTextBox.
  * @property {Number} characterRestriction
  * @android
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.characterRestrictionColor;
 
@@ -108,7 +108,7 @@ MaterialTextBox.prototype.characterRestrictionColor;
  * 
  * @property {UI.Font} labelsFont
  * @android
- * @since 3.1.1
+ * @since 3.1.2
  */
 MaterialTextBox.prototype.labelsFont;
 

@@ -12,16 +12,6 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
-        Object.defineProperty(self, 'titleFont', {
-            get: function() {
-                return self.nativeObject.titleLabel.valueForKey("font");
-            },
-            set: function(value) {
-                self.nativeObject.titleLabel.setValueForKey(value,"font");
-            },
-            enumerable: true
-        });
-        
         // Object.defineProperty(self, 'titleColor', {
         //     get: function() {
         //         return new Color({color : self.nativeObject.titleColor});
@@ -31,6 +21,28 @@ const MaterialTextbox = extend(TextBox)(
         //     },
         //     enumerable: true
         // });
+        
+        // var _hintFont;
+        // Object.defineProperty(self, 'hintFont', {
+        //     get: function() {
+        //         return _hintFont;
+        //     },
+        //     set: function(value) {
+        //         _hintFont = value;
+        //         self.nativeObject.placeholderFont = _hint;
+        //     },
+        //     enumerable: true,configurable : true
+        // });
+        
+        Object.defineProperty(self.ios, 'titleFont', {
+            get: function() {
+                return self.nativeObject.titleLabel.valueForKey("font");
+            },
+            set: function(value) {
+                self.nativeObject.titleLabel.setValueForKey(value,"font");
+            },
+            enumerable: true
+        });
         
         Object.defineProperty(self, 'selectedHintTextColor', {
             get: function() {
@@ -44,6 +56,21 @@ const MaterialTextbox = extend(TextBox)(
         
         Object.defineProperty(self, 'lineColor', {
             get: function() {
+                return {normal:self.ios.normallineColor, selected:self.ios.selectedLineColor};
+            },
+            set: function(value) {
+                if (value.normal) {
+                    self.ios.normallineColor = value.normal;
+                }
+                if (value.selected) {
+                    self.ios.selectedLineColor = value.selected;
+                }
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self.ios, 'normallineColor', {
+            get: function() {
                 return new Color({color : self.nativeObject.lineColor});
             },
             set: function(value) {
@@ -52,7 +79,17 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self.ios, 'errorColor', {
+        Object.defineProperty(self.ios, 'selectedLineColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.selectedLineColor});
+            },
+            set: function(value) {
+                self.nativeObject.selectedLineColor = value.nativeObject;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'errorColor', {
             get: function() {
                 return new Color({color : self.nativeObject.errorColor});
             },
@@ -92,16 +129,6 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self, 'selectedLineColor', {
-            get: function() {
-                return new Color({color : self.nativeObject.selectedLineColor});
-            },
-            set: function(value) {
-                self.nativeObject.selectedLineColor = value.nativeObject;
-            },
-            enumerable: true
-        });
-        
         var _hintTextColor = Color.create(199,199,205);
         Object.defineProperty(self, 'hintTextColor', {
             get: function() {
@@ -114,18 +141,6 @@ const MaterialTextbox = extend(TextBox)(
             },
             enumerable: true,configurable : true
         });
-        
-        // var _hintFont;
-        // Object.defineProperty(self, 'hintFont', {
-        //     get: function() {
-        //         return _hintFont;
-        //     },
-        //     set: function(value) {
-        //         _hintFont = value;
-        //         self.nativeObject.placeholderFont = _hint;
-        //     },
-        //     enumerable: true,configurable : true
-        // });
         
         var _hint;
         Object.defineProperty(self, 'hint', {
