@@ -104,4 +104,26 @@ MaterialTextBox.prototype.characterRestrictionColor;
  */
 MaterialTextBox.prototype.labelsFont;
 
+
+
+/**
+ * Gets/sets the enableErrorMessage of the MaterialTextBox. To change error dynamically, you should set this property at the creation moment.
+ * 
+ * @property {Boolean} enableErrorMessage
+ * @android
+ * @since 3.1.2
+ */
+MaterialTextBox.prototype.enableErrorMessage;
+
+
+
+/**
+ * Gets/sets the enableCharacterRestriction of the MaterialTextBox. To change counter dynamically at runtime, you should set this property at the creation moment.
+ * 
+ * @property {Boolean} enableCharacterRestriction
+ * @android
+ * @since 3.1.2
+ */
+MaterialTextBox.prototype.enableCharacterRestriction;
+
 module.exports = MaterialTextBox;
