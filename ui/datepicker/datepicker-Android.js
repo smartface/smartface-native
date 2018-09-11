@@ -8,6 +8,8 @@ function DatePicker(params) {
     const NativeDatePickerDialog = requireClass('android.app.DatePickerDialog');
     var today = new Date();
     
+    this.ios = {};
+    
     if(!this.nativeObject){
         this.nativeObject = new NativeDatePickerDialog(activity, NativeDatePickerDialog.OnDateSetListener.implement({
             onDateSet: function(datePicker, year, month, day) {

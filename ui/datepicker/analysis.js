@@ -69,4 +69,85 @@ DatePicker.prototype.show = function() {};
  */
 DatePicker.prototype.onDateSelected = function(date) {};
 
+/**
+ * Gets/sets title of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} title
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.title;
+
+/**
+ * Gets/sets titleColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} titleColor
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.titleColor;
+
+/**
+ * Gets/sets titleFont of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Font} titleFont
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.titleFont;
+
+/**
+ * Gets/sets cancelColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} cancelColor
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.cancelColor;
+
+/**
+ * Gets/sets cancelHighlightedColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} cancelHighlightedColor
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.cancelHighlightedColor;
+
+/**
+ * Gets/sets cancelFont of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Font} cancelFont
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.cancelFont;
+
+/**
+ * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} okColor
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.okColor;
+
+/**
+ * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Color} okHighlightedColor
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.okHighlightedColor;
+
+/**
+ * Gets/sets okFont of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {UI.Font} okFont
+ * @ios
+ * @since 3.1.1
+ */
+DatePicker.prototype.okFont;
+
 module.exports = DatePicker;

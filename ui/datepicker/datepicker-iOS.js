@@ -8,6 +8,8 @@ function DatePicker (params) {
         self.nativeObject = new __SF_UIDatePicker();
     }
     
+    self.ios = {};
+    
     self.onDateSelected = function(){};
     
     self.onDateSelectedListener = function(e){
@@ -34,9 +36,118 @@ function DatePicker (params) {
         }
     };
     
+    var _title;
+    Object.defineProperty(this.ios, 'title', {
+        get: function() {
+            return _title;
+        },
+        set: function(value) {
+            _title = value;
+        },
+        enumerable: true
+    });
+    
+    var _titleColor;
+    Object.defineProperty(this.ios, 'titleColor', {
+        get: function() {
+            return _titleColor;
+        },
+        set: function(value) {
+            _titleColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _titleFont;
+    Object.defineProperty(this.ios, 'titleFont', {
+        get: function() {
+            return _titleFont;
+        },
+        set: function(value) {
+            _titleFont = value;
+        },
+        enumerable: true
+    });
+    
+    var _cancelColor;
+    Object.defineProperty(this.ios, 'cancelColor', {
+        get: function() {
+            return _cancelColor;
+        },
+        set: function(value) {
+            _cancelColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _cancelHighlightedColor;
+    Object.defineProperty(this.ios, 'cancelHighlightedColor', {
+        get: function() {
+            return _cancelHighlightedColor;
+        },
+        set: function(value) {
+            _cancelHighlightedColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _cancelFont;
+    Object.defineProperty(this.ios, 'cancelFont', {
+        get: function() {
+            return _cancelFont;
+        },
+        set: function(value) {
+            _cancelFont = value;
+        },
+        enumerable: true
+    });
+    
+    var _okColor;
+    Object.defineProperty(this.ios, 'okColor', {
+        get: function() {
+            return _okColor;
+        },
+        set: function(value) {
+            _okColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _okHighlightedColor;
+    Object.defineProperty(this.ios, 'okHighlightedColor', {
+        get: function() {
+            return _okHighlightedColor;
+        },
+        set: function(value) {
+            _okHighlightedColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _okFont;
+    Object.defineProperty(this.ios, 'okFont', {
+        get: function() {
+            return _okFont;
+        },
+        set: function(value) {
+            _okFont = value;
+        },
+        enumerable: true
+    });
+        
     self.show = function(){
         self.nativeObject.datePickerMode = UIDatePickerMode.date;
-        self.nativeObject.show();
+        self.nativeObject.show(
+                (self.ios.title === undefined) ? "" : self.ios.title,
+                self.ios.titleColor ? self.ios.titleColor.nativeObject : undefined,
+                self.ios.titleFont ? self.ios.titleFont : undefined,
+                self.ios.cancelColor ? self.ios.cancelColor.nativeObject : undefined,
+                self.ios.cancelHighlightedColor ? self.ios.cancelHighlightedColor.nativeObject : undefined,
+                self.ios.cancelFont ? self.ios.cancelFont : undefined,
+                self.ios.okColor ? self.ios.okColor.nativeObject : undefined,
+                self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
+                self.ios.okFont ? self.ios.okFont : undefined
+                );
     };
     
     // Assign parameters given in constructor
