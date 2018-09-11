@@ -5,6 +5,8 @@ const Color = require("../color");
 const Font = require("../font");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+
 
 const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
 const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
@@ -45,7 +47,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         sfTextBox.nativeObject = nativeTextInputEditText;
 
         self.nativeObject.addView(nativeTextInputEditText);
-        
+
         var _hintTextColor;
         var _hintFocusedTextColor;
         var _enableCounterMaxLength = 10;
@@ -223,12 +225,12 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             //     set: function(height) {
             //         if (typeof height !== 'number')
             //             return;
-                        
+
             //         var layoutHeight = AndroidUnitConverter.pixelToDp(nativeTextInputLayout.getHeight());
             //         var textInputHeight = AndroidUnitConverter.pixelToDp(nativeTextInputEditText.getHeight());
             //         console.log("layoutHeight " + layoutHeight + " textInputHeight " + textInputHeight );
             //         var calculatedResult = height - (layoutHeight - textInputHeight) ;
-                    
+
             //         console.log("calculatedResult " + calculatedResult);
             //         nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(350));
             //         nativeTextInputEditText.invalidate()
@@ -253,15 +255,42 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         self.android = {};
 
         var _font;
-        Object.defineProperty(self.android, 'labelsFont', {
-            get: function() {
-                return _font;
+        Object.defineProperties(self.android, {
+            'labelsFont': {
+                get: function() {
+                    return _font;
+                },
+                set: function(font) {
+                    if (!font instanceof Font)
+                        return;
+                    _font = font;
+                    self.nativeObject.setTypeface(font.nativeObject);
+                },
+                enumerable: true
             },
-            set: function(font) {
-                if (!font instanceof Font)
-                    return;
-                _font = font;
-                self.nativeObject.setTypeface(font.nativeObject);
+            'textBoxHeight': {
+                get: function() {
+                    return nativeTextInputEditText.getHeight();
+                },
+                set: function(height) {
+                    if (typeof height !== 'number')
+                        return;
+
+                    nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
+                },
+                enumerable: true
+            },
+            'textBoxMaxHeight': {
+                get: function() {
+                    return nativeTextInputEditText.getMaxHeight();
+                },
+                set: function(maxHeight) {
+                    if (typeof maxHeight !== 'number')
+                        return;
+
+                    nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
+                },
+                enumerable: true
             }
         });
 
@@ -330,7 +359,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         }
 
         self.ios = {};
-        
+
         //Defaults 
         sfTextBox.multiline = false;
     }

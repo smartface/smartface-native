@@ -116,7 +116,6 @@ MaterialTextBox.prototype.labelsFont;
 MaterialTextBox.prototype.enableErrorMessage;
 
 
-
 /**
  * Gets/sets the enableCharacterRestriction of the MaterialTextBox. To change counter dynamically at runtime, you should set this property at the creation moment.
  * 
@@ -125,5 +124,26 @@ MaterialTextBox.prototype.enableErrorMessage;
  * @since 3.1.2
  */
 MaterialTextBox.prototype.enableCharacterRestriction;
+
+
+/**
+ * Gets/sets the textBoxHeight of the MaterialTextBox. This property is necessary because of the textbox does not grow its height with wrapper container(MaterialTextBox actually is a wrapper of views in Android). 
+ * 
+ * @property {Number} textBoxHeight
+ * @android
+ * @since 3.1.2
+ */
+MaterialTextBox.prototype.textBoxHeight;
+
+
+
+/**
+ * Gets/sets the textBoxMaxHeight of the MaterialTextBox.This property is necessary because it has same reason with textBoxHeight property.
+ * 
+ * @property {Number} textBoxMaxHeight
+ * @android
+ * @since 3.1.2
+ */
+MaterialTextBox.prototype.textBoxMaxHeight;
 
 module.exports = MaterialTextBox;
