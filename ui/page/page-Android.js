@@ -318,25 +318,22 @@ function Page(params) {
                     var resources = AndroidConfig.activityResources;
                     pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
                     pageAnimationsCache.popExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
-                    pageAnimationsCache.exit = resources.getIdentifier("longondismiss_animation", "anim", packageName);
 
                     if (animation)
-                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, pageAnimationsCache.exit, 0, pageAnimationsCache.popExit);
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.popExit);
                    
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-
+                    
                     fragmentTransaction.addToBackStack(popupPageTag);
                     fragmentTransaction.commitAllowingStateLoss();
                     fragmentManager.executePendingTransactions();
 
                     var isPresentLayoutFocused = page.layout.nativeObject.isFocused()
-                    
                     self.layout.nativeObject.setFocusableInTouchMode(false);
                     !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
-
                 }
                 else
                     throw Error("Page parameter mismatch, Parameter must be Page");
@@ -349,8 +346,6 @@ function Page(params) {
                 fragmentManager.popBackStack();
 
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
-                
-                self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true);
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus()
 
