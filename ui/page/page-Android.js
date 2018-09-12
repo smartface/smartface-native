@@ -317,11 +317,13 @@ function Page(params) {
                     var packageName = activity.getPackageName();
                     var resources = AndroidConfig.activityResources;
                     pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    pageAnimationsCache.popExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    pageAnimationsCache.exit = resources.getIdentifier("longondismiss_animation", "anim", packageName);
 
                     if (animation)
-                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
-
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, pageAnimationsCache.exit, 0, pageAnimationsCache.popExit);
+                   
+                    self.nativeObject.setAllowEnterTransitionOverlap(true);
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
 
                     fragmentTransaction.addToBackStack(popupPageTag);
@@ -350,6 +352,7 @@ function Page(params) {
 
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus()
+                self.popUpBackPage.nativeObject.setAllowEnterTransitionOverlap(false);
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
