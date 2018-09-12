@@ -306,6 +306,7 @@ function Page(params) {
 
                 if (page instanceof Page) {
 
+                    page.popUpBackPage = self
 
                     var rootViewId = NativeSFR.id.page_container
 
@@ -327,6 +328,10 @@ function Page(params) {
                     fragmentTransaction.commitAllowingStateLoss();
                     fragmentManager.executePendingTransactions();
 
+                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused()
+
+                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
 
@@ -340,6 +345,11 @@ function Page(params) {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager.popBackStack();
+
+                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus()
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
