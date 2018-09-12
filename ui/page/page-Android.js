@@ -323,7 +323,6 @@ function Page(params) {
                     if (animation)
                         fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, pageAnimationsCache.exit, 0, pageAnimationsCache.popExit);
                    
-                    self.nativeObject.setAllowEnterTransitionOverlap(true);
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
 
                     fragmentTransaction.addToBackStack(popupPageTag);
@@ -331,7 +330,8 @@ function Page(params) {
                     fragmentManager.executePendingTransactions();
 
                     var isPresentLayoutFocused = page.layout.nativeObject.isFocused()
-
+                    
+                    self.layout.nativeObject.setFocusableInTouchMode(false);
                     !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
@@ -349,10 +349,11 @@ function Page(params) {
                 fragmentManager.popBackStack();
 
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
-
+                
+                self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true);
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus()
-                self.popUpBackPage.nativeObject.setAllowEnterTransitionOverlap(false);
+
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
