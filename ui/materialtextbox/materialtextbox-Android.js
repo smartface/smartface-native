@@ -361,7 +361,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         self.ios = {};
 
         //Defaults 
-        sfTextBox.multiline = false;
+        self.textBoxNativeObject.setSingleLine(true);
     }
 )
 
