@@ -1,0 +1,121 @@
+
+/**
+ * @class UI.NavigationController
+ * @since 3.2
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     const NavigationController = require('sf-core/ui/navigationcontroller');
+ * 
+ *     var page1 = new Page();
+ *     var navigationController = new NavigationController(); //// OR IT CAN TAKES a controller object like tabbarcontroller AS AN ARGUMENT
+ *     navigationController.childControllers = [page1];
+ *     navigationController.headerBar.translucent = true;
+ *     var page2 = new Page();
+ *     page2.navigationItem.title = "Page1";
+ *     navigationController.push({page: page2, animation: true});
+ *
+ *     var page3 = new Page();
+ *     page3.parentController.headerBar.backgroundColor = Color.RED;
+ *     navigationController.push({page: page3, animation: true});
+ *
+ *     var page4 = new Page();
+ *     navigationController.push({page: page4, animation: true});
+ *     navigationController.childControllers; /// Returns [page1,page2,page3,page4];
+ *     navigationController.popTo({page: page2, animation: true});
+ *     navigationController.childControllers; /// Returns [page1,page2];
+ *
+ *     navigationController.pop();
+ *     navigationController.childControllers; /// Returns [page1];
+ *
+ *     navigationController.willShow = function ({page: page, animation: animation}) {};
+ *     navigationController.onTransition = function ({currentPage: currentPage, targetPage: targetPage, operation: operation}) /// => operation means (push || pop)
+ */
+
+function NavigationController() {
+    /**
+     * Gets/sets child controllers of NavigationController instance.
+     *
+     * @property {Array} childControllers
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.childControllers = [];
+    
+    /**
+     * Gets headerBar of NavigationController instance.
+     *
+     * @property {UI.HeaderBar} headerBar
+     * @android
+     * @ios
+     * @readonly
+     * @since 3.2.0
+     */
+    this.headerBar;
+    
+    /**
+     * Show page with animation parameter. Animated parameter is set to true as default.
+     *
+     * @method push
+     * @param params
+     * @param {UI.Page} params.page
+     * @param Boolean [params.animated = true]
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.push = function({page: page, animated: animated}) {};
+    
+    /**
+     * Pop the last page from the navigation controller's page back stack. 
+     *
+     * @method pop
+     * @param params
+     * @param Boolean [params.animated = true]
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.pop = function({animated: animated}) {};
+    
+    /**
+     * Until the given page is found, the pages popped from back stack.
+     *
+     * @method popTo
+     * @param params
+     * @param {UI.Page} params.page
+     * @param Boolean [params.animated = true]
+     * @android
+     * @ios
+     * @since 3.2.0
+     */
+    this.popTo = function({page: page, animated: animated}) {};
+    
+    /**
+     * This event is triggered before the page is displayed.
+     *
+     * @event willShow
+     * @param params
+     * @param {UI.Page} params.page
+     * @param UI.AnimationType params.animation
+     * @android
+     * @since 3.2.0
+     */
+    this.willShow = function(params){};
+    
+    
+    /**
+     * This event is triggered before the page is displayed.
+     *
+     * @event onTransition
+     * @param params
+     * @param {UI.Page} params.currentPage
+     * @param {UI.Page} params.targetPage
+     * @param UI.NavigationController.OperationType params.operation
+     * @android
+     * @since 3.2.0
+     */
+    this.onTransition = function(params){};
+}
+
