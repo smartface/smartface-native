@@ -74,12 +74,12 @@ const ScrollView = extend(ViewGroup)(
                         var frame = subviews[i].frame;
                         rect.x = frame.x < rect.x ? frame.x : rect.x;
                         rect.y = frame.y < rect.y ? frame.y : rect.y;
-                        var width = frame.x + frame.width;
+                        var width = frame.x < 0 ? frame.width : frame.x + frame.width;
                         if (width > rect.width) {
                             rect.width = width;
                             widthAffectingView = subviews[i];
                         }
-                        var height = frame.y + frame.height;
+                        var height = frame.y < 0 ? frame.height : frame.y + frame.height;
                         if (height > rect.height) {
                             rect.height = height;
                             heightAffectingView = subviews[i];
