@@ -71,6 +71,17 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
 
 
 /**
+ * Gets/sets items of the tab bar. 
+ *
+ * @property {UI.TabBarItem[]} items
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+BottomTabBar.prototype.items = null;
+
+
+/**
  * Adds an instance of UI.TabBarItem to bottom tab bar.
  * 
  * @method add

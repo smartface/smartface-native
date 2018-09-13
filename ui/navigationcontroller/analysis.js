@@ -119,3 +119,34 @@ function NavigationController() {
     this.onTransition = function(params){};
 }
 
+
+/**
+ * @enum {Number} UI.NavigationController.OperationType
+ *
+ * Operation type of NavigationController.
+ * @static
+ * @since 3.2
+ *
+ */
+NavigationController.OperationType = {};
+/**
+ * @property {Number} PUSH
+ * Push operation
+ * @ios
+ * @android
+ * @static
+ * @readonly
+ * @since 3.2
+ */
+NavigationController.OperationType.PUSH = 0;
+/**
+ * @property {Number} POP
+ * Pop operation
+ * @ios
+ * @android
+ * @static
+ * @readonly
+ * @since 3.2
+ */
+NavigationController.OperationType.POP = 1;
+
