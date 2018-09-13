@@ -316,10 +316,10 @@ function Page(params) {
                     var packageName = activity.getPackageName();
                     var resources = AndroidConfig.activityResources;
                     var popupPageEnter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    var popupPagepopExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    var popupPagePopExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
 
                     if (animation)
-                        fragmentTransaction.setCustomAnimations(popupPageEnter, 0, 0, popupPagepopExit);
+                        fragmentTransaction.setCustomAnimations(popupPageEnter, 0, 0, popupPagePopExit);
                    
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
                     
