@@ -14,8 +14,6 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
-
-// const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
@@ -41,6 +39,8 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 10
 };
+
+var pageAnimationsCache = null; 
 
 function Page(params) {
     (!params) && (params = {});
@@ -299,35 +299,33 @@ function Page(params) {
     });
 
     var popupPageTag = "popupWindow";
-    const GONE = 8;
     Object.defineProperties(self, {
         'present': {
             value: function(page, animation, onCompleteCallback) {
-
                 if (page instanceof Page) {
-
-                    page.popUpBackPage = self
-
-                    var rootViewId = NativeSFR.id.page_container
-
+                    page.popUpBackPage = self;
+                    
+                    var rootViewId = NativeSFR.id.page_container;
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
-
-                    var packageName = activity.getPackageName();
-                    var resources = AndroidConfig.activityResources;
-                    var popupPageEnter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    var popupPagePopExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    
+                    if(!pageAnimationsCache) {
+                        var packageName = activity.getPackageName();
+                        var resources = AndroidConfig.activityResources;
+                        pageAnimationsCache = {};
+                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    }
 
                     if (animation)
-                        fragmentTransaction.setCustomAnimations(popupPageEnter, 0, 0, popupPagePopExit);
-                   
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
+
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-                    
                     fragmentTransaction.addToBackStack(popupPageTag);
                     fragmentTransaction.commitAllowingStateLoss();
                     fragmentManager.executePendingTransactions();
 
-                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused()
+                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
                     self.layout.nativeObject.setFocusableInTouchMode(false);
                     !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
@@ -346,7 +344,7 @@ function Page(params) {
 
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus()
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
 
                 onCompleteCallback && onCompleteCallback();
             },
