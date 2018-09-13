@@ -152,6 +152,12 @@ function NavigatorViewModel(params) {
                 if (self.view === null) 
                 {
                     var rootPage = self.model.getPageInstance(self.model.rootPage);
+                    
+                    if (typeof (parameters) != 'undefined' && parameters != null) 
+                    {
+                        rootPage.__pendingParameters = parameters; 
+                    }
+                    
                     var nativeRootPage;
                     if (rootPage.type == "TabBarFlow") 
                     {
