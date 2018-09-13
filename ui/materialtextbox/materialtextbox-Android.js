@@ -362,6 +362,13 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
+        
+         // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
     }
 )
 
