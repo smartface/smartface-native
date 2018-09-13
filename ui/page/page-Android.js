@@ -313,14 +313,13 @@ function Page(params) {
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
 
-                    var pageAnimationsCache = {};
                     var packageName = activity.getPackageName();
                     var resources = AndroidConfig.activityResources;
-                    pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    pageAnimationsCache.popExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    var popupPageEnter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                    var popupPagepopExit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
 
                     if (animation)
-                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.popExit);
+                        fragmentTransaction.setCustomAnimations(popupPageEnter, 0, 0, popupPagepopExit);
                    
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
                     
