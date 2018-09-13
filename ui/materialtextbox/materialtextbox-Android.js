@@ -183,7 +183,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                         return;
                     _errorText = errorText;
 
-                    if (self.enableErrorMessage !== true)
+                    if (self.enableErrorMessage !== true && _errorText.length !== 0)
                         self.enableErrorMessage = true;
 
                     self.nativeObject.setError(_errorText);
