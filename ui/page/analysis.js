@@ -53,6 +53,16 @@ function Page(params) {}
 Page.prototype.onLoad = function (){};
 
 /**
+ * Gets the navigation item of the page.
+ *
+ * @property {UI.HeaderBarItem} navigationItem
+ * @ios
+ * @readonly
+ * @since 3.2.0
+ */
+Page.prototype.navigationItem;
+
+/**
  * Gets the main layout of Page which is an instance of UI.FlexLayout. You
  * should add views to the layout of the page.
  *
