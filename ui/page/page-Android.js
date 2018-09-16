@@ -64,6 +64,7 @@ function Page(params) {
 
     var callback = {
         onCreateView: function() {
+            console.log("Page onCreateView");
             self.nativeObject.setHasOptionsMenu(true);
             if (!isCreated) {
                 onLoadCallback && onLoadCallback();
@@ -77,10 +78,17 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
+                    if(Router.currentPage) {
+                        Router.currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+                    }
                     if (!self.isSwipeViewPage) {
-                        Router.currentPage = self;
+                        Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
+                    
+                    var isPresentLayoutFocused = self.layout.nativeObject.isFocused();
+                    !isPresentLayoutFocused && self.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && self.layout.nativeObject.requestFocus();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {

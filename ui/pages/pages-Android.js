@@ -7,6 +7,11 @@ var activity = AndroidConfig.activity;
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 var pageAnimationsCache;
 
+// var FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+var count = 0;
+
+const FragmentTransaction = require("../../util/Android/fragmenttransition");
+
 const Pages = function(params) {
     var self = this;
     var _sliderDrawer = null;
@@ -19,12 +24,21 @@ const Pages = function(params) {
     Object.defineProperties(self, {
         'push': {
             value: function(page, animated, tag, addToStack) {
-                push(self, rootViewId, page, animated, pagesStack, tag, addToStack);
+                page.pageID = "" + count++;
+                FragmentTransaction.push({
+                    page: page,
+                    animated: false
+                });
+                // push(self, rootViewId, page, animated, pagesStack, tag, addToStack);
             }
         },
         'pop': {
             value: function() {
-                return pop();
+                
+                FragmentTransaction.push({
+                    animated: false
+                });
+                // return pop();
             }
         },
         'popTo': {
@@ -184,8 +198,8 @@ function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
     if (addToStack) {
         fragmentTransaction.addToBackStack(tag); // for Backcompability
     }
-    fragmentTransaction.commitAllowingStateLoss();
-    fragmentManager.executePendingTransactions();
+    fragmentTransaction.commit();
+    // fragmentManager.executePendingTransactions();
 }
 
 function pop() {
