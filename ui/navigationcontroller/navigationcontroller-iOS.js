@@ -8,6 +8,8 @@ function NavigatonController(params) {
     
     // View
     self.view = new NavigationView({viewModel : self});
+    // NativeObjectDirectAccess
+    self.nativeObject = self.view.nativeObject;
     ////////////////////////////////////////////////////////////////////////////
     
     // Model
