@@ -88,7 +88,7 @@ function NavigatonController(params) {
         console.log("IOS==NAVIGATIONCONT==CONTROLLER:will show delegate");
         if (typeof this.willShow === "function"){
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:will show callback");
-            this.willShow({page: page, animated: animated});
+            this.willShow({controller: page, animated: animated});
         }
     };
     
@@ -104,11 +104,11 @@ function NavigatonController(params) {
     this.onTransition = undefined;
     this.animationControllerForOperationFromViewControllerToViewController = function(transitionOperation, fromIndex, toIndex){
         console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition delegate");
-        var fromPage = self.model.childControllers[fromIndex];
-        var toPage = self.model.pageForIndex(toIndex);
+        var fromController = self.model.childControllers[fromIndex];
+        var toController = self.model.pageForIndex(toIndex);
         if (typeof this.onTransition === "function"){
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition callback");
-            this.onTransition({currentPage: fromPage, targetPage: toPage, operation: transitionOperation});
+            this.onTransition({currentController: fromController, targetController: toController, operation: transitionOperation});
         }
     };
     //////////////////////////////////////////////////////////////////////////
