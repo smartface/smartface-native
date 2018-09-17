@@ -98,7 +98,7 @@ function NavigationController() {
      * @event willShow
      * @param params
      * @param {UI.Page} params.page
-     * @param UI.AnimationType params.animation
+     * @param UI.AnimationType params.animated
      * @android
      * @since 3.2.0
      */
