@@ -28,12 +28,11 @@ FragmentTransaction.replace = function(params) {
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
     if(params.animated) {
+        console.log("params.animationType: " + params.animationType + " === " + FragmentTransaction.AnimationType.RIGHTTOLEFT);
         // check animation type
-        switch(params.animationType) {
-            case FragmentTransaction.AnimationType.RIGHTTOLEFT:
-                console.log("FragmentTransaction.replace RIGHTTOLEFT");
-                rightToLeftTransitionAnimation(fragmentTransaction);
-                break;
+        if(params.animationType == FragmentTransaction.AnimationType.RIGHTTOLEFT) {
+            console.log("FragmentTransaction.replace RIGHTTOLEFT");
+            rightToLeftTransitionAnimation(fragmentTransaction);
         }
     }
     

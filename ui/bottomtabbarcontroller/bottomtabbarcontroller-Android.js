@@ -1,7 +1,6 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
-const NavigationController = require("sf-core/ui/navigationcontroller");
 const BottomTabBar = require("../../ui/bottomtabbar");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
@@ -11,7 +10,8 @@ const activity = AndroidConfig.activity;
 
 function BottomTabBarController() {
     this.tabbar = new BottomTabBar();
-
+    
+    var _addedToActivity = false;
     var _firstClick = true;
     var _disabledShiftingMode = false;
     this.childControllers = [];
@@ -61,11 +61,18 @@ function BottomTabBarController() {
             disableShiftMode();
             _disabledShiftingMode = true;
         }
-        var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
-        pageLayoutWrapper.addView(self.tabbar.nativeObject);
+        console.log("BottomTabBarController addTabBarToActivity _addedToActivity: " + _addedToActivity);
+        if(!_addedToActivity) {
+            _addedToActivity = true;
+            var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
+            pageLayoutWrapper.addView(self.tabbar.nativeObject);
+        }
     };
 
     this.push = function(childController) {
+        // Don't remove this line to top of the page.
+        // NavigationController requires BottomTabBarController.
+        const NavigationController = require("../../ui/navigationcontroller");
         try {
             console.log("childController typeof: " + typeof(childController));
             if (childController instanceof Page) {
@@ -81,21 +88,26 @@ function BottomTabBarController() {
                 console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
                 // first press
                 if (childController.historyStack.length < 1) {
+                    console.log("TabbarOnClick NavigationController first visit");
                     childController.push({
-                        page: childController.childControllers[0],
+                        controller: childController.childControllers[0],
                         animated: false
                     });
                 }
                 else {
+                    console.log("TabbarOnClick NavigationController not first visit");
+                    var childControllerStack = childController.historyStack;
+                    var childControllerStackLenght = childControllerStack.length;
+                    console.log("childControllerStackLenght: " + childControllerStackLenght);
                     // show latest page or controller
                     childController.show({
-                        page: childController.historyStack[childController.historyStack.length - 1],
+                        controller: childControllerStack[childControllerStackLenght - 1],
                         animated: false
                     });
                 }
             }
             else {
-                throw new Error("BottomTabbarController item is not a Page instance!");
+                throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
             }
         }
         catch (e) {
@@ -107,6 +119,11 @@ function BottomTabBarController() {
         self.addTabBarToActivity();
         self.push(self.childControllers[_selectedIndex]);
         // self.setChecked();
+    };
+    
+    // Use this function to exit tabbar page.
+    this.hiddenTabbar = function() {
+        
     };
     
     this.setChecked = function() {
@@ -128,7 +145,11 @@ function BottomTabBarController() {
             console.log("onNavigationItemSelected index: " + index + "    shouldSelect: " + result);
             if (result) {
                 console.log("_firstClick: " + _firstClick + "   _selectedIndex: " + _selectedIndex);
+                
+                console.log("self.childControllers[" + index + "]: " + typeof(self.childControllers[index]));
                 // revert previous selected item manually
+                
+                !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 self.didSelectByIndex(index);
