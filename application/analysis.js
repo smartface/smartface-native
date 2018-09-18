@@ -386,6 +386,17 @@ Application.onReceivedNotification = function(data){};
 Application.onApplicationCallReceived = function(e){};
 
 /**
+ * The event is called when a user taps a universal link.
+ * 
+ * @event onUserActivityWithBrowsingWeb
+ * @param {String} url Universal link.
+ * @ios
+ * @static
+ * @since 3.1.2
+ */
+Application.onUserActivityWithBrowsingWeb = function(url){};
+
+/**
  * This event is called after Application.requestPermissions function. This event is 
  * fired asynchronous way, there is no way to make sure which request is answered.
  * 
