@@ -31,23 +31,44 @@ const Request = function() {
 
 
 function http(params) {
+    const self = this;
+
     this.clientBuilder = new OkHttpClient.Builder();
+
+    // if (params.cookiePersistentEnable === true) { //If enable persists cookies. 
+    //     this.clientBuilder.cookieJar(createCookieJar());
+    // }
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
-    Object.defineProperty(this, "timeout", {
-        get: function() {
-            return _timeout;
-        },
-        set: function(value) {
-            if (typeof(value) !== "number")
-                throw new Error("timeout must be a number.");
+    var _cookiePersistentEnable = false;
+    Object.defineProperties(this, {
+        "timeout": {
+            get: function() {
+                return _timeout;
+            },
+            set: function(value) {
+                if (typeof(value) !== "number")
+                    throw new Error("timeout must be a number.");
 
-            _timeout = value;
-            this.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.client = this.clientBuilder.build();
+                _timeout = value;
+                self.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
+                self.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
+                self.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
+                self.client = self.clientBuilder.build();
+            },
+            enumerable: true
+        },
+        "cookiePersistentEnable": {
+            get: function() {
+                return _cookiePersistentEnable;
+            },
+            set function(value) {
+                if (typeof value !== "boolean")
+                    return;
+                _cookiePersistentEnable = value;
+                self.clientBuilder.cookieJar(createCookieJar());
+            }
         }
     });
 
@@ -290,6 +311,8 @@ function createMultipartBody(bodies) {
     return builder.build();
 }
 
+
+
 function getResponseHeaders(headers) {
     var responseHeaders = {};
     var headersSize = headers.size();
@@ -314,6 +337,16 @@ function runOnUiThread(requestOnLoad, e) {
         }
     });
     activity.runOnUiThread(runnable);
+}
+
+function createCookieJar() {
+    const NativePersistenCookieJar = requireClass("com.franmontiel.persistentcookiejar.PersistentCookieJar");
+    const NativeSetCookieCache = requireClass("com.franmontiel.persistentcookiejar.cache.SetCookieCache");
+    const NativeSharedPrefsCookiePersistor = requireClass("com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor");
+
+    var cookieJar = new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity));
+
+    return cookieJar;
 }
 
 module.exports = http;
