@@ -12,6 +12,7 @@ const NativeBackgroundColorSpan = requireClass("android.text.style.BackgroundCol
 const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");
 const NativeTypeface = requireClass("android.graphics.Typeface");
+const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 var SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
 const TextAlignmentDic = {};
@@ -65,8 +66,7 @@ const TextView = extend(Label)(
                 },
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
-                    const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
-                    var htmlTextNative = NativeHtml.fromHtml(""+htmlText);
+                    var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
                     this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
                     this.nativeObject.setText(htmlTextNative);
                 },
