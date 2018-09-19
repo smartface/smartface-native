@@ -37,7 +37,6 @@ function http(params) {
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
-    var _cookiePersistentEnable = false;
     Object.defineProperties(self, "timeout", {
         get: function() {
             return _timeout;
@@ -66,6 +65,8 @@ function http(params) {
     });
 
     self.android = {};
+    
+    var _cookiePersistentEnable = false;
     Object.defineProperty(self.android, 'cookiePersistenceEnable', {
         get: function() {
             return _cookiePersistentEnable;
