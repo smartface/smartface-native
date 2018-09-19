@@ -217,39 +217,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     changeViewColor(mErrorView, _errorColor);
                 },
                 enumerable: true
-            },
-            // 'height': {
-            //     get: function() {
-            //         return nativeTextInputEditText.getHeight();
-            //     },
-            //     set: function(height) {
-            //         if (typeof height !== 'number')
-            //             return;
-
-            //         var layoutHeight = AndroidUnitConverter.pixelToDp(nativeTextInputLayout.getHeight());
-            //         var textInputHeight = AndroidUnitConverter.pixelToDp(nativeTextInputEditText.getHeight());
-            //         console.log("layoutHeight " + layoutHeight + " textInputHeight " + textInputHeight );
-            //         var calculatedResult = height - (layoutHeight - textInputHeight) ;
-
-            //         console.log("calculatedResult " + calculatedResult);
-            //         nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(350));
-            //         nativeTextInputEditText.invalidate()
-            //         self.nativeObject.invalidate();
-            //     },
-            //     enumerable: true
-            // },
-            // 'maxHeight': {
-            //     get: function() {
-            //         return nativeTextInputEditText.getMaxHeight();
-            //     },
-            //     set: function(maxHeight) {
-            //         if (typeof maxHeight !== 'number')
-            //             return;
-
-            //         nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
-            //     },
-            //     enumerable: true
-            // }
+            }
         });
 
         self.android = {};
@@ -336,7 +304,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
 
         function changeViewColor(viewFieldName, color) {
-            try {
                 var javaTwoDimensionArray = array([array([], "int")]);
 
                 var javaColorArray = array([color.nativeObject], 'int');
@@ -352,10 +319,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
                 var myList = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
                 field.set(mNativeTextView, myList);
-            }
-            catch (e) {
-
-            }
         }
 
         self.ios = {};
