@@ -110,9 +110,9 @@ Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
             var url = Invocation.invokeInstanceMethod(e.userActivity,"webpageURL",[],"NSObject");
             var type = Invocation.invokeInstanceMethod(e.userActivity,"activityType",[],"NSString");
             if (url && type === "NSUserActivityTypeBrowsingWeb" && typeof value === 'function') {
-                value(url.absoluteString);
-                return true;
+                return value(url.absoluteString);
             }
+            return false;
         };
     },
     get: function() {
