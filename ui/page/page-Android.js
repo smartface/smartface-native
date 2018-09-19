@@ -56,15 +56,19 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-    activity.setSupportActionBar(toolbar);
-    var actionBar = activity.getSupportActionBar();
+    // activity.setSupportActionBar(toolbar);
+    var actionBar = null;//activity.getSupportActionBar();
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
 
     var callback = {
         onCreateView: function() {
+            console.log("Page onCreateView");
             self.nativeObject.setHasOptionsMenu(true);
+            
+            activity.setSupportActionBar(toolbar);
+    
             if (!isCreated) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
@@ -77,10 +81,17 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
+                    if(Router.currentPage) {
+                        Router.currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+                    }
                     if (!self.isSwipeViewPage) {
-                        Router.currentPage = self;
+                        Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
+                    
+                    var isPresentLayoutFocused = self.layout.nativeObject.isFocused();
+                    !isPresentLayoutFocused && self.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && self.layout.nativeObject.requestFocus();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
@@ -193,6 +204,12 @@ function Page(params) {
     self.headerBar.android = {};
     self.headerBar.ios = {};
     var onLoadCallback;
+    Object.defineProperty(this, 'toString', {
+        get: function() {
+            return "Page";
+        },
+        enumerable: true
+    });
     Object.defineProperty(this, 'onLoad', {
         get: function() {
             return onLoadCallback;
@@ -468,10 +485,10 @@ function Page(params) {
         set: function(value) {
             _borderVisibility = value;
             if (value) {
-                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+                actionBar && actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
             }
             else {
-                actionBar.setElevation(0);
+                actionBar && actionBar.setElevation(0);
             }
         },
         enumerable: true,
@@ -487,7 +504,7 @@ function Page(params) {
         set: function(leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
+                actionBar && actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true,
@@ -627,7 +644,7 @@ function Page(params) {
             const Image = require("../image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
-                actionBar.setLogo(_headerBarLogo.nativeObject);
+                actionBar && actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
         enumerable: true,
@@ -641,7 +658,7 @@ function Page(params) {
         set: function(logoEnabled) {
             if (TypeUtil.isBoolean(logoEnabled)) {
                 _headerBarLogoEnabled = logoEnabled;
-                actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
+                actionBar && actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
         enumerable: true,
@@ -934,11 +951,11 @@ function Page(params) {
 
         if (leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
-            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            actionBar && actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
             _headerBarLeftItem = null;
-            actionBar.setHomeAsUpIndicator(null);
+            actionBar && actionBar.setHomeAsUpIndicator(null);
         }
     };
 

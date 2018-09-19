@@ -501,4 +501,18 @@ ApplicationWrapper.Android.KeyboardMode = {
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
+ApplicationWrapper.setRootController = function(childController) {
+    const NavigationController = require("../ui/navigationcontroller");
+    if(childController instanceof NavigationController) {
+        console.log("setRootController NavigationController");
+        var childControllerStack = childController.historyStack;
+        var childControllerStackLenght = childControllerStack.length;
+        console.log("childControllerStackLenght: " + childControllerStackLenght);
+        // show latest page or controller
+        childController.show({
+            controller: childControllerStack[childControllerStackLenght - 1],
+            animated: false
+        });
+    }
+};
 module.exports = ApplicationWrapper;

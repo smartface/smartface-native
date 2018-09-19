@@ -1,6 +1,8 @@
 function TabBarItem(params) {
-    var _title, _icon, _page, _route, _firstPageIsSet;
+    var _title, _icon;
 
+    this.nativeObject = null; // this property should be set at runtime.
+    var self = this;
     Object.defineProperties(this, {
         'title': {
             get: function() {
@@ -26,7 +28,8 @@ function TabBarItem(params) {
 
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
-                }
+                };
+                
                 var icon = valueObj;
                 if (typeof icon === "string") {
                     icon = Image.createFromFile(icon);
@@ -53,48 +56,7 @@ function TabBarItem(params) {
                 else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
-
-            },
-            enumerable: true
-        },
-        'firstPageIsSet': {
-            get: function() {
-                return _firstPageIsSet;
-            },
-            set: function(value) {
-                _firstPageIsSet = value;
-            },
-            enumerable: true
-        },
-        'page': {
-            get: function() {
-                return _page;
-            },
-            set: function(page) {
-                if (typeof(page) === 'function')
-                    _page = page;
-                else
-                    throw new Error("page should be a function.");
-            },
-            enumerable: true
-        },
-        'route': {
-            get: function() {
-                return _route;
-            },
-            set: function(route) {
-                const Navigator = require("../navigator");
-                if (route instanceof Navigator) {
-                    _page = route.items[route.index];
-                    _route = route;
-                }
-                else if (typeof(route) === 'function') {
-                    _page = route;
-                    _route = route;
-                }
-                else {
-                    throw new Error("page should be an instance of Page or Navigator.");
-                }
+                self.nativeObject && (self.nativeObject.setIcon(icon.nativeObject));
             },
             enumerable: true
         },

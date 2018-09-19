@@ -15,7 +15,6 @@
  *     bottomTabBarController.didSelectByIndex = function (e){}
  *
  *     bottomTabBarController.tabbar.items // [page1.tabBarItem, page2.tabBarItem]
- *
  */
 
 function BottomTabbarController() {
