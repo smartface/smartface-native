@@ -37,7 +37,7 @@ function http(params) {
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
-    Object.defineProperties(self, "timeout", {
+    Object.defineProperty(self, "timeout", {
         get: function() {
             return _timeout;
         },
@@ -61,7 +61,8 @@ function http(params) {
         set: function(headers) {
             if (headers)
                 _defaultHeaders = headers;
-        }
+        },
+        enumerable: true
     });
 
     self.android = {};
