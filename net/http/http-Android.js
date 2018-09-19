@@ -33,16 +33,12 @@ const Request = function() {
 function http(params) {
     const self = this;
 
-    this.clientBuilder = new OkHttpClient.Builder();
-
-    // if (params.cookiePersistentEnable === true) { //If enable persists cookies. 
-    //     this.clientBuilder.cookieJar(createCookieJar());
-    // }
+    self.clientBuilder = new OkHttpClient.Builder();
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
     var _cookiePersistentEnable = false;
-    Object.defineProperties(this, {
+    Object.defineProperties(self, {
         "timeout": {
             get: function() {
                 return _timeout;
@@ -63,16 +59,24 @@ function http(params) {
             get: function() {
                 return _cookiePersistentEnable;
             },
-            set function(value) {
+            set: function(value) {
                 if (typeof value !== "boolean")
                     return;
                 _cookiePersistentEnable = value;
-                self.clientBuilder.cookieJar(createCookieJar());
-            }
+                if (_cookiePersistentEnable) {
+                    self.clientBuilder.cookieJar(createCookieJar());
+                }
+                else {
+                    const NativeCookieJar = requireClass("okhttp3.CookieJar");
+                    self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
+
+                }
+            },
+            enumerable: true
         }
     });
 
-    Object.defineProperty(this, "headers", {
+    Object.defineProperty(self, "headers", {
         get: function() {
             return _defaultHeaders;
         },
@@ -81,15 +85,15 @@ function http(params) {
                 _defaultHeaders = headers;
         }
     });
-
-    this.client = this.clientBuilder.build();
-    this.timeout = 60000;
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
-            this[param] = params[param];
+            self[param] = params[param];
         }
     }
+    
+    self.client = self.clientBuilder.build();
+    self.timeout = 60000;
 }
 
 http.prototype.cancelAll = function() {
