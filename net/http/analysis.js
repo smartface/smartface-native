@@ -30,7 +30,7 @@
  *         }
  *     });
  */
-var Http = function(params){    
+var Http = function(params) {
     /**
      * Gets/sets request timeout. Time elapsed in millisecond.
      *
@@ -39,7 +39,7 @@ var Http = function(params){
      * @ios
      */
     this.timeout = 60000;
-    
+
     /**
      * Gets/sets request headers.
      *
@@ -48,7 +48,7 @@ var Http = function(params){
      * @ios
      */
     this.headers = {};
-    
+
     /**
      * Cancels all requests.
      *
@@ -56,7 +56,7 @@ var Http = function(params){
      * @android
      * @ios
      */
-    this.cancelAll = function(){};
+    this.cancelAll = function() {};
     /**
      * @method requestFile
      * 
@@ -104,10 +104,10 @@ var Http = function(params){
      * @param {Object} params.onError.e.body Body of the error
      * @param {Number} params.onError.e.statusCode Error status code
      * @param {Object} params.onError.e.headers Headers sent with error
-    */
+     */
     this.upload = function(params) {};
-    
-    
+
+
     /**
      * @method requestImage
      * 
@@ -207,6 +207,16 @@ var Http = function(params){
      * @since 0.1
      */
     this.request = function(params) {};
+
+    /**
+     * Sets cookiePersistenceEnable of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
+     * with every request. This property must be given in contructor.
+     *
+     * @property {Boolean} cookiePersistenceEnable
+     * @android
+     * @since 3.1.2
+     */
+    this.cookiePersistenceEnable = false;
 };
 
 
@@ -224,7 +234,7 @@ var Http = function(params){
  *     request.cancel();
  * 
  */
-function Request(){}
+function Request() {}
 
 /**
  * @method cancel
@@ -233,6 +243,6 @@ function Request(){}
  * 
  * @since 0.1
  */
-Request.prototype.cancel = function(){};
+Request.prototype.cancel = function() {};
 
 module.exports = Http;
