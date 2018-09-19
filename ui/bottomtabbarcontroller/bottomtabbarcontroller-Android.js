@@ -9,7 +9,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const activity = AndroidConfig.activity;
 
 function BottomTabBarController() {
-    this.tabbar = new BottomTabBar();
+    this.tabBar = new BottomTabBar();
     
     var _addedToActivity = false;
     var _firstClick = true;
@@ -65,7 +65,7 @@ function BottomTabBarController() {
         if(!_addedToActivity) {
             _addedToActivity = true;
             var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
-            pageLayoutWrapper.addView(self.tabbar.nativeObject);
+            pageLayoutWrapper.addView(self.tabBar.nativeObject);
         }
     };
 
@@ -127,8 +127,8 @@ function BottomTabBarController() {
     };
     
     this.setChecked = function() {
-        var menu = self.tabbar.nativeObject.getMenu();
-        for (var i = 0; i < self.tabbar.itemCount; i++) {
+        var menu = self.tabBar.nativeObject.getMenu();
+        for (var i = 0; i < self.tabBar.itemCount; i++) {
             var checked = false;
             (i === _selectedIndex) && (checked = true);
             console.log("setChecked index: " + i + "   checked: " + checked);
@@ -137,7 +137,7 @@ function BottomTabBarController() {
     };
 
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
-    this.tabbar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
+    this.tabBar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
         onNavigationItemSelected: function(item) {
             var index = item.getItemId();
             console.log("_shouldSelectByIndexCallback: " + (!self.shouldSelectByIndex));
@@ -166,7 +166,7 @@ function BottomTabBarController() {
     }));
 
     function disableShiftMode() {
-        var menuView = self.tabbar.nativeObject.getChildAt(0);
+        var menuView = self.tabBar.nativeObject.getChildAt(0);
         var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
         shiftingMode.setAccessible(true);
         shiftingMode.setBoolean(menuView, false);

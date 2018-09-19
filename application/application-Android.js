@@ -503,16 +503,21 @@ Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
 ApplicationWrapper.setRootController = function(childController) {
     const NavigationController = require("../ui/navigationcontroller");
+    const FragmentTransition = require("../util/Android/fragmenttransition");
     if(childController instanceof NavigationController) {
-        console.log("setRootController NavigationController");
         var childControllerStack = childController.historyStack;
         var childControllerStackLenght = childControllerStack.length;
-        console.log("childControllerStackLenght: " + childControllerStackLenght);
         // show latest page or controller
         childController.show({
             controller: childControllerStack[childControllerStackLenght - 1],
             animated: false
         });
+    } else if(childController instanceof Page) {
+        // TODO: Check animation type. I am not sure about that!
+        FragmentTransition.push({
+            page: childController,
+            animated: false
+        })
     }
 };
 module.exports = ApplicationWrapper;
