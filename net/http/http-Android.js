@@ -49,7 +49,6 @@ function http(params) {
             self.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
             self.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
             self.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
-            self.client = self.clientBuilder.build();
         },
         enumerable: true
     });
@@ -66,7 +65,7 @@ function http(params) {
     });
 
     self.android = {};
-    
+
     var _cookiePersistenceEnable = false;
     Object.defineProperty(self, 'cookiePersistenceEnable', {
         get: function() {
@@ -86,6 +85,7 @@ function http(params) {
         },
         enumerable: true
     });
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -94,7 +94,8 @@ function http(params) {
     }
 
     self.client = self.clientBuilder.build();
-    self.timeout = 60000;
+    if (!self.timeout)
+        self.timeout = 60000;
 }
 
 http.prototype.cancelAll = function() {
