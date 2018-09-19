@@ -38,42 +38,21 @@ function http(params) {
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
     var _cookiePersistentEnable = false;
-    Object.defineProperties(self, {
-        "timeout": {
-            get: function() {
-                return _timeout;
-            },
-            set: function(value) {
-                if (typeof(value) !== "number")
-                    throw new Error("timeout must be a number.");
-
-                _timeout = value;
-                self.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
-                self.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
-                self.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
-                self.client = self.clientBuilder.build();
-            },
-            enumerable: true
+    Object.defineProperties(self, "timeout", {
+        get: function() {
+            return _timeout;
         },
-        "cookiePersistentEnable": {
-            get: function() {
-                return _cookiePersistentEnable;
-            },
-            set: function(value) {
-                if (typeof value !== "boolean")
-                    return;
-                _cookiePersistentEnable = value;
-                if (_cookiePersistentEnable) {
-                    self.clientBuilder.cookieJar(createCookieJar());
-                }
-                else {
-                    const NativeCookieJar = requireClass("okhttp3.CookieJar");
-                    self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
+        set: function(value) {
+            if (typeof(value) !== "number")
+                throw new Error("timeout must be a number.");
 
-                }
-            },
-            enumerable: true
-        }
+            _timeout = value;
+            self.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
+            self.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
+            self.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
+            self.client = self.clientBuilder.build();
+        },
+        enumerable: true
     });
 
     Object.defineProperty(self, "headers", {
@@ -85,13 +64,33 @@ function http(params) {
                 _defaultHeaders = headers;
         }
     });
+
+    self.android = {};
+    Object.defineProperty(self.android, 'cookiePersistenceEnable', {
+        get: function() {
+            return _cookiePersistentEnable;
+        },
+        set: function(value) {
+            if (typeof value !== "boolean")
+                return;
+            _cookiePersistentEnable = value;
+            if (_cookiePersistentEnable) {
+                self.clientBuilder.cookieJar(createCookieJar());
+            }
+            else {
+                const NativeCookieJar = requireClass("okhttp3.CookieJar");
+                self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
+            }
+        },
+        enumerable: true
+    });
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             self[param] = params[param];
         }
     }
-    
+
     self.client = self.clientBuilder.build();
     self.timeout = 60000;
 }

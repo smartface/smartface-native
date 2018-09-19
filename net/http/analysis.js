@@ -208,14 +208,13 @@ var Http = function(params) {
      */
     this.request = function(params) {};
 
-
     /**
      * Sets cookiePersistentEnable of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
      * with every request. This property must be given in contructor.
      *
      * @property {Boolean} cookiePersistentEnable
      * @android
-     * @ios
+     * @since 3.1.2
      */
     this.cookiePersistentEnable === false;
 };
