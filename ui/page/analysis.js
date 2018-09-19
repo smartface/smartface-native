@@ -192,6 +192,8 @@ Page.prototype.statusBar;
 /**
  * Gets header bar object of a  page. This property is readonly, you can not
  * set header bar to a page but you can change properties of page's header bar.
+ * In Android, header bar properties should be implemented in onLoad or onShow of page. 
+ * Otherwise given settings might be losed.
  *
  * @property {UI.HeaderBar} headerBar
  * @android

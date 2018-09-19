@@ -40,7 +40,7 @@ const OrientationDictionary = {
     15: 10
 };
 
-var pageAnimationsCache = null; 
+var pageAnimationsCache = null;
 
 function Page(params) {
     (!params) && (params = {});
@@ -56,16 +56,19 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-    activity.setSupportActionBar(toolbar);
-    var actionBar = activity.getSupportActionBar();
+
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
 
+    var actionBar = null;
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
+            activity.setSupportActionBar(toolbar);
             if (!isCreated) {
+                actionBar = activity.getSupportActionBar();
+                setDefaults();
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
@@ -304,12 +307,12 @@ function Page(params) {
             value: function(page, animation, onCompleteCallback) {
                 if (page instanceof Page) {
                     page.popUpBackPage = self;
-                    
+
                     var rootViewId = NativeSFR.id.page_container;
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
-                    
-                    if(!pageAnimationsCache) {
+
+                    if (!pageAnimationsCache) {
                         var packageName = activity.getPackageName();
                         var resources = AndroidConfig.activityResources;
                         pageAnimationsCache = {};
@@ -984,15 +987,17 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     // Default values
-    if (!params.skipDefaults) {
-        self.statusBar.visible = true;
-        self.statusBar.color = Color.TRANSPARENT;
-        self.headerBar.backgroundColor = Color.create("#00A1F1");
-        self.headerBar.leftItemEnabled = true;
-        self.headerBar.android.logoEnabled = false;
-        self.headerBar.titleColor = Color.WHITE;
-        self.headerBar.android.subtitleColor = Color.WHITE;
-        self.headerBar.visible = true;
+    var setDefaults = function() {
+        if (!params.skipDefaults) {
+            self.statusBar.visible = true;
+            self.statusBar.color = Color.TRANSPARENT;
+            self.headerBar.backgroundColor = Color.create("#00A1F1");
+            self.headerBar.leftItemEnabled = true;
+            self.headerBar.android.logoEnabled = false;
+            self.headerBar.titleColor = Color.WHITE;
+            self.headerBar.android.subtitleColor = Color.WHITE;
+            self.headerBar.visible = true;
+        }
     }
     //Handling ios value
     self.statusBar.ios = {};
