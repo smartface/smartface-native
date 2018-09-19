@@ -44,13 +44,12 @@ function BottomTabbarController() {
      * Sets the selected tab bar item.
      *
      * @method setIndex
-     * @param params
-     * @param Number params.index
+     * @param Number index
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.setIndex = function({index : index}) {};
+    this.setIndex = function(index) {};
     
     /**
      * Return true if you want the item to be displayed as the selected index.
