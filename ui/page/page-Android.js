@@ -14,8 +14,6 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
-
-// const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
@@ -42,6 +40,8 @@ const OrientationDictionary = {
     15: 10
 };
 
+var pageAnimationsCache = null;
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -56,20 +56,19 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-    // activity.setSupportActionBar(toolbar);
-    var actionBar = null;//activity.getSupportActionBar();
+
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
 
+    var actionBar = null;
     var callback = {
         onCreateView: function() {
-            console.log("Page onCreateView");
             self.nativeObject.setHasOptionsMenu(true);
-            
             activity.setSupportActionBar(toolbar);
-    
             if (!isCreated) {
+                actionBar = activity.getSupportActionBar();
+                setDefaults();
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
@@ -81,17 +80,10 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
-                    if(Router.currentPage) {
-                        Router.currentPage.layout.nativeObject.setFocusableInTouchMode(false);
-                    }
                     if (!self.isSwipeViewPage) {
-                        Application.currentPage = self;
+                        Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
-                    
-                    var isPresentLayoutFocused = self.layout.nativeObject.isFocused();
-                    !isPresentLayoutFocused && self.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                    !isPresentLayoutFocused && self.layout.nativeObject.requestFocus();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
@@ -204,12 +196,6 @@ function Page(params) {
     self.headerBar.android = {};
     self.headerBar.ios = {};
     var onLoadCallback;
-    Object.defineProperty(this, 'toString', {
-        get: function() {
-            return "Page";
-        },
-        enumerable: true
-    });
     Object.defineProperty(this, 'onLoad', {
         get: function() {
             return onLoadCallback;
@@ -316,37 +302,38 @@ function Page(params) {
     });
 
     var popupPageTag = "popupWindow";
-    const GONE = 8;
     Object.defineProperties(self, {
         'present': {
             value: function(page, animation, onCompleteCallback) {
-
                 if (page instanceof Page) {
+                    page.popUpBackPage = self;
 
-
-                    var rootViewId = NativeSFR.id.page_container
-
+                    var rootViewId = NativeSFR.id.page_container;
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
 
-                    var pageAnimationsCache = {};
-                    var packageName = activity.getPackageName();
-                    var resources = AndroidConfig.activityResources;
-                    pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    if (!pageAnimationsCache) {
+                        var packageName = activity.getPackageName();
+                        var resources = AndroidConfig.activityResources;
+                        pageAnimationsCache = {};
+                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    }
 
                     if (animation)
                         fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
 
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-
                     fragmentTransaction.addToBackStack(popupPageTag);
                     fragmentTransaction.commitAllowingStateLoss();
                     fragmentManager.executePendingTransactions();
 
+                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+                    self.layout.nativeObject.setFocusableInTouchMode(false);
+                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
-
                 }
                 else
                     throw Error("Page parameter mismatch, Parameter must be Page");
@@ -357,6 +344,11 @@ function Page(params) {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager.popBackStack();
+
+                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
+
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
@@ -485,10 +477,10 @@ function Page(params) {
         set: function(value) {
             _borderVisibility = value;
             if (value) {
-                actionBar && actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
+                actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
             }
             else {
-                actionBar && actionBar.setElevation(0);
+                actionBar.setElevation(0);
             }
         },
         enumerable: true,
@@ -504,7 +496,7 @@ function Page(params) {
         set: function(leftItemEnabled) {
             if (TypeUtil.isBoolean(leftItemEnabled)) {
                 _leftItemEnabled = leftItemEnabled;
-                actionBar && actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
+                actionBar.setDisplayHomeAsUpEnabled(_leftItemEnabled);
             }
         },
         enumerable: true,
@@ -644,7 +636,7 @@ function Page(params) {
             const Image = require("../image");
             if (image instanceof Image) {
                 _headerBarLogo = image;
-                actionBar && actionBar.setLogo(_headerBarLogo.nativeObject);
+                actionBar.setLogo(_headerBarLogo.nativeObject);
             }
         },
         enumerable: true,
@@ -658,7 +650,7 @@ function Page(params) {
         set: function(logoEnabled) {
             if (TypeUtil.isBoolean(logoEnabled)) {
                 _headerBarLogoEnabled = logoEnabled;
-                actionBar && actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
+                actionBar.setDisplayUseLogoEnabled(_headerBarLogoEnabled);
             }
         },
         enumerable: true,
@@ -951,11 +943,11 @@ function Page(params) {
 
         if (leftItem && leftItem.image) {
             _headerBarLeftItem = leftItem;
-            actionBar && actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
             _headerBarLeftItem = null;
-            actionBar && actionBar.setHomeAsUpIndicator(null);
+            actionBar.setHomeAsUpIndicator(null);
         }
     };
 
@@ -995,15 +987,17 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     // Default values
-    if (!params.skipDefaults) {
-        self.statusBar.visible = true;
-        self.statusBar.color = Color.TRANSPARENT;
-        self.headerBar.backgroundColor = Color.create("#00A1F1");
-        self.headerBar.leftItemEnabled = true;
-        self.headerBar.android.logoEnabled = false;
-        self.headerBar.titleColor = Color.WHITE;
-        self.headerBar.android.subtitleColor = Color.WHITE;
-        self.headerBar.visible = true;
+    var setDefaults = function() {
+        if (!params.skipDefaults) {
+            self.statusBar.visible = true;
+            self.statusBar.color = Color.TRANSPARENT;
+            self.headerBar.backgroundColor = Color.create("#00A1F1");
+            self.headerBar.leftItemEnabled = true;
+            self.headerBar.android.logoEnabled = false;
+            self.headerBar.titleColor = Color.WHITE;
+            self.headerBar.android.subtitleColor = Color.WHITE;
+            self.headerBar.visible = true;
+        }
     }
     //Handling ios value
     self.statusBar.ios = {};

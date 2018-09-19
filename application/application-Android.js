@@ -296,6 +296,7 @@ Object.defineProperties(ApplicationWrapper, {
 
 ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
