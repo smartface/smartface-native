@@ -49,7 +49,7 @@ const TextView = extend(Label)(
         var _onLinkClick = undefined;
         var _letterSpacing = 0;
         var _lineSpacing = 0;
-
+        var isMovementMethodAssigned = false;
         Object.defineProperties(labelPrototype, {
             'htmlText': {
                 get: function() {
@@ -67,7 +67,10 @@ const TextView = extend(Label)(
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                    this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    if (isMovementMethodAssigned) {
+                        isMovementMethodAssigned = true;
+                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    }
                     this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
@@ -117,7 +120,10 @@ const TextView = extend(Label)(
                     lineSpacing();
                     this.nativeObject.setText(self.myBuilder);
                     this.nativeObject.setSingleLine(false);
-                    this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    if (isMovementMethodAssigned) {
+                        isMovementMethodAssigned = true;
+                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    }
                     this.nativeObject.setHighlightColor(NativeColor.TRANSPARENT);
                 },
                 enumerable: true,
