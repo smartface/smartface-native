@@ -31,11 +31,13 @@ const Request = function() {
 
 
 function http(params) {
-    this.clientBuilder = new OkHttpClient.Builder();
+    const self = this;
+
+    self.clientBuilder = new OkHttpClient.Builder();
 
     var _timeout, // default OkHttp timeout. There is no way getting timout for public method.
         _defaultHeaders;
-    Object.defineProperty(this, "timeout", {
+    Object.defineProperty(self, "timeout", {
         get: function() {
             return _timeout;
         },
@@ -44,31 +46,56 @@ function http(params) {
                 throw new Error("timeout must be a number.");
 
             _timeout = value;
-            this.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
-            this.client = this.clientBuilder.build();
-        }
+            self.clientBuilder.connectTimeout(_timeout, TimeUnit.MILLISECONDS);
+            self.clientBuilder.readTimeout(_timeout, TimeUnit.MILLISECONDS);
+            self.clientBuilder.writeTimeout(_timeout, TimeUnit.MILLISECONDS);
+        },
+        enumerable: true
     });
 
-    Object.defineProperty(this, "headers", {
+    Object.defineProperty(self, "headers", {
         get: function() {
             return _defaultHeaders;
         },
         set: function(headers) {
             if (headers)
                 _defaultHeaders = headers;
-        }
+        },
+        enumerable: true
     });
 
-    this.client = this.clientBuilder.build();
-    this.timeout = 60000;
+    self.android = {};
+
+    var _cookiePersistenceEnable = false;
+    Object.defineProperty(self, 'cookiePersistenceEnable', {
+        get: function() {
+            return _cookiePersistenceEnable;
+        },
+        set: function(value) {
+            if (typeof value !== "boolean")
+                return;
+            _cookiePersistenceEnable = value;
+            if (_cookiePersistenceEnable) {
+                self.clientBuilder.cookieJar(createCookieJar());
+            }
+            else {
+                const NativeCookieJar = requireClass("okhttp3.CookieJar");
+                self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
+            }
+        },
+        enumerable: true
+    });
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
-            this[param] = params[param];
+            self[param] = params[param];
         }
     }
+
+    self.client = self.clientBuilder.build();
+    if (!self.timeout)
+        self.timeout = 60000;
 }
 
 http.prototype.cancelAll = function() {
@@ -290,6 +317,8 @@ function createMultipartBody(bodies) {
     return builder.build();
 }
 
+
+
 function getResponseHeaders(headers) {
     var responseHeaders = {};
     var headersSize = headers.size();
@@ -314,6 +343,16 @@ function runOnUiThread(requestOnLoad, e) {
         }
     });
     activity.runOnUiThread(runnable);
+}
+
+function createCookieJar() {
+    const NativePersistenCookieJar = requireClass("com.franmontiel.persistentcookiejar.PersistentCookieJar");
+    const NativeSetCookieCache = requireClass("com.franmontiel.persistentcookiejar.cache.SetCookieCache");
+    const NativeSharedPrefsCookiePersistor = requireClass("com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor");
+
+    var cookieJar = new NativePersistenCookieJar(new NativeSetCookieCache(), new NativeSharedPrefsCookiePersistor(activity));
+
+    return cookieJar;
 }
 
 module.exports = http;
