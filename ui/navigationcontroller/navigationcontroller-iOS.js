@@ -120,6 +120,8 @@ function NavigatonController(params) {
     }
 };
 
+const Color = require('sf-core/ui/color');
+const Image = require('sf-core/ui/image');
 function HeaderBar(params) {
     console.log("IOS==NAVIGATIONCONT==HeaderBar init");
     const UINavigationBar = SF.requireClass("UINavigationBar");
@@ -135,55 +137,150 @@ function HeaderBar(params) {
         self.nativeObject = params.nativeObject;
     }
     
-    var _prefersLargeTitles = false;
-    Object.defineProperty(self.ios, 'prefersLargeTitles', {
-        get: function() {
-            return _prefersLargeTitles;
-        },
-        set: function(value) {
-            if (typeof value === 'boolean') {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set prefers large titles");
-                _prefersLargeTitles = value;
-                if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
-                    self.nativeObject.prefersLargeTitles = _prefersLargeTitles;
-                }
-            }
-        },
-        enumerable: true
-    });
+    // var _translucent = true;
+    // Object.defineProperty(self.ios, 'translucent', {
+    //     get: function() {
+    //         return _translucent;
+    //     },
+    //     set: function(value) {
+    //         if (typeof value === 'boolean') {
+    //             console.log("IOS==NAVIGATIONCONT==HEADERBAR:set translucent");
+    //             _translucent = value;
+    //             self.nativeObject.translucent = _translucent;
+    //         }
+    //     },
+    //     enumerable: true
+    // });
     
-    var _backIndicatorImage;
-    Object.defineProperty(self.ios, 'backIndicatorImage', {
-        get: function() {
-            return _backIndicatorImage;
-        },
-        set: function(value) {
-            if (typeof value === "object") {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set backindicator image");
-                _backIndicatorImage = value;
-                self.nativeObject.backIndicatorImage = _backIndicatorImage.nativeObject;
+    // Object.defineProperty(self, 'titleColor', {
+    //     get: function() {
+    //         return new Color({color : self.nativeObject.titleTextAttributes["NSColor"]});
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.titleTextAttributes = {"NSColor" :value.nativeObject};
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // var _visible = true;
+    // Object.defineProperty(self, 'visible', {
+    //     get: function() {
+    //         return _visible;
+    //     },
+    //     set: function(value) {
+    //         _visible = value;
+    //         self.nativeObject.setNavigationBarHiddenAnimated(!value,true);
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // Object.defineProperty(self, 'itemColor', {
+    //     get: function() {
+    //         return new Color({color : self.nativeObject.tintColor});
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.tintColor = value.nativeObject;
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // Object.defineProperty(self, 'backgroundColor', {
+    //     get: function() {
+    //         return new Color({color : self.nativeObject.barTintColor});
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.barTintColor = value.nativeObject;
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // Object.defineProperty(self, 'backgroundImage', {
+    //     get: function() {
+    //         return Image.createFromImage(self.nativeObject.backgroundImage);
+    //     },
+    //     set: function(value) {
+    //         self.nativeObject.backgroundImage = value.nativeObject;
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // Object.defineProperty(self, 'height', {
+    //     get: function() {
+    //         return self.nativeObject.frame.height;
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // var _borderVisibility = true;
+    // Object.defineProperty(self, 'borderVisibility', {
+    //     get: function() {
+    //         return _borderVisibility;
+    //     },
+    //     set: function(value) {
+    //         if (typeof value === "boolean") {
+    //             if (value) {
+    //                 self.nativeObject.shadowImage = undefined;
+    //                 self.nativeObject.backgroundImage = undefined;
+    //             } else {
+    //                 var emptyImage = __SF_UIImage.getInstance();
+    //                 self.nativeObject.shadowImage = emptyImage;
+    //                 self.nativeObject.backgroundImage = emptyImage;
+    //             }
+    //             _borderVisibility = value;
+    //         }
+    //     },
+    //     enumerable: true,configurable : true
+    // });
+    
+    // var _prefersLargeTitles = false;
+    // Object.defineProperty(self.ios, 'prefersLargeTitles', {
+    //     get: function() {
+    //         return _prefersLargeTitles;
+    //     },
+    //     set: function(value) {
+    //         if (typeof value === 'boolean') {
+    //             console.log("IOS==NAVIGATIONCONT==HEADERBAR:set prefers large titles");
+    //             _prefersLargeTitles = value;
+    //             if (UINavigationBar.instancesRespondToSelector("prefersLargeTitles")) {
+    //                 self.nativeObject.prefersLargeTitles = _prefersLargeTitles;
+    //             }
+    //         }
+    //     },
+    //     enumerable: true
+    // });
+    
+    // var _backIndicatorImage;
+    // Object.defineProperty(self.ios, 'backIndicatorImage', {
+    //     get: function() {
+    //         return _backIndicatorImage;
+    //     },
+    //     set: function(value) {
+    //         if (typeof value === "object") {
+    //             console.log("IOS==NAVIGATIONCONT==HEADERBAR:set backindicator image");
+    //             _backIndicatorImage = value;
+    //             self.nativeObject.backIndicatorImage = _backIndicatorImage.nativeObject;
                 
-                // General use
-                self.ios.backIndicatorTransitionMaskImage = value;
-            }
-        },
-        enumerable: true,configurable : true
-    });
+    //             // General use
+    //             self.ios.backIndicatorTransitionMaskImage = value;
+    //         }
+    //     },
+    //     enumerable: true,configurable : true
+    // });
     
-    var _backIndicatorTransitionMaskImage;
-    Object.defineProperty(self.ios, 'backIndicatorTransitionMaskImage', {
-        get: function() {
-            return _backIndicatorTransitionMaskImage;
-        },
-        set: function(value) {
-            if (typeof value === "object") {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:back indicator transition mask image");
-                _backIndicatorTransitionMaskImage = value;
-                self.nativeObject.backIndicatorTransitionMaskImage = _backIndicatorTransitionMaskImage.nativeObject;
-            }
-        },
-        enumerable: true,configurable : true
-    });
+    // var _backIndicatorTransitionMaskImage;
+    // Object.defineProperty(self.ios, 'backIndicatorTransitionMaskImage', {
+    //     get: function() {
+    //         return _backIndicatorTransitionMaskImage;
+    //     },
+    //     set: function(value) {
+    //         if (typeof value === "object") {
+    //             console.log("IOS==NAVIGATIONCONT==HEADERBAR:back indicator transition mask image");
+    //             _backIndicatorTransitionMaskImage = value;
+    //             self.nativeObject.backIndicatorTransitionMaskImage = _backIndicatorTransitionMaskImage.nativeObject;
+    //         }
+    //     },
+    //     enumerable: true,configurable : true
+    // });
     
     if (params) {
         for (var param in params) {
