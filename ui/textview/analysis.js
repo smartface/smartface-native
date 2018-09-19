@@ -34,7 +34,7 @@ TextView.prototype.backgroundColor = UI.Color.TRANSPARENT;
 
 /**
  * Gets/sets HTML text value of TextView. This property helps user showing HTML
- * texts on the screen.
+ * texts on the screen. In Android, you must avoid to using selectable property to make the links clickable. 
  *
  *     @example
  *     // In this example 'This link' text inside TextView will shown underlined.
