@@ -68,7 +68,7 @@ function http(params) {
     self.android = {};
     
     var _cookiePersistenceEnable = false;
-    Object.defineProperty(self.android, 'cookiePersistenceEnable', {
+    Object.defineProperty(self, 'cookiePersistenceEnable', {
         get: function() {
             return _cookiePersistenceEnable;
         },
