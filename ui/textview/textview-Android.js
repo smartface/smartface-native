@@ -7,7 +7,6 @@ const TypeUtil = require("../../util/type");
 const unitconverter = require('sf-core/util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
 const NativeColor = requireClass("android.graphics.Color");
-const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeBackgroundColorSpan = requireClass("android.text.style.BackgroundColorSpan");
 const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
@@ -66,7 +65,9 @@ const TextView = extend(Label)(
                 },
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
-                    var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
+                    const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
+                    var htmlTextNative = NativeHtml.fromHtml(""+htmlText);
+                    this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
                     this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
@@ -209,7 +210,7 @@ const TextView = extend(Label)(
                         ds.setUnderlineText(value.underline);
                     }
                 };
-                
+
                 const SFClickableSpan = requireClass("io.smartface.android.sfcore.ui.textview.SFClickableSpan");
                 var clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
                 self.myBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -231,13 +232,13 @@ const TextView = extend(Label)(
                     applyCustomTypeFace(paint, newType);
                 }
             };
-            
+
             const SFTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
             var typeSpan = new SFTypefaceSpan("SF", typeSpanOverrideMethods);
             self.myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
             // --------------------------------------------------------------------------------
-            
+
             const NativeAbsoluteSizeSpan = requireClass("android.text.style.AbsoluteSizeSpan");
             self.myBuilder.setSpan(new NativeAbsoluteSizeSpan(value.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Underline 
