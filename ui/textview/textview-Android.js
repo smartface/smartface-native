@@ -7,12 +7,12 @@ const TypeUtil = require("../../util/type");
 const unitconverter = require('sf-core/util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
 const NativeColor = requireClass("android.graphics.Color");
-const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeBackgroundColorSpan = requireClass("android.text.style.BackgroundColorSpan");
 const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");
 const NativeTypeface = requireClass("android.graphics.Typeface");
+const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 var SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
 const TextAlignmentDic = {};
@@ -49,7 +49,7 @@ const TextView = extend(Label)(
         var _onLinkClick = undefined;
         var _letterSpacing = 0;
         var _lineSpacing = 0;
-
+        var isMovementMethodAssigned = false;
         Object.defineProperties(labelPrototype, {
             'htmlText': {
                 get: function() {
@@ -67,6 +67,10 @@ const TextView = extend(Label)(
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
+                    if (!isMovementMethodAssigned) {
+                        isMovementMethodAssigned = true;
+                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    }
                     this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
@@ -116,7 +120,10 @@ const TextView = extend(Label)(
                     lineSpacing();
                     this.nativeObject.setText(self.myBuilder);
                     this.nativeObject.setSingleLine(false);
-                    this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    if (!isMovementMethodAssigned) {
+                        isMovementMethodAssigned = true;
+                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+                    }
                     this.nativeObject.setHighlightColor(NativeColor.TRANSPARENT);
                 },
                 enumerable: true,
@@ -209,7 +216,7 @@ const TextView = extend(Label)(
                         ds.setUnderlineText(value.underline);
                     }
                 };
-                
+
                 const SFClickableSpan = requireClass("io.smartface.android.sfcore.ui.textview.SFClickableSpan");
                 var clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
                 self.myBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -231,13 +238,13 @@ const TextView = extend(Label)(
                     applyCustomTypeFace(paint, newType);
                 }
             };
-            
+
             const SFTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
             var typeSpan = new SFTypefaceSpan("SF", typeSpanOverrideMethods);
             self.myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
             // --------------------------------------------------------------------------------
-            
+
             const NativeAbsoluteSizeSpan = requireClass("android.text.style.AbsoluteSizeSpan");
             self.myBuilder.setSpan(new NativeAbsoluteSizeSpan(value.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Underline 
