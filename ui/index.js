@@ -46,4 +46,5 @@ module.exports = {
     EmailComposer: require("./emailcomposer"),
     MaterialTextbox: require("./materialtextbox"),
     NavigationController: require('./navigationcontroller'),
+    BottomTabBarController: require('./bottomtabbarcontroller')
 };

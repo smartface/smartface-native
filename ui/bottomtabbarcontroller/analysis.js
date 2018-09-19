@@ -8,12 +8,11 @@
  *     const BottomTabbarController = require('sf-core/ui/bottomtabbarcontroller');
  *     
  *     var bottomTabBarController = new BottomTabBarController();
- *     bottomTabBarController.tabbar.itemCount = 4;
  *     bottomTabBarController.childControllers = [page1, page2, navigationController1, navigationController2];
  *     bottomTabBarController.setIndex(2);
  *
- *     bottomTabBarController.shouldSelectByIndex = function (index){return true || false}
- *     bottomTabBarController.didSelectByIndex = function (index){}
+ *     bottomTabBarController.shouldSelectByIndex = function (e){return true || false}
+ *     bottomTabBarController.didSelectByIndex = function (e){}
  *
  *     bottomTabBarController.tabbar.items // [page1.tabBarItem, page2.tabBarItem]
  */
@@ -39,7 +38,7 @@ function BottomTabbarController() {
      * @ios
      * @since 3.2.0
      */
-    this.tabbar;
+    this.tabBar;
     
     /**
      * Sets the selected tab bar item.
@@ -56,22 +55,24 @@ function BottomTabbarController() {
      * Return true if you want the item to be displayed as the selected index.
      *
      * @event shouldSelectByIndex
-     * @param Number index
+     * @param params
+     * @param Number params.index
      * @return Boolean
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.shouldSelectByIndex = function(index) {};
+    this.shouldSelectByIndex = function({index : index}) {};
     
     /**
      *  Called when an item in the bottom tabbar item is selected.
      *
      * @event didSelectByIndex
-     * @param Number index
+     * @param params
+     * @param Number params.index
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.didSelectByIndex = function(index) {};
+    this.didSelectByIndex = function({index : index}) {};
 }
