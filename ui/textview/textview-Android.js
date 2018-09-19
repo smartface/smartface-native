@@ -67,7 +67,7 @@ const TextView = extend(Label)(
                 set: function(htmlText) {
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                    if (isMovementMethodAssigned) {
+                    if (!isMovementMethodAssigned) {
                         isMovementMethodAssigned = true;
                         this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
                     }
@@ -120,7 +120,7 @@ const TextView = extend(Label)(
                     lineSpacing();
                     this.nativeObject.setText(self.myBuilder);
                     this.nativeObject.setSingleLine(false);
-                    if (isMovementMethodAssigned) {
+                    if (!isMovementMethodAssigned) {
                         isMovementMethodAssigned = true;
                         this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
                     }
