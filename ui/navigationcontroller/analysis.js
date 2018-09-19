@@ -13,23 +13,23 @@
  *     navigationController.headerBar.translucent = true;
  *     var page2 = new Page();
  *     page2.navigationItem.title = "Page1";
- *     navigationController.push({page: page2, animation: true});
+ *     navigationController.push({controller: page2, animation: true});
  *
  *     var page3 = new Page();
  *     page3.parentController.headerBar.backgroundColor = Color.RED;
- *     navigationController.push({page: page3, animation: true});
+ *     navigationController.push({controller: page3, animation: true});
  *
  *     var page4 = new Page();
- *     navigationController.push({page: page4, animation: true});
+ *     navigationController.push({controller: page4, animation: true});
  *     navigationController.childControllers; /// Returns [page1,page2,page3,page4];
- *     navigationController.popTo({page: page2, animation: true});
+ *     navigationController.popTo({controller: page2, animation: true});
  *     navigationController.childControllers; /// Returns [page1,page2];
  *
  *     navigationController.pop();
  *     navigationController.childControllers; /// Returns [page1];
  *
- *     navigationController.willShow = function ({page: page, animation: animation}) {};
- *     navigationController.onTransition = function ({currentPage: currentPage, targetPage: targetPage, operation: operation}) /// => operation means (push || pop)
+ *     navigationController.willShow = function ({controller: controller, animation: animation}) {};
+ *     navigationController.onTransition = function ({currentController: currentController, targetController: targetController, operation: operation}) /// => operation means (push || pop)
  */
 
 function NavigationController() {
@@ -59,13 +59,13 @@ function NavigationController() {
      *
      * @method push
      * @param params
-     * @param {UI.Page} params.page
+     * @param {UI.Page|UI.BottomTabBarController} params.controller
      * @param Boolean [params.animated = true]
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.push = function({page: page, animated: animated}) {};
+    this.push = function({controller: controller, animated: animated}) {};
     
     /**
      * Pop the last page from the navigation controller's page back stack. 
@@ -84,20 +84,20 @@ function NavigationController() {
      *
      * @method popTo
      * @param params
-     * @param {UI.Page} params.page
+     * @param {UI.Page|UI.BottomTabBarController} params.controller
      * @param Boolean [params.animated = true]
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.popTo = function({page: page, animated: animated}) {};
+    this.popTo = function({controller: controller, animated: animated}) {};
     
     /**
      * This event is triggered before the page is displayed.
      *
      * @event willShow
      * @param params
-     * @param {UI.Page} params.page
+     * @param {UI.Page|UI.NavigationController} params.controller
      * @param UI.AnimationType params.animated
      * @android
      * @since 3.2.0
@@ -110,8 +110,8 @@ function NavigationController() {
      *
      * @event onTransition
      * @param params
-     * @param {UI.Page} params.currentPage
-     * @param {UI.Page} params.targetPage
+     * @param {UI.Page|UI.NavigationController} params.currentController
+     * @param {UI.PageUI.NavigationController} params.targetController
      * @param UI.NavigationController.OperationType params.operation
      * @android
      * @since 3.2.0
