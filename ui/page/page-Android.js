@@ -81,7 +81,7 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
-                        Router.currentPage = self;
+                        Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
 
