@@ -131,6 +131,7 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
+            console.log("onCreateContextMenu ");
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -140,12 +141,14 @@ function Page(params) {
             for (i = 0; i < items.length; i++) {
                 var menuTitle = items[i].android.spanTitle();
                 menu.add(0, i, 0, menuTitle);
+                console.log("onCreateContextMenu menu item count " + i);
             }
         },
         onContextItemSelected: function(item) {
             var itemId = item.getItemId();
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
+                console.log("items[itemId] " + items[itemId])
                 items[itemId].onSelected();
                 return true;
             }
@@ -711,14 +714,8 @@ function Page(params) {
             _selectedIndex = index;
             var menu;
             if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for (var i = 0; i < Object.keys(_parentTab.items).length; i++) {
-                    if (i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
-                    }
-                    else {
-                        menu.getItem(i).setChecked(false);
-                    }
-                }
+                var itemsKeys = Object.keys(_parentTab.items);
+                makeItemChecked(itemsKeys, menu);
             }
         },
         enumerable: true
@@ -766,17 +763,12 @@ function Page(params) {
                 }
             }
         }
-        // Don't merge upper loop. It doesn't work inside upper loop.
-        for (i = 0; i < keys.length; i++) {
-            if (i === _selectedIndex)
-                menu.getItem(i).setChecked(true);
-            else
-                menu.getItem(i).setChecked(false);
-        }
+
+        makeItemChecked(keys, menu); //Given index of item is will be checked.
 
         if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
             const NativeR = requireClass("android.R");
-            var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
+            var states = array([array([16842912], "int"), array([-16842912], "int")]);
 
             const ColorStateList = requireClass("android.content.res.ColorStateList");
             var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
@@ -795,6 +787,7 @@ function Page(params) {
                 const Navigator = require("../navigator");
 
                 var index = item.getItemId();
+                console.log("index " + index);
                 self.parentTab.currentIndex = index;
                 var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
                 if (!fragment)
@@ -815,6 +808,14 @@ function Page(params) {
                 return true;
             }
         }));
+    }
+
+    function makeItemChecked(keys, menu) {
+        for (var i = 0; i < keys.length; i++) {
+            if (i === _selectedIndex) {
+                menu.getItem(i).setChecked(true);
+            }
+        }
     }
 
     function disableShiftMode() {
