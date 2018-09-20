@@ -131,7 +131,6 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
-            console.log("onCreateContextMenu ");
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -141,14 +140,12 @@ function Page(params) {
             for (i = 0; i < items.length; i++) {
                 var menuTitle = items[i].android.spanTitle();
                 menu.add(0, i, 0, menuTitle);
-                console.log("onCreateContextMenu menu item count " + i);
             }
         },
         onContextItemSelected: function(item) {
             var itemId = item.getItemId();
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
-                console.log("items[itemId] " + items[itemId])
                 items[itemId].onSelected();
                 return true;
             }
@@ -766,10 +763,10 @@ function Page(params) {
 
         makeItemChecked(keys, menu); //Given index of item is will be checked.
 
+        var state_checked = 16842912;
+        var state_unchecked = -16842912;
         if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
-            const NativeR = requireClass("android.R");
-            var states = array([array([16842912], "int"), array([-16842912], "int")]);
-
+            var states = array([array([state_checked], "int"), array([state_unchecked], "int")]);
             const ColorStateList = requireClass("android.content.res.ColorStateList");
             var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
@@ -787,7 +784,6 @@ function Page(params) {
                 const Navigator = require("../navigator");
 
                 var index = item.getItemId();
-                console.log("index " + index);
                 self.parentTab.currentIndex = index;
                 var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
                 if (!fragment)
