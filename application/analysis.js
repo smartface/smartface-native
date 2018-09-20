@@ -7,6 +7,18 @@
 function Application() {}
 
 /**
+ * Gets status bar object. This property is readonly, you can not set
+ * status bar but you can change properties of status bar of application.
+ *
+ * @property {UI.StatusBar} statusBar
+ * @android
+ * @ios
+ * @readonly
+ * @since 3.2.0
+ */
+Application.prototype.statusBar;
+
+/**
  * Application package name.
  * 
  * @property {String} packageName
@@ -384,6 +396,18 @@ Application.onReceivedNotification = function(data){};
  * @see https://developer.android.com/training/sharing/receive.html
  */
 Application.onApplicationCallReceived = function(e){};
+
+/**
+ * The event is called when a user taps a universal link.
+ * 
+ * @event onUserActivityWithBrowsingWeb
+ * @param {String} url Universal link.
+ * @return {Boolean} YES to indicate that your app handled the activity or NO to let iOS know that your app did not handle the activity.
+ * @ios
+ * @static
+ * @since 3.1.2
+ */
+Application.onUserActivityWithBrowsingWeb = function(url){};
 
 /**
  * This event is called after Application.requestPermissions function. This event is 

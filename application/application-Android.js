@@ -296,6 +296,7 @@ Object.defineProperties(ApplicationWrapper, {
 
 ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
@@ -502,17 +503,25 @@ ApplicationWrapper.Android.KeyboardMode = {
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
 ApplicationWrapper.setRootController = function(childController) {
+    const Page = require("../ui/page");
     const NavigationController = require("../ui/navigationcontroller");
+    const FragmentTransition = require("../util/Android/fragmenttransition");
     if(childController instanceof NavigationController) {
-        console.log("setRootController NavigationController");
         var childControllerStack = childController.historyStack;
         var childControllerStackLenght = childControllerStack.length;
-        console.log("childControllerStackLenght: " + childControllerStackLenght);
         // show latest page or controller
         childController.show({
             controller: childControllerStack[childControllerStackLenght - 1],
             animated: false
         });
+    } else if(childController instanceof Page) {
+        // TODO: Check animation type. I am not sure about that!
+        FragmentTransition.push({
+            page: childController,
+            animated: false
+        });
     }
 };
+
+ApplicationWrapper.statusBar = require("./statusbar");
 module.exports = ApplicationWrapper;

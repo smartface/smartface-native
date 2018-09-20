@@ -1,7 +1,11 @@
+console.log("NavigationController require class");
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
-const Application = require("../../application");
+console.log("NavigationController require class 1");
+console.log("NavigationController require class 2");
 const BottomTabBarController = require("../../ui/bottomtabbarcontroller");
+console.log("NavigationController require class 3");
 const Page = require("../../ui/page");
+console.log("NavigationController require class 4");
 
 function NavigationController() {
     var historyStack = [];
@@ -81,13 +85,10 @@ function NavigationController() {
             throw new Error("This page doesn't exist in history!");
         }
 
-        console.log("NavigationController.show");
         params.animated && (params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT);
-        console.log("Params animated: " + (params.animated) + " animationType: " + params.animationType);
 
         !params.controller.parentController && (params.controller.parentController = self);
         _willShowCallback && (_willShowCallback({ controller: params.controller, animated: params.animated }));
-        console.log("NavigationController.showController");
 
         self.showController(params);
 
@@ -108,7 +109,6 @@ function NavigationController() {
             params.controller.pageID = FragmentTransaction.generatePageID();
         }
 
-        console.log("Push pageID: " + params.controller.pageID);
         if (pageIDCollectionInStack[params.controller.pageID]) {
             throw new Error("This page exist in history!");
         }
@@ -135,43 +135,38 @@ function NavigationController() {
     };
 
     this.pop = function(params) {
-        console.log("NavigationController.pop historyStack.length: " + historyStack.length);
         if (historyStack.length < 2) {
             throw new Error("There is no page in history!");
         }
         // remove current page from history and its id from collection
-        var currentPage = historyStack.pop();
-        pageIDCollectionInStack[currentPage.pageID] = null;
+        var poppedController = historyStack.pop();
+        pageIDCollectionInStack[poppedController.pageID] = null;
 
         var targetController = historyStack[historyStack.length - 1];
         !params && (params = {});
-        console.log("NavigationController.pop targetPage.pageID: " + targetController.pageID);
 
         _willShowCallback && (_willShowCallback({
             controller: targetController,
             animated: params.animated
         }));
         if (targetController instanceof Page) {
-            console.log("NavigationController.pop targetPage is a Page");
             params.page = targetController;
             FragmentTransaction.pop(params);
         }
         else if (targetController instanceof BottomTabBarController) {
-            console.log("NavigationController.pop targetPage is a Page");
             var bottomTabBarController = targetController;
             bottomTabBarController.show();
         }
 
         // TODO: Change these variables
         _onTransitionCallback && (_onTransitionCallback({
-            currentPage: Application.currentPage,
-            targetPage: params.page,
+            currentController: poppedController,
+            targetController: params.page,
             operation: NavigationController.OperationType.POP
         }));
     };
 
     this.popTo = function(params) {
-        console.log("NavigationController.pop historyStack.length: " + historyStack.length);
         if (historyStack.length < 2) {
             throw new Error("There is no controller in history!");
         }
@@ -181,19 +176,17 @@ function NavigationController() {
             throw new Error("Target controller doesn't exist in history!");
         }
 
+        var currentController = historyStack[historyStack.length - 1];
         // remove current controller from history and its id from collection
         while (historyStack[historyStack.length - 1].pageID != params.controller.pageID) {
             var controller = historyStack.pop();
             pageIDCollectionInStack[controller.pageID] = null;
         }
 
-        console.log("NavigationController.pop historyStack.length: " + historyStack.length);
         var targetController = historyStack[historyStack.length - 1];
 
         _willShowCallback && (_willShowCallback({ controller: targetController, animated: params.animated }));
-        console.log("NavigationController.pop targetPage.pageID: " + targetController.pageID);
         if (targetController instanceof Page) {
-            console.log("NavigationController.popTo targetController is a Page");
             var page = targetController;
             FragmentTransaction.pop({
                 page: page,
@@ -201,14 +194,13 @@ function NavigationController() {
             });
         }
         else if (targetController instanceof BottomTabBarController) {
-            console.log("NavigationController.popTo targetController is a BottomTabBarController");
             var bottomTabBarController = targetController;
             bottomTabBarController.show();
         }
         _onTransitionCallback && (_onTransitionCallback({
-            currentPage: Application.currentPage,
+            currentController: currentController,
             targetController: targetController,
-            operation: NavigationController.OperationType.POP
+            operation: (NavigationController.OperationType.POP)
         }));
     };
 }

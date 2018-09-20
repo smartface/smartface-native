@@ -80,11 +80,12 @@ Page.prototype.layout;
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
- *             this.statusBar.visible = true;
  *         }
+ *         Application.statusBar.visible = true;
  *     });
  *
  * @event onShow
@@ -195,6 +196,7 @@ Page.prototype.dismiss = function(onCompleteCallback){};
  * @android
  * @ios
  * @readonly
+ * @removed
  * @since 0.1
  */
 Page.prototype.statusBar;
@@ -202,6 +204,8 @@ Page.prototype.statusBar;
 /**
  * Gets header bar object of a  page. This property is readonly, you can not
  * set header bar to a page but you can change properties of page's header bar.
+ * In Android, header bar properties should be implemented in onLoad or onShow of page. 
+ * Otherwise given settings might be losed.
  *
  * @property {UI.HeaderBar} headerBar
  * @android

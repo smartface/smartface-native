@@ -11,6 +11,7 @@ function TabBarItem(params) {
             set: function(title) {
                 if (typeof(title) === "string") {
                     _title = title;
+                    this.nativeObject.setTitle(title);
                 }
                 else {
                     throw new Error("title should be string.");
