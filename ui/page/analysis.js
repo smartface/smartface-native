@@ -80,11 +80,12 @@ Page.prototype.layout;
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
- *             this.statusBar.visible = true;
  *         }
+ *         Application.statusBar.visible = true;
  *     });
  *
  * @event onShow

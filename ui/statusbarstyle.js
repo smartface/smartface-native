@@ -6,9 +6,10 @@
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
  *     var myPage = new Page();
- *     myPage.statusBar.style = StatusBarStyle.LIGHTCONTENT;
+ *     Application.statusBar.style = StatusBarStyle.LIGHTCONTENT;
  *
  */
 var StatusBarStyle = { };
