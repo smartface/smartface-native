@@ -7,22 +7,13 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
-const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
-const MINAPILEVEL_STATUSBARCOLOR = 21;
-const MINAPILEVEL_STATUSBARICONCOLOR = 23;
-
-// WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
-// WindowManager.LayoutParams.FLAG_FULLSCREEN
-const FLAG_FULLSCREEN = 1024;
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -353,79 +344,6 @@ function Page(params) {
             },
             enumerable: true
         }
-    });
-
-    this.statusBar = {};
-
-    var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
-    Object.defineProperty(self.statusBar, 'style', {
-        get: function() {
-            return statusBarStyle;
-        },
-        set: function(value) {
-            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
-                statusBarStyle = value;
-                if (statusBarStyle == StatusBarStyle.DEFAULT) {
-                    // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
-                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
-                }
-                else {
-                    //STATUS_BAR_VISIBLE = 0
-                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
-                }
-            }
-
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    var _visible;
-    Object.defineProperty(this.statusBar, 'visible', {
-        get: function() {
-            return _visible;
-        },
-        set: function(visible) {
-            _visible = visible;
-            var window = activity.getWindow();
-            if (visible) {
-                window.clearFlags(FLAG_FULLSCREEN);
-            }
-            else {
-                window.addFlags(FLAG_FULLSCREEN);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    this.statusBar.android = {};
-    var _color;
-    Object.defineProperty(this.statusBar.android, 'color', {
-        get: function() {
-            return _color;
-        },
-        set: function(color) {
-            _color = color;
-            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-                var window = activity.getWindow();
-                window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color.nativeObject);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(this.statusBar, 'height', {
-        get: function() {
-            var result = 0;
-            var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
-            }
-            return AndroidUnitConverter.pixelToDp(result);
-        },
-        enumerable: true,
-        configurable: true
     });
 
     var _headerBarColor; // SmartfaceBlue
@@ -986,11 +904,10 @@ function Page(params) {
     }));
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
+    
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {
-            self.statusBar.visible = true;
-            self.statusBar.color = Color.TRANSPARENT;
             self.headerBar.backgroundColor = Color.create("#00A1F1");
             self.headerBar.leftItemEnabled = true;
             self.headerBar.android.logoEnabled = false;
@@ -998,10 +915,7 @@ function Page(params) {
             self.headerBar.android.subtitleColor = Color.WHITE;
             self.headerBar.visible = true;
         }
-    }
-    //Handling ios value
-    self.statusBar.ios = {};
-    self.statusBar.ios.style = null;
+    };
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

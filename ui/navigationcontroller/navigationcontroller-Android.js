@@ -1,7 +1,11 @@
+console.log("NavigationController require class");
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
-const Application = require("../../application");
+console.log("NavigationController require class 1");
+console.log("NavigationController require class 2");
 const BottomTabBarController = require("../../ui/bottomtabbarcontroller");
+console.log("NavigationController require class 3");
 const Page = require("../../ui/page");
+console.log("NavigationController require class 4");
 
 function NavigationController() {
     var historyStack = [];
@@ -194,9 +198,9 @@ function NavigationController() {
             bottomTabBarController.show();
         }
         _onTransitionCallback && (_onTransitionCallback({
-            currentController currentController,
+            currentController: currentController,
             targetController: targetController,
-            operation: NavigationController.OperationType.POP
+            operation: (NavigationController.OperationType.POP)
         }));
     };
 }

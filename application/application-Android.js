@@ -503,6 +503,7 @@ ApplicationWrapper.Android.KeyboardMode = {
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
 ApplicationWrapper.setRootController = function(childController) {
+    const Page = require("../ui/page");
     const NavigationController = require("../ui/navigationcontroller");
     const FragmentTransition = require("../util/Android/fragmenttransition");
     if(childController instanceof NavigationController) {
@@ -518,7 +519,9 @@ ApplicationWrapper.setRootController = function(childController) {
         FragmentTransition.push({
             page: childController,
             animated: false
-        })
+        });
     }
 };
+
+ApplicationWrapper.statusBar = require("./statusbar");
 module.exports = ApplicationWrapper;

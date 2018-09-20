@@ -195,6 +195,7 @@ Page.prototype.dismiss = function(onCompleteCallback){};
  * @android
  * @ios
  * @readonly
+ * @removed
  * @since 0.1
  */
 Page.prototype.statusBar;

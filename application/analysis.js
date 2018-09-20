@@ -7,6 +7,18 @@
 function Application() {}
 
 /**
+ * Gets status bar object. This property is readonly, you can not set
+ * status bar but you can change properties of status bar of application.
+ *
+ * @property {UI.StatusBar} statusBar
+ * @android
+ * @ios
+ * @readonly
+ * @since 3.2.0
+ */
+Application.prototype.statusBar;
+
+/**
  * Application package name.
  * 
  * @property {String} packageName
