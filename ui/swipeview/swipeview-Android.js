@@ -148,9 +148,19 @@ const SwipeView = extend(View)(
 );
 
 function bypassPageSpecificProperties(page) {
-    page.statusBar = { android: {}};
     page.headerBar.visible = false;
-    page.headerBar = {};
+    Object.keys(page.statusBar).forEach(function(key){
+        Object.defineProperty(page.statusBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
+    Object.keys(page.headerBar).forEach(function(key){
+        Object.defineProperty(page.headerBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
     page.isSwipeViewPage = true;
     page.onShowSwipeView = page.onShow;
     page.onShow = function() {};
