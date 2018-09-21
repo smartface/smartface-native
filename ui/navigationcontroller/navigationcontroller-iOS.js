@@ -71,11 +71,6 @@ function NavigatonController(params) {
         self.model.popPage();
     };
     
-    this.popAll = function(){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:popAll");
-        self.model.popAll((page) => this.view.pop(false));
-    };
-    
     this.popTo = function (params){
         if (params.controller && typeof params.controller === 'object') {
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:pop to");
@@ -389,15 +384,6 @@ function NavigatonModel() {
         for (var i = self.childControllers.length - 1; i > index; --i) {
             var poppedPage = self.childControllers.pop();
             poppedPage.parentController = null;
-        }
-    };
-    
-    this.popAll = function (fn) {
-        console.log("IOS==NAVIGATIONCONT==MODEL:popAll to index");
-        while(self.childControllers.length) {
-            var poppedPage = self.childControllers.pop();
-            poppedPage.parentController = null;
-            fn(poppedPage);
         }
     };
     
