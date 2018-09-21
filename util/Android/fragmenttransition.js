@@ -24,6 +24,7 @@ FragmentTransaction.pop = function(params) {
 };
 
 FragmentTransaction.replace = function(params) {
+    // TODO: Beautify visibility setting of bottom tabbar
     const Application = require("sf-core/application");
     if(params.page.isInsideBottomTabBar) {
         console.log("=======================");
