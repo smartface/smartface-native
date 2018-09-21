@@ -4,13 +4,11 @@ const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
-const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
@@ -575,40 +573,6 @@ function Page(params) {
         configurable: true
     });
 
-    this.bottomTabBar = {};
-    Object.defineProperty(this.bottomTabBar, 'height', {
-        get: function() {
-            var result = 0;
-            var activity = AndroidConfig.activity;
-
-            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-            var packageName = activity.getPackageName();
-            var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
-            if (resourceId > 0) {
-                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
-            }
-            return AndroidUnitConverter.pixelToDp(result);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    var _parentTab;
-    var _selectedIndex;
-    var bottomNavigationView;
-    var rootLayoutID = NativeSFR.id.rootLayout;
-
-    Object.defineProperty(this,
-        'parentTab', {
-            get: function() {
-                return _parentTab;
-            },
-            set: function(tab) {
-                _parentTab = tab;
-                createBottomNavigationView(pageLayout);
-            },
-            enumerable: true
-        }
-    );
     var _tag;
     Object.defineProperty(this,
         'tag', {
@@ -621,133 +585,7 @@ function Page(params) {
             enumerable: true
         }
     );
-    Object.defineProperty(this, 'selectedIndex', {
-        get: function() {
-            return _selectedIndex;
-        },
-        set: function(index) {
-            _selectedIndex = index;
-            var menu;
-            if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for (var i = 0; i < Object.keys(_parentTab.items).length; i++) {
-                    if (i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
-                    }
-                    else {
-                        menu.getItem(i).setChecked(false);
-                    }
-                }
-            }
-        },
-        enumerable: true
-    });
-
-    function createBottomNavigationView(pageLayout) {
-        if (bottomNavigationView)
-            return;
-        const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
-        const Color = require("../color");
-
-        bottomNavigationView = new BottomNavigationView(activity);
-        var tab = _parentTab;
-        if (bottomNavigationView && bottomNavigationView.getMenu()) {
-            setPropertiesOfTabBarItems();
-            disableShiftMode();
-        }
-
-        var params = new RelativeLayoutLayoutParams(-1, -2);
-        params.addRule(12);
-        bottomNavigationView.setLayoutParams(params);
-        var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
-        bottomLayout.addView(bottomNavigationView);
-
-        if (tab.backgroundColor instanceof Color)
-            bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
-
-        rootLayout.paddingBottom = self.bottomTabBar.height;
-    }
-
-    function setPropertiesOfTabBarItems() {
-        var tab = _parentTab;
-        var menu = bottomNavigationView.getMenu();
-        var keys = Object.keys(tab.items);
-        for (var i = 0; i < keys.length; i++) {
-            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title);
-            var icon = tab.items[keys[i]].icon;
-            if (icon) {
-                const Image = require("../image");
-                if (icon instanceof Image || icon === null) {
-                    menuitem.setIcon(icon.nativeObject);
-                }
-                else { // if object
-                    menuitem.setIcon(icon);
-                }
-            }
-        }
-        // Don't merge upper loop. It doesn't work inside upper loop.
-        for (i = 0; i < keys.length; i++) {
-            if (i === _selectedIndex)
-                menu.getItem(i).setChecked(true);
-            else
-                menu.getItem(i).setChecked(false);
-        }
-
-        if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
-            const NativeR = requireClass("android.R");
-            var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
-
-            const ColorStateList = requireClass("android.content.res.ColorStateList");
-            var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
-            var statelist = new ColorStateList(states, colors);
-            bottomNavigationView.setItemTextColor(statelist);
-            bottomNavigationView.setItemIconTintList(statelist);
-        }
-        setBottomTabBarOnClickListener();
-    }
-
-    function setBottomTabBarOnClickListener() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
-            onNavigationItemSelected: function(item) {
-                var tab = self.parentTab;
-                var fragment;
-                const Navigator = require("../navigator");
-
-                var index = item.getItemId();
-                self.parentTab.currentIndex = index;
-                var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
-                if (!fragment)
-                    fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index], true); // isSingleton is true for tab switching
-
-                fragment.selectedIndex = index;
-                fragment.parentTab = self.parentTab;
-
-                if (!fragment.tag)
-                    fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
-
-                if (fragment.isBottomTabBarPage || fragment.firstPageInNavigator) {
-                    Router.pagesInstance.push(fragment, false, fragment.tag, false);
-                }
-                else if (tabItem instanceof Navigator) {
-                    tabItem.push(fragment, fragment.tag, false, true);
-                }
-                return true;
-            }
-        }));
-    }
-
-    function disableShiftMode() {
-        var menuView = bottomNavigationView.getChildAt(0);
-        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-        shiftingMode.setAccessible(true);
-        shiftingMode.setBoolean(menuView, false);
-        shiftingMode.setAccessible(false);
-        for (var i = 0; i < menuView.getChildCount(); i++) {
-            var item = menuView.getChildAt(i);
-            item.setShiftingMode(false);
-            var checked = (item.getItemData()).isChecked();
-            item.setChecked(checked);
-        }
-    }
+    
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
@@ -905,6 +743,9 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     
+    // TODO: Remove this line before merge to develop.
+    // This line added for Cenk's requirements
+    self.statusBar = require("../../application/statusbar");
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {

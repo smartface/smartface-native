@@ -24,6 +24,22 @@ FragmentTransaction.pop = function(params) {
 };
 
 FragmentTransaction.replace = function(params) {
+    const Application = require("sf-core/application");
+    if(params.page.isInsideBottomTabBar) {
+        console.log("=======================");
+        console.log("=======================");
+        console.log("Show BottomTabBar");
+        Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
+        console.log("=======================");
+        console.log("=======================");
+    } else {
+        console.log("=======================");
+        console.log("=======================");
+        console.log("Hide BottomTabBar");
+        Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
+        console.log("=======================");
+        console.log("=======================");
+    }
     // don't remove these variables. If they are global values, an exception occurs.
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
