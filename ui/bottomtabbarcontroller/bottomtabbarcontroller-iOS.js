@@ -53,12 +53,24 @@ function BottomTabBarController(params) {
         },
         enumerable: true
     });
+    
+    Object.defineProperty(self, 'selectedIndex', {
+        get: function() {
+            return self.model.currentIndex;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+                self.model.currentIndex = value;
+            }
+        },
+        enumerable: true
+    });
+    
     ////////////////////////////////////////////////////////////////////////////
     
     // Functions
-    this.setIndex = function (index){
-        self.model.currentIndex = index;
-        self.view.setIndex(index);
+    this.show = function (){
+        self.view.setIndex(self.model.currentIndex);
     };
     
     ////////////////////////////////////////////////////////////////////////////
@@ -98,7 +110,7 @@ const Image = require('sf-core/ui/image');
 function TabBar(params) {
     console.log("IOS==BOTTOMTABBARCONTROLLER==tabbar init");
     const UITabBar = SF.requireClass("UITabBar");
-    const UITabBarItem = SF.requireClass("UITabBarItem");
+    const TabBarItem = require('sf-core/ui/tabbaritem');
     
     var self = this;
     
@@ -111,35 +123,62 @@ function TabBar(params) {
         self.nativeObject = params.nativeObject;
     }
     
-    // Object.defineProperty(self.ios, 'translucent', {
-    //     get: function() {
-    //         return self.nativeObject.translucent;
-    //     },
-    //     set: function(value) {
-    //         if (typeof value === 'boolean') {
-    //             console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:set translucent");
-    //             self.nativeObject.translucent = value;
-    //         }
-    //     },
-    //     enumerable: true
-    // });
+    //////////////////////////////////////////////////////////////////////////
+    // ITEMS
+    var _items = [];
+    Object.defineProperty(self, 'items', {
+        get: function() {
+            return _items;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:items setter");
+                _items = value;
+                
+                for (var i in _items) {
+                    if (typeof _items[i].nativeObject === "undefined"){
+                        _items[i].nativeObject = self.nativeObject.items[i];   
+                    }
+                    _items[i].invalidate();
+                }
+            }
+        },
+        enumerable: true
+    });
     
-    // var _items;
-    // Object.defineProperty(self, 'items', {
-    //     get: function() {
-    //         var retval = self.nativeObject.items;
-    //         console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:items getter : " + retval);
-    //         return retval;
-    //     },
-    //     set: function(value) {
-    //         if (typeof value === 'object') {
-    //             console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:items setter");
-    //             _items = value;
-    //             self.nativeObject.items = _items;
-    //         }
-    //     },
-    //     enumerable: true
-    // });
+    // ITEMS DELEGATE
+    self.tabBarControllerItemsDidChange = function() {
+        console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange");
+        
+        if (self.items.length === self.nativeObject.items.length) {
+            console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange self has items");
+            for (var i in self.nativeObject.items) {
+                self.items[i].nativeObject = self.nativeObject.items[i];
+            }
+        } else {
+            console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange self havent items");
+            var itemsArray = [];
+            for (var i in self.nativeObject.items) {
+                var sfTabBarItem = new TabBarItem({nativeObject : self.nativeObject.items[i]});
+                itemsArray.push(sfTabBarItem);
+            }
+            self.items = itemsArray;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    
+    Object.defineProperty(self.ios, 'translucent', {
+        get: function() {
+            return self.nativeObject.translucent;
+        },
+        set: function(value) {
+            if (typeof value === 'boolean') {
+                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:set translucent");
+                self.nativeObject.translucent = value;
+            }
+        },
+        enumerable: true
+    });
     
     // Object.defineProperty(self, 'itemColor', {
     //     get: function() {
@@ -257,6 +296,10 @@ function BottomTabBarView(params) {
     this.setNativeChildViewControllers = function (nativeChildPageArray) {
         console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:set native child view controllers");
         self.nativeObject.viewControllers = nativeChildPageArray;
+        
+        if (nativeChildPageArray.length > 0) {
+            self.viewModel.tabBar.tabBarControllerItemsDidChange();  
+        }
     };
     
     ////////////////////////////////////////////////////////////////////////////

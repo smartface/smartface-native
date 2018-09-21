@@ -57,11 +57,11 @@ function NavigatonController(params) {
     
     // Functions
     this.push = function (params){
-        if (params.page && typeof params.page === 'object') {
+        if (params.controller && typeof params.controller === 'object') {
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:push");
-            self.view.push(params.page, params.animated ? true : false);
-            self.model.pushPage(params.page);
-            params.page.parentController = self;
+            self.view.push(params.controller, params.animated ? true : false);
+            self.model.pushPage(params.controller);
+            params.controller.parentController = self;
         }
     };
     
@@ -72,10 +72,10 @@ function NavigatonController(params) {
     };
     
     this.popTo = function (params){
-        if (params.page && typeof params.page === 'object') {
+        if (params.controller && typeof params.controller === 'object') {
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:pop to");
-            self.view.popTo(params.page, params.animated ? true : false);
-            self.model.popToPage(params.page);
+            self.view.popTo(params.controller, params.animated ? true : false);
+            self.model.popToPage(params.controller);
         }
     };
     ////////////////////////////////////////////////////////////////////////////
