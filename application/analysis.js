@@ -310,6 +310,16 @@ Application.android.keyboardMode;
 Application.checkUpdate = function(callback, user){};
 
 /**
+ * Triggered when user press back key. The default implementation finishes the application, 
+ * but you can override this to do whatever you want.
+ * 
+ * @event onBackButtonPressed
+ * @android
+ * @static
+ * @since 3.2.0
+ */
+Application.onBackButtonPressed = function(){};
+/**
  * Triggered before exiting application.
  * 
  * @since 0.1
