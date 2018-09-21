@@ -214,6 +214,7 @@ var Http = function(params) {
      *
      * @property {Boolean} cookiePersistenceEnable
      * @android
+     * @ios
      * @since 3.1.2
      */
     this.cookiePersistenceEnable = false;
