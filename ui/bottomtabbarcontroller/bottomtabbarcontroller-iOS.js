@@ -180,78 +180,88 @@ function TabBar(params) {
         enumerable: true
     });
     
-    // Object.defineProperty(self, 'itemColor', {
-    //     get: function() {
-    //         return new Color({color : self.nativeObject.tintColor});
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.tintColor = value.nativeObject;
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    Object.defineProperty(self, 'itemColor', {
+        get: function() {
+            return new Color({color : self.nativeObject.tintColor});
+        },
+        set: function(value) {
+            self.nativeObject.tintColor = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // Object.defineProperty(self, 'backgroundColor', {
-    //     get: function() {
-    //         return new Color({color : self.nativeObject.barTintColor});
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.barTintColor = value.nativeObject;
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    Object.defineProperty(self, 'unselectedItemColor', {
+        get: function() {
+            return new Color({color : self.nativeObject.unselectedItemTintColor});
+        },
+        set: function(value) {
+            self.nativeObject.unselectedItemTintColor = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // Object.defineProperty(self, 'backgroundImage', {
-    //     get: function() {
-    //         return Image.createFromImage(self.nativeObject.backgroundImage);
-    //     },
-    //     set: function(value) {
-    //         self.nativeObject.backgroundImage = value.nativeObject;
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    Object.defineProperty(self, 'backgroundColor', {
+        get: function() {
+            return new Color({color : self.nativeObject.barTintColor});
+        },
+        set: function(value) {
+            self.nativeObject.barTintColor = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // Object.defineProperty(self, 'height', {
-    //     get: function() {
-    //         return self.nativeObject.frame.height;
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    Object.defineProperty(self, 'backgroundImage', {
+        get: function() {
+            return Image.createFromImage(self.nativeObject.backgroundImage);
+        },
+        set: function(value) {
+            self.nativeObject.backgroundImage = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // var _borderVisibility = true;
-    // Object.defineProperty(self, 'borderVisibility', {
-    //     get: function() {
-    //         return _borderVisibility;
-    //     },
-    //     set: function(value) {
-    //         if (typeof value === "boolean") {
-    //             if (value) {
-    //                 self.nativeObject.shadowImage = undefined;
-    //                 self.nativeObject.backgroundImage = undefined;
-    //             } else {
-    //                 var emptyImage = __SF_UIImage.getInstance();
-    //                 self.nativeObject.shadowImage = emptyImage;
-    //                 self.nativeObject.backgroundImage = emptyImage;
-    //             }
-    //             _borderVisibility = value;
-    //         }
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    Object.defineProperty(self, 'height', {
+        get: function() {
+            return self.nativeObject.frame.height;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // var _selectionIndicatorImage;
-    // Object.defineProperty(self.ios, 'selectionIndicatorImage', {
-    //     get: function() {
-    //         return _selectionIndicatorImage;
-    //     },
-    //     set: function(value) {
-    //         if (typeof value === "object") {
-    //             console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:selectionIndicatorImage");
-    //             _selectionIndicatorImage = value;
-    //             self.nativeObject.selectionIndicatorImage = _selectionIndicatorImage.nativeObject;
-    //         }
-    //     },
-    //     enumerable: true,configurable : true
-    // });
+    var _borderVisibility = true;
+    Object.defineProperty(self, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (value) {
+                    self.nativeObject.shadowImage = undefined;
+                    self.nativeObject.backgroundImage = undefined;
+                } else {
+                    var emptyImage = __SF_UIImage.getInstance();
+                    self.nativeObject.shadowImage = emptyImage;
+                    self.nativeObject.backgroundImage = emptyImage;
+                }
+                _borderVisibility = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    var _selectionIndicatorImage;
+    Object.defineProperty(self.ios, 'selectionIndicatorImage', {
+        get: function() {
+            return _selectionIndicatorImage;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:selectionIndicatorImage");
+                _selectionIndicatorImage = value;
+                self.nativeObject.selectionIndicatorImage = _selectionIndicatorImage.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
     
     if (params) {
         for (var param in params) {
