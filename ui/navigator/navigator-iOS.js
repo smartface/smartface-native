@@ -180,6 +180,13 @@ function NavigatorViewModel(params) {
                 {
                     pageToGo = self.model.getPageInstance(routes[0]);
                 }
+                else 
+                {
+                    if (typeof (parameters) != 'undefined' && parameters != null) 
+                    {
+                        self.model.currentPage.__pendingParameters = parameters;
+                    }
+                }
             }
             
             if (pageToGo) 
