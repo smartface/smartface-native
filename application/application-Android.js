@@ -16,6 +16,7 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
+var _onBackButtonPressed;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
 var _keyboardMode;
@@ -301,6 +302,20 @@ ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
+        enumerable: true
+    },
+    'onBackButtonPressed': {
+        get: function() {
+            return _onBackButtonPressed;
+        },
+        set: function(callback) {
+            _onBackButtonPressed = callback;
+            spratAndroidActivityInstance.attachBackPressedListener({
+               onBackPressed: function() {
+                   _onBackButtonPressed && _onBackButtonPressed();
+               } 
+            });
+        },
         enumerable: true
     },
     'checkPermission': {

@@ -107,8 +107,7 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("../router");
-                    Router.goBack(null, this.__pendingParameters);
+                    self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
             }
             else if (_headerBarItems[itemId]) {
@@ -711,21 +710,6 @@ function Page(params) {
     self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
         onLongClick: function(view) {
             return true;
-        }
-    }));
-    //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
-    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-        onKey: function(view, keyCode, keyEvent) {
-            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                typeof self.android.onBackButtonPressed === "function" &&
-                    self.android.onBackButtonPressed();
-                return true;
-            }
-            else {
-                return false;
-            }
-
         }
     }));
 
