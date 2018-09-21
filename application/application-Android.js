@@ -16,6 +16,7 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
+var _onBackButtonPressed;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
 var _keyboardMode;
@@ -303,6 +304,20 @@ Object.defineProperties(ApplicationWrapper.android, {
         value: activity.getPackageName(),
         enumerable: true
     },
+    'onBackButtonPressed': {
+        get: function() {
+            return _onBackButtonPressed;
+        },
+        set: function(callback) {
+            _onBackButtonPressed = callback;
+            spratAndroidActivityInstance.attachBackPressedListener({
+               onBackPressed: function() {
+                   _onBackButtonPressed && _onBackButtonPressed();
+               } 
+            });
+        },
+        enumerable: true
+    },
     'checkPermission': {
         value: function(permission) {
             if (!TypeUtil.isString(permission)) {
@@ -502,23 +517,25 @@ ApplicationWrapper.Android.KeyboardMode = {
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
-ApplicationWrapper.setRootController = function(childController) {
+ApplicationWrapper.setRootController = function(params) {
     const Page = require("../ui/page");
     const NavigationController = require("../ui/navigationcontroller");
     const FragmentTransition = require("../util/Android/fragmenttransition");
-    if(childController instanceof NavigationController) {
-        var childControllerStack = childController.historyStack;
+    if((params.childController) instanceof NavigationController) {
+        var childControllerStack = params.childController.historyStack;
         var childControllerStackLenght = childControllerStack.length;
         // show latest page or controller
-        childController.show({
+        params.childController.show({
             controller: childControllerStack[childControllerStackLenght - 1],
-            animated: false
+            animated: params.animated
         });
-    } else if(childController instanceof Page) {
+    } else if((params.childController) instanceof Page) {
+        // TODO: Check pageID settings! Code duplicate exists
+        !params.childController.pageID && (params.childController.pageID = FragmentTransition.generatePageID());
         // TODO: Check animation type. I am not sure about that!
         FragmentTransition.push({
-            page: childController,
-            animated: false
+            page: (params.childController),
+            animated: params.animated
         });
     }
 };

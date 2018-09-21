@@ -9,7 +9,10 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const activity = AndroidConfig.activity;
 
 function BottomTabBarController() {
+    // TODO: Beautify this code
+    const Application = require("sf-core/application");
     this.tabBar = new BottomTabBar();
+    Application.tabBar = this.tabBar;
     
     var _addedToActivity = false;
     var _firstClick = true;
@@ -73,6 +76,7 @@ function BottomTabBarController() {
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
+        childController.isInsideBottomTabBar = true;
         try {
             console.log("childController typeof: " + typeof(childController));
             if (childController instanceof Page) {
@@ -121,11 +125,6 @@ function BottomTabBarController() {
         // self.setChecked();
     };
     
-    // Use this function to exit tabbar page.
-    this.hiddenTabbar = function() {
-        
-    };
-    
     this.setChecked = function() {
         var menu = self.tabBar.nativeObject.getMenu();
         for (var i = 0; i < self.tabBar.itemCount; i++) {
@@ -150,6 +149,10 @@ function BottomTabBarController() {
                 // revert previous selected item manually
                 
                 !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
+                
+                // TODO: Add this property to controller class
+                // use this property to show/hide bottom naviagtion view after controller transition
+                self.childControllers[index].isInsideBottomTabBar = true; 
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 self.didSelectByIndex(index);

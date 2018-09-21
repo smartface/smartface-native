@@ -176,7 +176,6 @@ Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser
  * Exists the application.
  *
  * @method exit
- * @readonly
  * @android
  * @ios
  * @static
@@ -185,10 +184,22 @@ Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser
 Application.exit = function(){};
 
 /**
+ * Set root controller of the application.
+ *
+ * @method setRootController
+ * @param {Object} params 
+ * @param {UI.Page|UI.NavigationController} controller
+ * @param {Boolean} [animated=false]
+ * @android
+ * @ios
+ * @static
+ * @since 3.2.0
+ */
+Application.setRootController = function(params){};
+/**
  * Restarts the application.
  *
  * @method restart
- * @readonly
  * @android
  * @ios
  * @static
@@ -205,7 +216,6 @@ Application.restart = function(){};
  * @method checkPermission
  * @param {String} permission
  * @return {Boolean}
- * @readonly
  * @android
  * @static
  * @since 1.2
@@ -227,7 +237,6 @@ Application.android.checkPermission = function(permission){};
  * @method requestPermissions
  * @param {Number} requestIdentifier This number  will be returned in {@link Application.android.onRequestPermissionsResult onRequestPermissionsResult} when the user give permission or not. 
  * @param {String} permission
- * @readonly
  * @android
  * @static
  * @since 1.2
@@ -241,7 +250,6 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  * @method shouldShowRequestPermissionRationale
  * @param {String} permission
  * @return {Boolean}
- * @readonly
  * @android
  * @static
  * @since 1.2
@@ -309,6 +317,16 @@ Application.android.keyboardMode;
  */
 Application.checkUpdate = function(callback, user){};
 
+/**
+ * Triggered when user press back key. The default implementation finishes the application, 
+ * but you can override this to do whatever you want.
+ * 
+ * @event onBackButtonPressed
+ * @android
+ * @static
+ * @since 3.2.0
+ */
+Application.onBackButtonPressed = function(){};
 /**
  * Triggered before exiting application.
  * 

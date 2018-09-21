@@ -31,6 +31,7 @@ function NavigationController() {
                 for (var i = 0; i < childControllersArray.length; i++) {
                     var childController = childControllersArray[i];
                     childController.parentController = self;
+                    childController.isInsideBottomTabBar = self.isInsideBottomTabBar;
                     if (!childController.pageID) {
                         childController.pageID = FragmentTransaction.generatePageID();
                     }
@@ -120,6 +121,7 @@ function NavigationController() {
 
     this.showController = function(params) {
         if ((params.controller) instanceof Page) {
+            params.controller.isInsideBottomTabBar = self.isInsideBottomTabBar;
             FragmentTransaction.push({
                 page: params.controller,
                 animated: params.animated,
@@ -127,6 +129,7 @@ function NavigationController() {
             });
         }
         else if ((params.controller) instanceof BottomTabBarController) {
+            params.controller.isInsideBottomTabBar = true;
             params.controller.show();
         }
         else {

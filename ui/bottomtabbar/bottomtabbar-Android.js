@@ -16,6 +16,18 @@ function BottomTabBar(params) {
     var _itemCount = 0;
     var _items = [];
     Object.defineProperties(this, {
+        'height': {
+            get: function() {
+                var result = 0;
+                const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+                var packageName = activity.getPackageName();
+                var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
+                if (resourceId > 0) {
+                    result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
+                }
+                return AndroidUnitConverter.pixelToDp(result);
+            }  
+        },
         'itemCount': {
             get: function() {
                 return _itemCount;
