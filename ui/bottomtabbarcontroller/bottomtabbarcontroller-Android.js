@@ -121,9 +121,9 @@ function BottomTabBarController() {
         }
     };
 
-    this.show = function(isNotClickAction) {
+    this.show = function() {
         self.addTabBarToActivity();
-        !isNotClickAction && (self.setChecked());
+        (self.setChecked());
         self.push(self.childControllers[_selectedIndex]);
         // self.setChecked();
     };

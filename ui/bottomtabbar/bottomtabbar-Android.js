@@ -101,7 +101,7 @@ function BottomTabBar(params) {
             var tabbarItem = tabBarItems[i];
             var title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
             tabbarItem.nativeObject = self.nativeObject.getMenu().add(0, i, 0, title);
-            tabbarItem.icon = tabbarItem.icon;
+            tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
         }
         _items = tabBarItems;
     }

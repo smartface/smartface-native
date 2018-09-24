@@ -20,6 +20,7 @@ FragmentTransaction.push = function(params) {
 
 FragmentTransaction.pop = function(params) {
     console.log("FragmentTransaction.pop animated param: " + params.animated);
+    params && (params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT);
     FragmentTransaction.replace(params);
 };
 
@@ -47,9 +48,17 @@ FragmentTransaction.replace = function(params) {
     if(params.animated) {
         console.log("params.animationType: " + params.animationType + " === " + FragmentTransaction.AnimationType.RIGHTTOLEFT);
         // check animation type
-        if(params.animationType == FragmentTransaction.AnimationType.RIGHTTOLEFT) {
-            console.log("FragmentTransaction.replace RIGHTTOLEFT");
-            rightToLeftTransitionAnimation(fragmentTransaction);
+        switch (params.animationType) {
+            case '0':
+                console.log("FragmentTransaction.replace RIGHTTOLEFT");
+                rightToLeftTransitionAnimation(fragmentTransaction);
+                break;
+            case '1':
+                console.log("FragmentTransaction.replace LEFTTORIGHT");
+                leftToRightTransitionAnimation(fragmentTransaction);
+                break;
+            default:
+                break;
         }
     }
     
@@ -64,6 +73,24 @@ FragmentTransaction.replace = function(params) {
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
+
+function leftToRightTransitionAnimation(fragmentTransaction) {
+    console.log("leftToRightTransitionAnimation");
+    if (!pageAnimationsCache["LEFTTORIGHT"]) {
+        pageAnimationsCache["LEFTTORIGHT"] = {};
+        var packageName = activity.getPackageName();
+        var resources = AndroidConfig.activityResources;
+        pageAnimationsCache["LEFTTORIGHT"].rightEnter = resources.getIdentifier("slide_right_enter", "anim", packageName);
+        pageAnimationsCache["LEFTTORIGHT"].rightExit = resources.getIdentifier("slide_right_exit", "anim", packageName);
+    }
+    
+    var rightExit = pageAnimationsCache["LEFTTORIGHT"].rightExit;
+    var rightEnter = pageAnimationsCache["LEFTTORIGHT"].rightEnter;
+    
+    if (rightEnter !== 0 && rightExit !== 0) {
+        fragmentTransaction.setCustomAnimations(rightEnter, rightExit);
+    }
+}
 
 function rightToLeftTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache["RIGHTTOLEFT"]) {
@@ -81,12 +108,13 @@ function rightToLeftTransitionAnimation(fragmentTransaction) {
     var rightExit = pageAnimationsCache["RIGHTTOLEFT"].rightExit;
     var rightEnter = pageAnimationsCache["RIGHTTOLEFT"].rightEnter;
     
-    if (leftEnter !== 0 && leftExit !== 0 && rightEnter !== 0 && rightExit !== 0) {
+    if (leftEnter !== 0 && leftExit !== 0) {
         fragmentTransaction.setCustomAnimations(leftEnter, leftExit, rightEnter, rightExit);
     }
 }
 
 FragmentTransaction.AnimationType = {};
 FragmentTransaction.AnimationType.RIGHTTOLEFT = "0";
+FragmentTransaction.AnimationType.LEFTTORIGHT = "1";
 
 module.exports = FragmentTransaction;
