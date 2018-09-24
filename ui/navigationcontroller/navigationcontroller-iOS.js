@@ -294,6 +294,7 @@ function HeaderBar(params) {
 function NavigationView(params) {
     console.log("IOS==NAVIGATIONCONT==NavigationView init");
     
+    const UIGestureRecognizer = SF.requireClass("UIGestureRecognizer");
     const UINavigationController = SF.requireClass("UINavigationController");
     
     var self = this;
@@ -318,6 +319,11 @@ function NavigationView(params) {
         },
         navigationControllerAnimationControllerForOperationFromViewControllerToViewController : function (navigationController, operation, fromVC, toVC) {
             console.log("IOS==NAVIGATIONCONT==VIEW:navigation controller animation controller for operation...");
+            if (typeof self.nativeObject.interactivePopGestureRecognizer.delegate !== "undefined") {
+                // Returning undefined to navigationControllerAnimationControllerForOperationFromViewControllerToViewController function breaks pop gesture recognizer.
+                // Delegate should be undefined.
+                self.nativeObject.interactivePopGestureRecognizer.delegate = undefined;
+            }
             var fromIndex = self.nativeObject.viewControllers.indexOf(fromVC);
             var toIndex = self.nativeObject.viewControllers.indexOf(toVC);
             self.viewModel.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
