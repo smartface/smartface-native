@@ -66,16 +66,16 @@ function http(params) {
 
     self.android = {};
 
-    var _cookiePersistenceEnable = false;
-    Object.defineProperty(self, 'cookiePersistenceEnable', {
+    var _cookiePersistenceEnabled = false;
+    Object.defineProperty(self, 'cookiePersistenceEnabled', {
         get: function() {
-            return _cookiePersistenceEnable;
+            return _cookiePersistenceEnabled;
         },
         set: function(value) {
             if (typeof value !== "boolean")
                 return;
-            _cookiePersistenceEnable = value;
-            if (_cookiePersistenceEnable) {
+            _cookiePersistenceEnabled = value;
+            if (_cookiePersistenceEnabled) {
                 self.clientBuilder.cookieJar(createCookieJar());
             }
             else {

@@ -209,14 +209,15 @@ var Http = function(params) {
     this.request = function(params) {};
 
     /**
-     * Sets cookiePersistenceEnable of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
+     * Sets cookiePersistenceEnabled of Http. Enabling cookie persistence stores your cookies in memory and sends the stored cookies
      * with every request. This property must be given in contructor.
      *
-     * @property {Boolean} cookiePersistenceEnable
+     * @property {Boolean} cookiePersistenceEnabled
      * @android
+     * @ios
      * @since 3.1.2
      */
-    this.cookiePersistenceEnable = false;
+    this.cookiePersistenceEnabled = false;
 };
 
 

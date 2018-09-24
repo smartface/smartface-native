@@ -711,14 +711,8 @@ function Page(params) {
             _selectedIndex = index;
             var menu;
             if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for (var i = 0; i < Object.keys(_parentTab.items).length; i++) {
-                    if (i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
-                    }
-                    else {
-                        menu.getItem(i).setChecked(false);
-                    }
-                }
+                var itemsKeys = Object.keys(_parentTab.items);
+                makeItemChecked(itemsKeys, menu);
             }
         },
         enumerable: true
@@ -766,18 +760,13 @@ function Page(params) {
                 }
             }
         }
-        // Don't merge upper loop. It doesn't work inside upper loop.
-        for (i = 0; i < keys.length; i++) {
-            if (i === _selectedIndex)
-                menu.getItem(i).setChecked(true);
-            else
-                menu.getItem(i).setChecked(false);
-        }
 
+        makeItemChecked(keys, menu); //Given index of item is will be checked.
+
+        var state_checked = 16842912;
+        var state_unchecked = -16842912;
         if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
-            const NativeR = requireClass("android.R");
-            var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
-
+            var states = array([array([state_checked], "int"), array([state_unchecked], "int")]);
             const ColorStateList = requireClass("android.content.res.ColorStateList");
             var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
@@ -815,6 +804,14 @@ function Page(params) {
                 return true;
             }
         }));
+    }
+
+    function makeItemChecked(keys, menu) {
+        for (var i = 0; i < keys.length; i++) {
+            if (i === _selectedIndex) {
+                menu.getItem(i).setChecked(true);
+            }
+        }
     }
 
     function disableShiftMode() {
