@@ -13,7 +13,6 @@ function BottomTabBar(params) {
     var self = this;
     var _itemColors;
     var _backgroundColor = Color.WHITE;
-    var _itemCount = 0;
     var _items = [];
     Object.defineProperties(this, {
         'height': {
@@ -28,19 +27,12 @@ function BottomTabBar(params) {
                 return AndroidUnitConverter.pixelToDp(result);
             }  
         },
-        'itemCount': {
-            get: function() {
-                return _itemCount;
-            },
-            set: function(value) {
-                _itemCount = value;
-                createTabbarMenuItems();
-            },
-            enumerable: true
-        },
         'items': {
             get: function() {
                 return _items;
+            },
+            set: function(tabBarItems) {
+                createTabbarMenuItems(tabBarItems);
             },
             enumerable: true
         },
@@ -103,14 +95,15 @@ function BottomTabBar(params) {
     // elevation doesn't work with default background white color.
     
 
-    function createTabbarMenuItems() {
-        alert("BottomTabBarController itemCount: " + _itemCount);
-        for (var i = 0; i < _itemCount; i++) {
-            var menuItem = self.nativeObject.getMenu().add(0, i, 0, "Title " + i);
-            var tabbarItem = new TabBarItem();
-            tabbarItem.nativeObject = menuItem;
-            _items[i] = tabbarItem;
+    function createTabbarMenuItems(tabBarItems) {
+        alert("BottomTabBarController itemCount: " + tabBarItems.length);
+        for (var i = 0; i < tabBarItems.length; i++) {
+            var tabbarItem = tabBarItems[i];
+            var title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
+            tabbarItem.nativeObject = self.nativeObject.getMenu().add(0, i, 0, title);
+            tabbarItem.icon = tabbarItem.icon;
         }
+        _items = tabBarItems;
     }
 
     // Assign parameters given in constructor

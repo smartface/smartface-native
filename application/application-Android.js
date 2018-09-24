@@ -521,22 +521,27 @@ ApplicationWrapper.setRootController = function(params) {
     const Page = require("../ui/page");
     const NavigationController = require("../ui/navigationcontroller");
     const FragmentTransition = require("../util/Android/fragmenttransition");
-    if((params.childController) instanceof NavigationController) {
-        var childControllerStack = params.childController.historyStack;
+    const BottomTabBarController = require("../ui/bottomtabbarcontroller");
+    
+    if((params.controller) instanceof NavigationController) {
+        var childControllerStack = params.controller.historyStack;
         var childControllerStackLenght = childControllerStack.length;
         // show latest page or controller
-        params.childController.show({
+        params.controller.show({
             controller: childControllerStack[childControllerStackLenght - 1],
             animated: params.animated
         });
-    } else if((params.childController) instanceof Page) {
+    } else if((params.controller) instanceof Page) {
         // TODO: Check pageID settings! Code duplicate exists
-        !params.childController.pageID && (params.childController.pageID = FragmentTransition.generatePageID());
+        !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
         // TODO: Check animation type. I am not sure about that!
         FragmentTransition.push({
-            page: (params.childController),
+            page: (params.controller),
             animated: params.animated
         });
+    } else if((params.controller) instanceof BottomTabBarController) {
+        console.log("setRootController BottomTabBarController");
+        params.controller.show();
     }
 };
 

@@ -80,29 +80,4 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
  */
 BottomTabBar.prototype.items = null;
 
-
-/**
- * Adds an instance of UI.TabBarItem to bottom tab bar.
- * 
- * @method add
- * @param {String} tag Tag of the tab bar item 
- * @param {UI.TabBarItem} tabBarItem Tab bar item
- * @param {Boolean} eagerLoading Page constructor will work immediately. This property has no effect on iOS.
- * @android
- * @ios
- * @since 1.1.10
- */
-BottomTabBar.prototype.add = function(tag, tabBarItem) {};
-
-/**
- * Sets the selected tab bar item.
- * 
- * @method setIndex
- * @param {String} tag Tag of the selected tab bar item
- * @android
- * @ios
- * @since 1.1.10
- */
-BottomTabBar.prototype.setIndex = function(tag) {};
-
 module.exports = BottomTabBar;

@@ -9,12 +9,11 @@
  *     
  *     var bottomTabBarController = new BottomTabBarController();
  *     bottomTabBarController.childControllers = [page1, page2, navigationController1, navigationController2];
- *     bottomTabBarController.setIndex(2);
+ *     bottomTabBarController.selectedIndex = 2;
  *
  *     bottomTabBarController.shouldSelectByIndex = function (e){return true || false}
  *     bottomTabBarController.didSelectByIndex = function (e){}
  *
- *     bottomTabBarController.tabbar.items // [page1.tabBarItem, page2.tabBarItem]
  */
 
 function BottomTabbarController() {
@@ -41,15 +40,14 @@ function BottomTabbarController() {
     this.tabBar;
     
     /**
-     * Sets the selected tab bar item.
+     * Gets/sets the selected tab bar item.
      *
-     * @method setIndex
-     * @param Number index
+     * @property Number selectedIndex
      * @android
      * @ios
      * @since 3.2.0
      */
-    this.setIndex = function(index) {};
+    this.selectedIndex = 0;
     
     /**
      * Return true if you want the item to be displayed as the selected index.

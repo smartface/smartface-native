@@ -26,10 +26,12 @@ function BottomTabBarController() {
         _didSelectByIndexCallback;
 
     Object.defineProperties(this, {
-        'setIndex': {
-            value: function(value) {
-                _selectedIndex = value;
-                self.setChecked();
+        'selectedIndex': {
+            get: function() {
+                return _selectedIndex;
+            },
+            set: function(index) {
+                _selectedIndex = index;
             },
             enumerable: true
         },
@@ -119,8 +121,9 @@ function BottomTabBarController() {
         }
     };
 
-    this.show = function() {
+    this.show = function(isNotClickAction) {
         self.addTabBarToActivity();
+        !isNotClickAction && (self.setChecked());
         self.push(self.childControllers[_selectedIndex]);
         // self.setChecked();
     };
