@@ -102,6 +102,25 @@ Object.defineProperty(SFApplication, 'onReceivedNotification', {
     enumerable: true
 });
 
+SFApplication._onUserActivityWithBrowsingWeb = function(){};
+Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
+    set:function(value){
+        SFApplication._onUserActivityWithBrowsingWeb = value;
+        Application.onUserActivityCallback = function(e){
+            var url = Invocation.invokeInstanceMethod(e.userActivity,"webpageURL",[],"NSObject");
+            var type = Invocation.invokeInstanceMethod(e.userActivity,"activityType",[],"NSString");
+            if (url && type === "NSUserActivityTypeBrowsingWeb" && typeof value === 'function') {
+                return value(url.absoluteString);
+            }
+            return false;
+        };
+    },
+    get: function() {
+        return SFApplication._onUserActivityWithBrowsingWeb;
+    },
+    enumerable: true
+});
+
 Application.onApplicationCallReceived = function(){};
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     set:function(value){

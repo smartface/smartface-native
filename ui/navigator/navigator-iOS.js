@@ -152,6 +152,12 @@ function NavigatorViewModel(params) {
                 if (self.view === null) 
                 {
                     var rootPage = self.model.getPageInstance(self.model.rootPage);
+                    
+                    if (typeof (parameters) != 'undefined' && parameters != null) 
+                    {
+                        rootPage.__pendingParameters = parameters; 
+                    }
+                    
                     var nativeRootPage;
                     if (rootPage.type == "TabBarFlow") 
                     {
@@ -173,6 +179,13 @@ function NavigatorViewModel(params) {
                 else if (routes[0] !== self.model.rootPage)
                 {
                     pageToGo = self.model.getPageInstance(routes[0]);
+                }
+                else 
+                {
+                    if (typeof (parameters) != 'undefined' && parameters != null) 
+                    {
+                        self.model.currentPage.__pendingParameters = parameters;
+                    }
                 }
             }
             

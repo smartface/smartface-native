@@ -14,8 +14,6 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
-
-// const NativeFragment = requireClass("android.support.v4.app.Fragment");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
@@ -42,6 +40,8 @@ const OrientationDictionary = {
     15: 10
 };
 
+var pageAnimationsCache = null;
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -56,16 +56,19 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-    activity.setSupportActionBar(toolbar);
-    var actionBar = activity.getSupportActionBar();
+
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
 
+    var actionBar = null;
     var callback = {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
+            activity.setSupportActionBar(toolbar);
             if (!isCreated) {
+                actionBar = activity.getSupportActionBar();
+                setDefaults();
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
@@ -299,37 +302,38 @@ function Page(params) {
     });
 
     var popupPageTag = "popupWindow";
-    const GONE = 8;
     Object.defineProperties(self, {
         'present': {
             value: function(page, animation, onCompleteCallback) {
-
                 if (page instanceof Page) {
+                    page.popUpBackPage = self;
 
-
-                    var rootViewId = NativeSFR.id.page_container
-
+                    var rootViewId = NativeSFR.id.page_container;
                     var fragmentManager = activity.getSupportFragmentManager();
                     var fragmentTransaction = fragmentManager.beginTransaction();
 
-                    var pageAnimationsCache = {};
-                    var packageName = activity.getPackageName();
-                    var resources = AndroidConfig.activityResources;
-                    pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                    pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    if (!pageAnimationsCache) {
+                        var packageName = activity.getPackageName();
+                        var resources = AndroidConfig.activityResources;
+                        pageAnimationsCache = {};
+                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    }
 
                     if (animation)
                         fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
 
                     fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-
                     fragmentTransaction.addToBackStack(popupPageTag);
                     fragmentTransaction.commitAllowingStateLoss();
                     fragmentManager.executePendingTransactions();
 
+                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+                    self.layout.nativeObject.setFocusableInTouchMode(false);
+                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
-
                 }
                 else
                     throw Error("Page parameter mismatch, Parameter must be Page");
@@ -340,6 +344,11 @@ function Page(params) {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager.popBackStack();
+
+                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
+
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
@@ -702,14 +711,8 @@ function Page(params) {
             _selectedIndex = index;
             var menu;
             if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                for (var i = 0; i < Object.keys(_parentTab.items).length; i++) {
-                    if (i === _selectedIndex) {
-                        menu.getItem(i).setChecked(true);
-                    }
-                    else {
-                        menu.getItem(i).setChecked(false);
-                    }
-                }
+                var itemsKeys = Object.keys(_parentTab.items);
+                makeItemChecked(itemsKeys, menu);
             }
         },
         enumerable: true
@@ -757,18 +760,13 @@ function Page(params) {
                 }
             }
         }
-        // Don't merge upper loop. It doesn't work inside upper loop.
-        for (i = 0; i < keys.length; i++) {
-            if (i === _selectedIndex)
-                menu.getItem(i).setChecked(true);
-            else
-                menu.getItem(i).setChecked(false);
-        }
 
+        makeItemChecked(keys, menu); //Given index of item is will be checked.
+
+        var state_checked = 16842912;
+        var state_unchecked = -16842912;
         if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
-            const NativeR = requireClass("android.R");
-            var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
-
+            var states = array([array([state_checked], "int"), array([state_unchecked], "int")]);
             const ColorStateList = requireClass("android.content.res.ColorStateList");
             var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
             var statelist = new ColorStateList(states, colors);
@@ -806,6 +804,14 @@ function Page(params) {
                 return true;
             }
         }));
+    }
+
+    function makeItemChecked(keys, menu) {
+        for (var i = 0; i < keys.length; i++) {
+            if (i === _selectedIndex) {
+                menu.getItem(i).setChecked(true);
+            }
+        }
     }
 
     function disableShiftMode() {
@@ -978,15 +984,17 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     // Default values
-    if (!params.skipDefaults) {
-        self.statusBar.visible = true;
-        self.statusBar.color = Color.TRANSPARENT;
-        self.headerBar.backgroundColor = Color.create("#00A1F1");
-        self.headerBar.leftItemEnabled = true;
-        self.headerBar.android.logoEnabled = false;
-        self.headerBar.titleColor = Color.WHITE;
-        self.headerBar.android.subtitleColor = Color.WHITE;
-        self.headerBar.visible = true;
+    var setDefaults = function() {
+        if (!params.skipDefaults) {
+            self.statusBar.visible = true;
+            self.statusBar.color = Color.TRANSPARENT;
+            self.headerBar.backgroundColor = Color.create("#00A1F1");
+            self.headerBar.leftItemEnabled = true;
+            self.headerBar.android.logoEnabled = false;
+            self.headerBar.titleColor = Color.WHITE;
+            self.headerBar.android.subtitleColor = Color.WHITE;
+            self.headerBar.visible = true;
+        }
     }
     //Handling ios value
     self.statusBar.ios = {};

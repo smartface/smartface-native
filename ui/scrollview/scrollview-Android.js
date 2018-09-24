@@ -206,8 +206,8 @@ function calculateScrollViewSize(scrollView) {
         for (var i = 0; i < arrayLenght; i++) {
             var viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
             var viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
-            var viewBottomMargin = childViews[keys[i]].marginBottom;
-            var layoutPaddingBottom = scrollView.layout.paddingBottom;
+            var viewBottomMargin = childViews[keys[i]].marginBottom || 0;
+            var layoutPaddingBottom = scrollView.layout.paddingBottom || 0;
 
             var measuredHeight = viewY + viewHeight + viewBottomMargin + layoutPaddingBottom;
             if (measuredHeight > layoutHeight)
