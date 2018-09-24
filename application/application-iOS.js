@@ -46,10 +46,12 @@ SFApplication.checkUpdate = function(callback, user){
     RAU.checkUpdate(callback, user);
 };
 
-SFApplication.setRootController = function(rootController){
-    var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
-    sfWindow.rootViewController = rootController.nativeObject;
-    sfWindow.makeKeyAndVisible();
+SFApplication.setRootController = function(params){
+    if (params && params.controller) {
+        var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+        sfWindow.rootViewController = params.controller.nativeObject;
+        sfWindow.makeKeyAndVisible();
+    }
 };
 
 SFApplication.ios = {};
