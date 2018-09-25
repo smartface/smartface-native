@@ -180,6 +180,9 @@ function NavigatorViewModel(params) {
                 {
                     pageToGo = self.model.getPageInstance(routes[0]);
                 }
+                else if (routes[0] === self.model.rootPage && routes.length === 1) {
+                    pageToGo = self.model.getPageInstance(routes[0]);   
+                }
                 else 
                 {
                     if (typeof (parameters) != 'undefined' && parameters != null) 
