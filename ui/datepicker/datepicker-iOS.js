@@ -11,12 +11,18 @@ function DatePicker (params) {
     self.ios = {};
     
     self.onDateSelected = function(){};
+    self.onCancelled = function(){};
     
     self.onDateSelectedListener = function(e){
         self.onDateSelected(e.date);
     };
     
+    self.onCancelledListener = function(){
+        self.onCancelled();
+    };
+    
     self.nativeObject.onSelected = self.onDateSelectedListener;
+    self.nativeObject.onCancelled = self.onCancelledListener;
     
     self.setDate = function(date){
         if (date && TypeUtil.isNumeric(date.getFullYear()) && TypeUtil.isNumeric(date.getMonth()) && TypeUtil.isNumeric(date.getDate())) {
