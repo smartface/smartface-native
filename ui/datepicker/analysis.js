@@ -168,7 +168,7 @@ DatePicker.prototype.okFont;
  * @since 3.1.3
  *
  * According to your requirements, you should choose of the theme enums. 
- * If there is no theme specified then default them style will be applied. 
+ * If there is no theme specified then default them style will be applied. Theme enum must be given with constructor.
  *
  *     @example
  *     const DatePicker = require('sf-core/ui/datepicker');
