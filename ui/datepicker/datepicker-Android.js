@@ -18,6 +18,7 @@ function DatePicker(params) {
     }
 
     var _onDateSelected;
+    var _onCancelled;
     Object.defineProperties(this, {
         'onDateSelected': {
             get: function() {
@@ -26,6 +27,25 @@ function DatePicker(params) {
             set: function(callback) {
                 if (TypeUtil.isFunction(callback)) {
                     _onDateSelected = callback;
+                }
+            },
+            enumerable: true
+        },
+        'onCancelled': {
+            get: function() {
+                return _onCancelled;
+            },
+            set: function(callback) {
+                if (TypeUtil.isFunction(callback)) {
+                    _onCancelled = callback;
+                    
+                    const NativeDialogInterface = requireClass("android.content.DialogInterface");
+
+                    this.nativeObject.setOnCancelListener(NativeDialogInterface.OnCancelListener.implement({
+                        onCancel: function(dialogInterface) {
+                            _onCancelled && _onCancelled();
+                        }
+                    }));
                 }
             },
             enumerable: true

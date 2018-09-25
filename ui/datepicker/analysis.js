@@ -165,7 +165,7 @@ DatePicker.prototype.okFont;
 /** 
  * @enum UI.DatePicker.Android.Style
  * @android
- * @since 3.1.2
+ * @since 3.1.3
  *
  * According to your requirements, you should choose of the theme enums. 
  * If there is no theme specified then default them style will be applied. 
@@ -193,7 +193,7 @@ DatePicker.prototype.Android.Style= {};
  * @static
  * @android
  * @readonly
- * @since 3.1.2
+ * @since 3.1.3
  */
 DatePicker.prototype.Android.Style.DEFAULT;
 
@@ -205,7 +205,7 @@ DatePicker.prototype.Android.Style.DEFAULT;
  * @static
  * @android
  * @readonly
- * @since 3.1.2
+ * @since 3.1.3
  */
 DatePicker.prototype.Android.Style.DEFAULT_DARK;
 
@@ -217,7 +217,7 @@ DatePicker.prototype.Android.Style.DEFAULT_DARK;
  * @static
  * @android
  * @readonly
- * @since 3.1.2
+ * @since 3.1.3
  */
 DatePicker.prototype.Android.Style.DEFAULT_LIGHT;
 
@@ -229,7 +229,7 @@ DatePicker.prototype.Android.Style.DEFAULT_LIGHT;
  * @static
  * @android
  * @readonly
- * @since 3.1.2
+ * @since 3.1.3
  */
 DatePicker.prototype.Android.Style.MATERIAL_DARK;
 
@@ -241,7 +241,7 @@ DatePicker.prototype.Android.Style.MATERIAL_DARK;
  * @static
  * @android
  * @readonly
- * @since 3.1.2
+ * @since 3.1.3
  */
 DatePicker.prototype.Android.Style.MATERIAL_LIGHT;
 
