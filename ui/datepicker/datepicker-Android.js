@@ -38,7 +38,7 @@ function DatePicker(params) {
             set: function(callback) {
                 if (TypeUtil.isFunction(callback)) {
                     _onCancelled = callback;
-                    
+
                     const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
                     this.nativeObject.setOnCancelListener(NativeDialogInterface.OnCancelListener.implement({
@@ -103,7 +103,7 @@ function DatePicker(params) {
 
 DatePicker.Android = {};
 
-DatePicker.Android.Style = { //ToDo: This is  API level 21, support below it.
+DatePicker.Android.Style = {
     DEFAULT: 0,
     DEFAULT_DARK: 16974545,
     DEFAULT_LIGHT: 16974546,
@@ -111,5 +111,9 @@ DatePicker.Android.Style = { //ToDo: This is  API level 21, support below it.
     MATERIAL_LIGHT: 16974394
 };
 Object.freeze(DatePicker.Android.Style);
+
+
+DatePicker.iOS = {};
+DatePicker.iOS.DatePickerMode = {};
 
 module.exports = DatePicker;
