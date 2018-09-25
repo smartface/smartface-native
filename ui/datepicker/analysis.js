@@ -160,4 +160,60 @@ DatePicker.prototype.okHighlightedColor;
  */
 DatePicker.prototype.okFont;
 
+/**
+ * The mode determines whether dates, times, or both dates and times are displayed.
+ *
+ * @property {UI.DatePicker.iOS.DatePickerMode} datePickerMode
+ * @ios
+ * @since 3.1.3
+ */
+DatePicker.prototype.datePickerMode;
+
+/**
+ * iOS Specific Properties.
+ * @class UI.DatePicker.iOS
+ * @since 3.1.3
+ */
+DatePicker.iOS = {};
+
+/** 
+ * @enum {Number} UI.DatePicker.iOS.DatePickerMode
+ * @since 3.1.3
+ * @ios
+ */
+DatePicker.iOS.DatePickerMode = {};
+
+/**
+ * A mode that displays the date in hours, minutes.
+ * 
+ * @property {Number} TIME
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.iOS.DatePickerMode.TIME = 0;
+
+/**
+ * A mode that displays the date in months, days of the month, and years.
+ * 
+ * @property {Number} DATE
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.iOS.DatePickerMode.DATE = 1;
+
+/**
+ * A mode that displays the date as unified day of the week, month, and day of the month values, plus hours, minutes.
+ * 
+ * @property {Number} DATEANDTIME
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.iOS.DatePickerMode.DATEANDTIME = 1;
+
 module.exports = DatePicker;

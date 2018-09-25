@@ -140,9 +140,18 @@ function DatePicker (params) {
         },
         enumerable: true
     });
-        
+    
+    Object.defineProperty(this.ios, 'datePickerMode', {
+        get: function() {
+            return self.nativeObject.datePickerMode;
+        },
+        set: function(value) {
+            self.nativeObject.datePickerMode = value;
+        },
+        enumerable: true
+    });
+    
     self.show = function(){
-        self.nativeObject.datePickerMode = UIDatePickerMode.date;
         self.nativeObject.show(
                 (self.ios.title === undefined) ? "" : self.ios.title,
                 self.ios.titleColor ? self.ios.titleColor.nativeObject : undefined,
@@ -163,5 +172,12 @@ function DatePicker (params) {
         }
     }
 }
+
+DatePicker.iOS = {};
+DatePicker.iOS.DatePickerMode = {
+     TIME : 0,
+     DATE : 1,
+     DATEANDTIME : 2
+};
 
 module.exports = DatePicker;
