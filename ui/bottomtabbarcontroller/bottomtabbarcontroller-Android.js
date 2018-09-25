@@ -158,7 +158,7 @@ function BottomTabBarController() {
                 self.childControllers[index].isInsideBottomTabBar = true; 
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
-                self.didSelectByIndex(index);
+                self.didSelectByIndex && self.didSelectByIndex(index);
                 
                 // This is a workaround to solve a native issue. If you call menuItem.setChecked() manually, 
                 // it breaks default selection behaviour.
