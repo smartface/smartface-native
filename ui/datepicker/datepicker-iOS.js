@@ -180,4 +180,7 @@ DatePicker.iOS.DatePickerMode = {
      DATEANDTIME : 2
 };
 
+DatePicker.Android = {};
+DatePicker.Android.Style = {};
+
 module.exports = DatePicker;
