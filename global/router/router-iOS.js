@@ -64,7 +64,6 @@ function RouterViewModel(params) {
         }
     };
     this.go = function (to, parameters, animated) {
-        
         var pageToGo = null;
         var routes = [];
         
