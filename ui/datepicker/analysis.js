@@ -216,4 +216,89 @@ DatePicker.iOS.DatePickerMode.DATE = 1;
  */
 DatePicker.iOS.DatePickerMode.DATEANDTIME = 1;
 
+
+/** 
+ * @enum UI.DatePicker.Android.Style
+ * @android
+ * @since 3.1.3
+ *
+ * According to your requirements, you should choose of the theme enums. 
+ * If there is no theme specified then default them style will be applied. 
+ *
+ *     @example
+ *     const DatePicker = require('sf-core/ui/datepicker');
+ *     var myDatePicker = new DatePicker({
+ *        android: {
+ *          style: DatePicker.Android.Style.DEFAULT_DARK
+ *        }
+ *     });
+ *     myDatePicker.onDateSelected = function(date) {
+ *         console.log('Year: ' + date.getFullYear() + ' Month: ' + date.getMonth() + ' Day' + date.getDate());
+ *     };
+ *     myDatePicker.show();
+ *
+ */
+DatePicker.Android.Style= {};
+
+
+/**
+ * Native default DatePicker theme.
+ *
+ * @property DEFAULT
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.Android.Style.DEFAULT;
+
+
+/**
+ * Native default dark theme with a dark background.
+ *
+ * @property DEFAULT_DARK
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.Android.Style.DEFAULT_DARK;
+
+
+/**
+ * Native default light theme with a light background.
+ *
+ * @property DEFAULT_LIGHT
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.Android.Style.DEFAULT_LIGHT;
+
+
+/**
+ * Material dark theme with two-tone backgrounds.
+ *
+ * @property MATERIAL_DARK
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.Android.Style.MATERIAL_DARK;
+
+
+/**
+ * Material light theme  with two-tone backgrounds.
+ *
+ * @property MATERIAL_LIGHT
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+DatePicker.Android.Style.MATERIAL_LIGHT;
+
+
 module.exports = DatePicker;
