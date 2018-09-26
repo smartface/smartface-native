@@ -7,6 +7,16 @@
 function Application() {}
 
 /**
+ * Gets/sets sliderDrawer of the Application.
+ *
+ * @property {UI.SliderDrawer} [sliderDrawer = null]
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+Application.prototype.sliderDrawer;
+
+/**
  * Gets status bar object. This property is readonly, you can not set
  * status bar but you can change properties of status bar of application.
  *

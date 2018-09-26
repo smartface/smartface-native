@@ -1,6 +1,7 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
@@ -20,8 +21,11 @@ var _onBackButtonPressed;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
 var _keyboardMode;
+var _sliderDrawer;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
+
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -55,6 +59,24 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
 Object.defineProperties(ApplicationWrapper, {
     // properties
+    'sliderDrawer': {
+        get: function() {
+            return _sliderDrawer;
+        },
+        set: function(drawer) {
+            const SliderDrawer = require('../ui/sliderdrawer');
+            if (drawer instanceof SliderDrawer) {
+                _sliderDrawer = drawer;
+                
+                detachSliderDrawer(_sliderDrawer);
+                attachSliderDrawer(_sliderDrawer);
+            }
+            else {
+                throw TypeError("Object must be SliderDrawer instance");
+            }
+        },
+        enumerable: true
+    },
     'byteReceived': {
         get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
@@ -285,7 +307,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
@@ -300,9 +322,9 @@ Object.defineProperties(ApplicationWrapper.android, {
         set: function(callback) {
             _onBackButtonPressed = callback;
             spratAndroidActivityInstance.attachBackPressedListener({
-               onBackPressed: function() {
-                   _onBackButtonPressed && _onBackButtonPressed();
-               } 
+                onBackPressed: function() {
+                    _onBackButtonPressed && _onBackButtonPressed();
+                }
             });
         },
         enumerable: true
@@ -498,21 +520,22 @@ Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
-    KeyboardAdjustPan: 32,     //SOFT_INPUT_ADJUST_PAN
-    KeyboardAdjustResize: 16,  //SOFT_INPUT_ADJUST_RESIZE
+    KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
+    KeyboardAdjustResize: 16, //SOFT_INPUT_ADJUST_RESIZE
     KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
-    AlwaysVisible: 5,             //SOFT_INPUT_STATE_ALWAYS_VISIBLE
-    AlwaysHidden: 3               //SOFT_INPUT_STATE_ALWAYS_HIDDEN
+    AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
+    AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
+// TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
     const Page = require("../ui/page");
     const NavigationController = require("../ui/navigationcontroller");
     const FragmentTransition = require("../util/Android/fragmenttransition");
     const BottomTabBarController = require("../ui/bottomtabbarcontroller");
-    
-    if((params.controller) instanceof NavigationController) {
+
+    if ((params.controller) instanceof NavigationController) {
         var childControllerStack = params.controller.historyStack;
         var childControllerStackLenght = childControllerStack.length;
         // show latest page or controller
@@ -520,7 +543,8 @@ ApplicationWrapper.setRootController = function(params) {
             controller: childControllerStack[childControllerStackLenght - 1],
             animated: params.animated
         });
-    } else if((params.controller) instanceof Page) {
+    }
+    else if ((params.controller) instanceof Page) {
         // TODO: Check pageID settings! Code duplicate exists
         !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
         // TODO: Check animation type. I am not sure about that!
@@ -528,11 +552,65 @@ ApplicationWrapper.setRootController = function(params) {
             page: (params.controller),
             animated: params.animated
         });
-    } else if((params.controller) instanceof BottomTabBarController) {
+    }
+    else if ((params.controller) instanceof BottomTabBarController) {
         console.log("setRootController BottomTabBarController");
         params.controller.show();
     }
 };
+
+ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer && _sliderDrawer.enabled) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT 
+            mDrawerLayout.openDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.openDrawer(3);
+        }
+    }
+};
+
+ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT
+            mDrawerLayout.closeDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.closeDrawer(3);
+        }
+    }
+};
+
+function attachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        var sliderDrawerId = sliderDrawer.nativeObject.getId();
+        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
+        if (!isExists) {
+            mDrawerLayout.addView(sliderDrawer.nativeObject);
+            mDrawerLayout.bringToFront();
+            if (sliderDrawer.drawerListener) {
+                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+            }
+        }
+        sliderDrawer.onLoad && sliderDrawer.onLoad();
+    }
+}
+
+function detachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        sliderDrawer.attachedPages = null;
+        mDrawerLayout.removeView(sliderDrawer.nativeObject);
+        if (sliderDrawer.drawerListener) {
+            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+        }
+    }
+}
 
 ApplicationWrapper.statusBar = require("./statusbar");
 module.exports = ApplicationWrapper;
