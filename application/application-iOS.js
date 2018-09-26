@@ -2,6 +2,8 @@ const RAU = require("./RAU");
 const WebView = require('sf-core/ui/webview');
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
+const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+
 var SFApplication = {};
 
 Object.defineProperty(SFApplication, 'byteReceived', {
@@ -66,6 +68,35 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
         return bundleIdentifier;
     },
     enumerable: true
+});
+
+SFApplication.statusBar = {};
+Object.defineProperty(SFApplication.statusBar, 'height', {
+    get: function() {
+        return __SF_UIApplication.sharedApplication().statusBarFrame.height;
+    },
+    enumerable: true,
+    configurable : true
+});
+Object.defineProperty(SFApplication.statusBar, 'visible', {
+    get: function() {
+        return !keyWindow.rootViewController.statusBarHidden;
+    },
+    set: function(value) {
+        keyWindow.rootViewController.statusBarHidden = !value;
+        keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();
+    },
+    enumerable: true,configurable : true
+});
+Object.defineProperty(SFApplication.statusBar, 'style', {
+    get: function() {
+        return keyWindow.rootViewController.statusBarStyle;
+    },
+    set: function(value) {
+        keyWindow.rootViewController.statusBarStyle = value;
+        keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();        
+    },
+    enumerable: true,configurable : true
 });
 
 SFApplication.android = {};
