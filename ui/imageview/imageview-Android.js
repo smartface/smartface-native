@@ -110,7 +110,7 @@ const ImageView = extend(View)(
             });
 
             if (TypeUtil.isString(params.url)) {
-                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
+                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(params.url);
                 if ((params.placeholder) instanceof Image) {
                     requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
