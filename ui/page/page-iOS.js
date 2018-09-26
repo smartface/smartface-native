@@ -366,14 +366,28 @@ function Page(params) {
     // Prevent undefined is not an object error
     this.android = {};
 
+    // Deprecated
     self.headerBar = {};
-    
     self.headerBar.android = {};
     self.headerBar.ios = {};
     
+    // New one
     self.navigationItem = {};
     self.navigationItem.ios = {};
-    
+    self.navigationItem.android = {};
+
+    // Deprecated
+    Object.defineProperty(self.headerBar, 'title', {
+        get: function() {
+            return self.nativeObject.navigationItem.title;
+        },
+        set: function(value) {
+            self.nativeObject.navigationItem.title = value;
+        },
+        enumerable: true,configurable : true
+    });
+
+    // New one
     Object.defineProperty(self.navigationItem, 'title', {
         get: function() {
             return self.nativeObject.navigationItem.title;
@@ -385,6 +399,29 @@ function Page(params) {
     });
     
     var _titleView = true;
+
+    // Deprecated
+    Object.defineProperty(self.headerBar, 'titleLayout', {
+        get: function() {
+            return _titleView;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                _titleView = value;
+                _titleView.applyLayout();
+                
+                // These calls may need for different cases.
+                // _titleView.nativeObject.layoutIfNeeded();
+                // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
+                _titleView.nativeObject.sizeToFit();
+                
+                self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    // New one
     Object.defineProperty(self.navigationItem, 'titleLayout', {
         get: function() {
             return _titleView;
@@ -405,6 +442,25 @@ function Page(params) {
         enumerable: true,configurable : true
     });
 
+    // Deprecated
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
+        get: function() {
+            return !self.nativeObject.navigationItem.hidesBackButton;
+        },
+        set: function(value) {
+            self.nativeObject.navigationItem.hidesBackButton = !value;
+            if (value){
+                if (_leftItem){
+                    self.nativeObject.navigationItem.leftBarButtonItem = _leftItem;
+                }
+            }else{
+                self.nativeObject.navigationItem.leftBarButtonItem = undefined;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    // New one
     Object.defineProperty(self.navigationItem, 'leftItemEnabled', {
         get: function() {
             return !self.nativeObject.navigationItem.hidesBackButton;
@@ -422,6 +478,18 @@ function Page(params) {
         enumerable: true,configurable : true
     });
 
+    // Deprecated
+    self.headerBar.setItems = function(value){
+        var nativeObjectArray = [];
+        
+        for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
+            nativeObjectArray.push(value[i].nativeObject);
+        }
+
+        self.nativeObject.navigationItem.rightBarButtonItems = nativeObjectArray;
+    };
+
+    // New one
     self.navigationItem.setItems = function(value){
         var nativeObjectArray = [];
         
@@ -433,6 +501,22 @@ function Page(params) {
     };
 
     var _leftItem;
+    // Deprecated
+    self.headerBar.setLeftItem = function(value){
+        if(value){
+            if (value instanceof HeaderBarItem) {
+                if(self.navigationItem.leftItemEnabled){
+                    self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
+                }
+                _leftItem = value.nativeObject;
+            }else{
+                throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
+            }
+        } else {
+            self.nativeObject.navigationItem.leftBarButtonItem = null;
+        }
+    };
+    // New one
     self.navigationItem.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
@@ -449,6 +533,23 @@ function Page(params) {
     };
     
     var _largeTitleDisplayMode = 0;
+    // Deprecated
+    Object.defineProperty(self.headerBar.ios, 'largeTitleDisplayMode', {
+        get: function() {
+            return _largeTitleDisplayMode;
+        },
+        set: function(value) {
+            if (typeof value === 'number') {
+                const UINavigationItem = SF.requireClass("UINavigationItem");
+                if (UINavigationItem.instancesRespondToSelector("largeTitleDisplayMode")) {
+                    _largeTitleDisplayMode = value;
+                    self.nativeObject.navigationItem.largeTitleDisplayMode = _largeTitleDisplayMode;
+                }
+            }
+        },
+        enumerable: true
+    });
+    // New one
     Object.defineProperty(self.navigationItem.ios, 'largeTitleDisplayMode', {
         get: function() {
             return _largeTitleDisplayMode;
@@ -465,6 +566,31 @@ function Page(params) {
         enumerable: true
     });
     
+    // Deprecated
+    Object.defineProperty(self.headerBar.ios, 'backBarButtonItem', {
+        get: function() {
+            var retval = undefined;
+            
+            var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
+            
+            if (nativeObject) {
+                var backBarButtonItem = new HeaderBarItem();
+                backBarButtonItem.nativeObject = nativeObject;
+                backBarButtonItem.nativeObject.target = nativeObject;
+                retval = backBarButtonItem;
+            }
+            
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                self.nativeObject.navigationItem.backBarButtonItem = value.nativeObject;
+            }
+        },
+        enumerable: true
+    });
+
+    // New one
     Object.defineProperty(self.navigationItem.ios, 'backBarButtonItem', {
         get: function() {
             var retval = undefined;
@@ -487,6 +613,91 @@ function Page(params) {
         },
         enumerable: true
     });
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // All deprecated headerBar properties
+
+    Object.defineProperty(self.headerBar, 'titleColor', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]});
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value.nativeObject};
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    var _visible = true;
+    Object.defineProperty(self.headerBar, 'visible', {
+        get: function() {
+            return _visible;
+        },
+        set: function(value) {
+            _visible = value;
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.setNavigationBarHiddenAnimated(!value,true);
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    Object.defineProperty(self.headerBar, 'itemColor', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.tintColor});
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.tintColor = value.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.headerBar, 'backgroundColor', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = new Color({color : self.nativeObject.navigationController.navigationBar.barTintColor});
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;  
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    Object.defineProperty(self.headerBar, 'backgroundImage', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (self.nativeObject.navigationController) {
+                self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if (params) {
         for (var param in params) {
