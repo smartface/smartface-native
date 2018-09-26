@@ -214,17 +214,6 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // events
     // We can not handle application calls for now, so let SMFApplication handle this
-    'onApplicationCallReceived': {
-        get: function() {
-            return Application.onApplicationCallReceived;
-        },
-        set: function(onApplicationCallReceived) {
-            if (TypeUtil.isFunction(onApplicationCallReceived)) {
-                Application.onApplicationCallReceived = onApplicationCallReceived;
-            }
-        },
-        enumerable: true
-    },
     'onExit': {
         get: function() {
             return _onExit;

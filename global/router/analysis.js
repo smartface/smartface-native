@@ -2,6 +2,7 @@
 /**
  * @class Router
  * @since 0.1
+ * @removed
  * 
  * Router is used for navigating between pages with given paths and parameters.
  * Simply define a route to a page, then from other pages go to that page with
