@@ -97,6 +97,7 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.fetchFromUrl = function(params) {
+            const self = this;
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             var target = NativeTarget.implement({
@@ -106,7 +107,9 @@ const ImageView = extend(View)(
                 onBitmapFailed: function(errorDrawable) {
                     params.onError && params.onError();
                 },
-                onPrepareLoad: function(placeHolderDrawable) {}
+                onPrepareLoad: function(placeHolderDrawable) {
+                    self.nativeObject.setImageDrawable(placeHolderDrawable);
+                }
             });
 
             if (TypeUtil.isString(params.url)) {
@@ -119,6 +122,7 @@ const ImageView = extend(View)(
                 }
             }
         };
+
         imageViewPrototype.loadFromFile = function(params) {
             var file = params.file;
             var isFade = params.fade;
