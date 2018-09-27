@@ -422,7 +422,7 @@ function Page(params) {
     });
 
     // New one
-    Object.defineProperty(self.navigationItem, 'titleLayout', {
+    Object.defineProperty(self.ios.navigationItem, 'titleLayout', {
         get: function() {
             return _titleView;
         },
@@ -461,7 +461,7 @@ function Page(params) {
     });
 
     // New one
-    Object.defineProperty(self.navigationItem, 'leftItemEnabled', {
+    Object.defineProperty(self.ios.navigationItem, 'leftItemEnabled', {
         get: function() {
             return !self.nativeObject.navigationItem.hidesBackButton;
         },
@@ -490,7 +490,7 @@ function Page(params) {
     };
 
     // New one
-    self.navigationItem.setItems = function(value){
+    self.ios.navigationItem.setItems = function(value){
         var nativeObjectArray = [];
         
         for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
@@ -517,7 +517,7 @@ function Page(params) {
         }
     };
     // New one
-    self.navigationItem.setLeftItem = function(value){
+    self.ios.navigationItem.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
                 if(self.navigationItem.leftItemEnabled){
@@ -550,7 +550,7 @@ function Page(params) {
         enumerable: true
     });
     // New one
-    Object.defineProperty(self.navigationItem.ios, 'largeTitleDisplayMode', {
+    Object.defineProperty(self.ios.navigationItem, 'largeTitleDisplayMode', {
         get: function() {
             return _largeTitleDisplayMode;
         },
@@ -591,7 +591,7 @@ function Page(params) {
     });
 
     // New one
-    Object.defineProperty(self.navigationItem.ios, 'backBarButtonItem', {
+    Object.defineProperty(self.ios.navigationItem, 'backBarButtonItem', {
         get: function() {
             var retval = undefined;
             
