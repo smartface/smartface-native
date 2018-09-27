@@ -102,11 +102,15 @@ const ImageView = extend(View)(
 			self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(object.url),object.placeholder ? object.placeholder.nativeObject : undefined,function(onSuccess,onError,image,error,cache,url){
 				if (!error) {
 					if (typeof onSuccess === "function") {
-						onSuccess(Image.createFromImage(image),cache);
+					    __SF_Dispatch.mainAsync(function(innerIndex){
+						    onSuccess(Image.createFromImage(image),cache);
+					    });
 					}
 				}else{
 					if (typeof onError === "function") {
-						onError();
+					    __SF_Dispatch.mainAsync(function(innerIndex){
+						    onError();
+					    });
 					}
 				}
 			}.bind(self,object.onSuccess,object.onError));
