@@ -372,10 +372,8 @@ function Page(params) {
     self.headerBar.ios = {};
     
     // New one
-    self.navigationItem = {};
-    self.navigationItem.ios = {};
-    self.navigationItem.android = {};
-
+    self.ios.navigationItem = {};
+    
     // Deprecated
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
