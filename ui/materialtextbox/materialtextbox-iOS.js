@@ -34,7 +34,17 @@ const MaterialTextbox = extend(TextBox)(
         //     enumerable: true,configurable : true
         // });
         
-        Object.defineProperty(self.ios, 'titleFont', {
+        Object.defineProperty(self.ios, 'titleFont', {//depraceted : use labelsFont
+            get: function() {
+                return self.nativeObject.titleLabel.valueForKey("font");
+            },
+            set: function(value) {
+                self.nativeObject.titleLabel.setValueForKey(value,"font");
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'labelsFont', {//depraceted : use labelsFont
             get: function() {
                 return self.nativeObject.titleLabel.valueForKey("font");
             },
