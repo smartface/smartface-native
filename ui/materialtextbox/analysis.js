@@ -101,7 +101,7 @@ MaterialTextBox.prototype.characterRestrictionColor;
  * @property {UI.Font} labelsFont
  * @android
  * @ios
- * @since 3.1.2
+ * @since 3.1.3
  */
 MaterialTextBox.prototype.labelsFont;
 
