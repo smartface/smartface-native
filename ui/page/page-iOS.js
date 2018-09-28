@@ -386,7 +386,7 @@ function Page(params) {
     });
 
     // New one
-    Object.defineProperty(self.navigationItem, 'title', {
+    Object.defineProperty(self.ios.navigationItem, 'title', {
         get: function() {
             return self.nativeObject.navigationItem.title;
         },
