@@ -134,7 +134,7 @@ function BottomTabBarController() {
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
         onNavigationItemSelected: function(item) {
             var index = item.getItemId();
-            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex(index) : true;
+            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
             if (result) {
                 !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
                 
@@ -143,7 +143,7 @@ function BottomTabBarController() {
                 self.childControllers[index].isInsideBottomTabBar = true; 
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
-                self.didSelectByIndex && self.didSelectByIndex(index);
+                self.didSelectByIndex && self.didSelectByIndex({index: index});
             }
             return result;
         }
