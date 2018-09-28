@@ -65,7 +65,6 @@ Object.defineProperty(SFApplication, 'sliderDrawer', {
     },
     set: function(value) {
         if (typeof value === "object") {
-            console.log("IOS==APPLICATION==:setting sliderDrawer");
             _sliderDrawer = value;
             if (typeof _rootPage !== "undefined") {
                 configureSliderDrawer(_rootPage, _sliderDrawer);
@@ -82,7 +81,6 @@ Object.defineProperty(SFApplication, 'rootPage', {
     },
     set: function(value) {
         if (typeof value === "object") {
-            console.log("IOS==APPLICATION==:setting rootPage");
             _rootPage = value;
             
             if (typeof _sliderDrawer !== "undefined") {
@@ -114,34 +112,7 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     enumerable: true
 });
 
-SFApplication.statusBar = {};
-Object.defineProperty(SFApplication.statusBar, 'height', {
-    get: function() {
-        return __SF_UIApplication.sharedApplication().statusBarFrame.height;
-    },
-    enumerable: true,
-    configurable : true
-});
-Object.defineProperty(SFApplication.statusBar, 'visible', {
-    get: function() {
-        return !keyWindow.rootViewController.statusBarHidden;
-    },
-    set: function(value) {
-        keyWindow.rootViewController.statusBarHidden = !value;
-        keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();
-    },
-    enumerable: true,configurable : true
-});
-Object.defineProperty(SFApplication.statusBar, 'style', {
-    get: function() {
-        return keyWindow.rootViewController.statusBarStyle;
-    },
-    set: function(value) {
-        keyWindow.rootViewController.statusBarStyle = value;
-        keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();        
-    },
-    enumerable: true,configurable : true
-});
+SFApplication.statusBar = require("./statusbar");
 
 SFApplication.android = {};
 SFApplication.Android = {};
