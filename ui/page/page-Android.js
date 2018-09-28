@@ -180,6 +180,7 @@ function Page(params) {
         enumerable: true
     });
     self.ios = {};
+    self.ios.navigationItem = {};
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};

@@ -11,21 +11,25 @@ const activity = AndroidConfig.activity;
 function BottomTabBarController() {
     // TODO: Beautify this code
     const Application = require("sf-core/application");
-    this.tabBar = new BottomTabBar();
-    Application.tabBar = this.tabBar;
+    Application.tabBar = new BottomTabBar();
     
     var _addedToActivity = false;
-    var _firstClick = true;
     var _disabledShiftingMode = false;
+    var _menu;
     this.childControllers = [];
 
     var self = this;
-
     var _selectedIndex = 0;
     var _shouldSelectByIndexCallback,
         _didSelectByIndexCallback;
 
     Object.defineProperties(this, {
+        'tabBar': {
+            get: function() {
+                return Application.tabBar;
+            },
+            enumerable: true
+        },
         'selectedIndex': {
             get: function() {
                 return _selectedIndex;
@@ -63,7 +67,7 @@ function BottomTabBarController() {
 
     this.addTabBarToActivity = function() {
         if (!_disabledShiftingMode) {
-            disableShiftMode();
+            disableShiftMode(self.tabBar);
             _disabledShiftingMode = true;
         }
         console.log("BottomTabBarController addTabBarToActivity _addedToActivity: " + _addedToActivity);
@@ -79,78 +83,59 @@ function BottomTabBarController() {
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
         childController.isInsideBottomTabBar = true;
-        try {
-            console.log("childController typeof: " + typeof(childController));
-            if (childController instanceof Page) {
-                if (!childController.pageID) {
-                    childController.pageID = FragmentTransaction.generatePageID();
-                }
-                FragmentTransaction.push({
-                    page: childController,
+        if (childController instanceof Page) {
+            if (!childController.pageID) {
+                childController.pageID = FragmentTransaction.generatePageID();
+            }
+            FragmentTransaction.push({
+                page: childController,
+                animated: false
+            });
+        }
+        else if (childController instanceof NavigationController) {
+            console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
+            // first press
+            if (childController.historyStack.length < 1) {
+                console.log("TabbarOnClick NavigationController first visit");
+                childController.push({
+                    controller: childController.childControllers[0],
                     animated: false
                 });
             }
-            else if (childController instanceof NavigationController) {
-                console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
-                // first press
-                if (childController.historyStack.length < 1) {
-                    console.log("TabbarOnClick NavigationController first visit");
-                    childController.push({
-                        controller: childController.childControllers[0],
-                        animated: false
-                    });
-                }
-                else {
-                    console.log("TabbarOnClick NavigationController not first visit");
-                    var childControllerStack = childController.historyStack;
-                    var childControllerStackLenght = childControllerStack.length;
-                    console.log("childControllerStackLenght: " + childControllerStackLenght);
-                    // show latest page or controller
-                    childController.show({
-                        controller: childControllerStack[childControllerStackLenght - 1],
-                        animated: false
-                    });
-                }
-            }
             else {
-                throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
+                console.log("TabbarOnClick NavigationController not first visit");
+                var childControllerStack = childController.historyStack;
+                var childControllerStackLenght = childControllerStack.length;
+                console.log("childControllerStackLenght: " + childControllerStackLenght);
+                // show latest page or controller
+                childController.show({
+                    controller: childControllerStack[childControllerStackLenght - 1],
+                    animated: false
+                });
             }
         }
-        catch (e) {
-            alert("Exception: " + e);
+        else {
+            throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
         }
     };
 
     this.show = function() {
         self.addTabBarToActivity();
-        (self.setChecked());
+        self.setChecked();
         self.push(self.childControllers[_selectedIndex]);
-        // self.setChecked();
     };
     
     this.setChecked = function() {
-        var menu = self.tabBar.nativeObject.getMenu();
-        for (var i = 0; i < self.tabBar.itemCount; i++) {
-            var checked = false;
-            (i === _selectedIndex) && (checked = true);
-            console.log("setChecked index: " + i + "   checked: " + checked);
-            menu.getItem(i).setChecked(checked);
-        }
+        (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        _menu.getItem(_selectedIndex).setChecked(true);
     };
 
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
         onNavigationItemSelected: function(item) {
             var index = item.getItemId();
-            console.log("_shouldSelectByIndexCallback: " + (!self.shouldSelectByIndex));
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex(index) : true;
-            console.log("onNavigationItemSelected index: " + index + "    shouldSelect: " + result);
             if (result) {
-                console.log("_firstClick: " + _firstClick + "   _selectedIndex: " + _selectedIndex);
-                
-                console.log("self.childControllers[" + index + "]: " + typeof(self.childControllers[index]));
-                // revert previous selected item manually
-                
                 !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
                 
                 // TODO: Add this property to controller class
@@ -159,31 +144,23 @@ function BottomTabBarController() {
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 self.didSelectByIndex && self.didSelectByIndex(index);
-                
-                // This is a workaround to solve a native issue. If you call menuItem.setChecked() manually, 
-                // it breaks default selection behaviour.
-                if(_firstClick) {
-                    self.setChecked();
-                    _firstClick = false;
-                }
             }
             return result;
         }
     }));
-
-    function disableShiftMode() {
-        var menuView = self.tabBar.nativeObject.getChildAt(0);
-        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-        shiftingMode.setAccessible(true);
-        shiftingMode.setBoolean(menuView, false);
-        shiftingMode.setAccessible(false);
-        for (var i = 0; i < menuView.getChildCount(); i++) {
-            var item = menuView.getChildAt(i);
-            item.setShiftingMode(false);
-            var checked = (item.getItemData()).isChecked();
-            item.setChecked(checked);
-        }
-    }
 }
 
+function disableShiftMode(bottomTabBar) {
+    var menuView = bottomTabBar.nativeObject.getChildAt(0);
+    var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
+    shiftingMode.setAccessible(true);
+    shiftingMode.setBoolean(menuView, false);
+    shiftingMode.setAccessible(false);
+    for (var i = 0; i < menuView.getChildCount(); i++) {
+        var item = menuView.getChildAt(i);
+        item.setShiftingMode(false);
+        var checked = (item.getItemData()).isChecked();
+        item.setChecked(checked);
+    }
+}
 module.exports = BottomTabBarController;
