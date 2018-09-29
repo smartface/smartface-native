@@ -85,17 +85,17 @@ const ImageView = extend(View)(
             var url = params.url;
             var placeholder = params.placeholder;
             var isFade = params.isFade;
-            var onFailure = params.onFailure;
+            var onError = params.onError;
             var onSuccess = params.onSuccess;
             var callback = null;
-            if (onFailure || onSuccess) {
+            if (onError || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
                         onSuccess && onSuccess();
                     },
                     onError: function() {
-                        onFailure && onFailure();
+                        onError && onError();
                     }
                 });
             }
