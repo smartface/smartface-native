@@ -103,13 +103,10 @@ const ImageView = extend(View)(
             if (TypeUtil.isString(url)) {
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
-                if (placeholder instanceof Image) {
-                    plainRequestCreator.placeholder(placeholder.nativeObject).into(this.nativeObject, callback);
-                }
-                else {
-                    var requestCreator = scaleImage(plainRequestCreator);
-                    requestCreator.into(this.nativeObject, callback);
-                }
+                if (placeholder instanceof Image)
+                    plainRequestCreator.placeholder(placeholder.nativeObject)
+                var requestCreator = scaleImage(plainRequestCreator);
+                requestCreator.into(this.nativeObject, callback);
             }
         };
 
