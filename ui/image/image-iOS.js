@@ -152,6 +152,13 @@ function Image(params) {
       },
       writable: false
     });
+    
+    Object.defineProperty(self.ios, 'imageFlippedForRightToLeftLayoutDirection', {
+      value: function(){
+        return Image.createFromImage(self.nativeObject.imageFlippedForRightToLeftLayoutDirection());
+      },
+      writable: false
+    });
 }
 
 Image.createFromFile = function(path) {
