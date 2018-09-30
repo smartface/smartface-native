@@ -146,6 +146,12 @@ function Image(params) {
       writable: false
     });
     
+    Object.defineProperty(self.ios, 'imageWithRenderingMode', {
+      value: function(value){
+        return Image.createFromImage(self.nativeObject.imageWithRenderingMode(value));
+      },
+      writable: false
+    });
 }
 
 Image.createFromFile = function(path) {
@@ -179,5 +185,12 @@ Object.defineProperty(Image, 'Format', {
     writable: false,
     enumerable: true
 });
+
+Image.iOS = {};
+Image.iOS.RenderingMode = {
+    AUTOMATIC : 0,
+    ORIGINAL : 1,
+    TEMPLATE : 2
+};
 
 module.exports = Image;
