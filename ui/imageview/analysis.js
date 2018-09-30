@@ -47,6 +47,32 @@ function ImageView(params) {}
 ImageView.prototype.image = null;
 
 /**
+ * Gets/sets the tintColor. Must create a new image object with the imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE) method to work correctly on the iOS.
+ *
+ *     @example
+ *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('sf-core/ui/image');
+ *     const Color = require('sf-core/ui/color');
+ *     const System = require('sf-core/device/system');
+ *
+ *     var image = Image.createFromFile("images://smartface.png");
+ *     if (System.OS == 'iOS') {
+ *         image = image.ios.imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE);
+ *     }
+ *
+ *     var imageView = new ImageView();
+ *     imageView.flexGrow = 1;
+ *     imageView.tintColor = Color.RED;
+ *     imageView.image = image;
+ *
+ * @property {UI.Color} tintColor
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+ImageView.prototype.tintColor = null;
+
+/**
  * Gets/sets image fill type.
  *
  *     @example
