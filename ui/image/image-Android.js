@@ -202,10 +202,14 @@ function Image(params) {
 
     self.ios = {};
     self.ios.resizableImageWithCapInsetsResizingMode = function() {
-        return self.nativeObject;
+        return self;
     };
-    self.ios.imageFlippedForRightToLeftLayoutDirection = function() {};
-    self.ios.imageWithRenderingMode = function() {};
+    self.ios.imageFlippedForRightToLeftLayoutDirection = function() {
+        return self;
+    };
+    self.ios.imageWithRenderingMode = function() {
+        return self;
+    };
 }
 
 Object.defineProperties(Image, {
