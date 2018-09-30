@@ -75,6 +75,17 @@ Image.prototype.toBlob = function() {};
 Image.prototype.imageWithRenderingMode = function() {};
 
 /**
+ * Returns the image of automatically related to system or application direction. 
+ * For Android, you can use autoMirrored property.
+ *
+ * @method imageFlippedForRightToLeftLayoutDirection
+ * @ios
+ * @return UI.Image
+ * @since 3.1.3
+ */
+Image.prototype.imageFlippedForRightToLeftLayoutDirection = function() {};
+
+/**
  * Specifies the possible resizing modes for an image.
  *
  * @method resizableImageWithCapInsetsResizingMode
