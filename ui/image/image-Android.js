@@ -25,10 +25,6 @@ const Format = {
 
 function Image(params) {
     var self = this;
-    self.ios = {};
-    self.ios.resizableImageWithCapInsetsResizingMode = function() {
-        return self.nativeObject;
-    };
     self.android = {};
 
     var androidResources = AndroidConfig.activityResources;
@@ -179,18 +175,37 @@ function Image(params) {
             configurable: true
         }
     });
-    
-    Object.defineProperty(self.android, 'round', {
-        value: function(radius) {
-            if(typeof(radius) !== "number")
-                throw new Error("radius value must be a number.");
-                
-            var roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
-            return new Image({
-                roundedBitmapDrawable: roundedBitmapDrawable
-            });
+
+    Object.defineProperties(self.android, {
+        'round': {
+            value: function(radius) {
+                if (typeof(radius) !== "number")
+                    throw new Error("radius value must be a number.");
+
+                var roundedBitmapDrawable = getRoundedBitmapDrawable(self.nativeObject.getBitmap(), radius);
+                return new Image({
+                    roundedBitmapDrawable: roundedBitmapDrawable
+                });
+            }
+        },
+        'autoMirrored': {
+            get: function() {
+                return self.nativeObject.isAutoMirrored();
+            },
+            set: function(isAutoMirrored) {
+                if (typeof isAutoMirrored !== 'boolean')
+                    return;
+                self.nativeObject.setAutoMirrored(isAutoMirrored);
+            }
         }
     });
+
+    self.ios = {};
+    self.ios.resizableImageWithCapInsetsResizingMode = function() {
+        return self.nativeObject;
+    };
+    self.ios.imageFlippedForRightToLeftLayoutDirection = function() {};
+    self.ios.imageWithRenderingMode = function() {};
 }
 
 Object.defineProperties(Image, {
@@ -245,11 +260,11 @@ Object.defineProperties(Image, {
 
 Object.defineProperty(Image.android, 'createRoundedImage', {
     value: function(params) {
-        if(typeof(params.path) !== "string") 
+        if (typeof(params.path) !== "string")
             throw new Error("path value must be a string.");
-        if(typeof(params.radius) !== "number")
+        if (typeof(params.radius) !== "number")
             throw new Error("radius value must be a number.");
-        
+
         var imageFile = new File({ path: params.path });
         if ((imageFile.type === Path.FILE_TYPE.ASSET) || (imageFile.type === Path.FILE_TYPE.DRAWABLE)) {
             var image = Image.createFromFile({ path: params.path });
@@ -308,5 +323,8 @@ function calculateInSampleSize(options, reqWidth, reqHeight) {
 
     return inSampleSize;
 }
+
+Image.iOS = {};
+Image.iOS.RenderingMode = {};
 
 module.exports = Image;
