@@ -33,6 +33,7 @@ const ImageView = extend(View)(
         imageViewPrototype._adjustViewBounds = false;
 
         var _fillType = null;
+        var _tintColor;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -55,6 +56,24 @@ const ImageView = extend(View)(
                         this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
+                },
+                enumerable: true
+            },
+            'tintColor': {
+                get: function() {
+                    return _tintColor;
+                },
+                set: function(tintColor) {
+                    const Color = require("sf-core/ui/color");
+                    if (!tintColor instanceof Color)
+                        return;
+                    _tintColor = tintColor;
+
+                    const NativeImageCompat = requireClass("android.support.v4.widget.ImageViewCompat");
+                    const NativeColorStateListUtil = requireClass("io.smartface.android.utils.ColorStateListUtil");
+
+                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(_tintColor.nativeObject));
+
                 },
                 enumerable: true
             },
