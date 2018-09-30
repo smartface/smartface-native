@@ -74,14 +74,17 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
- * @param {String} url
- * @param {UI.Image} placeholder
- * @param {Boolean} fade = true
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Boolean} object.fade = true
+ * @param {Function} object.onSuccess
+ * @param {Function} object.onError
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.3
  */
-ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
+ImageView.prototype.loadFromUrl = function(params){};
 
 /**
  * Load image from the file and place the returned image into the ImageView.
