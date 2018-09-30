@@ -54,6 +54,16 @@ Image.prototype.width = 0;
 Image.prototype.toBlob = function() {};
 
 /**
+ * Determines how an image is rendered.
+ *
+ * @method imageWithRenderingMode
+ * @ios
+ * @return UI.Image
+ * @since 3.1.3
+ */
+Image.prototype.imageWithRenderingMode = function() {};
+
+/**
  * Specifies the possible resizing modes for an image.
  *
  * @method resizableImageWithCapInsetsResizingMode
@@ -265,5 +275,52 @@ Format.JPEG = 0;
 Format.PNG = 1;
 
 Image.Format = Format;
+
+/**
+ * iOS Specific Properties.
+ * @class UI.Image.iOS
+ * @since 3.1.3
+ */
+Image.iOS = {};
+
+/** 
+ * @enum {Number} UI.Image.iOS.RenderingMode
+ * @since 3.1.3
+ * @ios
+ */
+Image.iOS.RenderingMode = {};
+
+/**
+ * Use the default rendering mode for the context where the image is used.
+ * 
+ * @property {Number} AUTOMATIC
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.AUTOMATIC = 0;
+
+/**
+ * Always draw the original image, without treating it as a template.
+ * 
+ * @property {Number} ORIGINAL
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.ORIGINAL = 1;
+
+/**
+ * Always draw the image as a template image, ignoring its color information.
+ * 
+ * @property {Number} TEMPLATE
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.TEMPLATE = 2;
 
 module.exports = Image;
