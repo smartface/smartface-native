@@ -2,6 +2,7 @@ const extend = require('js-base/core/extend');
 const View = require('../view');
 const Image = require("sf-core/ui/image");
 const ImageCacheType = require('sf-core/ui/imagecachetype');
+const Color = require("sf-core/ui/color");
 
 const FillType = { 
     NORMAL: 0,
@@ -122,6 +123,16 @@ const ImageView = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.contentMode = value;
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'tintColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.tintColor});
+            },
+            set: function(value) {
+                self.nativeObject.tintColor = value.nativeObject;
             },
             enumerable: true
         });

@@ -43,6 +43,17 @@ Image.prototype.height = 0;
 Image.prototype.width = 0;
 
 /**
+ * Gets/Sets the autoMirrored of image. This property sets direction of Image automatically related to system or application direction. 
+ * For iOS, you can use imageFlippedForRightToLeftLayoutDirection function. 
+ *
+ * @android
+ * @property {Boolean} autoMirrored
+ * @readonly
+ * @since 3.1.3
+ */
+Image.prototype.autoMirrored = false;
+
+/**
  * Returns a Blob instance.
  *
  * @android
@@ -52,6 +63,27 @@ Image.prototype.width = 0;
  * @since 0.1
  */
 Image.prototype.toBlob = function() {};
+
+/**
+ * Determines how an image is rendered.
+ *
+ * @method imageWithRenderingMode
+ * @ios
+ * @return UI.Image
+ * @since 3.1.3
+ */
+Image.prototype.imageWithRenderingMode = function() {};
+
+/**
+ * Returns the image of automatically related to system or application direction. 
+ * For Android, you can use autoMirrored property.
+ *
+ * @method imageFlippedForRightToLeftLayoutDirection
+ * @ios
+ * @return UI.Image
+ * @since 3.1.3
+ */
+Image.prototype.imageFlippedForRightToLeftLayoutDirection = function() {};
 
 /**
  * Specifies the possible resizing modes for an image.
@@ -67,7 +99,7 @@ Image.prototype.toBlob = function() {};
  * @return UI.Image
  * @since 1.1.18
  */
-Image.prototype.resizableImageWithCapInsetsResizingMode = function(insets,mode) {};
+Image.prototype.resizableImageWithCapInsetsResizingMode = function(insets, mode) {};
 
 /**
  * Creates a new image from existing image with specified width and height.
@@ -166,6 +198,7 @@ Image.prototype.compress = function(format, quality, onSuccess, onFailure) {}
  */
 Image.prototype.round = function(radius) {};
 
+
 /**
  * Returns a rotated image with given angle. Rotate direction is clockwise and angle is between 0-360.
  * onSuccess and onFailure are optional parameters.
@@ -196,7 +229,7 @@ Image.prototype.rotate = function(angle, onSuccess, onFailure) {};
  * @ios
  * @since 0.1
  */
-Image.createFromBlob = function(blob) { }
+Image.createFromBlob = function(blob) {}
 
 /**
  * Creates a rounded image object from given path. This method works for only Android. It returns undefined for iOS. 
@@ -232,7 +265,7 @@ Image.android.createRoundedImage = function(params) {};
  * @since 0.1
  * @see https://developer.android.com/topic/performance/graphics/load-bitmap.html
  */
-Image.createFromFile = function(path, width, height) { };
+Image.createFromFile = function(path, width, height) {};
 
 /**
  * @enum {Number} UI.Image.Format
@@ -265,5 +298,52 @@ Format.JPEG = 0;
 Format.PNG = 1;
 
 Image.Format = Format;
+
+/**
+ * iOS Specific Properties.
+ * @class UI.Image.iOS
+ * @since 3.1.3
+ */
+Image.iOS = {};
+
+/** 
+ * @enum {Number} UI.Image.iOS.RenderingMode
+ * @since 3.1.3
+ * @ios
+ */
+Image.iOS.RenderingMode = {};
+
+/**
+ * Use the default rendering mode for the context where the image is used.
+ * 
+ * @property {Number} AUTOMATIC
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.AUTOMATIC = 0;
+
+/**
+ * Always draw the original image, without treating it as a template.
+ * 
+ * @property {Number} ORIGINAL
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.ORIGINAL = 1;
+
+/**
+ * Always draw the image as a template image, ignoring its color information.
+ * 
+ * @property {Number} TEMPLATE
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Image.iOS.RenderingMode.TEMPLATE = 2;
 
 module.exports = Image;
