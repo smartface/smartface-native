@@ -100,18 +100,32 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
+        imageViewPrototype.loadFromUrl = function(params) {
+            var url = params.url;
+            var placeholder = params.placeholder;
+            var isFade = params.isFade;
+            var onError = params.onError;
+            var onSuccess = params.onSuccess;
+            var callback = null;
+            if (onError || onSuccess) {
+                const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
+                callback = NativePicassoCallback.implement({
+                    onSuccess: function() {
+                        onSuccess && onSuccess();
+                    },
+                    onError: function() {
+                        onError && onError();
+                    }
+                });
+            }
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
-                if (placeHolder instanceof Image) {
-                    plainRequestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
-                }
-                else {
-                    var requestCreator = scaleImage(plainRequestCreator);
-                    requestCreator.into(this.nativeObject);
-                }
+                if (placeholder instanceof Image)
+                    plainRequestCreator.placeholder(placeholder.nativeObject)
+                var requestCreator = scaleImage(plainRequestCreator);
+                requestCreator.into(this.nativeObject, callback);
             }
         };
 
@@ -132,7 +146,7 @@ const ImageView = extend(View)(
             });
 
             if (TypeUtil.isString(params.url)) {
-                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
+                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(params.url);
                 if ((params.placeholder) instanceof Image) {
                     requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
