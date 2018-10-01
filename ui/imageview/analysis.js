@@ -105,6 +105,7 @@ ImageView.prototype.loadFromFile = function(object){};
  * Fetch image from the server.
  * If you want better performance and automatically set image, use loadFromUrl. 
  * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ * In Android, this method is not recommended to use in listview.
  *
  * @method fetchFromUrl
  * @param {Object} object
