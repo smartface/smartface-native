@@ -170,6 +170,15 @@ DatePicker.prototype.okFont;
 DatePicker.prototype.datePickerMode;
 
 /**
+ * According to your requirements, this property enables you to specify native built-in styles.
+ *
+ * @property {UI.DatePicker.Android.Style} style
+ * @android
+ * @since 3.1.3
+ */
+DatePicker.prototype.style;
+
+/**
  * iOS Specific Properties.
  * @class UI.DatePicker.iOS
  * @since 3.1.3

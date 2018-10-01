@@ -47,6 +47,32 @@ function ImageView(params) {}
 ImageView.prototype.image = null;
 
 /**
+ * Gets/sets the tintColor. Must create a new image object with the imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE) method to work correctly on the iOS.
+ *
+ *     @example
+ *     const ImageView = require('sf-core/ui/imageview');
+ *     const Image = require('sf-core/ui/image');
+ *     const Color = require('sf-core/ui/color');
+ *     const System = require('sf-core/device/system');
+ *
+ *     var image = Image.createFromFile("images://smartface.png");
+ *     if (System.OS == 'iOS') {
+ *         image = image.ios.imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE);
+ *     }
+ *
+ *     var imageView = new ImageView();
+ *     imageView.flexGrow = 1;
+ *     imageView.tintColor = Color.RED;
+ *     imageView.image = image;
+ *
+ * @property {UI.Color} tintColor
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+ImageView.prototype.tintColor = null;
+
+/**
  * Gets/sets image fill type.
  *
  *     @example
@@ -74,14 +100,17 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
  *
  * @method loadFromUrl
- * @param {String} url
- * @param {UI.Image} placeholder
- * @param {Boolean} fade = true
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Boolean} object.fade = true
+ * @param {Function} object.onSuccess
+ * @param {Function} object.onError
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.3
  */
-ImageView.prototype.loadFromUrl = function(url,placeholder,fade){};
+ImageView.prototype.loadFromUrl = function(params){};
 
 /**
  * Load image from the file and place the returned image into the ImageView.
@@ -102,6 +131,7 @@ ImageView.prototype.loadFromFile = function(object){};
  * Fetch image from the server.
  * If you want better performance and automatically set image, use loadFromUrl. 
  * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ * In Android, this method is not recommended to use in listview.
  *
  * @method fetchFromUrl
  * @param {Object} object
