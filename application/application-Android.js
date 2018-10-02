@@ -295,7 +295,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
@@ -378,6 +378,17 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
+    'setAppLanguage': {
+        value: function(languageCode) {
+            if (TypeUtil.isString(languageCode)) {
+                const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+
+                var nativePreferenceManager = NativePreferenceManager.getDefaultSharedPreferences(activity);
+                nativePreferenceManager.edit().putString("AppLocale", languageCode).commit();
+            }
+        },
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ApplicationWrapper.Android, {
@@ -494,11 +505,11 @@ Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
-    KeyboardAdjustPan: 32,     //SOFT_INPUT_ADJUST_PAN
-    KeyboardAdjustResize: 16,  //SOFT_INPUT_ADJUST_RESIZE
+    KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
+    KeyboardAdjustResize: 16, //SOFT_INPUT_ADJUST_RESIZE
     KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
-    AlwaysVisible: 5,             //SOFT_INPUT_STATE_ALWAYS_VISIBLE
-    AlwaysHidden: 3               //SOFT_INPUT_STATE_ALWAYS_HIDDEN
+    AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
+    AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
