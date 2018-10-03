@@ -29,6 +29,17 @@ Application.android.packageName;
 Application.ios.bundleIdentifier;
 
 /**
+ * It indicates the directionality of the language in the user interface of the app.
+ * 
+ * @property {Application.iOS.UserInterfaceLayoutDirection} userInterfaceLayoutDirection
+ * @readonly
+ * @ios
+ * @static
+ * @since 3.1.3
+ */
+Application.ios.userInterfaceLayoutDirection;
+
+/**
  * The received bytes from the application.
  * 
  * @property {Number} byteReceived
@@ -770,5 +781,41 @@ Application.Android.KeyboardMode.AlwaysVisible
  * @since 3.1.0
  */
 Application.Android.KeyboardMode.AlwaysHidden
+
+/**
+ * iOS Specific Properties.
+ * @class Application.iOS
+ * @since 3.1.3
+ */
+Application.iOS = {};
+
+/** 
+ * @enum {Number} Application.iOS.UserInterfaceLayoutDirection
+ * @since 3.1.3
+ * @ios
+ */
+Application.iOS.UserInterfaceLayoutDirection = {};
+
+/**
+ * Layout direction is left to right.
+ * 
+ * @property {Number} LEFTTORIGHT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Application.iOS.UserInterfaceLayoutDirection.LEFTTORIGHT = 0;
+
+/**
+ * Layout direction is right to left.
+ * 
+ * @property {Number} RIGHTTOLEFT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+Application.iOS.UserInterfaceLayoutDirection.RIGHTTOLEFT = 1;
 
 module.exports = Application;
