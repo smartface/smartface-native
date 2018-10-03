@@ -1094,4 +1094,25 @@ function View(params) {
 
 }
 
+
+View.ios = {};
+
+Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
+    get: function() {
+        return __SF_UIView.viewAppearanceSemanticContentAttribute();
+    },
+    set: function(value){
+        __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
+    },
+    enumerable: true
+});
+
+View.iOS = {};
+
+View.iOS.SemanticContentAttribute = {
+    AUTO : 0,
+    FORCELEFTTORIGHT : 3,
+    FORCERIGHTTOLEFT : 4
+};
+
 module.exports = View;

@@ -60,6 +60,20 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     enumerable: true
 });
 
+Object.defineProperty(SFApplication.ios, 'userInterfaceLayoutDirection', {
+    get: function() {
+        return __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
+    },
+    enumerable: true
+});
+
+SFApplication.iOS = {};
+
+SFApplication.iOS.UserInterfaceLayoutDirection = {
+    LEFTTORIGHT : 0,
+    RIGHTTOLEFT : 1
+};
+
 SFApplication.android = {};
 SFApplication.Android = {};
 SFApplication.Android.KeyboardMode = {};
