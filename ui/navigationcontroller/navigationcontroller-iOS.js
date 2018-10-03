@@ -93,7 +93,23 @@ function NavigatonController(params) {
     };
     
     this.didShowViewController = function(viewController, index, animated){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:did show delegate");
+        console.log("IOS==NAVIGATIONCONT==CONTROLLER:did show delegate index : " + index);
+        
+        var operation = 0;
+        var fromIndex = 0;
+        var toIndex = 0;
+        if (self.model.pageToPush) {
+            operation = 1;
+            fromIndex = index-1;
+            toIndex = index;
+            this.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
+        } else if (self.view.nativeObject.viewControllers.length < self.model.childControllers.length) {
+            operation = 2;
+            fromIndex = self.model.childControllers.length - 1;
+            toIndex = index;
+            this.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
+        }
+
         self.model.popToIndex(index);
         if (self.model.pageToPush) {
             self.model.pageToPush = null;
@@ -103,7 +119,7 @@ function NavigatonController(params) {
     
     this.onTransition = undefined;
     this.animationControllerForOperationFromViewControllerToViewController = function(transitionOperation, fromIndex, toIndex){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition delegate");
+        console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition delegate fromIndex:" + fromIndex + " toIndex:" + toIndex + " operation:" + transitionOperation);
         var fromController = self.model.childControllers[fromIndex];
         var toController = self.model.pageForIndex(toIndex);
         if (typeof this.onTransition === "function"){
@@ -317,18 +333,18 @@ function NavigationView(params) {
             var index = self.nativeObject.viewControllers.indexOf(viewController);
             self.viewModel.didShowViewController(viewController, index, animated);
         },
-        navigationControllerAnimationControllerForOperationFromViewControllerToViewController : function (navigationController, operation, fromVC, toVC) {
-            console.log("IOS==NAVIGATIONCONT==VIEW:navigation controller animation controller for operation...");
-            if (typeof self.nativeObject.interactivePopGestureRecognizer.delegate !== "undefined") {
-                // Returning undefined to navigationControllerAnimationControllerForOperationFromViewControllerToViewController function breaks pop gesture recognizer.
-                // Delegate should be undefined.
-                self.nativeObject.interactivePopGestureRecognizer.delegate = undefined;
-            }
-            var fromIndex = self.nativeObject.viewControllers.indexOf(fromVC);
-            var toIndex = self.nativeObject.viewControllers.indexOf(toVC);
-            self.viewModel.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
-            return undefined;
-        }
+        // navigationControllerAnimationControllerForOperationFromViewControllerToViewController : function (navigationController, operation, fromVC, toVC) {
+        //     console.log("IOS==NAVIGATIONCONT==VIEW:navigation controller animation controller for operation...");
+        //     if (typeof self.nativeObject.interactivePopGestureRecognizer.delegate !== "undefined") {
+        //         // Returning undefined to navigationControllerAnimationControllerForOperationFromViewControllerToViewController function breaks pop gesture recognizer.
+        //         // Delegate should be undefined.
+        //         self.nativeObject.interactivePopGestureRecognizer.delegate = undefined;
+        //     }
+        //     var fromIndex = self.nativeObject.viewControllers.indexOf(fromVC);
+        //     var toIndex = self.nativeObject.viewControllers.indexOf(toVC);
+        //     self.viewModel.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
+        //     return undefined;
+        // }
     }).new();
     self.nativeObject.delegate = self.nativeObjectDelegate;
     
