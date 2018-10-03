@@ -602,7 +602,7 @@ View.prototype.ios.shadowColor = UI.Color.BLACK;
  * 
  * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
  *
- * @property {View.iOS.SemanticContentAttribute} viewAppearanceSemanticContentAttribute
+ * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
  * @ios
  * @static
  * @since 3.1.3
@@ -611,13 +611,13 @@ View.ios.viewAppearanceSemanticContentAttribute;
 
 /**
  * iOS Specific Properties.
- * @class View.iOS
+ * @class UI.View.iOS
  * @since 3.1.3
  */
 View.iOS = {};
 
 /** 
- * @enum {Number} View.iOS.SemanticContentAttribute
+ * @enum {Number} UI.View.iOS.SemanticContentAttribute
  * @since 3.1.3
  * @ios
  */
