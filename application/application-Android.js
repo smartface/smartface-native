@@ -298,6 +298,9 @@ ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function (url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
+ApplicationWrapper.iOS = {};
+ApplicationWrapper.iOS.UserInterfaceLayoutDirection = {};
+
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
