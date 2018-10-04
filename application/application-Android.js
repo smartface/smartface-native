@@ -22,6 +22,7 @@ var _keyboardMode;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
@@ -384,11 +385,15 @@ Object.defineProperties(ApplicationWrapper.android, {
     'setAppLanguage': {
         value: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
-                const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
-
-                var nativePreferenceManager = NativePreferenceManager.getDefaultSharedPreferences(activity);
-                nativePreferenceManager.edit().putString("AppLocale", languageCode).commit();
+                const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
+                LocaleConfigurationUtil.changeConfigurationLocale(activity, languageCode);
             }
+        },
+        enumerable: true
+    },
+    'getApplicationDirection': {
+        get: function() {
+           return   activity.getResources().getConfiguration().getLayoutDirection();
         },
         enumerable: true
     }
