@@ -38,7 +38,7 @@ const ViewGroup = extend(View)(
         };
 
 
-        this.getChildCount = function(){ // Deprecated
+        this.getChildCount = function(){
             return Object.keys(self.childs).length;
         };
 
