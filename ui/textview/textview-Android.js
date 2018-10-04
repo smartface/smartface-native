@@ -201,8 +201,6 @@ const TextView = extend(Label)(
             if (value.link !== undefined) {
                 var clickableSpanOverrideMethods = {
                     onClick: function(view) {
-                        console.log("self " + self.testText);
-
                         self.onClick && self.onClick(value.link);
                         self.onLinkClick && self.onLinkClick(value.link);
                     },

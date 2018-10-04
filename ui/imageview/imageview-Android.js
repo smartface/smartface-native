@@ -100,19 +100,20 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function(urlParam, placeholderParam, isFadeParam) { //ToDo: Paramters should be object this usage is deprecated
+        imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var url, placeholder, isFade, onError, onSuccess;
-            if (typeof url === "object") {
-                url = urlParam.url;
-                placeholder = urlParam.placeholder;
-                isFade = urlParam.isFade;
-                onError = urlParam.onError;
-                onSuccess = urlParam.onSuccess;
+            if (arguments.length === 1) {
+                var params = arguments[0];
+                url = params.url;
+                placeholder = params.placeholder;
+                isFade = params.isFade;
+                onError = params.onError;
+                onSuccess = params.onSuccess;
             }
             else {
-                url = urlParam;
-                placeholder = placeholderParam;
-                isFade = isFadeParam;
+                url = arguments[0];
+                placeholder = arguments[1];
+                isFade = arguments[2];
             }
 
             var callback = null;
