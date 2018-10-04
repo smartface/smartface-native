@@ -111,7 +111,7 @@ const TextView = extend(Label)(
 
                     lineSpacing();
                     this.nativeObject.setText(myBuilder);
-                    this.nativeObject.setSingleLine(true);
+                    this.nativeObject.setSingleLine(false);
                     if (!isMovementMethodAssigned) {
                         isMovementMethodAssigned = true;
                         this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
