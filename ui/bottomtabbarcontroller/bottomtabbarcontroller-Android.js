@@ -136,14 +136,21 @@ function BottomTabBarController() {
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
             if (result) {
-                !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
-                
+                try {
+                    !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
+                } catch(e) {
+                    Application.onUnhandledError && Application.onUnhandledError(e);
+                }
                 // TODO: Add this property to controller class
                 // use this property to show/hide bottom naviagtion view after controller transition
                 self.childControllers[index].isInsideBottomTabBar = true; 
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
-                self.didSelectByIndex && self.didSelectByIndex({index: index});
+                try {
+                    self.didSelectByIndex && self.didSelectByIndex({index: index});
+                }catch(e) {
+                    Application.onUnhandledError && Application.onUnhandledError(e);
+                }
             }
             return result;
         }
