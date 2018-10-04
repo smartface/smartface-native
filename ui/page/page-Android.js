@@ -895,7 +895,7 @@ function Page(params) {
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
-                if (item.badge.text && item.badge.nativeObject) {
+                if (item.badge.nativeObject) {
                     item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -914,6 +914,7 @@ function Page(params) {
                         parentOfNativeObject.removeAllViews();
                         nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
+                    item.badge.visible !== true ? item.badge.nativeObject.setVisibility(8) : item.badge.nativeObject.setVisibility(0);
                 }
                 itemView = nativeBadgeContainer;
                 item.setValues();
