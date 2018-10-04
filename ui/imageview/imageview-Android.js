@@ -100,12 +100,21 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function(params) {
-            var url = params.url;
-            var placeholder = params.placeholder;
-            var isFade = params.isFade;
-            var onError = params.onError;
-            var onSuccess = params.onSuccess;
+        imageViewPrototype.loadFromUrl = function(urlParam, placeholderParam, isFadeParam) {
+            var url, placeholder, isFade, onError, onSuccess;
+            if (typeof url === "object") {
+                url = urlParam.url;
+                placeholder = urlParam.placeholder;
+                isFade = urlParam.isFade;
+                onError = urlParam.onError;
+                onSuccess = urlParam.onSuccess;
+            }
+            else {
+                url = urlParam;
+                placeholder = placeholderParam;
+                isFade = isFadeParam;
+            }
+
             var callback = null;
             if (onError || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
