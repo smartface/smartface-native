@@ -140,7 +140,7 @@ function View(params) {
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
                 this.nativeObject.setBackground(this._gradientDrawable);
-                
+
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
@@ -158,11 +158,11 @@ function View(params) {
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = AndroidUnitConverter.dpToPixel(this._borderWidth);
 
-                
+
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
                 this.nativeObject.setBackground(this._gradientDrawable);
-                
+
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.TOP, borderWidthPx);
@@ -323,6 +323,12 @@ View.prototype = {
     },
     bringToFront: function() {
         this.nativeObject.bringToFront();
+    },
+    flipHorizontally: function() {
+        this.nativeObject.setScaleX(-1);
+    },
+    flipVertically: function() {
+        this.nativeObject.setScaleY(-1);
     },
     getParent: function() {
         return this.parent ? this.parent : null;
