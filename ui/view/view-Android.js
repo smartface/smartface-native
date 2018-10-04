@@ -719,5 +719,8 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_enabled,
 ], "int");
 
+View.ios = {};
+View.iOS = {};
+View.iOS.SemanticContentAttribute = {};
 
 module.exports = View;

@@ -596,6 +596,64 @@ View.prototype.ios.shadowOpacity = 0;
  * @ios
  * @since 2.0.6
  */
-View.prototype.ios.shadowColor = UI.Color.BLACK;;
+View.prototype.ios.shadowColor = UI.Color.BLACK;
+
+/**
+ * 
+ * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
+ *
+ * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
+ * @ios
+ * @static
+ * @since 3.1.3
+ */
+View.ios.viewAppearanceSemanticContentAttribute;
+
+/**
+ * iOS Specific Properties.
+ * @class UI.View.iOS
+ * @since 3.1.3
+ */
+View.iOS = {};
+
+/** 
+ * @enum {Number} UI.View.iOS.SemanticContentAttribute
+ * @since 3.1.3
+ * @ios
+ */
+View.iOS.SemanticContentAttribute = {};
+
+/**
+ * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
+ * 
+ * @property {Number} AUTO
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.AUTO = 0;
+
+/**
+ * Layout direction is always left to right.
+ * 
+ * @property {Number} FORCELEFTTORIGHT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.FORCELEFTTORIGHT = 3;
+
+/**
+ * Layout direction is always right to left.
+ * 
+ * @property {Number} FORCERIGHTTOLEFT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.FORCERIGHTTOLEFT = 4;
 
 module.exports = View;

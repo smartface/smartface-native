@@ -42,7 +42,14 @@ const ViewGroup = extend(View)(
             return Object.keys(self.childs).length;
         };
 
-     
+        this.getChildList = function(){
+            var childList = [];
+            for (var i in self.childs) {
+                childList.push(self.childs[i]);
+            }
+            return childList;
+        };
+        
         this.findChildById = function(id){
             return getKeyByValue(self.childs,id); 
         };
