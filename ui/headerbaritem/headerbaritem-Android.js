@@ -324,14 +324,14 @@ function HeaderBarItem(params) {
                     return;
 
                 _borderColor = borderColor;
-                _badge.backgroundColor = null; ; //re-set Drawable
+                _badge.backgroundColor = null;; //re-set Drawable
             },
             enumerable: true
         },
         'move': {
             value: function(x, y) {
-                _badge.x = (x < 0 ? x * -1 : x);
-                _badge.y = (y < 0 ? y : y);
+                _badge.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
+                _badge.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
             }
         }
     });
