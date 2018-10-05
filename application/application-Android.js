@@ -22,6 +22,7 @@ var _keyboardMode;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
@@ -295,7 +296,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 ApplicationWrapper.iOS = {};
@@ -381,6 +382,18 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
+    'layoutDirection': {
+        get: function() {
+            return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        set: function(languageCode) {
+            if (TypeUtil.isString(languageCode)) {
+                const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
+                LocaleConfigurationUtil.changeConfigurationLocale(activity, languageCode);
+            }
+            enumerable: true
+        }
+    }
 });
 
 Object.defineProperties(ApplicationWrapper.Android, {
@@ -497,12 +510,18 @@ Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
-    KeyboardAdjustPan: 32,     //SOFT_INPUT_ADJUST_PAN
-    KeyboardAdjustResize: 16,  //SOFT_INPUT_ADJUST_RESIZE
+    KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
+    KeyboardAdjustResize: 16, //SOFT_INPUT_ADJUST_RESIZE
     KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
-    AlwaysVisible: 5,             //SOFT_INPUT_STATE_ALWAYS_VISIBLE
-    AlwaysHidden: 3               //SOFT_INPUT_STATE_ALWAYS_HIDDEN
+    AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
+    AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
+
+ApplicationWrapper.Android.LayoutDirection = {
+    LTR: 0,
+    RTL: 1
+};
+Object.freeze(ApplicationWrapper.Android.LayoutDirection);
 
 module.exports = ApplicationWrapper;
