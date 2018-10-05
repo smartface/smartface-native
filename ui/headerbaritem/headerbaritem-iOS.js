@@ -95,7 +95,8 @@ function HeaderBarItem(params) {
     var _badgeHeight = 0;
     var _isBadgeFirstLoad = false;
     var _badgeText;
-    var _isRTL = false;
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    var _isRTL = !isLTR;
     
     Object.defineProperties(_badge, {
         'text': {
