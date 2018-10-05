@@ -862,7 +862,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const ALIGN_RIGHT = 7;
+        const ALIGN_END = 19;
 
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
@@ -900,9 +900,7 @@ function Page(params) {
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(ALIGN_RIGHT, nativeBadgeContainerButton.getId());
-
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 1), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
+                    layoutParams.addRule(ALIGN_END, nativeBadgeContainerButton.getId());
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
