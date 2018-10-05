@@ -67,9 +67,7 @@ Object.defineProperty(SFApplication.ios, 'userInterfaceLayoutDirection', {
     enumerable: true
 });
 
-SFApplication.iOS = {};
-
-SFApplication.iOS.UserInterfaceLayoutDirection = {
+SFApplication.LayoutDirection = {
     LEFTTORIGHT : 0,
     RIGHTTOLEFT : 1
 };
