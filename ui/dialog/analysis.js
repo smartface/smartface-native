@@ -67,7 +67,7 @@ Dialog.prototype.android = {};
 /**
  * Sets the theme style of dialog.
  *
- * @property {UI.Dialog.Android.Style} style
+ * @property {UI.Dialog.Android.Style} themeStyle
  * @android
  * @since 3.0.2
  */
