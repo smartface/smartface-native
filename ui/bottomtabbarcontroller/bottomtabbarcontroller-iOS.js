@@ -51,6 +51,12 @@ function BottomTabBarController(params) {
             console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:tabBar getter");
             return _tabBar;
         },
+        set: function (value){
+            console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:tabBar setter");
+            if (typeof value === "object") {
+                Object.assign(_tabBar, value);   
+            }
+        },
         enumerable: true
     });
     
@@ -114,7 +120,6 @@ function TabBar(params) {
     
     var self = this;
     
-    self.ios = {};
     self.android = {};
     
     self.nativeObject = undefined;
@@ -125,6 +130,21 @@ function TabBar(params) {
     
     //////////////////////////////////////////////////////////////////////////
     // ITEMS
+    
+    var _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function() {
+            return _ios;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                console.log("IOS==BOTTOMTABBARCONTROLLER==TABBAR:set ios");
+                Object.assign(_ios, value);
+            }
+        },
+        enumerable: true
+    });
+    
     var _items = [];
     Object.defineProperty(self, 'items', {
         get: function() {
