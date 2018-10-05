@@ -69,6 +69,7 @@ function BottomTabBar(params) {
             },
             set: function(color) {
                 if (color instanceof Color) {
+                    console.log("Tabbar backgroundColor set");
                     _backgroundColor = color;
                     self.nativeObject.setBackgroundColor(color.nativeObject);
                 }

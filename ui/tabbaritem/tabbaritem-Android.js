@@ -32,18 +32,12 @@ function TabBarItem(params) {
                 };
                 
                 var icon = valueObj;
-                if (typeof icon === "string") {
-                    icon = Image.createFromFile(icon);
-                }
-                else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
-                    icon.normal = icon.normal && Image.createFromFile(icon.normal);
-                    icon.selected = icon.selected && Image.createFromFile(icon.selected);
-                }
 
                 if (icon instanceof Image || icon === null) {
                     _icon = icon;
                 }
                 else if (icon instanceof Object) {
+                    // TODO: Refactor this implemenation. Discuss with ios team.
                     if (icon.normal instanceof Image && icon.selected instanceof Image) {
                         _icon = makeSelector(icon.normal, icon.selected);
                     }
@@ -53,6 +47,13 @@ function TabBarItem(params) {
                     else if (icon.selected instanceof Image) {
                         _icon = makeSelector(EmptyImage, icon.selected);
                     }
+                    else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
+                        icon.normal = icon.normal && Image.createFromFile(icon.normal);
+                        icon.selected = icon.selected && Image.createFromFile(icon.selected);
+                    }
+                
+                } else if (typeof icon === "string") {
+                    icon = Image.createFromFile(icon);
                 }
                 else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");

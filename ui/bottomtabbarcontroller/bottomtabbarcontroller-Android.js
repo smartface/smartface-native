@@ -8,7 +8,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 
 const activity = AndroidConfig.activity;
 
-function BottomTabBarController() {
+function BottomTabBarController(params) {
     // TODO: Beautify this code
     const Application = require("sf-core/application");
     Application.tabBar = new BottomTabBar();
@@ -27,6 +27,9 @@ function BottomTabBarController() {
         'tabBar': {
             get: function() {
                 return Application.tabBar;
+            },
+            set: function(params) {
+                Object.assign(Application.tabBar, params);
             },
             enumerable: true
         },
@@ -155,6 +158,8 @@ function BottomTabBarController() {
             return result;
         }
     }));
+    
+    params && (Object.assign(this, params));
 }
 
 function disableShiftMode(bottomTabBar) {
