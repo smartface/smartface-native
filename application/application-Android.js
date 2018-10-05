@@ -382,17 +382,23 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
-    'layoutDirection': {
+    'locale': {
         get: function() {
-            return activity.getResources().getConfiguration().getLayoutDirection();
+            return activity.getResources().getConfiguration().locale.getLanguage();
         },
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
                 const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 LocaleConfigurationUtil.changeConfigurationLocale(activity, languageCode);
             }
-            enumerable: true
-        }
+        },
+        enumerable: true
+    },
+    'getLayoutDirection': {
+        get: function() {
+            return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        enumerable: true
     }
 });
 
@@ -518,10 +524,10 @@ ApplicationWrapper.Android.KeyboardMode = {
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
-ApplicationWrapper.Android.LayoutDirection = {
-    LTR: 0,
-    RTL: 1
+ApplicationWrapper.LayoutDirection = {
+    LEFTTORIGHT: 0,
+    RIGHTTOLEFT: 1
 };
-Object.freeze(ApplicationWrapper.Android.LayoutDirection);
+Object.freeze(ApplicationWrapper.LayoutDirection);
 
 module.exports = ApplicationWrapper;

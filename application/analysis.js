@@ -30,6 +30,17 @@ Application.android.packageName;
 Application.android.locale;
 
 /**
+ * Get current layout direction.
+ *
+ * @property {Application.LayoutDirection} getLayoutDirection
+ * @readonly
+ * @android
+ * @static
+ * @since 3.1.3
+ */
+Application.getLayoutDirection;
+
+/**
  * Application bundle identifier.
  * 
  * @property {String} bundleIdentifier
@@ -194,6 +205,7 @@ Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser
  * @since 0.1
  */
 Application.exit = function() {};
+
 
 /**
  * Restarts the application.
@@ -799,6 +811,7 @@ Application.Android.KeyboardMode.AlwaysHidden
  * @enum {Number} Application.LayoutDirection
  * @since 3.1.3
  * @ios
+ * @android
  */
 Application.LayoutDirection = {};
 
