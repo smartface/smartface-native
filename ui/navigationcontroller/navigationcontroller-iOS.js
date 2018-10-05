@@ -51,6 +51,12 @@ function NavigatonController(params) {
             console.log("IOS==NAVIGATIONCONT==CONTROLLER:headerbar getter");
             return _headerBar;
         },
+        set: function (value){
+            console.log("IOS==NAVIGATIONCONT==CONTROLLER:headerbar setter");
+            if (typeof value === "object") {
+                Object.assign(_headerBar, value);   
+            }
+        },
         enumerable: true
     });
     ////////////////////////////////////////////////////////////////////////////
@@ -144,7 +150,6 @@ function HeaderBar(params) {
     
     var self = this;
     
-    self.ios = {};
     self.android = {};
     
     self.nativeObject = undefined;
@@ -156,6 +161,21 @@ function HeaderBar(params) {
     self.navigationController = params.navigationController;
     
     // Properties
+    var _ios = {};
+    Object.defineProperty(self, 'ios', {
+        get: function() {
+            return _ios;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set ios");
+                Object.assign(_ios, value);
+            }
+        },
+        enumerable: true
+    });
+    
+    
     Object.defineProperty(self.ios, 'translucent', {
         get: function() {
             return self.nativeObject.translucent;
