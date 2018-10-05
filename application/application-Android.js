@@ -381,7 +381,8 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'locale': {
         get: function() {
-            return activity.getResources().getConfiguration().locale.getLanguage();
+            const NativeLocale = requireClass("java.util.Locale");
+            return NativeLocale.getDefault().getLanguage();
         },
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
