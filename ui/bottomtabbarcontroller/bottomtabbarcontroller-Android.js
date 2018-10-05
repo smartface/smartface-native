@@ -82,6 +82,11 @@ function BottomTabBarController(params) {
     };
 
     this.push = function(childController) {
+        if(!childController) {
+            // throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
+            return;
+        }
+
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
@@ -98,14 +103,14 @@ function BottomTabBarController(params) {
         else if (childController instanceof NavigationController) {
             console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
             // first press
-            if (childController.historyStack.length < 1) {
+            if (childController.historyStack.length === 1) {
                 console.log("TabbarOnClick NavigationController first visit");
                 childController.push({
                     controller: childController.childControllers[0],
                     animated: false
                 });
             }
-            else {
+            else if (childController.historyStack.length > 1) {
                 console.log("TabbarOnClick NavigationController not first visit");
                 var childControllerStack = childController.historyStack;
                 var childControllerStackLenght = childControllerStack.length;
