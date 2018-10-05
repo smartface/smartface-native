@@ -262,7 +262,16 @@ function View(params) {
     this.getPosition = function(){
         return {left : self.left , top : self.top , width : self.width, height : self.height};
     }
-
+    
+    this.flipHorizontally = function(){
+        self.nativeObject.flipHorizontally();
+    }
+    
+    
+    this.flipVertically = function(){
+        self.nativeObject.flipVertically();
+    }
+    
     this.setPosition = function(position){
         self.left = position.left;
         self.top = position.top;
