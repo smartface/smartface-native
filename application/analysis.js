@@ -43,7 +43,7 @@ Application.ios.bundleIdentifier;
 /**
  * It indicates the directionality of the language in the user interface of the app.
  * 
- * @property {Application.iOS.UserInterfaceLayoutDirection} userInterfaceLayoutDirection
+ * @property {Application.LayoutDirection} userInterfaceLayoutDirection
  * @readonly
  * @ios
  * @static
