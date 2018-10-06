@@ -285,7 +285,7 @@ function creatTitleView() {
     var titleTextView = new NativeTextView(AndroidConfig.activity);
     titleTextView.setText(picker.title);
     titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-    titleTextView.setPadding(10, 20, 10, 10);
+    titleTextView.setPaddingRelative(10, 20, 10, 10);
     titleTextView.setGravity(CENTER);
     picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
     picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);

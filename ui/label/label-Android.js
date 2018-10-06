@@ -146,7 +146,7 @@ const Label = extend(View)(
                     return this.paddingLeft;
                 },
                 set: function(padding) {
-                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(padding),
+                    this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(padding),
                         AndroidUnitConverter.dpToPixel(padding),
                         AndroidUnitConverter.dpToPixel(padding),
                         AndroidUnitConverter.dpToPixel(padding));
@@ -161,7 +161,7 @@ const Label = extend(View)(
                     var paddingBottom = this.paddingBottom;
                     var paddingRight = this.paddingRight;
                     var paddingTop = this.paddingTop;
-                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(paddingLeft),
                         AndroidUnitConverter.dpToPixel(paddingTop),
                         AndroidUnitConverter.dpToPixel(paddingRight),
                         AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -176,7 +176,7 @@ const Label = extend(View)(
                     var paddingLeft = this.paddingLeft;
                     var paddingBottom = this.paddingBottom;
                     var paddingTop = this.paddingTop;
-                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(paddingLeft),
                         AndroidUnitConverter.dpToPixel(paddingTop),
                         AndroidUnitConverter.dpToPixel(paddingRight),
                         AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -191,7 +191,7 @@ const Label = extend(View)(
                     var paddingLeft = this.paddingLeft;
                     var paddingRight = this.paddingRight;
                     var paddingBottom = this.paddingBottom;
-                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(paddingLeft),
                         AndroidUnitConverter.dpToPixel(paddingTop),
                         AndroidUnitConverter.dpToPixel(paddingRight),
                         AndroidUnitConverter.dpToPixel(paddingBottom));
@@ -206,7 +206,7 @@ const Label = extend(View)(
                     var paddingLeft = this.paddingLeft;
                     var paddingRight = this.paddingRight;
                     var paddingTop = this.paddingTop;
-                    this.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(paddingLeft),
+                    this.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(paddingLeft),
                         AndroidUnitConverter.dpToPixel(paddingTop),
                         AndroidUnitConverter.dpToPixel(paddingRight),
                         AndroidUnitConverter.dpToPixel(paddingBottom));
