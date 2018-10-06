@@ -140,7 +140,7 @@ function setContentInset(self) {
         }
     }
     if (self.nativeRecyclerView) {
-        self.nativeRecyclerView.setPadding(leftInset, topInset, rightInset, bottomInset);
+        self.nativeRecyclerView.setPaddingRelative(leftInset, topInset, rightInset, bottomInset);
     }
 }
 

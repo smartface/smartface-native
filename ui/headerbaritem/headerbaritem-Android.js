@@ -64,7 +64,7 @@ function HeaderBarItem(params) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-                    this.nativeObject.setPadding(
+                    this.nativeObject.setPaddingRelative(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                     );
@@ -103,7 +103,7 @@ function HeaderBarItem(params) {
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackground(null);
-                        this.nativeObject.setPadding(
+                        this.nativeObject.setPaddingRelative(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
