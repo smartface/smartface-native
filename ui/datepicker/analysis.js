@@ -170,6 +170,24 @@ DatePicker.prototype.okFont;
 DatePicker.prototype.datePickerMode;
 
 /**
+ * Gets/sets cancelText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} cancelText
+ * @ios
+ * @since 3.1.3
+ */
+DatePicker.prototype.cancelText;
+
+/**
+ * Gets/sets okText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} okText
+ * @ios
+ * @since 3.1.3
+ */
+DatePicker.prototype.okText;
+
+/**
  * According to your requirements, this property enables you to specify native built-in styles.
  *
  * @property {UI.DatePicker.Android.Style} style
