@@ -1111,7 +1111,7 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
         return __SF_UIView.viewAppearanceSemanticContentAttribute();
     },
     set: function(value){
-        var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS");
+        var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); // For application-iOS.js Application Direction Manager
         userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
         userDefaults.synchronize();
     
