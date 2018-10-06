@@ -672,7 +672,17 @@ function Page(params) {
         },
         set: function(value) {
             if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;  
+                if (value) {
+                    self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;
+                    if (self.nativeObject.navigationController.navigationBar.backgroundImage) {
+                        self.nativeObject.navigationController.navigationBar.backgroundImage = undefined;
+                    }
+                } else {
+                    self.nativeObject.navigationController.navigationBar.barTintColor = undefined;
+                    if (self.headerBar.transparent) {
+                        self.headerBar.transparent = true;
+                    }
+                }
             }
         },
         enumerable: true,configurable : true
@@ -689,6 +699,54 @@ function Page(params) {
         set: function(value) {
             if (self.nativeObject.navigationController) {
                 self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    var _transparent = false;
+    Object.defineProperty(self.headerBar, 'transparent', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval = _transparent;
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (self.nativeObject.navigationController) {
+                    if (value) {
+                        if (typeof self.nativeObject.navigationController.navigationBar.barTintColor === "undefined") {
+                            self.nativeObject.navigationController.navigationBar.backgroundImage = __SF_UIImage.getInstance();
+                            self.nativeObject.navigationController.navigationBar.shadowImage = __SF_UIImage.getInstance();   
+                        }
+                        self.nativeObject.navigationController.navigationBar.translucent = true;
+                    } else {
+                        self.nativeObject.navigationController.navigationBar.backgroundImage = undefined;
+                        self.nativeObject.navigationController.navigationBar.shadowImage = undefined;
+                        self.nativeObject.navigationController.navigationBar.translucent = false;
+                    }   
+                    _transparent = value;
+                }
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.headerBar.ios, 'alpha', {
+        get: function() {
+            var retval = null;
+            if (self.nativeObject.navigationController) {
+                retval =  self.nativeObject.navigationController.navigationBar.alpha;
+            }
+            return retval;
+        },
+        set: function(value) {
+            if (typeof value === "number") {
+                if (self.nativeObject.navigationController) {
+                    self.nativeObject.navigationController.navigationBar.alpha = value;
+                }   
             }
         },
         enumerable: true,configurable : true

@@ -189,6 +189,42 @@ function HeaderBar(params) {
         enumerable: true
     });
     
+    var _transparent = false;
+    Object.defineProperty(self, 'transparent', {
+        get: function() {
+            return _transparent;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (value) {
+                    if (typeof self.nativeObject.barTintColor === "undefined") {
+                        self.nativeObject.backgroundImage = __SF_UIImage.getInstance();
+                        self.nativeObject.shadowImage = __SF_UIImage.getInstance();   
+                    }
+                    self.nativeObject.translucent = true;
+                } else {
+                    self.nativeObject.backgroundImage = undefined;
+                    self.nativeObject.shadowImage = undefined;
+                    self.nativeObject.translucent = false;
+                }
+                _transparent = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.ios, 'alpha', {
+        get: function() {
+            return self.nativeObject.alpha;
+        },
+        set: function(value) {
+            if (typeof value === "number") {
+                self.nativeObject.alpha = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
     Object.defineProperty(self, 'titleColor', {
         get: function() {
             return new Color({color : self.nativeObject.titleTextAttributes["NSColor"]});
@@ -226,7 +262,17 @@ function HeaderBar(params) {
             return new Color({color : self.nativeObject.barTintColor});
         },
         set: function(value) {
-            self.nativeObject.barTintColor = value.nativeObject;
+            if (value) {
+                self.nativeObject.barTintColor = value.nativeObject;
+                if (self.nativeObject.backgroundImage) {
+                    self.nativeObject.backgroundImage = undefined;
+                }
+            } else {
+                self.nativeObject.barTintColor = undefined;
+                if (self.transparent) {
+                    self.transparent = true;
+                }
+            }
         },
         enumerable: true,configurable : true
     });
