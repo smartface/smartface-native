@@ -1111,7 +1111,11 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
         return __SF_UIView.viewAppearanceSemanticContentAttribute();
     },
     set: function(value){
-        __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
+        var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS");
+        userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
+        userDefaults.synchronize();
+    
+        // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
     },
     enumerable: true
 });
