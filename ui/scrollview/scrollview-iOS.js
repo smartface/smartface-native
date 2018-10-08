@@ -59,7 +59,7 @@ const ScrollView = extend(ViewGroup)(
         
         var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
         if (!isLTR) {
-            self.flipHorizontally()
+            self.flipHorizontally();
             self.layout.onViewAddedInnerCallback = function(view){
                 view.flipHorizontally();
             };
