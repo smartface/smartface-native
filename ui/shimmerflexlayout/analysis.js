@@ -15,7 +15,7 @@ function ShimmerFlexLayout() {}
  * @ios
  * @since 3.1.3
  */
-ShimmerFlexLayout.startShimmer;
+ShimmerFlexLayout.startShimmering;
 
 /**
  * Stops the shimmer animation
@@ -25,7 +25,7 @@ ShimmerFlexLayout.startShimmer;
  * @ios
  * @since 3.1.3
  */
-ShimmerFlexLayout.stopShimmer;
+ShimmerFlexLayout.stopShimmering;
 
 /**
  * Assign the content flexlayout for shimmering. 
@@ -73,7 +73,7 @@ ShimmerFlexLayout.duration;
 /**
  * Set alpha for unhighlighted view over which the highlight is drawn.
  * 
- * @property {Number} baseAlpha
+ * @property {Number} [baseAlpha = 1]
  * @android
  * @ios
  * @since 3.1.3
@@ -84,7 +84,7 @@ ShimmerFlexLayout.baseAlpha;
 /**
  * Controls the brightness of the highlight at the center.
  * 
- * @property {Number} intensity
+ * @property {Number} [intensity = 0]
  * @android
  * @since 3.1.3
  */
@@ -100,11 +100,55 @@ ShimmerFlexLayout.intensity;
  */
 ShimmerFlexLayout.repeatCount;
 
+/**
+ * The highlight length of shimmering. Range of [0,1], defaults to 1.0.
+ * 
+ * @property {Number} [highlightLength = 1.0]
+ * @ios
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.highlightLength;
+
+/**
+ * The alpha of the content while it is shimmering. Defaults to 0.5.
+ * 
+ * @property {Number} [animationAlpha = 0.5]
+ * @ios
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.animationAlpha;
+
+/**
+ * The speed of shimmering, in points per second. Defaults to 230.
+ * 
+ * @property {Number} [speed = 230]
+ * @ios
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.speed;
+
+/**
+ * The duration of the fade used when shimmer begins. Defaults to 0.1.
+ * 
+ * @property {Number} [beginFadeDuration = 0.1]
+ * @ios
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.beginFadeDuration;
+
+/**
+ * The duration of the fade used when shimmer ends. Defaults to 0.3.
+ * 
+ * @property {Number} [endFadeDuration = 0.3]
+ * @ios
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.endFadeDuration;
 
 /**
  * Set animation repeat delay.
  * 
- * @property {Number} pauseDuration
+ * @property {Number} [pauseDuration = 0.4]
  * @android
  * @ios
  * @since 3.1.3
@@ -115,17 +159,18 @@ ShimmerFlexLayout.pauseDuration;
 /**
  * The travel direction of the shimmer: left to right, top to bottom, right to left or bottom to top.
  * 
- * @property {UI.ShimmerFlexLayout.Android.ShimmerDirection} shimmeringDirection
+ * @property {UI.ShimmerFlexLayout.ShimmeringDirection} shimmeringDirection
+ * @ios
  * @android
  * @since 3.1.3
  */
-ShimmerFlexLayout.shimmeringDirection;
+ShimmerFlexLayout.ShimmeringDirection;
 
 
 /**
  * Angle at which the highlight is tilted, measured in degrees.
  * 
- * @property {Number} tilt
+ * @property {Number} [tilt = 20]
  * @android
  * @since 3.1.3
  */
@@ -168,12 +213,14 @@ ShimmerFlexLayout.highlightAlpha;
 ShimmerFlexLayout.Android ={}
 
 /** 
- * @enum UI.ShimmerFlexLayout.Android.ShimmeringDirection
+ * @enum UI.ShimmerFlexLayout.ShimmeringDirection
+ * @ios
+ * @android
  * @since 3.1.3
  * 
  * This enums are used to identify the direction of shimmer sweep.
  */
-ShimmerFlexLayout.Android.ShimmeringDirection = {};
+ShimmerFlexLayout.ShimmeringDirection = {};
 
 
 /**

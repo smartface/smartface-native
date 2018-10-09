@@ -12,6 +12,8 @@ const ShimmerFlexLayout = extend(View)(
         
         _super(this);
         
+        this.android.build = function(){};
+        
         Object.defineProperty(this, 'startShimmering', {
             value: function() {
                 self.nativeObject.shimmering = true;
