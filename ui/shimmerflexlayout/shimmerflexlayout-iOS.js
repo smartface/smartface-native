@@ -12,14 +12,14 @@ const ShimmerFlexLayout = extend(View)(
         
         _super(this);
         
-        Object.defineProperty(this, 'startShimmer', {
+        Object.defineProperty(this, 'startShimmering', {
             value: function() {
                 self.nativeObject.shimmering = true;
             },
             enumerable: true
         });
         
-        Object.defineProperty(this, 'stopShimmer', {
+        Object.defineProperty(this, 'stopShimmering', {
             value: function() {
                 self.nativeObject.shimmering = false;
             },
