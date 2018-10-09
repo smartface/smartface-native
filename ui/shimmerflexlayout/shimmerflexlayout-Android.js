@@ -3,7 +3,7 @@ const View = require("sf-core/ui/view");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
 const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
-const TypeUtil = require("../util/type");
+const TypeUtil = require("sf-core/util/type");
 
 const NativeShimmerFrameLayout = requireClass("com.facebook.shimmer.ShimmerFrameLayout");
 const NativeShimmer = requireClass("com.facebook.shimmer.Shimmer");
@@ -15,22 +15,24 @@ const ShimmerFlexLayout = extend(View)(
 
         this.nativeObject = new NativeShimmerFrameLayout(activity);
 
-        var _layout = null;
-        var _duration, _baseAlpha, _intensity, _repeatCount,
-            _repeatDelay, _direction, _tilt, _highlightColor,
-            _baseColor, _shimmerEnum, _shimmerBuilder, _highlightAlpha;
-        this.android = {};
-        Object.defineProperties(this.android, {
+        var _layout = new FlexLayout();
+        this.nativeObject.addView(_layout.nativeObject);
+
+        var _baseAlpha, _direction, _repeatDelay, _contentLayout = null;
+        Object.defineProperties(this, {
             'contentLayout': {
                 get: function() {
-                    return _layout;
+                    return _contentLayout;
                 },
-                set: function(layout) {
-                    if (!layout instanceof FlexLayout)
+                set: function(contentLayout) {
+                    if (!contentLayout instanceof FlexLayout)
                         return;
-                    if (_layout !== null)
-                        this.nativeObject.removeAllViews();
-                    this.nativeObject.addView(_layout.nativeObject);
+                        
+                    if (_contentLayout !== null)
+                        _layout.removeAll();
+
+                    _contentLayout = contentLayout;
+                    _layout.addChild(contentLayout);
                 },
                 enumerable: true
             },
@@ -52,6 +54,45 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
+            'baseAlpha': {
+                get: function() {
+                    return _baseAlpha;
+                },
+                set: function(baseAlpha) {
+                    if (!TypeUtil.isNumeric(baseAlpha))
+                        return;
+                    _baseAlpha = baseAlpha;
+                },
+                enumerable: true
+            },
+            'pauseDuration': {
+                get: function() {
+                    return _repeatDelay;
+                },
+                set: function(repeatDelay) {
+                    if (!TypeUtil.isNumeric(repeatDelay))
+                        return;
+                    _repeatDelay = repeatDelay;
+                },
+                enumerable: true
+            },
+            'shimmeringDirection': {
+                get: function() {
+                    return _direction;
+                },
+                set: function(direction) {
+                    if (!typeof direction === 'enum')
+                        return;
+                    _direction = direction;
+                },
+                enumerable: true
+            }
+        });
+
+        var _duration, _intensity, _repeatCount, _tilt, _highlightColor,
+            _baseColor, _shimmerEnum, _shimmerBuilder, _highlightAlpha;
+        this.android = {};
+        Object.defineProperties(this.android, {
             'build': {
                 get: function() {
                     return _shimmerEnum;
@@ -59,6 +100,9 @@ const ShimmerFlexLayout = extend(View)(
                 set: function(shimmerEnum) {
                     _shimmerEnum = shimmerEnum;
                     _shimmerBuilder = shimmerBuilder(shimmerEnum);
+
+                    //default
+                    _shimmerBuilder.setAutoStart(false);
 
                     this.duration && _shimmerBuilder.setDuration(this.duration); //long
                     this.baseAlpha && _shimmerBuilder.setBaseAlpha(this.baseAlpha); //float
@@ -87,17 +131,6 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'baseAlpha': {
-                get: function() {
-                    return _baseAlpha;
-                },
-                set: function(baseAlpha) {
-                    if (!TypeUtil.isNumeric(baseAlpha))
-                        return;
-                    _baseAlpha = baseAlpha;
-                },
-                enumerable: true
-            },
             'intensity': {
                 get: function() {
                     return _intensity;
@@ -117,28 +150,6 @@ const ShimmerFlexLayout = extend(View)(
                     if (!TypeUtil.isNumeric(repeatCount))
                         return;
                     _repeatCount = repeatCount;
-                },
-                enumerable: true
-            },
-            'pauseDuration': {
-                get: function() {
-                    return _repeatDelay;
-                },
-                set: function(repeatDelay) {
-                    if (!TypeUtil.isNumeric(repeatDelay))
-                        return;
-                    _repeatDelay = repeatDelay;
-                },
-                enumerable: true
-            },
-            'shimmeringDirection': {
-                get: function() {
-                    return _direction;
-                },
-                set: function(direction) {
-                    if (!typeof direction === 'enum')
-                        return;
-                    _direction = direction;
                 },
                 enumerable: true
             },
@@ -197,9 +208,8 @@ const ShimmerFlexLayout = extend(View)(
         }
 
         //Defaults;
-        this.nativeObject.setAutoStart(false);
-        this.nativeObject.baseAlpha = 1;
-        this.nativeObject.pauseDuration = 0.4 * 1000;
+        this.baseAlpha = 1;
+        this.pauseDuration = 0.4 * 1000;
 
         function shimmerBuilder(shimmerEnum) {
             switch (shimmerEnum) {
@@ -213,6 +223,8 @@ const ShimmerFlexLayout = extend(View)(
                     return new NativeShimmer.AlphaHighlightBuilder();
             }
         };
+
+        this.ios = {};
     });
 
 ShimmerFlexLayout.Android = {};
@@ -223,9 +235,9 @@ ShimmerFlexLayout.Android.Shimmer = {
 Object.freeze(ShimmerFlexLayout.Android.Shimmer);
 
 ShimmerFlexLayout.ShimmeringDirection = {
-    TOP: 3,
+    UP: 3,
     RIGHT: 0,
-    LEFT: 2,
+    DOWN: 2,
     BOTTOM: 1
 };
 Object.freeze(ShimmerFlexLayout.ShimmeringDirection);
