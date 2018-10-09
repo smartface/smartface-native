@@ -12,6 +12,7 @@ function ShimmerFlexLayout() {}
  * 
  * @method  startShimmer
  * @android
+ * @ios
  * @since 3.1.3
  */
 ShimmerFlexLayout.startShimmer;
@@ -21,6 +22,7 @@ ShimmerFlexLayout.startShimmer;
  * 
  * @method  stopShimmer
  * @android
+ * @ios
  * @since 3.1.3
  */
 ShimmerFlexLayout.stopShimmer;
@@ -30,6 +32,7 @@ ShimmerFlexLayout.stopShimmer;
  * 
  * @property {Boolean} isShimmering
  * @readonly
+ * @ios
  * @android
  * @since 3.1.3
  */
