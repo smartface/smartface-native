@@ -50,14 +50,15 @@ ShimmerFlexLayout.isShimmering;
 
 
 /**
- * Builds the shimmer based on your assigned properties by given {UI.ShimmerFlexLayout.Android.Shimmer}. This method must be used after all other 
+ * Builds the shimmer based on your assigned properties by given UI.ShimmerFlexLayout.Android.Shimmer. This method must be used after all other 
  * propertis of ShimmerFlexLayout is assigned.
  * 
- * @method {UI.ShimmerFlexLayout.Android.Shimmer} build
+ * @method build
+ * @param {UI.ShimmerFlexLayout.Android.Shimmer} build
  * @android
  * @since 3.1.3
  */
-ShimmerFlexLayout.build;
+ShimmerFlexLayout.build = function(build){};
 
 
 /**
