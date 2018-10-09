@@ -39,7 +39,7 @@ const ShimmerFlexLayout = extend(View)(
             },
             'startShimmering': {
                 value: function() {
-                    this.nativeObject.startShimmer();
+                    self.nativeObject.startShimmer();
                 },
                 enumerable: true
             },
@@ -51,7 +51,7 @@ const ShimmerFlexLayout = extend(View)(
             },
             'stopShimmering': {
                 value: function() {
-                    this.nativeObject.stopShimmer();
+                    self.nativeObject.stopShimmer();
                 },
                 enumerable: true
             },
