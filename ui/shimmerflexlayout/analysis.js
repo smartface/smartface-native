@@ -2,6 +2,71 @@
  * @class UI.ShimmerFlexLayout
  * @since 3.1.3
  * 
+ * @example
+ * const Color = require('sf-core/ui/color');
+ * const FlexLayout = require('sf-core/ui/flexlayout');
+ *
+ * var flex = new FlexLayout();
+ * flex.flexGrow = 1;
+ * flex.flexDirection = FlexLayout.FlexDirection.ROW;
+ * var flexImage = new FlexLayout();
+ * flexImage.flexGrow = 0.5;
+ * flexImage.margin = 20;
+ * flexImage.marginRight = 10;
+ * flexImage.borderRadius = 10;
+ * flexImage.backgroundColor = Color.LIGHTGRAY;
+ *
+ * flex.addChild(flexImage);
+ *
+ * var flexLabels = new FlexLayout();
+ * flexLabels.flexGrow = 1;
+ *
+ * var labelTop = new FlexLayout();
+ * labelTop.height = 20;
+ * labelTop.margin = 20;
+ * labelTop.marginBottom = 10;
+ * labelTop.borderRadius = 10;
+ * labelTop.backgroundColor = Color.LIGHTGRAY;
+ * flexLabels.addChild(labelTop);
+ *
+ * var labelCenter = new FlexLayout();
+ * labelCenter.height = 20;
+ * labelCenter.margin = 20;
+ * labelCenter.marginTop = 0;
+ * labelCenter.borderRadius = 10;
+ * labelCenter.marginRight = 100;
+ * labelCenter.backgroundColor = Color.LIGHTGRAY;
+ * flexLabels.addChild(labelCenter);
+ *
+ * var labelBottom = new FlexLayout();
+ * labelBottom.positionType = FlexLayout.PositionType.ABSOLUTE;
+ * labelBottom.bottom = 20;
+ * labelBottom.left = 20;
+ * labelBottom.height = 20;
+ * labelBottom.right = 40;
+ * labelBottom.borderRadius = 10;
+ * labelBottom.backgroundColor = Color.LIGHTGRAY;
+ *
+ * flexLabels.addChild(labelBottom);
+ *
+ * flex.addChild(flexLabels);
+ *
+ * var shimmer = new ShimmerFlexLayout();
+ * shimmer.height = 200;
+ *   
+ * shimmer.ios.animationAlpha = 0.2;
+ * shimmer.baseAlpha = 0.5;
+ * shimmer.pauseDuration = 500;
+ * shimmer.android.highlightAlpha = 1;
+ *
+ * shimmer.android.build(ShimmerFlexLayout.Android.Shimmer.AlphaHighlight);
+ *
+ * shimmer.contentLayout = flex
+ *
+ * myPage.layout.addChild(shimmer);
+ *
+ * shimmer.startShimmering();
+ * 
  * This class provides an easy way to add a shimmer effect to any view in your app.
  * It is useful as an unobtrusive loading indicator.
  */
@@ -54,11 +119,11 @@ ShimmerFlexLayout.isShimmering;
  * propertis of ShimmerFlexLayout is assigned.
  * 
  * @method build
- * @param {UI.ShimmerFlexLayout.Android.Shimmer} build
+ * @param {UI.ShimmerFlexLayout.Android.Shimmer} shimmerType
  * @android
  * @since 3.1.3
  */
-ShimmerFlexLayout.build = function(build){};
+ShimmerFlexLayout.build = function(shimmerType) {};
 
 
 /**
@@ -179,7 +244,7 @@ ShimmerFlexLayout.tilt;
 
 
 /**
- * Set the shimmer's highlight color. This property must be used if given shimmer is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
+ * Set the shimmer's highlight color. This property must be used if given shimmer type is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
  * 
  * @property {UI.Color} highlightColor
  * @android
@@ -188,7 +253,7 @@ ShimmerFlexLayout.tilt;
 ShimmerFlexLayout.highlightColor;
 
 /**
- * Set base  color of content. This property must be used if given shimmer is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
+ * Set base  color of content. This property must be used if given shimmer type is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
  * 
  * @property {UI.Color} baseColor
  * @android
@@ -211,7 +276,7 @@ ShimmerFlexLayout.highlightAlpha;
  * @class UI.ShimmerFlexLayout.Android
  * @since 3.1.3
  */
-ShimmerFlexLayout.Android ={}
+ShimmerFlexLayout.Android = {}
 
 /** 
  * @enum UI.ShimmerFlexLayout.ShimmeringDirection

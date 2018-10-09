@@ -12,6 +12,7 @@ const activity = AndroidConfig.activity;
 const ShimmerFlexLayout = extend(View)(
     function(_super, params) {
         _super(this);
+        const self = this;
 
         this.nativeObject = new NativeShimmerFrameLayout(activity);
 
@@ -27,7 +28,7 @@ const ShimmerFlexLayout = extend(View)(
                 set: function(contentLayout) {
                     if (!contentLayout instanceof FlexLayout)
                         return;
-                        
+
                     if (_contentLayout !== null)
                         _layout.removeAll();
 
@@ -38,7 +39,7 @@ const ShimmerFlexLayout = extend(View)(
             },
             'startShimmering': {
                 value: function() {
-                    this.nativeObject.startShimmer()
+                    this.nativeObject.startShimmer();
                 },
                 enumerable: true
             },
@@ -50,7 +51,7 @@ const ShimmerFlexLayout = extend(View)(
             },
             'stopShimmering': {
                 value: function() {
-                    this.nativeObject.stopShimmer()
+                    this.nativeObject.stopShimmer();
                 },
                 enumerable: true
             },
@@ -90,33 +91,30 @@ const ShimmerFlexLayout = extend(View)(
         });
 
         var _duration, _intensity, _repeatCount, _tilt, _highlightColor,
-            _baseColor, _shimmerEnum, _shimmerBuilder, _highlightAlpha;
+            _baseColor, _shimmerBuilder, _highlightAlpha;
         this.android = {};
         Object.defineProperties(this.android, {
             'build': {
-                get: function() {
-                    return _shimmerEnum;
-                },
-                set: function(shimmerEnum) {
-                    _shimmerEnum = shimmerEnum;
+                value: function(shimmerEnum) {
                     _shimmerBuilder = shimmerBuilder(shimmerEnum);
 
-                    //default
+                    // //default
                     _shimmerBuilder.setAutoStart(false);
 
-                    this.duration && _shimmerBuilder.setDuration(this.duration); //long
-                    this.baseAlpha && _shimmerBuilder.setBaseAlpha(this.baseAlpha); //float
-                    this.intensity && _shimmerBuilder.setIntensity(this.intensity); //float
-                    this.repeatCount && _shimmerBuilder.setRepeatCount(this.repeatCount); //int
-                    this.pauseDuration && _shimmerBuilder.setRepeatDelay(this.pauseDuration); //long
-                    this.shimmeringDirection && _shimmerBuilder.setDirection(this.shimmeringDirection); //ENUM int
-                    this.tilt && _shimmerBuilder.setTilt(this.tilt); //float
+                    _duration && _shimmerBuilder.setDuration(_duration); //long
+                    _intensity && _shimmerBuilder.setIntensity(_intensity); //float
+                    _repeatCount && _shimmerBuilder.setRepeatCount(_repeatCount); //int
+                    _repeatDelay && _shimmerBuilder.setRepeatDelay(_repeatDelay); //long
+                    _direction && _shimmerBuilder.setDirection(_direction); //ENUM int
+                    _tilt && _shimmerBuilder.setTilt(_tilt); //float
                     if (shimmerEnum === ShimmerFlexLayout.Android.Shimmer.ColorHighlight) {
-                        this.highlightColor && _shimmerBuilder.setHighlightColor(this.highlightColor.nativeObject); //Color int
-                        this.baseColor && _shimmerBuilder.setBaseColor(this.baseColor.nativeObject); //Color int
-                        this.highlightAlpha && _shimmerBuilder.setHighlightAlpha(this.highlightAlpha); //float
+                        _highlightColor && _shimmerBuilder.setHighlightColor(_highlightColor.nativeObject); //Color int
+                        _baseColor && _shimmerBuilder.setBaseColor(_baseColor.nativeObject); //Color int
                     }
-                    this.nativeObject.setShimmer(_shimmerBuilder.build());
+                    _highlightAlpha && _shimmerBuilder.setHighlightAlpha(_highlightAlpha); //float
+                    _baseAlpha && _shimmerBuilder.setBaseAlpha(_baseAlpha); //float
+
+                    self.nativeObject.setShimmer(_shimmerBuilder.build());
                 },
                 enumerable: true
             },
