@@ -65,6 +65,7 @@ ShimmerFlexLayout.duration;
  * 
  * @property {Number} baseAlpha
  * @android
+ * @ios
  * @since 3.1.3
  */
 ShimmerFlexLayout.baseAlpha;
@@ -93,11 +94,12 @@ ShimmerFlexLayout.repeatCount;
 /**
  * Set animation repeat delay.
  * 
- * @property {Number} repeatDelay
+ * @property {Number} pauseDuration
  * @android
+ * @ios
  * @since 3.1.3
  */
-ShimmerFlexLayout.repeatDelay;
+ShimmerFlexLayout.pauseDuration;
 
 
 /**
@@ -121,7 +123,7 @@ ShimmerFlexLayout.tilt;
 
 
 /**
- * Set the shimmer's highlight color.
+ * Set the shimmer's highlight color. This property must be used if given shimmer is {UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight}.
  * 
  * @property {UI.Color} highlightColor
  * @android
@@ -130,7 +132,7 @@ ShimmerFlexLayout.tilt;
 ShimmerFlexLayout.highlightColor;
 
 /**
- * Set base  color of content.
+ * Set base  color of content. This property must be used if given shimmer is {UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight}.
  * 
  * @property {UI.Color} baseColor
  * @android
@@ -146,3 +148,62 @@ ShimmerFlexLayout.baseColor;
  * @since 3.1.3
  */
 ShimmerFlexLayout.highlightAlpha;
+
+
+/**
+ * Android Specific Properties.
+ * @class UI.ShimmerFlexLayout.Android
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android ={}
+
+/** 
+ * @enum UI.ShimmerFlexLayout.Android.ShimmerDirection
+ * @since 3.1.3
+ * 
+ * This enums are used to identify the direction of shimmer sweep.
+ */
+ShimmerFlexLayout.Android.ShimmerDirection = {};
+
+
+/**
+ * Highlight sweeps from  bottom to top.
+ *
+ * @property BOTTOM_TO_TOP
+ * @static
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.ShimmerDirection.BOTTOM_TO_TOP;
+
+/**
+ * Highlight sweeps from right to left.
+ *
+ * @property RIGHT_TO_LEFT
+ * @static
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.ShimmerDirection.RIGHT_TO_LEFT;
+
+
+/**
+ * Highlight sweeps from top to bottom.
+ *
+ * @property TOP_TO_BOTTOM
+ * @static
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.ShimmerDirection.TOP_TO_BOTTOM;
+
+
+/**
+ * Highlight sweeps from left to right.
+ *
+ * @property LEFT_TO_RIGHT
+ * @static
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.ShimmerDirection.LEFT_TO_RIGHT;

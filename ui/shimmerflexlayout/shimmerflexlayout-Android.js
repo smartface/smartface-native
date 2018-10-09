@@ -120,7 +120,7 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'repeatDelay': {
+            'pauseDuration': {
                 get: function() {
                     return _repeatDelay;
                 },
@@ -187,11 +187,12 @@ const ShimmerFlexLayout = extend(View)(
                 enumerable: true
             }
         });
-        
-        /*
-        Defaults;
-        autoStart
-        */
+
+
+        //Defaults;
+        this.nativeObject.setAutoStart(false);
+        this.nativeObject.baseAlpha = 1;
+
 
         function shimmerBuilder(shimmerEnum) {
             switch (shimmerEnum) {
