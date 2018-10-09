@@ -34,7 +34,7 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'startShimmer': {
+            'startShimmering': {
                 value: function() {
                     this.nativeObject.startShimmer()
                 },
@@ -46,13 +46,13 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'stopShimmer': {
+            'stopShimmering': {
                 value: function() {
                     this.nativeObject.stopShimmer()
                 },
                 enumerable: true
             },
-            'shimmer': {
+            'build': {
                 get: function() {
                     return _shimmerEnum;
                 },
@@ -189,11 +189,17 @@ const ShimmerFlexLayout = extend(View)(
         });
 
 
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+
         //Defaults;
         this.nativeObject.setAutoStart(false);
         this.nativeObject.baseAlpha = 1;
         this.nativeObject.pauseDuration = 0.4 * 1000;
-
 
         function shimmerBuilder(shimmerEnum) {
             switch (shimmerEnum) {
@@ -222,6 +228,6 @@ ShimmerFlexLayout.ShimmeringDirection = {
     LEFT: 2,
     BOTTOM: 1
 };
-Object.freeze(ShimmerFlexLayout.Android.ShimmeringDirection);
+Object.freeze(ShimmerFlexLayout.ShimmeringDirection);
 
 module.exports = ShimmerFlexLayout;
