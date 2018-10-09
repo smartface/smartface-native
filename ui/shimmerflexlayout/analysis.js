@@ -28,6 +28,16 @@ ShimmerFlexLayout.startShimmer;
 ShimmerFlexLayout.stopShimmer;
 
 /**
+ * Assign the content flexlayout for shimmering. 
+ * 
+ * @property {UI.FlexLayout} contentLayout
+ * @ios
+ * @android
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.contentLayout;
+
+/**
  * Gives information about whether the shimmer animation started or not. 
  * 
  * @property {Boolean} isShimmering
@@ -103,13 +113,13 @@ ShimmerFlexLayout.pauseDuration;
 
 
 /**
- * The travel direction of the shimmer highlight: left to right, top to bottom, right to left or bottom to top.
+ * The travel direction of the shimmer: left to right, top to bottom, right to left or bottom to top.
  * 
- * @property {UI.ShimmerFlexLayout.Android.ShimmerDirection} direction
+ * @property {UI.ShimmerFlexLayout.Android.ShimmerDirection} shimmeringDirection
  * @android
  * @since 3.1.3
  */
-ShimmerFlexLayout.direction;
+ShimmerFlexLayout.shimmeringDirection;
 
 
 /**
@@ -158,52 +168,93 @@ ShimmerFlexLayout.highlightAlpha;
 ShimmerFlexLayout.Android ={}
 
 /** 
- * @enum UI.ShimmerFlexLayout.Android.ShimmerDirection
+ * @enum UI.ShimmerFlexLayout.Android.ShimmeringDirection
  * @since 3.1.3
  * 
  * This enums are used to identify the direction of shimmer sweep.
  */
-ShimmerFlexLayout.Android.ShimmerDirection = {};
+ShimmerFlexLayout.Android.ShimmeringDirection = {};
 
 
 /**
  * Highlight sweeps from  bottom to top.
  *
- * @property BOTTOM_TO_TOP
+ * @property TOP
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.Android.ShimmerDirection.BOTTOM_TO_TOP;
+ShimmerFlexLayout.ShimmeringDirection.TOP;
 
 /**
  * Highlight sweeps from right to left.
  *
- * @property RIGHT_TO_LEFT
+ * @property LEFT
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.Android.ShimmerDirection.RIGHT_TO_LEFT;
+ShimmerFlexLayout.ShimmeringDirection.LEFT;
 
 
 /**
  * Highlight sweeps from top to bottom.
  *
- * @property TOP_TO_BOTTOM
+ * @property BOTTOM
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.Android.ShimmerDirection.TOP_TO_BOTTOM;
+ShimmerFlexLayout.ShimmeringDirection.BOTTOM;
 
 
 /**
  * Highlight sweeps from left to right.
  *
- * @property LEFT_TO_RIGHT
+ * @property RIGHT
  * @static
+ * @android
+ * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.Android.ShimmerDirection.LEFT_TO_RIGHT;
+ShimmerFlexLayout.ShimmeringDirection.RIGHT;
+
+
+/** 
+ * @enum UI.ShimmerFlexLayout.Android.Shimmer
+ * @since 3.1.3
+ * 
+ * This enums are used to identify shimmer type that can be either color or alpha .
+ */
+ShimmerFlexLayout.Android.Shimmer = {};
+
+
+/**
+ * The shimmer will be specified alpha.
+ *
+ * @property AlphaHighlight
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.Shimmer.AlphaHighlight;
+
+
+/**
+ * The shimmer will be specified color.
+ *
+ * @property ColorHighlight
+ * @static
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+ShimmerFlexLayout.Android.Shimmer.ColorHighlight;
