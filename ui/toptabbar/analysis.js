@@ -17,13 +17,31 @@ function TopTabBar(params){}
 TopTabBar.prototype.swipeView = null;
 
 /**
- * Gets the divider of the TopTabBar.
- * @property {Divider} divider
+ * Gets the divider color of the TopTabBar.
+ * @property {UI.Color} [dividerColor = UI.Color.BLACK]
  * @android
  * @ios
  * @since 3.2.0
  */
-TopTabBar.prototype.divider = null;
+TopTabBar.prototype.dividerColor = Color.BLACK;
+
+/**
+ * Gets the divider padding of the TopTabBar.
+ * @property {Number} [dividerPadding = 0]
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+TopTabBar.prototype.dividerPadding = 0;
+
+/**
+ * Gets the divider width of the TopTabBar.
+ * @property {Number} [dividerWidth = 0]
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+TopTabBar.prototype.dividerWidth = 0;
 
 /**
  * Gets the swipe view of the TopTabBar.
