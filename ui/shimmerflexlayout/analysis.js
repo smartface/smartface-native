@@ -179,7 +179,7 @@ ShimmerFlexLayout.tilt;
 
 
 /**
- * Set the shimmer's highlight color. This property must be used if given shimmer is {UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight}.
+ * Set the shimmer's highlight color. This property must be used if given shimmer is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
  * 
  * @property {UI.Color} highlightColor
  * @android
@@ -188,7 +188,7 @@ ShimmerFlexLayout.tilt;
 ShimmerFlexLayout.highlightColor;
 
 /**
- * Set base  color of content. This property must be used if given shimmer is {UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight}.
+ * Set base  color of content. This property must be used if given shimmer is UI.ShimmerFlexLayout.Android.Shimmer.ColorHighlight
  * 
  * @property {UI.Color} baseColor
  * @android
