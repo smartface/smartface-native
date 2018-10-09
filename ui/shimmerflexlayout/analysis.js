@@ -1,5 +1,5 @@
 /**
- * @class ShimmerFlexLayout
+ * @class UI.ShimmerFlexLayout
  * @since 3.1.3
  * 
  * This class provides an easy way to add a shimmer effect to any view in your app.
@@ -226,14 +226,14 @@ ShimmerFlexLayout.ShimmeringDirection = {};
 /**
  * Highlight sweeps from  bottom to top.
  *
- * @property TOP
+ * @property UP
  * @static
  * @android
  * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.ShimmeringDirection.TOP;
+ShimmerFlexLayout.ShimmeringDirection.UP;
 
 /**
  * Highlight sweeps from right to left.
@@ -251,14 +251,14 @@ ShimmerFlexLayout.ShimmeringDirection.LEFT;
 /**
  * Highlight sweeps from top to bottom.
  *
- * @property BOTTOM
+ * @property DOWN
  * @static
  * @android
  * @ios
  * @readonly
  * @since 3.1.3
  */
-ShimmerFlexLayout.ShimmeringDirection.BOTTOM;
+ShimmerFlexLayout.ShimmeringDirection.DOWN;
 
 
 /**
