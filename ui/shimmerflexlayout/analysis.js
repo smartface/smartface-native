@@ -194,18 +194,18 @@ ShimmerFlexLayout.animationAlpha;
 ShimmerFlexLayout.speed;
 
 /**
- * The duration of the fade used when shimmer begins. Defaults to 0.1.
+ * The duration of the fade used when shimmer begins. Defaults to 100.
  * 
- * @property {Number} [beginFadeDuration = 0.1]
+ * @property {Number} [beginFadeDuration = 100]
  * @ios
  * @since 3.1.3
  */
 ShimmerFlexLayout.beginFadeDuration;
 
 /**
- * The duration of the fade used when shimmer ends. Defaults to 0.3.
+ * The duration of the fade used when shimmer ends. Defaults to 300.
  * 
- * @property {Number} [endFadeDuration = 0.3]
+ * @property {Number} [endFadeDuration = 300]
  * @ios
  * @since 3.1.3
  */
@@ -214,7 +214,7 @@ ShimmerFlexLayout.endFadeDuration;
 /**
  * Set animation repeat delay.
  * 
- * @property {Number} [pauseDuration = 0.4]
+ * @property {Number} [pauseDuration = 400]
  * @android
  * @ios
  * @since 3.1.3

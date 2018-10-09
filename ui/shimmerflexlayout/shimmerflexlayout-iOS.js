@@ -109,20 +109,20 @@ const ShimmerFlexLayout = extend(View)(
         
         Object.defineProperty(this.ios, 'beginFadeDuration', {
             get: function() {
-                return self.nativeObject.shimmeringBeginFadeDuration;
+                return self.nativeObject.shimmeringBeginFadeDuration * 1000;
             },
             set: function(value){
-                self.nativeObject.shimmeringBeginFadeDuration = value;
+                self.nativeObject.shimmeringBeginFadeDuration = (value / 1000);
             },
             enumerable: true
         });
         
         Object.defineProperty(this.ios, 'endFadeDuration', {
             get: function() {
-                return self.nativeObject.shimmeringEndFadeDuration;
+                return self.nativeObject.shimmeringEndFadeDuration * 1000;
             },
             set: function(value){
-                self.nativeObject.shimmeringEndFadeDuration = value;
+                self.nativeObject.shimmeringEndFadeDuration = (value / 1000);
             },
             enumerable: true
         });
