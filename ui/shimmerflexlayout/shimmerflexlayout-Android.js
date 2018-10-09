@@ -64,8 +64,8 @@ const ShimmerFlexLayout = extend(View)(
                     this.baseAlpha && _shimmerBuilder.setBaseAlpha(this.baseAlpha); //float
                     this.intensity && _shimmerBuilder.setIntensity(this.intensity); //float
                     this.repeatCount && _shimmerBuilder.setRepeatCount(this.repeatCount); //int
-                    this.repeatDelay && _shimmerBuilder.setRepeatDelay(this.repeatDelay); //long
-                    this.direction && _shimmerBuilder.setDirection(this.direction); //ENUM int
+                    this.pauseDuration && _shimmerBuilder.setRepeatDelay(this.pauseDuration); //long
+                    this.shimmeringDirection && _shimmerBuilder.setDirection(this.shimmeringDirection); //ENUM int
                     this.tilt && _shimmerBuilder.setTilt(this.tilt); //float
                     if (shimmerEnum === ShimmerFlexLayout.Android.Shimmer.ColorHighlight) {
                         this.highlightColor && _shimmerBuilder.setHighlightColor(this.highlightColor.nativeObject); //Color int
@@ -120,7 +120,7 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'repeatDelay': {
+            'pauseDuration': {
                 get: function() {
                     return _repeatDelay;
                 },
@@ -131,7 +131,7 @@ const ShimmerFlexLayout = extend(View)(
                 },
                 enumerable: true
             },
-            'direction': {
+            'shimmeringDirection': {
                 get: function() {
                     return _direction;
                 },
@@ -187,11 +187,13 @@ const ShimmerFlexLayout = extend(View)(
                 enumerable: true
             }
         });
-        
-        /*
-        Defaults;
-        autoStart
-        */
+
+
+        //Defaults;
+        this.nativeObject.setAutoStart(false);
+        this.nativeObject.baseAlpha = 1;
+        this.nativeObject.pauseDuration = 0.4 * 1000;
+
 
         function shimmerBuilder(shimmerEnum) {
             switch (shimmerEnum) {
@@ -214,12 +216,12 @@ ShimmerFlexLayout.Android.Shimmer = {
 };
 Object.freeze(ShimmerFlexLayout.Android.Shimmer);
 
-ShimmerFlexLayout.Android.ShimmerDirection = {
-    BOTTOM_TO_TOP: 3,
-    LEFT_TO_RIGHT: 0,
-    RIGHT_TO_LEFT: 2,
-    TOP_TO_BOTTOM: 1
+ShimmerFlexLayout.ShimmeringDirection = {
+    TOP: 3,
+    RIGHT: 0,
+    LEFT: 2,
+    BOTTOM: 1
 };
-Object.freeze(ShimmerFlexLayout.Android.ShimmerDirection);
+Object.freeze(ShimmerFlexLayout.Android.ShimmeringDirection);
 
 module.exports = ShimmerFlexLayout;
