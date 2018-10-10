@@ -1,10 +1,14 @@
 /**
  * @class UI.ShimmerFlexLayout
+ * @extends UI.View
  * @since 3.1.3
  * 
+ * This class provides an easy way to add a shimmer effect to  any view. It is useful as an unobtrusive loading indicator.
+ *
+ *
  *     @example
- *     const Color = require('sf-core/ui/color');
  *     const FlexLayout = require('sf-core/ui/flexlayout');
+ *     const Color = require('sf-core/ui/color');
  *    
  *     var flex = new FlexLayout();
  *     flex.flexGrow = 1;
@@ -67,8 +71,6 @@
  *    
  *     shimmer.startShimmering();
  * 
- * This class provides an easy way to add a shimmer effect to any view in your app.
- * It is useful as an unobtrusive loading indicator.
  */
 function ShimmerFlexLayout() {}
 
