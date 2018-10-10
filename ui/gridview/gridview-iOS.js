@@ -199,7 +199,7 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(sfSelf, 'scrollEnabled', {
+        Object.defineProperty(sfSelf.ios, 'scrollEnabled', {
             get: function() {
                 return sfSelf.nativeObject.valueForKey("scrollEnabled");
             },

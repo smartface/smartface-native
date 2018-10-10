@@ -227,7 +227,6 @@ ListView.prototype.verticalScrollBarEnabled = false;
  * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
  *
  * @property {Boolean} [scrollEnabled = true]
- * @android
  * @ios
  * @since 3.1.3
  */
