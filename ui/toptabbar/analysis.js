@@ -44,13 +44,31 @@ TopTabBar.prototype.dividerPadding = 0;
 TopTabBar.prototype.dividerWidth = 0;
 
 /**
- * Gets the swipe view of the TopTabBar.
- * @property {Indicator} indicator
+ * Gets/sets the indicator color of the TopTabBar.
+ * @property {UI.Color} [indicatorColor = UI.Color.create("#00A1F1")]
  * @android
  * @ios
  * @since 3.2.0
  */
-TopTabBar.prototype.indicator = null;
+TopTabBar.prototype.indicatorColor;
+
+/**
+ * Gets/sets the indicator height of the TopTabBar.
+ * @property {Number} indicatorHeight
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+TopTabBar.prototype.indicatorHeight;
+
+/**
+ * Gets/sets background color of tabs.
+ * @property {UI.Color} [backgroundColor = Color.WHITE]
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+TopTabBar.prototype.backgroundColor = Color.WHITE;
 
 /**
  * Gets/sets whether to enable scrollable tabs.
@@ -60,6 +78,15 @@ TopTabBar.prototype.indicator = null;
  * @since 3.2.0
  */
 TopTabBar.prototype.scrollEnabled = false;
+
+/**
+ * Gets/sets the selected index of TopTabBar.
+ * @property {Number} selectedIndex
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+TopTabBar.prototype.selectedIndex;
 
 /**
  * Gets/sets the text color of the tabs. You can specify text colors for the different states (normal, selected) used for the tabs.

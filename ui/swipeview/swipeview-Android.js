@@ -18,14 +18,14 @@ const SwipeView = extend(View)(
         if(!self.nativeObject) {
             var callbacks = {
                 getCount: function() {
-                    if(_itemCountCallback)
-                        return _itemCountCallback();
+                    if(_pageCount != null)
+                        return _pageCount;
                     return _pages.length;
                 },
                 getItem: function(position) {
                     var pageInstance;
-                    if(_getItemCallback) {
-                        pageInstance = _getItemCallback(position);
+                    if(_onPageCreateCallback) {
+                        pageInstance = _onPageCreateCallback(position);
                     } else if(_pageInstances[position]) {
                         return (_pageInstances[position]).nativeObject;
                     } else { // For backward compatibility
@@ -52,8 +52,8 @@ const SwipeView = extend(View)(
         var _callbackOnPageSelected;
         var _callbackOnPageStateChanged;
         var _callbackOnPageScrolled;
-        var _getItemCallback;
-        var _itemCountCallback;
+        var _onPageCreateCallback;
+        var _pageCount;
         Object.defineProperties(self, {
             "page": {
                 get: function() {
@@ -63,20 +63,20 @@ const SwipeView = extend(View)(
                     _page = page;
                 }
             },
-            "getItem": {
+            "onPageCreate": {
                 get: function() {
-                    return _getItemCallback;
+                    return _onPageCreateCallback;
                 },
                 set: function(callback) {
-                    _getItemCallback = callback;
+                    _onPageCreateCallback = callback;
                 }
             },
-            "getItemCount": {
+            "pageCount": {
                 get: function() {
-                    return _itemCountCallback;
+                    return _pageCount;
                 },
                 set: function(count) {
-                    _itemCountCallback = count;
+                    _pageCount = count;
                 }
             },
             "pages": {
