@@ -46,5 +46,6 @@ module.exports = {
     EmailComposer: require("./emailcomposer"),
     MaterialTextbox: require("./materialtextbox"),
     ShimmerFlexLayout: require("./shimmerflexlayout"),
-    Gifimage: require("./gifimage")
+    GifImage: require("./gifimage"),
+    GifImageView: require("./gifimageview")
 };
