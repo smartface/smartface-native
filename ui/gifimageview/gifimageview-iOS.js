@@ -31,47 +31,47 @@ const GifImageView = extend(ImageView)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'currentFrameIndex', {
             get: function() {
                 return self.nativeObject.currentFrameIndex;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'isAnimating', {
             get: function() {
                 return self.nativeObject.animating;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'startAnimating', {
             value: function() {
                 self.nativeObject.startAnimating();
             },
             enumerable: true
         });
- 
+
         Object.defineProperty(self, 'stopAnimating', {
             value: function() {
                 self.nativeObject.stopAnimating();
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'setLoopCompletionCallback', {
             value: function(value) {
-                var handler = function(value,loopCountRemaining){
+                var handler = function(value, loopCountRemaining) {
                     if (typeof value === 'function') {
                         value(loopCountRemaining);
                     }
-                }.bind(this,value);
+                }.bind(this, value);
                 self.nativeObject.setLoopCompletionBlockWithJSValue(handler);
             },
             enumerable: true
-        });        
-        
+        });
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
