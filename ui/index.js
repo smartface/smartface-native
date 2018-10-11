@@ -45,5 +45,6 @@ module.exports = {
     LayoutManager: require("./layoutmanager"),
     EmailComposer: require("./emailcomposer"),
     MaterialTextbox: require("./materialtextbox"),
-    ShimmerFlexLayout: require("./shimmerflexlayout")
+    ShimmerFlexLayout: require("./shimmerflexlayout"),
+    Gifimage: require("./gifimage")
 };
