@@ -1,6 +1,7 @@
 const extend = require('js-base/core/extend');
 const ImageView = require("sf-core/ui/imageview");
 const GifImage = require("sf-core/ui/gifimage");
+const Image = require("sf-core/ui/image");
 
 const GifImageView = extend(ImageView)(
     function(_super, params) {
@@ -57,7 +58,7 @@ const GifImageView = extend(ImageView)(
             },
             'currentFrame': {
                 get: function() {
-                    return self.gifImage.nativeObject.getCurrentFrame();
+                    return new Image({ bitmap: self.gifImage.nativeObject.getCurrentFrame() });
                 },
                 enumerable: true
             },
