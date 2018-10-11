@@ -60,13 +60,18 @@ const GifImageView = extend(ImageView)(
             enumerable: true
         });
 
-        Object.defineProperty(self.ios, 'setLoopCompletionCallback', {
-            value: function(value) {
-                var handler = function(value, loopCountRemaining) {
-                    if (typeof value === 'function') {
-                        value(loopCountRemaining);
+        var _loopCompletionCallback;
+        Object.defineProperty(self.ios, 'loopCompletionCallback', {
+            get: function() {
+                return _loopCompletionCallback
+            },
+            set: function(value) {
+                _loopCompletionCallback = value;
+                var handler = function(_loopCompletionCallback, loopCountRemaining) {
+                    if (typeof _loopCompletionCallback === 'function') {
+                        _loopCompletionCallback(loopCountRemaining);
                     }
-                }.bind(this, value);
+                }.bind(this, _loopCompletionCallback);
                 self.nativeObject.setLoopCompletionBlockWithJSValue(handler);
             },
             enumerable: true
