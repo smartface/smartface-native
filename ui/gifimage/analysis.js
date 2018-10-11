@@ -1,5 +1,5 @@
 /**
- * @class UI.Gifimage
+ * @class UI.GifImage
  * @since 3.1.3
  * 
  * Image is used to store the image data read from the filesystem.
@@ -18,7 +18,7 @@
  *     myPage.layout.addChild(myImageView);
  *     
  */
-function Gifimage(params) {}
+function GifImage(params) {}
 
 
-module.exports = Gifimage;
+module.exports = GifImage;
