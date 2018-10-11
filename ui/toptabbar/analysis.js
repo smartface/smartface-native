@@ -78,13 +78,13 @@ TopTabBar.prototype.indicatorColor;
 TopTabBar.prototype.indicatorHeight;
 
 /**
- * Gets/sets background color of tabs.
- * @property {UI.Color} [backgroundColor = Color.WHITE]
+ * Gets/sets bar color of tabs.
+ * @property {UI.Color} [barColor = Color.WHITE]
  * @android
  * @ios
  * @since 3.2.0
  */
-TopTabBar.prototype.backgroundColor = Color.WHITE;
+TopTabBar.prototype.barColor = Color.WHITE;
 
 /**
  * Gets/sets whether to enable scrollable tabs.
