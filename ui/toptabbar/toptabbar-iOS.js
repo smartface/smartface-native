@@ -102,6 +102,18 @@ const TopTabBarPage = extend(Page)(
             enumerable: true,configurable : true
         });
         
+        Object.defineProperty(self,'indicatorHeight', {
+            get: function() {
+                return self.nativeObject.indicatorHeight;
+            },
+            set: function(value) {
+                if (typeof value === "number") {
+                    self.nativeObject.indicatorHeight = value;
+                }
+            },
+            enumerable: true,configurable : true
+        });
+        
         Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.scrollEnabled;
