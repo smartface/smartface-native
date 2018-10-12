@@ -3,7 +3,7 @@ const Page = require('sf-core/ui/page');
 const Color = require('sf-core/ui/color');
 const UITabBarItem = SF.requireClass("UITabBarItem");
 
-const TopTabBarPage = extend(Page)(
+const TabBarController = extend(Page)(
     function (_super, params) {
         
         var self = this;
@@ -222,4 +222,4 @@ const TopTabBarPage = extend(Page)(
     }
 );
 
-module.exports = TopTabBarPage;
+module.exports = TabBarController;
