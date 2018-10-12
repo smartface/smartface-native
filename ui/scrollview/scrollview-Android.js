@@ -105,10 +105,9 @@ const ScrollView = extend(ViewGroup)(
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         var _animate = animate;
-                        if (typeof(animate) === "undefined") {
+                        if (typeof(_animate) === "undefined") {
                             _animate = true;
                         }
-
                         (ScrollView.Align.HORIZONTAL === _align) && (_animate ? this.nativeObject.smoothScrollTo(coordinate, 0) : this.nativeObject.scrollTo(coordinate, 0));
                         (ScrollView.Align.VERTICAL === _align) && (_animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate));
                     }

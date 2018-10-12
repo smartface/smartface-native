@@ -779,6 +779,7 @@ function Page(params) {
     function setBottomTabBarOnClickListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
+                self.onHide && self.onHide();
                 var tab = self.parentTab;
                 var fragment;
                 const Navigator = require("../navigator");
