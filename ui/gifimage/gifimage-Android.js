@@ -1,16 +1,9 @@
 const NativeGifDrawable = requireClass("pl.droidsonroids.gif.GifDrawable");
-const NativeBitmap = requireClass("android.graphics.Bitmap");
-const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
 const FileStream = require('../../io/filestream');
 const File = require('../../io/file');
 const Blob = require('../../blob');
 const Image = require('sf-core/ui/image');
-
-const CompressFormat = [
-    NativeBitmap.CompressFormat.JPEG,
-    NativeBitmap.CompressFormat.PNG,
-];
 
 function GifImage(params) {
     const self = this;
@@ -60,7 +53,13 @@ function GifImage(params) {
         },
         'toBlob': {
             value: function() {
-                return self.blob;
+                if (self.content instanceof File) {
+                    var myFileStream = self.content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
+                    return myFileStream.readToEnd();
+                }
+                else if (self.content instanceof Blob) {
+                    return self.content;
+                }
             },
             enumerable: true
         }
@@ -101,24 +100,6 @@ function GifImage(params) {
         }
     });
 
-    function bitmapConverter(drawable) {
-        const NativeCanvas = requireClass("android.graphics.Canvas");
-        const NativeBitmap = requireClass("android.graphics.Bitmap");
-
-        var bitmap = null;
-        if (drawable.getIntrinsicHeight() <= 0 || drawable.getIntrinsicWidth() <= 0) {
-            bitmap = NativeBitmap.createBitmap(1, 1, NativeBitmap.Config.ARGB_8888);
-        }
-        else {
-            bitmap = NativeBitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), NativeBitmap.Config.ARGB_8888);
-        }
-        var nativeCanvas = new NativeCanvas(bitmap);
-        drawable.setBounds(0, 0, nativeCanvas.getWidth(), nativeCanvas.getHeight());
-        drawable.draw(nativeCanvas);
-
-        return bitmap;
-    }
-
     self.ios = {};
     self.ios.getDelayTimesForIndexes = function() {}
 };
@@ -128,9 +109,7 @@ GifImage.createFromFile = function(pathOrFile) {
         pathOrFile = new File({ path: pathOrFile });
 
     if (pathOrFile && pathOrFile.nativeObject) {
-        var myFileStream = pathOrFile.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-        var blob = myFileStream.readToEnd()
-        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), blob: blob });
+        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), content: pathOrFile });
     }
     else
         return null;
@@ -138,7 +117,7 @@ GifImage.createFromFile = function(pathOrFile) {
 GifImage.createFromBlob = function(blob) {
     var byteArray = blob.nativeObject.toByteArray();
     if (byteArray)
-        return new GifImage({ drawable: new NativeGifDrawable(byteArray), blob: blob });
+        return new GifImage({ drawable: new NativeGifDrawable(byteArray), content: blob });
     return null;
 }
 
