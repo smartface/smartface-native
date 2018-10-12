@@ -67,7 +67,7 @@ function GifImage(params) {
     });
 
     self.android = {};
-    var _seekPosition, _speed, _seekFrame;
+    var _seekPosition, _speed;
     Object.defineProperties(self.android, {
         'reset': {
             value: function() {
@@ -84,18 +84,6 @@ function GifImage(params) {
                     return;
                 _seekPosition = seekPosition
                 self.nativeObject.seekTo(seekPosition);
-            },
-            enumerable: true
-        },
-        'seekToFrame': {
-            get: function() {
-                return _seekFrame;
-            },
-            set: function(seekFrame) {
-                if (typeof _seekFrame !== "number")
-                    return;
-                _seekFrame = seekFrame
-                self.nativeObject.seekToFrame(_seekFrame);
             },
             enumerable: true
         },
@@ -141,7 +129,8 @@ GifImage.createFromFile = function(pathOrFile) {
 
     if (pathOrFile && pathOrFile.nativeObject) {
         var myFileStream = pathOrFile.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
-        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), blob: myFileStream.readToEnd() });
+        var blob = myFileStream.readToEnd()
+        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), blob: blob });
     }
     else
         return null;

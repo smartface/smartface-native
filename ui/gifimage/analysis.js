@@ -127,4 +127,31 @@ GifImage.prototype.toBlob = function() {};
  */
 GifImage.prototype.getDelayTimesForIndexes = function() {};
 
+/**
+ * Restarts the GifImage.
+ *
+ * @method reset
+ * @android
+ * @since 3.1.3
+ */
+GifImage.prototype.reset = function() {};
+
+/**
+ * Seeks animation to given absolute position.
+ * 
+ * @property {Number} seekTo 
+ * @android
+ * @since 3.1.3
+ */
+GifImage.prototype.seekTo;
+
+/**
+ * Sets/Gets new animation speed factor. For example, set 2 to speed up double into current speed.
+ * 
+ * @property {Number} speed 
+ * @android
+ * @since 3.1.3
+ */
+GifImage.prototype.speed;
+
 module.exports = GifImage;
