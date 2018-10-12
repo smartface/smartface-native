@@ -8,7 +8,8 @@ function GifImage(params) {
     var self = this;
     self.ios = {};
     self.android = {};
-
+    self.android.reset = function(){};
+    
     self.nativeObject = params.nativeObject;
 
     Object.defineProperty(self, 'loopCount', {
