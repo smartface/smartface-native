@@ -18,12 +18,13 @@ function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
-const TopTabBar = extend(Page)(
+const TabBarController = extend(Page)(
     function(_super, params) {
         var self = this;
         _super(self);
 
-        var _onPageCreateCallback;
+        var _onPageCreateCallback,
+            _onSelectedCallback;
         var _items = [];
         var _overScrollMode = 0;
         var _scrollEnabled = false;
@@ -55,12 +56,22 @@ const TopTabBar = extend(Page)(
             pageCount: params.items.length
         });
         this.android = {};
-
+        
         this.tabLayout.nativeObject.setupWithViewPager(this.swipeView.nativeObject);
         this.layout.addChild(this.tabLayout);
         this.layout.addChild(this.swipeView);
 
         Object.defineProperties(this, {
+            "onSelected": {
+                get: function() {
+                    return _onSelectedCallback;
+                },
+                set: function(callback) {
+                    _onSelectedCallback = callback;
+                },
+                enumerable: true,
+                configurable: true
+            },
             "barHeight": {
                 get: function() {
                     return PixelToDp(this.tabLayout.getHeight());
@@ -177,7 +188,7 @@ const TopTabBar = extend(Page)(
                     return _items;
                 },
                 set: function(itemArray) {
-                    console.log("Set items TopTabBar");
+                    console.log("Set items TabBarController");
                     // TODO: Add setting title and icon dynamically.
                     // TODO: Add string path for icon like UI.HeaderBarItem
                     _items = itemArray;
@@ -269,6 +280,7 @@ const TopTabBar = extend(Page)(
 
         var listener = NativeTabLayout.OnTabSelectedListener.implement({
             onTabSelected: function(tab) {
+                self.onSelected && self.onSelected(tab.getPosition());
                 if (!self.iconColor)
                     return;
 
@@ -298,4 +310,4 @@ const TopTabBar = extend(Page)(
     }
 );
 
-module.exports = TopTabBar;
+module.exports = TabBarController;
