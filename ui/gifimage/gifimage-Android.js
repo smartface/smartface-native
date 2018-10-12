@@ -2,15 +2,17 @@ const NativeGifDrawable = requireClass("pl.droidsonroids.gif.GifDrawable");
 const NativeBitmap = requireClass("android.graphics.Bitmap");
 const NativeByteArrayOutputStream = requireClass("java.io.ByteArrayOutputStream");
 
+const FileStream = require('../../io/filestream');
 const File = require('../../io/file');
 const Blob = require('../../blob');
 const Image = require('sf-core/ui/image');
 
 const CompressFormat = [
     NativeBitmap.CompressFormat.JPEG,
-    NativeBitmap.CompressFormat.PNG
+    NativeBitmap.CompressFormat.PNG,
 ];
-const GifImage = function(params) {
+
+function GifImage(params) {
     const self = this;
 
     if (params && params.drawable)
@@ -58,10 +60,7 @@ const GifImage = function(params) {
         },
         'toBlob': {
             value: function() {
-                var bitmap = self.nativeObject.getBitmap();
-                var stream = new NativeByteArrayOutputStream();
-                bitmap.compress(CompressFormat[1], 100, stream);
-                return new Blob(stream.toByteArray(), { type: "image" });
+                return self.blob;
             },
             enumerable: true
         }
@@ -114,27 +113,43 @@ const GifImage = function(params) {
         }
     });
 
+    function bitmapConverter(drawable) {
+        const NativeCanvas = requireClass("android.graphics.Canvas");
+        const NativeBitmap = requireClass("android.graphics.Bitmap");
+
+        var bitmap = null;
+        if (drawable.getIntrinsicHeight() <= 0 || drawable.getIntrinsicWidth() <= 0) {
+            bitmap = NativeBitmap.createBitmap(1, 1, NativeBitmap.Config.ARGB_8888);
+        }
+        else {
+            bitmap = NativeBitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), NativeBitmap.Config.ARGB_8888);
+        }
+        var nativeCanvas = new NativeCanvas(bitmap);
+        drawable.setBounds(0, 0, nativeCanvas.getWidth(), nativeCanvas.getHeight());
+        drawable.draw(nativeCanvas);
+
+        return bitmap;
+    }
+
     self.ios = {};
     self.ios.getDelayTimesForIndexes = function() {}
 };
 
-
 GifImage.createFromFile = function(pathOrFile) {
-    if (pathOrFile instanceof File) {
-        return new GifImage({ drawable: GifImage(new NativeGifDrawable(pathOrFile)) });
+    if (typeof pathOrFile === "string")
+        pathOrFile = new File({ path: pathOrFile });
+
+    if (pathOrFile && pathOrFile.nativeObject) {
+        var myFileStream = pathOrFile.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
+        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), blob: myFileStream.readToEnd() });
     }
-    else {
-        var imageFile = new File({ path: pathOrFile });
-        if (imageFile && imageFile.nativeObject) {
-            return new GifImage({ drawable: GifImage(new NativeGifDrawable(imageFile)) });
-        }
-    }
-    return null;
+    else
+        return null;
 }
 GifImage.createFromBlob = function(blob) {
     var byteArray = blob.nativeObject.toByteArray();
     if (byteArray)
-        return new GifImage({ drawable: GifImage(new NativeGifDrawable(byteArray)) });
+        return new GifImage({ drawable: new NativeGifDrawable(byteArray), blob: blob });
     return null;
 }
 

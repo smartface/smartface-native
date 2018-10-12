@@ -27,6 +27,7 @@ const GifImageView = extend(ImageView)(
                     if (!value instanceof GifImage)
                         return;
                     _image = value;
+                    this.nativeObject.setImageDrawable(null);
                     this.nativeObject.setImageDrawable(_image.nativeObject);
                 },
                 enumerable: true
@@ -37,16 +38,9 @@ const GifImageView = extend(ImageView)(
                 },
                 enumerable: true
             },
-            'stopAnimation': {
-                get: function() {
-                    return _image;
-                },
-                set: function(value) {
-                    // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (!value instanceof GifImage)
-                        return;
-                    _image = value;
-                    this.nativeObject.setImageDrawable(_image.nativeObject);
+            'stopAnimating': {
+                value: function() {
+                    self.gifImage.nativeObject.stop();
                 },
                 enumerable: true
             },
@@ -70,7 +64,7 @@ const GifImageView = extend(ImageView)(
             }
         });
 
-        self.ios.setLoopCompletionCallback = function() {}
+        self.ios = {};
     }
 );
 
