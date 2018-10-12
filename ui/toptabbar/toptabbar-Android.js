@@ -15,6 +15,7 @@ const extend = require('js-base/core/extend');
 const ModeSRC_IN = PorterDuff.Mode.SRC_IN;
 
 function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
+
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 const TopTabBar = extend(Page)(
@@ -23,32 +24,32 @@ const TopTabBar = extend(Page)(
         _super(self);
 
         var _onPageCreateCallback;
+        var _items = [];
+        var _overScrollMode = 0;
         var _scrollEnabled = false;
         var _dividerWidth = 0,
             _dividerPadding = 0,
             _dividerColor = Color.BLACK;
-        var _barColor = Color.WHITE;
-        var _textColor = Color.BLACK; // TODO: Get default value from native
-        var _indicatorColor = Color.create("#00A1F1");
-        var _iconColor;
-        var _indicatorHeight;
-        var _items = [];
-        
-        this.tabLayout = new NativeTabLayout(AndroidConfig.activity);
-        this.yogaNode = new NativeYogaNode();
+        var _barColor = Color.WHITE,
+            _textColor = Color.BLACK, // TODO: Get default value from native
+            _iconColor;
+        var _indicatorHeight,
+            _indicatorColor = Color.create("#00A1F1");
+            
+        this.tabLayout = {};
+        this.tabLayout.nativeObject = new NativeTabLayout(AndroidConfig.activity);
+        this.tabLayout.yogaNode = new NativeYogaNode();
         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
         this.divider = this.tabLayout.nativeObject.getChildAt(0);
-        
+
         this.dividerDrawable;
         this.swipeView = new SwipeView({
             page: self,
             flexGrow: 1,
             onPageCreate: function(position) {
-                if(!_onPageCreateCallback) {
-                    alert("_onPageCreateCallback not found!");
+                if (!_onPageCreateCallback) {
                     return null;
                 }
-                console.log("getItem: " + position);
                 return _onPageCreateCallback(position);
             },
             pageCount: params.items.length
@@ -94,8 +95,8 @@ const TopTabBar = extend(Page)(
                 },
                 set: function(color) {
                     _textColor = color;
-                    var normalColor = (color instanceof Color)? color : color.normal;
-                    var selectedColor = (color instanceof Color)? color : color.selected;
+                    var normalColor = (color instanceof Color) ? color : color.normal;
+                    var selectedColor = (color instanceof Color) ? color : color.selected;
                     this.tabLayout.nativeObject.setTabTextColors(normalColor.nativeObject, selectedColor.nativeObject);
                 },
                 enumerable: true,
@@ -107,13 +108,14 @@ const TopTabBar = extend(Page)(
                 },
                 set: function(color) {
                     _iconColor = color;
-                    var normalColor = (color instanceof Color)? color : color.normal;
-                    var selectedColor = (color instanceof Color)? color : color.selected;
+                    var normalColor = (color instanceof Color) ? color : color.normal;
+                    var selectedColor = (color instanceof Color) ? color : color.selected;
                     for (var i = 0; i < _items.length; i++) {
                         var tabIcon = this.tabLayout.nativeObject.getTabAt(i).getIcon();
-                        if(i === this.selectedIndex) {
+                        if (i === this.selectedIndex) {
                             tabIcon && (tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN));
-                        } else {
+                        }
+                        else {
                             tabIcon && (tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN));
                         }
                     }
@@ -242,7 +244,20 @@ const TopTabBar = extend(Page)(
                 enumerable: true,
                 configurable: true
             },
+            "overScrollMode": {
+                get: function() {
+                    return _overScrollMode;
+                },
+                set: function(mode) {
+                    _overScrollMode = mode;
+                    self.swipeView.android.overScrollMode = mode;
+                    self.tabLayout.nativeObject.setOverScrollMode(mode);
+                },
+                enumerable: true,
+                configurable: true
+            },
         });
+        
         this.setSelectedIndex = function(index, animated) {
             self.swipeView.swipeToIndex(index, animated);
         };
@@ -257,7 +272,7 @@ const TopTabBar = extend(Page)(
                 if (!self.iconColor)
                     return;
 
-                var selectedColor = ((self.iconColor) instanceof Color)? self.iconColor : self.iconColor.selected;
+                var selectedColor = ((self.iconColor) instanceof Color) ? self.iconColor : self.iconColor.selected;
                 var tabIcon = tab.getIcon();
                 tabIcon && (tabIcon.setColorFilter(selectedColor.nativeObject, ModeSRC_IN));
 
@@ -266,7 +281,7 @@ const TopTabBar = extend(Page)(
                 if (!self.iconColor)
                     return;
 
-                var normalColor = ((self.iconColor) instanceof Color)? self.iconColor : self.iconColor.normal;
+                var normalColor = ((self.iconColor) instanceof Color) ? self.iconColor : self.iconColor.normal;
                 var tabIcon = tab.getIcon();
                 tabIcon && (tabIcon.setColorFilter(normalColor.nativeObject, ModeSRC_IN));
             },

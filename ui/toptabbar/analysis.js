@@ -77,6 +77,18 @@ TopTabBar.prototype.indicatorColor;
  */
 TopTabBar.prototype.indicatorHeight;
 
+
+
+
+/**
+ * Gets/sets over-scroll mode for top tab bar.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.2.0
+ */
+TopTabBar.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
 /**
  * Gets/sets bar color of tabs.
  * @property {UI.Color} [barColor = Color.WHITE]
