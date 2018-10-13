@@ -8,7 +8,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
-const NativeLinearLayoutManager = requireClass("android.support.v7.widget.LinearLayoutManager");
+const NativeLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
@@ -127,6 +127,7 @@ const ListView = extend(View)(
         var _itemCount = 0;
         var _contentInset = {};
         var _onScrollListener;
+        var _scrollEnabled;
         Object.defineProperties(this, {
             // properties
             'listViewItemByIndex': {
@@ -145,6 +146,18 @@ const ListView = extend(View)(
                 set: function(rowHeight) {
                     if (TypeUtil.isNumeric(rowHeight)) {
                         _rowHeight = rowHeight;
+                    }
+                },
+                enumerable: true
+            },
+            'scrollEnabled':  {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(isScrollEnabled) {
+                    if (TypeUtil.isBoolean(isScrollEnabled)) {
+                        _scrollEnabled = isScrollEnabled;
+                        this.nativeInner.getLayoutManager().setCanScrollVerically(isScrollEnabled);
                     }
                 },
                 enumerable: true

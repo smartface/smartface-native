@@ -228,7 +228,8 @@ ListView.prototype.verticalScrollBarEnabled = false;
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.1.3
+ * @android
+ * @since 3.2.0
  */
 ListView.prototype.scrollEnabled = false;
 
