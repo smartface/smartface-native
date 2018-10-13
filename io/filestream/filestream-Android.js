@@ -180,8 +180,9 @@ function FileStream(params) {
                     return fileContent;
                 }
                 else {
-                    const NativeIOUtils = requireClass("org.apache.commons.io.IOUtils");
-                    var bytes = NativeIOUtils.toByteArray(this.nativeObject);
+                    const NativeFileUtil = requireClass("io.smartface.android.utils.FileUtil");
+                    // toByteArray method handle large files by copying the bytes into blocks of 4KiB.
+                    var bytes = NativeFileUtil.toByteArray(this.nativeObject);
                     return new Blob(bytes, { type: "file" });
                 }
             },
