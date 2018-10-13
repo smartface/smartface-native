@@ -3,7 +3,72 @@
  * @extends UI.Page
  * @since 3.2.0
  * 
- * This class extends from {@link UI.Page Page}. But you shouldn't use directly layout of the top tab bar.
+ * This class extends from {@link UI.Page Page}. But you shouldn't use directly layout of the {@link UI.TabBarController TabBarController}.
+ * {@link UI.TabBarController#items items} property must be given in constructor.
+ * 
+ *     @example
+ *     const extend = require("js-base/core/extend");
+ *     const TabBarController = require('sf-core/ui/tabbarcontroller');
+ *     const Color = require('sf-core/ui/color');
+ *     const TabBarItem = require('sf-core/ui/tabbaritem');
+ *     const Page = require('sf-core/ui/page');
+ *     
+ *     const backgroundColors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
+ *     const SamplePage = extend(Page)(
+ *         function(_super, params) {
+ *             _super(this, params);
+ *         }
+ *     );
+ *     
+ *     var TabBarController1 = extend(TabBarController)(
+ *         function(_super, params) {
+ *             _super(this, {
+ *                 items: createTabBarItems(5)
+ *             });
+ *     
+ *             var pages = [];
+ *             this.onPageCreate = function(index) {
+ *                 if (!pages[index]) {
+ *                     pages[index] = new SamplePage({ index: index });
+ *                     pages[index].layout.backgroundColor = backgroundColors[index];
+ *                 }
+ *                 return pages[index];
+ *             };
+ *     
+ *             this.onShow = function() {
+ *                 this.headerBar.visible = false;
+ *             }.bind(this);
+ *     
+ *             this.onLoad = function() {
+ *                 this.scrollEnabled = true;
+ *                 this.indicatorColor = Color.BLACK;
+ *                 this.indicatorHeight = 5;
+ *                 this.barColor = Color.LIGHTGRAY;
+ *                 this.iconColor = {
+ *                     normal: Color.BLACK,
+ *                     selected: Color.BLUE
+ *                 };
+ *                 this.textColor = {
+ *                     normal: Color.BLACK,
+ *                     selected: Color.BLUE
+ *                 };
+ *             }.bind(this);
+ *     
+ *             this.onSelected = function(index) {
+ *                 console.log("Selected item index: " + index);
+ *             };
+ *         }
+ *     );
+ *     
+ *     function createTabBarItems(itemCount) {
+ *         var items = [];
+ *         for (var i = 0; i < itemCount; i++) {
+ *             items.push(new TabBarItem({
+ *                 title: "Category " + i
+ *             }));
+ *         }
+ *         return items;
+ *     }
  *
  */
 function TabBarController(params){}
