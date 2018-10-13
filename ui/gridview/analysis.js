@@ -142,6 +142,20 @@ GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem
 GridView.prototype.scrollEnabled = false;
 
 /**
+ * Gets contentOffset of the GridView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.1.3
+ */
+GridView.prototype.contentOffset = {};
+
+/**
  * Gets/sets the number of items that will be shown in a GridView.
  * You should update this property after each data operation.
  *
@@ -266,9 +280,13 @@ GridView.prototype.stopRefresh = function(){};
  * necessary
  *
  * @event onScroll
+ * @param {Object} params
+ * @param {Object} params.contentOffset
+ * @param {Number} params.contentOffset.x
+ * @param {Number} params.contentOffset.y
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.3
  */
 GridView.prototype.onScroll = function onScroll(){ }
 

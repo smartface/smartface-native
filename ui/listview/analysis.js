@@ -317,6 +317,20 @@ ListView.prototype.scrollTo = function(index){};
 ListView.prototype.stopRefresh = function(){};
 
 /**
+ * Gets contentOffset of the ListView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.1.3
+ */
+ListView.prototype.contentOffset = {};
+
+/**
  * This event is called when a ListView is scrolling.
  * For better performance, don't set any callback if does not
  * necessary
