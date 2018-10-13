@@ -236,6 +236,8 @@ const MapView = extend(View)(
             },
             'centerLocation': {
                 get: function() {
+                    if (!_nativeGoogleMap)
+                        return _centerLocation;
                     var nativeLatLng = _nativeGoogleMap.getCameraPosition().target;
                     return { latitude: nativeLatLng.latitude, longitude: nativeLatLng.longitude };
                 },
