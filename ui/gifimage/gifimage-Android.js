@@ -8,14 +8,9 @@ const Image = require('sf-core/ui/image');
 function GifImage(params) {
     const self = this;
 
-    if (params && params.drawable)
-        self.nativeObject = params.drawable;
-
-    // Assign parameters given in constructor
     if (params) {
-        for (var param in params) {
-            this[param] = params[param];
-        }
+        params.drawable && (self.nativeObject = params.drawable);
+        params.content && (self.content = params.content);
     }
 
     Object.defineProperties(self, {

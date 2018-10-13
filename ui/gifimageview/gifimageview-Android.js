@@ -9,13 +9,6 @@ const GifImageView = extend(ImageView)(
 
         const self = this;
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-
         var _image;
         Object.defineProperties(self, {
             'gifImage': {
@@ -63,6 +56,13 @@ const GifImageView = extend(ImageView)(
                 enumerable: true
             }
         });
+
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
 
         self.ios = {};
     }
