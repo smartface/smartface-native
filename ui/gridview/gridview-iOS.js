@@ -71,7 +71,7 @@ const GridView = extend(View)(
             // UIScrollViewDelegate
             scrollViewDidScroll: function(scrollView) {
                 if (sfSelf.onScroll) {
-                    sfSelf.onScroll(scrollView.contentOffset);
+                    sfSelf.onScroll({contentOffset : scrollView.contentOffset});
                 }
             }
             // // UICollectionViewDelegateFlowLayout
