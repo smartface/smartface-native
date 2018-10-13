@@ -188,14 +188,12 @@ const TabBarController = extend(Page)(
                     return _items;
                 },
                 set: function(itemArray) {
-                    console.log("Set items TabBarController");
-                    // TODO: Add setting title and icon dynamically.
-                    // TODO: Add string path for icon like UI.HeaderBarItem
+                    // TODO: We have updated UI.TabBarItem in Router v2.
+                    // After it will merge, title and icon must be updated dynamicaly.
                     _items = itemArray;
                     for (var i = 0; i < itemArray.length; i++) {
                         var itemTitle = itemArray[i].title;
                         var itemIcon = itemArray[i].icon;
-                        console.log("Set title: " + i + " === " + itemTitle);
                         var tabItem = this.tabLayout.nativeObject.getTabAt(i);
                         itemTitle && (tabItem.setText(itemTitle));
                         itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
