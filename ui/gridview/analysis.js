@@ -133,11 +133,12 @@ GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index)
 GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
 
 /**
- * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
+ * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES. This property must be set after assigning layout manager.
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.1.3
+ * @android
+ * @since 3.2.0
  */
 GridView.prototype.scrollEnabled = false;
 

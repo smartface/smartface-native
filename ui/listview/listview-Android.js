@@ -8,7 +8,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
-const NativeLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
+const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
@@ -38,7 +38,7 @@ const ListView = extend(View)(
             this.nativeInner.setClipToPadding(false);
         }
 
-        var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
+        var linearLayoutManager = new NativeSFLinearLayoutManager(AndroidConfig.activity);
         this.nativeInner.setLayoutManager(linearLayoutManager);
         this.nativeObject.addView(this.nativeInner);
 

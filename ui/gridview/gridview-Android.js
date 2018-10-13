@@ -170,6 +170,7 @@ const GridView = extend(View)(
         var _itemCount = 0;
         var _scrollBarEnabled = false;
         var _contentOffset = { x: 0, y: 0 };
+        var _scrollEnabled;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -220,6 +221,25 @@ const GridView = extend(View)(
                         }
                         else {
                             this.nativeInner.setHorizontalScrollBarEnabled(value);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'scrollEnabled': {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(isScrollEnabled) {
+                    if (!this.layoutManager)
+                        return;
+                    if (TypeUtil.isBoolean(isScrollEnabled)) {
+                        _scrollEnabled = isScrollEnabled;
+                        if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
+                            this.nativeInner.getLayoutManager().setCanScrollVerically(isScrollEnabled);
+                        }
+                        else {
+                            this.nativeInner.getLayoutManager().setCanScrollHorizontally(isScrollEnabled);
                         }
                     }
                 },
