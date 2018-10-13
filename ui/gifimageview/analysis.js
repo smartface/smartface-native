@@ -1,7 +1,7 @@
 /**
  * @class UI.GifImageView
  * @extends UI.ImageView
- * @since 3.1.3
+ * @since 3.2.0
  * 
  * GifImageView is simply an gifimage container where UI.GifImage is displayed inside.
  * 
@@ -26,7 +26,7 @@ function GifImageView(params) {}
  * @property {UI.GifImage}  [gifImage = undefined]
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.gifImage = undefined;
 
@@ -37,7 +37,7 @@ GifImageView.prototype.gifImage = undefined;
  * @readonly
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.currentFrame;
 
@@ -48,7 +48,7 @@ GifImageView.prototype.currentFrame;
  * @readonly
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.currentFrameIndex;
 
@@ -59,7 +59,7 @@ GifImageView.prototype.currentFrameIndex;
  * @readonly
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.isAnimating;
 
@@ -69,7 +69,7 @@ GifImageView.prototype.isAnimating;
  * @method startAnimating
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.startAnimating = function(){};
 
@@ -79,7 +79,7 @@ GifImageView.prototype.startAnimating = function(){};
  * @method stopAnimating
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.stopAnimating = function(){};
 
@@ -89,7 +89,7 @@ GifImageView.prototype.stopAnimating = function(){};
  * @event loopCompletionCallback
  * @param {Number} loopCountRemaining
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImageView.prototype.loopCompletionCallback = function(params){};
 

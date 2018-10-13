@@ -1,6 +1,6 @@
 /**
  * @class UI.GifImage
- * @since 3.1.3
+ * @since 3.2.0
  * 
  * GifImage is used to store the gif data read from the filesystem.
  * It can be set to UI objects' properties (e.g. UI.GifImageView.gifImage).
@@ -30,7 +30,7 @@ function GifImage(params) {}
  * @static
  * @android
  * @ios
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.createFromBlob = function(blob) {}
 
@@ -47,7 +47,7 @@ GifImage.createFromBlob = function(blob) {}
  * @android
  * @ios
  * @static
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.createFromFile = function(path, width, height) {};
 
@@ -57,7 +57,7 @@ GifImage.createFromFile = function(path, width, height) {};
  * @android
  * @ios
  * @property {Number} loopCount
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.loopCount;
 
@@ -68,7 +68,7 @@ GifImage.prototype.loopCount;
  * @ios
  * @readonly
  * @property {Number} frameCount
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.frameCount;
 
@@ -79,7 +79,7 @@ GifImage.prototype.frameCount;
  * @ios
  * @readonly
  * @property {UI.Image} posterImage
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.posterImage;
 
@@ -89,7 +89,7 @@ GifImage.prototype.posterImage;
  * @ios
  * @readonly
  * @property {Number} frameCacheSizeCurrent
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.frameCacheSizeCurrent;
 
@@ -102,7 +102,7 @@ GifImage.prototype.frameCacheSizeCurrent;
  * @property {Object} instrinsicSize
  * @property {Number} instrinsicSize.width
  * @property {Number} instrinsicSize.height
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.instrinsicSize;
 
@@ -113,7 +113,7 @@ GifImage.prototype.instrinsicSize;
  * @ios
  * @method toBlob
  * @return Blob
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.toBlob = function() {};
 
@@ -123,7 +123,7 @@ GifImage.prototype.toBlob = function() {};
  * @ios
  * @method getDelayTimesForIndexes
  * @return {Object}
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.getDelayTimesForIndexes = function() {};
 
@@ -132,7 +132,7 @@ GifImage.prototype.getDelayTimesForIndexes = function() {};
  *
  * @method reset
  * @android
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.reset = function() {};
 
@@ -141,7 +141,7 @@ GifImage.prototype.reset = function() {};
  * 
  * @property {Number} seekTo 
  * @android
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.seekTo;
 
@@ -150,7 +150,7 @@ GifImage.prototype.seekTo;
  * 
  * @property {Number} speed 
  * @android
- * @since 3.1.3
+ * @since 3.2.0
  */
 GifImage.prototype.speed;
 
