@@ -134,9 +134,6 @@ TabBarController.prototype.indicatorColor;
  */
 TabBarController.prototype.indicatorHeight;
 
-
-
-
 /**
  * Gets/sets over-scroll mode for top tab bar.
  *
@@ -203,7 +200,8 @@ TabBarController.prototype.iconColor;
 TabBarController.prototype.textColor;
 
 /**
- * TODO: Add description
+ * This event called when a tab is chosen by the user.
+ * Returns an {@link UI.Page Page} instance based on index.
  *
  * @event onPageCreate
  * @param index
