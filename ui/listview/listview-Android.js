@@ -160,6 +160,12 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'contentOffset': {
+                get: function() {
+                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
+                },
+                enumerable: true
+            },
             'verticalScrollBarEnabled': {
                 get: function() {
                     return this.nativeInner.isVerticalScrollBarEnabled();
@@ -378,6 +384,7 @@ const ListView = extend(View)(
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
+                    //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
                     _contentOffset.x += dx;

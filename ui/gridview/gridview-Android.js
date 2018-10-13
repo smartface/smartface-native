@@ -9,6 +9,7 @@ const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
@@ -168,6 +169,7 @@ const GridView = extend(View)(
         var _onItemBind;
         var _itemCount = 0;
         var _scrollBarEnabled = false;
+        var _contentOffset = { x: 0, y: 0 };
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -351,12 +353,23 @@ const GridView = extend(View)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'contentOffset': {
+                get: function() {
+                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
+                },
+                enumerable: true
             }
         });
         const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
         var overrideMethods = {
             onScrolled: function(recyclerView, dx, dy) {
-                _onScroll && _onScroll();
+                _contentOffset.x += dx;
+                _contentOffset.y += dy;
+
+                var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         };
