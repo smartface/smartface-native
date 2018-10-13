@@ -715,7 +715,8 @@ function Page(params) {
                 makeItemChecked(itemsKeys, menu);
             }
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     function createBottomNavigationView(pageLayout) {

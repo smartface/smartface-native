@@ -44,5 +44,8 @@ module.exports = {
     SwipeView: require('./swipeview'),
     LayoutManager: require("./layoutmanager"),
     EmailComposer: require("./emailcomposer"),
-    MaterialTextbox: require("./materialtextbox")
+    MaterialTextbox: require("./materialtextbox"),
+    ShimmerFlexLayout: require("./shimmerflexlayout"),
+    GifImage: require("./gifimage"),
+    GifImageView: require("./gifimageview")
 };

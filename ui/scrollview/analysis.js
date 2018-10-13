@@ -129,6 +129,15 @@ ScrollView.prototype.addChild = function(view){};
 ScrollView.prototype.findChildById = function(id){};
 
 /**
+ * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @since 3.1.3
+ */
+ScrollView.prototype.scrollEnabled = false;
+
+/**
  * Gets the count of children in a viewgroup.
  *
  * @deprecated 1.1.10

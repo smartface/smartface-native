@@ -1,136 +1,136 @@
 /* globals requireClass */
-const File                  = require("../file");
-const Path                  = require("../path");
-const TypeUtil              = require("../../util/type");
-const Blob                  = require('../../blob');
-const AndroidConfig         = require("../../util/Android/androidconfig");
+const File = require("../file");
+const Path = require("../path");
+const TypeUtil = require("../../util/type");
+const Blob = require('../../blob');
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 function FileStream(params) {
     var fileObject;
     var _streamType = params.streamType;
     var _contentMode = FileStream.ContentMode.hasValue(params.contentMode) ? params.contentMode : FileStream.ContentMode.TEXT;
-    if(FileStream.StreamType.hasValue(params.streamType)){
-        if(TypeUtil.isString(params.path)){
-            fileObject = new File({path: params.path});
+    if (FileStream.StreamType.hasValue(params.streamType)) {
+        if (TypeUtil.isString(params.path)) {
+            fileObject = new File({ path: params.path });
         }
         // must check instance of File but
         // instanceof check, but got #<Object>
-        else if(params.source){
+        else if (params.source) {
             fileObject = params.source;
         }
-        else{
+        else {
             throw new Error("File path must be string or source must be given");
         }
     }
-    else{
+    else {
         throw new Error("Mode must be FileStream.StreamType");
     }
-    
-    if(_streamType === FileStream.StreamType.APPEND){
-        if(fileObject.type !== Path.FILE_TYPE.FILE){
+
+    if (_streamType === FileStream.StreamType.APPEND) {
+        if (fileObject.type !== Path.FILE_TYPE.FILE) {
             throw new Error("FileStream.StreamType.APPEND can be used for only files.");
         }
         const NativeBufferedOutputStream = requireClass("java.io.BufferedOutputStream");
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         const NativeOutputStreamWriter = requireClass("java.io.OutputStreamWriter");
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
-        
-        if(_contentMode === FileStream.ContentMode.TEXT){
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject,true);
+
+        if (_contentMode === FileStream.ContentMode.TEXT) {
+            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
-        else{
+        else {
             var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
-    else if(_streamType === FileStream.StreamType.READ){
-        if(fileObject.type === Path.FILE_TYPE.ASSET){
+    else if (_streamType === FileStream.StreamType.READ) {
+        if (fileObject.type === Path.FILE_TYPE.ASSET) {
             const NativeInputStreamReader = requireClass("java.io.InputStreamReader");
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
-            
+
             var assetsStreamObject = AndroidConfig.activity.getAssets().open(fileObject.nativeObject);
-            if(_contentMode === FileStream.ContentMode.TEXT){
+            if (_contentMode === FileStream.ContentMode.TEXT) {
                 var inputStreamReader = new NativeInputStreamReader(assetsStreamObject);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
             }
-            else{
+            else {
                 this.nativeObject = new NativeBufferedInputStream(assetsStreamObject);
             }
         }
-        else if(fileObject.type === Path.FILE_TYPE.DRAWABLE){
+        else if (fileObject.type === Path.FILE_TYPE.DRAWABLE) {
             const NativeInputStreamReader = requireClass("java.io.InputStreamReader");
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
-            
+
             var inputStream = AndroidConfig.activityResources.openRawResource(fileObject.drawableResourceId);
-            if(_contentMode === FileStream.ContentMode.TEXT){
+            if (_contentMode === FileStream.ContentMode.TEXT) {
                 var inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
             }
-            else{
+            else {
                 this.nativeObject = new NativeBufferedInputStream(inputStream);
             }
         }
-        else{
+        else {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             const NativeFileInputStream = requireClass("java.io.FileInputStream");
             const NativeFileReader = requireClass("java.io.FileReader");
-            
-            if(_contentMode === FileStream.ContentMode.TEXT){
+
+            if (_contentMode === FileStream.ContentMode.TEXT) {
                 var fileReader = new NativeFileReader(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedReader(fileReader);
             }
-            else{
+            else {
                 var fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedInputStream(fileInputStream);
             }
         }
     }
-    else if(_streamType === FileStream.StreamType.WRITE){
-        if(fileObject.type !== Path.FILE_TYPE.FILE){
+    else if (_streamType === FileStream.StreamType.WRITE) {
+        if (fileObject.type !== Path.FILE_TYPE.FILE) {
             throw new Error("FileStream.StreamType.WRITE can be used for only files.");
         }
         const NativeBufferedOutputStream = requireClass("java.io.BufferedOutputStream");
         const NativeFileOutputStream = requireClass("java.io.FileOutputStream");
         const NativeOutputStreamWriter = requireClass("java.io.OutputStreamWriter");
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
-        
-        if(_contentMode === FileStream.ContentMode.TEXT){
+
+        if (_contentMode === FileStream.ContentMode.TEXT) {
             var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
-        else{
+        else {
             var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
-    else {throw new Error("Mode must be FileStream.StreamType")}
-    
-    
+    else { throw new Error("Mode must be FileStream.StreamType") }
+
+
     // For prevent crashing, we should keep stream status.
     var _closed = false;
     Object.defineProperties(this, {
-        'mode' : {
+        'mode': {
             value: _streamType,
             enumerable: true
         },
-        'contentMode' : {
+        'contentMode': {
             value: _contentMode,
             enumerable: true
         },
         'isReadable': {
-            get: function(){
+            get: function() {
                 return this.nativeObject && !_closed && (_streamType === FileStream.StreamType.READ);
             },
             enumerable: true
         },
         'isWritable': {
-            get: function(){
+            get: function() {
                 return this.nativeObject && !_closed && (_streamType !== FileStream.StreamType.READ);
             },
             enumerable: true
@@ -143,34 +143,34 @@ function FileStream(params) {
             value: fileObject.path,
             enumerable: true
         },
-        'close' : {
-            value: function(){
-                !_closed && ( this.nativeObject.close() );
+        'close': {
+            value: function() {
+                !_closed && (this.nativeObject.close());
             },
             enumerable: true
         },
-        'readBlob' : {
-            value: function(){
-                if(_closed || (_streamType !== FileStream.StreamType.READ)){
+        'readBlob': {
+            value: function() {
+                if (_closed || (_streamType !== FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is not READ");
                 }
                 var fileContent = this.readToEnd();
-                if(_contentMode === FileStream.ContentMode.BINARY){
-                    return new Blob(fileContent, {type:"file"});
+                if (_contentMode === FileStream.ContentMode.BINARY) {
+                    return new Blob(fileContent, { type: "file" });
                 }
-                else{
+                else {
                     const NativeString = requireClass("java.lang.String");
-                    return new Blob(new NativeString(fileContent).getBytes(), {type:"file"});
+                    return new Blob(new NativeString(fileContent).getBytes(), { type: "file" });
                 }
             },
             enumerable: true
         },
-        'readToEnd' : {
-            value: function(){
-                if(_closed || (_streamType !== FileStream.StreamType.READ)){
+        'readToEnd': {
+            value: function() {
+                if (_closed || (_streamType !== FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is not READ");
                 }
-                if(_contentMode === FileStream.ContentMode.TEXT){
+                if (_contentMode === FileStream.ContentMode.TEXT) {
                     var readLine = this.nativeObject.readLine();
                     var fileContent = "";
                     while (readLine != null) {
@@ -179,30 +179,28 @@ function FileStream(params) {
                     }
                     return fileContent;
                 }
-                else{
-                    var input = null;
-                    var bytes = [];
-                    while((input = this.nativeObject.read()) !== -1){
-                        bytes.push(input);
-                    }
-                    return new Blob(bytes, {type:"file"});
+                else {
+                    const NativeFileUtil = requireClass("io.smartface.android.utils.FileUtil");
+                    // toByteArray method handle large files by copying the bytes into blocks of 4KiB.
+                    var bytes = NativeFileUtil.toByteArray(this.nativeObject);
+                    return new Blob(bytes, { type: "file" });
                 }
             },
             enumerable: true
         },
-        'write' : {
-            value: function(data){
-                if(_closed || (_streamType === FileStream.StreamType.READ)){
+        'write': {
+            value: function(data) {
+                if (_closed || (_streamType === FileStream.StreamType.READ)) {
                     throw new Error("FileStream already closed or streamType is READ");
                 }
-                if(_contentMode === FileStream.ContentMode.BINARY){
-                    if(!(data instanceof Blob)){
+                if (_contentMode === FileStream.ContentMode.BINARY) {
+                    if (!(data instanceof Blob)) {
                         throw new Error("Parameter must be Blob")
                     }
                     this.nativeObject.write(data.nativeObject.toByteArray());
                 }
-                else{
-                    if(!TypeUtil.isString(data)){
+                else {
+                    if (!TypeUtil.isString(data)) {
                         throw new Error("Parameter must be string")
                     }
                     this.nativeObject.write(data);
@@ -238,11 +236,11 @@ Object.defineProperties(FileStream.StreamType, {
         enumerable: true
     },
     'hasValue': {
-        value: function(valueToFind){
-            return Object.keys(FileStream.StreamType).some(function(element, index, array){
+        value: function(valueToFind) {
+            return Object.keys(FileStream.StreamType).some(function(element, index, array) {
                 return FileStream.StreamType[element] === valueToFind;
             });
-            
+
         },
         enumerable: false
     }
@@ -258,8 +256,8 @@ Object.defineProperties(FileStream.ContentMode, {
         enumerable: true
     },
     'hasValue': {
-        value: function(valueToFind){
-            return Object.keys(FileStream.ContentMode).some(function(element, index, array){
+        value: function(valueToFind) {
+            return Object.keys(FileStream.ContentMode).some(function(element, index, array) {
                 return FileStream.ContentMode[element] === valueToFind;
             });
         },
