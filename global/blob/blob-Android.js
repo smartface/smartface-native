@@ -14,6 +14,9 @@ function Blob(parts, properties) {
         } else {
             self.nativeObject.write(parts);
         }
+        // TODO: This line added for AND-3357. 
+        // But investigate whether parts property is need.
+        this.parts = parts;
     }
 
     Object.defineProperty(this, 'type', {
