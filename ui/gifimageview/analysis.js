@@ -11,7 +11,7 @@
  *     
  *     var myGifImage = GifImage.createFromFile("assets://smartface.gif")
  *     var myGifImageView = new GifImageView({
- *         gifimage: myImage,
+ *         gifImage: myImage,
  *         width: 200, height: 200
  *     });
  *     
