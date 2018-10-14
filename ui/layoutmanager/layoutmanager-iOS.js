@@ -37,6 +37,12 @@ function LayoutManager(params) {
                 value: retval
             });
             Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
+        },
+        targetContentOffsetForProposedContentOffsetWithScrollingVelocity: function(proposedContentOffset,velocity){
+            if (sfSelf.targetContentOffsetForProposedContentOffsetWithScrollingVelocity) {
+                return sfSelf.targetContentOffsetForProposedContentOffsetWithScrollingVelocity(proposedContentOffset,velocity);
+            }
+            return proposedContentOffset;
         }
     }).new();
     
