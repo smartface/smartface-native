@@ -6,6 +6,8 @@ const LayoutChangeListener = requireClass("android.view.View$OnLayoutChangeListe
 
 function LayoutManager(params) {
     var self = this;
+    self.ios = {};
+    
     this._lineDecoration = null;
     this._itemDecoration = null;
     this._itemLength = params && params.itemLength;
