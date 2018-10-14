@@ -114,7 +114,7 @@ const ListView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self.ios, 'scrollEnabled', {
+        Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.valueForKey("scrollEnabled");
             },

@@ -8,7 +8,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
-const NativeLinearLayoutManager = requireClass("android.support.v7.widget.LinearLayoutManager");
+const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
@@ -38,7 +38,7 @@ const ListView = extend(View)(
             this.nativeInner.setClipToPadding(false);
         }
 
-        var linearLayoutManager = new NativeLinearLayoutManager(AndroidConfig.activity);
+        var linearLayoutManager = new NativeSFLinearLayoutManager(AndroidConfig.activity);
         this.nativeInner.setLayoutManager(linearLayoutManager);
         this.nativeObject.addView(this.nativeInner);
 
@@ -127,6 +127,7 @@ const ListView = extend(View)(
         var _itemCount = 0;
         var _contentInset = {};
         var _onScrollListener;
+        var _scrollEnabled;
         Object.defineProperties(this, {
             // properties
             'listViewItemByIndex': {
@@ -149,6 +150,18 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            'scrollEnabled':  {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(isScrollEnabled) {
+                    if (TypeUtil.isBoolean(isScrollEnabled)) {
+                        _scrollEnabled = isScrollEnabled;
+                        this.nativeInner.getLayoutManager().setCanScrollVerically(isScrollEnabled);
+                    }
+                },
+                enumerable: true
+            },
             'itemCount': {
                 get: function() {
                     return _itemCount;
@@ -157,6 +170,12 @@ const ListView = extend(View)(
                     if (TypeUtil.isNumeric(itemCount)) {
                         _itemCount = itemCount;
                     }
+                },
+                enumerable: true
+            },
+            'contentOffset': {
+                get: function() {
+                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
                 },
                 enumerable: true
             },
@@ -378,6 +397,7 @@ const ListView = extend(View)(
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
+                    //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
                     _contentOffset.x += dx;
