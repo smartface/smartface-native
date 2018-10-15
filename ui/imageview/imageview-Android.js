@@ -102,7 +102,7 @@ const ImageView = extend(View)(
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var url, placeholder, isFade, onError, onSuccess;
-            if (arguments.length === 1) {
+            if (typeof arguments[0] === "object") {
                 var params = arguments[0];
                 url = params.url;
                 placeholder = params.placeholder;
