@@ -35,6 +35,46 @@ function LayoutManager(params) {}
 LayoutManager.prototype.onItemLength = function(itemLength){};
 
 /**
+ * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
+ * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.
+ *
+ *      @example
+ *      //For Left Span 
+ *      layoutManager.ios.targetContentOffset = function(proposedContentOffset, velocity){
+ *          var positionX = gridView.contentOffset.x / ITEM_LENGHT;
+ *          var decimalPositionX = parseInt(positionX);
+ *          var precisionPositionX = positionX % 1;
+ *
+ *          if (Math.abs(velocity.x) <= 0.5) {
+ *              if (precisionPositionX >= 0.5) {
+ *                  decimalPositionX++;
+ *              }
+ *          }
+ *          else {
+ *              if (velocity.x > 0) {
+ *                  decimalPositionX++;
+ *              }
+ *          }
+ *          return { x: decimalPositionX * ITEM_LENGHT, y: 0 };
+ *      };
+ * 
+ * 
+ * @param {Object} proposedContentOffset This is the value at which scrolling would naturally stop if no adjustments were made.
+ * @param {Number} proposedContentOffset.x
+ * @param {Number} proposedContentOffset.y
+ * @param {Object} velocity The current scrolling velocity along both the horizontal and vertical axes. This value is measured in points per second.
+ * @param {Number} velocity.x
+ * @param {Number} velocity.y
+ * @event targetContentOffset
+ * @ios
+ * @return {Object} The content offset that you want to use instead. The default implementation of this method returns the value in the proposedContentOffset parameter.
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.2.0
+ */
+LayoutManager.prototype.targetContentOffset = function(proposedContentOffset,velocity){};
+
+/**
  * Gets/sets colon or row count depends on scrolling direction of layout.
  * If vertical it represents colon, if horizontal it represent row count.
  *

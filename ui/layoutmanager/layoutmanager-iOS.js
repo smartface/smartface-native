@@ -40,8 +40,8 @@ function LayoutManager(params) {
             Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
         },
         targetContentOffsetForProposedContentOffsetWithScrollingVelocity: function(proposedContentOffset,velocity){
-            if (sfSelf.ios.targetContentOffsetForProposedContentOffsetWithScrollingVelocity) {
-                return sfSelf.ios.targetContentOffsetForProposedContentOffsetWithScrollingVelocity(proposedContentOffset,velocity);
+            if (sfSelf.ios.targetContentOffset) {
+                return sfSelf.ios.targetContentOffset(proposedContentOffset,velocity);
             }
             return proposedContentOffset;
         }
