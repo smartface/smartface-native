@@ -1,6 +1,7 @@
 const UITabBarItem = SF.requireClass("UITabBarItem");
 const Invocation = require('sf-core/util').Invocation;
 const Image = require('sf-core/ui/image');
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 function TabBarItem(params) {
     var self = this;
@@ -9,6 +10,26 @@ function TabBarItem(params) {
     if (params.nativeObject) {
         self.nativeObject = params.nativeObject;
     }
+    
+    var _nativeView;
+    Object.defineProperty(this, 'layout', {
+        get: function() {
+            var retval;
+            if (_nativeView) {
+                retval = _nativeView;
+            } else {
+                var key = new Invocation.Argument({
+                    type:"NSString",
+                    value: "view"
+                });
+                var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
+                _nativeView = new FlexLayout({nativeObject : view});
+                retval = _nativeView;
+            }
+            return retval;
+        },
+        enumerable: true
+    });
     
     var _title = "";
     Object.defineProperty(this, 'title', {

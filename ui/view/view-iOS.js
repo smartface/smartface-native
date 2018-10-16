@@ -12,7 +12,11 @@ function View(params) {
     self.ios = {};
 
     if(!self.nativeObject){
-        self.nativeObject = new __SF_UIView();
+        if (params && params.nativeObject) {
+            self.nativeObject = params.nativeObject;
+        } else {
+            self.nativeObject = new __SF_UIView();
+        }
     }
     
     self.uniqueId = self.nativeObject.uuid;
@@ -291,6 +295,22 @@ function View(params) {
     this.getParent = function(){
         return self.parent ? self.parent : null;
     };
+    
+    this.getScreenPosition = function() {
+        var viewOrigin = {x:self.nativeObject.bounds.x, y:self.nativeObject.bounds.y};
+        var origin= new Invocation.Argument({
+            type:"CGPoint",
+            value: viewOrigin
+        });
+        
+        var view= new Invocation.Argument({
+            type:"id",
+            value: undefined
+        });
+        
+        var screenOrigin = Invocation.invokeInstanceMethod(self.nativeObject,"convertPoint:toView:",[origin, view],"CGPoint");
+        return screenOrigin;
+    }
     
     var _onTouch;
     Object.defineProperty(self, 'onTouch', {
