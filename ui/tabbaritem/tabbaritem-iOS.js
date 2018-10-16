@@ -31,6 +31,10 @@ function TabBarItem(params) {
         enumerable: true
     });
     
+    this.getScreenPosition = function () {
+        return this.layout.getScreenPosition();
+    };
+    
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {

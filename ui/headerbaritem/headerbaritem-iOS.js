@@ -106,6 +106,9 @@ function HeaderBarItem(params) {
         }
     });
     
+    this.getScreenPosition = function () {
+        return this.layout.getScreenPosition();
+    };
     
     var _badgeVisible = false;
     var _badgeBackgroundColor = 0;
