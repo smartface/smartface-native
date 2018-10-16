@@ -27,7 +27,7 @@ const Picker = extend(View)(
         var _title = "";
         var _titleColor = Color.BLACK;
         var _titleFont;
-        var _okColor, _cancelColor, _okFont, _cancelFont;
+        var _okColor, _cancelColor, _okFont, _cancelFont, _okText, _cancelText;
         var buttonCustomize = false;
         Object.defineProperties(this, {
             'items': {
@@ -112,6 +112,30 @@ const Picker = extend(View)(
                 },
                 enumerable: true
             },
+            'cancelText': {
+                get: function() {
+                    return _cancelText;
+                },
+                set: function(text) {
+                    if (typeof text !== "string")
+                        return;
+                    buttonCustomize = true;
+                    _cancelText = text;
+                },
+                enumerable: true
+            },
+            'okText': {
+                get: function() {
+                    return _okText;
+                },
+                set: function(text) {
+                    if (typeof text !== "string")
+                        return;
+                    buttonCustomize = true;
+                    _okText = text;
+                },
+                enumerable: true
+            },
             'okFont': {
                 get: function() {
                     return _okFont;
@@ -168,7 +192,8 @@ const Picker = extend(View)(
                     if (buttonCustomize === true) {
                         var negativeButton = alertDialog.getButton(NativeDialogInterface.BUTTON_NEGATIVE);
                         var positiveButton = alertDialog.getButton(NativeDialogInterface.BUTTON_POSITIVE);
-
+                        self.cancelText && negativeButton.setText(self.cancelText);
+                        self.okText && positiveButton.setText(self.okText);
                         self.cancelColor && negativeButton.setTextColor(self.cancelColor.nativeObject);
                         self.okColor && positiveButton.setTextColor(self.okColor.nativeObject);
                         self.okFont && positiveButton.setTypeface(self.okFont.nativeObject);
@@ -260,7 +285,7 @@ function creatTitleView() {
     var titleTextView = new NativeTextView(AndroidConfig.activity);
     titleTextView.setText(picker.title);
     titleTextView.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-    titleTextView.setPadding(10, 20, 10, 10);
+    titleTextView.setPaddingRelative(10, 20, 10, 10);
     titleTextView.setGravity(CENTER);
     picker.titleColor && titleTextView.setTextColor(picker.titleColor.nativeObject);
     picker.titleFont && titleTextView.setTypeface(picker.titleFont.nativeObject);

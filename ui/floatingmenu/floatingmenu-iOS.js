@@ -25,8 +25,10 @@ function FloatingMenu(params) {
     if(!self.nativeObject){
         self.nativeObject = new __SF_Floaty();
     }
+    
     //Defaults
-    self.layoutDirection = Invocation.invokeInstanceMethod(__SF_UIApplication.sharedApplication(),"userInterfaceLayoutDirection",[],"NSInteger");
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    self.layoutDirection = isLTR ? 0 : 1;
     
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.yoga.position = 1;

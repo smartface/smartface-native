@@ -22,6 +22,7 @@ var _keyboardMode;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onCreate: function() {},
@@ -295,7 +296,7 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.ios = {};
-ApplicationWrapper.ios.canOpenUrl = function (url) {};
+ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 
 Object.defineProperties(ApplicationWrapper.android, {
@@ -378,6 +379,26 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
+    'locale': {
+        get: function() {
+            const NativeLocale = requireClass("java.util.Locale");
+            return NativeLocale.getDefault().getLanguage();
+        },
+        set: function(languageCode) {
+            if (TypeUtil.isString(languageCode)) {
+                const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+                var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
+                sharedPreferences.edit().putString("AppLocale", languageCode).commit();
+            }
+        },
+        enumerable: true
+    },
+    'getLayoutDirection': {
+        get: function() {
+            return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ApplicationWrapper.Android, {
@@ -494,12 +515,18 @@ Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
-    KeyboardAdjustPan: 32,     //SOFT_INPUT_ADJUST_PAN
-    KeyboardAdjustResize: 16,  //SOFT_INPUT_ADJUST_RESIZE
+    KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
+    KeyboardAdjustResize: 16, //SOFT_INPUT_ADJUST_RESIZE
     KeyboardAdjustUnspecified: 0, //SOFT_INPUT_ADJUST_UNSPECIFIED
-    AlwaysVisible: 5,             //SOFT_INPUT_STATE_ALWAYS_VISIBLE
-    AlwaysHidden: 3               //SOFT_INPUT_STATE_ALWAYS_HIDDEN
+    AlwaysVisible: 5, //SOFT_INPUT_STATE_ALWAYS_VISIBLE
+    AlwaysHidden: 3 //SOFT_INPUT_STATE_ALWAYS_HIDDEN
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
+
+ApplicationWrapper.LayoutDirection = {
+    LEFTTORIGHT: 0,
+    RIGHTTOLEFT: 1
+};
+Object.freeze(ApplicationWrapper.LayoutDirection);
 
 module.exports = ApplicationWrapper;

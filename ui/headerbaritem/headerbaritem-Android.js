@@ -64,7 +64,7 @@ function HeaderBarItem(params) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-                    this.nativeObject.setPadding(
+                    this.nativeObject.setPaddingRelative(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                     );
@@ -103,7 +103,7 @@ function HeaderBarItem(params) {
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackground(null);
-                        this.nativeObject.setPadding(
+                        this.nativeObject.setPaddingRelative(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
@@ -324,14 +324,14 @@ function HeaderBarItem(params) {
                     return;
 
                 _borderColor = borderColor;
-                _badge.backgroundColor = null; ; //re-set Drawable
+                _badge.backgroundColor = null;; //re-set Drawable
             },
             enumerable: true
         },
         'move': {
             value: function(x, y) {
-                _badge.x = (x < 0 ? x * -1 : x);
-                _badge.y = (y < 0 ? y : y);
+                _badge.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
+                _badge.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
             }
         }
     });
