@@ -1,0 +1,1 @@
+module.exports = require('./tabbarcontroller-' + Device.deviceOS);

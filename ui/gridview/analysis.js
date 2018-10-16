@@ -133,6 +133,15 @@ GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index)
 GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
 
 /**
+ * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @since 3.1.3
+ */
+GridView.prototype.scrollEnabled = false;
+
+/**
  * Gets/sets the number of items that will be shown in a GridView.
  * You should update this property after each data operation.
  *

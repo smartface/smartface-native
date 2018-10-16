@@ -100,12 +100,22 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function(params) {
-            var url = params.url;
-            var placeholder = params.placeholder;
-            var isFade = params.isFade;
-            var onError = params.onError;
-            var onSuccess = params.onSuccess;
+        imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
+            var url, placeholder, isFade, onError, onSuccess;
+            if (typeof arguments[0] === "object") {
+                var params = arguments[0];
+                url = params.url;
+                placeholder = params.placeholder;
+                isFade = params.isFade;
+                onError = params.onError;
+                onSuccess = params.onSuccess;
+            }
+            else {
+                url = arguments[0];
+                placeholder = arguments[1];
+                isFade = arguments[2];
+            }
+
             var callback = null;
             if (onError || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
@@ -125,7 +135,10 @@ const ImageView = extend(View)(
                 if (placeholder instanceof Image)
                     plainRequestCreator.placeholder(placeholder.nativeObject)
                 var requestCreator = scaleImage(plainRequestCreator);
-                requestCreator.into(this.nativeObject, callback);
+                if (callback !== null)
+                    requestCreator.into(this.nativeObject, callback);
+                else
+                    requestCreator.into(this.nativeObject);
             }
         };
 

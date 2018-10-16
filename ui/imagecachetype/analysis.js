@@ -39,6 +39,3 @@ ImageCacheType.DISK = 1;
  * @since 3.0.3
  */
 ImageCacheType.MEMORY = 2;
-
-
-module.exports = Object.freeze(ImageCacheType);

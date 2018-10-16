@@ -48,7 +48,6 @@ Image.prototype.width = 0;
  *
  * @android
  * @property {Boolean} autoMirrored
- * @readonly
  * @since 3.1.3
  */
 Image.prototype.autoMirrored = false;

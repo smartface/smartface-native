@@ -155,12 +155,7 @@ const MapView = extend(View)(
         var _centerLocation;
         Object.defineProperty(self, 'centerLocation', {
             get: function() {
-                if (_centerLocation) {
-                    return _centerLocation;
-                }
-                else {
-                    return self.nativeObject.centerLocation;
-                }
+                return self.nativeObject.centerLocation;
             },
             set: function(value) {
                 _centerLocation = value;

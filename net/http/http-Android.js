@@ -167,8 +167,7 @@ http.prototype.requestFile = function(params) {
         var file = new IO.File({ path: path });
         if (e && e.body) {
             var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
-            var blob = new Blob(e.body.parts, { type: {} });
-            stream.write(blob);
+            stream.write(e.body);
             stream.close();
             e.file = file;
         }

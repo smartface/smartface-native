@@ -254,7 +254,3 @@ KeyboardType.android.TIME = 20;
  * @readonly
  */
 KeyboardType.EMAILADDRESS = 21;
-
-Object.freeze(KeyboardType);
-
-module.exports = KeyboardType;

@@ -280,6 +280,7 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
+        this.setTouchHandlers();
     },
     get onTouch() {
         return this._onTouch;
