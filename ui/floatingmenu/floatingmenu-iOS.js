@@ -34,9 +34,11 @@ function FloatingMenu(params) {
     self.nativeObject.yoga.position = 1;
     
     if (self.layoutDirection == UIUserInterfaceLayoutDirection.rightToLeft) {
+        self.nativeObject.alignment = 0;
         self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"right");
         self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"left");
     }else{
+        self.nativeObject.alignment = 2;
         self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"left");
         self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"right");
     }
