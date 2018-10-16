@@ -45,16 +45,13 @@ LayoutManager.prototype.onItemLength = function(itemLength){};
  *          var decimalPositionX = parseInt(positionX);
  *          var precisionPositionX = positionX % 1;
  *
- *          if (Math.abs(velocity.x) <= 0.5) {
- *              if (precisionPositionX >= 0.5) {
- *                  decimalPositionX++;
- *              }
+ *          if (Math.abs(velocity.x) <= 0.5 && precisionPositionX >= 0.5) {
+ *              decimalPositionX++;
  *          }
- *          else {
- *              if (velocity.x > 0) {
- *                  decimalPositionX++;
- *              }
+ *          else if (velocity.x > 0) {
+ *              decimalPositionX++;
  *          }
+ *          
  *          return { x: decimalPositionX * ITEM_LENGHT, y: 0 };
  *      };
  * 
