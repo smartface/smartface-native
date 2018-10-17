@@ -228,7 +228,8 @@ ListView.prototype.verticalScrollBarEnabled = false;
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.1.3
+ * @android
+ * @since 3.2.0
  */
 ListView.prototype.scrollEnabled = false;
 
@@ -315,6 +316,20 @@ ListView.prototype.scrollTo = function(index){};
  * @since 0.1
  */
 ListView.prototype.stopRefresh = function(){};
+
+/**
+ * Gets contentOffset of the ListView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.1.3
+ */
+ListView.prototype.contentOffset = {};
 
 /**
  * This event is called when a ListView is scrolling.

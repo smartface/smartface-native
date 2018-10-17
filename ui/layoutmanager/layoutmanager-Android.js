@@ -1,11 +1,13 @@
 /*globals requireClass*/
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeItemDecoration = requireClass("android.support.v7.widget.RecyclerView$ItemDecoration");
-const NativeStaggeredGridLayoutManager = requireClass("android.support.v7.widget.StaggeredGridLayoutManager");
+const NativeSFStaggeredGridLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFStaggeredGridLayoutManager");
 const LayoutChangeListener = requireClass("android.view.View$OnLayoutChangeListener");
 
 function LayoutManager(params) {
     var self = this;
+    self.ios = {};
+
     this._lineDecoration = null;
     this._itemDecoration = null;
     this._itemLength = params && params.itemLength;
@@ -114,7 +116,7 @@ function LayoutManager(params) {
 
 
     if (!this.nativeObject) {
-        this.nativeObject = new NativeStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
+        this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
     }
 
 }
@@ -140,6 +142,7 @@ function setContentInset(self) {
         }
     }
     if (self.nativeRecyclerView) {
+        self.nativeRecyclerView.setClipToPadding(false);
         self.nativeRecyclerView.setPaddingRelative(leftInset, topInset, rightInset, bottomInset);
     }
 }
