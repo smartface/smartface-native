@@ -395,16 +395,33 @@ const GridView = extend(View)(
         };
         var onScrollListener = new SFOnScrollListener(overrideMethods);
 
+        // this.android = {};
         // android-only properties
-        Object.defineProperty(this.android, 'onItemLongSelected', {
-            get: function() {
-                return _onItemLongSelected;
+        var _snapToAlignment;
+        Object.defineProperties(this.android, {
+            'onItemLongSelected': {
+                get: function() {
+                    return _onItemLongSelected;
+                },
+                set: function(onItemLongSelected) {
+                    _onItemLongSelected = onItemLongSelected.bind(this);
+                },
+                enumerable: true,
+                configurable: true
             },
-            set: function(onItemLongSelected) {
-                _onItemLongSelected = onItemLongSelected.bind(this);
-            },
-            enumerable: true,
-            configurable: true
+            'snapToAlignment': {
+                get: function() {
+                    return _snapToAlignment;
+                },
+                set: function(alignment) {
+                    if (!typeof alignment === 'enum')
+                        return;
+                    const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
+                    let linearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
+                    linearSnapHelper.attachToRecyclerView(self.nativeInner);
+                },
+                enumerable: true
+            }
         });
 
 
@@ -431,6 +448,13 @@ const GridView = extend(View)(
         }
     }
 );
+GridView.Android = {};
+GridView.Android.SnapAlignment = {
+    SNAPTO_START: 0,
+    SNAPTO_CENTER: 1,
+    SNAPTO_END: 2
+};
+Object.freeze(GridView.Android.SnapAlignment);
 
 GridView.iOS = {};
 

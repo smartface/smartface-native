@@ -314,4 +314,53 @@ GridView.prototype.onPullRefresh = function onPullRefresh(){}
  */
 GridView.prototype.itemByIndex = function(index){};
 
+
+
+/**
+ * Android Specific Properties.
+ * @class UI.GridView.Android
+ * @since 3.2.0
+ */
+GridView.Android = {};
+
+/** 
+ * @enum UI.GridView.Android.SnapAlignment
+ * @since 1.1.16
+ * 
+ * This enum class used to specify your alignment of snapping. 
+ */
+GridView.Android.SnapAlignment ={};
+
+
+/**
+ * This property will align the snap at the left (horizontal) or top (vertical).
+ *
+ * @property SNAPTO_START
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_START;
+
+
+/**
+ * This property will align the snap in the center.
+ *
+ * @property SNAPTO_CENTER
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_CENTER;
+
+/**
+ * This property  will align the snap at the right (horizontal) or bottom (vertical).
+ *
+ * @property SNAPTO_END
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_END;
+
 module.exports = GridView;
