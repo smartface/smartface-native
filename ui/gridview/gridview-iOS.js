@@ -71,7 +71,7 @@ const GridView = extend(View)(
             // UIScrollViewDelegate
             scrollViewDidScroll: function(scrollView) {
                 if (sfSelf.onScroll) {
-                    sfSelf.onScroll();
+                    sfSelf.onScroll({contentOffset : scrollView.contentOffset});
                 }
             }
             // // UICollectionViewDelegateFlowLayout
@@ -111,7 +111,14 @@ const GridView = extend(View)(
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
-
+        
+        Object.defineProperty(sfSelf, 'contentOffset', {
+            get: function() {
+                return { x: sfSelf.nativeObject.contentOffset.x, y: sfSelf.nativeObject.contentOffset.y };
+            },
+            enumerable: true
+        });
+        
         var _itemCount = 0;
         Object.defineProperty(sfSelf, 'itemCount', {
             get: function() {
@@ -199,7 +206,7 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(sfSelf.ios, 'scrollEnabled', {
+        Object.defineProperty(sfSelf, 'scrollEnabled', {
             get: function() {
                 return sfSelf.nativeObject.valueForKey("scrollEnabled");
             },

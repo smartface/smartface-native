@@ -151,6 +151,28 @@ function DatePicker (params) {
         enumerable: true
     });
     
+    var _okText;
+    Object.defineProperty(this.ios, 'okText', {
+        get: function() {
+            return _okText;
+        },
+        set: function(value) {
+            _okText = value;
+        },
+        enumerable: true
+    });
+        
+    var _cancelText;
+    Object.defineProperty(this.ios, 'cancelText', {
+        get: function() {
+            return _cancelText;
+        },
+        set: function(value) {
+            _cancelText = value;
+        },
+        enumerable: true
+    });
+        
     self.show = function(){
         self.nativeObject.show(
                 (self.ios.title === undefined) ? "" : self.ios.title,
@@ -161,7 +183,9 @@ function DatePicker (params) {
                 self.ios.cancelFont ? self.ios.cancelFont : undefined,
                 self.ios.okColor ? self.ios.okColor.nativeObject : undefined,
                 self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
-                self.ios.okFont ? self.ios.okFont : undefined
+                self.ios.okFont ? self.ios.okFont : undefined,
+                self.ios.okText ? self.ios.okText : undefined,
+                self.ios.cancelText ? self.ios.cancelText : undefined
                 );
     };
     

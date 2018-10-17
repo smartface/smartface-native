@@ -184,6 +184,28 @@ const Picker = extend(View)(
             enumerable: true
         });
         
+        var _okText;
+        Object.defineProperty(this, 'okText', {
+            get: function() {
+                return _okText;
+            },
+            set: function(value) {
+                _okText = value;
+            },
+            enumerable: true
+        });
+        
+        var _cancelText;
+        Object.defineProperty(this, 'cancelText', {
+            get: function() {
+                return _cancelText;
+            },
+            set: function(value) {
+                _cancelText = value;
+            },
+            enumerable: true
+        });
+        
         self.show = function(ok,cancel){
               var okFunc = function(e){
                 if (typeof ok === "function"){
@@ -207,7 +229,9 @@ const Picker = extend(View)(
                 self.cancelFont ? self.cancelFont : undefined,
                 self.okColor ? self.okColor.nativeObject : undefined,
                 self.ios.okHighlightedColor ? self.ios.okHighlightedColor.nativeObject : undefined,
-                self.okFont ? self.okFont : undefined
+                self.okFont ? self.okFont : undefined,
+                self.okText ? self.okText : undefined,
+                self.cancelText ? self.cancelText : undefined
                 );
         }
         // Assign parameters given in constructor

@@ -139,6 +139,10 @@ function File(params) {
         return FileStream.create(self.nativeObject.getActualPath(), type, contentMode);
     };
     
+    this.getAbsolutePath = function () {
+        return self.nativeObject.getActualPath();
+    }
+    
  // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

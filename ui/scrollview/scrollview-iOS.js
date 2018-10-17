@@ -56,6 +56,17 @@ const ScrollView = extend(ViewGroup)(
             },
             enumerable: true
         });
+        
+        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+        if (!isLTR) {
+            self.flipHorizontally();
+            self.layout.onViewAddedInnerCallback = function(view){
+                view.flipHorizontally();
+            };
+            self.layout.onViewRemovedInnerCallback = function(view){
+                view.flipHorizontally();
+            };
+        }
 
         self.layout.applyLayout = function() {
             __SF_Dispatch.mainAsync(function() {

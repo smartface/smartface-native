@@ -135,7 +135,10 @@ const ImageView = extend(View)(
                 if (placeholder instanceof Image)
                     plainRequestCreator.placeholder(placeholder.nativeObject)
                 var requestCreator = scaleImage(plainRequestCreator);
-                requestCreator.into(this.nativeObject, callback);
+                if (callback !== null)
+                    requestCreator.into(this.nativeObject, callback);
+                else
+                    requestCreator.into(this.nativeObject);
             }
         };
 

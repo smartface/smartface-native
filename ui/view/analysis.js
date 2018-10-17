@@ -17,7 +17,7 @@
  * 
  */
 function View(params) {}
-    
+
 /**
  * Defines the opacity of a view. The value of this property is a float number
  * between 0.0 and 1.0. 0 represents view is completely transparent and 1
@@ -422,7 +422,27 @@ View.prototype.alignSelf = UI.FlexLayout.AlignSelf.AUTO;
  * @ios
  * @since 0.1
  */
-View.prototype.bringToFront = function(){};
+View.prototype.bringToFront = function() {};
+
+/**
+ * This method flips the view horizontally.
+ *
+ * @method flipHorizontally
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+View.prototype.flipHorizontally = function() {};
+
+/**
+ * This method flips the view vertically.
+ *
+ * @method flipVertically
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+View.prototype.flipVertically = function() {};
 
 /**
  * Gets the parent view of a view.
@@ -446,7 +466,7 @@ View.prototype.bringToFront = function(){};
  * @ios
  * @since 0.1
  */
-View.prototype.getParent = function(){};
+View.prototype.getParent = function() {};
 
 /**
  * This event is called when a touch screen motion event starts.
@@ -458,7 +478,7 @@ View.prototype.getParent = function(){};
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouch = function onTouch(){ };
+View.prototype.onTouch = function onTouch() {};
 
 /**
  * This event is called when a touch screen motion event ends. If touch position inside this view, isInside parameter will be true.
@@ -471,7 +491,7 @@ View.prototype.onTouch = function onTouch(){ };
  * @member UI.View
  * @since 0.1
  */
-View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
+View.prototype.onTouchEnded = function onTouchEnded(isInside) {};
 
 /**
  * This event is called when changed touch position. If touch position inside this view, isInside parameter will be true.
@@ -484,7 +504,7 @@ View.prototype.onTouchEnded = function onTouchEnded(isInside){ };
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchMoved = function onTouchMoved(isInside){ };
+View.prototype.onTouchMoved = function onTouchMoved(isInside) {};
 
 /**
  * This event is called when a parent view takes control of the touch events, like a ListView or ScrollView does when scrolling.
@@ -496,7 +516,7 @@ View.prototype.onTouchMoved = function onTouchMoved(isInside){ };
  * @member UI.View
  * @since 2.0.10
  */
-View.prototype.onTouchCancelled = function onTouchCancelled(){ };
+View.prototype.onTouchCancelled = function onTouchCancelled() {};
 
 /**
  * Gets/Sets the elevation of the view. For the views that has 
@@ -569,7 +589,7 @@ View.prototype.ios.clipsToBounds = 0;
  * @ios
  * @since 2.0.6
  */
-View.prototype.ios.shadowOffset = {x: 0.0,y: -3.0};
+View.prototype.ios.shadowOffset = { x: 0.0, y: -3.0 };
 
 /**
  * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.
@@ -596,6 +616,64 @@ View.prototype.ios.shadowOpacity = 0;
  * @ios
  * @since 2.0.6
  */
-View.prototype.ios.shadowColor = UI.Color.BLACK;;
+View.prototype.ios.shadowColor = UI.Color.BLACK;
+
+/**
+ * 
+ * Changes the direction of unreachable child views of all components. These components are HeaderBar, BottomBar, Material Textbox, Searchview, SwipeView etc.
+ *
+ * @property {UI.View.iOS.SemanticContentAttribute} [viewAppearanceSemanticContentAttribute = UI.View.iOS.SemanticContentAttribute.AUTO]
+ * @ios
+ * @static
+ * @since 3.1.3
+ */
+View.ios.viewAppearanceSemanticContentAttribute;
+
+/**
+ * iOS Specific Properties.
+ * @class UI.View.iOS
+ * @since 3.1.3
+ */
+View.iOS = {};
+
+/** 
+ * @enum {Number} UI.View.iOS.SemanticContentAttribute
+ * @since 3.1.3
+ * @ios
+ */
+View.iOS.SemanticContentAttribute = {};
+
+/**
+ * Layout direction will be the same as the device direction. You can use {@link Application#userInterfaceLayoutDirection userInterfaceLayoutDirection} property to check device direction.
+ * 
+ * @property {Number} AUTO
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.AUTO = 0;
+
+/**
+ * Layout direction is always left to right.
+ * 
+ * @property {Number} FORCELEFTTORIGHT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.FORCELEFTTORIGHT = 3;
+
+/**
+ * Layout direction is always right to left.
+ * 
+ * @property {Number} FORCERIGHTTOLEFT
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.1.3
+ */
+View.iOS.SemanticContentAttribute.FORCERIGHTTOLEFT = 4;
 
 module.exports = View;

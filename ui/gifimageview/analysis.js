@@ -11,7 +11,7 @@
  *     
  *     var myGifImage = GifImage.createFromFile("assets://smartface.gif")
  *     var myGifImageView = new GifImageView({
- *         gifimage: myImage,
+ *         gifImage: myGifImage,
  *         width: 200, height: 200
  *     });
  *     
@@ -92,5 +92,71 @@ GifImageView.prototype.stopAnimating = function(){};
  * @since 3.2.0
  */
 GifImageView.prototype.loopCompletionCallback = function(params){};
+
+/**
+ * Gets/sets the tintColor. Must create a new image object with the imageWithRenderingMode(Image.iOS.RenderingMode.TEMPLATE) method to work correctly on the iOS.
+ * 
+ * @property {UI.Color} tintColor
+ * @android
+ * @removed
+ * @ios
+ * @since 3.2.0
+ */
+GifImageView.prototype.tintColor = null;
+
+/**
+ * Load image from the server and place the returned image into the ImageView.
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ *
+ * @method loadFromUrl
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Boolean} object.fade = true
+ * @param {Function} object.onSuccess
+ * @param {Function} object.onError
+ * @android
+ * @removed
+ * @ios
+ * @since 3.2.0
+ */
+GifImageView.prototype.loadFromUrl = function(params){};
+
+/**
+ * Load image from the file and place the returned image into the ImageView.
+ *
+ * @method loadFromFile
+ * @param {Object} object
+ * @param {IO.File} object.file
+ * @param {Boolean} object.fade = true
+ * @param {Number} object.width
+ * @param {Number} object.height
+ * @android
+ * @removed
+ * @ios
+ * @since 3.2.0
+ */
+GifImageView.prototype.loadFromFile = function(object){};
+
+/**
+ * Fetch image from the server.
+ * If you want better performance and automatically set image, use loadFromUrl. 
+ * If you pass any image to placeHolder parameter, placeHolder image will shown until image loaded. 
+ * In Android, this method is not recommended to use in listview.
+ *
+ * @method fetchFromUrl
+ * @param {Object} object
+ * @param {String} object.url
+ * @param {UI.Image} object.placeholder
+ * @param {Function} object.onSuccess
+ * @param {UI.Image} object.onSuccess.image
+ * @param {UI.ImageCacheType} object.onSuccess.cache
+ * @param {Function} object.onError
+ * @removed
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+GifImageView.prototype.fetchFromUrl = function(object){};
 
 module.exports = GifImageView;

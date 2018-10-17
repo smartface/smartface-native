@@ -335,6 +335,12 @@ View.prototype = {
     bringToFront: function() {
         this.nativeObject.bringToFront();
     },
+    flipHorizontally: function() {
+        this.nativeObject.setScaleX(-1);
+    },
+    flipVertically: function() {
+        this.nativeObject.setScaleY(-1);
+    },
     getParent: function() {
         return this.parent ? this.parent : null;
     },
@@ -730,5 +736,8 @@ View.State.STATE_FOCUSED = array([
     NativeR.attr.state_enabled,
 ], "int");
 
+View.ios = {};
+View.iOS = {};
+View.iOS.SemanticContentAttribute = {};
 
 module.exports = View;
