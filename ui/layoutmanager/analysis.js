@@ -36,7 +36,7 @@ LayoutManager.prototype.onItemLength = function(itemLength){};
 
 /**
  * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
- * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.
+ * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.For Android, you can use {@link UI.GridView#snapToAlignment}.
  *
  *      @example
  *      //For Left Span 
