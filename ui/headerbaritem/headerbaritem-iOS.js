@@ -1,6 +1,7 @@
 const Color = require("sf-core/ui/color");
 const Image = require('sf-core/ui/image');
 const Invocation = require('sf-core/util').Invocation;
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 function HeaderBarItem(params) {
     var _onPress = null;
@@ -12,7 +13,27 @@ function HeaderBarItem(params) {
     var _badge = {};
     _badge.ios = {};
     
+    var _nativeView;
+    
     Object.defineProperties(this, {
+        'layout': {
+            get: function (argument) {
+                var retval;
+                if (_nativeView) {
+                    retval = _nativeView;
+                } else {
+                    var key = new Invocation.Argument({
+                        type:"NSString",
+                        value: "view"
+                    });
+                    var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
+                    _nativeView = new FlexLayout({nativeObject : view});
+                    retval = _nativeView;
+                }
+                return retval;
+            },
+            enumerable: true
+        },
         'title': {
             get: function() {
                 return self.nativeObject.title;
@@ -85,6 +106,9 @@ function HeaderBarItem(params) {
         }
     });
     
+    this.getScreenLocation = function () {
+        return this.layout.getScreenLocation();
+    };
     
     var _badgeVisible = false;
     var _badgeBackgroundColor = 0;
