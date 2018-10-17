@@ -296,7 +296,7 @@ function View(params) {
         return self.parent ? self.parent : null;
     };
     
-    this.getScreenPosition = function() {
+    this.getScreenLocation = function() {
         var viewOrigin = {x:self.nativeObject.bounds.x, y:self.nativeObject.bounds.y};
         var origin= new Invocation.Argument({
             type:"CGPoint",

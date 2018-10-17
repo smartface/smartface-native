@@ -106,8 +106,8 @@ function HeaderBarItem(params) {
         }
     });
     
-    this.getScreenPosition = function () {
-        return this.layout.getScreenPosition();
+    this.getScreenLocation = function () {
+        return this.layout.getScreenLocation();
     };
     
     var _badgeVisible = false;
