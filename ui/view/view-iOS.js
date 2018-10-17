@@ -262,7 +262,16 @@ function View(params) {
     this.getPosition = function(){
         return {left : self.left , top : self.top , width : self.width, height : self.height};
     }
-
+    
+    this.flipHorizontally = function(){
+        self.nativeObject.flipHorizontally();
+    }
+    
+    
+    this.flipVertically = function(){
+        self.nativeObject.flipVertically();
+    }
+    
     this.setPosition = function(position){
         self.left = position.left;
         self.top = position.top;
@@ -1093,5 +1102,30 @@ function View(params) {
     }
 
 }
+
+
+View.ios = {};
+
+Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
+    get: function() {
+        return __SF_UIView.viewAppearanceSemanticContentAttribute();
+    },
+    set: function(value){
+        var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); // For application-iOS.js Application Direction Manager
+        userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
+        userDefaults.synchronize();
+    
+        // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
+    },
+    enumerable: true
+});
+
+View.iOS = {};
+
+View.iOS.SemanticContentAttribute = {
+    AUTO : 0,
+    FORCELEFTTORIGHT : 3,
+    FORCERIGHTTOLEFT : 4
+};
 
 module.exports = View;

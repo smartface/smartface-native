@@ -77,7 +77,3 @@ ActionKeyType.SEARCH = 3;
  * @readonly
  */
 ActionKeyType.SEND = 4;
-
-Object.freeze(ActionKeyType);
-
-module.exports = ActionKeyType;

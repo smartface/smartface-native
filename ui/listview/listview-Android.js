@@ -370,7 +370,7 @@ const ListView = extend(View)(
             }
 
             if (self.nativeInner) {
-                self.nativeInner.setPadding(0, topInset, 0, bottomInset);
+                self.nativeInner.setPaddingRelative(0, topInset, 0, bottomInset);
             }
         }
 

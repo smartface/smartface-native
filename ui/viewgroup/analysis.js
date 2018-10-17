@@ -60,6 +60,17 @@ ViewGroup.prototype.removeAll = function(){};
 ViewGroup.prototype.getChildCount = function(){};
 
 /**
+ * Gets the array of children inside viewgroup.
+ *
+ * @returns {UI.View[]}
+ * @method getChildList
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+ViewGroup.prototype.getChildList = function(){};
+
+/**
  * Finds a child view with specified id within the layout.
  *
  *     @example
