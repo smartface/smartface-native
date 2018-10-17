@@ -202,7 +202,7 @@ GridView.prototype.scrollBarEnabled = false;
 GridView.prototype.refreshEnabled = true;
 
 /**
- * This property supportes pager style snapping in either vertical or horizontal orientation. For iOS, prefer to UI.LayoutManager.targetContentOffset.
+ * This property supports pager style snapping in either vertical or horizontal orientation. For iOS, prefer to UI.LayoutManager.targetContentOffset
  *
  * @property {UI.GridView.Android.SnapAlignment} [UI.GridView.Android.SnapAlignment.SNAPTO_START]
  * @android
