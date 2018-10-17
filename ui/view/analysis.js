@@ -445,6 +445,20 @@ View.prototype.flipHorizontally = function() {};
 View.prototype.flipVertically = function() {};
 
 /**
+ * This method returns an object that defines view location on screen.
+ *
+ * @method getScreenLocation
+ * @return {Object} location
+ * @return {Number} location.x
+ * @return {Number} location.y
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+View.prototype.getScreenLocation = function() {};
+
+
+/**
  * Gets the parent view of a view.
  *
  *     @example
