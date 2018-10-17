@@ -202,6 +202,24 @@ GridView.prototype.scrollBarEnabled = false;
 GridView.prototype.refreshEnabled = true;
 
 /**
+ * This property supportes pager style snapping in either vertical or horizontal orientation. 
+ *
+ * @property {UI.GridView.Android.SnapAlignment} [UI.GridView.Android.SnapAlignment.SNAPTO_START]
+ * @android
+ * @since 3.2.0
+ */
+GridView.prototype.snapToAlignment;
+
+/**
+ * This property allows snapping to behave as pager  or linear. 
+ *
+ * @property {Boolean} [paginationEnabled = true]
+ * @android
+ * @since 3.2.0
+ */
+GridView.prototype.paginationEnabled;
+
+/**
  * This method returns the index of item which is visible at
  * the top of a GridView at a given time.
  *

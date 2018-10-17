@@ -395,9 +395,8 @@ const GridView = extend(View)(
         };
         var onScrollListener = new SFOnScrollListener(overrideMethods);
 
-        // this.android = {};
         // android-only properties
-        var _snapToAlignment;
+        var _snapToAlignment, _paginationEnabled, _nativeLinearSnapHelper, _paginationAssigned = false;
         Object.defineProperties(this.android, {
             'onItemLongSelected': {
                 get: function() {
@@ -417,13 +416,31 @@ const GridView = extend(View)(
                     if (!typeof alignment === 'enum')
                         return;
                     const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
-                    let linearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
-                    linearSnapHelper.attachToRecyclerView(self.nativeInner);
+                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
+                    _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
+
+                    if (self.paginationEnabled && !_paginationAssigned)
+                        self.paginationEnabled(_paginationEnabled);
+                },
+                enumerable: true
+            },
+            'paginationEnabled': {
+                get: function() {
+                    return _paginationEnabled;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                        console.log(" value " + value);
+                    _paginationEnabled = value;
+                    if (_nativeLinearSnapHelper){
+                        _nativeLinearSnapHelper.disablePagination(!_paginationEnabled);
+                        _paginationAssigned = true;
+                    }
                 },
                 enumerable: true
             }
         });
-
 
         // ios-only properties
         this.ios = {};
