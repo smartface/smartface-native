@@ -122,6 +122,10 @@ File.prototype = {
     }
 };
 
+File.prototype.getAbsolutePath = function() {
+    return this.fullPath;
+};
+
 File.prototype.copy = function(destination) {
     if (this.nativeObject) {
         var destinationFile = new File({ path: destination });
