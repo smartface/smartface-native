@@ -9,7 +9,7 @@ function HeaderBarItem(params) {
     
     self.nativeObject = new __SF_UIBarButtonItem();
     self.nativeObject.target = self.nativeObject;
-    var _badge ={};
+    var _badge = {};
     _badge.ios = {};
     
     Object.defineProperties(this, {
@@ -95,6 +95,8 @@ function HeaderBarItem(params) {
     var _badgeHeight = 0;
     var _isBadgeFirstLoad = false;
     var _badgeText;
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    var _isRTL = !isLTR;
     
     Object.defineProperties(_badge, {
         'text': {
@@ -146,6 +148,10 @@ function HeaderBarItem(params) {
                                 self.badge.height = _badgeHeight;
                             } else {
                                 _badgeHeight = 0;
+                            }
+                            
+                            if (_isRTL) {
+                                self.badge.isRTL = _isRTL;
                             }
                         }
                         _isBadgeFirstLoad = true;
@@ -300,6 +306,18 @@ function HeaderBarItem(params) {
             },
             enumerable: true
         },
+        'isRTL' : {
+            get: function(){
+                return _isRTL;
+            },
+            set: function(value){
+                _isRTL = value;
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    self.nativeObject.pp_setIsRTL(value);
+                },1);
+            },
+            enumerable: true
+        }
     });
     
     // Assign parameters given in constructor

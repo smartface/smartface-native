@@ -150,7 +150,7 @@ function Navigator(params) {
                     if(_history.length < 1)
                         return false;
                     var current = _history[_history.length-1];
-                    current && current.page && current.page.onHide && current.page.onHide();
+                    // current && current.page && current.page.onHide && current.page.onHide();
                     _history.pop();
                     if(_history.length > 0) {
                         current = _history[_history.length-1];

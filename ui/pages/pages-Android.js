@@ -150,10 +150,11 @@ function isSliderDrawerOpen(_sliderDrawer) {
 }
 
 function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
-    if (pagesStack.length > 0) {
-        pagesStack[pagesStack.length - 1].onHide &&
-            pagesStack[pagesStack.length - 1].onHide();
+    const Router = require("sf-core/router");
+    if(Router.currentPage) {
+        Router.currentPage.onHide && Router.currentPage.onHide();
     }
+    
     if (!tag) {
         tag = "Page" + pagesStack.length;
     }
@@ -191,6 +192,11 @@ function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
 function pop() {
     var fragmentManager = activity.getSupportFragmentManager();
     if (fragmentManager.getBackStackEntryCount() > 0) {
+        const Router = require("sf-core/router");
+        if(Router.currentPage) {
+            Router.currentPage.onHide && Router.currentPage.onHide();
+        }
+    
         return fragmentManager.popBackStackImmediate();
     }
     return false;
