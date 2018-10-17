@@ -363,11 +363,10 @@ function HeaderBarItem(params) {
 
 HeaderBarItem.prototype = {
     getScreenLocation: function() {
-        if(!this.nativeObject)
-            return [];
-        var position = toJSArray(SFView.getLocationOnScreen(this.nativeObject));
-        position[0] = PixelToDp(position[0]);
-        position[1] = PixelToDp(position[1]);
+        var location = toJSArray(SFView.getLocationOnScreen(this.nativeObject));
+        var position = {};
+        position.x = PixelToDp(location[0]);
+        position.y = PixelToDp(location[1]);
         return position;
     },
 };
