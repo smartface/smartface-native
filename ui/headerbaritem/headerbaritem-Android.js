@@ -1,7 +1,9 @@
-/*globals requireClass*/
+/* globals requireClass, toJSArray */
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
+const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
+
 const Color = require("../color");
 const Image = require("../image");
 const View = require('../view');
@@ -14,6 +16,7 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
+function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -357,6 +360,16 @@ function HeaderBarItem(params) {
         }
     }
 }
+
+HeaderBarItem.prototype = {
+    getScreenLocation: function() {
+        var location = toJSArray(SFView.getLocationOnScreen(this.nativeObject));
+        var position = {};
+        position.x = PixelToDp(location[0]);
+        position.y = PixelToDp(location[1]);
+        return position;
+    },
+};
 
 var _itemColor = Color.WHITE;
 Object.defineProperty(HeaderBarItem, 'itemColor', {

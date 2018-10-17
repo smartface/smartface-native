@@ -56,6 +56,19 @@ HeaderBarItem.prototype.image = null;
 HeaderBarItem.prototype.enabled = true;
 
 /**
+ * This method returns an object that defines view location on screen.
+ *
+ * @method getScreenLocation
+ * @return {Object} location
+ * @return {Number} location.x
+ * @return {Number} location.y
+ * @android
+ * @ios
+ * @since 3.2.0
+ */
+HeaderBarItem.prototype.getScreenLocation = function() {};
+
+/**
  * Gets/sets callback for press event. If enabled property is set to false
  * press callback won't be called.
  *
