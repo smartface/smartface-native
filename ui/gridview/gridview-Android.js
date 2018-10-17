@@ -396,7 +396,8 @@ const GridView = extend(View)(
         var onScrollListener = new SFOnScrollListener(overrideMethods);
 
         // android-only properties
-        var _snapToAlignment, _paginationEnabled, _nativeLinearSnapHelper, _paginationAssigned = false;
+        var _snapToAlignment, _paginationEnabled = null,
+            _nativeLinearSnapHelper, _paginationAssigned = false;
         Object.defineProperties(this.android, {
             'onItemLongSelected': {
                 get: function() {
@@ -407,6 +408,21 @@ const GridView = extend(View)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'paginationEnabled': {
+                get: function() {
+                    return _paginationEnabled;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                    _paginationEnabled = value;
+                    if (_nativeLinearSnapHelper) {
+                        _nativeLinearSnapHelper.disablePagination(!_paginationEnabled);
+                        _paginationAssigned = true;
+                    }
+                },
+                enumerable: true
             },
             'snapToAlignment': {
                 get: function() {
@@ -419,27 +435,12 @@ const GridView = extend(View)(
                     _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
-                    if (self.paginationEnabled && !_paginationAssigned)
-                        self.paginationEnabled(_paginationEnabled);
-                },
-                enumerable: true
-            },
-            'paginationEnabled': {
-                get: function() {
-                    return _paginationEnabled;
-                },
-                set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
-                        console.log(" value " + value);
-                    _paginationEnabled = value;
-                    if (_nativeLinearSnapHelper){
-                        _nativeLinearSnapHelper.disablePagination(!_paginationEnabled);
-                        _paginationAssigned = true;
+                    if (self.android.paginationEnabled !== null && !_paginationAssigned) {
+                        self.android.paginationEnabled = _paginationEnabled ;
                     }
                 },
                 enumerable: true
-            }
+            },
         });
 
         // ios-only properties
