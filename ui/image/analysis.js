@@ -43,6 +43,26 @@ Image.prototype.height = 0;
 Image.prototype.width = 0;
 
 /**
+ * A Boolean value that indicates whether the image should flip in a right-to-left layout.
+ *
+ * @ios
+ * @property {Boolean} flipsForRightToLeftLayoutDirection
+ * @readonly
+ * @since 3.2.0
+ */
+Image.prototype.flipsForRightToLeftLayoutDirection = 0;
+
+/**
+ * Gets the renderingMode of image. 
+ *
+ * @ios
+ * @property {UI.Image.iOS.RenderingMode} renderingMode
+ * @readonly
+ * @since 3.2.0
+ */
+Image.prototype.renderingMode = 0;
+
+/**
  * Gets/Sets the autoMirrored of image. This property sets direction of Image automatically related to system or application direction. 
  * For iOS, you can use imageFlippedForRightToLeftLayoutDirection function. 
  *
@@ -67,11 +87,12 @@ Image.prototype.toBlob = function() {};
  * Determines how an image is rendered.
  *
  * @method imageWithRenderingMode
+ * @param {UI.Image.iOS.RenderingMode} renderingMode
  * @ios
  * @return UI.Image
  * @since 3.1.3
  */
-Image.prototype.imageWithRenderingMode = function() {};
+Image.prototype.imageWithRenderingMode = function(renderingMode) {};
 
 /**
  * Returns the image of automatically related to system or application direction. 
