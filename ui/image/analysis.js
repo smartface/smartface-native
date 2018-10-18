@@ -64,8 +64,8 @@ Image.prototype.renderingMode = 0;
 
 /**
  * Gets/Sets the autoMirrored of image. This property sets direction of Image automatically related to system or application direction. 
- * For iOS, you can use imageFlippedForRightToLeftLayoutDirection function. 
  *
+ * @ios
  * @android
  * @property {Boolean} autoMirrored
  * @since 3.1.3
@@ -95,8 +95,7 @@ Image.prototype.toBlob = function() {};
 Image.prototype.imageWithRenderingMode = function(renderingMode) {};
 
 /**
- * Returns the image of automatically related to system or application direction. 
- * For Android, you can use autoMirrored property.
+ * Returns the image of automatically related to system or application direction.
  *
  * @method imageFlippedForRightToLeftLayoutDirection
  * @ios

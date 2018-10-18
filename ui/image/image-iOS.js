@@ -170,10 +170,33 @@ function Image(params) {
     },
     enumerable: true
   });
-
+  
+  var _flippedImage;
+  var _nativeImage = self.nativeObject;
   Object.defineProperty(self.ios, 'flipsForRightToLeftLayoutDirection', {
     get: function() {
       return self.nativeObject.valueForKey("flipsForRightToLeftLayoutDirection");
+    },
+    enumerable: true
+  });
+  
+  var _autoMirrored = false;
+  Object.defineProperty(self, 'autoMirrored', {
+    set: function(value){
+      _autoMirrored = value;
+      if (_autoMirrored) {
+        if (_flippedImage) {
+          self.nativeObject = _flippedImage;
+        }else{
+          _flippedImage = self.nativeObject.imageFlippedForRightToLeftLayoutDirection();
+          self.nativeObject = _flippedImage;
+        }
+      }else{
+        self.nativeObject = _nativeImage
+      }
+    },
+    get: function() {
+      return _autoMirrored;
     },
     enumerable: true
   });
