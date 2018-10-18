@@ -42,11 +42,21 @@ const ImageView = extend(View)(
                 return Image.createFromImage(self.nativeObject.image);
             },
             set: function(value) {
+                _imageTemplate = undefined;
+                
                 if (typeof value === "string") {
                     var image = Image.createFromFile(value);
+                    if (_isSetTintColor) {
+                        image.nativeObject = image.nativeObject.imageWithRenderingMode(2);
+                        _imageTemplate = image.nativeObject;
+                    }
                     self.nativeObject.loadImage(image.nativeObject);
                 } else {
                     if (value) {
+                        if (_isSetTintColor) {
+                            value.nativeObject = value.nativeObject.imageWithRenderingMode(2);
+                            _imageTemplate = value.nativeObject;
+                        }
                         self.nativeObject.loadImage(value.nativeObject);
                     }else{
                         self.nativeObject.loadImage(undefined);
@@ -146,12 +156,23 @@ const ImageView = extend(View)(
             },
             enumerable: true
         });
-        
+
+        var _imageTemplate;
+        var _isSetTintColor = false;
         Object.defineProperty(self, 'tintColor', {
             get: function() {
                 return new Color({color : self.nativeObject.tintColor});
             },
             set: function(value) {
+                if (self.nativeObject.image) {
+                    if (_imageTemplate) {
+                        self.nativeObject.image = _imageTemplate;
+                    }else{
+                        _imageTemplate = self.nativeObject.image.imageWithRenderingMode(2);
+                        self.nativeObject.image = _imageTemplate;
+                    }
+                }
+                _isSetTintColor = true;
                 self.nativeObject.tintColor = value.nativeObject;
             },
             enumerable: true
