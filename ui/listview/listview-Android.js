@@ -298,7 +298,6 @@ const ListView = extend(View)(
                     return _onRowSelected;
                 },
                 set: function(onRowSelected) {
-                    console.log(" onRowSelected ");
                     _onRowSelected = onRowSelected.bind(this);
                 },
                 enumerable: true
