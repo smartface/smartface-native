@@ -503,7 +503,7 @@ function Page(params) {
     self.headerBar.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
-                if(self.navigationItem.leftItemEnabled){
+                if(self.ios.navigationItem.leftItemEnabled){
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
@@ -518,7 +518,7 @@ function Page(params) {
     self.ios.navigationItem.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
-                if(self.navigationItem.leftItemEnabled){
+                if(self.ios.navigationItem.leftItemEnabled){
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
