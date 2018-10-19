@@ -40,8 +40,6 @@ const OrientationDictionary = {
     15: 10
 };
 
-var pageAnimationsCache = null;
-
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -63,6 +61,17 @@ function Page(params) {
 
     var actionBar = null;
     var callback = {
+        onCreate: function() {
+            // TODO: Add api level check
+            if(!self.enterRevealTransition && !self.returnRevealAnimation)
+                return;
+            self.enterRevealTransition = false;
+            self.returnRevealAnimation = false;
+            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
+            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
+        },
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
@@ -296,37 +305,26 @@ function Page(params) {
         enumerable: true
     });
 
-    var popupPageTag = "popupWindow";
     Object.defineProperties(self, {
         'present': {
-            value: function(page, animation, onCompleteCallback) {
+            value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
+                    const Pages = require("../pages");
                     page.popUpBackPage = self;
+                    
+                    if(self.android.transitionViews) {
+                        console.log("Reveal Animation");
+                        page.enterRevealTransition = true;
+                        Pages.revealTransition(self.android.transitionViews, page.nativeObject);
+                    } else {
+                        console.log("PopUp Animation");
+                        Pages.popUpTransition(page.nativeObject, animation);
 
-                    var rootViewId = NativeSFR.id.page_container;
-                    var fragmentManager = activity.getSupportFragmentManager();
-                    var fragmentTransaction = fragmentManager.beginTransaction();
-
-                    if (!pageAnimationsCache) {
-                        var packageName = activity.getPackageName();
-                        var resources = AndroidConfig.activityResources;
-                        pageAnimationsCache = {};
-                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+                        self.layout.nativeObject.setFocusableInTouchMode(false);
+                        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
                     }
-
-                    if (animation)
-                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
-
-                    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-                    fragmentTransaction.addToBackStack(popupPageTag);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    fragmentManager.executePendingTransactions();
-
-                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-                    self.layout.nativeObject.setFocusableInTouchMode(false);
-                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
                 }
@@ -338,6 +336,15 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
+                console.log("self.popUpBackPage.android: " + self.popUpBackPage.android);
+                if(self.popUpBackPage.android.transitionViews) {
+                    console.log("returnRevealAnimation");
+                    self.popUpBackPage.returnRevealAnimation = true;
+                    fragmentManager.popBackStack();
+                    onCompleteCallback && onCompleteCallback();
+                    return;
+                }
+                console.log("dismiss popBackStack");
                 fragmentManager.popBackStack();
 
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
