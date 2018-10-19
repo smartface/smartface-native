@@ -103,14 +103,16 @@ function BottomTabBarController(params) {
         else if (childController instanceof NavigationController) {
             console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
             // first press
-            if (childController.historyStack.length === 1) {
+            if (childController.historyStack.length < 1) {
                 console.log("TabbarOnClick NavigationController first visit");
+                if(!childController.childControllers[0]) // Requested by Smartface Router Team
+                    return;
                 childController.push({
                     controller: childController.childControllers[0],
                     animated: false
                 });
             }
-            else if (childController.historyStack.length > 1) {
+            else if (childController.historyStack.length >= 1) {
                 console.log("TabbarOnClick NavigationController not first visit");
                 var childControllerStack = childController.historyStack;
                 var childControllerStackLenght = childControllerStack.length;
