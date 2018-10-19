@@ -304,17 +304,27 @@ function Page(params) {
         },
         enumerable: true
     });
-
+    
+    var _transitionViews;
     Object.defineProperties(self, {
+        'transitionViews': {
+            get: function() {
+                return _transitionViews;
+            },
+            set: function(views) {
+                _transitionViews = views;
+            },
+            enumerable: true
+        },
         'present': {
             value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
                     const Pages = require("../pages");
                     page.popUpBackPage = self;
                     
-                    if(self.android.transitionViews) {
+                    if(self.transitionViews) {
                         page.enterRevealTransition = true;
-                        Pages.revealTransition(self.android.transitionViews, page.nativeObject);
+                        Pages.revealTransition(self.transitionViews, page.nativeObject);
                     } else {
                         Pages.popUpTransition(page.nativeObject, animation);
 
@@ -334,7 +344,7 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(self.popUpBackPage.android.transitionViews) {
+                if(self.popUpBackPage.transitionViews) {
                     self.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();

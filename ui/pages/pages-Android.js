@@ -266,7 +266,6 @@ Pages.revealTransition = function(transitionViews, nativeObjectOfPage) {
     var lenght = transitionViews.length;
     for(var i = 0; i < lenght; i++) {
         var view = transitionViews[i];
-        console.log("Index: " + i + "  === transitionId: " + view.transitionId);
         fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
     } 
     fragmentTransaction.replace(rootViewId, nativeObjectOfPage);
