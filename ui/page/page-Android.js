@@ -313,11 +313,9 @@ function Page(params) {
                     page.popUpBackPage = self;
                     
                     if(self.android.transitionViews) {
-                        console.log("Reveal Animation");
                         page.enterRevealTransition = true;
                         Pages.revealTransition(self.android.transitionViews, page.nativeObject);
                     } else {
-                        console.log("PopUp Animation");
                         Pages.popUpTransition(page.nativeObject, animation);
 
                         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
@@ -336,17 +334,14 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                console.log("self.popUpBackPage.android: " + self.popUpBackPage.android);
                 if(self.popUpBackPage.android.transitionViews) {
-                    console.log("returnRevealAnimation");
                     self.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();
                     return;
                 }
-                console.log("dismiss popBackStack");
+                
                 fragmentManager.popBackStack();
-
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
