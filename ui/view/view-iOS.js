@@ -198,6 +198,18 @@ function View(params) {
         },
         enumerable: true
     });
+    
+    Object.defineProperty(self, 'transitionId', {
+        get: function() {
+            return self.nativeObject.valueForKey("heroID");
+        },
+        set: function(value) {
+            if (typeof value === "string") {
+                self.nativeObject.setValueForKey(value,"heroID");
+            }
+        },
+        enumerable: true
+    });
 
     self.nativeObject.layer.rotationZ = 0;
     self.nativeObject.layer.rotationX = 0;
