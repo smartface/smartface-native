@@ -503,7 +503,7 @@ function Page(params) {
     self.headerBar.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
-                if(self.navigationItem.leftItemEnabled){
+                if(self.ios.navigationItem.leftItemEnabled){
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
@@ -518,7 +518,7 @@ function Page(params) {
     self.ios.navigationItem.setLeftItem = function(value){
         if(value){
             if (value instanceof HeaderBarItem) {
-                if(self.navigationItem.leftItemEnabled){
+                if(self.ios.navigationItem.leftItemEnabled){
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
@@ -611,91 +611,6 @@ function Page(params) {
         },
         enumerable: true
     });
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // All deprecated headerBar properties
-
-    Object.defineProperty(self.headerBar, 'titleColor', {
-        get: function() {
-            var retval = null;
-            if (self.nativeObject.navigationController) {
-                retval = new Color({color : self.nativeObject.navigationController.navigationBar.titleTextAttributes["NSColor"]});
-            }
-            return retval;
-        },
-        set: function(value) {
-            if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.navigationBar.titleTextAttributes = {"NSColor" :value.nativeObject};
-            }
-        },
-        enumerable: true,configurable : true
-    });
-
-    var _visible = true;
-    Object.defineProperty(self.headerBar, 'visible', {
-        get: function() {
-            return _visible;
-        },
-        set: function(value) {
-            _visible = value;
-            if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.setNavigationBarHiddenAnimated(!value,true);
-            }
-        },
-        enumerable: true,configurable : true
-    });
-
-    Object.defineProperty(self.headerBar, 'itemColor', {
-        get: function() {
-            var retval = null;
-            if (self.nativeObject.navigationController) {
-                retval = new Color({color : self.nativeObject.navigationController.navigationBar.tintColor});
-            }
-            return retval;
-        },
-        set: function(value) {
-            if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.navigationBar.tintColor = value.nativeObject;
-            }
-        },
-        enumerable: true,configurable : true
-    });
-    
-    Object.defineProperty(self.headerBar, 'backgroundColor', {
-        get: function() {
-            var retval = null;
-            if (self.nativeObject.navigationController) {
-                retval = new Color({color : self.nativeObject.navigationController.navigationBar.barTintColor});
-            }
-            return retval;
-        },
-        set: function(value) {
-            if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.navigationBar.barTintColor = value.nativeObject;  
-            }
-        },
-        enumerable: true,configurable : true
-    });
-
-    Object.defineProperty(self.headerBar, 'backgroundImage', {
-        get: function() {
-            var retval = null;
-            if (self.nativeObject.navigationController) {
-                retval = Image.createFromImage(self.nativeObject.navigationController.navigationBar.backgroundImage);
-            }
-            return retval;
-        },
-        set: function(value) {
-            if (self.nativeObject.navigationController) {
-                self.nativeObject.navigationController.navigationBar.backgroundImage = value.nativeObject;
-            }
-        },
-        enumerable: true,configurable : true
-    });
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     if (params) {
         for (var param in params) {

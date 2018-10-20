@@ -1,5 +1,4 @@
 function NavigatonController(params) {
-    console.log("IOS==NAVIGATIONCONT==NavigationController Init");
     var self = this;
     
     ////////////////////////////////////////////////////////////////////////////
@@ -31,7 +30,6 @@ function NavigatonController(params) {
         },
         set: function(childControllers) {
             if (typeof childControllers === 'object') {
-                console.log("IOS==NAVIGATIONCONT==CONTROLLER:set child controller");
                 self.model.childControllers = childControllers;
                 
                 var nativeChildPageArray = [];
@@ -48,11 +46,9 @@ function NavigatonController(params) {
     var _headerBar = new HeaderBar({navigationController:self});
     Object.defineProperty(self, 'headerBar', {
         get: function() {
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:headerbar getter");
             return _headerBar;
         },
         set: function (value){
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:headerbar setter");
             if (typeof value === "object") {
                 Object.assign(_headerBar, value);   
             }
@@ -64,7 +60,6 @@ function NavigatonController(params) {
     // Functions
     this.push = function (params){
         if (params.controller && typeof params.controller === 'object') {
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:push");
             self.view.push(params.controller, params.animated ? true : false);
             self.model.pushPage(params.controller);
             params.controller.parentController = self;
@@ -72,14 +67,12 @@ function NavigatonController(params) {
     };
     
     this.pop = function (params){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:pop");
         self.view.pop(params.animated ? true : false);
         self.model.popPage();
     };
     
     this.popTo = function (params){
         if (params.controller && typeof params.controller === 'object') {
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:pop to");
             self.view.popTo(params.controller, params.animated ? true : false);
             self.model.popToPage(params.controller);
         }
@@ -91,16 +84,12 @@ function NavigatonController(params) {
     this.willShow = undefined;
     this.willShowViewController = function(index, animated){
         var page = self.model.pageForIndex(index);
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:will show delegate");
         if (typeof this.willShow === "function"){
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:will show callback");
             this.willShow({controller: page, animated: animated});
         }
     };
     
-    this.didShowViewController = function(viewController, index, animated){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:did show delegate index : " + index);
-        
+    this.didShowViewController = function(viewController, index, animated){        
         var operation = 0;
         var fromIndex = 0;
         var toIndex = 0;
@@ -120,16 +109,13 @@ function NavigatonController(params) {
         if (self.model.pageToPush) {
             self.model.pageToPush = null;
         }
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:did show delegate Childs Array: " + self.model.childControllers);
     };
     
     this.onTransition = undefined;
     this.animationControllerForOperationFromViewControllerToViewController = function(transitionOperation, fromIndex, toIndex){
-        console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition delegate fromIndex:" + fromIndex + " toIndex:" + toIndex + " operation:" + transitionOperation);
         var fromController = self.model.childControllers[fromIndex];
         var toController = self.model.pageForIndex(toIndex);
         if (typeof this.onTransition === "function"){
-            console.log("IOS==NAVIGATIONCONT==CONTROLLER:on transition callback");
             this.onTransition({currentController: fromController, targetController: toController, operation: transitionOperation});
         }
     };
@@ -145,7 +131,6 @@ function NavigatonController(params) {
 const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
 function HeaderBar(params) {
-    console.log("IOS==NAVIGATIONCONT==HeaderBar init");
     const UINavigationBar = SF.requireClass("UINavigationBar");
     
     var self = this;
@@ -154,7 +139,6 @@ function HeaderBar(params) {
     
     self.nativeObject = undefined;
     if (params.navigationController) {
-        console.log("IOS==NAVIGATIONCONT==HEADERBAR:native object init");
         self.nativeObject = params.navigationController.view.nativeObject.navigationBar;
     }
     
@@ -168,7 +152,6 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (typeof value === 'object') {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set ios");
                 Object.assign(_ios, value);
             }
         },
@@ -182,11 +165,46 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (typeof value === 'boolean') {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set translucent");
                 self.nativeObject.translucent = value;
             }
         },
         enumerable: true
+    });
+    
+    var _transparent = false;
+    Object.defineProperty(self, 'transparent', {
+        get: function() {
+            return _transparent;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (value) {
+                    if (typeof self.nativeObject.barTintColor === "undefined") {
+                        self.nativeObject.backgroundImage = __SF_UIImage.getInstance();
+                        self.nativeObject.shadowImage = __SF_UIImage.getInstance();   
+                    }
+                    self.nativeObject.translucent = true;
+                } else {
+                    self.nativeObject.backgroundImage = undefined;
+                    self.nativeObject.shadowImage = undefined;
+                    self.nativeObject.translucent = false;
+                }
+                _transparent = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self.ios, 'alpha', {
+        get: function() {
+            return self.nativeObject.alpha;
+        },
+        set: function(value) {
+            if (typeof value === "number") {
+                self.nativeObject.alpha = value;
+            }
+        },
+        enumerable: true,configurable : true
     });
     
     Object.defineProperty(self, 'titleColor', {
@@ -226,7 +244,17 @@ function HeaderBar(params) {
             return new Color({color : self.nativeObject.barTintColor});
         },
         set: function(value) {
-            self.nativeObject.barTintColor = value.nativeObject;
+            if (value) {
+                self.nativeObject.barTintColor = value.nativeObject;
+                if (self.nativeObject.backgroundImage) {
+                    self.nativeObject.backgroundImage = undefined;
+                }
+            } else {
+                self.nativeObject.barTintColor = undefined;
+                if (self.transparent) {
+                    self.transparent = true;
+                }
+            }
         },
         enumerable: true,configurable : true
     });
@@ -276,7 +304,6 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (typeof value === 'boolean') {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set prefers large titles");
                 _prefersLargeTitles = value;
                 var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
                 if (systemVersion >= 11) {
@@ -294,7 +321,6 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (typeof value === "object") {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:set backindicator image");
                 _backIndicatorImage = value;
                 self.nativeObject.backIndicatorImage = _backIndicatorImage.nativeObject;
                 
@@ -312,7 +338,6 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (typeof value === "object") {
-                console.log("IOS==NAVIGATIONCONT==HEADERBAR:back indicator transition mask image");
                 _backIndicatorTransitionMaskImage = value;
                 self.nativeObject.backIndicatorTransitionMaskImage = _backIndicatorTransitionMaskImage.nativeObject;
             }
@@ -327,9 +352,7 @@ function HeaderBar(params) {
     }
 };
 
-function NavigationView(params) {
-    console.log("IOS==NAVIGATIONCONT==NavigationView init");
-    
+function NavigationView(params) {    
     const UIGestureRecognizer = SF.requireClass("UIGestureRecognizer");
     const UINavigationController = SF.requireClass("UINavigationController");
     
@@ -337,24 +360,20 @@ function NavigationView(params) {
     self.viewModel = undefined;
     
     if (params.viewModel) {
-        console.log("IOS==NAVIGATIONCONT==VIEW:viewmodel setted");
         self.viewModel = params.viewModel;
     }
     
     self.nativeObject = UINavigationController.new();
     self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
         navigationControllerWillShowViewControllerAnimated : function (navigationController, viewController, animated) {
-            console.log("IOS==NAVIGATIONCONT==VIEW:will show view controller animated");
             var index = self.nativeObject.viewControllers.indexOf(viewController);
             self.viewModel.willShowViewController(index, animated);
         },
         navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated) {
-            console.log("IOS==NAVIGATIONCONT==VIEW:did show view controller animated");
             var index = self.nativeObject.viewControllers.indexOf(viewController);
             self.viewModel.didShowViewController(viewController, index, animated);
         },
         // navigationControllerAnimationControllerForOperationFromViewControllerToViewController : function (navigationController, operation, fromVC, toVC) {
-        //     console.log("IOS==NAVIGATIONCONT==VIEW:navigation controller animation controller for operation...");
         //     if (typeof self.nativeObject.interactivePopGestureRecognizer.delegate !== "undefined") {
         //         // Returning undefined to navigationControllerAnimationControllerForOperationFromViewControllerToViewController function breaks pop gesture recognizer.
         //         // Delegate should be undefined.
@@ -370,25 +389,21 @@ function NavigationView(params) {
     
     this.push = function (page, animated) {
         if (page.nativeObject) {
-            console.log("IOS==NAVIGATIONCONT==VIEW:push");
             self.nativeObject.pushViewControllerAnimated(page.nativeObject, animated);
         }
     };
     
     this.pop = function (animated) {
-        console.log("IOS==NAVIGATIONCONT==VIEW:pop");
         self.nativeObject.popViewControllerAnimated(animated);
     };
     
     this.popTo = function (page, animated) {
         if (page.nativeObject) {
-            console.log("IOS==NAVIGATIONCONT==VIEW:pop to");
             self.nativeObject.popToViewControllerAnimated(page.nativeObject, animated);
         }
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {
-        console.log("IOS==NAVIGATIONCONT==VIEW:set native child view controllers");
         self.nativeObject.viewControllers = nativeChildPageArray;
     };
     
@@ -396,7 +411,6 @@ function NavigationView(params) {
 };
 
 function NavigatonModel() {
-    console.log("IOS==NAVIGATIONCONT==Model init");
     var self = this;
     
     self.pageToPush = undefined;
@@ -404,19 +418,16 @@ function NavigatonModel() {
     self.childControllers = [];
     
     this.pushPage = function (page) {
-        console.log("IOS==NAVIGATIONCONT==MODEL:push page");
         self.pageToPush = page;
         self.childControllers.push(page);
     };
     
     this.popPage = function () {
-        console.log("IOS==NAVIGATIONCONT==MODEL:pop page");
         var poppedPage = self.childControllers.pop();
         poppedPage.parentController = null;
     };
     
     this.popToPage = function (page) {
-        console.log("IOS==NAVIGATIONCONT==MODEL:pop to page");
         var index = self.childControllers.indexOf(page);
         if (index >= 0) {
             this.popToIndex(index);
@@ -424,7 +435,6 @@ function NavigatonModel() {
     };
     
     this.popToIndex = function (index) {
-        console.log("IOS==NAVIGATIONCONT==MODEL:pop to index");
         for (var i = self.childControllers.length - 1; i > index; --i) {
             var poppedPage = self.childControllers.pop();
             poppedPage.parentController = null;
@@ -432,7 +442,6 @@ function NavigatonModel() {
     };
     
     this.pageForIndex = function (index) {
-        console.log("IOS==NAVIGATIONCONT==MODEL:page for index");
         var page = null;
         if (index >= 0) {
             page = self.childControllers[index];

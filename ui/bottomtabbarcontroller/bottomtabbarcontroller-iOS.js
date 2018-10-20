@@ -1,5 +1,4 @@
 function BottomTabBarController(params) {
-    console.log("IOS==BOTTOMTABBARCONTROLLER==NavigationController Init");
     var self = this;
     
     ////////////////////////////////////////////////////////////////////////////
@@ -31,7 +30,6 @@ function BottomTabBarController(params) {
         },
         set: function(childControllers) {
             if (typeof childControllers === 'object') {
-                console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:set child controller");
                 self.model.childControllers = childControllers;
                 
                 var nativeChildPageArray = [];
@@ -48,11 +46,9 @@ function BottomTabBarController(params) {
     var _tabBar = new TabBar({nativeObject:self.view.nativeObject.tabBar});
     Object.defineProperty(self, 'tabBar', {
         get: function() {
-            console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:tabBar getter");
             return _tabBar;
         },
         set: function (value){
-            console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:tabBar setter");
             if (typeof value === "object") {
                 Object.assign(_tabBar, value);   
             }
@@ -86,9 +82,7 @@ function BottomTabBarController(params) {
     this.shouldSelectByIndex = undefined;
     this.shouldSelectViewController = function(index) {
         var retval = true;
-        console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:shouldSelectByIndex delegate");
         if (typeof this.shouldSelectByIndex === "function"){
-            console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:shouldSelectByIndex callback");
             retval = this.shouldSelectByIndex({index : index});
         }
         return retval;
@@ -96,9 +90,7 @@ function BottomTabBarController(params) {
     
     this.didSelectByIndex = undefined;
     this.didSelectViewController = function(index){
-        console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:didSelectViewController delegate");
         if (typeof this.didSelectByIndex === "function"){
-            console.log("IOS==BOTTOMTABBARCONTROLLER==CONTROLLER:didSelectByIndex callback");
             this.didSelectByIndex({index : index});
         }
     };
@@ -114,7 +106,6 @@ function BottomTabBarController(params) {
 const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
 function TabBar(params) {
-    console.log("IOS==BOTTOMTABBARCONTROLLER==tabbar init");
     const UITabBar = SF.requireClass("UITabBar");
     const TabBarItem = require('sf-core/ui/tabbaritem');
     
@@ -124,7 +115,6 @@ function TabBar(params) {
     
     self.nativeObject = undefined;
     if (params.nativeObject) {
-        console.log("IOS==BOTTOMTABBARCONTROLLER==tabbar:native object init");
         self.nativeObject = params.nativeObject;
     }
     
@@ -138,7 +128,6 @@ function TabBar(params) {
         },
         set: function(value) {
             if (typeof value === 'object') {
-                console.log("IOS==BOTTOMTABBARCONTROLLER==TABBAR:set ios");
                 Object.assign(_ios, value);
             }
         },
@@ -152,7 +141,6 @@ function TabBar(params) {
         },
         set: function(value) {
             if (typeof value === 'object') {
-                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:items setter");
                 _items = value;
                 
                 for (var i in _items) {
@@ -167,16 +155,12 @@ function TabBar(params) {
     });
     
     // ITEMS DELEGATE
-    self.tabBarControllerItemsDidChange = function() {
-        console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange");
-        
+    self.tabBarControllerItemsDidChange = function() {        
         if (self.items.length === self.nativeObject.items.length) {
-            console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange self has items");
             for (var i in self.nativeObject.items) {
                 self.items[i].nativeObject = self.nativeObject.items[i];
             }
         } else {
-            console.log("IOS==BOTTOMTABBARCONTROLLER==tabBarControllerItemsDidChange self havent items");
             var itemsArray = [];
             for (var i in self.nativeObject.items) {
                 var sfTabBarItem = new TabBarItem({nativeObject : self.nativeObject.items[i]});
@@ -193,7 +177,6 @@ function TabBar(params) {
         },
         set: function(value) {
             if (typeof value === 'boolean') {
-                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:set translucent");
                 self.nativeObject.translucent = value;
             }
         },
@@ -275,7 +258,6 @@ function TabBar(params) {
         },
         set: function(value) {
             if (typeof value === "object") {
-                console.log("IOS==BOTTOMTABBARCONTROLLER==HEADERBAR:selectionIndicatorImage");
                 _selectionIndicatorImage = value;
                 self.nativeObject.selectionIndicatorImage = _selectionIndicatorImage.nativeObject;
             }
@@ -290,28 +272,23 @@ function TabBar(params) {
     }
 };
 
-function BottomTabBarView(params) {
-    console.log("IOS==BOTTOMTABBARCONTROLLER==NavigationView init");
-    
+function BottomTabBarView(params) {    
     const UITabBarController = SF.requireClass("UITabBarController");
     
     var self = this;
     self.viewModel = undefined;
     
     if (params.viewModel) {
-        console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:viewmodel setted");
         self.viewModel = params.viewModel;
     }
     
     self.nativeObject = UITabBarController.new();
     self.nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>',{
         tabBarControllerShouldSelectViewController : function (tabBarController, viewController) {
-            console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:tabBarControllerShouldSelectViewController");
             var index = self.nativeObject.viewControllers.indexOf(viewController);
             return self.viewModel.shouldSelectViewController(index);
         },
         tabBarControllerDidSelectViewController : function (tabBarController, viewController) {
-            console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:did show view controller animated");
             var index = self.nativeObject.viewControllers.indexOf(viewController);
             self.viewModel.didSelectViewController(index);
         }
@@ -319,12 +296,10 @@ function BottomTabBarView(params) {
     self.nativeObject.delegate = self.nativeObjectDelegate;
     
     this.setIndex = function (index) {
-        console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:setIndex");
         self.nativeObject.selectedIndex = index;
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {
-        console.log("IOS==BOTTOMTABBARCONTROLLER==VIEW:set native child view controllers");
         self.nativeObject.viewControllers = nativeChildPageArray;
         
         if (nativeChildPageArray.length > 0) {
@@ -336,7 +311,6 @@ function BottomTabBarView(params) {
 };
 
 function BottomTabBarModel() {
-    console.log("IOS==BOTTOMTABBARCONTROLLER==Model init");
     var self = this;
     
     self.childControllers = [];

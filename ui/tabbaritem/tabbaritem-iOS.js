@@ -20,7 +20,6 @@ function TabBarItem(params) {
                 _title = title;
                 if (self.nativeObject) {
                     self.nativeObject.title = _title;
-                    console.log("Tabbaritem native title did set");
                 }
             }
         },
