@@ -4,7 +4,8 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
 
-var pageAnimationsCache = {};
+var popupPageTag = "popupWindow";
+var pageAnimationsCache = {}, pagePopUpAnimationsCache;
 
 function FragmentTransaction(){}
 
@@ -70,6 +71,42 @@ FragmentTransaction.replace = function(params) {
     
     fragmentTransaction.replace(rootViewId, params.page.nativeObject, tag);
     // fragmentTransaction.addToBackStack(tag);
+    fragmentTransaction.commitAllowingStateLoss();
+    fragmentManager.executePendingTransactions();
+};
+
+FragmentTransaction.revealTransition = function(transitionViews, nativeObjectOfPage) {
+    var rootViewId = NativeR.id.page_container;
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    var lenght = transitionViews.length;
+    for(var i = 0; i < lenght; i++) {
+        var view = transitionViews[i];
+        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+    } 
+    fragmentTransaction.replace(rootViewId, nativeObjectOfPage);
+    fragmentTransaction.addToBackStack(popupPageTag);
+    fragmentTransaction.commitAllowingStateLoss();
+    fragmentManager.executePendingTransactions();
+};
+
+FragmentTransaction.popUpTransition = function(nativeObjectOfPage, animation) {
+    var rootViewId = NativeR.id.page_container;
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    if(!pagePopUpAnimationsCache) {
+        var packageName = activity.getPackageName();
+        var resources = AndroidConfig.activityResources;
+        pagePopUpAnimationsCache = {};
+        pagePopUpAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+        pagePopUpAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+    }
+
+    if (animation)
+        fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
+
+    fragmentTransaction.add(rootViewId, nativeObjectOfPage, popupPageTag);
+    fragmentTransaction.addToBackStack(popupPageTag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
