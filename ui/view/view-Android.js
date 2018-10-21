@@ -211,12 +211,6 @@ function View(params) {
 }
 
 View.prototype = {
-    get transitionId() {
-        return NativeViewCompat.getTransitionName(this.nativeObject);
-    },
-    set transitionId(id) {
-        NativeViewCompat.setTransitionName(this.nativeObject, id);
-    },
     get alpha() {
         // Avoiding integer-float conflics of engine
         return this.nativeObject.getAlpha();

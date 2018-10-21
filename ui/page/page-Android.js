@@ -29,6 +29,8 @@ const OrientationDictionary = {
     15: 10
 };
 
+var pageAnimationsCache = null;
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -50,17 +52,6 @@ function Page(params) {
 
     var actionBar = null;
     var callback = {
-        onCreate: function() {
-            // TODO: Add api level check
-            if(!self.enterRevealTransition && !self.returnRevealAnimation)
-                return;
-            self.enterRevealTransition = false;
-            self.returnRevealAnimation = false;
-            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
-            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);  
-        },
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
@@ -298,35 +289,38 @@ function Page(params) {
         },
         enumerable: true
     });
-    
-    var _transitionViews;
+
+    var popupPageTag = "popupWindow";
     Object.defineProperties(self, {
-        'transitionViews': {
-            get: function() {
-                return _transitionViews;
-            },
-            set: function(views) {
-                _transitionViews = views;
-            },
-            enumerable: true
-        },
         'present': {
             value: function(page, animation, onCompleteCallback) {
                 if (page instanceof Page) {
-                    const FragmentTransaction = require("../../util/Android/fragmenttransition");
                     page.popUpBackPage = self;
-                    
-                    if(self.transitionViews) {
-                        page.enterRevealTransition = true;
-                        FragmentTransaction.revealTransition(self.transitionViews, page.nativeObject);
-                    } else {
-                        FragmentTransaction.popUpTransition(page.nativeObject, animation);
 
-                        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-                        self.layout.nativeObject.setFocusableInTouchMode(false);
-                        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+                    var rootViewId = NativeSFR.id.page_container;
+                    var fragmentManager = activity.getSupportFragmentManager();
+                    var fragmentTransaction = fragmentManager.beginTransaction();
+
+                    if (!pageAnimationsCache) {
+                        var packageName = activity.getPackageName();
+                        var resources = AndroidConfig.activityResources;
+                        pageAnimationsCache = {};
+                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
                     }
+
+                    if (animation)
+                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
+
+                    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
+                    fragmentTransaction.addToBackStack(popupPageTag);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    fragmentManager.executePendingTransactions();
+
+                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+                    self.layout.nativeObject.setFocusableInTouchMode(false);
+                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
 
                     onCompleteCallback && onCompleteCallback();
                 }
@@ -338,14 +332,11 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
-                
                 fragmentManager.popBackStack();
-                if(!self.popUpBackPage.transitionViews) {
-                    var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
-                    !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                    !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
-                }
+
+                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
 
                 onCompleteCallback && onCompleteCallback();
             },
