@@ -29,11 +29,6 @@ function BottomTabBarController(params) {
                 return Application.tabBar;
             },
             set: function(params) {
-                console.log("..........................");
-                console.log("..........................");
-                console.log("Tabbar property setting");
-                console.log("..........................");
-                console.log("..........................");
                 Object.assign(Application.tabBar, params);
             },
             enumerable: true
