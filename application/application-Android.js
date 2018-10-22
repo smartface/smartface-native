@@ -1,6 +1,7 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
@@ -16,12 +17,15 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
+var _onBackButtonPressed;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
 var _keyboardMode;
+var _sliderDrawer;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -55,6 +59,24 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
 Object.defineProperties(ApplicationWrapper, {
     // properties
+    'sliderDrawer': {
+        get: function() {
+            return _sliderDrawer;
+        },
+        set: function(drawer) {
+            const SliderDrawer = require('../ui/sliderdrawer');
+            if (drawer instanceof SliderDrawer) {
+                _sliderDrawer = drawer;
+                
+                detachSliderDrawer(_sliderDrawer);
+                attachSliderDrawer(_sliderDrawer);
+            }
+            else {
+                throw TypeError("Object must be SliderDrawer instance");
+            }
+        },
+        enumerable: true
+    },
     'byteReceived': {
         get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
@@ -214,17 +236,6 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // events
     // We can not handle application calls for now, so let SMFApplication handle this
-    'onApplicationCallReceived': {
-        get: function() {
-            return Application.onApplicationCallReceived;
-        },
-        set: function(onApplicationCallReceived) {
-            if (TypeUtil.isFunction(onApplicationCallReceived)) {
-                Application.onApplicationCallReceived = onApplicationCallReceived;
-            }
-        },
-        enumerable: true
-    },
     'onExit': {
         get: function() {
             return _onExit;
@@ -295,6 +306,92 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+// TODO: Beautify the class. It is too complex! It is not a readable file! 
+ApplicationWrapper.setRootController = function(params) {
+    const Page = require("../ui/page");
+    const NavigationController = require("../ui/navigationcontroller");
+    const FragmentTransition = require("../util/Android/fragmenttransition");
+    const BottomTabBarController = require("../ui/bottomtabbarcontroller");
+
+    if ((params.controller) instanceof NavigationController) {
+        var childControllerStack = params.controller.historyStack;
+        var childControllerStackLenght = childControllerStack.length;
+        // show latest page or controller
+        params.controller.show({
+            controller: childControllerStack[childControllerStackLenght - 1],
+            animated: params.animated
+        });
+    }
+    else if ((params.controller) instanceof Page) {
+        // TODO: Check pageID settings! Code duplicate exists
+        !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
+        // TODO: Check animation type. I am not sure about that!
+        FragmentTransition.push({
+            page: (params.controller),
+            animated: params.animated
+        });
+    }
+    else if ((params.controller) instanceof BottomTabBarController) {
+        console.log("setRootController BottomTabBarController");
+        params.controller.show();
+    }
+};
+
+ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer && _sliderDrawer.enabled) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT 
+            mDrawerLayout.openDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.openDrawer(3);
+        }
+    }
+};
+
+ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT
+            mDrawerLayout.closeDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.closeDrawer(3);
+        }
+    }
+};
+
+function attachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        var sliderDrawerId = sliderDrawer.nativeObject.getId();
+        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
+        if (!isExists) {
+            mDrawerLayout.addView(sliderDrawer.nativeObject);
+            mDrawerLayout.bringToFront();
+            if (sliderDrawer.drawerListener) {
+                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+            }
+        }
+        sliderDrawer.onLoad && sliderDrawer.onLoad();
+    }
+}
+
+function detachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        sliderDrawer.attachedPages = null;
+        mDrawerLayout.removeView(sliderDrawer.nativeObject);
+        if (sliderDrawer.drawerListener) {
+            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+        }
+    }
+}
+
+ApplicationWrapper.statusBar = require("./statusbar");
+
 ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
@@ -302,6 +399,20 @@ ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
+        enumerable: true
+    },
+    'onBackButtonPressed': {
+        get: function() {
+            return _onBackButtonPressed;
+        },
+        set: function(callback) {
+            _onBackButtonPressed = callback;
+            spratAndroidActivityInstance.attachBackPressedListener({
+                onBackPressed: function() {
+                    _onBackButtonPressed && _onBackButtonPressed();
+                }
+            });
+        },
         enumerable: true
     },
     'checkPermission': {

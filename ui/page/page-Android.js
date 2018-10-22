@@ -4,25 +4,14 @@ const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-const Router = require("../../router");
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
-const NativeBuildVersion = requireClass("android.os.Build");
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
-const BottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
-const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 
-const MINAPILEVEL_STATUSBARCOLOR = 21;
-const MINAPILEVEL_STATUSBARICONCOLOR = 23;
-
-// WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
-const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
-// WindowManager.LayoutParams.FLAG_FULLSCREEN
-const FLAG_FULLSCREEN = 1024;
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -70,7 +59,7 @@ function Page(params) {
             const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
             var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
             var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
+            self.nativeObject.setSharedElementEnterTransition(inflateTransition);  
         },
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -87,7 +76,7 @@ function Page(params) {
         },
         onViewCreated: function(view, savedInstanceState) {
             if (!self.isSwipeViewPage) {
-                Router.currentPage = self;
+                Application.currentPage = self;
             }
             onShowCallback && onShowCallback();
 
@@ -122,8 +111,7 @@ function Page(params) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
                 else {
-                    const Router = require("../router");
-                    Router.goBack(null, this.__pendingParameters);
+                    self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
             }
             else if (_headerBarItems[itemId]) {
@@ -161,7 +149,6 @@ function Page(params) {
             const Webview = require('sf-core/ui/webview');
             const EmailComposer = require('sf-core/ui/emailcomposer');
 
-
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
             // todo: Define a method to register request and its callback 
@@ -196,6 +183,7 @@ function Page(params) {
         enumerable: true
     });
     self.ios = {};
+    self.ios.navigationItem = {};
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};
@@ -319,14 +307,14 @@ function Page(params) {
         'present': {
             value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
-                    const Pages = require("../pages");
+                    const FragmentTransaction = require("../../util/Android/fragmenttransition");
                     page.popUpBackPage = self;
                     
                     if(self.transitionViews) {
                         page.enterRevealTransition = true;
-                        Pages.revealTransition(self.transitionViews, page.nativeObject);
+                        FragmentTransaction.revealTransition(self.transitionViews, page.nativeObject);
                     } else {
-                        Pages.popUpTransition(page.nativeObject, animation);
+                        FragmentTransaction.popUpTransition(page.nativeObject, animation);
 
                         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
                         self.layout.nativeObject.setFocusableInTouchMode(false);
@@ -344,95 +332,19 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(self.popUpBackPage.transitionViews) {
-                    self.popUpBackPage.returnRevealAnimation = true;
-                    fragmentManager.popBackStack();
-                    onCompleteCallback && onCompleteCallback();
-                    return;
-                }
+                self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
                 
                 fragmentManager.popBackStack();
-                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
-                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
+                if(!self.popUpBackPage.transitionViews) {
+                    var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+                    !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                    !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
+                }
 
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
         }
-    });
-
-    this.statusBar = {};
-
-    var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
-    Object.defineProperty(self.statusBar, 'style', {
-        get: function() {
-            return statusBarStyle;
-        },
-        set: function(value) {
-            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARICONCOLOR) {
-                statusBarStyle = value;
-                if (statusBarStyle == StatusBarStyle.DEFAULT) {
-                    // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
-                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
-                }
-                else {
-                    //STATUS_BAR_VISIBLE = 0
-                    AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
-                }
-            }
-
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    var _visible;
-    Object.defineProperty(this.statusBar, 'visible', {
-        get: function() {
-            return _visible;
-        },
-        set: function(visible) {
-            _visible = visible;
-            var window = activity.getWindow();
-            if (visible) {
-                window.clearFlags(FLAG_FULLSCREEN);
-            }
-            else {
-                window.addFlags(FLAG_FULLSCREEN);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    this.statusBar.android = {};
-    var _color;
-    Object.defineProperty(this.statusBar.android, 'color', {
-        get: function() {
-            return _color;
-        },
-        set: function(color) {
-            _color = color;
-            if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
-                var window = activity.getWindow();
-                window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color.nativeObject);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(this.statusBar, 'height', {
-        get: function() {
-            var result = 0;
-            var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
-            }
-            return AndroidUnitConverter.pixelToDp(result);
-        },
-        enumerable: true,
-        configurable: true
     });
 
     var _headerBarColor; // SmartfaceBlue
@@ -664,40 +576,6 @@ function Page(params) {
         configurable: true
     });
 
-    this.bottomTabBar = {};
-    Object.defineProperty(this.bottomTabBar, 'height', {
-        get: function() {
-            var result = 0;
-            var activity = AndroidConfig.activity;
-
-            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-            var packageName = activity.getPackageName();
-            var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
-            if (resourceId > 0) {
-                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
-            }
-            return AndroidUnitConverter.pixelToDp(result);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    var _parentTab;
-    var _selectedIndex;
-    var bottomNavigationView;
-    var rootLayoutID = NativeSFR.id.rootLayout;
-
-    Object.defineProperty(this,
-        'parentTab', {
-            get: function() {
-                return _parentTab;
-            },
-            set: function(tab) {
-                _parentTab = tab;
-                createBottomNavigationView(pageLayout);
-            },
-            enumerable: true
-        }
-    );
     var _tag;
     Object.defineProperty(this,
         'tag', {
@@ -710,132 +588,7 @@ function Page(params) {
             enumerable: true
         }
     );
-    Object.defineProperty(this, 'selectedIndex', {
-        get: function() {
-            return _selectedIndex;
-        },
-        set: function(index) {
-            _selectedIndex = index;
-            var menu;
-            if (bottomNavigationView && (menu = bottomNavigationView.getMenu())) {
-                var itemsKeys = Object.keys(_parentTab.items);
-                makeItemChecked(itemsKeys, menu);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-
-    function createBottomNavigationView(pageLayout) {
-        if (bottomNavigationView)
-            return;
-        const RelativeLayoutLayoutParams = requireClass("android.widget.RelativeLayout$LayoutParams");
-        const Color = require("../color");
-
-        bottomNavigationView = new BottomNavigationView(activity);
-        var tab = _parentTab;
-        if (bottomNavigationView && bottomNavigationView.getMenu()) {
-            setPropertiesOfTabBarItems();
-            disableShiftMode();
-        }
-
-        var params = new RelativeLayoutLayoutParams(-1, -2);
-        params.addRule(12);
-        bottomNavigationView.setLayoutParams(params);
-        var bottomLayout = pageLayoutContainer.findViewById(rootLayoutID);
-        bottomLayout.addView(bottomNavigationView);
-
-        if (tab.backgroundColor instanceof Color)
-            bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
-
-        rootLayout.paddingBottom = self.bottomTabBar.height;
-    }
-
-    function setPropertiesOfTabBarItems() {
-        var tab = _parentTab;
-        var menu = bottomNavigationView.getMenu();
-        var keys = Object.keys(tab.items);
-        for (var i = 0; i < keys.length; i++) {
-            var menuitem = menu.add(0, i, 0, tab.items[keys[i]].title);
-            var icon = tab.items[keys[i]].icon;
-            if (icon) {
-                const Image = require("../image");
-                if (icon instanceof Image || icon === null) {
-                    menuitem.setIcon(icon.nativeObject);
-                }
-                else { // if object
-                    menuitem.setIcon(icon);
-                }
-            }
-        }
-
-        makeItemChecked(keys, menu); //Given index of item is will be checked.
-
-        var state_checked = 16842912;
-        var state_unchecked = -16842912;
-        if (tab && tab.itemColor && ('selected' in tab.itemColor && 'normal' in tab.itemColor)) {
-            var states = array([array([state_checked], "int"), array([state_unchecked], "int")]);
-            const ColorStateList = requireClass("android.content.res.ColorStateList");
-            var colors = array([tab.itemColor.selected.nativeObject, tab.itemColor.normal.nativeObject], "int");
-            var statelist = new ColorStateList(states, colors);
-            bottomNavigationView.setItemTextColor(statelist);
-            bottomNavigationView.setItemIconTintList(statelist);
-        }
-        setBottomTabBarOnClickListener();
-    }
-
-    function setBottomTabBarOnClickListener() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
-            onNavigationItemSelected: function(item) {
-                // self.onHide && self.onHide();
-                var tab = self.parentTab;
-                var fragment;
-                const Navigator = require("../navigator");
-
-                var index = item.getItemId();
-                self.parentTab.currentIndex = index;
-                var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
-                if (!fragment)
-                    fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index], true); // isSingleton is true for tab switching
-
-                fragment.selectedIndex = index;
-                fragment.parentTab = self.parentTab;
-
-                if (!fragment.tag)
-                    fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
-
-                if (fragment.isBottomTabBarPage || fragment.firstPageInNavigator) {
-                    Router.pagesInstance.push(fragment, false, fragment.tag, false);
-                }
-                else if (tabItem instanceof Navigator) {
-                    tabItem.push(fragment, fragment.tag, false, true);
-                }
-                return true;
-            }
-        }));
-    }
-
-    function makeItemChecked(keys, menu) {
-        for (var i = 0; i < keys.length; i++) {
-            if (i === _selectedIndex) {
-                menu.getItem(i).setChecked(true);
-            }
-        }
-    }
-
-    function disableShiftMode() {
-        var menuView = bottomNavigationView.getChildAt(0);
-        var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-        shiftingMode.setAccessible(true);
-        shiftingMode.setBoolean(menuView, false);
-        shiftingMode.setAccessible(false);
-        for (var i = 0; i < menuView.getChildCount(); i++) {
-            var item = menuView.getChildAt(i);
-            item.setShiftingMode(false);
-            var checked = (item.getItemData()).isChecked();
-            item.setChecked(checked);
-        }
-    }
+    
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
@@ -962,21 +715,6 @@ function Page(params) {
             return true;
         }
     }));
-    //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
-    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-        onKey: function(view, keyCode, keyEvent) {
-            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                typeof self.android.onBackButtonPressed === "function" &&
-                    self.android.onBackButtonPressed();
-                return true;
-            }
-            else {
-                return false;
-            }
-
-        }
-    }));
 
     self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
@@ -991,11 +729,13 @@ function Page(params) {
     }));
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
+    
+    // TODO: Remove this line before merge to develop.
+    // This line added for Cenk's requirements
+    self.statusBar = require("../../application/statusbar");
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {
-            self.statusBar.visible = true;
-            self.statusBar.color = Color.TRANSPARENT;
             self.headerBar.backgroundColor = Color.create("#00A1F1");
             self.headerBar.leftItemEnabled = true;
             self.headerBar.android.logoEnabled = false;
@@ -1003,10 +743,7 @@ function Page(params) {
             self.headerBar.android.subtitleColor = Color.WHITE;
             self.headerBar.visible = true;
         }
-    }
-    //Handling ios value
-    self.statusBar.ios = {};
-    self.statusBar.ios.style = null;
+    };
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

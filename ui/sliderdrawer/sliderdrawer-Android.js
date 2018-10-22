@@ -1,6 +1,7 @@
 /*globals requireClass*/
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
+const Application  = require('../../application');
 const AndroidUnitConverter  = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
@@ -64,17 +65,13 @@ const SliderDrawer = extend(FlexLayout)(
             },
             'show': {
                 value: function(){
-                    if(this.attachedPages){
-                        this.attachedPages.showSliderDrawer();
-                    }
+                    Application.showSliderDrawer(this);
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    if(this.attachedPages){
-                        this.attachedPages.hideSliderDrawer();
-                    }
+                    Application.hideSliderDrawer(this);
                 },
                 writable: false
             },

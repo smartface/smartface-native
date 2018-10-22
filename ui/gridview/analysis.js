@@ -22,7 +22,6 @@ const extend = require('js-base/core/extend');
  *          function(_super) {
  *              _super(this, {
  *                  onShow: function(params) {
- *                      this.statusBar.visible = false;
  *                      this.headerBar.visible = false;
  *                  },onLoad: function(){
  *                      var myDataSet = [];

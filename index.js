@@ -9,7 +9,6 @@ module.exports = {
     Data: require('./data'),
     SecureData: require('./securedata'),
     Application: require('./application'),
-    Router: require('./router'),
     AttributedString: require('./attributedstring'),
     AsyncTask: require('./asynctask')
 };
