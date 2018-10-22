@@ -82,15 +82,15 @@ function Page(params) {
 
             var spratIntent = AndroidConfig.activity.getIntent();
             if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
-                            try {
-                                var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                                Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
-                                spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
-                            }
-                            catch (e) {
-                                new Error("An error occured while getting notification json");
-                            }
-                        }
+                try {
+                    var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                    Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                    spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                }
+                catch (e) {
+                    new Error("An error occured while getting notification json");
+                }
+            }
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
