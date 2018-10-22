@@ -44,6 +44,7 @@ function NavigatonController(params) {
     });
     
     var _headerBar = new HeaderBar({navigationController:self});
+    _headerBar.ios.translucent = false;
     Object.defineProperty(self, 'headerBar', {
         get: function() {
             return _headerBar;
