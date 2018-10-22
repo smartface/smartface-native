@@ -25,7 +25,10 @@ var _sliderDrawer;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+<<<<<<< HEAD
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
+=======
+>>>>>>> develop
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -306,6 +309,92 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+// TODO: Beautify the class. It is too complex! It is not a readable file! 
+ApplicationWrapper.setRootController = function(params) {
+    const Page = require("../ui/page");
+    const NavigationController = require("../ui/navigationcontroller");
+    const FragmentTransition = require("../util/Android/fragmenttransition");
+    const BottomTabBarController = require("../ui/bottomtabbarcontroller");
+
+    if ((params.controller) instanceof NavigationController) {
+        var childControllerStack = params.controller.historyStack;
+        var childControllerStackLenght = childControllerStack.length;
+        // show latest page or controller
+        params.controller.show({
+            controller: childControllerStack[childControllerStackLenght - 1],
+            animated: params.animated
+        });
+    }
+    else if ((params.controller) instanceof Page) {
+        // TODO: Check pageID settings! Code duplicate exists
+        !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
+        // TODO: Check animation type. I am not sure about that!
+        FragmentTransition.push({
+            page: (params.controller),
+            animated: params.animated
+        });
+    }
+    else if ((params.controller) instanceof BottomTabBarController) {
+        console.log("setRootController BottomTabBarController");
+        params.controller.show();
+    }
+};
+
+ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer && _sliderDrawer.enabled) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT 
+            mDrawerLayout.openDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.openDrawer(3);
+        }
+    }
+};
+
+ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT
+            mDrawerLayout.closeDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.closeDrawer(3);
+        }
+    }
+};
+
+function attachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        var sliderDrawerId = sliderDrawer.nativeObject.getId();
+        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
+        if (!isExists) {
+            mDrawerLayout.addView(sliderDrawer.nativeObject);
+            mDrawerLayout.bringToFront();
+            if (sliderDrawer.drawerListener) {
+                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+            }
+        }
+        sliderDrawer.onLoad && sliderDrawer.onLoad();
+    }
+}
+
+function detachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        sliderDrawer.attachedPages = null;
+        mDrawerLayout.removeView(sliderDrawer.nativeObject);
+        if (sliderDrawer.drawerListener) {
+            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+        }
+    }
+}
+
+ApplicationWrapper.statusBar = require("./statusbar");
+
 ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
@@ -404,6 +493,26 @@ Object.defineProperties(ApplicationWrapper.android, {
         },
         enumerable: true
     },
+    'locale': {
+        get: function() {
+            const NativeLocale = requireClass("java.util.Locale");
+            return NativeLocale.getDefault().getLanguage();
+        },
+        set: function(languageCode) {
+            if (TypeUtil.isString(languageCode)) {
+                const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+                var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
+                sharedPreferences.edit().putString("AppLocale", languageCode).commit();
+            }
+        },
+        enumerable: true
+    },
+    'getLayoutDirection': {
+        get: function() {
+            return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        enumerable: true
+    }
 });
 
 Object.defineProperties(ApplicationWrapper.Android, {
@@ -528,89 +637,10 @@ ApplicationWrapper.Android.KeyboardMode = {
 };
 Object.freeze(ApplicationWrapper.Android.KeyboardMode);
 
-// TODO: Beautify the class. It is too complex! It is not a readable file! 
-ApplicationWrapper.setRootController = function(params) {
-    const Page = require("../ui/page");
-    const NavigationController = require("../ui/navigationcontroller");
-    const FragmentTransition = require("../util/Android/fragmenttransition");
-    const BottomTabBarController = require("../ui/bottomtabbarcontroller");
-
-    if ((params.controller) instanceof NavigationController) {
-        var childControllerStack = params.controller.historyStack;
-        var childControllerStackLenght = childControllerStack.length;
-        // show latest page or controller
-        params.controller.show({
-            controller: childControllerStack[childControllerStackLenght - 1],
-            animated: params.animated
-        });
-    }
-    else if ((params.controller) instanceof Page) {
-        // TODO: Check pageID settings! Code duplicate exists
-        !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
-        // TODO: Check animation type. I am not sure about that!
-        FragmentTransition.push({
-            page: (params.controller),
-            animated: params.animated
-        });
-    }
-    else if ((params.controller) instanceof BottomTabBarController) {
-        console.log("setRootController BottomTabBarController");
-        params.controller.show();
-    }
+ApplicationWrapper.LayoutDirection = {
+    LEFTTORIGHT: 0,
+    RIGHTTOLEFT: 1
 };
+Object.freeze(ApplicationWrapper.LayoutDirection);
 
-ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
-    if (_sliderDrawer && _sliderDrawer.enabled) {
-        const SliderDrawer = require('../ui/sliderdrawer');
-        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
-            // Gravity.RIGHT 
-            mDrawerLayout.openDrawer(5);
-        }
-        else {
-            // Gravity.LEFT
-            mDrawerLayout.openDrawer(3);
-        }
-    }
-};
-
-ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
-    if (_sliderDrawer) {
-        const SliderDrawer = require('../ui/sliderdrawer');
-        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
-            // Gravity.RIGHT
-            mDrawerLayout.closeDrawer(5);
-        }
-        else {
-            // Gravity.LEFT
-            mDrawerLayout.closeDrawer(3);
-        }
-    }
-};
-
-function attachSliderDrawer(sliderDrawer) {
-    if (sliderDrawer) {
-        var sliderDrawerId = sliderDrawer.nativeObject.getId();
-        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
-        if (!isExists) {
-            mDrawerLayout.addView(sliderDrawer.nativeObject);
-            mDrawerLayout.bringToFront();
-            if (sliderDrawer.drawerListener) {
-                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
-            }
-        }
-        sliderDrawer.onLoad && sliderDrawer.onLoad();
-    }
-}
-
-function detachSliderDrawer(sliderDrawer) {
-    if (sliderDrawer) {
-        sliderDrawer.attachedPages = null;
-        mDrawerLayout.removeView(sliderDrawer.nativeObject);
-        if (sliderDrawer.drawerListener) {
-            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
-        }
-    }
-}
-
-ApplicationWrapper.statusBar = require("./statusbar");
 module.exports = ApplicationWrapper;
