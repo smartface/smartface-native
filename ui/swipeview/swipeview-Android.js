@@ -145,36 +145,6 @@ const SwipeView = extend(View)(
                 this[param] = params[param];
             }
         }
-
-        // Use setAdapter method after constructor's parameters are assigned.
-        self.nativeObject.setAdapter(pagerAdapter);
-        var listener = NativeOnPageChangeListener.implement({
-            onPageScrollStateChanged: function(state) {
-                if (state === 0) { // SCROLL_STATE_IDLE
-                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
-                }
-                else if (state === 1) { // SCROLL_STATE_DRAGGING
-                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.DRAGGING);
-                }
-            },
-            onPageSelected: function(position) {
-                _callbackOnPageSelected && _callbackOnPageSelected(position, _pageInstances[position]);
-            },
-            onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
-                if (_callbackOnPageScrolled) {
-                    var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
-
-                    var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
-                    _callbackOnPageScrolled(position, offsetPixels);
-                }
-                var intPosition = position;
-                if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
-                    _lastIndex = intPosition;
-                    _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
-                }
-            }
-        });
-        self.nativeObject.addOnPageChangeListener(listener);
     }
 );
 

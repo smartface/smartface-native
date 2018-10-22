@@ -12,7 +12,11 @@ function View(params) {
     self.ios = {};
 
     if(!self.nativeObject){
-        self.nativeObject = new __SF_UIView();
+        if (params && params.nativeObject) {
+            self.nativeObject = params.nativeObject;
+        } else {
+            self.nativeObject = new __SF_UIView();
+        }
     }
     
     self.uniqueId = self.nativeObject.uuid;
@@ -194,6 +198,18 @@ function View(params) {
         },
         enumerable: true
     });
+    
+    Object.defineProperty(self, 'transitionId', {
+        get: function() {
+            return self.nativeObject.valueForKey("heroID");
+        },
+        set: function(value) {
+            if (typeof value === "string") {
+                self.nativeObject.setValueForKey(value,"heroID");
+            }
+        },
+        enumerable: true
+    });
 
     self.nativeObject.layer.rotationZ = 0;
     self.nativeObject.layer.rotationX = 0;
@@ -262,7 +278,16 @@ function View(params) {
     this.getPosition = function(){
         return {left : self.left , top : self.top , width : self.width, height : self.height};
     }
-
+    
+    this.flipHorizontally = function(){
+        self.nativeObject.flipHorizontally();
+    }
+    
+    
+    this.flipVertically = function(){
+        self.nativeObject.flipVertically();
+    }
+    
     this.setPosition = function(position){
         self.left = position.left;
         self.top = position.top;
@@ -291,6 +316,22 @@ function View(params) {
     this.getParent = function(){
         return self.parent ? self.parent : null;
     };
+    
+    this.getScreenLocation = function() {
+        var viewOrigin = {x:self.nativeObject.bounds.x, y:self.nativeObject.bounds.y};
+        var origin= new Invocation.Argument({
+            type:"CGPoint",
+            value: viewOrigin
+        });
+        
+        var view= new Invocation.Argument({
+            type:"id",
+            value: undefined
+        });
+        
+        var screenOrigin = Invocation.invokeInstanceMethod(self.nativeObject,"convertPoint:toView:",[origin, view],"CGPoint");
+        return screenOrigin;
+    }
     
     var _onTouch;
     Object.defineProperty(self, 'onTouch', {
@@ -1093,5 +1134,30 @@ function View(params) {
     }
 
 }
+
+
+View.ios = {};
+
+Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
+    get: function() {
+        return __SF_UIView.viewAppearanceSemanticContentAttribute();
+    },
+    set: function(value){
+        var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); // For application-iOS.js Application Direction Manager
+        userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
+        userDefaults.synchronize();
+    
+        // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
+    },
+    enumerable: true
+});
+
+View.iOS = {};
+
+View.iOS.SemanticContentAttribute = {
+    AUTO : 0,
+    FORCELEFTTORIGHT : 3,
+    FORCERIGHTTOLEFT : 4
+};
 
 module.exports = View;

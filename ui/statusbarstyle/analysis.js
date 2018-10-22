@@ -33,5 +33,3 @@ StatusBarStyle.DEFAULT = 0;
  * @since 0.1
  */
 StatusBarStyle.LIGHTCONTENT = 1;
-
-module.exports = Object.freeze(StatusBarStyle);

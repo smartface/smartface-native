@@ -119,5 +119,3 @@ TextAlignment.BOTTOMCENTER = 7;
  * @since 0.1
  */
 TextAlignment.BOTTOMRIGHT = 8;
-
-module.exports = Object.freeze(TextAlignment);

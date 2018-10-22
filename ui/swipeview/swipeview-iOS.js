@@ -194,6 +194,7 @@ const SwipeView = extend(View)(
         
         var _isPageTransaction = false;
         self.swipeToIndex = function(value,animated){
+            var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
             var _animated;
             if(typeof(animated) === "boolean"){
                 _animated = animated;
@@ -208,7 +209,7 @@ const SwipeView = extend(View)(
                 if(value < currentIndex){  
                     __SF_Dispatch.mainAsync(function(){
                     pendingViewControllerIndex = value;
-                    self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Reverse,_animated,function(){
+                    self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],isLTR ? UIPageViewControllerNavigationDirection.Reverse : UIPageViewControllerNavigationDirection.Forward,_animated,function(){
                         _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
                                 self.onPageSelectedHandler({completed : true, index: value});
@@ -218,7 +219,7 @@ const SwipeView = extend(View)(
                 }else{
                     __SF_Dispatch.mainAsync(function(){
                         pendingViewControllerIndex = value;
-                        self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],UIPageViewControllerNavigationDirection.Forward,_animated,function(){
+                        self.pageController.scrollToPageDirectionAnimatedCompletion(_pageNativeObjectArray[value],isLTR ? UIPageViewControllerNavigationDirection.Forward : UIPageViewControllerNavigationDirection.Reverse,_animated,function(){
                             _isPageTransaction = false;
                             __SF_Dispatch.mainAsync(function(){
                                 self.onPageSelectedHandler({completed : true, index: value});
@@ -292,8 +293,18 @@ const SwipeView = extend(View)(
 });
 
 function bypassPageSpecificProperties(page) {
-   page.statusBar = { android: {}};
-   page.headerBar = {};
+    Object.keys(page.statusBar).forEach(function(key){
+        Object.defineProperty(page.statusBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
+    Object.keys(page.headerBar).forEach(function(key){
+        Object.defineProperty(page.headerBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
 }
 
   

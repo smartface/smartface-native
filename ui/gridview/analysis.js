@@ -132,6 +132,30 @@ GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index)
 GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
 
 /**
+ * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES. This property must be set after assigning layout manager.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @android
+ * @since 3.2.0
+ */
+GridView.prototype.scrollEnabled = false;
+
+/**
+ * Gets contentOffset of the GridView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.1.3
+ */
+GridView.prototype.contentOffset = {};
+
+/**
  * Gets/sets the number of items that will be shown in a GridView.
  * You should update this property after each data operation.
  *
@@ -175,6 +199,24 @@ GridView.prototype.scrollBarEnabled = false;
  * @since 3.0.2
  */
 GridView.prototype.refreshEnabled = true;
+
+/**
+ * This property supportes pager style snapping in either vertical or horizontal orientation. For iOS, prefer to UI.LayoutManager.targetContentOffset
+ *
+ * @property {UI.GridView.Android.SnapAlignment} [snapToAlignment = UI.GridView.Android.SnapAlignment.SNAPTO_START]
+ * @android
+ * @since 3.2.0
+ */
+GridView.prototype.snapToAlignment;
+
+/**
+ * This property allows snapping to behave as pager  or linear. 
+ *
+ * @property {Boolean} [paginationEnabled = true]
+ * @android
+ * @since 3.2.0
+ */
+GridView.prototype.paginationEnabled;
 
 /**
  * This method returns the index of item which is visible at
@@ -256,9 +298,13 @@ GridView.prototype.stopRefresh = function(){};
  * necessary
  *
  * @event onScroll
+ * @param {Object} params
+ * @param {Object} params.contentOffset
+ * @param {Number} params.contentOffset.x
+ * @param {Number} params.contentOffset.y
  * @android
  * @ios
- * @since 3.0.2
+ * @since 3.1.3
  */
 GridView.prototype.onScroll = function onScroll(){ }
 
@@ -284,5 +330,52 @@ GridView.prototype.onPullRefresh = function onPullRefresh(){}
  * @since 3.0.2
  */
 GridView.prototype.itemByIndex = function(index){};
+
+/**
+ * Android Specific Properties.
+ * @class UI.GridView.Android
+ * @since 3.2.0
+ */
+GridView.Android = {};
+
+/** 
+ * @enum UI.GridView.Android.SnapAlignment
+ * @since 1.1.16
+ * 
+ * This enum class used to specify your alignment of snapping. 
+ */
+GridView.Android.SnapAlignment ={};
+
+
+/**
+ * This property will align the snap at the left (horizontal) or top (vertical).
+ *
+ * @property SNAPTO_START
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_START;
+
+
+/**
+ * This property will align the snap in the center.
+ *
+ * @property SNAPTO_CENTER
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_CENTER;
+
+/**
+ * This property  will align the snap at the right (horizontal) or bottom (vertical).
+ *
+ * @property SNAPTO_END
+ * @static
+ * @readonly
+ * @since 3.2.0
+ */
+GridView.Android.SnapAlignment.SNAPTO_END;
 
 module.exports = GridView;

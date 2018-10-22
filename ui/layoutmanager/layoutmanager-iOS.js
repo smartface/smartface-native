@@ -5,6 +5,7 @@ const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout")
 
 function LayoutManager(params) {
     var sfSelf = this;
+    sfSelf.ios = {};
     
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // NATIVE FLOWLAYOUT CLASS IMPLEMENTATION
@@ -37,6 +38,12 @@ function LayoutManager(params) {
                 value: retval
             });
             Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
+        },
+        targetContentOffsetForProposedContentOffsetWithScrollingVelocity: function(proposedContentOffset,velocity){
+            if (sfSelf.ios.targetContentOffset) {
+                return sfSelf.ios.targetContentOffset(proposedContentOffset,velocity);
+            }
+            return proposedContentOffset;
         }
     }).new();
     

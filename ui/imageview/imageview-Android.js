@@ -33,6 +33,7 @@ const ImageView = extend(View)(
         imageViewPrototype._adjustViewBounds = false;
 
         var _fillType = null;
+        var _tintColor;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -55,6 +56,24 @@ const ImageView = extend(View)(
                         this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
+                },
+                enumerable: true
+            },
+            'tintColor': {
+                get: function() {
+                    return _tintColor;
+                },
+                set: function(tintColor) {
+                    const Color = require("sf-core/ui/color");
+                    if (!tintColor instanceof Color)
+                        return;
+                    _tintColor = tintColor;
+
+                    const NativeImageCompat = requireClass("android.support.v4.widget.ImageViewCompat");
+                    const NativeColorStateListUtil = requireClass("io.smartface.android.utils.ColorStateListUtil");
+
+                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(_tintColor.nativeObject));
+
                 },
                 enumerable: true
             },
@@ -81,22 +100,50 @@ const ImageView = extend(View)(
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function(url, placeHolder, isFade) {
+        imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
+            var url, placeholder, isFade, onError, onSuccess;
+            if (typeof arguments[0] === "object") {
+                var params = arguments[0];
+                url = params.url;
+                placeholder = params.placeholder;
+                isFade = params.isFade;
+                onError = params.onError;
+                onSuccess = params.onSuccess;
+            }
+            else {
+                url = arguments[0];
+                placeholder = arguments[1];
+                isFade = arguments[2];
+            }
+
+            var callback = null;
+            if (onError || onSuccess) {
+                const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
+                callback = NativePicassoCallback.implement({
+                    onSuccess: function() {
+                        onSuccess && onSuccess();
+                    },
+                    onError: function() {
+                        onError && onError();
+                    }
+                });
+            }
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
-                if (placeHolder instanceof Image) {
-                    plainRequestCreator.placeholder(placeHolder.nativeObject).into(this.nativeObject);
-                }
-                else {
-                    var requestCreator = scaleImage(plainRequestCreator);
+                if (placeholder instanceof Image)
+                    plainRequestCreator.placeholder(placeholder.nativeObject)
+                var requestCreator = scaleImage(plainRequestCreator);
+                if (callback !== null)
+                    requestCreator.into(this.nativeObject, callback);
+                else
                     requestCreator.into(this.nativeObject);
-                }
             }
         };
 
         imageViewPrototype.fetchFromUrl = function(params) {
+            const self = this;
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             var target = NativeTarget.implement({
@@ -106,11 +153,13 @@ const ImageView = extend(View)(
                 onBitmapFailed: function(errorDrawable) {
                     params.onError && params.onError();
                 },
-                onPrepareLoad: function(placeHolderDrawable) {}
+                onPrepareLoad: function(placeHolderDrawable) {
+                    self.nativeObject.setImageDrawable(placeHolderDrawable);
+                }
             });
 
             if (TypeUtil.isString(params.url)) {
-                var requestCreator = scaleImage(NativePicasso.with(AndroidConfig.activity).load(params.url));
+                var requestCreator = NativePicasso.with(AndroidConfig.activity).load(params.url);
                 if ((params.placeholder) instanceof Image) {
                     requestCreator.placeholder(params.placeholder.nativeObject).into(target);
                 }
@@ -119,6 +168,7 @@ const ImageView = extend(View)(
                 }
             }
         };
+
         imageViewPrototype.loadFromFile = function(params) {
             var file = params.file;
             var isFade = params.fade;

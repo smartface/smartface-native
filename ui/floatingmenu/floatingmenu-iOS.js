@@ -25,16 +25,20 @@ function FloatingMenu(params) {
     if(!self.nativeObject){
         self.nativeObject = new __SF_Floaty();
     }
+    
     //Defaults
-    self.layoutDirection = Invocation.invokeInstanceMethod(__SF_UIApplication.sharedApplication(),"userInterfaceLayoutDirection",[],"NSInteger");
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    self.layoutDirection = isLTR ? 0 : 1;
     
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.yoga.position = 1;
     
     if (self.layoutDirection == UIUserInterfaceLayoutDirection.rightToLeft) {
+        self.nativeObject.alignment = 0;
         self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"right");
         self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"left");
     }else{
+        self.nativeObject.alignment = 2;
         self.nativeObject.yoga.setYGValueUnitForKey(NaN,YGUnit.Point,"left");
         self.nativeObject.yoga.setYGValueUnitForKey(14,YGUnit.Point,"right");
     }

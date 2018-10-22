@@ -105,10 +105,9 @@ const ScrollView = extend(ViewGroup)(
                         coordinate = UnitConverter.dpToPixel(coordinate);
 
                         var _animate = animate;
-                        if (typeof(animate) === "undefined") {
+                        if (typeof(_animate) === "undefined") {
                             _animate = true;
                         }
-
                         (ScrollView.Align.HORIZONTAL === _align) && (_animate ? this.nativeObject.smoothScrollTo(coordinate, 0) : this.nativeObject.scrollTo(coordinate, 0));
                         (ScrollView.Align.VERTICAL === _align) && (_animate ? this.nativeObject.smoothScrollTo(0, coordinate) : this.nativeObject.scrollTo(0, coordinate));
                     }
@@ -207,8 +206,8 @@ function calculateScrollViewSize(scrollView) {
         for (var i = 0; i < arrayLenght; i++) {
             var viewY = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getY());
             var viewHeight = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getMeasuredHeight());
-            var viewBottomMargin = childViews[keys[i]].marginBottom;
-            var layoutPaddingBottom = scrollView.layout.paddingBottom;
+            var viewBottomMargin = childViews[keys[i]].marginBottom || 0;
+            var layoutPaddingBottom = scrollView.layout.paddingBottom || 0;
 
             var measuredHeight = viewY + viewHeight + viewBottomMargin + layoutPaddingBottom;
             if (measuredHeight > layoutHeight)

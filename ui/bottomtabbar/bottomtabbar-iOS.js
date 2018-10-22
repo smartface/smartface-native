@@ -369,7 +369,9 @@ function TabBarFlowModel(argument) {
             if (objects[i].values.pageInstance.type !== undefined) {
                 switch (objects[i].values.pageInstance.type) {
                     case 'Navigator': {
-                        objects[i].values.pageInstance.go(objects[i].values.pageInstance.model.rootPage, null, null, true);
+                        if (!objects[i].values.pageInstance.view) {
+                            objects[i].values.pageInstance.go(objects[i].values.pageInstance.model.rootPage, null, null, true);
+                        }
                         instancesArray.push(objects[i].values.pageInstance.view.nativeObject);
                         break;
                     }

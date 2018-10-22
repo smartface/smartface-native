@@ -90,6 +90,7 @@ function addInnerNativeViewGroups(viewGroup, viewGroups) {
         var innerView = viewGroup.getChildAt(i);
         var innerClass = innerView.getClass();
         
+        // !NativeMapView.isAssignableFrom(innerClass) added for AND-3120
         if(NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
             addInnerNativeViewGroups(innerView, viewGroups);
         }

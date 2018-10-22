@@ -236,7 +236,10 @@ const MapView = extend(View)(
             },
             'centerLocation': {
                 get: function() {
-                    return _centerLocation;
+                    if (!_nativeGoogleMap)
+                        return _centerLocation;
+                    var nativeLatLng = _nativeGoogleMap.getCameraPosition().target;
+                    return { latitude: nativeLatLng.latitude, longitude: nativeLatLng.longitude };
                 },
                 set: function(location) {
                     if (location && TypeUtil.isNumeric(location.latitude) && TypeUtil.isNumeric(location.longitude)) {
@@ -681,7 +684,7 @@ const MapView = extend(View)(
                         nativeSquareTextView.setLayoutParams(layoutParams);
                         var mDensity = spratAndroidActivityInstance.getResources().getDisplayMetrics().density;
                         var twelveDpi = Math.round(6 * mDensity);
-                        nativeSquareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
+                        nativeSquareTextView.setPaddingRelative(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
 
                         return nativeSquareTextView;
                     },
