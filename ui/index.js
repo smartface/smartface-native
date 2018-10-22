@@ -1,8 +1,8 @@
 module.exports = {
     View: require('./view'),
     Label: require('./label'),
-    TextAlignment : require('./textalignment.js'),
-    ImageCacheType : require('./imagecachetype.js'),
+    TextAlignment : require('./textalignment'),
+    ImageCacheType : require('./imagecachetype'),
     Font: require('./font'),
     Color: require('./color'),
     Button: require('./button'),
@@ -10,6 +10,7 @@ module.exports = {
     Switch: require('./switch'),
     AlertView: require('./alertview'),
     Page: require('./page'),
+    Pages: require('./pages'),
     HeaderBarItem: require('./headerbaritem'),
     FlexLayout: require('./flexlayout'),
     Slider: require('./slider'),
@@ -36,6 +37,7 @@ module.exports = {
     WebView: require('./webview'),
     TimePicker: require('./timepicker'),
     Dialog: require('./dialog'),
+    Router: require('./router'),
     BottomTabBar: require('./bottomtabbar'),
     TabBarItem: require('./tabbaritem'),
     Navigator: require('./navigator'),
@@ -44,5 +46,9 @@ module.exports = {
     EmailComposer: require("./emailcomposer"),
     MaterialTextbox: require("./materialtextbox"),
     NavigationController: require('./navigationcontroller'),
-    BottomTabBarController: require('./bottomtabbarcontroller')
+    BottomTabBarController: require('./bottomtabbarcontroller'),
+    ShimmerFlexLayout: require("./shimmerflexlayout"),
+    GifImage: require("./gifimage"),
+    GifImageView: require("./gifimageview")
+
 };

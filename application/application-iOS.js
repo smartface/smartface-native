@@ -1,5 +1,4 @@
 const RAU = require("./RAU");
-const WebView = require('sf-core/ui/webview');
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
 var _rootPage;
@@ -113,6 +112,18 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
 });
 
 SFApplication.statusBar = require("./statusbar");
+
+Object.defineProperty(SFApplication.ios, 'userInterfaceLayoutDirection', {
+    get: function() {
+        return __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection;
+    },
+    enumerable: true
+});
+
+SFApplication.LayoutDirection = {
+    LEFTTORIGHT : 0,
+    RIGHTTOLEFT : 1
+};
 
 SFApplication.android = {};
 SFApplication.Android = {};
@@ -256,5 +267,15 @@ Application.emulator.globalObjectWillReset = function(state) {
             break;
     }
 };
+
+//Application Direction Manager (RTL Support)
+(function(){
+    var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
+    var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey("smartface.ios.viewAppearanceSemanticContentAttribute");
+    if(viewAppearanceSemanticContentAttribute != undefined){
+        __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
+    }
+}())
+
 
 module.exports = SFApplication;
