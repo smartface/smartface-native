@@ -108,11 +108,12 @@ Page.prototype.layout;
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
- *             this.statusBar.visible = true;
  *         }
+ *         Application.statusBar.visible = true;
  *     });
  *
  * @event onShow
@@ -223,6 +224,7 @@ Page.prototype.dismiss = function(onCompleteCallback){};
  * @android
  * @ios
  * @readonly
+ * @removed
  * @since 0.1
  */
 Page.prototype.statusBar;

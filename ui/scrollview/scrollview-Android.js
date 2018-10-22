@@ -16,7 +16,7 @@ const ScrollView = extend(ViewGroup)(
         var callback = null;
         if (!this.nativeObject) {
             if (_align === ScrollView.Align.HORIZONTAL) {
-                const NativeHorizontalScroll = requireClass('io.smartface.android.SFHorizontalScrollView');
+                const NativeHorizontalScroll = requireClass('io.smartface.android.sfcore.SFHorizontalScrollView');
                 callback = {
                     onScrollChanged: function(xObj, y, oldx, oldy) {
                         var x = xObj;
@@ -38,7 +38,7 @@ const ScrollView = extend(ViewGroup)(
                 this.nativeObject = new NativeHorizontalScroll(activity, callback);
             }
             else {
-                const NativeVerticalScroll = requireClass('io.smartface.android.SFScrollView');
+                const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
                 callback = {
                     onScrollChanged: function(xObj, yObj, oldx, oldy) {
                         var y = yObj;

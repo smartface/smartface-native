@@ -1,3 +1,4 @@
+/* globals requireClass */
 const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
@@ -160,8 +161,8 @@ Sound.onActivityResult = function(requestCode, resultCode, data) {
 };
 
 function getCurrentPageFragment() {
-    const Router = require("../../router");
-    return Router.getCurrentPage().page.nativeObject;
+    const Application = require("../../application");
+    return Application.currentPage.nativeObject;
 }
 
 module.exports = Sound;

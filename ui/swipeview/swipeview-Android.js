@@ -5,7 +5,7 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const DirectionBasedConverter = require("sf-core/util/Android/directionbasedconverter");
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
+const NativePagerAdapter = requireClass("io.smartface.android.sfcore.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
@@ -15,21 +15,23 @@ const SwipeView = extend(View)(
         var self = this;
         var _pages = [];
         var _lastIndex = -1;
-        
-        if(!self.nativeObject) {
+
+        if (!self.nativeObject) {
             var callbacks = {
                 getCount: function() {
-                    if(_pageCount != null)
+                    if (_pageCount != null)
                         return _pageCount;
                     return _pages.length;
                 },
                 getItem: function(position) {
                     var pageInstance;
-                    if(_onPageCreateCallback) {
+                    if (_onPageCreateCallback) {
                         pageInstance = _onPageCreateCallback(position);
-                    } else if(_pageInstances[position]) {
+                    }
+                    else if (_pageInstances[position]) {
                         return (_pageInstances[position]).nativeObject;
-                    } else { // For backward compatibility
+                    }
+                    else { // For backward compatibility
                         var pageClass = _pages[position];
                         pageInstance = new pageClass({
                             skipDefaults: true
@@ -42,7 +44,7 @@ const SwipeView = extend(View)(
                 }
             };
             var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
-        
+
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             DirectionBasedConverter.flipHorizontally(self.nativeObject);
@@ -143,35 +145,6 @@ const SwipeView = extend(View)(
                 this[param] = params[param];
             }
         }
-        
-        // Use setAdapter method after constructor's parameters are assigned.
-        self.nativeObject.setAdapter(pagerAdapter);
-        var listener = NativeOnPageChangeListener.implement({
-            onPageScrollStateChanged: function(state) {
-                if (state === 0) { // SCROLL_STATE_IDLE
-                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
-                } else if (state === 1) { // SCROLL_STATE_DRAGGING
-                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.DRAGGING);
-                }
-            },
-            onPageSelected: function(position) {
-                _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
-            },
-            onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
-                if(_callbackOnPageScrolled) {
-                    var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
-                    
-                    var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
-                    _callbackOnPageScrolled(position, offsetPixels);
-                }
-                var intPosition = position;
-                if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
-                    _lastIndex = intPosition;
-                    _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
-                }
-            }
-        });
-        self.nativeObject.addOnPageChangeListener(listener);
     }
 );
 

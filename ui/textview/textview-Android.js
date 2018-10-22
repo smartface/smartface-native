@@ -231,7 +231,7 @@ const TextView = extend(Label)(
                 }
             };
 
-            const SFTypefaceSpan = requireClass("io.smartface.android.SFTypefaceSpan");
+            const SFTypefaceSpan = requireClass("io.smartface.android.sfcore.SFTypefaceSpan");
             var typeSpan = new SFTypefaceSpan("SF", typeSpanOverrideMethods);
             myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
