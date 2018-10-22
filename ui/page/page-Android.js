@@ -75,27 +75,22 @@ function Page(params) {
             return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
-            const NativeRunnable = requireClass('java.lang.Runnable');
-            rootLayout.nativeObject.post(NativeRunnable.implement({
-                run: function() {
-                    if (!self.isSwipeViewPage) {
-                        Application.currentPage = self;
-                    }
-                    onShowCallback && onShowCallback();
+            if (!self.isSwipeViewPage) {
+                Application.currentPage = self;
+            }
+            onShowCallback && onShowCallback();
 
-                    var spratIntent = AndroidConfig.activity.getIntent();
-                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
-                        try {
-                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
-                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
-                        }
-                        catch (e) {
-                            new Error("An error occured while getting notification json");
-                        }
-                    }
+            var spratIntent = AndroidConfig.activity.getIntent();
+            if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                try {
+                    var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                    Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                    spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
                 }
-            }));
+                catch (e) {
+                    new Error("An error occured while getting notification json");
+                }
+            }
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
@@ -153,7 +148,6 @@ function Page(params) {
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
             const EmailComposer = require('sf-core/ui/emailcomposer');
-
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -311,7 +305,7 @@ function Page(params) {
             enumerable: true
         },
         'present': {
-            value: function(page, animation, onCompleteCallback) {
+            value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
                     const FragmentTransaction = require("../../util/Android/fragmenttransition");
                     page.popUpBackPage = self;
@@ -630,7 +624,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const ALIGN_RIGHT = 7;
+        const ALIGN_END = 19;
 
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
@@ -663,14 +657,12 @@ function Page(params) {
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
-                if (item.badge.text && item.badge.nativeObject) {
-                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
+                if (item.badge.nativeObject) {
+                    item.badge.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(ALIGN_RIGHT, nativeBadgeContainerButton.getId());
-
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 1), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
+                    layoutParams.addRule(ALIGN_END, nativeBadgeContainerButton.getId());
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
@@ -682,6 +674,7 @@ function Page(params) {
                         parentOfNativeObject.removeAllViews();
                         nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
+                    item.badge.visible !== true ? item.badge.nativeObject.setVisibility(8) : item.badge.nativeObject.setVisibility(0);
                 }
                 itemView = nativeBadgeContainer;
                 item.setValues();
