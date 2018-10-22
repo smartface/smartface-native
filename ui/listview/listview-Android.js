@@ -78,14 +78,18 @@ const ListView = extend(View)(
 
                 if (_onRowBind) {
                     _onRowBind(_holderViewLayout, position);
+                }
 
+                if (_onRowSelected) {
                     nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
                         onClick: function(view) {
                             var selectedItem = _listViewItems[view.hashCode()];
                             _onRowSelected && _onRowSelected(selectedItem, position);
                         }
                     }));
+                }
 
+                if (_onRowLongSelected) {
                     nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
                         onLongClick: function(view) {
 
@@ -98,6 +102,7 @@ const ListView = extend(View)(
                         }
                     }));
                 }
+
             },
             getItemCount: function() {
                 if (isNaN(_itemCount))
