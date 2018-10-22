@@ -25,10 +25,7 @@ var _sliderDrawer;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
-<<<<<<< HEAD
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-=======
->>>>>>> develop
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
