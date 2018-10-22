@@ -1,7 +1,9 @@
-/*globals requireClass*/
+/* globals requireClass, toJSArray */
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
+const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
+
 const Color = require("../color");
 const Image = require("../image");
 const View = require('../view');
@@ -14,6 +16,7 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
+function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function HeaderBarItem(params) {
     var _title = "";
@@ -64,7 +67,7 @@ function HeaderBarItem(params) {
                     this.nativeObject = new NativeTextButton(activity);
                     this.nativeObject.setText(_title);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-                    this.nativeObject.setPadding(
+                    this.nativeObject.setPaddingRelative(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                     );
@@ -103,7 +106,7 @@ function HeaderBarItem(params) {
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
                         this.nativeObject = new NativeImageButton(activity);
                         this.nativeObject.setBackground(null);
-                        this.nativeObject.setPadding(
+                        this.nativeObject.setPaddingRelative(
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
                         );
@@ -324,14 +327,14 @@ function HeaderBarItem(params) {
                     return;
 
                 _borderColor = borderColor;
-                _badge.backgroundColor = null; ; //re-set Drawable
+                _badge.backgroundColor = null;; //re-set Drawable
             },
             enumerable: true
         },
         'move': {
             value: function(x, y) {
-                _badge.x = (x < 0 ? x * -1 : x);
-                _badge.y = (y < 0 ? y : y);
+                _badge.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
+                _badge.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
             }
         }
     });
@@ -357,6 +360,16 @@ function HeaderBarItem(params) {
         }
     }
 }
+
+HeaderBarItem.prototype = {
+    getScreenLocation: function() {
+        var location = toJSArray(SFView.getLocationOnScreen(this.nativeObject));
+        var position = {};
+        position.x = PixelToDp(location[0]);
+        position.y = PixelToDp(location[1]);
+        return position;
+    },
+};
 
 var _itemColor = Color.WHITE;
 Object.defineProperty(HeaderBarItem, 'itemColor', {

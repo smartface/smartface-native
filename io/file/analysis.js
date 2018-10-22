@@ -235,14 +235,4 @@ File.prototype.openStream = function(mode, contentMode){};
  */
 File.prototype.rename = function(newName){};
 
-/**
- * Returns full path of current file.
- * 
- * @return {String}
- * @method getAbsolutePath
- * @android
- * @ios
- */
-File.prototype.getAbsolutePath = function(){};
-
 module.exports = File;

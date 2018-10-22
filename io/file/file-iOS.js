@@ -141,7 +141,7 @@ function File(params) {
     
     this.getAbsolutePath = function () {
         return self.nativeObject.getActualPath();
-    };
+    }
     
  // Assign parameters given in constructor
     if (params) {

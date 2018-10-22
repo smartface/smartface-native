@@ -145,6 +145,16 @@ Picker.prototype.cancelHighlightedColor;
 Picker.prototype.cancelFont;
 
 /**
+ * Gets/sets cancelText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} cancelText
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+Picker.prototype.cancelText;
+
+/**
  * Gets/sets okColor of the picker. This property only works with show method. Must set before show method.
  *
  * @property {UI.Color} okColor
@@ -153,6 +163,16 @@ Picker.prototype.cancelFont;
  * @since 3.1.1
  */
 Picker.prototype.okColor;
+
+/**
+ * Gets/sets okText of the picker. This property only works with show method. Must set before show method.
+ *
+ * @property {String} okText
+ * @android
+ * @ios
+ * @since 3.1.3
+ */
+Picker.prototype.okText;
 
 /**
  * Gets/sets okHighlightedColor of the picker. This property only works with show method. Must set before show method.

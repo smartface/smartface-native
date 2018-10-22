@@ -17,6 +17,29 @@ function Application() {}
  */
 Application.android.packageName;
 
+
+/**
+ * Set/Get the layout direction from a Locale. 
+ * 
+ * @property {String} locale
+ * @readonly
+ * @android
+ * @static
+ * @since 3.1.3
+ */
+Application.android.locale;
+
+/**
+ * Get current layout direction.
+ *
+ * @property {Application.LayoutDirection} getLayoutDirection
+ * @readonly
+ * @android
+ * @static
+ * @since 3.1.3
+ */
+Application.getLayoutDirection;
+
 /**
  * Application bundle identifier.
  * 
@@ -27,6 +50,17 @@ Application.android.packageName;
  * @since 3.0.2
  */
 Application.ios.bundleIdentifier;
+
+/**
+ * It indicates the directionality of the language in the user interface of the app.
+ * 
+ * @property {Application.LayoutDirection} userInterfaceLayoutDirection
+ * @readonly
+ * @ios
+ * @static
+ * @since 3.1.3
+ */
+Application.ios.userInterfaceLayoutDirection;
 
 /**
  * The received bytes from the application.
@@ -170,7 +204,8 @@ Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser
  * @static
  * @since 0.1
  */
-Application.exit = function(){};
+Application.exit = function() {};
+
 
 /**
  * Restarts the application.
@@ -182,7 +217,7 @@ Application.exit = function(){};
  * @static
  * @since 0.1
  */
-Application.restart = function(){};
+Application.restart = function() {};
 
 /**
  * This function checks if one of the dangerous permissions is granted at beginning or not. 
@@ -198,7 +233,7 @@ Application.restart = function(){};
  * @static
  * @since 1.2
  */
-Application.android.checkPermission = function(permission){};
+Application.android.checkPermission = function(permission) {};
 
 /**
  * With requestPermissions, the System Dialog will appear to ask for 
@@ -220,7 +255,7 @@ Application.android.checkPermission = function(permission){};
  * @static
  * @since 1.2
  */
-Application.android.requestPermissions = function(requestIdentifier, permission){};
+Application.android.requestPermissions = function(requestIdentifier, permission) {};
 
 /**
  * This method checks for a permission is shown before to user 
@@ -234,7 +269,7 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
  * @static
  * @since 1.2
  */
-Application.android.shouldShowRequestPermissionRationale = function(permission){};
+Application.android.shouldShowRequestPermissionRationale = function(permission) {};
 
 
 /**
@@ -295,7 +330,7 @@ Application.android.keyboardMode;
  * @static
  * @since 0.1
  */
-Application.checkUpdate = function(callback, user){};
+Application.checkUpdate = function(callback, user) {};
 
 /**
  * Triggered before exiting application.
@@ -307,7 +342,7 @@ Application.checkUpdate = function(callback, user){};
  * @static
  * @since 0.1
  */
-Application.onExit = function(){};
+Application.onExit = function() {};
 
 /**
  * Triggered after application bring to front.
@@ -319,7 +354,7 @@ Application.onExit = function(){};
  * @static
  * @since 0.1
  */
-Application.onMaximize = function(){};
+Application.onMaximize = function() {};
 
 /**
  * Triggered after application bring to back.
@@ -331,7 +366,7 @@ Application.onMaximize = function(){};
  * @static
  * @since 0.1
  */
-Application.onMinimize = function(){};
+Application.onMinimize = function() {};
 
 /**
  * This function hides keyboard.
@@ -342,7 +377,7 @@ Application.onMinimize = function(){};
  * @static
  * @since 3.0.1
  */
-Application.hideKeyboard = function(){};
+Application.hideKeyboard = function() {};
 
 /**
  * Triggered after a push (remote) notification recieved. This event will be 
@@ -357,7 +392,7 @@ Application.hideKeyboard = function(){};
  * @static
  * @since 0.1
  */
-Application.onReceivedNotification = function(data){};
+Application.onReceivedNotification = function(data) {};
 
 /**
  * Triggered when application is called by another application.
@@ -383,7 +418,7 @@ Application.onReceivedNotification = function(data){};
  * @since 1.1.13
  * @see https://developer.android.com/training/sharing/receive.html
  */
-Application.onApplicationCallReceived = function(e){};
+Application.onApplicationCallReceived = function(e) {};
 
 /**
  * The event is called when a user taps a universal link.
@@ -395,7 +430,7 @@ Application.onApplicationCallReceived = function(e){};
  * @static
  * @since 3.1.2
  */
-Application.onUserActivityWithBrowsingWeb = function(url){};
+Application.onUserActivityWithBrowsingWeb = function(url) {};
 
 /**
  * This event is called after Application.requestPermissions function. This event is 
@@ -410,7 +445,7 @@ Application.onUserActivityWithBrowsingWeb = function(url){};
  * @static
  * @since 1.2
  */
-Application.android.onRequestPermissionsResult = function(e){}
+Application.android.onRequestPermissionsResult = function(e) {}
 
 /**
  * Triggered when unhandelled error occurs.
@@ -425,7 +460,7 @@ Application.android.onRequestPermissionsResult = function(e){}
  * @static
  * @since 1.2
  */
-Application.onUnhandledError = function(error){};
+Application.onUnhandledError = function(error) {};
 
 /**
  * Android Specific Properties.
@@ -770,5 +805,38 @@ Application.Android.KeyboardMode.AlwaysVisible
  * @since 3.1.0
  */
 Application.Android.KeyboardMode.AlwaysHidden
+
+
+/** 
+ * @enum {Number} Application.LayoutDirection
+ * @since 3.1.3
+ * @ios
+ * @android
+ */
+Application.LayoutDirection = {};
+
+/**
+ * Layout direction is left to right.
+ * 
+ * @property {Number} LEFTTORIGHT
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+Application.LayoutDirection.LEFTTORIGHT = 0;
+
+/**
+ * Layout direction is right to left.
+ * 
+ * @property {Number} RIGHTTOLEFT
+ * @static
+ * @ios
+ * @android
+ * @readonly
+ * @since 3.1.3
+ */
+Application.LayoutDirection.RIGHTTOLEFT = 1;
 
 module.exports = Application;

@@ -173,6 +173,16 @@ function Image(params) {
             },
             enumerable: true,
             configurable: true
+        },
+        'autoMirrored': {
+            get: function() {
+                return self.nativeObject.isAutoMirrored();
+            },
+            set: function(isAutoMirrored) {
+                if (typeof isAutoMirrored !== 'boolean')
+                    return;
+                self.nativeObject.setAutoMirrored(isAutoMirrored);
+            }
         }
     });
 
@@ -186,16 +196,6 @@ function Image(params) {
                 return new Image({
                     roundedBitmapDrawable: roundedBitmapDrawable
                 });
-            }
-        },
-        'autoMirrored': {
-            get: function() {
-                return self.nativeObject.isAutoMirrored();
-            },
-            set: function(isAutoMirrored) {
-                if (typeof isAutoMirrored !== 'boolean')
-                    return;
-                self.nativeObject.setAutoMirrored(isAutoMirrored);
             }
         }
     });

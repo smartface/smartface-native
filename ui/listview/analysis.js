@@ -224,6 +224,16 @@ ListView.prototype.rowHeight = 0;
 ListView.prototype.verticalScrollBarEnabled = false;
 
 /**
+ * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
+ *
+ * @property {Boolean} [scrollEnabled = true]
+ * @ios
+ * @android
+ * @since 3.2.0
+ */
+ListView.prototype.scrollEnabled = false;
+
+/**
  * Enables/disables the refresh function of ListView. If set to false
  * onPullRefresh events will not be called.
  *
@@ -306,6 +316,20 @@ ListView.prototype.scrollTo = function(index){};
  * @since 0.1
  */
 ListView.prototype.stopRefresh = function(){};
+
+/**
+ * Gets contentOffset of the ListView.
+ * 
+ * @property contentOffset
+ * @android
+ * @ios
+ * @readonly
+ * @return {Object}
+ * @return {Number} return.x
+ * @return {Number} return.y
+ * @since 3.1.3
+ */
+ListView.prototype.contentOffset = {};
 
 /**
  * This event is called when a ListView is scrolling.

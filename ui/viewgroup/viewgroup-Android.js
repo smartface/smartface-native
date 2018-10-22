@@ -64,6 +64,16 @@ const ViewGroup = extend(View)(
                 },
                 enumerable: true
             },
+            'getChildList': {
+                value: function() {
+                    var childList = [];
+                    for (var i in this.childViews) {
+                        childList.push(this.childViews[i]);
+                    }
+                    return childList;
+                },
+                enumerable: true
+            },
             'findChildById': {
                 value: function(id) {
                     return this.childViews[id] ? this.childViews[id] : null;
