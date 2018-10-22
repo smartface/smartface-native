@@ -1,3 +1,4 @@
+/* globals requireClass */
 const AndroidConfig = require("./androidconfig");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -15,12 +16,10 @@ FragmentTransaction.generatePageID = function() {
 };
 
 FragmentTransaction.push = function(params) {
-    console.log("FragmentTransaction.push animated param: " + params.animated);
     FragmentTransaction.replace(params);
 };
 
 FragmentTransaction.pop = function(params) {
-    console.log("FragmentTransaction.pop animated param: " + params.animated);
     params && (params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT);
     FragmentTransaction.replace(params);
 };
@@ -29,33 +28,20 @@ FragmentTransaction.replace = function(params) {
     // TODO: Beautify visibility setting of bottom tabbar
     const Application = require("sf-core/application");
     if(params.page.isInsideBottomTabBar) {
-        console.log("=======================");
-        console.log("=======================");
-        console.log("Show BottomTabBar");
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
-        console.log("=======================");
-        console.log("=======================");
     } else {
-        console.log("=======================");
-        console.log("=======================");
-        console.log("Hide BottomTabBar");
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
-        console.log("=======================");
-        console.log("=======================");
     }
     // don't remove these variables. If they are global values, an exception occurs.
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
     if(params.animated) {
-        console.log("params.animationType: " + params.animationType + " === " + FragmentTransaction.AnimationType.RIGHTTOLEFT);
         // check animation type
         switch (params.animationType) {
             case '0':
-                console.log("FragmentTransaction.replace RIGHTTOLEFT");
                 rightToLeftTransitionAnimation(fragmentTransaction);
                 break;
             case '1':
-                console.log("FragmentTransaction.replace LEFTTORIGHT");
                 leftToRightTransitionAnimation(fragmentTransaction);
                 break;
             default:
@@ -64,7 +50,6 @@ FragmentTransaction.replace = function(params) {
     }
     
     var tag = params.page.pageID;
-    console.log("tag " + params.page.pageID);
     if(!tag) {
         throw new Error("This page doesn't have an unique ID!");
     }
@@ -112,7 +97,6 @@ FragmentTransaction.popUpTransition = function(nativeObjectOfPage, animation) {
 };
 
 function leftToRightTransitionAnimation(fragmentTransaction) {
-    console.log("leftToRightTransitionAnimation");
     if (!pageAnimationsCache["LEFTTORIGHT"]) {
         pageAnimationsCache["LEFTTORIGHT"] = {};
         var packageName = activity.getPackageName();

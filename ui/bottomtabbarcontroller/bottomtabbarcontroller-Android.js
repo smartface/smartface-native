@@ -1,3 +1,4 @@
+/* globals requireClass */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
@@ -73,7 +74,7 @@ function BottomTabBarController(params) {
             disableShiftMode(self.tabBar);
             _disabledShiftingMode = true;
         }
-        console.log("BottomTabBarController addTabBarToActivity _addedToActivity: " + _addedToActivity);
+        
         if(!_addedToActivity) {
             _addedToActivity = true;
             var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
@@ -101,10 +102,8 @@ function BottomTabBarController(params) {
             });
         }
         else if (childController instanceof NavigationController) {
-            console.log("TabbarOnClick childController.historyStack.length: " + childController.historyStack.length);
             // first press
             if (childController.historyStack.length < 1) {
-                console.log("TabbarOnClick NavigationController first visit");
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
                     return;
                 childController.push({
@@ -113,10 +112,9 @@ function BottomTabBarController(params) {
                 });
             }
             else if (childController.historyStack.length >= 1) {
-                console.log("TabbarOnClick NavigationController not first visit");
                 var childControllerStack = childController.historyStack;
                 var childControllerStackLenght = childControllerStack.length;
-                console.log("childControllerStackLenght: " + childControllerStackLenght);
+                
                 // show latest page or controller
                 childController.show({
                     controller: childControllerStack[childControllerStackLenght - 1],

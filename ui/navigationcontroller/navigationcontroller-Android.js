@@ -1,11 +1,6 @@
-console.log("NavigationController require class");
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
-console.log("NavigationController require class 1");
-console.log("NavigationController require class 2");
 const BottomTabBarController = require("../../ui/bottomtabbarcontroller");
-console.log("NavigationController require class 3");
 const Page = require("../../ui/page");
-console.log("NavigationController require class 4");
 
 function NavigationController() {
     var historyStack = [];

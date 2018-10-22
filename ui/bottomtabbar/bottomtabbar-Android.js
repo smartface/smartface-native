@@ -1,6 +1,6 @@
+/* globals requireClass, array */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Color = require("../../ui/color");
-const TabBarItem = require("../../ui/tabbaritem");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 
@@ -48,8 +48,8 @@ function BottomTabBar(params) {
                         var states = array([array([NativeR.attr.state_checked], "int"), array([], "int")]);
 
                         const ColorStateList = requireClass("android.content.res.ColorStateList");
-                        var colors = array([colors.selected.nativeObject, colors.normal.nativeObject], "int");
-                        var statelist = new ColorStateList(states, colors);
+                        var nativeColorArray = array([colors.selected.nativeObject, colors.normal.nativeObject], "int");
+                        var statelist = new ColorStateList(states, nativeColorArray);
                         self.nativeObject.setItemTextColor(statelist);
                         self.nativeObject.setItemIconTintList(statelist);
                     }
@@ -69,7 +69,6 @@ function BottomTabBar(params) {
             },
             set: function(color) {
                 if (color instanceof Color) {
-                    console.log("Tabbar backgroundColor set");
                     _backgroundColor = color;
                     self.nativeObject.setBackgroundColor(color.nativeObject);
                 }
