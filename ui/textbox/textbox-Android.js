@@ -72,7 +72,7 @@ const TextBox = extend(TextView)(
             const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
             //AND-3123: Due to the issue, hardware button listener added.
             var callback = {
-                'onKeyPreIme': function(keyCode, keyEvent) { 
+                'onKeyPreIme': function(keyCode, keyEvent) {
                     // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
                     if (keyCode === 4 && keyEvent.getAction() === 1) {
                         self.nativeObject.clearFocus();
@@ -304,6 +304,20 @@ const TextBox = extend(TextView)(
                 },
                 set: function(onActionButtonPress) {
                     _onActionButtonPress = onActionButtonPress.bind(this);
+
+                    if (this.__didSetOnEditorActionListener)
+                        return;
+
+                    self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
+                        onEditorAction: function(textView, actionId, event) {
+                            if (actionId === NativeActionKeyType[_actionKeyType]) {
+                                _onActionButtonPress && _onActionButtonPress({ actionKeyType: _actionKeyType });
+                            }
+                            return false;
+                        }
+                    }));
+
+                    this.__didSetOnEditorActionListener = true;
                 },
                 enumerable: true,
                 configurable: true
@@ -379,16 +393,6 @@ const TextBox = extend(TextView)(
             self.android.hintTextColor = Color.LIGHTGRAY;
             self.textAlignment = TextAlignment.MIDLEFT;
             self.padding = 0;
-
-
-            self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
-                onEditorAction: function(textView, actionId, event) {
-                    if (actionId === NativeActionKeyType[_actionKeyType]) {
-                        _onActionButtonPress && _onActionButtonPress({ actionKeyType: _actionKeyType });
-                    }
-                    return false;
-                }
-            }));
 
             // AND-3223: instead of setOnKeyListener , onKeyPreIme is implemented.  
             // self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
