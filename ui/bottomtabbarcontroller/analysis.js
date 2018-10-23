@@ -60,7 +60,7 @@ function BottomTabbarController() {
      * @ios
      * @since 3.2.0
      */
-    this.shouldSelectByIndex = function({index : index}) {};
+    this.shouldSelectByIndex = function(params) {};
     
     /**
      *  Called when an item in the bottom tabbar item is selected.
@@ -72,5 +72,5 @@ function BottomTabbarController() {
      * @ios
      * @since 3.2.0
      */
-    this.didSelectByIndex = function({index : index}) {};
+    this.didSelectByIndex = function(params) {};
 }

@@ -65,7 +65,7 @@ function NavigationController() {
      * @ios
      * @since 3.2.0
      */
-    this.push = function({controller: controller, animated: animated}) {};
+    this.push = function(params) {};
     
     /**
      * Pop the last page from the navigation controller's page back stack. 
@@ -77,7 +77,7 @@ function NavigationController() {
      * @ios
      * @since 3.2.0
      */
-    this.pop = function({animated: animated}) {};
+    this.pop = function(params) {};
     
     /**
      * Until the given page is found, the pages popped from back stack.
@@ -90,7 +90,7 @@ function NavigationController() {
      * @ios
      * @since 3.2.0
      */
-    this.popTo = function({controller: controller, animated: animated}) {};
+    this.popTo = function(params) {};
     
     /**
      * This event is triggered before the page is displayed.
@@ -149,4 +149,3 @@ NavigationController.OperationType.PUSH = 0;
  * @since 3.2
  */
 NavigationController.OperationType.POP = 1;
-
