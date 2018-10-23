@@ -54,12 +54,6 @@ const MapView = extend(View)(
                     self.nativeObject.onStart();
                     self.nativeObject.onResume();
 
-                    const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                    var latLng = new NativeLatLng(40.7828647, -73.9675491); // Location of Central Park 
-                    var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, 10);
-                    googleMap.moveCamera(cameraUpdate);
-
                     if (!_clusterEnabled) {
                         googleMap.setOnMarkerClickListener(NativeOnMarkerClickListener.implement({
                             onMarkerClick: function(marker) {
@@ -101,13 +95,15 @@ const MapView = extend(View)(
 
                     googleMap.setOnCameraIdleListener(NativeOnCameraIdleListener.implement({
                         onCameraIdle: function() {
+                            _nativeClusterManager && _nativeClusterManager.onCameraIdle();
+                            _zoomLevel = self.zoomLevel; // Current zoom level always kept by those properties
+                            _centerLocation = self.centerLocation;
                             if (_isMoveStarted) {
                                 _onCameraMoveEnded && _onCameraMoveEnded();
                                 _isMoveStarted = false;
                             }
                         }
                     }));
-
                     self.centerLocation = _centerLocation;
                     self.compassEnabled = _compassEnabled;
                     self.rotateEnabled = _rotateEnabled;
@@ -127,9 +123,9 @@ const MapView = extend(View)(
                     _pendingPins = [];
                     _pins = []; // ToDo: Clearing array on map ready should be re-considered while refactoring;
 
+
                     if (self.clusterEnabled)
                         startCluster();
-
                     _onCreate && _onCreate();
                 }
             }));
@@ -140,7 +136,8 @@ const MapView = extend(View)(
         }
 
         var _nativeClusterManager, _nativeGoogleMap, _onCreate,
-            _onPress, _onLongPress, _onCameraMoveStarted, _onCameraMoveEnded, _zoomLevel, _clusterOnPress;
+            _onPress, _onLongPress, _onCameraMoveStarted, _onCameraMoveEnded, _zoomLevel = 10,
+            _clusterOnPress;
         var _pins = [];
         var _pendingPins = [];
         var _centerLocation = { latitude: 40.7828647, longitude: -73.9675491 };
@@ -443,7 +440,6 @@ const MapView = extend(View)(
             'removePin': {
                 value: function(pin) {
                     if (pin instanceof MapView.Pin) {
-                        console.log("  self.nativeObject " + self.nativeObject);
                         if (self.nativeObject) {
                             if (!_clusterEnabled) {
                                 if (_pins.indexOf(pin) !== -1) {
@@ -585,9 +581,7 @@ const MapView = extend(View)(
             const NativeClusterManager = requireClass('com.google.maps.android.clustering.ClusterManager');
 
             _nativeClusterManager = new NativeClusterManager(AndroidConfig.activity, _nativeGoogleMap);
-            _nativeGoogleMap.setOnCameraIdleListener(_nativeClusterManager);
             _nativeGoogleMap.setOnMarkerClickListener(_nativeClusterManager);
-
 
             _nativeClusterManager.setOnClusterItemClickListener(NativeClusterManager.OnClusterItemClickListener.implement({
                 onClusterItemClick: function(item) {
@@ -703,7 +697,6 @@ function Pin(params) {
             },
             set: function(color) {
                 _color = color;
-                console.log("!self.nativeObject instanceof NativeClusterItem " + !self.nativeObject instanceof NativeClusterItem);
                 const Color = require("sf-core/ui/color");
                 if (!self.nativeObject instanceof NativeClusterItem && (color instanceof Color)) {
                     var colorHUE = hueDic[color.nativeObject];
