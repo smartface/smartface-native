@@ -182,13 +182,40 @@ function TabBar(params) {
         },
         enumerable: true
     });
-    
+
+    var _itemColor = {
+        normal : undefined,
+        selected : undefined
+    };
     Object.defineProperty(self, 'itemColor', {
+        get: function() {
+            return _itemColor;
+        },
+        set: function(itemColorObject) {
+            if (typeof itemColorObject === 'object') {
+                _itemColor = itemColorObject;
+                self.tintColor = _itemColor;
+            }
+        },
+        enumerable: true
+    });
+    
+    Object.defineProperty(self, 'tintColor', {
         get: function() {
             return new Color({color : self.nativeObject.tintColor});
         },
         set: function(value) {
-            self.nativeObject.tintColor = value.nativeObject;
+            if (self.nativeObject) {
+                if (typeof colorsObject.normal === 'object') {
+                    var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
+                    if (systemVersion >= 10) {
+                        self.unselectedItemTintColor = colorsObject.normal;
+                    }
+                }
+                if (typeof colorsObject.selected === 'object') {
+                    self.nativeObject.tintColor = colorsObject.selected.nativeObject;
+                }
+            }
         },
         enumerable: true,configurable : true
     });
