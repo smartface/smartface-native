@@ -73,6 +73,16 @@ Dialog.prototype.android = {};
  */
 Dialog.prototype.android.themeStyle = Dialog.Android.Style;
 
+/**
+ * Sets whether the dialog is full transparent. This property must be given in constructor function.
+ * If {@link UI.StatusBar statusBar} is visible, the dialog is drawn under status bar.
+ *
+ * @property {Boolean} isTransparent
+ * @android
+ * @since 3.2.0
+ */
+Dialog.prototype.android.isTransparent;
+
 
 /**
  * This function hides keyboard.
