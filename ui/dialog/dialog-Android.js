@@ -12,16 +12,15 @@ const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 function Dialog(params) {
     const self = this;
-
+    this.android = {};
+    
     var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
-    params.layoutHeight && (_layout.height = params.layoutHeight); 
-
     // Assign parameters given in constructor
     const themeStyle = Dialog.Android.Style.ThemeDefault;
     if(params && params.android) {
         themeStyle = params.android.themeStyle;
+        this.android.isTransparent = params.android.isTransparent;
     }
-    this.android = {};
     this.android.themeStyle = themeStyle;
     if (!this.nativeObject) {
         this.nativeObject = new NativeDialog(AndroidConfig.activity, this.android.themeStyle);
@@ -87,7 +86,7 @@ function Dialog(params) {
     };
 
     var skipDefaults = false;
-    if(params && (params.skipDefaults || params.isTransparent))
+    if(params && (params.skipDefaults || this.android.isTransparent))
         skipDefaults = true;
     
     var dialogWindow, colorDrawable;
