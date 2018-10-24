@@ -1,12 +1,12 @@
-/*globals requireClass*/
+/* globals requireClass, toJSArray */
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const Color = require('../color');
 const TypeUtil = require('../../util/type');
 const Font = require('../font');
-const spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance().getApplicationContext();
 const AndroidConfig = require('../../util/Android/androidconfig');
-const NativeDescriptorFactory = requireClass('com.google.android.gms.maps.model.BitmapDescriptorFactory');
+
+const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.MapClusterItem");
 const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
 const NativeGoogleMap = requireClass('com.google.android.gms.maps.GoogleMap');
 const NativeOnMarkerClickListener = NativeGoogleMap.OnMarkerClickListener;
@@ -14,16 +14,6 @@ const NativeOnMapClickListener = NativeGoogleMap.OnMapClickListener;
 const NativeOnMapLongClickListener = NativeGoogleMap.OnMapLongClickListener;
 const NativeOnCameraMoveStartedListener = NativeGoogleMap.OnCameraMoveStartedListener;
 const NativeOnCameraIdleListener = NativeGoogleMap.OnCameraIdleListener;
-const NativeClusterItem = requireClass("io.smartface.android.sfcore.ui.mapview.MapClusterItem");
-
-
-const hueDic = {};
-hueDic[Color.BLUE.nativeObject] = NativeDescriptorFactory.HUE_BLUE;
-hueDic[Color.CYAN.nativeObject] = NativeDescriptorFactory.HUE_CYAN;
-hueDic[Color.GREEN.nativeObject] = NativeDescriptorFactory.HUE_GREEN;
-hueDic[Color.MAGENTA.nativeObject] = NativeDescriptorFactory.HUE_MAGENTA;
-hueDic[Color.RED.nativeObject] = NativeDescriptorFactory.HUE_RED;
-hueDic[Color.YELLOW.nativeObject] = NativeDescriptorFactory.HUE_YELLOW;
 
 const MapView = extend(View)(
     function(_super, params) {
@@ -329,6 +319,7 @@ const MapView = extend(View)(
             'cluster': {
                 get: function() {
                     if (_nativeCustomMarkerRenderer === null) {
+                        const Cluster = require("./cluster");
                         _nativeCustomMarkerRenderer = new Cluster();
                     }
                     return _nativeCustomMarkerRenderer;
@@ -360,7 +351,7 @@ const MapView = extend(View)(
                 },
                 set: function(value) {
                     if (value instanceof Color)
-                        _fillColor = value
+                        _fillColor = value;
                 },
                 enumerable: true
             },
@@ -603,8 +594,7 @@ const MapView = extend(View)(
                 }
             }));
 
-            var clusterRender = self.cluster.setDefaultClusterRenderer();
-
+            var clusterRender = self.cluster.setDefaultClusterRenderer(self, _nativeGoogleMap, _nativeClusterManager);
             _nativeClusterManager.setRenderer(clusterRender);
         }
 
@@ -615,203 +605,8 @@ const MapView = extend(View)(
             _pinArray[clusterItemObj] = item;
             return clusterItemObj;
         }
-
-        function Cluster(params) {
-
-            function setDefaultClusterRenderer() {
-                const SFDefaultClusterRendererCustom = requireClass('io.smartface.android.sfcore.ui.mapview.SFDefaultClusterRendererCustom');
-                const NativeSquareTextView = requireClass('com.google.maps.android.ui.SquareTextView');
-                const NativeViewGroup = requireClass('android.view.ViewGroup');
-                const NativeGoogleMapR = requireClass("com.google.maps.android.R");
-
-                const COMPLEX_UNIT_SP = 2;
-                const WRAP_CONTENT = -2;
-                var callbacks = {
-                    onBeforeClusterItemRendered: function(clusterItemObj, markerOptions) {
-                        if (clusterItemObj.mImage !== undefined) {
-                            var iconBitmap = clusterItemObj.mImage.getBitmap();
-                            var clusterIcon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-                            markerOptions.icon(clusterIcon)
-                        }
-                        else if (clusterItemObj.mColor !== undefined) {
-                            markerOptions.icon(clusterItemObj.mColor);
-                        }
-                        markerOptions.snippet(clusterItemObj.getSnippet());
-                        markerOptions.title(clusterItemObj.getTitle());
-                    },
-                    shouldRenderAsCluster: function(cluster) {
-                        return cluster.getSize() > 1;
-                    },
-                    getColor: function(cluster) {
-                        return self.clusterFillColor && self.clusterFillColor;
-                    },
-                    makeSquareTextView: function(context) {
-                        var nativeSquareTextView = new NativeSquareTextView(context);
-                        nativeSquareTextView.setTextSize(COMPLEX_UNIT_SP, self.clusterFont.size);
-                        nativeSquareTextView.setTextColor(self.clusterTextColor);
-                        nativeSquareTextView.setTypeface(self.clusterFont.nativeObject);
-                        nativeSquareTextView.setId(NativeGoogleMapR.id.amu_text);
-
-                        var layoutParams = new NativeViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-                        nativeSquareTextView.setLayoutParams(layoutParams);
-                        var mDensity = spratAndroidActivityInstance.getResources().getDisplayMetrics().density;
-                        var twelveDpi = Math.round(6 * mDensity);
-                        nativeSquareTextView.setPaddingRelative(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
-
-                        return nativeSquareTextView;
-                    },
-                    setOutlineColor: function() {
-                        return self.clusterBorderColor;
-                    }
-                };
-                var _nativeDefaultClusterRenderer = new SFDefaultClusterRendererCustom(callbacks, spratAndroidActivityInstance, _nativeGoogleMap, _nativeClusterManager);
-                return _nativeDefaultClusterRenderer.getPersonRenderer();
-            }
-
-            Object.defineProperty(this, 'setDefaultClusterRenderer', {
-                value: function() {
-                    var nativeDefaultClusterRenderer = setDefaultClusterRenderer();
-                    return nativeDefaultClusterRenderer;
-                },
-                enumerable: true
-            })
-        }
     }
 );
-
-function Pin(params) {
-    var self = this;
-
-    self.nativeObject = null;
-    self._clusterColor = null;
-    var _color,
-        _image = null,
-        _location, _onPress;
-    var _subtitle = "";
-    var _title = "";
-    var _visible = true;
-    var _id = 0;
-    Object.defineProperties(self, {
-        'color': {
-            get: function() {
-                return _color;
-            },
-            set: function(color) {
-                _color = color;
-                const Color = require("sf-core/ui/color");
-                if (self.nativeObject && !self.isClusterEnabled && (color instanceof Color)) {
-                    var colorHUE = hueDic[color.nativeObject];
-                    var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
-                    self.nativeObject.setIcon(colorDrawable);
-                }
-                else if ((color instanceof Color)) {
-                    var clusterItemColorHUE = hueDic[color.nativeObject];
-                    var clusterItemColorDrawable = NativeDescriptorFactory.defaultMarker(clusterItemColorHUE)
-                    self._clusterColor = clusterItemColorDrawable;
-                }
-
-            }
-        },
-        'id': {
-            get: function() {
-                return _id;
-            },
-            set: function(value) {
-                _id = value;
-            }
-        },
-        'image': {
-            get: function() {
-                return _image;
-            },
-            set: function(image) {
-                _image = image;
-                const Image = require("sf-core/ui/image");
-                if (self.nativeObject && !self.isClusterEnabled && image instanceof Image) {
-                    var iconBitmap = image.nativeObject.getBitmap();
-                    var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
-
-                    self.nativeObject.setIcon(icon);
-                }
-
-            }
-        },
-        'location': {
-            get: function() {
-                return _location;
-            },
-            set: function(location) {
-                if (!location || !TypeUtil.isNumeric(location.latitude) || !TypeUtil.isNumeric(location.longitude)) {
-                    throw new Error("location property must be on object includes latitude and longitude keys.");
-                }
-                _location = location;
-                if (self.nativeObject && !self.isClusterEnabled) {
-                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-                    var position = new NativeLatLng(location.latitude, location.longitude);
-                    self.nativeObject.setPosition(position);
-                }
-            }
-        },
-        'subtitle': {
-            get: function() {
-                return _subtitle;
-            },
-            set: function(subtitle) {
-                if (!TypeUtil.isString(subtitle)) {
-                    throw new Error("subtitle must be a string.");
-                }
-                _subtitle = subtitle;
-                if (self.nativeObject && !self.isClusterEnabled) {
-                    self.nativeObject.setSnippet(subtitle);
-                }
-            }
-        },
-        'title': {
-            get: function() {
-                return _title;
-            },
-            set: function(title) {
-                if (!TypeUtil.isString(title)) {
-                    throw new Error("title must be a string.");
-                }
-                _title = title;
-                if (self.nativeObject && !self.isClusterEnabled) {
-                    self.nativeObject.setTitle(title);
-                }
-            }
-        },
-        'visible': {
-            get: function() {
-                return _visible;
-            },
-            set: function(visible) {
-                if (!TypeUtil.isBoolean(visible)) {
-                    throw new Error("visible type must be an boolean.");
-                }
-                _visible = visible;
-                if (self.nativeObject && !self.isClusterEnabled) {
-                    self.nativeObject.setVisible(visible);
-                }
-            }
-        },
-        'onPress': {
-            get: function() {
-                return _onPress;
-            },
-            set: function(callback) {
-                _onPress = callback;
-            }
-        }
-    });
-
-
-    // Assign parameters given in constructor
-    if (params) {
-        for (var param in params) {
-            this[param] = params[param];
-        }
-    }
-}
 
 Object.defineProperties(MapView, {
     'Type': {
@@ -819,7 +614,7 @@ Object.defineProperties(MapView, {
         enumerable: true
     },
     'Pin': {
-        value: Pin,
+        value: require("./pin"),
         enumerable: true
     }
 });
