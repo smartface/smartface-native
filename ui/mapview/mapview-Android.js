@@ -698,7 +698,7 @@ function Pin(params) {
             set: function(color) {
                 _color = color;
                 const Color = require("sf-core/ui/color");
-                if (!self.nativeObject instanceof NativeClusterItem && (color instanceof Color)) {
+                if (!(self.nativeObject instanceof NativeClusterItem) && (color instanceof Color)) {
                     var colorHUE = hueDic[color.nativeObject];
                     var colorDrawable = NativeDescriptorFactory.defaultMarker(colorHUE);
                     self.nativeObject.setIcon(colorDrawable);
@@ -727,7 +727,7 @@ function Pin(params) {
             set: function(image) {
                 _image = image;
                 const Image = require("sf-core/ui/image");
-                if (!self.nativeObject instanceof NativeClusterItem && image instanceof Image) {
+                if (!(self.nativeObject instanceof NativeClusterItem) && image instanceof Image) {
                     var iconBitmap = image.nativeObject.getBitmap();
                     var icon = NativeDescriptorFactory.fromBitmap(iconBitmap);
 
@@ -745,7 +745,7 @@ function Pin(params) {
                     throw new Error("location property must be on object includes latitude and longitude keys.");
                 }
                 _location = location;
-                if (!self.nativeObject instanceof NativeClusterItem) {
+                if (!(self.nativeObject instanceof NativeClusterItem)) {
                     const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
                     var position = new NativeLatLng(location.latitude, location.longitude);
                     self.nativeObject.setPosition(position);
@@ -761,7 +761,7 @@ function Pin(params) {
                     throw new Error("subtitle must be a string.");
                 }
                 _subtitle = subtitle;
-                if (!self.nativeObject instanceof NativeClusterItem) {
+                if (!(self.nativeObject instanceof NativeClusterItem)) {
                     self.nativeObject && self.nativeObject.setSnippet(subtitle);
                 }
             }
@@ -775,7 +775,7 @@ function Pin(params) {
                     throw new Error("title must be a string.");
                 }
                 _title = title;
-                if (!self.nativeObject instanceof NativeClusterItem) {
+                if (!(self.nativeObject instanceof NativeClusterItem)) {
                     self.nativeObject && self.nativeObject.setTitle(title);
                 }
             }
@@ -789,7 +789,7 @@ function Pin(params) {
                     throw new Error("visible type must be an boolean.");
                 }
                 _visible = visible;
-                if (!self.nativeObject instanceof NativeClusterItem) {
+                if (!(self.nativeObject instanceof NativeClusterItem)) {
                     self.nativeObject && self.nativeObject.setVisible(visible);
                 }
             }
