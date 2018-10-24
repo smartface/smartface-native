@@ -206,14 +206,14 @@ function TabBar(params) {
         },
         set: function(value) {
             if (self.nativeObject) {
-                if (typeof colorsObject.normal === 'object') {
+                if (typeof value.normal === 'object') {
                     var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
                     if (systemVersion >= 10) {
-                        self.unselectedItemTintColor = colorsObject.normal;
+                        self.unselectedItemTintColor = value.normal;
                     }
                 }
-                if (typeof colorsObject.selected === 'object') {
-                    self.nativeObject.tintColor = colorsObject.selected.nativeObject;
+                if (typeof value.selected === 'object') {
+                    self.nativeObject.tintColor = value.selected.nativeObject;
                 }
             }
         },
