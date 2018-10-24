@@ -372,7 +372,7 @@ Object.defineProperties(ApplicationWrapper.android, {
             return _keyboardMode;
         },
         set: function(modeEnum) {
-            if (!typeof modeEnum === 'enum')
+            if (typeof modeEnum !== "number")
                 return;
             _keyboardMode = modeEnum;
             activity.getWindow().setSoftInputMode(modeEnum);

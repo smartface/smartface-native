@@ -323,7 +323,7 @@ function HeaderBarItem(params) {
                 return _borderColor;
             },
             set: function(borderColor) {
-                if (!borderColor instanceof Color)
+                if (!(borderColor instanceof Color))
                     return;
 
                 _borderColor = borderColor;

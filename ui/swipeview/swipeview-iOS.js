@@ -93,7 +93,7 @@ const SwipeView = extend(View)(
                 return _pageArray;
             },
             set: function(value) {
-                if(!value instanceof Array){
+                if(!(value instanceof Array)){
                     return;
                 }
                 if(value.length < 1){
