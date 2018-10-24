@@ -16,7 +16,7 @@ function Dialog(params) {
     
     var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
     // Assign parameters given in constructor
-    const themeStyle = Dialog.Android.Style.ThemeDefault;
+    var themeStyle = Dialog.Android.Style.ThemeDefault;
     if(params && params.android) {
         themeStyle = params.android.themeStyle;
         this.android.isTransparent = params.android.isTransparent;
