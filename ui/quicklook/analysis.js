@@ -52,6 +52,20 @@ QuickLook.prototype.document = [];
 QuickLook.prototype.barColor = false;
 
 /**
+ * Gets/sets title color of QuickLook View.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.titleColor = UI.Color.GREEN;
+ *
+ * @property {UI.Color} titleColor
+ * @ios
+ * @since 3.1.3
+ */
+QuickLook.prototype.titleColor = false;
+
+/**
  * Gets/sets color of items on header & footer of QuickLook view.
  *
  *     @example

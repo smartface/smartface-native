@@ -41,6 +41,16 @@ function QuickLook (params) {
     //         enumerable: true
     //  });
      
+     Object.defineProperty(self, 'titleColor', {
+            get:function() {
+                return new Color({color : self.nativeObject.titleColor});
+            },
+            set:function(value) {
+                self.nativeObject.titleColor = value.nativeObject;
+            },
+            enumerable: true
+     });
+    
      Object.defineProperty(self, 'itemColor', {
             get:function() {
                 return new Color({color : self.nativeObject.itemColor});
