@@ -16,7 +16,6 @@ const Color = require("sf-core/ui/color");
  *     var testPDF = "assets://test.pdf";
  *     var testImage = "images://test.png";
  *     quickLook.document = [testPDF,testImage];
- *     quickLook.barColor = Color.create("#9D1B55");
  *     quickLook.itemColor = Color.WHITE;
  *     quickLook.show(myPage);
  *
@@ -46,6 +45,7 @@ QuickLook.prototype.document = [];
  *     quicklook.barColor = UI.Color.BLACK;
  *
  * @property {UI.Color} barColor
+ * @removed
  * @ios
  * @since 0.1
  */

@@ -31,15 +31,15 @@ function QuickLook (params) {
             enumerable: true
      });
      
-     Object.defineProperty(self, 'barColor', {
-            get:function() {
-                return new Color({color : self.nativeObject.barColor});
-            },
-            set:function(value) {
-                self.nativeObject.barColor = value.nativeObject;
-            },
-            enumerable: true
-     });
+    //  Object.defineProperty(self, 'barColor', { // Removed
+    //         get:function() {
+    //             return new Color({color : self.nativeObject.barColor});
+    //         },
+    //         set:function(value) {
+    //             self.nativeObject.barColor = value.nativeObject;
+    //         },
+    //         enumerable: true
+    //  });
      
      Object.defineProperty(self, 'itemColor', {
             get:function() {
