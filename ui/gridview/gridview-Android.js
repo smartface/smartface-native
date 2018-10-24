@@ -429,7 +429,7 @@ const GridView = extend(View)(
                     return _snapToAlignment;
                 },
                 set: function(alignment) {
-                    if (!typeof alignment === 'enum')
+                    if (typeof alignment !== 'number')
                         return;
                     const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
                     _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);

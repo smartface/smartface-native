@@ -26,7 +26,7 @@ const ShimmerFlexLayout = extend(View)(
                     return _contentLayout;
                 },
                 set: function(contentLayout) {
-                    if (!contentLayout instanceof FlexLayout)
+                    if (!(contentLayout instanceof FlexLayout))
                         return;
 
                     if (_contentLayout !== null)
@@ -82,7 +82,7 @@ const ShimmerFlexLayout = extend(View)(
                     return _direction;
                 },
                 set: function(direction) {
-                    if (!typeof direction === 'enum')
+                    if (typeof direction !== 'number')
                         return;
                     _direction = direction;
                 },
@@ -167,7 +167,7 @@ const ShimmerFlexLayout = extend(View)(
                     return _highlightColor;
                 },
                 set: function(highlightColor) {
-                    if (!highlightColor instanceof Color)
+                    if (!(highlightColor instanceof Color))
                         return;
                     _highlightColor = highlightColor;
                 },
@@ -178,7 +178,7 @@ const ShimmerFlexLayout = extend(View)(
                     return _baseColor;
                 },
                 set: function(baseColor) {
-                    if (!baseColor instanceof Color)
+                    if (!(baseColor instanceof Color))
                         return;
                     _baseColor = baseColor;
                 },
