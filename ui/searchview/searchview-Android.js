@@ -88,7 +88,7 @@ const SearchView = extend(View)(
         var _onSearchButtonClickedCallback;
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
-        
+
         Object.defineProperties(this, {
             'text': {
                 get: function() {
@@ -276,7 +276,8 @@ const SearchView = extend(View)(
                     }
                 },
                 enumerable: true
-            },'textalignment': {
+            },
+            'textalignment': {
                 get: function() {
                     return _textalignment;
                 },
@@ -291,12 +292,12 @@ const SearchView = extend(View)(
         var _hintTextColor = Color.LIGHTGRAY;
         var _keyboardType = KeyboardType.DEFAULT;
         var _closeImage = null;
-        var _textFieldBackgroundColor = Color.create(222,222,222);
+        var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
-        
+
         Object.defineProperties(this.android, {
             // 'underlineColor': {
             //     get: function() {
@@ -380,9 +381,21 @@ const SearchView = extend(View)(
                     _textFieldBorderRadius = value;
                     self.setTextFieldBackgroundDrawable();
                 }
+            },
+            'expand': {
+                value: function() {
+                    self.nativeObject.onActionViewExpanded();
+                },
+                enumerable: true
+            },
+            'collapse': {
+                value: function() {
+                    self.nativeObject.onActionViewCollapsed();
+                },
+                enumerable: true
             }
         });
-        
+
         const GradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
         var textFieldBackgroundDrawable = new GradientDrawable();
         this.setTextFieldBackgroundDrawable = function() {
@@ -393,14 +406,14 @@ const SearchView = extend(View)(
 
         // Handling ios specific properties
         this.ios = {};
-        this.ios.showLoading = function(){};
-        this.ios.hideLoading = function(){};
+        this.ios.showLoading = function() {};
+        this.ios.hideLoading = function() {};
 
         if (!this.skipDefaults) {
             const NativePorterDuff = requireClass('android.graphics.PorterDuff');
             const NativeView = requireClass("android.view.View");
             mCloseButton.getDrawable().setColorFilter(_textFieldBackgroundColor.nativeObject, NativePorterDuff.Mode.SRC_IN);
-            
+
             mSearchSrcTextView.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
                 onFocusChange: function(view, hasFocus) {
                     if (hasFocus) {
@@ -414,7 +427,7 @@ const SearchView = extend(View)(
                     }
                 }.bind(this)
             }));
-            
+
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query) {
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
@@ -427,7 +440,7 @@ const SearchView = extend(View)(
             }));
             this.borderWidth = 1;
             this.borderColor = _textFieldBackgroundColor;
-            this.textFieldBackgroundColor  = _textFieldBackgroundColor;
+            this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
         }
 
