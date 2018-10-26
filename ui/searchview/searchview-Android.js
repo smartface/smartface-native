@@ -8,7 +8,6 @@ const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const Exception = require("../../util/exception");
 const PorterDuff = requireClass('android.graphics.PorterDuff');
-const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
 const NativeSupportR = requireClass('android.support.v7.appcompat.R');
@@ -16,7 +15,6 @@ const NativeSupportR = requireClass('android.support.v7.appcompat.R');
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
 const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
-const Screen = require('sf-core/device/screen');
 
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
