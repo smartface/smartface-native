@@ -66,6 +66,15 @@ SearchView.prototype.backgroundImage;
 SearchView.prototype.iconImage;
 
 /**
+ * Gets/sets the apperance of searchview either it is iconified or not.
+ *
+ * @property {Boolean} iconified
+ * @android
+ * @since 3.2.4
+ */
+SearchView.prototype.iconified;
+
+/**
  * Adds SearchView to UI.Page's headerBar view.
  *
  * @method addToHeaderBar

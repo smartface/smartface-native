@@ -8,6 +8,7 @@ const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const Exception = require("../../util/exception");
 const PorterDuff = requireClass('android.graphics.PorterDuff');
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
 const NativeSupportR = requireClass('android.support.v7.appcompat.R');
@@ -15,12 +16,13 @@ const NativeSupportR = requireClass('android.support.v7.appcompat.R');
 // Context.INPUT_METHOD_SERVICE
 const INPUT_METHOD_SERVICE = 'input_method';
 const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
+const Screen = require('sf-core/device/screen');
 
 // InputMethodManager.SHOW_FORCED
 const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
 const HIDE_IMPLICIT_ONLY = 1;
-
+const INTEGER_MAX_VALUE = 2147483647;
 const NativeKeyboardType = [1, // InputType.TYPE_CLASS_TEXT
     2, //InputType.TYPE_CLASS_NUMBER
     2 | 8192, // InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
@@ -295,6 +297,7 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
+        var _iconified;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
@@ -382,17 +385,19 @@ const SearchView = extend(View)(
                     self.setTextFieldBackgroundDrawable();
                 }
             },
-            'expand': {
-                value: function() {
-                    self.nativeObject.onActionViewExpanded();
+            'iconified': {
+                get: function() {
+                    return _iconified;
                 },
-                enumerable: true
-            },
-            'collapse': {
-                value: function() {
-                    self.nativeObject.onActionViewCollapsed();
-                },
-                enumerable: true
+                set: function(value) {
+                    if (typeof value !== "boolean")
+                        return;
+                    _iconified = value;
+                    if (_iconified === false)
+                        self.nativeObject.onActionViewExpanded();
+                    else
+                        self.nativeObject.onActionViewCollapsed();
+                }
             }
         });
 
@@ -442,6 +447,7 @@ const SearchView = extend(View)(
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
+            this.nativeObject.setMaxWidth(INTEGER_MAX_VALUE); //Requires to fullfill the header bar.
         }
 
         // Assign parameters given in constructor
