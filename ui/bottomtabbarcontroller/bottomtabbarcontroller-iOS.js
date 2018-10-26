@@ -209,7 +209,7 @@ function TabBar(params) {
                 if (typeof value.normal === 'object') {
                     var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
                     if (systemVersion >= 10) {
-                        self.unselectedItemTintColor = value.normal;
+                        self.unselectedItemColor = value.normal;
                     }
                 }
                 if (typeof value.selected === 'object') {
