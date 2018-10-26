@@ -63,7 +63,7 @@ function Page(params) {
     var callback = {
         onCreate: function() {
             // TODO: Add api level check
-            if(!self.enterRevealTransition && !self.returnRevealAnimation)
+            if (!self.enterRevealTransition && !self.returnRevealAnimation)
                 return;
             self.enterRevealTransition = false;
             self.returnRevealAnimation = false;
@@ -304,7 +304,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     var _transitionViews;
     Object.defineProperties(self, {
         'transitionViews': {
@@ -321,11 +321,12 @@ function Page(params) {
                 if (page instanceof Page) {
                     const Pages = require("../pages");
                     page.popUpBackPage = self;
-                    
-                    if(self.transitionViews) {
+
+                    if (self.transitionViews) {
                         page.enterRevealTransition = true;
                         Pages.revealTransition(self.transitionViews, page.nativeObject);
-                    } else {
+                    }
+                    else {
                         Pages.popUpTransition(page.nativeObject, animation);
 
                         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
@@ -344,13 +345,13 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(self.popUpBackPage.transitionViews) {
+                if (self.popUpBackPage.transitionViews) {
                     self.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();
                     return;
                 }
-                
+
                 fragmentManager.popBackStack();
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
@@ -839,7 +840,6 @@ function Page(params) {
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
-        view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
             title: "Search"
