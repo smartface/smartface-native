@@ -86,22 +86,27 @@ function Page(params) {
             return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
-            if (!self.isSwipeViewPage) {
-                Router.currentPage = self;
-            }
-            onShowCallback && onShowCallback();
+            const NativeRunnable = requireClass('java.lang.Runnable');
+            rootLayout.nativeObject.post(NativeRunnable.implement({
+                run: function() {
+                    if (!self.isSwipeViewPage) {
+                        Router.currentPage = self;
+                    }
+                    onShowCallback && onShowCallback();
 
-            var spratIntent = AndroidConfig.activity.getIntent();
-            if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
-                try {
-                    var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                    Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
-                    spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                    var spratIntent = AndroidConfig.activity.getIntent();
+                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                        try {
+                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                        }
+                        catch (e) {
+                            new Error("An error occured while getting notification json");
+                        }
+                    }
                 }
-                catch (e) {
-                    new Error("An error occured while getting notification json");
-                }
-            }
+            }));
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
