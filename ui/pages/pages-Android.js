@@ -5,7 +5,8 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 var activity = AndroidConfig.activity;
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
-var pageAnimationsCache;
+var pageAnimationsCache, pagePopUpAnimationsCache;
+var popupPageTag = "popupWindow";
 
 const Pages = function(params) {
     var self = this;
@@ -150,10 +151,11 @@ function isSliderDrawerOpen(_sliderDrawer) {
 }
 
 function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
-    if (pagesStack.length > 0) {
-        pagesStack[pagesStack.length - 1].onHide &&
-            pagesStack[pagesStack.length - 1].onHide();
+    const Router = require("sf-core/router");
+    if(Router.currentPage) {
+        Router.currentPage.onHide && Router.currentPage.onHide();
     }
+    
     if (!tag) {
         tag = "Page" + pagesStack.length;
     }
@@ -191,6 +193,11 @@ function push(self, rootViewId, page, animated, pagesStack, tag, addToStack) {
 function pop() {
     var fragmentManager = activity.getSupportFragmentManager();
     if (fragmentManager.getBackStackEntryCount() > 0) {
+        const Router = require("sf-core/router");
+        if(Router.currentPage) {
+            Router.currentPage.onHide && Router.currentPage.onHide();
+        }
+    
         return fragmentManager.popBackStackImmediate();
     }
     return false;
@@ -251,5 +258,41 @@ function detachSliderDrawer(sliderDrawer) {
         }
     }
 }
+
+Pages.revealTransition = function(transitionViews, nativeObjectOfPage) {
+    var rootViewId = NativeR.id.page_container;
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    var lenght = transitionViews.length;
+    for(var i = 0; i < lenght; i++) {
+        var view = transitionViews[i];
+        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+    } 
+    fragmentTransaction.replace(rootViewId, nativeObjectOfPage);
+    fragmentTransaction.addToBackStack(popupPageTag);
+    fragmentTransaction.commitAllowingStateLoss();
+    fragmentManager.executePendingTransactions();
+};
+
+Pages.popUpTransition = function(nativeObjectOfPage, animation) {
+    var rootViewId = NativeR.id.page_container;
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    if(!pagePopUpAnimationsCache) {
+        var packageName = activity.getPackageName();
+        var resources = AndroidConfig.activityResources;
+        pagePopUpAnimationsCache = {};
+        pagePopUpAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+        pagePopUpAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+    }
+
+    if (animation)
+        fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
+
+    fragmentTransaction.add(rootViewId, nativeObjectOfPage, popupPageTag);
+    fragmentTransaction.addToBackStack(popupPageTag);
+    fragmentTransaction.commitAllowingStateLoss();
+    fragmentManager.executePendingTransactions();
+};
 
 module.exports = Pages;

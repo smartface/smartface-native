@@ -112,7 +112,7 @@ Router.go = function(to, parameters, animated) {
     }
     
     var current = history[history.length-1];
-    current && current.page && current.page.onHide && current.page.onHide();
+    // current && current.page && current.page.onHide && current.page.onHide();
     if(!current)
         history.push({path: route.to, page: route.page, controller: route.controller});
     else if(current.path !== route.to) 
@@ -136,7 +136,7 @@ Router.goBack = function(to, parameters, animated) {
             return true;
         }
         else if (pagesInstance.popTo(item.path, item.page)) {
-            current && current.page.onHide && current.page.onHide();
+            // current && current.page.onHide && current.page.onHide();
             history.splice(history.indexOf(item)+1);
             if(history.length > 0) {
                 current = history[history.length-1];
@@ -155,7 +155,7 @@ Router.goBack = function(to, parameters, animated) {
             var tabbarItem = tabbar.items[itemKey];
             if(tabbarItem.route instanceof Navigator) {
                 if(!tabbarItem.route.goBack(parameters)) {
-                    current && current.page.onHide && current.page.onHide();
+                    // current && current.page.onHide && current.page.onHide();
                     history.pop();
                     if(history.length > 0) {
                         current = history[history.length-1];
@@ -169,7 +169,7 @@ Router.goBack = function(to, parameters, animated) {
         }
         
         if (pagesInstance.pop()) {
-            current && current.page.onHide && current.page.onHide();
+            // current && current.page.onHide && current.page.onHide();
             history.pop();
             if(history.length > 0) {
                 current = history[history.length-1];

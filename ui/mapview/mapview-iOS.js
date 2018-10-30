@@ -55,7 +55,7 @@ const MapView = extend(View)(
         function mapRender() {
             if (_isFirstRender) {
                 _isFirstRender = 0;
-                self.setZoomLevelWithAnimated(self.centerLocation, _zoomLevel, true);
+                self.setZoomLevelWithAnimated(_centerLocation ? _centerLocation : self.centerLocation, _zoomLevel, true);
                 if (typeof self.onCreate === "function") {
                     self.onCreate();
                 }
@@ -155,12 +155,7 @@ const MapView = extend(View)(
         var _centerLocation;
         Object.defineProperty(self, 'centerLocation', {
             get: function() {
-                if (_centerLocation) {
-                    return _centerLocation;
-                }
-                else {
-                    return self.nativeObject.centerLocation;
-                }
+                return self.nativeObject.centerLocation;
             },
             set: function(value) {
                 _centerLocation = value;
@@ -390,7 +385,7 @@ const MapView = extend(View)(
                 return _zoomLevel;
             },
             set: function(value) {
-                self.setZoomLevelWithAnimated(self.centerLocation, value + 1, true);
+                self.setZoomLevelWithAnimated(_centerLocation ? _centerLocation : self.centerLocation, value + 1, true);
             },
             enumerable: true
         });

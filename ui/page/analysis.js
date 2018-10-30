@@ -53,6 +53,44 @@ function Page(params) {}
 Page.prototype.onLoad = function (){};
 
 /**
+ * Gets/sets custom transition views. Used with custom transitions to map a {@link UI.View View}
+ * from a removed or hidden {@link UI.Page Page} to a {@link UI.View View} from a shown or added {@link UI.Page Page}.
+ * 
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page({
+ *         var page = this;
+ *         onShow: function() {
+ *             page.headerBar.visible = true;
+ *             page.statusBar.visible = true;
+ * 
+ *             page.imageView1.transitionID = "view1";
+ *             page.imageView2.transitionID = "view2";
+ * 
+ *             page.transitionViews = [page.imageView1, page.imageView2];
+ *         }
+ *     });
+ * 
+ *     var myDetailPage = new Page({
+ *         var page = this;
+ *         onShow: function() {
+ *             page.headerBar.visible = true;
+ *             page.statusBar.visible = true;
+ *         }
+ * 
+ *         page.imageView1.transitionID = "view2";
+ *         page.imageView2.transitionID = "view1";
+ *     });
+ *
+ * @property {UI.View[]} transitionViews
+ * @android
+ * @ios
+ * @readonly
+ * @since 3.2.0
+ */
+Page.prototype.transitionViews;
+
+/**
  * Gets the main layout of Page which is an instance of UI.FlexLayout. You
  * should add views to the layout of the page.
  *

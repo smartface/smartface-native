@@ -1,8 +1,8 @@
 module.exports = {
     View: require('./view'),
     Label: require('./label'),
-    TextAlignment : require('./textalignment.js'),
-    ImageCacheType : require('./imagecachetype.js'),
+    TextAlignment : require('./textalignment'),
+    ImageCacheType : require('./imagecachetype'),
     Font: require('./font'),
     Color: require('./color'),
     Button: require('./button'),
@@ -44,5 +44,8 @@ module.exports = {
     SwipeView: require('./swipeview'),
     LayoutManager: require("./layoutmanager"),
     EmailComposer: require("./emailcomposer"),
-    MaterialTextbox: require("./materialtextbox")
+    MaterialTextbox: require("./materialtextbox"),
+    ShimmerFlexLayout: require("./shimmerflexlayout"),
+    GifImage: require("./gifimage"),
+    GifImageView: require("./gifimageview")
 };

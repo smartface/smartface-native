@@ -232,7 +232,8 @@ MapView.prototype.android.locationButtonVisible;
 MapView.prototype.zoomLevel = 15;
 
 /**
- * This property sets center location of the map to the given latitude & longitude.
+ * This property sets center location of the map to the given latitude & longitude. Getting this property must be 
+ * in onCreate event or after. 
  *
  *     @example
  *     const MapView = require('sf-core/ui/mapview');

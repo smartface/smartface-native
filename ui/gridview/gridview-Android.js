@@ -9,6 +9,7 @@ const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
@@ -168,6 +169,8 @@ const GridView = extend(View)(
         var _onItemBind;
         var _itemCount = 0;
         var _scrollBarEnabled = false;
+        var _contentOffset = { x: 0, y: 0 };
+        var _scrollEnabled;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -218,6 +221,25 @@ const GridView = extend(View)(
                         }
                         else {
                             this.nativeInner.setHorizontalScrollBarEnabled(value);
+                        }
+                    }
+                },
+                enumerable: true
+            },
+            'scrollEnabled': {
+                get: function() {
+                    return _scrollEnabled;
+                },
+                set: function(isScrollEnabled) {
+                    if (!this.layoutManager)
+                        return;
+                    if (TypeUtil.isBoolean(isScrollEnabled)) {
+                        _scrollEnabled = isScrollEnabled;
+                        if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
+                            this.nativeInner.getLayoutManager().setCanScrollVerically(isScrollEnabled);
+                        }
+                        else {
+                            this.nativeInner.getLayoutManager().setCanScrollHorizontally(isScrollEnabled);
                         }
                     }
                 },
@@ -351,29 +373,75 @@ const GridView = extend(View)(
                 },
                 enumerable: true,
                 configurable: true
+            },
+            'contentOffset': {
+                get: function() {
+                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
+                },
+                enumerable: true
             }
         });
         const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
         var overrideMethods = {
             onScrolled: function(recyclerView, dx, dy) {
-                _onScroll && _onScroll();
+                _contentOffset.x += dx;
+                _contentOffset.y += dy;
+
+                var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
             },
             onScrollStateChanged: function(recyclerView, newState) {},
         };
         var onScrollListener = new SFOnScrollListener(overrideMethods);
 
         // android-only properties
-        Object.defineProperty(this.android, 'onItemLongSelected', {
-            get: function() {
-                return _onItemLongSelected;
+        var _snapToAlignment, _paginationEnabled = null,
+            _nativeLinearSnapHelper, _paginationAssigned = false;
+        Object.defineProperties(this.android, {
+            'onItemLongSelected': {
+                get: function() {
+                    return _onItemLongSelected;
+                },
+                set: function(onItemLongSelected) {
+                    _onItemLongSelected = onItemLongSelected.bind(this);
+                },
+                enumerable: true,
+                configurable: true
             },
-            set: function(onItemLongSelected) {
-                _onItemLongSelected = onItemLongSelected.bind(this);
+            'paginationEnabled': {
+                get: function() {
+                    return _paginationEnabled;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+                    _paginationEnabled = value;
+                    if (_nativeLinearSnapHelper) {
+                        _nativeLinearSnapHelper.disablePagination(!_paginationEnabled);
+                        _paginationAssigned = true;
+                    }
+                },
+                enumerable: true
             },
-            enumerable: true,
-            configurable: true
-        });
+            'snapToAlignment': {
+                get: function() {
+                    return _snapToAlignment;
+                },
+                set: function(alignment) {
+                    if (typeof alignment !== 'number')
+                        return;
+                    const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
+                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
+                    _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
+                    if (self.android.paginationEnabled !== null && !_paginationAssigned) {
+                        self.android.paginationEnabled = _paginationEnabled ;
+                    }
+                },
+                enumerable: true
+            },
+        });
 
         // ios-only properties
         this.ios = {};
@@ -398,6 +466,13 @@ const GridView = extend(View)(
         }
     }
 );
+GridView.Android = {};
+GridView.Android.SnapAlignment = {
+    SNAPTO_START: 0,
+    SNAPTO_CENTER: 1,
+    SNAPTO_END: 2
+};
+Object.freeze(GridView.Android.SnapAlignment);
 
 GridView.iOS = {};
 

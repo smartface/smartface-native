@@ -40,8 +40,6 @@ const OrientationDictionary = {
     15: 10
 };
 
-var pageAnimationsCache = null;
-
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -63,6 +61,17 @@ function Page(params) {
 
     var actionBar = null;
     var callback = {
+        onCreate: function() {
+            // TODO: Add api level check
+            if (!self.enterRevealTransition && !self.returnRevealAnimation)
+                return;
+            self.enterRevealTransition = false;
+            self.returnRevealAnimation = false;
+            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
+            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
+        },
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
@@ -301,37 +310,35 @@ function Page(params) {
         enumerable: true
     });
 
-    var popupPageTag = "popupWindow";
+    var _transitionViews;
     Object.defineProperties(self, {
+        'transitionViews': {
+            get: function() {
+                return _transitionViews;
+            },
+            set: function(views) {
+                _transitionViews = views;
+            },
+            enumerable: true
+        },
         'present': {
-            value: function(page, animation, onCompleteCallback) {
+            value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
+                    const Pages = require("../pages");
                     page.popUpBackPage = self;
 
-                    var rootViewId = NativeSFR.id.page_container;
-                    var fragmentManager = activity.getSupportFragmentManager();
-                    var fragmentTransaction = fragmentManager.beginTransaction();
-
-                    if (!pageAnimationsCache) {
-                        var packageName = activity.getPackageName();
-                        var resources = AndroidConfig.activityResources;
-                        pageAnimationsCache = {};
-                        pageAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-                        pageAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+                    if (self.transitionViews) {
+                        page.enterRevealTransition = true;
+                        Pages.revealTransition(self.transitionViews, page.nativeObject);
                     }
+                    else {
+                        Pages.popUpTransition(page.nativeObject, animation);
 
-                    if (animation)
-                        fragmentTransaction.setCustomAnimations(pageAnimationsCache.enter, 0, 0, pageAnimationsCache.exit);
-
-                    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-                    fragmentTransaction.addToBackStack(popupPageTag);
-                    fragmentTransaction.commitAllowingStateLoss();
-                    fragmentManager.executePendingTransactions();
-
-                    var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-                    self.layout.nativeObject.setFocusableInTouchMode(false);
-                    !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                    !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+                        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+                        self.layout.nativeObject.setFocusableInTouchMode(false);
+                        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+                    }
 
                     onCompleteCallback && onCompleteCallback();
                 }
@@ -343,8 +350,14 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
-                fragmentManager.popBackStack();
+                if (self.popUpBackPage.transitionViews) {
+                    self.popUpBackPage.returnRevealAnimation = true;
+                    fragmentManager.popBackStack();
+                    onCompleteCallback && onCompleteCallback();
+                    return;
+                }
 
+                fragmentManager.popBackStack();
                 var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
@@ -715,7 +728,8 @@ function Page(params) {
                 makeItemChecked(itemsKeys, menu);
             }
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
 
     function createBottomNavigationView(pageLayout) {
@@ -779,6 +793,7 @@ function Page(params) {
     function setBottomTabBarOnClickListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
+                // self.onHide && self.onHide();
                 var tab = self.parentTab;
                 var fragment;
                 const Navigator = require("../navigator");
@@ -830,7 +845,6 @@ function Page(params) {
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
-        view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
             title: "Search"
@@ -862,7 +876,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const ALIGN_RIGHT = 7;
+        const ALIGN_END = 19;
 
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
@@ -895,14 +909,12 @@ function Page(params) {
                 nativeBadgeContainer.addView(nativeBadgeContainerButton);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
-                if (item.badge.text && item.badge.nativeObject) {
-                    item.badge.nativeObject.setPadding(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
+                if (item.badge.nativeObject) {
+                    item.badge.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
 
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(ALIGN_RIGHT, nativeBadgeContainerButton.getId());
-
-                    layoutParams.setMargins(0, AndroidUnitConverter.dpToPixel(item.badge.y || 1), AndroidUnitConverter.dpToPixel(item.badge.x || 1), 0);
+                    layoutParams.addRule(ALIGN_END, nativeBadgeContainerButton.getId());
                     item.badge.layoutParams = layoutParams;
                     item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
 
@@ -914,6 +926,7 @@ function Page(params) {
                         parentOfNativeObject.removeAllViews();
                         nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
+                    item.badge.visible !== true ? item.badge.nativeObject.setVisibility(8) : item.badge.nativeObject.setVisibility(0);
                 }
                 itemView = nativeBadgeContainer;
                 item.setValues();

@@ -78,27 +78,46 @@ function Page(params) {
         }
     }
     
+    var _transitionViews;
+    Object.defineProperty(self, 'transitionViews', {
+        get: function() {
+            return _transitionViews;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                _transitionViews = value;   
+            }
+        },
+        enumerable: true
+    });
+    
     self.present = function(page, animation, onComplete) {
         if (typeof page === "object") {
             var _animationNeed = animation ? animation : true;
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
                 
-            var navigationController = page.nativeObject.valueForKey("navigationController");
-            if (!navigationController) {
+            var pageToPresent;
+            if (page.headerBar.visible) {
                 var alloc = Invocation.invokeClassMethod("UINavigationController","alloc",[],"id");
                 var argViewController= new Invocation.Argument({
                     type:"NSObject",
                     value: page.nativeObject
                 });
-                navigationController = Invocation.invokeInstanceMethod(alloc,"initWithRootViewController:",[argViewController],"NSObject");
+                pageToPresent = Invocation.invokeInstanceMethod(alloc,"initWithRootViewController:",[argViewController],"NSObject");
       
-                navigationController.valueForKey("navigationBar").setValueForKey(false,"translucent");
+                pageToPresent.valueForKey("navigationBar").setValueForKey(false,"translucent");
                 if(parseInt(System.OSVersion) >= 11){
-                    navigationController.valueForKey("navigationBar").setValueForKey(false,"prefersLargeTitles");
+                    pageToPresent.valueForKey("navigationBar").setValueForKey(false,"prefersLargeTitles");
                 }
+            } else {
+                pageToPresent = page.nativeObject;
             }
-
-            self.nativeObject.presentViewController(navigationController, _completionBlock);
+            
+            if (typeof self.transitionViews !== "undefined"){
+                pageToPresent.setValueForKey(true,"isHeroEnabled");
+            }
+            
+            self.nativeObject.presentViewController(pageToPresent, _animationNeed, _completionBlock);
         }
     }
     

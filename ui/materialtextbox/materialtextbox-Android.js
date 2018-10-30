@@ -59,6 +59,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         var enableCounter = false;
         var _enableErrorMessage = false;
         var _enableCharacterRestriction = false;
+        var _font;
         Object.defineProperties(self, {
             'hint': {
                 get: function() {
@@ -78,7 +79,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _hintTextColor;
                 },
                 set: function(hintTextColor) {
-                    if (!hintTextColor instanceof Color)
+                    if (!(hintTextColor instanceof Color))
                         return;
                     _hintTextColor = hintTextColor;
 
@@ -91,7 +92,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _hintFocusedTextColor;
                 },
                 set: function(hintFocusedTextColor) {
-                    if (!hintFocusedTextColor instanceof Color)
+                    if (!(hintFocusedTextColor instanceof Color))
                         return;
                     _hintFocusedTextColor = hintFocusedTextColor;
 
@@ -163,7 +164,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _characterRestrictionColor;
                 },
                 set: function(value) {
-                    if (!_characterRestrictionColor instanceof Color)
+                    if (!(_characterRestrictionColor instanceof Color))
                         return;
                     _characterRestrictionColor = value;
 
@@ -207,7 +208,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _errorColor;
                 },
                 set: function(errorColor) {
-                    if (!errorColor instanceof Color)
+                    if (!(errorColor instanceof Color))
                         return;
 
                     _errorColor = errorColor;
@@ -217,19 +218,30 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     changeViewColor(mErrorView, _errorColor);
                 },
                 enumerable: true
+            },
+            'labelsFont': {
+                get: function() {
+                    return _font;
+                },
+                set: function(font) {
+                    if (!(font instanceof Font))
+                        return;
+                    _font = font;
+                    self.nativeObject.setTypeface(font.nativeObject);
+                },
+                enumerable: true
             }
         });
 
         self.android = {};
 
-        var _font;
         Object.defineProperties(self.android, {
             'labelsFont': {
                 get: function() {
                     return _font;
                 },
                 set: function(font) {
-                    if (!font instanceof Font)
+                    if (!(font instanceof Font))
                         return;
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
@@ -304,29 +316,29 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
 
         function changeViewColor(viewFieldName, color) {
-                var javaTwoDimensionArray = array([array([], "int")]);
+            var javaTwoDimensionArray = array([array([], "int")]);
 
-                var javaColorArray = array([color.nativeObject], 'int');
+            var javaColorArray = array([color.nativeObject], 'int');
 
-                var requiredField = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
-                requiredField.setAccessible(true);
+            var requiredField = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
+            requiredField.setAccessible(true);
 
-                var mNativeTextView = requiredField.get(nativeTextInputLayout);
+            var mNativeTextView = requiredField.get(nativeTextInputLayout);
 
-                var nativeTextView = new NativeTextView(activity);
-                var field = nativeTextView.getClass().getDeclaredField("mTextColor"); // ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
-                field.setAccessible(true);
+            var nativeTextView = new NativeTextView(activity);
+            var field = nativeTextView.getClass().getDeclaredField("mTextColor"); // ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
+            field.setAccessible(true);
 
-                var myList = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
-                field.set(mNativeTextView, myList);
+            var myList = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
+            field.set(mNativeTextView, myList);
         }
 
         self.ios = {};
 
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
-        
-         // Assign parameters given in constructor
+
+        // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

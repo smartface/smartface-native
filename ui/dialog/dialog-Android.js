@@ -4,30 +4,29 @@ const NativeColorDrawable = requireClass("android.graphics.drawable.ColorDrawabl
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Color = require("../color");
 const Flex = require("../flexlayout");
+const Screen = require('sf-core/device/screen');
 
 //InputMethodManager to close softinput keyboard
 const INPUT_METHOD_SERVICE = 'input_method';
 const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 function Dialog(params) {
-    const page = this;
-
+    const self = this;
+    this.android = {};
+    
     var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
-
-
     // Assign parameters given in constructor
-    page.android = {};
-    const defaultTheme = { themeStyle: Dialog.Android.Style.ThemeDefault };
-    Object.keys((params && params.android) || defaultTheme)
-        .forEach(function(key) {
-            page.android[key] = (params && params.android[key]) || defaultTheme[key]
-        });
-
+    var themeStyle = Dialog.Android.Style.ThemeDefault;
+    if(params && params.android) {
+        themeStyle = params.android.themeStyle;
+        this.android.isTransparent = params.android.isTransparent;
+    }
+    this.android.themeStyle = themeStyle;
     if (!this.nativeObject) {
         this.nativeObject = new NativeDialog(AndroidConfig.activity, this.android.themeStyle);
     }
 
-    Object.defineProperties(page, {
+    Object.defineProperties(self, {
         'layout': {
             get: function() { return _layout },
             enumerable: true
@@ -50,28 +49,77 @@ function Dialog(params) {
             configurable: true
         }
     });
-
-    page.android = {};
-    Object.defineProperty(page.android, 'hideKeyboard', {
-        value: function() {
-            if (!page.nativeObject)
-                return;
-            var windowToken = page.nativeObject.getWindow().getCurrentFocus().getWindowToken();
-            var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-            inputManager.hideSoftInputFromWindow(windowToken, 0);
+    
+    var _onShowCallback;
+    var _isSetListener = false;
+    Object.defineProperties(self.android, {
+        'hideKeyboard': {
+            value: function() {
+                if (!self.nativeObject)
+                    return;
+                var windowToken = self.nativeObject.getWindow().getCurrentFocus().getWindowToken();
+                var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
+                inputManager.hideSoftInputFromWindow(windowToken, 0);
+            },
+            enumerable: true
         },
-        enumerable: true
+        "onShow": {
+            get: function() {
+                return _onShowCallback;
+            },
+            set: function(callback) {
+                _onShowCallback = callback;
+                !_isSetListener && (self.setShowListener());
+            }
+        }
     });
+    
+    this.setShowListener = function() {
+        const DialogInterface = requireClass("android.content.DialogInterface");
+        var listener = DialogInterface.OnShowListener.implement({
+            onShow: function(dialog) {
+                _onShowCallback && _onShowCallback();
+            }
+        });
+        self.nativeObject.setOnShowListener(listener);
+        _isSetListener = true;
+    };
 
-    if (!this.skipDefaults) {
+    var skipDefaults = false;
+    if(params && (params.skipDefaults || this.android.isTransparent))
+        skipDefaults = true;
+    
+    var dialogWindow, colorDrawable;
+    if (!skipDefaults) {
         // View.Window.FEATURE_NO_TITLE
         this.nativeObject.requestWindowFeature(1);
         this.nativeObject.setContentView(_layout.nativeObject);
-        var dialogWindow = this.nativeObject.getWindow();
-        var colorDrawable = new NativeColorDrawable((Color.create(58, 0, 0, 0)).nativeObject);
+        dialogWindow = this.nativeObject.getWindow();
+        colorDrawable = new NativeColorDrawable((Color.create(58, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
         dialogWindow.setLayout(-1, -1);
+    } else {
+        dialogWindow = this.nativeObject.getWindow();
+        dialogWindow.setGravity(80);
+        this.nativeObject.setContentView(this.layout.nativeObject);
+    
+        colorDrawable = new NativeColorDrawable((Color.create(0, 0, 0, 0)).nativeObject);
+        dialogWindow.setBackgroundDrawable(colorDrawable);
+        
+        const Router = require("sf-core/router");
+        var currentPage = Router.currentPage;
+        var isStatusBarVisible = currentPage.statusBar.visible;
+        var statusBarHeight = 0;
+        if(isStatusBarVisible)
+            statusBarHeight = currentPage.statusBar.height;
+        var layoutHeight = Screen.height - statusBarHeight;
+        if(statusBarHeight > 0) {
+            this.layout.height = layoutHeight;
+            dialogWindow.setLayout(-1, -2);
+        } else {
+            dialogWindow.setLayout(-1, -1);
+        }
     }
 
     // Assign parameters given in constructor

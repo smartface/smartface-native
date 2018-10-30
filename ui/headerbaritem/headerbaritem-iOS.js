@@ -1,6 +1,7 @@
 const Color = require("sf-core/ui/color");
 const Image = require('sf-core/ui/image');
 const Invocation = require('sf-core/util').Invocation;
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 function HeaderBarItem(params) {
     var _onPress = null;
@@ -9,10 +10,30 @@ function HeaderBarItem(params) {
     
     self.nativeObject = new __SF_UIBarButtonItem();
     self.nativeObject.target = self.nativeObject;
-    var _badge ={};
+    var _badge = {};
     _badge.ios = {};
     
+    var _nativeView;
+    
     Object.defineProperties(this, {
+        'layout': {
+            get: function (argument) {
+                var retval;
+                if (_nativeView) {
+                    retval = _nativeView;
+                } else {
+                    var key = new Invocation.Argument({
+                        type:"NSString",
+                        value: "view"
+                    });
+                    var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
+                    _nativeView = new FlexLayout({nativeObject : view});
+                    retval = _nativeView;
+                }
+                return retval;
+            },
+            enumerable: true
+        },
         'title': {
             get: function() {
                 return self.nativeObject.title;
@@ -85,6 +106,9 @@ function HeaderBarItem(params) {
         }
     });
     
+    this.getScreenLocation = function () {
+        return this.layout.getScreenLocation();
+    };
     
     var _badgeVisible = false;
     var _badgeBackgroundColor = 0;
@@ -95,6 +119,8 @@ function HeaderBarItem(params) {
     var _badgeHeight = 0;
     var _isBadgeFirstLoad = false;
     var _badgeText;
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    var _isRTL = !isLTR;
     
     Object.defineProperties(_badge, {
         'text': {
@@ -146,6 +172,10 @@ function HeaderBarItem(params) {
                                 self.badge.height = _badgeHeight;
                             } else {
                                 _badgeHeight = 0;
+                            }
+                            
+                            if (_isRTL) {
+                                self.badge.isRTL = _isRTL;
                             }
                         }
                         _isBadgeFirstLoad = true;
@@ -300,6 +330,18 @@ function HeaderBarItem(params) {
             },
             enumerable: true
         },
+        'isRTL' : {
+            get: function(){
+                return _isRTL;
+            },
+            set: function(value){
+                _isRTL = value;
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    self.nativeObject.pp_setIsRTL(value);
+                },1);
+            },
+            enumerable: true
+        }
     });
     
     // Assign parameters given in constructor
