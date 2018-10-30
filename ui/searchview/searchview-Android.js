@@ -295,7 +295,6 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
-        var _iconified;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
@@ -381,20 +380,6 @@ const SearchView = extend(View)(
                 set: function(value) {
                     _textFieldBorderRadius = value;
                     self.setTextFieldBackgroundDrawable();
-                }
-            },
-            'iconified': {
-                get: function() {
-                    return _iconified;
-                },
-                set: function(value) {
-                    if (typeof value !== "boolean")
-                        return;
-                    _iconified = value;
-                    if (_iconified === false)
-                        self.nativeObject.onActionViewExpanded();
-                    else
-                        self.nativeObject.onActionViewCollapsed();
                 }
             }
         });
