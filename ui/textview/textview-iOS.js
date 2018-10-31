@@ -130,9 +130,11 @@ const TextView = extend(View)(
                         "NSColor" : attributeString.foregroundColor.nativeObject,
                         "NSFont" : attributeString.font,
                         "NSUnderline" : attributeString.underline ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSStrikethrough" : attributeString.strikethrough ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
                         "NSLink": attributeString.link,
                         "NSBackgroundColor" : attributeString.backgroundColor.nativeObject,
                         "NSUnderlineColor" : attributeString.ios.underlineColor.nativeObject,
+                        "NSStrikethroughColor" : attributeString.ios.strikethroughColor.nativeObject,
                         "NSKern" : self.letterSpacing,
                         "NSParagraphStyle" : paragraphStyle
                     }
