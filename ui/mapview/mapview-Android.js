@@ -94,8 +94,8 @@ const MapView = extend(View)(
                             }
                         }
                     }));
-                    
-                    self.setCenterLocationWithZoomLevel(_centerLocation , _zoomLevel , false);
+
+                    self.setCenterLocationWithZoomLevel(_centerLocation, _zoomLevel, false);
                     self.compassEnabled = _compassEnabled;
                     self.rotateEnabled = _rotateEnabled;
                     self.scrollEnabled = _scrollEnabled;
@@ -175,21 +175,23 @@ const MapView = extend(View)(
             },
             'setCenterLocationWithZoomLevel': {
                 value: function(location, zoomlevel, animate) {
-                    const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
-
                     if (typeof location === "object")
                         _centerLocation = location;
                     if (typeof zoomlevel === "number")
                         _zoomLevel = zoomlevel;
 
-                    var latLng = new NativeLatLng(_centerLocation.latitude, _centerLocation.longitude); // Location of Central Park 
-                    var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, _zoomLevel);
-                    
-                    if (animate === false)
-                        _nativeGoogleMap.moveCamera(cameraUpdate);
-                    else
-                        _nativeGoogleMap.animateCamera(cameraUpdate);
+                    if (_nativeGoogleMap) {
+                        const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                        const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+
+                        var latLng = new NativeLatLng(_centerLocation.latitude, _centerLocation.longitude); // Location of Central Park 
+                        var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, _zoomLevel);
+
+                        if (animate === false)
+                            _nativeGoogleMap.moveCamera(cameraUpdate);
+                        else
+                            _nativeGoogleMap.animateCamera(cameraUpdate);
+                    }
                 },
                 enumerable: true
             },
