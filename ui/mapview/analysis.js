@@ -13,10 +13,11 @@ const extend = require('js-base/core/extend');
  *         flexGrow: 1,
  *         alignSelf: FlexLayout.AlignSelf.STRETCH,
  *         onCreate: function() {
- *             myMapView.centerLocation = {
+ *             var centerLocation = {
  *                 latitude: 37.4488259,
  *                 longitude: -122.1600047
  *             };
+ *             myMapView.setCenterLocationWithZoomLevel(centerLocation,11,false);
  *             var myPin = new MapView.Pin({
  *                 location: {
  *                     latitude: 37.4488259,
@@ -172,15 +173,16 @@ MapView.prototype.onClusterPress;
  * This property sets center location of the map to the given latitude & longitude.
  *
  * @method setCenterLocationWithZoomLevel
- * @params {Object} params
- * @params {Object} params.centerLocation
- * @params {Number} params.zoomLevel
- * @params {Boolean} params.animated
+ * @param {Object} centerLocation
+ * @param {Number} centerLocation.latitude
+ * @param {Number} centerLocation.longitude
+ * @param {Number} zoomLevel
+ * @param {Boolean} animated
  * @android
  * @ios
  * @since 3.2.1
  */
-MapView.prototype.setCenterLocationWithZoomLevel = function(params) {};
+MapView.prototype.setCenterLocationWithZoomLevel = function(centerLocation,zoomLevel,animated) {};
 
 
  /**
@@ -441,10 +443,11 @@ MapView.prototype.type = UI.MapView.Type.NORMAL;
  *            myMapView.zoomEnabled =  true;
  *            myMapView.compassEnabled = true;
  *            myMapView.type =  MapView.Type.NORMAL;
- *            myMapView.centerLocation = {
+ *            var centerLocation = {
  *                 latitude: 41.0209078,
  *                 longitude: 29.0039533
- *             };
+ *            };
+ *            myMapView.setCenterLocationWithZoomLevel(centerLocation,11,false);
  *            myMapView.addPin(myPin);
  *         }
  *     });
