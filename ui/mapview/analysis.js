@@ -171,14 +171,6 @@ MapView.prototype.onClusterPress;
 /**
  * This property sets center location of the map to the given latitude & longitude.
  *
- *     @example
- *     const MapView = require('sf-core/ui/mapview');
- *     var myMapView = new MapView({
- *         centerLocation: {
- *             latitude: 41.0209078,
- *             longitude: 29.0039533
- *         }
- *     });
  * @method setCenterLocationWithZoomLevel
  * @params {Object} params
  * @params {Object} params.centerLocation
@@ -189,6 +181,17 @@ MapView.prototype.onClusterPress;
  * @since 3.2.1
  */
 MapView.prototype.setCenterLocationWithZoomLevel = function() {};
+
+
+ /**
+* This property gets zoom level of the map to the given level. Zoom level will be between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
+*
+* @property {Number} [zoomLevel = 15]
+* @android
+* @ios
+* @since 1.1.10
+*/
+MapView.prototype.zoomLevel = 15;
 
 /**
  * Gets/sets minimum zoom level.
@@ -224,25 +227,6 @@ MapView.prototype.android.lazyLoading;
  * @since 3.0.1
  */
 MapView.prototype.android.locationButtonVisible;
-
-/**
- * This property sets center location of the map to the given latitude & longitude. Getting this property must be 
- * in onCreate event or after. 
- *
- *     @example
- *     const MapView = require('sf-core/ui/mapview');
- *     var myMapView = new MapView({
- *         centerLocation: {
- *             latitude: 41.0209078,
- *             longitude: 29.0039533
- *         }
- *     });
- * @property {Object} centerLocation
- * @android
- * @ios
- * @since 0.1
- */
-MapView.prototype.centerLocation;
 
 /**
  * Get visible pins on MapView.
