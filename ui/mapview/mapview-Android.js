@@ -94,14 +94,14 @@ const MapView = extend(View)(
                             }
                         }
                     }));
-                    self.centerLocation = _centerLocation;
+                    
+                    self.setCenterLocationWithZoomLevel(_centerLocation , _zoomLevel , false);
                     self.compassEnabled = _compassEnabled;
                     self.rotateEnabled = _rotateEnabled;
                     self.scrollEnabled = _scrollEnabled;
                     self.zoomEnabled = _zoomEnabled;
                     self.userLocationEnabled = _userLocationEnabled;
                     self.type = _type;
-                    self.zoomLevel = _zoomLevel;
                     self.maxZoomLevel = _maxZoomLevel;
                     self.minZoomLevel = _minZoomLevel;
                     self.locationButtonVisible = _locationButtonVisible;
@@ -171,18 +171,25 @@ const MapView = extend(View)(
                     var nativeLatLng = _nativeGoogleMap.getCameraPosition().target;
                     return { latitude: nativeLatLng.latitude, longitude: nativeLatLng.longitude };
                 },
-                set: function(location) {
-                    if (location && TypeUtil.isNumeric(location.latitude) && TypeUtil.isNumeric(location.longitude)) {
-                        _centerLocation = location;
-                        if (_nativeGoogleMap) {
-                            const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
-                            const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
+                enumerable: true
+            },
+            'setCenterLocationWithZoomLevel': {
+                value: function(location, zoomlevel, animate) {
+                    const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
+                    const NativeLatLng = requireClass('com.google.android.gms.maps.model.LatLng');
 
-                            var target = new NativeLatLng(location.latitude, location.longitude);
-                            var cameraUpdate = NativeCameraUpdateFactory.newLatLng(target);
-                            _nativeGoogleMap.moveCamera(cameraUpdate);
-                        }
-                    }
+                    if (typeof location === "object")
+                        _centerLocation = location;
+                    if (typeof zoomlevel === "number")
+                        _zoomLevel = zoomlevel;
+
+                    var latLng = new NativeLatLng(_centerLocation.latitude, _centerLocation.longitude); // Location of Central Park 
+                    var cameraUpdate = NativeCameraUpdateFactory.newLatLngZoom(latLng, _zoomLevel);
+                    
+                    if (animate === false)
+                        _nativeGoogleMap.moveCamera(cameraUpdate);
+                    else
+                        _nativeGoogleMap.animateCamera(cameraUpdate);
                 },
                 enumerable: true
             },
