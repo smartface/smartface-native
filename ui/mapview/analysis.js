@@ -179,12 +179,16 @@ MapView.prototype.onClusterPress;
  *             longitude: 29.0039533
  *         }
  *     });
- * @property {Object} centerLocation
+ * @method setCenterLocationWithZoomLevel
+ * @params {Object} params
+ * @params {Object} params.centerLocation
+ * @params {Number} params.zoomLevel
+ * @params {Boolean} params.animated
  * @android
  * @ios
- * @since 0.1
+ * @since 3.2.1
  */
-MapView.prototype.centerLocation;
+MapView.prototype.setCenterLocationWithZoomLevel = function() {};
 
 /**
  * Gets/sets minimum zoom level.
@@ -222,16 +226,6 @@ MapView.prototype.android.lazyLoading;
 MapView.prototype.android.locationButtonVisible;
 
 /**
- * This property sets zoom level of the map to the given level. Zoom level must between 0 to 19. When you try to get value of this property; in iOS you will get what you set, but in Android you will get the actual zoom level which means if user changed zoom level via pinching you will get different value than you set.
- *
- * @property {Number} [zoomLevel = 15]
- * @android
- * @ios
- * @since 1.1.10
- */
-MapView.prototype.zoomLevel = 15;
-
-/**
  * This property sets center location of the map to the given latitude & longitude. Getting this property must be 
  * in onCreate event or after. 
  *
@@ -259,7 +253,7 @@ MapView.prototype.centerLocation;
  * @method getVisiblePins
  * @since 2.0.7
  */
-MapView.prototype.getVisiblePins = function(){};
+MapView.prototype.getVisiblePins = function() {};
 
 
 /**
@@ -271,7 +265,7 @@ MapView.prototype.getVisiblePins = function(){};
  * @deprecated
  * @since 2.0.10
  */
-MapView.prototype.android.prepareMapAsync = function(){};
+MapView.prototype.android.prepareMapAsync = function() {};
 
 
 /**
@@ -281,7 +275,7 @@ MapView.prototype.android.prepareMapAsync = function(){};
  * @method prepareMap
  * @since 3.1.0
  */
-MapView.prototype.android.prepareMap= function(){};
+MapView.prototype.android.prepareMap = function() {};
 
 /**
  * Adds a UI.MapView.Pin on the map.
@@ -292,7 +286,7 @@ MapView.prototype.android.prepareMap= function(){};
  * @method addPin
  * @since 0.1
  */
-MapView.prototype.addPin = function(){};
+MapView.prototype.addPin = function() {};
 
 /**
  * Removes the UI.MapView.Pin from the map.
@@ -303,7 +297,7 @@ MapView.prototype.addPin = function(){};
  * @ios
  * @since 0.1
  */
-MapView.prototype.removePin = function(){};
+MapView.prototype.removePin = function() {};
 
 /**
  * Removes all pins from the map.
@@ -313,7 +307,7 @@ MapView.prototype.removePin = function(){};
  * @ios
  * @since 3.1.1
  */
-MapView.prototype.removeAllPins = function(){};
+MapView.prototype.removeAllPins = function() {};
 
 /**
  * Triggered when pressed on the map and sends the location pressed on the map.
@@ -414,7 +408,7 @@ MapView.prototype.onTouchMoved;
  * @android
  * @ios
  */
-MapView.prototype.onCreate = function onCreate(){ };
+MapView.prototype.onCreate = function onCreate() {};
 
 /**
  * Gets/Sets map type
