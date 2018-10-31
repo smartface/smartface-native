@@ -180,7 +180,7 @@ MapView.prototype.onClusterPress;
  * @ios
  * @since 3.2.1
  */
-MapView.prototype.setCenterLocationWithZoomLevel = function() {};
+MapView.prototype.setCenterLocationWithZoomLevel = function(params) {};
 
 
  /**
