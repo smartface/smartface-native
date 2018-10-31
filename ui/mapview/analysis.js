@@ -229,6 +229,18 @@ MapView.prototype.android.lazyLoading;
 MapView.prototype.android.locationButtonVisible;
 
 /**
+ * This property gets center location of the map to the given latitude & longitude. Getting this property must be 
+ * in onCreate event or after. 
+ *
+ * @property {Object} centerLocation
+ * @android
+ * @ios
+ * @readonly
+ * @since 0.1
+ */
+MapView.prototype.centerLocation;
+
+/**
  * Get visible pins on MapView.
  *
  * @return {UI.MapView.Pin[]} Visible pin array.
