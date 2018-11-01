@@ -1,6 +1,10 @@
 const RAU = require("./RAU");
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
+var _rootPage;
+var _sliderDrawer;
+const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+
 var SFApplication = {};
 
 Object.defineProperty(SFApplication, 'byteReceived', {
@@ -45,6 +49,54 @@ SFApplication.checkUpdate = function(callback, user){
     RAU.checkUpdate(callback, user);
 };
 
+SFApplication.setRootController = function(params){
+    if (params && params.controller) {
+        SFApplication.rootPage = params.controller;
+        var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+        sfWindow.rootViewController = params.controller.nativeObject;
+        sfWindow.makeKeyAndVisible();
+    }
+};
+
+Object.defineProperty(SFApplication, 'sliderDrawer', {
+    get: function() {
+        return _sliderDrawer;
+    },
+    set: function(value) {
+        if (typeof value === "object") {
+            _sliderDrawer = value;
+            if (typeof _rootPage !== "undefined") {
+                configureSliderDrawer(_rootPage, _sliderDrawer);
+            }
+        }
+        
+    },
+    enumerable: true,configurable : true
+});
+
+Object.defineProperty(SFApplication, 'rootPage', {
+    get: function() {
+        return _rootPage;
+    },
+    set: function(value) {
+        if (typeof value === "object") {
+            _rootPage = value;
+            
+            if (typeof _sliderDrawer !== "undefined") {
+                configureSliderDrawer(_rootPage, _sliderDrawer);
+            }
+        }
+        
+    },
+    enumerable: true,configurable : true
+});
+
+function configureSliderDrawer(rootPage, sliderDrawer) {
+    rootPage.sliderDrawer = sliderDrawer;
+    sliderDrawer.nativeObject.Pages = rootPage;
+    sliderDrawer.nativeObject.checkSwipeGesture(rootPage.nativeObject, rootPage, _sliderDrawer.nativeObject);
+};
+
 SFApplication.ios = {};
 SFApplication.ios.canOpenUrl = function (url) {
     return SMFApplication.canOpenUrl(url);
@@ -58,6 +110,8 @@ Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     },
     enumerable: true
 });
+
+SFApplication.statusBar = require("./statusbar");
 
 Object.defineProperty(SFApplication.ios, 'userInterfaceLayoutDirection', {
     get: function() {

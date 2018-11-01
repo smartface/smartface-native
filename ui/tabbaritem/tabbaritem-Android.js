@@ -1,6 +1,8 @@
 function TabBarItem(params) {
-    var _title, _icon, _page, _route, _firstPageIsSet;
+    var _title, _icon;
 
+    this.nativeObject = null; // this property should be set at runtime.
+    var self = this;
     Object.defineProperties(this, {
         'title': {
             get: function() {
@@ -9,6 +11,7 @@ function TabBarItem(params) {
             set: function(title) {
                 if (typeof(title) === "string") {
                     _title = title;
+                    this.nativeObject && this.nativeObject.setTitle(title);
                 }
                 else {
                     throw new Error("title should be string.");
@@ -26,20 +29,15 @@ function TabBarItem(params) {
 
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
-                }
+                };
+                
                 var icon = valueObj;
-                if (typeof icon === "string") {
-                    icon = Image.createFromFile(icon);
-                }
-                else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
-                    icon.normal = icon.normal && Image.createFromFile(icon.normal);
-                    icon.selected = icon.selected && Image.createFromFile(icon.selected);
-                }
 
                 if (icon instanceof Image || icon === null) {
                     _icon = icon;
                 }
                 else if (icon instanceof Object) {
+                    // TODO: Refactor this implemenation. Discuss with ios team.
                     if (icon.normal instanceof Image && icon.selected instanceof Image) {
                         _icon = makeSelector(icon.normal, icon.selected);
                     }
@@ -49,52 +47,18 @@ function TabBarItem(params) {
                     else if (icon.selected instanceof Image) {
                         _icon = makeSelector(EmptyImage, icon.selected);
                     }
+                    else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
+                        icon.normal = icon.normal && Image.createFromFile(icon.normal);
+                        icon.selected = icon.selected && Image.createFromFile(icon.selected);
+                    }
+                
+                } else if (typeof icon === "string") {
+                    icon = Image.createFromFile(icon);
                 }
                 else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
-
-            },
-            enumerable: true
-        },
-        'firstPageIsSet': {
-            get: function() {
-                return _firstPageIsSet;
-            },
-            set: function(value) {
-                _firstPageIsSet = value;
-            },
-            enumerable: true
-        },
-        'page': {
-            get: function() {
-                return _page;
-            },
-            set: function(page) {
-                if (typeof(page) === 'function')
-                    _page = page;
-                else
-                    throw new Error("page should be a function.");
-            },
-            enumerable: true
-        },
-        'route': {
-            get: function() {
-                return _route;
-            },
-            set: function(route) {
-                const Navigator = require("../navigator");
-                if (route instanceof Navigator) {
-                    _page = route.items[route.index];
-                    _route = route;
-                }
-                else if (typeof(route) === 'function') {
-                    _page = route;
-                    _route = route;
-                }
-                else {
-                    throw new Error("page should be an instance of Page or Navigator.");
-                }
+                self.nativeObject && (self.nativeObject.setIcon(icon.nativeObject));
             },
             enumerable: true
         },
