@@ -111,7 +111,7 @@ const TextView = extend(Label)(
                     });
 
                     //Sets the given line space
-                    this.lineSpacing(_lineSpacing);
+                    this.lineSpacing = _lineSpacing ;
                     this.nativeObject.setText(_attributedStringBuilder);
                     this.nativeObject.setSingleLine(false);
                     if (!isMovementMethodAssigned) {
@@ -153,7 +153,7 @@ const TextView = extend(Label)(
                 set: function(value) {
                     _lineSpacing = value;
 
-                    if (_attributedStringBuilder)
+                    if (!_attributedStringBuilder)
                         return;
 
                     let lineSpan = NativeLineHeightSpan.implement({

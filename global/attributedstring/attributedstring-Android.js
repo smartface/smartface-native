@@ -106,7 +106,7 @@ AttributedString.prototype.setSpan = function(stringBuilder) {
     if (this.link !== undefined) {
         var clickableSpanOverrideMethods = {
             onClick: function(view) {
-                self.textview.onLinkClick && self.textview.onLinkClick(self.link);
+              self.textView.onLinkClick && self.textView.onLinkClick(self.link);
             },
             updateDrawState: function(ds) {
                 ds.setUnderlineText(self.underline);
