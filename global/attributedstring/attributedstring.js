@@ -53,7 +53,7 @@ const AttributedString = function(params){
     });
     
     var _strikethrough = false;
-    Object.defineProperty(self, '_strikethrough', {
+    Object.defineProperty(self, 'strikethrough', {
         get: function() {
             return _strikethrough;
         },
