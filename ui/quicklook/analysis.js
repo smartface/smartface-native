@@ -16,7 +16,6 @@ const Color = require("sf-core/ui/color");
  *     var testPDF = "assets://test.pdf";
  *     var testImage = "images://test.png";
  *     quickLook.document = [testPDF,testImage];
- *     quickLook.barColor = Color.create("#9D1B55");
  *     quickLook.itemColor = Color.WHITE;
  *     quickLook.show(myPage);
  *
@@ -46,10 +45,25 @@ QuickLook.prototype.document = [];
  *     quicklook.barColor = UI.Color.BLACK;
  *
  * @property {UI.Color} barColor
+ * @removed
  * @ios
  * @since 0.1
  */
 QuickLook.prototype.barColor = false;
+
+/**
+ * Gets/sets title color of QuickLook View.
+ *
+ *     @example
+ *     const QuickLook = require('sf-core/ui/quicklook');
+ *     var quicklook = new QuickLook();
+ *     quicklook.titleColor = UI.Color.GREEN;
+ *
+ * @property {UI.Color} titleColor
+ * @ios
+ * @since 3.1.3
+ */
+QuickLook.prototype.titleColor = false;
 
 /**
  * Gets/sets color of items on header & footer of QuickLook view.

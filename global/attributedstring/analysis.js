@@ -56,6 +56,16 @@ AttributedString.prototype.foregroundColor = Color.BLACK;
 AttributedString.prototype.underline = false;
 
 /**
+ * Gets/sets strikethrough on AttributedString.
+ *
+ * @property {boolean} [strikethrough = false]
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+AttributedString.prototype.strikethrough = false;
+
+/**
  * Gets/sets underlineColor on AttributedString.
  *
  * @property {UI.Color} underlineColor
@@ -64,6 +74,14 @@ AttributedString.prototype.underline = false;
  */
 AttributedString.prototype.underlineColor = Color.WHITE;
 
+/**
+ * Gets/sets strikethroughColor on AttributedString.
+ *
+ * @property {UI.Color} strikethroughColor
+ * @ios
+ * @since 3.2.1
+ */
+AttributedString.prototype.strikethroughColor = Color.WHITE;
 
 /**
  * Gets/sets backgroundColor on AttributedString.

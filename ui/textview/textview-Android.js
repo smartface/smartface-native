@@ -34,8 +34,7 @@ const TextView = extend(Label)(
 
         var self = this;
 
-        var myBuilder = new NativeSpannableStringBuilder();
-
+        var _attributedStringBuilder;
         var _spanArray = [];
         var _onClick = undefined; //Deprecated : Please use self.onLinkClick
         var _onLinkClick = undefined;
@@ -104,13 +103,17 @@ const TextView = extend(Label)(
                 },
                 set: function(values) {
                     _spanArray = values;
-                    myBuilder.clear();
+                    if(_attributedStringBuilder)
+                        _attributedStringBuilder.clear();
+                    else
+                        _attributedStringBuilder = new NativeSpannableStringBuilder();
+
                     for (var i = 0; i < _spanArray.length; i++) {
                         createSpannyText(_spanArray[i]);
                     }
 
                     lineSpacing();
-                    this.nativeObject.setText(myBuilder);
+                    this.nativeObject.setText(_attributedStringBuilder);
                     this.nativeObject.setSingleLine(false);
                     if (!isMovementMethodAssigned) {
                         isMovementMethodAssigned = true;
@@ -189,13 +192,13 @@ const TextView = extend(Label)(
                     fm.descent += unitconverter.dpToPixel(_lineSpacing);
                 }
             });
-            myBuilder.setSpan(lineSpan, 0, myBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+            _attributedStringBuilder.setSpan(lineSpan, 0, _attributedStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         function createSpannyText(value) {
-            myBuilder.append(value.string);
-            var start = myBuilder.length() - value.string.length;
-            var end = myBuilder.length();
+            _attributedStringBuilder.append(value.string);
+            var start = _attributedStringBuilder.length() - value.string.length;
+            var end = _attributedStringBuilder.length();
             // Link 
             // --------------------------------------------------------------------------------
             if (value.link !== undefined) {
@@ -211,14 +214,20 @@ const TextView = extend(Label)(
 
                 const SFClickableSpan = requireClass("io.smartface.android.sfcore.ui.textview.SFClickableSpan");
                 var clickSpan = new SFClickableSpan(clickableSpanOverrideMethods);
-                myBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+                _attributedStringBuilder.setSpan(clickSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            if (value.strikethrough) {
+                const NativeStrikethroughSpan = requireClass("android.text.style.StrikethroughSpan");
+                var strikethroughSpan = new NativeStrikethroughSpan();
+                _attributedStringBuilder.setSpan(strikethroughSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
             // Foreground Color 
             // --------------------------------------------------------------------------------
-            myBuilder.setSpan(new NativeForegroundColorSpan(value.foregroundColor.nativeObject), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            _attributedStringBuilder.setSpan(new NativeForegroundColorSpan(value.foregroundColor.nativeObject), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Background Color 
             // --------------------------------------------------------------------------------
-            myBuilder.setSpan(new NativeBackgroundColorSpan(value.backgroundColor.nativeObject), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            _attributedStringBuilder.setSpan(new NativeBackgroundColorSpan(value.backgroundColor.nativeObject), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Font
             // --------------------------------------------------------------------------------
             var newType = value.font.nativeObject;
@@ -233,17 +242,17 @@ const TextView = extend(Label)(
 
             const SFTypefaceSpan = requireClass("io.smartface.android.sfcore.SFTypefaceSpan");
             var typeSpan = new SFTypefaceSpan("SF", typeSpanOverrideMethods);
-            myBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            _attributedStringBuilder.setSpan(typeSpan, start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Size
             // --------------------------------------------------------------------------------
 
             const NativeAbsoluteSizeSpan = requireClass("android.text.style.AbsoluteSizeSpan");
-            myBuilder.setSpan(new NativeAbsoluteSizeSpan(value.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+            _attributedStringBuilder.setSpan(new NativeAbsoluteSizeSpan(value.font.size, true), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             // Underline 
             // --------------------------------------------------------------------------------
             if (value.underline === true) {
                 const NativeUnderlineSpan = requireClass("android.text.style.UnderlineSpan");
-                myBuilder.setSpan(new NativeUnderlineSpan(), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
+                _attributedStringBuilder.setSpan(new NativeUnderlineSpan(), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
