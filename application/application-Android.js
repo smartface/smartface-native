@@ -292,7 +292,6 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-
     'onApplicationCallReceived': {
         get: function() {
             return Application.onApplicationCallReceived;
