@@ -91,10 +91,11 @@ function GridView(params) {}
  * @event onItemCreate
  * @android
  * @ios
+ * @param {Number} itemType
  * @return {UI.GridViewItem}
  * @since 3.0.2
  */
-GridView.prototype.onItemCreate = function onItemCreate(){};
+GridView.prototype.onItemCreate = function onItemCreate(type){};
 
 /**
  * This event is called when a UI.GridViewItem created at specified row index.
@@ -108,6 +109,18 @@ GridView.prototype.onItemCreate = function onItemCreate(){};
  * @since 3.0.2
  */
 GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
+
+/**
+ * This event is called before onItemCreate callback. Returns item type you should use based on position.
+ *
+ * @event onItemType
+ * @param {Number} index
+ * @android
+ * @ios
+ * @return {Number}
+ * @since 3.2.1
+ */
+GridView.prototype.onItemType = function onItemType(index){};
 
 /**
  * This event is called when user selects a item at specific index.
