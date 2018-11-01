@@ -45,18 +45,6 @@ const TextView = extend(View)(
             configurable: true
         });
         
-        var _onClick = undefined; //Deprecated : Please use self.onLinkClick
-        Object.defineProperty(self, 'onClick', {
-            get: function() {
-                return _onClick;
-            },
-            set: function(value) {
-                _onClick = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        
         var _onLinkClick = undefined;
         Object.defineProperty(self, 'onLinkClick', {
             get: function() {
@@ -82,9 +70,6 @@ const TextView = extend(View)(
         });
         
         self.nativeObject.didTapLinkWithURL = function(e){
-            if (typeof self.onClick == 'function') {
-                self.onClick(e.URL);
-            }
             if (typeof self.onLinkClick == 'function') {
                 self.onLinkClick(e.URL);
             }

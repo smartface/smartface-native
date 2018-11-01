@@ -198,23 +198,6 @@ TextView.prototype.ios.scrollEnabled = true;
 TextView.prototype.attributedText = "";
 
 /**
- * This event is called when user click link string. onClick just work with attributedText.
- * onClick deprecated on 3.0.1 version.Use onLinkClick instead.
- * 
- *     @example
- *     myTextView.onClick = function(string) {
- *         console.log(string);
- *     };
- *
- * @param {String} string
- * @event onClick
- * @android
- * @ios
- * @since 3.0.0
- */
-TextView.prototype.onClick = function(string) {};
-
-/**
  * This event is called when user click link string. onLinkClick just work with attributedText.
  *
  *     @example
