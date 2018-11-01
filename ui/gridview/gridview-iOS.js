@@ -40,22 +40,18 @@ const GridView = extend(View)(
                 var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
                 
                 if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
-                    console.log("Registerr : " + type);
                     collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
                     sfSelf.registeredIndentifier.push(type);
                 }
                 
-                console.log("11111 : " + type);
                 var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
                 // onItemCreate and onItemBind callback pairs
                 if (cell.contentView.subviews.length > 0) {
-                    console.log("Not Createee : " + cell);
                     if (sfSelf.onItemBind) {
                         sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                     }
                 }
                 else {
-                    console.log("Createee : " + cell);
                     collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
                     cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
                     if (sfSelf.onItemBind) {
@@ -63,7 +59,6 @@ const GridView = extend(View)(
                     }
                 }
                 
-                console.log("Return : " + cell);
                 return cell;
             },
             // UICollectionViewDelegate
