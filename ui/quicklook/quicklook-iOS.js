@@ -31,16 +31,26 @@ function QuickLook (params) {
             enumerable: true
      });
      
-     Object.defineProperty(self, 'barColor', {
+    //  Object.defineProperty(self, 'barColor', { // Removed
+    //         get:function() {
+    //             return new Color({color : self.nativeObject.barColor});
+    //         },
+    //         set:function(value) {
+    //             self.nativeObject.barColor = value.nativeObject;
+    //         },
+    //         enumerable: true
+    //  });
+     
+     Object.defineProperty(self, 'titleColor', {
             get:function() {
-                return new Color({color : self.nativeObject.barColor});
+                return new Color({color : self.nativeObject.titleColor});
             },
             set:function(value) {
-                self.nativeObject.barColor = value.nativeObject;
+                self.nativeObject.titleColor = value.nativeObject;
             },
             enumerable: true
      });
-     
+    
      Object.defineProperty(self, 'itemColor', {
             get:function() {
                 return new Color({color : self.nativeObject.itemColor});

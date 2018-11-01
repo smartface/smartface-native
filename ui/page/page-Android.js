@@ -52,7 +52,7 @@ function Page(params) {
     var callback = {
         onCreate: function() {
             // TODO: Add api level check
-            if(!self.enterRevealTransition && !self.returnRevealAnimation)
+            if (!self.enterRevealTransition && !self.returnRevealAnimation)
                 return;
             self.enterRevealTransition = false;
             self.returnRevealAnimation = false;
@@ -75,22 +75,27 @@ function Page(params) {
             return pageLayoutContainer;
         },
         onViewCreated: function(view, savedInstanceState) {
-            if (!self.isSwipeViewPage) {
-                Application.currentPage = self;
-            }
-            onShowCallback && onShowCallback();
+            const NativeRunnable = requireClass('java.lang.Runnable');
+            rootLayout.nativeObject.post(NativeRunnable.implement({
+                run: function() {
+                    if (!self.isSwipeViewPage) {
+                        Application.currentPage = self;
+                    }
+                    onShowCallback && onShowCallback();
 
-            var spratIntent = AndroidConfig.activity.getIntent();
-            if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
-                try {
-                    var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
-                    Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
-                    spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                    var spratIntent = AndroidConfig.activity.getIntent();
+                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                        try {
+                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                            Application.onReceivedNotification({ 'remote': JSON.parse(notificationJson) });
+                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
+                        }
+                        catch (e) {
+                            new Error("An error occured while getting notification json");
+                        }
+                    }
                 }
-                catch (e) {
-                    new Error("An error occured while getting notification json");
-                }
-            }
+            }));
         },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
@@ -292,7 +297,7 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     var _transitionViews;
     Object.defineProperties(self, {
         'transitionViews': {
@@ -309,8 +314,8 @@ function Page(params) {
                 if (page instanceof Page) {
                     const FragmentTransaction = require("../../util/Android/fragmenttransition");
                     page.popUpBackPage = self;
-                    
-                    if(self.transitionViews) {
+
+                    if (self.transitionViews) {
                         page.enterRevealTransition = true;
                         FragmentTransaction.revealTransition(self.transitionViews, page.nativeObject);
                     } else {
@@ -592,7 +597,6 @@ function Page(params) {
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
-        view.nativeObject.onActionViewCollapsed();
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
             title: "Search"

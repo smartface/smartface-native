@@ -17,7 +17,7 @@ const GifImageView = extend(ImageView)(
                 },
                 set: function(value) {
                     // We don't use backgroundImage of view. Because, it breaks image fill type.
-                    if (!value instanceof GifImage)
+                    if (!(value instanceof GifImage))
                         return;
                     _image = value;
                     this.nativeObject.setImageDrawable(null);

@@ -1,4 +1,4 @@
-/*globals requireClass*/
+/* globals requireClass, array */
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const GridViewItem = require('../gridviewitem');
@@ -50,7 +50,7 @@ const GridView = extend(View)(
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
-                    holderViewLayout = _onItemCreate();
+                    holderViewLayout = _onItemCreate(viewType);
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -156,7 +156,9 @@ const GridView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                return 1;
+                if (_onItemType)
+                    return _onItemType(position);
+                return 0;
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
@@ -164,6 +166,7 @@ const GridView = extend(View)(
         var _onScroll;
         var _onItemCreate;
         var _onItemSelected;
+        var _onItemType;
         var _onItemLongSelected;
         var _onPullRefresh;
         var _onItemBind;
@@ -294,7 +297,7 @@ const GridView = extend(View)(
                     var nativeColors = [];
                     colors.forEach(function(element) {
                         nativeColors.push(element.nativeObject);
-                    })
+                    });
                     /** @todo
                      * Error: Method setColorSchemeColors with 1 parameters couldn\'t found.
                      * Invoking method with varargs parameter maybe caused this. 
@@ -322,6 +325,15 @@ const GridView = extend(View)(
                 },
                 set: function(onItemCreate) {
                     _onItemCreate = onItemCreate.bind(this);
+                },
+                enumerable: true
+            },
+            'onItemType': {
+                get: function() {
+                    return _onItemType;
+                },
+                set: function(callback) {
+                    _onItemType = callback;
                 },
                 enumerable: true
             },
@@ -429,7 +441,7 @@ const GridView = extend(View)(
                     return _snapToAlignment;
                 },
                 set: function(alignment) {
-                    if (!typeof alignment === 'enum')
+                    if (typeof alignment !== 'number')
                         return;
                     const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
                     _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
