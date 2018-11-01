@@ -317,16 +317,9 @@ function Page(params) {
 
                     if (self.transitionViews) {
                         page.enterRevealTransition = true;
-<<<<<<< HEAD
-                        Pages.revealTransition(self.transitionViews, page.nativeObject);
-                    }
-                    else {
-                        Pages.popUpTransition(page.nativeObject, animation);
-=======
                         FragmentTransaction.revealTransition(self.transitionViews, page.nativeObject);
                     } else {
                         FragmentTransaction.popUpTransition(page.nativeObject, animation);
->>>>>>> develop-4.0
 
                         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
                         self.layout.nativeObject.setFocusableInTouchMode(false);
