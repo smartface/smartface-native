@@ -14,12 +14,12 @@ const NSIndexPath = SF.requireClass("NSIndexPath");
 const GridView = extend(View)(
     function(_super, params) {
         var sfSelf = this;
-
+        
+        sfSelf.registeredIndentifier = [];
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // NATIVE COLLECTION VIEW CONTROLLER CLASS IMPLEMENTATION
         var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>', {
             viewDidLoad: function() {
-                self.valueForKey("collectionView").registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, 'Cell');
             },
             // UICollectionViewDataSource
             numberOfSectionsInCollectionView: function(collectionView) {
@@ -37,26 +37,33 @@ const GridView = extend(View)(
             },
             collectionViewCellForItemAtIndexPath: function(collectionView, indexPath) {
                 // Cell dequeing for type
-                var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "Cell";
-                var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
-                if (!cell) {
+                var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
+                
+                if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
+                    console.log("Registerr : " + type);
                     collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
-                    cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
+                    sfSelf.registeredIndentifier.push(type);
                 }
-
+                
+                console.log("11111 : " + type);
+                var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
                 // onItemCreate and onItemBind callback pairs
                 if (cell.contentView.subviews.length > 0) {
+                    console.log("Not Createee : " + cell);
                     if (sfSelf.onItemBind) {
                         sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                     }
                 }
                 else {
-                    collectionViewItems[cell.uuid] = sfSelf.onItemCreate(cell.reuseIdentifier);
+                    console.log("Createee : " + cell);
+                    collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
                     cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
                     if (sfSelf.onItemBind) {
                         sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                     }
                 }
+                
+                console.log("Return : " + cell);
                 return cell;
             },
             // UICollectionViewDelegate
