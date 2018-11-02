@@ -110,14 +110,20 @@ const AttributedString = function(params){
     function setParams(params){
         for (var param in params) {
             if(param === "ios" || param === "android"){
-                setParams(param);
+                setOSSpecificParams.call(this,params[param],param);
             }else{
                 this[param] = params[param];
             }
         }
     }
-
-    setParams(params);
+    
+    function setOSSpecificParams(params,key){
+        for (var param in params) {
+            this[key][param] = params[param];
+        }
+    }
+    
+    setParams.call(this,params);
 };
 
 module.exports = AttributedString;
