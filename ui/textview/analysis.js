@@ -199,7 +199,6 @@ TextView.prototype.attributedText = "";
 
 /**
  * This event is called when user click link string. onClick just work with attributedText.
- * onClick deprecated on 3.0.1 version.Use onLinkClick instead.
  * 
  *     @example
  *     myTextView.onClick = function(string) {
