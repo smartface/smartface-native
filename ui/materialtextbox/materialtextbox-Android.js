@@ -48,18 +48,14 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         self.nativeObject.addView(nativeTextInputEditText);
 
-        var _hintTextColor;
-        var _hintFocusedTextColor;
+        var _hintTextColor, _hintFocusedTextColor,
+            _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font;
         var _enableCounterMaxLength = 10;
-        var _errorText;
         var reflectionHelper = new SfReflectionHelper();
-        var _lineColorObj;
-        var _errorColor;
-        var _characterRestrictionColor;
         var enableCounter = false;
         var _enableErrorMessage = false;
         var _enableCharacterRestriction = false;
-        var _font;
+        var _touchEnable = true;
         Object.defineProperties(self, {
             'hint': {
                 get: function() {
@@ -228,6 +224,19 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                         return;
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
+                },
+                enumerable: true
+            },
+            'touchEnabled': {
+                get: function() {
+                    return _touchEnable;
+                },
+                set: function(value) {
+                    if (typeof value !== 'boolean')
+                        return;
+
+                    _touchEnable = value;
+                    sfTextBox.enabled = value;
                 },
                 enumerable: true
             }
