@@ -107,12 +107,17 @@ const AttributedString = function(params){
         enumerable: true
     });
     
-    if (params) {
+    function setParams(params){
         for (var param in params) {
-            this[param] = params[param];
+            if(param === "ios" || param === "android"){
+                setParams(param);
+            }else{
+                this[param] = params[param];
+            }
         }
     }
-    
+
+    setParams(params);
 };
 
 module.exports = AttributedString;
