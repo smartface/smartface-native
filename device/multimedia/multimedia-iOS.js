@@ -4,79 +4,81 @@ const Page = require('sf-core/ui/page');
 const Invocation = require('sf-core/util').Invocation;
 
 const UIImagePickerControllerSourceType = {
-    photoLibrary : 0,
-    camera : 1,
-    savedPhotosAlbum : 2
+    photoLibrary: 0,
+    camera: 1,
+    savedPhotosAlbum: 2
 }
 
 const UIImagePickerMediaTypes = {
-    image : "public.image",
-    video : "public.movie"
+    image: "public.image",
+    video: "public.movie"
 }
 
 const UIImagePickerControllerCameraFlashMode = {
-    off : -1,
-    auto : 0,
-    on : 1
+    off: -1,
+    auto: 0,
+    on: 1
 }
 
 function Multimedia() {}
 
-Multimedia.createImagePickerController = function(e){
-    var picker =  new __SF_UIImagePickerController();
+Multimedia.createImagePickerController = function(e) {
+    var picker = new __SF_UIImagePickerController();
     if (e.action) {
         picker.mediaTypes = e.action;
     }
-    
+
     if (e.type) {
         picker.mediaTypes = e.type;
     }
-    
+
     picker.allowsEditing = e.allowsEditing ? e.allowsEditing : false;
-    
+
     picker.sourceType = e.sourceType;
-    
+
     if (picker.sourceType == UIImagePickerControllerSourceType.camera) {
-        picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;  
+        picker.cameraFlashMode = e.cameraFlashMode ? e.cameraFlashMode : 0;
     }
-    
-    
-    this.pickerDelegate =  new __SF_UIImagePickerControllerDelegate();
-          
-    this.pickerDelegate.imagePickerControllerDidCancel = function(){
+
+
+    this.pickerDelegate = new __SF_UIImagePickerControllerDelegate();
+
+    this.pickerDelegate.imagePickerControllerDidCancel = function() {
         picker.dismissViewController();
-        if (e.onCancel){
+        if (e.onCancel) {
             e.onCancel();
         }
     };
-  
-    this.pickerDelegate.didFinishPickingMediaWithInfo = function(param){
-        picker.dismissViewController();
-        if (e.onSuccess){
-            if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image){
-                
-                var image;
-                if (param.info["UIImagePickerControllerEditedImage"]) {
-                    image = Image.createFromImage(param.info["UIImagePickerControllerEditedImage"]);
-                } else {
-                    image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
+
+    this.pickerDelegate.didFinishPickingMediaWithInfo = function(param) {
+        picker.dismissViewController(function() {
+            if (e.onSuccess) {
+                if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.image) {
+                    var image;
+                    if (param.info["UIImagePickerControllerEditedImage"]) {
+                        image = Image.createFromImage(param.info["UIImagePickerControllerEditedImage"]);
+                    }
+                    else {
+                        image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
+                    }
+
+                    if (image.nativeObject.fixOrientation) {
+                        var fixedImage = image.nativeObject.fixOrientation();
+                        image = Image.createFromImage(fixedImage);
+                    }
+                    e.onSuccess({ image: image });
                 }
-                
-                if (image.nativeObject.fixOrientation) {
-                    var fixedImage = image.nativeObject.fixOrientation();
-                    image = Image.createFromImage(fixedImage);
+                else if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video) {
+                    var videoURL = param.info["UIImagePickerControllerMediaURL"];
+                    var file = new File({ path: videoURL.absoluteString });
+                    e.onSuccess({ video: file });
                 }
-                e.onSuccess({image : image});
-            }else if(param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video){
-                var videoURL = param.info["UIImagePickerControllerMediaURL"];
-                var file = new File({path:videoURL.absoluteString});
-                e.onSuccess({video : file});
             }
-        }
+        });
     };
-    
+
     picker.delegate = this.pickerDelegate;
-    
+
     return picker;
 }
 
@@ -85,7 +87,8 @@ Multimedia.startCamera = function(e) {
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(this.picker);
-    }else{
+    }
+    else {
         throw new TypeError("Parameter type mismatch. params.page must be Page instance");
     }
 };
@@ -95,16 +98,17 @@ Multimedia.pickFromGallery = function(e) {
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(this.picker);
-    }else{
+    }
+    else {
         throw new TypeError("Parameter type mismatch. params.page must be Page instance");
     }
 };
 
 Multimedia.android = {};
 
-Multimedia.android.getAllGalleryItems = function(){};
+Multimedia.android.getAllGalleryItems = function() {};
 
-Multimedia.Type = { };
+Multimedia.Type = {};
 
 Multimedia.Type.IMAGE = [UIImagePickerMediaTypes.image];
 
@@ -112,7 +116,7 @@ Multimedia.Type.VIDEO = [UIImagePickerMediaTypes.video];
 
 Multimedia.Type.ALL = [UIImagePickerMediaTypes.image, UIImagePickerMediaTypes.video];
 
-Multimedia.ActionType = { };
+Multimedia.ActionType = {};
 
 Multimedia.ActionType.IMAGE_CAPTURE = [UIImagePickerMediaTypes.image];
 
@@ -126,102 +130,103 @@ Multimedia.iOS.CameraFlashMode.ON = [UIImagePickerControllerCameraFlashMode.on];
 
 Multimedia.ios = {};
 
-Multimedia.ios.requestGalleryAuthorization = function(callback){
-    Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function(status){
+Multimedia.ios.requestGalleryAuthorization = function(callback) {
+    Multimedia.ios.native.PHPhotoLibraryRequestAuthorization(function(status) {
         if (typeof callback == 'function') {
             if (status == PHAuthorizationStatus.Authorized) {
                 callback(true);
-            }else{
+            }
+            else {
                 callback(false);
             }
         }
     });
 }
 
-Multimedia.ios.requestCameraAuthorization = function(callback){
-    Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType(function(status){
+Multimedia.ios.requestCameraAuthorization = function(callback) {
+    Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType(function(status) {
         if (typeof callback == 'function') {
             callback(status);
         }
     });
 }
 
-Multimedia.ios.getGalleryAuthorizationStatus = function(){
+Multimedia.ios.getGalleryAuthorizationStatus = function() {
     return Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus();
 }
 
-Multimedia.ios.getCameraAuthorizationStatus = function(){
+Multimedia.ios.getCameraAuthorizationStatus = function() {
     return Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType();
 }
 
 Multimedia.ios.native = {};
 
 const AVMediaType = {
-    Video : "vide"
+    Video: "vide"
 }
 
 const AVAuthorizationStatus = {
-    NotDetermined : 0,
-    Restricted : 1,
-    Denied : 2,
-    Authorized : 3,
+    NotDetermined: 0,
+    Restricted: 1,
+    Denied: 2,
+    Authorized: 3,
 }
 
 Multimedia.ios.cameraAuthorizationStatus = AVAuthorizationStatus; //deprecated
 Multimedia.iOS.CameraAuthorizationStatus = {
-    NOTDETERMINED : 0,
-    RESTRICTED : 1,
-    DENIED : 2,
+    NOTDETERMINED: 0,
+    RESTRICTED: 1,
+    DENIED: 2,
     AUTHORIZED: 3
 }
 
-Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback){
+Multimedia.ios.native.AVCaptureDeviceRequestAccessForMediaType = function(callback) {
     var argType = new Invocation.Argument({
-        type:"NSString",
+        type: "NSString",
         value: AVMediaType.Video
     });
     var argCallback = new Invocation.Argument({
-        type:"BoolBlock",
+        type: "BoolBlock",
         value: callback
     });
-    Invocation.invokeClassMethod("AVCaptureDevice","requestAccessForMediaType:completionHandler:",[argType,argCallback]);
+    Invocation.invokeClassMethod("AVCaptureDevice", "requestAccessForMediaType:completionHandler:", [argType, argCallback]);
 };
 
-Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType = function(){
+Multimedia.ios.native.AVCaptureDeviceaAuthorizationStatusForMediaType = function() {
     var argType = new Invocation.Argument({
-        type:"NSString",
+        type: "NSString",
         value: AVMediaType.Video
     });
-    return Invocation.invokeClassMethod("AVCaptureDevice","authorizationStatusForMediaType:",[argType],"NSInteger");
+    return Invocation.invokeClassMethod("AVCaptureDevice", "authorizationStatusForMediaType:", [argType], "NSInteger");
 }
 
 const PHAuthorizationStatus = {
-    NotDetermined : 0, // User has not yet made a choice with regards to this application
-    Restricted : 1,        // This application is not authorized to access photo data.
-                                            // The user cannot change this application’s status, possibly due to active restrictions
-                                            //   such as parental controls being in place.
-    Denied : 2,            // User has explicitly denied this application access to photos data.
-    Authorized : 3      // User has authorized this application to access photos data.
+    NotDetermined: 0, // User has not yet made a choice with regards to this application
+    Restricted: 1, // This application is not authorized to access photo data.
+    // The user cannot change this application’s status, possibly due to active restrictions
+    //   such as parental controls being in place.
+    Denied: 2, // User has explicitly denied this application access to photos data.
+    Authorized: 3 // User has authorized this application to access photos data.
 };
 
 Multimedia.ios.galleryAuthorizationStatus = PHAuthorizationStatus; //deprecated
 Multimedia.iOS.GalleryAuthorizationStatus = {
-    NOTDETERMINED : 0,
-    RESTRICTED : 1,
-    DENIED : 2,
+    NOTDETERMINED: 0,
+    RESTRICTED: 1,
+    DENIED: 2,
     AUTHORIZED: 3
 }
 
-Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback){
+Multimedia.ios.native.PHPhotoLibraryRequestAuthorization = function(callback) {
     var argCallback = new Invocation.Argument({
-        type:"NSIntegerBlock",
+        type: "NSIntegerBlock",
         value: callback
     });
-    Invocation.invokeClassMethod("PHPhotoLibrary","requestAuthorization:",[argCallback]);
+    Invocation.invokeClassMethod("PHPhotoLibrary", "requestAuthorization:", [argCallback]);
 };
 
-Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus = function(){
-    return Invocation.invokeClassMethod("PHPhotoLibrary","authorizationStatus",[],"NSInteger");
+Multimedia.ios.native.PHPhotoLibraryAuthorizationStatus = function() {
+    return Invocation.invokeClassMethod("PHPhotoLibrary", "authorizationStatus", [], "NSInteger");
 }
 
 module.exports = Multimedia;
