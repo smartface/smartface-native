@@ -55,7 +55,7 @@ Object.defineProperty(statusBar, 'visible', {
 });
 
 statusBar.android = {};
-var _color;
+var _color, _isTransparent = false;
 Object.defineProperty(statusBar.android, 'color', {
     get: function() {
         return _color;
@@ -72,6 +72,50 @@ Object.defineProperty(statusBar.android, 'color', {
     configurable: true
 });
 
+Object.defineProperty(statusBar.android, 'isTransparent', {
+    get: function() {
+        return _isTransparent;
+    },
+    set: function(value) {
+        var hideStatusBarBackground = false;
+        _isTransparent = value;
+        let window = AndroidConfig.activity.getWindow();
+        if(_isTransparent) {
+            let flags = window.getDecorView().getSystemUiVisibility();
+            flags |= FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+            if (hideStatusBarBackground) {
+                window.clearFlags(FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(0); // Color.TRANSPARENT
+                // 256 = View.SYSTEM_UI_FLAG_LAYOUT_STABLE, 1024 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                window.getDecorView().setSystemUiVisibility(256 | 1024);
+            } else {
+                flags |= FLAG_TRANSLUCENT_STATUS;
+                window.addFlags(flags);
+            }
+            setFitsSystemWindows(window, false);
+        } else {
+            window.clearFlags(FLAG_TRANSLUCENT_STATUS);
+            window.getDecorView().setSystemUiVisibility(1024 | 256);
+            window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            
+            setFitsSystemWindows(window, true);
+        }
+    },
+    enumerable: true,
+    configurable: true
+});
+
+function setFitsSystemWindows (window, isSetFitsSystemWindows) {
+    const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
+    // ID_ANDROID_CONTENT = The ID that the main layout in the XML layout file should have.
+    // 16908290 = ID_ANDROID_CONTENT
+    let mContentView = window.findViewById(16908290);
+    let mChildView = mContentView.getChildAt(0);
+    if (mChildView != null) {
+        mChildView.setFitsSystemWindows(isSetFitsSystemWindows);
+        NativeViewCompat.requestApplyInsets(mChildView);
+    }
+}
 Object.defineProperty(statusBar, 'height', {
         get: function() {
             var result = 0;
