@@ -1,3 +1,4 @@
+/* globals requireClass */
 const NativeBuildVersion = requireClass("android.os.Build");
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -56,7 +57,7 @@ Object.defineProperty(statusBar, 'visible', {
 });
 
 statusBar.android = {};
-var _color, _isTransparent = false;
+var _color, _transparent = false;
 Object.defineProperty(statusBar.android, 'color', {
     get: function() {
         return _color;
@@ -72,17 +73,17 @@ Object.defineProperty(statusBar.android, 'color', {
     enumerable: true,
     configurable: true
 });
-Object.defineProperty(statusBar.android, 'isTransparent', {
+Object.defineProperty(statusBar.android, 'transparent', {
     get: function() {
-        return _isTransparent;
+        return _transparent;
     },
     set: function(value) {
         // TODO: Set default true this property. Maybe in future, this property will be optional. 
         var hideStatusBarBackground = true,
             isSetFitsSystemWindows = true;
-        _isTransparent = value;
+        _transparent = value;
         let window = AndroidConfig.activity.getWindow();
-        if (_isTransparent) {
+        if (_transparent) {
             let flags = window.getDecorView().getSystemUiVisibility();
             flags |= FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
             if (hideStatusBarBackground) {

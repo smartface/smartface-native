@@ -393,7 +393,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _borderVisibility = true, _isTransparent = false;
+    var _borderVisibility = true, _transparent = false;
     Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
@@ -411,15 +411,15 @@ function Page(params) {
         configurable: true
     });
 
-    Object.defineProperty(self.headerBar, 'isTransparent', {
+    Object.defineProperty(self.headerBar, 'transparent', {
         get: function() {
-            return _isTransparent;
+            return _transparent;
         },
         set: function(value) {
-            if(value !== _isTransparent) {
-                _isTransparent = value;
+            if(value !== _transparent) {
+                _transparent = value;
                 var pageLayoutParams = pageLayout.getLayoutParams();
-                if(_isTransparent)
+                if(_transparent)
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
                 else
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
