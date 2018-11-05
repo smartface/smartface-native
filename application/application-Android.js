@@ -477,6 +477,13 @@ Object.defineProperties(ApplicationWrapper.android, {
         value: {},
         enumerable: true
     },
+    'navigationBar': {
+        get: function() {
+            console.log("Get navigationbar from Application");
+            return (require("./navigationbar"));
+        },
+        enumerable: true
+    },
     'keyboardMode': {
         get: function() {
             return _keyboardMode;
