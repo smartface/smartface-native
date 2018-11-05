@@ -15,14 +15,12 @@ Object.defineProperties(NavigationBar, {
                 return _style;
             },
             set: function(value) {
-                console.log("NavigationBar style");
                 _style = value;
                 if (NativeBuild.VERSION.SDK_INT >= 26) {
                     var window = activity.getWindow();
                     var flags = window.getDecorView().getSystemUiVisibility();
                     // 16 = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
                     (_style === Style.LIGHTCONTENT) ? (flags |= 16) : (flags &= ~16);
-                    console.log("Set flags: " + flags);
                     window.getDecorView().setSystemUiVisibility(flags);
                 }
             },

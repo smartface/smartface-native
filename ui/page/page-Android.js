@@ -416,16 +416,13 @@ function Page(params) {
             return _isTransparent;
         },
         set: function(value) {
-            console.log("value: " + value + "   _isTransparent: " + _isTransparent);
             if(value !== _isTransparent) {
                 _isTransparent = value;
-                console.log("set Transparent HeaderBar!");
                 var pageLayoutParams = pageLayout.getLayoutParams();
                 if(_isTransparent)
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
                 else
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
-                console.log("Add or remove rule: " + self.isTransparent);
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
             }
         },
