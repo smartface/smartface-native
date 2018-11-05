@@ -411,7 +411,7 @@ function Page(params) {
         configurable: true
     });
 
-    Object.defineProperty(this, 'isTransparent', {
+    Object.defineProperty(self.headerBar, 'isTransparent', {
         get: function() {
             return _isTransparent;
         },
@@ -420,22 +420,18 @@ function Page(params) {
             if(value !== _isTransparent) {
                 _isTransparent = value;
                 console.log("set Transparent HeaderBar!");
-                this.setTransparentHeaderBar();
+                var pageLayoutParams = pageLayout.getLayoutParams();
+                if(_isTransparent)
+                    pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
+                else
+                    pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
+                console.log("Add or remove rule: " + self.isTransparent);
+                pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
             }
         },
         enumerable: true,
         configurable: true
     });
-    
-    this.setTransparentHeaderBar = function() {
-        var pageLayoutParams = frameLayout.getLayoutParams();
-        if(self.isTransparent)
-            pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
-        else
-            pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
-        console.log("Add or remove rule: " + self.isTransparent);
-        pageLayoutParams && frameLayout.setLayoutParams(pageLayoutParams);
-    };
 
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {

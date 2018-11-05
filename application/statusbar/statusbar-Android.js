@@ -72,35 +72,37 @@ Object.defineProperty(statusBar.android, 'color', {
     enumerable: true,
     configurable: true
 });
-
 Object.defineProperty(statusBar.android, 'isTransparent', {
     get: function() {
         return _isTransparent;
     },
     set: function(value) {
-        var hideStatusBarBackground = false;
+        // TODO: Set default true this property. Maybe in future, this property will be optional. 
+        var hideStatusBarBackground = true,
+            isSetFitsSystemWindows = true;
         _isTransparent = value;
         let window = AndroidConfig.activity.getWindow();
-        if(_isTransparent) {
+        if (_isTransparent) {
             let flags = window.getDecorView().getSystemUiVisibility();
             flags |= FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
             if (hideStatusBarBackground) {
                 window.clearFlags(FLAG_TRANSLUCENT_STATUS);
-                window.setStatusBarColor(0); // Color.TRANSPARENT
+                window.setStatusBarColor(0);
                 // 256 = View.SYSTEM_UI_FLAG_LAYOUT_STABLE, 1024 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 window.getDecorView().setSystemUiVisibility(256 | 1024);
-            } else {
+            }
+            else {
                 flags |= FLAG_TRANSLUCENT_STATUS;
                 window.addFlags(flags);
             }
-            setFitsSystemWindows(window, false);
-        } else {
+            isSetFitsSystemWindows = false;
+        }
+        else {
             window.clearFlags(FLAG_TRANSLUCENT_STATUS);
             window.getDecorView().setSystemUiVisibility(1024 | 256);
             window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            
-            setFitsSystemWindows(window, true);
         }
+        setFitsSystemWindows(window, isSetFitsSystemWindows);
     },
     enumerable: true,
     configurable: true
