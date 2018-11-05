@@ -331,7 +331,6 @@ ApplicationWrapper.setRootController = function(params) {
         });
     }
     else if ((params.controller) instanceof BottomTabBarController) {
-        console.log("setRootController BottomTabBarController");
         params.controller.show();
     }
 };
@@ -479,7 +478,6 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'navigationBar': {
         get: function() {
-            console.log("Get navigationbar from Application");
             return (require("./navigationbar"));
         },
         enumerable: true
