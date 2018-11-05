@@ -393,7 +393,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _borderVisibility = true;
+    var _borderVisibility = true, _isTransparent = false;
     Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
@@ -411,6 +411,31 @@ function Page(params) {
         configurable: true
     });
 
+    Object.defineProperty(this, 'isTransparent', {
+        get: function() {
+            return _isTransparent;
+        },
+        set: function(value) {
+            console.log("value: " + value + "   _isTransparent: " + _isTransparent);
+            if(value !== _isTransparent) {
+                _isTransparent = value;
+                console.log("set Transparent HeaderBar!");
+                this.setTransparentHeaderBar();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    this.setTransparentHeaderBar = function() {
+        var pageLayoutParams = frameLayout.getLayoutParams();
+        if(self.isTransparent)
+            pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
+        else
+            pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
+        console.log("Add or remove rule: " + self.isTransparent);
+        pageLayoutParams && frameLayout.setLayoutParams(pageLayoutParams);
+    };
 
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
