@@ -218,15 +218,7 @@ Object.defineProperties(Image, {
             var imageFile = new File({ path: path });
             if (imageFile && imageFile.nativeObject) {
                 var bitmap;
-                if (imageFile.type === Path.FILE_TYPE.ASSET) {
-                    var assetsInputStream = AndroidConfig.activity.getAssets().open(imageFile.nativeObject);
-                    if (width && height)
-                        bitmap = decodeSampledBitmapFromResource(assetsInputStream, width, height);
-                    else
-                        bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
-                    assetsInputStream.close();
-                }
-                else if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
+                if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
                     bitmap = imageFile.nativeObject;
                 }
                 else {
