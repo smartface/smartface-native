@@ -5,10 +5,11 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
-// WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+
+// WindowManager.LayoutParams flags
 const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
-// WindowManager.LayoutParams.FLAG_FULLSCREEN
 const FLAG_FULLSCREEN = 1024;
+const FLAG_TRANSLUCENT_STATUS = 67108864; 
 
 var statusBar = {};
 var activity = AndroidConfig.activity;
