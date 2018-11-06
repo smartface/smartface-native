@@ -1,33 +1,30 @@
 /**
  * @enum Application.Android.NavigationBar.Style
- * @since 0.1
+ * @since 4.0.1
  *
  * Style is an enum. It defines navigation bar appearance style.
  *
  *     @example
  *     const Application = require('sf-core/application');
- *     const NavigationBarStyle = require('sf-core/application/android/navigationbar/style');
- *     Application.android.navigationBar.style = NavigationBarStyle.DARKCONTENT;
+ *     Application.android.navigationBar.style = Application.NavigationBar.Style.DARKCONTENT;
  *
  */
-var NavigationBarStyle = { };
+var NavigationBarStyle = {};
 
 /**
- * @property {Number} DEFAULT
+ * @property {Number} DARKCONTENT
  * Status bar default dark theme.
- * @ios
  * @static
  * @readonly
- * @since 0.1
+ * @since 4.0.1
  */
-StatusBarStyle.DEFAULT = 0;
+NavigationBarStyle.DARKCONTENT = 0;
 
 /**
  * @property {Number} LIGHTCONTENT
- * Status bar light theme.
- * @ios
+ * Navigation bar light theme.
  * @static
  * @readonly
- * @since 0.1
+ * @since 4.0.1
  */
 NavigationBarStyle.LIGHTCONTENT = 1;

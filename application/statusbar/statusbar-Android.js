@@ -89,7 +89,6 @@ Object.defineProperty(statusBar.android, 'transparent', {
                 window.clearFlags(FLAG_TRANSLUCENT_STATUS);
                 window.setStatusBarColor(0);
                 // 256 = View.SYSTEM_UI_FLAG_LAYOUT_STABLE, 1024 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                // window.getDecorView().setSystemUiVisibility(256 | 1024);
                 flags |= 256 | 1024;
                 window.getDecorView().setSystemUiVisibility(flags);
             }

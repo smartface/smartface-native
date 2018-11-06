@@ -478,7 +478,7 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'navigationBar': {
         get: function() {
-            return (require("./navigationbar"));
+            return (require("./android/navigationbar"));
         },
         enumerable: true
     },

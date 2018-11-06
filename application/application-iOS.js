@@ -132,9 +132,10 @@ SFApplication.android.checkPermission = function(){};
 SFApplication.android.requestPermissions = function(){};
 SFApplication.android.shouldShowRequestPermissionRationale = function(){};
 SFApplication.android.onRequestPermissionsResult = function(){};
-SFApplication.android.Permissions = {};
+SFApplication.Android.NavigationBar = { Style: {} };
 SFApplication.Android.Permissions = {};
-SFApplication.android.navigationBar = { Style: {} };
+SFApplication.android.Permissions = {};
+SFApplication.android.navigationBar = {};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set:function(value){

@@ -1,5 +1,5 @@
 var NavigationBarStyle = {};
-NavigationBarStyle.DEFAULT = 0;
-NavigationBarStyle.DARKCONTENT = 1;
+NavigationBarStyle.DARKCONTENT = 0;
+NavigationBarStyle.LIGHTCONTENT = 1;
 
 module.exports = Object.freeze(NavigationBarStyle);

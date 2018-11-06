@@ -417,8 +417,7 @@ function Page(params) {
         },
         set: function(value) {
             _alpha = value;
-            var intValue = Math.floor(_alpha * 255);
-            toolbar.getBackground().setAlpha(intValue);
+            toolbar.setAlpha(value);
         },
         enumerable: true,
         configurable: true
@@ -437,6 +436,8 @@ function Page(params) {
                 else
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
+                
+                toolbar.getBackground().setAlpha(0);
             }
         },
         enumerable: true,
