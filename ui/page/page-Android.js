@@ -393,7 +393,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _borderVisibility = true;
+    var _borderVisibility = true, _transparent = false, _alpha = 1.0;
     Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
@@ -411,6 +411,38 @@ function Page(params) {
         configurable: true
     });
 
+    Object.defineProperty(self.headerBar, 'alpha', {
+        get: function() {
+            return _alpha;
+        },
+        set: function(value) {
+            _alpha = value;
+            toolbar.setAlpha(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(self.headerBar, 'transparent', {
+        get: function() {
+            return _transparent;
+        },
+        set: function(value) {
+            if(value !== _transparent) {
+                _transparent = value;
+                var pageLayoutParams = pageLayout.getLayoutParams();
+                if(_transparent)
+                    pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
+                else
+                    pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
+                pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
+                
+                toolbar.getBackground().setAlpha(0);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
 
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {

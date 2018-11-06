@@ -331,7 +331,6 @@ ApplicationWrapper.setRootController = function(params) {
         });
     }
     else if ((params.controller) instanceof BottomTabBarController) {
-        console.log("setRootController BottomTabBarController");
         params.controller.show();
     }
 };
@@ -475,6 +474,12 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'Permissions': {
         value: {},
+        enumerable: true
+    },
+    'navigationBar': {
+        get: function() {
+            return (require("./android/navigationbar"));
+        },
         enumerable: true
     },
     'keyboardMode': {
@@ -622,6 +627,11 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
 });
 
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
+
+ApplicationWrapper.Android.NavigationBar = {
+    Style: require("./android/navigationbar/style")
+};
+Object.freeze(ApplicationWrapper.Android.NavigationBar);
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
