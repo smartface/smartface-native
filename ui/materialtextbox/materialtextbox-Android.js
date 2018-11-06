@@ -48,26 +48,21 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         self.nativeObject.addView(nativeTextInputEditText);
 
-        var _hintTextColor;
-        var _hintFocusedTextColor;
+        var _hintTextColor, _hintFocusedTextColor,
+            _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font;
         var _enableCounterMaxLength = 10;
-        var _errorText;
         var reflectionHelper = new SfReflectionHelper();
-        var _lineColorObj;
-        var _errorColor;
-        var _characterRestrictionColor;
         var enableCounter = false;
         var _enableErrorMessage = false;
         var _enableCharacterRestriction = false;
-        var _font;
+        var _touchEnable = true;
         Object.defineProperties(self, {
             'hint': {
                 get: function() {
                     return self.nativeObject.getHint().toString();
                 },
                 set: function(hintText) {
-                    if (typeof hintText !== 'string')
-                        return;
+                    
                     var enableHintMessage = (_errorText !== "" ? true : false);
                     self.nativeObject.setHintEnabled(enableHintMessage);
                     self.nativeObject.setHint(hintText);
@@ -135,8 +130,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableCharacterRestriction;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+                    
                     _enableCharacterRestriction = value;
                     self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
                 },
@@ -147,8 +141,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.isCounterEnabled();
                 },
                 set: function(value) {
-                    if (typeof value !== 'number')
-                        return;
+                    
                     _enableCounterMaxLength = value;
                     enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
 
@@ -180,8 +173,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getError().toString();
                 },
                 set: function(errorText) {
-                    if (typeof errorText !== 'string')
-                        return;
                     _errorText = errorText;
 
                     if (self.enableErrorMessage !== true && _errorText.length !== 0)
@@ -196,8 +187,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableErrorMessage;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+                   
                     _enableErrorMessage = value
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
@@ -230,6 +220,16 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     self.nativeObject.setTypeface(font.nativeObject);
                 },
                 enumerable: true
+            },
+            'touchEnabled': {
+                get: function() {
+                    return _touchEnable;
+                },
+                set: function(value) {
+                    _touchEnable = value;
+                    sfTextBox.enabled = value;
+                },
+                enumerable: true
             }
         });
 
@@ -253,8 +253,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getHeight();
                 },
                 set: function(height) {
-                    if (typeof height !== 'number')
-                        return;
 
                     nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
                 },
@@ -265,8 +263,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getMaxHeight();
                 },
                 set: function(maxHeight) {
-                    if (typeof maxHeight !== 'number')
-                        return;
 
                     nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
                 },
