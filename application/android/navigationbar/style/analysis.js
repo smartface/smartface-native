@@ -13,7 +13,8 @@ var NavigationBarStyle = {};
 
 /**
  * @property {Number} DARKCONTENT
- * Status bar default dark theme.
+ * Navigation bar default dark theme.
+ * @android
  * @static
  * @readonly
  * @since 4.0.1
@@ -23,6 +24,7 @@ NavigationBarStyle.DARKCONTENT = 0;
 /**
  * @property {Number} LIGHTCONTENT
  * Navigation bar light theme.
+ * @android
  * @static
  * @readonly
  * @since 4.0.1
