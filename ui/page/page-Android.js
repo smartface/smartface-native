@@ -393,7 +393,7 @@ function Page(params) {
         configurable: true
     });
 
-    var _borderVisibility = true, _transparent = false;
+    var _borderVisibility = true, _transparent = false, _alpha = 1.0;
     Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
@@ -406,6 +406,19 @@ function Page(params) {
             else {
                 actionBar.setElevation(0);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+
+    Object.defineProperty(self.headerBar, 'alpha', {
+        get: function() {
+            return _alpha;
+        },
+        set: function(value) {
+            _alpha = value;
+            var intValue = Math.floor(_alpha * 255);
+            toolbar.getBackground().setAlpha(intValue);
         },
         enumerable: true,
         configurable: true

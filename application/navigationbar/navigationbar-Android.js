@@ -45,7 +45,7 @@ Object.defineProperties(NavigationBar, {
 
 var Style = {};
 Style.DEFAULT = 0;
-Style.LIGHTCONTENT = 1;
+Style.DARKCONTENT = 1;
 Object.freeze(Style);
 
 NavigationBar.Style = Style;

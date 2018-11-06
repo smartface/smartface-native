@@ -37,6 +37,15 @@ function StatusBar(parentPage) {}
 StatusBar.prototype.height;
 
 /**
+ * Gets/sets transparency of status bar.
+ *
+ * @property {Boolean} [transparent = true]
+ * @android
+ * @since 4.0.1
+ */
+StatusBar.prototype.transparent = false;
+
+/**
  * Gets/sets visibility of the status bar.
  *
  * @property {Boolean} visible
