@@ -28,10 +28,10 @@ function TabBarItem(params) {
                     nativeObject: NativeDrawable.createFromPath(null)
                 }
                 var icon = valueObj;
-                if (typeof icon === "string") { //IDE requires this implementation.
+                if (!(icon instanceof Object)) { //IDE requires this implementation.
                     icon = Image.createImageFromPath(icon);
                 }
-                else if (icon instanceof Object) {
+                else {
                     icon.normal = Image.createImageFromPath(icon.normal);
                     icon.selected = Image.createImageFromPath(icon.selected);
                 }
