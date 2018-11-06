@@ -199,7 +199,6 @@ TextView.prototype.attributedText = "";
 
 /**
  * This event is called when user click link string. onClick just work with attributedText.
- * onClick deprecated on 3.0.1 version.Use onLinkClick instead.
  * 
  *     @example
  *     myTextView.onClick = function(string) {
@@ -211,6 +210,7 @@ TextView.prototype.attributedText = "";
  * @android
  * @ios
  * @since 3.0.0
+ * @removed since 3.2.1, you should use UI.TextView#onLinkClick instead
  */
 TextView.prototype.onClick = function(string) {};
 

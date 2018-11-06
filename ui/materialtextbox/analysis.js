@@ -27,6 +27,7 @@ MaterialTextBox.prototype.titleFont;
  * Gets/sets the selectedHintTextColor of the MaterialTextBox.
  * @property {UI.Color} selectedHintTextColor
  * @ios
+ * @android
  * @since 3.1.2
  */
 MaterialTextBox.prototype.selectedHintTextColor;
