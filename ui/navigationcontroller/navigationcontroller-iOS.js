@@ -196,13 +196,15 @@ function HeaderBar(params) {
         enumerable: true,configurable : true
     });
     
-    Object.defineProperty(self.ios, 'alpha', {
+    Object.defineProperty(self, 'alpha', {
         get: function() {
             return self.nativeObject.alpha;
         },
         set: function(value) {
             if (typeof value === "number") {
-                self.nativeObject.alpha = value;
+                SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
+                    self.nativeObject.alpha = value;
+                });
             }
         },
         enumerable: true,configurable : true
@@ -229,6 +231,17 @@ function HeaderBar(params) {
         },
         enumerable: true,configurable : true
     });
+    
+    self.ios.setVisible = function (visible, animated) {
+        if (typeof visible === "boolean") {
+            _visible = visible;
+            var _animated = true;
+            if (typeof animated === "boolean") {
+                _animated = animated;
+            }
+            self.navigationController.nativeObject.setNavigationBarHiddenAnimated(!_visible,_animated);
+        }
+    }
     
     Object.defineProperty(self, 'itemColor', {
         get: function() {
