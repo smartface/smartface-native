@@ -62,8 +62,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getHint().toString();
                 },
                 set: function(hintText) {
-                    if (typeof hintText !== 'string')
-                        return;
+                    
                     var enableHintMessage = (_errorText !== "" ? true : false);
                     self.nativeObject.setHintEnabled(enableHintMessage);
                     self.nativeObject.setHint(hintText);
@@ -131,8 +130,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableCharacterRestriction;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+                    
                     _enableCharacterRestriction = value;
                     self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
                 },
@@ -143,8 +141,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.isCounterEnabled();
                 },
                 set: function(value) {
-                    if (typeof value !== 'number')
-                        return;
+                    
                     _enableCounterMaxLength = value;
                     enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
 
@@ -176,8 +173,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getError().toString();
                 },
                 set: function(errorText) {
-                    if (typeof errorText !== 'string')
-                        return;
                     _errorText = errorText;
 
                     if (self.enableErrorMessage !== true && _errorText.length !== 0)
@@ -192,8 +187,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableErrorMessage;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+                   
                     _enableErrorMessage = value
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
@@ -232,9 +226,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _touchEnable;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
-
                     _touchEnable = value;
                     sfTextBox.enabled = value;
                 },
@@ -262,8 +253,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getHeight();
                 },
                 set: function(height) {
-                    if (typeof height !== 'number')
-                        return;
 
                     nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
                 },
@@ -274,8 +263,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getMaxHeight();
                 },
                 set: function(maxHeight) {
-                    if (typeof maxHeight !== 'number')
-                        return;
 
                     nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
                 },
