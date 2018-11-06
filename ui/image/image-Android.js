@@ -320,6 +320,13 @@ function calculateInSampleSize(options, reqWidth, reqHeight) {
     return inSampleSize;
 }
 
+
+Image.createImageFromPath = function(path) {
+    if (typeof path === "string")
+        path = Image.createFromFile(path);
+    return path;
+};
+
 Image.iOS = {};
 Image.iOS.RenderingMode = {};
 
