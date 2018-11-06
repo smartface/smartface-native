@@ -628,6 +628,11 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
 
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
 
+ApplicationWrapper.Android.NavigationBar = {
+    Style: require("./android/navigationbar/style")
+};
+Object.freeze(ApplicationWrapper.Android.NavigationBar);
+
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING
     KeyboardAdjustPan: 32, //SOFT_INPUT_ADJUST_PAN
