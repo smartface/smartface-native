@@ -273,6 +273,25 @@ WebView.prototype.clearFormData = function() {};
 WebView.prototype.clearHistory = function() {};
 
 /**
+ * This event is triggered more than once to get safeAreaInsets.
+ *
+ * @event safeAreaInsets
+ * @param {Object} systemSafeAreaInsets
+ * @param {Number} systemSafeAreaInsets.top
+ * @param {Number} systemSafeAreaInsets.bottom
+ * @param {Number} systemSafeAreaInsets.right
+ * @param {Number} systemSafeAreaInsets.left
+ * @return {Object} safeAreaInsets
+ * @return {Number} return.top
+ * @return {Number} return.bottom
+ * @return {Number} return.right
+ * @return {Number} return.left
+ * @ios
+ * @since 3.2.1
+ */
+WebView.prototype.safeAreaInsets = function(systemSafeAreaInsets) {};
+
+/**
  * Tells this WebView to clear its Cookie.
  *
  * @method clearCookie
