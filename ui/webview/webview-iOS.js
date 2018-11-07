@@ -142,6 +142,22 @@ const WebView = extend(View)(
             enumerable: true
          });
          
+         var _safeAreaInsets;
+         Object.defineProperty(self.ios, 'safeAreaInsets', {
+            get: function() {
+                return _safeAreaInsets;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    _safeAreaInsets = value;
+                    self.nativeObject.safeAreaInsetsCallback = value;
+                }else{
+                    throw new Error("safeAreaInsets must be function");
+                }
+            },
+            enumerable: true
+         });
+         
          Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.scrollView.valueForKey("scrollEnabled");
