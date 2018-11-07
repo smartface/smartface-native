@@ -179,18 +179,24 @@ const ScrollView = extend(ViewGroup)(
             }
         }
 
-        self.layout.applyLayout = function() {
+        self.layout.applyLayout = function() { // ToDo: This method will overwrite flexlayout's applyLayout. It is not sure that we should overwrite it.
             if (self.autoSizeEnabled) {
-                const Runnable = requireClass("java.lang.Runnable");
+                const NativeViewTreeObserver = requireClass('android.view.ViewTreeObserver');
                 var scrollView = self;
-                var runnable = Runnable.implement({
-                    run: function() {
+                var nativeGlobalLayoutListener = NativeViewTreeObserver.OnGlobalLayoutListener.implement({
+                    onGlobalLayout: function() {
                         calculateScrollViewSize(scrollView);
                         scrollView.layout.nativeObject.requestLayout();
                         scrollView.layout.nativeObject.invalidate();
+                        scrollView.layout.nativeObject.getViewTreeObserver().removeOnGlobalLayoutListener(nativeGlobalLayoutListener);
                     }
                 });
-                scrollView.layout.nativeObject.post(runnable);
+                scrollView.layout.nativeObject.getViewTreeObserver().addOnGlobalLayoutListener(nativeGlobalLayoutListener);
+                scrollView.layout.nativeObject.requestLayout();
+            }
+            else {
+                scrollView.layout.nativeObject.requestLayout();
+                scrollView.layout.nativeObject.invalidate();
             }
         };
     }
@@ -220,8 +226,8 @@ function calculateScrollViewSize(scrollView) {
         for (i = 0; i < arrayLenght; i++) {
             var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
             var viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
-            var viewRightMargin = childViews[keys[i]].marginRight;
-            var layoutPaddingRight = scrollView.layout.paddingRight;
+            var viewRightMargin = childViews[keys[i]].marginRight || 0;
+            var layoutPaddingRight = scrollView.layout.paddingRight || 0;
             var measuredWidth = viewX + viewWidth + viewRightMargin + layoutPaddingRight;
             if (measuredWidth > layoutWidth)
                 layoutWidth = measuredWidth;
