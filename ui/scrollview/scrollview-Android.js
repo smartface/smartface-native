@@ -194,10 +194,6 @@ const ScrollView = extend(ViewGroup)(
                 scrollView.layout.nativeObject.getViewTreeObserver().addOnGlobalLayoutListener(nativeGlobalLayoutListener);
                 scrollView.layout.nativeObject.requestLayout();
             }
-            else {
-                scrollView.layout.nativeObject.requestLayout();
-                scrollView.layout.nativeObject.invalidate();
-            }
         };
     }
 );
