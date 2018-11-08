@@ -162,7 +162,6 @@ const ImageView = extend(View)(
         };
 
         this.loadFromFile = function(params) {
-            console.log("_fillType " + _fillType);
             var file = params.file;
             var isFade = params.fade;
             var width = params.width;
