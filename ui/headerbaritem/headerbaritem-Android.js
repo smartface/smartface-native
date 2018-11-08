@@ -97,9 +97,7 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-
-                if (typeof value === "string")
-                    value = Image.createFromPath(value); //IDE requires this implementation.
+                value = Image.createImageFromPath(value); //IDE requires this implementation.
 
                 if (value === null || value instanceof Image) {
                     _image = value;
