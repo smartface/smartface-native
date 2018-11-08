@@ -6,9 +6,7 @@ const LayoutManager = require("../layoutmanager");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
-// const UICollectionViewController = SF.requireClass("UICollectionView");
 const UICollectionView = SF.requireClass("UICollectionView");
-// const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 const NSIndexPath = SF.requireClass("NSIndexPath");
 
 const GridView = extend(View)(
@@ -17,7 +15,7 @@ const GridView = extend(View)(
         
         sfSelf.registeredIndentifier = [];
         
-        var CollectionViewControllerClass = __SF_UICollectionViewController;
+        var CollectionViewClass = __SF_UICollectionView;
 
         var defaultflowLayout;
         if (params && params.layoutManager) {
@@ -27,18 +25,23 @@ const GridView = extend(View)(
             throw new Error('GridView constructor must have layoutManager.');
         }
 
-        // CollectionViewControllerClass Init Scope Using Invocation
-        var alloc = Invocation.invokeClassMethod(CollectionViewControllerClass.name, "alloc", [], "id");
+        // CollectionViewClass Init Scope Using Invocation
+        var alloc = Invocation.invokeClassMethod(CollectionViewClass.name, "alloc", [], "id");
         var argument = new Invocation.Argument({
             type: "NSObject",
             value: defaultflowLayout.nativeObject
         });
         
-        var collectionViewController = Invocation.invokeInstanceMethod(alloc, "initWithCollectionViewLayout:", [argument], "NSObject");
-        collectionViewController.numberOfSections = function (collectionView) {
+        var frame = new Invocation.Argument({
+            type: "CGRect",
+            value: {x:0, y:0, width:0, height:0}
+        });
+        
+        var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame ,argument], "NSObject");
+        smfcollectionView.numberOfSectionsCallback = function (collectionView) {
             return _sectionCount;
         };
-        collectionViewController.numberOfItemsInSection = function (collectionView, section) {
+        smfcollectionView.numberOfItemsInSectionCallback = function (collectionView, section) {
             var retval;
             if (_numberOfItemsInSection) {
                 retval = _numberOfItemsInSection(section);
@@ -48,7 +51,7 @@ const GridView = extend(View)(
             }
             return retval;
         };
-        collectionViewController.cellForItemAtIndexPath = function (collectionView, indexPath) {
+        smfcollectionView.cellForItemAtIndexPathCallback = function (collectionView, indexPath) {
             // Cell dequeing for type
             var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
             
@@ -74,7 +77,7 @@ const GridView = extend(View)(
             
             return cell;
         };
-        collectionViewController.didSelectItemAtIndexPath = function (collectionView, indexPath) {
+        smfcollectionView.didSelectItemAtIndexPathCallback = function (collectionView, indexPath) {
             var cell = collectionView.cellForItemAtIndexPath(indexPath);
             if (cell) {
                 if (sfSelf.onItemSelected) {
@@ -82,7 +85,7 @@ const GridView = extend(View)(
                 }
             }
         };
-        collectionViewController.scrollViewDidScroll = function (scrollView) {
+        smfcollectionView.scrollViewDidScrollCallback = function (scrollView) {
             if (sfSelf.onScroll) {
                 sfSelf.onScroll({contentOffset : scrollView.contentOffset});
             }
@@ -92,8 +95,8 @@ const GridView = extend(View)(
         // INITIALIZATION
         
         if (!sfSelf.nativeObject) {
-            sfSelf.nativeObject = collectionViewController.collectionView;
-            defaultflowLayout.collectionView = collectionViewController.collectionView;
+            sfSelf.nativeObject = smfcollectionView;
+            defaultflowLayout.collectionView = smfcollectionView;
             
             sfSelf.refreshControl = new __SF_UIRefreshControl();
         }
