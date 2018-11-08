@@ -469,14 +469,16 @@ function Page(params) {
         configurable: true
     });
 
-    var _headerbarItemView;
+    var _titleLayout;
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
-            return _headerbarItemView;
+            return _titleLayout;
         },
         set: function(view) {
-            view && toolbar.addView(view.nativeObject);
-            _headerbarItemView = view;
+            const ToolbarLayoutParams = requireClass("android.support.v7.widget.Toolbar$LayoutParams");
+            var toolbarParams = new ToolbarLayoutParams(1); // Gravity.CENTER
+            view && toolbar.addView(view.nativeObject, toolbarParams);
+            _titleLayout = view;
         },
         enumerable: true,
         configurable: true
