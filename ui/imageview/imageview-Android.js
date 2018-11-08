@@ -20,21 +20,13 @@ const ImageView = extend(View)(
             this.imageFillType = ImageView.FillType.NORMAL;
         }
 
-        // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    },
-    function(imageViewPrototype) {
         //imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
-        imageViewPrototype._image = null;
-        imageViewPrototype._adjustViewBounds = false;
+        this._image = null;
+        this._adjustViewBounds = false;
 
         var _fillType = null;
         var _tintColor;
-        Object.defineProperties(imageViewPrototype, {
+        Object.defineProperties(this, {
             'image': {
                 get: function() {
                     return this._image;
@@ -96,11 +88,11 @@ const ImageView = extend(View)(
             }
         });
 
-        imageViewPrototype.toString = function() {
+        this.toString = function() {
             return 'ImageView';
         };
 
-        imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
+        this.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var url, placeholder, isFade, onError, onSuccess;
             if (typeof arguments[0] === "object") {
                 var params = arguments[0];
@@ -142,7 +134,7 @@ const ImageView = extend(View)(
             }
         };
 
-        imageViewPrototype.fetchFromUrl = function(params) {
+        this.fetchFromUrl = function(params) {
             const self = this;
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
@@ -169,7 +161,8 @@ const ImageView = extend(View)(
             }
         };
 
-        imageViewPrototype.loadFromFile = function(params) {
+        this.loadFromFile = function(params) {
+            console.log("_fillType " + _fillType);
             var file = params.file;
             var isFade = params.fade;
             var width = params.width;
@@ -244,6 +237,15 @@ const ImageView = extend(View)(
                 return loadedImage;
             }
         }
+        
+        
+         // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    
     }
 );
 
