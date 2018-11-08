@@ -179,7 +179,7 @@ const ScrollView = extend(ViewGroup)(
             }
         }
 
-        self.layout.applyLayout = function() {
+        self.layout.applyLayout = function() { // ToDo: This method will overwrite flexlayout's applyLayout. It is not sure that we should overwrite it.
             if (self.autoSizeEnabled) {
                 const NativeViewTreeObserver = requireClass('android.view.ViewTreeObserver');
                 var scrollView = self;
