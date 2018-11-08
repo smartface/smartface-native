@@ -109,14 +109,6 @@ function Page(params) {
             }));
         },
         onCreateOptionsMenu: function(menu) {
-            console.log("onCreateOptionsMenu");
-            
-            console.log("currentScreenWidth: " + global.currentScreenWidth);
-            if (global.currentScreenWidth && self.headerBar.titleLayout && (global.currentScreenWidth !== self.headerBar.titleLayout.width)) {
-                console.log("set titleLayout.width: " + self.headerBar.titleLayout.width);
-                self.headerBar.titleLayout.width = global.currentScreenWidth;
-            }
-    
             if (!optionsMenu)
                 optionsMenu = menu;
             if (_headerBarItems.length > 0) {
@@ -125,7 +117,6 @@ function Page(params) {
             return true;
         },
         onConfigurationChanged: function(newConfig) {
-            console.log("onConfigurationChanged");
             const Screen = require("../../device/screen");
             _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
         },
@@ -149,7 +140,6 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
-            console.log("onCreateContextMenu");
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
