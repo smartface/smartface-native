@@ -334,6 +334,16 @@ const SearchView = extend(View)(
             enumerable: true
         });
         
+        Object.defineProperty(this.ios, 'cancelButtonText', {
+            get: function() {
+                return self.nativeObject.valueForKey("_cancelButtonText");
+            },
+            set: function(value) {
+                self.nativeObject.setValueForKey(value,"_cancelButtonText");
+            },
+            enumerable: true
+        });
+        
         var _showsCancelButton = false;
         Object.defineProperty(this.ios, 'showsCancelButton', {
             get: function() {
