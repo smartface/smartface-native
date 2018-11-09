@@ -66,7 +66,8 @@ SearchView.prototype.backgroundImage;
 SearchView.prototype.iconImage;
 
 /**
- * Adds SearchView to UI.Page's headerBar view.
+ * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar, 
+ * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios.
  *
  * @method addToHeaderBar
  * @param {UI.Page} page.
