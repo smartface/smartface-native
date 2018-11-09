@@ -84,6 +84,16 @@ SearchView.prototype.addToHeaderBar = function(page){};
  * @since 3.0.2
  */
 SearchView.prototype.textFieldBorderRadius; 
+/**
+ * Sets/gets border thickness of bounded view. Accepts unsigned
+ * numbers, 0 means no border.
+ *
+ * @property {Number} [borderWidth = 1]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.borderWidth = 0;
 
 /**
  * Removes SearchView from UI.Page's headerBar view.
