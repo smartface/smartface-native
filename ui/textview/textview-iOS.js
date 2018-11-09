@@ -2,35 +2,35 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
-const Invocation    = require('sf-core/util').Invocation;
+const Invocation = require('sf-core/util').Invocation;
 
 const NSUnderlineStyle = {
-    None : 0,
-    Single : 1,
-    Thick : 2,
-    Double : 9
+    None: 0,
+    Single: 1,
+    Thick: 2,
+    Double: 9
 };
 
 const TextView = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
-        
-        if(!self.nativeObject){
+
+        if (!self.nativeObject) {
             self.nativeObject = new __SF_UITextView();
         }
-        
+
         _super(this);
-        
+
         //Defaults
         self.nativeObject.setSelectable = false;
-		self.nativeObject.setEditable = false;	
-		self.nativeObject.setDelaysContentTouches = true;
-	    self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
-	    self.nativeObject.textContainer.maximumNumberOfLines = 0;
-    	self.nativeObject.textContainer.lineBreakMode = 0;
-    	self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
-    	
-    	var _attributedText = [];
+        self.nativeObject.setEditable = false;
+        self.nativeObject.setDelaysContentTouches = true;
+        self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
+        self.nativeObject.textContainer.maximumNumberOfLines = 0;
+        self.nativeObject.textContainer.lineBreakMode = 0;
+        self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
+
+        var _attributedText = [];
         Object.defineProperty(self, 'attributedText', {
             get: function() {
                 return _attributedText;
@@ -44,7 +44,19 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
+
+        var _onClick = undefined; //Deprecated : Please use self.onLinkClick
+        Object.defineProperty(self, 'onClick', {
+            get: function() {
+                return _onClick;
+            },
+            set: function(value) {
+                _onClick = value;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
         var _onLinkClick = undefined;
         Object.defineProperty(self, 'onLinkClick', {
             get: function() {
@@ -56,7 +68,7 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
+
         var _letterSpacing = 0;
         Object.defineProperty(self, 'letterSpacing', {
             get: function() {
@@ -68,13 +80,16 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
-        self.nativeObject.didTapLinkWithURL = function(e){
+
+        self.nativeObject.didTapLinkWithURL = function(e) {
+            if (typeof self.onClick == 'function') {
+                self.onClick(e.URL);
+            }
             if (typeof self.onLinkClick == 'function') {
                 self.onLinkClick(e.URL);
             }
         };
-        
+
         var _lineSpacing = 0;
         Object.defineProperty(self, 'lineSpacing', {
             get: function() {
@@ -86,137 +101,139 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
-        function setText(value){
-            var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle","alloc",[],"id");
-            var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc,"init",[],"NSObject");
+
+        function setText(value) {
+            var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle", "alloc", [], "id");
+            var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc, "init", [], "NSObject");
             var argLineSpacing = new Invocation.Argument({
-                type:"CGFloat",
+                type: "CGFloat",
                 value: self.lineSpacing
             });
-            Invocation.invokeInstanceMethod(paragraphStyle,"setLineSpacing:",[argLineSpacing]);
+            Invocation.invokeInstanceMethod(paragraphStyle, "setLineSpacing:", [argLineSpacing]);
 
-            var alloc = Invocation.invokeClassMethod("NSMutableAttributedString","alloc",[],"id");
-            var mutableString = Invocation.invokeInstanceMethod(alloc,"init",[],"NSObject");
+            var alloc = Invocation.invokeClassMethod("NSMutableAttributedString", "alloc", [], "id");
+            var mutableString = Invocation.invokeInstanceMethod(alloc, "init", [], "NSObject");
 
             for (var i in value) {
                 var attributeString = value[i];
-                
-                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString","alloc",[],"id");
-        
+
+                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString", "alloc", [], "id");
+
                 var argString = new Invocation.Argument({
-                    type:"NSString",
+                    type: "NSString",
                     value: attributeString.string
                 });
-                    
+
                 var argAttributes = new Invocation.Argument({
-                    type:"id",
+                    type: "id",
                     value: {
-                        "NSColor" : attributeString.foregroundColor.nativeObject,
-                        "NSFont" : attributeString.font,
-                        "NSUnderline" : attributeString.underline ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
-                        "NSStrikethrough" : attributeString.strikethrough ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSColor": attributeString.foregroundColor.nativeObject,
+                        "NSFont": attributeString.font,
+                        "NSUnderline": attributeString.underline ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSStrikethrough": attributeString.strikethrough ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
                         "NSLink": attributeString.link,
-                        "NSBackgroundColor" : attributeString.backgroundColor.nativeObject,
-                        "NSUnderlineColor" : attributeString.ios.underlineColor.nativeObject,
-                        "NSStrikethroughColor" : attributeString.ios.strikethroughColor.nativeObject,
-                        "NSKern" : self.letterSpacing,
-                        "NSParagraphStyle" : paragraphStyle
+                        "NSBackgroundColor": attributeString.backgroundColor.nativeObject,
+                        "NSUnderlineColor": attributeString.ios.underlineColor.nativeObject,
+                        "NSStrikethroughColor": attributeString.ios.strikethroughColor.nativeObject,
+                        "NSKern": self.letterSpacing,
+                        "NSParagraphStyle": paragraphStyle
                     }
                 });
-                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString,"initWithString:attributes:",[argString,argAttributes],"NSObject");
-                
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, "initWithString:attributes:", [argString, argAttributes], "NSObject");
+
                 var argAppend = new Invocation.Argument({
-                        type:"NSObject",
-                        value: nativeAttributeString
-                    });
-                Invocation.invokeInstanceMethod(mutableString,"appendAttributedString:",[argAppend]);
+                    type: "NSObject",
+                    value: nativeAttributeString
+                });
+                Invocation.invokeInstanceMethod(mutableString, "appendAttributedString:", [argAppend]);
             }
 
             var argAttributeString = new Invocation.Argument({
-                type:"NSObject",
+                type: "NSObject",
                 value: mutableString
             });
-            
-            Invocation.invokeInstanceMethod(self.nativeObject,"setAttributedText:",[argAttributeString]);
+
+            Invocation.invokeInstanceMethod(self.nativeObject, "setAttributedText:", [argAttributeString]);
             self.textAlignment = self.textAlignment;
         }
-        
-    	var _selectable = false;			
-    	Object.defineProperty(self, 'selectable', {
-            get:function() {
+
+        var _selectable = false;
+        Object.defineProperty(self, 'selectable', {
+            get: function() {
                 return _selectable;
             },
-            set:function(value) {
-                if (typeof(value) === "boolean"){
+            set: function(value) {
+                if (typeof(value) === "boolean") {
                     _selectable = value;
                     self.nativeObject.setSelectable = value;
                 }
             },
             enumerable: true
-         });
-         
+        });
+
         Object.defineProperty(self, 'htmlText', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.htmlText;
             },
-            set:function(value) {
+            set: function(value) {
                 self.nativeObject.htmlText = value;
             },
             enumerable: true
         });
-        
+
         self.ios = {};
         Object.defineProperty(self.ios, 'showScrollBar', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
             },
-            set:function(value) {
+            set: function(value) {
                 self.nativeObject.showsHorizontalScrollIndicator = value;
                 self.nativeObject.showsVerticalScrollIndicator = value;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'scrollEnabled', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.valueForKey("scrollEnabled");
             },
-            set:function(value) {
-                self.nativeObject.setValueForKey(value,"scrollEnabled");
+            set: function(value) {
+                self.nativeObject.setValueForKey(value, "scrollEnabled");
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'font', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.font;
             },
-            set:function(value) {
+            set: function(value) {
                 self.nativeObject.setEditable = true;
                 self.nativeObject.font = value;
                 self.nativeObject.setEditable = false;
                 self.nativeObject.setSelectable = self.selectable;
             },
             enumerable: true
-         });
+        });
 
         Object.defineProperty(self, 'multiline', {
             get: function() {
-               if(self.nativeObject.textContainer.maximumNumberOfLines === 0 && self.nativeObject.textContainer.lineBreakMode === 0){
+                if (self.nativeObject.textContainer.maximumNumberOfLines === 0 && self.nativeObject.textContainer.lineBreakMode === 0) {
                     return true;
-                }else{
+                }
+                else {
                     return false;
                 }
             },
             set: function(value) {
-            	if (value){
-            		self.nativeObject.textContainer.maximumNumberOfLines = 0;
-    				self.nativeObject.textContainer.lineBreakMode = 0;
-            	}else{
-            		self.nativeObject.textContainer.maximumNumberOfLines = 1;
-    				self.nativeObject.textContainer.lineBreakMode = 4;
-            	}
+                if (value) {
+                    self.nativeObject.textContainer.maximumNumberOfLines = 0;
+                    self.nativeObject.textContainer.lineBreakMode = 0;
+                }
+                else {
+                    self.nativeObject.textContainer.maximumNumberOfLines = 1;
+                    self.nativeObject.textContainer.lineBreakMode = 4;
+                }
             },
             enumerable: true
         });
@@ -244,7 +261,7 @@ const TextView = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _textColor = Color.BLACK;
         Object.defineProperty(self, 'textColor', {
             get: function() {
@@ -259,7 +276,7 @@ const TextView = extend(View)(
             },
             enumerable: true
         });
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

@@ -34,6 +34,7 @@ const TextView = extend(Label)(
         var _attributedStringBuilder;
         var _attributedStringArray = [];
         var _onLinkClick = undefined;
+        var _onClick = undefined; //Deprecated : Please use self.onLinkClick
         var _letterSpacing = 0;
         var _lineSpacing = 0;
         var isMovementMethodAssigned = false;
@@ -128,6 +129,16 @@ const TextView = extend(Label)(
                 },
                 set: function(value) {
                     _onLinkClick = value;
+                },
+                enumerable: true,
+                configurable: true
+           },
+            'onClick': {
+                get: function() {
+                    return _onClick;
+                },
+                set: function(value) {
+                    _onClick = value;
                 },
                 enumerable: true,
                 configurable: true
