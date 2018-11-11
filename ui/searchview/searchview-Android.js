@@ -201,24 +201,17 @@ const SearchView = extend(View)(
             },
             'requestFocus': {
                 value: function() {
-                    mSearchSrcTextView.requestFocus();
-                    // Due to the requirements we should show keyboard when focus requested.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    this.nativeObject.requestFocus();
                 },
                 enumerable: true
             },
             'removeFocus': {
                 value: function() {
+                    this.nativeObject.clearFocus();
                     mSearchSrcTextView.clearFocus();
-                    // Due to the requirements we should hide keyboard when focus cleared.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
                 },
                 enumerable: true
             },
-
             'toString': {
                 value: function() {
                     return 'SearchView';
@@ -226,7 +219,6 @@ const SearchView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
-
             // events
             'onSearchBegin': {
                 get: function() {
@@ -251,6 +243,7 @@ const SearchView = extend(View)(
                     return _onTextChangedCallback;
                 },
                 set: function(onTextChanged) {
+                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
                     _onTextChangedCallback = onTextChanged.bind(this);
                 },
                 enumerable: true
@@ -260,6 +253,7 @@ const SearchView = extend(View)(
                     return _onSearchButtonClickedCallback;
                 },
                 set: function(onSearchButtonClicked) {
+                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
                     _onSearchButtonClickedCallback = onSearchButtonClicked.bind(this);
                 },
                 enumerable: true
@@ -299,21 +293,6 @@ const SearchView = extend(View)(
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
         Object.defineProperties(this.android, {
-            // 'underlineColor': {
-            //     get: function() {
-            //         return _underlineColor;
-            //     },
-            //     set: function(underlineColor) {
-            //         if ( ('normal' in underlineColor) && ('focus' in underlineColor)) {
-            //             _underlineColor = underlineColor;
-            //             mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
-            //         }else {
-            //             throw new Error("underlineColor must include normal and focus property.");
-            //         }
-
-            //     },
-            //     enumerable: true
-            // },
             'hintTextColor': {
                 get: function() {
                     return _hintTextColor;
@@ -391,6 +370,20 @@ const SearchView = extend(View)(
             textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
             mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
         };
+        
+        this.setQueryTextListener = () => {
+            this.__isNotSetQueryTextListener = true;
+            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
+                onQueryTextSubmit: function(query) {
+                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                    return false;
+                },
+                onQueryTextChange: function(newText) {
+                    _onTextChangedCallback && _onTextChangedCallback(newText);
+                    return false;
+                }
+            }));
+        };
 
         // Handling ios specific properties
         this.ios = {};
@@ -411,27 +404,16 @@ const SearchView = extend(View)(
                     else {
                         _onSearchEndCallback && _onSearchEndCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
-                        this.removeFocus();
                     }
                 }.bind(this)
             }));
 
-            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-                onQueryTextSubmit: function(query) {
-                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
-                    return false;
-                },
-                onQueryTextChange: function(newText) {
-                    _onTextChangedCallback && _onTextChangedCallback(newText);
-                    return false;
-                }
-            }));
             this.borderWidth = 1;
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
-            this.nativeObject.setMaxWidth(INTEGER_MAX_VALUE); //Requires to fullfill the header bar.
         }
+        
 
         // Assign parameters given in constructor
         if (params) {
