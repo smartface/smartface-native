@@ -372,7 +372,7 @@ const SearchView = extend(View)(
         };
         
         this.setQueryTextListener = () => {
-            this.setQueryTextListener = true;
+            this.__isNotSetQueryTextListener = true;
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
                 onQueryTextSubmit: function(query) {
                     _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
