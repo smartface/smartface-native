@@ -873,7 +873,6 @@ function Page(params) {
         if (optionsMenu == null) {
             return;
         }
-        const NativeMenuItem = requireClass("android.view.MenuItem");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
@@ -934,15 +933,13 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                // itemView.setBackgroundColor(Color.BLACK.nativeObject);
-                // left, top, right, bottom
-                // itemView.setPadding(
-                //     0, 0,
-                //     HeaderBarItemPadding.vertical, 0
-                // );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
-                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
+                
+                itemView.onActionViewExpanded();
+                itemView.setIconified(false);
+                itemView.clearFocus();
                 item.menuItem.setActionView(itemView);
             }
         });
