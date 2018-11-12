@@ -64,6 +64,15 @@ WebView.prototype.scrollEnabled = true;
 WebView.prototype.scrollBarEnabled = true;
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.2.1
+ */
+WebView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
+/**
  * Sets/Gets the bounce effect when scrolling.
  *
  * @property {Boolean} bounceEnabled
