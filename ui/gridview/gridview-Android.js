@@ -5,11 +5,13 @@ const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const GridViewLayoutManager = require('../layoutmanager');
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
-const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
@@ -43,6 +45,7 @@ const GridView = extend(View)(
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
+        scrollableSuper(this, this.nativeInner);
 
         var _gridViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");

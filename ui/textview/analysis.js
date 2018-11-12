@@ -147,6 +147,15 @@ TextView.prototype.ios.showScrollBar = false;
 TextView.prototype.ios.scrollEnabled = true;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+TextView.prototype.bounces = true;
+
+/**
  * Gets/sets attributedText on TextView.
  *
  *     @example
