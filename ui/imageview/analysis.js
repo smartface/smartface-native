@@ -137,7 +137,7 @@ ImageView.prototype.loadFromFile = function(object){};
  * @param {Function} object.onSuccess
  * @param {UI.Image} object.onSuccess.image
  * @param {UI.ImageCacheType} object.onSuccess.cache
- * @param {Function} object.onError
+ * @param {Function} object.onFailure
  * @android
  * @ios
  * @since 3.0.2
