@@ -7,6 +7,7 @@ const KeyboardType = require('../keyboardtype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const Exception = require("../../util/exception");
+const Reflection = require("../android/reflection");
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
@@ -82,10 +83,8 @@ const SearchView = extend(View)(
         var _iconImage = null;
         var _hint = "";
         var _textColor = Color.BLACK;
-        var _onTextChangedCallback;
-        var _onSearchBeginCallback;
-        var _onSearchEndCallback;
-        var _onSearchButtonClickedCallback;
+        var _onTextChangedCallback, _onSearchBeginCallback,
+            _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor;
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
 
@@ -280,6 +279,16 @@ const SearchView = extend(View)(
                     mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
                 },
                 enumerable: true
+            },
+            'cursorColor': {
+                get: function() {
+                    return _textViewCursorColor;
+                },
+                set: function(color) {
+                    _textViewCursorColor = color;
+                    Reflection.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
+                },
+                enumerable: true
             }
         });
 
@@ -370,7 +379,7 @@ const SearchView = extend(View)(
             textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
             mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
         };
-        
+
         this.setQueryTextListener = () => {
             this.__isNotSetQueryTextListener = true;
             this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
@@ -413,7 +422,7 @@ const SearchView = extend(View)(
             this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
         }
-        
+
 
         // Assign parameters given in constructor
         if (params) {
