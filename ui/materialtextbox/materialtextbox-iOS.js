@@ -22,16 +22,6 @@ const MaterialTextbox = extend(TextBox)(
             enumerable: true
         });
         
-        Object.defineProperty(self.ios, 'cursorColor', {
-            get: function() {
-                return new Color({color : self.nativeObject.valueForKey("tintColor")});
-            },
-            set: function(color) {
-                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
-            },
-            enumerable: true
-        });
-        
         // var _hintFont;
         // Object.defineProperty(self, 'hintFont', {
         //     get: function() {
