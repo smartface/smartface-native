@@ -169,11 +169,7 @@ const ImageView = extend(View)(
             }
         };
 
-<<<<<<< HEAD
-        this.loadFromFile = function(params) {
-=======
         imageViewPrototype.loadFromFile = function(params) {
->>>>>>> parent of f4f15f50... [AND-3356] this issue was occuring because assigned properites were in global and was being crash by othe instances
             var file = params.file;
             var isFade = params.fade;
             var width = params.width;
