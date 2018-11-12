@@ -78,6 +78,18 @@ const TabBarController = extend(Page)(
         self.android = {};
         self.ios = {};
         
+        Object.defineProperty(self, 'barTextTransform', {
+            get: function() {
+                return self.nativeObject.topBar.valueForKey("titleTextTransform");
+            },
+            set: function(value) {
+                if (typeof value === "number") {
+                    self.nativeObject.topBar.setValueForKey(value, "titleTextTransform");
+                }
+            },
+            enumerable: true,configurable : true
+        });
+        
         Object.defineProperty(self, 'barColor', {
             get: function() {
                 return new Color({color : self.nativeObject.topBarBackgroundColor});
@@ -221,5 +233,16 @@ const TabBarController = extend(Page)(
         }
     }
 );
+
+TabBarController.BarTextTransform = {};
+Object.defineProperty(TabBarController.BarTextTransform,"AUTO",{
+    value: 0
+});
+Object.defineProperty(TabBarController.BarTextTransform,"NONE",{
+    value: 1
+});
+Object.defineProperty(TabBarController.BarTextTransform,"UPPERCASE",{
+    value: 2
+});
 
 module.exports = TabBarController;
