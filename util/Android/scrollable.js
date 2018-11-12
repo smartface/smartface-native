@@ -10,7 +10,6 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                 return _overScrollMode;
             },
             set: function(mode) {
-                console.log("overScrollMode set: " + mode);
                 nativeScrollableObject.setOverScrollMode(mode);
                 _overScrollMode = mode;
             },
