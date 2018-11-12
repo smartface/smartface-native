@@ -78,7 +78,7 @@ TextBox.prototype.cursorPosition = {start: 0, end: 0};
 /**
  * Gets/sets the cursor color of TextBox.
  *
- * @property {UI.Color}
+ * @property {UI.Color} cursorColor
  * @android
  * @ios
  * @since 3.2.1
