@@ -66,7 +66,8 @@ SearchView.prototype.backgroundImage;
 SearchView.prototype.iconImage;
 
 /**
- * Adds SearchView to UI.Page's headerBar view.
+ * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar, 
+ * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios.
  *
  * @method addToHeaderBar
  * @param {UI.Page} page.
@@ -84,6 +85,17 @@ SearchView.prototype.addToHeaderBar = function(page){};
  * @since 3.0.2
  */
 SearchView.prototype.textFieldBorderRadius; 
+/**
+ * Sets/gets border thickness of bounded view. Accepts unsigned
+ * numbers, 0 means no border. When the searchview is added to header bar, 
+ * the border width of the search view will be 0 on ios.
+ *
+ * @property {Number} [borderWidth = 1]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.borderWidth = 1;
 
 /**
  * Removes SearchView from UI.Page's headerBar view.
@@ -175,13 +187,14 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
- * Gets/sets cursor color of searchview. This property works only for IOS.
+ * Gets/sets cursor color of searchview.
  *
  * @property {UI.Color} cursorColor
  * @ios
- * @since 1.1.12
+ * @android
+ * @since 3.2.1
  */
-SearchView.prototype.ios.cursorColor;
+SearchView.prototype.cursorColor;
 
 /**
  * Gets/sets cancel button color of searchview. This property works only for IOS.

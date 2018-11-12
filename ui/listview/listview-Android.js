@@ -5,6 +5,8 @@ const ListViewItem = require("../listviewitem");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
@@ -15,7 +17,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const ListView = extend(View)(
     function(_super, params) {
-
+        
         var self = this;
 
         if (!this.nativeObject) {
@@ -43,6 +45,7 @@ const ListView = extend(View)(
         this.nativeObject.addView(this.nativeInner);
 
         _super(this);
+        scrollableSuper(this, this.nativeInner);
 
         var _listViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");

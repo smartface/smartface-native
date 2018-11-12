@@ -210,7 +210,9 @@ const TabBarController = extend(Page)(
             if (typeof animated !== "undefined") {
                 _animated = animated;   
             }
-            self.nativeObject.setSelectedIndexWithAnimated(index, _animated);
+            SF.dispatch_async(SF.dispatch_get_main_queue(), function() {
+                self.nativeObject.setSelectedIndexWithAnimated(index, _animated);
+            });
         };
 
         // Assign parameters given in constructor

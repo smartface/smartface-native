@@ -10,6 +10,7 @@ const UICollectionViewController = SF.requireClass("UICollectionView");
 const UICollectionView = SF.requireClass("UICollectionView");
 const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 const NSIndexPath = SF.requireClass("NSIndexPath");
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const GridView = extend(View)(
     function(_super, params) {
@@ -111,6 +112,8 @@ const GridView = extend(View)(
 
         _super(this);
 
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
         

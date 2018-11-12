@@ -3,6 +3,7 @@ const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
 const Invocation = require('sf-core/util').Invocation;
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const NSUnderlineStyle = {
     None: 0,
@@ -20,7 +21,9 @@ const TextView = extend(View)(
         }
 
         _super(this);
-
+        
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+        
         //Defaults
         self.nativeObject.setSelectable = false;
         self.nativeObject.setEditable = false;
@@ -181,7 +184,6 @@ const TextView = extend(View)(
             enumerable: true
         });
 
-        self.ios = {};
         Object.defineProperty(self.ios, 'showScrollBar', {
             get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
