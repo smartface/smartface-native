@@ -393,7 +393,7 @@ const TextBox = extend(View)(
         
         this.ios = {};
         
-        Object.defineProperty(self.ios, 'cursorColor', {
+        Object.defineProperty(self, 'cursorColor', {
             get: function() {
                 return new Color({color : self.nativeObject.valueForKey("tintColor")});
             },

@@ -90,9 +90,7 @@ const TextBox = extend(TextView)(
         var _isPassword = false;
         var _keyboardType = KeyboardType.DEFAULT;
         var _actionKeyType = ActionKeyType.DEFAULT;
-        var _onTextChanged;
-        var _onEditBegins;
-        var _onEditEnds;
+        var _onTextChanged , _cursorColor, _onEditBegins, _onEditEnds;
         var _onActionButtonPress;
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
@@ -111,6 +109,17 @@ const TextBox = extend(TextView)(
                         }
                         self.nativeObject.setSelection(value.start, value.end);
                     }
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'cursorColor': {
+                get: function() {
+                    return _cursorColor;
+                },
+                set: function(color) {
+                    _cursorColor = color;
+                    setCursorColor(this, color);
                 },
                 enumerable: true,
                 configurable: true
@@ -433,6 +442,31 @@ const TextBox = extend(TextView)(
         }
     }
 );
+/*
+ToDo: This method is evil. When Android provides this feature programmitically just remove. 
+this method should be always being in consideration while updating support libraries of Android.
+*/
+function setCursorColor(textbox, color) {
+    const NativeTextView = requireClass("android.widget.TextView");
+    const NativePorterDuff = requireClass("android.graphics.PorterDuff");
+    
+    var fCursorDrawableRes = NativeTextView.getDeclaredField("mCursorDrawableRes");
+    fCursorDrawableRes.setAccessible(true);
+    var mCursorDrawableRes = fCursorDrawableRes.getInt(textbox.nativeObject);
+    var fEditor = NativeTextView.getDeclaredField("mEditor");
+    fEditor.setAccessible(true);
+    var editor = fEditor.get(textbox.nativeObject);
+    var clazz = editor.getClass();
+    var fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+    fCursorDrawable.setAccessible(true);
+    var drawables = [];
+    drawables[0] = textbox.nativeObject.getContext().getResources().getDrawable(mCursorDrawableRes);
+    drawables[1] = textbox.nativeObject.getContext().getResources().getDrawable(mCursorDrawableRes);
+    drawables[0].setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+    drawables[1].setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
+
+    fCursorDrawable.set(editor, array(drawables, 'android.graphics.drawable.Drawable'));
+}
 
 function setKeyboardType(self, autoCapitalize) {
     if (self.isPassword) {
