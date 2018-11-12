@@ -67,6 +67,7 @@ WebView.prototype.scrollBarEnabled = true;
  * Sets/Gets the bounce effect when scrolling.
  *
  * @property {Boolean} bounceEnabled
+ * @deprecated 3.2.1 Use {@link UI.WebView#bounces} for iOS or Use {@link UI.WebView#overScrollMode} for Android.
  * @android
  * @ios
  * @since 1.1.12
