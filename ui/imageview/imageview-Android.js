@@ -152,7 +152,9 @@ const ImageView = extend(View)(
                     params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap }), (from && ImageView.CacheType[from.name()]));
                 },
                 onBitmapFailed: function(errorDrawable) {
-                    params.onError && params.onError();
+                    // onFailure callback added instead of onError in sf-core 3.2.1
+                    var onFailure = (params.onError ? params.onError : params.onFailure);
+                    onFailure && onFailure();
                 },
                 onPrepareLoad: function(placeHolderDrawable) {
                     self.nativeObject.setImageDrawable(placeHolderDrawable);
