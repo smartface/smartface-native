@@ -937,9 +937,13 @@ function Page(params) {
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
                 
-                itemView.onActionViewExpanded();
-                itemView.setIconified(false);
-                itemView.clearFocus();
+                // TODO: Beautify this implementation
+                if(item.searchView) {
+                    itemView.onActionViewExpanded();
+                    itemView.setIconified(false);
+                    itemView.clearFocus();
+                }
+                
                 item.menuItem.setActionView(itemView);
             }
         });
