@@ -11,7 +11,7 @@
  *
  *     var myLabel = new Label();
  *     myLabel.text = "Bold_Italic Font";
- *     myLabel.font = Font.create("Arial", 16, Font.BOLD_ITALIC);
+ *     myLabel.font = Font.create("Arial-ItalicMT", 16);
  *     myPage.layout.addChild(myLabel);
  */
 function Font() {}
