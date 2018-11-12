@@ -20,13 +20,21 @@ const ImageView = extend(View)(
             this.imageFillType = ImageView.FillType.NORMAL;
         }
 
+        // Assign parameters given in constructor
+        if (params) {
+            for (var param in params) {
+                this[param] = params[param];
+            }
+        }
+    },
+    function(imageViewPrototype) {
         //imageViewPrototype._fillType = null; // native does not store ImageFillType but ScaleType
-        this._image = null;
-        this._adjustViewBounds = false;
+        imageViewPrototype._image = null;
+        imageViewPrototype._adjustViewBounds = false;
 
         var _fillType = null;
         var _tintColor;
-        Object.defineProperties(this, {
+        Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
                     return this._image;
@@ -88,11 +96,11 @@ const ImageView = extend(View)(
             }
         });
 
-        this.toString = function() {
+        imageViewPrototype.toString = function() {
             return 'ImageView';
         };
 
-        this.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
+        imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var url, placeholder, isFade, onError, onSuccess;
             if (typeof arguments[0] === "object") {
                 var params = arguments[0];
@@ -134,7 +142,7 @@ const ImageView = extend(View)(
             }
         };
 
-        this.fetchFromUrl = function(params) {
+        imageViewPrototype.fetchFromUrl = function(params) {
             const self = this;
             const NativeTarget = requireClass("com.squareup.picasso.Target");
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
@@ -161,7 +169,11 @@ const ImageView = extend(View)(
             }
         };
 
+<<<<<<< HEAD
         this.loadFromFile = function(params) {
+=======
+        imageViewPrototype.loadFromFile = function(params) {
+>>>>>>> parent of f4f15f50... [AND-3356] this issue was occuring because assigned properites were in global and was being crash by othe instances
             var file = params.file;
             var isFade = params.fade;
             var width = params.width;
@@ -236,15 +248,6 @@ const ImageView = extend(View)(
                 return loadedImage;
             }
         }
-        
-        
-         // Assign parameters given in constructor
-        if (params) {
-            for (var param in params) {
-                this[param] = params[param];
-            }
-        }
-    
     }
 );
 
