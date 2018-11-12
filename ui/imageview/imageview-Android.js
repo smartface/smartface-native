@@ -101,13 +101,14 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-            var url, placeholder, isFade, onError, onSuccess;
+            var url, placeholder, isFade, onFailure, onSuccess;
             if (typeof arguments[0] === "object") {
                 var params = arguments[0];
                 url = params.url;
                 placeholder = params.placeholder;
                 isFade = params.isFade;
-                onError = params.onError;
+                // onFailure callback added instead of onError in sf-core 3.2.1
+                onFailure = (params.onError ? params.onError : params.onFailure);
                 onSuccess = params.onSuccess;
             }
             else {
@@ -117,14 +118,14 @@ const ImageView = extend(View)(
             }
 
             var callback = null;
-            if (onError || onSuccess) {
+            if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
                         onSuccess && onSuccess();
                     },
                     onError: function() {
-                        onError && onError();
+                        onFailure && onFailure();
                     }
                 });
             }
