@@ -15,7 +15,7 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const ListView = extend(View)(
     function(_super, params) {
-
+        
         var self = this;
 
         if (!this.nativeObject) {

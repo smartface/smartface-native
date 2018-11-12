@@ -74,6 +74,15 @@ WebView.prototype.scrollBarEnabled = true;
 WebView.prototype.bounceEnabled = true;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+WebView.prototype.bounces = true;
+
+/**
  * Sets/Gets the current page which is contain webview.
  *
  * @property {UI.Page} page
