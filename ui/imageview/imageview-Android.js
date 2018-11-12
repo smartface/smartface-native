@@ -32,8 +32,8 @@ const ImageView = extend(View)(
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
 
-        var _fillType = null;
-        var _tintColor;
+        imageViewPrototype._fillType = null;
+        imageViewPrototype._tintColor;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -61,36 +61,36 @@ const ImageView = extend(View)(
             },
             'tintColor': {
                 get: function() {
-                    return _tintColor;
+                    return this._tintColor;
                 },
                 set: function(tintColor) {
                     const Color = require("sf-core/ui/color");
                     if (!tintColor instanceof Color)
                         return;
-                    _tintColor = tintColor;
+                    this._tintColor = tintColor;
 
                     const NativeImageCompat = requireClass("android.support.v4.widget.ImageViewCompat");
                     const NativeColorStateListUtil = requireClass("io.smartface.android.utils.ColorStateListUtil");
 
-                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(_tintColor.nativeObject));
+                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(this._tintColor.nativeObject));
 
                 },
                 enumerable: true
             },
             'imageFillType': {
                 get: function() {
-                    return _fillType;
+                    return this._fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)) {
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    _fillType = fillType;
+                    this._fillType = fillType;
                     if (fillType === ImageView.FillType.ASPECTFILL && !this._adjustViewBounds) {
                         this.nativeObject.setAdjustViewBounds(true);
                         this._adjustViewBounds = true;
                     }
-                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
+                    this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
                 },
                 enumerable: true
             }
@@ -222,8 +222,8 @@ const ImageView = extend(View)(
         };
 
         function scaleImage(loadedImage) {
-            if (loadedImage && _fillType !== null) {
-                switch (_fillType) {
+            if (loadedImage && imageViewPrototype._fillType !== null) {
+                switch (imageViewPrototype._fillType) {
                     case ImageView.FillType.NORMAL:
                         return loadedImage
                         break;
