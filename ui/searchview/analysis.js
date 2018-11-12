@@ -187,13 +187,14 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
- * Gets/sets cursor color of searchview. This property works only for IOS.
+ * Gets/sets cursor color of searchview.
  *
  * @property {UI.Color} cursorColor
  * @ios
- * @since 1.1.12
+ * @android
+ * @since 3.2.1
  */
-SearchView.prototype.ios.cursorColor;
+SearchView.prototype.cursorColor;
 
 /**
  * Gets/sets cancel button color of searchview. This property works only for IOS.

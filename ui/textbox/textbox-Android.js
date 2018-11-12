@@ -8,6 +8,7 @@ const ActionKeyType = require('../actionkeytype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
+const Reflection = require("../android/reflection");
 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -119,7 +120,7 @@ const TextBox = extend(TextView)(
                 },
                 set: function(color) {
                     _cursorColor = color;
-                    setCursorColor(this, color);
+                    Reflection.setCursorColor(this.nativeObject, color.nativeObject);
                 },
                 enumerable: true,
                 configurable: true
@@ -442,32 +443,6 @@ const TextBox = extend(TextView)(
         }
     }
 );
-/*
-ToDo: This method is evil. When Android provides this feature programmitically just remove. 
-this method should be always being in consideration while updating support libraries of Android.
-*/
-function setCursorColor(textbox, color) {
-    const NativeTextView = requireClass("android.widget.TextView");
-    const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-    
-    var fCursorDrawableRes = NativeTextView.getDeclaredField("mCursorDrawableRes");
-    fCursorDrawableRes.setAccessible(true);
-    var mCursorDrawableRes = fCursorDrawableRes.getInt(textbox.nativeObject);
-    var fEditor = NativeTextView.getDeclaredField("mEditor");
-    fEditor.setAccessible(true);
-    var editor = fEditor.get(textbox.nativeObject);
-    var clazz = editor.getClass();
-    var fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
-    fCursorDrawable.setAccessible(true);
-    var drawables = [];
-    drawables[0] = textbox.nativeObject.getContext().getResources().getDrawable(mCursorDrawableRes);
-    drawables[1] = textbox.nativeObject.getContext().getResources().getDrawable(mCursorDrawableRes);
-    drawables[0].setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-    drawables[1].setColorFilter(color.nativeObject, NativePorterDuff.Mode.SRC_IN);
-
-    fCursorDrawable.set(editor, array(drawables, 'android.graphics.drawable.Drawable'));
-}
-
 function setKeyboardType(self, autoCapitalize) {
     if (self.isPassword) {
         var typeface = self.nativeObject.getTypeface();
