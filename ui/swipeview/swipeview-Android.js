@@ -2,7 +2,9 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
-const DirectionBasedConverter = require("sf-core/util/Android/directionbasedconverter");
+const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
@@ -48,7 +50,9 @@ const SwipeView = extend(View)(
             DirectionBasedConverter.flipHorizontally(self.nativeObject);
             self.nativeObject.setId(viewID);
         }
+        
         _super(self);
+        scrollableSuper(this, this.nativeObject);
 
         var _page;
         var _pageInstances = [];
