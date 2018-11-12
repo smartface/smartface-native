@@ -181,6 +181,15 @@ GridView.prototype.contentOffset = {};
 GridView.prototype.itemCount = 0;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.bounces = true;
+
+/**
  * Class for GridView layout calculation.
  * The layoutManager used to organize the collected view’s items.
  *
