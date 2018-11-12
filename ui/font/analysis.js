@@ -34,15 +34,15 @@ Font.prototype.sizeOfString = function(string,maxWidth) { }
  * @android
  * @ios
  * @since 0.1
- * Creates a font instance with the given family name, size and style. Font name parameter must be specified according to actual name of font. 
- * To obtain actual font name for iOS, use {@link https://developer.smartface.io/docs/font|Font.ios.allFontNames()} method. 
- * The actual name is same as named of font file in Android. Font's enums can be used. 
+ * Creates a font instance with the given family name, size and style. Assigning font style is deprecated usage (may not work mostly) instead font name parameter must be specified according to actual name of font. 
+ * To obtain actual font name for iOS, use {@link UI.Font#allFontNames  allFontNames} method. 
+ * The actual name is same as named of font file in Android.
  *
  *     @example
  *     const Font = require('sf-core/ui/font');
  *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label({
- *         font: Font.create(Font.DEFAULT, 16, Font.NORMAL)
+ *         font: Font.create("Arial-ItalicMT", 16)
  *     });
  *     myLabel.text = "Label text";
  *
