@@ -752,9 +752,6 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     
-    // TODO: Remove this line before merge to develop.
-    // This line added for Cenk's requirements
-    self.statusBar = require("../../application/statusbar");
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {
