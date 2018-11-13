@@ -53,7 +53,8 @@ const TabBarController = extend(Page)(
                 }
                 return _onPageCreateCallback(position);
             },
-            pageCount: _items.length
+            // TODO: Remove params.items check later version
+            pageCount: (params.items ? params.items.length : _items.length)
         });
         this.android = {};
         
@@ -194,8 +195,8 @@ const TabBarController = extend(Page)(
                     
                     // TODO: Maybe later, swipeView pageCount can be set dynamically.
                     // After that, use refreshData method like listview.
-                    this.swipeView.pageCount = _items.length;
-                    this.swipeView.pagerAdapter.notifyDataSetChanged();
+                    // this.swipeView.pageCount = _items.length;
+                    // this.swipeView.pagerAdapter.notifyDataSetChanged();
                     
                     for (var i = 0; i < itemArray.length; i++) {
                         var itemTitle = itemArray[i].title;
