@@ -1,5 +1,4 @@
 const NativeTextView = requireClass('android.widget.TextView');
-const NativeTypeface = requireClass('android.util.TypedValue');
 const NativeView = requireClass('android.view.View');
 
 const AndroidConverter = require("./unitconverter");
@@ -11,19 +10,18 @@ Object.defineProperty(SizeCalculator, 'calculateStringSize', {
         let text = params.text,
             maxWidth = params.maxWidth,
             textSize = params.textSize,
-            typeface = params.textSize,
-            padding = params.padding;
-            
+            typeface = params.typeface && params.typeface.nativeObject;
+
         let nativeTextView;
         if (typeof text !== 'object') {
             nativeTextView = new NativeTextView(AndroidConfig.activity);
-            padding && nativeTextView.setPadding(padding, 0, padding, padding);
             typeface && nativeTextView.setTypeface(typeface);
             nativeTextView.setText(text, NativeTextView.BufferType.SPANNABLE);
-            textSize !== undefined && nativeTextView.setTextSize(NativeTypeface.COMPLEX_UNIT_SP, textSize); //setTextSize's unit is SP by default
+            textSize !== undefined && nativeTextView.setTextSize(textSize); //setTextSize's unit is SP by default
         }
-        else
+        else {
             nativeTextView = text.nativeObject;
+        }
 
         let widthMeasureSpec = NativeView.MeasureSpec.makeMeasureSpec(AndroidConverter.dpToPixel(maxWidth), NativeView.MeasureSpec.AT_MOST);
         let heightMeasureSpec = NativeView.MeasureSpec.makeMeasureSpec(0, NativeView.MeasureSpec.UNSPECIFIED);
