@@ -53,7 +53,7 @@ const TabBarController = extend(Page)(
                 }
                 return _onPageCreateCallback(position);
             },
-            pageCount: params.items.length
+            pageCount: _items.length
         });
         this.android = {};
         
@@ -191,6 +191,12 @@ const TabBarController = extend(Page)(
                     // TODO: We have updated UI.TabBarItem in Router v2.
                     // After it will merge, title and icon must be updated dynamicaly.
                     _items = itemArray;
+                    
+                    // TODO: Maybe later, swipeView pageCount can be set dynamically.
+                    // After that, use refreshData method like listview.
+                    this.swipeView.pageCount = _items.length;
+                    this.swipeView.pagerAdapter.notifyDataSetChanged();
+                    
                     for (var i = 0; i < itemArray.length; i++) {
                         var itemTitle = itemArray[i].title;
                         var itemIcon = itemArray[i].icon;
