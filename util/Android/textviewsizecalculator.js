@@ -12,16 +12,19 @@ Object.defineProperty(SizeCalculator, 'calculateStringSize', {
             maxWidth = params.maxWidth,
             textSize = params.textSize,
             typeface = params.textSize,
-            padding = params.padding,
-            nativeTextView = new NativeTextView(AndroidConfig.activity),
-            letterSpacing = params.letterSpacing;
+            padding = params.padding;
+            
+        let nativeTextView;
+        if (typeof text !== 'object') {
+            nativeTextView = new NativeTextView(AndroidConfig.activity);
+            padding && nativeTextView.setPadding(padding, 0, padding, padding);
+            typeface && nativeTextView.setTypeface(typeface);
+            nativeTextView.setText(text, NativeTextView.BufferType.SPANNABLE);
+            textSize !== undefined && nativeTextView.setTextSize(NativeTypeface.COMPLEX_UNIT_SP, textSize); //setTextSize's unit is SP by default
+        }
+        else
+            nativeTextView = text.nativeObject;
 
-
-        letterSpacing && nativeTextView.setLetterSpacing(letterSpacing);
-        padding && nativeTextView.setPadding(padding, 0, padding, padding);
-        typeface && nativeTextView.setTypeface(typeface);
-        nativeTextView.setText(text, NativeTextView.BufferType.SPANNABLE);
-        textSize !== undefined && nativeTextView.setTextSize(NativeTypeface.COMPLEX_UNIT_SP, textSize); //setTextSize's unit is SP by default
         let widthMeasureSpec = NativeView.MeasureSpec.makeMeasureSpec(AndroidConverter.dpToPixel(maxWidth), NativeView.MeasureSpec.AT_MOST);
         let heightMeasureSpec = NativeView.MeasureSpec.makeMeasureSpec(0, NativeView.MeasureSpec.UNSPECIFIED);
         nativeTextView.measure(widthMeasureSpec, heightMeasureSpec);
