@@ -209,6 +209,18 @@ TextView.prototype.attributedText = "";
 /**
  * This event is called when user click link string. onClick just work with attributedText.
  * 
+ * @param {Object} params
+ * @param {Number} params.maxWidth
+ * @method getAttributeTextSize
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+TextView.prototype.getAttributeTextSize = function(object) {};
+
+/**
+ * This event is called when user click link string. onClick just work with attributedText.
+ * 
  *     @example
  *     myTextView.onClick = function(string) {
  *         console.log(string);
