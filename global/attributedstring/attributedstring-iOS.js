@@ -1,5 +1,6 @@
 const Font = require('sf-core/ui/font');
 const Color = require('sf-core/ui/color');
+const Invocation = require('sf-core/util').Invocation;
 
 const AttributedString = function(params){
     
@@ -126,4 +127,74 @@ const AttributedString = function(params){
     setParams.call(this,params);
 };
 
+const NSUnderlineStyle = {
+    None: 0,
+    Single: 1,
+    Thick: 2,
+    Double: 9
+};
+
+
+AttributedString.getSize = function(array,size,lineSpacing,letterSpacing){
+    var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle", "alloc", [], "id");
+            var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc, "init", [], "NSObject");
+            var argLineSpacing = new Invocation.Argument({
+                type: "CGFloat",
+                value: lineSpacing
+            });
+            Invocation.invokeInstanceMethod(paragraphStyle, "setLineSpacing:", [argLineSpacing]);
+
+            var alloc = Invocation.invokeClassMethod("NSMutableAttributedString", "alloc", [], "id");
+            var mutableString = Invocation.invokeInstanceMethod(alloc, "init", [], "NSObject");
+
+            for (var i in array) {
+                var attributeString = array[i];
+
+                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString", "alloc", [], "id");
+
+                var argString = new Invocation.Argument({
+                    type: "NSString",
+                    value: attributeString.string
+                });
+
+                var argAttributes = new Invocation.Argument({
+                    type: "id",
+                    value: {
+                        "NSColor": attributeString.foregroundColor.nativeObject,
+                        "NSFont": attributeString.font,
+                        "NSUnderline": attributeString.underline ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSStrikethrough": attributeString.strikethrough ? NSUnderlineStyle.Single : NSUnderlineStyle.None,
+                        "NSLink": attributeString.link,
+                        "NSBackgroundColor": attributeString.backgroundColor.nativeObject,
+                        "NSUnderlineColor": attributeString.ios.underlineColor.nativeObject,
+                        "NSStrikethroughColor": attributeString.ios.strikethroughColor.nativeObject,
+                        "NSKern": letterSpacing,
+                        "NSParagraphStyle": paragraphStyle
+                    }
+                });
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, "initWithString:attributes:", [argString, argAttributes], "NSObject");
+
+                var argAppend = new Invocation.Argument({
+                    type: "NSObject",
+                    value: nativeAttributeString
+                });
+                Invocation.invokeInstanceMethod(mutableString, "appendAttributedString:", [argAppend]);
+            }
+
+            var argSize = new Invocation.Argument({
+                type: "CGSize",
+                value: size
+            });
+            
+            var argOptions = new Invocation.Argument({
+                type: "id",
+                value: 00000011 //(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+            });
+            var argContext = new Invocation.Argument({
+                type: "NSObject",
+                value: undefined
+            });
+            
+            return Invocation.invokeInstanceMethod(mutableString, "boundingRectWithSize:options:context:", [argSize,argOptions,argContext],"CGRect");
+}
 module.exports = AttributedString;
