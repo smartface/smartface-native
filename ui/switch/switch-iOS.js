@@ -13,7 +13,8 @@ const Switch = extend(View)(
          
        _super(this);
        
-       self.nativeObject.layer.masksToBounds = false;
+       self.nativeObject.thumbTintColor = Color.GREEN.nativeObject; //thumbOffColor
+       self.nativeObject.onTintColor = Color.GRAY.nativeObject; // toggleOnColor
        
        Object.defineProperty(self, 'enabled', {
             get: function() {
@@ -27,23 +28,15 @@ const Switch = extend(View)(
         
        Object.defineProperty(self, 'thumbOnColor', {
             get: function() {
-                if (self.nativeObject.thumbTintColor === undefined) {
-                    return null;
-                }else{
-                    return new Color({color : self.nativeObject.thumbTintColor});
-                }
+                return new Color({color : self.nativeObject.thumbTintColor});
             },
             set: function(value) {
-                if (value === null || value === undefined) {
-                    self.nativeObject.thumbTintColor = undefined;
-                }else{
-                    self.nativeObject.thumbTintColor = value.nativeObject;
-                }
+               self.nativeObject.thumbTintColor = value.nativeObject;
             },
             enumerable: true
          });
          
-       var _toggleOnColor = Color.GREEN;
+       var _toggleOnColor = Color.GRAY;
        Object.defineProperty(self, 'toggleOnColor', {
             get: function() {
                 return _toggleOnColor;
