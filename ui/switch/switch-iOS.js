@@ -27,10 +27,18 @@ const Switch = extend(View)(
         
        Object.defineProperty(self, 'thumbOnColor', {
             get: function() {
-                return new Color({color : self.nativeObject.thumbTintColor});
+                if (self.nativeObject.thumbTintColor === undefined) {
+                    return null;
+                }else{
+                    return new Color({color : self.nativeObject.thumbTintColor});
+                }
             },
             set: function(value) {
-               self.nativeObject.thumbTintColor = value.nativeObject;
+                if (value === null || value === undefined) {
+                    self.nativeObject.thumbTintColor = undefined;
+                }else{
+                    self.nativeObject.thumbTintColor = value.nativeObject;
+                }
             },
             enumerable: true
          });

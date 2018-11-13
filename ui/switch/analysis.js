@@ -31,7 +31,7 @@ Switch.prototype.enabled = true;
 
 /**
  * Gets/sets color of the thumb when Switch is ON. If this is set on iOS, the switch grip will lose its drop shadow.
- * The default of this property is green on Android and white on iOS.
+ * The default of this property is green on Android and null on iOS. For iOS, If you want to use default of this property, you should set null.
  *
  * @property {UI.Color} thumbOnColor
  * @android
