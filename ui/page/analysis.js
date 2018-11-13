@@ -192,7 +192,7 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  * 
  *
  * @method present
- * @param {UI.Page} page
+ * @param {UI.Page|UI.NavigationController} controller
  * @param {Boolean} animation
  * @param {Function} onCompleteCallback
  * @android
