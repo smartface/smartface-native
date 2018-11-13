@@ -63,7 +63,7 @@ Switch.prototype.android.thumbOffColor = Color.GRAY;
 
 /**
  * Gets/sets the background of the switch when it is ON.
- * It is set to gray by default.
+ * The default of this property is gray on Android and green on iOS.
  *
  * @property {UI.Color} toggleOnColor
  * @android

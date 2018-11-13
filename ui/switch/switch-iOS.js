@@ -35,7 +35,7 @@ const Switch = extend(View)(
             enumerable: true
          });
          
-       var _toggleOnColor = Color.GRAY;
+       var _toggleOnColor = Color.GREEN;
        Object.defineProperty(self, 'toggleOnColor', {
             get: function() {
                 return _toggleOnColor;
