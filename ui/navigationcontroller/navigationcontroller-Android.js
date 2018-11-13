@@ -120,7 +120,8 @@ function NavigationController() {
             FragmentTransaction.push({
                 page: params.controller,
                 animated: params.animated,
-                animationType: params.animationType
+                animationType: params.animationType,
+                isComingFromPresent: params.isComingFromPresent
             });
         }
         else if ((params.controller) instanceof BottomTabBarController) {
