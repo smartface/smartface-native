@@ -128,9 +128,8 @@ const TextView = extend(Label)(
                     const SizeCalculator = require("../../util/Android/textviewsizecalculator.js");
                     if (_attributedStringBuilder)
                         return SizeCalculator.calculateStringSize({
-                            text: _attributedStringBuilder,
-                            maxWidth: maxWidth,
-                            letterSpacing: self.letterSpacing
+                            text: self,
+                            maxWidth: maxWidth
                         });
                     else return null;
                 },
