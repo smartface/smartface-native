@@ -13,8 +13,7 @@ const Switch = extend(View)(
          
        _super(this);
        
-       self.nativeObject.thumbTintColor = Color.GREEN.nativeObject; //thumbOffColor
-       self.nativeObject.onTintColor = Color.GRAY.nativeObject; // toggleOnColor
+       self.nativeObject.layer.masksToBounds = false;
        
        Object.defineProperty(self, 'enabled', {
             get: function() {
