@@ -112,7 +112,7 @@ const TextView = extend(Label)(
                     });
 
                     //Sets the given line space
-                    this.lineSpacing = _lineSpacing ;
+                    this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
                     this.nativeObject.setSingleLine(false);
                     if (!isMovementMethodAssigned) {
@@ -120,6 +120,19 @@ const TextView = extend(Label)(
                         this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
                     }
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
+                },
+                enumerable: true
+            },
+            'getAttributeTextSize': {
+                value: function(maxWidth) {
+                    const SizeCalculator = require("../../util/Android/textviewsizecalculator.js");
+                    if (_attributedStringBuilder)
+                        return SizeCalculator.calculateStringSize({
+                            text: _attributedStringBuilder,
+                            maxWidth: maxWidth,
+                            letterSpacing: self.letterSpacing
+                        });
+                    else return null;
                 },
                 enumerable: true
             },
@@ -132,7 +145,7 @@ const TextView = extend(Label)(
                 },
                 enumerable: true,
                 configurable: true
-           },
+            },
             'onClick': {
                 get: function() {
                     return _onClick;
