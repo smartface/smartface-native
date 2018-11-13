@@ -43,7 +43,7 @@ const SwipeView = extend(View)(
                     return pageInstance.nativeObject;
                 }
             };
-            var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+            this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
         
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
@@ -149,7 +149,7 @@ const SwipeView = extend(View)(
         }
         
         // Use setAdapter method after constructor's parameters are assigned.
-        self.nativeObject.setAdapter(pagerAdapter);
+        self.nativeObject.setAdapter(self.pagerAdapter);
         var listener = NativeOnPageChangeListener.implement({
             onPageScrollStateChanged: function(state) {
                 if (state === 0) { // SCROLL_STATE_IDLE
