@@ -16,7 +16,31 @@ FragmentTransaction.generatePageID = function() {
 };
 
 FragmentTransaction.push = function(params) {
-    FragmentTransaction.replace(params);
+    checkBottomTabBarVisible(params.page);
+    if(params.isComingFromPresent) {
+        const FragmentTransaction = require("../../util/Android/fragmenttransition");
+        const Application = require("../../application");
+        
+        let currentPage = Application.currentPage;
+        let page = params.page;
+        page.popUpBackPage = currentPage;
+        
+        if (currentPage.transitionViews) {
+            page.enterRevealTransition = true;
+            FragmentTransaction.revealTransition(currentPage.transitionViews, page);
+        } else {
+            FragmentTransaction.popUpTransition(page, params.animated);
+            
+            var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+            currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+            !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+            !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+        }
+
+        params.onCompleteCallback && params.onCompleteCallback();
+    } else {
+        FragmentTransaction.replace(params);
+    }
 };
 
 FragmentTransaction.pop = function(params) {
@@ -25,13 +49,6 @@ FragmentTransaction.pop = function(params) {
 };
 
 FragmentTransaction.replace = function(params) {
-    // TODO: Beautify visibility setting of bottom tabbar
-    const Application = require("sf-core/application");
-    if(params.page.isInsideBottomTabBar) {
-        Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
-    } else {
-        Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
-    }
     // don't remove these variables. If they are global values, an exception occurs.
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -60,7 +77,8 @@ FragmentTransaction.replace = function(params) {
     fragmentManager.executePendingTransactions();
 };
 
-FragmentTransaction.revealTransition = function(transitionViews, nativeObjectOfPage) {
+FragmentTransaction.revealTransition = function(transitionViews, page) {
+    checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -69,13 +87,14 @@ FragmentTransaction.revealTransition = function(transitionViews, nativeObjectOfP
         var view = transitionViews[i];
         fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
     } 
-    fragmentTransaction.replace(rootViewId, nativeObjectOfPage);
+    fragmentTransaction.replace(rootViewId, page.nativeObject);
     fragmentTransaction.addToBackStack(popupPageTag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
 
-FragmentTransaction.popUpTransition = function(nativeObjectOfPage, animation) {
+FragmentTransaction.popUpTransition = function(page, animation) {
+    checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -90,11 +109,21 @@ FragmentTransaction.popUpTransition = function(nativeObjectOfPage, animation) {
     if (animation)
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
 
-    fragmentTransaction.add(rootViewId, nativeObjectOfPage, popupPageTag);
+    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
     fragmentTransaction.addToBackStack(popupPageTag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
+
+function checkBottomTabBarVisible(page) {
+    // TODO: Beautify visibility setting of bottom tabbar
+    const Application = require("sf-core/application");
+    if(page.isInsideBottomTabBar) {
+        Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
+    } else {
+        Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
+    }
+}
 
 function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache["LEFTTORIGHT"]) {

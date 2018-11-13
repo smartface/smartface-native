@@ -310,27 +310,13 @@ function Page(params) {
             enumerable: true
         },
         'present': {
-            value: function(page, animation = true, onCompleteCallback) {
-                if (page instanceof Page) {
-                    const FragmentTransaction = require("../../util/Android/fragmenttransition");
-                    page.popUpBackPage = self;
-
-                    if (self.transitionViews) {
-                        page.enterRevealTransition = true;
-                        FragmentTransaction.revealTransition(self.transitionViews, page.nativeObject);
-                    } else {
-                        FragmentTransaction.popUpTransition(page.nativeObject, animation);
-
-                        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-                        self.layout.nativeObject.setFocusableInTouchMode(false);
-                        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
-                    }
-
-                    onCompleteCallback && onCompleteCallback();
-                }
-                else
-                    throw Error("Page parameter mismatch, Parameter must be Page");
+            value: function(controller, animation = true, onCompleteCallback) {
+                Application.setRootController({
+                    controller: controller,
+                    animation: animation,
+                    isComingFromPresent: true,
+                    onCompleteCallback: onCompleteCallback
+                });
             },
             enumerable: true
         },
@@ -766,9 +752,6 @@ function Page(params) {
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
     
-    // TODO: Remove this line before merge to develop.
-    // This line added for Cenk's requirements
-    self.statusBar = require("../../application/statusbar");
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {

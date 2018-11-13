@@ -318,7 +318,9 @@ ApplicationWrapper.setRootController = function(params) {
         // show latest page or controller
         params.controller.show({
             controller: childControllerStack[childControllerStackLenght - 1],
-            animated: params.animated
+            animated: params.animation,
+            isComingFromPresent: params.isComingFromPresent,
+            onCompleteCallback: params.onCompleteCallback
         });
     }
     else if ((params.controller) instanceof Page) {
@@ -327,11 +329,16 @@ ApplicationWrapper.setRootController = function(params) {
         // TODO: Check animation type. I am not sure about that!
         FragmentTransition.push({
             page: (params.controller),
-            animated: params.animated
+            animated: params.animation,
+            isComingFromPresent: params.isComingFromPresent,
+            onCompleteCallback: params.onCompleteCallback
         });
     }
     else if ((params.controller) instanceof BottomTabBarController) {
+        // BottomTabBarController doesn't support pop-up or reveal animation yet.
         params.controller.show();
+    } else {
+        throw Error("controller parameter mismatch, Parameter must be UI.Page, UI.NavigationController or UI.BottomTabBarController");
     }
 };
 
