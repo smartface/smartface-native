@@ -75,8 +75,11 @@ const TabBarController = extend(Page)(
             },
             "barHeight": {
                 get: function() {
-                    return PixelToDp(this.tabLayout.getHeight());
+                    return PixelToDp(this.tabLayout.nativeObject.getHeight());
                 },
+                set: function(height) {
+                    this.tabLayout.yogaNode.setHeight(DpToPixel(height));
+                 },
                 enumerable: true,
                 configurable: true
             },
