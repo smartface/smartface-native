@@ -207,15 +207,16 @@ TextView.prototype.bounces = true;
 TextView.prototype.attributedText = "";
 
 /**
- * This method returns height & width of given attributed text. In Android, this method should be
- * used after assigning all needed properties.
+ * This method returns height & width of given attributed text. This method should be
+ * used after assigning all needed properties. If attributedText is not set, this method returns null.
  * 
- * @param {Object} params
- * @param {Number} params.maxWidth
+ * @param {Number} maxWidth
  * @method getAttributeTextSize
  * @android
  * @ios
- * @return {Object} &emsp;width : Number <br />&emsp;height : Number
+ * @return {Object} Size of attributedText
+ * @return {Number} return.width
+ * @return {Number} return.height
  * @since 3.2.1
  */
 TextView.prototype.getAttributeTextSize = function(object) {};
