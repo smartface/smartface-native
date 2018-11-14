@@ -79,18 +79,31 @@ const Switch = extend(View)(
             }
         });
 
-        let _backgroundImage;
+        let _toggleImage, _thumbImage;
         Object.defineProperties(this.android, {
-            'backgroundImage': {
+            'toggleImage': {
                 get: function() {
-                    return _backgroundImage;
+                    return _toggleImage;
                 },
-                set: function(backgroundImage) {
+                set: function(toggleImage) {
                     const Image = require("../image");
-                    _backgroundImage = backgroundImage;
+                    _toggleImage = toggleImage;
 
-                    _backgroundImage = Image.createImageFromPath(_backgroundImage);
-                    self.nativeObject.setTrackDrawable(_backgroundImage.nativeObject);
+                    _toggleImage = Image.createImageFromPath(toggleImage);
+                    self.nativeObject.setTrackDrawable(_toggleImage.nativeObject);
+                },
+                enumerable: true
+            },
+            'thumbImage': {
+                get: function() {
+                    return _thumbImage;
+                },
+                set: function(thumbImage) {
+                    const Image = require("../image");
+                    _thumbImage = thumbImage;
+
+                    _thumbImage = Image.createImageFromPath(thumbImage);
+                    self.nativeObject.setThumbDrawable(_thumbImage.nativeObject);
                 },
                 enumerable: true
             },
@@ -124,7 +137,7 @@ const Switch = extend(View)(
             }
         }));
 
-        if (!params.skipDefaults) {
+        if (!(params && params.skipDefaults)) {
             this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
             this.thumbOffColor = Color.GRAY;
             this.toggleOnColor = Color.GRAY;

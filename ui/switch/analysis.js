@@ -73,13 +73,22 @@ Switch.prototype.android.thumbOffColor = Color.GRAY;
 Switch.prototype.toggleOnColor = Color.GRAY;
 
 /**
- * Gets/sets the background image of the switch.
+ * Gets/sets the toggle image of the switch.
  *
- * @property {UI.Color | String} backgroundImage
+ * @property {UI.Color | String} toggleImage
  * @android
  * @since 3.2.1
  */
-Switch.prototype.andorid.backgroundImage;
+Switch.prototype.andorid.toggleImage;
+
+/**
+ * Gets/sets the thumb image of the switch.
+ *
+ * @property {UI.Color | String} thumbImage
+ * @android
+ * @since 3.2.1
+ */
+Switch.prototype.andorid.thumbImage;
 
 /**
  * Gets/sets the background of the switch when it is OFF.  It is set to gray
