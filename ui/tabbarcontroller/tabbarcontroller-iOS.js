@@ -78,13 +78,31 @@ const TabBarController = extend(Page)(
         self.android = {};
         self.ios = {};
         
-        Object.defineProperty(self, 'barTextTransform', {
+        Object.defineProperty(self.ios, 'barTextTransform', {
             get: function() {
                 return self.nativeObject.topBar.valueForKey("titleTextTransform");
             },
             set: function(value) {
                 if (typeof value === "number") {
                     self.nativeObject.topBar.setValueForKey(value, "titleTextTransform");
+                }
+            },
+            enumerable: true,configurable : true
+        });
+        
+        var _autoCapitalize = true;
+        Object.defineProperty(self, 'autoCapitalize', {
+            get: function() {
+                return _autoCapitalize;
+            },
+            set: function(value) {
+                if (typeof value === "boolean") {
+                    if (value) {
+                        self.ios.barTextTransform = TabBarController.iOS.BarTextTransform.AUTO;
+                    } else {
+                        self.ios.barTextTransform = TabBarController.iOS.BarTextTransform.NONE;
+                    }
+                    _autoCapitalize = value;
                 }
             },
             enumerable: true,configurable : true
@@ -236,14 +254,15 @@ const TabBarController = extend(Page)(
     }
 );
 
-TabBarController.BarTextTransform = {};
-Object.defineProperty(TabBarController.BarTextTransform,"AUTO",{
+TabBarController.iOS = {};
+TabBarController.iOS.BarTextTransform = {};
+Object.defineProperty(TabBarController.iOS.BarTextTransform,"AUTO",{
     value: 0
 });
-Object.defineProperty(TabBarController.BarTextTransform,"NONE",{
+Object.defineProperty(TabBarController.iOS.BarTextTransform,"NONE",{
     value: 1
 });
-Object.defineProperty(TabBarController.BarTextTransform,"UPPERCASE",{
+Object.defineProperty(TabBarController.iOS.BarTextTransform,"UPPERCASE",{
     value: 2
 });
 
