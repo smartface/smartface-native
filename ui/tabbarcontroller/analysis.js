@@ -126,6 +126,15 @@ TabBarController.prototype.dividerWidth = 0;
 TabBarController.prototype.indicatorColor;
 
 /**
+ * Gets/sets the auto capitalize title of the items of TabBarController.
+ * @property {Boolean} [autoCapitalize = true]
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+TabBarController.prototype.autoCapitalize;
+
+/**
  * Gets/sets the indicator height of the TabBarController.
  * @property {Number} indicatorHeight
  * @android

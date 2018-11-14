@@ -36,6 +36,7 @@ const TabBarController = extend(Page)(
             _iconColor;
         var _indicatorHeight,
             _indicatorColor = Color.create("#00A1F1");
+        var _autoCapitalize = true;
             
         this.tabLayout = {};
         this.tabLayout.nativeObject = new NativeTabLayout(AndroidConfig.activity);
@@ -190,7 +191,7 @@ const TabBarController = extend(Page)(
                 },
                 set: function(itemArray) {
                     // TODO: We have updated UI.TabBarItem in Router v2.
-                    // After it will merge, title and icon must be updated dynamicaly.
+                    // After it will merge, title and icon must be updated dynamically.
                     _items = itemArray;
                     
                     // TODO: Maybe later, swipeView pageCount can be set dynamically.
@@ -198,12 +199,30 @@ const TabBarController = extend(Page)(
                     this.swipeView.pageCount = _items.length;
                     this.swipeView.pagerAdapter.notifyDataSetChanged();
                     
-                    for (var i = 0; i < itemArray.length; i++) {
+                    for (let i = 0; i < itemArray.length; i++) {
                         var itemTitle = itemArray[i].title;
                         var itemIcon = itemArray[i].icon;
                         var tabItem = this.tabLayout.nativeObject.getTabAt(i);
                         itemTitle && (tabItem.setText(itemTitle));
                         itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
+                    }
+                    if(!this.autoCapitalize) {
+                        setAllCaps(_items, this.tabLayout.nativeObject);
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            },
+            "autoCapitalize": {
+                get: function() {
+                    return _autoCapitalize;
+                },
+                set: function(value) {
+                    _autoCapitalize = value;
+                    if(this.items && (this.items.length > 0)) {
+                        // TODO: If you set title or icon later, native tabLayout capitalizes title of tab item.
+                        // Call this function after setting title.
+                        setAllCaps(this.items, this.tabLayout.nativeObject);
                     }
                 },
                 enumerable: true,
@@ -314,5 +333,23 @@ const TabBarController = extend(Page)(
         }
     }
 );
+
+function setAllCaps(itemArray, nativeTabLayout) {
+    const NativeTextView = requireClass("android.widget.TextView");
+    let viewGroupOfTabLayout = nativeTabLayout.getChildAt(0);
+    let tabsCount = viewGroupOfTabLayout.getChildCount();
+    for (let i = 0; i < tabsCount; i++) {
+        let viewGroupOfTab = viewGroupOfTabLayout.getChildAt(i);
+        let tabChildsCount = viewGroupOfTab.getChildCount();
+        for (let j = 0; j < tabChildsCount; j++) {
+            let tabViewChild = viewGroupOfTab.getChildAt(j);
+            let isAssignableFrom = NativeTextView.isAssignableFrom(tabViewChild.getClass()); 
+            if (isAssignableFrom) {
+                tabViewChild.setAllCaps(false);
+                itemArray[i].nativeTextView = tabViewChild;
+            }
+        }
+    }
+}
 
 module.exports = TabBarController;
