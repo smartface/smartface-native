@@ -323,6 +323,8 @@ function Page(params) {
         'dismiss': {
             value: function(onCompleteCallback) {
                 var fragmentManager = activity.getSupportFragmentManager();
+                if(!self.popUpBackPage)
+                    return;
                 self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
                 
                 fragmentManager.popBackStack();
