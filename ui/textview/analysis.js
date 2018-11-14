@@ -207,6 +207,21 @@ TextView.prototype.bounces = true;
 TextView.prototype.attributedText = "";
 
 /**
+ * This method returns height & width of given attributed text. This method should be
+ * used after assigning all needed properties. If attributedText is not set, this method returns null.
+ * 
+ * @param {Number} maxWidth
+ * @method getAttributeTextSize
+ * @android
+ * @ios
+ * @return {Object} Size of attributedText
+ * @return {Number} return.width
+ * @return {Number} return.height
+ * @since 3.2.1
+ */
+TextView.prototype.getAttributeTextSize = function(object) {};
+
+/**
  * This event is called when user click link string. onClick just work with attributedText.
  * 
  *     @example
