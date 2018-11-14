@@ -1,6 +1,5 @@
 const Font = require('sf-core/ui/font');
 const Color = require('sf-core/ui/color');
-const Invocation = require('sf-core/util').Invocation;
 
 const AttributedString = function(params){
     
