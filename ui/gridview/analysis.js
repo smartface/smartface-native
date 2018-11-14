@@ -98,6 +98,15 @@ function GridView(params) {}
 GridView.prototype.onItemCreate = function onItemCreate(type){};
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.2.1
+ */
+GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
+/**
  * This event is called when a UI.GridViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
@@ -179,6 +188,15 @@ GridView.prototype.contentOffset = {};
  * @since 3.0.2
  */
 GridView.prototype.itemCount = 0;
+
+/**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.bounces = true;
 
 /**
  * Class for GridView layout calculation.

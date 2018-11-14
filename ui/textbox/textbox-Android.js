@@ -8,6 +8,7 @@ const ActionKeyType = require('../actionkeytype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const AutoCapitalize = require("./autocapitalize");
+const Reflection = require("../android/reflection");
 
 const NativeView = requireClass("android.view.View");
 const NativeTextWatcher = requireClass("android.text.TextWatcher");
@@ -90,9 +91,7 @@ const TextBox = extend(TextView)(
         var _isPassword = false;
         var _keyboardType = KeyboardType.DEFAULT;
         var _actionKeyType = ActionKeyType.DEFAULT;
-        var _onTextChanged;
-        var _onEditBegins;
-        var _onEditEnds;
+        var _onTextChanged , _cursorColor, _onEditBegins, _onEditEnds;
         var _onActionButtonPress;
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
@@ -111,6 +110,17 @@ const TextBox = extend(TextView)(
                         }
                         self.nativeObject.setSelection(value.start, value.end);
                     }
+                },
+                enumerable: true,
+                configurable: true
+            },
+            'cursorColor': {
+                get: function() {
+                    return _cursorColor;
+                },
+                set: function(color) {
+                    _cursorColor = color;
+                    Reflection.setCursorColor(this.nativeObject, color.nativeObject);
                 },
                 enumerable: true,
                 configurable: true
@@ -433,7 +443,6 @@ const TextBox = extend(TextView)(
         }
     }
 );
-
 function setKeyboardType(self, autoCapitalize) {
     if (self.isPassword) {
         var typeface = self.nativeObject.getTypeface();

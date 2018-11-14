@@ -8,7 +8,14 @@ function HeaderBarItem(params) {
     
     var self = this;
     
-    self.nativeObject = new __SF_UIBarButtonItem();
+    var _systemItem;
+    if (params && params.ios && params.ios.systemItem) {
+        _systemItem = params.ios.systemItem;
+        self.nativeObject = __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
+    }else{
+        self.nativeObject = new __SF_UIBarButtonItem();
+    }
+    
     self.nativeObject.target = self.nativeObject;
     var _badge = {};
     _badge.ios = {};
@@ -101,6 +108,17 @@ function HeaderBarItem(params) {
         'badge': {
             get: function(){
                 return _badge;
+            },
+            enumerable: true
+        }
+    });
+    
+    this.ios = {};
+    
+    Object.defineProperties(this.ios, {
+        'systemItem': {
+            get: function(){
+                return _systemItem;
             },
             enumerable: true
         }
@@ -345,11 +363,50 @@ function HeaderBarItem(params) {
     });
     
     // Assign parameters given in constructor
-    if (params) {
+    function setParams(params){
         for (var param in params) {
-            this[param] = params[param];
+            if(param === "ios" || param === "android"){
+                setOSSpecificParams.call(this,params[param],param);
+            }else{
+                this[param] = params[param];
+            }
         }
     }
+    
+    function setOSSpecificParams(params,key){
+        for (var param in params) {
+            this[key][param] = params[param];
+        }
+    }
+    
+    setParams.call(this,params);
 }
+
+HeaderBarItem.iOS = {};
+HeaderBarItem.iOS.SystemItem = {
+    DONE : 0,
+    CANCEL : 1,
+    EDIT : 2,
+    SAVE : 3,
+    ADD : 4,
+    FLEXIBLESPACE : 5,
+    FIXEDSPACE : 6,
+    COMPOSE : 7,
+    REPLY : 8,
+    ACTION : 9,
+    ORGANIZE : 10,
+    BOOKMARKS : 11,
+    SEARCH : 12,
+    REFRESH : 13,
+    STOP : 14,
+    CAMERA : 15,
+    TRASH : 16,
+    PLAY : 17,
+    PAUSE : 18,
+    REWIND : 19,
+    FASTFORWARD : 20,
+    UNDO : 21,
+    REDO : 22
+};
 
 module.exports = HeaderBarItem;

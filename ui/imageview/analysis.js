@@ -102,7 +102,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @param {UI.Image} object.placeholder
  * @param {Boolean} object.fade = true
  * @param {Function} object.onSuccess
- * @param {Function} object.onError
+ * @param {Function} object.onFailure
  * @android
  * @ios
  * @since 3.1.3
@@ -137,7 +137,7 @@ ImageView.prototype.loadFromFile = function(object){};
  * @param {Function} object.onSuccess
  * @param {UI.Image} object.onSuccess.image
  * @param {UI.ImageCacheType} object.onSuccess.cache
- * @param {Function} object.onError
+ * @param {Function} object.onFailure
  * @android
  * @ios
  * @since 3.0.2
