@@ -225,7 +225,7 @@ const TabBarController = extend(Page)(
                     if(this.items && (this.items.length > 0)) {
                         // TODO: If you set title or icon later, native tabLayout capitalizes title of tab item.
                         // Call this function after setting title.
-                        setAllCaps(this.items, this.tabLayout.nativeObject);
+                        setAllCaps(this.items, this.tabLayout.nativeObject, _autoCapitalize);
                     }
                 },
                 enumerable: true,
@@ -337,7 +337,7 @@ const TabBarController = extend(Page)(
     }
 );
 
-function setAllCaps(itemArray, nativeTabLayout) {
+function setAllCaps(itemArray, nativeTabLayout, autoCapitalize) {
     const NativeTextView = requireClass("android.widget.TextView");
     let viewGroupOfTabLayout = nativeTabLayout.getChildAt(0);
     let tabsCount = viewGroupOfTabLayout.getChildCount();
@@ -348,7 +348,7 @@ function setAllCaps(itemArray, nativeTabLayout) {
             let tabViewChild = viewGroupOfTab.getChildAt(j);
             let isAssignableFrom = NativeTextView.isAssignableFrom(tabViewChild.getClass()); 
             if (isAssignableFrom) {
-                tabViewChild.setAllCaps(false);
+                tabViewChild.setAllCaps(autoCapitalize);
                 itemArray[i].nativeTextView = tabViewChild;
             }
         }
