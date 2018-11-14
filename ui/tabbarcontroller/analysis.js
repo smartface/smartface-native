@@ -4,7 +4,6 @@
  * @since 3.2.0
  * 
  * This class extends from {@link UI.Page Page}. But you shouldn't use directly layout of the {@link UI.TabBarController TabBarController}.
- * {@link UI.TabBarController#items items} property must be given in constructor.
  * 
  *     @example
  *     const extend = require("js-base/core/extend");
