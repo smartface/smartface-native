@@ -75,7 +75,7 @@ Switch.prototype.toggleOnColor = Color.GRAY;
 /**
  * Gets/sets the background image of the switch.
  *
- * @property {UI.Color} backgroundImage
+ * @property {UI.Color | String} backgroundImage
  * @android
  * @since 3.2.1
  */
