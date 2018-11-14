@@ -315,6 +315,11 @@ ApplicationWrapper.setRootController = function(params) {
     if ((params.controller) instanceof NavigationController) {
         var childControllerStack = params.controller.historyStack;
         var childControllerStackLenght = childControllerStack.length;
+        
+        // This check is requested by Smartface Router team.
+        if(childControllerStackLenght === 0) // no child controller
+            return;
+            
         // show latest page or controller
         params.controller.show({
             controller: childControllerStack[childControllerStackLenght - 1],

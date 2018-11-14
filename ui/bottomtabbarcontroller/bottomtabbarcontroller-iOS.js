@@ -75,6 +75,29 @@ function BottomTabBarController(params) {
         self.view.setIndex(self.model.currentIndex);
     };
     
+    this.present = function(controller, animation, onComplete) {
+        if (typeof controller === "object") {
+            var _animationNeed = animation ? animation : true;
+            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+                
+            var controllerToPresent;
+            if (controller && controller.nativeObject) {
+                controllerToPresent = controller.nativeObject;
+                
+                if (typeof self.transitionViews !== "undefined"){
+                    controllerToPresent.setValueForKey(true,"isHeroEnabled");
+                }
+                
+                self.view.present(controllerToPresent, _animationNeed, _completionBlock);
+            }
+        }
+    };
+    
+    this.dismiss = function(onComplete) {
+        var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+        self.view.dismiss(_completionBlock);
+    };
+    
     ////////////////////////////////////////////////////////////////////////////
     
     
@@ -324,6 +347,14 @@ function BottomTabBarView(params) {
     
     this.setIndex = function (index) {
         self.nativeObject.selectedIndex = index;
+    };
+    
+    this.present = function (controllerToPresent, animationNeed, completionBlock) {
+        self.nativeObject.presentViewController(controllerToPresent, animationNeed, completionBlock);
+    };
+    
+    this.dismiss = function (onComplete) {
+        self.nativeObject.dismissViewController(onComplete);
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {

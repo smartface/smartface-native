@@ -97,27 +97,15 @@ function Page(params) {
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
                 
             var pageToPresent;
-            if (page.headerBar.visible) {
-                var alloc = Invocation.invokeClassMethod("UINavigationController","alloc",[],"id");
-                var argViewController= new Invocation.Argument({
-                    type:"NSObject",
-                    value: page.nativeObject
-                });
-                pageToPresent = Invocation.invokeInstanceMethod(alloc,"initWithRootViewController:",[argViewController],"NSObject");
-      
-                pageToPresent.valueForKey("navigationBar").setValueForKey(false,"translucent");
-                if(parseInt(System.OSVersion) >= 11){
-                    pageToPresent.valueForKey("navigationBar").setValueForKey(false,"prefersLargeTitles");
-                }
-            } else {
+            if (page && page.nativeObject) {
                 pageToPresent = page.nativeObject;
+                
+                if (typeof self.transitionViews !== "undefined"){
+                    pageToPresent.setValueForKey(true,"isHeroEnabled");
+                }
+                
+                self.nativeObject.presentViewController(pageToPresent, _animationNeed, _completionBlock);
             }
-            
-            if (typeof self.transitionViews !== "undefined"){
-                pageToPresent.setValueForKey(true,"isHeroEnabled");
-            }
-            
-            self.nativeObject.presentViewController(pageToPresent, _animationNeed, _completionBlock);
         }
     }
     
