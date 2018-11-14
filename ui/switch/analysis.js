@@ -73,7 +73,7 @@ Switch.prototype.android.thumbOffColor = Color.GRAY;
 Switch.prototype.toggleOnColor = Color.GRAY;
 
 /**
- * Gets/sets the toggle image of the switch.
+ * Gets/sets the toggle image of the switch. This property should be used before assigning colors.
  *
  * @property {UI.Color | String} toggleImage
  * @android
@@ -82,7 +82,7 @@ Switch.prototype.toggleOnColor = Color.GRAY;
 Switch.prototype.andorid.toggleImage;
 
 /**
- * Gets/sets the thumb image of the switch.
+ * Gets/sets the thumb image of the switch. This property should be used before assigning colors.
  *
  * @property {UI.Color | String} thumbImage
  * @android
