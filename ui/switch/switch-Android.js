@@ -79,7 +79,21 @@ const Switch = extend(View)(
             }
         });
 
+        let _backgroundImage;
         Object.defineProperties(this.android, {
+            'backgroundImage': {
+                get: function() {
+                    return _backgroundImage;
+                },
+                set: function(backgroundImage) {
+                    const Image = require("../image");
+                    _backgroundImage = backgroundImage;
+
+                    _backgroundImage = Image.createImageFromPath(_backgroundImage);
+                    self.nativeObject.setTrackDrawable(_backgroundImage.nativeObject);
+                },
+                enumerable: true
+            },
             'toggleOffColor': {
                 get: function() {
                     return _toggleOffColor;
