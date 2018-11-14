@@ -104,7 +104,8 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-
+        
+        var _lastModifiedAttributedString;
         function setText(value) {
             var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle", "alloc", [], "id");
             var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc, "init", [], "NSObject");
@@ -150,7 +151,9 @@ const TextView = extend(View)(
                 });
                 Invocation.invokeInstanceMethod(mutableString, "appendAttributedString:", [argAppend]);
             }
-
+            
+            _lastModifiedAttributedString = mutableString;
+            
             var argAttributeString = new Invocation.Argument({
                 type: "NSObject",
                 value: mutableString
@@ -173,7 +176,35 @@ const TextView = extend(View)(
             },
             enumerable: true
         });
-
+        
+        Object.defineProperty(self, 'getAttributeTextSize', {
+            value: function(maxWidth) {
+                if (_lastModifiedAttributedString) {
+                    var argSize = new Invocation.Argument({
+                        type: "CGSize",
+                        value: {
+                            width: maxWidth,
+                            height: Number.MAX_VALUE
+                        }
+                    });
+                    
+                    var argOptions = new Invocation.Argument({
+                        type: "NSUInteger",
+                        value: 00000011 //(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                    });
+                    var argContext = new Invocation.Argument({
+                        type: "NSObject",
+                        value: undefined
+                    });
+                    
+                    var rect = Invocation.invokeInstanceMethod(_lastModifiedAttributedString, "boundingRectWithSize:options:context:", [argSize,argOptions,argContext],"CGRect");
+                    return {width: rect.width, height: rect.height};
+                }
+                return null;
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(self, 'htmlText', {
             get: function() {
                 return self.nativeObject.htmlText;
