@@ -160,7 +160,7 @@ function View(params) {
             },
             set: function(value) {
                 this._borderWidth = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable(this.nativeObject)));
+                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderWidthPx = DpToPixel(this._borderWidth);
 
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
