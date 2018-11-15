@@ -38,7 +38,7 @@ MaterialTextBox.prototype.selectedHintTextColor;
  * 
  * @property {Object} params
  * @property {UI.View} params.view
- * @property {Numer} params.width
+ * @property {Number} params.width
  * @android
  * @ios
  * @since 3.2.1
