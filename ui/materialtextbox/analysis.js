@@ -36,9 +36,9 @@ MaterialTextBox.prototype.selectedHintTextColor;
 /**
  * This property used to assign a view right of MaterialTextBox. The given view's width must be specified.
  * 
- * @property {Object} params
- * @property {UI.View} params.view
- * @property {Number} params.width
+ * @property {Object} rightLayout
+ * @property {UI.View} rightLayout.view
+ * @property {Number} rightLayout.width
  * @android
  * @ios
  * @since 3.2.1
