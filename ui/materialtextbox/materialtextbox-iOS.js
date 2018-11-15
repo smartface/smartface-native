@@ -49,7 +49,7 @@ const MaterialTextbox = extend(TextBox)(
                     }
                 }
                 
-                _rightLayoutMain.content.addChild(object.layout);
+                _rightLayoutMain.content.addChild(object.view);
                 self.nativeObject.setValueForKey(3, "rightViewMode");
                 self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
             },
