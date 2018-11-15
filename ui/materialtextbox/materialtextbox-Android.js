@@ -28,6 +28,7 @@ const WRAP_CONTENT = -2;
 const MATCH_PARENT = -1;
 const state_focused = 16842908;
 const state_unfocused = -16842908;
+const GRAVITY_END = 8388613;
 const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
     function(_super, params) {
         _super(this);
@@ -332,7 +333,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
             const FlexLayout = require("sf-core/ui/flexlayout");
 
-            let frameLayout = new NativeFrameLayout.LayoutParams(-2, -1, 8388613); //Gravity.END
+            let frameLayout = new NativeFrameLayout.LayoutParams(-2, -1, GRAVITY_END); 
             frameLayout.setMargins(0, 0, 0, AndroidUnitConverter.dpToPixel(9)); //9dp given re-position top of textbox line.
 
             let innerFrameLayout = self.nativeObject.getChildAt(0); //0 child is FrameLayout
@@ -354,7 +355,12 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
             let mPasswordToggleDummyDrawable = new NativeColorDrawable();
             mPasswordToggleDummyDrawable.setBounds(0, 0, AndroidUnitConverter.dpToPixel(width), 1);
-            // Store the user defined end compound drawable so that we can restore it later
+            
+            /* 
+            ToDo:After solving AND-3433 issue, retrieve compound drawables from textview and assign to directions
+            Assigning null to directions, fine for now  but in feature user can assign compound drawables and we 
+            should not write over it.
+            */
             textViewNativeObject.setCompoundDrawablesRelative(null, null,
                 mPasswordToggleDummyDrawable, null);
         }
