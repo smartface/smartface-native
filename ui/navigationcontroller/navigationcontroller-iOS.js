@@ -79,27 +79,36 @@ function NavigatonController(params) {
         }
     };
     
-    this.present = function(controller, animation, onComplete) {
-        if (typeof controller === "object") {
-            var _animationNeed = animation ? animation : true;
-            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-                
-            var controllerToPresent;
-            if (controller && controller.nativeObject) {
-                controllerToPresent = controller.nativeObject;
-                
-                if (typeof self.transitionViews !== "undefined"){
-                    controllerToPresent.setValueForKey(true,"isHeroEnabled");
+    this.present = function (params) {
+        if (typeof params === "object") {
+            var controller = params.controller;
+            var animation = params.animation;
+            var onComplete = params.onComplete;
+            
+            if (typeof controller === "object") {
+                var _animationNeed = animation ? animation : true;
+                var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+                    
+                var controllerToPresent;
+                if (controller && controller.nativeObject) {
+                    controllerToPresent = controller.nativeObject;
+                    
+                    if (typeof self.transitionViews !== "undefined"){
+                        controllerToPresent.setValueForKey(true,"isHeroEnabled");
+                    }
+                    
+                    self.view.present(controllerToPresent, _animationNeed, _completionBlock);
                 }
-                
-                self.view.present(controllerToPresent, _animationNeed, _completionBlock);
-            }
+            }   
         }
     };
     
-    this.dismiss = function(onComplete) {
-        var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-        self.view.dismiss(_completionBlock);
+    this.dismiss = function (params) {
+        if (typeof params === "object") {
+            var onComplete = params.onComplete;
+            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+            self.view.dismiss(_completionBlock);
+        }
     };
     
     ////////////////////////////////////////////////////////////////////////////
