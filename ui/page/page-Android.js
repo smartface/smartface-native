@@ -310,12 +310,15 @@ function Page(params) {
             enumerable: true
         },
         'present': {
-            value: function(controller, animation = true, onCompleteCallback) {
+            value: function(params) {
+                if(!params)
+                    return;
+                (params.animated !== false) && (params.animated = true);
                 Application.setRootController({
-                    controller: controller,
-                    animation: animation,
+                    controller: params.controller,
+                    animation: params.animated,
                     isComingFromPresent: true,
-                    onCompleteCallback: onCompleteCallback
+                    onComplete: params.onComplete
                 });
             },
             enumerable: true

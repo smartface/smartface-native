@@ -132,6 +132,18 @@ function NavigationController() {
             throw new Error("The controller is not a Page instance or a BottomTabBarController instance!");
         }
     };
+    
+    this.present = function(params) {
+        const Application = require("../../application");
+        if(!params)
+            return;
+        Application.currentPage && (Application.currentPage.present(params.controller, params.animated, params.onComplete));
+    };
+    
+    this.dismiss = function(onCompleteCallback) {
+        const Application = require("../../application");
+        Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
+    };
 
     this.pop = function(params) {
         if (historyStack.length < 2) {
