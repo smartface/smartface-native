@@ -187,21 +187,27 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  *     popuPage.layout.addChild(myButton);
  *
  *     self.popupBtn.onPress = function() {
- *     self.present(popuPage, true, function() { console.log("Page3 presented..."); });
+ *         self.present({ 
+ *             controller: popuPage, 
+ *             animated: true, 
+ *             onComplete: function() { 
+ *                 console.log("Page3 presented...");
+ *             }; 
+ *         });
  *     }
  * 
  *
  * @method present
- * @param {UI.Page|UI.NavigationController} controller
- * @param {Boolean} animation
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {UI.Page|UI.NavigationController} params.controller
+ * @param {Boolean} params.animated
+ * @param {Function} params.onComplete
  * @android
  * @ios
- * @static
  * @since 3.1.1
  *
  */
-Page.prototype.present = function(page, animation, onCompleteCallback){};
+Page.prototype.present = function(params){};
 
 
 /**
@@ -211,7 +217,6 @@ Page.prototype.present = function(page, animation, onCompleteCallback){};
  * @param {Function} onCompleteCallback
  * @android
  * @ios
- * @static
  * @since 3.1.1
  */
 Page.prototype.dismiss = function(onCompleteCallback){};

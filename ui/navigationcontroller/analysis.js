@@ -121,6 +121,33 @@ function NavigationController() {
 
 
 /**
+ * This function shows up the pop-up controller.
+ * 
+ *
+ * @method present
+ * @param {Object} params
+ * @param {UI.Page|UI.NavigationController} params.controller
+ * @param {Boolean} params.animated
+ * @param {Function} params.onComplete
+ * @android
+ * @ios
+ * @since 4.0.1
+ *
+ */
+NavigationController.prototype.present = function(params){};
+
+/**
+ * This function dismiss presently shown pop-up controller.
+ *
+ * @method dismiss
+ * @param {Function} onCompleteCallback
+ * @android
+ * @ios
+ * @since 4.0.1
+ */
+NavigationController.prototype.dismiss = function(onCompleteCallback){};
+
+/**
  * @enum {Number} UI.NavigationController.OperationType
  *
  * Operation type of NavigationController.

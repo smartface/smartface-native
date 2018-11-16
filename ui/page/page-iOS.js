@@ -91,23 +91,29 @@ function Page(params) {
         enumerable: true
     });
     
-    self.present = function(page, animation, onComplete) {
-        if (typeof page === "object") {
-            var _animationNeed = animation ? animation : true;
-            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-                
-            var pageToPresent;
-            if (page && page.nativeObject) {
-                pageToPresent = page.nativeObject;
-                
-                if (typeof self.transitionViews !== "undefined"){
-                    pageToPresent.setValueForKey(true,"isHeroEnabled");
+    self.present = function (params) {
+        if (typeof params === "object") {
+            var controller = params.controller;
+            var animation = params.animated;
+            var onComplete = params.onComplete;
+            
+            if (typeof controller === "object") {
+                var _animationNeed = animation ? animation : true;
+                var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+                    
+                var controllerToPresent;
+                if (controller && controller.nativeObject) {
+                    controllerToPresent = controller.nativeObject;
+                    
+                    if (typeof self.transitionViews !== "undefined"){
+                        controllerToPresent.setValueForKey(true,"isHeroEnabled");
+                    }
+                    
+                    self.nativeObject.presentViewController(controllerToPresent, _animationNeed, _completionBlock);
                 }
-                
-                self.nativeObject.presentViewController(pageToPresent, _animationNeed, _completionBlock);
-            }
+            }   
         }
-    }
+    };
     
     var _presentationStyle = 0;
     Object.defineProperty(self.ios, 'presentationStyle', {
@@ -123,10 +129,13 @@ function Page(params) {
         enumerable: true
     });
     
-    self.dismiss = function(onComplete) {
-        var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-        self.nativeObject.dismissViewController(_completionBlock);
-    }
+    self.dismiss = function (params) {
+        if (typeof params === "object") {
+            var onComplete = params.onComplete;
+            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
+            self.nativeObject.dismissViewController(_completionBlock);
+        }
+    };
     
     self.calculatePosition = function(){
         self.layout.applyLayout();
