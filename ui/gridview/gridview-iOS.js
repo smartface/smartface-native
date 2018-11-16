@@ -85,11 +85,6 @@ const GridView = extend(View)(
                 }
             }
         };
-        smfcollectionView.scrollViewDidScrollCallback = function (scrollView) {
-            if (sfSelf.onScroll) {
-                sfSelf.onScroll({contentOffset : scrollView.contentOffset});
-            }
-        };
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INITIALIZATION
@@ -107,6 +102,13 @@ const GridView = extend(View)(
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
+        
+        Object.defineProperty(sfSelf, 'onScroll', {
+            set: function(value) {
+                sfSelf.nativeObject.didScroll = value;
+            },
+            enumerable: true
+        });
         
         Object.defineProperty(sfSelf, 'contentOffset', {
             get: function() {
@@ -346,19 +348,6 @@ const GridView = extend(View)(
             set: function(value) {
                 if (typeof value === "function") {
                     _onItemSelected = value;
-                }
-            },
-            enumerable: true
-        });
-
-        var _onScroll = null;
-        Object.defineProperty(sfSelf, 'onScroll', {
-            get: function() {
-                return _onScroll;
-            },
-            set: function(value) {
-                if (typeof value === "function") {
-                    _onScroll = value;
                 }
             },
             enumerable: true

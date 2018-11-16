@@ -44,12 +44,6 @@ const ScrollView = extend(ViewGroup)(
 
         _super(this);
 
-        self.nativeObject.onScrollBegin = function() {
-            if (typeof self.onTouch === 'function') {
-                self.onTouch();
-            }
-        }
-
         Object.defineProperty(self, 'layout', {
             get: function() {
                 return self.contentLayout;
