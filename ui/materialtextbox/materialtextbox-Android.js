@@ -333,29 +333,20 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
             const FlexLayout = require("sf-core/ui/flexlayout");
 
-            let frameLayout = new NativeFrameLayout.LayoutParams(-2, -1, GRAVITY_END); 
+            let frameLayout = new NativeFrameLayout.LayoutParams(-2, -1, GRAVITY_END);
             frameLayout.setMargins(0, 0, 0, AndroidUnitConverter.dpToPixel(9)); //9dp given re-position top of textbox line.
 
             let innerFrameLayout = self.nativeObject.getChildAt(0); //0 child is FrameLayout
             let textViewNativeObject = self.textBoxNativeObject;
-            
-            if (view instanceof FlexLayout) {
-                let myFlexLayout = new FlexLayout();
-                myFlexLayout.addChild(view);
-                myFlexLayout.nativeObject.setLayoutParams(frameLayout);
-                innerFrameLayout.addView(myFlexLayout.nativeObject);
-            }
-            else {
-                view.nativeObject.setLayoutParams(frameLayout);
-                innerFrameLayout.addView(view.nativeObject);
-                view.nativeObject.setPadding(textViewNativeObject.getPaddingLeft(),
-                    textViewNativeObject.getPaddingTop(), textViewNativeObject.getPaddingRight(),
-                    textViewNativeObject.getPaddingBottom());
-            }
+
+            let myFlexLayout = new FlexLayout();
+            myFlexLayout.addChild(view);
+            myFlexLayout.nativeObject.setLayoutParams(frameLayout);
+            innerFrameLayout.addView(myFlexLayout.nativeObject);
 
             let mPasswordToggleDummyDrawable = new NativeColorDrawable();
             mPasswordToggleDummyDrawable.setBounds(0, 0, AndroidUnitConverter.dpToPixel(width), 1);
-            
+
             /* 
             ToDo:After solving AND-3433 issue, retrieve compound drawables from textview and assign to directions
             Assigning null to directions, fine for now  but in feature user can assign compound drawables and we 
