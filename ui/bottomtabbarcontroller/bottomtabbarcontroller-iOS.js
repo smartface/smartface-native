@@ -78,7 +78,7 @@ function BottomTabBarController(params) {
     this.present = function (params) {
         if (typeof params === "object") {
             var controller = params.controller;
-            var animation = params.animation;
+            var animation = params.animated;
             var onComplete = params.onComplete;
             
             if (typeof controller === "object") {
