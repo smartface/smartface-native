@@ -32,6 +32,20 @@ MaterialTextBox.prototype.titleFont;
  */
 MaterialTextBox.prototype.selectedHintTextColor;
 
+
+/**
+ * This property used to assign a view right of MaterialTextBox. The given view's width must be specified.
+ * 
+ * @property {Object} rightLayout
+ * @property {UI.View} rightLayout.view
+ * @property {Number} rightLayout.width
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+MaterialTextBox.prototype.rightLayout;
+
+
 /**
  * Gets/sets the lineColor of the MaterialTextBox. In Android, if error message appears then line color cannot be changed. 
  * @property {Object} [lineColor = {}]
@@ -135,6 +149,7 @@ MaterialTextBox.prototype.enableCharacterRestriction;
  * @property {Number} textBoxHeight
  * @android
  * @since 3.1.2
+ * @deprecated 3.2.1 TextBox grows as its wrapper
  */
 MaterialTextBox.prototype.textBoxHeight;
 
@@ -146,6 +161,7 @@ MaterialTextBox.prototype.textBoxHeight;
  * @property {Number} textBoxMaxHeight
  * @android
  * @since 3.1.2
+ * @deprecated 3.2.1 TextBox grows as its wrapper
  */
 MaterialTextBox.prototype.textBoxMaxHeight;
 
