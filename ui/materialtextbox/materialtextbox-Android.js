@@ -240,7 +240,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 },
                 set: function(params) {
                     _rightLayout = params.view;
-                    _rightLayoutWidth = params.width;
+                    _rightLayoutWidth = params.width !== undefined ? params.width  : 30;
                     setRightLayout(_rightLayout, _rightLayoutWidth);
                 }
             }
@@ -333,7 +333,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
             const FlexLayout = require("sf-core/ui/flexlayout");
 
-            let frameLayout = new NativeFrameLayout.LayoutParams(-2, -1, GRAVITY_END);
+            let frameLayout = new NativeFrameLayout.LayoutParams(AndroidUnitConverter.dpToPixel(width), -1, GRAVITY_END);
             frameLayout.setMargins(0, 0, 0, AndroidUnitConverter.dpToPixel(9)); //9dp given re-position top of textbox line.
 
             let innerFrameLayout = self.nativeObject.getChildAt(0); //0 child is FrameLayout
