@@ -47,7 +47,7 @@ function RippleEffect (view) {
     });
     
     view.android.updateRippleEffectIfNeeded = () => {
-        _rippleEnabled && (view.android.rippleColor = _rippleColor);
+        (_rippleEnabled && _rippleColor) && (view.android.rippleColor = _rippleColor);
     };
 }
 
