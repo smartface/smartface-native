@@ -15,6 +15,17 @@ UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
         enumerable: true
     });
 
+    Object.defineProperty(self, 'contentOffset', {
+        get: function() {
+            var contentOffset = {
+                x: nativeObject.contentOffset.x + nativeObject.contentInsetDictionary.left,
+                y: nativeObject.contentOffset.y + nativeObject.contentInsetDictionary.top
+            };
+            return contentOffset;
+        },
+        enumerable: true
+    });
+
     Object.defineProperty(self.ios, 'onScrollBeginDragging', {
         set: function(value) {
             var onScrollBeginDraggingHandler = function(scrollView) {
@@ -78,8 +89,8 @@ UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
                     x: scrollView.contentOffset.x + scrollView.contentInsetDictionary.left,
                     y: scrollView.contentOffset.y + scrollView.contentInsetDictionary.top
                 };
-                targetContentOffset.x += + scrollView.contentInsetDictionary.left;
-                targetContentOffset.y += + scrollView.contentInsetDictionary.top;
+                targetContentOffset.x += +scrollView.contentInsetDictionary.left;
+                targetContentOffset.y += +scrollView.contentInsetDictionary.top;
                 value(contentOffset, velocity, targetContentOffset);
             };
             nativeObject.onScrollViewWillEndDraggingWithVelocityTargetContentOffset = onScrollEndDraggingWithVelocityTargetContentOffsetHandler;

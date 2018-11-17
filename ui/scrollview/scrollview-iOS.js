@@ -180,13 +180,6 @@ const ScrollView = extend(ViewGroup)(
             enumerable: true
         });
 
-        Object.defineProperty(self, 'contentOffset', {
-            get: function() {
-                return { x: self.nativeObject.contentOffset.x, y: self.nativeObject.contentOffset.y };
-            },
-            enumerable: true
-        });
-
         Object.defineProperty(self.layout, 'backgroundColor', {
             get: function() {
                 return new Color({ color: self.layout.nativeObject.backgroundColor });

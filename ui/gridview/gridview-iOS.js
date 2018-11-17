@@ -113,13 +113,6 @@ const GridView = extend(View)(
             enumerable: true
         });
         
-        Object.defineProperty(sfSelf, 'contentOffset', {
-            get: function() {
-                return { x: sfSelf.nativeObject.contentOffset.x, y: sfSelf.nativeObject.contentOffset.y };
-            },
-            enumerable: true
-        });
-        
         var _itemCount = 0;
         Object.defineProperty(sfSelf, 'itemCount', {
             get: function() {

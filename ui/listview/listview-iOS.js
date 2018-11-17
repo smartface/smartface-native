@@ -238,13 +238,6 @@ const ListView = extend(View)(
             }
         }
 
-        Object.defineProperty(self, 'contentOffset', {
-            get: function() {
-                return { x: self.nativeObject.contentOffset.x, y: self.nativeObject.contentOffset.y };
-            },
-            enumerable: true
-        });
-
         var _contentInset = { top: 0, left: 0, bottom: 0, right: 0 };
         Object.defineProperty(self, 'contentInset', {
             get: function() {
