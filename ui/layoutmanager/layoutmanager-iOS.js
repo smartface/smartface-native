@@ -126,11 +126,7 @@ function LayoutManager(params) {
                 _contentInset = value;
                 
                 if (sfSelf.collectionView) {
-                    var argContentInset = new Invocation.Argument({
-                        type:"UIEdgeInsets",
-                        value: _contentInset
-                    });
-                    Invocation.invokeInstanceMethod(sfSelf.collectionView, "setContentInset:", [argContentInset]);
+                    sfSelf.collectionView.contentInsetDictionary = _contentInset;
                 }
             }
         },
