@@ -256,6 +256,45 @@ ScrollView.prototype.onViewRemoved = function() {};
 ScrollView.prototype.onScroll = function onScroll(){};
 
 /**
+ * This event is called when a ScrollView is currently being dragged by outside input such as user touch input.
+ *
+ * @event onScrollBeginDragging
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDragging = function onScrollBeginDragging(contentOffset){}
+
+/**
+ * This event is called when a ScrollView is currently animating to a final position while not under outside control.
+ *
+ * @event onScrollBeginDecelerating
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDecelerating = function onScrollBeginDecelerating(contentOffset){}
+
+/**
+ * This event is called when a ScrollView is not currently scrolling.
+ *
+ * @event onScrollEndDecelerating
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDecelerating = function onScrollEndDecelerating(contentOffset){}
+
+/**
  * Gets contentOffset of the ScrollView.
  * 
  * @property contentOffset
