@@ -27,7 +27,7 @@ ScrollState.DRAGGING = 1;
  * @android
  * @static
  * @readonly
- * @since 3.2.2
+ * @since 3.1.2
  */
 ScrollState.IDLE = 0;
 

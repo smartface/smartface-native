@@ -359,14 +359,14 @@ const GridView = extend(View)(
                     return _onScroll;
                 },
                 set: function(onScroll) {
-                    _onScroll = onScroll.bind(this);
+                    _onScroll = onScroll;
                     if (onScroll && isScrollListenerAdded === true)
                         return;
                     if (onScroll) {
                         this.nativeInner.setOnScrollListener(onScrollListener);
                         isScrollListenerAdded = true;
                     }
-                    else if (_onScrollStateChanged === undefined) {
+                    else if (!_onScrollStateChanged) {
                         this.nativeInner.removeOnScrollListener(onScrollListener);
                         isScrollListenerAdded = false;
                     }
@@ -421,7 +421,7 @@ const GridView = extend(View)(
                     return _onScrollStateChanged;
                 },
                 set: function(onScrollStateChanged) {
-                    _onScrollStateChanged = onScrollStateChanged.bind(this);
+                    _onScrollStateChanged = onScrollStateChanged;
 
                     if (onScrollStateChanged && isScrollListenerAdded === true)
                         return;
@@ -430,7 +430,7 @@ const GridView = extend(View)(
                         this.nativeInner.setOnScrollListener(onScrollListener);
                         isScrollListenerAdded = true;
                     }
-                    else if (_onScroll === undefined) {
+                    else if (!_onScroll) {
                         this.nativeInner.removeOnScrollListener(onScrollListener);
                         isScrollListenerAdded = false;
                     }
