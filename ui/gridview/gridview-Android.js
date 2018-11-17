@@ -166,17 +166,13 @@ const GridView = extend(View)(
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll;
-        var _onItemCreate;
-        var _onItemSelected;
-        var _onItemType;
-        var _onItemLongSelected;
-        var _onPullRefresh;
-        var _onItemBind;
-        var _itemCount = 0;
-        var _scrollBarEnabled = false;
-        var _contentOffset = { x: 0, y: 0 };
-        var _scrollEnabled;
+        var _onScroll = undefined,
+            isScrollListenerAdded = false,
+            _onItemCreate, _onItemSelected, _onItemType,
+            _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
+            _scrollBarEnabled = false,
+            _contentOffset = { x: 0, y: 0 },
+            _scrollEnabled, _onScrollStateChanged = undefined;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -364,11 +360,15 @@ const GridView = extend(View)(
                 },
                 set: function(onScroll) {
                     _onScroll = onScroll.bind(this);
+                    if (onScroll && isScrollListenerAdded === true)
+                        return;
                     if (onScroll) {
                         this.nativeInner.setOnScrollListener(onScrollListener);
+                        isScrollListenerAdded = true;
                     }
-                    else {
+                    else if (_onScrollStateChanged === undefined) {
                         this.nativeInner.removeOnScrollListener(onScrollListener);
+                        isScrollListenerAdded = false;
                     }
                 },
                 enumerable: true
@@ -406,7 +406,9 @@ const GridView = extend(View)(
                 var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                 _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
             },
-            onScrollStateChanged: function(recyclerView, newState) {},
+            onScrollStateChanged: function(recyclerView, newState) {
+                _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
+            },
         };
         var onScrollListener = new SFOnScrollListener(overrideMethods);
 
@@ -414,6 +416,27 @@ const GridView = extend(View)(
         var _snapToAlignment, _paginationEnabled = null,
             _nativeLinearSnapHelper, _paginationAssigned = false;
         Object.defineProperties(this.android, {
+            'onScrollStateChanged': {
+                get: function() {
+                    return _onScrollStateChanged;
+                },
+                set: function(onScrollStateChanged) {
+                    _onScrollStateChanged = onScrollStateChanged.bind(this);
+
+                    if (onScrollStateChanged && isScrollListenerAdded === true)
+                        return;
+
+                    if (onScrollStateChanged) {
+                        this.nativeInner.setOnScrollListener(onScrollListener);
+                        isScrollListenerAdded = true;
+                    }
+                    else if (_onScroll === undefined) {
+                        this.nativeInner.removeOnScrollListener(onScrollListener);
+                        isScrollListenerAdded = false;
+                    }
+                },
+                enumerable: true
+            },
             'onItemLongSelected': {
                 get: function() {
                     return _onItemLongSelected;
@@ -451,7 +474,7 @@ const GridView = extend(View)(
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
                     if (self.android.paginationEnabled !== null && !_paginationAssigned) {
-                        self.android.paginationEnabled = _paginationEnabled ;
+                        self.android.paginationEnabled = _paginationEnabled;
                     }
                 },
                 enumerable: true
