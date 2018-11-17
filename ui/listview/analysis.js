@@ -359,46 +359,6 @@ ListView.prototype.contentOffset = {};
  */
 ListView.prototype.onScroll = function onScroll(){ }
 
-
-/**
- * This event is called when a ListView is currently being dragged by outside input such as user touch input.
- *
- * @event onScrollBeginDragging
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-ListView.prototype.onScrollBeginDragging = function onScrollBeginDragging(contentOffset){}
-
-/**
- * This event is called when a ListView is currently animating to a final position while not under outside control.
- *
- * @event onScrollBeginDecelerating
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-ListView.prototype.onScrollBeginDecelerating = function onScrollBeginDecelerating(contentOffset){}
-
-/**
- * This event is called when a ListView is not currently scrolling.
- *
- * @event onScrollEndDecelerating
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-ListView.prototype.onScrollEndDecelerating = function onScrollEndDecelerating(contentOffset){}
-
 /**
  * This event is called when user pulls down and releases a ListView
  * when scroll position is on the top.
