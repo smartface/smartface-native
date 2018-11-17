@@ -4,3 +4,5 @@ const ScrollState = {
     SETTLING: 2
 };
 Object.freeze(ScrollState);
+
+module.exports = ScrollState;
