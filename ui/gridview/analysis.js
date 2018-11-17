@@ -379,6 +379,73 @@ GridView.prototype.onPullRefresh = function onPullRefresh(){}
 GridView.prototype.itemByIndex = function(index){};
 
 /**
+ * This event is called when the grid view is about to start scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDragging
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollBeginDragging = function(contentOffset){};
+
+/**
+ * This event is called when the grid view is starting to decelerate the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDecelerating
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollBeginDecelerating = function(contentOffset){};
+
+/**
+ * This event is called when the grid view has ended decelerating the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollEndDecelerating
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollEndDecelerating = function(contentOffset){};
+
+/**
+ * This event is called when dragging ended in the grid view.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Boolean} decelerate
+ * @event onScrollEndDraggingWillDecelerate
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate){};
+
+/**
+ * This event is called when the user finishes scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Object} velocity
+ * @param {Number} velocity.x
+ * @param {Number} velocity.y
+ * @param {Object} targetContentOffset
+ * @param {Number} targetContentOffset.x
+ * @param {Number} targetContentOffset.y
+ * @event onScrollEndDraggingWithVelocityTargetContentOffset
+ * @ios
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset){};
+
+/**
  * Android Specific Properties.
  * @class UI.GridView.Android
  * @since 3.2.0
