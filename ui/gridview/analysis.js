@@ -341,45 +341,6 @@ GridView.prototype.stopRefresh = function(){};
 GridView.prototype.onScroll = function onScroll(){ }
 
 /**
- * This event is called when a GridView is currently being dragged by outside input such as user touch input.
- *
- * @event onScrollBeginDragging
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-GridView.prototype.onScrollBeginDragging = function onScrollBeginDragging(contentOffset){}
-
-/**
- * This event is called when a GridView is currently animating to a final position while not under outside control.
- *
- * @event onScrollBeginDecelerating
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-GridView.prototype.onScrollBeginDecelerating = function onScrollBeginDecelerating(contentOffset){}
-
-/**
- * This event is called when a GridView is not currently scrolling.
- *
- * @event onScrollEndDecelerating
- * @param {Object} contentOffset
- * @param {Number} contentOffset.x
- * @param {Number} contentOffset.y
- * @android
- * @ios
- * @since 3.2.1
- */
-GridView.prototype.onScrollEndDecelerating = function onScrollEndDecelerating(contentOffset){}
-
-/**
  * This event is called when user pulls down and releases a GridView
  * when scroll position is on the top.
  *
