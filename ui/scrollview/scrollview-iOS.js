@@ -46,12 +46,6 @@ const ScrollView = extend(ViewGroup)(
         _super(this);
         
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
-                
-        self.nativeObject.onScrollBegin = function() {
-            if (typeof self.onTouch === 'function') {
-                self.onTouch();
-            }
-        }
 
         Object.defineProperty(self, 'layout', {
             get: function() {
@@ -182,13 +176,6 @@ const ScrollView = extend(ViewGroup)(
             },
             set: function(value) {
                 self.nativeObject.setValueForKey(value, "scrollEnabled");
-            },
-            enumerable: true
-        });
-
-        Object.defineProperty(self, 'contentOffset', {
-            get: function() {
-                return { x: self.nativeObject.contentOffset.x, y: self.nativeObject.contentOffset.y };
             },
             enumerable: true
         });

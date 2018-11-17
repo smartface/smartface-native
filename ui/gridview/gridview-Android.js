@@ -166,17 +166,13 @@ const GridView = extend(View)(
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll;
-        var _onItemCreate;
-        var _onItemSelected;
-        var _onItemType;
-        var _onItemLongSelected;
-        var _onPullRefresh;
-        var _onItemBind;
-        var _itemCount = 0;
-        var _scrollBarEnabled = false;
-        var _contentOffset = { x: 0, y: 0 };
-        var _scrollEnabled;
+        var _onScroll = undefined,
+            isScrollListenerAdded = false,
+            _onItemCreate, _onItemSelected, _onItemType,
+            _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
+            _scrollBarEnabled = false,
+            _contentOffset = { x: 0, y: 0 },
+            _scrollEnabled, _onScrollStateChanged = undefined;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -363,12 +359,18 @@ const GridView = extend(View)(
                     return _onScroll;
                 },
                 set: function(onScroll) {
-                    _onScroll = onScroll.bind(this);
+                    _onScroll = onScroll;
+                    if (onScroll && isScrollListenerAdded === true)
+                        return;
+
+                    let scrollListenerObject = _onScrollListener === null ? createOnScrollListernerObject() : _onScrollListener;
                     if (onScroll) {
-                        this.nativeInner.setOnScrollListener(onScrollListener);
+                        this.nativeInner.setOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = true;
                     }
-                    else {
-                        this.nativeInner.removeOnScrollListener(onScrollListener);
+                    else if (!_onScrollStateChanged) {
+                        this.nativeInner.removeOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = false;
                     }
                 },
                 enumerable: true
@@ -389,6 +391,9 @@ const GridView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
+            /* 
+            ToDo: Removing onScroll listener makes contentOffset null.
+            */
             'contentOffset': {
                 get: function() {
                     return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
@@ -396,24 +401,33 @@ const GridView = extend(View)(
                 enumerable: true
             }
         });
-        const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
-        var overrideMethods = {
-            onScrolled: function(recyclerView, dx, dy) {
-                _contentOffset.x += dx;
-                _contentOffset.y += dy;
-
-                var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
-            },
-            onScrollStateChanged: function(recyclerView, newState) {},
-        };
-        var onScrollListener = new SFOnScrollListener(overrideMethods);
 
         // android-only properties
         var _snapToAlignment, _paginationEnabled = null,
             _nativeLinearSnapHelper, _paginationAssigned = false;
         Object.defineProperties(this.android, {
+            'onScrollStateChanged': {
+                get: function() {
+                    return _onScrollStateChanged;
+                },
+                set: function(onScrollStateChanged) {
+                    _onScrollStateChanged = onScrollStateChanged;
+
+                    if (onScrollStateChanged && isScrollListenerAdded === true)
+                        return;
+
+                    let scrollListenerObject = _onScrollListener === null ? createOnScrollListernerObject() : _onScrollListener;
+                    if (onScrollStateChanged) {
+                        this.nativeInner.setOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = true;
+                    }
+                    else if (!_onScroll) {
+                        this.nativeInner.removeOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = false;
+                    }
+                },
+                enumerable: true
+            },
             'onItemLongSelected': {
                 get: function() {
                     return _onItemLongSelected;
@@ -451,12 +465,34 @@ const GridView = extend(View)(
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
                     if (self.android.paginationEnabled !== null && !_paginationAssigned) {
-                        self.android.paginationEnabled = _paginationEnabled ;
+                        self.android.paginationEnabled = _paginationEnabled;
                     }
                 },
                 enumerable: true
             },
         });
+
+        var _onScrollListener = null;
+
+        function createOnScrollListernerObject() {
+            const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
+            var overrideMethods = {
+                onScrolled: function(recyclerView, dx, dy) {
+                    _contentOffset.x += dx;
+                    _contentOffset.y += dy;
+
+                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                    _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
+                },
+                onScrollStateChanged: function(recyclerView, newState) {
+                    _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
+                },
+            };
+            _onScrollListener = new SFOnScrollListener(overrideMethods);
+
+            return _onScrollListener;
+        }
 
         // ios-only properties
         this.ios = {};
