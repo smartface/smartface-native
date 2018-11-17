@@ -325,7 +325,7 @@ GridView.prototype.scrollTo = function(index,animated){};
 GridView.prototype.stopRefresh = function(){};
 
 /**
- * This event is called when a GridView is scrolling.
+ * This event is called when a GridView is scrolling. To remove this evet, set null.
  * For better performance, don't set any callback if does not
  * necessary
  *
@@ -339,6 +339,21 @@ GridView.prototype.stopRefresh = function(){};
  * @since 3.1.3
  */
 GridView.prototype.onScroll = function onScroll(){ }
+
+/**
+ * This event is called when a GridView's scroll state is changed. To remove this evet, set null.
+ * For better performance, don't set any callback if does not
+ * necessary
+ *
+ * @event onScrollStateChanged
+ * @param {UI.Android.ScrollState} newState
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @android
+ * @since 3.2.1
+ */
+GridView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
 
 /**
  * This event is called when user pulls down and releases a GridView
