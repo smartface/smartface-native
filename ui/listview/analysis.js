@@ -341,7 +341,7 @@ ListView.prototype.stopRefresh = function(){};
 ListView.prototype.contentOffset = {};
 
 /**
- * This event is called when a ListView is scrolling.
+ * This event is called when a ListView is scrolling. To remove this evet, set null.
  * For better performance, don't set any callback if does not
  * necessary
  *
@@ -358,6 +358,22 @@ ListView.prototype.contentOffset = {};
  * @since 0.1
  */
 ListView.prototype.onScroll = function onScroll(){ }
+
+
+/**
+ * This event is called when a ListView's scroll state is changed. To remove this evet, set null.
+ * For better performance, don't set any callback if does not
+ * necessary
+ *
+ * @event onScrollStateChanged
+ * @param {UI.Android.ScrollState} newState
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @android
+ * @since 3.2.1
+ */
+ListView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
 
 /**
  * This event is called when user pulls down and releases a ListView
