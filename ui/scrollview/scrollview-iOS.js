@@ -6,6 +6,7 @@ const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
 const Invocation = require('sf-core/util/iOS/invocation.js');
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const ScrollType = {
     vertical: 0,
@@ -43,6 +44,8 @@ const ScrollView = extend(ViewGroup)(
         }
 
         _super(this);
+        
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
         Object.defineProperty(self, 'layout', {
             get: function() {

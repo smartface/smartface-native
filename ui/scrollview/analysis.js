@@ -138,6 +138,15 @@ ScrollView.prototype.findChildById = function(id){};
 ScrollView.prototype.scrollEnabled = false;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.bounces = true;
+
+/**
  * Gets the count of children in a viewgroup.
  *
  * @deprecated 1.1.10

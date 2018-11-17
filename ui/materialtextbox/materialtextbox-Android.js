@@ -28,6 +28,7 @@ const WRAP_CONTENT = -2;
 const MATCH_PARENT = -1;
 const state_focused = 16842908;
 const state_unfocused = -16842908;
+const GRAVITY_END = 8388613;
 const MaterialTextbox = extend(View)( //Actually this class behavior is InputLayout.
     function(_super, params) {
         _super(this);
@@ -41,33 +42,30 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         var sfTextBox = new TextBox();
         var nativeTextInputEditText = new NativeTextInputEditText(nativeTextInputLayout.getContext());
-        nativeTextInputEditText.setLayoutParams(new NativeLinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, float(1.0)));
+        nativeTextInputEditText.setLayoutParams(new NativeLinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT, float(1.0)));
 
         self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
 
         self.nativeObject.addView(nativeTextInputEditText);
 
-        var _hintTextColor;
-        var _hintFocusedTextColor;
+        var _hintTextColor, _hintFocusedTextColor,
+            _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font,
+            _rightLayout = null,
+            _rightLayoutWidth;
         var _enableCounterMaxLength = 10;
-        var _errorText;
         var reflectionHelper = new SfReflectionHelper();
-        var _lineColorObj;
-        var _errorColor;
-        var _characterRestrictionColor;
         var enableCounter = false;
         var _enableErrorMessage = false;
         var _enableCharacterRestriction = false;
-        var _font;
+        var _touchEnable = true;
         Object.defineProperties(self, {
             'hint': {
                 get: function() {
                     return self.nativeObject.getHint().toString();
                 },
                 set: function(hintText) {
-                    if (typeof hintText !== 'string')
-                        return;
+
                     var enableHintMessage = (_errorText !== "" ? true : false);
                     self.nativeObject.setHintEnabled(enableHintMessage);
                     self.nativeObject.setHint(hintText);
@@ -135,8 +133,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableCharacterRestriction;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+
                     _enableCharacterRestriction = value;
                     self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
                 },
@@ -147,8 +144,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.isCounterEnabled();
                 },
                 set: function(value) {
-                    if (typeof value !== 'number')
-                        return;
+
                     _enableCounterMaxLength = value;
                     enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
 
@@ -180,8 +176,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getError().toString();
                 },
                 set: function(errorText) {
-                    if (typeof errorText !== 'string')
-                        return;
                     _errorText = errorText;
 
                     if (self.enableErrorMessage !== true && _errorText.length !== 0)
@@ -196,8 +190,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableErrorMessage;
                 },
                 set: function(value) {
-                    if (typeof value !== 'boolean')
-                        return;
+
                     _enableErrorMessage = value
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
@@ -230,6 +223,26 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     self.nativeObject.setTypeface(font.nativeObject);
                 },
                 enumerable: true
+            },
+            'touchEnabled': {
+                get: function() {
+                    return _touchEnable;
+                },
+                set: function(value) {
+                    _touchEnable = value;
+                    sfTextBox.enabled = value;
+                },
+                enumerable: true
+            },
+            'rightLayout': {
+                get: function() {
+                    return { view: _rightLayout, width: _rightLayoutWidth };
+                },
+                set: function(params) {
+                    _rightLayout = params.view;
+                    _rightLayoutWidth = params.width !== undefined ? params.width  : 30;
+                    setRightLayout(_rightLayout, _rightLayoutWidth);
+                }
             }
         });
 
@@ -253,8 +266,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getHeight();
                 },
                 set: function(height) {
-                    if (typeof height !== 'number')
-                        return;
 
                     nativeTextInputEditText.setHeight(AndroidUnitConverter.dpToPixel(height));
                 },
@@ -265,8 +276,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return nativeTextInputEditText.getMaxHeight();
                 },
                 set: function(maxHeight) {
-                    if (typeof maxHeight !== 'number')
-                        return;
 
                     nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
                 },
@@ -312,6 +321,39 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     enumerable: true
                 });
             }
+        }
+
+        /*
+        This method gives more flexablity than implementing TextInputLayout's toggle password icon. 
+        After using this, user cannot use toggle password icon.
+        */
+        function setRightLayout(view, width) {
+            const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
+            const NativeFrameLayout = requireClass('android.widget.FrameLayout');
+
+            const FlexLayout = require("sf-core/ui/flexlayout");
+
+            let frameLayout = new NativeFrameLayout.LayoutParams(AndroidUnitConverter.dpToPixel(width), -1, GRAVITY_END);
+            frameLayout.setMargins(0, 0, 0, AndroidUnitConverter.dpToPixel(9)); //9dp given re-position top of textbox line.
+
+            let innerFrameLayout = self.nativeObject.getChildAt(0); //0 child is FrameLayout
+            let textViewNativeObject = self.textBoxNativeObject;
+
+            let myFlexLayout = new FlexLayout();
+            myFlexLayout.addChild(view);
+            myFlexLayout.nativeObject.setLayoutParams(frameLayout);
+            innerFrameLayout.addView(myFlexLayout.nativeObject);
+
+            let mPasswordToggleDummyDrawable = new NativeColorDrawable();
+            mPasswordToggleDummyDrawable.setBounds(0, 0, AndroidUnitConverter.dpToPixel(width), 1);
+
+            /* 
+            ToDo:After solving AND-3433 issue, retrieve compound drawables from textview and assign to directions
+            Assigning null to directions, fine for now  but in feature user can assign compound drawables and we 
+            should not write over it.
+            */
+            textViewNativeObject.setCompoundDrawablesRelative(null, null,
+                mPasswordToggleDummyDrawable, null);
         }
 
 

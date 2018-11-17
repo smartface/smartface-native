@@ -8,6 +8,7 @@ const LayoutManager = require("../layoutmanager");
 const Invocation = require('sf-core/util/iOS/invocation.js');
 const UICollectionView = SF.requireClass("UICollectionView");
 const NSIndexPath = SF.requireClass("NSIndexPath");
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const GridView = extend(View)(
     function(_super, params) {
@@ -100,6 +101,8 @@ const GridView = extend(View)(
 
         _super(this);
 
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
         

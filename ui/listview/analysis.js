@@ -305,6 +305,15 @@ ListView.prototype.refreshData = function(){};
 ListView.prototype.scrollTo = function(index){};
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+ListView.prototype.bounces = true;
+
+/**
  * This method cancels refresh operation and stops the refresh
  * indicator on a ListView. You should call this method after
  * finishing event inside onPullRefresh otherwise refresh indicator
