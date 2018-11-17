@@ -173,6 +173,9 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
+            /* 
+            ToDo: Removing onScroll listener makes contentOffset null.
+            */
             'contentOffset': {
                 get: function() {
                     return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
