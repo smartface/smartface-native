@@ -273,7 +273,7 @@ KeyboardType.EMAILADDRESS = 21;
 
 
 /** 
- * @enum KeyboardType.Android 
+ * @enum UI.KeyboardType.Android 
  * @since 3.2.0
  * 
  * These are android specific enums.
@@ -423,7 +423,7 @@ KeyboardType.Android.TIME = 20;
 
 
 /** 
- * @enum KeyboardType.iOS 
+ * @enum UI.KeyboardType.iOS 
  * @since 3.2.0
  * 
  * These are ios specific enums.
