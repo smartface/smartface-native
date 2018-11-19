@@ -147,6 +147,15 @@ TextView.prototype.ios.showScrollBar = false;
 TextView.prototype.ios.scrollEnabled = true;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+TextView.prototype.bounces = true;
+
+/**
  * Gets/sets attributedText on TextView.
  *
  *     @example
@@ -198,8 +207,22 @@ TextView.prototype.ios.scrollEnabled = true;
 TextView.prototype.attributedText = "";
 
 /**
+ * This method returns height & width of given attributed text. This method should be
+ * used after assigning all needed properties. If attributedText is not set, this method returns null.
+ * 
+ * @param {Number} maxWidth
+ * @method getAttributeTextSize
+ * @android
+ * @ios
+ * @return {Object} Size of attributedText
+ * @return {Number} return.width
+ * @return {Number} return.height
+ * @since 3.2.1
+ */
+TextView.prototype.getAttributeTextSize = function(object) {};
+
+/**
  * This event is called when user click link string. onClick just work with attributedText.
- * onClick deprecated on 3.0.1 version.Use onLinkClick instead.
  * 
  *     @example
  *     myTextView.onClick = function(string) {
@@ -211,6 +234,7 @@ TextView.prototype.attributedText = "";
  * @android
  * @ios
  * @since 3.0.0
+ * @removed since 3.2.1, you should use UI.TextView#onLinkClick instead
  */
 TextView.prototype.onClick = function(string) {};
 

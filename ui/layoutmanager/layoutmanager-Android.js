@@ -11,10 +11,10 @@ function LayoutManager(params) {
     this._lineDecoration = null;
     this._itemDecoration = null;
     this._itemLength = params && params.itemLength;
-    this._spanCount = params && params.spanCount;
+    this._spanCount = (params && params.spanCount !== undefined) ? params.spanCount : 1;
     this._lineSpacing = params && params.lineSpacing;
     this._itemSpacing = params && params.itemSpacing;
-    this._scrollDirection = params && params.scrollDirection;
+    this._scrollDirection = (params && params.scrollDirection !== undefined) ? params.scrollDirection : 1;
     this._contentInset = params && params.contentInset;
     this._onItemLength = params && params.onItemLength;
     this._nativeRecyclerView = null;

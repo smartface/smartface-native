@@ -46,6 +46,15 @@ TextArea.prototype.android.hint = "";
 TextArea.prototype.ios.showScrollBar = false;
 
 /**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+TextArea.prototype.bounces = true;
+
+/**
  * This property adjusts font size according to view's fixed width. If you set it true,
  * you should set minimum font size by changing the minimumFontSize property.
  * This property works only for iOS.
