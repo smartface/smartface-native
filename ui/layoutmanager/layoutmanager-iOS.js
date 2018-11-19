@@ -1,7 +1,5 @@
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
-const UICollectionView = SF.requireClass("UICollectionView");
-// const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 
 function LayoutManager(params) {
     var sfSelf = this;
