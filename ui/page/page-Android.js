@@ -314,8 +314,12 @@ function Page(params) {
                 if(!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
+                console.log("Present params: " + Object.keys(params));
+                const NavigationController = require("../navigationcontroller");
+                console.log("Present params typeof NavigationController: " + (params instanceof NavigationController));
+                
                 Application.setRootController({
-                    controller: params.controller,
+                    controller: params,
                     animation: params.animated,
                     isComingFromPresent: true,
                     onComplete: params.onComplete

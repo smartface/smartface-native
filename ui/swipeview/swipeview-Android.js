@@ -5,7 +5,8 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const DirectionBasedConverter = require("sf-core/util/Android/directionbasedconverter");
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.sfcore.SFCorePagerAdapter");
+const NativePagerAdapter = requireClass("io.smartface.android.sfcore.swipeview.SFCorePagerAdapter");
+console.log("NativePagerAdapter: " + NativePagerAdapter);
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
@@ -43,7 +44,7 @@ const SwipeView = extend(View)(
                     return pageInstance.nativeObject;
                 }
             };
-            var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+            // var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
 
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);

@@ -88,11 +88,19 @@ function BottomTabBarController(params) {
             return;
         }
 
+        if(!self.isActive)
+           return;
+        
+        const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+        console.log("BottomTabBarController deactivateController");
+        ViewController.deactivateController(self.getCurrentController());
+           
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
         childController.isInsideBottomTabBar = true;
         if (childController instanceof Page) {
+            childController.isActive = true;
             if (!childController.pageID) {
                 childController.pageID = FragmentTransaction.generatePageID();
             }
@@ -102,6 +110,7 @@ function BottomTabBarController(params) {
             });
         }
         else if (childController instanceof NavigationController) {
+            childController.isActive = true;
             // first press
             if (childController.historyStack.length < 1) {
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
@@ -130,12 +139,24 @@ function BottomTabBarController(params) {
     this.show = function() {
         self.addTabBarToActivity();
         self.setChecked();
+        // TODO: check isActive property
         self.push(self.childControllers[_selectedIndex]);
     };
     
     this.setChecked = function() {
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
         _menu.getItem(_selectedIndex).setChecked(true);
+    };
+    
+    this.getCurrentController = function() {
+        console.log("BottomTabBarController getCurrentController");
+        var controller = self.childControllers[_selectedIndex];
+        if(!controller)
+           return null;
+        if(controller instanceof Page)
+           return controller;
+           
+        return controller.getCurrentController();
     };
 
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;

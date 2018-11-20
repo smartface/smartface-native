@@ -195,6 +195,8 @@ const TabBarController = extend(Page)(
                         var itemTitle = itemArray[i].title;
                         var itemIcon = itemArray[i].icon;
                         var tabItem = this.tabLayout.nativeObject.getTabAt(i);
+                        if(!tabItem)
+                           break;
                         itemTitle && (tabItem.setText(itemTitle));
                         itemIcon && (tabItem.setIcon(itemIcon.nativeObject));
                     }
