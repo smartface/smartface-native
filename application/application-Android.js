@@ -227,6 +227,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
+            if(!focusedView)
+               return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
