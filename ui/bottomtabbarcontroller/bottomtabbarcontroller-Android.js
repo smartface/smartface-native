@@ -145,6 +145,8 @@ function BottomTabBarController(params) {
     
     this.setChecked = function() {
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if(_selectedIndex < 0)
+           return;
         _menu.getItem(_selectedIndex).setChecked(true);
     };
     

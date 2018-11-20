@@ -170,6 +170,7 @@ function NavigationController() {
         if (historyStack.length < 2) {
             throw new Error("There is no page in history!");
         }
+        console.log("NavigationController pop: " + self.isActive);
         // remove current page from history and its id from collection
         var poppedController = historyStack.pop();
         pageIDCollectionInStack[poppedController.pageID] = null;

@@ -112,6 +112,7 @@ function Page(params) {
         onOptionsItemSelected: function(menuItem) {
             var itemId = menuItem.getItemId();
             if (itemId === NativeAndroidR.id.home) {
+                console.log("Press home headerBarItems");
                 if (_headerBarLeftItem) {
                     _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
                 }
@@ -314,10 +315,11 @@ function Page(params) {
                 if(!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
-                console.log("Present params: " + Object.keys(params));
+                console.log("Present params typeof object: " + (typeof(params) === "object"));
                 const NavigationController = require("../navigationcontroller");
                 console.log("Present params typeof NavigationController: " + (params instanceof NavigationController));
                 
+                console.log("Present params.onComplete: " + Object.keys(params));
                 Application.setRootController({
                     controller: params,
                     animation: params.animated,
@@ -328,7 +330,8 @@ function Page(params) {
             enumerable: true
         },
         'dismiss': {
-            value: function(onCompleteCallback) {
+            value: function(params) {
+                console.log("Dismiss");
                 var fragmentManager = activity.getSupportFragmentManager();
                 if(!self.popUpBackPage)
                     return;
@@ -340,8 +343,8 @@ function Page(params) {
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
                 }
-
-                onCompleteCallback && onCompleteCallback();
+                console.log("Dismiss onComplete: " + typeof(params.onComplete));
+                params.onComplete && params.onComplete();
             },
             enumerable: true
         }

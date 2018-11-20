@@ -28,10 +28,10 @@ FragmentTransaction.push = function(params) {
     const Application = require("../../application");
     
     console.log("FragmentTransaction.push function isComingFromPresent: " + params.isComingFromPresent);
-    // if(!params.isComingFromPresent) {
+    if(!params.isComingFromPresent) {
         FragmentTransaction.replace(params);
         return;
-    // }
+    }
     
     let currentPage = Application.currentPage;
     let page = params.page;
@@ -50,7 +50,7 @@ FragmentTransaction.push = function(params) {
         !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
     }
 
-    params.onCompleteCallback && params.onCompleteCallback();
+    params.onComplete && params.onComplete();
 };
 
 FragmentTransaction.pop = function(params) {
