@@ -291,7 +291,7 @@ const WebView = extend(View)(
         let _onBackButtonPressedCallback = undefined;
         Object.defineProperty(this.android, 'onBackButtonPressed', {
             get: function() {
-                return _page;
+                return _onBackButtonPressedCallback;
             },
             set: function(onBackButtonPressedCallback) {
                 if (_onBackButtonPressedCallback === undefined) {
