@@ -2,11 +2,12 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
-const DirectionBasedConverter = require("sf-core/util/Android/directionbasedconverter");
+const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
 const NativePagerAdapter = requireClass("io.smartface.android.sfcore.swipeview.SFCorePagerAdapter");
-console.log("NativePagerAdapter: " + NativePagerAdapter);
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
@@ -44,14 +45,16 @@ const SwipeView = extend(View)(
                     return pageInstance.nativeObject;
                 }
             };
-            // var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
-
+            this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+        
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             DirectionBasedConverter.flipHorizontally(self.nativeObject);
             self.nativeObject.setId(viewID);
         }
+        
         _super(self);
+        scrollableSuper(this, this.nativeObject);
 
         var _page;
         var _pageInstances = [];
@@ -146,6 +149,35 @@ const SwipeView = extend(View)(
                 this[param] = params[param];
             }
         }
+        
+        // Use setAdapter method after constructor's parameters are assigned.
+        self.nativeObject.setAdapter(self.pagerAdapter);
+        var listener = NativeOnPageChangeListener.implement({
+            onPageScrollStateChanged: function(state) {
+                if (state === 0) { // SCROLL_STATE_IDLE
+                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.IDLE);
+                } else if (state === 1) { // SCROLL_STATE_DRAGGING
+                    _callbackOnPageStateChanged && _callbackOnPageStateChanged(SwipeView.State.DRAGGING);
+                }
+            },
+            onPageSelected: function(position) {
+                _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
+            },
+            onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
+                if(_callbackOnPageScrolled) {
+                    var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
+                    
+                    var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
+                    _callbackOnPageScrolled(position, offsetPixels);
+                }
+                var intPosition = position;
+                if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
+                    _lastIndex = intPosition;
+                    _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
+                }
+            }
+        });
+        self.nativeObject.addOnPageChangeListener(listener);
     }
 );
 

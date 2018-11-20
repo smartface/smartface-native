@@ -4,6 +4,7 @@ const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const scrollableSuper = require("../../util/Android/scrollable");
 
 const ScrollView = extend(ViewGroup)(
     function(_super, params) {
@@ -62,6 +63,7 @@ const ScrollView = extend(ViewGroup)(
         }
 
         _super(this);
+        scrollableSuper(this, this.nativeObject);
         const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
         // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.

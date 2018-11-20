@@ -64,14 +64,33 @@ WebView.prototype.scrollEnabled = true;
 WebView.prototype.scrollBarEnabled = true;
 
 /**
+ * Gets/sets over-scroll mode for this view.
+ *
+ * @property {UI.Android.OverScrollMode} [overScrollMode = UI.Android.OverScrollMode.ALWAYS]
+ * @android
+ * @since 3.2.1
+ */
+WebView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
+
+/**
  * Sets/Gets the bounce effect when scrolling.
  *
  * @property {Boolean} bounceEnabled
+ * @deprecated 3.2.1 Use {@link UI.WebView#bounces} for iOS or Use {@link UI.WebView#overScrollMode} for Android.
  * @android
  * @ios
  * @since 1.1.12
  */
 WebView.prototype.bounceEnabled = true;
+
+/**
+ * Sets/Gets the bounce effect when scrolling.
+ *
+ * @property {Boolean} bounces
+ * @ios
+ * @since 3.2.1
+ */
+WebView.prototype.bounces = true;
 
 /**
  * Sets/Gets the current page which is contain webview.
@@ -271,6 +290,25 @@ WebView.prototype.clearFormData = function() {};
  * @since 2.0.7
  */
 WebView.prototype.clearHistory = function() {};
+
+/**
+ * This event is triggered more than once to get safeAreaInsets.
+ *
+ * @event safeAreaInsets
+ * @param {Object} systemSafeAreaInsets
+ * @param {Number} systemSafeAreaInsets.top
+ * @param {Number} systemSafeAreaInsets.bottom
+ * @param {Number} systemSafeAreaInsets.right
+ * @param {Number} systemSafeAreaInsets.left
+ * @return {Object} safeAreaInsets
+ * @return {Number} return.top
+ * @return {Number} return.bottom
+ * @return {Number} return.right
+ * @return {Number} return.left
+ * @ios
+ * @since 3.2.1
+ */
+WebView.prototype.safeAreaInsets = function(systemSafeAreaInsets) {};
 
 /**
  * Tells this WebView to clear its Cookie.

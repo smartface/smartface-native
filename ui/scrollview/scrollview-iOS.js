@@ -6,6 +6,7 @@ const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
 const Invocation = require('sf-core/util/iOS/invocation.js');
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const ScrollType = {
     vertical: 0,
@@ -43,12 +44,8 @@ const ScrollView = extend(ViewGroup)(
         }
 
         _super(this);
-
-        self.nativeObject.onScrollBegin = function() {
-            if (typeof self.onTouch === 'function') {
-                self.onTouch();
-            }
-        }
+        
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
         Object.defineProperty(self, 'layout', {
             get: function() {
@@ -179,13 +176,6 @@ const ScrollView = extend(ViewGroup)(
             },
             set: function(value) {
                 self.nativeObject.setValueForKey(value, "scrollEnabled");
-            },
-            enumerable: true
-        });
-
-        Object.defineProperty(self, 'contentOffset', {
-            get: function() {
-                return { x: self.nativeObject.contentOffset.x, y: self.nativeObject.contentOffset.y };
             },
             enumerable: true
         });
