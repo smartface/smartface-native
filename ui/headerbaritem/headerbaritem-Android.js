@@ -39,6 +39,8 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value === null)
                     return;
+                return;
+                // TODO: Fix it for new router.
                 if (!(typeof(value) === "number" || value instanceof Color)) {
                     throw new TypeError("color must be Color instance");
                 }

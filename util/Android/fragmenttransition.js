@@ -12,39 +12,51 @@ function FragmentTransaction(){}
 
 FragmentTransaction.pageCount = 0;
 FragmentTransaction.generatePageID = function() {
-     return "" + (FragmentTransaction.pageCount++);
+     return (++FragmentTransaction.pageCount);
 };
 
 FragmentTransaction.push = function(params) {
     checkBottomTabBarVisible(params.page);
-    if(params.isComingFromPresent) {
-        const FragmentTransaction = require("../../util/Android/fragmenttransition");
-        const Application = require("../../application");
-        
-        let currentPage = Application.currentPage;
-        let page = params.page;
-        page.popUpBackPage = currentPage;
-        
-        if (currentPage.transitionViews) {
-            page.enterRevealTransition = true;
-            FragmentTransaction.revealTransition(currentPage.transitionViews, page);
-        } else {
-            FragmentTransaction.popUpTransition(page, params.animated);
-            
-            var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-            currentPage.layout.nativeObject.setFocusableInTouchMode(false);
-            !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-            !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
-        }
-
-        params.onCompleteCallback && params.onCompleteCallback();
-    } else {
-        FragmentTransaction.replace(params);
+    
+    var tag = params.page.pageID;
+    console.log("params.page.pageID: " + params.page.pageID);
+    if(!tag) {
+        throw new Error("This page doesn't have an unique ID!");
     }
+    
+    const FragmentTransaction = require("../../util/Android/fragmenttransition");
+    const Application = require("../../application");
+    
+    console.log("FragmentTransaction.push function isComingFromPresent: " + params.isComingFromPresent);
+    if(!params.isComingFromPresent) {
+        FragmentTransaction.replace(params);
+        return;
+    }
+    
+    let currentPage = Application.currentPage;
+    let page = params.page;
+    page.popUpBackPage = currentPage;
+    
+    if (currentPage.transitionViews) {
+        page.enterRevealTransition = true;
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page);
+    } else {
+        console.log("FragmentTransaction.push function popUpTransition");
+        FragmentTransaction.popUpTransition(page, params.animated);
+        
+        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+        currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+    }
+
+    params.onComplete && params.onComplete();
 };
 
 FragmentTransaction.pop = function(params) {
     params && (params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT);
+    
+    checkBottomTabBarVisible(params.page);
     FragmentTransaction.replace(params);
 };
 
@@ -66,12 +78,7 @@ FragmentTransaction.replace = function(params) {
         }
     }
     
-    var tag = params.page.pageID;
-    if(!tag) {
-        throw new Error("This page doesn't have an unique ID!");
-    }
-    
-    fragmentTransaction.replace(rootViewId, params.page.nativeObject, tag);
+    fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     // fragmentTransaction.addToBackStack(tag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
@@ -109,7 +116,7 @@ FragmentTransaction.popUpTransition = function(page, animation) {
     if (animation)
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
 
-    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
+    fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
     fragmentTransaction.addToBackStack(popupPageTag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
@@ -118,6 +125,7 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 function checkBottomTabBarVisible(page) {
     // TODO: Beautify visibility setting of bottom tabbar
     const Application = require("sf-core/application");
+    console.log("page.isInsideBottomTabBar: " + page.isInsideBottomTabBar);
     if(page.isInsideBottomTabBar) {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
     } else {

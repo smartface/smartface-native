@@ -227,6 +227,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
+            if(!focusedView)
+               return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -311,8 +313,14 @@ ApplicationWrapper.setRootController = function(params) {
     const NavigationController = require("../ui/navigationcontroller");
     const FragmentTransition = require("../util/Android/fragmenttransition");
     const BottomTabBarController = require("../ui/bottomtabbarcontroller");
+    const ViewController = require("../util/Android/transition/viewcontroller");
+    console.log("ApplicationWrapper.setRootController");
+    ViewController.deactivateRootController(ApplicationWrapper.currentPage);
+    console.log("Before ViewController.activateController");
+    ViewController.activateController(params.controller);
 
     if ((params.controller) instanceof NavigationController) {
+       console.log("ViewController.showController params.controller NavigationController");
         var childControllerStack = params.controller.historyStack;
         var childControllerStackLenght = childControllerStack.length;
         
@@ -320,6 +328,7 @@ ApplicationWrapper.setRootController = function(params) {
         if(childControllerStackLenght === 0) // no child controller
             return;
             
+       console.log("ViewController.showController NavigationController show method");
         // show latest page or controller
         params.controller.show({
             controller: childControllerStack[childControllerStackLenght - 1],
@@ -329,6 +338,7 @@ ApplicationWrapper.setRootController = function(params) {
         });
     }
     else if ((params.controller) instanceof Page) {
+        console.log("ViewController.showController params.controller Page or TabBarController");
         // TODO: Check pageID settings! Code duplicate exists
         !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
         // TODO: Check animation type. I am not sure about that!
@@ -340,11 +350,13 @@ ApplicationWrapper.setRootController = function(params) {
         });
     }
     else if ((params.controller) instanceof BottomTabBarController) {
+        console.log("ViewController.showController params.controller BottomTabBarController");
         // BottomTabBarController doesn't support pop-up or reveal animation yet.
+        params.controller.isInsideBottomTabBar = true;
         params.controller.show();
     } else {
         throw Error("controller parameter mismatch, Parameter must be UI.Page, UI.NavigationController or UI.BottomTabBarController");
-    }
+    }   
 };
 
 ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {

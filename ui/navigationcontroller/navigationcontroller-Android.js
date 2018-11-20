@@ -1,5 +1,6 @@
 const FragmentTransaction = require("../../util/Android/fragmenttransition");
 const BottomTabBarController = require("../../ui/bottomtabbarcontroller");
+const ViewController = require("../../util/Android/transition/viewcontroller");
 const Page = require("../../ui/page");
 
 function NavigationController() {
@@ -11,6 +12,8 @@ function NavigationController() {
     var self = this;
     var _willShowCallback;
     var _onTransitionCallback;
+
+    this.isActive = false;
     Object.defineProperties(this, {
         'childControllers': {
             get: function() {
@@ -37,6 +40,10 @@ function NavigationController() {
                     pageIDCollectionInStack[childController.pageID] = childController;
 
                     historyStack.push(childController);
+                }
+
+                if (self.isActive) {
+                    ViewController.activateController(self.getCurrentController());
                 }
             },
             enumerable: true
@@ -80,18 +87,23 @@ function NavigationController() {
         if (!pageIDCollectionInStack[params.controller.pageID]) {
             throw new Error("This page doesn't exist in history!");
         }
-
+        console.log("NavigationController show self.isActive: " + self.isActive);
+        if(!self.isActive)
+           return;
+        
         params.animated && (params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT);
-
         !params.controller.parentController && (params.controller.parentController = self);
         _willShowCallback && (_willShowCallback({ controller: params.controller, animated: params.animated }));
 
+        // No need self.isActive property. show method is triggered when self is active.
+        ViewController.activateController(params.controller);
+        
         self.showController(params);
-
         var currentController;
         if (historyStack.length > 1) {
             currentController = historyStack[historyStack.length - 1];
         }
+
         // TODO: Chnage currentPage as currentController
         _onTransitionCallback && (_onTransitionCallback({
             currentController: currentController,
@@ -106,16 +118,24 @@ function NavigationController() {
         }
 
         if (pageIDCollectionInStack[params.controller.pageID]) {
-            throw new Error("This page exist in history!");
+            throw new Error("This page exist in history! PageID: " + params.controller.pageID);
         }
+        
+        console.log("NavigationController isActive: " + self.isActive + " deactivateController");
+        self.isActive && (ViewController.deactivateController(self.getCurrentController()));
+
+        params.controller.parentController = self;
         pageIDCollectionInStack[params.controller.pageID] = params.controller;
         historyStack.push(params.controller);
-
+        console.log("NavigationController historyStack.length: " + historyStack.length);
+        console.log("NavigationController push function: " + self.isActive);
         self.show(params);
     };
 
     this.showController = function(params) {
+        console.log("NavigationController showController function");
         if ((params.controller) instanceof Page) {
+            console.log("NavigationController showController params.controller Page");
             params.controller.isInsideBottomTabBar = self.isInsideBottomTabBar;
             FragmentTransaction.push({
                 page: params.controller,
@@ -125,6 +145,7 @@ function NavigationController() {
             });
         }
         else if ((params.controller) instanceof BottomTabBarController) {
+            console.log("NavigationController showController params.controller BottomTabBarController");
             params.controller.isInsideBottomTabBar = true;
             params.controller.show();
         }
@@ -132,14 +153,14 @@ function NavigationController() {
             throw new Error("The controller is not a Page instance or a BottomTabBarController instance!");
         }
     };
-    
+
     this.present = function(params) {
         const Application = require("../../application");
-        if(!params)
+        if (!params)
             return;
         Application.currentPage && (Application.currentPage.present(params.controller, params.animated, params.onComplete));
     };
-    
+
     this.dismiss = function(onCompleteCallback) {
         const Application = require("../../application");
         Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
@@ -149,32 +170,16 @@ function NavigationController() {
         if (historyStack.length < 2) {
             throw new Error("There is no page in history!");
         }
+        console.log("NavigationController pop: " + self.isActive);
         // remove current page from history and its id from collection
         var poppedController = historyStack.pop();
         pageIDCollectionInStack[poppedController.pageID] = null;
+        if (!self.isActive) {
+            return;
+        }
 
-        var targetController = historyStack[historyStack.length - 1];
         !params && (params = {});
-
-        _willShowCallback && (_willShowCallback({
-            controller: targetController,
-            animated: params.animated
-        }));
-        if (targetController instanceof Page) {
-            params.page = targetController;
-            FragmentTransaction.pop(params);
-        }
-        else if (targetController instanceof BottomTabBarController) {
-            var bottomTabBarController = targetController;
-            bottomTabBarController.show();
-        }
-
-        // TODO: Change these variables
-        _onTransitionCallback && (_onTransitionCallback({
-            currentController: poppedController,
-            targetController: params.page,
-            operation: NavigationController.OperationType.POP
-        }));
+        self.popFromHistoryController(poppedController, params);
     };
 
     this.popTo = function(params) {
@@ -187,13 +192,29 @@ function NavigationController() {
             throw new Error("Target controller doesn't exist in history!");
         }
 
-        var currentController = historyStack[historyStack.length - 1];
+        var currentController = self.getCurrentController();
+        // TODO: getCurrentController for accesing current controller
         // remove current controller from history and its id from collection
         while (historyStack[historyStack.length - 1].pageID != params.controller.pageID) {
             var controller = historyStack.pop();
             pageIDCollectionInStack[controller.pageID] = null;
         }
 
+        if (!self.isActive) {
+            return;
+        }
+        self.popFromHistoryController(currentController, params);
+    };
+
+    // TODO: Use getCurrentController for all possible case
+    this.getCurrentController = function() {
+        if (historyStack.length > 0) {
+            return historyStack[historyStack.length - 1];
+        }
+        return null;
+    };
+
+    this.popFromHistoryController = function(currentController, params) {
         var targetController = historyStack[historyStack.length - 1];
 
         _willShowCallback && (_willShowCallback({ controller: targetController, animated: params.animated }));

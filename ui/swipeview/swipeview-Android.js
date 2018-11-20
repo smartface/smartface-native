@@ -7,7 +7,7 @@ const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.sfcore.SFCorePagerAdapter");
+const NativePagerAdapter = requireClass("io.smartface.android.sfcore.swipeview.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
@@ -151,7 +151,7 @@ const SwipeView = extend(View)(
         }
         
         // Use setAdapter method after constructor's parameters are assigned.
-        self.nativeObject.setAdapter(pagerAdapter);
+        self.nativeObject.setAdapter(self.pagerAdapter);
         var listener = NativeOnPageChangeListener.implement({
             onPageScrollStateChanged: function(state) {
                 if (state === 0) { // SCROLL_STATE_IDLE
