@@ -1,5 +1,6 @@
 /**
- * iOS Specific Properties.
+ * The visual style of the progress indicator.
+ * 
  * @class UI.ActivityIndicator.iOS.ActivityIndicatorViewStyle
  * @since 3.2.1
  */
