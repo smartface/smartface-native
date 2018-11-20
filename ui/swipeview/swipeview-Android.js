@@ -7,7 +7,7 @@ const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
-const NativePagerAdapter = requireClass("io.smartface.android.sfcore.swipeview.SFCorePagerAdapter");
+const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
 const NativeOnPageChangeListener = requireClass("android.support.v4.view.ViewPager$OnPageChangeListener");
 
 const fragmentManager = AndroidConfig.activity.getSupportFragmentManager();
