@@ -91,7 +91,7 @@ const ImageView = extend(View)(
         }
         
         self.loadFromUrl = function(url,placeholder,fade){
-            if (typeof url === "string") { //Depraceted: Use loadFromUrl(object);
+            if (typeof url === "string") { // Deprecated: Use loadFromUrl(object);
 				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined,function(innerFade,image,error,cache,url){
 					if (!error) {
 						if (cache == ImageCacheType.NONE && innerFade !== false) {
