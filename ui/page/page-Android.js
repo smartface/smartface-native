@@ -657,7 +657,6 @@ function Page(params) {
         configurable: true
     });
     var _contentInsets = {};
-    self.toolbar = toolbar;
     Object.defineProperty(self.headerBar.android, 'contentInsets', {
         get: function() {
             return { left: toolbar.getContentInsetStart(), right: toolbar.getContentInsetEnd() };
