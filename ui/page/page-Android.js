@@ -54,9 +54,6 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-
-    self.toolbar = toolbar;
-
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
