@@ -55,6 +55,8 @@ function Page(params) {
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
 
+    self.toolbar = toolbar;
+
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
@@ -657,6 +659,20 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    var _contentInsets = {};
+    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+        get: function() {
+            return _contentInsets;
+        },
+        set: function(contentInsets) { // API Level 21+
+            _contentInsets = contentInsets;
+            let cotentInsetStart = _contentInsets.left === undefined ? toolbar.getContentInsetEnd() : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? toolbar.getContentInsetStart() : _contentInsets.right;
+            toolbar.setContentInsetsRelative(cotentInsetStart, cotentInsetEnd);
+        },
+        enumerable: true
+    });
+
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
@@ -936,14 +952,14 @@ function Page(params) {
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
-                
+
                 // TODO: Beautify this implementation
-                if(item.searchView) {
+                if (item.searchView) {
                     itemView.onActionViewExpanded();
                     itemView.setIconified(false);
                     itemView.clearFocus();
                 }
-                
+
                 item.menuItem.setActionView(itemView);
             }
         });
