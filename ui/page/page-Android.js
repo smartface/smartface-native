@@ -657,14 +657,16 @@ function Page(params) {
         configurable: true
     });
     var _contentInsets = {};
+    self.toolbar = toolbar;
     Object.defineProperty(self.headerBar.android, 'contentInsets', {
         get: function() {
-            return _contentInsets;
+            return { left: toolbar.getContentInsetStart(), right: toolbar.getContentInsetEnd() };
         },
         set: function(contentInsets) { // API Level 21+
             _contentInsets = contentInsets;
-            let cotentInsetStart = _contentInsets.left === undefined ? toolbar.getContentInsetEnd() : _contentInsets.left;
-            let cotentInsetEnd = _contentInsets.right === undefined ? toolbar.getContentInsetStart() : _contentInsets.right;
+            let cotentInsetStart = _contentInsets.left === undefined ? toolbar.getContentInsetStart() : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? toolbar.getContentInsetEnd() : _contentInsets.right;
+
             toolbar.setContentInsetsRelative(cotentInsetStart, cotentInsetEnd);
         },
         enumerable: true
