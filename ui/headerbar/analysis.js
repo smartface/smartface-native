@@ -176,7 +176,7 @@ HeaderBar.prototype.titleLayout;
 
 /**
  * Gets/sets the content inset of headerbar. Minimum API Level 21 required. The content inset affects the valid area for Headerbar content other than 
- * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar.titleLayout titleLayout}  and 
+ * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar#titleLayout titleLayout}  and 
  * can be used to effectively align HeaderBar content along well-known gridlines. 
  *
  * @property {Object} contentInsets 
