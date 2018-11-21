@@ -953,8 +953,8 @@ function Page(params) {
 
                 // TODO: Beautify this implementation
                 if (item.searchView) {
-                    itemView.onActionViewExpanded();
-                    itemView.setIconified(false);
+                    itemView.onActionViewCollapsed();
+                    itemView.setIconified(true);
                     itemView.clearFocus();
                 }
 

@@ -67,7 +67,8 @@ SearchView.prototype.iconImage;
 
 /**
  * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar, 
- * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios.
+ * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios. In Android, 
+ * searchview always will be iconified. So to make apperance always expanded, combine searchview with {@link UI.HeaderBar.titleLayout titleLayout}
  *
  * @method addToHeaderBar
  * @param {UI.Page} page.
