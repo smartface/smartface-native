@@ -79,7 +79,7 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
-                        console.log(">>>>>>>>>>> Application.currentPage: " + self.pageID);
+                        console.log("################ Application.currentPage: " + self.pageID);
                         Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -325,12 +325,18 @@ function Page(params) {
                     return;
                 (params.animated !== false) && (params.animated = true);
                 console.log("Present params typeof object: " + (typeof(params) === "object"));
-                const NavigationController = require("../navigationcontroller");
-                console.log("Present params typeof NavigationController: " + (params instanceof NavigationController));
+                const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+                // console.log("Present params typeof NavigationController: " + (params instanceof ViewController));
                 
                 console.log("Present params.onComplete: " + Object.keys(params));
-                Application.setRootController({
-                    controller: params,
+                // TODO: Remove this custom implement to avoid smartafce Router bug!
+                let controller = params;
+                params.__isPopupPage = true;
+                
+                ViewController.activateController(controller);
+                
+                ViewController.setController({
+                    controller: controller, //params.controller,
                     animation: params.animated,
                     isComingFromPresent: true,
                     onComplete: params.onComplete
@@ -340,6 +346,7 @@ function Page(params) {
         },
         'dismiss': {
             value: function(params) {
+                const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
                 console.log("Dismiss");
                 var fragmentManager = activity.getSupportFragmentManager();
                 if(!self.popUpBackPage)
@@ -352,6 +359,7 @@ function Page(params) {
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
                 }
+                FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
                 Application.currentPage = self.popUpBackPage;
                 console.log("Dismiss onComplete: " + typeof(params.onComplete));
                 params.onComplete && params.onComplete();

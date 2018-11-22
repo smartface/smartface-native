@@ -155,6 +155,7 @@ function NavigationController() {
     };
 
     this.present = function(params) {
+        console.log("NavigationController present.....");
         const Application = require("../../application");
         if (!params)
             return;
@@ -162,6 +163,7 @@ function NavigationController() {
     };
 
     this.dismiss = function(onCompleteCallback) {
+        console.log("NavigationController dismiss.....");
         const Application = require("../../application");
         Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
     };
