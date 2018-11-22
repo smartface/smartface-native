@@ -967,8 +967,7 @@ function Page(params) {
 
                 // TODO: Beautify this implementation
                 if (item.searchView) {
-                    itemView.onActionViewCollapsed();
-                    itemView.setIconified(true);
+                    itemView.setIconifiedByDefault(true);
                     itemView.clearFocus();
                 }
 
