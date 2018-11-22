@@ -63,7 +63,6 @@ const SearchView = extend(View)(
     function(_super, params) {
         if (!this.nativeObject) {
             this.nativeObject = new NativeSearchView(AndroidConfig.activity);
-            this.nativeObject.onActionViewExpanded();
             // Prevent gain focus when SearchView appear.
             this.nativeObject.clearFocus();
         }
@@ -298,7 +297,7 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
-
+        var _searchButtonIcon, _clearIcon, _searchIcon, _iconifiedByDefault = false;
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
         Object.defineProperties(this.android, {
@@ -369,6 +368,49 @@ const SearchView = extend(View)(
                     _textFieldBorderRadius = value;
                     self.setTextFieldBackgroundDrawable();
                 }
+            },
+            'searchButtonIcon': {
+                get: function() {
+                    return _searchButtonIcon;
+                },
+                set: function(value) {
+                    _searchButtonIcon = value;
+                    mSearchButton.setImageDrawable(_searchButtonIcon.nativeObject);
+                },
+                enumerable: true
+            },
+            'clearIcon': {
+                get: function() {
+                    return _clearIcon;
+                },
+                set: function(value) {
+                    _clearIcon = value;
+                    let closeBtn = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+                    closeBtn.setImageDrawable(_clearIcon.nativeObject);
+                },
+                enumerable: true
+            },
+            'searchIcon': {
+                get: function() {
+                    return _searchIcon;
+                },
+                set: function(value) {
+                    _searchIcon = value;
+                    let mSearchEditFrame = self.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
+                    let searchImage = mSearchEditFrame.getChildAt(0);
+                    searchImage.setImageDrawable(_searchIcon.nativeObject);
+                },
+                enumerable: true
+            },
+            'iconifiedByDefault': {
+                get: function() {
+                    return _iconifiedByDefault;
+                },
+                set: function(value) {
+                    _iconifiedByDefault = value;
+                    self.nativeObject.setIconifiedByDefault(_iconifiedByDefault);
+                },
+                enumerable: true
             }
         });
 
@@ -421,6 +463,7 @@ const SearchView = extend(View)(
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
+            this.android.iconifiedByDefault = false;
         }
 
 
