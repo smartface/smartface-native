@@ -395,10 +395,17 @@ const SearchView = extend(View)(
                     return _searchIcon;
                 },
                 set: function(value) {
+                    const Image = require("../image");
                     _searchIcon = value;
                     let mSearchEditFrame = self.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
-                    let searchImage = mSearchEditFrame.getChildAt(0);
-                    searchImage.setImageDrawable(_searchIcon.nativeObject);
+                    let searchImage = mSearchEditFrame.getChildAt(0); //AppCompatImageView
+                    if (_searchIcon instanceof Image) {
+                        searchImage.setImageDrawable(_searchIcon.nativeObject);
+                    }
+                    else {
+                        mSearchEditFrame.removeViewAt(0);
+                        mSearchEditFrame.addView(_searchIcon.nativeObject,0);
+                    }
                 },
                 enumerable: true
             },
