@@ -79,6 +79,7 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
+                        console.log(">>>>>>>>>>> Application.currentPage: " + self.pageID);
                         Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -112,12 +113,20 @@ function Page(params) {
         onOptionsItemSelected: function(menuItem) {
             var itemId = menuItem.getItemId();
             if (itemId === NativeAndroidR.id.home) {
-                console.log("Press home headerBarItems");
-                if (_headerBarLeftItem) {
-                    _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
+                let leftItem;
+                if(Application.currentPage.pageID === self.pageID) {
+                    console.log("Application.currentPage.pageID === self.pageID: " + self.pageID);
+                    leftItem = self._headerBarLeftItem;
+                } else {
+                    console.log("Application.currentPage.pageID !== self.pageID");
+                    leftItem = Application.currentPage._headerBarLeftItem;
+                }
+                
+                if (leftItem) {
+                    leftItem.onPress && leftItem.onPress();
                 }
                 else {
-                    self.android.onBackButtonPressed && self.android.onBackButtonPressed();
+                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
             }
             else if (_headerBarItems[itemId]) {
@@ -343,6 +352,7 @@ function Page(params) {
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
                 }
+                Application.currentPage = self.popUpBackPage;
                 console.log("Dismiss onComplete: " + typeof(params.onComplete));
                 params.onComplete && params.onComplete();
             },
@@ -730,18 +740,18 @@ function Page(params) {
             }
         });
     };
-    var _headerBarLeftItem = null;
+    self._headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
 
         if (leftItem && leftItem.image) {
-            _headerBarLeftItem = leftItem;
-            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            self._headerBarLeftItem = leftItem;
+            actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
-            _headerBarLeftItem = null;
+            self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
     };
