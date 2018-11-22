@@ -44,39 +44,39 @@ const OrientationDictionary = {
 
 function Page(params) {
     (!params) && (params = {});
-    var __self = this;
+    var self = this;
     
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
-    __self.pageLayoutContainer = pageLayoutContainer;
+    self.pageLayoutContainer = pageLayoutContainer;
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
         backgroundColor: Color.WHITE
     });
-    rootLayout.parent = __self;
+    rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
 
     var isCreated = false;
     var optionsMenu = null;
-    __self.contextMenu = {};
+    self.contextMenu = {};
 
     var actionBar = null;
     var callback = {
         onCreate: function() {
             // TODO: Add api level check
-            if (!__self.enterRevealTransition && !__self.returnRevealAnimation)
+            if (!self.enterRevealTransition && !self.returnRevealAnimation)
                 return;
-            __self.enterRevealTransition = false;
-            __self.returnRevealAnimation = false;
+            self.enterRevealTransition = false;
+            self.returnRevealAnimation = false;
             const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
             var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
             var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            __self.nativeObject.setSharedElementEnterTransition(inflateTransition);
+            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
-            __self.nativeObject.setHasOptionsMenu(true);
+            self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
             actionBar = activity.getSupportActionBar();
             if (!isCreated) {
@@ -84,7 +84,7 @@ function Page(params) {
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
             }
-            __self.orientation = _orientation;
+            self.orientation = _orientation;
 
             return pageLayoutContainer;
         },
@@ -92,11 +92,11 @@ function Page(params) {
             const NativeRunnable = requireClass('java.lang.Runnable');
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
-                    if (!__self.isSwipeViewPage) {
-                        if(!__self.__pageID)
-                           __self.__pageID = ++Router.pageCount;
+                    if (!self.isSwipeViewPage) {
+                        if(!self.__pageID)
+                           self.__pageID = ++Router.pageCount;
                            
-                        Router.currentPage = __self;
+                        Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
 
@@ -118,7 +118,7 @@ function Page(params) {
             if (!optionsMenu)
                 optionsMenu = menu;
             if (_headerBarItems.length > 0) {
-                __self.headerBar.setItems(_headerBarItems);
+                self.headerBar.setItems(_headerBarItems);
             }
             return true;
         },
@@ -132,8 +132,8 @@ function Page(params) {
                 // TODO: This is a workaround. If you press the left button while the popup is presented, 
                 // the callback of the current page is not triggered.
                 let clickedLeftItem;
-                if (Router.currentPage.__pageID === __self.__pageID) {
-                    clickedLeftItem = __self._headerBarLeftItem;
+                if (Router.currentPage.__pageID === self.__pageID) {
+                    clickedLeftItem = self._headerBarLeftItem;
                 }
                 else {
                     clickedLeftItem = Router.currentPage._headerBarLeftItem;
@@ -151,9 +151,9 @@ function Page(params) {
             return true;
         },
         onCreateContextMenu: function(menu, view, menuInfo) {
-            var items = __self.contextMenu.items;
-            var headerTitle = __self.contextMenu.headerTitle;
-            if (__self.contextMenu.headerTitle !== "") {
+            var items = self.contextMenu.items;
+            var headerTitle = self.contextMenu.headerTitle;
+            if (self.contextMenu.headerTitle !== "") {
                 menu.setHeaderTitle(headerTitle);
             }
             var i;
@@ -164,7 +164,7 @@ function Page(params) {
         },
         onContextItemSelected: function(item) {
             var itemId = item.getItemId();
-            var items = __self.contextMenu.items;
+            var items = self.contextMenu.items;
             if (items && itemId >= 0) {
                 items[itemId].onSelected();
                 return true;
@@ -200,8 +200,8 @@ function Page(params) {
             }
         }
     };
-    __self.nativeObject = new SFFragment();
-    __self.nativeObject.setCallbacks(callback);
+    self.nativeObject = new SFFragment();
+    self.nativeObject.setCallbacks(callback);
 
     this.isSwipeViewPage = false;
 
@@ -211,10 +211,10 @@ function Page(params) {
         },
         enumerable: true
     });
-    __self.ios = {};
-    __self.headerBar = {};
-    __self.headerBar.android = {};
-    __self.headerBar.ios = {};
+    self.ios = {};
+    self.headerBar = {};
+    self.headerBar.android = {};
+    self.headerBar.ios = {};
     var onLoadCallback;
     Object.defineProperty(this, 'onLoad', {
         get: function() {
@@ -287,7 +287,7 @@ function Page(params) {
     });
 
     var _isBottomTabBarPage = false;
-    Object.defineProperty(__self, 'isBottomTabBarPage', {
+    Object.defineProperty(self, 'isBottomTabBarPage', {
         get: function() {
             return _isBottomTabBarPage;
         },
@@ -300,7 +300,7 @@ function Page(params) {
     });
 
     var _firstPageInNavigator;
-    Object.defineProperty(__self, 'firstPageInNavigator', {
+    Object.defineProperty(self, 'firstPageInNavigator', {
         get: function() {
             return _firstPageInNavigator;
         },
@@ -311,7 +311,7 @@ function Page(params) {
     });
 
     var _isShown;
-    Object.defineProperty(__self, 'isShown', {
+    Object.defineProperty(self, 'isShown', {
         get: function() {
             return _isShown;
         },
@@ -322,7 +322,7 @@ function Page(params) {
     });
 
     var _transitionViews;
-    Object.defineProperties(__self, {
+    Object.defineProperties(self, {
         'transitionViews': {
             get: function() {
                 return _transitionViews;
@@ -336,17 +336,17 @@ function Page(params) {
             value: function(page, animation = true, onCompleteCallback) {
                 if (page instanceof Page) {
                     const Pages = require("../pages");
-                    page.popUpBackPage = __self;
+                    page.popUpBackPage = self;
 
-                    if (__self.transitionViews) {
+                    if (self.transitionViews) {
                         page.enterRevealTransition = true;
-                        Pages.revealTransition(__self.transitionViews, page.nativeObject);
+                        Pages.revealTransition(self.transitionViews, page.nativeObject);
                     }
                     else {
                         Pages.popUpTransition(page.nativeObject, animation);
 
                         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-                        __self.layout.nativeObject.setFocusableInTouchMode(false);
+                        self.layout.nativeObject.setFocusableInTouchMode(false);
                         !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                         !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
                     }
@@ -360,23 +360,23 @@ function Page(params) {
         },
         'dismiss': {
             value: function(onCompleteCallback) {
-                if(!__self.popUpBackPage) { return; }
+                if(!self.popUpBackPage) { return; }
                 
                 var fragmentManager = activity.getSupportFragmentManager();
-                if (__self.popUpBackPage.transitionViews) {
-                    __self.popUpBackPage.returnRevealAnimation = true;
+                if (self.popUpBackPage.transitionViews) {
+                    self.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();
-                    Router.currentPage = __self.popUpBackPage;
+                    Router.currentPage = self.popUpBackPage;
                     return;
                 }
 
                 fragmentManager.popBackStack();
-                var isPrevLayoutFocused = __self.popUpBackPage.layout.nativeObject.isFocused();
-                !isPrevLayoutFocused && __self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-                !isPrevLayoutFocused && __self.popUpBackPage.layout.nativeObject.requestFocus();
+                var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+                !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
 
-                Router.currentPage = __self.popUpBackPage;
+                Router.currentPage = self.popUpBackPage;
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
@@ -386,7 +386,7 @@ function Page(params) {
     this.statusBar = {};
 
     var statusBarStyle = StatusBarStyle.LIGHTCONTENT;
-    Object.defineProperty(__self.statusBar, 'style', {
+    Object.defineProperty(self.statusBar, 'style', {
         get: function() {
             return statusBarStyle;
         },
@@ -457,7 +457,7 @@ function Page(params) {
     });
 
     var _headerBarColor; // SmartfaceBlue
-    Object.defineProperty(__self.headerBar, 'backgroundColor', {
+    Object.defineProperty(self.headerBar, 'backgroundColor', {
         get: function() {
             return _headerBarColor;
         },
@@ -470,7 +470,7 @@ function Page(params) {
         configurable: true
     });
     var _headerBarImage = null;
-    Object.defineProperty(__self.headerBar, 'backgroundImage', {
+    Object.defineProperty(self.headerBar, 'backgroundImage', {
         get: function() {
             return _headerBarImage;
         },
@@ -485,7 +485,7 @@ function Page(params) {
     });
 
     var _titleLayout;
-    Object.defineProperty(__self.headerBar, 'titleLayout', {
+    Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
             return _titleLayout;
         },
@@ -500,7 +500,7 @@ function Page(params) {
     });
 
     var _borderVisibility = true;
-    Object.defineProperty(__self.headerBar, 'borderVisibility', {
+    Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
         },
@@ -519,7 +519,7 @@ function Page(params) {
 
 
     var _leftItemEnabled;
-    Object.defineProperty(__self.headerBar, 'leftItemEnabled', {
+    Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
             return _leftItemEnabled;
         },
@@ -532,7 +532,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(__self.headerBar, 'height', {
+    Object.defineProperty(self.headerBar, 'height', {
         get: function() {
             var resources = AndroidConfig.activityResources;
             return AndroidUnitConverter.pixelToDp(resources.getDimension(NativeSupportR.dimen.abc_action_bar_default_height_material));
@@ -540,7 +540,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(__self.headerBar, 'title', {
+    Object.defineProperty(self.headerBar, 'title', {
         get: function() {
             return toolbar.getTitle();
         },
@@ -556,7 +556,7 @@ function Page(params) {
         configurable: true
     });
     var _headerBarTitleColor;
-    Object.defineProperty(__self.headerBar, 'titleColor', {
+    Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
             return _headerBarTitleColor;
         },
@@ -571,7 +571,7 @@ function Page(params) {
     });
 
     var _leftItemColor = Color.WHITE;
-    Object.defineProperty(__self.headerBar, 'leftItemColor', {
+    Object.defineProperty(self.headerBar, 'leftItemColor', {
         get: function() {
             return _leftItemColor;
         },
@@ -587,13 +587,13 @@ function Page(params) {
     });
 
     var _itemColor = Color.WHITE;
-    Object.defineProperty(__self.headerBar, 'itemColor', {
+    Object.defineProperty(self.headerBar, 'itemColor', {
         get: function() {
             return _itemColor;
         },
         set: function(color) {
             if (color instanceof Color) {
-                __self.headerBar.leftItemColor = color;
+                self.headerBar.leftItemColor = color;
                 for (var i = 0; i < _headerBarItems.length; i++)
                     _headerBarItems[i].color = color;
                 const HeaderBarItem = require("../headerbaritem");
@@ -603,7 +603,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(__self.headerBar, 'visible', {
+    Object.defineProperty(self.headerBar, 'visible', {
         get: function() {
             // View.VISIBLE
             return toolbar.getVisibility() === 0;
@@ -611,7 +611,7 @@ function Page(params) {
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
-                    if (__self.isBottomTabBarPage) {
+                    if (self.isBottomTabBarPage) {
                         // View.GONE
                         toolbar.setVisibility(8);
                     }
@@ -629,7 +629,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(__self.headerBar.android, 'subtitle', {
+    Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
             return toolbar.getSubtitle();
         },
@@ -645,7 +645,7 @@ function Page(params) {
         configurable: true
     });
     var _headerBarSubtitleColor;
-    Object.defineProperty(__self.headerBar.android, 'subtitleColor', {
+    Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
             return _headerBarSubtitleColor;
         },
@@ -658,7 +658,7 @@ function Page(params) {
         configurable: true
     });
     var _headerBarLogo = null;
-    Object.defineProperty(__self.headerBar.android, 'logo', {
+    Object.defineProperty(self.headerBar.android, 'logo', {
         get: function() {
             return _headerBarLogo;
         },
@@ -673,7 +673,7 @@ function Page(params) {
         configurable: true
     });
     var _headerBarLogoEnabled = false;
-    Object.defineProperty(__self.headerBar.android, 'logoEnabled', {
+    Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
             return _headerBarLogoEnabled;
         },
@@ -771,7 +771,7 @@ function Page(params) {
         if (tab.backgroundColor instanceof Color)
             bottomNavigationView.setBackgroundColor(tab.backgroundColor.nativeObject);
 
-        rootLayout.paddingBottom = __self.bottomTabBar.height;
+        rootLayout.paddingBottom = self.bottomTabBar.height;
     }
 
     function setPropertiesOfTabBarItems() {
@@ -810,19 +810,19 @@ function Page(params) {
     function setBottomTabBarOnClickListener() {
         bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener.implement({
             onNavigationItemSelected: function(item) {
-                // __self.onHide && __self.onHide();
-                var tab = __self.parentTab;
+                // self.onHide && self.onHide();
+                var tab = self.parentTab;
                 var fragment;
                 const Navigator = require("../navigator");
 
                 var index = item.getItemId();
-                __self.parentTab.currentIndex = index;
+                self.parentTab.currentIndex = index;
                 var tabItem = _parentTab.items[Object.keys(_parentTab.items)[index]].route;
                 if (!fragment)
                     fragment = _parentTab.getRoute(Object.keys(_parentTab.items)[index], true); // isSingleton is true for tab switching
 
                 fragment.selectedIndex = index;
-                fragment.parentTab = __self.parentTab;
+                fragment.parentTab = self.parentTab;
 
                 if (!fragment.tag)
                     fragment.tag = tab.tag + '/' + Object.keys(tab.items)[index];
@@ -860,23 +860,23 @@ function Page(params) {
         }
     }
     // Implemented for just SearchView
-    __self.headerBar.addViewToHeaderBar = function(view) {
+    self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
         _headerBarItems.unshift(new HeaderBarItem({
             searchView: view,
             title: "Search"
         }));
-        __self.headerBar.setItems(_headerBarItems);
+        self.headerBar.setItems(_headerBarItems);
     };
     // Implemented for just SearchView
-    __self.headerBar.removeViewFromHeaderBar = function(view) {
+    self.headerBar.removeViewFromHeaderBar = function(view) {
         if (_headerBarItems.length > 0 && _headerBarItems[0].searchView) {
             _headerBarItems = _headerBarItems.splice(1, _headerBarItems.length);
-            __self.headerBar.setItems(_headerBarItems);
+            self.headerBar.setItems(_headerBarItems);
         }
     };
     var _headerBarItems = [];
-    __self.headerBar.setItems = function(items) {
+    self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
             return;
         }
@@ -963,35 +963,35 @@ function Page(params) {
             }
         });
     };
-    __self._headerBarLeftItem = null;
-    __self.headerBar.setLeftItem = function(leftItem) {
+    self._headerBarLeftItem = null;
+    self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
 
         if (leftItem && leftItem.image) {
-            __self._headerBarLeftItem = leftItem;
-            actionBar.setHomeAsUpIndicator(__self._headerBarLeftItem.image.nativeObject);
+            self._headerBarLeftItem = leftItem;
+            actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
-            __self._headerBarLeftItem = null;
+            self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
     };
 
     // Added to solve AND-2713 bug.
-    __self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
+    self.layout.nativeObject.setOnLongClickListener(NativeView.OnLongClickListener.implement({
         onLongClick: function(view) {
             return true;
         }
     }));
     //Due to the AND-3237 issue, when the textbox loses focus this callback is triggered otherwise onKey event in pages.
-    __self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+    self.layout.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
         onKey: function(view, keyCode, keyEvent) {
             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
             if (keyCode === 4 && (keyEvent.getAction() === 0)) {
-                typeof __self.android.onBackButtonPressed === "function" &&
-                    __self.android.onBackButtonPressed();
+                typeof self.android.onBackButtonPressed === "function" &&
+                    self.android.onBackButtonPressed();
                 return true;
             }
             else {
@@ -1001,7 +1001,7 @@ function Page(params) {
         }
     }));
 
-    __self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
+    self.layout.nativeObject.setOnFocusChangeListener(NativeView.OnFocusChangeListener.implement({
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
@@ -1012,24 +1012,24 @@ function Page(params) {
             }
         }
     }));
-    __self.layout.nativeObject.setFocusable(true);
-    __self.layout.nativeObject.setFocusableInTouchMode(true);
+    self.layout.nativeObject.setFocusable(true);
+    self.layout.nativeObject.setFocusableInTouchMode(true);
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {
-            __self.statusBar.visible = true;
-            __self.statusBar.color = Color.TRANSPARENT;
-            __self.headerBar.backgroundColor = Color.create("#00A1F1");
-            __self.headerBar.leftItemEnabled = true;
-            __self.headerBar.android.logoEnabled = false;
-            __self.headerBar.titleColor = Color.WHITE;
-            __self.headerBar.android.subtitleColor = Color.WHITE;
-            __self.headerBar.visible = true;
+            self.statusBar.visible = true;
+            self.statusBar.color = Color.TRANSPARENT;
+            self.headerBar.backgroundColor = Color.create("#00A1F1");
+            self.headerBar.leftItemEnabled = true;
+            self.headerBar.android.logoEnabled = false;
+            self.headerBar.titleColor = Color.WHITE;
+            self.headerBar.android.subtitleColor = Color.WHITE;
+            self.headerBar.visible = true;
         }
     }
     //Handling ios value
-    __self.statusBar.ios = {};
-    __self.statusBar.ios.style = null;
+    self.statusBar.ios = {};
+    self.statusBar.ios.style = null;
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
