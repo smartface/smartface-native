@@ -360,11 +360,14 @@ function Page(params) {
         },
         'dismiss': {
             value: function(onCompleteCallback) {
+                if(!pageSelf.popUpBackPage) { return; }
+                
                 var fragmentManager = activity.getSupportFragmentManager();
                 if (pageSelf.popUpBackPage.transitionViews) {
                     pageSelf.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();
+                    Router.currentPage = pageSelf.popUpBackPage;
                     return;
                 }
 
@@ -373,6 +376,7 @@ function Page(params) {
                 !isPrevLayoutFocused && pageSelf.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && pageSelf.popUpBackPage.layout.nativeObject.requestFocus();
 
+                Router.currentPage = pageSelf.popUpBackPage;
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
