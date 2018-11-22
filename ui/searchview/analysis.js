@@ -214,6 +214,47 @@ SearchView.prototype.ios.cancelButtonColor;
  */
 SearchView.prototype.ios.cancelButtonText;
 
+
+/**
+ * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * property should be true.
+ *
+ * @property {UI.Image} searchButtonIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.searchButtonIcon;
+
+/**
+ * This property makes the search view either iconified or expanded.
+ *
+ * @property {UI.Image} [iconifiedByDefault = false ]
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.iconifiedByDefault;
+
+
+/**
+ * Gets/sets clear icon of searchview.
+ *
+ * @property {UI.Image} clearIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.clearIcon;
+
+
+/**
+ * Gets/sets search icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * property should be false.
+ *
+ * @property {UI.Image} searchIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.searchIcon;
+
 /**
  * Gets/sets the color of the hint text.
  *
