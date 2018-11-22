@@ -228,7 +228,7 @@ SearchView.prototype.android.searchButtonIcon;
 /**
  * This property makes the search view either iconified or expanded.
  *
- * @property {UI.Image} [iconifiedByDefault = false ]
+ * @property {Boolean} [iconifiedByDefault = false ]
  * @android
  * @since 3.2.1
  */
