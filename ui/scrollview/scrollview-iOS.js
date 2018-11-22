@@ -4,7 +4,6 @@ const ScrollViewAlign = require("sf-core/ui/scrollview/scrollview-align");
 const ScrollViewEdge = require("sf-core/ui/scrollview/scrollview-edge");
 const FlexLayout = require('sf-core/ui/flexlayout');
 const Color = require('sf-core/ui/color');
-const System = require('sf-core/device/system');
 const Invocation = require('sf-core/util/iOS/invocation.js');
 const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
@@ -19,9 +18,6 @@ const ScrollView = extend(ViewGroup)(
 
         if (!self.nativeObject) {
             self.nativeObject = new __SF_UIScrollView();
-            if (System.OSVersion.split(".")[0] >= 11) {
-                self.nativeObject.setValueForKey(2, "contentInsetAdjustmentBehavior");
-            }
             self.contentLayout = new FlexLayout();
             self.contentLayout.nativeObject.addFrameObserver();
             self.contentLayout.nativeObject.frameObserveHandler = function(e) {
