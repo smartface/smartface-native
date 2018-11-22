@@ -246,7 +246,7 @@ SearchView.prototype.android.clearIcon;
 
 
 /**
- * Gets/sets search icon or custom view to searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * This property allows you to override search icon of searchview by custom view or image . While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
  * property should be false.
  *
  * @property {UI.Image | UI.View} searchIcon
