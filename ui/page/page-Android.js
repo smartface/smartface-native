@@ -659,14 +659,14 @@ function Page(params) {
     var _contentInsets = {};
     Object.defineProperty(self.headerBar.android, 'contentInsets', {
         get: function() {
-            return { left: toolbar.getContentInsetStart(), right: toolbar.getContentInsetEnd() };
+            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
         },
         set: function(contentInsets) { // API Level 21+
             _contentInsets = contentInsets;
-            let cotentInsetStart = _contentInsets.left === undefined ? toolbar.getContentInsetStart() : _contentInsets.left;
-            let cotentInsetEnd = _contentInsets.right === undefined ? toolbar.getContentInsetEnd() : _contentInsets.right;
+            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
 
-            toolbar.setContentInsetsRelative(cotentInsetStart, cotentInsetEnd);
+            toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
         },
         enumerable: true
     });
@@ -692,7 +692,6 @@ function Page(params) {
             var result = 0;
             var activity = AndroidConfig.activity;
 
-            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
