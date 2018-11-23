@@ -40,9 +40,12 @@ const OrientationDictionary = {
     15: 10
 };
 
+
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
+    
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
@@ -54,7 +57,6 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
@@ -75,8 +77,8 @@ function Page(params) {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
+            actionBar = activity.getSupportActionBar();
             if (!isCreated) {
-                actionBar = activity.getSupportActionBar();
                 setDefaults();
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
@@ -90,6 +92,9 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
+                        if(!self.__pageID)
+                           self.__pageID = ++Router.pageCount;
+                           
                         Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -123,13 +128,18 @@ function Page(params) {
         onOptionsItemSelected: function(menuItem) {
             var itemId = menuItem.getItemId();
             if (itemId === NativeAndroidR.id.home) {
-                if (_headerBarLeftItem) {
-                    _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
+                // TODO: This is a workaround. If you press the left button while the popup is presented, 
+                // the callback of the current page is not triggered.
+                let clickedLeftItem;
+                if (Router.currentPage.__pageID === self.__pageID) {
+                    clickedLeftItem = self._headerBarLeftItem;
                 }
                 else {
-                    const Router = require("../router");
-                    Router.goBack(null, this.__pendingParameters);
+                    clickedLeftItem = Router.currentPage._headerBarLeftItem;
                 }
+                
+                if(clickedLeftItem)
+                   clickedLeftItem.onPress && clickedLeftItem.onPress();
             }
             else if (_headerBarItems[itemId]) {
                 var item = _headerBarItems[itemId];
@@ -349,11 +359,14 @@ function Page(params) {
         },
         'dismiss': {
             value: function(onCompleteCallback) {
+                if(!self.popUpBackPage) { return; }
+                
                 var fragmentManager = activity.getSupportFragmentManager();
                 if (self.popUpBackPage.transitionViews) {
                     self.popUpBackPage.returnRevealAnimation = true;
                     fragmentManager.popBackStack();
                     onCompleteCallback && onCompleteCallback();
+                    Router.currentPage = self.popUpBackPage;
                     return;
                 }
 
@@ -362,6 +375,7 @@ function Page(params) {
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                 !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
 
+                Router.currentPage = self.popUpBackPage;
                 onCompleteCallback && onCompleteCallback();
             },
             enumerable: true
@@ -657,6 +671,21 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    var _contentInsets = {};
+    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+        get: function() {
+            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
+        },
+        set: function(contentInsets) { // API Level 21+
+            _contentInsets = contentInsets;
+            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
+
+            toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
+        },
+        enumerable: true
+    });
+
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
@@ -678,7 +707,6 @@ function Page(params) {
             var result = 0;
             var activity = AndroidConfig.activity;
 
-            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
@@ -936,30 +964,29 @@ function Page(params) {
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
-                
+
                 // TODO: Beautify this implementation
-                if(item.searchView) {
-                    itemView.onActionViewExpanded();
-                    itemView.setIconified(false);
+                if (item.searchView) {
+                    itemView.setIconifiedByDefault(true);
                     itemView.clearFocus();
                 }
-                
+
                 item.menuItem.setActionView(itemView);
             }
         });
     };
-    var _headerBarLeftItem = null;
+    self._headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
 
         if (leftItem && leftItem.image) {
-            _headerBarLeftItem = leftItem;
-            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            self._headerBarLeftItem = leftItem;
+            actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
-            _headerBarLeftItem = null;
+            self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
     };

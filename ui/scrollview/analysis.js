@@ -269,4 +269,71 @@ ScrollView.prototype.onScroll = function onScroll(){};
  */
 ScrollView.prototype.contentOffset = {};
 
+/**
+ * This event is called when the scroll view is about to start scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDragging
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDragging = function(contentOffset){};
+
+/**
+ * This event is called when the scroll view is starting to decelerate the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollBeginDecelerating
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset){};
+
+/**
+ * This event is called when the scroll view has ended decelerating the scrolling movement.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @event onScrollEndDecelerating
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDecelerating = function(contentOffset){};
+
+/**
+ * This event is called when dragging ended in the scroll view.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Boolean} decelerate
+ * @event onScrollEndDraggingWillDecelerate
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate){};
+
+/**
+ * This event is called when the user finishes scrolling the content.
+ * 
+ * @param {Object} contentOffset
+ * @param {Number} contentOffset.x
+ * @param {Number} contentOffset.y
+ * @param {Object} velocity
+ * @param {Number} velocity.x
+ * @param {Number} velocity.y
+ * @param {Object} targetContentOffset
+ * @param {Number} targetContentOffset.x
+ * @param {Number} targetContentOffset.y
+ * @event onScrollEndDraggingWithVelocityTargetContentOffset
+ * @ios
+ * @since 3.2.1
+ */
+ScrollView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset){};
+
 module.exports = ScrollView;
