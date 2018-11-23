@@ -79,6 +79,7 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
+                        console.log("################ Application.currentPage: " + self.pageID);
                         Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -112,11 +113,20 @@ function Page(params) {
         onOptionsItemSelected: function(menuItem) {
             var itemId = menuItem.getItemId();
             if (itemId === NativeAndroidR.id.home) {
-                if (_headerBarLeftItem) {
-                    _headerBarLeftItem.onPress && _headerBarLeftItem.onPress();
+                let leftItem;
+                if(Application.currentPage.pageID === self.pageID) {
+                    console.log("Application.currentPage.pageID === self.pageID: " + self.pageID);
+                    leftItem = self._headerBarLeftItem;
+                } else {
+                    console.log("Application.currentPage.pageID !== self.pageID");
+                    leftItem = Application.currentPage._headerBarLeftItem;
+                }
+                
+                if (leftItem) {
+                    leftItem.onPress && leftItem.onPress();
                 }
                 else {
-                    self.android.onBackButtonPressed && self.android.onBackButtonPressed();
+                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
             }
             else if (_headerBarItems[itemId]) {
@@ -314,8 +324,19 @@ function Page(params) {
                 if(!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
-                Application.setRootController({
-                    controller: params.controller,
+                console.log("Present params typeof object: " + (typeof(params) === "object"));
+                const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+                // console.log("Present params typeof NavigationController: " + (params instanceof ViewController));
+                
+                console.log("Present params.onComplete: " + Object.keys(params));
+                // TODO: Remove this custom implement to avoid smartafce Router bug!
+                let controller = params;
+                params.__isPopupPage = true;
+                
+                ViewController.activateController(controller);
+                
+                ViewController.setController({
+                    controller: controller, //params.controller,
                     animation: params.animated,
                     isComingFromPresent: true,
                     onComplete: params.onComplete
@@ -324,8 +345,11 @@ function Page(params) {
             enumerable: true
         },
         'dismiss': {
-            value: function(onCompleteCallback) {
+            value: function(params) {
+                const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+                console.log("Dismiss");
                 var fragmentManager = activity.getSupportFragmentManager();
+                console.log("self.popUpBackPage: " + self.popUpBackPage);
                 if(!self.popUpBackPage)
                     return;
                 self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
@@ -336,8 +360,10 @@ function Page(params) {
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
                 }
-
-                onCompleteCallback && onCompleteCallback();
+                FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
+                Application.currentPage = self.popUpBackPage;
+                console.log("Dismiss onComplete: " + typeof(params.onComplete));
+                params.onComplete && params.onComplete();
             },
             enumerable: true
         }
@@ -371,14 +397,16 @@ function Page(params) {
         configurable: true
     });
 
-    var _headerbarItemView;
+    var _titleLayout;
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
-            return _headerbarItemView;
+            return _titleLayout;
         },
         set: function(view) {
-            view && toolbar.addView(view.nativeObject);
-            _headerbarItemView = view;
+            const ToolbarLayoutParams = requireClass("android.support.v7.widget.Toolbar$LayoutParams");
+            var toolbarParams = new ToolbarLayoutParams(1); // Gravity.CENTER
+            view && toolbar.addView(view.nativeObject, toolbarParams);
+            _titleLayout = view;
         },
         enumerable: true,
         configurable: true
@@ -646,7 +674,6 @@ function Page(params) {
         if (optionsMenu == null) {
             return;
         }
-        const NativeMenuItem = requireClass("android.view.MenuItem");
         const NativeImageButton = requireClass('android.widget.ImageButton');
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
@@ -707,31 +734,33 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                // itemView.setBackgroundColor(Color.BLACK.nativeObject);
-                // left, top, right, bottom
-                // itemView.setPadding(
-                //     0, 0,
-                //     HeaderBarItemPadding.vertical, 0
-                // );
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
-                item.menuItem.setShowAsAction(NativeMenuItem.SHOW_AS_ACTION_ALWAYS);
+                item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
+                
+                // TODO: Beautify this implementation
+                if(item.searchView) {
+                    itemView.onActionViewExpanded();
+                    itemView.setIconified(false);
+                    itemView.clearFocus();
+                }
+                
                 item.menuItem.setActionView(itemView);
             }
         });
     };
-    var _headerBarLeftItem = null;
+    self._headerBarLeftItem = null;
     self.headerBar.setLeftItem = function(leftItem) {
         const HeaderBarItem = require("../headerbaritem");
         if (!leftItem && !(leftItem instanceof HeaderBarItem))
             throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
 
         if (leftItem && leftItem.image) {
-            _headerBarLeftItem = leftItem;
-            actionBar.setHomeAsUpIndicator(_headerBarLeftItem.image.nativeObject);
+            self._headerBarLeftItem = leftItem;
+            actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
         }
         else { // null or undefined
-            _headerBarLeftItem = null;
+            self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
     };

@@ -88,11 +88,18 @@ function BottomTabBarController(params) {
             return;
         }
 
+        if(!self.__isActive)
+           return;
+        
+        const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+        ViewController.deactivateController(self.getCurrentController());
+           
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
         childController.isInsideBottomTabBar = true;
         if (childController instanceof Page) {
+            childController.__isActive = true;
             if (!childController.pageID) {
                 childController.pageID = FragmentTransaction.generatePageID();
             }
@@ -102,6 +109,7 @@ function BottomTabBarController(params) {
             });
         }
         else if (childController instanceof NavigationController) {
+            childController.__isActive = true;
             // first press
             if (childController.historyStack.length < 1) {
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
@@ -130,12 +138,25 @@ function BottomTabBarController(params) {
     this.show = function() {
         self.addTabBarToActivity();
         self.setChecked();
+        // TODO: check __isActive property
         self.push(self.childControllers[_selectedIndex]);
     };
     
     this.setChecked = function() {
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if(_selectedIndex < 0)
+           return;
         _menu.getItem(_selectedIndex).setChecked(true);
+    };
+    
+    this.getCurrentController = function() {
+        var controller = self.childControllers[_selectedIndex];
+        if(!controller)
+           return null;
+        if(controller instanceof Page)
+           return controller;
+           
+        return controller.getCurrentController();
     };
 
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;

@@ -4,6 +4,8 @@ const View = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
 const NativeBuild = requireClass("android.os.Build");
@@ -36,6 +38,8 @@ const WebView = extend(View)(
         }
 
         _super(this);
+        scrollableSuper(this, this.nativeObject);
+        
         var overrideMethods = {
             onPageFinished: function(view, url) {
                 _onShow && _onShow({ url: url });
