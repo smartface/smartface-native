@@ -57,7 +57,6 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
@@ -672,6 +671,21 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    var _contentInsets = {};
+    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+        get: function() {
+            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
+        },
+        set: function(contentInsets) { // API Level 21+
+            _contentInsets = contentInsets;
+            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
+
+            toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
+        },
+        enumerable: true
+    });
+
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
@@ -693,7 +707,6 @@ function Page(params) {
             var result = 0;
             var activity = AndroidConfig.activity;
 
-            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
             var packageName = activity.getPackageName();
             var resourceId = AndroidConfig.activityResources.getIdentifier("design_bottom_navigation_height", "dimen", packageName);
             if (resourceId > 0) {
@@ -951,14 +964,13 @@ function Page(params) {
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
-                
+
                 // TODO: Beautify this implementation
-                if(item.searchView) {
-                    itemView.onActionViewExpanded();
-                    itemView.setIconified(false);
+                if (item.searchView) {
+                    itemView.setIconifiedByDefault(true);
                     itemView.clearFocus();
                 }
-                
+
                 item.menuItem.setActionView(itemView);
             }
         });
