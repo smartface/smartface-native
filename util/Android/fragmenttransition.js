@@ -18,14 +18,12 @@ FragmentTransaction.push = function(params) {
     FragmentTransaction.checkBottomTabBarVisible(params.page);
     
     var tag = params.page.pageID;
-    console.log("params.page.pageID: " + params.page.pageID);
     if(!tag) {
         throw new Error("This page doesn't have an unique ID!");
     }
     
     const Application = require("../../application");
     
-    console.log("FragmentTransaction.push function isComingFromPresent: " + params.isComingFromPresent);
     if(!params.isComingFromPresent) {
         FragmentTransaction.replace(params);
         return;
@@ -34,13 +32,11 @@ FragmentTransaction.push = function(params) {
     let currentPage = Application.currentPage;
     let page = params.page;
     page.popUpBackPage = currentPage;
-    console.log("############ page.popUpBackPage.pageID: " + page.popUpBackPage.pageID);
     
     if (currentPage.transitionViews) {
         page.enterRevealTransition = true;
         FragmentTransaction.revealTransition(currentPage.transitionViews, page);
     } else {
-        console.log("FragmentTransaction.push function popUpTransition");
         FragmentTransaction.popUpTransition(page, params.animated);
         
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
@@ -76,9 +72,7 @@ FragmentTransaction.replace = function(params) {
         }
     }
     
-    console.log("############ params.page.popupPage: " + params.page.popUpBackPage);
     if(params.page.popUpBackPage) {
-        console.log("############ Back to popup page");
         // back to popup page
         fragmentTransaction.replace(rootViewId, params.page.popUpBackPage.nativeObject, "" + params.page.popUpBackPage.pageID);
         fragmentTransaction.add(rootViewId, params.page.nativeObject, "" + params.page.pageID);
@@ -131,7 +125,6 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 FragmentTransaction.checkBottomTabBarVisible = function(page) {
     // TODO: Beautify visibility setting of bottom tabbar
     const Application = require("sf-core/application");
-    console.log("checkBottomTabBarVisible: page.isInsideBottomTabBar: " + page.isInsideBottomTabBar);
     if(page.isInsideBottomTabBar) {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
     } else {

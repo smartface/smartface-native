@@ -44,7 +44,6 @@ function NavigationController() {
                     historyStack.push(childController);
                 }
 
-                console.log("NavigationController childControllers navID: " + self.__navID + " self.__isActive: " + self.__isActive);
                 if (self.__isActive) {
                     ViewController.activateController(self.getCurrentController());
                 }
@@ -90,7 +89,6 @@ function NavigationController() {
         if (!pageIDCollectionInStack[params.controller.pageID]) {
             throw new Error("This page doesn't exist in history!");
         }
-        console.log("NavigationController show self.__isActive: " + self.__isActive);
         if(!self.__isActive)
            return;
         
@@ -98,7 +96,6 @@ function NavigationController() {
         !params.controller.parentController && (params.controller.parentController = self);
         _willShowCallback && (_willShowCallback({ controller: params.controller, animated: params.animated }));
 
-        console.log("NavigationController navID: " + self.__navID + " calls activateController");
         // No need self.__isActive property. show method is triggered when self is active.
         ViewController.activateController(params.controller);
         
@@ -117,7 +114,6 @@ function NavigationController() {
     };
 
     this.push = function(params) {
-        console.log("NavigationController push navID: " + self.__navID + " __isActive: " + self.__isActive);
         if (!params.controller.pageID) {
             params.controller.pageID = FragmentTransaction.generatePageID();
         }
@@ -126,20 +122,16 @@ function NavigationController() {
             throw new Error("This page exist in history! PageID: " + params.controller.pageID);
         }
         
-        console.log("NavigationController __isActive: " + self.__isActive + " deactivateController");
         self.__isActive && (ViewController.deactivateController(self.getCurrentController()));
 
         params.controller.parentController = self;
         pageIDCollectionInStack[params.controller.pageID] = params.controller;
         historyStack.push(params.controller);
-        console.log("NavigationController historyStack.length: " + historyStack.length);
         self.show(params);
     };
 
     this.showController = function(params) {
-        console.log("NavigationController showController function");
         if ((params.controller) instanceof Page) {
-            console.log("NavigationController showController params.controller Page");
             params.controller.isInsideBottomTabBar = self.isInsideBottomTabBar;
             FragmentTransaction.push({
                 page: params.controller,
@@ -149,7 +141,6 @@ function NavigationController() {
             });
         }
         else if ((params.controller) instanceof BottomTabBarController) {
-            console.log("NavigationController showController params.controller BottomTabBarController");
             params.controller.isInsideBottomTabBar = true;
             params.controller.show();
         }
@@ -159,7 +150,6 @@ function NavigationController() {
     };
 
     this.present = function(params) {
-        console.log("NavigationController present.....");
         const Application = require("../../application");
         if (!params)
             return;
@@ -167,20 +157,16 @@ function NavigationController() {
     };
 
     this.dismiss = function(onCompleteCallback) {
-        console.log("NavigationController dismiss self.__navID: " + self.__navID);
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
         Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
         ViewController.deactivateController(self);
-        
-        console.log("NavigationController __isActive after dismiss: " + self.__isActive + " navID: " + self.__navID);
     };
 
     this.pop = function(params) {
         if (historyStack.length < 2) {
             throw new Error("There is no page in history!");
         }
-        console.log("NavigationController pop: " + self.__isActive);
         // remove current page from history and its id from collection
         var poppedController = historyStack.pop();
         pageIDCollectionInStack[poppedController.pageID] = null;

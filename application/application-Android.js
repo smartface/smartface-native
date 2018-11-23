@@ -310,9 +310,7 @@ Object.defineProperties(ApplicationWrapper, {
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
     const ViewController = require("../util/Android/transition/viewcontroller");
-    console.log("ApplicationWrapper.setRootController");
     ViewController.deactivateRootController(ApplicationWrapper.currentPage);
-    console.log("Before ViewController.activateController");
     ViewController.activateController(params.controller);
     
     ViewController.setController(params); 

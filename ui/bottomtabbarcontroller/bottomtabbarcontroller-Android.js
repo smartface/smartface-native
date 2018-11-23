@@ -92,7 +92,6 @@ function BottomTabBarController(params) {
            return;
         
         const ViewController = require("sf-core/util/Android/transition/viewcontroller");
-        console.log("BottomTabBarController deactivateController");
         ViewController.deactivateController(self.getCurrentController());
            
         // Don't remove this line to top of the page.
@@ -151,7 +150,6 @@ function BottomTabBarController(params) {
     };
     
     this.getCurrentController = function() {
-        console.log("BottomTabBarController getCurrentController");
         var controller = self.childControllers[_selectedIndex];
         if(!controller)
            return null;
