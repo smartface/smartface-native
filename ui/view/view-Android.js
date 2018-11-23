@@ -57,7 +57,7 @@ function View(params) {
 
     this.android = {};
     rippleSuperView(this);
-    
+
     // Background drawable properties
     this._backgroundColor = Color.TRANSPARENT;
     this._borderColor = Color.BLACK;
@@ -183,7 +183,7 @@ function View(params) {
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderRadiusPx = DpToPixel(this._borderRadius);
                 this._gradientDrawable.setCornerRadius(borderRadiusPx);
-                this.android.updateRippleEffectIfNeeded();
+                this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
             },
             enumerable: true,
             configurable: true
