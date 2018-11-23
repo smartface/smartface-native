@@ -225,6 +225,17 @@ WebView.prototype.evaluateJS = function(javascript,onReceive) {};
 WebView.prototype.onChangedURL = function(event) {};
 
 /**
+ * This event will be triggered when user clicks back button on the Device. WebView is focusable view. When it gains focus, this
+ * event begin to trigger. The purpose of using this event might be
+ * navigating back to pervious web pages.
+ *
+ * @event onBackButtonPressed
+ * @android
+ * @since 3.2.1
+ */
+WebView.prototype.onBackButtonPressed = function (){};
+
+/**
  * Callback triggered when the web page is loaded.
  *
  * @event onLoad
