@@ -227,6 +227,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
+            if(!focusedView)
+               return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -307,44 +309,11 @@ Object.defineProperties(ApplicationWrapper, {
 
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
-    const Page = require("../ui/page");
-    const NavigationController = require("../ui/navigationcontroller");
-    const FragmentTransition = require("../util/Android/fragmenttransition");
-    const BottomTabBarController = require("../ui/bottomtabbarcontroller");
-
-    if ((params.controller) instanceof NavigationController) {
-        var childControllerStack = params.controller.historyStack;
-        var childControllerStackLenght = childControllerStack.length;
-        
-        // This check is requested by Smartface Router team.
-        if(childControllerStackLenght === 0) // no child controller
-            return;
-            
-        // show latest page or controller
-        params.controller.show({
-            controller: childControllerStack[childControllerStackLenght - 1],
-            animated: params.animation,
-            isComingFromPresent: params.isComingFromPresent,
-            onCompleteCallback: params.onCompleteCallback
-        });
-    }
-    else if ((params.controller) instanceof Page) {
-        // TODO: Check pageID settings! Code duplicate exists
-        !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
-        // TODO: Check animation type. I am not sure about that!
-        FragmentTransition.push({
-            page: (params.controller),
-            animated: params.animation,
-            isComingFromPresent: params.isComingFromPresent,
-            onCompleteCallback: params.onCompleteCallback
-        });
-    }
-    else if ((params.controller) instanceof BottomTabBarController) {
-        // BottomTabBarController doesn't support pop-up or reveal animation yet.
-        params.controller.show();
-    } else {
-        throw Error("controller parameter mismatch, Parameter must be UI.Page, UI.NavigationController or UI.BottomTabBarController");
-    }
+    const ViewController = require("../util/Android/transition/viewcontroller");
+    ViewController.deactivateRootController(ApplicationWrapper.currentPage);
+    ViewController.activateController(params.controller);
+    
+    ViewController.setController(params); 
 };
 
 ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {

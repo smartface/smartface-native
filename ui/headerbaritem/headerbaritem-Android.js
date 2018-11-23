@@ -28,7 +28,9 @@ function HeaderBarItem(params) {
     var _imageButton = false;
     var _menuItem = null;
     var activity = AndroidConfig.activity;
-
+    
+    this.ios = {};
+    
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -37,6 +39,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value === null)
                     return;
+                // TODO: Fix it for new router.
                 if (!(typeof(value) === "number" || value instanceof Color)) {
                     throw new TypeError("color must be Color instance");
                 }
@@ -408,5 +411,8 @@ function createColorStateList(textColors) {
     }
     return (new NativeColorStateList(array(statesSet), array(colorsSets, "int")));
 }
+
+HeaderBarItem.iOS = {};
+HeaderBarItem.iOS.SystemItem = {};
 
 module.exports = HeaderBarItem;

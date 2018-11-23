@@ -5,6 +5,7 @@ const ActionKeyType = require('sf-core/ui/actionkeytype');
 const Animator = require('sf-core/ui/animator');
 const Color = require('sf-core/ui/color');
 const TextAlignment = require('sf-core/ui/textalignment');
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const TextArea = extend(TextBox)(
     function(_super, params) {
@@ -15,6 +16,8 @@ const TextArea = extend(TextBox)(
         }
 
         _super(this);
+        
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
         
         Object.defineProperty(self, 'textAlignment', {
             get: function() {

@@ -32,6 +32,13 @@ function TabBarItem(params) {
                 };
                 
                 var icon = valueObj;
+                if (!(icon instanceof Object)) { //IDE requires this implementation.
+                    icon = Image.createImageFromPath(icon);
+                }
+                else {
+                    icon.normal = Image.createImageFromPath(icon.normal);
+                    icon.selected = Image.createImageFromPath(icon.selected);
+                }
 
                 if (icon instanceof Image || icon === null) {
                     _icon = icon;

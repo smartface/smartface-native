@@ -8,57 +8,56 @@
  *     @example
  *     const TextArea = require('sf-core/ui/textarea');
  *     const SpeechRecognizer = require("sf-core/speechrecognizer");
- *     const Application = require("sf-core/application"); 
+ *     const Application = require("sf-core/application");
  *     const Button = require('sf-core/ui/button');
  *     const System = require('sf-core/device/system');
  *     var myButton = new Button({
  *         height: 100,
  *         text: "Start Recording"
- *     });
- *       
+ *      })   
  *     var myTextArea = new TextArea({
  *         height: 100
- *     });
- * 
- *     myButton.onPress = function(){
- *         if(!SpeechRecognizer.isRunning()){
- *             myButton.text = "Stop Recording"; 
- *             if(System.OS === "iOS") {
+ *      })   
+ *     myButton.onPress = function() {
+ *         if (!SpeechRecognizer.isRunning()) {
+ *             myButton.text = "Stop Recording";
+ *             if (System.OS === "iOS") {
  *                 startSpeechRecognizer();
  *             }
- *             else if(System.OS === "Android") {
+ *             else if (System.OS === "Android") {
  *                 const RECORD_AUDIO_CODE = 1002;
  *                 Application.android.requestPermissions(RECORD_AUDIO_CODE, Application.Android.Permissions.RECORD_AUDIO);
- *                 Application.android.onRequestPermissionsResult = function(e){
- *                     if(e.requestCode === RECORD_AUDIO_CODE && e.result) {
+ *                 Application.android.onRequestPermissionsResult = function(e) {
+ *                     if (e.requestCode === RECORD_AUDIO_CODE && e.result) {
  *                         startSpeechRecognizer();
  *                     }
- *                  }
- *              }
- *          }else{
- *              myButton.text = "Start Recording"; 
- *              SpeechRecognizer.stop();
- *          }
- *      }
- * 
- *      this.layout.addChild(myTextArea);
- *      this.layout.addChild(myButton);
- * 
- *      function startSpeechRecognizer() {
- *          SpeechRecognizer.start({
- *              onResult:function(result){
- *                  myTextArea.text = result;
- *              },
- *              onFinish  : function(result){
- *                  myButton.text = "Start Recording"; 
- *                  alert("Finish : " + result);
- *              },
- *              onError : function(error){
- *                  myButton.text = "Start Recording";
- *                  alert("Error : " + error);
- *              }
- *          });
- *      }
+ *                 }
+ *             }
+ *         }
+ *         else {
+ *             myButton.text = "Start Recording";
+ *             SpeechRecognizer.stop();
+ *         }
+ *         
+ *     this.layout.addChild(myTextArea);
+ *     this.layout.addChild(myButton)   
+ *     function startSpeechRecognizer() {
+ *         SpeechRecognizer.start({
+ *             locale : "en_US",
+ *             onResult: function(result) {
+ *                 myTextArea.text = result;
+ *             },
+ *             onFinish: function(result) {
+ *                 myButton.text = "Start Recording";
+ *                 alert("Finish : " + result);
+ *             },
+ *             onError: function(error) {
+ *                 myButton.text = "Start Recording";
+ *                 alert("Error : " + error);
+ *             }
+ *         });
+ *     }
+ *          
  */
 const SpeechRecognizer = {};
 

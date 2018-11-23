@@ -4,6 +4,7 @@ const UIControlEvents = require("sf-core/util").UIControlEvents;
 const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
 const Invocation = require('sf-core/util/iOS/invocation.js');
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const UITableViewRowAnimation = {
     fade: 0,
@@ -19,6 +20,7 @@ const UITableViewRowAnimation = {
 
 const ListView = extend(View)(
     function(_super, params) {
+        
         var self = this;
 
         if (!self.nativeObject) {
@@ -33,14 +35,14 @@ const ListView = extend(View)(
         }
 
         _super(this);
-
+        
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+                
         self.onRowCreate = function() {};
 
         self.onRowBind = function(listViewItem, index) {};
         self.onRowSelected = function(listViewItem, index) {};
         self.onRowHeight = function(index) { return 0 };
-
-        self.ios = {}
 
         Object.defineProperty(self.ios, 'leftToRightSwipeEnabled', {
             get: function() {
@@ -235,13 +237,6 @@ const ListView = extend(View)(
                 self.refreshControl.tintColor = param.nativeObject;
             }
         }
-
-        Object.defineProperty(self, 'contentOffset', {
-            get: function() {
-                return { x: self.nativeObject.contentOffset.x, y: self.nativeObject.contentOffset.y };
-            },
-            enumerable: true
-        });
 
         var _contentInset = { top: 0, left: 0, bottom: 0, right: 0 };
         Object.defineProperty(self, 'contentInset', {

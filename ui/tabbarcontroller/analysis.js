@@ -4,7 +4,6 @@
  * @since 3.2.0
  * 
  * This class extends from {@link UI.Page Page}. But you shouldn't use directly layout of the {@link UI.TabBarController TabBarController}.
- * {@link UI.TabBarController#items items} property must be given in constructor.
  * 
  *     @example
  *     const extend = require("js-base/core/extend");
@@ -74,7 +73,8 @@
 function TabBarController(params){}
 
 /**
- * Gets the tab bar height of the TabBarController.
+ * Gets the tab bar height of the TabBarController. You can change barHeight on Android, but not iOS.
+ * This property is read-only for iOS.
  * @property {Number} barHeight
  * @android
  * @ios
@@ -124,6 +124,15 @@ TabBarController.prototype.dividerWidth = 0;
  * @since 3.2.0
  */
 TabBarController.prototype.indicatorColor;
+
+/**
+ * Gets/sets the auto capitalize title of the items of TabBarController.
+ * @property {Boolean} [autoCapitalize = true]
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+TabBarController.prototype.autoCapitalize;
 
 /**
  * Gets/sets the indicator height of the TabBarController.

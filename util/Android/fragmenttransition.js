@@ -5,46 +5,52 @@ const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
 
-var popupPageTag = "popupWindow";
 var pageAnimationsCache = {}, pagePopUpAnimationsCache;
 
 function FragmentTransaction(){}
 
 FragmentTransaction.pageCount = 0;
 FragmentTransaction.generatePageID = function() {
-     return "" + (FragmentTransaction.pageCount++);
+     return (++FragmentTransaction.pageCount);
 };
 
 FragmentTransaction.push = function(params) {
-    checkBottomTabBarVisible(params.page);
-    if(params.isComingFromPresent) {
-        const FragmentTransaction = require("../../util/Android/fragmenttransition");
-        const Application = require("../../application");
-        
-        let currentPage = Application.currentPage;
-        let page = params.page;
-        page.popUpBackPage = currentPage;
-        
-        if (currentPage.transitionViews) {
-            page.enterRevealTransition = true;
-            FragmentTransaction.revealTransition(currentPage.transitionViews, page);
-        } else {
-            FragmentTransaction.popUpTransition(page, params.animated);
-            
-            var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
-            currentPage.layout.nativeObject.setFocusableInTouchMode(false);
-            !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
-            !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
-        }
-
-        params.onCompleteCallback && params.onCompleteCallback();
-    } else {
-        FragmentTransaction.replace(params);
+    FragmentTransaction.checkBottomTabBarVisible(params.page);
+    
+    var tag = params.page.pageID;
+    if(!tag) {
+        throw new Error("This page doesn't have an unique ID!");
     }
+    
+    const Application = require("../../application");
+    
+    if(!params.isComingFromPresent) {
+        FragmentTransaction.replace(params);
+        return;
+    }
+    
+    let currentPage = Application.currentPage;
+    let page = params.page;
+    page.popUpBackPage = currentPage;
+    
+    if (currentPage.transitionViews) {
+        page.enterRevealTransition = true;
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page);
+    } else {
+        FragmentTransaction.popUpTransition(page, params.animated);
+        
+        var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
+        currentPage.layout.nativeObject.setFocusableInTouchMode(false);
+        !isPresentLayoutFocused && page.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
+        !isPresentLayoutFocused && page.layout.nativeObject.requestFocus();
+    }
+
+    params.onComplete && params.onComplete();
 };
 
 FragmentTransaction.pop = function(params) {
     params && (params.animationType = FragmentTransaction.AnimationType.LEFTTORIGHT);
+    FragmentTransaction.checkBottomTabBarVisible(params.page);
     FragmentTransaction.replace(params);
 };
 
@@ -66,19 +72,20 @@ FragmentTransaction.replace = function(params) {
         }
     }
     
-    var tag = params.page.pageID;
-    if(!tag) {
-        throw new Error("This page doesn't have an unique ID!");
+    if(params.page.popUpBackPage) {
+        // back to popup page
+        fragmentTransaction.replace(rootViewId, params.page.popUpBackPage.nativeObject, "" + params.page.popUpBackPage.pageID);
+        fragmentTransaction.add(rootViewId, params.page.nativeObject, "" + params.page.pageID);
+    } else {
+        fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     }
     
-    fragmentTransaction.replace(rootViewId, params.page.nativeObject, tag);
-    // fragmentTransaction.addToBackStack(tag);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
 
 FragmentTransaction.revealTransition = function(transitionViews, page) {
-    checkBottomTabBarVisible(page);
+    FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -88,13 +95,13 @@ FragmentTransaction.revealTransition = function(transitionViews, page) {
         fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
     } 
     fragmentTransaction.replace(rootViewId, page.nativeObject);
-    fragmentTransaction.addToBackStack(popupPageTag);
+    fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
 
 FragmentTransaction.popUpTransition = function(page, animation) {
-    checkBottomTabBarVisible(page);
+    FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -109,13 +116,13 @@ FragmentTransaction.popUpTransition = function(page, animation) {
     if (animation)
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
 
-    fragmentTransaction.add(rootViewId, page.nativeObject, popupPageTag);
-    fragmentTransaction.addToBackStack(popupPageTag);
+    fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
+    fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
 
-function checkBottomTabBarVisible(page) {
+FragmentTransaction.checkBottomTabBarVisible = function(page) {
     // TODO: Beautify visibility setting of bottom tabbar
     const Application = require("sf-core/application");
     if(page.isInsideBottomTabBar) {
@@ -123,7 +130,7 @@ function checkBottomTabBarVisible(page) {
     } else {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
     }
-}
+};
 
 function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache["LEFTTORIGHT"]) {

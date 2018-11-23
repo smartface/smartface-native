@@ -214,12 +214,13 @@ Page.prototype.present = function(params){};
  * This function dismiss presently shown pop-up page.
  *
  * @method dismiss
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {Function} params.onComplete
  * @android
  * @ios
  * @since 3.1.1
  */
-Page.prototype.dismiss = function(onCompleteCallback){};
+Page.prototype.dismiss = function(params){};
 
 /**
  * Gets status bar object. This property is readonly, you can not set

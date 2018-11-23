@@ -5,5 +5,6 @@ module.exports = {
     Exception : require("./exception/exception.js"),
     UIDatePickerMode : require("./iOS/uidatepickermode.js"),
     KeyboardAnimationDelegate : require("./iOS/keyboardanimationdelegate.js"),
-    Invocation : require("./iOS/invocation.js")
+    Invocation : require("./iOS/invocation.js"),
+    UIScrollViewInheritance : require("./iOS/uiscrollviewinheritance.js")
 };

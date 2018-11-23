@@ -125,7 +125,7 @@ const ImageView = extend(View)(
     					    });
     					}
     				}
-    			}.bind(self,url.onSuccess,url.onError,url.fade));
+    			}.bind(self,url.onSuccess,url.onError ? url.onError : url.onFailure,url.fade)); //onFailure COR-1817
             }
         }
         
@@ -144,7 +144,7 @@ const ImageView = extend(View)(
 					    });
 					}
 				}
-			}.bind(self,object.onSuccess,object.onError));
+			}.bind(self,object.onSuccess,object.onError ? object.onError : object.onFailure)); //onFailure COR-1817
         };
         
         Object.defineProperty(self, 'imageFillType', {

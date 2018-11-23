@@ -1,6 +1,7 @@
 const TextBox = require('../textbox');
 const extend = require('js-base/core/extend');
 const Color = require('sf-core/ui/color');
+const FlexLayout = require('sf-core/ui/flexlayout');
 
 const MaterialTextbox = extend(TextBox)(
     function(_super, params) {
@@ -11,6 +12,49 @@ const MaterialTextbox = extend(TextBox)(
         }
 
         _super(this);
+        
+        var _rightLayout = undefined;
+        var _rightLayoutMain;
+        Object.defineProperty(self, 'rightLayout', {
+            get: function() {
+                return _rightLayout;
+            },
+            set: function(object) {
+                _rightLayout = object;
+                if (object === undefined) {
+                    self.nativeObject.setValueForKey(undefined, "rightView");
+                    self.nativeObject.setValueForKey(0, "rightViewMode");
+                    return;
+                }
+                
+                if (!_rightLayoutMain) {
+                    var flexMain = new FlexLayout();
+                    var flexContent = new FlexLayout();
+                    flexMain.nativeObject.frame = { x: 0, y: 0, width: object.width ? object.width : 30, height: 0 };
+                    flexMain.nativeObject.addFrameObserver();
+                    flexMain.nativeObject.frameObserveHandler = function(e) {
+                        flexContent.top = 0;
+                        flexContent.left = 0;
+                        flexContent.width = e.frame.width;
+                        flexContent.height = e.frame.height;
+                        flexContent.applyLayout();
+                    };
+                    flexMain.addChild(flexContent);
+                    flexMain.content = flexContent;
+                    _rightLayoutMain = flexMain;
+                }else{
+                    var childs = _rightLayoutMain.content.getChildList();
+                    for (var i in childs) {
+                        _rightLayoutMain.content.removeChild(childs[i]);
+                    }
+                }
+                
+                _rightLayoutMain.content.addChild(object.view);
+                self.nativeObject.setValueForKey(3, "rightViewMode");
+                self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
+            },
+            enumerable: true
+        });
         
         Object.defineProperty(self.ios, 'titleColor', {
             get: function() {

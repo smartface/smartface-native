@@ -48,6 +48,7 @@ Notifications.LocalNotification = function(params) {
     var _alertAction = "";
     var _sound = "";
     var _repeatInterval = 0;
+    var _launchImage;
     Object.defineProperties(this, {
         'alertBody': {
             get: function() {
