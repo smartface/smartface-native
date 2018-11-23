@@ -349,6 +349,7 @@ function Page(params) {
                 const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
                 console.log("Dismiss");
                 var fragmentManager = activity.getSupportFragmentManager();
+                console.log("self.popUpBackPage: " + self.popUpBackPage);
                 if(!self.popUpBackPage)
                     return;
                 self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);

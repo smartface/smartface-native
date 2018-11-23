@@ -12,8 +12,10 @@ function NavigationController() {
     var self = this;
     var _willShowCallback;
     var _onTransitionCallback;
+    
+    this.__navID = ++NavigationController.NavCount;
 
-    this.isActive = false;
+    this.__isActive = false;
     Object.defineProperties(this, {
         'childControllers': {
             get: function() {
@@ -42,7 +44,8 @@ function NavigationController() {
                     historyStack.push(childController);
                 }
 
-                if (self.isActive) {
+                console.log("NavigationController childControllers navID: " + self.__navID + " self.__isActive: " + self.__isActive);
+                if (self.__isActive) {
                     ViewController.activateController(self.getCurrentController());
                 }
             },
@@ -87,15 +90,16 @@ function NavigationController() {
         if (!pageIDCollectionInStack[params.controller.pageID]) {
             throw new Error("This page doesn't exist in history!");
         }
-        console.log("NavigationController show self.isActive: " + self.isActive);
-        if(!self.isActive)
+        console.log("NavigationController show self.__isActive: " + self.__isActive);
+        if(!self.__isActive)
            return;
         
         params.animated && (params.animationType = FragmentTransaction.AnimationType.RIGHTTOLEFT);
         !params.controller.parentController && (params.controller.parentController = self);
         _willShowCallback && (_willShowCallback({ controller: params.controller, animated: params.animated }));
 
-        // No need self.isActive property. show method is triggered when self is active.
+        console.log("NavigationController navID: " + self.__navID + " calls activateController");
+        // No need self.__isActive property. show method is triggered when self is active.
         ViewController.activateController(params.controller);
         
         self.showController(params);
@@ -113,6 +117,7 @@ function NavigationController() {
     };
 
     this.push = function(params) {
+        console.log("NavigationController push navID: " + self.__navID + " __isActive: " + self.__isActive);
         if (!params.controller.pageID) {
             params.controller.pageID = FragmentTransaction.generatePageID();
         }
@@ -121,14 +126,13 @@ function NavigationController() {
             throw new Error("This page exist in history! PageID: " + params.controller.pageID);
         }
         
-        console.log("NavigationController isActive: " + self.isActive + " deactivateController");
-        self.isActive && (ViewController.deactivateController(self.getCurrentController()));
+        console.log("NavigationController __isActive: " + self.__isActive + " deactivateController");
+        self.__isActive && (ViewController.deactivateController(self.getCurrentController()));
 
         params.controller.parentController = self;
         pageIDCollectionInStack[params.controller.pageID] = params.controller;
         historyStack.push(params.controller);
         console.log("NavigationController historyStack.length: " + historyStack.length);
-        console.log("NavigationController push function: " + self.isActive);
         self.show(params);
     };
 
@@ -163,20 +167,24 @@ function NavigationController() {
     };
 
     this.dismiss = function(onCompleteCallback) {
-        console.log("NavigationController dismiss.....");
+        console.log("NavigationController dismiss self.__navID: " + self.__navID);
         const Application = require("../../application");
+        const ViewController = require("../../util/Android/transition/viewcontroller");
         Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
+        ViewController.deactivateController(self);
+        
+        console.log("NavigationController __isActive after dismiss: " + self.__isActive + " navID: " + self.__navID);
     };
 
     this.pop = function(params) {
         if (historyStack.length < 2) {
             throw new Error("There is no page in history!");
         }
-        console.log("NavigationController pop: " + self.isActive);
+        console.log("NavigationController pop: " + self.__isActive);
         // remove current page from history and its id from collection
         var poppedController = historyStack.pop();
         pageIDCollectionInStack[poppedController.pageID] = null;
-        if (!self.isActive) {
+        if (!self.__isActive) {
             return;
         }
 
@@ -202,7 +210,7 @@ function NavigationController() {
             pageIDCollectionInStack[controller.pageID] = null;
         }
 
-        if (!self.isActive) {
+        if (!self.__isActive) {
             return;
         }
         self.popFromHistoryController(currentController, params);
@@ -238,6 +246,8 @@ function NavigationController() {
         }));
     };
 }
+
+NavigationController.NavCount = 0;
 
 NavigationController.OperationType = {};
 NavigationController.OperationType.PUSH = 1;

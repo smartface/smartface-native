@@ -88,7 +88,7 @@ function BottomTabBarController(params) {
             return;
         }
 
-        if(!self.isActive)
+        if(!self.__isActive)
            return;
         
         const ViewController = require("sf-core/util/Android/transition/viewcontroller");
@@ -100,7 +100,7 @@ function BottomTabBarController(params) {
         const NavigationController = require("../../ui/navigationcontroller");
         childController.isInsideBottomTabBar = true;
         if (childController instanceof Page) {
-            childController.isActive = true;
+            childController.__isActive = true;
             if (!childController.pageID) {
                 childController.pageID = FragmentTransaction.generatePageID();
             }
@@ -110,7 +110,7 @@ function BottomTabBarController(params) {
             });
         }
         else if (childController instanceof NavigationController) {
-            childController.isActive = true;
+            childController.__isActive = true;
             // first press
             if (childController.historyStack.length < 1) {
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
@@ -139,7 +139,7 @@ function BottomTabBarController(params) {
     this.show = function() {
         self.addTabBarToActivity();
         self.setChecked();
-        // TODO: check isActive property
+        // TODO: check __isActive property
         self.push(self.childControllers[_selectedIndex]);
     };
     
