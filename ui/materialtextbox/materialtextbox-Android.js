@@ -121,72 +121,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 },
                 enumerable: true
             },
-            'enableCharacterRestriction': {
-                get: function() {
-                    return _enableCharacterRestriction;
-                },
-                set: function(value) {
-
-                    _enableCharacterRestriction = value;
-                    self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
-                },
-                enumerable: true
-            },
-            'characterRestriction': {
-                get: function() {
-                    return self.nativeObject.isCounterEnabled();
-                },
-                set: function(value) {
-
-                    _enableCounterMaxLength = value;
-                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
-
-                    if (self.enableCharacterRestriction !== true)
-                        self.enableCharacterRestriction = true;
-
-                    self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
-                },
-                enumerable: true
-            },
-            'characterRestrictionColor': {
-                get: function() {
-                    return _characterRestrictionColor;
-                },
-                set: function(value) {
-                    _characterRestrictionColor = value;
-
-                    if (enableCounter !== true)
-                        self.enableCharacterRestriction = true;
-
-                    changeViewColor(mCounterView, _characterRestrictionColor);
-                },
-                enumerable: true
-            },
-            'errorMessage': {
-                get: function() {
-                    return self.nativeObject.getError().toString();
-                },
-                set: function(errorText) {
-                    _errorText = errorText;
-
-                    if (self.enableErrorMessage !== true && _errorText.length !== 0)
-                        self.enableErrorMessage = true;
-
-                    self.nativeObject.setError(_errorText);
-                },
-                enumerable: true
-            },
-            'enableErrorMessage': {
-                get: function() {
-                    return _enableErrorMessage;
-                },
-                set: function(value) {
-
-                    _enableErrorMessage = value
-                    self.nativeObject.setErrorEnabled(_enableErrorMessage);
-                },
-                enumerable: true
-            },
             'errorColor': {
                 get: function() {
                     return _errorColor;
@@ -194,8 +128,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(errorColor) {
 
                     _errorColor = errorColor;
-                    if (self.enableErrorMessage !== true)
-                        self.enableErrorMessage = true;
+                    if (_enableErrorMessage !== true)
+                        self.android.enableErrorMessage = true;
 
                     changeViewColor(mErrorView, _errorColor);
                 },
@@ -280,7 +214,21 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return this._onTouchCancelled;
                 },
                 enumerable: true
-            }
+            },
+            'errorMessage': {
+                get: function() {
+                    return self.nativeObject.getError().toString();
+                },
+                set: function(errorText) {
+                    _errorText = errorText;
+
+                    if (_enableErrorMessage !== true && _errorText.length !== 0)
+                        self.android.enableErrorMessage = true;
+
+                    self.nativeObject.setError(_errorText);
+                },
+                enumerable: true
+            },
         });
 
         self.android = {};
@@ -315,7 +263,59 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
                 },
                 enumerable: true
-            }
+            },
+            'characterRestriction': {
+                get: function() {
+                    return self.nativeObject.isCounterEnabled();
+                },
+                set: function(value) {
+
+                    _enableCounterMaxLength = value;
+                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
+
+                    if (_enableCharacterRestriction !== true)
+                        self.android.enableCharacterRestriction = true;
+
+                    self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
+                },
+                enumerable: true
+            },
+            'characterRestrictionColor': {
+                get: function() {
+                    return _characterRestrictionColor;
+                },
+                set: function(value) {
+                    _characterRestrictionColor = value;
+
+                    if (enableCounter !== true)
+                        self.android.enableCharacterRestriction = true;
+
+                    changeViewColor(mCounterView, _characterRestrictionColor);
+                },
+                enumerable: true
+            },
+            'enableCharacterRestriction': {
+                get: function() {
+                    return _enableCharacterRestriction;
+                },
+                set: function(value) {
+
+                    _enableCharacterRestriction = value;
+                    self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
+                },
+                enumerable: true
+            },
+            'enableErrorMessage': {
+                get: function() {
+                    return _enableErrorMessage;
+                },
+                set: function(value) {
+
+                    _enableErrorMessage = value
+                    self.nativeObject.setErrorEnabled(_enableErrorMessage);
+                },
+                enumerable: true
+            },
         });
 
         for (var key in sfTextBox) { //Overrides the textbox properties & methods
