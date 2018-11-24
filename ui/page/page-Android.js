@@ -1017,6 +1017,7 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
+                if(!focusedView) { return; }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
