@@ -405,7 +405,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         */
         function getReCreatedErrorView() {
             const NativeR = requireClass(AndroidConfig.packageName + '.R');
-            let materialLinearLayout = self.nativeObject.getChildAt(1); //This is 
+            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
             let errorTextView = materialLinearLayout.findViewById(NativeR.id.textinput_error)
 
             return errorTextView;
@@ -413,7 +413,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         function getReCreatedCounterView() {
             const NativeR = requireClass(AndroidConfig.packageName + '.R');
-            let materialLinearLayout = self.nativeObject.getChildAt(1); //This is 
+            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
             let counterTextView = materialLinearLayout.findViewById(NativeR.id.textinput_counter);
 
             return counterTextView;
