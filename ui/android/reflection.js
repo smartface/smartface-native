@@ -1,3 +1,4 @@
+const AndroidConfig = require('../../util/Android/androidconfig');
 /*
 ToDo: This methods are deman. When Android provides this feature programmitically just remove. 
 this method should be always being in consideration while updating support libraries of Android.
@@ -7,6 +8,11 @@ const Reflection = function() {};
 Object.defineProperties(Reflection, {
     'setCursorColor': {
         value: function(textbox, color) {
+            /*
+            ToDo: Keep until pragmatic solution available. Does not work for Android P and higher.
+            */
+            if (AndroidConfig.sdkVersion >= 28)
+                return;
             const NativeTextView = requireClass("android.widget.TextView");
             const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 
