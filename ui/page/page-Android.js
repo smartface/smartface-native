@@ -29,9 +29,12 @@ const OrientationDictionary = {
     15: 10
 };
 
+
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
+    
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
@@ -43,7 +46,6 @@ function Page(params) {
     rootLayout.parent = self;
     pageLayout.addView(rootLayout.nativeObject);
     var toolbar = pageLayoutContainer.findViewById(NativeSFR.id.toolbar);
-
     var isCreated = false;
     var optionsMenu = null;
     self.contextMenu = {};
@@ -64,8 +66,8 @@ function Page(params) {
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
+            actionBar = activity.getSupportActionBar();
             if (!isCreated) {
-                actionBar = activity.getSupportActionBar();
                 setDefaults();
                 onLoadCallback && onLoadCallback();
                 isCreated = true;
@@ -128,6 +130,9 @@ function Page(params) {
                 else {
                     // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
+                
+                if(clickedLeftItem)
+                   clickedLeftItem.onPress && clickedLeftItem.onPress();
             }
             else if (_headerBarItems[itemId]) {
                 var item = _headerBarItems[itemId];
@@ -617,6 +622,21 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    var _contentInsets = {};
+    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+        get: function() {
+            return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
+        },
+        set: function(contentInsets) { // API Level 21+
+            _contentInsets = contentInsets;
+            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
+            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
+
+            toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
+        },
+        enumerable: true
+    });
+
     var _headerBarLogoEnabled = false;
     Object.defineProperty(self.headerBar.android, 'logoEnabled', {
         get: function() {
@@ -631,6 +651,7 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
 
     var _tag;
     Object.defineProperty(this,
@@ -737,14 +758,13 @@ function Page(params) {
                 item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
-                
+
                 // TODO: Beautify this implementation
-                if(item.searchView) {
-                    itemView.onActionViewExpanded();
-                    itemView.setIconified(false);
+                if (item.searchView) {
+                    itemView.setIconifiedByDefault(true);
                     itemView.clearFocus();
                 }
-                
+
                 item.menuItem.setActionView(itemView);
             }
         });

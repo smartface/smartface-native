@@ -77,8 +77,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _hintTextColor;
                 },
                 set: function(hintTextColor) {
-                    if (!(hintTextColor instanceof Color))
-                        return;
                     _hintTextColor = hintTextColor;
 
                     reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject, _hintTextColor.nativeObject);
@@ -90,8 +88,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _hintFocusedTextColor;
                 },
                 set: function(hintFocusedTextColor) {
-                    if (!(hintFocusedTextColor instanceof Color))
-                        return;
                     _hintFocusedTextColor = hintFocusedTextColor;
 
                     reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject, _hintFocusedTextColor.nativeObject);
@@ -103,9 +99,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _lineColorObj;
                 },
                 set: function(lineColorObj) {
-
-                    if (typeof lineColorObj !== "object")
-                        return;
                     _lineColorObj = lineColorObj;
 
                     var jsColorArray = [];
@@ -160,8 +153,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _characterRestrictionColor;
                 },
                 set: function(value) {
-                    if (!(_characterRestrictionColor instanceof Color))
-                        return;
                     _characterRestrictionColor = value;
 
                     if (enableCounter !== true)
@@ -201,8 +192,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _errorColor;
                 },
                 set: function(errorColor) {
-                    if (!(errorColor instanceof Color))
-                        return;
 
                     _errorColor = errorColor;
                     if (self.enableErrorMessage !== true)
@@ -217,8 +206,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _font;
                 },
                 set: function(font) {
-                    if (!(font instanceof Font))
-                        return;
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
                 },
@@ -240,9 +227,59 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 },
                 set: function(params) {
                     _rightLayout = params.view;
-                    _rightLayoutWidth = params.width !== undefined ? params.width  : 30;
+                    _rightLayoutWidth = params.width !== undefined ? params.width : 30;
                     setRightLayout(_rightLayout, _rightLayoutWidth);
                 }
+            },
+            'onTouch': {
+                set: function(onTouch) {
+                    this._onTouch = onTouch.bind(this);
+                    this.setTouchHandlers();
+                    sfTextBox._onTouch = onTouch.bind(this);
+                    sfTextBox.setTouchHandlers();
+                },
+                get: function() {
+                    return this._onTouch;
+                },
+                enumerable: true
+            },
+            'onTouchEnded': {
+                set: function(onTouchEnded) {
+                    this._onTouchEnded = onTouchEnded.bind(this);
+                    this.setTouchHandlers();
+                    sfTextBox._onTouchEnded = onTouchEnded.bind(this);
+                    sfTextBox.setTouchHandlers();
+                },
+
+                get: function() {
+                    return this._onTouchEnded;
+                },
+                enumerable: true
+            },
+            'onTouchMoved': {
+                set: function(onTouchMoved) {
+                    this._onTouchMoved = onTouchMoved.bind(this);
+                    this.setTouchHandlers();
+                    sfTextBox._onTouchMoved = onTouchMoved.bind(this);
+                    sfTextBox.setTouchHandlers();
+                },
+                get: function() {
+                    return this._onTouchMoved;
+                },
+                enumerable: true
+            },
+            'onTouchCancelled': {
+                set: function(onTouchCancelled) {
+                    this._onTouchCancelled = onTouchCancelled.bind(this);
+                    this.setTouchHandlers();
+                    sfTextBox._onTouchCancelled = onTouchCancelled.bind(this);
+                    sfTextBox.setTouchHandlers();
+                },
+
+                get: function() {
+                    return this._onTouchCancelled;
+                },
+                enumerable: true
             }
         });
 
@@ -254,8 +291,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _font;
                 },
                 set: function(font) {
-                    if (!(font instanceof Font))
-                        return;
                     _font = font;
                     self.nativeObject.setTypeface(font.nativeObject);
                 },

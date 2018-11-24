@@ -15,7 +15,7 @@ const View = require('../view');
  *         top: 100,
  *         left: 50
  *     });
- *     myActivityIndicator.ios.type = ActivityIndicator.iOS.Type.WHITELARGE;    
+ *     myActivityIndicator.ios.activityIndicatorViewStyle = ActivityIndicator.iOS.ActivityIndicatorViewStyle.LARGE;  
  * 
  *     myPage.layout.addChild(myActivityIndicator);
  */
@@ -32,42 +32,14 @@ function ActivityIndicator(params){}
 ActivityIndicator.prototype.color = Color.GRAY;
 
 ActivityIndicator.prototype.ios = {};
+
 /**
- * Gets/sets type of the activity indicator.
+ * Gets/sets style of the activity indicator.
  *
- * @property {ActivityIndicator.iOS.Type} type
+ * @property {UI.ActivityIndicator.iOS.ActivityIndicatorViewStyle} [activityIndicatorViewStyle = UI.ActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL]
  * @ios
- * @since 0.1
+ * @since 3.2.1
  */
-ActivityIndicator.prototype.ios.type = ActivityIndicator.iOS.Type.WHITE;
-
-ActivityIndicator.iOS = {};
-ActivityIndicator.iOS.Type = {};
-/**
- * @property {Number} WHITELARGE
- * @ios
- * @static
- * @readonly
- * @since 0.1
- */
-ActivityIndicator.iOS.Type.WHITELARGE = 0;
-
-/**
- * @property {Number} WHITE
- * @ios
- * @static
- * @readonly
- * @since 0.1
- */
-ActivityIndicator.iOS.Type.WHITE = 1;
-
-/**
- * @property {Number} GRAY
- * @ios
- * @static
- * @readonly
- * @since 0.1
- */
-ActivityIndicator.iOS.Type.GRAY = 2;
+ActivityIndicator.prototype.ios.activityIndicatorViewStyle = ActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL;
 
 module.exports = ActivityIndicator;
