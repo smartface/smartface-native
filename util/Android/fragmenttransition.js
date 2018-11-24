@@ -24,6 +24,11 @@ FragmentTransaction.push = function(params) {
     }
     
     const Application = require("../../application");
+    let currentPage = Application.currentPage;
+    if(currentPage && (currentPage.pageID === tag)) {
+        console.log("This page is already added");
+        return;
+    }
     
     console.log("FragmentTransaction.push function isComingFromPresent: " + params.isComingFromPresent);
     if(!params.isComingFromPresent) {
@@ -31,7 +36,6 @@ FragmentTransaction.push = function(params) {
         return;
     }
     
-    let currentPage = Application.currentPage;
     let page = params.page;
     page.popUpBackPage = currentPage;
     console.log("############ page.popUpBackPage.pageID: " + page.popUpBackPage.pageID);
