@@ -188,7 +188,7 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
- * Gets/sets cursor color of searchview.
+ * Gets/sets cursor color of searchview. This feature is available for Android Oreo 8.1 and below versions.
  *
  * @property {UI.Color} cursorColor
  * @ios
