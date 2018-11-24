@@ -8,7 +8,7 @@ UIScrollViewInheritance.addPropertiesAndMethods = function(customNativeObject) {
     var nativeObject = customNativeObject ? customNativeObject : self.nativeObject;
     
     if (System.OSVersion.split(".")[0] >= 11) {
-        self.nativeObject.setValueForKey(2, "contentInsetAdjustmentBehavior");
+        nativeObject.setValueForKey(2, "contentInsetAdjustmentBehavior");
     }
 
     Object.defineProperty(self.ios, 'bounces', {

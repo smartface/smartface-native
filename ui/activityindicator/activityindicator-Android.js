@@ -54,7 +54,7 @@ const ActivityIndicator = extend(View)(
     }
 );
 
-ActivityIndicator.iOS = {};
+ActivityIndicator.iOS = require("./ios");
 ActivityIndicator.iOS.Type = {};
 
 module.exports = ActivityIndicator;

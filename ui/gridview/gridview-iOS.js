@@ -6,7 +6,6 @@ const LayoutManager = require("../layoutmanager");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
-const UICollectionView = SF.requireClass("UICollectionView");
 const NSIndexPath = SF.requireClass("NSIndexPath");
 const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 

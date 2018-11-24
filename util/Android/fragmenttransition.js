@@ -23,13 +23,16 @@ FragmentTransaction.push = function(params) {
     }
     
     const Application = require("../../application");
+    let currentPage = Application.currentPage;
+    if(currentPage && (currentPage.pageID === tag)) {
+        return;
+    }
     
     if(!params.isComingFromPresent) {
         FragmentTransaction.replace(params);
         return;
     }
     
-    let currentPage = Application.currentPage;
     let page = params.page;
     page.popUpBackPage = currentPage;
     
