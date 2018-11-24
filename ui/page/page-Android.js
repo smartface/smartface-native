@@ -130,9 +130,6 @@ function Page(params) {
                 else {
                     // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
-                
-                if(clickedLeftItem)
-                   clickedLeftItem.onPress && clickedLeftItem.onPress();
             }
             else if (_headerBarItems[itemId]) {
                 var item = _headerBarItems[itemId];
@@ -148,8 +145,7 @@ function Page(params) {
             if (self.contextMenu.headerTitle !== "") {
                 menu.setHeaderTitle(headerTitle);
             }
-            var i;
-            for (i = 0; i < items.length; i++) {
+            for (var i = 0; i < items.length; i++) {
                 var menuTitle = items[i].android.spanTitle();
                 menu.add(0, i, 0, menuTitle);
             }
