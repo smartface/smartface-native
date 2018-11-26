@@ -29,9 +29,6 @@ const ListView = extend(View)(
             self.nativeObject.addSubview(self.refreshControl);
             self.nativeObject.separatorStyle = 0;
             self.nativeObject.showsVerticalScrollIndicator = false;
-            self.nativeObject.setValueForKey(0, "estimatedRowHeight");
-            self.nativeObject.setValueForKey(0, "estimatedSectionHeaderHeight");
-            self.nativeObject.setValueForKey(0, "estimatedSectionFooterHeight");
         }
 
         _super(this);
