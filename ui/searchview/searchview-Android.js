@@ -7,6 +7,7 @@ const KeyboardType = require('../keyboardtype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const Exception = require("../../util/exception");
+const Reflection = require("../android/reflection");
 const PorterDuff = requireClass('android.graphics.PorterDuff');
 
 const NativeSearchView = requireClass('android.support.v7.widget.SearchView');
@@ -62,7 +63,6 @@ const SearchView = extend(View)(
     function(_super, params) {
         if (!this.nativeObject) {
             this.nativeObject = new NativeSearchView(AndroidConfig.activity);
-            this.nativeObject.onActionViewExpanded();
             // Prevent gain focus when SearchView appear.
             this.nativeObject.clearFocus();
         }
@@ -82,10 +82,8 @@ const SearchView = extend(View)(
         var _iconImage = null;
         var _hint = "";
         var _textColor = Color.BLACK;
-        var _onTextChangedCallback;
-        var _onSearchBeginCallback;
-        var _onSearchEndCallback;
-        var _onSearchButtonClickedCallback;
+        var _onTextChangedCallback, _onSearchBeginCallback,
+            _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor;
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
 
@@ -201,24 +199,17 @@ const SearchView = extend(View)(
             },
             'requestFocus': {
                 value: function() {
-                    mSearchSrcTextView.requestFocus();
-                    // Due to the requirements we should show keyboard when focus requested.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    inputMethodManager.toggleSoftInput(SHOW_FORCED, HIDE_IMPLICIT_ONLY);
+                    this.nativeObject.requestFocus();
                 },
                 enumerable: true
             },
             'removeFocus': {
                 value: function() {
+                    this.nativeObject.clearFocus();
                     mSearchSrcTextView.clearFocus();
-                    // Due to the requirements we should hide keyboard when focus cleared.
-                    var inputMethodManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
-                    var windowToken = this.nativeObject.getWindowToken();
-                    inputMethodManager.hideSoftInputFromWindow(windowToken, 0);
                 },
                 enumerable: true
             },
-
             'toString': {
                 value: function() {
                     return 'SearchView';
@@ -226,7 +217,6 @@ const SearchView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
-
             // events
             'onSearchBegin': {
                 get: function() {
@@ -251,6 +241,7 @@ const SearchView = extend(View)(
                     return _onTextChangedCallback;
                 },
                 set: function(onTextChanged) {
+                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
                     _onTextChangedCallback = onTextChanged.bind(this);
                 },
                 enumerable: true
@@ -260,6 +251,7 @@ const SearchView = extend(View)(
                     return _onSearchButtonClickedCallback;
                 },
                 set: function(onSearchButtonClicked) {
+                    !this.__isNotSetQueryTextListener && this.setQueryTextListener();
                     _onSearchButtonClickedCallback = onSearchButtonClicked.bind(this);
                 },
                 enumerable: true
@@ -286,6 +278,16 @@ const SearchView = extend(View)(
                     mSearchSrcTextView.setGravity(NativeTextAlignment[textalignment]);
                 },
                 enumerable: true
+            },
+            'cursorColor': {
+                get: function() {
+                    return _textViewCursorColor;
+                },
+                set: function(color) {
+                    _textViewCursorColor = color;
+                    Reflection.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
+                },
+                enumerable: true
             }
         });
 
@@ -295,25 +297,10 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
-
+        var _searchButtonIcon, _clearIcon, _searchIcon, _iconifiedByDefault = false;
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
         Object.defineProperties(this.android, {
-            // 'underlineColor': {
-            //     get: function() {
-            //         return _underlineColor;
-            //     },
-            //     set: function(underlineColor) {
-            //         if ( ('normal' in underlineColor) && ('focus' in underlineColor)) {
-            //             _underlineColor = underlineColor;
-            //             mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
-            //         }else {
-            //             throw new Error("underlineColor must include normal and focus property.");
-            //         }
-
-            //     },
-            //     enumerable: true
-            // },
             'hintTextColor': {
                 get: function() {
                     return _hintTextColor;
@@ -381,6 +368,56 @@ const SearchView = extend(View)(
                     _textFieldBorderRadius = value;
                     self.setTextFieldBackgroundDrawable();
                 }
+            },
+            'searchButtonIcon': {
+                get: function() {
+                    return _searchButtonIcon;
+                },
+                set: function(value) {
+                    _searchButtonIcon = value;
+                    mSearchButton.setImageDrawable(_searchButtonIcon.nativeObject);
+                },
+                enumerable: true
+            },
+            'clearIcon': {
+                get: function() {
+                    return _clearIcon;
+                },
+                set: function(value) {
+                    _clearIcon = value;
+                    let closeBtn = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
+                    closeBtn.setImageDrawable(_clearIcon.nativeObject);
+                },
+                enumerable: true
+            },
+            'searchIcon': {
+                get: function() {
+                    return _searchIcon;
+                },
+                set: function(value) {
+                    const Image = require("../image");
+                    _searchIcon = value;
+                    let mSearchEditFrame = self.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
+                    let searchImage = mSearchEditFrame.getChildAt(0); //AppCompatImageView
+                    if (_searchIcon instanceof Image) {
+                        searchImage.setImageDrawable(_searchIcon.nativeObject);
+                    }
+                    else {
+                        mSearchEditFrame.removeViewAt(0);
+                        mSearchEditFrame.addView(_searchIcon.nativeObject,0);
+                    }
+                },
+                enumerable: true
+            },
+            'iconifiedByDefault': {
+                get: function() {
+                    return _iconifiedByDefault;
+                },
+                set: function(value) {
+                    _iconifiedByDefault = value;
+                    self.nativeObject.setIconifiedByDefault(_iconifiedByDefault);
+                },
+                enumerable: true
             }
         });
 
@@ -390,6 +427,20 @@ const SearchView = extend(View)(
             textFieldBackgroundDrawable.setColor(_textFieldBackgroundColor.nativeObject);
             textFieldBackgroundDrawable.setCornerRadius(_textFieldBorderRadius);
             mSearchSrcTextView.setBackground(textFieldBackgroundDrawable);
+        };
+
+        this.setQueryTextListener = () => {
+            this.__isNotSetQueryTextListener = true;
+            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
+                onQueryTextSubmit: function(query) {
+                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
+                    return false;
+                },
+                onQueryTextChange: function(newText) {
+                    _onTextChangedCallback && _onTextChangedCallback(newText);
+                    return false;
+                }
+            }));
         };
 
         // Handling ios specific properties
@@ -411,27 +462,17 @@ const SearchView = extend(View)(
                     else {
                         _onSearchEndCallback && _onSearchEndCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
-                        this.removeFocus();
                     }
                 }.bind(this)
             }));
 
-            this.nativeObject.setOnQueryTextListener(NativeSearchView.OnQueryTextListener.implement({
-                onQueryTextSubmit: function(query) {
-                    _onSearchButtonClickedCallback && _onSearchButtonClickedCallback();
-                    return false;
-                },
-                onQueryTextChange: function(newText) {
-                    _onTextChangedCallback && _onTextChangedCallback(newText);
-                    return false;
-                }
-            }));
             this.borderWidth = 1;
             this.borderColor = _textFieldBackgroundColor;
             this.textFieldBackgroundColor = _textFieldBackgroundColor;
             this.backgroundColor = Color.WHITE;
-            this.nativeObject.setMaxWidth(INTEGER_MAX_VALUE); //Requires to fullfill the header bar.
+            this.android.iconifiedByDefault = false;
         }
+
 
         // Assign parameters given in constructor
         if (params) {

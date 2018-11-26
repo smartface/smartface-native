@@ -52,6 +52,17 @@ const AttributedString = function(params){
         enumerable: true
     });
     
+    var _strikethrough = false;
+    Object.defineProperty(self, 'strikethrough', {
+        get: function() {
+            return _strikethrough;
+        },
+        set: function(value) {
+            _strikethrough = value;
+        },
+        enumerable: true
+    });
+    
     var _underlineColor = self.foregroundColor;
     Object.defineProperty(self.ios, 'underlineColor', {
         get: function() {
@@ -59,6 +70,17 @@ const AttributedString = function(params){
         },
         set: function(value) {
             _underlineColor = value;
+        },
+        enumerable: true
+    });
+    
+    var _strikethroughColor = self.foregroundColor;
+    Object.defineProperty(self.ios, 'strikethroughColor', {
+        get: function() {
+            return _strikethroughColor;
+        },
+        set: function(value) {
+            _strikethroughColor = value;
         },
         enumerable: true
     });
@@ -85,12 +107,23 @@ const AttributedString = function(params){
         enumerable: true
     });
     
-    if (params) {
+    function setParams(params){
         for (var param in params) {
-            this[param] = params[param];
+            if(param === "ios" || param === "android"){
+                setOSSpecificParams.call(this,params[param],param);
+            }else{
+                this[param] = params[param];
+            }
         }
     }
     
+    function setOSSpecificParams(params,key){
+        for (var param in params) {
+            this[key][param] = params[param];
+        }
+    }
+    
+    setParams.call(this,params);
 };
 
 module.exports = AttributedString;

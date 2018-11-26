@@ -66,7 +66,9 @@ SearchView.prototype.backgroundImage;
 SearchView.prototype.iconImage;
 
 /**
- * Adds SearchView to UI.Page's headerBar view.
+ * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar, 
+ * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios. In Android, 
+ * searchview always will be iconified. So to make apperance always expanded, combine searchview with {@link UI.HeaderBar#titleLayout titleLayout}
  *
  * @method addToHeaderBar
  * @param {UI.Page} page.
@@ -84,6 +86,17 @@ SearchView.prototype.addToHeaderBar = function(page){};
  * @since 3.0.2
  */
 SearchView.prototype.textFieldBorderRadius; 
+/**
+ * Sets/gets border thickness of bounded view. Accepts unsigned
+ * numbers, 0 means no border. When the searchview is added to header bar, 
+ * the border width of the search view will be 0 on ios.
+ *
+ * @property {Number} [borderWidth = 1]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.borderWidth = 1;
 
 /**
  * Removes SearchView from UI.Page's headerBar view.
@@ -175,13 +188,14 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
- * Gets/sets cursor color of searchview. This property works only for IOS.
+ * Gets/sets cursor color of searchview.
  *
  * @property {UI.Color} cursorColor
  * @ios
- * @since 1.1.12
+ * @android
+ * @since 3.2.1
  */
-SearchView.prototype.ios.cursorColor;
+SearchView.prototype.cursorColor;
 
 /**
  * Gets/sets cancel button color of searchview. This property works only for IOS.
@@ -191,6 +205,56 @@ SearchView.prototype.ios.cursorColor;
  * @since 1.1.12
  */
 SearchView.prototype.ios.cancelButtonColor;
+
+/**
+ * Gets/sets cancel button text of searchview. This property works only for IOS.
+ *
+ * @property {String} cancelButtonText
+ * @ios
+ * @since 3.2.1
+ */
+SearchView.prototype.ios.cancelButtonText;
+
+
+/**
+ * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * property should be true.
+ *
+ * @property {UI.Image} searchButtonIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.searchButtonIcon;
+
+/**
+ * This property makes the search view either iconified or expanded.
+ *
+ * @property {Boolean} [iconifiedByDefault = false ]
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.iconifiedByDefault;
+
+
+/**
+ * Gets/sets clear icon of searchview.
+ *
+ * @property {UI.Image} clearIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.clearIcon;
+
+
+/**
+ * This property allows you to override search icon of searchview by custom view or image . While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * property should be false.
+ *
+ * @property {UI.Image | UI.View} searchIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.searchIcon;
 
 /**
  * Gets/sets the color of the hint text.

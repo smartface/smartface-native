@@ -10,6 +10,8 @@ const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 
+const rippleSuperView = require("./ripple");
+
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
@@ -54,6 +56,8 @@ function View(params) {
     }
 
     this.android = {};
+    rippleSuperView(this);
+
     // Background drawable properties
     this._backgroundColor = Color.TRANSPARENT;
     this._borderColor = Color.BLACK;
@@ -122,12 +126,10 @@ function View(params) {
                     // this.borderRadius = this.borderRadius;
                     // this.borderWidth = this.borderWidth;
                     // this.borderColor = this.borderColor;
-                    this.nativeObject.setBackground(this._gradientDrawable);
 
                 }
                 else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
-                    this.nativeObject.setBackground(this._gradientDrawable);
                 }
             },
             enumerable: true,
@@ -143,7 +145,6 @@ function View(params) {
                 var borderWidthPx = DpToPixel(this._borderWidth);
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -164,7 +165,6 @@ function View(params) {
 
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -183,7 +183,7 @@ function View(params) {
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderRadiusPx = DpToPixel(this._borderRadius);
                 this._gradientDrawable.setCornerRadius(borderRadiusPx);
-                this.nativeObject.setBackground(this._gradientDrawable); // TODO check this line is required or not
+                this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
             },
             enumerable: true,
             configurable: true

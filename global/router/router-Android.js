@@ -181,6 +181,8 @@ Router.goBack = function(to, parameters, animated) {
     return false;
 };
 
+Router.pageCount = 0;
+
 Router.getCurrent = function() {
     return history[history.length-1].path;
 };

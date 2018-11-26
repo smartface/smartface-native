@@ -36,12 +36,12 @@ function FileStream(params) {
         const NativeBufferedWriter = requireClass("java.io.BufferedWriter");
 
         if (_contentMode === FileStream.ContentMode.TEXT) {
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
+            let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else {
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
+            let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
@@ -50,14 +50,14 @@ function FileStream(params) {
             const NativeInputStreamReader = requireClass("java.io.InputStreamReader");
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
-
-            var assetsStreamObject = AndroidConfig.activity.getAssets().open(fileObject.nativeObject);
+            const NativeFileInputStream = requireClass("java.io.FileInputStream");
             if (_contentMode === FileStream.ContentMode.TEXT) {
-                var inputStreamReader = new NativeInputStreamReader(assetsStreamObject);
+                let inputStreamReader = new NativeInputStreamReader(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
             }
             else {
-                this.nativeObject = new NativeBufferedInputStream(assetsStreamObject);
+                var fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
+                this.nativeObject = new NativeBufferedInputStream(fileInputStream);
             }
         }
         else if (fileObject.type === Path.FILE_TYPE.DRAWABLE) {
@@ -67,7 +67,7 @@ function FileStream(params) {
 
             var inputStream = AndroidConfig.activityResources.openRawResource(fileObject.drawableResourceId);
             if (_contentMode === FileStream.ContentMode.TEXT) {
-                var inputStreamReader = new NativeInputStreamReader(inputStream);
+                let inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
             }
             else {
@@ -81,11 +81,11 @@ function FileStream(params) {
             const NativeFileReader = requireClass("java.io.FileReader");
 
             if (_contentMode === FileStream.ContentMode.TEXT) {
-                var fileReader = new NativeFileReader(fileObject.nativeObject);
+                let fileReader = new NativeFileReader(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedReader(fileReader);
             }
             else {
-                var fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
+                let fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedInputStream(fileInputStream);
             }
         }
@@ -101,11 +101,11 @@ function FileStream(params) {
 
         if (_contentMode === FileStream.ContentMode.TEXT) {
             var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
-            var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
+            let outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
         }
         else {
-            var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
+            let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
     }
