@@ -13,7 +13,7 @@ ViewController.deactivateRootController = function(controller) {
     }
 };
 
-ViewController.set__isActiveOfController = function(controller, __isActive) {
+ViewController.setIsActiveOfController = function(controller, __isActive) {
     if((!controller) || (controller instanceof Page))
        return;
     controller.__isActive = __isActive;
@@ -28,11 +28,11 @@ ViewController.set__isActiveOfController = function(controller, __isActive) {
 };
 
 ViewController.activateController = function(controller) {
-    ViewController.set__isActiveOfController(controller, true);
+    ViewController.setIsActiveOfController(controller, true);
 };
 
 ViewController.deactivateController = function(controller) {
-    ViewController.set__isActiveOfController(controller, false);
+    ViewController.setIsActiveOfController(controller, false);
 };
 
 ViewController.setController = function(params) {

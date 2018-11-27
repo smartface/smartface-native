@@ -272,7 +272,6 @@ const TabBarController = extend(Page)(
                     return _dividerPadding;
                 },
                 set: function(padding) {
-                    console.log("Set divider size");
                     _dividerPadding = padding;
                     if (self.dividerDrawable) {
                         var px = DpToPixel(_dividerPadding);

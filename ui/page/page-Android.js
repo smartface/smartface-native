@@ -81,7 +81,6 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
-                        console.log("################ Application.currentPage: " + self.pageID);
                         Application.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -117,10 +116,8 @@ function Page(params) {
             if (itemId === NativeAndroidR.id.home) {
                 let leftItem;
                 if(Application.currentPage.pageID === self.pageID) {
-                    console.log("Application.currentPage.pageID === self.pageID: " + self.pageID);
                     leftItem = self._headerBarLeftItem;
                 } else {
-                    console.log("Application.currentPage.pageID !== self.pageID");
                     leftItem = Application.currentPage._headerBarLeftItem;
                 }
                 
@@ -325,11 +322,7 @@ function Page(params) {
                 if(!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
-                console.log("Present params typeof object: " + (typeof(params) === "object"));
                 const ViewController = require("sf-core/util/Android/transition/viewcontroller");
-                // console.log("Present params typeof NavigationController: " + (params instanceof ViewController));
-                
-                console.log("Present params.onComplete: " + Object.keys(params));
                 // TODO: Remove this custom implement to avoid smartafce Router bug!
                 let controller = params;
                 params.__isPopupPage = true;
@@ -348,9 +341,7 @@ function Page(params) {
         'dismiss': {
             value: function(params) {
                 const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
-                console.log("Dismiss");
                 var fragmentManager = activity.getSupportFragmentManager();
-                console.log("self.popUpBackPage: " + self.popUpBackPage);
                 if(!self.popUpBackPage)
                     return;
                 self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
@@ -363,7 +354,6 @@ function Page(params) {
                 }
                 FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
                 Application.currentPage = self.popUpBackPage;
-                console.log("Dismiss onComplete: " + typeof(params.onComplete));
                 params.onComplete && params.onComplete();
             },
             enumerable: true
@@ -792,6 +782,7 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
+                if(!focusedView) { return; }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");

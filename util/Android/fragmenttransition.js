@@ -108,19 +108,32 @@ FragmentTransaction.popUpTransition = function(page, animation) {
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
-    if(!pagePopUpAnimationsCache) {
-        var packageName = activity.getPackageName();
-        var resources = AndroidConfig.activityResources;
-        pagePopUpAnimationsCache = {};
-        pagePopUpAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
-        pagePopUpAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
-    }
-
+    
+    !pagePopUpAnimationsCache && setPopUpAnimationsCache();
+    
     if (animation)
-        fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0, 0, pagePopUpAnimationsCache.exit);
+        fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0);
 
     fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
-    fragmentTransaction.addToBackStack("" + page.pageID);
+    fragmentTransaction.commitAllowingStateLoss();
+    fragmentManager.executePendingTransactions();
+};
+
+FragmentTransaction.dismissTransition = function(page, animation) {
+    FragmentTransaction.checkBottomTabBarVisible(page);
+    var fragmentManager = activity.getSupportFragmentManager();
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    
+    !pagePopUpAnimationsCache && setPopUpAnimationsCache();
+
+    if (animation)
+        fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
+    if(page.parentController) {
+        let popupBackPage = page.parentController.popUpBackPage;
+        fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
+    }
+    
+    fragmentTransaction.remove(page.nativeObject);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
@@ -171,6 +184,15 @@ function rightToLeftTransitionAnimation(fragmentTransaction) {
     if (leftEnter !== 0 && leftExit !== 0) {
         fragmentTransaction.setCustomAnimations(leftEnter, leftExit, rightEnter, rightExit);
     }
+}
+
+function setPopUpAnimationsCache() {
+    var packageName = activity.getPackageName();
+    var resources = AndroidConfig.activityResources;
+    pagePopUpAnimationsCache = {};
+    pagePopUpAnimationsCache.enter = resources.getIdentifier("onshow_animation", "anim", packageName);
+    pagePopUpAnimationsCache.exit = resources.getIdentifier("ondismiss_animation", "anim", packageName);
+    return pagePopUpAnimationsCache;
 }
 
 FragmentTransaction.AnimationType = {};
