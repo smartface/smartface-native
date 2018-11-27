@@ -151,16 +151,35 @@ function NavigationController() {
 
     this.present = function(params) {
         const Application = require("../../application");
-        if (!params)
+        if (!params || !self.__isActive)
             return;
-        Application.currentPage && (Application.currentPage.present(params.controller, params.animated, params.onComplete));
+        params.controller.popUpBackPage = Application.currentPage;
+        params.controller.popupBackNavigator = self;
+        ViewController.activateController(params.controller);
+        
+        ViewController.setController({
+            controller: params.controller, //params.controller,
+            animation: params.animated,
+            isComingFromPresent: true,
+            onComplete: params.onComplete
+        });
     };
 
-    this.dismiss = function(onCompleteCallback) {
+    this.dismiss = function(params = {}) {
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
-        Application.currentPage && (Application.currentPage.dismiss(onCompleteCallback));
+        if(!self.popupBackNavigator) { return; }
+        
+        const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+        FragmentTransaction.dismissTransition(self.getCurrentController(), true);
+        FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
+        
+        Application.currentPage = self.popUpBackPage;
+        self.popUpBackPage = null;
+        self.popupBackNavigator = null;
+        
         ViewController.deactivateController(self);
+        params.onComplete && params.onComplete();
     };
 
     this.pop = function(params) {
