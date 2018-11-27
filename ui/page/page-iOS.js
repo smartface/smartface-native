@@ -455,7 +455,9 @@ function Page(params) {
                 _titleView.applyLayout();
                 
                 // These calls may need for different cases.
-                // _titleView.nativeObject.layoutIfNeeded();
+                if (checkIfSearchviewIsSubview(_titleView.nativeObject)) { //Workaround Bug : IOS-2707
+                    _titleView.nativeObject.layoutIfNeeded();
+                }
                 // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
                 _titleView.nativeObject.sizeToFit();
                 
