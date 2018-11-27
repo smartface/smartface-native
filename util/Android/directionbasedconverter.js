@@ -31,8 +31,6 @@ DirectionBasedConverter.convertMargin = function(layoutParams, left, top, right,
         layoutParams.setMargins(left, top, right, bottom);
     }
     return layoutParams;
-}
-
-
+};
 
 module.exports = DirectionBasedConverter;
