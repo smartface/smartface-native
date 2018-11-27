@@ -407,8 +407,11 @@ function Page(params) {
             if (nativeObject.subviews[index].constructor.name === "SMFNative.SMFUISearchBar") {
                 return true;
             }
-            return checkIfSearchviewIsSubview(nativeObject.subviews[index]);
+            if (checkIfSearchviewIsSubview(nativeObject.subviews[index])) {
+                return true
+            }
         }
+        return false;
     };
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
