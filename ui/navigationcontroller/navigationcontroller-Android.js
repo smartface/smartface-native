@@ -37,7 +37,7 @@ function NavigationController() {
                     }
 
                     if (pageIDCollectionInStack[childController.pageID]) {
-                        throw new Error("This page exist in history!");
+                        // console.log("This page exist in history!");
                     }
                     pageIDCollectionInStack[childController.pageID] = childController;
 
@@ -119,7 +119,7 @@ function NavigationController() {
         }
 
         if (pageIDCollectionInStack[params.controller.pageID]) {
-            throw new Error("This page exist in history! PageID: " + params.controller.pageID);
+            // console.log("This page exist in history! PageID: " + params.controller.pageID);
         }
         
         self.__isActive && (ViewController.deactivateController(self.getCurrentController()));
