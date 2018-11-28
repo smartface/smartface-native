@@ -77,9 +77,14 @@ FragmentTransaction.replace = function(params) {
     
     if(params.page.popUpBackPage) {
         // back to popup page
-        fragmentTransaction.replace(rootViewId, params.page.popUpBackPage.nativeObject, "" + params.page.popUpBackPage.pageID);
         fragmentTransaction.add(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     } else {
+        let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
+        if(hasPopupBackController && (params.page.parentController.historyStack.length == 2)) {
+            // first push to pop up navigation controller
+            let firstPageInPopup = params.page.parentController.historyStack[0];
+            fragmentTransaction.remove(firstPageInPopup.nativeObject);
+        }
         fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     }
     
@@ -113,7 +118,6 @@ FragmentTransaction.popUpTransition = function(page, animation) {
     
     if (animation)
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0);
-
     fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();

@@ -83,6 +83,7 @@ function Page(params) {
                     if (!self.isSwipeViewPage) {
                         Application.currentPage = self;
                     }
+                    Application.registOnItemSelectedListener();
                     onShowCallback && onShowCallback();
 
                     var spratIntent = AndroidConfig.activity.getIntent();

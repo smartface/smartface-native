@@ -307,6 +307,19 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+ApplicationWrapper.registOnItemSelectedListener = function() {
+    if(ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    ApplicationWrapper.__isSetOnItemSelectedListener = true;
+    spratAndroidActivityInstance.attachItemSelectedListener({
+        onOptionsItemSelected: function() {
+            let leftItem = ApplicationWrapper.currentPage._headerBarLeftItem;
+            if(leftItem) {
+                leftItem.onPress && leftItem.onPress();
+            }
+        }
+    });
+};
+
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
     const ViewController = require("../util/Android/transition/viewcontroller");
