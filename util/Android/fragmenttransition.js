@@ -1,5 +1,7 @@
 /* globals requireClass */
 const AndroidConfig = require("./androidconfig");
+const DirectionBasedConverter = require("./directionbasedconverter");
+
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 const activity = AndroidConfig.activity;
@@ -63,7 +65,8 @@ FragmentTransaction.replace = function(params) {
     var fragmentTransaction = fragmentManager.beginTransaction();
     if(params.animated) {
         // check animation type
-        switch (params.animationType) {
+        let animationType = DirectionBasedConverter.getAnimationType(params.animationType);
+        switch (animationType) {
             case '0':
                 rightToLeftTransitionAnimation(fragmentTransaction);
                 break;
