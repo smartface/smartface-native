@@ -76,7 +76,7 @@ TextBox.prototype.cursorPosition = {start: 0, end: 0};
 
 
 /**
- * Gets/sets the cursor color of TextBox. This feature is available for Android Oreo 8.1 and below versions.
+ * Gets/sets the cursor color of TextBox.
  *
  * @property {UI.Color} cursorColor
  * @android
