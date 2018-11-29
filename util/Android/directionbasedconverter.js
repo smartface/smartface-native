@@ -16,10 +16,10 @@ DirectionBasedConverter.convertIndex = function(array, index) {
 
 DirectionBasedConverter.getAnimationType = function(animationType) {
     const FragmentTransaction = require("./fragmenttransition");
-    
-    if(LTR) { return; }
-    
-    switch(animationType) {
+
+    if (LTR) { return; }
+
+    switch (animationType) {
         case FragmentTransaction.AnimationType.LEFTTORIGHT:
             return FragmentTransaction.AnimationType.RIGHTTOLEFT;
         case FragmentTransaction.AnimationType.RIGHTTOLEFT:
@@ -30,7 +30,7 @@ DirectionBasedConverter.getAnimationType = function(animationType) {
 };
 
 DirectionBasedConverter.setLayoutDirection = function(nativeLayout) {
-    if(LTR) { return; }
+    if (LTR) { return; }
     // 1 = View.LAYOUT_DIRECTION_RTL
     nativeLayout.setLayoutDirection(1);
 };
