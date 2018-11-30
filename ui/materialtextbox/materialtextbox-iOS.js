@@ -29,6 +29,7 @@ const MaterialTextbox = extend(TextBox)(
                 
                 if (!_rightLayoutMain) {
                     var flexMain = new FlexLayout();
+                    flexMain.nativeObject.yoga.isEnabled = false; // Bug : IOS-2714
                     var flexContent = new FlexLayout();
                     flexMain.nativeObject.frame = { x: 0, y: 0, width: object.width ? object.width : 30, height: 0 };
                     flexMain.nativeObject.addFrameObserver();

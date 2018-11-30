@@ -419,11 +419,11 @@ function Page(params) {
                 return true;
             }
             if (checkIfSearchviewIsSubview(nativeObject.subviews[index])) {
-                return true
+                return true;
             }
         }
         return false;
-    };
+    }
     // Deprecated
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
