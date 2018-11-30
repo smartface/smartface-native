@@ -67,12 +67,11 @@ const VideoView = extend(View)(
             'loadFile': {
                 value: function(file) {
                     const File = require("../../io/file");
-                    const Path = require("../../io/path");
-                    
-                    if(!(file instanceof File) || (file.type !== Path.FILE_TYPE.FILE) || !(file.exists)) {
+
+                    if(!(file instanceof File) || !(file.exists)) {
                         throw new TypeError(Exception.TypeError.FILE);
                     }
-                    this.nativeInner.setVideoPath(file.path);
+                    this.nativeInner.setVideoPath(file.fullPath);
                 }
             },
             'onReady': {

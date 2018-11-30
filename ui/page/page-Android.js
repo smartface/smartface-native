@@ -34,7 +34,7 @@ const OrientationDictionary = {
 function Page(params) {
     (!params) && (params = {});
     var self = this;
-    
+
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
@@ -128,6 +128,7 @@ function Page(params) {
                 else {
                     // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
                 }
+
             }
             else if (_headerBarItems[itemId]) {
                 var item = _headerBarItems[itemId];
@@ -783,7 +784,7 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
-                if(!focusedView) { return; }
+                if (!focusedView) { return; }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
