@@ -610,15 +610,15 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    var _contentInsets = {};
-    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+    var _contentInset = {};
+    Object.defineProperty(self.headerBar.android, 'contentInset', {
         get: function() {
             return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
         },
-        set: function(contentInsets) { // API Level 21+
-            _contentInsets = contentInsets;
-            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
-            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
+        set: function(contentInset) { // API Level 21+
+            _contentInset = contentInset;
+            let cotentInsetStart = _contentInset.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInset.left;
+            let cotentInsetEnd = _contentInset.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInset.right;
 
             toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
         },
