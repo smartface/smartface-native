@@ -131,6 +131,7 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 
 FragmentTransaction.dismissTransition = function(page, animation) {
     const ViewController = require("./transition/viewcontroller");
+    const Page = require("sf-core/ui/page");
     
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
@@ -147,9 +148,9 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         }
         
         let popupBackPage = page.parentController.popUpBackPage;
-        fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
+        popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
     }
-
+    
     fragmentTransaction.remove(page.nativeObject);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();

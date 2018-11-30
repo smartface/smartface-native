@@ -17,7 +17,7 @@ function BottomTabBarController(params) {
     var _addedToActivity = false;
     var _disabledShiftingMode = false;
     var _menu;
-    this.childControllers = [];
+    var _childControllers = [];
 
     var self = this;
     var _selectedIndex = 0;
@@ -31,6 +31,21 @@ function BottomTabBarController(params) {
             },
             set: function(params) {
                 Object.assign(Application.tabBar, params);
+            },
+            enumerable: true
+        },
+        'childControllers': {
+            get: function() {
+                return _childControllers;
+            },
+            set: function(childrenArray) {
+                _childControllers = childrenArray;
+                
+                // set isInsideBottomTabBar for all children
+                const ViewController = require("../../util/Android/transition/viewcontroller");
+                for(let index in _childControllers) {
+                    ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
+                }
             },
             enumerable: true
         },
@@ -78,6 +93,7 @@ function BottomTabBarController(params) {
         if(!_addedToActivity) {
             _addedToActivity = true;
             var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
+            self.tabBar.nativeObject.setVisibility(8); // GONE
             pageLayoutWrapper.addView(self.tabBar.nativeObject);
         }
     };
@@ -185,6 +201,7 @@ function BottomTabBarController(params) {
         }
     }));
     
+    this.addTabBarToActivity();
     params && (Object.assign(this, params));
 }
 
