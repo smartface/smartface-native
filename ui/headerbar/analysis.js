@@ -187,6 +187,7 @@ HeaderBar.prototype.android.logoEnabled = null;
 
 /**
  * Gets/sets the title layout of the HeaderBar. Title layout allows you to assign custom view.
+ * For iOS, layouts are centered on the header bar and may be resized to fit.
  *
  * @property {UI.View} titleLayout
  * @android
