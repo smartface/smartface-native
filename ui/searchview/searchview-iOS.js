@@ -30,6 +30,13 @@ const SearchView = extend(View)(
         
         _super(this);
         
+        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+        if (isLTR) {
+            self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+        } else {
+            self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+        }
+        
         if(parseInt(System.OSVersion) >= 11){
             var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject,"heightAnchor",[],"NSObject");
             

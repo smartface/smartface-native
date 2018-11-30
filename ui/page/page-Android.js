@@ -45,7 +45,7 @@ const OrientationDictionary = {
 function Page(params) {
     (!params) && (params = {});
     var self = this;
-    
+
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
@@ -92,9 +92,9 @@ function Page(params) {
             rootLayout.nativeObject.post(NativeRunnable.implement({
                 run: function() {
                     if (!self.isSwipeViewPage) {
-                        if(!self.__pageID)
-                           self.__pageID = ++Router.pageCount;
-                           
+                        if (!self.__pageID)
+                            self.__pageID = ++Router.pageCount;
+
                         Router.currentPage = self;
                     }
                     onShowCallback && onShowCallback();
@@ -137,9 +137,14 @@ function Page(params) {
                 else {
                     clickedLeftItem = Router.currentPage._headerBarLeftItem;
                 }
-                
-                if(clickedLeftItem)
-                   clickedLeftItem.onPress && clickedLeftItem.onPress();
+
+                if (clickedLeftItem) {
+                    clickedLeftItem.onPress && clickedLeftItem.onPress();
+                }
+                else {
+                    const Router = require("../router");
+                    Router.goBack(null, this.__pendingParameters);
+                }
             }
             else if (_headerBarItems[itemId]) {
                 var item = _headerBarItems[itemId];
@@ -359,8 +364,8 @@ function Page(params) {
         },
         'dismiss': {
             value: function(onCompleteCallback) {
-                if(!self.popUpBackPage) { return; }
-                
+                if (!self.popUpBackPage) { return; }
+
                 var fragmentManager = activity.getSupportFragmentManager();
                 if (self.popUpBackPage.transitionViews) {
                     self.popUpBackPage.returnRevealAnimation = true;
@@ -671,15 +676,15 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    var _contentInsets = {};
-    Object.defineProperty(self.headerBar.android, 'contentInsets', {
+    var _contentInset = {};
+    Object.defineProperty(self.headerBar.android, 'contentInset', {
         get: function() {
             return { left: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()), right: AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) };
         },
-        set: function(contentInsets) { // API Level 21+
-            _contentInsets = contentInsets;
-            let cotentInsetStart = _contentInsets.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInsets.left;
-            let cotentInsetEnd = _contentInsets.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInsets.right;
+        set: function(contentInset) { // API Level 21+
+            _contentInset = contentInset;
+            let cotentInsetStart = _contentInset.left === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetStart()) : _contentInset.left;
+            let cotentInsetEnd = _contentInset.right === undefined ? AndroidUnitConverter.pixelToDp(toolbar.getContentInsetEnd()) : _contentInset.right;
 
             toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
         },
@@ -1017,7 +1022,7 @@ function Page(params) {
         onFocusChange: function(view, hasFocus) {
             if (hasFocus) {
                 var focusedView = activity.getCurrentFocus();
-                if(!focusedView) { return; }
+                if (!focusedView) { return; }
                 var windowToken = focusedView.getWindowToken();
 
                 var inputMethodManager = AndroidConfig.getSystemService("input_method", "android.view.inputmethod.InputMethodManager");
