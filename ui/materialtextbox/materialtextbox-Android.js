@@ -1,28 +1,21 @@
+/* globals requireClass, array */
 const TextBox = require('../textbox');
 const extend = require('js-base/core/extend');
 const View = require("../view");
-const Color = require("../color");
-const Font = require("../font");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
-
 const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
 const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-
-const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-
 const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
 
 const hintTextColorFieldName = "mDefaultTextColor";
 const hintFocusedTextColorFieldName = "mFocusedTextColor";
-const mErrorView = "mErrorView";
-const mCounterView = "mCounterView";
 
 const WRAP_CONTENT = -2;
 const MATCH_PARENT = -1;
@@ -132,7 +125,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                         self.android.enableErrorMessage = true;
 
                     let errorView = getReCreatedErrorView();
-                    errorView.setTextColor(_errorColor.nativeObject)
+                    errorView.setTextColor(_errorColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -273,9 +266,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return self.nativeObject.getCounterMaxLength();
                 },
                 set: function(value) {
-
                     _enableCounterMaxLength = value;
-                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
+                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false);
 
                     //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
                     if (_enableCharacterRestriction !== true)
@@ -308,7 +300,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableCharacterRestriction;
                 },
                 set: function(value) {
-
                     _enableCharacterRestriction = value;
                     self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
                 },
@@ -319,8 +310,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return _enableErrorMessage;
                 },
                 set: function(value) {
-
-                    _enableErrorMessage = value
+                    _enableErrorMessage = value;
                     self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
                 enumerable: true
@@ -406,7 +396,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         function getReCreatedErrorView() {
             const NativeR = requireClass(AndroidConfig.packageName + '.R');
             let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
-            let errorTextView = materialLinearLayout.findViewById(NativeR.id.textinput_error)
+            let errorTextView = materialLinearLayout.findViewById(NativeR.id.textinput_error);
 
             return errorTextView;
         }
@@ -431,6 +421,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
     }
-)
+);
 
 module.exports = MaterialTextbox;
