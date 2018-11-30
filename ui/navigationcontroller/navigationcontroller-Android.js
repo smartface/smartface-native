@@ -150,11 +150,9 @@ function NavigationController() {
     };
 
     this.present = function(params) {
-        console.log("NavigationController present: " + self.__navID);
         const Application = require("../../application");
         if (!params || !self.__isActive)
             return;
-        // params.controller.popUpBackPage = Application.currentPage;
         params.controller.popupBackNavigator = self;
         ViewController.deactivateRootController(Application.currentPage);
         ViewController.activateController(params.controller);
@@ -168,16 +166,15 @@ function NavigationController() {
     };
 
     this.dismiss = function(params = {}) {
-        console.log("NavigationController dismiss: " + self.__navID);
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
-        if(!self.popupBackNavigator) { return; }
-        
         const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
         
+        if(!self.popupBackNavigator) { return; }
+        
         FragmentTransaction.dismissTransition(self.getCurrentController(), true);
-        // FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
-        console.log("NavigationController dismiss self.popUpBackPage: " + self.popUpBackPage.pageID);
+        FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
+
         Application.currentPage = self.popUpBackPage;
         ViewController.activateRootController(Application.currentPage);
         self.popUpBackPage = null;
