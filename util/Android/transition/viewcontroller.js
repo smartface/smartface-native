@@ -93,16 +93,32 @@ ViewController.getCurrentPageFromController = function(controller) {
     const NavigationController = require("../../../ui/navigationcontroller");
     const BottomTabBarController = require("../../../ui/bottomtabbarcontroller");
     
-    if (controller instanceof Page)
+    if (controller instanceof Page) {
         return controller;
+    }
+    
     if (controller.historyStack.length > 0) {
         let childController = controller.historyStack[controller.historyStack.length - 1];
-        while (childController instanceof NavigationController || controller instanceof BottomTabBarController) {
+        while (childController instanceof NavigationController || childController instanceof BottomTabBarController) {
             childController = childController.getCurrentController();
         }
         return childController;
     }
     return null;
+};
+
+
+ViewController.setIsInsideBottomTabBarForAllChildren = function(controller) {
+    if(controller instanceof Page) {
+       controller.isInsideBottomTabBar = true;
+       return;
+    }
+    
+    // for NavigationController
+    controller.historyStack.forEach(function(childController) {
+        childController.isInsideBottomTabBar = true;
+        ViewController.setIsInsideBottomTabBarForAllChildren(childController);
+    });
 };
 
 module.exports = ViewController;
