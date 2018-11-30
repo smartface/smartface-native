@@ -153,12 +153,12 @@ function NavigationController() {
         const Application = require("../../application");
         if (!params || !self.__isActive)
             return;
-        params.controller.popUpBackPage = Application.currentPage;
         params.controller.popupBackNavigator = self;
+        ViewController.deactivateRootController(Application.currentPage);
         ViewController.activateController(params.controller);
         
         ViewController.setController({
-            controller: params.controller, //params.controller,
+            controller: params.controller,
             animation: params.animated,
             isComingFromPresent: true,
             onComplete: params.onComplete
@@ -168,13 +168,15 @@ function NavigationController() {
     this.dismiss = function(params = {}) {
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
+        const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+        
         if(!self.popupBackNavigator) { return; }
         
-        const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
         FragmentTransaction.dismissTransition(self.getCurrentController(), true);
         FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
-        
+
         Application.currentPage = self.popUpBackPage;
+        ViewController.activateRootController(Application.currentPage);
         self.popUpBackPage = null;
         self.popupBackNavigator = null;
         

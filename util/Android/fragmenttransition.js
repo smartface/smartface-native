@@ -130,7 +130,8 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 };
 
 FragmentTransaction.dismissTransition = function(page, animation) {
-    FragmentTransaction.checkBottomTabBarVisible(page);
+    const ViewController = require("./transition/viewcontroller");
+    
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -139,6 +140,12 @@ FragmentTransaction.dismissTransition = function(page, animation) {
     if (animation)
         fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
     if (page.parentController) {
+        let popupBackNavigator = page.parentController.popupBackNavigator;
+        if(popupBackNavigator) {
+            let currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
+            page.parentController.popUpBackPage = currentPageFromController;
+        }
+        
         let popupBackPage = page.parentController.popUpBackPage;
         fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
     }
