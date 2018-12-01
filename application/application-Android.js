@@ -324,8 +324,8 @@ ApplicationWrapper.registOnItemSelectedListener = function() {
 ApplicationWrapper.setRootController = function(params) {
     const ViewController = require("../util/Android/transition/viewcontroller");
     ViewController.deactivateRootController(ApplicationWrapper.currentPage);
-    ViewController.activateController(params.controller);
-    
+    // ViewController.activateController(params.controller);
+    params.controller.__isActive = true;
     ViewController.setController(params); 
 };
 
