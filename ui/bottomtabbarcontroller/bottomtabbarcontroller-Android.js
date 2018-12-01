@@ -86,8 +86,7 @@ function BottomTabBarController(params) {
 
     this.addTabBarToActivity = function() {
         if (!_disabledShiftingMode) {
-            disableShiftMode(self.tabBar);
-            _disabledShiftingMode = true;
+            _disabledShiftingMode = disableShiftMode(self.tabBar);
         }
         
         if(!_addedToActivity) {
@@ -100,12 +99,12 @@ function BottomTabBarController(params) {
 
     this.push = function(childController) {
         if(!childController) {
-            // throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
+            // console.log("BottomTabbarController item is not a Page instance or a NavigationController instance!");
             return;
         }
-
+        
         if(!self.__isActive)
-           return;
+          return;
         
         const ViewController = require("sf-core/util/Android/transition/viewcontroller");
         ViewController.deactivateController(self.getCurrentController());
@@ -182,13 +181,14 @@ function BottomTabBarController(params) {
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
             if (result) {
                 try {
-                    !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
+                    self.childControllers[index].parentController = self;
                 } catch(e) {
                     Application.onUnhandledError && Application.onUnhandledError(e);
                 }
                 // TODO: Add this property to controller class
                 // use this property to show/hide bottom naviagtion view after controller transition
                 self.childControllers[index].isInsideBottomTabBar = true; 
+                self.childControllers[index].__isActive = true;
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 try {
@@ -211,11 +211,16 @@ function disableShiftMode(bottomTabBar) {
     shiftingMode.setAccessible(true);
     shiftingMode.setBoolean(menuView, false);
     shiftingMode.setAccessible(false);
-    for (var i = 0; i < menuView.getChildCount(); i++) {
+    let childCount = menuView.getChildCount();
+    if(childCount === 0)
+        return false;
+    
+    for (var i = 0; i < childCount; i++) {
         var item = menuView.getChildAt(i);
         item.setShiftingMode(false);
         var checked = (item.getItemData()).isChecked();
         item.setChecked(checked);
     }
+    return true;
 }
 module.exports = BottomTabBarController;
