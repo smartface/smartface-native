@@ -125,6 +125,7 @@ function NavigationController() {
         self.__isActive && (ViewController.deactivateController(self.getCurrentController()));
 
         params.controller.parentController = self;
+        params.controller.isInsideBottomTabBar = self.isInsideBottomTabBar;
         pageIDCollectionInStack[params.controller.pageID] = params.controller;
         historyStack.push(params.controller);
         self.show(params);

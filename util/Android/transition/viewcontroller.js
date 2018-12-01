@@ -109,8 +109,8 @@ ViewController.getCurrentPageFromController = function(controller) {
 
 
 ViewController.setIsInsideBottomTabBarForAllChildren = function(controller) {
+    controller.isInsideBottomTabBar = true;
     if(controller instanceof Page) {
-       controller.isInsideBottomTabBar = true;
        return;
     }
     
