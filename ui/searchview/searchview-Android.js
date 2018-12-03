@@ -297,7 +297,8 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var self = this;
-        var _searchButtonIcon, _clearIcon, _searchIcon, _iconifiedByDefault = false;
+        var _searchButtonIcon, _clearIcon, _searchIcon, _iconifiedByDefault = false,
+            _searchImageRemoved = false;
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
         Object.defineProperties(this.android, {
@@ -403,7 +404,8 @@ const SearchView = extend(View)(
                         searchImage.setImageDrawable(_searchIcon.nativeObject);
                     }
                     else if (_searchIcon instanceof View) {
-                        mSearchEditFrame.removeViewAt(0);
+                        !_searchImageRemoved && mSearchEditFrame.removeViewAt(0);
+                        _searchImageRemoved = true;
                         mSearchEditFrame.addView(_searchIcon.nativeObject, 0);
                     }
                     else if (value === null) {
@@ -412,7 +414,8 @@ const SearchView = extend(View)(
                         /*
                         Support old style. Which looks like iOS.
                         */
-                        mSearchEditFrame.removeViewAt(0);
+                        !_searchImageRemoved && mSearchEditFrame.removeViewAt(0);
+                        _searchImageRemoved = true;
                         updateQueryHint(self, mSearchSrcTextView, mSearchHintIcon, _hint);
                     }
                 },
@@ -503,7 +506,7 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
 
         const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
-        let nativeDrawable = icon instanceof Image ? icon.nativeObject :  icon;
+        let nativeDrawable = icon instanceof Image ? icon.nativeObject : icon;
         var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
         nativeDrawable.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");
