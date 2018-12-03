@@ -242,6 +242,7 @@ SearchView.prototype.android.iconifiedByDefault;
  * @property {UI.Image} clearIcon
  * @android
  * @since 3.2.1
+ * @deprecated 3.2.2 Use {@link UI.SearchView#closeImage} instead.
  */
 SearchView.prototype.android.clearIcon;
 
