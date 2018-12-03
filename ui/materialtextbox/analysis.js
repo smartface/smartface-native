@@ -13,7 +13,7 @@
  *     myPage.layout.addChild(materialtextbox);
  *
  */
-function MaterialTextBox(params){}
+function MaterialTextBox(params) {}
 
 /**
  * Gets/sets the titleFont of the MaterialTextBox. Error label and animated hint label are the same on iOS so this property make changes on both.
@@ -152,6 +152,27 @@ MaterialTextBox.prototype.enableCharacterRestriction;
  * @deprecated 3.2.1 TextBox grows as its wrapper
  */
 MaterialTextBox.prototype.textBoxHeight;
+
+
+/**
+ * Gets/sets font of a Label. When set to null label uses system font.
+ * It is set to null by default. In Android, to make hint text size as your given text size assign the font property in constructor.
+ *
+ *     @example
+ *     const Label = require('sf-core/ui/label');
+ *     const Font = require('sf-core/ui/font')
+ *     var myLabel = new Label({
+ *         text: "This is my label",
+ *         visible: true
+ *     });
+ *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+ *
+ * @property {UI.Font} [font = null]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MaterialTextBox.prototype.font = null;
 
 
 
