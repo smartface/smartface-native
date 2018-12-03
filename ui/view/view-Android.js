@@ -1,4 +1,4 @@
-/*globals array, requireClass, toJSArray, release */
+/*globals array, requireClass, toJSArray */
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");
@@ -289,7 +289,6 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
-        this.setTouchHandlers();
     },
     get onTouch() {
         return this._onTouch;
@@ -669,22 +668,22 @@ View.prototype.setTouchHandlers = function() {
             var isInside = !(x > w || x < 0 || y > h || y < 0);
             if (this.touchEnabled) {
                 let result;
-                switch(event.getAction()) {
+                switch (event.getAction()) {
                     case ACTION_UP:
                         this._onTouchEnded && (result = this._onTouchEnded(isInside));
                         return (result === true);
-                    case ACTION_DOWN: 
+                    case ACTION_DOWN:
                         // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                         // So we should consume ACTION_DOWN event.
                         this._onTouch && (result = this._onTouch());
-                        return ((result === true) || (result === undefined));
+                        return !(result === false);
                     case ACTION_MOVE:
                         this._onTouchMoved && (result = this._onTouchMoved(isInside));
                         return (result === true);
                     case ACTION_CANCEL:
                         this._onTouchCancelled && (result = this._onTouchCancelled());
                         return (result === true);
-                    default: 
+                    default:
                         return false;
                 }
             }
