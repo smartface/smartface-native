@@ -1,4 +1,4 @@
-/*globals array, requireClass, toJSArray, release */
+/*globals array, requireClass, toJSArray */
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");
@@ -289,7 +289,6 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
-        this.setTouchHandlers();
     },
     get onTouch() {
         return this._onTouch;
@@ -661,57 +660,34 @@ View.prototype.setTouchHandlers = function() {
 
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-
             var x = event.getX();
             var y = event.getY();
-
             var w = view.getWidth();
             var h = view.getHeight();
 
             var isInside = !(x > w || x < 0 || y > h || y < 0);
-
-            if (this.touchEnabled && (this._onTouch || this._onTouchEnded)) {
-                var result;
-
-                if (event.getAction() === ACTION_UP) {
-                    result = (this._onTouchEnded && this._onTouchEnded(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                }
-                else if (event.getAction() === ACTION_DOWN) {
-                    result = (this._onTouch && this._onTouch());
-                    // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
-                    // So we should consume ACTION_DOWN event.
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_MOVE) { // MOVE
-
-                    result = (this._onTouchMoved && this._onTouchMoved(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_CANCEL) { // CANCEL
-
-                    result = (this._onTouchCancelled && this._onTouchCancelled());
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
+            if (this.touchEnabled) {
+                let result;
+                switch (event.getAction()) {
+                    case ACTION_UP:
+                        this._onTouchEnded && (result = this._onTouchEnded(isInside));
+                        return (result === true);
+                    case ACTION_DOWN:
+                        // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
+                        // So we should consume ACTION_DOWN event.
+                        this._onTouch && (result = this._onTouch());
+                        return !(result === false);
+                    case ACTION_MOVE:
+                        this._onTouchMoved && (result = this._onTouchMoved(isInside));
+                        return (result === true);
+                    case ACTION_CANCEL:
+                        this._onTouchCancelled && (result = this._onTouchCancelled());
+                        return (result === true);
+                    default:
+                        return false;
                 }
             }
-            return !this.touchEnabled;
+            return false;
         }.bind(this)
     }));
     this.didSetTouchHandler = true;
