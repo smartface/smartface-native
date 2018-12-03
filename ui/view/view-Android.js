@@ -677,7 +677,7 @@ View.prototype.setTouchHandlers = function() {
                         // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
                         // So we should consume ACTION_DOWN event.
                         this._onTouch && (result = this._onTouch());
-                        return !(result === false);
+                        return ((result === true) || (result === undefined));
                     case ACTION_MOVE:
                         this._onTouchMoved && (result = this._onTouchMoved(isInside));
                         return (result === true);
