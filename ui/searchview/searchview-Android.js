@@ -411,6 +411,7 @@ const SearchView = extend(View)(
                     else if (value === null) {
                         let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
                         let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
+                        a.recycle();
                         /*
                         Support old style. Which looks like iOS.
                         */
