@@ -402,9 +402,18 @@ const SearchView = extend(View)(
                     if (_searchIcon instanceof Image) {
                         searchImage.setImageDrawable(_searchIcon.nativeObject);
                     }
-                    else {
+                    else if (_searchIcon instanceof View) {
                         mSearchEditFrame.removeViewAt(0);
-                        mSearchEditFrame.addView(_searchIcon.nativeObject,0);
+                        mSearchEditFrame.addView(_searchIcon.nativeObject, 0);
+                    }
+                    else if (value === null) {
+                        let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
+                        let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
+                        /*
+                        Support old style. Which looks like iOS.
+                        */
+                        mSearchEditFrame.removeViewAt(0);
+                        updateQueryHint(self, mSearchSrcTextView, mSearchHintIcon, _hint);
                     }
                 },
                 enumerable: true
@@ -487,15 +496,19 @@ SearchView.iOS = {};
 SearchView.iOS.Style = {};
 
 function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
-    if (icon && icon.nativeObject) {
+    if (icon) {
         const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
         const NativeImageSpan = requireClass("android.text.style.ImageSpan");
+        const Image = require("sf-core/ui/image");
+
+        const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
+
+        let nativeDrawable = icon instanceof Image ? icon.nativeObject :  icon;
         var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
-        icon.nativeObject.setBounds(0, 0, textSize, textSize);
+        nativeDrawable.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");
-        var imageSpan = new NativeImageSpan(icon.nativeObject);
-        // Spannable.SPAN_EXCLUSIVE_EXCLUSIVE = 33
-        ssb.setSpan(imageSpan, 1, 2, 33);
+        var imageSpan = new NativeImageSpan(nativeDrawable);
+        ssb.setSpan(imageSpan, 1, 2, SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.append(hint);
         mSearchSrcTextView.setHint(ssb);
     }
