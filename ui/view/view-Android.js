@@ -668,7 +668,7 @@ View.prototype.setTouchHandlers = function() {
 
             var isInside = !(x > w || x < 0 || y > h || y < 0);
             if (this.touchEnabled) {
-                let result = false;
+                let result;
                 switch(event.getAction()) {
                     case ACTION_UP:
                         this._onTouchEnded && (result = this._onTouchEnded(isInside));
