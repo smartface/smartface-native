@@ -247,8 +247,8 @@ SearchView.prototype.android.clearIcon;
 
 
 /**
- * This property allows you to override search icon of searchview by custom view or image . While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
- * property should be false.
+ * This property allows you to override search icon of searchview by custom view or image. Assigning null allows you to remove searchIcon then textbox of searchview is fully occupied.
+ * While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault } property should be false.
  *
  * @property {UI.Image | UI.View} searchIcon
  * @android
