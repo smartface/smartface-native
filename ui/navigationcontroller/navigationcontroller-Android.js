@@ -4,9 +4,7 @@ const ViewController = require("../../util/Android/transition/viewcontroller");
 const Page = require("../../ui/page");
 
 function NavigationController() {
-    var historyStack = [];
     var pageIDCollectionInStack = {};
-
     var _childControllers = [];
 
     var self = this;
@@ -25,7 +23,6 @@ function NavigationController() {
                 // Reset history and pageIDDtack
                 _childControllers = childControllersArray;
                 pageIDCollectionInStack = {};
-                historyStack = [];
 
                 // Fill properties of each controller
                 for (var i = 0; i < childControllersArray.length; i++) {
@@ -40,19 +37,11 @@ function NavigationController() {
                         // console.log("This page exist in history!");
                     }
                     pageIDCollectionInStack[childController.pageID] = childController;
-
-                    historyStack.push(childController);
                 }
 
                 if (self.__isActive) {
                     ViewController.activateController(self.getCurrentController());
                 }
-            },
-            enumerable: true
-        },
-        'historyStack': {
-            get: function() {
-                return historyStack;
             },
             enumerable: true
         },
@@ -101,8 +90,8 @@ function NavigationController() {
         
         self.showController(params);
         var currentController;
-        if (historyStack.length > 1) {
-            currentController = historyStack[historyStack.length - 1];
+        if (_childControllers.length > 1) {
+            currentController = _childControllers[_childControllers.length - 1];
         }
 
         // TODO: Chnage currentPage as currentController
@@ -127,7 +116,7 @@ function NavigationController() {
         params.controller.parentController = self;
         params.controller.isInsideBottomTabBar = self.isInsideBottomTabBar;
         pageIDCollectionInStack[params.controller.pageID] = params.controller;
-        historyStack.push(params.controller);
+        _childControllers.push(params.controller);
         self.show(params);
     };
 
@@ -186,11 +175,11 @@ function NavigationController() {
     };
 
     this.pop = function(params) {
-        if (historyStack.length < 2) {
+        if (_childControllers.length < 2) {
             throw new Error("There is no page in history!");
         }
         // remove current page from history and its id from collection
-        var poppedController = historyStack.pop();
+        var poppedController = _childControllers.pop();
         pageIDCollectionInStack[poppedController.pageID] = null;
         if (!self.__isActive) {
             return;
@@ -201,7 +190,7 @@ function NavigationController() {
     };
 
     this.popTo = function(params) {
-        if (historyStack.length < 2) {
+        if (_childControllers.length < 2) {
             throw new Error("There is no controller in history!");
         }
 
@@ -213,8 +202,8 @@ function NavigationController() {
         var currentController = self.getCurrentController();
         // TODO: getCurrentController for accesing current controller
         // remove current controller from history and its id from collection
-        while (historyStack[historyStack.length - 1].pageID != params.controller.pageID) {
-            var controller = historyStack.pop();
+        while (_childControllers[_childControllers.length - 1].pageID != params.controller.pageID) {
+            var controller = _childControllers.pop();
             pageIDCollectionInStack[controller.pageID] = null;
         }
 
@@ -226,14 +215,14 @@ function NavigationController() {
 
     // TODO: Use getCurrentController for all possible case
     this.getCurrentController = function() {
-        if (historyStack.length > 0) {
-            return historyStack[historyStack.length - 1];
+        if (_childControllers.length > 0) {
+            return _childControllers[_childControllers.length - 1];
         }
         return null;
     };
 
     this.popFromHistoryController = function(currentController, params) {
-        var targetController = historyStack[historyStack.length - 1];
+        var targetController = _childControllers[_childControllers.length - 1];
 
         _willShowCallback && (_willShowCallback({ controller: targetController, animated: params.animated }));
         if (targetController instanceof Page) {

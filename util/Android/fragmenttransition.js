@@ -86,9 +86,9 @@ FragmentTransaction.replace = function(params) {
     }
     else {
         let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
-        if (hasPopupBackController && (params.page.parentController.historyStack.length == 2)) {
+        if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
             // first push to pop up navigation controller
-            let firstPageInPopup = params.page.parentController.historyStack[0];
+            let firstPageInPopup = params.page.parentController.childControllers[0];
             fragmentTransaction.remove(firstPageInPopup.nativeObject);
         }
         fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);

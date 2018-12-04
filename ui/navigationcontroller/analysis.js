@@ -104,7 +104,6 @@ function NavigationController() {
      */
     this.willShow = function(params){};
     
-    
     /**
      * This event is triggered before the page is displayed.
      *
