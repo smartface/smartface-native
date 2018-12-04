@@ -3,6 +3,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Font = require('../font');
 const Color = require('../color');
+const Image = require("../image");
 const KeyboardType = require('../keyboardtype');
 const TextAlignment = require('../textalignment');
 const AndroidConfig = require('../../util/Android/androidconfig');
@@ -74,16 +75,19 @@ const SearchView = extend(View)(
         var mCloseButton = this.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
         var mSearchButton = this.nativeObject.findViewById(NativeSupportR.id.search_button);
         var mUnderLine = this.nativeObject.findViewById(NativeSupportR.id.search_plate);
+        var mSearchEditFrame = this.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
+
         mUnderLine.setBackgroundColor(Color.TRANSPARENT.nativeObject);
         // mUnderLine.getBackground().setColorFilter(_defaultUnderlineColorNormal.nativeObject, PorterDuff.Mode.MULTIPLY);
 
         _super(this);
 
-        var _iconImage = null;
+        const self = this;
         var _hint = "";
         var _textColor = Color.BLACK;
         var _onTextChangedCallback, _onSearchBeginCallback,
-            _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor;
+            _onSearchEndCallback, _onSearchButtonClickedCallback, _textViewCursorColor,
+            _searchIconAssigned = false;
         var _font = null;
         var _textalignment = TextAlignment.MIDLEFT;
 
@@ -106,7 +110,7 @@ const SearchView = extend(View)(
                 set: function(hint) {
                     if (hint) {
                         _hint = "" + hint;
-                        updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
+                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
                     }
                 },
                 enumerable: true
@@ -139,13 +143,14 @@ const SearchView = extend(View)(
             },
             "iconImage": {
                 get: function() {
-                    return _iconImage;
+                    return _searchIcon;
                 },
                 set: function(iconImage) {
+                    _searchIconAssigned = true;
                     // If setting null to icon, default search icon will be displayed.
                     if (iconImage == null || iconImage instanceof require("../image")) {
-                        _iconImage = iconImage;
-                        updateQueryHint(this, mSearchSrcTextView, _iconImage, _hint);
+                        _searchIcon = iconImage;
+                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
                     }
                 },
                 enumerable: true
@@ -288,6 +293,20 @@ const SearchView = extend(View)(
                     Reflection.setCursorColor(mSearchSrcTextView, _textViewCursorColor.nativeObject);
                 },
                 enumerable: true
+            },
+            'searchIcon': {
+                get: function() {
+                    return _searchIcon;
+                },
+                set: function(value) {
+                    _searchIcon = value;
+                    _searchIconAssigned = true;
+                    // If setting null to icon, default search icon will be displayed.
+                    if (_searchIcon == null || _searchIcon instanceof require("../image")) {
+                        updateQueryHint(this, mSearchSrcTextView, _searchIcon, _hint);
+                    }
+                },
+                enumerable: true
             }
         });
 
@@ -296,9 +315,9 @@ const SearchView = extend(View)(
         var _closeImage = null;
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
-        var self = this;
-        var _searchButtonIcon, _clearIcon, _searchIcon, _iconifiedByDefault = false,
-            _searchImageRemoved = false;
+        var _searchButtonIcon, _closeIcon, _searchIcon, _iconifiedByDefault = false,
+            _leftView;
+
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
         Object.defineProperties(this.android, {
@@ -380,45 +399,28 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            'clearIcon': {
+            'closeIcon': {
                 get: function() {
-                    return _clearIcon;
+                    return _closeIcon;
                 },
                 set: function(value) {
-                    _clearIcon = value;
-                    let closeBtn = self.nativeObject.findViewById(NativeSupportR.id.search_close_btn);
-                    closeBtn.setImageDrawable(_clearIcon.nativeObject);
+                    _closeIcon = value;
+                    mCloseButton.setImageDrawable(_closeIcon.nativeObject);
                 },
                 enumerable: true
             },
-            'searchIcon': {
+            'leftView': {
                 get: function() {
-                    return _searchIcon;
+                    return _leftView;
                 },
                 set: function(value) {
-                    const Image = require("../image");
-                    _searchIcon = value;
-                    let mSearchEditFrame = self.nativeObject.findViewById(NativeSupportR.id.search_edit_frame);
-                    let searchImage = mSearchEditFrame.getChildAt(0); //AppCompatImageView
-                    if (_searchIcon instanceof Image) {
-                        searchImage.setImageDrawable(_searchIcon.nativeObject);
-                    }
-                    else if (_searchIcon instanceof View) {
-                        !_searchImageRemoved && mSearchEditFrame.removeViewAt(0);
-                        _searchImageRemoved = true;
-                        mSearchEditFrame.addView(_searchIcon.nativeObject, 0);
-                    }
-                    else if (value === null) {
-                        let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
-                        let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
-                        a.recycle();
-                        /*
-                        Support old style. Which looks like iOS.
-                        */
-                        !_searchImageRemoved && mSearchEditFrame.removeViewAt(0);
-                        _searchImageRemoved = true;
-                        updateQueryHint(self, mSearchSrcTextView, mSearchHintIcon, _hint);
-                    }
+                    _leftView = value;
+                    mSearchEditFrame.addView(_leftView.nativeObject, 0);
+                    //If searchIcon is assign then can be used leftView as well
+                    if (_searchIconAssigned)
+                        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
+                    else
+                        updateQueryHint(self, mSearchSrcTextView, null, _hint);
                 },
                 enumerable: true
             },
@@ -486,6 +488,13 @@ const SearchView = extend(View)(
             this.android.iconifiedByDefault = false;
         }
 
+        // Makes SearchView's textbox apperance fully occupied.
+        mSearchEditFrame.removeViewAt(0);
+        let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
+        let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
+        _searchIcon = new Image({ roundedBitmapDrawable: mSearchHintIcon });
+        updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
+        a.recycle();
 
         // Assign parameters given in constructor
         if (params) {
@@ -503,11 +512,10 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
     if (icon) {
         const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
         const NativeImageSpan = requireClass("android.text.style.ImageSpan");
-        const Image = require("sf-core/ui/image");
 
         const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
-        let nativeDrawable = icon instanceof Image ? icon.nativeObject : icon;
+        let nativeDrawable = icon.nativeObject;
         var textSize = parseInt(mSearchSrcTextView.getTextSize() * 1.25);
         nativeDrawable.setBounds(0, 0, textSize, textSize);
         var ssb = new NativeSpannableStringBuilder("   ");
