@@ -126,7 +126,7 @@ function BottomTabBarController(params) {
         else if (childController instanceof NavigationController) {
             childController.__isActive = true;
             // first press
-            if (childController.historyStack.length < 1) {
+            if (childController.childControllers.length < 1) {
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
                     return;
                 childController.push({
@@ -134,8 +134,8 @@ function BottomTabBarController(params) {
                     animated: false
                 });
             }
-            else if (childController.historyStack.length >= 1) {
-                var childControllerStack = childController.historyStack;
+            else if (childController.childControllers.length >= 1) {
+                var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
                 
                 // show latest page or controller

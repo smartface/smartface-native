@@ -96,7 +96,7 @@ TextBox.prototype.cursorColor = UI.Color.BLACK
 TextBox.prototype.hint = "";
 
 /**
- * Gets/sets the color of the hint text. This property works only for Android.
+ * Gets/sets the color of the hint text.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
  * @android

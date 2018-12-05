@@ -53,7 +53,7 @@ ViewController.setController = function(params) {
     const BottomTabBarController = require("../../../ui/bottomtabbarcontroller");
 
     if ((params.controller) instanceof NavigationController) {
-        var childControllerStack = params.controller.historyStack;
+        var childControllerStack = params.controller.childControllers;
         var childControllerStackLenght = childControllerStack.length;
 
         // This check is requested by Smartface Router team.
@@ -97,8 +97,8 @@ ViewController.getCurrentPageFromController = function(controller) {
         return controller;
     }
     
-    if (controller.historyStack.length > 0) {
-        let childController = controller.historyStack[controller.historyStack.length - 1];
+    if (controller.childControllers.length > 0) {
+        let childController = controller.childControllers[controller.childControllers.length - 1];
         while (childController instanceof NavigationController || childController instanceof BottomTabBarController) {
             childController = childController.getCurrentController();
         }
@@ -115,7 +115,7 @@ ViewController.setIsInsideBottomTabBarForAllChildren = function(controller) {
     }
     
     // for NavigationController
-    controller.historyStack.forEach(function(childController) {
+    controller.childControllers.forEach(function(childController) {
         childController.isInsideBottomTabBar = true;
         ViewController.setIsInsideBottomTabBarForAllChildren(childController);
     });
