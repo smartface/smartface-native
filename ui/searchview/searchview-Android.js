@@ -316,7 +316,7 @@ const SearchView = extend(View)(
         var _textFieldBackgroundColor = Color.create(222, 222, 222);
         var _textFieldBorderRadius = 15;
         var _searchButtonIcon, _closeIcon, _searchIcon, _iconifiedByDefault = false,
-            _leftView;
+            _leftItem;
 
         var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
 
@@ -409,13 +409,18 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            'leftView': {
+            'leftItem': {
                 get: function() {
-                    return _leftView;
+                    return _leftItem;
                 },
                 set: function(value) {
-                    _leftView = value;
-                    mSearchEditFrame.addView(_leftView.nativeObject, 0);
+                    _leftItem = value;
+                    if (_leftItem instanceof Image) {
+                        mCompatImageView.setImageDrawable(_leftItem.nativeObject);
+                        mSearchEditFrame.addView(mCompatImageView, 0);
+                    }
+                    else
+                        mSearchEditFrame.addView(_leftItem.nativeObject, 0);
                     //If searchIcon is assign then can be used leftView as well
                     if (_searchIconAssigned)
                         updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
@@ -489,6 +494,7 @@ const SearchView = extend(View)(
         }
 
         // Makes SearchView's textbox apperance fully occupied.
+        var mCompatImageView = mSearchEditFrame.getChildAt(0);
         mSearchEditFrame.removeViewAt(0);
         let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
         let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable

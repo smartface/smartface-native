@@ -269,13 +269,13 @@ SearchView.prototype.android.closeIcon;
 
 
 /**
- * This property allows you to override search icon of searchview by custom view.
+ * This property allows you to override search icon of searchview by given icon or custom layout.
  *
- * @property {UI.FlexLayout} leftView
+ * @property {UI.Image | UI.FlexLayout} leftItem
  * @android
  * @since 3.2.2
  */
-SearchView.prototype.android.leftView;
+SearchView.prototype.android.leftItem;
 
 /**
  * Gets/sets the color of the hint text.
