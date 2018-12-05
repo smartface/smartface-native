@@ -40,8 +40,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
 
-        self.nativeObject.addView(nativeTextInputEditText);
-
         var _hintTextColor, _hintFocusedTextColor,
             _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font,
             _rightLayout = null,
@@ -420,6 +418,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 this[param] = params[param];
             }
         }
+
+        // TextInputLayout considers the nativeTextInputEditText hint size as text size when font property
+        // is given before addView. Otherwise  it overrides the hint text size and cannot be changed. 
+        self.nativeObject.addView(nativeTextInputEditText);
     }
 );
 

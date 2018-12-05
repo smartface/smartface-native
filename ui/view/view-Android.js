@@ -692,6 +692,7 @@ View.prototype.setTouchHandlers = function() {
     }));
     this.didSetTouchHandler = true;
 };
+
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
 function createGradientDrawable() {
