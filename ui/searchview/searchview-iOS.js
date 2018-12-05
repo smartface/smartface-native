@@ -247,13 +247,25 @@ const SearchView = extend(View)(
         });
         
         var _iconImage;
-        Object.defineProperty(this, 'iconImage', {
+        Object.defineProperty(this, 'iconImage', { //Depracted use searchIcon
             get: function() {
                 return _iconImage;
             },
             set: function(iconImage) {
                 _iconImage = iconImage;
                 self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
+            },
+            enumerable: true
+        });
+        
+        var _searchIcon;
+        Object.defineProperty(this, 'searchIcon', {
+            get: function() {
+                return _searchIcon;
+            },
+            set: function(searchIcon) {
+                _searchIcon = searchIcon;
+                self.nativeObject.setIconImage(_searchIcon.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
             },
             enumerable: true
         });
