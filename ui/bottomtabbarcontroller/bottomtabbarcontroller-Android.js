@@ -177,6 +177,7 @@ function BottomTabBarController(params) {
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
         onNavigationItemSelected: function(item) {
+            const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
             if (result) {
@@ -187,6 +188,7 @@ function BottomTabBarController(params) {
                 }
                 // TODO: Add this property to controller class
                 // use this property to show/hide bottom naviagtion view after controller transition
+                self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
                 self.childControllers[index].isInsideBottomTabBar = true; 
                 self.childControllers[index].__isActive = true;
                 self.push(self.childControllers[index]);
