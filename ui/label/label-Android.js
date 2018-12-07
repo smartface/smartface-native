@@ -67,7 +67,13 @@ const Label = extend(View)(
         Object.defineProperties(labelPrototype, {
             'font': {
                 get: function() {
-                    return this.fontInitial;
+                    const Font = require("../font");
+                    let nativeTypeface = this.nativeObject.getTypeface();
+                    let textSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
+                    return new Font({
+                        "nativeObject": nativeTypeface,
+                        "size": textSize
+                    });
                 },
                 set: function(font) {
                     if (font) {
