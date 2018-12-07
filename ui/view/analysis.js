@@ -466,8 +466,9 @@ View.prototype.flipHorizontally = function() {};
 View.prototype.flipVertically = function() {};
 
 /**
- * This method returns an object that defines view location on screen.
- *
+ * This method returns an object that defines view location on screen. 
+ * Do not use this method for invisible views in {@link UI.ListView ListView} and {@link UI.GridView GridView}.
+ * 
  * @method getScreenLocation
  * @return {Object} location
  * @return {Number} location.x
