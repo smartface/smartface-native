@@ -30,6 +30,13 @@ const SearchView = extend(View)(
         
         _super(this);
         
+        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+        if (isLTR) {
+            self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+        } else {
+            self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+        }
+        
         if(parseInt(System.OSVersion) >= 11){
             var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject,"heightAnchor",[],"NSObject");
             
@@ -240,13 +247,25 @@ const SearchView = extend(View)(
         });
         
         var _iconImage;
-        Object.defineProperty(this, 'iconImage', {
+        Object.defineProperty(this, 'iconImage', { //Depracted use searchIcon
             get: function() {
                 return _iconImage;
             },
             set: function(iconImage) {
                 _iconImage = iconImage;
                 self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
+            },
+            enumerable: true
+        });
+        
+        var _searchIcon;
+        Object.defineProperty(this, 'searchIcon', {
+            get: function() {
+                return _searchIcon;
+            },
+            set: function(searchIcon) {
+                _searchIcon = searchIcon;
+                self.nativeObject.setIconImage(_searchIcon.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
             },
             enumerable: true
         });
@@ -324,12 +343,33 @@ const SearchView = extend(View)(
             enumerable: true
         });
         
+        // self.textfield.setValueForKey(Color.create(0,122,255).nativeObject,"tintColor");
+        Object.defineProperty(this, 'cursorColor', {
+            get: function() {
+                return new Color({color : self.textfield.valueForKey("tintColor")});
+            },
+            set: function(color) {
+                self.textfield.setValueForKey(color.nativeObject,"tintColor");
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(this.ios, 'cancelButtonColor', {
             get: function() {
                 return new Color({color : self.nativeObject.valueForKey("tintColor")});
             },
             set: function(color) {
                 self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(this.ios, 'cancelButtonText', {
+            get: function() {
+                return self.nativeObject.valueForKey("_cancelButtonText");
+            },
+            set: function(value) {
+                self.nativeObject.setValueForKey(value,"_cancelButtonText");
             },
             enumerable: true
         });

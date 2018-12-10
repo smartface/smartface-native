@@ -1,4 +1,4 @@
-/*globals array, requireClass, toJSArray, release */
+/*globals array, requireClass, toJSArray */
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");
@@ -9,6 +9,8 @@ const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
 const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
+
+const rippleSuperView = require("./ripple");
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
@@ -54,6 +56,8 @@ function View(params) {
     }
 
     this.android = {};
+    rippleSuperView(this);
+
     // Background drawable properties
     this._backgroundColor = Color.TRANSPARENT;
     this._borderColor = Color.BLACK;
@@ -122,12 +126,10 @@ function View(params) {
                     // this.borderRadius = this.borderRadius;
                     // this.borderWidth = this.borderWidth;
                     // this.borderColor = this.borderColor;
-                    this.nativeObject.setBackground(this._gradientDrawable);
 
                 }
                 else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
-                    this.nativeObject.setBackground(this._gradientDrawable);
                 }
             },
             enumerable: true,
@@ -143,7 +145,6 @@ function View(params) {
                 var borderWidthPx = DpToPixel(this._borderWidth);
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -164,7 +165,6 @@ function View(params) {
 
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
-                this.nativeObject.setBackground(this._gradientDrawable);
 
                 this.yogaNode.setBorder(YogaEdge.LEFT, borderWidthPx);
                 this.yogaNode.setBorder(YogaEdge.RIGHT, borderWidthPx);
@@ -183,7 +183,7 @@ function View(params) {
                 (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 var borderRadiusPx = DpToPixel(this._borderRadius);
                 this._gradientDrawable.setCornerRadius(borderRadiusPx);
-                this.nativeObject.setBackground(this._gradientDrawable); // TODO check this line is required or not
+                this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
             },
             enumerable: true,
             configurable: true
@@ -289,7 +289,6 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
-        this.setTouchHandlers();
     },
     get onTouch() {
         return this._onTouch;
@@ -661,61 +660,39 @@ View.prototype.setTouchHandlers = function() {
 
     this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-
             var x = event.getX();
             var y = event.getY();
-
             var w = view.getWidth();
             var h = view.getHeight();
 
             var isInside = !(x > w || x < 0 || y > h || y < 0);
-
-            if (this.touchEnabled && (this._onTouch || this._onTouchEnded)) {
-                var result;
-
-                if (event.getAction() === ACTION_UP) {
-                    result = (this._onTouchEnded && this._onTouchEnded(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                }
-                else if (event.getAction() === ACTION_DOWN) {
-                    result = (this._onTouch && this._onTouch());
-                    // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
-                    // So we should consume ACTION_DOWN event.
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_MOVE) { // MOVE
-
-                    result = (this._onTouchMoved && this._onTouchMoved(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_CANCEL) { // CANCEL
-
-                    result = (this._onTouchCancelled && this._onTouchCancelled());
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
+            if (this.touchEnabled) {
+                let result;
+                switch (event.getAction()) {
+                    case ACTION_UP:
+                        this._onTouchEnded && (result = this._onTouchEnded(isInside));
+                        return (result === true);
+                    case ACTION_DOWN:
+                        // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
+                        // So we should consume ACTION_DOWN event.
+                        this._onTouch && (result = this._onTouch());
+                        return !(result === false);
+                    case ACTION_MOVE:
+                        this._onTouchMoved && (result = this._onTouchMoved(isInside));
+                        return (result === true);
+                    case ACTION_CANCEL:
+                        this._onTouchCancelled && (result = this._onTouchCancelled());
+                        return (result === true);
+                    default:
+                        return false;
                 }
             }
-            return !this.touchEnabled;
+            return false;
         }.bind(this)
     }));
     this.didSetTouchHandler = true;
 };
+
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
 function createGradientDrawable() {

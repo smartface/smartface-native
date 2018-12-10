@@ -91,6 +91,7 @@ KeyboardType.URL = 4;
  * @ios
  * @readonly
  * @since 0.1
+ * @deprecated 3.2.0 {@link UI.KeyboardType.iOS.TWITTER} instead.
  */
 KeyboardType.ios.TWITTER = 5;
 
@@ -101,6 +102,7 @@ KeyboardType.ios.TWITTER = 5;
  * @ios
  * @readonly
  * @since 0.1
+ * @deprecated 3.2.0 {@link UI.KeyboardType.iOS.WEBSEARCH} instead.
  */
 KeyboardType.ios.WEBSEARCH = 6;
 
@@ -111,6 +113,7 @@ KeyboardType.ios.WEBSEARCH = 6;
  * @android
  * @readonly
  * @since 0.1
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.DATETIME} instead.
  */
 KeyboardType.android.DATETIME = 7;
 
@@ -121,6 +124,7 @@ KeyboardType.android.DATETIME = 7;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.SIGNEDNUMBER} instead.
  */
 KeyboardType.android.SIGNEDNUMBER = 8;
 
@@ -131,6 +135,7 @@ KeyboardType.android.SIGNEDNUMBER = 8;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.SIGNEDDECIMAL} instead.
  */
 KeyboardType.android.SIGNEDDECIMAL = 9;
 
@@ -141,6 +146,7 @@ KeyboardType.android.SIGNEDDECIMAL = 9;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTAUTOCOMPLETE} instead.
  */
 KeyboardType.android.TEXTAUTOCOMPLETE = 10;
 
@@ -151,6 +157,7 @@ KeyboardType.android.TEXTAUTOCOMPLETE = 10;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTAUTOCORRECT} instead.
  */
 KeyboardType.android.TEXTAUTOCORRECT = 11;
 
@@ -161,6 +168,7 @@ KeyboardType.android.TEXTAUTOCORRECT = 11;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTCAPCHARACTERS} instead.
  */
 KeyboardType.android.TEXTCAPCHARACTERS = 12;
 
@@ -171,6 +179,7 @@ KeyboardType.android.TEXTCAPCHARACTERS = 12;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTCAPSENTENCES} instead.
  */
 KeyboardType.android.TEXTCAPSENTENCES = 13;
 
@@ -181,6 +190,7 @@ KeyboardType.android.TEXTCAPSENTENCES = 13;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTCAPWORDS} instead.
  */
 KeyboardType.android.TEXTCAPWORDS = 14;
 
@@ -191,6 +201,7 @@ KeyboardType.android.TEXTCAPWORDS = 14;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTEMAILSUBJECT} instead.
  */
 KeyboardType.android.TEXTEMAILSUBJECT = 15;
 
@@ -201,6 +212,7 @@ KeyboardType.android.TEXTEMAILSUBJECT = 15;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTLONGMESSAGE} instead.
  */
 KeyboardType.android.TEXTLONGMESSAGE = 16;
 
@@ -211,6 +223,7 @@ KeyboardType.android.TEXTLONGMESSAGE = 16;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTNOSUGGESTIONS} instead.
  */
 KeyboardType.android.TEXTNOSUGGESTIONS = 17;
 
@@ -221,6 +234,7 @@ KeyboardType.android.TEXTNOSUGGESTIONS = 17;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTPERSONNAME} instead.
  */
 KeyboardType.android.TEXTPERSONNAME = 18;
 
@@ -231,6 +245,7 @@ KeyboardType.android.TEXTPERSONNAME = 18;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TEXTSHORTMESSAGE} instead.
  */
 KeyboardType.android.TEXTSHORTMESSAGE = 19;
 
@@ -241,6 +256,7 @@ KeyboardType.android.TEXTSHORTMESSAGE = 19;
  * @android
  * @since 0.1
  * @readonly
+ * @deprecated 3.2.0 {@link UI.KeyboardType.Android.TIME} instead.
  */
 KeyboardType.android.TIME = 20;
 
@@ -254,3 +270,183 @@ KeyboardType.android.TIME = 20;
  * @readonly
  */
 KeyboardType.EMAILADDRESS = 21;
+
+
+/** 
+ * @enum UI.KeyboardType.Android 
+ * @since 3.2.0
+ * 
+ * These are android specific enums.
+ */
+KeyboardType.Android = {};
+
+
+/**
+ * @property {Number} DATETIME
+ * Date and time specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @readonly
+ * @since 3.2.1
+ */
+KeyboardType.Android.DATETIME = 7;
+
+/**
+ * @property {Number} SIGNEDNUMBER
+ * Signed number specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.SIGNEDNUMBER = 8;
+
+/**
+ * @property {Number} SIGNEDDECIMAL
+ * Signed decimal specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.SIGNEDDECIMAL = 9;
+
+/**
+ * @property {Number} TEXTAUTOCOMPLETE
+ * Auto complete text specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTAUTOCOMPLETE = 10;
+
+/**
+ * @property {Number} TEXTAUTOCORRECT
+ * Auto correct text specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTAUTOCORRECT = 11;
+
+/**
+ * @property {Number} TEXTCAPCHARACTERS
+ * Auto capitalized characters specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTCAPCHARACTERS = 12;
+
+/**
+ * @property {Number} TEXTCAPSENTENCES
+ * Auto capitalized sentences specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTCAPSENTENCES = 13;
+
+/**
+ * @property {Number} TEXTCAPWORDS
+ * Auto capitalized word specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTCAPWORDS = 14;
+
+/**
+ * @property {Number} TEXTEMAILSUBJECT
+ * Email subject specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTEMAILSUBJECT = 15;
+
+/**
+ * @property {Number} TEXTLONGMESSAGE
+ * Long message specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTLONGMESSAGE = 16;
+
+/**
+ * @property {Number} TEXTNOSUGGESTIONS
+ * Text with no suggestion keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTNOSUGGESTIONS = 17;
+
+/**
+ * @property {Number} TEXTPERSONNAME
+ * Person name specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTPERSONNAME = 18;
+
+/**
+ * @property {Number} TEXTSHORTMESSAGE
+ * Short message specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TEXTSHORTMESSAGE = 19;
+
+/**
+ * @property {Number} TIME
+ * Time specific keyboard appearance. This keyboard type works only for Android.
+ * @static
+ * @android
+ * @since 3.2.1
+ * @readonly
+ */
+KeyboardType.Android.TIME = 20;
+
+
+/** 
+ * @enum UI.KeyboardType.iOS 
+ * @since 3.2.0
+ * 
+ * These are ios specific enums.
+ */
+KeyboardType.iOS = {};
+
+
+/**
+ * @property {Number} TWITTER
+ * Twitter specific keyboard appearance. This keyboard type works only for iOS.
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.2.1
+ */
+KeyboardType.iOS.TWITTER = 5;
+
+/**
+ * @property {Number} WEBSEARCH
+ * Web search specific keyboard appearance. This keyboard type works only for iOS.
+ * @static
+ * @ios
+ * @readonly
+ * @since 3.2.1
+ */
+KeyboardType.iOS.WEBSEARCH = 6;

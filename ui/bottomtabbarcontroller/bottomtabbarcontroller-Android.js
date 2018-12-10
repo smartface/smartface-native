@@ -17,7 +17,7 @@ function BottomTabBarController(params) {
     var _addedToActivity = false;
     var _disabledShiftingMode = false;
     var _menu;
-    this.childControllers = [];
+    var _childControllers = [];
 
     var self = this;
     var _selectedIndex = 0;
@@ -31,6 +31,21 @@ function BottomTabBarController(params) {
             },
             set: function(params) {
                 Object.assign(Application.tabBar, params);
+            },
+            enumerable: true
+        },
+        'childControllers': {
+            get: function() {
+                return _childControllers;
+            },
+            set: function(childrenArray) {
+                _childControllers = childrenArray;
+                
+                // set isInsideBottomTabBar for all children
+                const ViewController = require("../../util/Android/transition/viewcontroller");
+                for(let index in _childControllers) {
+                    ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
+                }
             },
             enumerable: true
         },
@@ -71,28 +86,35 @@ function BottomTabBarController(params) {
 
     this.addTabBarToActivity = function() {
         if (!_disabledShiftingMode) {
-            disableShiftMode(self.tabBar);
-            _disabledShiftingMode = true;
+            _disabledShiftingMode = disableShiftMode(self.tabBar);
         }
         
         if(!_addedToActivity) {
             _addedToActivity = true;
             var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
+            self.tabBar.nativeObject.setVisibility(8); // GONE
             pageLayoutWrapper.addView(self.tabBar.nativeObject);
         }
     };
 
     this.push = function(childController) {
         if(!childController) {
-            // throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
+            // console.log("BottomTabbarController item is not a Page instance or a NavigationController instance!");
             return;
         }
-
+        
+        if(!self.__isActive)
+          return;
+        
+        const ViewController = require("sf-core/util/Android/transition/viewcontroller");
+        ViewController.deactivateController(self.getCurrentController());
+           
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
         childController.isInsideBottomTabBar = true;
         if (childController instanceof Page) {
+            childController.__isActive = true;
             if (!childController.pageID) {
                 childController.pageID = FragmentTransaction.generatePageID();
             }
@@ -102,8 +124,9 @@ function BottomTabBarController(params) {
             });
         }
         else if (childController instanceof NavigationController) {
+            childController.__isActive = true;
             // first press
-            if (childController.historyStack.length < 1) {
+            if (childController.childControllers.length < 1) {
                 if(!childController.childControllers[0]) // Requested by Smartface Router Team
                     return;
                 childController.push({
@@ -111,8 +134,8 @@ function BottomTabBarController(params) {
                     animated: false
                 });
             }
-            else if (childController.historyStack.length >= 1) {
-                var childControllerStack = childController.historyStack;
+            else if (childController.childControllers.length >= 1) {
+                var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
                 
                 // show latest page or controller
@@ -130,28 +153,44 @@ function BottomTabBarController(params) {
     this.show = function() {
         self.addTabBarToActivity();
         self.setChecked();
+        // TODO: check __isActive property
         self.push(self.childControllers[_selectedIndex]);
     };
     
     this.setChecked = function() {
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if(_selectedIndex < 0)
+           return;
         _menu.getItem(_selectedIndex).setChecked(true);
+    };
+    
+    this.getCurrentController = function() {
+        var controller = self.childControllers[_selectedIndex];
+        if(!controller)
+           return null;
+        if(controller instanceof Page)
+           return controller;
+           
+        return controller.getCurrentController();
     };
 
     var listener = NativeBottomNavigationView.OnNavigationItemSelectedListener;
     this.tabBar.nativeObject.setOnNavigationItemSelectedListener(listener.implement({
         onNavigationItemSelected: function(item) {
+            const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
             if (result) {
                 try {
-                    !self.childControllers[index].parentController && (self.childControllers[index].parentController = self);
+                    self.childControllers[index].parentController = self;
                 } catch(e) {
                     Application.onUnhandledError && Application.onUnhandledError(e);
                 }
                 // TODO: Add this property to controller class
                 // use this property to show/hide bottom naviagtion view after controller transition
+                self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
                 self.childControllers[index].isInsideBottomTabBar = true; 
+                self.childControllers[index].__isActive = true;
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 try {
@@ -164,6 +203,7 @@ function BottomTabBarController(params) {
         }
     }));
     
+    this.addTabBarToActivity();
     params && (Object.assign(this, params));
 }
 
@@ -173,11 +213,16 @@ function disableShiftMode(bottomTabBar) {
     shiftingMode.setAccessible(true);
     shiftingMode.setBoolean(menuView, false);
     shiftingMode.setAccessible(false);
-    for (var i = 0; i < menuView.getChildCount(); i++) {
+    let childCount = menuView.getChildCount();
+    if(childCount === 0)
+        return false;
+    
+    for (var i = 0; i < childCount; i++) {
         var item = menuView.getChildAt(i);
         item.setShiftingMode(false);
         var checked = (item.getItemData()).isChecked();
         item.setChecked(checked);
     }
+    return true;
 }
 module.exports = BottomTabBarController;

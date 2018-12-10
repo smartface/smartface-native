@@ -3,6 +3,7 @@ const View = require('sf-core/ui/view');
 const Color = require('sf-core/ui/color');
 const File = require('sf-core/io/file');
 const Invocation = require('sf-core/util').Invocation;
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const WebView = extend(View)(
     function (_super, params) {
@@ -14,6 +15,8 @@ const WebView = extend(View)(
          
         _super(this);
     
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this,this.nativeObject.scrollView);
+        
         self.android.clearHistory = function(){};
         self.android.clearFormData = function(){};
         
@@ -138,6 +141,22 @@ const WebView = extend(View)(
             },
             set: function(value) {
                 self.nativeObject.zoomEnabled = value;
+            },
+            enumerable: true
+         });
+         
+         var _safeAreaInsets;
+         Object.defineProperty(self.ios, 'safeAreaInsets', {
+            get: function() {
+                return _safeAreaInsets;
+            },
+            set: function(value) {
+                if (typeof value === 'function') {
+                    _safeAreaInsets = value;
+                    self.nativeObject.safeAreaInsetsCallback = value;
+                }else{
+                    throw new Error("safeAreaInsets must be function");
+                }
             },
             enumerable: true
          });

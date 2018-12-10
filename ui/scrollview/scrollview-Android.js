@@ -4,6 +4,7 @@ const UnitConverter = require("../../util/Android/unitconverter.js");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const scrollableSuper = require("../../util/Android/scrollable");
 
 const ScrollView = extend(ViewGroup)(
     function(_super, params) {
@@ -62,6 +63,7 @@ const ScrollView = extend(ViewGroup)(
         }
 
         _super(this);
+        scrollableSuper(this, this.nativeObject);
         const FlexLayout = require("../flexlayout");
         var _layout = new FlexLayout();
         // TODO : Below settings doesn't work depending on https://github.com/facebook/yoga/issues/435.
@@ -179,18 +181,20 @@ const ScrollView = extend(ViewGroup)(
             }
         }
 
-        self.layout.applyLayout = function() {
+        self.layout.applyLayout = function() { // ToDo: This method will overwrite flexlayout's applyLayout. It is not sure that we should overwrite it.
             if (self.autoSizeEnabled) {
-                const Runnable = requireClass("java.lang.Runnable");
+                const NativeViewTreeObserver = requireClass('android.view.ViewTreeObserver');
                 var scrollView = self;
-                var runnable = Runnable.implement({
-                    run: function() {
+                var nativeGlobalLayoutListener = NativeViewTreeObserver.OnGlobalLayoutListener.implement({
+                    onGlobalLayout: function() {
                         calculateScrollViewSize(scrollView);
                         scrollView.layout.nativeObject.requestLayout();
                         scrollView.layout.nativeObject.invalidate();
+                        scrollView.layout.nativeObject.getViewTreeObserver().removeOnGlobalLayoutListener(nativeGlobalLayoutListener);
                     }
                 });
-                scrollView.layout.nativeObject.post(runnable);
+                scrollView.layout.nativeObject.getViewTreeObserver().addOnGlobalLayoutListener(nativeGlobalLayoutListener);
+                scrollView.layout.nativeObject.requestLayout();
             }
         };
     }
@@ -220,8 +224,8 @@ function calculateScrollViewSize(scrollView) {
         for (i = 0; i < arrayLenght; i++) {
             var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
             var viewWidth = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getWidth());
-            var viewRightMargin = childViews[keys[i]].marginRight;
-            var layoutPaddingRight = scrollView.layout.paddingRight;
+            var viewRightMargin = childViews[keys[i]].marginRight || 0;
+            var layoutPaddingRight = scrollView.layout.paddingRight || 0;
             var measuredWidth = viewX + viewWidth + viewRightMargin + layoutPaddingRight;
             if (measuredWidth > layoutWidth)
                 layoutWidth = measuredWidth;

@@ -6,81 +6,16 @@ const LayoutManager = require("../layoutmanager");
 
 //NativeAccess
 const Invocation = require('sf-core/util/iOS/invocation.js');
-const UICollectionViewController = SF.requireClass("UICollectionView");
-const UICollectionView = SF.requireClass("UICollectionView");
-const UICollectionViewFlowLayout = SF.requireClass("UICollectionViewFlowLayout");
 const NSIndexPath = SF.requireClass("NSIndexPath");
+const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 
 const GridView = extend(View)(
     function(_super, params) {
         var sfSelf = this;
         
         sfSelf.registeredIndentifier = [];
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // NATIVE COLLECTION VIEW CONTROLLER CLASS IMPLEMENTATION
-        var CollectionViewControllerClass = SF.defineClass('CollectionViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>', {
-            viewDidLoad: function() {
-            },
-            // UICollectionViewDataSource
-            numberOfSectionsInCollectionView: function(collectionView) {
-                return _sectionCount;
-            },
-            collectionViewNumberOfItemsInSection: function(collectionView, section) {
-                var retval;
-                if (_numberOfItemsInSection) {
-                    retval = _numberOfItemsInSection(section);
-                }
-                else {
-                    retval = _itemCount;
-                }
-                return retval;
-            },
-            collectionViewCellForItemAtIndexPath: function(collectionView, indexPath) {
-                // Cell dequeing for type
-                var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
-                
-                if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
-                    collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
-                    sfSelf.registeredIndentifier.push(type);
-                }
-                
-                var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
-                // onItemCreate and onItemBind callback pairs
-                if (cell.contentView.subviews.length > 0) {
-                    if (sfSelf.onItemBind) {
-                        sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
-                    }
-                }
-                else {
-                    collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
-                    cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
-                    if (sfSelf.onItemBind) {
-                        sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
-                    }
-                }
-                
-                return cell;
-            },
-            // UICollectionViewDelegate
-            collectionViewDidSelectItemAtIndexPath: function(collectionView, indexPath) {
-                var cell = collectionView.cellForItemAtIndexPath(indexPath);
-                if (cell) {
-                    if (sfSelf.onItemSelected) {
-                        sfSelf.onItemSelected(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
-                    }
-                }
-            },
-            // UIScrollViewDelegate
-            scrollViewDidScroll: function(scrollView) {
-                if (sfSelf.onScroll) {
-                    sfSelf.onScroll({contentOffset : scrollView.contentOffset});
-                }
-            }
-            // // UICollectionViewDelegateFlowLayout
-            // collectionViewLayoutSizeForItemAtIndexPath : function (collectionView, collectionViewLayout, indexPath) {
-            //     return sfSelf.layoutManager.sizeForItemAtIndexPath(collectionView, collectionViewLayout, indexPath);
-            // }
-        });
+        
+        var CollectionViewClass = __SF_UICollectionView;
 
         var defaultflowLayout;
         if (params && params.layoutManager) {
@@ -90,20 +25,74 @@ const GridView = extend(View)(
             throw new Error('GridView constructor must have layoutManager.');
         }
 
-        // CollectionViewControllerClass Init Scope Using Invocation
-        var alloc = Invocation.invokeClassMethod(CollectionViewControllerClass.name, "alloc", [], "id");
+        // CollectionViewClass Init Scope Using Invocation
+        var alloc = Invocation.invokeClassMethod(CollectionViewClass.name, "alloc", [], "id");
         var argument = new Invocation.Argument({
             type: "NSObject",
             value: defaultflowLayout.nativeObject
         });
-        var collectionViewController = Invocation.invokeInstanceMethod(alloc, "initWithCollectionViewLayout:", [argument], "NSObject");
+        
+        var frame = new Invocation.Argument({
+            type: "CGRect",
+            value: {x:0, y:0, width:0, height:0}
+        });
+        
+        var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame ,argument], "NSObject");
+        smfcollectionView.numberOfSectionsCallback = function (collectionView) {
+            return _sectionCount;
+        };
+        smfcollectionView.numberOfItemsInSectionCallback = function (collectionView, section) {
+            var retval;
+            if (_numberOfItemsInSection) {
+                retval = _numberOfItemsInSection(section);
+            }
+            else {
+                retval = _itemCount;
+            }
+            return retval;
+        };
+        smfcollectionView.cellForItemAtIndexPathCallback = function (collectionView, indexPath) {
+            // Cell dequeing for type
+            var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
+            
+            if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
+                collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
+                sfSelf.registeredIndentifier.push(type);
+            }
+            
+            var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
+            // onItemCreate and onItemBind callback pairs
+            if (cell.contentView.subviews.length > 0) {
+                if (sfSelf.onItemBind) {
+                    sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
+                }
+            }
+            else {
+                collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
+                cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
+                if (sfSelf.onItemBind) {
+                    sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
+                }
+            }
+            
+            return cell;
+        };
+        smfcollectionView.didSelectItemAtIndexPathCallback = function (collectionView, indexPath) {
+            var cell = collectionView.cellForItemAtIndexPath(indexPath);
+            if (cell) {
+                if (sfSelf.onItemSelected) {
+                    sfSelf.onItemSelected(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
+                }
+            }
+        };
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INITIALIZATION
+        
         if (!sfSelf.nativeObject) {
-            sfSelf.nativeObject = collectionViewController.valueForKey("collectionView");
-            defaultflowLayout.collectionView = collectionViewController.valueForKey("collectionView");
-
+            sfSelf.nativeObject = smfcollectionView;
+            defaultflowLayout.collectionView = smfcollectionView;
+            
             sfSelf.refreshControl = new __SF_UIRefreshControl();
         }
 
@@ -111,12 +100,14 @@ const GridView = extend(View)(
 
         _super(this);
 
+        UIScrollViewInheritance.addPropertiesAndMethods.call(this);
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
         
-        Object.defineProperty(sfSelf, 'contentOffset', {
-            get: function() {
-                return { x: sfSelf.nativeObject.contentOffset.x, y: sfSelf.nativeObject.contentOffset.y };
+        Object.defineProperty(sfSelf, 'onScroll', {
+            set: function(value) {
+                sfSelf.nativeObject.didScroll = value;
             },
             enumerable: true
         });
@@ -151,6 +142,7 @@ const GridView = extend(View)(
             },
             enumerable: true
         });
+
 
         var _scrollBarEnabled = true;
         Object.defineProperty(sfSelf, 'scrollBarEnabled', {
@@ -356,19 +348,6 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        var _onScroll = null;
-        Object.defineProperty(sfSelf, 'onScroll', {
-            get: function() {
-                return _onScroll;
-            },
-            set: function(value) {
-                if (typeof value === "function") {
-                    _onScroll = value;
-                }
-            },
-            enumerable: true
-        });
-
         Object.defineProperty(sfSelf, 'onPullRefresh', {
             set: function(value) {
                 sfSelf.refreshControl.addJSTarget(value.bind(this), UIControlEvents.valueChanged);
@@ -419,7 +398,7 @@ const GridView = extend(View)(
         });
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

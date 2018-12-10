@@ -413,7 +413,17 @@ function Page(params) {
     });
     
     var _titleView = true;
-
+    function checkIfSearchviewIsSubview(nativeObject){ //Workaround Bug : IOS-2707
+        for (var index in nativeObject.subviews){
+            if (nativeObject.subviews[index].constructor.name === "SMFNative.SMFUISearchBar") {
+                return true;
+            }
+            if (checkIfSearchviewIsSubview(nativeObject.subviews[index])) {
+                return true;
+            }
+        }
+        return false;
+    }
     // Deprecated
     Object.defineProperty(self.headerBar, 'titleLayout', {
         get: function() {
@@ -425,7 +435,9 @@ function Page(params) {
                 _titleView.applyLayout();
                 
                 // These calls may need for different cases.
-                // _titleView.nativeObject.layoutIfNeeded();
+                if (checkIfSearchviewIsSubview(_titleView.nativeObject)) { //Workaround Bug : IOS-2707
+                    _titleView.nativeObject.layoutIfNeeded();
+                }
                 // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
                 _titleView.nativeObject.sizeToFit();
                 
@@ -446,7 +458,9 @@ function Page(params) {
                 _titleView.applyLayout();
                 
                 // These calls may need for different cases.
-                // _titleView.nativeObject.layoutIfNeeded();
+                if (checkIfSearchviewIsSubview(_titleView.nativeObject)) { //Workaround Bug : IOS-2707
+                    _titleView.nativeObject.layoutIfNeeded();
+                }
                 // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
                 _titleView.nativeObject.sizeToFit();
                 

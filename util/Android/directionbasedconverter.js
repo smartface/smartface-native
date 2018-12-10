@@ -14,6 +14,27 @@ DirectionBasedConverter.convertIndex = function(array, index) {
     return (RTL ? (array.length - 1) - index : index);
 };
 
+DirectionBasedConverter.getAnimationType = function(animationType) {
+    const FragmentTransaction = require("./fragmenttransition");
+
+    if (LTR) { return; }
+
+    switch (animationType) {
+        case FragmentTransaction.AnimationType.LEFTTORIGHT:
+            return FragmentTransaction.AnimationType.RIGHTTOLEFT;
+        case FragmentTransaction.AnimationType.RIGHTTOLEFT:
+            return FragmentTransaction.AnimationType.LEFTTORIGHT;
+        default:
+            return -1;
+    }
+};
+
+DirectionBasedConverter.setLayoutDirection = function(nativeLayout) {
+    if (LTR) { return; }
+    // 1 = View.LAYOUT_DIRECTION_RTL
+    nativeLayout.setLayoutDirection(1);
+};
+
 DirectionBasedConverter.flipHorizontally = function(view) {
     if (typeof view === "object")
         return (RTL ? view.flipHorizontally() : view);
@@ -31,8 +52,6 @@ DirectionBasedConverter.convertMargin = function(layoutParams, left, top, right,
         layoutParams.setMargins(left, top, right, bottom);
     }
     return layoutParams;
-}
-
-
+};
 
 module.exports = DirectionBasedConverter;
