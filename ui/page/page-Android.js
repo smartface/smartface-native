@@ -768,6 +768,8 @@ function Page(params) {
             self.headerBar.visible = true;
         }
     };
+    
+    self.statusBar = require("sf-core/application").statusBar;
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
