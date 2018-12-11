@@ -17,7 +17,7 @@ DirectionBasedConverter.convertIndex = function(array, index) {
 DirectionBasedConverter.getAnimationType = function(animationType) {
     const FragmentTransaction = require("./fragmenttransition");
 
-    if (LTR) { return; }
+    if (LTR) { return animationType; }
 
     switch (animationType) {
         case FragmentTransaction.AnimationType.LEFTTORIGHT:
