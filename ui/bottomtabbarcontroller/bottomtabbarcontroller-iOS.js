@@ -89,7 +89,24 @@ function BottomTabBarController(params) {
                 if (controller && controller.nativeObject) {
                     controllerToPresent = controller.nativeObject;
                     
-                    if (typeof self.transitionViews !== "undefined"){
+                    function getVisiblePage(currentPage) {
+                        var retval = null;
+                        if (currentPage.constructor.name === "BottomTabBarController") {
+                            var controller = currentPage.childControllers[currentPage.selectedIndex];
+                            retval = getVisiblePage(controller);
+                        } else if (currentPage.constructor.name === "NavigatonController") {
+                            var controller = currentPage.childControllers[currentPage.childControllers.length - 1];
+                            retval = getVisiblePage(controller);
+                        } else {
+                            // Page
+                            retval = currentPage;
+                        }
+                        return retval;
+                    };
+                    
+                    var currentPage = getVisiblePage(self.childControllers[self.selectedIndex]);
+                    
+                    if (typeof currentPage.transitionViews !== "undefined"){
                         controllerToPresent.setValueForKey(true,"isHeroEnabled");
                     }
                     
