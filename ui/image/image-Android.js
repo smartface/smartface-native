@@ -39,6 +39,9 @@ function Image(params) {
         else if (params.roundedBitmapDrawable) {
             self.nativeObject = params.roundedBitmapDrawable;
         }
+        else if (params.drawable) {
+            self.nativeObject = params.drawable;
+        }
         else {
             throw new Error("path or bitmap can not be empty for Image!");
         }
