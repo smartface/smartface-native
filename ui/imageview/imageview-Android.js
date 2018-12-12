@@ -118,14 +118,16 @@ const ImageView = extend(View)(
             }
 
             var callback = null;
+            var self = this;
             if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
                 let self = this;
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
-                        self._image = new Image({
-                            bitmap: self.nativeObject.getDrawable()
-                        });
+                        let loadedDrawable = self.nativeObject.getDrawable();
+                        if(loadedDrawable) {
+                            self._image = new Image({ drawable: loadedDrawable});
+                        }
                         onSuccess && onSuccess();
                     },
                     onError: function() {
