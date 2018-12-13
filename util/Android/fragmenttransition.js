@@ -132,13 +132,10 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 FragmentTransaction.dismissTransition = function(page, animation) {
     const ViewController = require("./transition/viewcontroller");
     
-    var fragmentManager = activity.getSupportFragmentManager();
-    var fragmentTransaction = fragmentManager.beginTransaction();
-
+    let fragmentManager = activity.getSupportFragmentManager();
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();
 
-    if (animation)
-        fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
+    let popupBackPage;
     if (page.parentController) {
         let popupBackNavigator = page.parentController.popupBackNavigator;
         if(popupBackNavigator) {
@@ -147,9 +144,17 @@ FragmentTransaction.dismissTransition = function(page, animation) {
             page.parentController.popUpBackPage = currentPageFromController;
         }
         
-        let popupBackPage = page.parentController.popUpBackPage;
-        popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
+        popupBackPage = page.parentController.popUpBackPage;
+        if(popupBackPage.transitionViews) {
+            // reveal back animation
+            fragmentManager.popBackStackImmediate();
+            return;
+        } 
     }
+    var fragmentTransaction = fragmentManager.beginTransaction();
+    if (animation)
+        fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
+    popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
     
     fragmentTransaction.remove(page.nativeObject);
     fragmentTransaction.commitAllowingStateLoss();
