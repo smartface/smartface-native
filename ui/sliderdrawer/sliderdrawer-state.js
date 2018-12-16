@@ -1,17 +1,17 @@
 const SliderDrawerState = {};
 
 Object.defineProperty(SliderDrawerState, 'OPEN', {
-    value: 0,
+    value: 2,
     enumerable: true
 });
 
 Object.defineProperty(SliderDrawerState, 'CLOSED', {
-    value: 1,
+    value: 0,
     enumerable: true
 });
 
 Object.defineProperty(SliderDrawerState, 'DRAGGED', {
-    value: 2,
+    value: 1,
     enumerable: true
 });
 
