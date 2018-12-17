@@ -237,6 +237,7 @@ function HeaderBar(params) {
                     }
                     self.nativeObject.shadowImage = __SF_UIImage.getInstance();   
                     self.nativeObject.translucent = true;
+                    self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
                 } else {
                     if (self.nativeObject.backgroundImage === _transparentEmptyImage) {
                         self.nativeObject.backgroundImage = undefined;
