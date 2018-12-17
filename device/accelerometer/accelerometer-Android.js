@@ -1,4 +1,5 @@
-const AndroidConfig             = require('../../util/Android/androidconfig')
+/* globals toJSArray, requireClass */
+const AndroidConfig             = require('../../util/Android/androidconfig');
 const NativeSensor              = requireClass('android.hardware.Sensor');
 const NativeSensorEventListener = requireClass('android.hardware.SensorEventListener');
 // Context.SENSOR_SERVICE
@@ -18,7 +19,7 @@ Object.defineProperties(Accelerometer, {
             _sensorListener = NativeSensorEventListener.implement({
                 onAccuracyChanged: function(sensor, accuracy) {},
                 onSensorChanged: function(event) {
-                    var eventData = event.values;
+                    var eventData = toJSArray(event.values);
                     _callback && _callback({
                         x: eventData[0],
                         y: eventData[1],
