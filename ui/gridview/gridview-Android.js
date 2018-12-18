@@ -41,8 +41,8 @@ const GridView = extend(View)(
         }
 
         this._layoutManager = params.layoutManager;
-
         this.nativeObject.addView(this.nativeInner);
+        this.__isRecyclerView = true;
 
         _super(this);
         scrollableSuper(this, this.nativeInner);
@@ -478,6 +478,7 @@ const GridView = extend(View)(
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
+                    if(!self.touchEnabled) { return; }
                     _contentOffset.x += dx;
                     _contentOffset.y += dy;
 
@@ -486,6 +487,7 @@ const GridView = extend(View)(
                     _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
                 },
                 onScrollStateChanged: function(recyclerView, newState) {
+                    if(!self.touchEnabled) { return; }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },
             };
@@ -501,14 +503,7 @@ const GridView = extend(View)(
             return {};
         };
 
-        if (!this.skipDefaults) {
-            this.nativeInner.setAdapter(dataAdapter);
-            this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
-                onRefresh: function() {
-                    _onPullRefresh && _onPullRefresh();
-                }
-            }));
-        }
+        this.nativeInner.setAdapter(dataAdapter);
 
         if (params) {
             for (var param in params) {

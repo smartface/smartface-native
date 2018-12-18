@@ -658,7 +658,8 @@ View.prototype = {
 View.prototype.setTouchHandlers = function() {
     if (this.didSetTouchHandler) return;
 
-    this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+    let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
+    touchableView.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
             var x = event.getX();
             var y = event.getY();
