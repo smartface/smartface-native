@@ -103,6 +103,7 @@ const SwipeView = extend(View)(
                 _instanceArray = [];
                 for (var i = 0; i < value.length; i++) {
                     var page = new value[i]();
+                    bypassPageSpecificProperties(page);
                     if (page.nativeObject.constructor.name === "SMFNative.SMFUIViewController"){
                         page.orientation = Page.Orientation.AUTO;
                         _instanceArray.push(page);
@@ -290,6 +291,22 @@ const SwipeView = extend(View)(
             }
         }
 });
+
+function bypassPageSpecificProperties(page) {
+    Object.keys(page.statusBar).forEach(function(key){
+        Object.defineProperty(page.statusBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
+    Object.keys(page.headerBar).forEach(function(key){
+        Object.defineProperty(page.headerBar, key,{
+            set: function() {},
+            get: function() {return {};},
+        });
+    });
+}
+
   
 SwipeView.State = require("./swipeviewState");
   

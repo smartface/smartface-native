@@ -1,5 +1,4 @@
-const sharedApplication = SF.requireClass("UIApplication").sharedApplication();
-const keyWindow = sharedApplication.keyWindow;
+const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
 
 var StatusBar = {};
 StatusBar.ios = {};
@@ -8,7 +7,7 @@ StatusBar.android = {};
 // Properties
 Object.defineProperty(StatusBar, 'height', {
     get: function() {
-        return sharedApplication.statusBarFrame.height;
+        return __SF_UIApplication.sharedApplication().statusBarFrame.height;
     },
     enumerable: true,
     configurable : true
@@ -16,11 +15,35 @@ Object.defineProperty(StatusBar, 'height', {
 
 Object.defineProperty(StatusBar, 'visible', {
     get: function() {
-        return !sharedApplication.statusBarHidden;
+        var retval;
+        
+        var className = "SMFNative.SMFUIViewController";
+        var controller; 
+        
+        if (keyWindow.rootViewController.constructor.name === className){ 
+            controller = keyWindow.rootViewController;
+        } else if (keyWindow.rootViewController.topViewController && keyWindow.rootViewController.topViewController.constructor.name === className) {
+            controller = keyWindow.rootViewController.topViewController;
+        }
+        
+        if (controller) {
+            retval = !controller.statusBarHidden;
+        }
+
+        return retval;
     },
     set: function(value) {
-        if (typeof value === "boolean") {
-            sharedApplication.setStatusBarHiddenWithAnimation(!value, false);
+        var className = "SMFNative.SMFUIViewController";
+        var controller;
+        if (keyWindow.rootViewController.constructor.name === className) {
+            controller = keyWindow.rootViewController;
+        } else if (keyWindow.rootViewController.topViewController && keyWindow.rootViewController.topViewController.constructor.name === className) {
+            controller = keyWindow.rootViewController.topViewController;
+        }
+        
+        if (controller) {
+            controller.statusBarHidden = !value;
+            controller.setNeedsStatusBarAppearanceUpdate();
         }
     },
     enumerable: true,configurable : true
@@ -28,10 +51,17 @@ Object.defineProperty(StatusBar, 'visible', {
 
 Object.defineProperty(StatusBar, 'style', {
     get: function() {
-        return sharedApplication.statusBarStyle;
+        var retval;
+        if (keyWindow.rootViewController.constructor.name === "SMFNative.SMFUIViewController"){
+            retval = keyWindow.rootViewController.statusBarStyle;
+        }
+        return retval;
     },
     set: function(value) {
-        sharedApplication.setStatusBarStyleAnimated(value, false);
+        if (keyWindow.rootViewController.constructor.name === "SMFNative.SMFUIViewController"){
+            keyWindow.rootViewController.statusBarStyle = value;
+            keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();      
+        }
     },
     enumerable: true,configurable : true
 });
