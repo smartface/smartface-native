@@ -40,6 +40,8 @@ const YogaEdge = {
 const activity = AndroidConfig.activity;
 
 function View(params) {
+
+    params = params || {};
     this.ios = {};
 
     if (!this.nativeObject) {
@@ -130,7 +132,6 @@ function View(params) {
                 else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                 }
-
                 setBackgroundDrawable.call(this, _isBackgroundAssigned);
             },
             enumerable: true,
@@ -711,7 +712,6 @@ function createGradientDrawable() {
 }
 
 function setBackgroundDrawable(isBackgroundAssigned) {
-    console.log("setBackgroundDrawable " + setBackgroundDrawable);
     if (!isBackgroundAssigned)
         this.nativeObject.setBackground(this._gradientDrawable);
     isBackgroundAssigned = true;
