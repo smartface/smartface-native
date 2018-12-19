@@ -81,6 +81,7 @@ StatusBar.prototype.backgroundColor = Color.create("#FF757575");
  *     });
  *
  * @property {UI.Color} color
+ * @deprecated
  * @android
  * @since 0.1
  */
