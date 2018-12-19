@@ -15,6 +15,7 @@ const BottomNavigationView = requireClass("android.support.design.widget.BottomN
 const StatusBarStyle = require('sf-core/ui/statusbarstyle');
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
+const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
 const MINAPILEVEL_STATUSBARCOLOR = 21;
 const MINAPILEVEL_STATUSBARICONCOLOR = 23;
@@ -180,7 +181,6 @@ function Page(params) {
             const Sound = require("sf-core/device/sound");
             const Webview = require('sf-core/ui/webview');
             const EmailComposer = require('sf-core/ui/emailcomposer');
-
 
             var requestCode = nativeRequestCode;
             var resultCode = nativeResultCode;
@@ -549,12 +549,16 @@ function Page(params) {
             return toolbar.getTitle();
         },
         set: function(text) {
+            const AttributedString = require("../attributedstring");
+            let titleText = "";
             if (TypeUtil.isString(text)) {
-                toolbar.setTitle(text);
+                titleText = text;
+            } else if(text instanceof AttributedString) {
+                let attributedStringBuilder = new NativeSpannableStringBuilder();
+                text.setSpan(attributedStringBuilder);
+                titleText = attributedStringBuilder;
             }
-            else {
-                toolbar.setTitle("");
-            }
+            toolbar.setTitle(titleText);
         },
         enumerable: true,
         configurable: true
