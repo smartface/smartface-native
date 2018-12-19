@@ -13,6 +13,8 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
+        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    
         var _rightLayout = undefined;
         var _rightLayoutMain;
         Object.defineProperty(self, 'rightLayout', {
@@ -22,8 +24,13 @@ const MaterialTextbox = extend(TextBox)(
             set: function(object) {
                 _rightLayout = object;
                 if (object === undefined) {
-                    self.nativeObject.setValueForKey(undefined, "rightView");
-                    self.nativeObject.setValueForKey(0, "rightViewMode");
+                    if (isLTR) {
+                        self.nativeObject.setValueForKey(undefined, "rightView");
+                        self.nativeObject.setValueForKey(0, "rightViewMode"); 
+                    }else{
+                        self.nativeObject.setValueForKey(undefined, "leftView");
+                        self.nativeObject.setValueForKey(0, "leftViewMode"); 
+                    }
                     return;
                 }
                 
@@ -51,8 +58,13 @@ const MaterialTextbox = extend(TextBox)(
                 }
                 
                 _rightLayoutMain.content.addChild(object.view);
-                self.nativeObject.setValueForKey(3, "rightViewMode");
-                self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
+                if (isLTR) {
+                    self.nativeObject.setValueForKey(3, "rightViewMode");
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
+                }else{
+                    self.nativeObject.setValueForKey(3, "leftViewMode");
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"leftView");
+                }
             },
             enumerable: true
         });
