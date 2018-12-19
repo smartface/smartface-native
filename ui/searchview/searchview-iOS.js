@@ -30,10 +30,9 @@ const SearchView = extend(View)(
         
         _super(this);
         
-        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
-        if (isLTR) {
+        if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
             self.nativeObject.setValueForKey(3, "semanticContentAttribute");
-        } else {
+        } else if(__SF_UIView.viewAppearanceSemanticContentAttribute() == 4){
             self.nativeObject.setValueForKey(4, "semanticContentAttribute");
         }
         
