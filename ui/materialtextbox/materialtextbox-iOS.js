@@ -13,8 +13,10 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
-        var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
-    
+        var isLTR_UserInterfaceLayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0;
+        var isUnspecified = __SF_UIView.viewAppearanceSemanticContentAttribute() == 0;
+        var isLTR_ViewAppearance = __SF_UIView.viewAppearanceSemanticContentAttribute() == 3;
+        
         var _rightLayout = undefined;
         var _rightLayoutMain;
         Object.defineProperty(self, 'rightLayout', {
@@ -24,7 +26,7 @@ const MaterialTextbox = extend(TextBox)(
             set: function(object) {
                 _rightLayout = object;
                 if (object === undefined) {
-                    if (isLTR) {
+                    if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
                         self.nativeObject.setValueForKey(undefined, "rightView");
                         self.nativeObject.setValueForKey(0, "rightViewMode"); 
                     }else{
@@ -58,7 +60,7 @@ const MaterialTextbox = extend(TextBox)(
                 }
                 
                 _rightLayoutMain.content.addChild(object.view);
-                if (isLTR) {
+                if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
                     self.nativeObject.setValueForKey(3, "rightViewMode");
                     self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
                 }else{
