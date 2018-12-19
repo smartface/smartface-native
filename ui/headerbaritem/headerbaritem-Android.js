@@ -1,4 +1,4 @@
-/* globals requireClass, toJSArray */
+/* globals requireClass, toJSArray, array */
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
@@ -8,11 +8,13 @@ const Color = require("../color");
 const Image = require("../image");
 const View = require('../view');
 const Font = require('../font');
+const AttributedString = require("../attributedstring");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
@@ -62,13 +64,20 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if (value !== null && typeof(value) !== "string") {
+                if (value !== null && typeof(value) !== "string" && !(value instanceof AttributedString)) {
                     throw new TypeError("title must be string or null.");
                 }
                 _title = value;
+                let titleText = _title;
+                if(_title instanceof AttributedString) {
+                    let attributedStringBuilder = new NativeSpannableStringBuilder();
+                    _title.setSpan(attributedStringBuilder);
+                    titleText = attributedStringBuilder;
+                }
+            
                 if (!this.nativeObject) {
                     this.nativeObject = new NativeTextButton(activity);
-                    this.nativeObject.setText(_title);
+                    this.nativeObject.setText(titleText);
                     this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
                     this.nativeObject.setPaddingRelative(
                         HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
@@ -81,7 +90,7 @@ function HeaderBarItem(params) {
                         this.menuItem.setActionView(this.nativeObject);
                 }
                 else if (!this.imageButton) {
-                    this.nativeObject.setText(_title);
+                    this.nativeObject.setText(titleText);
                     this.color = _color;
                 }
             },

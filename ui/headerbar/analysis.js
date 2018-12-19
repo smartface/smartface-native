@@ -218,7 +218,7 @@ HeaderBar.prototype.contentInset = {};
  *     var myPage = new Page();
  *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
  *
- * @property {String} subtitle
+ * @property {String|UI.AttributedString} subtitle
  * @android
  * @since 0.1
  */
@@ -267,7 +267,7 @@ HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.A
 /**
  * Gets/sets title of the header bar.
  *
- * @property {String} title
+ * @property {String|UI.AttributedString} title
  * @android
  * @ios
  * @since 0.1

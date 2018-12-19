@@ -3,13 +3,15 @@ const FlexLayout = require("../flexlayout");
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const AttributedString = require("../attributedstring");
+const Application = require("../../application");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
-const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
@@ -486,7 +488,6 @@ function Page(params) {
             return toolbar.getTitle();
         },
         set: function(text) {
-            const AttributedString = require("../attributedstring");
             let titleText = "";
             if (TypeUtil.isString(text)) {
                 titleText = text;
@@ -576,20 +577,23 @@ function Page(params) {
     });
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
-            return toolbar.getSubtitle();
+            return _subtitle;
         },
         set: function(text) {
+            let titleText = "";
             if (TypeUtil.isString(text)) {
-                toolbar.setSubtitle(text);
+                titleText = text;
+            } else if(text instanceof AttributedString) {
+                let attributedStringBuilder = new NativeSpannableStringBuilder();
+                text.setSpan(attributedStringBuilder);
+                titleText = attributedStringBuilder;
             }
-            else {
-                toolbar.setSubtitle("");
-            }
+            toolbar.setSubtitle(titleText);
         },
         enumerable: true,
         configurable: true
     });
-    var _headerBarSubtitleColor;
+    var _headerBarSubtitleColor, _subtitle = "";
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
             return _headerBarSubtitleColor;
@@ -750,7 +754,13 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
+                let itemTitle = item.title;
+                if((item.title) instanceof AttributedString) {
+                    let attributedStringBuilder = new NativeSpannableStringBuilder();
+                    item.title.setSpan(attributedStringBuilder);
+                    itemTitle = attributedStringBuilder;
+                }
+                item.menuItem = optionsMenu.add(0, itemID++, 0, itemTitle);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
 

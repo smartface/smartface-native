@@ -25,7 +25,7 @@ function HeaderBarItem(params) {}
  *
  * Title won't show if item is set as left item to header bar.
  *
- * @property {String} title
+ * @property {String|UI.AttributedString} title
  * @android
  * @ios
  * @since 0.1

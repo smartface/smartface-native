@@ -1,6 +1,6 @@
+/* globals requireClass */
 const Font = require('sf-core/ui/font');
 const Color = require('sf-core/ui/color');
-
 
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
@@ -146,6 +146,6 @@ AttributedString.prototype.setSpan = function(stringBuilder) {
         const NativeUnderlineSpan = requireClass("android.text.style.UnderlineSpan");
         stringBuilder.setSpan(new NativeUnderlineSpan(), start, end, SPAN_EXCLUSIVE_EXCLUSIVE);
     }
-}
+};
 
 module.exports = AttributedString;
