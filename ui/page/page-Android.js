@@ -443,13 +443,15 @@ function Page(params) {
             if(value !== _transparent) {
                 _transparent = value;
                 var pageLayoutParams = pageLayout.getLayoutParams();
-                if(_transparent)
+                if(_transparent) {
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
-                else
+                    self.headerBar.backgroundColor = Color.TRANSPARENT;
+                }
+                else {
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
+                }
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
                 
-                toolbar.getBackground().setAlpha(0);
             }
         },
         enumerable: true,

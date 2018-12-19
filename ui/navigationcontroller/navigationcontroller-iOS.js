@@ -223,6 +223,7 @@ function HeaderBar(params) {
     });
     
     var _transparent = false;
+    var _transparentEmptyImage;
     Object.defineProperty(self, 'transparent', {
         get: function() {
             return _transparent;
@@ -230,15 +231,21 @@ function HeaderBar(params) {
         set: function(value) {
             if (typeof value === "boolean") {
                 if (value) {
-                    if (typeof self.nativeObject.barTintColor === "undefined") {
-                        self.nativeObject.backgroundImage = __SF_UIImage.getInstance();
-                        self.nativeObject.shadowImage = __SF_UIImage.getInstance();   
+                    if (!self.nativeObject.backgroundImage) {
+                        var _transparentEmptyImage = __SF_UIImage.getInstance();
+                        self.nativeObject.backgroundImage = _transparentEmptyImage;
                     }
+                    self.nativeObject.shadowImage = __SF_UIImage.getInstance();   
                     self.nativeObject.translucent = true;
+                    self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
+                    _borderVisibility = false;
                 } else {
-                    self.nativeObject.backgroundImage = undefined;
+                    if (self.nativeObject.backgroundImage === _transparentEmptyImage) {
+                        self.nativeObject.backgroundImage = undefined;
+                    }
                     self.nativeObject.shadowImage = undefined;
                     self.nativeObject.translucent = false;
+                    _borderVisibility = true;
                 }
                 _transparent = value;
             }
@@ -309,14 +316,10 @@ function HeaderBar(params) {
         },
         set: function(value) {
             if (value) {
-                self.nativeObject.barTintColor = value.nativeObject;
-                if (self.nativeObject.backgroundImage) {
-                    self.nativeObject.backgroundImage = undefined;
-                }
-            } else {
-                self.nativeObject.barTintColor = undefined;
                 if (self.transparent) {
-                    self.transparent = true;
+                    self.nativeObject.backgroundColor = value.nativeObject;
+                }else{
+                    self.nativeObject.barTintColor = value.nativeObject;
                 }
             }
         },
@@ -349,11 +352,9 @@ function HeaderBar(params) {
             if (typeof value === "boolean") {
                 if (value) {
                     self.nativeObject.shadowImage = undefined;
-                    self.nativeObject.backgroundImage = undefined;
                 } else {
                     var emptyImage = __SF_UIImage.getInstance();
                     self.nativeObject.shadowImage = emptyImage;
-                    self.nativeObject.backgroundImage = emptyImage;
                 }
                 _borderVisibility = value;
             }

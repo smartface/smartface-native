@@ -56,6 +56,17 @@ StatusBar.prototype.transparent = false;
 StatusBar.prototype.visible = true;
 
 /**
+ * Gets/sets color of the status bar. Android version LOLLIPOP (API 21) or above. 
+ * If you want to make SliderDrawer to overlay Android StatusBar, you should always use color with alpha channel.
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 4.0.0
+ */
+StatusBar.prototype.backgroundColor = Color.create("#FF757575");
+
+/**
  * Gets/sets color of the status bar. This property works only for Android version 
  * LOLLIPOP (API 21) or above. If you want to make SliderDrawer to overlay Android StatusBar, 
  * you should always use color with alpha channel.
@@ -70,6 +81,7 @@ StatusBar.prototype.visible = true;
  *     });
  *
  * @property {UI.Color} color
+ * @deprecated
  * @android
  * @since 0.1
  */
