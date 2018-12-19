@@ -40,6 +40,27 @@
  */
 function HeaderBar() {}
 
+
+/**
+ * Defines the opacity of a view. The value of this property is a float number between 0.0 and 1.0. 
+ * 0 represents view is completely transparent and 1 represents view is completely opaque.
+ *
+ * @property {Number} [alpha = 1]
+ * @android
+ * @ios
+ * @since 4.0.1
+ */
+HeaderBar.prototype.alpha = 1;
+
+/**
+ * Gets/sets transparency of header bar.
+ *
+ * @property {Boolean} [transparent = true]
+ * @android
+ * @since 4.0.1
+ */
+HeaderBar.prototype.transparent = false;
+
 /**
  * Gets/sets border visibility of headerbar.
  *
@@ -166,6 +187,7 @@ HeaderBar.prototype.android.logoEnabled = null;
 
 /**
  * Gets/sets the title layout of the HeaderBar. Title layout allows you to assign custom view.
+ * For iOS, layouts are centered on the header bar and may be resized to fit.
  *
  * @property {UI.View} titleLayout
  * @android

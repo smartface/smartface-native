@@ -6,6 +6,7 @@ const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientD
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require('../page');
 const Color = require('../color');
@@ -43,6 +44,7 @@ const TabBarController = extend(Page)(
         this.tabLayout.yogaNode = new NativeYogaNode();
         this.tabLayout.nativeObject.setLayoutParams(new NativeRelativeLayout.LayoutParams(-1, -2));
         this.divider = this.tabLayout.nativeObject.getChildAt(0);
+        DirectionBasedConverter.setLayoutDirection(this.tabLayout.nativeObject);
 
         this.dividerDrawable;
         this.swipeView = new SwipeView({
@@ -272,7 +274,6 @@ const TabBarController = extend(Page)(
                     return _dividerPadding;
                 },
                 set: function(padding) {
-                    console.log("Set divider size");
                     _dividerPadding = padding;
                     if (self.dividerDrawable) {
                         var px = DpToPixel(_dividerPadding);

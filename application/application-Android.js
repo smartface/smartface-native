@@ -1,6 +1,7 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
+const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
 function ApplicationWrapper() {}
 
@@ -16,12 +17,15 @@ const REQUEST_CODE_CALL_APPLICATION = 114;
 var _onMinimize;
 var _onMaximize;
 var _onExit;
+var _onBackButtonPressed;
 var _onReceivedNotification;
 var _onRequestPermissionsResult;
 var _keyboardMode;
+var _sliderDrawer;
 var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndroidActivity").getInstance();
 var activity = AndroidConfig.activity;
 
+var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -55,6 +59,24 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
 spratAndroidActivityInstance.addActivityLifeCycleCallbacks(activityLifeCycleListener);
 Object.defineProperties(ApplicationWrapper, {
     // properties
+    'sliderDrawer': {
+        get: function() {
+            return _sliderDrawer;
+        },
+        set: function(drawer) {
+            const SliderDrawer = require('../ui/sliderdrawer');
+            if (drawer instanceof SliderDrawer) {
+                _sliderDrawer = drawer;
+                
+                detachSliderDrawer(_sliderDrawer);
+                attachSliderDrawer(_sliderDrawer);
+            }
+            else {
+                throw TypeError("Object must be SliderDrawer instance");
+            }
+        },
+        enumerable: true
+    },
     'byteReceived': {
         get: function() {
             const NativeTrafficStats = requireClass("android.net.TrafficStats");
@@ -205,6 +227,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
+            if(!focusedView)
+               return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -214,17 +238,6 @@ Object.defineProperties(ApplicationWrapper, {
     },
     // events
     // We can not handle application calls for now, so let SMFApplication handle this
-    'onApplicationCallReceived': {
-        get: function() {
-            return Application.onApplicationCallReceived;
-        },
-        set: function(onApplicationCallReceived) {
-            if (TypeUtil.isFunction(onApplicationCallReceived)) {
-                Application.onApplicationCallReceived = onApplicationCallReceived;
-            }
-        },
-        enumerable: true
-    },
     'onExit': {
         get: function() {
             return _onExit;
@@ -281,7 +294,6 @@ Object.defineProperties(ApplicationWrapper, {
         },
         enumerable: true
     },
-
     'onApplicationCallReceived': {
         get: function() {
             return Application.onApplicationCallReceived;
@@ -295,6 +307,83 @@ Object.defineProperties(ApplicationWrapper, {
     },
 });
 
+ApplicationWrapper.registOnItemSelectedListener = function() {
+    if(ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    ApplicationWrapper.__isSetOnItemSelectedListener = true;
+    spratAndroidActivityInstance.attachItemSelectedListener({
+        onOptionsItemSelected: function() {
+            let leftItem = ApplicationWrapper.currentPage._headerBarLeftItem;
+            if(leftItem) {
+                leftItem.onPress && leftItem.onPress();
+            }
+        }
+    });
+};
+
+// TODO: Beautify the class. It is too complex! It is not a readable file! 
+ApplicationWrapper.setRootController = function(params) {
+    const ViewController = require("../util/Android/transition/viewcontroller");
+    ViewController.deactivateRootController(ApplicationWrapper.currentPage);
+    // ViewController.activateController(params.controller);
+    params.controller.__isActive = true;
+    ViewController.setController(params); 
+};
+
+ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer && _sliderDrawer.enabled) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT 
+            mDrawerLayout.openDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.openDrawer(3);
+        }
+    }
+};
+
+ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
+    if (_sliderDrawer) {
+        const SliderDrawer = require('../ui/sliderdrawer');
+        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
+            // Gravity.RIGHT
+            mDrawerLayout.closeDrawer(5);
+        }
+        else {
+            // Gravity.LEFT
+            mDrawerLayout.closeDrawer(3);
+        }
+    }
+};
+
+function attachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        var sliderDrawerId = sliderDrawer.nativeObject.getId();
+        var isExists = mDrawerLayout.findViewById(sliderDrawerId);
+        if (!isExists) {
+            mDrawerLayout.addView(sliderDrawer.nativeObject);
+            mDrawerLayout.bringToFront();
+            if (sliderDrawer.drawerListener) {
+                mDrawerLayout.addDrawerListener(sliderDrawer.drawerListener);
+            }
+        }
+        sliderDrawer.onLoad && sliderDrawer.onLoad();
+    }
+}
+
+function detachSliderDrawer(sliderDrawer) {
+    if (sliderDrawer) {
+        sliderDrawer.attachedPages = null;
+        mDrawerLayout.removeView(sliderDrawer.nativeObject);
+        if (sliderDrawer.drawerListener) {
+            mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
+        }
+    }
+}
+
+ApplicationWrapper.statusBar = require("./statusbar");
+
 ApplicationWrapper.ios = {};
 ApplicationWrapper.ios.canOpenUrl = function(url) {};
 ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
@@ -302,6 +391,20 @@ ApplicationWrapper.ios.onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperties(ApplicationWrapper.android, {
     'packageName': {
         value: activity.getPackageName(),
+        enumerable: true
+    },
+    'onBackButtonPressed': {
+        get: function() {
+            return _onBackButtonPressed;
+        },
+        set: function(callback) {
+            _onBackButtonPressed = callback;
+            spratAndroidActivityInstance.attachBackPressedListener({
+                onBackPressed: function() {
+                    _onBackButtonPressed && _onBackButtonPressed();
+                }
+            });
+        },
         enumerable: true
     },
     'checkPermission': {
@@ -365,6 +468,12 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'Permissions': {
         value: {},
+        enumerable: true
+    },
+    'navigationBar': {
+        get: function() {
+            return (require("./android/navigationbar"));
+        },
         enumerable: true
     },
     'keyboardMode': {
@@ -512,6 +621,11 @@ Object.defineProperties(ApplicationWrapper.Android.Permissions, {
 });
 
 Object.assign(ApplicationWrapper.android.Permissions, ApplicationWrapper.Android.Permissions);
+
+ApplicationWrapper.Android.NavigationBar = {
+    Style: require("./android/navigationbar/style")
+};
+Object.freeze(ApplicationWrapper.Android.NavigationBar);
 
 ApplicationWrapper.Android.KeyboardMode = {
     KeyboardAdjustNothing: 48, //SOFT_INPUT_ADJUST_NOTHING

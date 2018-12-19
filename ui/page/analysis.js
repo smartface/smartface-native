@@ -108,11 +108,12 @@ Page.prototype.layout;
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
- *             this.statusBar.visible = true;
  *         }
+ *         Application.statusBar.visible = true;
  *     });
  *
  * @event onShow
@@ -186,34 +187,40 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  *     popuPage.layout.addChild(myButton);
  *
  *     self.popupBtn.onPress = function() {
- *     self.present(popuPage, true, function() { console.log("Page3 presented..."); });
+ *         self.present({ 
+ *             controller: popuPage, 
+ *             animated: true, 
+ *             onComplete: function() { 
+ *                 console.log("Page3 presented...");
+ *             }; 
+ *         });
  *     }
  * 
  *
  * @method present
- * @param {UI.Page} page
- * @param {Boolean} animation
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {UI.Page|UI.NavigationController} params.controller
+ * @param {Boolean} params.animated
+ * @param {Function} params.onComplete
  * @android
  * @ios
- * @static
  * @since 3.1.1
  *
  */
-Page.prototype.present = function(page, animation, onCompleteCallback){};
+Page.prototype.present = function(params){};
 
 
 /**
  * This function dismiss presently shown pop-up page.
  *
  * @method dismiss
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {Function} params.onComplete
  * @android
  * @ios
- * @static
  * @since 3.1.1
  */
-Page.prototype.dismiss = function(onCompleteCallback){};
+Page.prototype.dismiss = function(params){};
 
 /**
  * Gets status bar object. This property is readonly, you can not set
@@ -223,6 +230,7 @@ Page.prototype.dismiss = function(onCompleteCallback){};
  * @android
  * @ios
  * @readonly
+ * @removed
  * @since 0.1
  */
 Page.prototype.statusBar;
