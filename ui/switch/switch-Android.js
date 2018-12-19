@@ -14,7 +14,7 @@ const Switch = extend(View)(
         if (!this.nativeObject) {
             this.nativeObject = new NativeSwitch(AndroidConfig.activity);
         }
-        _super(this);
+        _super(this, { skipDefaultBackground: true });
 
         var _thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue
         var _thumbOffColor = Color.GRAY;
@@ -155,10 +155,10 @@ const Switch = extend(View)(
 
 function setThumbColor(self) {
     if (self.toggle) {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
     else {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
 
