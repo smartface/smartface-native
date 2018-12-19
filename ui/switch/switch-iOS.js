@@ -13,6 +13,12 @@ const Switch = extend(View)(
          
        _super(this);
        
+       if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+           self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+       } else if(__SF_UIView.viewAppearanceSemanticContentAttribute() == 4){
+           self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+       }
+        
        self.nativeObject.layer.masksToBounds = false;
        
        Object.defineProperty(self, 'enabled', {

@@ -56,8 +56,24 @@ Object.defineProperty(statusBar, 'visible', {
     configurable: true
 });
 
-statusBar.android = {};
 var _color, _transparent = false;
+Object.defineProperty(statusBar, 'backgroundColor', {
+    get: function() {
+        return _color;
+    },
+    set: function(color) {
+        _color = color;
+        if (NativeBuildVersion.VERSION.SDK_INT >= MINAPILEVEL_STATUSBARCOLOR) {
+            var window = activity.getWindow();
+            window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(color.nativeObject);
+        }
+    },
+    enumerable: true,
+    configurable: true
+});
+
+statusBar.android = {};
 Object.defineProperty(statusBar.android, 'color', {
     get: function() {
         return _color;

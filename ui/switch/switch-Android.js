@@ -16,7 +16,7 @@ const Switch = extend(View)(
         }
         _super(this);
 
-        var _thumbOnColor = null;
+        var _thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue
         var _thumbOffColor = Color.GRAY;
         var _toggleOnColor = Color.GRAY;
         var _toggleOffColor = Color.GRAY;
@@ -138,10 +138,10 @@ const Switch = extend(View)(
         }));
 
         if (!(params && params.skipDefaults)) {
-            this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
-            this.thumbOffColor = Color.GRAY;
-            this.toggleOnColor = Color.GRAY;
-            this.android.toggleOffColor = Color.GRAY;
+            this.thumbOnColor = _thumbOnColor;
+            this.thumbOffColor = _thumbOffColor;
+            this.toggleOnColor = _toggleOnColor;
+            this.android.toggleOffColor = _toggleOffColor;
         }
 
         // Assign parameters given in constructor
