@@ -40,10 +40,8 @@ const YogaEdge = {
 const activity = AndroidConfig.activity;
 
 function View(params) {
-
     params = params || {};
     this.ios = {};
-
     if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
@@ -205,6 +203,7 @@ function View(params) {
     this._onTouchCancelled;
     // YOGA PROPERTIES
 
+    // Intention of this check for ignoring unnecessary background drawables. 
     if (!params.skipDefaultBackground) {
         this.nativeObject.setBackground(this._gradientDrawable);
         _isBackgroundAssigned = true;
