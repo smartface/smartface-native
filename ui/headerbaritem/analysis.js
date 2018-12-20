@@ -77,6 +77,16 @@ HeaderBarItem.prototype.image = null;
 HeaderBarItem.prototype.enabled = true;
 
 /**
+ * Gets/sets font of header bar item.
+ *
+ * @property {UI.Font} font
+ * @android
+ * @ios
+ * @since 4.0.0
+ */
+HeaderBarItem.prototype.font = undefined;
+
+/**
  * This method returns an object that defines view location on screen.
  *
  * @method getScreenLocation
