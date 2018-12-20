@@ -91,9 +91,9 @@ Object.defineProperties(System, {
     },
     'vibrate': {
         value: function(options = {}) {
-            let milisecond = options.millisecond || 500;
+            let millisecond = options.millisecond || 500;
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
-            vibrator.vibrate(milisecond);
+            vibrator.vibrate(millisecond);
         },
         enumerable: true
     },
