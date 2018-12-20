@@ -4,7 +4,7 @@ const Color = require("../color");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
-const NativeSwitch = requireClass("android.support.v7.widget.SwitchCompat");
+const NativeSwitch = requireClass("android.widget.Switch");
 const NativeCompoundButton = requireClass("android.widget.CompoundButton");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
 
@@ -138,10 +138,10 @@ const Switch = extend(View)(
         }));
 
         if (!(params && params.skipDefaults)) {
-            // this.thumbOnColor = _thumbOnColor;
-            // this.thumbOffColor = _thumbOffColor;
-            // this.toggleOnColor = _toggleOnColor;
-            // this.android.toggleOffColor = _toggleOffColor;
+            this.thumbOnColor = _thumbOnColor;
+            this.thumbOffColor = _thumbOffColor;
+            this.toggleOnColor = _toggleOnColor;
+            this.android.toggleOffColor = _toggleOffColor;
         }
 
         // Assign parameters given in constructor
@@ -155,10 +155,10 @@ const Switch = extend(View)(
 
 function setThumbColor(self) {
     if (self.toggle) {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
     else {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
 
