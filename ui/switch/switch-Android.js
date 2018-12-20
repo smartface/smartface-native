@@ -14,7 +14,7 @@ const Switch = extend(View)(
         if (!this.nativeObject) {
             this.nativeObject = new NativeSwitch(AndroidConfig.activity);
         }
-        _super(this, { skipDefaultBackground: true });
+        _super(this);
 
         var _thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue
         var _thumbOffColor = Color.GRAY;

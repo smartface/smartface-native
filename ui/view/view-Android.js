@@ -203,11 +203,6 @@ function View(params) {
     this._onTouchCancelled;
     // YOGA PROPERTIES
 
-    // Intention of this check for ignoring unnecessary background drawables. 
-    if (!params.skipDefaultBackground) {
-        this.nativeObject.setBackground(this._gradientDrawable);
-        _isBackgroundAssigned = true;
-    }
     // Assign defaults
     if (!this.skipDefaults) {
         var idInitial = NativeView.generateViewId();
