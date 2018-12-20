@@ -190,10 +190,10 @@ System.clipboard;
  * @android
  * @since 0.1
  */
-System.android.getPackageVersion ({
+System.android.getPackageVersion({
     packageName: null,
-    onSuccess: function(versionName){},
-    onError: function(error){}
+    onSuccess: function(versionName) {},
+    onError: function(error) {}
 });
 
 /**
@@ -220,9 +220,9 @@ System.android.getPackageVersion ({
  * @ios
  * @since 0.1
  */
-System.ios.validateFingerPrint ({
-    onSuccess: function(){},
-    onError: function(){}
+System.ios.validateFingerPrint({
+    onSuccess: function() {},
+    onError: function() {}
 });
 
 /**
@@ -256,15 +256,17 @@ System.ios.validateFingerPrint ({
  * @android
  * @since 1.1.13
  */
-System.validateFingerPrint ({
-    onSuccess: function(){},
-    onError: function(){}
+System.validateFingerPrint({
+    onSuccess: function() {},
+    onError: function() {}
 });
 
 /**
- * Vibrates the device for a while.
+ * Vibrates the device for a while. iOS ignores given parameter.
  * 
  * @method vibrate
+ * @param {Object} params 
+ * @param {Number} params.millisecond
  * @android
  * @ios
  * @static

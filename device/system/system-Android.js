@@ -1,11 +1,11 @@
-const TypeUtil             = require('../../util/type');
-const AndroidConfig        = require('../../util/Android/androidconfig');
-const NativeBuild          = requireClass('android.os.Build');
-const NativeIntentFilter   = requireClass('android.content.IntentFilter');
+const TypeUtil = require('../../util/type');
+const AndroidConfig = require('../../util/Android/androidconfig');
+const NativeBuild = requireClass('android.os.Build');
+const NativeIntentFilter = requireClass('android.content.IntentFilter');
 const NativeBatteryManager = requireClass('android.os.BatteryManager');
-const NativeClipData       = requireClass('android.content.ClipData');
-const NativeViewConfig     = requireClass('android.view.ViewConfiguration');
-const NativeLocale         = requireClass('java.util.Locale');
+const NativeClipData = requireClass('android.content.ClipData');
+const NativeViewConfig = requireClass('android.view.ViewConfiguration');
+const NativeLocale = requireClass('java.util.Locale');
 const OSType = require('./ostype');
 //NativeIntent.ACTION_BATTERY_CHANGED
 const ACTION_BATTERY_CHANGED = 'android.intent.action.BATTERY_CHANGED';
@@ -37,7 +37,7 @@ Object.defineProperties(System, {
     },
     'language': {
         get: function() {
-            return  NativeLocale.getDefault().getLanguage().toString();
+            return NativeLocale.getDefault().getLanguage().toString();
         },
         enumerable: true
     },
@@ -77,7 +77,8 @@ Object.defineProperties(System, {
             var storedData = clipboard.getPrimaryClip();
             if (storedData != null) { // NEEDED!
                 return storedData.getItemAt(0).getText().toString();
-            } else {
+            }
+            else {
                 return null;
             }
         },
@@ -89,15 +90,16 @@ Object.defineProperties(System, {
         enumerable: true
     },
     'vibrate': {
-        value: function() {
+        value: function(options = {}) {
+            let milisecond = options.millisecond || 500;
             var vibrator = AndroidConfig.getSystemService(VIBRATOR_SERVICE, VIBRATOR_MANAGER);
-            vibrator.vibrate(500);
+            vibrator.vibrate(milisecond);
         },
         enumerable: true
     },
     'fingerPrintAvailable': {
         get: function() {
-            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
+            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
                 var fingerprintManager = AndroidConfig.getSystemService(FINGERPRINT_SERVICE, FINGERPRINT_MANAGER);
                 return fingerprintManager && fingerprintManager.isHardwareDetected() && fingerprintManager.hasEnrolledFingerprints();
             }
@@ -106,14 +108,14 @@ Object.defineProperties(System, {
         enumerable: true
     },
     'validateFingerPrint': {
-        value: function(params){
-            if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable){
+        value: function(params) {
+            if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW && this.fingerPrintAvailable) {
                 const NativeFingerprintAuthenticationDialogFragment = requireClass("com.android.fingerprintdialog.FingerprintAuthenticationDialogFragment");
                 const NativeFingerPrintListener = requireClass("com.android.fingerprintdialog.FingerPrintListener");
-                
+
                 var fragmentManager = AndroidConfig.activity.getFragmentManager();
                 var fragment = new NativeFingerprintAuthenticationDialogFragment();
-                
+
                 var listeners = NativeFingerPrintListener.implement({
                     'onError': function() {
                         params && params.onError && params.onError();
@@ -121,7 +123,7 @@ Object.defineProperties(System, {
                     'onAuthenticated': function() {
                         params && params.onSuccess && params.onSuccess();
                     },
-                    'onTimeout': function(){
+                    'onTimeout': function() {
                         params && params.onError && params.onError();
                     },
                     'onCancel': function() {
@@ -131,14 +133,14 @@ Object.defineProperties(System, {
                         params && params.onError && params.onError();
                     }
                 });
-                
-                if(params && TypeUtil.isString(params.message)){
+
+                if (params && TypeUtil.isString(params.message)) {
                     fragment.setMessage(params.message);
                 }
-                if(params && TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)){
+                if (params && TypeUtil.isObject(params.android) && TypeUtil.isString(params.android.title)) {
                     fragment.setTitle(params.android.title);
                 }
-                
+
                 fragment.addFingerPrintListener(listeners);
                 fragment.show(fragmentManager, DIALOG_FRAGMENT_TAG);
                 return;
@@ -166,7 +168,7 @@ Object.defineProperties(System.android, {
         value: function(packageName) {
             var packageList = AndroidConfig.activity.getPackageManager().getInstalledApplications(0);
             for (var i = 0; i < packageList.size(); i++) {
-                if(packageList.get(i).packageName.toString() === packageName) {
+                if (packageList.get(i).packageName.toString() === packageName) {
                     return true;
                 }
             }
