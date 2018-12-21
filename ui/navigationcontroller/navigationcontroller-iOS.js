@@ -456,11 +456,11 @@ function NavigationView(params) {
     };
     
     this.present = function (controllerToPresent, animated, completionBlock) {
-        self.nativeObject.presentViewController(controllerToPresent, animated, completionBlock);
+        self.nativeObject.presentViewController(controllerToPresent, completionBlock, animated);
     };
     
     this.dismiss = function (completionBlock, animated) {
-        self.nativeObject.dismissViewController(animated, completionBlock);
+        self.nativeObject.dismissViewController(completionBlock, animated);
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {
