@@ -279,13 +279,13 @@ function HeaderBar(params) {
         enumerable: true,configurable : true
     });
     
-    var _font = undefined;
-    Object.defineProperty(self, 'font', {
+    var _titleFont = undefined;
+    Object.defineProperty(self, 'titleFont', {
         get: function() {
-            return _font;
+            return _titleFont;
         },
         set: function(value) {
-            _font = value;
+            _titleFont = value;
             self.__updateTitleTextAttributes();
         },
         enumerable: true,configurable : true
@@ -294,7 +294,7 @@ function HeaderBar(params) {
     self.__updateTitleTextAttributes = function(){
         var titleTextAttributes = {};
         _titleColor && (titleTextAttributes["NSColor"] = _titleColor.nativeObject);
-        _font && (titleTextAttributes["NSFont"] = _font);
+        _titleFont && (titleTextAttributes["NSFont"] = _titleFont);
         
         self.nativeObject.titleTextAttributes = titleTextAttributes;
     };

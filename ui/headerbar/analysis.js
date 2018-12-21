@@ -143,14 +143,14 @@ HeaderBar.prototype.backgroundImage = null;
 HeaderBar.prototype.leftItemEnabled = false;
 
 /**
- * Gets/sets font of header bar.
+ * Gets/sets titleFont of header bar.
  *
- * @property {UI.Font} font
+ * @property {UI.Font} titleFont
  * @android
  * @ios
  * @since 4.0.0
  */
-HeaderBar.prototype.font = undefined;
+HeaderBar.prototype.titleFont = undefined;
 
 /**
  * Gets the height of the header bar. Height is a read only property and
