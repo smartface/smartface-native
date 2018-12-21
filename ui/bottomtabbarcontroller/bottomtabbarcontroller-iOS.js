@@ -376,7 +376,7 @@ function BottomTabBarView(params) {
     };
     
     this.present = function (controllerToPresent, animationNeed, completionBlock) {
-        self.nativeObject.presentViewController(controllerToPresent, animationNeed, completionBlock);
+        self.nativeObject.presentViewController(controllerToPresent, completionBlock, animationNeed);
     };
     
     this.dismiss = function (onComplete) {

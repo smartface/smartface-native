@@ -54,8 +54,7 @@ Contacts.add = function(params) {
                 }
             };
             this.contactViewController.delegate = this.contactViewControllerDelegate;
-            const UINavigationController = SF.requireClass("UINavigationController");
-            var navigationalcontactViewController = UINavigationController.new();
+            var navigationalcontactViewController = new __SF_UINavigationController();
             navigationalcontactViewController.viewControllers = [this.contactViewController];
             params.page.nativeObject.presentViewController(navigationalcontactViewController);
         } else {
