@@ -455,12 +455,12 @@ function NavigationView(params) {
         }
     };
     
-    this.present = function (controllerToPresent, animationNeed, completionBlock) {
-        self.nativeObject.presentViewController(controllerToPresent, animationNeed, completionBlock);
+    this.present = function (controllerToPresent, animated, completionBlock) {
+        self.nativeObject.presentViewController(controllerToPresent, animated, completionBlock);
     };
     
-    this.dismiss = function (onComplete) {
-        self.nativeObject.dismissViewController(onComplete);
+    this.dismiss = function (completionBlock, animated) {
+        self.nativeObject.dismissViewController(animated, completionBlock);
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {
