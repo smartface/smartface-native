@@ -32,8 +32,6 @@ const OrientationDictionary = {
     15: 10
 };
 
-
-
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -483,24 +481,39 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    var _titleFont, _headerBarTitle = "Smartface";
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return toolbar.getTitle();
+            return _headerBarTitle;
         },
         set: function(text) {
-            let titleText = "";
-            if (TypeUtil.isString(text)) {
-                titleText = text;
-            } else if(text instanceof AttributedString) {
-                let attributedStringBuilder = new NativeSpannableStringBuilder();
-                text.setSpan(attributedStringBuilder);
-                titleText = attributedStringBuilder;
+            _headerBarTitle = text;
+            if (!TypeUtil.isString(text)) {
+                toolbar.setTitle("");
+                return;
             }
-            toolbar.setTitle(titleText);
+            
+            if(!self.headerBar.titleFont) {
+                toolbar.setTitle(text);
+                return;
+            }
+            self.__setAttributedTitle();
         },
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(self.headerBar, 'titleFont', {
+        get: function() {
+            return _titleFont;
+        },
+        set: function(font) {
+            _titleFont = font;
+            self.__setAttributedTitle();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
     var _headerBarTitleColor;
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
@@ -509,7 +522,11 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                toolbar.setTitleTextColor(color.nativeObject);
+                if(!self.headerBar.titleFont) {
+                    toolbar.setTitleTextColor(color.nativeObject);
+                    return;
+                }
+                self.__setAttributedTitle();
             }
         },
         enumerable: true,
@@ -580,20 +597,22 @@ function Page(params) {
             return _subtitle;
         },
         set: function(text) {
-            let titleText = "";
-            if (TypeUtil.isString(text)) {
-                titleText = text;
-            } else if(text instanceof AttributedString) {
-                let attributedStringBuilder = new NativeSpannableStringBuilder();
-                text.setSpan(attributedStringBuilder);
-                titleText = attributedStringBuilder;
+            _subtitle = text;
+            if (!TypeUtil.isString(text)) {
+                toolbar.setSubtitle("");
+                return;
+            } 
+            
+            if(!self.headerBar.android.subtitleFont) {
+                toolbar.setSubtitle(text);
+                return;
             }
-            toolbar.setSubtitle(titleText);
+            self.__setAttributedSubtitle();
         },
         enumerable: true,
         configurable: true
     });
-    var _headerBarSubtitleColor, _subtitle = "";
+    var _headerBarSubtitleColor, _subtitle = "", _subtitleFont;
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
             return _headerBarSubtitleColor;
@@ -606,6 +625,19 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+    
+    Object.defineProperty(self.headerBar.android, 'subtitleFont', {
+        get: function() {
+            return _subtitleFont;
+        },
+        set: function(font) {
+            _subtitleFont = font;
+            self.__setAttributedSubtitle();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
     var _headerBarLogo = null;
     Object.defineProperty(self.headerBar.android, 'logo', {
         get: function() {
@@ -664,6 +696,44 @@ function Page(params) {
             enumerable: true
         }
     );
+    
+    self.__setAttributedSubtitle = function () {
+        if (self.headerBar.__attributedSubtitleBuilder)
+            self.headerBar.__attributedSubtitleBuilder.clear();
+        else
+            self.headerBar.__attributedSubtitleBuilder = new NativeSpannableStringBuilder();
+            
+        if(!self.headerBar.__attributedSubtitleString) {
+            self.headerBar.__attributedSubtitleString = new AttributedString();
+        } 
+        self.headerBar.__attributedSubtitleString.font = _subtitleFont;
+        self.headerBar.__attributedSubtitleString.string = _subtitle;
+        
+        let titleBuilder = self.headerBar.__attributedSubtitleBuilder;
+        self.headerBar.__attributedSubtitleString.foregroundColor = self.headerBar.android.subtitleColor;
+        self.headerBar.__attributedSubtitleString.setSpan(titleBuilder);
+        
+        toolbar.setSubtitle(titleBuilder);
+    };
+    
+    self.__setAttributedTitle = function () {
+        if (self.headerBar.__attributedTitleBuilder)
+            self.headerBar.__attributedTitleBuilder.clear();
+        else
+            self.headerBar.__attributedTitleBuilder = new NativeSpannableStringBuilder();
+            
+        if(!self.headerBar.__attributedTitleString) {
+            self.headerBar.__attributedTitleString = new AttributedString();
+        } 
+        self.headerBar.__attributedTitleString.font = self.headerBar.titleFont;
+        self.headerBar.__attributedTitleString.string = self.headerBar.title;
+        
+        let titleBuilder = self.headerBar.__attributedTitleBuilder;
+        self.headerBar.__attributedTitleString.foregroundColor = self.headerBar.titleColor;
+        self.headerBar.__attributedTitleString.setSpan(titleBuilder);
+        
+        toolbar.setTitle(titleBuilder);
+    };
     
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
@@ -754,13 +824,7 @@ function Page(params) {
                 item.setValues();
             }
             if (itemView) {
-                let itemTitle = item.title;
-                if((item.title) instanceof AttributedString) {
-                    let attributedStringBuilder = new NativeSpannableStringBuilder();
-                    item.title.setSpan(attributedStringBuilder);
-                    itemTitle = attributedStringBuilder;
-                }
-                item.menuItem = optionsMenu.add(0, itemID++, 0, itemTitle);
+                item.menuItem = optionsMenu.add(0, itemID++, 0, item.title);
                 item.menuItem.setEnabled(item.enabled);
                 item.menuItem.setShowAsAction(2); // MenuItem.SHOW_AS_ACTION_ALWAYS
 

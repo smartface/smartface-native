@@ -5,7 +5,6 @@ const Color = require('sf-core/ui/color');
 const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
 const AttributedString = function(params) {
-
     var self = this;
 
     self.ios = {};
@@ -98,7 +97,7 @@ const AttributedString = function(params) {
 
 AttributedString.prototype.setSpan = function(stringBuilder) {
     const self = this;
-
+    console.log("this.string: " + this.string);
     stringBuilder.append(this.string);
     var start = stringBuilder.length() - this.string.length;
     var end = stringBuilder.length();

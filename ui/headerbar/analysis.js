@@ -143,7 +143,16 @@ HeaderBar.prototype.backgroundImage = null;
 HeaderBar.prototype.leftItemEnabled = false;
 
 /**
- * Gets/sets titleFont of header bar.
+ * Gets/sets titleFont of header bar subtitle.
+ *
+ * @property {UI.Font} subtitleFont
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.subtitleFont = undefined;
+
+/**
+ * Gets/sets titleFont of header bar title.
  *
  * @property {UI.Font} titleFont
  * @android
@@ -228,7 +237,7 @@ HeaderBar.prototype.contentInset = {};
  *     var myPage = new Page();
  *     myPage.headerBar.android.subtitle = 'Hello from HeaderBar Subtitle!';
  *
- * @property {String|UI.AttributedString} subtitle
+ * @property {String} subtitle
  * @android
  * @since 0.1
  */
@@ -277,7 +286,7 @@ HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.A
 /**
  * Gets/sets title of the header bar.
  *
- * @property {String|UI.AttributedString} title
+ * @property {String} title
  * @android
  * @ios
  * @since 0.1
