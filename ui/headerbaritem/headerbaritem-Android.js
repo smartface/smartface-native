@@ -29,6 +29,7 @@ function HeaderBarItem(params) {
     var _searchView = null;
     var _imageButton = false;
     var _menuItem = null;
+    var _font = null;
     var activity = AndroidConfig.activity;
     
     this.ios = {};
@@ -51,11 +52,19 @@ function HeaderBarItem(params) {
                         var imageCopy = this.image.nativeObject.mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
-                    }
-                    else {
+                    } else {
                         this.nativeObject.setTextColor(_color.nativeObject);
                     }
                 }
+            },
+            enumerable: true
+        },
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(value) {
+                _font = value;
             },
             enumerable: true
         },
@@ -64,15 +73,13 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if (value !== null && typeof(value) !== "string" && !(value instanceof AttributedString)) {
+                if (value !== null && typeof(value) !== "string") {
                     throw new TypeError("title must be string or null.");
                 }
                 _title = value;
                 let titleText = _title;
-                if(_title instanceof AttributedString) {
-                    let attributedStringBuilder = new NativeSpannableStringBuilder();
-                    _title.setSpan(attributedStringBuilder);
-                    titleText = attributedStringBuilder;
+                if(this.font) {
+                    titleText = this.__createAttributedText();
                 }
             
                 if (!this.nativeObject) {
@@ -379,6 +386,25 @@ HeaderBarItem.prototype = {
         position.y = PixelToDp(location[1]);
         return position;
     },
+    __createAttributedText: function() {
+        if (this.__attributedTitleBuilder)
+            this.__attributedTitleBuilder.clear();
+        else
+            this.__attributedTitleBuilder = new NativeSpannableStringBuilder();
+            
+        if(!this.__attributedTitleString) {
+            this.__attributedTitleString = new AttributedString();
+        } 
+        
+        this.__attributedTitleString.font = this.font;
+        this.__attributedTitleString.string = this.title;
+        
+        let titleBuilder = this.__attributedTitleBuilder;
+        this.__attributedTitleString.foregroundColor = this.color ? this.color : HeaderBarItem.itemColor;
+        this.__attributedTitleString.setSpan(titleBuilder);
+        
+        return titleBuilder;
+    }
 };
 
 var _itemColor = Color.WHITE;
