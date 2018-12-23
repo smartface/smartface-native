@@ -166,6 +166,19 @@ ListView.prototype.onRowHeight = function onRowHeight(index){};
 ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
 
 /**
+ * This event is called when a scroll occurs. 
+ *
+ * @param {Object} params
+ * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+ * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+ * @return {Boolean} Return true if the event is consumed.
+ * @event onGesture
+ * @android
+ * @since 4.0.1
+ */
+ListView.prototype.onGesture = function onGesture(params){};
+
+/**
  * This event is called when user selects a row at specific index.
  *
  * @param {UI.ListViewItem} listViewItem
