@@ -109,7 +109,7 @@ function Page(params) {
                         controllerToPresent.setValueForKey(true,"isHeroEnabled");
                     }
                     
-                    self.nativeObject.presentViewController(controllerToPresent, _animationNeed, _completionBlock);
+                    self.nativeObject.presentViewController(controllerToPresent, _completionBlock, _animationNeed);
                 }
             }   
         }
