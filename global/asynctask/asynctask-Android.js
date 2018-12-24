@@ -70,7 +70,7 @@ function AsyncTask(params) {
     Object.defineProperties(self.android, {
         'setCancel': {
             value: function(mayInterruptIfRunning = false) {
-                self.nativeObject.cancel(mayInterruptIfRunning);
+               return self.nativeObject.cancel(mayInterruptIfRunning);
             }
         },
         'getStatus': {

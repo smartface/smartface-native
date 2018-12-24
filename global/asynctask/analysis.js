@@ -47,4 +47,38 @@ AsyncTask.prototype.onComplete = function (){};
  */
 AsyncTask.prototype.run = function (){};
 
+/**
+ * Attempts to cancel execution of this task. This attempt will fail if the task has already completed,
+ * already been cancelled, or could not be cancelled for some other reason. If successful, 
+ * and this task has not started when cancel is called, this task should never run. If the task has already started,
+ * then the mayInterruptIfRunning parameter determines whether the thread executing this task should be interrupted in an attempt to stop the task.
+ *
+ * @method setCancel
+ * @android
+ * @since 3.2.2
+ * @return {Boolean} false if the task could not be cancelled, typically because it has already completed normally; true otherwise
+ */
+AsyncTask.prototype.setCancel = function (){};
+
+
+/**
+ * Returns the current status of this task.
+ *
+ * @method getStatus
+ * @android
+ * @since 3.2.2
+ * @return {AsyncTask.Status.Android} status
+ */
+AsyncTask.prototype.getStatus = function (){};
+
+
+/**
+ * Runs on the UI thread before onComplete.
+ *
+ * @method onPreExecute
+ * @android
+ * @since 3.2.2
+ */
+AsyncTask.prototype.onPreExecute = function (){};
+
 module.exports = AsyncTask;
