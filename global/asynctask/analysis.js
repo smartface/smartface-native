@@ -84,10 +84,10 @@ AsyncTask.prototype.onPreExecute = function (){};
 
 /**
  * Android Specific Properties.
- * @class AsyncTask.Android
+ * @class AsyncTask.Android.Status
  * @since 3.2.2
  */
-AsyncTask.prototype.Status.Android = {};
+AsyncTask.prototype.Android.Status.Android = {};
 
 /** 
  * @enum Application.Android.FINISHED 
