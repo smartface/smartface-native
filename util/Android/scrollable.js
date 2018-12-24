@@ -8,7 +8,7 @@ function Scrollable(childJsClass, nativeScrollableObject) {
         self.android = {};
     }
     
-    var _overScrollMode = 0;
+    var _overScrollMode = 0, _onGesture;
     Object.defineProperties(self.android, {
         'overScrollMode': {
             get: function() {
@@ -25,6 +25,31 @@ function Scrollable(childJsClass, nativeScrollableObject) {
     
     if(!self.__isRecyclerView)
         return;
+        
+    Object.defineProperties(self.android, {
+        'onGesture': {
+            get: function() {
+                return _onGesture;
+            },
+            set: function(value) {
+                _onGesture = value;
+                if(_onGesture) {
+                    self.nativeInner.setJsCallbacks({
+                        onScrollGesture: function(distanceX, distanceY) {
+                            let returnValue = true;
+                            _onGesture && (returnValue = _onGesture({distanceX: distanceX, distanceY: distanceY}));
+                            return !!returnValue;
+                        }
+                    });
+                } else {
+                    self.nativeInner.setJsCallbacks(null);
+                }
+            },
+            enumerable: true,
+            configurable: true
+        }
+    });
+            
     
     self.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: function() {
