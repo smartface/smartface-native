@@ -106,6 +106,19 @@ GridView.prototype.onItemCreate = function onItemCreate(type){};
 GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
 
 /**
+ * This event is called when a scroll occurs. 
+ *
+ * @param {Object} params
+ * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+ * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+ * @return {Boolean} Return true if the event is consumed.
+ * @event onGesture
+ * @android
+ * @since 4.0.1
+ */
+GridView.prototype.onGesture = function onGesture(params){};
+
+/**
  * This event is called when a UI.GridViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
