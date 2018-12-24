@@ -109,11 +109,11 @@ function AsyncTask(params) {
 }
 
 
-AsyncTask.Status = {};
-AsyncTask.Status.Android = {};
-AsyncTask.Status.Android.FINISHED = SFAsyncTask.Status.FINISHED;
-AsyncTask.Status.Android.PENDING = SFAsyncTask.Status.PENDING;
-AsyncTask.Status.Android.RUNNING = SFAsyncTask.Status.RUNNING;
+AsyncTask.Android = {};
+AsyncTask.Android.Status = {};
+AsyncTask.Android.Status.FINISHED = SFAsyncTask.Status.FINISHED;
+AsyncTask.Android.Status.PENDING = SFAsyncTask.Status.PENDING;
+AsyncTask.Android.Status.RUNNING = SFAsyncTask.Status.RUNNING;
 Object.freeze(AsyncTask.Status.Android);
 
 module.exports = AsyncTask;

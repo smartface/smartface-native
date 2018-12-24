@@ -81,4 +81,38 @@ AsyncTask.prototype.getStatus = function (){};
  */
 AsyncTask.prototype.onPreExecute = function (){};
 
+
+/**
+ * Android Specific Properties.
+ * @class AsyncTask.Android
+ * @since 3.2.2
+ */
+AsyncTask.prototype.Status.Android = {};
+
+/** 
+ * @enum Application.Android.FINISHED 
+ * @since 3.2.2
+ * 
+ * Indicates that onComplete has finished.
+ */
+AsyncTask.prototype.Android.Status.FINISHED = {};
+
+/** 
+ * @enum Application.Android.PENDING 
+ * @since 3.2.2
+ * 
+ * Indicates that the task has not been executed yet.
+ */
+AsyncTask.prototype.Android.Status.PENDING = {};
+
+
+/** 
+ * @enum Application.Android.RUNNING 
+ * @since 3.2.2
+ * 
+ * Indicates that the task is running.
+ */
+AsyncTask.prototype.Android.Status.RUNNING = {};
+
+
 module.exports = AsyncTask;
