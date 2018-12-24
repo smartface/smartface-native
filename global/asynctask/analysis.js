@@ -67,7 +67,7 @@ AsyncTask.prototype.setCancel = function (){};
  * @method getStatus
  * @android
  * @since 3.2.2
- * @return {AsyncTask.Status.Android} status
+ * @return {AsyncTask.Android.Status} status
  */
 AsyncTask.prototype.getStatus = function (){};
 
@@ -84,33 +84,46 @@ AsyncTask.prototype.onPreExecute = function (){};
 
 /**
  * Android Specific Properties.
- * @class AsyncTask.Android.Status
+ * @class AsyncTask.Android
  * @since 3.2.2
  */
-AsyncTask.prototype.Android.Status.Android = {};
+AsyncTask.prototype.Android = {};
+
+/**
+ * @enum AsyncTask.Android.Status  
+ * @since 3.2.2
+ *
+ */
+AsyncTask.prototype.Android.Status = {};
 
 /** 
- * @enum Application.Android.FINISHED 
- * @since 3.2.2
- * 
  * Indicates that onComplete has finished.
+ *
+ * @property FINISHED
+ * @static
+ * @readonly
+ * @since 3.2.0
  */
 AsyncTask.prototype.Android.Status.FINISHED = {};
 
 /** 
- * @enum Application.Android.PENDING 
- * @since 3.2.2
- * 
  * Indicates that the task has not been executed yet.
+ *
+ * @property PENDING
+ * @static
+ * @readonly
+ * @since 3.2.0
  */
 AsyncTask.prototype.Android.Status.PENDING = {};
 
 
 /** 
- * @enum Application.Android.RUNNING 
- * @since 3.2.2
- * 
  * Indicates that the task is running.
+ *
+ * @property RUNNING
+ * @static
+ * @readonly
+ * @since 3.2.0
  */
 AsyncTask.prototype.Android.Status.RUNNING = {};
 
