@@ -132,6 +132,15 @@ GridView.prototype.onGesture = function onGesture(params){};
 GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
 
 /**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+
+/**
  * This event is called before onItemCreate callback. Returns item type you should use based on position.
  *
  * @event onItemType
