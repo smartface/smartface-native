@@ -1,6 +1,6 @@
 /**
 * @enum {Number} UI.iOS.ContentInsetAdjustment
-* @aios
+* @ios
 * @static
 * @readonly
 * @since 4.0.0

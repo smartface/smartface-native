@@ -129,6 +129,14 @@ ListView.prototype.onRowType = function onRowType(index){};
  */
 ListView.prototype.onRowCreate = function onRowCreate(type){};
 
+/**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+ListView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
  * Gets/sets over-scroll mode for this view.
