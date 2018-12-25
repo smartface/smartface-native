@@ -21,8 +21,10 @@
  *
  *     var myPage = new Page({
  *         onLoad: function() {
- *             this.headerBar.backgroundColor = Color.MAGENTA;
- *             this.headerBar.title = "Header Bar";
+ *             var page = this;
+ *             var headerBar = System.OS === "Android" ? page.headerBar : page.parentController.headerBar;
+ *             headerBar.backgroundColor = Color.MAGENTA;
+ *             page.headerBar.title = "Header Bar";
  *
  *             var myItem = new HeaderBarItem({
  *                 title: "Done",
@@ -33,7 +35,9 @@
  *             this.headerBar.setItems([myItem]);
  *         },
  *         onShow: function() {
- *             this.headerBar.visible = true;
+ *             var page = this;
+ *             var headerBar = System.OS === "Android" ? page.headerBar : page.parentController.headerBar;
+ *             headerBar.visible = true;
  *         }
  *     });
  *
@@ -42,7 +46,7 @@ function HeaderBar() {}
 
 
 /**
- * Defines the opacity of a view. The value of this property is a float number between 0.0 and 1.0. 
+ * Defines the opacity of a view. The value of this property is a float number between 0.0 and 1.0. For iOS, you should access this property from page.parentController.
  * 0 represents view is completely transparent and 1 represents view is completely opaque.
  *
  * @property {Number} [alpha = 1]
@@ -53,16 +57,17 @@ function HeaderBar() {}
 HeaderBar.prototype.alpha = 1;
 
 /**
- * Gets/sets transparency of header bar.
+ * Gets/sets transparency of header bar. For iOS, you should access this property from page.parentController.
  *
  * @property {Boolean} [transparent = true]
+ * @ios
  * @android
  * @since 4.0.1
  */
 HeaderBar.prototype.transparent = false;
 
 /**
- * Gets/sets border visibility of headerbar.
+ * Gets/sets border visibility of headerbar. For iOS, you should access this property from page.parentController.
  *
  * @property {Boolean} [borderVisibility = true]
  * @android
@@ -74,14 +79,16 @@ HeaderBar.prototype.borderVisibility = true;
 
 /**
  * Gets/sets background color of the header bar. If not set, header bar will have default
- * background color depending on device's OS and OS version.
+ * background color depending on device's OS and OS version. For iOS, you should access this property from page.parentController.
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
  *     const Color = require('sf-core/ui/color');
  *     var myPage = new Page({
  *         onLoad: function() {
- *             this.headerBar.backgroundColor = Color.RED;
+ *             var page = this;
+ *             var headerBar = System.OS === "Android" ? page.headerBar : page.parentController.headerBar;
+ *             headerBar.backgroundColor = Color.RED;
  *         }
  *     });
  *
@@ -93,14 +100,16 @@ HeaderBar.prototype.borderVisibility = true;
 HeaderBar.prototype.backgroundColor = Color.create("#00A1F1");
 
 /**
- * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items.
+ * Gets/sets item color of the header bar. This property will change color of the left item and color of all header bar items. For iOS, you should access this property from page.parentController.
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
  *     const Color = require('sf-core/ui/color');
  *     var myPage = new Page({
  *         onLoad: function() {
- *             this.headerBar.itemColor = Color.BLUE;
+ *             var page = this;
+ *             var headerBar = System.OS === "Android" ? page.headerBar : page.parentController.headerBar;
+ *             headerBar.itemColor = Color.BLUE;
  *         }
  *     });
  *
@@ -112,14 +121,16 @@ HeaderBar.prototype.backgroundColor = Color.create("#00A1F1");
 HeaderBar.prototype.itemColor = Color.WHITE;
 
 /**
- * Gets/sets background image of the HeaderBar.
+ * Gets/sets background image of the HeaderBar. For iOS, you should access this property from page.parentController.
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
  *     const Image = require('sf-core/ui/image');
  *     var myPage = new Page({
  *         onLoad: function() {
- *             this.headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
+ *             var page = this;
+ *             var headerBar = System.OS === "Android" ? page.headerBar : page.parentController.headerBar;
+ *             headerBar.backgroundImage = Image.createFromFile('images://smartface.png');
  *         }
  *     });
  *
@@ -144,7 +155,7 @@ HeaderBar.prototype.leftItemEnabled = false;
 
 /**
  * Gets the height of the header bar. Height is a read only property and
- * its value may change depending on device and screen density.
+ * its value may change depending on device and screen density. For iOS, you should access this property from page.parentController.
  *
  * @property {Number} height
  * @android
@@ -275,7 +286,7 @@ HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.A
 HeaderBar.prototype.title = '';
 
 /**
- * Gets/sets title color of the header bar.
+ * Gets/sets title color of the header bar. For iOS, you should access this property from page.parentController.
  *
  * @property {UI.Color} [titleColor = Color.BLACK]
  * @android
@@ -285,7 +296,7 @@ HeaderBar.prototype.title = '';
 HeaderBar.prototype.titleColor = Color.BLACK;
 
 /**
- * Gets/sets visibility of the header bar.
+ * Gets/sets visibility of the header bar. For iOS, you should access this property from page.parentController.
  *
  * @property {boolean} [visible = true]
  * @android
