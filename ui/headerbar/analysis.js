@@ -6,7 +6,7 @@
  * buttons and you can show title of page on HeaderBar.
  *
  * Creating instance of HeaderBar class is not valid. You can access header bar of page
- * via UI.Page.headerBar property.
+ * via UI.Page.headerBar property. Some properties should change from parentController of page for iOS.
  *
  * On iOS you should work with header bar in scope of onLoad and onShow callbacks, otherwise
  * behaviour is undefined.
