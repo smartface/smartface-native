@@ -65,7 +65,7 @@ FragmentTransaction.replace = function(params) {
     // don't remove these variables. If they are global values, an exception occurs.
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
-    if (params.animated) {
+    if (!(params.animated === false)) {
         // check animation type
         let animationType = DirectionBasedConverter.getAnimationType(params.animationType);
         switch (animationType) {
@@ -122,7 +122,7 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();
 
-    if (animation)
+    if (!(animation === false))
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0);
     fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
@@ -152,7 +152,7 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         } 
     }
     var fragmentTransaction = fragmentManager.beginTransaction();
-    if (animation)
+    if (!(animation === false))
         fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
     popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
     
