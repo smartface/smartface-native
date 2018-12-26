@@ -35,7 +35,7 @@ function AsyncTask(params) {
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _task = value.bind(self);
+                    _task = value;
                 }
             }
         },
@@ -45,7 +45,7 @@ function AsyncTask(params) {
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _onComplete = value.bind(self);
+                    _onComplete = value;
                 }
             }
         },
@@ -68,7 +68,7 @@ function AsyncTask(params) {
 
     self.android = {};
     Object.defineProperties(self.android, {
-        'setCancel': {
+        'cancel': {
             value: function(mayInterruptIfRunning = false) {
                return self.nativeObject.cancel(mayInterruptIfRunning);
             }
@@ -84,7 +84,7 @@ function AsyncTask(params) {
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _onPreExecute = value.bind(self);
+                    _onPreExecute = value;
                 }
             }
         },
@@ -94,10 +94,11 @@ function AsyncTask(params) {
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _onProgressUpdate = value.bind(self);
+                    _onProgressUpdate = value;
                 }
             }
-        }
+        },
+        
     });
 
     // Assign parameters given in constructor
@@ -114,6 +115,6 @@ AsyncTask.Android.Status = {};
 AsyncTask.Android.Status.FINISHED = SFAsyncTask.Status.FINISHED;
 AsyncTask.Android.Status.PENDING = SFAsyncTask.Status.PENDING;
 AsyncTask.Android.Status.RUNNING = SFAsyncTask.Status.RUNNING;
-Object.freeze(AsyncTask.Status.Android);
+Object.freeze(AsyncTask.Android.Status);
 
 module.exports = AsyncTask;
