@@ -80,7 +80,6 @@ HeaderBarItem.prototype.enabled = true;
  * Gets/sets font of header bar item.
  *
  * @property {UI.Font} font
- * @android
  * @ios
  * @since 4.0.0
  */

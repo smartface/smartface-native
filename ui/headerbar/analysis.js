@@ -152,10 +152,9 @@ HeaderBar.prototype.leftItemEnabled = false;
 HeaderBar.prototype.subtitleFont = undefined;
 
 /**
- * Gets/sets titleFont of header bar title.
+ * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
  *
  * @property {UI.Font} titleFont
- * @android
  * @ios
  * @since 4.0.0
  */

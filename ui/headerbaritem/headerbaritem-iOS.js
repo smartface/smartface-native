@@ -85,24 +85,6 @@ function HeaderBarItem(params) {
             },
             enumerable: true
         },
-        'font': {
-            get: function() {
-                return _font;
-            },
-            set: function(value) {
-                _font = value;
-                if (_font) {
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 0);        //UIControlStateNormal
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 0);   //UIControlStateHighlighted
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 1);   //UIControlStateDisabled
-                }else{
-                    self.nativeObject.setTitleTextAttributesForState({}, 0);        //UIControlStateNormal
-                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 0);   //UIControlStateHighlighted
-                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 1);   //UIControlStateDisabled
-                }
-            },
-            enumerable: true
-        },
         'enabled': {
             get: function() {
                 return self.nativeObject.enabled;
@@ -138,6 +120,24 @@ function HeaderBarItem(params) {
         'systemItem': {
             get: function(){
                 return _systemItem;
+            },
+            enumerable: true
+        },
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(value) {
+                _font = value;
+                if (_font) {
+                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 0);        //UIControlStateNormal
+                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 0);   //UIControlStateHighlighted
+                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 1);   //UIControlStateDisabled
+                }else{
+                    self.nativeObject.setTitleTextAttributesForState({}, 0);        //UIControlStateNormal
+                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 0);   //UIControlStateHighlighted
+                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 1);   //UIControlStateDisabled
+                }
             },
             enumerable: true
         }
