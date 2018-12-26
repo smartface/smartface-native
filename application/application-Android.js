@@ -382,7 +382,7 @@ Object.defineProperties(ApplicationWrapper.android, {
     'locale': {
         get: function() {
             const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
-            return LocaleConfigurationUtil.getDeviceLanguage(activity.getResources().getConfiguration());
+            return LocaleConfigurationUtil.getDeviceLanguage();
         },
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
