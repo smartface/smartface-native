@@ -53,12 +53,13 @@ AsyncTask.prototype.run = function (){};
  * and this task has not started when cancel is called, this task should never run. If the task has already started,
  * then the mayInterruptIfRunning parameter determines whether the thread executing this task should be interrupted in an attempt to stop the task.
  *
- * @method setCancel
+ * @property cancel
  * @android
+ * @ios
  * @since 3.2.2
  * @return {Boolean} false if the task could not be cancelled, typically because it has already completed normally; true otherwise
  */
-AsyncTask.prototype.setCancel = function (){};
+AsyncTask.prototype.cancel = function (){};
 
 
 /**
@@ -81,6 +82,15 @@ AsyncTask.prototype.getStatus = function (){};
  */
 AsyncTask.prototype.onPreExecute = function (){};
 
+/**
+ * Runs on the UI thread after cancel() is invoked
+ *
+ * @method onCancelled
+ * @android
+ * @ios
+ * @since 3.2.2
+ */
+AsyncTask.prototype.onCancelled = function (){};
 
 /**
  * Android Specific Properties.
