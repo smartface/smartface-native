@@ -387,8 +387,12 @@ Object.defineProperties(ApplicationWrapper.android, {
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
                 const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+                const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
+
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
+
+                LocaleHelperUtil.changeConfigurationLocale(activity);
             }
         },
         enumerable: true
