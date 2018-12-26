@@ -144,7 +144,7 @@ HeaderBar.prototype.leftItemEnabled = false;
 
 /**
  * Gets/sets titleFont of header bar subtitle.
- *
+ * 
  * @property {UI.Font} subtitleFont
  * @android
  * @since 4.0.0
@@ -153,7 +153,16 @@ HeaderBar.prototype.subtitleFont = undefined;
 
 /**
  * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
- *
+ * 
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     const Font = require("sf-core/ui/font");
+ *     var myPage = new Page({
+ *         onLoad: function() {
+ *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
+ *         }
+ *     });
+ * 
  * @property {UI.Font} titleFont
  * @ios
  * @since 4.0.0
