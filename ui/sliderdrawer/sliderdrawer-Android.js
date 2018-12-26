@@ -56,13 +56,13 @@ const SliderDrawer = extend(FlexLayout)(
                     if(!this.__isAttached) return;
                     
                     if (_enabled) {
+                        // DrawerLayout.LOCK_MODE_UNLOCKED
+                        Application.__mDrawerLayout.setDrawerLockMode(0);
+                    }
+                    else {
                         // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
                         Application.__mDrawerLayout.setDrawerLockMode(1);
                         (this.state === SliderDrawer.State.OPEN) && (this.__hideSliderDrawer());
-                    }
-                    else {
-                        // DrawerLayout.LOCK_MODE_UNLOCKED
-                        Application.__mDrawerLayout.setDrawerLockMode(0);
                     }
                 },
                 enumerable: true,
