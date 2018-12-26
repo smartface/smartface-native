@@ -55,6 +55,7 @@ AsyncTask.prototype.run = function (){};
  *
  * @property cancel
  * @android
+ * @ios
  * @since 3.2.2
  * @return {Boolean} false if the task could not be cancelled, typically because it has already completed normally; true otherwise
  */

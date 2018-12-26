@@ -1,20 +1,17 @@
 /*globals array,requireClass,release */
 const TypeUtil = require("sf-core/util/type");
-const SFAsyncTask = requireClass('io.smartface.android.SFAsyncTask');
+const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
 
 function AsyncTask(params) {
-    
+
     const self = this;
-    
+
     var callbacks = {
         onPreExecute: function() {
             _onPreExecute && _onPreExecute();
         },
         doInBackground: function(objects) {
             _task && _task(objects);
-        },
-        onProgressUpdate: function() {
-            _onProgressUpdate && _onProgressUpdate();
         },
         onPostExecute: function() {
             _onComplete && _onComplete();
@@ -24,10 +21,7 @@ function AsyncTask(params) {
     this.nativeObject.setJsCallback(callbacks);
 
 
-    var _onPreExecute;
-    var _task;
-    var _onProgressUpdate;
-    var _onComplete;
+    let _onPreExecute,_task, _onComplete;
     Object.defineProperties(self, {
         'task': {
             get: function() {
@@ -50,13 +44,13 @@ function AsyncTask(params) {
             }
         },
         'run': {
-            value: function(params) {
-                if (TypeUtil.isArray(params)) {
-                    self.nativeObject.executeTask(array(params, "java.lang.Object"));
-                }
-                else {
-                    self.nativeObject.executeTask(null);
-                }
+            value: function() {
+                self.nativeObject.executeTask();
+            }
+        },
+        'cancel': {
+            value: function(mayInterruptIfRunning = false) {
+                return self.nativeObject.cancel(mayInterruptIfRunning);
             }
         },
         'toString': {
@@ -68,11 +62,6 @@ function AsyncTask(params) {
 
     self.android = {};
     Object.defineProperties(self.android, {
-        'cancel': {
-            value: function(mayInterruptIfRunning = false) {
-               return self.nativeObject.cancel(mayInterruptIfRunning);
-            }
-        },
         'getStatus': {
             value: function() {
                 return self.nativeObject.getStatus();
@@ -87,18 +76,7 @@ function AsyncTask(params) {
                     _onPreExecute = value;
                 }
             }
-        },
-        'onProgressUpdate': {
-            get: function() {
-                return _onProgressUpdate;
-            },
-            set: function(value) {
-                if (TypeUtil.isFunction(value)) {
-                    _onProgressUpdate = value;
-                }
-            }
-        },
-        
+        }
     });
 
     // Assign parameters given in constructor
