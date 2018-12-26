@@ -522,7 +522,6 @@ function Page(params) {
         configurable: true
     });
 
-
     var _leftItemEnabled;
     Object.defineProperty(self.headerBar, 'leftItemEnabled', {
         get: function() {
@@ -634,6 +633,20 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
+    let _headerBarElevation = null;
+    Object.defineProperty(self.headerBar.android, 'elevation', {
+        get: function() {
+            return (_headerBarElevation === null ? AndroidUnitConverter.pixelToDp(actionBar.getElevation()) : _headerBarElevation);
+        },
+        set: function(value) {
+            _headerBarElevation = value;
+            actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
             return toolbar.getSubtitle();
