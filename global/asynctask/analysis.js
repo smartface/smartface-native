@@ -82,6 +82,15 @@ AsyncTask.prototype.getStatus = function (){};
  */
 AsyncTask.prototype.onPreExecute = function (){};
 
+/**
+ * Runs on the UI thread after cancel() is invoked
+ *
+ * @method onCancelled
+ * @android
+ * @ios
+ * @since 3.2.2
+ */
+AsyncTask.prototype.onCancelled = function (){};
 
 /**
  * Android Specific Properties.

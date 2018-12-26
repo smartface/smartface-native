@@ -15,13 +15,16 @@ function AsyncTask(params) {
         },
         onPostExecute: function() {
             _onComplete && _onComplete();
+        },
+        onCancelled: function() {
+            _onCancelled && _onCancelled();
         }
     };
     this.nativeObject = new SFAsyncTask();
     this.nativeObject.setJsCallback(callbacks);
 
 
-    let _onPreExecute,_task, _onComplete;
+    let _onPreExecute,_task, _onComplete, _onCancelled;
     Object.defineProperties(self, {
         'task': {
             get: function() {
@@ -40,6 +43,16 @@ function AsyncTask(params) {
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
                     _onComplete = value;
+                }
+            }
+        },
+        'onCancelled':{
+            get: function() {
+                return _onCancelled;
+            },
+            set: function(value) {
+                if (TypeUtil.isFunction(value)) {
+                    _onCancelled = value;
                 }
             }
         },
