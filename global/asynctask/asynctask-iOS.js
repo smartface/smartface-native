@@ -10,7 +10,7 @@ function AsyncTask(params) {
 
     var _task;
     var _onComplete;
-    var __onCancelled;
+    var _onCancelled;
 
     Object.defineProperties(self, {
         'task': {
