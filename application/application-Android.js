@@ -464,14 +464,16 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'locale': {
         get: function() {
-            const NativeLocale = requireClass("java.util.Locale");
-            return NativeLocale.getDefault().getLanguage();
+            const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
+            return LocaleConfigurationUtil.getDeviceLanguage();
         },
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
                 const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+                const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
+                LocaleHelperUtil.changeConfigurationLocale();
             }
         },
         enumerable: true
