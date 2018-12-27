@@ -2,6 +2,8 @@
 /**
  * @class UI.BottomTabbarController
  * @since 3.2
+ * 
+ * BottomTabbarController is used for navigating between tab bar items with given tags.
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
@@ -14,6 +16,7 @@
  *     bottomTabBarController.shouldSelectByIndex = function (e){return true || false}
  *     bottomTabBarController.didSelectByIndex = function (e){}
  *
+ * @see https://smartface.github.io/router/class/src/native/BottomTabBarRouter.js~BottomTabBarRouter.html
  */
 
 function BottomTabbarController() {
