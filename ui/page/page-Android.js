@@ -38,6 +38,7 @@ function Page(params) {
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
+    pageLayoutContainer.setLayoutDirection(activity.getResources().getConfiguration().getLayoutDirection());
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -569,6 +570,20 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
+
+    let _headerBarElevation = null;
+    Object.defineProperty(self.headerBar.android, 'elevation', {
+        get: function() {
+            return (_headerBarElevation === null ? AndroidUnitConverter.pixelToDp(actionBar.getElevation()) : _headerBarElevation);
+        },
+        set: function(value) {
+            _headerBarElevation = value;
+            actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
+        },
+        enumerable: true,
+        configurable: true
+    });
+
     Object.defineProperty(self.headerBar.android, 'subtitle', {
         get: function() {
             return toolbar.getSubtitle();

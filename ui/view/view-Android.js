@@ -40,8 +40,8 @@ const YogaEdge = {
 const activity = AndroidConfig.activity;
 
 function View(params) {
+    params = params || {};
     this.ios = {};
-
     if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
@@ -67,10 +67,10 @@ function View(params) {
 
     this._gradientDrawable = createGradientDrawable();
     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
-    this.nativeObject.setBackground(this._gradientDrawable);
 
     var _nativeObject = this.nativeObject;
-    var _overScrollMode = 0;
+    var _overScrollMode = 0,
+        _isBackgroundAssigned = false;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -119,7 +119,6 @@ function View(params) {
             },
             set: function(color) {
                 this._backgroundColor = color;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 if (color.isGradient) {
                     this._gradientDrawable.setOrientation(color.direction);
                     this._gradientDrawable.setColors(array(color.colors, "int"));
@@ -131,6 +130,7 @@ function View(params) {
                 else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                 }
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
             },
             enumerable: true,
             configurable: true
@@ -141,7 +141,9 @@ function View(params) {
             },
             set: function(value) {
                 this._borderColor = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
                 var borderWidthPx = DpToPixel(this._borderWidth);
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
@@ -160,7 +162,9 @@ function View(params) {
             },
             set: function(value) {
                 this._borderWidth = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
                 var borderWidthPx = DpToPixel(this._borderWidth);
 
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
@@ -180,7 +184,7 @@ function View(params) {
             },
             set: function(value) {
                 this._borderRadius = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
                 var borderRadiusPx = DpToPixel(this._borderRadius);
                 this._gradientDrawable.setCornerRadius(borderRadiusPx);
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
@@ -699,6 +703,12 @@ View.prototype._backgroundColor = Color.TRANSPARENT;
 function createGradientDrawable() {
     const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
     return new NativeGradientDrawable();
+}
+
+function setBackgroundDrawable(isBackgroundAssigned) {
+    if (!isBackgroundAssigned)
+        this.nativeObject.setBackground(this._gradientDrawable);
+    isBackgroundAssigned = true;
 }
 
 View.State = {};

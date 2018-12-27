@@ -34,12 +34,12 @@ OverScrollMode.AUTO = 1;
 /**
  * Never allow a user to over-scroll this scroll view.
  * 
- * @property {Number} NEWER
+ * @property {Number} NEVER
  * @android
  * @static
  * @readonly
  * @since 3.0.2
  */
-OverScrollMode.NEWER = 2;
+OverScrollMode.NEVER = 2;
 
 module.exports = OverScrollMode;

@@ -235,6 +235,21 @@ HeaderBar.prototype.contentInset = {};
  */
 HeaderBar.prototype.android.subtitle = '';
 
+
+/**
+ * Gets/sets elevation of the header bar.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *     myPage.headerBar.android.elevation = 10;
+ *
+ * @property {Number} elevation
+ * @android
+ * @since 3.2.2
+ */
+HeaderBar.prototype.android.elevation;
+
 /**
  * Gets/sets backBarButtonItem of the header bar.
  * When it set, it will change the next page's back button appearance.
