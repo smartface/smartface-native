@@ -17,13 +17,10 @@ Object.defineProperty(StatusBar, 'height', {
 Object.defineProperty(StatusBar, 'backgroundColor', {
     get: function() {
         var statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey("statusBarWindow");
-        console.log("statusBarWindow :" + statusBarWindow);
         if (statusBarWindow) {
             var statusBar = statusBarWindow.valueForKey("statusBar");
-            console.log("statusBar :" + statusBar);
             if (statusBar) {
                 var backgroundColor = statusBar.valueForKey("backgroundColor");
-                console.log("backgroundColor :" + backgroundColor);
                 if (backgroundColor) {
                     return new Color({color : backgroundColor});
                 }
