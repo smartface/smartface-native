@@ -10,7 +10,6 @@
  *       webOptions.url = "https://smartface.io"
  *       webOptions.barColor = Color.RED;
  *       webOptions.ios.itemColor = Color.BLUE;
- *       webOptions.ios.statusBarVisible = false;
  *       WebBrowser.show(page,webOptions);
  */
 function WebBrowser(params) {}
@@ -40,7 +39,6 @@ WebBrowser.show = function(page,options) {};
  *      webOptions.url = "https://smartface.io"
  *      webOptions.barColor = Color.RED;
  *      webOptions.ios.itemColor = Color.BLUE;
- *      webOptions.ios.statusBarVisible = false;
  *      WebBrowser.show(page,options);
  */
 WebBrowser.Options = function(options) {};
@@ -78,6 +76,7 @@ WebBrowser.Options.prototype.itemColor = Color.create("#00A1F1");
  * Gets/sets visibility of the status bar.
  *
  * @property {Boolean} [statusBarVisible = true]
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @ios
  * @since 0.1
  */

@@ -225,7 +225,7 @@ Page.prototype.dismiss = function(params){};
  * @android
  * @ios
  * @readonly
- * @removed
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @since 0.1
  */
 Page.prototype.statusBar;
