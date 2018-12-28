@@ -33,6 +33,18 @@ function HeaderBarItem(params) {}
 HeaderBarItem.prototype.title = "";
 
 /**
+ * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
+ * shown in the header bar.
+ *
+ * Attributed title won't show if item is set as left item to header bar.
+ *
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.1
+ */
+HeaderBarItem.prototype.attributedTitle;
+
+/**
  * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
  *
  *     @example
@@ -75,6 +87,15 @@ HeaderBarItem.prototype.image = null;
  * @since 0.1
  */
 HeaderBarItem.prototype.enabled = true;
+
+/**
+ * Gets/sets font of header bar item.
+ *
+ * @property {UI.Font} font
+ * @ios
+ * @since 4.0.0
+ */
+HeaderBarItem.prototype.font = undefined;
 
 /**
  * This method returns an object that defines view location on screen.

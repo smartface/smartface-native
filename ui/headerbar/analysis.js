@@ -154,6 +154,33 @@ HeaderBar.prototype.backgroundImage = null;
 HeaderBar.prototype.leftItemEnabled = false;
 
 /**
+ * Gets/sets titleFont of header bar subtitle.
+ * 
+ * @property {UI.Font} subtitleFont
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.subtitleFont = undefined;
+
+/**
+ * Gets/sets titleFont of header bar title. You should access this property from page.parentController.
+ * 
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     const Font = require("sf-core/ui/font");
+ *     var myPage = new Page({
+ *         onLoad: function() {
+ *             this.parentController.headerBar.ios.titleFont = Font.create(Font.DEFAULT, 10);
+ *         }
+ *     });
+ * 
+ * @property {UI.Font} titleFont
+ * @ios
+ * @since 4.0.0
+ */
+HeaderBar.prototype.titleFont = undefined;
+
+/**
  * Gets the height of the header bar. Height is a read only property and
  * its value may change depending on device and screen density. For iOS, you should access this property from page.parentController.
  *
@@ -299,6 +326,24 @@ HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.A
  * @since 0.1
  */
 HeaderBar.prototype.title = '';
+
+/**
+ * Gets/sets attributed title of the header bar.
+ *
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.attributedTitle;
+
+/**
+ * Gets/sets attributed subtitle of the header bar.
+ *
+ * @property {UI.AttributedString} attributedSubtitle
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.attributedSubtitle;
 
 /**
  * Gets/sets title color of the header bar. For iOS, you should access this property from page.parentController.
