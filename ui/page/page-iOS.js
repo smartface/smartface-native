@@ -6,6 +6,7 @@ const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
 const Invocation    = require('sf-core/util').Invocation;
 const HeaderBarItem = require('sf-core/ui/headerbaritem');
+const Application = require("sf-core/application");
 
 const UIInterfaceOrientation = {
     unknown : 0,
@@ -109,7 +110,7 @@ function Page(params) {
                         controllerToPresent.setValueForKey(true,"isHeroEnabled");
                     }
                     
-                    self.nativeObject.presentViewController(controllerToPresent, _animationNeed, _completionBlock);
+                    self.nativeObject.presentViewController(controllerToPresent, _completionBlock, _animationNeed);
                 }
             }   
         }
@@ -309,65 +310,8 @@ function Page(params) {
     
     self.nativeObject.onHide = self.onHideHandler;
     
-    this.statusBar = {};
-    Object.defineProperty(self.statusBar, 'height', {
-         get: function() {
-                return __SF_UIApplication.sharedApplication().statusBarFrame.height;
-         },
-         enumerable: true,configurable : true
-    });
-    
-    Object.defineProperty(self.statusBar, 'visible', {
-        get: function() {
-            return !self.nativeObject.statusBarHidden;
-        },
-        set: function(value) {
-            self.nativeObject.statusBarHidden = !value;
-            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
-            var parentViewController = getParentViewController(self.nativeObject);
-            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
-                parentViewController.statusBarHidden = self.nativeObject.statusBarHidden;
-                parentViewController.setNeedsStatusBarAppearanceUpdate();
-            }
-        },
-        enumerable: true,configurable : true
-    });
-
-    this.statusBar.ios = {};
-    // Deprecated self.statusBar.ios.style use : self.statusBar.style 
-    Object.defineProperty(self.statusBar.ios, 'style', {
-        get: function() {
-            return self.nativeObject.statusBarStyle;
-        },
-        set: function(value) {
-            self.nativeObject.statusBarStyle = value;
-            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
-            var parentViewController = getParentViewController(self.nativeObject);
-            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
-                parentViewController.statusBarStyle = self.nativeObject.statusBarStyle;
-                parentViewController.setNeedsStatusBarAppearanceUpdate();
-            }
-            
-        },
-        enumerable: true,configurable : true
-    });
-    
-    Object.defineProperty(self.statusBar, 'style', {
-        get: function() {
-            return self.nativeObject.statusBarStyle;
-        },
-        set: function(value) {
-            self.nativeObject.statusBarStyle = value;
-            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
-            var parentViewController = getParentViewController(self.nativeObject);
-            if (parentViewController && parentViewController.constructor.name === "SMFNative.SMFUIViewController") {
-                parentViewController.statusBarStyle = self.nativeObject.statusBarStyle;
-                parentViewController.setNeedsStatusBarAppearanceUpdate();
-            }
-            
-        },
-        enumerable: true,configurable : true
-    });
+    //Deprecated use Application.statusBar
+    this.statusBar = Application.statusBar;
     
     function getParentViewController(controller){
         var parent = Invocation.invokeInstanceMethod(controller,"parentViewController",[],"NSObject");
@@ -377,8 +321,7 @@ function Page(params) {
             return controller;
         }
     }
-    // Prevent undefined is not an object error
-    this.statusBar.android = {};
+
     // Prevent undefined is not an object error
     this.android = {};
 

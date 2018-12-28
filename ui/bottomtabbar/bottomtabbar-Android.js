@@ -96,10 +96,13 @@ function BottomTabBar(params) {
     
 
     function createTabbarMenuItems(tabBarItems) {
+        let btbMenu = self.nativeObject.getMenu();
+        btbMenu.clear();
+        
         for (var i = 0; i < tabBarItems.length; i++) {
             var tabbarItem = tabBarItems[i];
             var title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
-            tabbarItem.nativeObject = self.nativeObject.getMenu().add(0, i, 0, title);
+            tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
         }
         _items = tabBarItems;

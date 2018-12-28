@@ -13,7 +13,6 @@
  *
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const Router = require('sf-core/router');
  *     const Page = require('sf-core/ui/page');
  *     var page1 = new extend(Page)(
  *         function(_super,params)
@@ -21,7 +20,6 @@
  *             var self = this;
  *             _super(this,{
  *                 onShow: function() {
- *                     this.headerBar.visible = true;
  *                     this.headerBar.title = "Smartface Page";
  *                 },
  *                 onLoad: function(){
@@ -36,9 +34,8 @@
  *             });
  *         }
  *     );
- *
- *     Router.add('myPage',page1);
- *     Router.go('myPage');
+ * 
+ * @see https://github.com/smartface/router#push-a-new-page
  */
 function Page(params) {}
 
@@ -62,7 +59,6 @@ Page.prototype.onLoad = function (){};
  *         var page = this;
  *         onShow: function() {
  *             page.headerBar.visible = true;
- *             page.statusBar.visible = true;
  * 
  *             page.imageView1.transitionID = "view1";
  *             page.imageView2.transitionID = "view2";
@@ -75,7 +71,6 @@ Page.prototype.onLoad = function (){};
  *         var page = this;
  *         onShow: function() {
  *             page.headerBar.visible = true;
- *             page.statusBar.visible = true;
  *         }
  * 
  *         page.imageView1.transitionID = "view2";
@@ -230,7 +225,7 @@ Page.prototype.dismiss = function(params){};
  * @android
  * @ios
  * @readonly
- * @removed
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @since 0.1
  */
 Page.prototype.statusBar;

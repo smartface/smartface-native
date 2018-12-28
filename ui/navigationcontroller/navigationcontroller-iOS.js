@@ -439,10 +439,7 @@ function HeaderBar(params) {
     }
 };
 
-function NavigationView(params) {    
-    const UIGestureRecognizer = SF.requireClass("UIGestureRecognizer");
-    const UINavigationController = SF.requireClass("UINavigationController");
-    
+function NavigationView(params) {
     var self = this;
     self.viewModel = undefined;
     
@@ -450,29 +447,19 @@ function NavigationView(params) {
         self.viewModel = params.viewModel;
     }
     
-    self.nativeObject = UINavigationController.new();
-    self.nativeObjectDelegate = SF.defineClass('NavigationControllerDelegate : NSObject <UINavigationControllerDelegate>',{
-        navigationControllerWillShowViewControllerAnimated : function (navigationController, viewController, animated) {
-            var index = self.nativeObject.viewControllers.indexOf(viewController);
-            self.viewModel.willShowViewController(index, animated);
-        },
-        navigationControllerDidShowViewControllerAnimated : function (navigationController, viewController, animated) {
-            var index = self.nativeObject.viewControllers.indexOf(viewController);
-            self.viewModel.didShowViewController(viewController, index, animated);
-        },
-        // navigationControllerAnimationControllerForOperationFromViewControllerToViewController : function (navigationController, operation, fromVC, toVC) {
-        //     if (typeof self.nativeObject.interactivePopGestureRecognizer.delegate !== "undefined") {
-        //         // Returning undefined to navigationControllerAnimationControllerForOperationFromViewControllerToViewController function breaks pop gesture recognizer.
-        //         // Delegate should be undefined.
-        //         self.nativeObject.interactivePopGestureRecognizer.delegate = undefined;
-        //     }
-        //     var fromIndex = self.nativeObject.viewControllers.indexOf(fromVC);
-        //     var toIndex = self.nativeObject.viewControllers.indexOf(toVC);
-        //     self.viewModel.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
-        //     return undefined;
-        // }
-    }).new();
-    self.nativeObject.delegate = self.nativeObjectDelegate;
+    self.nativeObject = new __SF_UINavigationController();
+    self.__navigationControllerDelegate = new __SF_SMFNavigationControllerDelegate();
+    self.__navigationControllerDelegate.navigationControllerWillShowViewControllerAnimated = function(navigationController, viewController, animated){
+        var index = self.nativeObject.viewControllers.indexOf(viewController);
+        self.viewModel.willShowViewController(index, animated);
+    };
+    
+    self.__navigationControllerDelegate.navigationControllerDidShowViewControllerAnimated = function(navigationController, viewController, animated){
+        var index = self.nativeObject.viewControllers.indexOf(viewController);
+        self.viewModel.didShowViewController(viewController, index, animated);
+    };
+    
+    self.nativeObject.delegate = self.__navigationControllerDelegate;
     
     this.push = function (page, animated) {
         if (page.nativeObject) {
@@ -490,12 +477,12 @@ function NavigationView(params) {
         }
     };
     
-    this.present = function (controllerToPresent, animationNeed, completionBlock) {
-        self.nativeObject.presentViewController(controllerToPresent, animationNeed, completionBlock);
+    this.present = function (controllerToPresent, animated, completionBlock) {
+        self.nativeObject.presentViewController(controllerToPresent, completionBlock, animated);
     };
     
-    this.dismiss = function (onComplete) {
-        self.nativeObject.dismissViewController(onComplete);
+    this.dismiss = function (completionBlock, animated) {
+        self.nativeObject.dismissViewController(completionBlock, animated);
     };
     
     this.setNativeChildViewControllers = function (nativeChildPageArray) {

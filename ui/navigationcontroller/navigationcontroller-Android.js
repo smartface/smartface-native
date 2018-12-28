@@ -41,6 +41,11 @@ function NavigationController() {
 
                 if (self.__isActive) {
                     ViewController.activateController(self.getCurrentController());
+                    
+                    self.show({
+                        controller: _childControllers[_childControllers.length-1],
+                        animated: false
+                    });
                 }
             },
             enumerable: true

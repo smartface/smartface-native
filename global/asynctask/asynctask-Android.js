@@ -1,8 +1,11 @@
-/*globals array,requireClass,release */
+/*globals array,requireClass */
 const TypeUtil = require("sf-core/util/type");
-const SFAsyncTask = requireClass('io.smartface.android.sfcore.SFAsyncTask');
+const SFAsyncTask = requireClass('io.smartface.android.sfcore.global.SFAsyncTask');
 
 function AsyncTask(params) {
+
+    const self = this;
+
     var callbacks = {
         onPreExecute: function() {
             _onPreExecute && _onPreExecute();
@@ -10,49 +13,26 @@ function AsyncTask(params) {
         doInBackground: function(objects) {
             _task && _task(objects);
         },
-        onProgressUpdate: function() {
-            _onProgressUpdate && _onProgressUpdate();
-        },
         onPostExecute: function() {
             _onComplete && _onComplete();
+        },
+        onCancelled: function() {
+            _onCancelled && _onCancelled();
         }
     };
     this.nativeObject = new SFAsyncTask();
     this.nativeObject.setJsCallback(callbacks);
 
 
-    var _onPreExecute;
-    var _task;
-    var _onProgressUpdate;
-    var _onComplete;
-    Object.defineProperties(this, {
-        'onPreExecute': {
-            get: function() {
-                return _onPreExecute;
-            },
-            set: function(value) {
-                if (TypeUtil.isFunction(value)) {
-                    _onPreExecute = value.bind(this);
-                }
-            }
-        },
+    let _onPreExecute,_task, _onComplete, _onCancelled;
+    Object.defineProperties(self, {
         'task': {
             get: function() {
                 return _task;
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _task = value.bind(this);
-                }
-            }
-        },
-        'onProgressUpdate': {
-            get: function() {
-                return _onProgressUpdate;
-            },
-            set: function(value) {
-                if (TypeUtil.isFunction(value)) {
-                    _onProgressUpdate = value.bind(this);
+                    _task = value;
                 }
             }
         },
@@ -62,32 +42,52 @@ function AsyncTask(params) {
             },
             set: function(value) {
                 if (TypeUtil.isFunction(value)) {
-                    _onComplete = value.bind(this);
+                    _onComplete = value;
+                }
+            }
+        },
+        'onCancelled':{
+            get: function() {
+                return _onCancelled;
+            },
+            set: function(value) {
+                if (TypeUtil.isFunction(value)) {
+                    _onCancelled = value;
                 }
             }
         },
         'run': {
-            value: function(params) {
-                if (TypeUtil.isArray(params)) {
-                    this.nativeObject.executeTask(array(params, "java.lang.Object"));
-                } else {
-                    this.nativeObject.executeTask(null);
-                }
+            value: function() {
+                self.nativeObject.executeTask();
             }
         },
         'cancel': {
-            value: function() {
-                this.nativeObject.cancel();
-            }
-        },
-        'status': {
-            value: function() {
-                return this.nativeObject.getStatus();
+            value: function(mayInterruptIfRunning = false) {
+                return self.nativeObject.cancel(mayInterruptIfRunning);
             }
         },
         'toString': {
             value: function() {
                 return "AsyncTask";
+            }
+        }
+    });
+
+    self.android = {};
+    Object.defineProperties(self.android, {
+        'getStatus': {
+            value: function() {
+                return self.nativeObject.getStatus();
+            }
+        },
+        'onPreExecute': {
+            get: function() {
+                return _onPreExecute;
+            },
+            set: function(value) {
+                if (TypeUtil.isFunction(value)) {
+                    _onPreExecute = value;
+                }
             }
         }
     });
@@ -101,9 +101,11 @@ function AsyncTask(params) {
 }
 
 
-AsyncTask.Status = {};
-AsyncTask.Status.FINISHED = SFAsyncTask.Status.FINISHED;
-AsyncTask.Status.PENDING = SFAsyncTask.Status.PENDING;
-AsyncTask.Status.RUNNING = SFAsyncTask.Status.RUNNING;
+AsyncTask.Android = {};
+AsyncTask.Android.Status = {};
+AsyncTask.Android.Status.FINISHED = SFAsyncTask.Status.FINISHED;
+AsyncTask.Android.Status.PENDING = SFAsyncTask.Status.PENDING;
+AsyncTask.Android.Status.RUNNING = SFAsyncTask.Status.RUNNING;
+Object.freeze(AsyncTask.Android.Status);
 
 module.exports = AsyncTask;

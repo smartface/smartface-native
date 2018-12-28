@@ -26,6 +26,7 @@ var spratAndroidActivityInstance = requireClass("io.smartface.android.SpratAndro
 var activity = AndroidConfig.activity;
 
 var mDrawerLayout = activity.findViewById(NativeR.id.layout_root);
+ApplicationWrapper.__mDrawerLayout = mDrawerLayout;
 
 // Creating Activity Lifecycle listener
 var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
@@ -66,9 +67,9 @@ Object.defineProperties(ApplicationWrapper, {
         set: function(drawer) {
             const SliderDrawer = require('../ui/sliderdrawer');
             if (drawer instanceof SliderDrawer) {
-                _sliderDrawer = drawer;
-                
                 detachSliderDrawer(_sliderDrawer);
+                
+                _sliderDrawer = drawer;
                 attachSliderDrawer(_sliderDrawer);
             }
             else {
@@ -329,36 +330,9 @@ ApplicationWrapper.setRootController = function(params) {
     ViewController.setController(params); 
 };
 
-ApplicationWrapper.showSliderDrawer = function (_sliderDrawer) {
-    if (_sliderDrawer && _sliderDrawer.enabled) {
-        const SliderDrawer = require('../ui/sliderdrawer');
-        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
-            // Gravity.RIGHT 
-            mDrawerLayout.openDrawer(5);
-        }
-        else {
-            // Gravity.LEFT
-            mDrawerLayout.openDrawer(3);
-        }
-    }
-};
-
-ApplicationWrapper.hideSliderDrawer = function (_sliderDrawer) {
-    if (_sliderDrawer) {
-        const SliderDrawer = require('../ui/sliderdrawer');
-        if (_sliderDrawer.drawerPosition === SliderDrawer.Position.RIGHT) {
-            // Gravity.RIGHT
-            mDrawerLayout.closeDrawer(5);
-        }
-        else {
-            // Gravity.LEFT
-            mDrawerLayout.closeDrawer(3);
-        }
-    }
-};
-
 function attachSliderDrawer(sliderDrawer) {
     if (sliderDrawer) {
+        sliderDrawer.__isAttached = true;
         var sliderDrawerId = sliderDrawer.nativeObject.getId();
         var isExists = mDrawerLayout.findViewById(sliderDrawerId);
         if (!isExists) {
@@ -374,7 +348,7 @@ function attachSliderDrawer(sliderDrawer) {
 
 function detachSliderDrawer(sliderDrawer) {
     if (sliderDrawer) {
-        sliderDrawer.attachedPages = null;
+        sliderDrawer.__isAttached = false;
         mDrawerLayout.removeView(sliderDrawer.nativeObject);
         if (sliderDrawer.drawerListener) {
             mDrawerLayout.removeDrawerListener(sliderDrawer.drawerListener);
@@ -490,14 +464,16 @@ Object.defineProperties(ApplicationWrapper.android, {
     },
     'locale': {
         get: function() {
-            const NativeLocale = requireClass("java.util.Locale");
-            return NativeLocale.getDefault().getLanguage();
+            const LocaleConfigurationUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
+            return LocaleConfigurationUtil.getDeviceLanguage();
         },
         set: function(languageCode) {
             if (TypeUtil.isString(languageCode)) {
                 const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+                const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
+                LocaleHelperUtil.changeConfigurationLocale();
             }
         },
         enumerable: true
