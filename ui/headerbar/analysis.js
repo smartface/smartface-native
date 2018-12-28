@@ -302,6 +302,24 @@ HeaderBar.prototype.ios.largeTitleDisplayMode = Page.iOS.LargeTitleDisplayMode.A
 HeaderBar.prototype.title = '';
 
 /**
+ * Gets/sets attributed title of the header bar.
+ *
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.attributedTitle;
+
+/**
+ * Gets/sets attributed subtitle of the header bar.
+ *
+ * @property {UI.AttributedString} attributedSubtitle
+ * @android
+ * @since 4.0.0
+ */
+HeaderBar.prototype.attributedSubtitle;
+
+/**
  * Gets/sets title color of the header bar.
  *
  * @property {UI.Color} [titleColor = Color.BLACK]
