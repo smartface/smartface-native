@@ -1,27 +1,28 @@
 /* globals requireClass, toJSArray, array */
-const NativeTextButton = requireClass('android.widget.Button');
-const NativePorterDuff = requireClass('android.graphics.PorterDuff');
-const NativeImageButton = requireClass('android.widget.ImageButton');
-const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
-
 const Color = require("../color");
 const Image = require("../image");
 const View = require('../view');
 const Font = require('../font');
-const AttributedString = require("../attributedstring");
+const TypeUtil = require("../../util/type");
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
+const AttributedString = require("sf-core/ui/attributedstring");
+
+const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
+const NativeTextButton = requireClass('android.widget.Button');
+const NativePorterDuff = requireClass('android.graphics.PorterDuff');
+const NativeImageButton = requireClass('android.widget.ImageButton');
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
-const TypeUtil = require("../../util/type");
-const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function HeaderBarItem(params) {
     var _title = "";
+    var _attributedTitle;
     var _image = null;
     var _enabled = true;
     var _onPress = null;
@@ -29,10 +30,12 @@ function HeaderBarItem(params) {
     var _searchView = null;
     var _imageButton = false;
     var _menuItem = null;
-    var _font = null;
+    var _attributedTitleBuilder;
+    var self = this;
     var activity = AndroidConfig.activity;
     
     this.ios = {};
+    this.android = {};
     
     Object.defineProperties(this, {
         'color': {
@@ -52,19 +55,11 @@ function HeaderBarItem(params) {
                         var imageCopy = this.image.nativeObject.mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
-                    } else {
+                    }
+                    else {
                         this.nativeObject.setTextColor(_color.nativeObject);
                     }
                 }
-            },
-            enumerable: true
-        },
-        'font': {
-            get: function() {
-                return _font;
-            },
-            set: function(value) {
-                _font = value;
             },
             enumerable: true
         },
@@ -73,33 +68,20 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                if (value !== null && typeof(value) !== "string") {
-                    throw new TypeError("title must be string or null.");
-                }
+                // if (value !== null && typeof(value) !== "string") {
+                //     throw new TypeError("title must be string or null.");
+                // }
                 _title = value;
-                let titleText = _title;
-                if(this.font) {
-                    titleText = this.__createAttributedText();
+                let titleText;
+                if(_title instanceof AttributedString) {
+                    let attributedStringBuilder = new NativeSpannableStringBuilder();
+                    _title.setSpan(attributedStringBuilder);
+                    titleText = attributedStringBuilder;
+                } else {
+                    titleText = _title;
                 }
-            
-                if (!this.nativeObject) {
-                    this.nativeObject = new NativeTextButton(activity);
-                    this.nativeObject.setText(titleText);
-                    this.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
-                    this.nativeObject.setPaddingRelative(
-                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-                    );
-
-                    this.color = _color;
-                    this.imageButton = false;
-                    if (this.menuItem)
-                        this.menuItem.setActionView(this.nativeObject);
-                }
-                else if (!this.imageButton) {
-                    this.nativeObject.setText(titleText);
-                    this.color = _color;
-                }
+                
+                self.__setTitle(titleText);
             },
             enumerable: true
         },
@@ -140,7 +122,11 @@ function HeaderBarItem(params) {
                         else {
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
-                            this.title = _title;
+                            if(_attributedTitle) {
+                                this.attributedTitle = _attributedTitle;
+                            } else {
+                                this.title = _title;
+                            }
                         }
                     }
                 }
@@ -198,8 +184,10 @@ function HeaderBarItem(params) {
                 if (this.imageButton) {
                     this.image = this.image;
                 }
-                else {
-                    this.title = this.title;
+                else if(_attributedTitle) {
+                    this.attributedTitle = _attributedTitle;
+                } else {
+                    this.title = _title;
                 }
 
                 const NativeView = requireClass('android.view.View');
@@ -224,10 +212,31 @@ function HeaderBarItem(params) {
             enumerable: true
         }
     });
+    
+    Object.defineProperties(this.android, {
+        'attributedTitle': {
+            get: function() {
+                return _attributedTitle;
+            },
+            set: function(value) {
+                _attributedTitle = value;
+                if(_attributedTitle instanceof AttributedString) {
+                    if (_attributedTitleBuilder)
+                        _attributedTitleBuilder.clear();
+                    else
+                        _attributedTitleBuilder = new NativeSpannableStringBuilder();
+                        
+                    _attributedTitle.setSpan(_attributedTitleBuilder);
+                    self.__setTitle(_attributedTitleBuilder);
+                } else {
+                    self.__setTitle(null);
+                }
+            },
+            enumerable: true
+        }
+    });
 
     var _badge = {};
-
-
     var _borderRadius = AndroidUnitConverter.dpToPixel(10);
     var _borderWidth = AndroidUnitConverter.dpToPixel(2);
 
@@ -365,6 +374,31 @@ function HeaderBarItem(params) {
             _badge.textColor = Color.WHITE;
     }
 
+    this.__setTitle = function(title) {
+        let itemTitle = title ? title : "";
+        console.log("setTitle: " + (itemTitle instanceof AttributedString));
+        if (!self.nativeObject) {
+            self.nativeObject = new NativeTextButton(activity);
+            console.log(" -------------- ");
+            self.nativeObject.setText(itemTitle);
+            self.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
+            self.nativeObject.setPaddingRelative(
+                HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+                HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+            );
+
+            // self.color = _color;
+            self.imageButton = false;
+            if (self.menuItem)
+                self.menuItem.setActionView(self.nativeObject);
+        }
+        else if (!self.imageButton) {
+            console.log(" ================= ");
+            self.nativeObject.setText(itemTitle);
+            // self.color = _color;
+        }
+    };
+    
     if (!_color) {
         if (HeaderBarItem.itemColor) {
             this.color = HeaderBarItem.itemColor;
@@ -386,25 +420,6 @@ HeaderBarItem.prototype = {
         position.y = PixelToDp(location[1]);
         return position;
     },
-    __createAttributedText: function() {
-        if (this.__attributedTitleBuilder)
-            this.__attributedTitleBuilder.clear();
-        else
-            this.__attributedTitleBuilder = new NativeSpannableStringBuilder();
-            
-        if(!this.__attributedTitleString) {
-            this.__attributedTitleString = new AttributedString();
-        } 
-        
-        this.__attributedTitleString.font = this.font;
-        this.__attributedTitleString.string = this.title;
-        
-        let titleBuilder = this.__attributedTitleBuilder;
-        this.__attributedTitleString.foregroundColor = this.color ? this.color : HeaderBarItem.itemColor;
-        this.__attributedTitleString.setSpan(titleBuilder);
-        
-        return titleBuilder;
-    }
 };
 
 var _itemColor = Color.WHITE;

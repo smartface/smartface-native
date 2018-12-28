@@ -3,15 +3,13 @@ const FlexLayout = require("../flexlayout");
 const Color = require("../color");
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
-const AttributedString = require("../attributedstring");
-const Application = require("../../application");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
-
 const PorterDuff = requireClass("android.graphics.PorterDuff");
 const NativeView = requireClass('android.view.View');
 const NativeAndroidR = requireClass("android.R");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
+const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
@@ -32,6 +30,8 @@ const OrientationDictionary = {
     15: 10
 };
 
+
+
 function Page(params) {
     (!params) && (params = {});
     var self = this;
@@ -39,6 +39,7 @@ function Page(params) {
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
+    pageLayoutContainer.setLayoutDirection(activity.getResources().getConfiguration().getLayoutDirection());
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -274,30 +275,6 @@ function Page(params) {
         enumerable: true
     });
 
-    var _isBottomTabBarPage = false;
-    Object.defineProperty(self, 'isBottomTabBarPage', {
-        get: function() {
-            return _isBottomTabBarPage;
-        },
-        set: function(isBottomTabBarPage) {
-            _isBottomTabBarPage = isBottomTabBarPage;
-            if (_isBottomTabBarPage)
-                this.headerBar.visible = false;
-        },
-        enumerable: true
-    });
-
-    var _firstPageInNavigator;
-    Object.defineProperty(self, 'firstPageInNavigator', {
-        get: function() {
-            return _firstPageInNavigator;
-        },
-        set: function(value) {
-            _firstPageInNavigator = value;
-        },
-        enumerable: true
-    });
-
     var _isShown;
     Object.defineProperty(self, 'isShown', {
         get: function() {
@@ -481,39 +458,21 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    var _titleFont, _headerBarTitle = "Smartface";
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
-            return _headerBarTitle;
+            return toolbar.getTitle();
         },
         set: function(text) {
-            _headerBarTitle = text;
-            if (!TypeUtil.isString(text)) {
-                toolbar.setTitle("");
-                return;
-            }
-            
-            if(!self.headerBar.titleFont) {
+            if (TypeUtil.isString(text)) {
                 toolbar.setTitle(text);
-                return;
             }
-            self.__setAttributedTitle();
+            else {
+                toolbar.setTitle("");
+            }
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(self.headerBar, 'titleFont', {
-        get: function() {
-            return _titleFont;
-        },
-        set: function(font) {
-            _titleFont = font;
-            self.__setAttributedTitle();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    
     var _headerBarTitleColor;
     Object.defineProperty(self.headerBar, 'titleColor', {
         get: function() {
@@ -522,11 +481,7 @@ function Page(params) {
         set: function(color) {
             if (color) {
                 _headerBarTitleColor = color;
-                if(!self.headerBar.titleFont) {
-                    toolbar.setTitleTextColor(color.nativeObject);
-                    return;
-                }
-                self.__setAttributedTitle();
+                toolbar.setTitleTextColor(color.nativeObject);
             }
         },
         enumerable: true,
@@ -574,14 +529,8 @@ function Page(params) {
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
-                    if (self.isBottomTabBarPage) {
-                        // View.GONE
-                        toolbar.setVisibility(8);
-                    }
-                    else {
-                        // View.VISIBLE
-                        toolbar.setVisibility(0);
-                    }
+                    // View.VISIBLE
+                    toolbar.setVisibility(0);
                 }
                 else {
                     // View.GONE
@@ -592,27 +541,36 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(self.headerBar.android, 'subtitle', {
+
+    let _headerBarElevation = null;
+    Object.defineProperty(self.headerBar.android, 'elevation', {
         get: function() {
-            return _subtitle;
+            return (_headerBarElevation === null ? AndroidUnitConverter.pixelToDp(actionBar.getElevation()) : _headerBarElevation);
         },
-        set: function(text) {
-            _subtitle = text;
-            if (!TypeUtil.isString(text)) {
-                toolbar.setSubtitle("");
-                return;
-            } 
-            
-            if(!self.headerBar.android.subtitleFont) {
-                toolbar.setSubtitle(text);
-                return;
-            }
-            self.__setAttributedSubtitle();
+        set: function(value) {
+            _headerBarElevation = value;
+            actionBar.setElevation(AndroidUnitConverter.dpToPixel(value));
         },
         enumerable: true,
         configurable: true
     });
-    var _headerBarSubtitleColor, _subtitle = "", _subtitleFont;
+
+    Object.defineProperty(self.headerBar.android, 'subtitle', {
+        get: function() {
+            return toolbar.getSubtitle();
+        },
+        set: function(text) {
+            if (TypeUtil.isString(text)) {
+                toolbar.setSubtitle(text);
+            }
+            else {
+                toolbar.setSubtitle("");
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    var _headerBarSubtitleColor;
     Object.defineProperty(self.headerBar.android, 'subtitleColor', {
         get: function() {
             return _headerBarSubtitleColor;
@@ -625,19 +583,6 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    
-    Object.defineProperty(self.headerBar.android, 'subtitleFont', {
-        get: function() {
-            return _subtitleFont;
-        },
-        set: function(font) {
-            _subtitleFont = font;
-            self.__setAttributedSubtitle();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    
     var _headerBarLogo = null;
     Object.defineProperty(self.headerBar.android, 'logo', {
         get: function() {
@@ -666,6 +611,48 @@ function Page(params) {
             toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
         },
         enumerable: true
+    });
+    
+    
+    var _attributedTitle, _attributedSubtitle, _attributedTitleBuilder, _attributedSubtitleBuilder;
+    Object.defineProperty(self.headerBar.android, 'attributedTitle', {
+        get: function() {
+            return _attributedTitle;
+        },
+        set: function(title) {
+            _attributedTitle = title;
+            if(_attributedTitle) {
+                if (_attributedTitleBuilder)
+                    _attributedTitleBuilder.clear();
+                else
+                    _attributedTitleBuilder = new NativeSpannableStringBuilder();
+                
+                title.setSpan(_attributedTitleBuilder);
+                toolbar.setTitle(_attributedTitleBuilder);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(self.headerBar.android, 'attributedSubtitle', {
+        get: function() {
+            return _attributedSubtitle;
+        },
+        set: function(subtitle) {
+            _attributedSubtitle = subtitle;
+            if(_attributedSubtitle) {
+                if (_attributedSubtitleBuilder)
+                    _attributedSubtitleBuilder.clear();
+                else
+                    _attributedSubtitleBuilder = new NativeSpannableStringBuilder();
+                
+                subtitle.setSpan(_attributedSubtitleBuilder);
+                toolbar.setSubtitle(_attributedSubtitleBuilder);
+            }
+        },
+        enumerable: true,
+        configurable: true
     });
 
     var _headerBarLogoEnabled = false;
@@ -696,44 +683,6 @@ function Page(params) {
             enumerable: true
         }
     );
-    
-    self.__setAttributedSubtitle = function () {
-        if (self.headerBar.__attributedSubtitleBuilder)
-            self.headerBar.__attributedSubtitleBuilder.clear();
-        else
-            self.headerBar.__attributedSubtitleBuilder = new NativeSpannableStringBuilder();
-            
-        if(!self.headerBar.__attributedSubtitleString) {
-            self.headerBar.__attributedSubtitleString = new AttributedString();
-        } 
-        self.headerBar.__attributedSubtitleString.font = _subtitleFont;
-        self.headerBar.__attributedSubtitleString.string = _subtitle;
-        
-        let titleBuilder = self.headerBar.__attributedSubtitleBuilder;
-        self.headerBar.__attributedSubtitleString.foregroundColor = self.headerBar.android.subtitleColor;
-        self.headerBar.__attributedSubtitleString.setSpan(titleBuilder);
-        
-        toolbar.setSubtitle(titleBuilder);
-    };
-    
-    self.__setAttributedTitle = function () {
-        if (self.headerBar.__attributedTitleBuilder)
-            self.headerBar.__attributedTitleBuilder.clear();
-        else
-            self.headerBar.__attributedTitleBuilder = new NativeSpannableStringBuilder();
-            
-        if(!self.headerBar.__attributedTitleString) {
-            self.headerBar.__attributedTitleString = new AttributedString();
-        } 
-        self.headerBar.__attributedTitleString.font = self.headerBar.titleFont;
-        self.headerBar.__attributedTitleString.string = self.headerBar.title;
-        
-        let titleBuilder = self.headerBar.__attributedTitleBuilder;
-        self.headerBar.__attributedTitleString.foregroundColor = self.headerBar.titleColor;
-        self.headerBar.__attributedTitleString.setSpan(titleBuilder);
-        
-        toolbar.setTitle(titleBuilder);
-    };
     
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {

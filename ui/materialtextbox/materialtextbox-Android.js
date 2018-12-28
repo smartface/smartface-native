@@ -209,7 +209,8 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             },
             'errorMessage': {
                 get: function() {
-                    return self.nativeObject.getError().toString();
+                    let error = self.nativeObject.getError();
+                    return (error ? error.toString() : "");
                 },
                 set: function(errorText) {
                     _errorText = errorText;

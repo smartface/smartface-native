@@ -25,12 +25,24 @@ function HeaderBarItem(params) {}
  *
  * Title won't show if item is set as left item to header bar.
  *
- * @property {String|UI.AttributedString} title
+ * @property {String} title
  * @android
  * @ios
  * @since 0.1
  */
 HeaderBarItem.prototype.title = "";
+
+/**
+ * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
+ * shown in the header bar.
+ *
+ * Attributed title won't show if item is set as left item to header bar.
+ *
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.1
+ */
+HeaderBarItem.prototype.attributedTitle;
 
 /**
  * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
