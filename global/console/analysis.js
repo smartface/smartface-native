@@ -8,7 +8,7 @@
 function console() {}
    
 /**
- * Logs message to the debugging console.
+ * Logs message to the debugging console. You can pass multiple parameters.
  * 
  *     @example
  *     var text = "Some text";
@@ -16,6 +16,9 @@ function console() {}
  * 
  *     var number = 5432;
  *     console.log(number);
+ * 
+ *     // multiple parameter
+ *     console.log(number, text);
  * 
  *     const Label = require('sf-core/ui/label');
  *     var myLabel = new Label({
@@ -28,4 +31,4 @@ function console() {}
  * @static
  * @since 0.1
  */
-console.log = function(message){}
+console.log = function(message){};
