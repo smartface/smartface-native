@@ -280,7 +280,7 @@ function HeaderBar(params) {
     });
     
     var _titleFont = undefined;
-    Object.defineProperty(self, 'titleFont', {
+    Object.defineProperty(self.ios, 'titleFont', {
         get: function() {
             return _titleFont;
         },
