@@ -194,7 +194,7 @@ MapView.prototype.setCenterLocationWithZoomLevel = function(centerLocation,zoomL
 * @ios
 * @since 1.1.10
 */
-MapView.prototype.zoomLevel = 15;
+MapView.prototype.zoomLevel;
 
 /**
  * Gets/sets minimum zoom level.
