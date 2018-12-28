@@ -176,7 +176,7 @@ const MapView = extend(View)(
                     if (typeof location === "object")
                         _centerLocation = location;
                     if (typeof zoomlevel === "number")
-                        _zoomLevel = zoomlevel;
+                        _zoomLevel = zoomlevel - 2;
 
                     if (_nativeGoogleMap) {
                         const NativeCameraUpdateFactory = requireClass('com.google.android.gms.maps.CameraUpdateFactory');
