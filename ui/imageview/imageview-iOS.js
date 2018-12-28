@@ -91,7 +91,7 @@ const ImageView = extend(View)(
         }
         
         self.loadFromUrl = function(url,placeholder,fade){
-            if (typeof url === "string") { //Depraceted: Use loadFromUrl(object);
+            if (typeof url === "string") { // Deprecated: Use loadFromUrl(object);
 				self.nativeObject.loadFromURL(__SF_NSURL.URLWithString(url),placeholder ? placeholder.nativeObject : undefined,undefined,function(innerFade,image,error,cache,url){
 					if (!error) {
 						if (cache == ImageCacheType.NONE && innerFade !== false) {
@@ -125,7 +125,7 @@ const ImageView = extend(View)(
     					    });
     					}
     				}
-    			}.bind(self,url.onSuccess,url.onError,url.fade));
+    			}.bind(self,url.onSuccess,url.onError ? url.onError : url.onFailure,url.fade)); //onFailure COR-1817
             }
         }
         
@@ -144,7 +144,7 @@ const ImageView = extend(View)(
 					    });
 					}
 				}
-			}.bind(self,object.onSuccess,object.onError));
+			}.bind(self,object.onSuccess,object.onError ? object.onError : object.onFailure)); //onFailure COR-1817
         };
         
         Object.defineProperty(self, 'imageFillType', {

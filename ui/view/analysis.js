@@ -19,6 +19,27 @@
 function View(params) {}
 
 /**
+ * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
+ * to see the effect.
+ *
+ * @property {Boolean} [rippleEnabled = false]
+ * @android
+ * @member UI.View
+ * @since 3.2.1
+ */
+ 
+View.prototype.rippleEnabled;
+/**
+ * Gets/sets ripple effect color for view.
+ *
+ * @property {UI.Color} rippleColor
+ * @android
+ * @member UI.View
+ * @since 3.2.1
+ */
+View.prototype.rippleColor;
+
+/**
  * Defines the opacity of a view. The value of this property is a float number
  * between 0.0 and 1.0. 0 represents view is completely transparent and 1
  * represents view is completely opaque.
@@ -445,8 +466,9 @@ View.prototype.flipHorizontally = function() {};
 View.prototype.flipVertically = function() {};
 
 /**
- * This method returns an object that defines view location on screen.
- *
+ * This method returns an object that defines view location on screen. 
+ * Do not use this method for invisible views in {@link UI.ListView ListView} and {@link UI.GridView GridView}.
+ * 
  * @method getScreenLocation
  * @return {Object} location
  * @return {Number} location.x

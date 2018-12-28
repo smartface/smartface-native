@@ -2,7 +2,9 @@
 const extend = require('js-base/core/extend');
 const View = require('../view');
 const AndroidConfig = require("../../util/Android/androidconfig");
-const DirectionBasedConverter = require("sf-core/util/Android/directionbasedconverter");
+const DirectionBasedConverter = require("../../util/Android/directionbasedconverter");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeViewPager = requireClass("android.support.v4.view.ViewPager");
 const NativePagerAdapter = requireClass("io.smartface.android.SFCorePagerAdapter");
@@ -41,14 +43,16 @@ const SwipeView = extend(View)(
                     return pageInstance.nativeObject;
                 }
             };
-            var pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
+            this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
         
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             DirectionBasedConverter.flipHorizontally(self.nativeObject);
             self.nativeObject.setId(viewID);
         }
+        
         _super(self);
+        scrollableSuper(this, this.nativeObject);
 
         var _page;
         var _pageInstances = [];
@@ -145,7 +149,7 @@ const SwipeView = extend(View)(
         }
         
         // Use setAdapter method after constructor's parameters are assigned.
-        self.nativeObject.setAdapter(pagerAdapter);
+        self.nativeObject.setAdapter(self.pagerAdapter);
         var listener = NativeOnPageChangeListener.implement({
             onPageScrollStateChanged: function(state) {
                 if (state === 0) { // SCROLL_STATE_IDLE

@@ -1,15 +1,17 @@
-/*globals requireClass*/
+/* globals requireClass, array */
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const GridViewItem = require('../gridviewitem');
 const TypeUtil = require("../../util/type");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const GridViewLayoutManager = require('../layoutmanager');
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
-const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
@@ -39,10 +41,11 @@ const GridView = extend(View)(
         }
 
         this._layoutManager = params.layoutManager;
-
         this.nativeObject.addView(this.nativeInner);
+        this.__isRecyclerView = true;
 
         _super(this);
+        scrollableSuper(this, this.nativeInner);
 
         var _gridViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
@@ -50,7 +53,7 @@ const GridView = extend(View)(
             onCreateViewHolder: function(parent, viewType) {
                 var holderViewLayout;
                 try {
-                    holderViewLayout = _onItemCreate();
+                    holderViewLayout = _onItemCreate(viewType);
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -156,21 +159,20 @@ const GridView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                return 1;
+                if (_onItemType)
+                    return _onItemType(position);
+                return 0;
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll;
-        var _onItemCreate;
-        var _onItemSelected;
-        var _onItemLongSelected;
-        var _onPullRefresh;
-        var _onItemBind;
-        var _itemCount = 0;
-        var _scrollBarEnabled = false;
-        var _contentOffset = { x: 0, y: 0 };
-        var _scrollEnabled;
+        var _onScroll = undefined,
+            isScrollListenerAdded = false,
+            _onItemCreate, _onItemSelected, _onItemType,
+            _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
+            _scrollBarEnabled = false,
+            _contentOffset = { x: 0, y: 0 },
+            _scrollEnabled, _onScrollStateChanged = undefined;
         Object.defineProperties(this, {
             // properties
             'layoutManager': {
@@ -294,7 +296,7 @@ const GridView = extend(View)(
                     var nativeColors = [];
                     colors.forEach(function(element) {
                         nativeColors.push(element.nativeObject);
-                    })
+                    });
                     /** @todo
                      * Error: Method setColorSchemeColors with 1 parameters couldn\'t found.
                      * Invoking method with varargs parameter maybe caused this. 
@@ -325,6 +327,15 @@ const GridView = extend(View)(
                 },
                 enumerable: true
             },
+            'onItemType': {
+                get: function() {
+                    return _onItemType;
+                },
+                set: function(callback) {
+                    _onItemType = callback;
+                },
+                enumerable: true
+            },
             'onItemBind': {
                 get: function() {
                     return _onItemBind;
@@ -348,12 +359,18 @@ const GridView = extend(View)(
                     return _onScroll;
                 },
                 set: function(onScroll) {
-                    _onScroll = onScroll.bind(this);
+                    _onScroll = onScroll;
+                    if (onScroll && isScrollListenerAdded === true)
+                        return;
+
+                    let scrollListenerObject = _onScrollListener === null ? createOnScrollListernerObject() : _onScrollListener;
                     if (onScroll) {
-                        this.nativeInner.setOnScrollListener(onScrollListener);
+                        this.nativeInner.setOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = true;
                     }
-                    else {
-                        this.nativeInner.removeOnScrollListener(onScrollListener);
+                    else if (!_onScrollStateChanged) {
+                        this.nativeInner.removeOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = false;
                     }
                 },
                 enumerable: true
@@ -374,6 +391,9 @@ const GridView = extend(View)(
                 enumerable: true,
                 configurable: true
             },
+            /* 
+            ToDo: Removing onScroll listener makes contentOffset null.
+            */
             'contentOffset': {
                 get: function() {
                     return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
@@ -381,24 +401,33 @@ const GridView = extend(View)(
                 enumerable: true
             }
         });
-        const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
-        var overrideMethods = {
-            onScrolled: function(recyclerView, dx, dy) {
-                _contentOffset.x += dx;
-                _contentOffset.y += dy;
-
-                var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
-            },
-            onScrollStateChanged: function(recyclerView, newState) {},
-        };
-        var onScrollListener = new SFOnScrollListener(overrideMethods);
 
         // android-only properties
         var _snapToAlignment, _paginationEnabled = null,
             _nativeLinearSnapHelper, _paginationAssigned = false;
         Object.defineProperties(this.android, {
+            'onScrollStateChanged': {
+                get: function() {
+                    return _onScrollStateChanged;
+                },
+                set: function(onScrollStateChanged) {
+                    _onScrollStateChanged = onScrollStateChanged;
+
+                    if (onScrollStateChanged && isScrollListenerAdded === true)
+                        return;
+
+                    let scrollListenerObject = _onScrollListener === null ? createOnScrollListernerObject() : _onScrollListener;
+                    if (onScrollStateChanged) {
+                        this.nativeInner.setOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = true;
+                    }
+                    else if (!_onScroll) {
+                        this.nativeInner.removeOnScrollListener(scrollListenerObject);
+                        isScrollListenerAdded = false;
+                    }
+                },
+                enumerable: true
+            },
             'onItemLongSelected': {
                 get: function() {
                     return _onItemLongSelected;
@@ -436,12 +465,36 @@ const GridView = extend(View)(
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
                     if (self.android.paginationEnabled !== null && !_paginationAssigned) {
-                        self.android.paginationEnabled = _paginationEnabled ;
+                        self.android.paginationEnabled = _paginationEnabled;
                     }
                 },
                 enumerable: true
             },
         });
+
+        var _onScrollListener = null;
+
+        function createOnScrollListernerObject() {
+            const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
+            var overrideMethods = {
+                onScrolled: function(recyclerView, dx, dy) {
+                    if(!self.touchEnabled) { return; }
+                    _contentOffset.x += dx;
+                    _contentOffset.y += dy;
+
+                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                    _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
+                },
+                onScrollStateChanged: function(recyclerView, newState) {
+                    if(!self.touchEnabled) { return; }
+                    _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
+                },
+            };
+            _onScrollListener = new SFOnScrollListener(overrideMethods);
+
+            return _onScrollListener;
+        }
 
         // ios-only properties
         this.ios = {};
@@ -450,14 +503,7 @@ const GridView = extend(View)(
             return {};
         };
 
-        if (!this.skipDefaults) {
-            this.nativeInner.setAdapter(dataAdapter);
-            this.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
-                onRefresh: function() {
-                    _onPullRefresh && _onPullRefresh();
-                }
-            }));
-        }
+        this.nativeInner.setAdapter(dataAdapter);
 
         if (params) {
             for (var param in params) {

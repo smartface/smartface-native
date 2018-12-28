@@ -163,6 +163,30 @@ HeaderBar.prototype.android.logo = null;
  */
 HeaderBar.prototype.android.logoEnabled = null;
 
+
+/**
+ * Gets/sets the title layout of the HeaderBar. Title layout allows you to assign custom view.
+ *
+ * @property {UI.View} titleLayout
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+HeaderBar.prototype.titleLayout;
+
+/**
+ * Gets/sets the content inset of headerbar. Minimum API Level 21 required. The content inset affects the valid area for Headerbar content other than 
+ * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar#titleLayout titleLayout}  and 
+ * can be used to effectively align HeaderBar content along well-known gridlines. 
+ *
+ * @property {Object} contentInset 
+ * @property {Number} contentInset.left
+ * @property {Number} contentInset.right
+ * @android
+ * @since 3.2.1
+ */
+HeaderBar.prototype.contentInset = {};
+
 /**
  * Gets/sets subtitle of the header bar. If not set subtitle will not show.
  * This property will work only for Android.
@@ -177,6 +201,21 @@ HeaderBar.prototype.android.logoEnabled = null;
  * @since 0.1
  */
 HeaderBar.prototype.android.subtitle = '';
+
+
+/**
+ * Gets/sets elevation of the header bar.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *     myPage.headerBar.android.elevation = 10;
+ *
+ * @property {Number} elevation
+ * @android
+ * @since 3.2.2
+ */
+HeaderBar.prototype.android.elevation;
 
 /**
  * Gets/sets backBarButtonItem of the header bar.
@@ -275,6 +314,6 @@ HeaderBar.prototype.setItems = function(items) {};
  * @method setLeftItem
  * @param {UI.HeaderBarItem} item HeaderBarItem to add.
  */
-HeaderBar.prototype.setLeftItem = function(item){};
+HeaderBar.prototype.setLeftItem = function(item) {};
 
 module.exports = HeaderBar;

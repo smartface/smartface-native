@@ -13,7 +13,7 @@
  *     myPage.layout.addChild(materialtextbox);
  *
  */
-function MaterialTextBox(params){}
+function MaterialTextBox(params) {}
 
 /**
  * Gets/sets the titleFont of the MaterialTextBox. Error label and animated hint label are the same on iOS so this property make changes on both.
@@ -27,9 +27,24 @@ MaterialTextBox.prototype.titleFont;
  * Gets/sets the selectedHintTextColor of the MaterialTextBox.
  * @property {UI.Color} selectedHintTextColor
  * @ios
+ * @android
  * @since 3.1.2
  */
 MaterialTextBox.prototype.selectedHintTextColor;
+
+
+/**
+ * This property used to assign a view right of MaterialTextBox. The given view's width must be specified.
+ * 
+ * @property {Object} rightLayout
+ * @property {UI.View} rightLayout.view
+ * @property {Number} rightLayout.width
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+MaterialTextBox.prototype.rightLayout;
+
 
 /**
  * Gets/sets the lineColor of the MaterialTextBox. In Android, if error message appears then line color cannot be changed. 
@@ -96,7 +111,7 @@ MaterialTextBox.prototype.characterRestrictionColor;
 
 /**
  * Gets/sets the labelsFont of the MaterialTextBox. In Android, sets the font to hint and any other labels (such as error and counter labels) but size of font does not take into account.
- * Before using this property you should enable conter and error. 
+ * Before using this property you should enable conter , error and give hint text. 
  * In iOS, title and error message appear on same view as native behavior. So given font and size of font  will be applied to both of it. 
  * 
  * @property {UI.Font} labelsFont
@@ -134,8 +149,30 @@ MaterialTextBox.prototype.enableCharacterRestriction;
  * @property {Number} textBoxHeight
  * @android
  * @since 3.1.2
+ * @deprecated 3.2.1 TextBox grows as its wrapper
  */
 MaterialTextBox.prototype.textBoxHeight;
+
+
+/**
+ * Gets/sets font of a Label. When set to null label uses system font.
+ * It is set to null by default. In Android, to make hint text size as your given text size assign the font property in constructor.
+ *
+ *     @example
+ *     const Label = require('sf-core/ui/label');
+ *     const Font = require('sf-core/ui/font')
+ *     var myLabel = new Label({
+ *         text: "This is my label",
+ *         visible: true
+ *     });
+ *     myLabel.font = Font.create("Arial", 16, Font.BOLD);
+ *
+ * @property {UI.Font} [font = null]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+MaterialTextBox.prototype.font = null;
 
 
 
@@ -145,6 +182,7 @@ MaterialTextBox.prototype.textBoxHeight;
  * @property {Number} textBoxMaxHeight
  * @android
  * @since 3.1.2
+ * @deprecated 3.2.1 TextBox grows as its wrapper
  */
 MaterialTextBox.prototype.textBoxMaxHeight;
 

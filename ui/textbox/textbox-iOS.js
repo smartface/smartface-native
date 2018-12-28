@@ -392,6 +392,17 @@ const TextBox = extend(View)(
         });
         
         this.ios = {};
+        
+        Object.defineProperty(self, 'cursorColor', {
+            get: function() {
+                return new Color({color : self.nativeObject.valueForKey("tintColor")});
+            },
+            set: function(color) {
+                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
+            },
+            enumerable: true
+        });
+        
         Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
             get: function() {
                 return self.nativeObject.adjustsFontSizeToFitWidth;

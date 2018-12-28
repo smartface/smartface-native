@@ -74,6 +74,17 @@ TextBox.prototype.textColor = UI.Color.BLACK;
  */
 TextBox.prototype.cursorPosition = {start: 0, end: 0};
 
+
+/**
+ * Gets/sets the cursor color of TextBox.
+ *
+ * @property {UI.Color} cursorColor
+ * @android
+ * @ios
+ * @since 3.2.1
+ */
+TextBox.prototype.cursorColor = UI.Color.BLACK
+
 /**
  * Gets/sets hint text that will be displayed when TextBox is empty.
  *
@@ -85,7 +96,7 @@ TextBox.prototype.cursorPosition = {start: 0, end: 0};
 TextBox.prototype.hint = "";
 
 /**
- * Gets/sets the color of the hint text. This property works only for Android.
+ * Gets/sets the color of the hint text.
  *
  * @property {UI.Color} [hintTextColor = UI.Color.LIGHTGRAY]
  * @android

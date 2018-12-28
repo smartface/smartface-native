@@ -270,7 +270,7 @@ function RouterView(params) {
         if (info.pagesNativeInstance) {
             // Old approach (only UINavigationController)
             if (viewControllerExists) {
-                self.nativeObject.popToPage(viewController, info.animated);
+                self.nativeObject.popToViewControllerAnimated(viewController, info.animated);
             } else {
                 self.nativeObject.pushViewControllerAnimated(viewController,info.animated);
             }

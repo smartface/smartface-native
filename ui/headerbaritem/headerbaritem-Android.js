@@ -28,7 +28,9 @@ function HeaderBarItem(params) {
     var _imageButton = false;
     var _menuItem = null;
     var activity = AndroidConfig.activity;
-
+    
+    this.ios = {};
+    
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -97,9 +99,7 @@ function HeaderBarItem(params) {
                 return _image;
             },
             set: function(value) {
-
-                if (typeof value === "string")
-                    value = Image.createFromPath(value); //IDE requires this implementation.
+                value = Image.createImageFromPath(value); //IDE requires this implementation.
 
                 if (value === null || value instanceof Image) {
                     _image = value;
@@ -410,5 +410,8 @@ function createColorStateList(textColors) {
     }
     return (new NativeColorStateList(array(statesSet), array(colorsSets, "int")));
 }
+
+HeaderBarItem.iOS = {};
+HeaderBarItem.iOS.SystemItem = {};
 
 module.exports = HeaderBarItem;

@@ -13,7 +13,7 @@
  *     };
  *
  */
-function SearchView () {}
+function SearchView() {}
 
 /**
  * Gets/sets text of SearchView.
@@ -62,11 +62,25 @@ SearchView.prototype.backgroundImage;
  * @android
  * @ios
  * @since 0.1
+ * @deprecated 3.2.2 Use {@link UI.SearchView#searchIcon} instead.
  */
 SearchView.prototype.iconImage;
 
+
 /**
- * Adds SearchView to UI.Page's headerBar view.
+ * Gets/sets search icon image of SearchView.
+ *
+ * @property {UI.Image} searchIcon
+ * @android
+ * @ios
+ * @since 3.2.2
+ */
+SearchView.prototype.searchIcon;
+
+/**
+ * Adds SearchView to UI.Page's headerBar view. When SearchView is added to header bar, 
+ * {@link UI.SearchView#borderWidth borderWidth} of SearchView will be 0 on ios. In Android, 
+ * searchview always will be iconified. So to make apperance always expanded, combine searchview with {@link UI.HeaderBar#titleLayout titleLayout}
  *
  * @method addToHeaderBar
  * @param {UI.Page} page.
@@ -74,7 +88,7 @@ SearchView.prototype.iconImage;
  * @ios
  * @since 0.1
  */
-SearchView.prototype.addToHeaderBar = function(page){};
+SearchView.prototype.addToHeaderBar = function(page) {};
 
 /**
  * Sets/gets corner radius of text field of search view. textFieldBorderRadius maximum value must be half of the shortest edge.
@@ -83,7 +97,18 @@ SearchView.prototype.addToHeaderBar = function(page){};
  * @android
  * @since 3.0.2
  */
-SearchView.prototype.textFieldBorderRadius; 
+SearchView.prototype.textFieldBorderRadius;
+/**
+ * Sets/gets border thickness of bounded view. Accepts unsigned
+ * numbers, 0 means no border. When the searchview is added to header bar, 
+ * the border width of the search view will be 0 on ios.
+ *
+ * @property {Number} [borderWidth = 1]
+ * @android
+ * @ios
+ * @since 0.1
+ */
+SearchView.prototype.borderWidth = 1;
 
 /**
  * Removes SearchView from UI.Page's headerBar view.
@@ -94,7 +119,7 @@ SearchView.prototype.textFieldBorderRadius;
  * @ios
  * @since 0.1
  */
-SearchView.prototype.removeFromHeaderBar = function(page){};
+SearchView.prototype.removeFromHeaderBar = function(page) {};
 
 /**
  * This function shows keyboard.
@@ -105,7 +130,7 @@ SearchView.prototype.removeFromHeaderBar = function(page){};
  * @since 0.1
  * @deprecated 1.1.8 Use {@link UI.SearchView#requestFocus} instead.
  */
-SearchView.prototype.showKeyboard = function(){};
+SearchView.prototype.showKeyboard = function() {};
 
 /**
  * This function hides keyboard.
@@ -116,7 +141,7 @@ SearchView.prototype.showKeyboard = function(){};
  * @since 0.1
  * @deprecated 1.1.8 Use {@link UI.SearchView#removeFocus} instead.
  */
-SearchView.prototype.hideKeyboard = function(){};
+SearchView.prototype.hideKeyboard = function() {};
 
 /**
  * This function gives focus to the SearchView. When the SearchView gained focus, keyboard will appear.
@@ -126,7 +151,7 @@ SearchView.prototype.hideKeyboard = function(){};
  * @ios
  * @since 1.1.8
  */
-SearchView.prototype.requestFocus = function(){};
+SearchView.prototype.requestFocus = function() {};
 
 /**
  * This function show loading indicator.
@@ -135,7 +160,7 @@ SearchView.prototype.requestFocus = function(){};
  * @ios
  * @since 3.0.2
  */
-SearchView.prototype.showLoading = function(){};
+SearchView.prototype.showLoading = function() {};
 
 /**
  * This function hide loading indicator.
@@ -144,7 +169,7 @@ SearchView.prototype.showLoading = function(){};
  * @ios
  * @since 3.0.2
  */
-SearchView.prototype.hideLoading = function(){};
+SearchView.prototype.hideLoading = function() {};
 
 /**
  * This function removes focus from the SearchView. When the SearchView lost its focus, keyboard will disappear.
@@ -154,7 +179,7 @@ SearchView.prototype.hideLoading = function(){};
  * @ios
  * @since 1.1.8
  */
-SearchView.prototype.removeFocus = function(){};
+SearchView.prototype.removeFocus = function() {};
 
 /**
  * Gets/sets the search view’s style. This property works only for IOS.
@@ -175,13 +200,14 @@ SearchView.prototype.ios.searchViewStyle;
 SearchView.prototype.ios.showsCancelButton;
 
 /**
- * Gets/sets cursor color of searchview. This property works only for IOS.
+ * Gets/sets cursor color of searchview.
  *
  * @property {UI.Color} cursorColor
  * @ios
- * @since 1.1.12
+ * @android
+ * @since 3.2.1
  */
-SearchView.prototype.ios.cursorColor;
+SearchView.prototype.cursorColor;
 
 /**
  * Gets/sets cancel button color of searchview. This property works only for IOS.
@@ -191,6 +217,65 @@ SearchView.prototype.ios.cursorColor;
  * @since 1.1.12
  */
 SearchView.prototype.ios.cancelButtonColor;
+
+/**
+ * Gets/sets cancel button text of searchview. This property works only for IOS.
+ *
+ * @property {String} cancelButtonText
+ * @ios
+ * @since 3.2.1
+ */
+SearchView.prototype.ios.cancelButtonText;
+
+
+/**
+ * Gets/sets search button icon of searchview. While using this property, {@link UI.SearchView#iconifiedByDefault iconifiedByDefault }
+ * property should be true.
+ *
+ * @property {UI.Image} searchButtonIcon
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.searchButtonIcon;
+
+/**
+ * This property makes the search view either iconified or expanded.
+ *
+ * @property {Boolean} [iconifiedByDefault = false ]
+ * @android
+ * @since 3.2.1
+ */
+SearchView.prototype.android.iconifiedByDefault;
+
+
+/**
+ * Gets/sets clear icon of searchview.
+ *
+ * @property {UI.Image} clearIcon
+ * @android
+ * @since 3.2.1
+ * @deprecated 3.2.2 Use {@link UI.SearchView#closeIcon} instead.
+ */
+SearchView.prototype.android.clearIcon;
+
+/**
+ * Gets/sets clear/close icon of searchview.
+ *
+ * @property {UI.Image} closeIcon
+ * @android
+ * @since 3.2.2
+ */
+SearchView.prototype.android.closeIcon;
+
+
+/**
+ * This property allows you to override search icon of searchview by given icon or custom layout.
+ *
+ * @property {UI.Image | UI.FlexLayout} leftItem
+ * @android
+ * @since 3.2.2
+ */
+SearchView.prototype.android.leftItem;
 
 /**
  * Gets/sets the color of the hint text.
@@ -247,6 +332,7 @@ SearchView.prototype.android.textAlignment = UI.TextAlignment.MIDLEFT;
  * @property {UI.Image} [closeImage = null]
  * @android
  * @since 0.1
+ * @deprecated 3.2.2 Use {@link UI.SearchView#closeIcon} instead.
  */
 SearchView.prototype.android.closeImage = null;
 

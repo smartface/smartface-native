@@ -4,6 +4,8 @@ const View = require('../view');
 const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
+const scrollableSuper = require("../../util/Android/scrollable");
+
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
 const NativeBuild = requireClass("android.os.Build");
@@ -36,6 +38,10 @@ const WebView = extend(View)(
         }
 
         _super(this);
+        scrollableSuper(this, this.nativeObject);
+
+        const self = this;
+
         var overrideMethods = {
             onPageFinished: function(view, url) {
                 _onShow && _onShow({ url: url });
@@ -276,6 +282,38 @@ const WebView = extend(View)(
             },
             set: function(page) {
                 _page = page;
+            },
+            enumerable: true,
+            configurable: true
+        });
+
+
+        let _onBackButtonPressedCallback = undefined;
+        Object.defineProperty(this.android, 'onBackButtonPressed', {
+            get: function() {
+                return _onBackButtonPressedCallback;
+            },
+            set: function(onBackButtonPressedCallback) {
+                if (_onBackButtonPressedCallback === undefined) {
+                    _onBackButtonPressedCallback = onBackButtonPressedCallback;
+                    
+                    self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
+                        onKey: function(view, keyCode, keyEvent) {
+                            // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
+                            if (keyCode === 4 && (keyEvent.getAction() === 0)) {
+                                typeof _onBackButtonPressedCallback === "function" &&
+                                    _onBackButtonPressedCallback();
+                                return true;
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                    }));
+                }
+                else {
+                    _onBackButtonPressedCallback = onBackButtonPressedCallback;
+                }
             },
             enumerable: true,
             configurable: true

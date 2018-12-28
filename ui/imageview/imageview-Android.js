@@ -32,8 +32,8 @@ const ImageView = extend(View)(
         imageViewPrototype._image = null;
         imageViewPrototype._adjustViewBounds = false;
 
-        var _fillType = null;
-        var _tintColor;
+        imageViewPrototype._fillType = null;
+        imageViewPrototype._tintColor;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
@@ -61,36 +61,36 @@ const ImageView = extend(View)(
             },
             'tintColor': {
                 get: function() {
-                    return _tintColor;
+                    return this._tintColor;
                 },
                 set: function(tintColor) {
                     const Color = require("sf-core/ui/color");
                     if (!tintColor instanceof Color)
                         return;
-                    _tintColor = tintColor;
+                    this._tintColor = tintColor;
 
                     const NativeImageCompat = requireClass("android.support.v4.widget.ImageViewCompat");
                     const NativeColorStateListUtil = requireClass("io.smartface.android.utils.ColorStateListUtil");
 
-                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(_tintColor.nativeObject));
+                    NativeImageCompat.setImageTintList(this.nativeObject, NativeColorStateListUtil.getColorStateListWithValueOf(this._tintColor.nativeObject));
 
                 },
                 enumerable: true
             },
             'imageFillType': {
                 get: function() {
-                    return _fillType;
+                    return this._fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)) {
                         fillType = ImageView.FillType.NORMAL;
                     }
-                    _fillType = fillType;
+                    this._fillType = fillType;
                     if (fillType === ImageView.FillType.ASPECTFILL && !this._adjustViewBounds) {
                         this.nativeObject.setAdjustViewBounds(true);
                         this._adjustViewBounds = true;
                     }
-                    this.nativeObject.setScaleType(ImageFillTypeDic[_fillType]);
+                    this.nativeObject.setScaleType(ImageFillTypeDic[this._fillType]);
                 },
                 enumerable: true
             }
@@ -101,13 +101,14 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-            var url, placeholder, isFade, onError, onSuccess;
+            var url, placeholder, isFade, onFailure, onSuccess;
             if (typeof arguments[0] === "object") {
                 var params = arguments[0];
                 url = params.url;
                 placeholder = params.placeholder;
                 isFade = params.isFade;
-                onError = params.onError;
+                // onFailure callback added instead of onError in sf-core 3.2.1
+                onFailure = (params.onError ? params.onError : params.onFailure);
                 onSuccess = params.onSuccess;
             }
             else {
@@ -117,14 +118,19 @@ const ImageView = extend(View)(
             }
 
             var callback = null;
-            if (onError || onSuccess) {
+            var self = this;
+            if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
+                        let loadedDrawable = self.nativeObject.getDrawable();
+                        if(loadedDrawable) {
+                            self._image = new Image({ drawable: loadedDrawable});
+                        }
                         onSuccess && onSuccess();
                     },
                     onError: function() {
-                        onError && onError();
+                        onFailure && onFailure();
                     }
                 });
             }
@@ -151,7 +157,9 @@ const ImageView = extend(View)(
                     params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap }), (from && ImageView.CacheType[from.name()]));
                 },
                 onBitmapFailed: function(errorDrawable) {
-                    params.onError && params.onError();
+                    // onFailure callback added instead of onError in sf-core 3.2.1
+                    var onFailure = (params.onError ? params.onError : params.onFailure);
+                    onFailure && onFailure();
                 },
                 onPrepareLoad: function(placeHolderDrawable) {
                     self.nativeObject.setImageDrawable(placeHolderDrawable);
@@ -222,8 +230,8 @@ const ImageView = extend(View)(
         };
 
         function scaleImage(loadedImage) {
-            if (loadedImage && _fillType !== null) {
-                switch (_fillType) {
+            if (loadedImage && imageViewPrototype._fillType !== null) {
+                switch (imageViewPrototype._fillType) {
                     case ImageView.FillType.NORMAL:
                         return loadedImage
                         break;

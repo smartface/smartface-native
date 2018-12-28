@@ -30,8 +30,8 @@ function Switch(params) {}
 Switch.prototype.enabled = true;
 
 /**
- * Gets/sets color of the thumb when Switch is ON.
- * It is set to green by default.
+ * Gets/sets color of the thumb when Switch is ON. If this is set on iOS, the switch grip will lose its drop shadow.
+ * The default of this property is green on Android and null on iOS. For iOS, If you want to use default of this property, you should set null.
  *
  * @property {UI.Color} thumbOnColor
  * @android
@@ -63,7 +63,7 @@ Switch.prototype.android.thumbOffColor = Color.GRAY;
 
 /**
  * Gets/sets the background of the switch when it is ON.
- * It is set to gray by default.
+ * The default of this property is gray on Android and green on iOS.
  *
  * @property {UI.Color} toggleOnColor
  * @android
@@ -71,6 +71,24 @@ Switch.prototype.android.thumbOffColor = Color.GRAY;
  * @since 0.1
  */
 Switch.prototype.toggleOnColor = Color.GRAY;
+
+/**
+ * Gets/sets the toggle image of the switch. This property should be used before assigning colors.
+ *
+ * @property {UI.Color | String} toggleImage
+ * @android
+ * @since 3.2.1
+ */
+Switch.prototype.andorid.toggleImage;
+
+/**
+ * Gets/sets the thumb image of the switch. This property should be used before assigning colors.
+ *
+ * @property {UI.Color | String} thumbImage
+ * @android
+ * @since 3.2.1
+ */
+Switch.prototype.andorid.thumbImage;
 
 /**
  * Gets/sets the background of the switch when it is OFF.  It is set to gray

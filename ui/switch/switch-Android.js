@@ -16,7 +16,7 @@ const Switch = extend(View)(
         }
         _super(this);
 
-        var _thumbOnColor = null;
+        var _thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue
         var _thumbOffColor = Color.GRAY;
         var _toggleOnColor = Color.GRAY;
         var _toggleOffColor = Color.GRAY;
@@ -79,7 +79,34 @@ const Switch = extend(View)(
             }
         });
 
+        let _toggleImage, _thumbImage;
         Object.defineProperties(this.android, {
+            'toggleImage': {
+                get: function() {
+                    return _toggleImage;
+                },
+                set: function(toggleImage) {
+                    const Image = require("../image");
+                    _toggleImage = toggleImage;
+
+                    _toggleImage = Image.createImageFromPath(toggleImage);
+                    self.nativeObject.setTrackDrawable(_toggleImage.nativeObject);
+                },
+                enumerable: true
+            },
+            'thumbImage': {
+                get: function() {
+                    return _thumbImage;
+                },
+                set: function(thumbImage) {
+                    const Image = require("../image");
+                    _thumbImage = thumbImage;
+
+                    _thumbImage = Image.createImageFromPath(thumbImage);
+                    self.nativeObject.setThumbDrawable(_thumbImage.nativeObject);
+                },
+                enumerable: true
+            },
             'toggleOffColor': {
                 get: function() {
                     return _toggleOffColor;
@@ -110,11 +137,11 @@ const Switch = extend(View)(
             }
         }));
 
-        if (!this.skipDefaults) {
-            this.thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue;
-            this.thumbOffColor = Color.GRAY;
-            this.toggleOnColor = Color.GRAY;
-            this.android.toggleOffColor = Color.GRAY;
+        if (!(params && params.skipDefaults)) {
+            this.thumbOnColor = _thumbOnColor;
+            this.thumbOffColor = _thumbOffColor;
+            this.toggleOnColor = _toggleOnColor;
+            this.android.toggleOffColor = _toggleOffColor;
         }
 
         // Assign parameters given in constructor
@@ -128,10 +155,10 @@ const Switch = extend(View)(
 
 function setThumbColor(self) {
     if (self.toggle) {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
     else {
-        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
 

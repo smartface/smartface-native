@@ -106,13 +106,11 @@ const MapView = extend(View)(
                     self.minZoomLevel = _minZoomLevel;
                     self.locationButtonVisible = _locationButtonVisible;
 
-
+                    _pins = []; // ToDo: Clearing array on map ready should be re-considered while refactoring;
                     _pendingPins.forEach(function(element) {
                         self.addPin(element);
                     });
                     _pendingPins = [];
-                    _pins = []; // ToDo: Clearing array on map ready should be re-considered while refactoring;
-
 
                     if (self.clusterEnabled)
                         startCluster();

@@ -39,6 +39,9 @@ function Image(params) {
         else if (params.roundedBitmapDrawable) {
             self.nativeObject = params.roundedBitmapDrawable;
         }
+        else if (params.drawable) {
+            self.nativeObject = params.drawable;
+        }
         else {
             throw new Error("path or bitmap can not be empty for Image!");
         }
@@ -218,15 +221,7 @@ Object.defineProperties(Image, {
             var imageFile = new File({ path: path });
             if (imageFile && imageFile.nativeObject) {
                 var bitmap;
-                if (imageFile.type === Path.FILE_TYPE.ASSET) {
-                    var assetsInputStream = AndroidConfig.activity.getAssets().open(imageFile.nativeObject);
-                    if (width && height)
-                        bitmap = decodeSampledBitmapFromResource(assetsInputStream, width, height);
-                    else
-                        bitmap = NativeBitmapFactory.decodeStream(assetsInputStream);
-                    assetsInputStream.close();
-                }
-                else if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
+                if (imageFile.type === Path.FILE_TYPE.DRAWABLE) {
                     bitmap = imageFile.nativeObject;
                 }
                 else {
@@ -327,6 +322,13 @@ function calculateInSampleSize(options, reqWidth, reqHeight) {
 
     return inSampleSize;
 }
+
+
+Image.createImageFromPath = function(path) {
+    if (typeof path === "string")
+        path = Image.createFromFile(path);
+    return path;
+};
 
 Image.iOS = {};
 Image.iOS.RenderingMode = {};
