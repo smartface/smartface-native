@@ -68,20 +68,11 @@ function HeaderBarItem(params) {
                 return _title;
             },
             set: function(value) {
-                // if (value !== null && typeof(value) !== "string") {
-                //     throw new TypeError("title must be string or null.");
-                // }
-                _title = value;
-                let titleText;
-                if(_title instanceof AttributedString) {
-                    let attributedStringBuilder = new NativeSpannableStringBuilder();
-                    _title.setSpan(attributedStringBuilder);
-                    titleText = attributedStringBuilder;
-                } else {
-                    titleText = _title;
+                if (value !== null && typeof(value) !== "string") {
+                    throw new TypeError("title must be string or null.");
                 }
-                
-                self.__setTitle(titleText);
+                _title = value;
+                self.__setTitle(_title);
             },
             enumerable: true
         },
@@ -376,10 +367,8 @@ function HeaderBarItem(params) {
 
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
-        console.log("setTitle: " + (itemTitle instanceof AttributedString));
         if (!self.nativeObject) {
             self.nativeObject = new NativeTextButton(activity);
-            console.log(" -------------- ");
             self.nativeObject.setText(itemTitle);
             self.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
             self.nativeObject.setPaddingRelative(
@@ -387,15 +376,14 @@ function HeaderBarItem(params) {
                 HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
             );
 
-            // self.color = _color;
+            self.color = _color;
             self.imageButton = false;
             if (self.menuItem)
                 self.menuItem.setActionView(self.nativeObject);
         }
         else if (!self.imageButton) {
-            console.log(" ================= ");
             self.nativeObject.setText(itemTitle);
-            // self.color = _color;
+            self.color = _color;
         }
     };
     
