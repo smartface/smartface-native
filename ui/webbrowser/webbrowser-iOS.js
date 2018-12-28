@@ -14,8 +14,6 @@ WebBrowser.show = function(page,options){
     });
 
     var safariViewController = __SF_SMFSFSafariViewController.create(nsURL,false);
-    
-    safariViewController.statusBarHidden = !options.ios.statusBarVisible;
 
     var argBarColor = new Invocation.Argument({
         type:"NSObject",

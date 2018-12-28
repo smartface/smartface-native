@@ -1,5 +1,6 @@
 const File = require("sf-core/io/file");
 const Color = require("sf-core/ui/color");
+const Application = require("sf-core/application");
 
 function QuickLook (params) {
     var self = this;
@@ -61,29 +62,7 @@ function QuickLook (params) {
             enumerable: true
      });
     
-    self.statusBar = {};
-    
-    Object.defineProperty(self.statusBar, 'visible', {
-        get: function() {
-            return !self.nativeObject.statusBarHidden;
-        },
-        set: function(value) {
-            self.nativeObject.statusBarHidden = !value;
-            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
-        },
-        enumerable: true
-    });
-    
-    Object.defineProperty(self.statusBar, 'style', {
-        get: function() {
-            return self.nativeObject.statusBarStyle;
-        },
-        set: function(value) {
-            self.nativeObject.statusBarStyle = value;
-            self.nativeObject.setNeedsStatusBarAppearanceUpdate();
-        },
-        enumerable: true
-    });
+    self.statusBar = Application.statusBar;
     
     self.show = function(Page){
         Page.nativeObject.presentViewController(self.nativeObject);
