@@ -267,15 +267,37 @@ function HeaderBar(params) {
         enumerable: true,configurable : true
     });
     
+    var _titleColor = undefined;
     Object.defineProperty(self, 'titleColor', {
         get: function() {
-            return new Color({color : self.nativeObject.titleTextAttributes["NSColor"]});
+            return _titleColor;
         },
         set: function(value) {
-            self.nativeObject.titleTextAttributes = {"NSColor" :value.nativeObject};
+            _titleColor = value;
+            self.__updateTitleTextAttributes();
         },
         enumerable: true,configurable : true
     });
+    
+    var _titleFont = undefined;
+    Object.defineProperty(self.ios, 'titleFont', {
+        get: function() {
+            return _titleFont;
+        },
+        set: function(value) {
+            _titleFont = value;
+            self.__updateTitleTextAttributes();
+        },
+        enumerable: true,configurable : true
+    });
+    
+    self.__updateTitleTextAttributes = function(){
+        var titleTextAttributes = {};
+        _titleColor && (titleTextAttributes["NSColor"] = _titleColor.nativeObject);
+        _titleFont && (titleTextAttributes["NSFont"] = _titleFont);
+        
+        self.nativeObject.titleTextAttributes = titleTextAttributes;
+    };
     
     var _visible = true;
     Object.defineProperty(self, 'visible', {

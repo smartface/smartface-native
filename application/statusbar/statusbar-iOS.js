@@ -1,5 +1,4 @@
 const Color = require("sf-core/ui/color");
-const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
 
 var StatusBar = {};
 StatusBar.ios = {};
@@ -17,13 +16,10 @@ Object.defineProperty(StatusBar, 'height', {
 Object.defineProperty(StatusBar, 'backgroundColor', {
     get: function() {
         var statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey("statusBarWindow");
-        console.log("statusBarWindow :" + statusBarWindow);
         if (statusBarWindow) {
             var statusBar = statusBarWindow.valueForKey("statusBar");
-            console.log("statusBar :" + statusBar);
             if (statusBar) {
                 var backgroundColor = statusBar.valueForKey("backgroundColor");
-                console.log("backgroundColor :" + backgroundColor);
                 if (backgroundColor) {
                     return new Color({color : backgroundColor});
                 }
@@ -46,53 +42,20 @@ Object.defineProperty(StatusBar, 'backgroundColor', {
 
 Object.defineProperty(StatusBar, 'visible', {
     get: function() {
-        var retval;
-        
-        var className = "SMFNative.SMFUIViewController";
-        var controller; 
-        
-        if (keyWindow.rootViewController.constructor.name === className){ 
-            controller = keyWindow.rootViewController;
-        } else if (keyWindow.rootViewController.topViewController && keyWindow.rootViewController.topViewController.constructor.name === className) {
-            controller = keyWindow.rootViewController.topViewController;
-        }
-        
-        if (controller) {
-            retval = !controller.statusBarHidden;
-        }
-
-        return retval;
+        return !__SF_UIApplication.sharedApplication().sf_statusBarHidden;
     },
     set: function(value) {
-        var className = "SMFNative.SMFUIViewController";
-        var controller;
-        if (keyWindow.rootViewController.constructor.name === className) {
-            controller = keyWindow.rootViewController;
-        } else if (keyWindow.rootViewController.topViewController && keyWindow.rootViewController.topViewController.constructor.name === className) {
-            controller = keyWindow.rootViewController.topViewController;
-        }
-        
-        if (controller) {
-            controller.statusBarHidden = !value;
-            controller.setNeedsStatusBarAppearanceUpdate();
-        }
+        __SF_UIApplication.sharedApplication().sf_statusBarHidden = !value;
     },
     enumerable: true,configurable : true
 });
 
 Object.defineProperty(StatusBar, 'style', {
     get: function() {
-        var retval;
-        if (keyWindow.rootViewController.constructor.name === "SMFNative.SMFUIViewController"){
-            retval = keyWindow.rootViewController.statusBarStyle;
-        }
-        return retval;
+        return __SF_UIApplication.sharedApplication().sf_statusBarStyle;
     },
     set: function(value) {
-        if (keyWindow.rootViewController.constructor.name === "SMFNative.SMFUIViewController"){
-            keyWindow.rootViewController.statusBarStyle = value;
-            keyWindow.rootViewController.setNeedsStatusBarAppearanceUpdate();      
-        }
+        __SF_UIApplication.sharedApplication().sf_statusBarStyle = value;
     },
     enumerable: true,configurable : true
 });

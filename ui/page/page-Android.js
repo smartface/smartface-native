@@ -11,6 +11,7 @@ const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
 const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
+const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -274,30 +275,6 @@ function Page(params) {
         enumerable: true
     });
 
-    var _isBottomTabBarPage = false;
-    Object.defineProperty(self, 'isBottomTabBarPage', {
-        get: function() {
-            return _isBottomTabBarPage;
-        },
-        set: function(isBottomTabBarPage) {
-            _isBottomTabBarPage = isBottomTabBarPage;
-            if (_isBottomTabBarPage)
-                this.headerBar.visible = false;
-        },
-        enumerable: true
-    });
-
-    var _firstPageInNavigator;
-    Object.defineProperty(self, 'firstPageInNavigator', {
-        get: function() {
-            return _firstPageInNavigator;
-        },
-        set: function(value) {
-            _firstPageInNavigator = value;
-        },
-        enumerable: true
-    });
-
     var _isShown;
     Object.defineProperty(self, 'isShown', {
         get: function() {
@@ -552,14 +529,8 @@ function Page(params) {
         set: function(visible) {
             if (TypeUtil.isBoolean(visible)) {
                 if (visible) {
-                    if (self.isBottomTabBarPage) {
-                        // View.GONE
-                        toolbar.setVisibility(8);
-                    }
-                    else {
-                        // View.VISIBLE
-                        toolbar.setVisibility(0);
-                    }
+                    // View.VISIBLE
+                    toolbar.setVisibility(0);
                 }
                 else {
                     // View.GONE
@@ -640,6 +611,48 @@ function Page(params) {
             toolbar.setContentInsetsRelative(AndroidUnitConverter.dpToPixel(cotentInsetStart), AndroidUnitConverter.dpToPixel(cotentInsetEnd));
         },
         enumerable: true
+    });
+    
+    
+    var _attributedTitle, _attributedSubtitle, _attributedTitleBuilder, _attributedSubtitleBuilder;
+    Object.defineProperty(self.headerBar.android, 'attributedTitle', {
+        get: function() {
+            return _attributedTitle;
+        },
+        set: function(title) {
+            _attributedTitle = title;
+            if(_attributedTitle) {
+                if (_attributedTitleBuilder)
+                    _attributedTitleBuilder.clear();
+                else
+                    _attributedTitleBuilder = new NativeSpannableStringBuilder();
+                
+                title.setSpan(_attributedTitleBuilder);
+                toolbar.setTitle(_attributedTitleBuilder);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    
+    Object.defineProperty(self.headerBar.android, 'attributedSubtitle', {
+        get: function() {
+            return _attributedSubtitle;
+        },
+        set: function(subtitle) {
+            _attributedSubtitle = subtitle;
+            if(_attributedSubtitle) {
+                if (_attributedSubtitleBuilder)
+                    _attributedSubtitleBuilder.clear();
+                else
+                    _attributedSubtitleBuilder = new NativeSpannableStringBuilder();
+                
+                subtitle.setSpan(_attributedSubtitleBuilder);
+                toolbar.setSubtitle(_attributedSubtitleBuilder);
+            }
+        },
+        enumerable: true,
+        configurable: true
     });
 
     var _headerBarLogoEnabled = false;
