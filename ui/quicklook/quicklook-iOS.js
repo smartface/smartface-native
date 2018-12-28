@@ -62,6 +62,7 @@ function QuickLook (params) {
             enumerable: true
      });
     
+    //Deprecated use Application.statusBar
     self.statusBar = Application.statusBar;
     
     self.show = function(Page){

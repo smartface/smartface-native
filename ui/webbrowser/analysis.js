@@ -76,7 +76,7 @@ WebBrowser.Options.prototype.itemColor = Color.create("#00A1F1");
  * Gets/sets visibility of the status bar.
  *
  * @property {Boolean} [statusBarVisible = true]
- * @removed
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @ios
  * @since 0.1
  */

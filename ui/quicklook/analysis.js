@@ -83,7 +83,7 @@ QuickLook.prototype.itemColor = UI.Color.BLACK;
  * status bar to a page but you can change properties of page's status bar.
  *
  * @property {UI.StatusBar} statusBar
- * @removed
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @ios
  * @readonly
  * @since 0.1
