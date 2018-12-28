@@ -346,7 +346,7 @@ HeaderBar.prototype.attributedTitle;
 HeaderBar.prototype.attributedSubtitle;
 
 /**
- * Gets/sets title color of the header bar.
+ * Gets/sets title color of the header bar. For iOS, you should access this property from page.parentController.
  *
  * @property {UI.Color} [titleColor = Color.BLACK]
  * @android
