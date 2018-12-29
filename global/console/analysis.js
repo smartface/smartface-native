@@ -4,6 +4,14 @@
  *
  * console class represents debugging console of application.
  * You can access debugging console from Smartface Cloud IDE.
+ * Logging to console doesn't require the console module. It can be used anywhere within your code.
+ * 
+ * 
+ *     @example
+ *     const Hardware = require('sf-core/device/hardware');
+ * 
+ *     console.info("Device.Hardware.IMEI: ", Hardware.android.IMEI);
+ *     console.error("Uncaught Exception!");
  */
 function console() {}
    
@@ -32,3 +40,46 @@ function console() {}
  * @since 0.1
  */
 console.log = function(message){};
+
+   
+/**
+ * Logs error message to the debugging console. You can pass multiple parameters.
+ * 
+ *     @example
+ *     var errorMessage = "Error message";
+ *     console.error(errorMessage);
+ * 
+ * @param {Object} message Object to output to the console.
+ * @method error
+ * @static
+ * @since 4.0.0
+ */
+console.error = function(message){};
+   
+/**
+ * Logs an informational message to the debugging console. You can pass multiple parameters.
+ * 
+ *     @example
+ *     var infoMessage = "Informatinal message";
+ *     console.info(infoMessage);
+ * 
+ * @param {Object} message Object to output to the console.
+ * @method info
+ * @static
+ * @since 4.0.0
+ */
+console.info = function(message){};
+   
+/**
+ * Logs a warning message to the debugging console. You can pass multiple parameters.
+ * 
+ *     @example
+ *     var warningMessage = "Warning message";
+ *     console.warn(warningMessage);
+ * 
+ * @param {Object} message Object to output to the console.
+ * @method warn
+ * @static
+ * @since 4.0.0
+ */
+console.warn = function(message){};
