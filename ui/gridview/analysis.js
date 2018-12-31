@@ -22,7 +22,6 @@ const extend = require('js-base/core/extend');
  *          function(_super) {
  *              _super(this, {
  *                  onShow: function(params) {
- *                      this.statusBar.visible = false;
  *                      this.headerBar.visible = false;
  *                  },onLoad: function(){
  *                      var myDataSet = [];
@@ -107,6 +106,19 @@ GridView.prototype.onItemCreate = function onItemCreate(type){};
 GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
 
 /**
+ * This event is called when a scroll occurs. 
+ *
+ * @param {Object} params
+ * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+ * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+ * @return {Boolean} Return true if the event is consumed.
+ * @event onGesture
+ * @android
+ * @since 4.0.1
+ */
+GridView.prototype.onGesture = function onGesture(params){};
+
+/**
  * This event is called when a UI.GridViewItem created at specified row index.
  * You can bind your data to row items inside this callback.
  *
@@ -118,6 +130,15 @@ GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @since 3.0.2
  */
 GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
+
+/**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
  * This event is called before onItemCreate callback. Returns item type you should use based on position.

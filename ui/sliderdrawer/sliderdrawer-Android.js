@@ -1,6 +1,7 @@
 /*globals requireClass*/
 const FlexLayout            = require('../flexlayout');
 const extend                = require('js-base/core/extend');
+const Application  = require('../../application');
 const AndroidUnitConverter  = require('../../util/Android/unitconverter.js');
 const NativeDrawerLayout    = requireClass('android.support.v4.widget.DrawerLayout');
 
@@ -16,7 +17,7 @@ const SliderDrawer = extend(FlexLayout)(
         var _onShow;
         var _onHide;
         var _onLoad;
-        this.attachedPages = null;
+        this.__isAttached = false;
         var _enabled = true;
         var _state = SliderDrawer.State.CLOSED;
         
@@ -49,10 +50,19 @@ const SliderDrawer = extend(FlexLayout)(
                 get: function(){
                     return _enabled;
                 },
-                set: function(enabled){
-                    _enabled = enabled;
-                    if(this.attachedPages){
-                        this.attachedPages.setDrawerLocked(!enabled);
+                set: function(value){
+                    _enabled = value;
+                    
+                    if(!this.__isAttached) return;
+                    
+                    if (_enabled) {
+                        // DrawerLayout.LOCK_MODE_UNLOCKED
+                        Application.__mDrawerLayout.setDrawerLockMode(0);
+                    }
+                    else {
+                        // DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+                        Application.__mDrawerLayout.setDrawerLockMode(1);
+                        (this.state === SliderDrawer.State.OPEN) && (this.__hideSliderDrawer());
                     }
                 },
                 enumerable: true,
@@ -64,17 +74,15 @@ const SliderDrawer = extend(FlexLayout)(
             },
             'show': {
                 value: function(){
-                    if(this.attachedPages){
-                        this.attachedPages.showSliderDrawer();
-                    }
+                    if(!this.__isAttached) return;
+                    this.__showSliderDrawer();
                 },
                 writable: false
             },
             'hide':{
                 value: function(){
-                    if(this.attachedPages){
-                        this.attachedPages.hideSliderDrawer();
-                    }
+                    if(!this.__isAttached) return;
+                    this.__hideSliderDrawer();
                 },
                 writable: false
             },
@@ -161,12 +169,10 @@ const SliderDrawer = extend(FlexLayout)(
             }
         });
         
-        if(!this.skipDefaults){
-            // setting default values
-            this.width = 200;
-            this.nativeObject.setLayoutParams (drawerLayoutParams);
-            this.nativeObject.setFitsSystemWindows(true);
-        }
+        // setting default values
+        this.width = 200;
+        this.nativeObject.setLayoutParams (drawerLayoutParams);
+        this.nativeObject.setFitsSystemWindows(true);
         
         
         // Assign parameters given in constructor
@@ -175,6 +181,31 @@ const SliderDrawer = extend(FlexLayout)(
                 this[param] = params[param];
             }
         }
+    },
+    function (sliderDrawerPrototype) {
+        sliderDrawerPrototype.__showSliderDrawer = function() {
+            if (this.enabled) {
+                if (this.drawerPosition === SliderDrawer.Position.RIGHT) {
+                    // Gravity.RIGHT 
+                    Application.__mDrawerLayout.openDrawer(5);
+                }
+                else {
+                    // Gravity.LEFT
+                    Application.__mDrawerLayout.openDrawer(3);
+                }
+            }
+        };
+        
+        sliderDrawerPrototype.__hideSliderDrawer = function() {
+            if (this.drawerPosition === SliderDrawer.Position.RIGHT) {
+                // Gravity.RIGHT
+                Application.__mDrawerLayout.closeDrawer(5);
+            }
+            else {
+                // Gravity.LEFT
+                Application.__mDrawerLayout.closeDrawer(3);
+            }
+        };
     }
 );
 

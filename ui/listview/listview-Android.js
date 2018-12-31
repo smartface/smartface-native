@@ -8,16 +8,15 @@ const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
-const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
+const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
 const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const ListView = extend(View)(
     function(_super, params) {
-
         var self = this;
 
         if (!this.nativeObject) {
@@ -25,15 +24,13 @@ const ListView = extend(View)(
         }
 
         if (!this.nativeInner) {
-            // For creating RecyclerView with android:scrollbar=vertical attribute
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-                this.nativeInner = new NativeRecyclerView(themeWrapper);
+                this.nativeInner = new NativeSFRecyclerView(themeWrapper);
             }
             else {
-                this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
+                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
             }
-            //this.nativeInner.setItemViewCacheSize(0);
             this.nativeInner.setHasFixedSize(true);
             this.nativeInner.setDrawingCacheEnabled(true);
             this.nativeInner.setItemViewCacheSize(0);

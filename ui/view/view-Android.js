@@ -1,4 +1,4 @@
-/*globals array, requireClass, toJSArray, release */
+/*globals array, requireClass, toJSArray */
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");

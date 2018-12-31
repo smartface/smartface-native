@@ -9,7 +9,7 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const scrollableSuper = require("../../util/Android/scrollable");
 
 const NativeView = requireClass("android.view.View");
-const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
+const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
 
@@ -17,7 +17,6 @@ const NativeR = requireClass(AndroidConfig.packageName + ".R");
 
 const GridView = extend(View)(
     function(_super, params) {
-
         var self = this;
 
         if (!this.nativeObject) {
@@ -28,11 +27,12 @@ const GridView = extend(View)(
             // For creating RecyclerView with android:scrollbar=vertical attribute
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-                this.nativeInner = new NativeRecyclerView(themeWrapper);
+                this.nativeInner = new NativeSFRecyclerView(themeWrapper);
             }
             else {
-                this.nativeInner = new NativeRecyclerView(AndroidConfig.activity);
+                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
             }
+            
             //this.nativeInner.setItemViewCacheSize(0);
             //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
             this.nativeInner.setScrollBarStyle(50331648);

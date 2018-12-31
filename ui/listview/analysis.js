@@ -129,6 +129,14 @@ ListView.prototype.onRowType = function onRowType(index){};
  */
 ListView.prototype.onRowCreate = function onRowCreate(type){};
 
+/**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+ListView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
 
 /**
  * Gets/sets over-scroll mode for this view.
@@ -164,6 +172,19 @@ ListView.prototype.onRowHeight = function onRowHeight(index){};
  * @since 0.1
  */
 ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
+
+/**
+ * This event is called when a scroll occurs. 
+ *
+ * @param {Object} params
+ * @param {Number} distanceX The distance along the X axis that has been scrolled since the last scroll
+ * @param {Number} distanceY The distance along the Y axis that has been scrolled since the last scroll
+ * @return {Boolean} Return true if the event is consumed.
+ * @event onGesture
+ * @android
+ * @since 4.0.1
+ */
+ListView.prototype.onGesture = function onGesture(params){};
 
 /**
  * This event is called when user selects a row at specific index.
