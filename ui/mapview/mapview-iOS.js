@@ -55,7 +55,6 @@ const MapView = extend(View)(
         function mapRender() {
             if (_isFirstRender) {
                 _isFirstRender = 0;
-                self.setZoomLevelWithAnimated(_centerLocation ? _centerLocation : self.centerLocation, _zoomLevel, true);
                 if (typeof self.onCreate === "function") {
                     self.onCreate();
                 }
@@ -152,14 +151,9 @@ const MapView = extend(View)(
             enumerable: true
         });
 
-        var _centerLocation;
         Object.defineProperty(self, 'centerLocation', {
             get: function() {
                 return self.nativeObject.centerLocation;
-            },
-            set: function(value) {
-                _centerLocation = value;
-                self.setZoomLevelWithAnimated(value, _zoomLevel, true);
             },
             enumerable: true
         });
@@ -384,11 +378,9 @@ const MapView = extend(View)(
                 }
                 return _zoomLevel;
             },
-            set: function(value) {
-                self.setZoomLevelWithAnimated(_centerLocation ? _centerLocation : self.centerLocation, value + 1, true);
-            },
             enumerable: true
         });
+        
         self.nativeObject.regionWillChangeAnimated = function() {
             if (_isFirstRender) {
                 return;
@@ -424,14 +416,17 @@ const MapView = extend(View)(
 
         self.setZoomLevelWithAnimated = function(centerLocation, zoomLevel, animated) {
             // clamp large numbers to 28
-            _zoomLevel = zoomLevel;
             zoomLevel = Math.min(zoomLevel, 28);
 
             // use the zoom level to compute the region
             var span = coordinateSpanWithCenterCoordinate(centerLocation, zoomLevel);
             self.nativeObject.centerLocation = { latitudeDelta: span.latitudeDelta, longitudeDelta: span.longitudeDelta, latitude: centerLocation.latitude, longitude: centerLocation.longitude, animated: animated };
         }
-
+        
+        self.setCenterLocationWithZoomLevel = function(centerLocation, zoomLevel, animated){
+            self.setZoomLevelWithAnimated(centerLocation, zoomLevel + 1, animated);
+        };
+        
         self.getVisiblePins = function() {
             var annotationVisibleRect = Invocation.invokeInstanceMethod(self.nativeObject, "visibleMapRect", [], "CGRect");
 

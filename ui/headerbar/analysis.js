@@ -179,13 +179,13 @@ HeaderBar.prototype.titleLayout;
  * the navigation button and menu. Insets define the minimum margin for these custom views like {@link UI.HeaderBar#titleLayout titleLayout}  and 
  * can be used to effectively align HeaderBar content along well-known gridlines. 
  *
- * @property {Object} contentInsets 
- * @property {Number} contentInsets.left
- * @property {Number} contentInsets.right
+ * @property {Object} contentInset 
+ * @property {Number} contentInset.left
+ * @property {Number} contentInset.right
  * @android
  * @since 3.2.1
  */
-HeaderBar.prototype.contentInsets = {};
+HeaderBar.prototype.contentInset = {};
 
 /**
  * Gets/sets subtitle of the header bar. If not set subtitle will not show.
@@ -201,6 +201,21 @@ HeaderBar.prototype.contentInsets = {};
  * @since 0.1
  */
 HeaderBar.prototype.android.subtitle = '';
+
+
+/**
+ * Gets/sets elevation of the header bar.
+ *
+ *     @example
+ *     const Page = require('sf-core/ui/page');
+ *     var myPage = new Page();
+ *     myPage.headerBar.android.elevation = 10;
+ *
+ * @property {Number} elevation
+ * @android
+ * @since 3.2.2
+ */
+HeaderBar.prototype.android.elevation;
 
 /**
  * Gets/sets backBarButtonItem of the header bar.

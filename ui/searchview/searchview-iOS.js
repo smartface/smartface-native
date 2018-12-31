@@ -30,6 +30,12 @@ const SearchView = extend(View)(
         
         _super(this);
         
+        if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+            self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+        } else if(__SF_UIView.viewAppearanceSemanticContentAttribute() == 4){
+            self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+        }
+        
         if(parseInt(System.OSVersion) >= 11){
             var heightAnchor = Invocation.invokeInstanceMethod(self.nativeObject,"heightAnchor",[],"NSObject");
             
@@ -240,13 +246,25 @@ const SearchView = extend(View)(
         });
         
         var _iconImage;
-        Object.defineProperty(this, 'iconImage', {
+        Object.defineProperty(this, 'iconImage', { //Depracted use searchIcon
             get: function() {
                 return _iconImage;
             },
             set: function(iconImage) {
                 _iconImage = iconImage;
                 self.nativeObject.setIconImage(_iconImage.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
+            },
+            enumerable: true
+        });
+        
+        var _searchIcon;
+        Object.defineProperty(this, 'searchIcon', {
+            get: function() {
+                return _searchIcon;
+            },
+            set: function(searchIcon) {
+                _searchIcon = searchIcon;
+                self.nativeObject.setIconImage(_searchIcon.nativeObject, UISearchBarIcon.search, __SF_UIControlStateNormal);
             },
             enumerable: true
         });

@@ -1,28 +1,21 @@
+/* globals requireClass, array */
 const TextBox = require('../textbox');
 const extend = require('js-base/core/extend');
 const View = require("../view");
-const Color = require("../color");
-const Font = require("../font");
 
 const AndroidConfig = require("../../util/Android/androidconfig.js");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
-
 const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
 const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
 const NativeLinearLayout = requireClass("android.widget.LinearLayout");
-
-const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-
 const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
 const activity = AndroidConfig.activity;
 
 const hintTextColorFieldName = "mDefaultTextColor";
 const hintFocusedTextColorFieldName = "mFocusedTextColor";
-const mErrorView = "mErrorView";
-const mCounterView = "mCounterView";
 
 const WRAP_CONTENT = -2;
 const MATCH_PARENT = -1;
@@ -46,8 +39,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
 
         self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
-
-        self.nativeObject.addView(nativeTextInputEditText);
 
         var _hintTextColor, _hintFocusedTextColor,
             _errorText, _lineColorObj, _errorColor, _characterRestrictionColor, _font,
@@ -121,72 +112,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 },
                 enumerable: true
             },
-            'enableCharacterRestriction': {
-                get: function() {
-                    return _enableCharacterRestriction;
-                },
-                set: function(value) {
-
-                    _enableCharacterRestriction = value;
-                    self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
-                },
-                enumerable: true
-            },
-            'characterRestriction': {
-                get: function() {
-                    return self.nativeObject.isCounterEnabled();
-                },
-                set: function(value) {
-
-                    _enableCounterMaxLength = value;
-                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false)
-
-                    if (self.enableCharacterRestriction !== true)
-                        self.enableCharacterRestriction = true;
-
-                    self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
-                },
-                enumerable: true
-            },
-            'characterRestrictionColor': {
-                get: function() {
-                    return _characterRestrictionColor;
-                },
-                set: function(value) {
-                    _characterRestrictionColor = value;
-
-                    if (enableCounter !== true)
-                        self.enableCharacterRestriction = true;
-
-                    changeViewColor(mCounterView, _characterRestrictionColor);
-                },
-                enumerable: true
-            },
-            'errorMessage': {
-                get: function() {
-                    return self.nativeObject.getError().toString();
-                },
-                set: function(errorText) {
-                    _errorText = errorText;
-
-                    if (self.enableErrorMessage !== true && _errorText.length !== 0)
-                        self.enableErrorMessage = true;
-
-                    self.nativeObject.setError(_errorText);
-                },
-                enumerable: true
-            },
-            'enableErrorMessage': {
-                get: function() {
-                    return _enableErrorMessage;
-                },
-                set: function(value) {
-
-                    _enableErrorMessage = value
-                    self.nativeObject.setErrorEnabled(_enableErrorMessage);
-                },
-                enumerable: true
-            },
             'errorColor': {
                 get: function() {
                     return _errorColor;
@@ -194,10 +119,11 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(errorColor) {
 
                     _errorColor = errorColor;
-                    if (self.enableErrorMessage !== true)
-                        self.enableErrorMessage = true;
+                    if (_enableErrorMessage !== true)
+                        self.android.enableErrorMessage = true;
 
-                    changeViewColor(mErrorView, _errorColor);
+                    let errorView = getReCreatedErrorView();
+                    errorView.setTextColor(_errorColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -280,11 +206,28 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     return this._onTouchCancelled;
                 },
                 enumerable: true
-            }
+            },
+            'errorMessage': {
+                get: function() {
+                    return self.nativeObject.getError().toString();
+                },
+                set: function(errorText) {
+                    _errorText = errorText;
+
+                    //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
+                    if (!_enableErrorMessage && _errorText.length !== 0)
+                        self.android.enableErrorMessage = true;
+
+                    if (_errorColor)
+                        self.errorColor = _errorColor;
+
+                    self.nativeObject.setError(_errorText);
+                },
+                enumerable: true
+            },
         });
 
         self.android = {};
-
         Object.defineProperties(self.android, {
             'labelsFont': {
                 get: function() {
@@ -313,6 +256,60 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(maxHeight) {
 
                     nativeTextInputEditText.setMaxHeight(AndroidUnitConverter.dpToPixel(maxHeight));
+                },
+                enumerable: true
+            },
+            'characterRestriction': {
+                get: function() {
+                    return self.nativeObject.getCounterMaxLength();
+                },
+                set: function(value) {
+                    _enableCounterMaxLength = value;
+                    enableCounter = (_enableCounterMaxLength !== 0 ? true : false);
+
+                    //Must re-set all settings. TextInputLayout  re-creates everytime enabling.
+                    if (_enableCharacterRestriction !== true)
+                        self.android.enableCharacterRestriction = true;
+
+                    if (_characterRestrictionColor)
+                        self.android.characterRestrictionColor = _characterRestrictionColor;
+
+                    self.nativeObject.setCounterMaxLength(_enableCounterMaxLength);
+                },
+                enumerable: true
+            },
+            'characterRestrictionColor': {
+                get: function() {
+                    return _characterRestrictionColor;
+                },
+                set: function(value) {
+                    _characterRestrictionColor = value;
+
+                    if (enableCounter !== true)
+                        self.android.enableCharacterRestriction = true;
+
+                    let counterView = getReCreatedCounterView();
+                    counterView.setTextColor(_characterRestrictionColor.nativeObject);
+                },
+                enumerable: true
+            },
+            'enableCharacterRestriction': {
+                get: function() {
+                    return _enableCharacterRestriction;
+                },
+                set: function(value) {
+                    _enableCharacterRestriction = value;
+                    self.nativeObject.setCounterEnabled(_enableCharacterRestriction);
+                },
+                enumerable: true
+            },
+            'enableErrorMessage': {
+                get: function() {
+                    return _enableErrorMessage;
+                },
+                set: function(value) {
+                    _enableErrorMessage = value;
+                    self.nativeObject.setErrorEnabled(_enableErrorMessage);
                 },
                 enumerable: true
             }
@@ -391,23 +388,23 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 mPasswordToggleDummyDrawable, null);
         }
 
+        /* 
+        TextInputLayout re-creates error & counter view when enabling.
+        */
+        function getReCreatedErrorView() {
+            const NativeR = requireClass(AndroidConfig.packageName + '.R');
+            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
+            let errorTextView = materialLinearLayout.findViewById(NativeR.id.textinput_error);
 
-        function changeViewColor(viewFieldName, color) {
-            var javaTwoDimensionArray = array([array([], "int")]);
+            return errorTextView;
+        }
 
-            var javaColorArray = array([color.nativeObject], 'int');
+        function getReCreatedCounterView() {
+            const NativeR = requireClass(AndroidConfig.packageName + '.R');
+            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
+            let counterTextView = materialLinearLayout.findViewById(NativeR.id.textinput_counter);
 
-            var requiredField = nativeTextInputLayout.getClass().getDeclaredField(viewFieldName);
-            requiredField.setAccessible(true);
-
-            var mNativeTextView = requiredField.get(nativeTextInputLayout);
-
-            var nativeTextView = new NativeTextView(activity);
-            var field = nativeTextView.getClass().getDeclaredField("mTextColor"); // ToDo:Remove then make as Textview.class instead of nativeTextView.getClass();
-            field.setAccessible(true);
-
-            var myList = new NativeColorStateList(javaTwoDimensionArray, javaColorArray);
-            field.set(mNativeTextView, myList);
+            return counterTextView;
         }
 
         self.ios = {};
@@ -421,7 +418,11 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 this[param] = params[param];
             }
         }
+
+        // TextInputLayout considers the nativeTextInputEditText hint size as text size when font property
+        // is given before addView. Otherwise  it overrides the hint text size and cannot be changed. 
+        self.nativeObject.addView(nativeTextInputEditText);
     }
-)
+);
 
 module.exports = MaterialTextbox;

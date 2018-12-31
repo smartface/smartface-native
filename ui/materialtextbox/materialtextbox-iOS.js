@@ -13,6 +13,10 @@ const MaterialTextbox = extend(TextBox)(
 
         _super(this);
         
+        var isLTR_UserInterfaceLayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0;
+        var isUnspecified = __SF_UIView.viewAppearanceSemanticContentAttribute() == 0;
+        var isLTR_ViewAppearance = __SF_UIView.viewAppearanceSemanticContentAttribute() == 3;
+        
         var _rightLayout = undefined;
         var _rightLayoutMain;
         Object.defineProperty(self, 'rightLayout', {
@@ -22,13 +26,19 @@ const MaterialTextbox = extend(TextBox)(
             set: function(object) {
                 _rightLayout = object;
                 if (object === undefined) {
-                    self.nativeObject.setValueForKey(undefined, "rightView");
-                    self.nativeObject.setValueForKey(0, "rightViewMode");
+                    if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
+                        self.nativeObject.setValueForKey(undefined, "rightView");
+                        self.nativeObject.setValueForKey(0, "rightViewMode"); 
+                    }else{
+                        self.nativeObject.setValueForKey(undefined, "leftView");
+                        self.nativeObject.setValueForKey(0, "leftViewMode"); 
+                    }
                     return;
                 }
                 
                 if (!_rightLayoutMain) {
                     var flexMain = new FlexLayout();
+                    flexMain.nativeObject.yoga.isEnabled = false; // Bug : IOS-2714
                     var flexContent = new FlexLayout();
                     flexMain.nativeObject.frame = { x: 0, y: 0, width: object.width ? object.width : 30, height: 0 };
                     flexMain.nativeObject.addFrameObserver();
@@ -50,8 +60,13 @@ const MaterialTextbox = extend(TextBox)(
                 }
                 
                 _rightLayoutMain.content.addChild(object.view);
-                self.nativeObject.setValueForKey(3, "rightViewMode");
-                self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
+                if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
+                    self.nativeObject.setValueForKey(3, "rightViewMode");
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
+                }else{
+                    self.nativeObject.setValueForKey(3, "leftViewMode");
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"leftView");
+                }
             },
             enumerable: true
         });

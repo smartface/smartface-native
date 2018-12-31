@@ -40,8 +40,8 @@ const YogaEdge = {
 const activity = AndroidConfig.activity;
 
 function View(params) {
+    params = params || {};
     this.ios = {};
-
     if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
@@ -67,10 +67,10 @@ function View(params) {
 
     this._gradientDrawable = createGradientDrawable();
     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
-    this.nativeObject.setBackground(this._gradientDrawable);
 
     var _nativeObject = this.nativeObject;
-    var _overScrollMode = 0;
+    var _overScrollMode = 0,
+        _isBackgroundAssigned = false;
     Object.defineProperties(this.android, {
         'zIndex': {
             get: function() {
@@ -119,7 +119,6 @@ function View(params) {
             },
             set: function(color) {
                 this._backgroundColor = color;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
                 if (color.isGradient) {
                     this._gradientDrawable.setOrientation(color.direction);
                     this._gradientDrawable.setColors(array(color.colors, "int"));
@@ -131,6 +130,7 @@ function View(params) {
                 else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                 }
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
             },
             enumerable: true,
             configurable: true
@@ -141,7 +141,9 @@ function View(params) {
             },
             set: function(value) {
                 this._borderColor = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
                 var borderWidthPx = DpToPixel(this._borderWidth);
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
                 this._gradientDrawable.setStroke(borderWidthPx, this._borderColor.nativeObject);
@@ -160,7 +162,9 @@ function View(params) {
             },
             set: function(value) {
                 this._borderWidth = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
+
                 var borderWidthPx = DpToPixel(this._borderWidth);
 
                 !borderWidthPx && (borderWidthPx = 0); // NaN, undefined etc.
@@ -180,7 +184,7 @@ function View(params) {
             },
             set: function(value) {
                 this._borderRadius = value;
-                (!this._gradientDrawable && (this._gradientDrawable = createGradientDrawable()));
+                setBackgroundDrawable.call(this, _isBackgroundAssigned);
                 var borderRadiusPx = DpToPixel(this._borderRadius);
                 this._gradientDrawable.setCornerRadius(borderRadiusPx);
                 this.android.updateRippleEffectIfNeeded && this.android.updateRippleEffectIfNeeded();
@@ -289,7 +293,6 @@ View.prototype = {
     },
     set touchEnabled(value) {
         this._touchEnabled = value;
-        this.setTouchHandlers();
     },
     get onTouch() {
         return this._onTouch;
@@ -659,68 +662,53 @@ View.prototype = {
 View.prototype.setTouchHandlers = function() {
     if (this.didSetTouchHandler) return;
 
-    this.nativeObject.setOnTouchListener(NativeView.OnTouchListener.implement({
+    let touchableView = this.__isRecyclerView ? this.nativeInner : this.nativeObject;
+    touchableView.setOnTouchListener(NativeView.OnTouchListener.implement({
         onTouch: function(view, event) {
-
             var x = event.getX();
             var y = event.getY();
-
             var w = view.getWidth();
             var h = view.getHeight();
 
             var isInside = !(x > w || x < 0 || y > h || y < 0);
-
-            if (this.touchEnabled && (this._onTouch || this._onTouchEnded)) {
-                var result;
-
-                if (event.getAction() === ACTION_UP) {
-                    result = (this._onTouchEnded && this._onTouchEnded(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                }
-                else if (event.getAction() === ACTION_DOWN) {
-                    result = (this._onTouch && this._onTouch());
-                    // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
-                    // So we should consume ACTION_DOWN event.
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_MOVE) { // MOVE
-
-                    result = (this._onTouchMoved && this._onTouchMoved(isInside));
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
-                }
-                else if (event.getAction() === ACTION_CANCEL) { // CANCEL
-
-                    result = (this._onTouchCancelled && this._onTouchCancelled());
-                    if (result != undefined) {
-                        return result;
-                    }
-                    else {
-                        return true;
-                    }
+            if (this.touchEnabled) {
+                let result;
+                switch (event.getAction()) {
+                    case ACTION_UP:
+                        this._onTouchEnded && (result = this._onTouchEnded(isInside));
+                        return (result === true);
+                    case ACTION_DOWN:
+                        // MotionEvent.ACTION_UP won't get called until the MotionEvent.ACTION_DOWN occured. 
+                        // So we should consume ACTION_DOWN event.
+                        this._onTouch && (result = this._onTouch());
+                        return !(result === false);
+                    case ACTION_MOVE:
+                        this._onTouchMoved && (result = this._onTouchMoved(isInside));
+                        return (result === true);
+                    case ACTION_CANCEL:
+                        this._onTouchCancelled && (result = this._onTouchCancelled());
+                        return (result === true);
+                    default:
+                        return false;
                 }
             }
-            return !this.touchEnabled;
+            return false;
         }.bind(this)
     }));
     this.didSetTouchHandler = true;
 };
+
 View.prototype._backgroundColor = Color.TRANSPARENT;
 
 function createGradientDrawable() {
     const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
     return new NativeGradientDrawable();
+}
+
+function setBackgroundDrawable(isBackgroundAssigned) {
+    if (!isBackgroundAssigned)
+        this.nativeObject.setBackground(this._gradientDrawable);
+    isBackgroundAssigned = true;
 }
 
 View.State = {};

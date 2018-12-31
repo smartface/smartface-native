@@ -9,7 +9,6 @@ const AndroidConfig = require("../../util/Android/androidconfig.js");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeTextUtils = requireClass("android.text.TextUtils");
 
 const TextAlignmentDic = {};
 TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
@@ -31,7 +30,7 @@ const Label = extend(View)(
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
             self.nativeObject.setGravity(INT_16_3);
             this.viewNativeDefaultTextAlignment = INT_16_3;
-            self.nativeObject.setEllipsize(NativeTextUtils.TruncateAt.END);
+            // self.nativeObject.setEllipsize(NativeTextUtils.TruncateAt.END);
         }
         else {
             if (!this.skipDefaults) {
@@ -67,7 +66,13 @@ const Label = extend(View)(
         Object.defineProperties(labelPrototype, {
             'font': {
                 get: function() {
-                    return this.fontInitial;
+                    const Font = require("../font");
+                    let nativeTypeface = this.nativeObject.getTypeface();
+                    let textSize = AndroidUnitConverter.pixelToDp(this.nativeObject.getTextSize());
+                    return new Font({
+                        "nativeObject": nativeTypeface,
+                        "size": textSize
+                    });
                 },
                 set: function(font) {
                     if (font) {
