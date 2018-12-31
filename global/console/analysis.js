@@ -83,3 +83,37 @@ console.info = function(message){};
  * @since 4.0.0
  */
 console.warn = function(message){};
+   
+/**
+ * Starts a timer for given name. 
+ * 
+ *     @example
+ *     console.time("for-loop");
+ *     for(let i = 0; i < 1000; i++) { 
+ *         // do something
+ *     }
+ *     console.timeEnd("for-loop");
+ * 
+ * @param {String} [key="default"]
+ * @method time
+ * @static
+ * @since 4.0.0
+ */
+console.time = function(key){};
+   
+/**
+ * Stops a timer that was previously started by given name. Logs the time to the debugging console in milliseconds. 
+ * 
+ *     @example
+ *     console.time("for-loop");
+ *     for(let i = 0; i < 1000; i++) { 
+ *         // do something
+ *     }
+ *     console.timeEnd("for-loop");
+ * 
+ * @param {String} [key="default"]
+ * @method timeEnd
+ * @static
+ * @since 4.0.0
+ */
+console.timeEnd = function(key){};
