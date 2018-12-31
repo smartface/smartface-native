@@ -130,7 +130,7 @@ function NavigationController() {
  * @param {Function} params.onComplete
  * @android
  * @ios
- * @since 4.0.1
+ * @since 4.0.0
  *
  */
 NavigationController.prototype.present = function(params){};
@@ -142,7 +142,7 @@ NavigationController.prototype.present = function(params){};
  * @param {Function} onCompleteCallback
  * @android
  * @ios
- * @since 4.0.1
+ * @since 4.0.0
  */
 NavigationController.prototype.dismiss = function(onCompleteCallback){};
 

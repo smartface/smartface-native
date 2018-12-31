@@ -182,7 +182,7 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
  * @return {Boolean} Return true if the event is consumed.
  * @event onGesture
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 ListView.prototype.onGesture = function onGesture(params){};
 

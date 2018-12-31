@@ -40,7 +40,7 @@ HeaderBarItem.prototype.title = "";
  *
  * @property {UI.AttributedString} attributedTitle
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 HeaderBarItem.prototype.attributedTitle;
 
