@@ -341,4 +341,13 @@ WebView.prototype.clearCookie = function() {};
  */
 WebView.prototype.clearAllData = function() {};
 
+/**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+WebView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+
 module.exports = WebView;

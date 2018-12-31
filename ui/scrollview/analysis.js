@@ -147,6 +147,15 @@ ScrollView.prototype.scrollEnabled = false;
 ScrollView.prototype.bounces = true;
 
 /**
+ * The behavior for determining the adjusted content offsets.
+ *
+ * @property {UI.iOS.ContentInsetAdjustment} [contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER]
+ * @ios
+ * @since 4.0.0
+ */
+ScrollView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustment.NEVER;
+
+/**
  * Gets the count of children in a viewgroup.
  *
  * @deprecated 1.1.10

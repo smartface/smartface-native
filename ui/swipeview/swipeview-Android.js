@@ -17,21 +17,23 @@ const SwipeView = extend(View)(
         var self = this;
         var _pages = [];
         var _lastIndex = -1;
-        
-        if(!self.nativeObject) {
+
+        if (!self.nativeObject) {
             var callbacks = {
                 getCount: function() {
-                    if(_pageCount != null)
+                    if (_pageCount != null)
                         return _pageCount;
                     return _pages.length;
                 },
                 getItem: function(position) {
                     var pageInstance;
-                    if(_onPageCreateCallback) {
+                    if (_onPageCreateCallback) {
                         pageInstance = _onPageCreateCallback(position);
-                    } else if(_pageInstances[position]) {
+                    }
+                    else if (_pageInstances[position]) {
                         return (_pageInstances[position]).nativeObject;
-                    } else { // For backward compatibility
+                    }
+                    else { // For backward compatibility
                         var pageClass = _pages[position];
                         pageInstance = new pageClass({
                             skipDefaults: true
@@ -96,7 +98,6 @@ const SwipeView = extend(View)(
                             throw new TypeError("Array parameter cannot be empty.");
                         }
                         _pages = pages;
-
                     }
                 }
             },
@@ -181,12 +182,6 @@ const SwipeView = extend(View)(
 
 function bypassPageSpecificProperties(page) {
     page.headerBar.visible = false;
-    Object.keys(page.statusBar).forEach(function(key) {
-        Object.defineProperty(page.statusBar, key, {
-            set: function() {},
-            get: function() { return {}; },
-        });
-    });
     Object.keys(page.headerBar).forEach(function(key) {
         Object.defineProperty(page.headerBar, key, {
             set: function() {},

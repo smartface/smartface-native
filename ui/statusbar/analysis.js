@@ -4,7 +4,7 @@
  * This class represents status bar object. Creating instance of
  * StatusBar is not valid since you can't use in anywhere. If you
  * want to access status bar object you can access via
- * UI.Page.statusBar property of your page.
+ * Application.statusBar property.
  * 
  * If the StatusBar visible, page starts under the StatusBar for Android but StatusBar 
  * will overlaps the page for iOS if the HeaderBar is invisible at this moment.
@@ -12,12 +12,13 @@
  *     @example
  *     const StatusBarStyle = require('sf-core/ui/statusbarstyle');
  *     const Color = require('sf-core/ui/color');
+ *     const Application = require('sf-core/application');
  *     const Page = require('sf-core/ui/page');
  *     var myPage = new Page({
  *         onShow: function() {
- *             this.statusBar.visible = true;
- *             this.statusBar.android.color = Color.create("#FF757575");
- *             this.statusBar.style = StatusBarStyle.DEFAULT;
+ *             Application.statusBar.visible = true;
+ *             Application.statusBar.android.color = Color.create("#FF757575");
+ *             Application.statusBar.style = StatusBarStyle.DEFAULT;
  *          }
  *     });
  */
@@ -36,6 +37,15 @@ function StatusBar(parentPage) {}
 StatusBar.prototype.height;
 
 /**
+ * Gets/sets transparency of status bar.
+ *
+ * @property {Boolean} [transparent = true]
+ * @android
+ * @since 4.0.1
+ */
+StatusBar.prototype.transparent = false;
+
+/**
  * Gets/sets visibility of the status bar.
  *
  * @property {Boolean} visible
@@ -44,6 +54,17 @@ StatusBar.prototype.height;
  * @since 0.1
  */
 StatusBar.prototype.visible = true;
+
+/**
+ * Gets/sets color of the status bar. Android version LOLLIPOP (API 21) or above. 
+ * If you want to make SliderDrawer to overlay Android StatusBar, you should always use color with alpha channel.
+ *
+ * @property {UI.Color} color
+ * @android
+ * @ios
+ * @since 4.0.0
+ */
+StatusBar.prototype.backgroundColor = Color.create("#FF757575");
 
 /**
  * Gets/sets color of the status bar. This property works only for Android version 
@@ -60,6 +81,7 @@ StatusBar.prototype.visible = true;
  *     });
  *
  * @property {UI.Color} color
+ * @deprecated
  * @android
  * @since 0.1
  */

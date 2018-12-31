@@ -13,7 +13,6 @@
  *
  *     @example
  *     const extend = require("js-base/core/extend");
- *     const Router = require('sf-core/router');
  *     const Page = require('sf-core/ui/page');
  *     var page1 = new extend(Page)(
  *         function(_super,params)
@@ -21,7 +20,6 @@
  *             var self = this;
  *             _super(this,{
  *                 onShow: function() {
- *                     this.headerBar.visible = true;
  *                     this.headerBar.title = "Smartface Page";
  *                 },
  *                 onLoad: function(){
@@ -36,9 +34,8 @@
  *             });
  *         }
  *     );
- *
- *     Router.add('myPage',page1);
- *     Router.go('myPage');
+ * 
+ * @see https://github.com/smartface/router#push-a-new-page
  */
 function Page(params) {}
 
@@ -62,7 +59,6 @@ Page.prototype.onLoad = function (){};
  *         var page = this;
  *         onShow: function() {
  *             page.headerBar.visible = true;
- *             page.statusBar.visible = true;
  * 
  *             page.imageView1.transitionID = "view1";
  *             page.imageView2.transitionID = "view2";
@@ -75,7 +71,6 @@ Page.prototype.onLoad = function (){};
  *         var page = this;
  *         onShow: function() {
  *             page.headerBar.visible = true;
- *             page.statusBar.visible = true;
  *         }
  * 
  *         page.imageView1.transitionID = "view2";
@@ -108,11 +103,12 @@ Page.prototype.layout;
  *
  *     @example
  *     const Page = require('sf-core/ui/page');
+ *     const Application = require('sf-core/application');
  *     var myPage = new Page({
  *         onShow: function() {
  *             this.headerBar.visible = true;
- *             this.statusBar.visible = true;
  *         }
+ *         Application.statusBar.visible = true;
  *     });
  *
  * @event onShow
@@ -186,34 +182,40 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  *     popuPage.layout.addChild(myButton);
  *
  *     self.popupBtn.onPress = function() {
- *     self.present(popuPage, true, function() { console.log("Page3 presented..."); });
+ *         self.present({ 
+ *             controller: popuPage, 
+ *             animated: true, 
+ *             onComplete: function() { 
+ *                 console.log("Page3 presented...");
+ *             }; 
+ *         });
  *     }
  * 
  *
  * @method present
- * @param {UI.Page} page
- * @param {Boolean} animation
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {UI.Page|UI.NavigationController} params.controller
+ * @param {Boolean} params.animated
+ * @param {Function} params.onComplete
  * @android
  * @ios
- * @static
  * @since 3.1.1
  *
  */
-Page.prototype.present = function(page, animation, onCompleteCallback){};
+Page.prototype.present = function(params){};
 
 
 /**
  * This function dismiss presently shown pop-up page.
  *
  * @method dismiss
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {Function} params.onComplete
  * @android
  * @ios
- * @static
  * @since 3.1.1
  */
-Page.prototype.dismiss = function(onCompleteCallback){};
+Page.prototype.dismiss = function(params){};
 
 /**
  * Gets status bar object. This property is readonly, you can not set
@@ -223,6 +225,7 @@ Page.prototype.dismiss = function(onCompleteCallback){};
  * @android
  * @ios
  * @readonly
+ * @removed 4.0.0 Use {@link Application.statusBar} instead
  * @since 0.1
  */
 Page.prototype.statusBar;
