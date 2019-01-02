@@ -276,7 +276,7 @@ function Page(params) {
     
     self.orientation = [UIInterfaceOrientation.portrait]; // Default Portrait
     
-    var _onShow = function(e){}.bind(this);
+    var _onShow = undefined;
     Object.defineProperty(self, 'onShow', {
         get: function() {
             return _onShow;
