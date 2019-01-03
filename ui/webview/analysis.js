@@ -248,7 +248,7 @@ WebView.prototype.onBackButtonPressed = function (){};
 WebView.prototype.onLoad = function(event) {};
 
 /**
- * Callback triggered when the target equels to _blank. That means open new window.
+ * Callback triggered when the target equals to _blank. That means open new window.
  *
  * @event onOpenNewWindow
  * @param {Object} event
