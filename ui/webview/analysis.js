@@ -248,6 +248,22 @@ WebView.prototype.onBackButtonPressed = function (){};
 WebView.prototype.onLoad = function(event) {};
 
 /**
+ * Callback triggered when the target equals to _blank. That means open new window.
+ *
+ *     @example
+ *     myWebView.ios.onOpenNewWindow = function(event) {
+ *         myWebView.loadURL(event.url);
+ *     };
+ * 
+ * @event onOpenNewWindow
+ * @param {Object} event
+ * @param {String} event.url
+ * @ios
+ * @since 4.0.1
+ */
+WebView.prototype.onOpenNewWindow = function(event) {};
+
+/**
  * Callback triggered when an error occured while loading a web page.
  *
  * @event onError
