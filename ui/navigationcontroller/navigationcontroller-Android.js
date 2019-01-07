@@ -1,4 +1,4 @@
-const FragmentTransaction = require("../../util/Android/fragmenttransition");
+const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 const BottomTabBarController = require("../../ui/bottomtabbarcontroller");
 const ViewController = require("../../util/Android/transition/viewcontroller");
 const Page = require("../../ui/page");
@@ -163,11 +163,11 @@ function NavigationController() {
     this.dismiss = function(params = {}) {
         const Application = require("../../application");
         const ViewController = require("../../util/Android/transition/viewcontroller");
-        const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+        const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
         
         if(!self.popupBackNavigator) { return; }
         
-        FragmentTransaction.dismissTransition(self.getCurrentController(), true);
+        FragmentTransaction.dismissTransition(self.getCurrentController(), params.animated);
         FragmentTransaction.checkBottomTabBarVisible(self.popUpBackPage);
 
         Application.currentPage = self.popUpBackPage;

@@ -86,7 +86,7 @@ function NavigatonController(params) {
             var onComplete = params.onComplete;
             
             if (typeof controller === "object") {
-                var _animationNeed = animation ? animation : true;
+                var _animationNeed = animation;
                 var _completionBlock = onComplete ? function(){onComplete();} : undefined;
                     
                 var controllerToPresent;
@@ -123,8 +123,9 @@ function NavigatonController(params) {
     this.dismiss = function (params) {
         if (typeof params === "object") {
             var onComplete = params.onComplete;
+            var animation = params.animated;
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-            self.view.dismiss(_completionBlock);
+            self.view.dismiss(_completionBlock,animation);
         }
     };
     

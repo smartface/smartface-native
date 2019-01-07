@@ -319,8 +319,8 @@ function Page(params) {
             enumerable: true
         },
         'dismiss': {
-            value: function(params) {
-                const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+            value: function(params = {}) {
+                const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
                 var fragmentManager = activity.getSupportFragmentManager();
                 if(!self.popUpBackPage)
                     return;
