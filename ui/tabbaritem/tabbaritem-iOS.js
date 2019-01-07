@@ -105,195 +105,235 @@ function TabBarItem(params) {
         enumerable: true
     });
     
-    // These are setted to undefined because of invalidate() function.
-    // Invalidate function will call from Page's tabBarItem setter for each item, check these code flow.
-    var _text = undefined;
-    var _visible = undefined;
-    var _height = undefined;
-    var _backgroundColor = undefined;
-    var _font = undefined;
-    var _textColor = undefined;
-    var _borderWidth = undefined;
-    var _borderColor = undefined;
-    var _move = {};
+    var _badgeVisible = false;
+    var _badgeBackgroundColor = 0;
+    var _badgeFont = 0;
+    var _badgeTextColor = 0;
+    var _badgeBorderColor = 0;
+    var _badgeBorderWidth = 0;
+    var _badgeHeight = 0;
+    var _isBadgeFirstLoad = false;
+    var _badgeText;
+    var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
+    var _isRTL = !isLTR;
     
     Object.defineProperties(_badge, {
         'text': {
-            get : function() {
-                return _text;
+            get: function(){
+                return _badgeText;
             },
-            set : function(text) {
-                if (typeof text === "string") {
-                    _text = text;
-                    
-                    if (self.nativeObject) {
+            set: function(value){
+                if (typeof value === "string") {
+                    __SF_Dispatch.mainAsyncAfter(function(){
                         __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_addBadgeWithText(text);
-                            _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
-                            _borderColor ? self.badge.borderColor = _borderColor : 0;
-                            _borderWidth ? self.badge.borderWidth = _borderWidth : 0;
-                            _backgroundColor ? self.badge.backgroundColor = _backgroundColor : 0;
-                            _textColor ? self.badge.textColor = _textColor : 0;
-                            _font ? self.badge.font = _font : 0;
-                        },1);  
-                    }
+                            self.nativeObject.pp_addBadgeWithText(value);
+                        },1);
+                        if (!_isBadgeFirstLoad) {
+                            if (_badgeVisible) {
+                                self.badge.visible = _badgeVisible;
+                            }
+                            
+                            if (_badgeBackgroundColor) {
+                                self.badge.backgroundColor = _badgeBackgroundColor;
+                            }else{
+                                _badgeBackgroundColor = 0;
+                            }
+                            
+                            if (_badgeTextColor) {
+                                self.badge.textColor = _badgeTextColor;
+                            } else {
+                                _badgeTextColor = 0;
+                            }
+                            
+                            if (_badgeFont) {
+                                self.badge.font = _badgeFont;
+                            } else {
+                                _badgeFont = 0;
+                            }
+                            
+                            if (_badgeBorderColor) {
+                                self.badge.borderColor = _badgeBorderColor;
+                            } else {
+                                _badgeBorderColor = 0;
+                            }
+                            
+                            if (_badgeBorderWidth) {
+                                self.badge.borderWidth = _badgeBorderWidth;
+                            } else {
+                                _badgeBorderWidth = 0;
+                            }
+                            
+                            if (_badgeHeight) {
+                                self.badge.height = _badgeHeight;
+                            } else {
+                                _badgeHeight = 0;
+                            }
+                            
+                            if (_isRTL) {
+                                self.badge.isRTL = _isRTL;
+                            }
+                        }
+                        _isBadgeFirstLoad = true;
+                    },1);
                 }
-            },
-            enumerable: true
+            }
         },
-        'visible': {
-            get : function() {
-                return _visible;
+        'visible' : {
+            get : function(){
+                return _badgeVisible;
             },
-            set : function (value) {
+            set : function(value){
                 if (typeof value === "boolean") {
-                    _visible = value;
-                    
-                    if (self.nativeObject) {
-                        if (value) {
+                    _badgeVisible = value;
+                    if (_badgeVisible) {
+                        
+                        __SF_Dispatch.mainAsyncAfter(function(){
                             self.nativeObject.pp_showBadge();
-                        }else{
+                        },1);
+                    } else {
+                        __SF_Dispatch.mainAsyncAfter(function(){
                             self.nativeObject.pp_hiddenBadge();
-                        }    
+                        },1);
                     }
                 }
             },
             enumerable: true
         },
-        'height': {
-            get : function () {
-                return _height;
+        'height' : {
+            get : function(){
+                return _badgeHeight;
             },
-            set : function (value) {
+            set : function(value){
                 if (typeof value === "number") {
-                    _height = value;
+                    _badgeHeight = value;
                     
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBadgeHeight(value);   
-                    }
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBadgeHeight(_badgeHeight);
+                    },1);
                 }
             },
             enumerable: true
         },
         'borderWidth' : {
             get : function(){
-                return _borderWidth;
+                return _badgeBorderWidth;
             },
             set : function(value){
                 if (typeof value === "number") {
-                    _borderWidth = value;
+                    _badgeBorderWidth = value;
                     
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBorderWidth(_borderWidth);   
-                    }
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBorderWidth(_badgeBorderWidth);
+                    },1);
                 }
             },
             enumerable: true
         },
         'borderColor' : {
             get : function(){
-                return _borderColor;
+                return _badgeBorderColor;
             },
             set : function(value){
                 if (typeof value === "object") {
-                    _borderColor = value;
+                    _badgeBorderColor = value;
                     
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBorderColor(_borderColor.nativeObject);   
-                    }
+                    __SF_Dispatch.mainAsyncAfter(function(){
+                        self.nativeObject.pp_setBorderColor(_badgeBorderColor.nativeObject);
+                    },1);
                 }
             },
             enumerable: true
         },
         'backgroundColor' : {
-            get : function () {
-                return _backgroundColor;
+            get : function(){
+                return _badgeBackgroundColor;
             },
-            set : function (value) {
+            set : function(value){
                 if (typeof value === "object") {
-                    _backgroundColor = value;
+                    _badgeBackgroundColor = value;
                     
-                    if (self.nativeObject) {
+                    __SF_Dispatch.mainAsyncAfter(function(){
                         var argIDBlock= new Invocation.Argument({
                             type:"IDBlock",
                             value: function(label){
                                 var argColor= new Invocation.Argument({
                                     type:"NSObject",
-                                    value: value.nativeObject
+                                    value: _badgeBackgroundColor.nativeObject
                                 });
                                 Invocation.invokeInstanceMethod(label,"setBackgroundColor:",[argColor]);
                             }
                         });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
+                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                    },1);
                 }
             },
             enumerable: true
         },
         'textColor' : {
-            get : function () {
-                return _textColor;
+            get : function(){
+                return _badgeTextColor;
             },
-            set : function (value) {
+            set : function(value){
                 if (typeof value === "object") {
-                    _textColor = value;
+                    _badgeTextColor = value;
                     
-                    if (self.nativeObject) {
+                    __SF_Dispatch.mainAsyncAfter(function(){
                         var argIDBlock= new Invocation.Argument({
                             type:"IDBlock",
                             value: function(label){
                                 var argColor= new Invocation.Argument({
                                     type:"NSObject",
-                                    value: value.nativeObject
+                                    value: _badgeTextColor.nativeObject
                                 });
                                 Invocation.invokeInstanceMethod(label,"setTextColor:",[argColor]);
                             }
                         });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
+                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                    },1);
                 }
             },
             enumerable: true
         },
         'font' : {
-            get : function () {
-                return _font;
+            get : function(){
+                return _badgeFont;
             },
-            set : function (value) {
-                if (typeof value === "object") {
-                    _font = value;
-                        
-                    if (self.nativeObject) {
-                        var argIDBlock= new Invocation.Argument({
-                            type:"IDBlock",
-                            value: function(label){
-                                var argFont= new Invocation.Argument({
-                                    type:"NSObject",
-                                    value: value
-                                });
-                                Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
-                            }
-                        });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
-                }
+            set : function(value){
+                _badgeFont = value;
+                
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    var argIDBlock= new Invocation.Argument({
+                        type:"IDBlock",
+                        value: function(label){
+                            var argFont= new Invocation.Argument({
+                                type:"NSObject",
+                                value: _badgeFont
+                            });
+                            Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
+                        }
+                    });
+                    Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);
+                },1);
             },
             enumerable: true
-        }
-    });
-    
-    Object.defineProperties(_badge, {
+        },
         'move' : {
             value: function(x,y){
-                if (typeof x === "number" && typeof y === "number") {
-                    _move = {x:x, y:y};
-                    
-                    if (self.nativeObject) {
-                        __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_moveBadgeWithXY(_move.x, _move.y);
-                        },1);   
-                    }
-                }
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    self.nativeObject.pp_moveBadgeWithXY(x,y);
+                },1);
+            },
+            enumerable: true
+        },
+        'isRTL' : {
+            get: function(){
+                return _isRTL;
+            },
+            set: function(value){
+                _isRTL = value;
+                __SF_Dispatch.mainAsyncAfter(function(){
+                    self.nativeObject.pp_setIsRTL(value);
+                },1);
             },
             enumerable: true
         }
@@ -305,17 +345,6 @@ function TabBarItem(params) {
     self.invalidate = function() {
         this.title = _title;
         this.icon = _icon;
-        
-        //For badge
-        this.badge.text = _text;
-        this.badge.visible = _visible;
-        this.badge.height = _height;
-        this.badge.backgroundColor = _backgroundColor;
-        this.badge.font = _font;
-        this.badge.textColor = _textColor;
-        this.badge.borderColor = _borderColor;
-        this.badge.borderWidth = _borderWidth;
-        this.badge.move(_move.x, _move.y);
     }
     
     if (params) {
