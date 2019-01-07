@@ -461,7 +461,7 @@ const GridView = extend(View)(
                     if (typeof alignment !== 'number')
                         return;
                     const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
-                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment);
+                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment,self.nativeInner);
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
                     if (self.android.paginationEnabled !== null && !_paginationAssigned) {
