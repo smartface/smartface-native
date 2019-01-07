@@ -1,7 +1,7 @@
 /* globals requireClass */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
-const FragmentTransaction = require("../../util/Android/fragmenttransition");
+const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 const BottomTabBar = require("../../ui/bottomtabbar");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");

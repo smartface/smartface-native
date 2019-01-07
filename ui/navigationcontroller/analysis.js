@@ -139,12 +139,14 @@ NavigationController.prototype.present = function(params){};
  * This function dismiss presently shown pop-up controller.
  *
  * @method dismiss
- * @param {Function} onCompleteCallback
+ * @param {Object} params
+ * @param {Function} params.onComplete
+ * @param {Boolean} params.animated
  * @android
  * @ios
  * @since 4.0.0
  */
-NavigationController.prototype.dismiss = function(onCompleteCallback){};
+NavigationController.prototype.dismiss = function(){};
 
 /**
  * @enum {Number} UI.NavigationController.OperationType
