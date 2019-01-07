@@ -99,7 +99,7 @@ function Page(params) {
             var onComplete = params.onComplete;
             
             if (typeof controller === "object") {
-                var _animationNeed = animation ? animation : true;
+                var _animationNeed = animation;
                 var _completionBlock = onComplete ? function(){onComplete();} : undefined;
                     
                 var controllerToPresent;
@@ -133,8 +133,9 @@ function Page(params) {
     self.dismiss = function (params) {
         if (typeof params === "object") {
             var onComplete = params.onComplete;
+            var animation = params.animated;
             var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-            self.nativeObject.dismissViewController(_completionBlock);
+            self.nativeObject.dismissViewController(_completionBlock,animation);
         }
     };
     
