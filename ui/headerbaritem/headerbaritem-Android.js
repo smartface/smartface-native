@@ -21,21 +21,24 @@ const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringB
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function HeaderBarItem(params) {
-    var _title = "";
-    var _attributedTitle;
-    var _image = null;
-    var _enabled = true;
-    var _onPress = null;
-    var _color = null;
-    var _searchView = null;
-    var _imageButton = false;
-    var _menuItem = null;
-    var _attributedTitleBuilder;
-    var self = this;
-    var activity = AndroidConfig.activity;
+    const self = this;
     
+    let _title = "",
+        _attributedTitle,
+        _image = null,
+        _enabled = true,
+        _onPress = null,
+        _color = null,
+        _searchView = null,
+        _imageButton = false,
+        _menuItem = null,
+        _attributedTitleBuilder,
+        _badgeObj = undefined;
+    const activity = AndroidConfig.activity;
+
     this.ios = {};
     this.android = {};
+    self.badgeAdded = false;
     
     Object.defineProperties(this, {
         'color': {
@@ -113,9 +116,10 @@ function HeaderBarItem(params) {
                         else {
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
-                            if(_attributedTitle) {
+                            if (_attributedTitle) {
                                 this.attributedTitle = _attributedTitle;
-                            } else {
+                            }
+                            else {
                                 this.title = _title;
                             }
                         }
@@ -175,9 +179,10 @@ function HeaderBarItem(params) {
                 if (this.imageButton) {
                     this.image = this.image;
                 }
-                else if(_attributedTitle) {
+                else if (_attributedTitle) {
                     this.attributedTitle = _attributedTitle;
-                } else {
+                }
+                else {
                     this.title = _title;
                 }
 
@@ -198,12 +203,17 @@ function HeaderBarItem(params) {
         },
         'badge': {
             get: function() {
-                return _badge;
+                const Badge = require("sf-core/ui/badge");
+                if (_badgeObj === undefined) {
+                    self.badgeAdded = true;
+                    _badgeObj = new Badge();
+                }
+                return _badgeObj;
             },
             enumerable: true
         }
     });
-    
+
     Object.defineProperties(this.android, {
         'attributedTitle': {
             get: function() {
@@ -211,159 +221,22 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 _attributedTitle = value;
-                if(_attributedTitle instanceof AttributedString) {
+                if (_attributedTitle instanceof AttributedString) {
                     if (_attributedTitleBuilder)
                         _attributedTitleBuilder.clear();
                     else
                         _attributedTitleBuilder = new NativeSpannableStringBuilder();
-                        
+
                     _attributedTitle.setSpan(_attributedTitleBuilder);
                     self.__setTitle(_attributedTitleBuilder);
-                } else {
+                }
+                else {
                     self.__setTitle(null);
                 }
             },
             enumerable: true
         }
     });
-
-    var _badge = {};
-    var _borderRadius = AndroidUnitConverter.dpToPixel(10);
-    var _borderWidth = AndroidUnitConverter.dpToPixel(2);
-
-    _badge.nativeObject = new NativeTextView(activity);
-    var nativeGradientDrawable = new NativeGradientDrawable();
-    nativeGradientDrawable.setCornerRadius(_borderRadius);
-
-    _badge.layoutParams;
-    var _borderColor = Color.WHITE;
-    var _badgeVisible = false;
-    var _badgeText;
-    var _badgeBackgroundColor;
-    var _badgeTextColor;
-    var _badgeFont;
-    Object.defineProperties(_badge, {
-        'visible': {
-            get: function() {
-                return _badgeVisible;
-            },
-            set: function(visible) {
-                _badgeVisible = visible;
-                if (visible) {
-                    _badge.nativeObject.setVisibility(0);
-                }
-                else {
-                    _badge.nativeObject.setVisibility(4);
-                }
-            },
-            enumerable: true
-        },
-        'text': {
-            get: function() {
-                return _badgeText;
-            },
-            set: function(text) {
-                _badgeText = text;
-                _badge.visible = true;
-                if (_badge.nativeObject) {
-                    _badge.nativeObject.setText("" + text);
-                    _badge.nativeObject.setGravity(17);
-                }
-            },
-            enumerable: true
-        },
-        'backgroundColor': {
-            get: function() {
-                return _badgeBackgroundColor;
-            },
-            set: function(color) {
-                _badgeBackgroundColor = color;
-                if (_badge.nativeObject && color) {
-                    nativeGradientDrawable.setColor(color.nativeObject);
-                }
-                else if (_badge.nativeObject) {
-                    nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
-                    nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
-                }
-                _badge.nativeObject.setBackground(nativeGradientDrawable);
-            },
-            enumerable: true
-        },
-        'textColor': {
-            get: function() {
-                return _badgeTextColor;
-            },
-            set: function(color) {
-                _badgeTextColor = color;
-                if (_badge.nativeObject && color) {
-                    if (color.nativeObject) {
-                        _badge.nativeObject.setTextColor(color.nativeObject);
-                    }
-                    else if (TypeUtil.isObject(color)) {
-                        var textColorStateListDrawable = createColorStateList(color);
-                        this.nativeObject.setTextColor(textColorStateListDrawable);
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'font': {
-            get: function() {
-                return _badgeFont;
-            },
-            set: function(font) {
-                _badgeFont = font;
-                if (_badge.nativeObject && font) {
-                    _badge.nativeObject.setTypeface(font.nativeObject);
-                    if (font.size && TypeUtil.isNumeric(font.size)) {
-                        _badge.nativeObject.setTextSize(font.size);
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'borderWidth': {
-            get: function() {
-                return _borderWidth;
-            },
-            set: function(borderWidth) {
-                if (typeof borderWidth !== 'number')
-                    return;
-
-                _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
-                _badge.backgroundColor = null; //re-set Drawable
-            },
-            enumerable: true
-        },
-        'borderColor': {
-            get: function() {
-                return _borderColor;
-            },
-            set: function(borderColor) {
-                if (!(borderColor instanceof Color))
-                    return;
-
-                _borderColor = borderColor;
-                _badge.backgroundColor = null;; //re-set Drawable
-            },
-            enumerable: true
-        },
-        'move': {
-            value: function(x, y) {
-                _badge.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
-                _badge.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
-            }
-        }
-    });
-    if (_badge.nativeObject) {
-        //sets default values
-        if (!_badge.backgroundColor)
-            _badge.backgroundColor = Color.RED;
-        if (!_badge.font)
-            _badge.font = Font.create("Arial", 11, Font.NORMAL);
-        if (!_badge.textColor)
-            _badge.textColor = Color.WHITE;
-    }
 
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
@@ -386,7 +259,7 @@ function HeaderBarItem(params) {
             self.color = _color;
         }
     };
-    
+
     if (!_color) {
         if (HeaderBarItem.itemColor) {
             this.color = HeaderBarItem.itemColor;
