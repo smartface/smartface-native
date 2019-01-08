@@ -95,18 +95,16 @@ function TabBarItem(params) {
         enumerable: true
     });
     
-    console.log("Tabbaritem const");
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
     
-    // var _badge = new Badge({nativeObject : self.nativeObject});
-    // console.log("_badge : " + self.nativeObject);
-    // Object.defineProperty(this, 'badge', {
-    //     get: function(){
-    //         return _badge;
-    //     },
-    //     enumerable: true
-    // });
+    var _badge = self.nativeObject ? new Badge({nativeObject : self.nativeObject}) : undefined;
+    Object.defineProperty(this, 'badge', {
+        get: function(){
+            return _badge;
+        },
+        enumerable: true
+    });
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -114,6 +112,9 @@ function TabBarItem(params) {
     self.invalidate = function() {
         this.title = _title;
         this.icon = _icon;
+        if (!_badge) {
+            _badge = new Badge({nativeObject : self.nativeObject});
+        }
     }
     
     if (params) {

@@ -2,10 +2,6 @@ const Invocation = require('sf-core/util').Invocation;
 
 function Badge(params) {
     
-    if (!params.nativeObject) {
-        throw new Error("Badge constructor must have nativeObject parameter.");
-    };
-    
     var self = this;
     self.nativeObject = params.nativeObject;
     
@@ -34,47 +30,47 @@ function Badge(params) {
                         },1);
                         if (!_isBadgeFirstLoad) {
                             if (_badgeVisible) {
-                                self.badge.visible = _badgeVisible;
+                                self.visible = _badgeVisible;
                             }
                             
                             if (_badgeBackgroundColor) {
-                                self.badge.backgroundColor = _badgeBackgroundColor;
+                                self.backgroundColor = _badgeBackgroundColor;
                             }else{
                                 _badgeBackgroundColor = 0;
                             }
                             
                             if (_badgeTextColor) {
-                                self.badge.textColor = _badgeTextColor;
+                                self.textColor = _badgeTextColor;
                             } else {
                                 _badgeTextColor = 0;
                             }
                             
                             if (_badgeFont) {
-                                self.badge.font = _badgeFont;
+                                self.font = _badgeFont;
                             } else {
                                 _badgeFont = 0;
                             }
                             
                             if (_badgeBorderColor) {
-                                self.badge.borderColor = _badgeBorderColor;
+                                self.borderColor = _badgeBorderColor;
                             } else {
                                 _badgeBorderColor = 0;
                             }
                             
                             if (_badgeBorderWidth) {
-                                self.badge.borderWidth = _badgeBorderWidth;
+                                self.borderWidth = _badgeBorderWidth;
                             } else {
                                 _badgeBorderWidth = 0;
                             }
                             
                             if (_badgeHeight) {
-                                self.badge.height = _badgeHeight;
+                                self.height = _badgeHeight;
                             } else {
                                 _badgeHeight = 0;
                             }
                             
                             if (_isRTL) {
-                                self.badge.isRTL = _isRTL;
+                                self.isRTL = _isRTL;
                             }
                         }
                         _isBadgeFirstLoad = true;
