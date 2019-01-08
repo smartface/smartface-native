@@ -141,7 +141,7 @@ HeaderBarItem.prototype.color = null;
  *     headerBarItem.badge.visible = true;
  *     page.headerBar.setItems([headerBarItem]);
  * 
- * @property {UI.HeaderBarItem.Badge} badge
+ * @property {UI.Badge} badge
  * @android
  * @ios
  * @readonly
