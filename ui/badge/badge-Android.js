@@ -14,6 +14,7 @@ function Badge(params) {
     const self = this;
     const activity = AndroidConfig.activity;
     const ALIGN_END = 19;
+    const CENTER = 17;
 
     const TextViewContentPadding = {
         start: AndroidUnitConverter.dpToPixel(5),
@@ -22,11 +23,11 @@ function Badge(params) {
         bottom: AndroidUnitConverter.dpToPixel(1)
     };
 
-    // let parentNativeView = params.parentView;
     let _borderRadius = AndroidUnitConverter.dpToPixel(10);
     let _borderWidth = AndroidUnitConverter.dpToPixel(2);
 
     self.nativeObject = new NativeTextView(activity);
+    self.nativeObject.setGravity(CENTER);
     self.nativeObject.setPaddingRelative(TextViewContentPadding.start, TextViewContentPadding.top, TextViewContentPadding.end, TextViewContentPadding.bottom);
 
     let nativeGradientDrawable = new NativeGradientDrawable();
@@ -61,7 +62,6 @@ function Badge(params) {
                 self.visible = true;
                 if (self.nativeObject) {
                     self.nativeObject.setText("" + text);
-                    self.nativeObject.setGravity(17);
                 }
             },
             enumerable: true
@@ -138,7 +138,7 @@ function Badge(params) {
                     return;
 
                 _borderColor = borderColor;
-                self.backgroundColor = null;; //re-set Drawable
+                self.backgroundColor = null; //re-set Drawable
             },
             enumerable: true
         },
