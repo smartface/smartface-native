@@ -1,113 +1,217 @@
+const Color = require("sf-core/ui/color");
+const Font = require("sf-core/ui/font");
 /*globals requireClass*/
-const NativeTransitionManager = requireClass('android.support.transition.TransitionManager');
-const NativeTransition        = requireClass('android.support.transition.Transition');
-const NativeTransitionSet     = requireClass('android.support.transition.TransitionSet');
-const NativeAutoTransition    = requireClass('android.support.transition.AutoTransition');
-const NativeAlphaTransition   = requireClass('io.smartface.android.anims.AlphaTransition');
-const NativeRotateTransition  = requireClass('io.smartface.android.anims.RotateTransition');
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const NativeTextView = requireClass("android.widget.TextView");
+const TypeUtil = require("../../util/type");
+const View = require('../view');
 
-function Animator(params) {
-    var _layout       = params.layout;
-    var _duration     = params.duration;
-    var _animFunction = params.animFunction;
+const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
+const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 
-    var _completeFunction = null;
-    var _nextAnimator = null;
-    var _onComplete = function() {
-        if (_nextAnimator) {
-            _nextAnimator.perform();
-        } else if (_completeFunction) {
-            _completeFunction();
-            _layout.applyLayout();
-        }
+function Badge(params) {
+    const self = this;
+    const activity = AndroidConfig.activity;
+    const ALIGN_END = 19;
+
+    const TextViewContentPadding = {
+        start: AndroidUnitConverter.dpToPixel(5),
+        top: AndroidUnitConverter.dpToPixel(1),
+        end: AndroidUnitConverter.dpToPixel(5),
+        bottom: AndroidUnitConverter.dpToPixel(1)
     };
-    
-    Object.defineProperties(this, {
-        'perform': {
-            value: function() {
-                var autoTransition = new NativeAutoTransition();
-                var alphaTransition = new NativeAlphaTransition();
-                var rotateTransition = new NativeRotateTransition();
-                var transitionSet = new NativeTransitionSet();
-                transitionSet.addTransition(autoTransition);
-                transitionSet.addTransition(alphaTransition);
-                transitionSet.addTransition(rotateTransition);
-                transitionSet.setDuration(long(_duration));
-                transitionSet.addListener(NativeTransition.TransitionListener.implement({
-                    onTransitionStart:  function(transition) {},
-                    onTransitionCancel: function(transition) {},
-                    onTransitionPause:  function(transition) {},
-                    onTransitionResume: function(transition) {},
-                    onTransitionEnd:    function(transition) {
-                        _onComplete();
-                    }
-                }));
-                NativeTransitionManager.beginDelayedTransition(_layout.nativeObject, transitionSet);
-                _animFunction();
-                _layout.applyLayout();
-                applyLayoutInners(_layout);  
-            }
-        },
-        'then': {
-            value: function(duration, animFunction) {
-                var animator = new Animator({
-                    layout      : _layout,
-                    duration    : duration,
-                    animFunction: animFunction
-                });
-                _nextAnimator = animator;
-                return _nextAnimator;
-            }
-        },
-        'complete': {
-            value: function(completeFunction) {
-                _completeFunction = completeFunction;
-            }
-        },
-        'toString': {
-            value: function(){
-                return 'Animator';
+
+    // let parentNativeView = params.parentView;
+    let _borderRadius = AndroidUnitConverter.dpToPixel(10);
+    let _borderWidth = AndroidUnitConverter.dpToPixel(2);
+
+    self.nativeObject = new NativeTextView(activity);
+    self.nativeObject.setPaddingRelative(TextViewContentPadding.start, TextViewContentPadding.top, TextViewContentPadding.end, TextViewContentPadding.bottom);
+
+    let nativeGradientDrawable = new NativeGradientDrawable();
+    nativeGradientDrawable.setCornerRadius(_borderRadius);
+
+    let _borderColor = Color.WHITE,
+        _badgeVisible = false,
+        _badgeText, _badgeBackgroundColor,
+        _badgeTextColor, _badgeFont;
+    Object.defineProperties(self, {
+        'visible': {
+            get: function() {
+                return _badgeVisible;
             },
-            enumerable: true, 
-            configurable: true
+            set: function(visible) {
+                _badgeVisible = visible;
+                if (visible) {
+                    self.nativeObject.setVisibility(0);
+                }
+                else {
+                    self.nativeObject.setVisibility(4);
+                }
+            },
+            enumerable: true
+        },
+        'text': {
+            get: function() {
+                return _badgeText;
+            },
+            set: function(text) {
+                _badgeText = text;
+                self.visible = true;
+                if (self.nativeObject) {
+                    self.nativeObject.setText("" + text);
+                    self.nativeObject.setGravity(17);
+                }
+            },
+            enumerable: true
+        },
+        'backgroundColor': {
+            get: function() {
+                return _badgeBackgroundColor;
+            },
+            set: function(color) {
+                _badgeBackgroundColor = color;
+                if (self.nativeObject && color) {
+                    nativeGradientDrawable.setColor(color.nativeObject);
+                }
+                else if (self.nativeObject) {
+                    nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
+                    nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
+                }
+                self.nativeObject.setBackground(nativeGradientDrawable);
+            },
+            enumerable: true
+        },
+        'textColor': {
+            get: function() {
+                return _badgeTextColor;
+            },
+            set: function(color) {
+                _badgeTextColor = color;
+                if (self.nativeObject && color) {
+                    if (color.nativeObject) {
+                        self.nativeObject.setTextColor(color.nativeObject);
+                    }
+                    else if (TypeUtil.isObject(color)) {
+                        var textColorStateListDrawable = createColorStateList(color);
+                        this.nativeObject.setTextColor(textColorStateListDrawable);
+                    }
+                }
+            },
+            enumerable: true
+        },
+        'font': {
+            get: function() {
+                return _badgeFont;
+            },
+            set: function(font) {
+                _badgeFont = font;
+                if (self.nativeObject && font) {
+                    self.nativeObject.setTypeface(font.nativeObject);
+                    if (font.size && TypeUtil.isNumeric(font.size)) {
+                        self.nativeObject.setTextSize(font.size);
+                    }
+                }
+            },
+            enumerable: true
+        },
+        'borderWidth': {
+            get: function() {
+                return _borderWidth;
+            },
+            set: function(borderWidth) {
+                if (typeof borderWidth !== 'number')
+                    return;
+
+                _borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
+                self.backgroundColor = null; //re-set Drawable
+            },
+            enumerable: true
+        },
+        'borderColor': {
+            get: function() {
+                return _borderColor;
+            },
+            set: function(borderColor) {
+                if (!(borderColor instanceof Color))
+                    return;
+
+                _borderColor = borderColor;
+                self.backgroundColor = null;; //re-set Drawable
+            },
+            enumerable: true
+        },
+        'move': {
+            value: function(x, y) {
+                self.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
+                self.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
+            }
         }
     });
-}
 
-function applyLayoutInners(rootLayout) {
-    var innerGroups = [];
-    addInnerNativeViewGroups(rootLayout.nativeObject, innerGroups);
-    innerGroups.forEach(function(viewGroup) {
-        viewGroup.requestLayout();
-        viewGroup.invalidate();
-    });
-}
+    if (self.nativeObject) {
+        //sets default values
+        if (!self.backgroundColor)
+            self.backgroundColor = Color.RED;
+        if (!self.font)
+            self.font = Font.create("Arial", 11, Font.NORMAL);
+        if (!self.textColor)
+            self.textColor = Color.WHITE;
+    }
 
-function addInnerNativeViewGroups(viewGroup, viewGroups) {
-    const NativeViewGroup = requireClass("android.view.ViewGroup");
-    const NativeMapView = requireClass('com.google.android.gms.maps.MapView');
-    for (var i = 0; i < viewGroup.getChildCount(); i++) {
-        var innerView = viewGroup.getChildAt(i);
-        var innerClass = innerView.getClass();
-        
-        // !NativeMapView.isAssignableFrom(innerClass) added for AND-3120
-        if(NativeViewGroup.isAssignableFrom(innerClass) && !NativeMapView.isAssignableFrom(innerClass)) {
-            addInnerNativeViewGroups(innerView, viewGroups);
+    function createColorStateList(textColors) {
+        var statesSet = [];
+        var colorsSets = [];
+        if (textColors.normal) {
+            statesSet.push(View.State.STATE_NORMAL);
+            colorsSets.push(textColors.normal.nativeObject);
         }
-        viewGroups.push(innerView);
+        if (textColors.disabled) {
+            statesSet.push(View.State.STATE_DISABLED);
+            colorsSets.push(textColors.disabled.nativeObject);
+        }
+        if (textColors.selected) {
+            statesSet.push(View.State.STATE_SELECTED);
+            colorsSets.push(textColors.selected.nativeObject);
+        }
+        if (textColors.pressed) {
+            statesSet.push(View.State.STATE_PRESSED);
+            colorsSets.push(textColors.pressed.nativeObject);
+        }
+        if (textColors.focused) {
+            statesSet.push(View.State.STATE_FOCUSED);
+            colorsSets.push(textColors.focused.nativeObject);
+        }
+        return (new NativeColorStateList(array(statesSet), array(colorsSets, "int")));
+    }
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
     }
 }
 
-Object.defineProperty(Animator, 'animate', {
-   value: function(rootLayout, duration, animFunction) {
-       var animator = new Animator({
-           layout      : rootLayout,
-           duration    : duration,
-           animFunction: animFunction
-       });
-       animator.perform();
-       return animator;
-   }
-});
 
-module.exports = Animator;
+Badge.prototype.singleton = function(params = {}) {
+    let instance;
+
+    function createInstance() {
+        if (instance)
+            instance = new Badge(params);
+        return instance;
+    }
+
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance();
+            }
+            return instance;
+        }
+    };
+};
+
+module.exports = Badge;

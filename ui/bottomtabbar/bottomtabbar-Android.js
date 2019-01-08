@@ -25,7 +25,7 @@ function BottomTabBar(params) {
                     result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
                 }
                 return AndroidUnitConverter.pixelToDp(result);
-            }  
+            }
         },
         'items': {
             get: function() {
@@ -93,17 +93,20 @@ function BottomTabBar(params) {
     });
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
     // elevation doesn't work with default background white color.
-    
+
 
     function createTabbarMenuItems(tabBarItems) {
         let btbMenu = self.nativeObject.getMenu();
         btbMenu.clear();
-        
+
         for (var i = 0; i < tabBarItems.length; i++) {
             var tabbarItem = tabBarItems[i];
             var title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
             tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
+            tabbarItem.tabBarItemParent = self.nativeObject;
+            tabbarItem.index = i;
+            tabbarItem.badgeAdded === true && tabbarItem.badge;
         }
         _items = tabBarItems;
     }
