@@ -58,7 +58,7 @@ TabBarItem.prototype.icon = null;
  * @readonly
  * @since 4.0.1
  */
-TabBarItem.prototype.badge = {};
+TabBarItem.prototype.badge;
 
 /**
  * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown. 

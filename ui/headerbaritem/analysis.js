@@ -147,7 +147,7 @@ HeaderBarItem.prototype.color = null;
  * @readonly
  * @since 3.0.0
  */
-HeaderBarItem.prototype.badge = {};
+HeaderBarItem.prototype.badge;
 
 /**
  * iOS Specific Properties.
