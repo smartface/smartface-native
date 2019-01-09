@@ -30,12 +30,7 @@ function HeaderBarItem(params) {
                 if (_nativeView) {
                     retval = _nativeView;
                 } else {
-                    var key = new Invocation.Argument({
-                        type:"NSString",
-                        value: "view"
-                    });
-                    var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
-                    _nativeView = new FlexLayout({nativeObject : view});
+                    _nativeView = new FlexLayout({nativeObject : self.nativeObject.containerView});
                     retval = _nativeView;
                 }
                 return retval;
