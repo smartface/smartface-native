@@ -11,7 +11,7 @@ function BottomTabBar(params) {
     this.nativeObject = new NativeBottomNavigationView(activity);
 
     var self = this;
-    var _itemColors;
+    var _itemColors, _disableAnimation = false;
     var _backgroundColor = Color.WHITE;
     var _items = [];
     Object.defineProperties(this, {
@@ -85,11 +85,22 @@ function BottomTabBar(params) {
     });
 
     this.android = {};
-    Object.defineProperty(this.android, 'maxItemCount', {
-        get: function() {
-            return MAXITEMCOUNT;
+    Object.defineProperties(self.android, {
+        'maxItemCount': {
+            get: function() {
+                return MAXITEMCOUNT;
+            },
+            enumerable: true
         },
-        enumerable: true
+        'disableItemAnimation': {
+            get: function() {
+                return _disableAnimation;
+            },
+            set: function(value) {
+                _disableAnimation = value;
+            },
+            enumerable: true
+        }
     });
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
     // elevation doesn't work with default background white color.
