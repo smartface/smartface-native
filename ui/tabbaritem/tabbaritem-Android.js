@@ -79,7 +79,7 @@ function TabBarItem(params) {
                 if (_badgeObj === undefined)
                     _badgeObj = new Badge();
                 _badgeObj.nativeObject.getParent() === undefined && setBadgeToTabarItem.call(self, _badgeObj);
-                
+
                 return _badgeObj;
             },
             enumerable: true
@@ -105,10 +105,12 @@ function TabBarItem(params) {
         self.badgeAdded = true;
         if (self.tabBarItemParent !== null && self.index !== null) {
             const NativeFrameLayout = requireClass("android.widget.FrameLayout");
+            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
-            let layoutParams = new NativeFrameLayout.LayoutParams(NativeFrameLayout.LayoutParams.WRAP_CONTENT, NativeFrameLayout.LayoutParams.WRAP_CONTENT);
+            const TOP_CENTERHORIZANTAL = 1 | 48;
+            let layoutParams = new NativeFrameLayout.LayoutParams(NativeFrameLayout.LayoutParams.WRAP_CONTENT, NativeFrameLayout.LayoutParams.WRAP_CONTENT, TOP_CENTERHORIZANTAL);
             badgeObj.layoutParams = layoutParams;
-            // layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(10));
+            layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(12));
             badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
 
             let nativeBottomTabarMenuView = self.tabBarItemParent.getChildAt(0);

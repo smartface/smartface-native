@@ -1,9 +1,6 @@
 /* globals requireClass, toJSArray, array */
 const Color = require("../color");
 const Image = require("../image");
-const View = require('../view');
-const Font = require('../font');
-const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
@@ -13,9 +10,6 @@ const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
-const NativeTextView = requireClass("android.widget.TextView");
-const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeGradientDrawable = requireClass("android.graphics.drawable.GradientDrawable");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
@@ -38,8 +32,7 @@ function HeaderBarItem(params) {
 
     this.ios = {};
     this.android = {};
-    self.badgeAdded = false;
-    
+
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -205,7 +198,6 @@ function HeaderBarItem(params) {
             get: function() {
                 const Badge = require("sf-core/ui/badge");
                 if (_badgeObj === undefined) {
-                    self.badgeAdded = true;
                     _badgeObj = new Badge();
                 }
                 return _badgeObj;
@@ -297,31 +289,7 @@ Object.defineProperty(HeaderBarItem, 'itemColor', {
     configurable: true
 });
 
-function createColorStateList(textColors) {
-    var statesSet = [];
-    var colorsSets = [];
-    if (textColors.normal) {
-        statesSet.push(View.State.STATE_NORMAL);
-        colorsSets.push(textColors.normal.nativeObject);
-    }
-    if (textColors.disabled) {
-        statesSet.push(View.State.STATE_DISABLED);
-        colorsSets.push(textColors.disabled.nativeObject);
-    }
-    if (textColors.selected) {
-        statesSet.push(View.State.STATE_SELECTED);
-        colorsSets.push(textColors.selected.nativeObject);
-    }
-    if (textColors.pressed) {
-        statesSet.push(View.State.STATE_PRESSED);
-        colorsSets.push(textColors.pressed.nativeObject);
-    }
-    if (textColors.focused) {
-        statesSet.push(View.State.STATE_FOCUSED);
-        colorsSets.push(textColors.focused.nativeObject);
-    }
-    return (new NativeColorStateList(array(statesSet), array(colorsSets, "int")));
-}
+
 
 HeaderBarItem.iOS = {};
 HeaderBarItem.iOS.SystemItem = {};
