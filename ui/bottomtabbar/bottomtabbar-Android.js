@@ -117,9 +117,17 @@ function BottomTabBar(params) {
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
             tabbarItem.tabBarItemParent = self.nativeObject;
             tabbarItem.index = i;
-            tabbarItem.badgeAdded === true && tabbarItem.badge;
         }
+        addBadgeToItem(tabBarItems);
         _items = tabBarItems;
+    }
+
+    function addBadgeToItem(tabBarItems) {
+        // Adding badge must be after added all menu items.
+        for (var i = 0; i < tabBarItems.length; i++) {
+            tabBarItems[i].badgeAdded && tabBarItems[i].badge;
+        }
+
     }
 
     // Assign parameters given in constructor

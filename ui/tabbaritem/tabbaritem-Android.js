@@ -108,7 +108,8 @@ function TabBarItem(params) {
             const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
             const TOP_CENTERHORIZANTAL = 1 | 48;
-            let layoutParams = new NativeFrameLayout.LayoutParams(NativeFrameLayout.LayoutParams.WRAP_CONTENT, NativeFrameLayout.LayoutParams.WRAP_CONTENT, TOP_CENTERHORIZANTAL);
+            const WRAP_CONTENT = -2;
+            let layoutParams = new NativeFrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, TOP_CENTERHORIZANTAL);
             badgeObj.layoutParams = layoutParams;
             layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(12));
             badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);

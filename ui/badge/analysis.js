@@ -79,7 +79,8 @@ Badge.prototype.borderColor = null;
 Badge.prototype.borderWidth = 0;
 
 /**
- * Set Badge offset, Badge center point defaults to the top right corner of its parent.
+ * Set Badge offset, Badge center point defaults to the top right corner of its parent. When using badge in tab bar items, this method must be implement
+ * at the initialize time.
  *
  * @property {Function} move
  * @param {Number} x
