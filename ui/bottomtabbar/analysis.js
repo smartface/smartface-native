@@ -21,6 +21,16 @@ function BottomTabBar() {}
 BottomTabBar.prototype.android = {};
 BottomTabBar.prototype.android.maxItemCount = true;
 
+
+/**
+ * Enable/disable the default animation of BottomTabBar item. Might be used while badge being used.
+ *
+ * @since 4.0.1
+ * @property {Boolean} disableItemAnimation
+ * @android
+ */
+BottomTabBar.prototype.android.disableItemAnimation = false;
+
 /**
  * Gets/sets title and icon color of the tab bar items. 
  *

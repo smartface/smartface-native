@@ -2,12 +2,13 @@ const UITabBarItem = SF.requireClass("UITabBarItem");
 const Invocation = require('sf-core/util').Invocation;
 const Image = require('sf-core/ui/image');
 const FlexLayout = require('sf-core/ui/flexlayout');
+const Badge = require('sf-core/ui/badge');
 
 function TabBarItem(params) {
     var self = this;
     
     self.nativeObject = undefined;
-    if (params.nativeObject) {
+    if (params && params.nativeObject) {
         self.nativeObject = params.nativeObject;
     }
     
@@ -97,206 +98,12 @@ function TabBarItem(params) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
     
-    var _badge = {};
+    var _badge = self.nativeObject ? new Badge({nativeObject : self.nativeObject}) : {};
     Object.defineProperty(this, 'badge', {
         get: function(){
             return _badge;
         },
         enumerable: true
-    });
-    
-    // These are setted to undefined because of invalidate() function.
-    // Invalidate function will call from Page's tabBarItem setter for each item, check these code flow.
-    var _text = undefined;
-    var _visible = undefined;
-    var _height = undefined;
-    var _backgroundColor = undefined;
-    var _font = undefined;
-    var _textColor = undefined;
-    var _borderWidth = undefined;
-    var _borderColor = undefined;
-    var _move = {};
-    
-    Object.defineProperties(_badge, {
-        'text': {
-            get : function() {
-                return _text;
-            },
-            set : function(text) {
-                if (typeof text === "string") {
-                    _text = text;
-                    
-                    if (self.nativeObject) {
-                        __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_addBadgeWithText(text);
-                            _visible ? self.nativeObject.pp_showBadge() : self.nativeObject.pp_hiddenBadge();
-                            _borderColor ? self.badge.borderColor = _borderColor : 0;
-                            _borderWidth ? self.badge.borderWidth = _borderWidth : 0;
-                            _backgroundColor ? self.badge.backgroundColor = _backgroundColor : 0;
-                            _textColor ? self.badge.textColor = _textColor : 0;
-                            _font ? self.badge.font = _font : 0;
-                        },1);  
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'visible': {
-            get : function() {
-                return _visible;
-            },
-            set : function (value) {
-                if (typeof value === "boolean") {
-                    _visible = value;
-                    
-                    if (self.nativeObject) {
-                        if (value) {
-                            self.nativeObject.pp_showBadge();
-                        }else{
-                            self.nativeObject.pp_hiddenBadge();
-                        }    
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'height': {
-            get : function () {
-                return _height;
-            },
-            set : function (value) {
-                if (typeof value === "number") {
-                    _height = value;
-                    
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBadgeHeight(value);   
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'borderWidth' : {
-            get : function(){
-                return _borderWidth;
-            },
-            set : function(value){
-                if (typeof value === "number") {
-                    _borderWidth = value;
-                    
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBorderWidth(_borderWidth);   
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'borderColor' : {
-            get : function(){
-                return _borderColor;
-            },
-            set : function(value){
-                if (typeof value === "object") {
-                    _borderColor = value;
-                    
-                    if (self.nativeObject) {
-                        self.nativeObject.pp_setBorderColor(_borderColor.nativeObject);   
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'backgroundColor' : {
-            get : function () {
-                return _backgroundColor;
-            },
-            set : function (value) {
-                if (typeof value === "object") {
-                    _backgroundColor = value;
-                    
-                    if (self.nativeObject) {
-                        var argIDBlock= new Invocation.Argument({
-                            type:"IDBlock",
-                            value: function(label){
-                                var argColor= new Invocation.Argument({
-                                    type:"NSObject",
-                                    value: value.nativeObject
-                                });
-                                Invocation.invokeInstanceMethod(label,"setBackgroundColor:",[argColor]);
-                            }
-                        });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'textColor' : {
-            get : function () {
-                return _textColor;
-            },
-            set : function (value) {
-                if (typeof value === "object") {
-                    _textColor = value;
-                    
-                    if (self.nativeObject) {
-                        var argIDBlock= new Invocation.Argument({
-                            type:"IDBlock",
-                            value: function(label){
-                                var argColor= new Invocation.Argument({
-                                    type:"NSObject",
-                                    value: value.nativeObject
-                                });
-                                Invocation.invokeInstanceMethod(label,"setTextColor:",[argColor]);
-                            }
-                        });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
-                }
-            },
-            enumerable: true
-        },
-        'font' : {
-            get : function () {
-                return _font;
-            },
-            set : function (value) {
-                if (typeof value === "object") {
-                    _font = value;
-                        
-                    if (self.nativeObject) {
-                        var argIDBlock= new Invocation.Argument({
-                            type:"IDBlock",
-                            value: function(label){
-                                var argFont= new Invocation.Argument({
-                                    type:"NSObject",
-                                    value: value
-                                });
-                                Invocation.invokeInstanceMethod(label,"setFont:",[argFont]);
-                            }
-                        });
-                        Invocation.invokeInstanceMethod(self.nativeObject,"pp_setBadgeLabelAttributes:",[argIDBlock]);   
-                    }
-                }
-            },
-            enumerable: true
-        }
-    });
-    
-    Object.defineProperties(_badge, {
-        'move' : {
-            value: function(x,y){
-                if (typeof x === "number" && typeof y === "number") {
-                    _move = {x:x, y:y};
-                    
-                    if (self.nativeObject) {
-                        __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_moveBadgeWithXY(_move.x, _move.y);
-                        },1);   
-                    }
-                }
-            },
-            enumerable: true
-        }
     });
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,17 +112,9 @@ function TabBarItem(params) {
     self.invalidate = function() {
         this.title = _title;
         this.icon = _icon;
-        
-        //For badge
-        this.badge.text = _text;
-        this.badge.visible = _visible;
-        this.badge.height = _height;
-        this.badge.backgroundColor = _backgroundColor;
-        this.badge.font = _font;
-        this.badge.textColor = _textColor;
-        this.badge.borderColor = _borderColor;
-        this.badge.borderWidth = _borderWidth;
-        this.badge.move(_move.x, _move.y);
+        if (_badge.constructor.name !== "Badge") {
+            _badge = new Badge({nativeObject : self.nativeObject, parameters : _badge});
+        }
     }
     
     if (params) {

@@ -1,8 +1,11 @@
 function TabBarItem(params) {
-    var _title, _icon;
+    let _title, _icon, _badgeObj = undefined;
 
     this.nativeObject = null; // this property should be set at runtime.
-    var self = this;
+    this.tabBarItemParent = null; // this property assigned while adding item.
+    this.index = null;
+    this.badgeAdded = false;
+    const self = this;
     Object.defineProperties(this, {
         'title': {
             get: function() {
@@ -30,7 +33,7 @@ function TabBarItem(params) {
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
                 };
-                
+
                 var icon = valueObj;
                 if (!(icon instanceof Object)) { //IDE requires this implementation.
                     icon = Image.createImageFromPath(icon);
@@ -58,14 +61,26 @@ function TabBarItem(params) {
                         icon.normal = icon.normal && Image.createFromFile(icon.normal);
                         icon.selected = icon.selected && Image.createFromFile(icon.selected);
                     }
-                
-                } else if (typeof icon === "string") {
+
+                }
+                else if (typeof icon === "string") {
                     icon = Image.createFromFile(icon);
                 }
                 else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
                 self.nativeObject && (self.nativeObject.setIcon(icon.nativeObject));
+            },
+            enumerable: true
+        },
+        'badge': {
+            get: function() {
+                const Badge = require("sf-core/ui/badge");
+                if (_badgeObj === undefined)
+                    _badgeObj = new Badge();
+                _badgeObj.nativeObject.getParent() === undefined && setBadgeToTabarItem.call(self, _badgeObj);
+
+                return _badgeObj;
             },
             enumerable: true
         },
@@ -82,6 +97,26 @@ function TabBarItem(params) {
     if (params) {
         for (var param in params) {
             this[param] = params[param];
+        }
+    }
+
+    function setBadgeToTabarItem(badgeObj) {
+        const self = this;
+        self.badgeAdded = true;
+        if (self.tabBarItemParent !== null && self.index !== null) {
+            const NativeFrameLayout = requireClass("android.widget.FrameLayout");
+            const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+
+            const TOP_CENTERHORIZANTAL = 1 | 48;
+            const WRAP_CONTENT = -2;
+            let layoutParams = new NativeFrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, TOP_CENTERHORIZANTAL);
+            badgeObj.layoutParams = layoutParams;
+            layoutParams.setMarginStart(AndroidUnitConverter.dpToPixel(12));
+            badgeObj.nativeObject.setLayoutParams(badgeObj.layoutParams);
+
+            let nativeBottomTabarMenuView = self.tabBarItemParent.getChildAt(0);
+            let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(self.index);
+            nativeMenuItem.addView(badgeObj.nativeObject);
         }
     }
 
