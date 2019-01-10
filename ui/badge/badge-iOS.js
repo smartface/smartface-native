@@ -238,6 +238,12 @@ function Badge(params) {
             enumerable: true
         }
     });
+    
+     if (params && params.parameters) {
+        for (var param in params.parameters) {
+            this[param] = params.parameters[param];
+        }
+    }
 };
 
 module.exports = Badge;
