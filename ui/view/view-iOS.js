@@ -264,6 +264,18 @@ function View(params) {
         enumerable: true,configurable: true
     });
 
+    var _scale = {x:1.0, y:1.0};
+    Object.defineProperty(self, 'scale', {
+        get: function() {
+            return _scale;
+        },
+        set: function(value) {
+            _scale = value;
+            self.nativeObject.scale({ scaleX: value.x, scaleY: value.y });
+        },
+        enumerable: true,configurable: true
+    });
+    
     Object.defineProperty(self, 'touchEnabled', {
         get: function() {
             return self.nativeObject.touchEnabled;
