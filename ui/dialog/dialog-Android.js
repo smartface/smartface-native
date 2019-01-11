@@ -13,13 +13,13 @@ const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 function Dialog(params) {
     const self = this;
     this.android = {};
-    
+
     var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
     // Assign parameters given in constructor
     var themeStyle = Dialog.Android.Style.ThemeDefault;
-    if(params && params.android) {
-        themeStyle = params.android.themeStyle;
-        this.android.isTransparent = params.android.isTransparent;
+    if (params && params.android) {
+        themeStyle = params.android.themeStyle || themeStyle;
+        this.android.isTransparent = params.android.isTransparent || false;
     }
     this.android.themeStyle = themeStyle;
     if (!this.nativeObject) {
@@ -49,7 +49,7 @@ function Dialog(params) {
             configurable: true
         }
     });
-    
+
     var _onShowCallback;
     var _isSetListener = false;
     Object.defineProperties(self.android, {
@@ -73,7 +73,7 @@ function Dialog(params) {
             }
         }
     });
-    
+
     this.setShowListener = function() {
         const DialogInterface = requireClass("android.content.DialogInterface");
         var listener = DialogInterface.OnShowListener.implement({
@@ -86,9 +86,9 @@ function Dialog(params) {
     };
 
     var skipDefaults = false;
-    if(params && (params.skipDefaults || this.android.isTransparent))
+    if (params && (params.skipDefaults || this.android.isTransparent))
         skipDefaults = true;
-    
+
     var dialogWindow, colorDrawable;
     if (!skipDefaults) {
         // View.Window.FEATURE_NO_TITLE
@@ -99,26 +99,28 @@ function Dialog(params) {
         dialogWindow.setBackgroundDrawable(colorDrawable);
         // View.WindowManager.LayoutParams.MATCH_PARENT
         dialogWindow.setLayout(-1, -1);
-    } else {
+    }
+    else {
         dialogWindow = this.nativeObject.getWindow();
         dialogWindow.setGravity(80);
         this.nativeObject.setContentView(this.layout.nativeObject);
-    
+
         colorDrawable = new NativeColorDrawable((Color.create(0, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
-        
+
         const Application = require("../../application");
         var currentPage = Application.currentPage;
-        
+
         var isStatusBarVisible = currentPage.statusBar.visible;
         var statusBarHeight = 0;
-        if(isStatusBarVisible)
+        if (isStatusBarVisible)
             statusBarHeight = currentPage.statusBar.height;
         var layoutHeight = Screen.height - statusBarHeight;
-        if(statusBarHeight > 0) {
+        if (statusBarHeight > 0) {
             this.layout.height = layoutHeight;
             dialogWindow.setLayout(-1, -2);
-        } else {
+        }
+        else {
             dialogWindow.setLayout(-1, -1);
         }
     }
@@ -133,7 +135,7 @@ function Dialog(params) {
 
 Dialog.Android = {};
 Dialog.Android.Style = {
-    ThemeDefault: 16974065,  //Theme_Holo_Light_NoActionBar_Fullscreen
+    ThemeDefault: 16974065, //Theme_Holo_Light_NoActionBar_Fullscreen
     ThemeNoHeaderBar: 16974064, //Theme_Holo_Light_NoActionBar
     ThemeNoHeaderBarWithOverscan: 16974302, //Theme_Holo_Light_NoActionBar_Overscan
     ThemeNoHeaderBarWithTranslucentDecor: 16974306 //Theme_Holo_Light_NoActionBar_TranslucentDecor
