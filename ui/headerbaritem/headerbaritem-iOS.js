@@ -30,7 +30,7 @@ function HeaderBarItem(params) {
                 if (_nativeView) {
                     retval = _nativeView;
                 } else {
-                    _nativeView = new FlexLayout({nativeObject : self.nativeObject.containerView});
+                    _nativeView = self.nativeObject.containerView ? new FlexLayout({nativeObject : self.nativeObject.containerView}) : undefined;
                     retval = _nativeView;
                 }
                 return retval;
@@ -109,7 +109,7 @@ function HeaderBarItem(params) {
         },
         'size': {
             get: function(){
-                return {width : self.layout.nativeObject.frame.width, height : self.layout.nativeObject.frame.height};
+                return self.layout ? {width : self.layout.nativeObject.frame.width, height : self.layout.nativeObject.frame.height} : undefined;
             },
             enumerable: true
         }
