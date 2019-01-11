@@ -8,7 +8,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AttributedString = require("sf-core/ui/attributedstring");
-
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
@@ -33,10 +32,11 @@ function HeaderBarItem(params) {
     var _attributedTitleBuilder;
     var self = this;
     var activity = AndroidConfig.activity;
-    
+    var _size;
+
     this.ios = {};
     this.android = {};
-    
+
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -113,9 +113,10 @@ function HeaderBarItem(params) {
                         else {
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
-                            if(_attributedTitle) {
+                            if (_attributedTitle) {
                                 this.attributedTitle = _attributedTitle;
-                            } else {
+                            }
+                            else {
                                 this.title = _title;
                             }
                         }
@@ -175,9 +176,10 @@ function HeaderBarItem(params) {
                 if (this.imageButton) {
                     this.image = this.image;
                 }
-                else if(_attributedTitle) {
+                else if (_attributedTitle) {
                     this.attributedTitle = _attributedTitle;
-                } else {
+                }
+                else {
                     this.title = _title;
                 }
 
@@ -188,6 +190,22 @@ function HeaderBarItem(params) {
                     }
                 }));
             }
+        },
+        'size': {
+            get: function() {
+                return self.nativeObject ? {
+                    width: AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth()),
+                    height: AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight())
+                } : undefined;
+            },
+            set: function(size) {
+                _size = size;
+                if (typeof size === 'object' && self.nativeObject) {
+                    self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(size.width));
+                    self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(size.height));
+                }
+            },
+            configurable: true
         },
         'toString': {
             value: function() {
@@ -203,7 +221,7 @@ function HeaderBarItem(params) {
             enumerable: true
         }
     });
-    
+
     Object.defineProperties(this.android, {
         'attributedTitle': {
             get: function() {
@@ -211,15 +229,16 @@ function HeaderBarItem(params) {
             },
             set: function(value) {
                 _attributedTitle = value;
-                if(_attributedTitle instanceof AttributedString) {
+                if (_attributedTitle instanceof AttributedString) {
                     if (_attributedTitleBuilder)
                         _attributedTitleBuilder.clear();
                     else
                         _attributedTitleBuilder = new NativeSpannableStringBuilder();
-                        
+
                     _attributedTitle.setSpan(_attributedTitleBuilder);
                     self.__setTitle(_attributedTitleBuilder);
-                } else {
+                }
+                else {
                     self.__setTitle(null);
                 }
             },
@@ -386,7 +405,7 @@ function HeaderBarItem(params) {
             self.color = _color;
         }
     };
-    
+
     if (!_color) {
         if (HeaderBarItem.itemColor) {
             this.color = HeaderBarItem.itemColor;

@@ -33,7 +33,7 @@ function HeaderBarItem(params) {}
 HeaderBarItem.prototype.title = "";
 
 /**
- * Gets/sets size of header bar item.
+ * Gets/sets size of header bar item. Size must be obtained life cycle of page. Otherwise returning value will be undefined.
  *
  * @property {Object} size
  * @property {Number} size.width
