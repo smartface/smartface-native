@@ -33,6 +33,19 @@ function HeaderBarItem(params) {}
 HeaderBarItem.prototype.title = "";
 
 /**
+ * Gets/sets size of header bar item.
+ *
+ * @property {Object} size
+ * @property {Number} size.width
+ * @property {Number} size.height
+ * @readonly
+ * @android
+ * @ios
+ * @since 4.0.1
+ */
+HeaderBarItem.prototype.size;
+
+/**
  * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
  * shown in the header bar.
  *
