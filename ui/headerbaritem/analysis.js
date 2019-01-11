@@ -154,104 +154,13 @@ HeaderBarItem.prototype.color = null;
  *     headerBarItem.badge.visible = true;
  *     page.headerBar.setItems([headerBarItem]);
  * 
- * @property {UI.HeaderBarItem.Badge} badge
+ * @property {UI.Badge} badge
  * @android
  * @ios
  * @readonly
  * @since 3.0.0
  */
-HeaderBarItem.prototype.badge = {};
-
-/**
- * @class UI.HeaderBarItem.Badge
- * @since 3.0.0
- * 
- * Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
- * 
- */
-HeaderBarItem.Badge = {};
-
-/**
- * Gets/sets text of header bar item badge.
- *
- * @property {String} text
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.text = "";
-
-/**
- * Gets/sets visible of header bar item badge.
- *
- * @property {Boolean} visible
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.visible = false;
-
-/**
- * Gets/sets backgroundColor of header bar item badge.
- *
- * @property {UI.Color} backgroundColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.backgroundColor = null;
-
-/**
- * Gets/sets textColor of header bar item badge.
- *
- * @property {UI.Color} textColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.textColor = null;
-
-/**
- * Gets/sets font of header bar item badge.
- *
- * @property {UI.Font} font
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.font = null;
-
-/**
- * Gets/sets border color of header bar item badge.
- *
- * @property {UI.Color} borderColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.borderColor = null;
-
-/**
- * Gets/sets border width of header bar item badge.
- *
- * @property {Number} borderWidth
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.borderWidth = 0;
-
-/**
- * Set Badge offset, Badge center point defaults to the top right corner of its parent.
- *
- * @property {Function} move
- * @param {Number} x
- * @param {Number} y
- * @android
- * @ios
- * @since 3.0.0
- */
-HeaderBarItem.Badge.prototype.move = function(x,y){}
+HeaderBarItem.prototype.badge;
 
 /**
  * iOS Specific Properties.
