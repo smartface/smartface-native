@@ -106,6 +106,12 @@ function HeaderBarItem(params) {
                 return _badge;
             },
             enumerable: true
+        },
+        'size': {
+            get: function(){
+                return {width : self.layout.nativeObject.frame.width, height : self.layout.nativeObject.frame.height};
+            },
+            enumerable: true
         }
     });
     
