@@ -107,8 +107,9 @@ function Dialog(params) {
         colorDrawable = new NativeColorDrawable((Color.create(0, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
         
-        const Router = require("sf-core/router");
-        var currentPage = Router.currentPage;
+        const Application = require("../../application");
+        var currentPage = Application.currentPage;
+        
         var isStatusBarVisible = currentPage.statusBar.visible;
         var statusBarHeight = 0;
         if(isStatusBarVisible)
