@@ -272,6 +272,15 @@ View.prototype = {
             this.nativeObject.setScaleX(value);
         }
     },
+    get scale() {
+        return { x: this.nativeObject.getScaleX(), y: this.nativeObject.getScaleY() }
+    },
+    set scale(value) {
+        if (TypeUtil.isObject(value)) {
+            value.x !== undefined && this.nativeObject.setScaleX(value.x);
+            value.y !== undefined && this.nativeObject.setScaleY(value.y);
+        }
+    },
     get scaleY() {
         return this.nativeObject.getScaleY();
     },

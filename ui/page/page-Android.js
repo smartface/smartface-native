@@ -319,8 +319,8 @@ function Page(params) {
             enumerable: true
         },
         'dismiss': {
-            value: function(params) {
-                const FragmentTransaction = require("sf-core/util/Android/fragmenttransition");
+            value: function(params = {}) {
+                const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
                 var fragmentManager = activity.getSupportFragmentManager();
                 if(!self.popUpBackPage)
                     return;
@@ -751,8 +751,6 @@ function Page(params) {
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
 
                 if (item.badge.nativeObject) {
-                    item.badge.nativeObject.setPaddingRelative(AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1), AndroidUnitConverter.dpToPixel(5), AndroidUnitConverter.dpToPixel(1));
-
                     var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
                     item.nativeObject.setId(NativeView.generateViewId());
                     layoutParams.addRule(ALIGN_END, nativeBadgeContainerButton.getId());

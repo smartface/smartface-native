@@ -4,7 +4,7 @@
  * This class represents Android navigation bar (includes soft keys) object. Creating instance of
  * NavigationBar is not valid since you can't use in anywhere.
  * 
- * @since 4.0.1
+ * @since 4.0.0
  */
 function NavigationBar() {}
 
@@ -14,7 +14,7 @@ function NavigationBar() {}
  *
  * @property {UI.Color} color
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 NavigationBar.prototype.color;
 
@@ -24,7 +24,7 @@ NavigationBar.prototype.color;
  *
  * @property {Application.Android.NavigationBar.Style} [style = Application.Android.NavigationBar.Style.DARKCONTENT]
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 NavigationBar.prototype.style;
 

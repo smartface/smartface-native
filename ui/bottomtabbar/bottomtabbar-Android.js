@@ -11,7 +11,7 @@ function BottomTabBar(params) {
     this.nativeObject = new NativeBottomNavigationView(activity);
 
     var self = this;
-    var _itemColors;
+    var _itemColors, _disableAnimation = false;
     var _backgroundColor = Color.WHITE;
     var _items = [];
     Object.defineProperties(this, {
@@ -25,7 +25,7 @@ function BottomTabBar(params) {
                     result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
                 }
                 return AndroidUnitConverter.pixelToDp(result);
-            }  
+            }
         },
         'items': {
             get: function() {
@@ -85,27 +85,49 @@ function BottomTabBar(params) {
     });
 
     this.android = {};
-    Object.defineProperty(this.android, 'maxItemCount', {
-        get: function() {
-            return MAXITEMCOUNT;
+    Object.defineProperties(self.android, {
+        'maxItemCount': {
+            get: function() {
+                return MAXITEMCOUNT;
+            },
+            enumerable: true
         },
-        enumerable: true
+        'disableItemAnimation': {
+            get: function() {
+                return _disableAnimation;
+            },
+            set: function(value) {
+                _disableAnimation = value;
+            },
+            enumerable: true
+        }
     });
     this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
     // elevation doesn't work with default background white color.
-    
+
 
     function createTabbarMenuItems(tabBarItems) {
         let btbMenu = self.nativeObject.getMenu();
         btbMenu.clear();
-        
+
         for (var i = 0; i < tabBarItems.length; i++) {
             var tabbarItem = tabBarItems[i];
             var title = (tabbarItem.title ? tabbarItem.title : ("Title " + i));
             tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
+            tabbarItem.tabBarItemParent = self.nativeObject;
+            tabbarItem.index = i;
         }
+        addBadgeToItem(tabBarItems);
         _items = tabBarItems;
+    }
+
+    function addBadgeToItem(tabBarItems) {
+        // Adding badge must be after added all menu items.
+        for (var i = 0; i < tabBarItems.length; i++) {
+            tabBarItems[i].badgeAdded && tabBarItems[i].badge;
+        }
+
     }
 
     // Assign parameters given in constructor

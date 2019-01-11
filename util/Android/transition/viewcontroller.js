@@ -49,7 +49,7 @@ ViewController.deactivateController = function(controller) {
 ViewController.setController = function(params) {
     const Page = require("../../../ui/page");
     const NavigationController = require("../../../ui/navigationcontroller");
-    const FragmentTransition = require("../fragmenttransition");
+    const FragmentTransition = require("../transition/fragmenttransition");
     const BottomTabBarController = require("../../../ui/bottomtabbarcontroller");
 
     if ((params.controller) instanceof NavigationController) {

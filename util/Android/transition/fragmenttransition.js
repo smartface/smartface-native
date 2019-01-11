@@ -1,6 +1,6 @@
 /* globals requireClass */
-const AndroidConfig = require("./androidconfig");
-const DirectionBasedConverter = require("./directionbasedconverter");
+const AndroidConfig = require("../androidconfig");
+const DirectionBasedConverter = require("../directionbasedconverter");
 
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -25,7 +25,7 @@ FragmentTransaction.push = function(params) {
         throw new Error("This page doesn't have an unique ID!");
     }
 
-    const Application = require("../../application");
+    const Application = require("../../../application");
     let currentPage = Application.currentPage;
     if (currentPage && (currentPage.pageID === tag)) {
         return;
@@ -130,7 +130,7 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 };
 
 FragmentTransaction.dismissTransition = function(page, animation) {
-    const ViewController = require("./transition/viewcontroller");
+    const ViewController = require("./viewcontroller");
     
     let fragmentManager = activity.getSupportFragmentManager();
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();

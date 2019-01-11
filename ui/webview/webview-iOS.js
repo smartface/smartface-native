@@ -86,6 +86,12 @@ const WebView = extend(View)(
             self.nativeObject.reload();
         }
         
+        self.ios.onOpenNewWindow = function(){};
+        self.nativeObject.onOpenNewWindow = function(e) {
+            var urlString  = e.request.URL ? e.request.URL.absoluteString : undefined;
+            self.ios.onOpenNewWindow({url : urlString});
+        };
+        
         self.evaluateJS = function(javascript,callback){
             function result(e){
                 if (callback){
