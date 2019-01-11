@@ -5,7 +5,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const AttributedString = require("sf-core/ui/attributedstring");
-
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
@@ -15,8 +14,9 @@ const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringB
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
 function HeaderBarItem(params) {
+
     const self = this;
-    
+
     let _title = "",
         _attributedTitle,
         _image = null,
@@ -27,7 +27,8 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _attributedTitleBuilder,
-        _badgeObj = undefined;
+        _badgeObj = undefined,
+        _size;
     const activity = AndroidConfig.activity;
 
     this.ios = {};
@@ -186,6 +187,22 @@ function HeaderBarItem(params) {
                     }
                 }));
             }
+        },
+        'size': {
+            get: function() {
+                return self.nativeObject ? {
+                    width: AndroidUnitConverter.pixelToDp(self.nativeObject.getWidth()),
+                    height: AndroidUnitConverter.pixelToDp(self.nativeObject.getHeight())
+                } : undefined;
+            },
+            set: function(size) {
+                _size = size;
+                if (typeof size === 'object' && self.nativeObject) {
+                    self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(size.width));
+                    self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(size.height));
+                }
+            },
+            configurable: true
         },
         'toString': {
             value: function() {

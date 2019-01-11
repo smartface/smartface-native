@@ -31,12 +31,7 @@ function HeaderBarItem(params) {
                 if (_nativeView) {
                     retval = _nativeView;
                 } else {
-                    var key = new Invocation.Argument({
-                        type:"NSString",
-                        value: "view"
-                    });
-                    var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
-                    _nativeView = new FlexLayout({nativeObject : view});
+                    _nativeView = self.nativeObject.containerView ? new FlexLayout({nativeObject : self.nativeObject.containerView}) : undefined;
                     retval = _nativeView;
                 }
                 return retval;
@@ -110,6 +105,12 @@ function HeaderBarItem(params) {
         'badge': {
             get: function(){
                 return _badge;
+            },
+            enumerable: true
+        },
+        'size': {
+            get: function(){
+                return self.layout ? {width : self.layout.nativeObject.frame.width, height : self.layout.nativeObject.frame.height} : undefined;
             },
             enumerable: true
         }

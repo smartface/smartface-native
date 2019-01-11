@@ -424,6 +424,19 @@ View.prototype.flexShrink = 1;
  */
 View.prototype.flexBasis = -1;
 
+
+/**
+ * This property sets the amount that the view is scaled in X & Y around the pivot point, as a proportion of the view's unscaled width. A value of 1 means that no scaling is applied.
+ * Actually {@link UI.flipVertically flipVertically} & {@link UI.flipHorizontally flipHorizontally} functions are assignes -1 to X & Y to mirror the view. So while using scale, need to
+ * consider these functions.
+ * 
+ * @property {Object} scale
+ * @android
+ * @ios
+ * @since 4.0.1
+ */
+View.prototype.scale = {x : 1, y: 1};
+
 /**
  * This property specifies how a child view aligns in the cross-axis.
  * It overrides the {@link UI.FlexLayout.AlignItems FlexLayout.AlignItems} property of the parent.
