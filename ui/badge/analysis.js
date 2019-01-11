@@ -82,7 +82,7 @@ Badge.prototype.borderWidth = 0;
  * Set Badge offset, Badge center point defaults to the top right corner of its parent. When using badge in tab bar items, this method must be implement
  * at the initialize time.
  *
- * @property {Function} move
+ * @method move
  * @param {Number} x
  * @param {Number} y
  * @android
