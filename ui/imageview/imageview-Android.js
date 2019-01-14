@@ -37,7 +37,12 @@ const ImageView = extend(View)(
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    return this._image;
+                    if (this._image === undefined)
+                        return this.nativeObject.getDrawable() !== null ? new Image({
+                            drawable: this.nativeObject.getDrawable()
+                        }) : null;
+                    else
+                        return this._image;
                 },
                 set: function(value) {
                     // We don't use backgroundImage of view. Because, it breaks image fill type.
@@ -79,7 +84,7 @@ const ImageView = extend(View)(
             },
             'imageFillType': {
                 get: function() {
-                    return this._fillType;
+                    return this._fillType === undefined ? this.nativeObject.getScaleType() : this._fillType;
                 },
                 set: function(fillType) {
                     if (!(fillType in ImageFillTypeDic)) {
@@ -125,8 +130,8 @@ const ImageView = extend(View)(
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
                         let loadedDrawable = self.nativeObject.getDrawable();
-                        if(loadedDrawable) {
-                            self._image = new Image({ drawable: loadedDrawable});
+                        if (loadedDrawable) {
+                            self._image = new Image({ drawable: loadedDrawable });
                         }
                         onSuccess && onSuccess();
                     },
@@ -288,12 +293,10 @@ Object.defineProperties(ImageView.FillType, {
         enumerable: true
     },
 });
-
-const ImageFillTypeDic = {};
+const ImageFillTypeDic  = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL] = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
 ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
 ImageFillTypeDic[ImageView.FillType.ASPECTFILL] = NativeImageView.ScaleType.CENTER_CROP; //should be centerCrop
-
 
 module.exports = ImageView;
