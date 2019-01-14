@@ -37,10 +37,11 @@ const ImageView = extend(View)(
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    if (this._image === undefined)
-                        return this.nativeObject.getDrawable() !== null ? new Image({
+                    if (!this._image){
+                        return this.nativeObject.getDrawable() ? new Image({
                             drawable: this.nativeObject.getDrawable()
                         }) : null;
+                    }
                     else
                         return this._image;
                 },
@@ -293,7 +294,7 @@ Object.defineProperties(ImageView.FillType, {
         enumerable: true
     },
 });
-const ImageFillTypeDic  = {};
+const ImageFillTypeDic = {};
 ImageFillTypeDic[ImageView.FillType.NORMAL] = NativeImageView.ScaleType.CENTER;
 ImageFillTypeDic[ImageView.FillType.STRETCH] = NativeImageView.ScaleType.FIT_XY;
 ImageFillTypeDic[ImageView.FillType.ASPECTFIT] = NativeImageView.ScaleType.FIT_CENTER; // should be fit().centerInside()
