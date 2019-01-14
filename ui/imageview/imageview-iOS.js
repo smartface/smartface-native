@@ -39,7 +39,7 @@ const ImageView = extend(View)(
          
         Object.defineProperty(self, 'image', {
             get: function() {
-                return Image.createFromImage(self.nativeObject.image);
+                return self.nativeObject.image ? Image.createFromImage(self.nativeObject.image) : undefined;
             },
             set: function(value) {
                 _imageTemplate = undefined;
