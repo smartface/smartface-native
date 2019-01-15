@@ -154,7 +154,8 @@ const ImageView = extend(View)(
             set: function(value) {
                 self.nativeObject.contentMode = value;
             },
-            enumerable: true
+            enumerable: true,
+            configurable:true
         });
 
         var _imageTemplate;
