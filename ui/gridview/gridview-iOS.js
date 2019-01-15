@@ -51,6 +51,11 @@ const GridView = extend(View)(
             }
             return retval;
         };
+        
+        smfcollectionView.sizeForItemAtIndexPath = function(){
+            return defaultflowLayout.calculateItemSize();
+        };
+        
         smfcollectionView.cellForItemAtIndexPathCallback = function (collectionView, indexPath) {
             // Cell dequeing for type
             var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";

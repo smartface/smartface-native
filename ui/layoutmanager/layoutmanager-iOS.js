@@ -7,7 +7,7 @@ function LayoutManager(params) {
     
     var flowLayout = new __SF_UICollectionViewFlowLayout();
     
-    flowLayout.prepareLayoutCallback = function () {
+    sfSelf.calculateItemSize = function(){
         var retval = {width: 0, height: 0};
         var insetSize = 0;
         if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
@@ -26,12 +26,16 @@ function LayoutManager(params) {
             var insetSize = calculatedSizes.insetSize/2;
             sfSelf.sectionInset = {top:insetSize,left:0,bottom:insetSize,right:0};
         }
-
-        var argumentSize = new Invocation.Argument({
-            type:"CGSize",
-            value: retval
-        });
-        Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
+        return retval;
+    };
+    
+    flowLayout.prepareLayoutCallback = function () {
+        var retval = sfSelf.calculateItemSize();
+        // var argumentSize = new Invocation.Argument({
+        //     type:"CGSize",
+        //     value: retval
+        // });
+        // Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
     };
     flowLayout.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = function (proposedContentOffset, velocity) {
         if (sfSelf.ios.targetContentOffset) {
