@@ -35,7 +35,7 @@ TextBox.prototype.font = null;
 TextBox.prototype.text = "";
 
 /**
- * Gets/sets automatically capitalization of the TextBox.
+ * Gets/sets automatically capitalization of the TextBox. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.
  * @property {UI.TextBox.AutoCapitalize} [autoCapitalize = UI.TextBox.AutoCapitalize.NONE]
  * @android
  * @ios
@@ -167,7 +167,7 @@ TextBox.prototype.ios.keyboardLayout = null;
 TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
 
 /**
- * Gets/sets the content of the TextBox is password or not.
+ * Gets/sets the content of the TextBox is password or not. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.
  *
  * @property {Boolean} [isPassword = false]
  * @android
@@ -177,7 +177,7 @@ TextBox.prototype.ios.keyboardAppearance = UI.KeyboardAppearance.DEFAULT;
 TextBox.prototype.isPassword = false;
 
 /**
- * Gets/sets keyboard type for TextBox.
+ * Gets/sets keyboard type for TextBox. {@link UI.TextBox#cursorPosition Cursor Position} might be necessary to re-set.
  *
  * @property {UI.KeyboardType} [keyboardType = UI.KeyboardType.DEFAULT]
  * @android
@@ -187,7 +187,7 @@ TextBox.prototype.isPassword = false;
 TextBox.prototype.keyboardType = UI.KeyboardType.DEFAULT;
 
 /**
- * Gets/sets action key type for TextBox.
+ * Gets/sets action key type for TextBox. 
  *
  * @property {UI.ActionKeyType} [actionKeyType = UI.ActionKeyType.DEFAULT]
  * @android
