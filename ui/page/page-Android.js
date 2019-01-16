@@ -835,7 +835,6 @@ function Page(params) {
         }
     };
     
-    self.statusBar = require("sf-core/application").statusBar;
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

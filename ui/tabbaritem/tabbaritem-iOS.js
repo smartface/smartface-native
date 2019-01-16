@@ -98,7 +98,7 @@ function TabBarItem(params) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
     
-    var _badge = self.nativeObject ? new Badge({nativeObject : self.nativeObject}) : {};
+    var _badge = self.nativeObject ? new Badge({nativeObject : self.nativeObject}) : {move : function(x,y){this.moveX = x;this.moveY = y;}};
     Object.defineProperty(this, 'badge', {
         get: function(){
             return _badge;
@@ -113,7 +113,10 @@ function TabBarItem(params) {
         this.title = _title;
         this.icon = _icon;
         if (_badge.constructor.name !== "Badge") {
-            _badge = new Badge({nativeObject : self.nativeObject, parameters : _badge});
+            delete _badge["move"]; 
+            var _badgeWithNativeObject = new Badge({nativeObject : self.nativeObject, parameters : _badge});
+            _badge.moveX !== undefined && _badgeWithNativeObject.move(_badge.moveX,_badge.moveY);
+            _badge = _badgeWithNativeObject;
         }
     }
     

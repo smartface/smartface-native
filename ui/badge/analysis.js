@@ -9,7 +9,7 @@
 function Badge(params){};
 
 /**
- * Gets/sets text of header bar item badge.
+ * Gets/sets text of badge.
  *
  * @property {String} text
  * @android
@@ -19,7 +19,7 @@ function Badge(params){};
 Badge.prototype.text = "";
 
 /**
- * Gets/sets visible of header bar item badge.
+ * Gets/sets visible of badge.
  *
  * @property {Boolean} visible
  * @android
@@ -29,7 +29,7 @@ Badge.prototype.text = "";
 Badge.prototype.visible = false;
 
 /**
- * Gets/sets backgroundColor of header bar item badge.
+ * Gets/sets backgroundColor of badge.
  *
  * @property {UI.Color} backgroundColor
  * @android
@@ -39,7 +39,7 @@ Badge.prototype.visible = false;
 Badge.prototype.backgroundColor = null;
 
 /**
- * Gets/sets textColor of header bar item badge.
+ * Gets/sets textColor of badge.
  *
  * @property {UI.Color} textColor
  * @android
@@ -49,7 +49,7 @@ Badge.prototype.backgroundColor = null;
 Badge.prototype.textColor = null;
 
 /**
- * Gets/sets font of header bar item badge.
+ * Gets/sets font of badge.
  *
  * @property {UI.Font} font
  * @android
@@ -59,7 +59,7 @@ Badge.prototype.textColor = null;
 Badge.prototype.font = null;
 
 /**
- * Gets/sets border color of header bar item badge.
+ * Gets/sets border color of badge.
  *
  * @property {UI.Color} borderColor
  * @android
@@ -69,7 +69,7 @@ Badge.prototype.font = null;
 Badge.prototype.borderColor = null;
 
 /**
- * Gets/sets border width of header bar item badge.
+ * Gets/sets border width of badge.
  *
  * @property {Number} borderWidth
  * @android
