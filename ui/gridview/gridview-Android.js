@@ -498,7 +498,6 @@ function assignSizeBasedOnDirection(holderViewLayout, viewType) {
             }
         }
     }
-    console.log("assignSizeBasedOnDirection bitti");
 }
 
 function applyFullSpan(viewHolderItem) {
