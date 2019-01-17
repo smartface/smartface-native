@@ -35,7 +35,7 @@ function LayoutManager(params) {
         if (sfSelf.onFullSpan) {
             var __fullSpanSize = sfSelf.calculateItemSize(1);
             sfSelf.collectionView.sizeForItemAtIndexPath = function(collectionView,indexPath){
-                var itemLength = sfSelf.onFullSpan(sfSelf.jsCollectionView.onItemType(indexPath.row, indexPath.section).toString());
+                var itemLength = sfSelf.onFullSpan(parseInt(sfSelf.jsCollectionView.onItemType(indexPath.row, indexPath.section)));
                 
                 if (itemLength === undefined) {
                     return retval;
