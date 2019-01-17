@@ -54,7 +54,7 @@ const GridView = extend(View)(
         
         smfcollectionView.cellForItemAtIndexPathCallback = function (collectionView, indexPath) {
             // Cell dequeing for type
-            var type = sfSelf.onItemType ? sfSelf.onItemType(indexPath.row, indexPath.section).toString() : "0";
+            var type = sfSelf.onItemType(indexPath.row, indexPath.section).toString();
             
             if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
                 collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
@@ -93,7 +93,7 @@ const GridView = extend(View)(
         if (!sfSelf.nativeObject) {
             sfSelf.nativeObject = smfcollectionView;
             defaultflowLayout.collectionView = smfcollectionView;
-            
+            defaultflowLayout.jsCollectionView = sfSelf;
             sfSelf.refreshControl = new __SF_UIRefreshControl();
         }
 
@@ -385,7 +385,7 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        var _itemTypeForSection = null;
+        var _itemTypeForSection = function(){return "0";};
         Object.defineProperty(sfSelf, 'onItemType', {
             get: function() {
                 return _itemTypeForSection;
