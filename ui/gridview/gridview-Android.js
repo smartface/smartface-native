@@ -32,7 +32,7 @@ const GridView = extend(View)(
             else {
                 this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
             }
-            
+
             //this.nativeInner.setItemViewCacheSize(0);
             //Set Scrollbar Style as SCROLLBARS_OUTSIDE_INSET
             this.nativeInner.setScrollBarStyle(50331648);
@@ -68,18 +68,23 @@ const GridView = extend(View)(
                 }
                 if (self._layoutManager.onItemLength && spanSize) {
                     if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-                        holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+                        let fullSpanHeight;
+                        if (self._layoutManager.onFullSpan &&
+                            TypeUtil.isNumeric(fullSpanHeight = self._layoutManager.onFullSpan(viewType))) {
+                            holderViewLayout.height = fullSpanHeight;
+                        }
+                        else
+                            holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+
                     }
                     else {
-                        holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
-                    }
-                }
-                else if (self._layoutManager.itemLength) {
-                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-                        holderViewLayout.height = self._layoutManager.itemLength;
-                    }
-                    else {
-                        holderViewLayout.width = self._layoutManager.itemLength;
+                        let fullSpanWidth;
+                        if (self._layoutManager.onFullSpan &&
+                            TypeUtil.isNumeric(fullSpanWidth = self._layoutManager.onFullSpan(viewType))) {
+                            holderViewLayout.width = fullSpanWidth;
+                        }
+                        else
+                            holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
                     }
                 }
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
@@ -95,38 +100,44 @@ const GridView = extend(View)(
                     self._layoutManager.viewHeight = self.height;
                     spanSize = self._layoutManager.spanSize;
                 }
-                if (self._layoutManager && ((typeof(self._layoutManager.itemLength) === "number") || self._layoutManager.onItemLength)) {
+                if ((self._layoutManager && self._layoutManager.onItemLength) || self._layoutManager.onFullSpan) {
                     if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
 
-                        if (self._layoutManager.onItemLength) {
+                        let fullSpanHeight;
+                        if (self._layoutManager.onFullSpan &&
+                            TypeUtil.isNumeric((fullSpanHeight = self._layoutManager.onFullSpan(nativeHolderView.getItemViewType())))) {
+                            if (_holderViewLayout.height != fullSpanHeight)
+                                _holderViewLayout.height = fullSpanHeight;
+                            applyFullSpan(_holderViewLayout);
+                        }
+                        else {
                             var calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
-                            if (_holderViewLayout.height != calculatedItemHeight) {
+                            if (_holderViewLayout.height != calculatedItemHeight)
                                 _holderViewLayout.height = calculatedItemHeight;
-                            }
-                        }
-                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.height) {
-                            _holderViewLayout.height = self._layoutManager.itemLength;
-                        }
-                        if (self.width < _holderViewLayout.width) {
-                            _holderViewLayout.width = self.width;
+
+                            if (self.width < _holderViewLayout.width)
+                                _holderViewLayout.width = self.width;
                         }
                     }
                     else {
-                        if (self._layoutManager.onItemLength) {
+                        let fullSpanWidth;
+                        if (self._layoutManager.onFullSpan &&
+                            TypeUtil.isNumeric((fullSpanWidth = self._layoutManager.onFullSpan(nativeHolderView.getItemViewType())))) {
+                            if (_holderViewLayout.width != fullSpanWidth)
+                                _holderViewLayout.width = fullSpanWidth;
+                            applyFullSpan(_holderViewLayout);
+                        }
+                        else {
                             var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
-                            if (_holderViewLayout.width != calculatedItemWidth) {
+                            if (_holderViewLayout.width != calculatedItemWidth)
                                 _holderViewLayout.width = calculatedItemWidth;
-                            }
-                        }
-                        else if (self._layoutManager.itemLength && self._layoutManager.itemLength != _holderViewLayout.width) {
-                            _holderViewLayout.width = self._layoutManager.itemLength;
-                        }
-                        if (self.height < _holderViewLayout.height) {
-                            _holderViewLayout.height = self.height;
+
+
+                            if (self.height < _holderViewLayout.height)
+                                _holderViewLayout.height = self.height;
                         }
                     }
                 }
-
 
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);
@@ -461,7 +472,7 @@ const GridView = extend(View)(
                     if (typeof alignment !== 'number')
                         return;
                     const NativeSFCustomizedPagerSnapHelper = requireClass("io.smartface.android.sfcore.ui.listview.SFCustomizedPagerSnapHelper");
-                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment,self.nativeInner);
+                    _nativeLinearSnapHelper = new NativeSFCustomizedPagerSnapHelper(alignment, self.nativeInner);
                     _nativeLinearSnapHelper.attachToRecyclerView(self.nativeInner);
 
                     if (self.android.paginationEnabled !== null && !_paginationAssigned) {
@@ -474,11 +485,17 @@ const GridView = extend(View)(
 
         var _onScrollListener = null;
 
+
+        function applyFullSpan(viewHolderItem) {
+            let layoutParams = viewHolderItem.nativeObject.getLayoutParams();
+            layoutParams.setFullSpan(true);
+        }
+
         function createOnScrollListernerObject() {
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
-                    if(!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) { return; }
                     _contentOffset.x += dx;
                     _contentOffset.y += dy;
 
@@ -487,7 +504,7 @@ const GridView = extend(View)(
                     _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
                 },
                 onScrollStateChanged: function(recyclerView, newState) {
-                    if(!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) { return; }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },
             };
@@ -519,7 +536,6 @@ GridView.Android.SnapAlignment = {
     SNAPTO_END: 2
 };
 Object.freeze(GridView.Android.SnapAlignment);
-
 GridView.iOS = {};
 
 module.exports = GridView;
