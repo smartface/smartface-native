@@ -101,6 +101,8 @@ function Dialog(params) {
         dialogWindow.setLayout(-1, -1);
     }
     else {
+        const Application = require("../../application");
+
         dialogWindow = this.nativeObject.getWindow();
         dialogWindow.setGravity(80);
         this.nativeObject.setContentView(this.layout.nativeObject);
@@ -108,13 +110,10 @@ function Dialog(params) {
         colorDrawable = new NativeColorDrawable((Color.create(0, 0, 0, 0)).nativeObject);
         dialogWindow.setBackgroundDrawable(colorDrawable);
 
-        const Application = require("../../application");
-        var currentPage = Application.currentPage;
-
-        var isStatusBarVisible = currentPage.statusBar.visible;
+        var isStatusBarVisible = Application.statusBar.visible;
         var statusBarHeight = 0;
         if (isStatusBarVisible)
-            statusBarHeight = currentPage.statusBar.height;
+            statusBarHeight = Application.statusBar.height;
         var layoutHeight = Screen.height - statusBarHeight;
         if (statusBarHeight > 0) {
             this.layout.height = layoutHeight;
