@@ -10,7 +10,6 @@ function LayoutManager(params) {
 
     this._lineDecoration = null;
     this._itemDecoration = null;
-    this._itemLength = params && params.itemLength;
     this._spanCount = (params && params.spanCount !== undefined) ? params.spanCount : 1;
     this._lineSpacing = params && params.lineSpacing;
     this._itemSpacing = params && params.itemSpacing;
@@ -119,6 +118,11 @@ function LayoutManager(params) {
         this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
     }
 
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 function setContentInset(self) {
@@ -264,17 +268,17 @@ LayoutManager.prototype = {
             setContentInset(this);
         }
     },
-    get itemLength() {
-        return this._itemLength;
-    },
-    set itemLength(value) {
-        this._itemLength = value;
-    },
     get onItemLength() {
         return this._onItemLength;
     },
     set onItemLength(value) {
         this._onItemLength = value;
+    },
+    get onFullSpan() {
+        return this._onFullSpanCallback
+    },
+    set onFullSpan(value) {
+        this._onFullSpanCallback = value;
     },
     get spanSize() {
         return this._spanSize;
