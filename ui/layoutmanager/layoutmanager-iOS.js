@@ -35,7 +35,8 @@ function LayoutManager(params) {
         if (sfSelf.onFullSpan) {
             var __fullSpanSize = sfSelf.calculateItemSize(1);
             sfSelf.collectionView.sizeForItemAtIndexPath = function(collectionView,indexPath){
-                var itemLength = sfSelf.onFullSpan(indexPath.row);
+                var itemLength = sfSelf.onFullSpan(sfSelf.jsCollectionView.onItemType(indexPath.row, indexPath.section).toString());
+                
                 if (itemLength === undefined) {
                     return retval;
                 }else{
@@ -83,6 +84,7 @@ function LayoutManager(params) {
     if(!sfSelf.nativeObject){
         sfSelf.nativeObject = flowLayout;
         sfSelf.collectionView = null; //CollectionView will set this property.
+        sfSelf.jsCollectionView = null;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
