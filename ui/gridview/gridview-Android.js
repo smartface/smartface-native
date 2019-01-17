@@ -66,7 +66,7 @@ const GridView = extend(View)(
                     self._layoutManager.viewHeight = self.height;
                     spanSize = self._layoutManager.spanSize;
                 }
-                if (self._layoutManager.onItemLength && spanSize) {
+                if ((self._layoutManager.onItemLength && spanSize) || self._layoutManager.onFullSpan) {
                     if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
                         let fullSpanHeight;
                         if (self._layoutManager.onFullSpan &&
