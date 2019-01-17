@@ -287,14 +287,14 @@ LayoutManager.prototype = {
         this._spanSize = value;
     },
     set viewWidth(value) {
-        if (value > 0 && this._scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
+        if (value > 0)
             setSpanSizeForVertical(this, value);
-        }
+
     },
     set viewHeight(value) {
-        if (value > 0 && this._scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
+        if (value > 0)
             setSpanSizeForHorizontal(this, value);
-        }
+
     }
 };
 

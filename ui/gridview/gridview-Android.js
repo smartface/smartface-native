@@ -61,32 +61,16 @@ const GridView = extend(View)(
                     holderViewLayout = new GridViewItem();
                 }
                 var spanSize = self._layoutManager.spanSize;
-                if (spanSize == 0) {
-                    self._layoutManager.viewWidth = self.width;
-                    self._layoutManager.viewHeight = self.height;
+                if (spanSize === 0) {
+                    if (self._layoutManager.scrollDirection === GridViewLayoutManager.ScrollDirection.VERTICAL)
+                        self._layoutManager.viewWidth = self.width;
+                    else
+                        self._layoutManager.viewHeight = self.height;
                     spanSize = self._layoutManager.spanSize;
                 }
-                if ((self._layoutManager.onItemLength && spanSize) || self._layoutManager.onFullSpan) {
-                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-                        let fullSpanHeight;
-                        if (self._layoutManager.onFullSpan &&
-                            TypeUtil.isNumeric(fullSpanHeight = self._layoutManager.onFullSpan(viewType))) {
-                            holderViewLayout.height = fullSpanHeight;
-                        }
-                        else
-                            holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
 
-                    }
-                    else {
-                        let fullSpanWidth;
-                        if (self._layoutManager.onFullSpan &&
-                            TypeUtil.isNumeric(fullSpanWidth = self._layoutManager.onFullSpan(viewType))) {
-                            holderViewLayout.width = fullSpanWidth;
-                        }
-                        else
-                            holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
-                    }
-                }
+                assignSizeBasedOnDirection.call(self, holderViewLayout, viewType);
+
                 holderViewLayout.viewType = viewType;
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
                 return holderViewLayout.nativeInner;
@@ -95,51 +79,8 @@ const GridView = extend(View)(
                 var itemHashCode = nativeHolderView.itemView.hashCode();
                 var _holderViewLayout = _gridViewItems[itemHashCode];
 
-                var spanSize = self._layoutManager.spanSize;
-                if (spanSize == 0) {
-                    self._layoutManager.viewWidth = self.width;
-                    self._layoutManager.viewHeight = self.height;
-                    spanSize = self._layoutManager.spanSize;
-                }
-                if ((self._layoutManager && self._layoutManager.onItemLength) || self._layoutManager.onFullSpan) {
-                    if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
-
-                        let fullSpanHeight;
-                        if (self._layoutManager.onFullSpan &&
-                            TypeUtil.isNumeric((fullSpanHeight = self._layoutManager.onFullSpan(_holderViewLayout.viewType)))) {
-                            if (_holderViewLayout.height != fullSpanHeight)
-                                _holderViewLayout.height = fullSpanHeight;
-                            applyFullSpan(_holderViewLayout);
-                        }
-                        else {
-                            var calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
-                            if (_holderViewLayout.height != calculatedItemHeight)
-                                _holderViewLayout.height = calculatedItemHeight;
-
-                            if (self.width < _holderViewLayout.width)
-                                _holderViewLayout.width = self.width;
-                        }
-                    }
-                    else {
-                        let fullSpanWidth;
-                        if (self._layoutManager.onFullSpan &&
-                            TypeUtil.isNumeric((fullSpanWidth = self._layoutManager.onFullSpan(_holderViewLayout.viewType)))) {
-                            if (_holderViewLayout.width != fullSpanWidth)
-                                _holderViewLayout.width = fullSpanWidth;
-                            applyFullSpan(_holderViewLayout);
-                        }
-                        else {
-                            var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
-                            if (_holderViewLayout.width != calculatedItemWidth)
-                                _holderViewLayout.width = calculatedItemWidth;
-
-
-                            if (self.height < _holderViewLayout.height)
-                                _holderViewLayout.height = self.height;
-                        }
-                    }
-                }
-
+                assignSizeBasedOnDirection.call(self, _holderViewLayout, _holderViewLayout.viewType);
+                
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);
 
@@ -486,12 +427,6 @@ const GridView = extend(View)(
 
         var _onScrollListener = null;
 
-
-        function applyFullSpan(viewHolderItem) {
-            let layoutParams = viewHolderItem.nativeObject.getLayoutParams();
-            layoutParams.setFullSpan(true);
-        }
-
         function createOnScrollListernerObject() {
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
@@ -530,6 +465,47 @@ const GridView = extend(View)(
         }
     }
 );
+
+function assignSizeBasedOnDirection(holderViewLayout, viewType) {
+    const self = this;
+    let spanSize = self._layoutManager.spanSize;
+    if ((self._layoutManager.onItemLength && spanSize) || self._layoutManager.onFullSpan) {
+        if (self._layoutManager.scrollDirection == GridViewLayoutManager.ScrollDirection.VERTICAL) {
+            let fullSpanHeight;
+            if (self._layoutManager.onFullSpan &&
+                TypeUtil.isNumeric(fullSpanHeight = self._layoutManager.onFullSpan(viewType))) {
+                holderViewLayout.height = fullSpanHeight;
+                applyFullSpan(holderViewLayout);
+            }
+            else {
+                let calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
+                if (holderViewLayout.height != calculatedItemHeight)
+                    holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
+            }
+
+        }
+        else {
+            let fullSpanWidth;
+            if (self._layoutManager.onFullSpan &&
+                TypeUtil.isNumeric(fullSpanWidth = self._layoutManager.onFullSpan(viewType))) {
+                holderViewLayout.width = fullSpanWidth;
+                applyFullSpan(holderViewLayout);
+            }
+            else {
+                var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
+                if (holderViewLayout.width != calculatedItemWidth)
+                    holderViewLayout.width = self._layoutManager.onItemLength(spanSize);
+            }
+        }
+    }
+    console.log("assignSizeBasedOnDirection bitti");
+}
+
+function applyFullSpan(viewHolderItem) {
+    let layoutParams = viewHolderItem.nativeObject.getLayoutParams();
+    layoutParams.setFullSpan(true);
+}
+
 GridView.Android = {};
 GridView.Android.SnapAlignment = {
     SNAPTO_START: 0,
