@@ -10,10 +10,9 @@ function LayoutManager(params) {
 
     this._lineDecoration = null;
     this._itemDecoration = null;
-    this._itemLength = params && params.itemLength;
     this._spanCount = (params && params.spanCount !== undefined) ? params.spanCount : 1;
     this._lineSpacing = params && params.lineSpacing;
-    this._itemSpacing = params && params.itemSpacing;
+    this._itemSpacing = params && params.itemSpacing || 0;
     this._scrollDirection = (params && params.scrollDirection !== undefined) ? params.scrollDirection : 1;
     this._contentInset = params && params.contentInset;
     this._onItemLength = params && params.onItemLength;
@@ -119,6 +118,11 @@ function LayoutManager(params) {
         this.nativeObject = new NativeSFStaggeredGridLayoutManager(this._spanCount, this._scrollDirection);
     }
 
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 function setContentInset(self) {
@@ -197,7 +201,7 @@ function setSpanSizeForHorizontal(self, newHeight) {
             paddingsVertical += self._contentInset.bottom;
         }
     }
-    self._spanSize = newHeight - (self._spanCount - 1) * self._itemSpacing - paddingsVertical;
+    self._spanSize = (newHeight / self._spanCount) - paddingsVertical;
 }
 
 function setSpanSizeForVertical(self, newWidth) {
@@ -211,7 +215,7 @@ function setSpanSizeForVertical(self, newWidth) {
             paddingsHorizontal += self._contentInset.right;
         }
     }
-    self._spanSize = newWidth - (self._spanCount - 1) * self._itemSpacing - paddingsHorizontal;
+    self._spanSize = (newWidth / self._spanCount) - paddingsHorizontal;
 }
 
 
@@ -264,17 +268,17 @@ LayoutManager.prototype = {
             setContentInset(this);
         }
     },
-    get itemLength() {
-        return this._itemLength;
-    },
-    set itemLength(value) {
-        this._itemLength = value;
-    },
     get onItemLength() {
         return this._onItemLength;
     },
     set onItemLength(value) {
         this._onItemLength = value;
+    },
+    get onFullSpan() {
+        return this._onFullSpanCallback
+    },
+    set onFullSpan(value) {
+        this._onFullSpanCallback = value;
     },
     get spanSize() {
         return this._spanSize;
@@ -283,14 +287,14 @@ LayoutManager.prototype = {
         this._spanSize = value;
     },
     set viewWidth(value) {
-        if (value > 0 && this._scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
+        if (value > 0)
             setSpanSizeForVertical(this, value);
-        }
+
     },
     set viewHeight(value) {
-        if (value > 0) {
+        if (value > 0)
             setSpanSizeForHorizontal(this, value);
-        }
+
     }
 };
 
