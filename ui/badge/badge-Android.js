@@ -193,25 +193,4 @@ function Badge(params) {
         }
     }
 }
-
-
-Badge.prototype.singleton = function(params = {}) {
-    let instance;
-
-    function createInstance() {
-        if (instance)
-            instance = new Badge(params);
-        return instance;
-    }
-
-    return {
-        getInstance: function() {
-            if (!instance) {
-                instance = createInstance();
-            }
-            return instance;
-        }
-    };
-};
-
 module.exports = Badge;

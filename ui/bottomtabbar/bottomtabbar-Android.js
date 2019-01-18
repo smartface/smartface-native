@@ -84,7 +84,16 @@ function BottomTabBar(params) {
         },
     });
 
-    this.android = {};
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
     Object.defineProperties(self.android, {
         'maxItemCount': {
             get: function() {
