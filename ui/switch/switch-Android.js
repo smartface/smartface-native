@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const View = require('../view');
-const Color = require("../color");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
@@ -16,10 +15,10 @@ const Switch = extend(View)(
         }
         _super(this);
 
-        var _thumbOnColor = null;
-        var _thumbOffColor = Color.GRAY;
-        var _toggleOnColor = Color.GRAY;
-        var _toggleOffColor = Color.GRAY;
+        var _thumbOnColor;
+        var _thumbOffColor;
+        var _toggleOnColor;
+        var _toggleOffColor;
         var onToggleChangedCallback;
         Object.defineProperties(this, {
             'thumbOnColor': {
@@ -147,11 +146,11 @@ const Switch = extend(View)(
 );
 
 function setThumbColor(self) {
-    if (self.toggle) {
-        self.thumbOnColor && self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
+    if (self.toggle && self.thumbOnColor) {
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
-    else {
-        self.thumbOffColor && self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
+    else if(self.thumbOffColor) {
+        self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
 
