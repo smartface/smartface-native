@@ -59,7 +59,6 @@ function Badge(params) {
             },
             set: function(text) {
                 _badgeText = text;
-                self.visible = true;
                 if (self.nativeObject) {
                     self.nativeObject.setText("" + text);
                 }
@@ -158,6 +157,7 @@ function Badge(params) {
             self.font = Font.create("Arial", 11, Font.NORMAL);
         if (!self.textColor)
             self.textColor = Color.WHITE;
+        self.visible = false;
     }
 
     function createColorStateList(textColors) {
