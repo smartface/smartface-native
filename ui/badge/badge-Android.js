@@ -143,8 +143,8 @@ function Badge(params) {
         },
         'move': {
             value: function(x, y) {
-                self.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
-                self.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
+                self.nativeObject.setTranslationX(AndroidUnitConverter.dpToPixel(x));
+                self.nativeObject.setTranslationY(AndroidUnitConverter.dpToPixel(y));
             }
         }
     });
