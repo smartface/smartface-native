@@ -29,9 +29,8 @@ function Badge(params) {
                             self.nativeObject.pp_addBadgeWithText(value);
                         },1);
                         if (!_isBadgeFirstLoad) {
-                            if (_badgeVisible) {
-                                self.visible = _badgeVisible;
-                            }
+                            
+                            self.visible = _badgeVisible;
                             
                             if (_badgeBackgroundColor) {
                                 self.backgroundColor = _badgeBackgroundColor;
@@ -86,7 +85,6 @@ function Badge(params) {
                 if (typeof value === "boolean") {
                     _badgeVisible = value;
                     if (_badgeVisible) {
-                        
                         __SF_Dispatch.mainAsyncAfter(function(){
                             self.nativeObject.pp_showBadge();
                         },1);

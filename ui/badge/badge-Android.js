@@ -13,7 +13,6 @@ const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 function Badge(params) {
     const self = this;
     const activity = AndroidConfig.activity;
-    const ALIGN_END = 19;
     const CENTER = 17;
 
     const TextViewContentPadding = {
@@ -59,7 +58,6 @@ function Badge(params) {
             },
             set: function(text) {
                 _badgeText = text;
-                self.visible = true;
                 if (self.nativeObject) {
                     self.nativeObject.setText("" + text);
                 }
@@ -144,8 +142,8 @@ function Badge(params) {
         },
         'move': {
             value: function(x, y) {
-                self.nativeObject.setX(AndroidUnitConverter.dpToPixel(x));
-                self.nativeObject.setY(AndroidUnitConverter.dpToPixel(y));
+                self.nativeObject.setTranslationX(AndroidUnitConverter.dpToPixel(x));
+                self.nativeObject.setTranslationY(AndroidUnitConverter.dpToPixel(y));
             }
         }
     });
@@ -158,6 +156,7 @@ function Badge(params) {
             self.font = Font.create("Arial", 11, Font.NORMAL);
         if (!self.textColor)
             self.textColor = Color.WHITE;
+        self.visible = false;
     }
 
     function createColorStateList(textColors) {

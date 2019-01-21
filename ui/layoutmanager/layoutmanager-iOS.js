@@ -53,8 +53,12 @@ function LayoutManager(params) {
         }
     };
     flowLayout.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = function (proposedContentOffset, velocity) {
+        var proposedContentOffsetWithInset = {x:proposedContentOffset.x + sfSelf.contentInset.left,y:proposedContentOffset.y + sfSelf.contentInset.top};
         if (sfSelf.ios.targetContentOffset) {
-            return sfSelf.ios.targetContentOffset(proposedContentOffset,velocity);
+            var returnValue = sfSelf.ios.targetContentOffset(proposedContentOffsetWithInset,velocity);
+            returnValue.x -= sfSelf.contentInset.left;
+            returnValue.y -= sfSelf.contentInset.top;
+            return returnValue;
         }
         return proposedContentOffset;
     };

@@ -152,21 +152,21 @@ const VideoView = extend(View)(
         // Handling ios specific properties
         this.ios = {};
         
-        if(!this.skipDefaults){
-            this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
-                onPrepared: function(mediaPlayer) {
-                    _nativeMediaPlayer = mediaPlayer;
-    
-                    _onReady && _onReady();
-                }
-            }));
-            
-            this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
-                onCompletion: function(mediaPlayer) {
-                    _onFinish && _onFinish();
-                }
-            }));
-        }
+        // TODO: Set this listener after onReady callback is set.
+        this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({
+            onPrepared: function(mediaPlayer) {
+                _nativeMediaPlayer = mediaPlayer;
+
+                _onReady && _onReady();
+            }
+        }));
+        
+        // TODO: Set this listener after onFinish callback is set.
+        this.nativeInner.setOnCompletionListener(NativeMediaPlayer.OnCompletionListener.implement({
+            onCompletion: function(mediaPlayer) {
+                _onFinish && _onFinish();
+            }
+        }));
 
         // Assign parameters given in constructor
         if (params) {
