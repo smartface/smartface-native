@@ -34,7 +34,7 @@ const ImageView = extend(View)(
         _super(this);
              
         //defaults
-        self.nativeObject.contentMode = FillType.ios.MIDCENTER;
+        self.nativeObject.contentMode = FillType.NORMAL;
         self.touchEnabled = true;
          
         Object.defineProperty(self, 'image', {
