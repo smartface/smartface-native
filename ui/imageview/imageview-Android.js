@@ -29,11 +29,13 @@ const ImageView = extend(View)(
 
         imageViewPrototype._fillType = null;
         imageViewPrototype._tintColor;
+        imageViewPrototype.newImageLoaded = false;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    if (!this._image){
-                        return this.nativeObject.getDrawable() ? new Image({
+                    if (!this._image || this.newImageLoaded) {
+                        this.newImageLoaded = false;
+                        return this._image = this.nativeObject.getDrawable() ? new Image({
                             drawable: this.nativeObject.getDrawable()
                         }) : null;
                     }
@@ -103,11 +105,12 @@ const ImageView = extend(View)(
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
             var url, placeholder, isFade, onFailure, onSuccess;
+
             if (typeof arguments[0] === "object") {
                 var params = arguments[0];
                 url = params.url;
                 placeholder = params.placeholder;
-                isFade = params.isFade;
+                isFade = params.fade;
                 // onFailure callback added instead of onError in sf-core 3.2.1
                 onFailure = (params.onError ? params.onError : params.onFailure);
                 onSuccess = params.onSuccess;
@@ -118,17 +121,12 @@ const ImageView = extend(View)(
                 isFade = arguments[2];
             }
 
+
             var callback = null;
-            var self = this;
             if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
-                let self = this;
                 callback = NativePicassoCallback.implement({
                     onSuccess: function() {
-                        let loadedDrawable = self.nativeObject.getDrawable();
-                        if (loadedDrawable) {
-                            self._image = new Image({ drawable: loadedDrawable });
-                        }
                         onSuccess && onSuccess();
                     },
                     onError: function() {
@@ -141,13 +139,14 @@ const ImageView = extend(View)(
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
                 (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
                 if (placeholder instanceof Image)
-                    plainRequestCreator.placeholder(placeholder.nativeObject)
+                    plainRequestCreator.placeholder(placeholder.nativeObject);
                 var requestCreator = scaleImage(plainRequestCreator);
                 if (callback !== null)
                     requestCreator.into(this.nativeObject, callback);
                 else
                     requestCreator.into(this.nativeObject);
             }
+            this.newImageLoaded = true;
         };
 
         imageViewPrototype.fetchFromUrl = function(params) {
@@ -228,6 +227,7 @@ const ImageView = extend(View)(
                         requestCreator.into(this.nativeObject);
                     }
                 }
+                this.newImageLoaded = true;
             }
         };
 
