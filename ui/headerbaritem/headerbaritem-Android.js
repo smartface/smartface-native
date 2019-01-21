@@ -34,6 +34,7 @@ function HeaderBarItem(params) {
     this.ios = {};
     this.android = {};
 
+    self.isBadgeEnabled = false;
     Object.defineProperties(this, {
         'color': {
             get: function() {
@@ -216,12 +217,46 @@ function HeaderBarItem(params) {
                 const Badge = require("sf-core/ui/badge");
                 if (_badgeObj === undefined) {
                     _badgeObj = new Badge();
+                    self.isBadgeEnabled = true;
+                    self.assignRules(_badgeObj);
+                    self.addToHeaderView(_badgeObj);
                 }
                 return _badgeObj;
             },
             enumerable: true
         }
     });
+
+    this.assignRules = function(badge) {
+        if (!self.nativeObject)
+            return;
+
+        const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
+        const NativeView = requireClass('android.view.View');
+
+        const ALIGN_END = 19;
+        const WRAP_CONTENT = -2;
+
+        var layoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        self.nativeObject.setId(NativeView.generateViewId());
+        layoutParams.addRule(ALIGN_END, self.nativeObject.getId());
+
+        badge.nativeObject.setLayoutParams(layoutParams);
+    }
+
+    this.addToHeaderView = function(badge) {
+        if (!self.nativeBadgeContainer || !badge)
+            return;
+
+        if (!badge.nativeObject.getParent()) {
+            self.nativeBadgeContainer.addView(badge.nativeObject);
+        }
+        else {
+            var parentOfNativeObject = badge.nativeObject.getParent();
+            parentOfNativeObject.removeAllViews();
+            self.nativeBadgeContainer.addView(badge.nativeObject);
+        }
+    };
 
     Object.defineProperties(this.android, {
         'attributedTitle': {
@@ -281,6 +316,7 @@ function HeaderBarItem(params) {
         }
     }
 }
+
 
 HeaderBarItem.prototype = {
     getScreenLocation: function() {

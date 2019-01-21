@@ -720,8 +720,6 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
-        const ALIGN_END = 19;
-
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -733,41 +731,25 @@ function Page(params) {
                 itemView = item.searchView.nativeObject;
             }
             else {
-                var badgeLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
-                var nativeBadgeContainer = new NativeRelativeLayout(activity);
-                nativeBadgeContainer.setLayoutParams(badgeLayoutParams);
 
                 var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
-                var nativeBadgeContainerButton = new NativeRelativeLayout(activity);
-                nativeBadgeContainerButton.setId(NativeView.generateViewId());
-                nativeBadgeContainerButton.setLayoutParams(badgeButtonLayoutParams);
+                var nativeBadgeContainer = new NativeRelativeLayout(activity);
+                nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
 
                 if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    nativeBadgeContainerButton.addView(item.nativeObject);
+                    nativeBadgeContainer.addView(item.nativeObject);
                 }
                 else {
                     item.nativeObject = new NativeTextButton(activity);
-                    nativeBadgeContainerButton.addView(item.nativeObject);
+                    nativeBadgeContainer.addView(item.nativeObject);
                 }
-                nativeBadgeContainer.addView(nativeBadgeContainerButton);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
+                item.nativeBadgeContainer = nativeBadgeContainer;
 
-                if (item.badge.nativeObject) {
-                    var layoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
-                    item.nativeObject.setId(NativeView.generateViewId());
-                    layoutParams.addRule(ALIGN_END, nativeBadgeContainerButton.getId());
-                    item.badge.layoutParams = layoutParams;
-                    item.badge.nativeObject.setLayoutParams(item.badge.layoutParams);
-
-                    if (!item.badge.nativeObject.getParent()) {
-                        nativeBadgeContainer.addView(item.badge.nativeObject);
-                    }
-                    else {
-                        var parentOfNativeObject = item.badge.nativeObject.getParent();
-                        parentOfNativeObject.removeAllViews();
-                        nativeBadgeContainer.addView(item.badge.nativeObject);
-                    }
+                if (item.isBadgeEnabled !== false) {
+                    item.assignRules(item.badge);
+                    item.addToHeaderView(item.badge);
                 }
                 itemView = nativeBadgeContainer;
                 item.setValues();
