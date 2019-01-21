@@ -145,7 +145,7 @@ HeaderBarItem.prototype.onPress = null;
 HeaderBarItem.prototype.color = null;
 
 /**
- * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge should not be given in constructor.
  *
  *     @example
  *     var headerBarItem = new HeaderBarItem();
