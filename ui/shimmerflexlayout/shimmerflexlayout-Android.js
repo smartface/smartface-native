@@ -19,7 +19,7 @@ const ShimmerFlexLayout = extend(View)(
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
 
-        var _baseAlpha, _direction, _repeatDelay, _contentLayout = null;
+        var _baseAlpha = 1, _direction, _repeatDelay = 400, _contentLayout = null;
         Object.defineProperties(this, {
             'contentLayout': {
                 get: function() {
@@ -197,17 +197,12 @@ const ShimmerFlexLayout = extend(View)(
             }
         });
 
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-
-        //Defaults;
-        this.baseAlpha = 1;
-        this.pauseDuration = 0.4 * 1000;
 
         function shimmerBuilder(shimmerEnum) {
             switch (shimmerEnum) {

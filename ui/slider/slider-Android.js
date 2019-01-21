@@ -93,6 +93,7 @@ const Slider = extend(View)(
                 },
                 set: function(thumbImage) {
                     const Image = require("../image");
+                    console.log("_thumbImage set: ", typeof(thumbImage));
                     if(thumbImage instanceof Image && thumbImage.nativeObject){
                         _thumbImage = thumbImage;
                         this.nativeObject.setThumb(thumbImage.nativeObject);

@@ -1,6 +1,5 @@
 /*globals requireClass*/
 const View = require('../view');
-const Color = require("../color");
 const extend = require('js-base/core/extend');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
@@ -16,10 +15,10 @@ const Switch = extend(View)(
         }
         _super(this);
 
-        var _thumbOnColor = Color.create("#00A1F1"); // SmartfaceBlue
-        var _thumbOffColor = Color.GRAY;
-        var _toggleOnColor = Color.GRAY;
-        var _toggleOffColor = Color.GRAY;
+        var _thumbOnColor;
+        var _thumbOffColor;
+        var _toggleOnColor;
+        var _toggleOffColor;
         var onToggleChangedCallback;
         Object.defineProperties(this, {
             'thumbOnColor': {
@@ -137,13 +136,6 @@ const Switch = extend(View)(
             }
         }));
 
-        if (!(params && params.skipDefaults)) {
-            this.thumbOnColor = _thumbOnColor;
-            this.thumbOffColor = _thumbOffColor;
-            this.toggleOnColor = _toggleOnColor;
-            this.android.toggleOffColor = _toggleOffColor;
-        }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -154,20 +146,20 @@ const Switch = extend(View)(
 );
 
 function setThumbColor(self) {
-    if (self.toggle) {
+    if (self.toggle && self.thumbOnColor) {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
-    else {
+    else if(self.thumbOffColor) {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
 
 function setTrackColor(self) {
     if (self.toggle) {
-        self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.toggleOnColor && self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
     else {
-        self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
+        self.android.toggleOffColor && self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }
 

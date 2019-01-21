@@ -467,24 +467,6 @@ const WebView = extend(View)(
                 return true;
 
             }
-            // openFileChooser: function(uploadMsg, acceptType, capture) {
-            //     if (uploadMsg !== undefined && acceptType !== undefined && capture === undefined) {
-            //         mUploadMessage = uploadMsg;
-            //         var i = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-            //         i.addCategory(NativeIntent.CATEGORY_OPENABLE);
-            //         i.setType("*/*");
-            //         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i, "File Browser"),
-            //             WebView.RESULT_CODE_ICE_CREAM);
-            //     }
-            //     else {
-            //         mUploadMessage = uploadMsg;
-            //         var i2 = new NativeIntent(NativeIntent.ACTION_GET_CONTENT);
-            //         i2.addCategory(NativeIntent.CATEGORY_OPENABLE);
-            //         i2.setType("image/*");
-            //         _page.nativeObject.startActivityForResult(NativeIntent.createChooser(i2, "File Browser"),
-            //             WebView.RESULT_CODE_ICE_CREAM);
-            //     }
-            // }
         };
         const SFWebChromeClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebChromeClient');
         var nativeWebChromeClient = new SFWebChromeClient(overrideMethodsWebChrome);

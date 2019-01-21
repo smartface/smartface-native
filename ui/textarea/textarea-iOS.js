@@ -28,7 +28,6 @@ const TextArea = extend(TextBox)(
             },
             enumerable: true
         });
-        self.textAlignment = TextAlignment.TOPLEFT;
         
         Object.defineProperty(self.ios, 'showScrollBar', {
             get:function() {

@@ -31,8 +31,6 @@ function BottomTabBarController(params) {
                 return Application.tabBar;
             },
             set: function(params) {
-                Object.assign(Application.tabBar.android, params.android || {});
-                delete(params.android);
                 Object.assign(Application.tabBar, params);
             },
             enumerable: true
@@ -108,7 +106,6 @@ function BottomTabBarController(params) {
 
     this.push = function(childController) {
         if (!childController) {
-            // console.log("BottomTabbarController item is not a Page instance or a NavigationController instance!");
             return;
         }
 
@@ -260,8 +257,9 @@ function disableShiftMode(bottomTabBar) {
         var item = menuView.getChildAt(i);
         item.setShiftingMode(false);
         var checked = (item.getItemData()).isChecked();
-        if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation === true)
+        if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation) {
             item.setChecked(false);
+        }
         else
             item.setChecked(checked);
     }

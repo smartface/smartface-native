@@ -35,6 +35,20 @@ function LayoutManager(params) {}
 LayoutManager.prototype.onItemLength = function(itemLength){};
 
 /**
+ * This event used to define specified gridview item  to fully occupy width/height  based on direction. According to direction return value must be either desired height or width of gridview item. If the direction
+ * is {@link UI.LayoutManager.ScrollDirection#VERTICAL VERTICAL} then return value must be height or vice versa. Returning undefined indicates that
+ * the gridview item will not modified. 
+ *
+ * @param {Number} itemType
+ * @event onFullSpan
+ * @android
+ * @ios
+ * @return {Number} height/width
+ * @since 4.0.1
+ */
+LayoutManager.prototype.onFullSpan = function(itemType){};
+
+/**
  * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
  * For example, you might use this method to always stop scrolling on a boundary between items, as opposed to stopping in the middle of an item.For Android, you can use {@link UI.GridView#snapToAlignment}.
  *

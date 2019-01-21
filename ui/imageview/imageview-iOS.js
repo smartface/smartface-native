@@ -34,12 +34,12 @@ const ImageView = extend(View)(
         _super(this);
              
         //defaults
-        self.nativeObject.contentMode = FillType.ios.MIDCENTER;
+        self.nativeObject.contentMode = FillType.NORMAL;
         self.touchEnabled = true;
          
         Object.defineProperty(self, 'image', {
             get: function() {
-                return Image.createFromImage(self.nativeObject.image);
+                return self.nativeObject.image ? Image.createFromImage(self.nativeObject.image) : undefined;
             },
             set: function(value) {
                 _imageTemplate = undefined;
@@ -154,7 +154,8 @@ const ImageView = extend(View)(
             set: function(value) {
                 self.nativeObject.contentMode = value;
             },
-            enumerable: true
+            enumerable: true,
+            configurable:true
         });
 
         var _imageTemplate;

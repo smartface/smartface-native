@@ -4,7 +4,6 @@ const extend = require('js-base/core/extend');
 
 const NativeProgressBar = requireClass("android.widget.ProgressBar");
 const NativePorterDuff = requireClass("android.graphics.PorterDuff");
-const Color = require('../color');
 const AndroidConfig = require("../../util/Android/androidconfig");
 
 const ActivityIndicator = extend(View)(
@@ -17,11 +16,7 @@ const ActivityIndicator = extend(View)(
 
         // Handling ios specific properties.
         this.ios = {}; 
-        
-        if(!this.skipDefaults){
-            this.nativeObject.setIndeterminate(true);
-            this.color = Color.create("#00A1F1"); // SmartfaceBlue
-        }
+        this.nativeObject.setIndeterminate(true);
         
         // Assign parameters given in constructor
         if (params) {
