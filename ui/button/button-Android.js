@@ -133,7 +133,6 @@ const Button = extend(Label)(
         this.__backgroundImages = null;
         this._borderColor = Color.BLACK;
         this._borderWidth = 0;
-        // YOGA PROPERTIES
     
         this.setBackgroundImage = function() {
             var resources = AndroidConfig.activityResources;
@@ -307,23 +306,18 @@ const Button = extend(Label)(
                     break;
             }
             // This check is added for COR-1562
-            const Webview = require("../webview");
-            if (this instanceof Webview) {
-                this.nativeObject.setBackgroundColor(0);
-            }
+            // const Webview = require("../webview");
+            // if (this instanceof Webview) {
+            //     this.nativeObject.setBackgroundColor(0);
+            // }
         
             this.nativeObject.setBackground(layerDrawableNative);
         };
     
 
         // Default settings
-        if (!this.skipDefaults) {
-            this.nativeObject.setBackground(this.layerDrawable);
-            this.nativeObject.setAllCaps(false); // enable lowercase texts
-            this.backgroundColor = Color.create("#00A1F1"); // Smartface blue
-            this.textColor = Color.WHITE;
-            this.padding = 0;
-        }
+        this.nativeObject.setBackground(this.layerDrawable);
+        this.nativeObject.setAllCaps(false); // enable lowercase texts
 
         // Assign parameters given in constructor
         if (params) {

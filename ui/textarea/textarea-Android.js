@@ -1,6 +1,5 @@
 const extend        = require('js-base/core/extend');
 const TextBox       = require("../textbox");
-const TextAlignment = require('../textalignment');
 
 const TextArea = extend(TextBox)(
     function (_super, params) {
@@ -8,7 +7,6 @@ const TextArea = extend(TextBox)(
         _super(this);
 
         self.nativeObject.setSingleLine(false);
-        self.textAlignment = TextAlignment.TOPLEFT;
 
         // Remove implementations of some properties
         Object.defineProperties(self, {

@@ -2,9 +2,7 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const KeyboardType = require('sf-core/ui/keyboardtype');
 const ActionKeyType = require('sf-core/ui/actionkeytype');
-const Animator = require('sf-core/ui/animator');
 const Color = require('sf-core/ui/color');
-const Screen = require('sf-core/device/screen');
 const KeyboardAnimationDelegate = require("sf-core/util").KeyboardAnimationDelegate;
 const Invocation = require('sf-core/util/iOS/invocation.js');
 

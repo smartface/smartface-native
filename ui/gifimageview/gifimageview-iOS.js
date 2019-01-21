@@ -1,6 +1,5 @@
 const extend = require('js-base/core/extend');
 const ImageView = require('../imageview');
-const GifImage = require("sf-core/ui/gifimage");
 const Image = require("sf-core/ui/image");
 
 const GifImageView = extend(ImageView)(

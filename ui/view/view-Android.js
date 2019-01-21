@@ -203,11 +203,8 @@ function View(params) {
     this._onTouchCancelled;
     // YOGA PROPERTIES
 
-    // Assign defaults
-    if (!this.skipDefaults) {
-        var idInitial = NativeView.generateViewId();
-        this.nativeObject.setId(idInitial);
-    }
+    var idInitial = NativeView.generateViewId();
+    this.nativeObject.setId(idInitial);
 
     // Assign parameters given in constructor
     if (params) {
