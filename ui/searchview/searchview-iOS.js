@@ -207,6 +207,8 @@ const SearchView = extend(View)(
             },
             enumerable: true
         });
+        
+        // ATTENTION: Removing this line causes the crash.
         this.backgroundColor = Color.WHITE;
         
         var _borderWidth = 0;
@@ -230,8 +232,6 @@ const SearchView = extend(View)(
             enumerable: true,
             configurable:true
         });
-        self.borderWidth = 1;
-        self.borderColor = Color.create(222,222,222);
         
         var _backgroundImage;
         Object.defineProperty(this, 'backgroundImage', {

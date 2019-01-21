@@ -28,10 +28,8 @@ const TextView = extend(View)(
         self.nativeObject.setSelectable = false;
         self.nativeObject.setEditable = false;
         self.nativeObject.setDelaysContentTouches = true;
-        self.nativeObject.textAlignmentNumber = SFTextAlignment.MIDLEFT;
         self.nativeObject.textContainer.maximumNumberOfLines = 0;
         self.nativeObject.textContainer.lineBreakMode = 0;
-        self.nativeObject.backgroundColor = Color.TRANSPARENT.nativeObject;
 
         var _attributedText = [];
         Object.defineProperty(self, 'attributedText', {

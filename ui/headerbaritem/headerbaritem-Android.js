@@ -1,4 +1,4 @@
-/* globals requireClass, toJSArray, array */
+/* globals requireClass, toJSArray */
 const Color = require("../color");
 const Image = require("../image");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
@@ -27,8 +27,7 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _attributedTitleBuilder,
-        _badgeObj = undefined,
-        _size;
+        _badgeObj = undefined;
     const activity = AndroidConfig.activity;
 
     this.ios = {};
@@ -269,11 +268,6 @@ function HeaderBarItem(params) {
         }
     };
 
-    if (!_color) {
-        if (HeaderBarItem.itemColor) {
-            this.color = HeaderBarItem.itemColor;
-        }
-    }
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

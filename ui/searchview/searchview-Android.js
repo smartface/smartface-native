@@ -486,10 +486,6 @@ const SearchView = extend(View)(
                 }.bind(this)
             }));
 
-            this.borderWidth = 1;
-            this.borderColor = _textFieldBackgroundColor;
-            this.textFieldBackgroundColor = _textFieldBackgroundColor;
-            this.backgroundColor = Color.WHITE;
             this.android.iconifiedByDefault = false;
         }
 
