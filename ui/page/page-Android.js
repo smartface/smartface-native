@@ -720,6 +720,7 @@ function Page(params) {
         const NativeTextButton = requireClass('android.widget.Button');
         const NativeRelativeLayout = requireClass("android.widget.RelativeLayout");
 
+        const WRAP_CONTENT = -2;
         // to fix supportRTL padding bug, we should set this manually.
         // @todo this values are hard coded. Find typed arrays
 
@@ -732,18 +733,17 @@ function Page(params) {
             }
             else {
 
-                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(NativeRelativeLayout.LayoutParams.WRAP_CONTENT, NativeRelativeLayout.LayoutParams.WRAP_CONTENT);
+                var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
 
                 if (item.image && item.image.nativeObject) {
                     item.nativeObject = new NativeImageButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
                 }
                 else {
                     item.nativeObject = new NativeTextButton(activity);
-                    nativeBadgeContainer.addView(item.nativeObject);
                 }
+                nativeBadgeContainer.addView(item.nativeObject);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
                 item.nativeBadgeContainer = nativeBadgeContainer;
 
