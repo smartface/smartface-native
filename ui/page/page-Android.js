@@ -63,7 +63,7 @@ function Page(params) {
             const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
             var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
             var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);  
+            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
             self.nativeObject.setHasOptionsMenu(true);
@@ -118,12 +118,13 @@ function Page(params) {
             var itemId = menuItem.getItemId();
             if (itemId === NativeAndroidR.id.home) {
                 let leftItem;
-                if(Application.currentPage.pageID === self.pageID) {
+                if (Application.currentPage.pageID === self.pageID) {
                     leftItem = self._headerBarLeftItem;
-                } else {
+                }
+                else {
                     leftItem = Application.currentPage._headerBarLeftItem;
                 }
-                
+
                 if (leftItem) {
                     leftItem.onPress && leftItem.onPress();
                 }
@@ -299,16 +300,16 @@ function Page(params) {
         },
         'present': {
             value: function(params) {
-                if(!params)
+                if (!params)
                     return;
                 (params.animated !== false) && (params.animated = true);
                 const ViewController = require("sf-core/util/Android/transition/viewcontroller");
                 // TODO: Remove this custom implement to avoid smartafce Router bug!
                 let controller = params;
                 params.__isPopupPage = true;
-                
+
                 ViewController.activateController(controller);
-                
+
                 ViewController.setController({
                     controller: controller, //params.controller,
                     animation: params.animated,
@@ -322,12 +323,12 @@ function Page(params) {
             value: function(params = {}) {
                 const FragmentTransaction = require("sf-core/util/Android/transition/fragmenttransition");
                 var fragmentManager = activity.getSupportFragmentManager();
-                if(!self.popUpBackPage)
+                if (!self.popUpBackPage)
                     return;
                 self.popUpBackPage.transitionViews && (self.popUpBackPage.returnRevealAnimation = true);
-                
+
                 fragmentManager.popBackStack();
-                if(!self.popUpBackPage.transitionViews) {
+                if (!self.popUpBackPage.transitionViews) {
                     var isPrevLayoutFocused = self.popUpBackPage.layout.nativeObject.isFocused();
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.setFocusableInTouchMode(true); //This will control the back button press
                     !isPrevLayoutFocused && self.popUpBackPage.layout.nativeObject.requestFocus();
@@ -383,7 +384,9 @@ function Page(params) {
         configurable: true
     });
 
-    var _borderVisibility = true, _transparent = false, _alpha = 1.0;
+    var _borderVisibility = true,
+        _transparent = false,
+        _alpha = 1.0;
     Object.defineProperty(self.headerBar, 'borderVisibility', {
         get: function() {
             return _borderVisibility;
@@ -418,10 +421,10 @@ function Page(params) {
             return _transparent;
         },
         set: function(value) {
-            if(value !== _transparent) {
+            if (value !== _transparent) {
                 _transparent = value;
                 var pageLayoutParams = pageLayout.getLayoutParams();
-                if(_transparent) {
+                if (_transparent) {
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
                     self.headerBar.backgroundColor = Color.TRANSPARENT;
                 }
@@ -429,7 +432,7 @@ function Page(params) {
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
                 }
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
-                
+
             }
         },
         enumerable: true,
@@ -612,8 +615,8 @@ function Page(params) {
         },
         enumerable: true
     });
-    
-    
+
+
     var _attributedTitle, _attributedSubtitle, _attributedTitleBuilder, _attributedSubtitleBuilder;
     Object.defineProperty(self.headerBar.android, 'attributedTitle', {
         get: function() {
@@ -621,12 +624,12 @@ function Page(params) {
         },
         set: function(title) {
             _attributedTitle = title;
-            if(_attributedTitle) {
+            if (_attributedTitle) {
                 if (_attributedTitleBuilder)
                     _attributedTitleBuilder.clear();
                 else
                     _attributedTitleBuilder = new NativeSpannableStringBuilder();
-                
+
                 title.setSpan(_attributedTitleBuilder);
                 toolbar.setTitle(_attributedTitleBuilder);
             }
@@ -634,19 +637,19 @@ function Page(params) {
         enumerable: true,
         configurable: true
     });
-    
+
     Object.defineProperty(self.headerBar.android, 'attributedSubtitle', {
         get: function() {
             return _attributedSubtitle;
         },
         set: function(subtitle) {
             _attributedSubtitle = subtitle;
-            if(_attributedSubtitle) {
+            if (_attributedSubtitle) {
                 if (_attributedSubtitleBuilder)
                     _attributedSubtitleBuilder.clear();
                 else
                     _attributedSubtitleBuilder = new NativeSpannableStringBuilder();
-                
+
                 subtitle.setSpan(_attributedSubtitleBuilder);
                 toolbar.setSubtitle(_attributedSubtitleBuilder);
             }
@@ -683,7 +686,7 @@ function Page(params) {
             enumerable: true
         }
     );
-    
+
     // Implemented for just SearchView
     self.headerBar.addViewToHeaderBar = function(view) {
         const HeaderBarItem = require("../headerbaritem");
@@ -765,7 +768,6 @@ function Page(params) {
                         parentOfNativeObject.removeAllViews();
                         nativeBadgeContainer.addView(item.badge.nativeObject);
                     }
-                    item.badge.visible !== true ? item.badge.nativeObject.setVisibility(8) : item.badge.nativeObject.setVisibility(0);
                 }
                 itemView = nativeBadgeContainer;
                 item.setValues();
@@ -822,7 +824,7 @@ function Page(params) {
     }));
     self.layout.nativeObject.setFocusable(true);
     self.layout.nativeObject.setFocusableInTouchMode(true);
-    
+
     // Default values
     var setDefaults = function() {
         if (!params.skipDefaults) {
@@ -834,7 +836,7 @@ function Page(params) {
             self.headerBar.visible = true;
         }
     };
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
