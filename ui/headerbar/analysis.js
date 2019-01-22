@@ -52,7 +52,7 @@ function HeaderBar() {}
  * @property {Number} [alpha = 1]
  * @android
  * @ios
- * @since 4.0.1
+ * @since 4.0.0
  */
 HeaderBar.prototype.alpha = 1;
 
@@ -62,7 +62,7 @@ HeaderBar.prototype.alpha = 1;
  * @property {Boolean} [transparent = true]
  * @ios
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 HeaderBar.prototype.transparent = false;
 

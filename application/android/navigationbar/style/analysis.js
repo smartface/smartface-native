@@ -1,6 +1,6 @@
 /**
  * @enum Application.Android.NavigationBar.Style
- * @since 4.0.1
+ * @since 4.0.0
  *
  * Style is an enum. It defines navigation bar appearance style.
  *
@@ -17,7 +17,7 @@ var NavigationBarStyle = {};
  * @android
  * @static
  * @readonly
- * @since 4.0.1
+ * @since 4.0.0
  */
 NavigationBarStyle.DARKCONTENT = 0;
 
@@ -27,6 +27,6 @@ NavigationBarStyle.DARKCONTENT = 0;
  * @android
  * @static
  * @readonly
- * @since 4.0.1
+ * @since 4.0.0
  */
 NavigationBarStyle.LIGHTCONTENT = 1;

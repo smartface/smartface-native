@@ -1,10 +1,8 @@
 const ViewGroup = require('../viewgroup');
 const extend = require('js-base/core/extend');
-const Invocation = require('sf-core/util/iOS/invocation.js');
 
 const CollectionViewItem = extend(ViewGroup)(
     function (_super, params) {
-        var sfSelf = this;
         
         _super(this);
         

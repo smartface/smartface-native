@@ -45,6 +45,21 @@ TabBarItem.prototype.title = "";
  */
 TabBarItem.prototype.icon = null;
 
+/**
+ * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.
+ *
+ *     @example
+ *     page.parentController.tabBar.items[0].badge.text = "5"; //ParentController must be BottomTabbarController
+ *     page.parentController.tabBar.items[0].badge.visible = true;
+ * 
+ * @property {UI.Badge} badge
+ * @android
+ * @ios
+ * @readonly
+ * @since 4.0.1
+ */
+TabBarItem.prototype.badge;
 
 /**
  * Gets/sets the route related to tab item. When an tab bar item is pressed, its route is shown. 

@@ -1,6 +1,5 @@
 const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
-const Color = require('sf-core/ui/color');
 const File = require('sf-core/io/file');
 const Invocation = require('sf-core/util').Invocation;
 const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
@@ -21,7 +20,6 @@ const WebView = extend(View)(
         self.android.clearFormData = function(){};
         
         self.nativeObject.setValueForKey(false,"opaque");
-        self.backgroundColor = Color.WHITE;
         
         Object.defineProperty(self, 'loadURL', {
             value: function(value) {
@@ -85,6 +83,12 @@ const WebView = extend(View)(
         self.refresh = function(){
             self.nativeObject.reload();
         }
+        
+        self.ios.onOpenNewWindow = function(){};
+        self.nativeObject.onOpenNewWindow = function(e) {
+            var urlString  = e.request.URL ? e.request.URL.absoluteString : undefined;
+            self.ios.onOpenNewWindow({url : urlString});
+        };
         
         self.evaluateJS = function(javascript,callback){
             function result(e){

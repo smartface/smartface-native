@@ -41,9 +41,8 @@ StatusBar.prototype.height;
  *
  * @property {Boolean} [transparent = true]
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
-StatusBar.prototype.transparent = false;
 
 /**
  * Gets/sets visibility of the status bar.

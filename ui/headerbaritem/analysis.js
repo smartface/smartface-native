@@ -33,6 +33,19 @@ function HeaderBarItem(params) {}
 HeaderBarItem.prototype.title = "";
 
 /**
+ * Gets/sets size of header bar item. Size must be obtained life cycle of page. Otherwise returning value will be undefined.
+ *
+ * @property {Object} size
+ * @property {Number} size.width
+ * @property {Number} size.height
+ * @readonly
+ * @android
+ * @ios
+ * @since 4.0.1
+ */
+HeaderBarItem.prototype.size;
+
+/**
  * Gets/sets attributed title of header bar item. If image is not set, attributed title will be
  * shown in the header bar.
  *
@@ -40,7 +53,7 @@ HeaderBarItem.prototype.title = "";
  *
  * @property {UI.AttributedString} attributedTitle
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 HeaderBarItem.prototype.attributedTitle;
 
@@ -132,7 +145,8 @@ HeaderBarItem.prototype.onPress = null;
 HeaderBarItem.prototype.color = null;
 
 /**
- * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
+ * Gets badge of header bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval. Badge should not be given in constructor. In Android,
+ * badge does not appear when assigned to {@link UI.HeaderBar#setLeftItem left item} of HeaderBar.
  *
  *     @example
  *     var headerBarItem = new HeaderBarItem();
@@ -141,104 +155,13 @@ HeaderBarItem.prototype.color = null;
  *     headerBarItem.badge.visible = true;
  *     page.headerBar.setItems([headerBarItem]);
  * 
- * @property {UI.HeaderBarItem.Badge} badge
+ * @property {UI.Badge} badge
  * @android
  * @ios
  * @readonly
  * @since 3.0.0
  */
-HeaderBarItem.prototype.badge = {};
-
-/**
- * @class UI.HeaderBarItem.Badge
- * @since 3.0.0
- * 
- * Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
- * 
- */
-HeaderBarItem.Badge = {};
-
-/**
- * Gets/sets text of header bar item badge.
- *
- * @property {String} text
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.text = "";
-
-/**
- * Gets/sets visible of header bar item badge.
- *
- * @property {Boolean} visible
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.visible = false;
-
-/**
- * Gets/sets backgroundColor of header bar item badge.
- *
- * @property {UI.Color} backgroundColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.backgroundColor = null;
-
-/**
- * Gets/sets textColor of header bar item badge.
- *
- * @property {UI.Color} textColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.textColor = null;
-
-/**
- * Gets/sets font of header bar item badge.
- *
- * @property {UI.Font} font
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.font = null;
-
-/**
- * Gets/sets border color of header bar item badge.
- *
- * @property {UI.Color} borderColor
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.borderColor = null;
-
-/**
- * Gets/sets border width of header bar item badge.
- *
- * @property {Number} borderWidth
- * @android
- * @ios
- * @since 3.1.0
- */
-HeaderBarItem.Badge.prototype.borderWidth = 0;
-
-/**
- * Set Badge offset, Badge center point defaults to the top right corner of its parent.
- *
- * @property {Function} move
- * @param {Number} x
- * @param {Number} y
- * @android
- * @ios
- * @since 3.0.0
- */
-HeaderBarItem.Badge.prototype.move = function(x,y){}
+HeaderBarItem.prototype.badge;
 
 /**
  * iOS Specific Properties.

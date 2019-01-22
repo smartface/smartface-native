@@ -15,11 +15,6 @@ const ImageView = extend(View)(
         }
         _super(this);
 
-        if (!this.skipDefaults) {
-            // SET DEFAULTS
-            this.imageFillType = ImageView.FillType.NORMAL;
-        }
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

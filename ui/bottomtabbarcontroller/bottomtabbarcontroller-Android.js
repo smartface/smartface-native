@@ -1,7 +1,7 @@
 /* globals requireClass */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
-const FragmentTransaction = require("../../util/Android/fragmenttransition");
+const FragmentTransaction = require("../../util/Android/transition/fragmenttransition");
 const BottomTabBar = require("../../ui/bottomtabbar");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
@@ -13,7 +13,7 @@ function BottomTabBarController(params) {
     // TODO: Beautify this code
     const Application = require("sf-core/application");
     Application.tabBar = new BottomTabBar();
-    
+
     var _addedToActivity = false;
     var _disabledShiftingMode = false;
     var _menu;
@@ -23,6 +23,7 @@ function BottomTabBarController(params) {
     var _selectedIndex = 0;
     var _shouldSelectByIndexCallback,
         _didSelectByIndexCallback;
+    var cahceNativeViews = {};
 
     Object.defineProperties(this, {
         'tabBar': {
@@ -40,10 +41,16 @@ function BottomTabBarController(params) {
             },
             set: function(childrenArray) {
                 _childControllers = childrenArray;
-                
+
                 // set isInsideBottomTabBar for all children
                 const ViewController = require("../../util/Android/transition/viewcontroller");
-                for(let index in _childControllers) {
+                for (let index in _childControllers) {
+                    try {
+                        _childControllers[index].parentController = self;
+                    }
+                    catch (e) {
+                        Application.onUnhandledError && Application.onUnhandledError(e);
+                    }
                     ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
                 }
             },
@@ -88,8 +95,8 @@ function BottomTabBarController(params) {
         if (!_disabledShiftingMode) {
             _disabledShiftingMode = disableShiftMode(self.tabBar);
         }
-        
-        if(!_addedToActivity) {
+
+        if (!_addedToActivity) {
             _addedToActivity = true;
             var pageLayoutWrapper = activity.findViewById(NativeSFR.id.page_container_wrapper);
             self.tabBar.nativeObject.setVisibility(8); // GONE
@@ -98,17 +105,16 @@ function BottomTabBarController(params) {
     };
 
     this.push = function(childController) {
-        if(!childController) {
-            // console.log("BottomTabbarController item is not a Page instance or a NavigationController instance!");
+        if (!childController) {
             return;
         }
-        
-        if(!self.__isActive)
-          return;
-        
+
+        if (!self.__isActive)
+            return;
+
         const ViewController = require("sf-core/util/Android/transition/viewcontroller");
         ViewController.deactivateController(self.getCurrentController());
-           
+
         // Don't remove this line to top of the page.
         // NavigationController requires BottomTabBarController.
         const NavigationController = require("../../ui/navigationcontroller");
@@ -127,7 +133,7 @@ function BottomTabBarController(params) {
             childController.__isActive = true;
             // first press
             if (childController.childControllers.length < 1) {
-                if(!childController.childControllers[0]) // Requested by Smartface Router Team
+                if (!childController.childControllers[0]) // Requested by Smartface Router Team
                     return;
                 childController.push({
                     controller: childController.childControllers[0],
@@ -137,7 +143,7 @@ function BottomTabBarController(params) {
             else if (childController.childControllers.length >= 1) {
                 var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
-                
+
                 // show latest page or controller
                 childController.show({
                     controller: childControllerStack[childControllerStackLenght - 1],
@@ -156,21 +162,26 @@ function BottomTabBarController(params) {
         // TODO: check __isActive property
         self.push(self.childControllers[_selectedIndex]);
     };
-    
+
     this.setChecked = function() {
-        (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
-        if(_selectedIndex < 0)
-           return;
-        _menu.getItem(_selectedIndex).setChecked(true);
+        if (self.tabBar.android && self.tabBar.android.disableItemAnimation) {
+            setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
+        }
+        else {
+            (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+            if (_selectedIndex < 0)
+                return;
+            _menu.getItem(_selectedIndex).setChecked(true);
+        }
     };
-    
+
     this.getCurrentController = function() {
         var controller = self.childControllers[_selectedIndex];
-        if(!controller)
-           return null;
-        if(controller instanceof Page)
-           return controller;
-           
+        if (!controller)
+            return null;
+        if (controller instanceof Page)
+            return controller;
+
         return controller.getCurrentController();
     };
 
@@ -179,32 +190,57 @@ function BottomTabBarController(params) {
         onNavigationItemSelected: function(item) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
-            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({index: index}) : true;
+            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
+
+            if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
+                setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
+
             if (result) {
-                try {
-                    self.childControllers[index].parentController = self;
-                } catch(e) {
-                    Application.onUnhandledError && Application.onUnhandledError(e);
-                }
                 // TODO: Add this property to controller class
                 // use this property to show/hide bottom naviagtion view after controller transition
                 self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
-                self.childControllers[index].isInsideBottomTabBar = true; 
+                self.childControllers[index].isInsideBottomTabBar = true;
                 self.childControllers[index].__isActive = true;
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 try {
-                    self.didSelectByIndex && self.didSelectByIndex({index: index});
-                }catch(e) {
+                    self.didSelectByIndex && self.didSelectByIndex({ index: index });
+                }
+                catch (e) {
                     Application.onUnhandledError && Application.onUnhandledError(e);
                 }
             }
-            return result;
+            return self.tabBar.android && self.tabBar.android.disableItemAnimation ? false : result;
         }
     }));
-    
+
     this.addTabBarToActivity();
     params && (Object.assign(this, params));
+}
+
+function setColorToMenuViewItem(index, cahce) {
+    const tabBar = this;
+
+    let selectedColorNO = tabBar.itemColor.selected.nativeObject;
+    let normalColorNO = tabBar.itemColor.normal.nativeObject;
+    if (Object.keys(cahce).length <= tabBar.items.length) {
+        cahce[index] = {};
+        let nativeBottomTabarMenuView = tabBar.nativeObject.getChildAt(0);
+        let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(index);
+        cahce[index].nativeImageView = nativeMenuItem.getChildAt(0);
+        cahce[index].nativeTextView = nativeMenuItem.getChildAt(1).getChildAt(0);
+    }
+    cahce[index].nativeImageView.setColorFilter(selectedColorNO);
+    cahce[index].nativeTextView.setTextColor(selectedColorNO);
+
+    for (let i in cahce) {
+        let parsedToInt = parseInt(i);
+        if (parsedToInt !== index && cahce.prevSelectedIndex === parsedToInt) {
+            cahce[i].nativeImageView.setColorFilter(normalColorNO);
+            cahce[i].nativeTextView.setTextColor(normalColorNO);
+        }
+    }
+    cahce.prevSelectedIndex = index;
 }
 
 function disableShiftMode(bottomTabBar) {
@@ -214,14 +250,18 @@ function disableShiftMode(bottomTabBar) {
     shiftingMode.setBoolean(menuView, false);
     shiftingMode.setAccessible(false);
     let childCount = menuView.getChildCount();
-    if(childCount === 0)
+    if (childCount === 0)
         return false;
-    
+
     for (var i = 0; i < childCount; i++) {
         var item = menuView.getChildAt(i);
         item.setShiftingMode(false);
         var checked = (item.getItemData()).isChecked();
-        item.setChecked(checked);
+        if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation) {
+            item.setChecked(false);
+        }
+        else
+            item.setChecked(checked);
     }
     return true;
 }

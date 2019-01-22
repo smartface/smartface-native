@@ -1,26 +1,23 @@
 /*globals requireClass*/
-const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
-const extend                = require('js-base/core/extend');
-const FlexLayout            = require('../flexlayout');
-const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
+const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
+const extend = require('js-base/core/extend');
+const FlexLayout = require('../flexlayout');
+const StaggeredGridLayoutManager = requireClass('android.support.v7.widget.StaggeredGridLayoutManager');
 
 const GridViewItem = extend(FlexLayout)(
-    function (_super, params) {
+    function(_super, params) {
         _super(this);
-        
-        if(!this.nativeInner){
-            if(params && params.nativeInner){
+
+        if (!this.nativeInner) {
+            if (params && params.nativeInner) {
                 this.nativeInner = params.nativeInner;
             }
-            else{
+            else {
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
-        }
-
-        if(!this.skipDefaults){
-            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-1);
-            this.nativeObject.setLayoutParams(layoutParams);
+            //StaggeredGridLayoutManager layout params are provides a few related feature. 
+            this.nativeObject.setLayoutParams(new StaggeredGridLayoutManager.LayoutParams(-1, -1));
         }
 
         if (params) {
@@ -54,10 +51,10 @@ const GridViewItem = extend(FlexLayout)(
                 configurable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'GridViewItem';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });

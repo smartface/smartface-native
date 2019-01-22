@@ -114,7 +114,7 @@ GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @return {Boolean} Return true if the event is consumed.
  * @event onGesture
  * @android
- * @since 4.0.1
+ * @since 4.0.0
  */
 GridView.prototype.onGesture = function onGesture(params){};
 

@@ -1,7 +1,6 @@
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
-const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
 const Invocation = require('sf-core/util/iOS/invocation.js');
 const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
@@ -15,8 +14,7 @@ const UITableViewRowAnimation = {
     none: 5, // available in iOS 3.0
     middle: 6, // available in iOS 3.2.  attempts to keep cell centered in the space it will/did occupy
     automatic: 7 // available in iOS 5.0.  chooses an appropriate animation style for you
-}
-
+};
 
 const ListView = extend(View)(
     function(_super, params) {

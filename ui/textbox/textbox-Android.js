@@ -395,27 +395,9 @@ const TextBox = extend(TextView)(
         // Handling ios specific properties
         self.ios = {};
 
-        if (!this.skipDefaults) {
-            // Don't use self.multiline = false due to AND-2725 bug.
-            // setMovementMethod in label-Android.js file removes the textbox cursor. 
-            self.nativeObject.setSingleLine(true);
-
-            self.android.hintTextColor = Color.LIGHTGRAY;
-            self.textAlignment = TextAlignment.MIDLEFT;
-            self.padding = 0;
-
-            // AND-3223: instead of setOnKeyListener , onKeyPreIme is implemented.  
-            // self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
-            //     onKey: function(view, keyCode, keyEvent) {
-            //         // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-            //         if (keyCode === 4 && keyEvent.getAction() === 1) {
-            //             
-            //             self.nativeObject.clearFocus();
-            //         }
-            //         return false;
-            //     }
-            // }));
-        }
+        // Don't use self.multiline = false due to AND-2725 bug.
+        // setMovementMethod in label-Android.js file removes the textbox cursor. 
+        self.nativeObject.setSingleLine(true);
 
         // Always return false for using both touch and focus events. 
         // It will not broke events on scrollable parents. Solves: AND-2798
