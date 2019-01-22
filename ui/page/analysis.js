@@ -199,6 +199,7 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  * @param {Function} params.onComplete
  * @android
  * @ios
+ * @deprecated
  * @since 3.1.1
  *
  */
@@ -214,6 +215,7 @@ Page.prototype.present = function(params){};
  * @android
  * @ios
  * @since 3.1.1
+ * @deprecated
  */
 Page.prototype.dismiss = function(params){};
 
