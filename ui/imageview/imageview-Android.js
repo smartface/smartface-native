@@ -250,8 +250,6 @@ function getLoadFromUrlParams() {
             fade: arguments[2]
         };
     }
-
-
 }
 
 ImageView.CacheType = {};
