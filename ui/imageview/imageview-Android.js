@@ -103,7 +103,7 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-            var {url, placeholder, fade, onFailure, onSuccess} = getLoadFromUrlParams(arguments);
+            var {url, placeholder, fade, onFailure, onSuccess} = getLoadFromUrlParams.apply(null,arguments);
             var callback = null;
             if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
