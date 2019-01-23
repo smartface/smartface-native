@@ -29,15 +29,14 @@ const ImageView = extend(View)(
 
         imageViewPrototype._fillType = null;
         imageViewPrototype._tintColor;
-        imageViewPrototype.newImageLoaded = false;
+        imageViewPrototype.__newImageLoaded = false;
         Object.defineProperties(imageViewPrototype, {
             'image': {
                 get: function() {
-                    if (!this._image || this.newImageLoaded) {
-                        this.newImageLoaded = false;
-                        return this._image = this.nativeObject.getDrawable() ? new Image({
-                            drawable: this.nativeObject.getDrawable()
-                        }) : null;
+                    if (!this._image || this.__newImageLoaded) {
+                        this.__newImageLoaded = false;
+                        let drawable = this.nativeObject.getDrawable();
+                        return this._image = (drawable ? new Image({ drawable: drawable}) : null);
                     }
                     else
                         return this._image;
@@ -104,24 +103,7 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-            var url, placeholder, isFade, onFailure, onSuccess;
-
-            if (typeof arguments[0] === "object") {
-                var params = arguments[0];
-                url = params.url;
-                placeholder = params.placeholder;
-                isFade = params.fade;
-                // onFailure callback added instead of onError in sf-core 3.2.1
-                onFailure = (params.onError ? params.onError : params.onFailure);
-                onSuccess = params.onSuccess;
-            }
-            else {
-                url = arguments[0];
-                placeholder = arguments[1];
-                isFade = arguments[2];
-            }
-
-
+            var {url, placeholder, fade, onFailure, onSuccess} = getLoadFromUrlParams(arguments);
             var callback = null;
             if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
@@ -137,7 +119,7 @@ const ImageView = extend(View)(
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (TypeUtil.isString(url)) {
                 var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(url);
-                (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
+                (fade === false) && (plainRequestCreator = plainRequestCreator.noFade());
                 if (placeholder instanceof Image)
                     plainRequestCreator.placeholder(placeholder.nativeObject);
                 var requestCreator = scaleImage(plainRequestCreator);
@@ -146,7 +128,7 @@ const ImageView = extend(View)(
                 else
                     requestCreator.into(this.nativeObject);
             }
-            this.newImageLoaded = true;
+            this.__newImageLoaded = true;
         };
 
         imageViewPrototype.fetchFromUrl = function(params) {
@@ -179,11 +161,7 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromFile = function(params) {
-            var file = params.file;
-            var isFade = params.fade;
-            var width = params.width;
-            var height = params.height;
-            var placeHolder = params.placeHolder;
+            var {file, fade, width, height, placeHolder} = params;
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (file instanceof File) {
                 var resolvedPath = file.resolvedPath;
@@ -191,7 +169,7 @@ const ImageView = extend(View)(
                     var resources = AndroidConfig.activity.getResources();
                     var drawableResourceId = resources.getIdentifier(resolvedPath.name, "drawable", AndroidConfig.packageName);
                     var plainRequestCreatorDrawable = NativePicasso.with(AndroidConfig.activity).load(drawableResourceId);
-                    (isFade === false) && (plainRequestCreatorDrawable = plainRequestCreatorDrawable.noFade());
+                    (fade === false) && (plainRequestCreatorDrawable = plainRequestCreatorDrawable.noFade());
                     (placeHolder instanceof Image) && (plainRequestCreatorDrawable.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -205,7 +183,7 @@ const ImageView = extend(View)(
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
                     var plaingRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
-                    (isFade === false) && (plaingRequestCreatorAsset = plaingRequestCreatorAsset.noFade());
+                    (fade === false) && (plaingRequestCreatorAsset = plaingRequestCreatorAsset.noFade());
                     (placeHolder instanceof Image) && (plaingRequestCreatorAsset.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plaingRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -217,7 +195,7 @@ const ImageView = extend(View)(
                 }
                 else {
                     var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
-                    (isFade === false) && (plainRequestCreator = plainRequestCreator.noFade());
+                    (fade === false) && (plainRequestCreator = plainRequestCreator.noFade());
                     (placeHolder instanceof Image) && (plainRequestCreator.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
@@ -227,7 +205,7 @@ const ImageView = extend(View)(
                         requestCreator.into(this.nativeObject);
                     }
                 }
-                this.newImageLoaded = true;
+                this.__newImageLoaded = true;
             }
         };
 
@@ -235,17 +213,13 @@ const ImageView = extend(View)(
             if (loadedImage && imageViewPrototype._fillType !== null) {
                 switch (imageViewPrototype._fillType) {
                     case ImageView.FillType.NORMAL:
-                        return loadedImage
-                        break;
+                        return loadedImage;
                     case ImageView.FillType.STRETCH:
                         return loadedImage.fit();
-                        break;
                     case ImageView.FillType.ASPECTFIT:
                         return loadedImage.fit().centerInside();
-                        break;
                     case ImageView.FillType.ASPECTFILL:
                         return loadedImage.fit().centerCrop();
-                        break;
                     default:
                         return loadedImage;
                 }
@@ -256,6 +230,29 @@ const ImageView = extend(View)(
         }
     }
 );
+
+function getLoadFromUrlParams() {
+    if (typeof arguments[0] === "object") {
+        var params = arguments[0];
+        // onFailure callback added instead of onError in sf-core 3.2.1
+        return {
+            url: params.url,
+            placeholder: params.placeholder,
+            onFailure: (params.onError ? params.onError : params.onFailure),
+            fade: params.fade,
+            onSuccess: params.onSuccess
+        };
+    }
+    else {
+        return {
+            url: arguments[0],
+            placeholder: arguments[1],
+            fade: arguments[2]
+        };
+    }
+
+
+}
 
 ImageView.CacheType = {};
 ImageView.CacheType["NETWORK"] = 0; // NONE
