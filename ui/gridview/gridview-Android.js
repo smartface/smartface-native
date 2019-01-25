@@ -54,6 +54,11 @@ const GridView = extend(View)(
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onItemCreate(viewType);
+                    // INFO: If onItemCreate doesn't return GridViewItem, the app crashes.
+                    // This check handles this case.
+                    if(!holderViewLayout || !holderViewLayout.nativeInner) {
+                        throw new Error("onItemCreate must be return an instanceof UI.GridViewItem");
+                    }
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -112,9 +117,9 @@ const GridView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if (_onItemType)
-                    return _onItemType(position);
-                return 0;
+                let itemType;
+                _onItemType && (itemType = _onItemType(position));
+                return (typeof(itemType) === "number") ? itemType : 0;
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
