@@ -8,7 +8,6 @@ const ListViewItem = extend(ViewHolder)(
         _super(this);
         
         if(!this.nativeInner){
-            console.log("!!! this.nativeInner");
             if(params && params.nativeInner){
                 this.nativeInner = params.nativeInner;
             }
