@@ -1,14 +1,14 @@
 /*globals requireClass*/
-const AndroidUnitConverter  = require("../../util/Android/unitconverter.js");
 const extend                = require('js-base/core/extend');
-const FlexLayout            = require('../flexlayout');
+const ViewHolder            = require('./viewholder');
 const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
 
-const ListViewItem = extend(FlexLayout)(
+const ListViewItem = extend(ViewHolder)(
     function (_super, params) {
         _super(this);
         
         if(!this.nativeInner){
+            console.log("!!! this.nativeInner");
             if(params && params.nativeInner){
                 this.nativeInner = params.nativeInner;
             }
@@ -16,10 +16,10 @@ const ListViewItem = extend(FlexLayout)(
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
-        }
 
-        var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
-        this.nativeObject.setLayoutParams(layoutParams);
+            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
+            this.nativeObject.setLayoutParams(layoutParams);
+        }
 
         if (params) {
             for (var param in params) {
@@ -29,28 +29,6 @@ const ListViewItem = extend(FlexLayout)(
     },
     function(listViewItemPrototype) {
         Object.defineProperties(listViewItemPrototype, {
-            // Added due to problem in row height for RecyclerView
-            'height': {
-                get: function() {
-                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().height);
-                },
-                set: function(height) {
-                    this.nativeObject.getLayoutParams().height = AndroidUnitConverter.dpToPixel(height);
-                },
-                enumerable: true,
-                configurable: true
-            },
-            // Added due to problem in row width for RecyclerView
-            'width': {
-                get: function() {
-                    return AndroidUnitConverter.pixelToDp(this.nativeObject.getLayoutParams().width);
-                },
-                set: function(width) {
-                    this.nativeObject.getLayoutParams().width = AndroidUnitConverter.dpToPixel(width);
-                },
-                enumerable: true,
-                configurable: true
-            },
             'toString': {
                 value: function(){
                     return 'ListViewItem';
