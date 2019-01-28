@@ -1,4 +1,6 @@
 function TabBarItem(params) {
+    this.ios = {};
+    
     let _title, _icon, _badgeObj = undefined;
 
     this.nativeObject = null; // this property should be set at runtime.

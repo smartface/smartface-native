@@ -1,3 +1,4 @@
+const Font = require("sf-core/ui/font");
 const UITabBarItem = SF.requireClass("UITabBarItem");
 const Invocation = require('sf-core/util').Invocation;
 const Image = require('sf-core/ui/image');
@@ -6,6 +7,7 @@ const Badge = require('sf-core/ui/badge');
 
 function TabBarItem(params) {
     var self = this;
+    self.ios = {};
     
     self.nativeObject = undefined;
     if (params && params.nativeObject) {
@@ -95,6 +97,30 @@ function TabBarItem(params) {
         enumerable: true
     });
     
+    var _font;
+    Object.defineProperties(self.ios, {
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(value) {
+                _font = value;
+                if (self.nativeObject) {
+                    if (_font) {
+                        self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 0);        //UIControlStateNormal
+                        self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 0);   //UIControlStateHighlighted
+                        self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 1);   //UIControlStateDisabled
+                    }else{
+                        self.nativeObject.setTitleTextAttributesForState({}, 0);        //UIControlStateNormal
+                        self.nativeObject.setTitleTextAttributesForState({}, 1 << 0);   //UIControlStateHighlighted
+                        self.nativeObject.setTitleTextAttributesForState({}, 1 << 1);   //UIControlStateDisabled
+                    }
+                }
+            },
+            enumerable: true
+        }
+    });
+    
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
     
@@ -112,6 +138,7 @@ function TabBarItem(params) {
     self.invalidate = function() {
         this.title = _title;
         this.icon = _icon;
+        this.ios.font = _font;
         if (_badge.constructor.name !== "Badge") {
             delete _badge["move"]; 
             var _badgeWithNativeObject = new Badge({nativeObject : self.nativeObject, parameters : _badge});
