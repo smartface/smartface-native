@@ -1,4 +1,3 @@
-const Font = require("sf-core/ui/font");
 const UITabBarItem = SF.requireClass("UITabBarItem");
 const Invocation = require('sf-core/util').Invocation;
 const Image = require('sf-core/ui/image');
