@@ -52,6 +52,11 @@ const ListView = extend(View)(
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onRowCreate(viewType);
+                    // INFO: If onRowCreate doesn't return ListViewItem, the app crashes.
+                    // This check handles this case.
+                    if(!holderViewLayout || !holderViewLayout.nativeInner) {
+                        throw new Error("onRowCreate must be return an instanceof UI.ListViewItem");
+                    }
                 }
                 catch (e) {
                     const Application = require("../../application");
@@ -113,9 +118,9 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if (_onRowType)
-                    return _onRowType(position);
-                return 0;
+                let rowType;
+                _onRowType && (rowType = _onRowType(position));
+                return (typeof(rowType) === "number") ? rowType : 0;
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
