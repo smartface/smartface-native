@@ -333,6 +333,16 @@ GridView.prototype.refreshData = function(){};
 GridView.prototype.scrollTo = function(index,animated){};
 
 /**
+ * Sets/Gets instanceState of GridView. Called when the GridView should save its layout state. This is a good time to save your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
+ *
+ * @property {UI.GridView.instanceState} instanceState
+ * @android
+ * @since 4.0.2
+ */
+GridView.prototype.instanceState;
+
+/**
  * This method cancels refresh operation and stops the refresh
  * indicator on a GridView. You should call this method after
  * finishing event inside onPullRefresh otherwise refresh indicator

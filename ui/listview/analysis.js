@@ -323,7 +323,7 @@ ListView.prototype.refreshData = function(){};
  * @android
  * @since 4.0.2
  */
-ListView.prototype.instanceState = true;
+ListView.prototype.instanceState;
 
 /**
  * This method scrolls ListView to a specific index.
