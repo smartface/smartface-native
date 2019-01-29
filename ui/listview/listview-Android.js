@@ -136,9 +136,9 @@ const ListView = extend(View)(
             'listViewItemByIndex': {
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
-                    if (viewHolder)
-                        return _listViewItems[viewHolder.itemView.hashCode()];
-                    return undefined;
+                    if(!viewHolder) return undefined; // like ios
+                    
+                    return _listViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
             },
