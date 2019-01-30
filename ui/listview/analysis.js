@@ -315,15 +315,30 @@ ListView.prototype.setPullRefreshColors = function(colors){};
 ListView.prototype.refreshData = function(){};
 
 
+
 /**
- * Sets/Gets instanceState of ListView. Called when the ListView should save its layout state. This is a good time to save your scroll position, 
+ * Called when the ListView should save its layout state. This is a good time to save your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+ * Returned state instance native object so it cannot be  modified or access its keys etc.
+ *
+ * @method saveInstanceState
+ * @android
+ * @return {Object}
+ * @since 4.0.2
+ */
+ListView.prototype.saveInstanceState = function(){};
+
+
+/**
+ * Called when the ListView should restore its layout state. This is a good time to restore your scroll position, 
  * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
  *
- * @property {UI.ListView.instanceState} instanceState
+ * @param {Object} state
+ * @method restoreInstanceState
  * @android
  * @since 4.0.2
  */
-ListView.prototype.instanceState;
+ListView.prototype.restoreInstanceState = function(state){};
 
 /**
  * This method scrolls ListView to a specific index.
