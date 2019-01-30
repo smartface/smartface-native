@@ -52,13 +52,15 @@ function Scrollable(childJsClass, nativeScrollableObject) {
         },
         'saveInstanceState': {
             value: function() {
-                return self.layoutManager.nativeObject.onSaveInstanceState();
+                return {
+                    nativeObject: self.layoutManager.nativeObject.onSaveInstanceState()
+                };
             },
             enumerable: true
         },
         'restoreInstanceState': {
             value: function(savedInstance) {
-                self.layoutManager.nativeObject.onRestoreInstanceState(savedInstance);
+                self.layoutManager.nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
             },
             enumerable: true
         }
