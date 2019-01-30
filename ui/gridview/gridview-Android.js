@@ -152,6 +152,8 @@ const GridView = extend(View)(
             'itemByIndex': {
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
+                    if(!viewHolder) return undefined; // like ios
+                    
                     return _gridViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
