@@ -50,11 +50,14 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             enumerable: true,
             configurable: true
         },
-        'instanceState': {
-            get: function() {
+        'saveInstanceState': {
+            value: function() {
                 return self.layoutManager.nativeObject.onSaveInstanceState();
             },
-            set: function(savedInstance) {
+            enumerable: true
+        },
+        'restoreInstanceState': {
+            value: function(savedInstance) {
                 self.layoutManager.nativeObject.onRestoreInstanceState(savedInstance);
             },
             enumerable: true
