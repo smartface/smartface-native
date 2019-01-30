@@ -36,12 +36,13 @@ const ListView = extend(View)(
             this.nativeInner.setItemViewCacheSize(0);
             this.nativeInner.setClipToPadding(false);
         }
-
-        var linearLayoutManager = new NativeSFLinearLayoutManager(AndroidConfig.activity);
-        this.nativeInner.setLayoutManager(linearLayoutManager);
+        
+        this._layoutManager = {};
+        this._layoutManager.nativeObject = new NativeSFLinearLayoutManager(AndroidConfig.activity);
+        this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
         this.nativeObject.addView(this.nativeInner);
         this.__isRecyclerView = true;
-        
+
         _super(this);
         scrollableSuper(this, this.nativeInner);
 
@@ -54,7 +55,7 @@ const ListView = extend(View)(
                     holderViewLayout = _onRowCreate(viewType);
                     // INFO: If onRowCreate doesn't return ListViewItem, the app crashes.
                     // This check handles this case.
-                    if(!holderViewLayout || !holderViewLayout.nativeInner) {
+                    if (!holderViewLayout || !holderViewLayout.nativeInner) {
                         throw new Error("onRowCreate must be return an instanceof UI.ListViewItem");
                     }
                 }
@@ -132,6 +133,12 @@ const ListView = extend(View)(
             _onScrollListener = undefined,
             _scrollEnabled, isScrollListenerAdded = false;
         Object.defineProperties(this, {
+            'layoutManager': {
+                get: function() {
+                    return self._layoutManager;
+                },
+                enumerable: true
+            },
             // properties
             'listViewItemByIndex': {
                 value: function(index) {
@@ -433,7 +440,7 @@ const ListView = extend(View)(
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(recyclerView, dx, dy) {
-                    if(!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) { return; }
                     //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
@@ -445,7 +452,7 @@ const ListView = extend(View)(
                     _onScroll && _onScroll({ translation: { x: dX, y: dY }, contentOffset: { x: offsetX, y: offsetY } });
                 },
                 onScrollStateChanged: function(recyclerView, newState) {
-                    if(!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) { return; }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },
             };
