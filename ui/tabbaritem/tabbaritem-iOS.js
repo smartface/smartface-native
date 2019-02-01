@@ -132,8 +132,12 @@ function TabBarItem(params) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
 
-    var _badge = self.nativeObject ? new Badge({ nativeObject: self.nativeObject }) : { move: function(x, y) { this.moveX = x;
-            this.moveY = y; } };
+    var _badge = self.nativeObject ? new Badge({ nativeObject: self.nativeObject }) : {
+        move: function(x, y) {
+            this.moveX = x;
+            this.moveY = y;
+        }
+    };
     Object.defineProperty(this, 'badge', {
         get: function() {
             return _badge;
@@ -156,11 +160,23 @@ function TabBarItem(params) {
         }
     }
 
-    if (params) {
+    // Assign parameters given in constructor
+    params && (function(params) {
         for (var param in params) {
-            this[param] = params[param];
+            if (param === "ios" || param === "android") {
+                setOSSpecificParams.call(this, params[param], param);
+            }
+            else {
+                this[param] = params[param];
+            }
         }
-    }
+
+        function setOSSpecificParams(params, key) {
+            for (var param in params) {
+                this[key][param] = params[param];
+            }
+        }
+    }.bind(this)(params));
 };
 
 module.exports = TabBarItem;
