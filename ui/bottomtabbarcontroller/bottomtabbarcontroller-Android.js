@@ -169,7 +169,7 @@ function BottomTabBarController(params) {
 
     this.setChecked = function() {
         initializeOnce();
-        if (!(self.tabBar.android.disableItemAnimation)) {
+        if (!self.tabBar.android.disableItemAnimation) {
             (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
             if (_selectedIndex < 0)
                 return;
@@ -240,7 +240,7 @@ function setColorToMenuViewItem(index, cahce) {
     let normalColorNO = tabBar.itemColor.normal.nativeObject;
 
     !cahce[index] && (cahce[index] = {});
-    if (!(cahce[index].nativeImageView && cahce[index].nativeTextView)) {
+    if (!cahce[index].nativeImageView && !cahce[index].nativeTextView) {
         let nativeBottomTabarMenuView = tabBar.nativeObject.getChildAt(0);
         let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(index);
         cahce[index].nativeImageView = nativeMenuItem.getChildAt(0);
@@ -269,10 +269,10 @@ function setNormalColorToAttributed(selectedIndex) {
             return;
 
         let tabBarItem = tabBarItems[i];
-        if (tabBarItem._attributedTitleBuilder === undefined)
+        if (!(tabBarItem._attributedTitleBuilder))
             return;
-
-        attributedItemBuilder(tabBarItem, normalColorNO);
+        let nativeStringBuilder = attributedItemBuilder(tabBarItem, normalColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
     }
 }
 
@@ -283,34 +283,29 @@ function controlAttributedTextColor(index, cache) {
     const tabBar = this;
 
     let tabBarItem = tabBar.items[index];
+    let nativeStringBuilder;
 
-    if (tabBarItem._attributedTitleBuilder === undefined)
-        return;
-
-    let selectedColorNO = tabBar.itemColor.selected.nativeObject;
-    let normalColorNO = tabBar.itemColor.normal.nativeObject;
-
-    let nativeStringBuilder = attributedItem.call(tabBarItem, cache, index, selectedColorNO, true);
-    tabBarItem.__setTitle(nativeStringBuilder);
-
-    if (cache.prevSelectedAttributedItem !== undefined && cache.prevSelectedAttributedItem !== index) {
-
+    if (tabBarItem._attributedTitleBuilder) {
+        let selectedColorNO = tabBar.itemColor.selected.nativeObject;
+        nativeStringBuilder = attributedItem.call(tabBarItem, selectedColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
+    }
+    if (cache.prevSelectedAttributedItem !== undefined &&
+        cache.prevSelectedAttributedItem !== index) {
         let i = cache.prevSelectedAttributedItem;
         let prevTabBarItem = tabBar.items[i];
-        nativeStringBuilder = attributedItem.call(prevTabBarItem, cache, i, normalColorNO, false);
-        prevTabBarItem.__setTitle(nativeStringBuilder);
+        if (prevTabBarItem._attributedTitleBuilder) {
+            let normalColorNO = tabBar.itemColor.normal.nativeObject;
+            nativeStringBuilder = attributedItem.call(prevTabBarItem, normalColorNO);
+            prevTabBarItem.__setTitle(nativeStringBuilder);
+        }
     }
     cache.prevSelectedAttributedItem = index;
 }
 
-function attributedItem(cache, index, color, selected) {
+function attributedItem(color) {
     const tabBarItem = this;
-    let nativeStringBuilder;
-    if (selected)
-        nativeStringBuilder = attributedItemBuilder(tabBarItem, color);
-    else
-        nativeStringBuilder = attributedItemBuilder(tabBarItem, color);
-    return nativeStringBuilder;
+    return attributedItemBuilder(tabBarItem, color);
 }
 
 function attributedItemBuilder(tabBarItem, color) {
