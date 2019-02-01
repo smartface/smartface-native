@@ -272,7 +272,7 @@ function setNormalColorToAttributed(selectedIndex) {
         if (tabBarItem._attributedTitleBuilder === undefined)
             return;
 
-        cachedAttributedItem(tabBarItem, normalColorNO);
+        attributedItemBuilder(tabBarItem, normalColorNO);
     }
 }
 
@@ -290,32 +290,30 @@ function controlAttributedTextColor(index, cache) {
     let selectedColorNO = tabBar.itemColor.selected.nativeObject;
     let normalColorNO = tabBar.itemColor.normal.nativeObject;
 
-    let nativeStringBuilder = cacheAttributedItems.call(tabBarItem, cache, index, selectedColorNO, true);
+    let nativeStringBuilder = attributedItem.call(tabBarItem, cache, index, selectedColorNO, true);
     tabBarItem.__setTitle(nativeStringBuilder);
 
     if (cache.prevSelectedAttributedItem !== undefined && cache.prevSelectedAttributedItem !== index) {
 
         let i = cache.prevSelectedAttributedItem;
         let prevTabBarItem = tabBar.items[i];
-        nativeStringBuilder = cacheAttributedItems.call(prevTabBarItem, cache, i, normalColorNO, false);
+        nativeStringBuilder = attributedItem.call(prevTabBarItem, cache, i, normalColorNO, false);
         prevTabBarItem.__setTitle(nativeStringBuilder);
     }
     cache.prevSelectedAttributedItem = index;
 }
 
-function cacheAttributedItems(cache, index, color, selected) {
+function attributedItem(cache, index, color, selected) {
     const tabBarItem = this;
     let nativeStringBuilder;
-    if (selected) {
-        nativeStringBuilder = cachedAttributedItem(tabBarItem, color);
-    }
-    else {
-        nativeStringBuilder = cachedAttributedItem(tabBarItem, color);
-    }
+    if (selected)
+        nativeStringBuilder = attributedItemBuilder(tabBarItem, color);
+    else
+        nativeStringBuilder = attributedItemBuilder(tabBarItem, color);
     return nativeStringBuilder;
 }
 
-function cachedAttributedItem(tabBarItem, color) {
+function attributedItemBuilder(tabBarItem, color) {
     let nativeForegroundSpan = new NativeForegroundColorSpan(color);
     let nativeStringBuilder = tabBarItem._attributedTitleBuilder;
     nativeStringBuilder.setSpan(nativeForegroundSpan, 0, nativeStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
