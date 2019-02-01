@@ -98,6 +98,7 @@ const SwipeView = extend(View)(
                             throw new TypeError("Array parameter cannot be empty.");
                         }
                         _pages = pages;
+                        this.pagerAdapter.notifyDataSetChanged();
                     }
                 }
             },
