@@ -92,8 +92,16 @@ function TabBarItem(params) {
         }
     });
 
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
 
-    this.android = {};
     /*
     Applies common properties of items.
     */
