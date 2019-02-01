@@ -1,6 +1,8 @@
+const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
+
 function TabBarItem(params) {
     this.ios = {};
-    
+
     let _title, _icon, _badgeObj = undefined;
 
     this.nativeObject = null; // this property should be set at runtime.
@@ -14,13 +16,8 @@ function TabBarItem(params) {
                 return _title;
             },
             set: function(title) {
-                if (typeof(title) === "string") {
-                    _title = title;
-                    this.nativeObject && this.nativeObject.setTitle(title);
-                }
-                else {
-                    throw new Error("title should be string.");
-                }
+                _title = title;
+                self.__setTitle(title);
             },
             enumerable: true
         },
@@ -94,6 +91,17 @@ function TabBarItem(params) {
             configurable: true
         }
     });
+
+
+    this.android = {};
+    /*
+    Applies common properties of items.
+    */
+    attributedTitleSuper(self);
+
+    this.__setTitle = function(title) {
+        self.nativeObject && self.nativeObject.setTitle(title);
+    };
 
     // Assign parameters given in constructor
     if (params) {
