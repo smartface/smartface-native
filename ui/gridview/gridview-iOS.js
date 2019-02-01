@@ -405,6 +405,10 @@ const GridView = extend(View)(
                 this[param] = params[param];
             }
         }
+        
+        sfSelf.android = {};
+        sfSelf.android.saveInstanceState = function(){ return {};};
+        sfSelf.android.restoreInstanceState = function(savedInstance){};
     }
 );
 module.exports = GridView;
