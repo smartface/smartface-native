@@ -223,6 +223,8 @@ const ListView = extend(View)(
         });
 
         self.android = {};
+        self.android.saveInstanceState = function() {};
+        self.android.restoreInstanceState = function() {};
 
         self.setPullRefreshColors = function(param) {
             if (Object.prototype.toString.call(param) === '[object Array]') {

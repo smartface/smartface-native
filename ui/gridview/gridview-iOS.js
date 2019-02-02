@@ -103,6 +103,9 @@ const GridView = extend(View)(
 
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
         
+        sfSelf.android.saveInstanceState = function() {};
+        sfSelf.android.restoreInstanceState = function() {};
+        
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
         
