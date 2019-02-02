@@ -25,9 +25,7 @@ function Badge(params) {
             set: function(value){
                 if (typeof value === "string") {
                     __SF_Dispatch.mainAsyncAfter(function(){
-                        __SF_Dispatch.mainAsyncAfter(function(){
-                            self.nativeObject.pp_addBadgeWithText(value);
-                        },1);
+                        self.nativeObject.pp_addBadgeWithText(value);
                         if (!_isBadgeFirstLoad) {
                             
                             self.visible = _badgeVisible;
