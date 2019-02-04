@@ -32,6 +32,15 @@ function TabBarItem(params) {}
  */
 TabBarItem.prototype.title = "";
 
+/**
+ * Gets/sets font of tab bar item.
+ *
+ * @property {UI.Font} font
+ * @ios
+ * @since 4.0.2
+ */
+TabBarItem.prototype.font = undefined;
+
 
 /**
  * Gets/sets the icon  of tab item. 
