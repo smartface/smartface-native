@@ -32,6 +32,15 @@ function TabBarItem(params) {}
  */
 TabBarItem.prototype.title = "";
 
+/**
+ * Gets/sets font of tab bar item.
+ *
+ * @property {UI.Font} font
+ * @ios
+ * @since 4.0.2
+ */
+TabBarItem.prototype.font = undefined;
+
 
 /**
  * Gets/sets the icon  of tab item. 
@@ -70,5 +79,15 @@ TabBarItem.prototype.badge;
  * @since 1.1.10
  */
 TabBarItem.prototype.route = null;
+
+
+/**
+ * Gets/sets attributed title of tab bar item. 
+ * 
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.2
+ */
+TabBarItem.prototype.attributedTitle;
 
 module.exports = TabBarItem;

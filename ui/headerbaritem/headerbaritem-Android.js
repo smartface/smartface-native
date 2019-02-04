@@ -4,12 +4,11 @@ const Image = require("../image");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
-const AttributedString = require("sf-core/ui/attributedstring");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
-const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
+const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
@@ -26,7 +25,6 @@ function HeaderBarItem(params) {
         _searchView = null,
         _imageButton = false,
         _menuItem = null,
-        _attributedTitleBuilder,
         _badgeObj = undefined;
     const activity = AndroidConfig.activity;
 
@@ -196,7 +194,6 @@ function HeaderBarItem(params) {
                 } : undefined;
             },
             set: function(size) {
-                _size = size;
                 if (typeof size === 'object' && self.nativeObject) {
                     self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(size.width));
                     self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(size.height));
@@ -257,29 +254,10 @@ function HeaderBarItem(params) {
         }
     };
 
-    Object.defineProperties(this.android, {
-        'attributedTitle': {
-            get: function() {
-                return _attributedTitle;
-            },
-            set: function(value) {
-                _attributedTitle = value;
-                if (_attributedTitle instanceof AttributedString) {
-                    if (_attributedTitleBuilder)
-                        _attributedTitleBuilder.clear();
-                    else
-                        _attributedTitleBuilder = new NativeSpannableStringBuilder();
-
-                    _attributedTitle.setSpan(_attributedTitleBuilder);
-                    self.__setTitle(_attributedTitleBuilder);
-                }
-                else {
-                    self.__setTitle(null);
-                }
-            },
-            enumerable: true
-        }
-    });
+    /*
+    Applies common properties of items.
+    */
+    attributedTitleSuper(self);
 
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
