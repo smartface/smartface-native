@@ -1,4 +1,3 @@
-const Color = require("sf-core/ui/color");
 /* globals requireClass */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const Page = require("../../ui/page");
