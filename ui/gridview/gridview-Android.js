@@ -23,14 +23,20 @@ const GridView = extend(View)(
             this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
 
+        let _callbacks = {
+            onAttachedToWindow: function() {
+                self.android.onAttachedToWindow && self.android.onAttachedToWindow();
+            }
+        };
+
         if (!this.nativeInner) {
             // For creating RecyclerView with android:scrollbar=vertical attribute
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-                this.nativeInner = new NativeSFRecyclerView(themeWrapper);
+                this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
             }
             else {
-                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
+                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
             }
 
             //this.nativeInner.setItemViewCacheSize(0);
@@ -39,7 +45,6 @@ const GridView = extend(View)(
             this.nativeInner.setHorizontalScrollBarEnabled(false);
             this.nativeInner.setVerticalScrollBarEnabled(false);
         }
-
         this._layoutManager = params.layoutManager;
         this.nativeObject.addView(this.nativeInner);
         this.__isRecyclerView = true;
@@ -56,7 +61,7 @@ const GridView = extend(View)(
                     holderViewLayout = _onItemCreate(viewType);
                     // INFO: If onItemCreate doesn't return GridViewItem, the app crashes.
                     // This check handles this case.
-                    if(!holderViewLayout || !holderViewLayout.nativeInner) {
+                    if (!holderViewLayout || !holderViewLayout.nativeInner) {
                         throw new Error("onItemCreate must be return an instanceof UI.GridViewItem");
                     }
                 }
@@ -85,7 +90,7 @@ const GridView = extend(View)(
                 var _holderViewLayout = _gridViewItems[itemHashCode];
 
                 assignSizeBasedOnDirection.call(self, _holderViewLayout, _holderViewLayout.viewType);
-                
+
                 if (_onItemBind) {
                     _onItemBind(_holderViewLayout, position);
 
@@ -152,8 +157,8 @@ const GridView = extend(View)(
             'itemByIndex': {
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
-                    if(!viewHolder) return undefined; // like ios
-                    
+                    if (!viewHolder) return undefined; // like ios
+
                     return _gridViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
