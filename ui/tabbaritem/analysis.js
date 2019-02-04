@@ -71,4 +71,14 @@ TabBarItem.prototype.badge;
  */
 TabBarItem.prototype.route = null;
 
+
+/**
+ * Gets/sets attributed title of tab bar item. 
+ * 
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.2
+ */
+TabBarItem.prototype.attributedTitle;
+
 module.exports = TabBarItem;
