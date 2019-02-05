@@ -21,7 +21,7 @@
 function Image(params) {}
 
 /**
- * Gets the height of image. 
+ * Gets the height of image in pixels.
  *
  * @android
  * @ios
@@ -32,11 +32,11 @@ function Image(params) {}
 Image.prototype.height = 0;
 
 /**
- * Gets the width of image. 
+ * Gets the width of image in pixels. 
  *
  * @android
  * @ios
- * @property {Number} width
+ * @property {Number} width 
  * @readonly
  * @since 0.1
  */
@@ -112,8 +112,8 @@ Image.prototype.imageFlippedForRightToLeftLayoutDirection = function() {};
  * @param {Object} insets
  * @param {Number} insets.top
  * @param {Number} insets.left
- * @param {Number} insets.width
- * @param {Number} insets.height
+ * @param {Number} insets.width  Width in pixel
+ * @param {Number} insets.height Height in pixel
  * @param {Number} mode &emsp;UIImageResizingModeTile = 0 <br />&emsp;UIImageResizingModeStretch = 1
  * @return UI.Image
  * @since 1.1.18
@@ -274,8 +274,8 @@ Image.android.createRoundedImage = function(params) {};
  *     var myImage = Image.createFromFile("images://smartface.png");
  * 
  * @param {String} path Image file path
- * @param {Number} width Thumbnail width
- * @param {Number} height thumbnail height
+ * @param {Number} width Width in pixels
+ * @param {Number} height Height in pixels
  * @method createFromFile
  * @return {UI.Image} An Image instance.
  * @android
