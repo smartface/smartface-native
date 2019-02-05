@@ -112,8 +112,8 @@ Image.prototype.imageFlippedForRightToLeftLayoutDirection = function() {};
  * @param {Object} insets
  * @param {Number} insets.top
  * @param {Number} insets.left
- * @param {Number} insets.width  Width in pixel
- * @param {Number} insets.height Height in pixel
+ * @param {Number} insets.width  Width in pixels
+ * @param {Number} insets.height Height in pixels
  * @param {Number} mode &emsp;UIImageResizingModeTile = 0 <br />&emsp;UIImageResizingModeStretch = 1
  * @return UI.Image
  * @since 1.1.18
