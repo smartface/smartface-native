@@ -143,6 +143,11 @@ const ListView = extend(View)(
             }
             else {
                 _listItemArray[e.cell.uuid] = self.onRowCreate(parseInt(e.cell.reuseIdentifier));
+                
+                // Bug ID : IOS-2750
+                self.nativeObject.superview && (_listItemArray[e.cell.uuid].nativeObject.yoga.direction = self.nativeObject.superview.yoga.resolvedDirection);
+                ///////
+                
                 e.cell.contentView.addSubview(_listItemArray[e.cell.uuid].nativeObject);
                 self.onRowBind(_listItemArray[e.cell.uuid], e.indexPath.row);
             }
