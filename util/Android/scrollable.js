@@ -27,6 +27,7 @@ function Scrollable(childJsClass, nativeScrollableObject) {
     if (!self.__isRecyclerView)
         return;
 
+    let _onAttachedToWindow;
     Object.defineProperties(self.android, {
         'onGesture': {
             get: function() {
@@ -61,6 +62,15 @@ function Scrollable(childJsClass, nativeScrollableObject) {
         'restoreInstanceState': {
             value: function(savedInstance) {
                 self.layoutManager.nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
+            },
+            enumerable: true
+        },
+        'onAttachedToWindow': {
+            get: function() {
+                return _onAttachedToWindow;
+            },
+            set: function(onAttachedToWindow) {
+                _onAttachedToWindow = onAttachedToWindow;
             },
             enumerable: true
         }

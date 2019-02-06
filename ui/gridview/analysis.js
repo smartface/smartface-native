@@ -458,6 +458,16 @@ GridView.prototype.onScrollBeginDecelerating = function(contentOffset){};
  */
 GridView.prototype.onScrollEndDecelerating = function(contentOffset){};
 
+
+/**
+ * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing. 
+ * 
+ * @event onAttachedToWindow
+ * @android
+ * @since 4.0.2
+ */
+GridView.prototype.onAttachedToWindow = function(){};
+
 /**
  * This event is called when dragging ended in the grid view.
  * 
