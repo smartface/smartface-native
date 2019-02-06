@@ -1,3 +1,4 @@
+const FlexLayout = require("sf-core/ui/flexlayout");
 const View = require('../view');
 const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
@@ -70,6 +71,11 @@ const GridView = extend(View)(
             }
             else {
                 collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
+                
+                // Bug ID : IOS-2750
+                smfcollectionView.superview && (collectionViewItems[cell.uuid].nativeObject.yoga.direction = smfcollectionView.superview.yoga.resolvedDirection);
+                ///////
+                
                 cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
                 if (sfSelf.onItemBind) {
                     sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
