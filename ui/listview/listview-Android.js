@@ -23,20 +23,26 @@ const ListView = extend(View)(
             this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
 
+
+        let _callbacks = {
+            onAttachedToWindow: function() {
+                self.android.onAttachedToWindow && self.android.onAttachedToWindow();
+            }
+        };
         if (!this.nativeInner) {
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-                this.nativeInner = new NativeSFRecyclerView(themeWrapper);
+                this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
             }
             else {
-                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
+                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
             }
             this.nativeInner.setHasFixedSize(true);
             this.nativeInner.setDrawingCacheEnabled(true);
             this.nativeInner.setItemViewCacheSize(0);
             this.nativeInner.setClipToPadding(false);
         }
-        
+
         this._layoutManager = {};
         this._layoutManager.nativeObject = new NativeSFLinearLayoutManager(AndroidConfig.activity);
         this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
@@ -143,8 +149,8 @@ const ListView = extend(View)(
             'listViewItemByIndex': {
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
-                    if(!viewHolder) return undefined; // like ios
-                    
+                    if (!viewHolder) return undefined; // like ios
+
                     return _listViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
