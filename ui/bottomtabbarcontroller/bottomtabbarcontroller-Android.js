@@ -6,7 +6,8 @@ const BottomTabBar = require("../../ui/bottomtabbar");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
-
+const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
+const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
 
 function BottomTabBarController(params) {
@@ -22,8 +23,10 @@ function BottomTabBarController(params) {
     var self = this;
     var _selectedIndex = 0;
     var _shouldSelectByIndexCallback,
-        _didSelectByIndexCallback;
+        _didSelectByIndexCallback,
+        initializeOneTime = false;
     var cahceNativeViews = {};
+    var cacheNativeBuilders = {};
 
     Object.defineProperties(this, {
         'tabBar': {
@@ -164,16 +167,25 @@ function BottomTabBarController(params) {
     };
 
     this.setChecked = function() {
-        if (self.tabBar.android && self.tabBar.android.disableItemAnimation) {
-            setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
-        }
-        else {
+        initializeOnce();
+        if (!self.tabBar.android.disableItemAnimation) {
             (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
             if (_selectedIndex < 0)
                 return;
             _menu.getItem(_selectedIndex).setChecked(true);
         }
     };
+
+    function initializeOnce() {
+        if (initializeOneTime === true)
+            return;
+        //Set normal color to attributed strings.
+        setNormalColorToAttributed.call(self.tabBar, _selectedIndex);
+        controlAttributedTextColor.call(self.tabBar, _selectedIndex, cacheNativeBuilders);
+        self.tabBar.android.disableItemAnimation && setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
+
+        initializeOneTime = true;
+    }
 
     this.getCurrentController = function() {
         var controller = self.childControllers[_selectedIndex];
@@ -194,6 +206,8 @@ function BottomTabBarController(params) {
 
             if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
+
+            controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
 
             if (result) {
                 // TODO: Add this property to controller class
@@ -223,8 +237,9 @@ function setColorToMenuViewItem(index, cahce) {
 
     let selectedColorNO = tabBar.itemColor.selected.nativeObject;
     let normalColorNO = tabBar.itemColor.normal.nativeObject;
-    if (Object.keys(cahce).length <= tabBar.items.length) {
-        cahce[index] = {};
+
+    !cahce[index] && (cahce[index] = {});
+    if (!cahce[index].nativeImageView && !cahce[index].nativeTextView) {
         let nativeBottomTabarMenuView = tabBar.nativeObject.getChildAt(0);
         let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(index);
         cahce[index].nativeImageView = nativeMenuItem.getChildAt(0);
@@ -241,6 +256,63 @@ function setColorToMenuViewItem(index, cahce) {
         }
     }
     cahce.prevSelectedIndex = index;
+}
+
+function setNormalColorToAttributed(selectedIndex) {
+    const tabBar = this;
+
+    let normalColorNO = tabBar.itemColor.normal.nativeObject;
+    let tabBarItems = tabBar.items;
+    for (var i = tabBarItems.length; i--;) {
+        if (i === selectedIndex)
+            return;
+
+        let tabBarItem = tabBarItems[i];
+        if (!(tabBarItem._attributedTitleBuilder))
+            return;
+        let nativeStringBuilder = attributedItemBuilder(tabBarItem, normalColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
+    }
+}
+
+/*
+Over draws the given foreground color based on selected and normal color of tabbar item. 
+*/
+function controlAttributedTextColor(index, cache) {
+    const tabBar = this;
+
+    let tabBarItem = tabBar.items[index];
+    let nativeStringBuilder;
+
+    if (tabBarItem._attributedTitleBuilder) {
+        let selectedColorNO = tabBar.itemColor.selected.nativeObject;
+        nativeStringBuilder = attributedItem.call(tabBarItem, selectedColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
+    }
+    if (cache.prevSelectedAttributedItem !== undefined &&
+        cache.prevSelectedAttributedItem !== index) {
+        let i = cache.prevSelectedAttributedItem;
+        let prevTabBarItem = tabBar.items[i];
+        if (prevTabBarItem._attributedTitleBuilder) {
+            let normalColorNO = tabBar.itemColor.normal.nativeObject;
+            nativeStringBuilder = attributedItem.call(prevTabBarItem, normalColorNO);
+            prevTabBarItem.__setTitle(nativeStringBuilder);
+        }
+    }
+    cache.prevSelectedAttributedItem = index;
+}
+
+function attributedItem(color) {
+    const tabBarItem = this;
+    return attributedItemBuilder(tabBarItem, color);
+}
+
+function attributedItemBuilder(tabBarItem, color) {
+    let nativeForegroundSpan = new NativeForegroundColorSpan(color);
+    let nativeStringBuilder = tabBarItem._attributedTitleBuilder;
+    nativeStringBuilder.setSpan(nativeForegroundSpan, 0, nativeStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+
+    return nativeStringBuilder;
 }
 
 function disableShiftMode(bottomTabBar) {

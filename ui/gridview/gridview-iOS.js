@@ -12,9 +12,9 @@ const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
 const GridView = extend(View)(
     function(_super, params) {
         var sfSelf = this;
-        
+
         sfSelf.registeredIndentifier = [];
-        
+
         var CollectionViewClass = __SF_UICollectionView;
 
         var defaultflowLayout;
@@ -31,17 +31,17 @@ const GridView = extend(View)(
             type: "NSObject",
             value: defaultflowLayout.nativeObject
         });
-        
+
         var frame = new Invocation.Argument({
             type: "CGRect",
-            value: {x:0, y:0, width:0, height:0}
+            value: { x: 0, y: 0, width: 0, height: 0 }
         });
-        
-        var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame ,argument], "NSObject");
-        smfcollectionView.numberOfSectionsCallback = function (collectionView) {
+
+        var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame, argument], "NSObject");
+        smfcollectionView.numberOfSectionsCallback = function(collectionView) {
             return _sectionCount;
         };
-        smfcollectionView.numberOfItemsInSectionCallback = function (collectionView, section) {
+        smfcollectionView.numberOfItemsInSectionCallback = function(collectionView, section) {
             var retval;
             if (_numberOfItemsInSection) {
                 retval = _numberOfItemsInSection(section);
@@ -51,16 +51,16 @@ const GridView = extend(View)(
             }
             return retval;
         };
-        
-        smfcollectionView.cellForItemAtIndexPathCallback = function (collectionView, indexPath) {
+
+        smfcollectionView.cellForItemAtIndexPathCallback = function(collectionView, indexPath) {
             // Cell dequeing for type
             var type = sfSelf.onItemType(indexPath.row, indexPath.section).toString();
-            
+
             if (sfSelf.registeredIndentifier.indexOf(type) === -1) {
                 collectionView.registerClassForCellWithReuseIdentifier(__SF_UICollectionViewCell, type);
                 sfSelf.registeredIndentifier.push(type);
             }
-            
+
             var cell = collectionView.dequeueReusableCellWithReuseIdentifierForIndexPath(type, indexPath);
             // onItemCreate and onItemBind callback pairs
             if (cell.contentView.subviews.length > 0) {
@@ -75,10 +75,10 @@ const GridView = extend(View)(
                     sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                 }
             }
-            
+
             return cell;
         };
-        smfcollectionView.didSelectItemAtIndexPathCallback = function (collectionView, indexPath) {
+        smfcollectionView.didSelectItemAtIndexPathCallback = function(collectionView, indexPath) {
             var cell = collectionView.cellForItemAtIndexPath(indexPath);
             if (cell) {
                 if (sfSelf.onItemSelected) {
@@ -89,7 +89,7 @@ const GridView = extend(View)(
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // INITIALIZATION
-        
+
         if (!sfSelf.nativeObject) {
             sfSelf.nativeObject = smfcollectionView;
             defaultflowLayout.collectionView = smfcollectionView;
@@ -102,20 +102,20 @@ const GridView = extend(View)(
         _super(this);
 
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
-        
+
         sfSelf.android.saveInstanceState = function() {};
         sfSelf.android.restoreInstanceState = function() {};
-        
+
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // PROPERTIES
-        
+
         Object.defineProperty(sfSelf, 'onScroll', {
             set: function(value) {
                 sfSelf.nativeObject.didScroll = value;
             },
             enumerable: true
         });
-        
+
         var _itemCount = 0;
         Object.defineProperty(sfSelf, 'itemCount', {
             get: function() {
@@ -388,7 +388,7 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        var _itemTypeForSection = function(){return "0";};
+        var _itemTypeForSection = function() { return "0"; };
         Object.defineProperty(sfSelf, 'onItemType', {
             get: function() {
                 return _itemTypeForSection;
@@ -402,7 +402,7 @@ const GridView = extend(View)(
         });
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

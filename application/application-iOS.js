@@ -1,3 +1,12 @@
+//Application Direction Manager (RTL Support)
+(function(){
+    var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
+    var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey("smartface.ios.viewAppearanceSemanticContentAttribute");
+    if(viewAppearanceSemanticContentAttribute != undefined){
+        __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
+    }
+}())
+
 const RAU = require("./RAU");
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
@@ -269,15 +278,5 @@ Application.emulator.globalObjectWillReset = function(state) {
             break;
     }
 };
-
-//Application Direction Manager (RTL Support)
-(function(){
-    var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
-    var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey("smartface.ios.viewAppearanceSemanticContentAttribute");
-    if(viewAppearanceSemanticContentAttribute != undefined){
-        __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
-    }
-}())
-
 
 module.exports = SFApplication;
