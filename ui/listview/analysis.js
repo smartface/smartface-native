@@ -665,6 +665,16 @@ ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function
 ListView.prototype.onAttachedToWindow = function() {};
 
 /**
+ * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+ * 
+ * @event onDetachedFromWindow
+ * @android
+ * @since 4.0.2
+ */
+ListView.prototype.onDetachedFromWindow = function() {};
+
+
+/**
  * iOS Specific Properties.
  * @class UI.ListView.iOS
  */
