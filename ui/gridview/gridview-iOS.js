@@ -73,7 +73,7 @@ const GridView = extend(View)(
                 collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
                 
                 // Bug ID : IOS-2750
-                smfcollectionView.superview && (collectionViewItems[cell.uuid].nativeObject.yoga.direction = smfcollectionView.superview.yoga.resolvedDirection);
+                (collectionViewItems[cell.uuid].nativeObject.yoga.direction == 0) && smfcollectionView.superview && (collectionViewItems[cell.uuid].nativeObject.yoga.direction = smfcollectionView.superview.yoga.resolvedDirection);
                 ///////
                 
                 cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
