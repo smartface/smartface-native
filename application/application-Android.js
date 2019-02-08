@@ -45,8 +45,8 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onStart: function() {},
     onDestroy: function() {
         if (_onExit) {
-            _onExit();
-        }
+            _onExit();  
+        }  
     },
     onRequestPermissionsResult: function(requestCode, permission, grantResult) {
         var permissionResults = {};
@@ -210,9 +210,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'restart': {
         value: function() {
-            var spratIntent = activity.getIntent();
-            activity.finish();
-            activity.startActivity(spratIntent);
+            spratAndroidActivityInstance.restartSpratActivityFromPushNotification();
         },
         enumerable: true
     },
