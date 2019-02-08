@@ -12,6 +12,8 @@ const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 
 function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
 
+const activity = AndroidConfig.activity;
+
 function HeaderBarItem(params) {
 
     const self = this;
@@ -25,8 +27,9 @@ function HeaderBarItem(params) {
         _searchView = null,
         _imageButton = false,
         _menuItem = null,
-        _badgeObj = undefined;
-    const activity = AndroidConfig.activity;
+        _badgeObj = undefined,
+        _systemIcon;
+
 
     this.ios = {};
     this.android = {};
@@ -89,16 +92,7 @@ function HeaderBarItem(params) {
                 if (value === null || value instanceof Image) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
-                        this.nativeObject = new NativeImageButton(activity);
-                        this.nativeObject.setBackground(null);
-                        this.nativeObject.setPaddingRelative(
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-                        );
-                        this.imageButton = true;
-                        if (this.menuItem) {
-                            this.menuItem.setActionView(this.nativeObject);
-                        }
+                        createImageButton.call(this);
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
@@ -122,6 +116,17 @@ function HeaderBarItem(params) {
                 }
             },
             enumerable: true
+        },
+        'systemIcon': {
+            get: function() {
+                return _systemIcon;
+            },
+            set: function(systemIcon) {
+                _systemIcon = systemIcon;
+
+                if (this.nativeObject)
+                    self.nativeObject.setImageResource(systemIcon);
+            }
         },
         // Searchview only property
         'searchView': {
@@ -288,6 +293,22 @@ function HeaderBarItem(params) {
         }
     }
 }
+
+function createImageButton() {
+    const headerBarItem = this;
+
+    headerBarItem.nativeObject = new NativeImageButton(activity);
+    headerBarItem.nativeObject.setBackground(null);
+    headerBarItem.nativeObject.setPaddingRelative(
+        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+    );
+    headerBarItem.imageButton = true;
+    if (headerBarItem.menuItem) {
+        headerBarItem.menuItem.setActionView(this.nativeObject);
+    }
+}
+
 
 
 HeaderBarItem.prototype = {
