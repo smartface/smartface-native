@@ -163,7 +163,7 @@ function BottomTabBarController(params) {
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
-        // Uncommented for: https://smartface.atlassian.net/browse/SUPDEV-1867
+        // Comment out for: https://smartface.atlassian.net/browse/SUPDEV-1867
         // self.push(self.childControllers[_selectedIndex]);
     };
 
