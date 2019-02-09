@@ -39,7 +39,6 @@ function Page(params) {
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
-    pageLayoutContainer.setLayoutDirection(activity.getResources().getConfiguration().getLayoutDirection());
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -66,6 +65,7 @@ function Page(params) {
             self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
+            pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
             actionBar = activity.getSupportActionBar();
