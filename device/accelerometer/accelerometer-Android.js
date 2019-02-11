@@ -9,13 +9,14 @@ const SENSOR_MANAGER = 'android.hardware.SensorManager';
 const Accelerometer = {};
 
 var sensorManager = AndroidConfig.getSystemService(SENSOR_SERVICE, SENSOR_MANAGER);
-var sensor = sensorManager.getDefaultSensor(NativeSensor.TYPE_ACCELEROMETER);
+var accelerometerSensor = sensorManager.getDefaultSensor(NativeSensor.TYPE_ACCELEROMETER);
 
 var _callback;
 var _sensorListener;
+
 Object.defineProperties(Accelerometer, {
     'start': {
-        value: function() {
+        value: function(delayType = 0) {
             _sensorListener = NativeSensorEventListener.implement({
                 onAccuracyChanged: function(sensor, accuracy) {},
                 onSensorChanged: function(event) {
@@ -28,13 +29,13 @@ Object.defineProperties(Accelerometer, {
                 }
             });
             // SensorManager.SENSOR_DELAY_UI
-            sensorManager.registerListener(_sensorListener, sensor, 2);
+            sensorManager.registerListener(_sensorListener, accelerometerSensor, delayType);
         }
     },
     'stop': {
         value: function() {
             if (_sensorListener) {
-                sensorManager.unregisterListener(_sensorListener, sensor);
+                sensorManager.unregisterListener(_sensorListener, accelerometerSensor);
                 _sensorListener = null;
             }
         }
