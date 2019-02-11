@@ -4,9 +4,9 @@ Accelerometer.ios = {};
 Accelerometer.android = {};
 
 Accelerometer.monitonManager = new __SF_CMMotionManager();
-
+Accelerometer.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
+ 
 Accelerometer.start = function() {
-    Accelerometer.monitonManager.accelerometerUpdateInterval = Accelerometer.ios._accelerometerUpdateInterval / 1000; // Convert to second
     Accelerometer.monitonManager.startAccelerometerUpdates();
 }
 
@@ -21,13 +21,12 @@ Object.defineProperty(Accelerometer, 'onAccelerate', {
     enumerable: true
 });
 
-Accelerometer.ios._accelerometerUpdateInterval = 100;
 Object.defineProperty(Accelerometer.ios, 'accelerometerUpdateInterval', {
     get: function() {
-        return Accelerometer.ios._accelerometerUpdateInterval;
+        return Accelerometer.monitonManager.accelerometerUpdateInterval * 1000; // Convert to millisecond
     },
     set: function(value) {
-        Accelerometer.ios._accelerometerUpdateInterval = value;
+        Accelerometer.monitonManager.accelerometerUpdateInterval = value / 1000; // Convert to second
     },
     enumerable: true
 });
