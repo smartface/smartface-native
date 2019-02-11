@@ -8,6 +8,9 @@ const SENSOR_MANAGER = 'android.hardware.SensorManager';
 
 const Accelerometer = {};
 
+Accelerometer.ios = {};
+Accelerometer.android = {};
+
 var sensorManager = AndroidConfig.getSystemService(SENSOR_SERVICE, SENSOR_MANAGER);
 var sensor = sensorManager.getDefaultSensor(NativeSensor.TYPE_ACCELEROMETER);
 
