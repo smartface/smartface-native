@@ -1,42 +1,30 @@
-/* globals toJSArray, requireClass */
-const AndroidConfig             = require('../../util/Android/androidconfig');
-const NativeSensor              = requireClass('android.hardware.Sensor');
-const NativeSensorEventListener = requireClass('android.hardware.SensorEventListener');
-// Context.SENSOR_SERVICE
-const SENSOR_SERVICE = 'sensor';
-const SENSOR_MANAGER = 'android.hardware.SensorManager';
+/* globals requireClass */
+const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.device.accelerometer.SFAccelerometerListener');
 
 const Accelerometer = {};
-
-var sensorManager = AndroidConfig.getSystemService(SENSOR_SERVICE, SENSOR_MANAGER);
-var sensor = sensorManager.getDefaultSensor(NativeSensor.TYPE_ACCELEROMETER);
-
 var _callback;
-var _sensorListener;
+
+Accelerometer.__instance = new NativeSFAccelerometerListener();
+Accelerometer.__isSetCallback = false;
+Accelerometer.__isStarted = false;
+
+Accelerometer.__getInstance = function() {
+    return Accelerometer.__instance;
+};
+
 Object.defineProperties(Accelerometer, {
     'start': {
         value: function() {
-            _sensorListener = NativeSensorEventListener.implement({
-                onAccuracyChanged: function(sensor, accuracy) {},
-                onSensorChanged: function(event) {
-                    var eventData = toJSArray(event.values);
-                    _callback && _callback({
-                        x: eventData[0],
-                        y: eventData[1],
-                        z: eventData[2]
-                    });
-                }
-            });
-            // SensorManager.SENSOR_DELAY_UI
-            sensorManager.registerListener(_sensorListener, sensor, 2);
+            if(Accelerometer.__isStarted) return;
+            Accelerometer.__isStarted = true;
+            Accelerometer.__getInstance().startListener();
         }
     },
     'stop': {
         value: function() {
-            if (_sensorListener) {
-                sensorManager.unregisterListener(_sensorListener, sensor);
-                _sensorListener = null;
-            }
+            if(!Accelerometer.__isStarted) return;
+            Accelerometer.__isStarted = false;
+            Accelerometer.__getInstance().stopListener();
         }
     },
     'onAccelerate': {
@@ -45,6 +33,17 @@ Object.defineProperties(Accelerometer, {
         },
         set: function(callback) {
             _callback = callback;
+            if(typeof(callback) === "function") {
+                if(Accelerometer.__isSetCallback) return;
+                Accelerometer.__isSetCallback = true;
+                Accelerometer.__getInstance().onAccelerateCallback = function(x, y, z) {
+                    _callback && _callback({x, y, z});
+                };
+            } else {
+                if(!Accelerometer.__isSetCallback) return;
+                Accelerometer.__isSetCallback = false;
+                Accelerometer.__getInstance().onAccelerateCallback = null;
+            }
         }
     }
 });
