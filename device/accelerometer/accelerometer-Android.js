@@ -4,6 +4,9 @@ const NativeSFAccelerometerListener = requireClass('io.smartface.android.sfcore.
 const Accelerometer = {};
 var _callback;
 
+Accelerometer.ios = {};
+Accelerometer.android = {};
+
 Accelerometer.__instance = new NativeSFAccelerometerListener();
 Accelerometer.__isSetCallback = false;
 Accelerometer.__isStarted = false;

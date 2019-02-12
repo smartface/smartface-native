@@ -51,4 +51,13 @@ Accelerometer.stop = function() {}
  */
 Accelerometer.onAccelerate = function(event) {}
 
+/**
+ * The interval, in millisecond, for providing accelerometer updates to the block handler.
+ * 
+ * @property {Number} [accelerometerUpdateInterval = 100]
+ * @ios
+ * @since 4.0.2
+ */
+Accelerometer.accelerometerUpdateInterval = function() {}
+
 module.exports = Accelerometer;
