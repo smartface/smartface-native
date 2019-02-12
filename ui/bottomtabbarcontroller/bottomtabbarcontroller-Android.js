@@ -163,17 +163,21 @@ function BottomTabBarController(params) {
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
-        self.push(self.childControllers[_selectedIndex]);
+        // Comment out for: https://smartface.atlassian.net/browse/SUPDEV-1867
+        // self.push(self.childControllers[_selectedIndex]);
     };
 
     this.setChecked = function() {
         initializeOnce();
-        if (!self.tabBar.android.disableItemAnimation) {
-            (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
-            if (_selectedIndex < 0)
-                return;
-            _menu.getItem(_selectedIndex).setChecked(true);
-        }
+        
+        (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if (_selectedIndex < 0)
+            return;
+        // TODO: This check is a workaround. https://smartface.atlassian.net/browse/SUPDEV-1867
+        // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
+        if(self.__targetIndex === _selectedIndex) return;
+        self.__targetIndex = _selectedIndex;
+        self.tabBar.nativeObject.setSelectedItemId(_selectedIndex);
     };
 
     function initializeOnce() {
@@ -203,7 +207,7 @@ function BottomTabBarController(params) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
-
+            
             if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
 

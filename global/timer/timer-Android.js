@@ -1,4 +1,5 @@
-const NativeHandler = requireClass("android.os.Handler");
+/* global requireClass */
+const NativeSFHandler = requireClass("io.smartface.android.sfcore.global.SFHandler");
 const NativeRunnable = requireClass("java.lang.Runnable");
 
 const NUMBER = "number";
@@ -27,7 +28,7 @@ function runnableTask() {
     }
 }
 
-Timer.handler = new NativeHandler();
+Timer.handler = NativeSFHandler.getHandler();
 
 Timer.setTimeout = function(params){
     params.repeat = false;
