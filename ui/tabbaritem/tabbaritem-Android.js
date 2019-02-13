@@ -3,7 +3,8 @@ const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 function TabBarItem(params) {
     this.ios = {};
 
-    let _title, _icon, _badgeObj = undefined;
+    let _title, _icon, _badgeObj = undefined,
+        _systemIconId;
 
     this.nativeObject = null; // this property should be set at runtime.
     this.tabBarItemParent = null; // this property assigned while adding item.
@@ -99,6 +100,19 @@ function TabBarItem(params) {
         },
         set: function(value) {
             Object.assign(self.android, value || {});
+        }
+    });
+
+    Object.defineProperties(self.android, {
+        'systemIcon': {
+            get: function() {
+                return _systemIconId;
+            },
+            set: function(systemIconId) {
+                _systemIconId = systemIconId;
+                self.nativeObject && (self.nativeObject.setIcon(systemIconId));
+            },
+            enumerable: true
         }
     });
 

@@ -28,11 +28,10 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _badgeObj = undefined,
-        _systemIcon;
+        _systemIconId;
 
 
     this.ios = {};
-    this.android = {};
 
     self.isBadgeEnabled = false;
     Object.defineProperties(this, {
@@ -92,7 +91,7 @@ function HeaderBarItem(params) {
                 if (value === null || value instanceof Image) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
-                        createImageButton.call(this);
+                        this.nativeObject = createNativeImageButton.call(this);
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
@@ -116,17 +115,6 @@ function HeaderBarItem(params) {
                 }
             },
             enumerable: true
-        },
-        'systemIcon': {
-            get: function() {
-                return _systemIcon;
-            },
-            set: function(systemIcon) {
-                _systemIcon = systemIcon;
-
-                if (this.nativeObject)
-                    self.nativeObject.setImageResource(systemIcon);
-            }
         },
         // Searchview only property
         'searchView': {
@@ -174,7 +162,8 @@ function HeaderBarItem(params) {
                 this.color = this.color;
                 this.enabled = this.enabled;
                 if (this.imageButton) {
-                    this.image = this.image;
+                    this.image && (this.image = this.image);
+                    this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
                 }
                 else if (_attributedTitle) {
                     this.attributedTitle = _attributedTitle;
@@ -228,6 +217,33 @@ function HeaderBarItem(params) {
         }
     });
 
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
+    Object.defineProperties(self.android, {
+        'systemIcon': {
+            get: function() {
+                return _systemIconId;
+            },
+            set: function(systemIconId) {
+                _systemIconId = systemIconId;
+
+                if (!self.nativeObject || (self.nativeObject && !self.imageButton))
+                    self.nativeObject = createNativeImageButton.call(self);
+
+                self.nativeObject && (self.nativeObject.setImageResource(systemIconId));
+            },
+            enumerable: true
+        }
+    });
+
     this.assignRules = function(badge) {
         if (!self.nativeObject)
             return;
@@ -243,7 +259,7 @@ function HeaderBarItem(params) {
         layoutParams.addRule(ALIGN_END, self.nativeObject.getId());
 
         badge.nativeObject.setLayoutParams(layoutParams);
-    }
+    };
 
     this.addToHeaderView = function(badge) {
         if (!self.nativeBadgeContainer || !badge)
@@ -266,6 +282,7 @@ function HeaderBarItem(params) {
 
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
+
         if (!self.nativeObject) {
             self.nativeObject = new NativeTextButton(activity);
             self.nativeObject.setText(itemTitle);
@@ -278,7 +295,7 @@ function HeaderBarItem(params) {
             self.color = _color;
             self.imageButton = false;
             if (self.menuItem)
-                self.menuItem.setActionView(self.nativeObject);
+                self.menuItem.getActionView().addView(self.nativeObject);
         }
         else if (!self.imageButton) {
             self.nativeObject.setText(itemTitle);
@@ -294,19 +311,25 @@ function HeaderBarItem(params) {
     }
 }
 
-function createImageButton() {
+function createNativeImageButton() {
     const headerBarItem = this;
 
-    headerBarItem.nativeObject = new NativeImageButton(activity);
-    headerBarItem.nativeObject.setBackground(null);
-    headerBarItem.nativeObject.setPaddingRelative(
-        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-        HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-    );
-    headerBarItem.imageButton = true;
-    if (headerBarItem.menuItem) {
-        headerBarItem.menuItem.setActionView(this.nativeObject);
+    let nativeImageButton;
+    if (!headerBarItem.nativeObject) {
+        nativeImageButton = new NativeImageButton(activity);
+        nativeImageButton.setBackground(null);
+        nativeImageButton.setPaddingRelative(
+            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+        );
     }
+    else
+        nativeImageButton = headerBarItem.nativeObject;
+    headerBarItem.imageButton = true;
+    if (headerBarItem.menuItem)
+        headerBarItem.menuItem.getActionView().addView(nativeImageButton);
+
+    return nativeImageButton;
 }
 
 

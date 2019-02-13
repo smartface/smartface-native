@@ -129,6 +129,7 @@ function BottomTabBar(params) {
 
             tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
+            tabbarItem.android.systemIcon && (tabbarItem.android.systemIcon = tabbarItem.android.systemIcon);
             tabbarItem.tabBarItemParent = self.nativeObject;
             tabbarItem.index = i;
         }
