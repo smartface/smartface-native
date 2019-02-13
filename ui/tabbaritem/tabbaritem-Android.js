@@ -4,7 +4,7 @@ function TabBarItem(params) {
     this.ios = {};
 
     let _title, _icon, _badgeObj = undefined,
-        _systemIconId;
+        _systemIcon;
 
     this.nativeObject = null; // this property should be set at runtime.
     this.tabBarItemParent = null; // this property assigned while adding item.
@@ -106,11 +106,12 @@ function TabBarItem(params) {
     Object.defineProperties(self.android, {
         'systemIcon': {
             get: function() {
-                return _systemIconId;
+                return _systemIcon;
             },
-            set: function(systemIconId) {
-                _systemIconId = systemIconId;
-                self.nativeObject && (self.nativeObject.setIcon(systemIconId));
+            set: function(systemIcon) {
+                _systemIcon = systemIcon;
+                const Image = require("../image");
+                self.nativeObject && (self.nativeObject.setIcon(Image.systemDrawableId(_systemIcon)));
             },
             enumerable: true
         }

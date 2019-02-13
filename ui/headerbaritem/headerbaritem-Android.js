@@ -28,7 +28,7 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _badgeObj = undefined,
-        _systemIconId ;
+        _systemIcon;
 
 
     this.ios = {};
@@ -230,15 +230,15 @@ function HeaderBarItem(params) {
     Object.defineProperties(self.android, {
         'systemIcon': {
             get: function() {
-                return _systemIconId;
+                return _systemIcon;
             },
-            set: function(systemIconId) {
-                _systemIconId = systemIconId;
+            set: function(systemIcon) {
+                _systemIcon = systemIcon;
 
                 if (!self.nativeObject || (self.nativeObject && !self.imageButton))
                     self.nativeObject = createNativeImageButton.call(self);
 
-                self.nativeObject && (self.nativeObject.setImageResource(systemIconId));
+                self.nativeObject && (self.nativeObject.setImageResource(Image.systemDrawableId(_systemIcon)));
             },
             enumerable: true
         }

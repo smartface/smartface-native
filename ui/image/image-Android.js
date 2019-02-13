@@ -209,7 +209,7 @@ function Image(params) {
         }
     });
 
-    let _systemIconId;
+    let _systemIcon;
     Object.defineProperties(self.android, {
         'round': {
             value: function(radius) {
@@ -222,15 +222,14 @@ function Image(params) {
                 });
             }
         },
-        'systemIconId': {
+        'systemIcon': {
             get: function() {
-                return _systemIconId;
+                return _systemIcon;
             },
-            set: function(systemIconId) {
+            set: function(systemIcon) {
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
-                _systemIconId = systemIconId;
-
-                self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, _systemIconId);
+                _systemIcon = systemIcon;
+                self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, Image.systemDrawableId(_systemIcon));
             },
             enumerable: true
         }
@@ -279,10 +278,10 @@ Object.defineProperties(Image, {
         enumerable: true
     },
     'createSystemIcon': {
-        value: function(systemIconId) {
+        value: function(systemIcon) {
             return (new Image({
                 android: {
-                    systemIconId: systemIconId
+                    systemIcon: systemIcon
                 }
             }));
         },
@@ -379,6 +378,18 @@ Image.createImageFromPath = function(path) {
         path = Image.createFromFile(path);
     return path;
 };
+
+Image.systemDrawableId = function(systemIcon) {
+    let resID;
+    if (systemIcon.constructor === String) {
+        const NativeR = requireClass('android.R');
+        resID = NativeR.drawable["" + systemIcon];
+    }
+    else {
+        resID = systemIcon;
+    }
+    return resID;
+}
 
 Image.iOS = {};
 Image.iOS.RenderingMode = {};

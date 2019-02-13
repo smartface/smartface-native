@@ -59,7 +59,7 @@ TabBarItem.prototype.icon = null;
 /**
  * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
  *
- * @property {Number} systemIcon
+ * @property {Number | String} systemIcon
  * @android
  * @since 4.0.2
  */

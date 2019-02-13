@@ -73,24 +73,24 @@ Image.prototype.renderingMode = 0;
 Image.prototype.autoMirrored = false;
 
 /**
- * Built-in icons can be created as image object with the corresponding systemIconId value.
+ * Built-in icons can be created as image object with the corresponding systemIcon value.
  *
- * @property {Number} systemIconId
+ * @property {Number | String} systemIcon
  * @android
  * @since 4.0.2
  */
-Image.prototype.systemIconId;
+Image.prototype.systemIcon;
 
 
 /**
- * Returns an Image object which built-in icon is created corresponding systemIconId value.
+ * Returns an Image object which built-in icon is created corresponding systemIcon value.
  *
  * @android
  * @method createSystemIcon
- * @param {Number} systemIconId
+ * @param {Number | String} systemIcon
  * @since 4.0.2
  */
-Image.prototype.createSystemIcon = function(systemIconId) {};
+Image.prototype.createSystemIcon = function(systemIcon) {};
 
 /**
  * Returns a Blob instance.
