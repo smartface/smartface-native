@@ -1,23 +1,19 @@
-const AndroidConfig = require('../../util/Android/androidconfig');
+/* global requireClass */
 const TypeUtil = require('../../util/type');
 
-const NativeLocationRequest = requireClass("com.google.android.gms.location.LocationRequest");
-const NativeLocationServices = requireClass("com.google.android.gms.location.LocationServices");
-const NativeLooper = requireClass("android.os.Looper");
-const NativeOnSuccessListener = requireClass("com.google.android.gms.tasks.OnSuccessListener");
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
 const LOCATION_INTERVAL = 1000 * 1;
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
-
 const Location = {};
-
-const locationProviderClient = NativeLocationServices.getFusedLocationProviderClient(AndroidConfig.activity);
-
 var _onLocationChanged;
-var locationCallback;
+const locationCallback = function(latitude, longitude) {
+    Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
+};
+
+Location.__instance = null;
 Object.defineProperties(Location, {
     'android': {
         value: {},
@@ -28,64 +24,16 @@ Object.defineProperties(Location, {
         enumerable: true
     },
     'start': {
-        value: function(priority) {
-
-            if (locationCallback) {
-                locationProviderClient.removeLocationUpdates(locationCallback);
+        value: function(priority = Location.Android.Priority.HIGH_ACCURACY) {
+            if (!Location.__instance) {
+                Location.__instance = SFLocationCallback.createSingletonInstance(locationCallback);
             }
-
-            switch (priority) {
-                case Location.Android.Priority.HIGH_ACCURACY:
-                    break;
-
-                case Location.Android.Priority.BALANCED:
-                    break;
-
-                case Location.Android.Priority.LOW_POWER:
-                    break;
-
-                case Location.Android.Priority.NO_POWER:
-                    break;
-
-                default:
-                    priority = Location.Android.Priority.HIGH_ACCURACY;
-            };
-
-            var locationRequest = NativeLocationRequest.create();
-            locationRequest.setInterval(LOCATION_INTERVAL);
-            locationRequest.setPriority(priority);
-
-            locationCallback = {
-                onLocationResult: function(locationResult) {
-                    var location = locationResult.getLastLocation()
-                    _onLocationChanged && _onLocationChanged({
-                        latitude: location.getLatitude(),
-                        longitude: location.getLongitude()
-                    });
-                }
-            }
-            locationCallback = new SFLocationCallback(locationCallback);
-            locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, NativeLooper.myLooper());
-
-            //Last known location is necessary to get location without waiting for interval
-            locationProviderClient.getLastLocation().addOnSuccessListener(NativeOnSuccessListener.implement({
-                onSuccess: function(location) {
-                    if (location) { //Location might return null in some devices.
-                        _onLocationChanged && _onLocationChanged({
-                            latitude: location.getLatitude(),
-                            longitude: location.getLongitude()
-                        });
-                    }
-                }
-            }));
+            Location.__instance.start(priority);
         }
     },
     'stop': {
         value: function() {
-            if (locationCallback) {
-                locationProviderClient.removeLocationUpdates(locationCallback);
-                locationCallback = null;
-            }
+            Location.__instance.stop();
         }
     },
     'onLocationChanged': {
