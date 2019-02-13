@@ -28,7 +28,7 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _badgeObj = undefined,
-        _systemIconId = null;
+        _systemIconId ;
 
 
     this.ios = {};
@@ -48,8 +48,8 @@ function HeaderBarItem(params) {
                 }
                 _color = value;
                 if (this.nativeObject) {
-                    if (this.image && this.image.nativeObject) {
-                        var imageCopy = this.image.nativeObject.mutate();
+                    if ((this.image && this.image.nativeObject) || this.android.systemIcon) {
+                        var imageCopy = this.nativeObject.getDrawable().mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
@@ -159,7 +159,6 @@ function HeaderBarItem(params) {
         },
         'setValues': {
             value: function() {
-                this.color = this.color;
                 this.enabled = this.enabled;
                 if (this.imageButton) {
                     this.image && (this.image = this.image);
@@ -171,6 +170,7 @@ function HeaderBarItem(params) {
                 else {
                     this.title = _title;
                 }
+                this.color = this.color;
 
                 const NativeView = requireClass('android.view.View');
                 this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({

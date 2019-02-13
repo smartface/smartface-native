@@ -63,7 +63,7 @@ TabBarItem.prototype.icon = null;
  * @android
  * @since 4.0.2
  */
-TabBarItem.prototype.systemIcon = null;
+TabBarItem.prototype.systemIcon;
 
 /**
  * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.

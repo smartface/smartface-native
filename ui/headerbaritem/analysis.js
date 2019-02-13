@@ -64,7 +64,7 @@ HeaderBarItem.prototype.attributedTitle;
  * @android
  * @since 4.0.2
  */
-HeaderBarItem.prototype.systemIcon = null;
+HeaderBarItem.prototype.systemIcon;
 
 /**
  * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.

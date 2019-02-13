@@ -4,7 +4,7 @@ function TabBarItem(params) {
     this.ios = {};
 
     let _title, _icon, _badgeObj = undefined,
-        _systemIconId = null;
+        _systemIconId;
 
     this.nativeObject = null; // this property should be set at runtime.
     this.tabBarItemParent = null; // this property assigned while adding item.
