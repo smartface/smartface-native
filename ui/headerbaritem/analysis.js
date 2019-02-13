@@ -58,6 +58,15 @@ HeaderBarItem.prototype.size;
 HeaderBarItem.prototype.attributedTitle;
 
 /**
+ * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
+ *
+ * @property {Number} systemIcon
+ * @android
+ * @since 4.0.2
+ */
+HeaderBarItem.prototype.systemIcon = null;
+
+/**
  * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
  *
  *     @example

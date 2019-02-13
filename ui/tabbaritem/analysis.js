@@ -54,6 +54,17 @@ TabBarItem.prototype.font = undefined;
  */
 TabBarItem.prototype.icon = null;
 
+
+
+/**
+ * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
+ *
+ * @property {Number} systemIcon
+ * @android
+ * @since 4.0.2
+ */
+TabBarItem.prototype.systemIcon = null;
+
 /**
  * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
  * For iOS, when tabBarItem icon size is big, default position of badge might be wrong. You should call move function for fix this problem. Badge should not be given in constructor.

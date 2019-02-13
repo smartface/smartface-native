@@ -28,7 +28,7 @@ function HeaderBarItem(params) {
         _imageButton = false,
         _menuItem = null,
         _badgeObj = undefined,
-        _systemIconId;
+        _systemIconId = null;
 
 
     this.ios = {};
