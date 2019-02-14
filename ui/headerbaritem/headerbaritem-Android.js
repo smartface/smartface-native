@@ -33,6 +33,7 @@ function HeaderBarItem(params) {
 
     this.ios = {};
 
+
     self.isBadgeEnabled = false;
     Object.defineProperties(this, {
         'color': {
@@ -48,8 +49,8 @@ function HeaderBarItem(params) {
                 }
                 _color = value;
                 if (this.nativeObject) {
-                    if ((this.image && this.image.nativeObject) || this.android.systemIcon) {
-                        var imageCopy = this.nativeObject.getDrawable().mutate();
+                    if (this.image || this.android.systemIcon) {
+                        let imageCopy = this.nativeObject.getDrawable().mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
                     }
@@ -283,7 +284,7 @@ function HeaderBarItem(params) {
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
 
-        if (!self.nativeObject) {
+        if (!self.nativeObject || self.imageButton) {
             self.nativeObject = new NativeTextButton(activity);
             self.nativeObject.setText(itemTitle);
             self.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
@@ -291,11 +292,13 @@ function HeaderBarItem(params) {
                 HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                 HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
             );
-
-            self.color = _color;
             self.imageButton = false;
-            if (self.menuItem)
-                self.menuItem.getActionView().addView(self.nativeObject);
+            self.color = _color;
+            if (self.menuItem) {
+                let itemView = self.menuItem.getActionView();
+                itemView.getChildCount() && itemView.removeAllViews();
+                itemView.addView(self.nativeObject);
+            }
         }
         else if (!self.imageButton) {
             self.nativeObject.setText(itemTitle);
@@ -315,7 +318,7 @@ function createNativeImageButton() {
     const headerBarItem = this;
 
     let nativeImageButton;
-    if (!headerBarItem.nativeObject) {
+    if (!headerBarItem.nativeObject || !headerBarItem.imageButton) {
         nativeImageButton = new NativeImageButton(activity);
         nativeImageButton.setBackground(null);
         nativeImageButton.setPaddingRelative(
@@ -326,8 +329,14 @@ function createNativeImageButton() {
     else
         nativeImageButton = headerBarItem.nativeObject;
     headerBarItem.imageButton = true;
-    if (headerBarItem.menuItem)
-        headerBarItem.menuItem.getActionView().addView(nativeImageButton);
+    if (headerBarItem.menuItem) {
+        /*
+        We know that got action view is ViewGroup.
+        */
+        let itemView = headerBarItem.menuItem.getActionView();
+        itemView.getChildCount() && itemView.removeAllViews();
+        itemView.addView(nativeImageButton);
+    }
 
     return nativeImageButton;
 }

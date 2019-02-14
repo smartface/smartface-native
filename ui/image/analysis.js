@@ -79,7 +79,7 @@ Image.prototype.autoMirrored = false;
  *     @example
  *     let imageObj = new Image({
  *         android: {
- *             systemIconId: 17301545 // Or 'ic_dialog_email'
+ *             systemIcon: 17301545 // Or 'ic_dialog_email'
  *         }
  *     });
  * 
