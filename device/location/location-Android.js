@@ -26,7 +26,7 @@ Object.defineProperties(Location, {
     'start': {
         value: function(priority = Location.Android.Priority.HIGH_ACCURACY) {
             if (!Location.__instance) {
-                Location.__instance = SFLocationCallback.createSingletonInstance(locationCallback);
+                Location.__instance = new SFLocationCallback(locationCallback);
             }
             Location.__instance.start(priority);
         }
