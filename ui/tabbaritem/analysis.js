@@ -58,9 +58,19 @@ TabBarItem.prototype.icon = null;
 
 /**
  * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
- *
+ * 
+ *     @example
+ *     var myItem = new TabBarItem({
+ *         android: {
+ *             systemIcon: 17301545   // OR 'ic_dialog_email'
+ *         },
+ *         title: "Page1"
+ *     });
+ * 
+ * 
  * @property {Number | String} systemIcon
  * @android
+ * @see https://developer.android.com/reference/android/R.drawable
  * @since 4.0.2
  */
 TabBarItem.prototype.systemIcon;

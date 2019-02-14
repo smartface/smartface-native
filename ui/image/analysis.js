@@ -75,8 +75,17 @@ Image.prototype.autoMirrored = false;
 /**
  * Built-in icons can be created as image object with the corresponding systemIcon value.
  *
+ * 
+ *     @example
+ *     let imageObj = new Image({
+ *         android: {
+ *             systemIconId: 17301545 // Or 'ic_dialog_email'
+ *         }
+ *     });
+ * 
  * @property {Number | String} systemIcon
  * @android
+ * @see https://developer.android.com/reference/android/R.drawable
  * @since 4.0.2
  */
 Image.prototype.systemIcon;
@@ -88,6 +97,7 @@ Image.prototype.systemIcon;
  * @android
  * @method createSystemIcon
  * @param {Number | String} systemIcon
+ * @see https://developer.android.com/reference/android/R.drawable
  * @since 4.0.2
  */
 Image.prototype.createSystemIcon = function(systemIcon) {};
