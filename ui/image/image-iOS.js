@@ -14,6 +14,7 @@ function Image(params) {
   self.android.round = function(radius) {
     return self;
   };
+  self.android.createSystemIcon = function(id) { return self };
 
   if (params.path) {
     if (params.path.includes(".app")) {
@@ -170,7 +171,7 @@ function Image(params) {
     },
     enumerable: true
   });
-  
+
   var _flippedImage;
   var _nativeImage = self.nativeObject;
   Object.defineProperty(self.ios, 'flipsForRightToLeftLayoutDirection', {
@@ -179,19 +180,21 @@ function Image(params) {
     },
     enumerable: true
   });
-  
+
   var _autoMirrored = false;
   Object.defineProperty(self, 'autoMirrored', {
-    set: function(value){
+    set: function(value) {
       _autoMirrored = value;
       if (_autoMirrored) {
         if (_flippedImage) {
           self.nativeObject = _flippedImage;
-        }else{
+        }
+        else {
           _flippedImage = self.nativeObject.imageFlippedForRightToLeftLayoutDirection();
           self.nativeObject = _flippedImage;
         }
-      }else{
+      }
+      else {
         self.nativeObject = _nativeImage
       }
     },
