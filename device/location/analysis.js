@@ -59,6 +59,20 @@ Location.stop = function(){};
 Location.onLocationChanged = function onLocationChanged(event){}
 
 /**
+ * Gets last known location. The method return undefined if no location data has ever been retrieved.
+ * 
+ * @method getLastKnownLocation
+ * @param {Object} event
+ * @param {Number} event.latitude
+ * @param {Number} event.longitude
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.2
+ */
+Location.getLastKnownLocation = function(event) {};
+
+/**
  * Callback to capture authorization status changes.
  * This callback starts to working after call 'Location.start' function until call 'Location.stop' function.
  * 
