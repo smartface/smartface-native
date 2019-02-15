@@ -2,6 +2,8 @@ const Invocation = require('sf-core/util').Invocation;
 
 function Location() {};
 
+Location.nativeObject = new __SF_CLLocationManager();
+
 Location.ios = {};
 Location.ios.native = {};
 Location.ios.native.authorizationStatus = {
@@ -63,7 +65,7 @@ Location.start = function(){
     if (Location.nativeObject) {
         Location.stop();
     }
-    Location.nativeObject = new __SF_CLLocationManager();
+    
     Location.delegate = new __SF_CLLocationManagerDelegate();
     
     if (__SF_CLLocationManager.locationServicesEnabled()) {
@@ -86,10 +88,13 @@ Location.stop = function() {
     if (Location.nativeObject) {
         Location.nativeObject.stopUpdatingLocation();
         Location.nativeObject.delegate = undefined;
-        Location.nativeObject = undefined;
         Location.delegate = undefined;
     }
 }
+
+Location.getLastKnownLocation = function(){
+    return Location.nativeObject.lastKnownLocation();
+};
 
 Location.onLocationChanged = function onLocationChanged(event) { }
 
