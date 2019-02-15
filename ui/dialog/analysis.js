@@ -85,7 +85,7 @@ Dialog.prototype.android.isTransparent;
 
 
 /**
- * Sets whether this dialog is cancelable with the {@link UI.Application#onBackButtonPressed BACK} key.
+ * Sets whether this dialog is cancelable with the {@link Application#onBackButtonPressed BACK} key.
  *
  * @property {Boolean} cancelable
  * @android
