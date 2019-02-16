@@ -12,17 +12,19 @@ const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 
 function Dialog(params) {
     const self = this;
-    
-    var _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
+
+    let _isTransparent,
+        _themeStyle, _layout;
+
+    _layout = new Flex({ backgroundColor: Color.TRANSPARENT });
     // Assign parameters given in constructor
-    var themeStyle = Dialog.Android.Style.ThemeDefault;
+    _themeStyle = Dialog.Android.Style.ThemeDefault;
     if (params && params.android) {
-        themeStyle = params.android.themeStyle || themeStyle;
-        this.isTransparent = params.android.isTransparent || false;
+        _themeStyle = params.android.themeStyle || _themeStyle;
+        _isTransparent = params.android.isTransparent || false;
     }
-    this.themeStyle = themeStyle;
     if (!this.nativeObject) {
-        this.nativeObject = new NativeDialog(AndroidConfig.activity, this.themeStyle);
+        this.nativeObject = new NativeDialog(AndroidConfig.activity, _themeStyle);
     }
 
     Object.defineProperties(self, {
@@ -91,6 +93,24 @@ function Dialog(params) {
                 self.nativeObject.setCancelable(_cancelable);
             },
             enumerable: true
+        },
+        'isTransparent': {
+            get: function() {
+                return _isTransparent;
+            },
+            set: function(value) {
+                _isTransparent = value;
+            },
+            enumerable: true
+        },
+        'themeStyle': {
+            get: function() {
+                return _themeStyle;
+            },
+            set: function(value) {
+                _themeStyle = value;
+            },
+            enumerable: true
         }
     });
 
@@ -106,7 +126,7 @@ function Dialog(params) {
     };
 
     var skipDefaults = false;
-    if (params && (params.skipDefaults || this.isTransparent))
+    if (params && (params.skipDefaults || _isTransparent))
         skipDefaults = true;
 
     var dialogWindow, colorDrawable;
