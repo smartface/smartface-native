@@ -1,5 +1,8 @@
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
+const Http = require("sf-core/net/http");
+const Network = require('sf-core/device/network');
+    
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -44,6 +47,7 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onStop: function() {},
     onStart: function() {},
     onDestroy: function() {
+        cancelAllBackgroundJobs();
         if (_onExit) {
             _onExit();  
         }  
@@ -318,6 +322,11 @@ ApplicationWrapper.registOnItemSelectedListener = function() {
         }
     });
 };
+
+function cancelAllBackgroundJobs() {
+    Http.__cancelAll();
+    Network.__cancelAll();
+}
 
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
