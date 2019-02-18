@@ -7,7 +7,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 
-const NativeView = requireClass("android.view.View");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
@@ -51,11 +50,11 @@ const ListView = extend(View)(
 
         _super(this);
         scrollableSuper(this, this.nativeInner);
-
+        
         var _listViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
         var callbacks = {
-            onCreateViewHolder: function(parent, viewType) {
+            onCreateViewHolder: function(viewType) {
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onRowCreate(viewType);
@@ -75,11 +74,12 @@ const ListView = extend(View)(
                     holderViewLayout.height = self.rowHeight;
                 }
                 _listViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+                
+                holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
                 return holderViewLayout.nativeInner;
             },
-            onBindViewHolder: function(nativeHolderView, position) {
-                var itemHashCode = nativeHolderView.itemView.hashCode();
-                var _holderViewLayout = _listViewItems[itemHashCode];
+            onBindViewHolder: function(itemViewHashCode, position) {
+                var _holderViewLayout = _listViewItems[itemViewHashCode];
 
                 if (!self.rowHeight && _onRowHeight) {
                     var rowHeight = _onRowHeight(position);
@@ -89,33 +89,7 @@ const ListView = extend(View)(
                     _holderViewLayout.height = self.rowHeight;
                 }
 
-                if (_onRowBind) {
-                    _onRowBind(_holderViewLayout, position);
-                }
-
-                if (_onRowSelected) {
-                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                        onClick: function(view) {
-                            var selectedItem = _listViewItems[view.hashCode()];
-                            _onRowSelected && _onRowSelected(selectedItem, position);
-                        }
-                    }));
-                }
-
-                if (_onRowLongSelected) {
-                    nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-                        onLongClick: function(view) {
-
-                            if (typeof _onRowLongSelected === 'function') {
-                                var selectedItem = _listViewItems[view.hashCode()];
-                                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
-                                return true;
-                            }
-                            return false;
-                        }
-                    }));
-                }
-
+                _onRowBind  && _onRowBind(_holderViewLayout, position);
             },
             getItemCount: function() {
                 if (isNaN(_itemCount))
@@ -128,6 +102,14 @@ const ListView = extend(View)(
                 let rowType;
                 _onRowType && (rowType = _onRowType(position));
                 return (typeof(rowType) === "number") ? rowType : 0;
+            }, 
+            onItemSelected: function(position, itemViewHashCode) {
+                var selectedItem = _listViewItems[itemViewHashCode];
+                _onRowSelected && _onRowSelected(selectedItem, position);
+            },
+            onLongItemSelected: function(position, itemViewHashCode) {
+                var selectedItem = _listViewItems[itemViewHashCode];
+                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
