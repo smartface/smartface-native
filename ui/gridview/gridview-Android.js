@@ -8,7 +8,6 @@ const GridViewLayoutManager = require('../layoutmanager');
 const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const scrollableSuper = require("../../util/Android/scrollable");
 
-const NativeView = requireClass("android.view.View");
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeContextThemeWrapper = requireClass("android.view.ContextThemeWrapper");
@@ -55,7 +54,7 @@ const GridView = extend(View)(
         var _gridViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
         var callbacks = {
-            onCreateViewHolder: function(parent, viewType) {
+            onCreateViewHolder: function(viewType) {
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onItemCreate(viewType);
@@ -83,36 +82,16 @@ const GridView = extend(View)(
 
                 holderViewLayout.viewType = viewType;
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+                
+                holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
                 return holderViewLayout.nativeInner;
             },
-            onBindViewHolder: function(nativeHolderView, position) {
-                var itemHashCode = nativeHolderView.itemView.hashCode();
-                var _holderViewLayout = _gridViewItems[itemHashCode];
+            onBindViewHolder: function(itemViewHashCode, position) {
+                var _holderViewLayout = _gridViewItems[itemViewHashCode];
 
                 assignSizeBasedOnDirection.call(self, _holderViewLayout, _holderViewLayout.viewType);
 
-                if (_onItemBind) {
-                    _onItemBind(_holderViewLayout, position);
-
-                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                        onClick: function(view) {
-                            var selectedItem = _gridViewItems[view.hashCode()];
-                            _onItemSelected && _onItemSelected(selectedItem, position);
-                        }
-                    }));
-
-                    nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-                        onLongClick: function(view) {
-
-                            if (typeof _onItemLongSelected === 'function') {
-                                var selectedItem = _gridViewItems[view.hashCode()];
-                                _onItemLongSelected && _onItemLongSelected(selectedItem, position);
-                                return true;
-                            }
-                            return false;
-                        }
-                    }));
-                }
+                _onItemBind && _onItemBind(_holderViewLayout, position);
             },
             getItemCount: function() {
                 if (isNaN(_itemCount))
@@ -125,6 +104,14 @@ const GridView = extend(View)(
                 let itemType;
                 _onItemType && (itemType = _onItemType(position));
                 return (typeof(itemType) === "number") ? itemType : 0;
+            },
+            onItemSelected: function(position, itemViewHashCode) {
+                var selectedItem = _gridViewItems[itemViewHashCode];
+                _onItemSelected && _onItemSelected(selectedItem, position);
+            },
+            onLongItemSelected: function(position, itemViewHashCode) {
+                var selectedItem = _gridViewItems[itemViewHashCode];
+                _onItemLongSelected && _onItemLongSelected(selectedItem, position);
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
