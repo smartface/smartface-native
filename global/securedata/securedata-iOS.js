@@ -1,6 +1,6 @@
 function SecureData(params) {
     var _account = params && params.key;
-    var _service = params && params.service;
+    var _service = params && params.ios && params.ios.service;
 
     if (!_account || !_service) {
         throw new Error("Constructor must have service and key parameter.");

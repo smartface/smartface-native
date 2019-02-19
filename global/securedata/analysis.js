@@ -8,7 +8,13 @@
  * This class provides the functionality of a cryptographic cipher for encryption and decryption.
  * 
  *     @example
- * 
+ *      const SecureData = require("sf-core/global/securedata");
+ *      var secure = new SecureData({
+ *          ios: {
+ *              service: "com.myapp.serviceparameter"
+ *          },
+ *          key: "keyparamater"
+ *      });
  * 
  */
 function SecureData(params) {}
