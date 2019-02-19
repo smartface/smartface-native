@@ -68,7 +68,7 @@ SecureData.prototype.key;
 /**
  * A key whose value is a string indicating the item's service. iOS only argument
  * 
- * @property {String} key
+ * @property {String} service
  * @ios
  * @readonly
  * @since 4.0.2
