@@ -2,8 +2,8 @@
  * @class SecureData
  * @constructor
  * @param {Object} params
- * @param {string} params.key - This key value is being used while saving or reading your secret data.
- * @param {string} params.service - A key whose value is a string indicating the item's service. iOS only argument.
+ * @param {String} params.key - This key value is being used while saving or reading your value.
+ * @param {String} params.service - A key whose value is a string indicating the item's service. iOS only argument.
  * 
  * This class provides the functionality of a cryptographic cipher for encryption and decryption.
  * 
@@ -14,11 +14,11 @@
 function SecureData(params) {}
 
 /**
- * This method encrypts your secret data and keeps.
+ * This method encrypts your value and keeps.
  * 
  * @method save
  * @param {Object} params
- * @param {string} params.secret
+ * @param {String} params.value
  * @android
  * @ios
  * @since 4.0.2
@@ -28,7 +28,7 @@ SecureData.prototype.save = function(params){};
 
 
 /**
- * This method dencrypts already kept secret data.
+ * This method dencrypts already kept value.
  * 
  * @method read
  * @android
@@ -41,7 +41,7 @@ SecureData.prototype.read = function(){};
 
 
 /**
- * This method deletes saved secret data.
+ * This method deletes saved value.
  * 
  * @method delete
  * @android
@@ -54,10 +54,11 @@ SecureData.prototype.delete = function(){};
 
 
 /**
- * This key value is being used while saving or reading your secret data
+ * This key value is being used while saving or reading your value.
  * 
- * @property {string} key
+ * @property {String} key
  * @ios
+ * @readonly
  * @android
  * @since 4.0.2
  */
@@ -67,8 +68,9 @@ SecureData.prototype.key;
 /**
  * A key whose value is a string indicating the item's service. iOS only argument
  * 
- * @property {string} key
+ * @property {String} key
  * @ios
+ * @readonly
  * @since 4.0.2
  */
 SecureData.prototype.service;
