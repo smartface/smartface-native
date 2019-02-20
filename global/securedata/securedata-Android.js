@@ -3,7 +3,7 @@ const NativeSFKeyStore = requireClass('io.smartface.android.sfcore.global.SFKeyS
 
 function SecureData(params) {
     const self = this;
-    
+
     let key = params && params.key;
     if (!key) {
         throw new Error("Constructor must have key parameter.");
@@ -22,43 +22,42 @@ function SecureData(params) {
 
     self.read = () => {
         return new Promise((resolve, reject) => {
-            try {
-                let decryptData = self.nativeObject.decryptData();
-                resolve(decryptData);
-            }
-            catch (e) {
-                reject();
-                Application.onUnhandledError && Application.onUnhandledError(e);
-            }
+            self.nativeObject.decryptData({
+                onResult: function(msg, error) {
+                    if (error)
+                        reject(msg);
+                    else
+                        resolve(msg)
+                }
+            });
         });
     };
 
     self.save = (params) => {
         return new Promise((resolve, reject) => {
-            try {
-                self.nativeObject.encryptData(params.value);
-                resolve();
-            }
-            catch (e) {
-                reject();
-                Application.onUnhandledError && Application.onUnhandledError(e);
-            }
+            self.nativeObject.encryptData(params.value , {
+                onResult: function(msg, error) {
+                    if (error)
+                        reject(msg);
+                    else
+                        resolve();
+                }
+            });
         });
     };
 
     self.delete = () => {
         return new Promise((resolve, reject) => {
-            try {
-                self.nativeObject.deleteEntry();
-                resolve();
-            }
-            catch (e) {
-                reject();
-                Application.onUnhandledError && Application.onUnhandledError(e);
-            }
+            self.nativeObject.deleteEntry({
+                onResult: function(msg, error) {
+                    if (error)
+                        reject(msg);
+                    else
+                        resolve();
+                }
+            });
         });
     };
-
     self.ios = {};
 }
 module.exports = SecureData;
