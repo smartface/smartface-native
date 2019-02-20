@@ -1,11 +1,8 @@
 /**
  * @class SecureData
- * @constructor
- * @param {Object} params
- * @param {String} params.key - This key value is being used while saving or reading your value.
- * @param {String} params.service - A key whose value is a string indicating the item's service. iOS only argument.
- * 
- * This class provides the functionality of a cryptographic cipher for encryption and decryption.
+ * @since 4.0.2
+ *
+ * This class provides the functionality of a cryptographic cipher for encryption and decryption. Given key always present until delete method called. In Android, it uses built-in RSA Algorithm.
  * 
  *     @example
  *      const SecureData = require("sf-core/global/securedata");
@@ -34,7 +31,7 @@ SecureData.prototype.save = function(params){};
 
 
 /**
- * This method dencrypts already kept value.
+ * This method dencrypts already saved value.
  * 
  * @method read
  * @android
@@ -60,7 +57,7 @@ SecureData.prototype.delete = function(){};
 
 
 /**
- * This key value is being used while saving or reading your value.
+ * This key value is being used while saving or reading your value and must be given in constructor. 
  * 
  * @property {String} key
  * @ios
@@ -72,7 +69,7 @@ SecureData.prototype.key;
 
 
 /**
- * A key whose value is a string indicating the item's service. iOS only argument
+ * A key whose value is a string indicating the item's service and must be given in constructor. iOS only argument
  * 
  * @property {String} service
  * @ios
