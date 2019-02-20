@@ -72,4 +72,6 @@ function SecureData(params) {
     }
 }
 
+SecureData.Error = require("./error");
+
 module.exports = SecureData;
