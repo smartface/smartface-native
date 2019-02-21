@@ -14,7 +14,6 @@ function TabBar(params) {
         self.nativeObject = params.nativeObject;
     }
     
-    self.nativeObject.translucent = false;
     //////////////////////////////////////////////////////////////////////////
     // ITEMS
     

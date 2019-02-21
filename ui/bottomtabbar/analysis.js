@@ -64,4 +64,13 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
  */
 BottomTabBar.prototype.items = null;
 
+/**
+ * A Boolean value that indicates whether the tab bar is translucent.
+ *
+ * @property {Boolean} translucent
+ * @ios
+ * @since 4.0.2
+ */
+BottomTabBar.prototype.translucent = true;
+
 module.exports = BottomTabBar;
