@@ -71,6 +71,6 @@ BottomTabBar.prototype.items = null;
  * @ios
  * @since 4.0.2
  */
-BottomTabBar.prototype.translucent = true;
+BottomTabBar.prototype.translucent = false;
 
 module.exports = BottomTabBar;
