@@ -30,7 +30,15 @@ function SecureData(params) {
         return new Promise((resolve, reject) => {
             self.nativeObject.readPasswordWithBlock(function(e) {
                 if (e.error) {
-                    reject(e.error.code);
+                    var errorMessage; 
+                    if (e.error.code == 1) {
+                        errorMessage = SecureData._iOS._Message.NOPASSWORD;
+                    }else if(e.error.code == 2){
+                        errorMessage = SecureData._iOS._Message.UNEXPECTEDPASSWORDDATA;
+                    }else{
+                        errorMessage = SecureData._iOS._Message.UNHANDLEDERROR;
+                    }
+                    reject(errorMessage);
                 }
                 else {
                     resolve(e.password);
@@ -43,7 +51,7 @@ function SecureData(params) {
         return new Promise((resolve, reject) => {
             self.nativeObject.savePasswordWithBlock(e.value, function(e) {
                 if (e.error) {
-                    reject(e.error.code);
+                    reject(SecureData._iOS._Message.UNHANDLEDERROR);
                 }
                 else {
                     resolve();
@@ -56,7 +64,7 @@ function SecureData(params) {
         return new Promise((resolve, reject) => {
             self.nativeObject.deleteItemWithBlock(function(e) {
                 if (e.error) {
-                    reject(e.error.code);
+                    reject(SecureData._iOS._Message.UNHANDLEDERROR);
                 }
                 else {
                     resolve();
@@ -71,5 +79,13 @@ function SecureData(params) {
         }
     }
 }
+
+SecureData._iOS = {};
+
+SecureData._iOS._Message = {
+    NOPASSWORD : "The specified item could not be found in the keychain.",
+    UNEXPECTEDPASSWORDDATA : "Unexpected data in the keychain.",
+    UNHANDLEDERROR : "Keychain unhandled error."
+};
 
 module.exports = SecureData;
