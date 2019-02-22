@@ -1,5 +1,4 @@
 const Accelerometer = require("sf-core/device/accelerometer");
-const Application = require("sf-core/application");
 const Location = require("sf-core/device/location");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
