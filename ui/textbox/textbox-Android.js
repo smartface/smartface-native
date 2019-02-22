@@ -447,12 +447,16 @@ const TextBox = extend(TextView)(
 
 /*
 These Android InputType Flags are not supported with isPassword
+
 TYPE_TEXT_VARIATION_WEB_EDIT_TEXT
 TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
 TYPE_TEXT_VARIATION_WEB_PASSWORD
 TYPE_TEXT_VARIATION_PHONETIC
 TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
 TYPE_DATETIME_VARIATION_DATE
+
+These enums are determined by their integer values. If enum value is  power of 2 and same values is not present right now, that means
+it is supported or may not  in case of not receiving these conditions.
 */
 function updateInputType(self, unsetFlags, setFlags) {
     let currentInputType = self.nativeObject.getInputType();
