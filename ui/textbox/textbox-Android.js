@@ -160,6 +160,7 @@ const TextBox = extend(TextView)(
                 },
                 set: function(isPassword) {
                     _isPassword = isPassword;
+                    let typeface = self.nativeObject.getTypeface();
                     let currentInputType = this.nativeObject.getInputType();
 
                     let passwordType;
@@ -173,8 +174,7 @@ const TextBox = extend(TextView)(
                         updateInputType(this, removeTags, passwordType);
                     else
                         updateInputType(this, removeTags, 0);
-
-                    let typeface = self.nativeObject.getTypeface();
+                    // Some devices might change the font.
                     self.nativeObject.setTypeface(typeface);
                 },
                 enumerable: true,
