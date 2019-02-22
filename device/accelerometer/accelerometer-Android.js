@@ -7,11 +7,13 @@ var _callback;
 Accelerometer.ios = {};
 Accelerometer.android = {};
 
-Accelerometer.__instance = new NativeSFAccelerometerListener();
+Accelerometer.__instance = null;
 Accelerometer.__isSetCallback = false;
 Accelerometer.__isStarted = false;
 
 Accelerometer.__getInstance = function() {
+    if(!Accelerometer.__instance)
+        Accelerometer.__instance = new NativeSFAccelerometerListener();
     return Accelerometer.__instance;
 };
 

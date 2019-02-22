@@ -33,7 +33,7 @@ Object.defineProperties(Location, {
     },
     'stop': {
         value: function() {
-            Location.__instance.stop();
+            Location.__instance && Location.__instance.stop();
         }
     },
     'onLocationChanged': {
