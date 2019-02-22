@@ -1,3 +1,6 @@
+const Accelerometer = require("sf-core/device/accelerometer");
+const Application = require("sf-core/application");
+const Location = require("sf-core/device/location");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("sf-core/net/http");
@@ -324,6 +327,8 @@ ApplicationWrapper.registOnItemSelectedListener = function() {
 };
 
 function cancelAllBackgroundJobs() {
+    Location.stop();
+    Accelerometer.stop();
     Http.__cancelAll();
     Network.__cancelAll();
 }
