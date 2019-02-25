@@ -23,6 +23,8 @@ const INPUT_METHOD_MANAGER = 'android.view.inputmethod.InputMethodManager';
 const SHOW_FORCED = 2;
 // InputMethodManager.HIDE_IMPLICIT_ONLY
 const HIDE_IMPLICIT_ONLY = 1;
+const TYPE_TEXT_VARIATION_PASSWORD = 128;
+const TYPE_NUMBER_VARIATION_PASSWORD = 16;
 
 const NativeKeyboardType = [
     1, // TYPE_CLASS_TEXT															
@@ -33,19 +35,19 @@ const NativeKeyboardType = [
     1, // TYPE_CLASS_TEXT															
     160, // TYPE_TEXT_VARIATION_WEB_EDIT_TEXT										
     4, // TYPE_CLASS_DATETIME														
-    2 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_SIGNED								
+    2 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_SIGNED	   							
     2 | 8192 | 4096, // TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL | TYPE_NUMBER_FLAG_SIGNED	
-    1 | 65536, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_COMPLETE							
-    1 | 32768, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_CORRECT							
-    1 | 4096, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_CHARACTERS							
-    1 | 16384, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_SENTENCES							
-    1 | 8192, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_WORDS								
+    65536, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_COMPLETE					
+    32768, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_AUTO_CORRECT	    		
+    4096, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_CHARACTERS     DEPRECATED						
+    16384, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_SENTENCES	 DEPRECATED					
+    8192, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_CAP_WORDS		     DEPRECATED
     1 | 48, // TYPE_TEXT_VARIATION_EMAIL_SUBJECT										
     1 | 80, // TYPE_TEXT_VARIATION_LONG_MESSAGE											
-    1 | 524288, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_NO_SUGGESTIONS							
-    1 | 96, // TYPE_TEXT_VARIATION_PERSON_NAME											
+    524288, // TYPE_CLASS_TEXT | TYPE_TEXT_FLAG_NO_SUGGESTIONS						
+    1 | 96, // TYPE_TEXT_VARIATION_PERSON_NAME		 								
     1 | 64, // TYPE_TEXT_VARIATION_SHORT_MESSAGE										
-    4 | 32, // TYPE_DATETIME_VARIATION_TIME												
+    4 | 32, // TYPE_DATETIME_VARIATION_TIME				
     1 | 32, // TYPE_TEXT_VARIATION_EMAIL_ADDRESS										
 ];
 
@@ -91,7 +93,7 @@ const TextBox = extend(TextView)(
         var _isPassword = false;
         var _keyboardType = KeyboardType.DEFAULT;
         var _actionKeyType = ActionKeyType.DEFAULT;
-        var _onTextChanged , _cursorColor, _onEditBegins, _onEditEnds;
+        var _onTextChanged, _cursorColor, _onEditBegins, _onEditEnds;
         var _onActionButtonPress;
         var _hasEventsLocked = false;
         var _autoCapitalize = 0;
@@ -158,7 +160,22 @@ const TextBox = extend(TextView)(
                 },
                 set: function(isPassword) {
                     _isPassword = isPassword;
-                    setKeyboardType(this, _autoCapitalize);
+                    let typeface = self.nativeObject.getTypeface();
+                    let currentInputType = this.nativeObject.getInputType();
+
+                    let passwordType;
+                    if ((currentInputType & NativeKeyboardType[KeyboardType.DEFAULT]) != 0)
+                        passwordType = TYPE_TEXT_VARIATION_PASSWORD;
+                    else
+                        passwordType = TYPE_NUMBER_VARIATION_PASSWORD;
+
+                    let removeTags = TYPE_TEXT_VARIATION_PASSWORD | TYPE_NUMBER_VARIATION_PASSWORD;
+                    if (_isPassword)
+                        updateInputType(this, removeTags, passwordType);
+                    else
+                        updateInputType(this, removeTags, 0);
+                    // Some devices might change the font.
+                    self.nativeObject.setTypeface(typeface);
                 },
                 enumerable: true,
                 configurable: true
@@ -168,13 +185,14 @@ const TextBox = extend(TextView)(
                     return _keyboardType;
                 },
                 set: function(keyboardType) {
+                    let removeFlags = NativeKeyboardType[_keyboardType];
                     if (!TypeUtil.isNumeric(NativeKeyboardType[keyboardType])) {
                         _keyboardType = KeyboardType.DEFAULT;
                     }
                     else {
                         _keyboardType = keyboardType;
                     }
-                    setKeyboardType(this, _autoCapitalize);
+                    updateInputType(this, removeFlags, NativeKeyboardType[_keyboardType]);
                 },
                 enumerable: true,
                 configurable: true
@@ -354,8 +372,9 @@ const TextBox = extend(TextView)(
                     return _autoCapitalize;
                 },
                 set: function(autoCapitalize) {
+                    let prevAutoCapitalize = _autoCapitalize;
                     _autoCapitalize = autoCapitalize;
-                    setKeyboardType(this, _autoCapitalize);
+                    updateInputType(this, prevAutoCapitalize, NativeAutoCapitalize[_autoCapitalize]);
                 },
                 enumerable: true,
                 configurable: true
@@ -425,28 +444,23 @@ const TextBox = extend(TextView)(
         }
     }
 );
-function setKeyboardType(self, autoCapitalize) {
-    if (self.isPassword) {
-        var typeface = self.nativeObject.getTypeface();
-        // BUG/AND-3012
-        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 144 | NativeAutoCapitalize[autoCapitalize]); // TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-        /*
-        if(IndexOfNumberKeyboardType.indexOf(self.keyboardType) >= 0) { 
-            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 128); // 128 = TYPE_TEXT_VARIATION_PASSWORD
-        } else {
-            self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | 16); // 16 = TYPE_NUMBER_VARIATION_PASSWORD
-        }
-        */
-        const NativePasswordTransformationMethod = requireClass('android.text.method.PasswordTransformationMethod');
-        var passwordMethod = new NativePasswordTransformationMethod();
-        self.nativeObject.setTypeface(typeface);
-        self.nativeObject.setTransformationMethod(passwordMethod);
-        release(passwordMethod);
-    }
-    else {
-        self.nativeObject.setInputType(NativeKeyboardType[self.keyboardType] | NativeAutoCapitalize[autoCapitalize]);
-        self.nativeObject.setTransformationMethod(null);
-    }
+
+/*
+These Android InputType Flags are not supported with isPassword
+
+TYPE_TEXT_VARIATION_WEB_EDIT_TEXT
+TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
+TYPE_TEXT_VARIATION_WEB_PASSWORD
+TYPE_TEXT_VARIATION_PHONETIC
+TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+TYPE_DATETIME_VARIATION_DATE
+
+These enums are determined by their integer values. If enum value is  power of 2 and same values is not present right now, that means
+it is supported or may not  in case of not receiving these conditions.
+*/
+function updateInputType(self, unsetFlags, setFlags) {
+    let currentInputType = self.nativeObject.getInputType();
+    self.nativeObject.setInputType((currentInputType & ~unsetFlags) | setFlags);
 }
 
 TextBox.AutoCapitalize = AutoCapitalize;
