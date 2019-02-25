@@ -213,8 +213,9 @@ const ListView = extend(View)(
             return visibleIndexArray[visibleIndexArray.length - 1];
         };
 
-        this.scrollTo = function(index) {
-            self.nativeObject.scrollTo(index);
+        this.scrollTo = function(index,animated) {
+            let indexPath = __SF_NSIndexPath.indexPathForRowInSection(index,0);
+            self.nativeObject.scrollToRowAtIndexPathAtScrollPositionAnimated(indexPath,1,(animated === false) ? animated : true);
         };
 
         Object.defineProperty(self, 'verticalScrollBarEnabled', {
