@@ -25,48 +25,38 @@ function TabBarItem(params) {
             get: function() {
                 return _icon;
             },
-            set: function(valueObj) {
+            set: function(value) {
                 const Image = require("../image");
                 const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
 
+                _icon = value;
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
                 };
 
-                var icon = valueObj;
-                if (!(icon instanceof Object)) { //IDE requires this implementation.
+                let icon = value;
+                if (icon.constructor === String) { //IDE requires this implementation.
                     icon = Image.createImageFromPath(icon);
                 }
-                else {
+                else if (icon instanceof Object) {
                     icon.normal = Image.createImageFromPath(icon.normal);
                     icon.selected = Image.createImageFromPath(icon.selected);
                 }
-
-                if (icon instanceof Image || icon === null) {
-                    _icon = icon;
-                }
-                else if (icon instanceof Object) {
-                    // TODO: Refactor this implemenation. Discuss with ios team.
-                    if (icon.normal instanceof Image && icon.selected instanceof Image) {
-                        _icon = makeSelector(icon.normal, icon.selected);
-                    }
-                    else if (icon.normal instanceof Image) {
-                        _icon = makeSelector(icon.normal, EmptyImage);
-                    }
-                    else if (icon.selected instanceof Image) {
-                        _icon = makeSelector(EmptyImage, icon.selected);
-                    }
-                    else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
-                        icon.normal = icon.normal && Image.createFromFile(icon.normal);
-                        icon.selected = icon.selected && Image.createFromFile(icon.selected);
-                    }
-
-                }
-                else if (typeof icon === "string") {
-                    icon = Image.createFromFile(icon);
-                }
                 else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");
+                }
+
+                if (icon instanceof Object) {
+                    // TODO: Refactor this implemenation. Discuss with ios team.
+                    if (icon.normal instanceof Image && icon.selected instanceof Image) {
+                        icon = makeSelector(icon.normal, icon.selected);
+                    }
+                    else if (icon.normal instanceof Image) {
+                        icon = makeSelector(icon.normal, EmptyImage);
+                    }
+                    else if (icon.selected instanceof Image) {
+                        icon = makeSelector(EmptyImage, icon.selected);
+                    }
                 }
                 self.nativeObject && (self.nativeObject.setIcon(icon.nativeObject));
             },
