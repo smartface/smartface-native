@@ -63,7 +63,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintTextColor) {
                     _hintTextColor = hintTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject, _hintTextColor.nativeObject);
+                    reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject.getInstance(), _hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -74,7 +74,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintFocusedTextColor) {
                     _hintFocusedTextColor = hintFocusedTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject, _hintFocusedTextColor.nativeObject);
+                    reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject.getInstance(), _hintFocusedTextColor.nativeObject);
                 },
                 enumerable: true
             },
