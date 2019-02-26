@@ -157,7 +157,7 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         
         popupBackPage = page.parentController.popUpBackPage;
         if(popupBackPage && popupBackPage.transitionViews) {
-            _addedFragmentsInContainer[popupBackPage.pageID] = false;
+            _addedFragmentsInContainer[page.pageID] = false;
             // reveal back animation
             fragmentManager.popBackStackImmediate();
             return;
