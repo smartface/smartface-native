@@ -81,8 +81,7 @@ function NavigationController() {
     // Call this function from BottomTabBarController
     this.show = function(params) {
         if (!pageIDCollectionInStack[params.controller.pageID]) {
-            // throw new Error("This page doesn't exist in history!");
-            return;
+            throw new Error("This page doesn't exist in history!");
         }
         if(!self.__isActive)
            return;
@@ -182,8 +181,7 @@ function NavigationController() {
 
     this.pop = function(params) {
         if (_childControllers.length < 2) {
-            // throw new Error("There is no page in history!");
-            return;
+            throw new Error("There is no page in history!");
         }
         // remove current page from history and its id from collection
         var poppedController = _childControllers.pop();
@@ -198,14 +196,12 @@ function NavigationController() {
 
     this.popTo = function(params) {
         if (_childControllers.length < 2) {
-            // throw new Error("There is no controller in history!");
-            return;
+            throw new Error("There is no controller in history!");
         }
 
         // check whether target page exist in history
         if (!pageIDCollectionInStack[params.controller.pageID]) {
-            // throw new Error("Target controller doesn't exist in history!");
-            return;
+            throw new Error("Target controller doesn't exist in history!");
         }
 
         var currentController = self.getCurrentController();
