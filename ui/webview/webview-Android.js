@@ -386,9 +386,12 @@ const WebView = extend(View)(
             }
         };
 
-        const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
-        var nativeWebClient = new SFWebViewClient(overrideMethods);
-        this.nativeObject.setWebViewClient(nativeWebClient);
+        const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
+        var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
+        /*
+        ToDo: Trying to access any field or methods of instance will cause exception.  Consider when getDeclatedMethods exceptions are handled
+        */
+        this.nativeObject.setWebViewClient(nativeWebClient.getInstance());
         this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
         this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
         var settings = this.nativeObject.getSettings();
