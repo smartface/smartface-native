@@ -54,7 +54,7 @@ Label.prototype.font = null;
 
 /**
  * Enables/disables multiple line property of a Label. If set to true
- * and the text is long enough, text will be shown in multiline.
+ * and the text is long enough, text will be shown in multiline. Setting multiline will override the {@link UI.Label#ellipsizeMode ellipsizeMode} prop.
  *
  * @property {Boolean} [multiline = false]
  * @android
