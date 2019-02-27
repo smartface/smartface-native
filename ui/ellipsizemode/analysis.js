@@ -34,7 +34,7 @@ const EllipsizeMode = {};
  * @readonly
  * @since 4.0.2
  */
-EllipsizeMode.START = 0;
+EllipsizeMode.START;
 
 /**
  * End & start of text fits in the container and the missing middle of the text  is indicated by 
@@ -47,7 +47,7 @@ EllipsizeMode.START = 0;
  * @readonly
  * @since 4.0.2s
  */
-EllipsizeMode.MIDDLE = 1;
+EllipsizeMode.MIDDLE;
 
 /**
  * Start of text fits in the container and the missing end of the text  is indicated by 
@@ -60,9 +60,7 @@ EllipsizeMode.MIDDLE = 1;
  * @since 4.0.2
  * @readonly
  */
-EllipsizeMode.END = 2;
-
-
+EllipsizeMode.END;
 
 /**
  * Turns off ellipsizing
@@ -74,4 +72,26 @@ EllipsizeMode.END = 2;
  * @since 4.0.2
  * @readonly
  */
-EllipsizeMode.NONE = 3;
+EllipsizeMode.NONE;
+
+/**
+ * Wrap at word boundaries.
+ * 
+ * @property {Number} WORDWRAPPING
+ * @ios
+ * @static
+ * @since 4.0.2
+ * @readonly
+ */
+EllipsizeMode.WORDWRAPPING;
+
+/**
+ * Wrap at character boundaries.
+ * 
+ * @property {Number} CHARWRAPPING
+ * @ios
+ * @static
+ * @since 4.0.2
+ * @readonly
+ */
+EllipsizeMode.CHARWRAPPING;

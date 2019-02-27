@@ -1,8 +1,12 @@
 const EllipsizeMode = { };
-EllipsizeMode.START = 0;
-EllipsizeMode.MIDDLE = 1;
-EllipsizeMode.END = 2;
-EllipsizeMode.NONE = 2;
+EllipsizeMode.START = "start";
+EllipsizeMode.MIDDLE = "middle";
+EllipsizeMode.END = "end";
+EllipsizeMode.NONE = "none";
+
+EllipsizeMode.iOS = {};
+EllipsizeMode.iOS.WORDWRAPPING = "ios_wordwrapping";
+EllipsizeMode.iOS.CHARWRAPPING = "ios_charwrapping";
 
 Object.freeze(EllipsizeMode);
 

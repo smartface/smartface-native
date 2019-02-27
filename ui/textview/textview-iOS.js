@@ -4,6 +4,7 @@ const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
 const Invocation = require('sf-core/util').Invocation;
 const UIScrollViewInheritance = require('sf-core/util').UIScrollViewInheritance;
+const NSLineBreakMode = require('sf-core/util/iOS/nslinebreakmode');
 
 const NSUnderlineStyle = {
     None: 0,
@@ -21,9 +22,9 @@ const TextView = extend(View)(
         }
 
         _super(this);
-        
+
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
-        
+
         //Defaults
         self.nativeObject.setSelectable = false;
         self.nativeObject.setEditable = false;
@@ -102,8 +103,9 @@ const TextView = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
+
         var _lastModifiedAttributedString;
+
         function setText(value) {
             var paragraphAlloc = Invocation.invokeClassMethod("NSMutableParagraphStyle", "alloc", [], "id");
             var paragraphStyle = Invocation.invokeInstanceMethod(paragraphAlloc, "init", [], "NSObject");
@@ -149,9 +151,9 @@ const TextView = extend(View)(
                 });
                 Invocation.invokeInstanceMethod(mutableString, "appendAttributedString:", [argAppend]);
             }
-            
+
             _lastModifiedAttributedString = mutableString;
-            
+
             var argAttributeString = new Invocation.Argument({
                 type: "NSObject",
                 value: mutableString
@@ -174,7 +176,7 @@ const TextView = extend(View)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'getAttributeTextSize', {
             value: function(maxWidth) {
                 if (_lastModifiedAttributedString) {
@@ -185,7 +187,7 @@ const TextView = extend(View)(
                             height: Number.MAX_VALUE
                         }
                     });
-                    
+
                     var argOptions = new Invocation.Argument({
                         type: "NSUInteger",
                         value: 00000011 //(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
@@ -194,15 +196,15 @@ const TextView = extend(View)(
                         type: "NSObject",
                         value: undefined
                     });
-                    
-                    var rect = Invocation.invokeInstanceMethod(_lastModifiedAttributedString, "boundingRectWithSize:options:context:", [argSize,argOptions,argContext],"CGRect");
-                    return {width: rect.width, height: rect.height};
+
+                    var rect = Invocation.invokeInstanceMethod(_lastModifiedAttributedString, "boundingRectWithSize:options:context:", [argSize, argOptions, argContext], "CGRect");
+                    return { width: rect.width, height: rect.height };
                 }
                 return null;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'htmlText', {
             get: function() {
                 return self.nativeObject.htmlText;
@@ -304,6 +306,26 @@ const TextView = extend(View)(
                 self.nativeObject.textColor = value.nativeObject;
                 self.nativeObject.setEditable = false;
                 self.nativeObject.setSelectable = self.selectable;
+            },
+            enumerable: true
+        });
+
+        Object.defineProperty(self, 'ellipsizeMode', {
+            get: function() {
+                return NSLineBreakMode.nsLineBreakModeToEllipsizeMode(self.nativeObject.textContainer.lineBreakMode);
+            },
+            set: function(value) {
+                self.nativeObject.textContainer.lineBreakMode = NSLineBreakMode.ellipsizeModeToNSLineBreakMode(value);
+            },
+            enumerable: true
+        });
+
+        Object.defineProperty(self, 'maxLines', {
+            get: function() {
+                return self.nativeObject.textContainer.maximumNumberOfLines;
+            },
+            set: function(value) {
+                self.nativeObject.textContainer.maximumNumberOfLines = value;
             },
             enumerable: true
         });
