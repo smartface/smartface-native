@@ -45,7 +45,7 @@ EllipsizeMode.START;
  * @ios
  * @static
  * @readonly
- * @since 4.0.2s
+ * @since 4.0.2
  */
 EllipsizeMode.MIDDLE;
 
