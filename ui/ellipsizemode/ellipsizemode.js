@@ -1,4 +1,5 @@
 const EllipsizeMode = { };
+
 EllipsizeMode.START = "start";
 EllipsizeMode.MIDDLE = "middle";
 EllipsizeMode.END = "end";
