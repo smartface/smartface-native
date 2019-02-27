@@ -77,7 +77,7 @@ Label.prototype.maxLines;
 
 
 /**
- * Causes words in the text that are longer than the view's width to be ellipsized instead of broken in the middle. 
+ * Causes words in the text that are longer than the view's width to be ellipsized instead of broken in the middle. If {@link UI.Label#maxLines maxLines} has been used to set two or more lines, only {@link UI.EllipsizeMode#END EllipsizeMode.END} is supported
  *
  * @property {UI.EllipsizeMode} 
  * @android

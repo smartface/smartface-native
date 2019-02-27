@@ -10,7 +10,7 @@ const EllipsizeMode = require("../ellipsizemode");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
-const NativeTruncateAt = requireClass("android.text.TextUtils.TruncateAt");
+const NativeTextUtils = requireClass("android.text.TextUtils");
 
 const TextAlignmentDic = {};
 TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
@@ -18,9 +18,9 @@ TextAlignmentDic[TextAlignment.MIDCENTER] = 17; // Gravity.CENTER
 TextAlignmentDic[TextAlignment.MIDRIGHT] = 16 | 5; // Gravity.CENTER_VERTICAL | Gravity.RIGHT
 
 const NativeEllipsizeMode = {};
-NativeEllipsizeMode[EllipsizeMode.START] = NativeTruncateAt.START;
-NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTruncateAt.MIDDLE;
-NativeEllipsizeMode[EllipsizeMode.END] = NativeTruncateAt.END;
+NativeEllipsizeMode[EllipsizeMode.START] = NativeTextUtils.TruncateAt.START;
+NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTextUtils.TruncateAt.MIDDLE;
+NativeEllipsizeMode[EllipsizeMode.END] = NativeTextUtils.TruncateAt.END;
 NativeEllipsizeMode[EllipsizeMode.NONE] = null;
 
 const activity = AndroidConfig.activity;
@@ -39,7 +39,6 @@ const Label = extend(View)(
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
             self.nativeObject.setGravity(INT_16_3);
             this.viewNativeDefaultTextAlignment = INT_16_3;
-            // self.nativeObject.setEllipsize(NativeTextUtils.TruncateAt.END);
         }
         else {
             if (!this.skipDefaults) {
@@ -108,7 +107,6 @@ const Label = extend(View)(
                     return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
                 },
                 set: function(value) {
-                    this._maxLines = value;
                     if (value === 0)
                         this.nativeObject.setMaxLines(MAX_VALUE);
                     else
@@ -118,9 +116,10 @@ const Label = extend(View)(
             },
             'ellipsizeMode': {
                 get: function() {
-                    return this.nativeObject.getEllipsize();
+                    return this._ellipsizeMode;
                 },
                 set: function(ellipsizeModeEnum) {
+                    this._ellipsizeMode = ellipsizeModeEnum;
                     this.nativeObject.setEllipsize(NativeEllipsizeMode[ellipsizeModeEnum]);
                 },
                 enumerable: true,
