@@ -136,7 +136,7 @@ function TabBarItem(params) {
         res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
-        return res;
+        return { nativeObject: res };
     }
 }
 
