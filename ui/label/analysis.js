@@ -68,7 +68,7 @@ Label.prototype.multiline = false;
 /**
  * Sets the height of the Label to be at most maxLines tall. Setting 0 indicated that maxLine will be as much as given content. 
  *
- * @property {Number} the maximum height of Label in terms of number of lines
+ * @property {Number} maxLines
  * @android
  * @ios
  * @since 4.0.2
@@ -79,7 +79,7 @@ Label.prototype.maxLines;
 /**
  * Causes words in the text that are longer than the view's width to be ellipsized instead of broken in the middle. If {@link UI.Label#maxLines maxLines} has been used to set two or more lines, only {@link UI.EllipsizeMode#END EllipsizeMode.END} is supported
  *
- * @property {UI.EllipsizeMode} 
+ * @property {UI.EllipsizeMode} ellipsizeMode
  * @android
  * @ios
  * @since 4.0.2
