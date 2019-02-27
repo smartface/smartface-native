@@ -2,6 +2,7 @@ const EllipsizeMode = { };
 EllipsizeMode.START = 0;
 EllipsizeMode.MIDDLE = 1;
 EllipsizeMode.END = 2;
+EllipsizeMode.NONE = 2;
 
 Object.freeze(EllipsizeMode);
 

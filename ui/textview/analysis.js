@@ -80,6 +80,28 @@ TextView.prototype.font = null;
  */
 TextView.prototype.multiline = false;
 
+
+/**
+ * Sets the height of the TextView to be at most maxLines tall. Setting 0 indicated that maxLine will be as much as given content. 
+ *
+ * @property {Number} the maximum height of TextView in terms of number of lines
+ * @android
+ * @ios
+ * @since 4.0.2
+ */
+TextView.prototype.maxLines;
+
+
+/**
+ * Causes words in the text that are longer than the view's width to be ellipsized instead of broken in the middle. 
+ *
+ * @property {UI.EllipsizeMode} 
+ * @android
+ * @ios
+ * @since 4.0.2
+ */
+TextView.prototype.ellipsizeMode;
+
 /**
  * Enables/disables selectable status of the TextView. If set to true
  * the text inside the TextView will be selectable.

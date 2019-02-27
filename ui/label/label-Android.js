@@ -6,18 +6,27 @@ const TextAlignment = require("../textalignment");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig.js");
+const EllipsizeMode = require("../ellipsizemode");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+const NativeTruncateAt = requireClass("android.text.TextUtils.TruncateAt");
 
 const TextAlignmentDic = {};
 TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
 TextAlignmentDic[TextAlignment.MIDCENTER] = 17; // Gravity.CENTER
 TextAlignmentDic[TextAlignment.MIDRIGHT] = 16 | 5; // Gravity.CENTER_VERTICAL | Gravity.RIGHT
 
+const NativeEllipsizeMode = {};
+NativeEllipsizeMode[EllipsizeMode.START] = NativeTruncateAt.START;
+NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTruncateAt.MIDDLE;
+NativeEllipsizeMode[EllipsizeMode.END] = NativeTruncateAt.END;
+NativeEllipsizeMode[EllipsizeMode.NONE] = null;
+
 const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
+const MAX_VALUE = 2147483647;
 
 const Label = extend(View)(
     function(_super, params) {
@@ -90,19 +99,32 @@ const Label = extend(View)(
                 },
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(!multiline);
-                    // Integer.MAX_VALUE
-                    // const NativeInteger = requireClass("java.lang.Integer");
-                    // this.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                    // if(multiline){
-                    //     const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                    //     var movementMethod = new NativeScrollingMovementMethod();
-                    //     this.nativeObject.setMovementMethod(movementMethod);
-                    // }
-                    // else{
-                    //     this.nativeObject.setMovementMethod(null);
-                    // }
                 },
                 enumerable: true
+            },
+            'maxLines': {
+                get: function() {
+                    let mMaxLines = this.nativeObject.getMaxLines();
+                    return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
+                },
+                set: function(value) {
+                    this._maxLines = value;
+                    if (value === 0)
+                        this.nativeObject.setMaxLines(MAX_VALUE);
+                    else
+                        this.nativeObject.setMaxLines(value);
+                },
+                enumerable: true
+            },
+            'ellipsizeMode': {
+                get: function() {
+                    return this.nativeObject.getEllipsize();
+                },
+                set: function(ellipsizeModeEnum) {
+                    this.nativeObject.setEllipsize(NativeEllipsizeMode[ellipsizeModeEnum]);
+                },
+                enumerable: true,
+                configurable: true
             },
             'text': {
                 get: function() {

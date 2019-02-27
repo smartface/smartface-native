@@ -2,7 +2,7 @@
  * @enum {Number} UI.EllipsizeMode
  * @static
  * @readonly
- * @since 0.1
+ * @since 4.0.2
  *
  * EllipsizeMode is an enum. It defines how to text will be truncated.
  *
@@ -61,3 +61,17 @@ EllipsizeMode.MIDDLE = 1;
  * @readonly
  */
 EllipsizeMode.END = 2;
+
+
+
+/**
+ * Turns off ellipsizing
+ * 
+ * @property {Number} NONE
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.2
+ * @readonly
+ */
+EllipsizeMode.NONE = 3;
