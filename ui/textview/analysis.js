@@ -88,6 +88,7 @@ TextView.prototype.multiline = false;
  * @android
  * @ios
  * @since 4.0.2
+ * @deprecated 4.0.2 Use {@link UI.TextView#maxLines maxLines} instead 
  */
 TextView.prototype.maxLines;
 
