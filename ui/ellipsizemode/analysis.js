@@ -75,7 +75,7 @@ EllipsizeMode.END;
 EllipsizeMode.NONE;
 
 /**
- * Wrap at word boundaries.
+ * Wrapping occurs at word boundaries, unless the word itself doesn’t fit on a single line. This mode may not work correctly when the maxLines value is 1.
  * 
  * @property {Number} WORDWRAPPING
  * @ios
@@ -86,7 +86,7 @@ EllipsizeMode.NONE;
 EllipsizeMode.WORDWRAPPING;
 
 /**
- * Wrap at character boundaries.
+ * Wrap at character boundaries. This mode may not work correctly when the maxLines value is 1.
  * 
  * @property {Number} CHARWRAPPING
  * @ios
