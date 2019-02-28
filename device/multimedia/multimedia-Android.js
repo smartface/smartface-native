@@ -27,6 +27,8 @@ const NativeAction = [
 function Multimedia() {}
 Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
 Multimedia.CropImage.RESULT_OK = -1;
+Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
+Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
 
 Object.defineProperty(Multimedia, 'Type', {
     value: Type,
