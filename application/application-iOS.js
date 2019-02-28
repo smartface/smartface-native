@@ -12,7 +12,7 @@ const Invocation = require('sf-core/util/iOS/invocation.js');
 
 var _rootPage;
 var _sliderDrawer;
-const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
 var SFApplication = {};
 
@@ -42,11 +42,11 @@ SFApplication.exit = function(){
 };
 
 SFApplication.restart = function(){
+    cancelAllBackgroundJobs();
     SMFApplication.restart();
 };
 
 SFApplication.hideKeyboard = function(){
-    var keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
     var argForce = new Invocation.Argument({
         type:"BOOL",
         value: true
@@ -61,9 +61,8 @@ SFApplication.checkUpdate = function(callback, user){
 SFApplication.setRootController = function(params){
     if (params && params.controller) {
         SFApplication.rootPage = params.controller;
-        var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
-        sfWindow.rootViewController = params.controller.nativeObject;
-        sfWindow.makeKeyAndVisible();
+        keyWindow.rootViewController = params.controller.nativeObject;
+        keyWindow.makeKeyAndVisible();
     }
 };
 
@@ -260,12 +259,7 @@ const EmulatorResetState = {
 
 Application.emulator = {};
 Application.emulator.globalObjectWillReset = function(state) {
-    
-    const Network = require('sf-core/device/network');
-    if (Network.notifierInstance) {
-        Network.notifierInstance.stopNotifier();
-        Network.notifierInstance.removeObserver();
-    }
+    cancelAllBackgroundJobs();
     
     switch (state) {
         case EmulatorResetState.scan :
@@ -278,5 +272,24 @@ Application.emulator.globalObjectWillReset = function(state) {
             break;
     }
 };
+
+function cancelAllBackgroundJobs() {
+    const Location = require('sf-core/device/location');
+    const Accelerometer = require('sf-core/device/accelerometer');
+    const Network = require('sf-core/device/network');
+
+    if (Location.nativeObject) {
+        Location.stop();
+    }
+    
+    Accelerometer.stop();
+    
+    if (Network.notifierInstance) {
+        Network.notifierInstance.stopNotifier();
+        Network.notifierInstance.removeObserver();
+    }
+    
+    // Http.__cancelAll();
+}
 
 module.exports = SFApplication;
