@@ -121,7 +121,7 @@ Database.prototype.query = function(sqlCommand){};
  */
 Database.QueryResult = function(params){}
 
-    /**
+/**
  * Returns the count of the query result.
  * 
  * @method count
@@ -166,6 +166,16 @@ Database.QueryResult.prototype.getLast = function(){};
  * @since 1.0
  */
 Database.QueryResult.prototype.get = function(index){};
+
+
+/**
+ * Closes the Cursor, releasing all of its resources and making it completely invalid.
+ * 
+ * @method close
+ * @android
+ * @since 4.0.2
+ */
+Database.QueryResult.prototype.close = function(){};
 
 /**
  * @class Data.Database.DatabaseObject
