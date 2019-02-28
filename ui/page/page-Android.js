@@ -102,6 +102,9 @@ function Page(params) {
                 }
             }));
         },
+        onPause: function() {
+            self.onHide && self.onHide();  
+        },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
                 optionsMenu = menu;

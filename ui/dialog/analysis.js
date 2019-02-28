@@ -100,6 +100,7 @@ Dialog.prototype.android.cancelable = true;
  * @method hideKeyboard
  * @android
  * @static
+ * @deprecated 4.0.2 Use {@link Application#hideKeyboard} instead.
  * @since 3.0.1
  */
 Dialog.prototype.android.hideKeyboard = function() {};
