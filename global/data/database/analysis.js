@@ -169,7 +169,7 @@ Database.QueryResult.prototype.get = function(index){};
 
 
 /**
- * Closes the Cursor, releasing all of its resources and making it completely invalid.
+ * Closes the QueryResult, releasing all of its resources and making it completely invalid.
  * 
  * @method close
  * @android
