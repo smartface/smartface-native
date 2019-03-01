@@ -11,6 +11,8 @@ Sound.PICK_SOUND = 1004;
 const Multimedia = {};
 Multimedia.CAMERA_REQUEST = 1002;
 Multimedia.PICK_FROM_GALLERY = 1003;
+
+Multimedia.CropImage = {};
 Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
 Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE = 204;
 
