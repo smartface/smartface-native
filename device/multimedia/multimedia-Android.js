@@ -1,4 +1,5 @@
 const AndroidConfig = require('../../util/Android/androidconfig');
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 const NativeMediaStore = requireClass("android.provider.MediaStore");
 const NativeIntent = requireClass("android.content.Intent");
 const NativeBitmapFactory = requireClass("android.graphics.BitmapFactory");
@@ -7,7 +8,6 @@ const NativeCropImage = requireClass('com.theartofdev.edmodo.cropper.CropImage')
 
 const File = require("../../io/file");
 const Image = require("../../ui/image");
-const Page = require("../../ui/page");
 
 const Type = {
     IMAGE: 0,
@@ -25,13 +25,10 @@ const NativeAction = [
 ];
 
 function Multimedia() {}
-Multimedia.CropImage = {};
-
-Multimedia.CAMERA_REQUEST = 1002;
-Multimedia.PICK_FROM_GALLERY = 1003;
-Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE = 203;
+Multimedia.CropImage = RequestCodes.Multimedia.CropImage;
 Multimedia.CropImage.RESULT_OK = -1;
-Multimedia.CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE = 204
+Multimedia.CAMERA_REQUEST = RequestCodes.Multimedia.CAMERA_REQUEST;
+Multimedia.PICK_FROM_GALLERY = RequestCodes.Multimedia.PICK_FROM_GALLERY;
 
 Object.defineProperty(Multimedia, 'Type', {
     value: Type,
