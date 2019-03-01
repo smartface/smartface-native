@@ -96,6 +96,7 @@ Database.QueryResult = function(params) {
         },
         'getLast': {
             value: function() {
+                this.nativeObject.moveToLast();
                 return new Database.DatabaseObject({
                      isInternal: true,
                      cursor : this.nativeObject
@@ -105,6 +106,7 @@ Database.QueryResult = function(params) {
         'get': {
             value: function(location) {
                 if (typeof location === 'number') {
+                    this.nativeObject.moveToPosition(int(location));
                     return new Database.DatabaseObject({
                          isInternal : true,
                          cursor : this.nativeObject
