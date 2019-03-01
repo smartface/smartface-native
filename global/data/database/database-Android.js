@@ -3,7 +3,7 @@ const File = require('../../../io/file');
 const Path = require('../../../io/path');
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
-const SFDatabaseObject = requireClass('io.smartface.android.sfcore.global.data.database.SFDatabaseObject');
+const SFQueryResult = requireClass('io.smartface.android.sfcore.global.data.database.SFQueryResult');
 
 function Database(params) {
     this.nativeObject = null;
@@ -61,9 +61,10 @@ function Database(params) {
         'query': {
             value: function(sqlCommand) {
                 if (typeof sqlCommand === 'string') {
+                    let nativeCursor = this.nativeObject.rawQuery(sqlCommand, null);
                     return new Database.QueryResult({
                         isInternal: true,
-                        cursor: this.nativeObject.rawQuery(sqlCommand, null)
+                        cursor: new SFQueryResult(nativeCursor)
                     });
                 }
             },
@@ -88,29 +89,29 @@ Database.QueryResult = function(params) {
         },
         'getFirst': {
             value: function() {
-                this.nativeObject.moveToFirst();
                 return new Database.DatabaseObject({
                     isInternal: true,
-                    cursor: new SFDatabaseObject(this.nativeObject)
+                    cursorRefIndex: this.nativeObject.moveToFirst(),
+                    cursor: this.nativeObject
                 });
             }
         },
         'getLast': {
             value: function() {
-                this.nativeObject.moveToLast();
                 return new Database.DatabaseObject({
                     isInternal: true,
-                    cursor: new SFDatabaseObject(this.nativeObject)
+                    cursorRefIndex: this.nativeObject.moveToLast(),
+                    cursor: this.nativeObject
                 });
             }
         },
         'get': {
             value: function(location) {
                 if (typeof location === 'number') {
-                    this.nativeObject.moveToPosition(int(location));
                     return new Database.DatabaseObject({
                         isInternal: true,
-                        cursor: new SFDatabaseObject(this.nativeObject)
+                        cursorRefIndex: this.nativeObject.moveToPosition(int(location)),
+                        cursor: this.nativeObject
                     });
                 }
                 else {
@@ -136,11 +137,12 @@ Database.DatabaseObject = function(params) {
     }
 
     this.nativeObject = params.cursor;
+    let cursorRefIndex = params.cursorRefIndex;
     Object.defineProperties(this, {
         'getString': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    let value = this.nativeObject.getString(columnName);
+                    let value = this.nativeObject.getString(cursorRefIndex, columnName);
                     return value;
                 }
                 else {
@@ -152,7 +154,7 @@ Database.DatabaseObject = function(params) {
         'getInteger': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    let value = this.nativeObject.getInt(columnName);
+                    let value = this.nativeObject.getInt(cursorRefIndex, columnName);
                     return (value !== -1 ? value : null);
                 }
                 else {
@@ -164,7 +166,7 @@ Database.DatabaseObject = function(params) {
         'getBoolean': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    let value = this.nativeObject.getBoolean(columnName);
+                    let value = this.nativeObject.getBoolean(cursorRefIndex, columnName);
                     return value;
                 }
                 else {
@@ -176,7 +178,7 @@ Database.DatabaseObject = function(params) {
         'getFloat': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    let value = this.nativeObject.getFloat(columnName);
+                    let value = this.nativeObject.getFloat(cursorRefIndex, columnName);
                     return (value !== -1 ? value : null);
                 }
                 else {
