@@ -345,7 +345,7 @@ Location.Android = {};
 Location.Android.SettingsStatusCodes = {};
 
 /** 
- * @enum Device.Location.Android.SettingsStatusCodes.OTHER
+ * @property {NUMBER} OTHER
  * @android
  * @since 4.0.2
  * 
@@ -354,7 +354,7 @@ Location.Android.SettingsStatusCodes = {};
 Location.Android.SettingsStatusCodes.OTHER = 0;
 
 /** 
- * @enum Device.Location.Android.SettingsStatusCodes.OTHER
+ * @property {NUMBER} DENIED
  * @android
  * @since 4.0.2
  * 
