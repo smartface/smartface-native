@@ -29,6 +29,8 @@ function Location() {}
  * @param {Object} params 
  * @param {Function} params.onSuccess 
  * @param {Function} params.onFailure
+ * @param {Object} params.onFailure.params 
+ * @param {Device.Location.Android.SettingsStatusCodes} params.onFailure.params.statusCode
  * @android
  * @static
  * @since 4.0.2
