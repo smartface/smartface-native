@@ -61,23 +61,13 @@ Location.onLocationChanged = function onLocationChanged(event) {}
 
 
 /**
- * This callback type is called when last known location obtained correctly
- *
- * @callback onSuccess
- * @param {Number} Latitude
- * @param {Number} Longitude
- */
-/**
- * This callback type is called when obtain last known location null or unexpected error occured.
- *
- * @callback onFailure
- */
-/**
- * Gets last known location. The method return undefined if no location data has ever been retrieved.
+ * Gets last known location. The onFailure function will be triggered if no location data has ever been retrieved or unexpected error occurred.
  * 
  * @method getLastKnownLocation
- * @param {onSuccess} onSuccess
- * @param {onFailure} onFailure
+ * @param {Function} onSuccess
+ * @param {Number}   onSuccess.Latitude
+ * @param {Number}   onSuccess.Longitude
+ * @param {Function} onFailure
  * @android
  * @ios
  * @static
