@@ -22,10 +22,6 @@
 function Location() {}
 
 /**
-<<<<<<< HEAD
- * Starts capturing. For Android, need to define interval & priority which need to be decided wisely; 
- * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
-=======
  * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
  * Shows an dialog to open the location service when the location service is off. 
  * 
@@ -42,9 +38,8 @@ function Location() {}
 Location.checkSettings = function(priority){};
 
 /**
- * Starts capturing. For android, you should define which priority you want to 
- * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
->>>>>>> develop
+ * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;  
+ * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
  * @param {Location.Android.Priority} [priority = Location.Android.Priority.HIGH_ACCURACY]

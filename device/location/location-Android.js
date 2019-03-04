@@ -14,20 +14,21 @@ var _onLocationChanged;
 const locationCallback = function(latitude, longitude) {
     Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
 };
-            
+
 var _onFailureCallback, _onSucessCallback;
-Location.__onActivityResult = function (resultCode) {
-    if(resultCode === -1) { // -1 = OK
+Location.__onActivityResult = function(resultCode) {
+    if (resultCode === -1) { // -1 = OK
         _onSucessCallback && _onSucessCallback();
-    } else {
-        _onFailureCallback && _onFailureCallback({statusCode: "DENIED"});
+    }
+    else {
+        _onFailureCallback && _onFailureCallback({ statusCode: "DENIED" });
     }
 };
 
 Location.__instance = null;
 Location.__getInstance = function() {
-    if(!Location.__instance)
-        Location.__instance =  new SFLocationCallback(locationCallback);
+    if (!Location.__instance)
+        Location.__instance = new SFLocationCallback(locationCallback);
     return Location.__instance;
 };
 
@@ -42,7 +43,7 @@ Object.defineProperties(Location, {
     },
     'start': {
         value: function(priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
-            Location.__getInstance().start(priority,interval);
+            Location.__getInstance().start(priority, interval);
         }
     },
     'stop': {
@@ -62,19 +63,11 @@ Object.defineProperties(Location, {
     },
     'getLastKnownLocation': {
         value: function(onSuccess, onFailure) {
-            Location.instance.getLastKnownLocation({
+            Location.__getInstance().getLastKnownLocation({
                 'onSuccess': onSuccess,
                 'onFailure': onFailure
             });
         }
-    },
-    'instance': {
-        get: () => (
-            Location.__instance === undefined ?
-            Location.__instance = new SFLocationCallback(locationCallback) :
-            Location.__instance
-        ),
-        enumerable: true
     }
 });
 
@@ -117,15 +110,15 @@ Object.defineProperties(Location.android, {
         value: function(params = {}) {
             params.onSuccess && (_onSucessCallback = params.onSuccess);
             params.onFailure && (_onFailureCallback = params.onFailure);
-            
+
             Location.__getInstance().checkSettings({
                 onSuccess: function() {
                     _onSucessCallback && _onSucessCallback();
                 },
                 onFailure: function(reason) {
-                    _onFailureCallback && _onFailureCallback({statusCode: reason});
+                    _onFailureCallback && _onFailureCallback({ statusCode: reason });
                 }
-           });  
+            });
         }
     }
 });
