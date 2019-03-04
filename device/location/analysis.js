@@ -345,9 +345,6 @@ Location.authorizationStatus.Denied = 2;
  */
 Location.authorizationStatus.Authorized = 3;
 
-<<<<<<< HEAD
-module.exports = Location;
-=======
 
 /**
  * Android Specific Properties.
@@ -385,4 +382,3 @@ Location.Android.SettingsStatusCodes.OTHER = 0;
 Location.Android.SettingsStatusCodes.DENIED = 1;
 
 module.exports = Location;
->>>>>>> develop
