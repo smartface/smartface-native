@@ -3,17 +3,15 @@ const TypeUtil = require('../../util/type');
 
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
-const LOCATION_INTERVAL = 1000 * 1;
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
 const Location = {};
-var _onLocationChanged;
+var _onLocationChanged, _resultCObj;
 const locationCallback = function(latitude, longitude) {
     Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
 };
 
-Location.__instance = null;
 Object.defineProperties(Location, {
     'android': {
         value: {},
@@ -24,16 +22,13 @@ Object.defineProperties(Location, {
         enumerable: true
     },
     'start': {
-        value: function(priority = Location.Android.Priority.HIGH_ACCURACY) {
-            if (!Location.__instance) {
-                Location.__instance = new SFLocationCallback(locationCallback);
-            }
-            Location.__instance.start(priority);
+        value: function(priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
+            Location.instance.start(priority, interval);
         }
     },
     'stop': {
         value: function() {
-            Location.__instance.stop();
+            Location.instance.stop();
         }
     },
     'onLocationChanged': {
@@ -45,6 +40,22 @@ Object.defineProperties(Location, {
                 _onLocationChanged = callback;
             }
         }
+    },
+    'getLastKnownLocation': {
+        value: function(onSuccess, onFailure) {
+            Location.instance.getLastKnownLocation({
+                'onSuccess': onSuccess,
+                'onFailure': onFailure
+            });
+        }
+    },
+    'instance': {
+        get: () => (
+            Location.__instance === undefined ?
+            Location.__instance = new SFLocationCallback(locationCallback) :
+            Location.__instance
+        ),
+        enumerable: true
     }
 });
 

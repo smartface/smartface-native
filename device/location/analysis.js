@@ -22,17 +22,18 @@
 function Location() {}
 
 /**
- * Starts capturing. For android, you should define which priority you want to 
- * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
+ * Starts capturing. For Android, need to define interval & priority which need to be decided wisely; 
+ * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
- * @param {Location.Android.Priority} priority 
+ * @param {Location.Android.Priority} [priority = Location.Android.Priority.HIGH_ACCURACY]
+ * @param {Number} [interval = 1000] 
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Location.start = function(priority){};
+Location.start = function(priority, interval) {};
 
 /**
  * Stops capturing.
@@ -43,7 +44,7 @@ Location.start = function(priority){};
  * @static
  * @since 0.1
  */
-Location.stop = function(){};
+Location.stop = function() {};
 
 /**
  * Callback to capture location events.
@@ -56,21 +57,33 @@ Location.stop = function(){};
  * @ios
  * @since 0.1
  */
-Location.onLocationChanged = function onLocationChanged(event){}
+Location.onLocationChanged = function onLocationChanged(event) {}
 
+
+/**
+ * This callback type is called when last known location obtained correctly
+ *
+ * @callback onSuccess
+ * @param {Number} Latitude
+ * @param {Number} Longitude
+ */
+/**
+ * This callback type is called when obtain last known location null or unexpected error occured.
+ *
+ * @callback onFailure
+ */
 /**
  * Gets last known location. The method return undefined if no location data has ever been retrieved.
  * 
  * @method getLastKnownLocation
- * @param {Object} event
- * @param {Number} event.latitude
- * @param {Number} event.longitude
+ * @param {onSuccess} onSuccess
+ * @param {onFailure} onFailure
  * @android
  * @ios
  * @static
  * @since 4.0.2
  */
-Location.getLastKnownLocation = function(event) {};
+Location.getLastKnownLocation = function(onSuccess, onFailure) {};
 
 /**
  * Callback to capture authorization status changes.
@@ -81,7 +94,7 @@ Location.getLastKnownLocation = function(event) {};
  * @ios
  * @since 2.0.11
  */
-Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status){}
+Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status) {}
 
 /**
  * Gets authorization status.
