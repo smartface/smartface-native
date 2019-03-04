@@ -10,6 +10,8 @@ const rootViewId = NativeR.id.page_container;
 var pageAnimationsCache = {},
     pagePopUpAnimationsCache;
 
+var _addedFragmentsInContainer = {};
+
 function FragmentTransaction() {}
 
 FragmentTransaction.pageCount = 0;
@@ -82,15 +84,20 @@ FragmentTransaction.replace = function(params) {
 
     if (params.page.popUpBackPage) {
         // back to popup page
+        _addedFragmentsInContainer[params.page.pageID] = true;
         fragmentTransaction.add(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     }
     else {
-        let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
-        if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
-            // first push to pop up navigation controller
-            let firstPageInPopup = params.page.parentController.childControllers[0];
-            fragmentTransaction.remove(firstPageInPopup.nativeObject);
-        }
+        // let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
+        // if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
+        //     // first push to pop up navigation controller
+        //     let firstPageInPopup = params.page.parentController.childControllers[0];
+        //     fragmentTransaction.remove(firstPageInPopup.nativeObject);
+        // }
+        
+        _addedFragmentsInContainer = {};
+        _addedFragmentsInContainer[params.page.pageID] = true;
+        // replace removes all added fragments
         fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     }
 
@@ -108,6 +115,8 @@ FragmentTransaction.revealTransition = function(transitionViews, page) {
         var view = transitionViews[i];
         fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
     }
+    _addedFragmentsInContainer = {};
+    _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.replace(rootViewId, page.nativeObject);
     fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
@@ -124,6 +133,8 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 
     if (!(animation === false))
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0);
+    
+    _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
@@ -145,18 +156,28 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         }
         
         popupBackPage = page.parentController.popUpBackPage;
-        if(popupBackPage.transitionViews) {
+        if(popupBackPage && popupBackPage.transitionViews) {
+            _addedFragmentsInContainer[page.pageID] = false;
             // reveal back animation
             fragmentManager.popBackStackImmediate();
             return;
         } 
     }
     var fragmentTransaction = fragmentManager.beginTransaction();
+    
     if (!(animation === false))
         fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
-    popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
     
-    fragmentTransaction.remove(page.nativeObject);
+    // already exists in container
+    if(_addedFragmentsInContainer[popupBackPage.pageID]) { 
+        _addedFragmentsInContainer[page.pageID] = false;
+        fragmentTransaction.remove(page.nativeObject);
+    } else {
+        _addedFragmentsInContainer = {};
+        _addedFragmentsInContainer[popupBackPage.pageID] = true;
+        popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
+    }
+    
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };

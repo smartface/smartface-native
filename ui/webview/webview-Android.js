@@ -5,6 +5,7 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -24,6 +25,7 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
+
 var activity = AndroidConfig.activity;
 
 var mFilePathCallback;
@@ -386,9 +388,12 @@ const WebView = extend(View)(
             }
         };
 
-        const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
-        var nativeWebClient = new SFWebViewClient(overrideMethods);
-        this.nativeObject.setWebViewClient(nativeWebClient);
+        const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
+        var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
+        /*
+        ToDo: Trying to access any field or methods of instance will cause exception.  Consider when getDeclatedMethods exceptions are handled
+        */
+        this.nativeObject.setWebViewClient(nativeWebClient.getInstance());
         this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
         this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
         var settings = this.nativeObject.getSettings();
@@ -482,8 +487,8 @@ const WebView = extend(View)(
     }
 );
 
-WebView.REQUEST_CODE_LOLIPOP = 1111;
-WebView.RESULT_CODE_ICE_CREAM = 2222;
+WebView.REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
+WebView.RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;
 
 WebView.onActivityResult = function(requestCode, resultCode, data) {
 

@@ -22,8 +22,29 @@
 function Location() {}
 
 /**
+<<<<<<< HEAD
  * Starts capturing. For Android, need to define interval & priority which need to be decided wisely; 
  * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
+=======
+ * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
+ * Shows an dialog to open the location service when the location service is off. 
+ * 
+ * @method checkSettings
+ * @param {Object} params 
+ * @param {Function} params.onSuccess 
+ * @param {Function} params.onFailure
+ * @param {Object} params.onFailure.params 
+ * @param {Device.Location.Android.SettingsStatusCodes} params.onFailure.params.statusCode
+ * @android
+ * @static
+ * @since 4.0.2
+ */
+Location.checkSettings = function(priority){};
+
+/**
+ * Starts capturing. For android, you should define which priority you want to 
+ * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
+>>>>>>> develop
  *
  * @method start
  * @param {Location.Android.Priority} [priority = Location.Android.Priority.HIGH_ACCURACY]
@@ -329,4 +350,44 @@ Location.authorizationStatus.Denied = 2;
  */
 Location.authorizationStatus.Authorized = 3;
 
+<<<<<<< HEAD
 module.exports = Location;
+=======
+
+/**
+ * Android Specific Properties.
+ * @class Device.Location.Android
+ * @since 4.0.2
+ */
+Location.Android = {};
+
+
+/** 
+ * @enum Device.Location.Android.SettingsStatusCodes
+ * @android
+ * @since 4.0.2
+ * 
+ * Location settings specific status codes.
+ */
+Location.Android.SettingsStatusCodes = {};
+
+/** 
+ * @property {NUMBER} OTHER
+ * @android
+ * @since 4.0.2
+ * 
+ * Location settings can't be changed to meet the requirements, no dialog pops up.
+ */
+Location.Android.SettingsStatusCodes.OTHER = 0;
+
+/** 
+ * @property {NUMBER} DENIED
+ * @android
+ * @since 4.0.2
+ * 
+ * The user explicitly denied the use of location services for this app.
+ */
+Location.Android.SettingsStatusCodes.DENIED = 1;
+
+module.exports = Location;
+>>>>>>> develop

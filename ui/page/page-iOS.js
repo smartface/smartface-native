@@ -311,9 +311,6 @@ function Page(params) {
     
     self.nativeObject.onHide = self.onHideHandler;
     
-    //Deprecated use Application.statusBar
-    this.statusBar = Application.statusBar;
-    
     function getParentViewController(controller){
         var parent = Invocation.invokeInstanceMethod(controller,"parentViewController",[],"NSObject");
         if (parent) {

@@ -99,10 +99,11 @@ Location.getLastKnownLocation = function(){
 Location.onLocationChanged = function onLocationChanged(event) { }
 
 Location.android = {};
+Location.android.checkSettings = function(){};
 Location.Android = {};
 Location.android.Provider = {};
 Location.Android.Provider = {};
 Location.Android.Priority = {};
-
+Location.Android.SettingsStatusCodes = {};
 
 module.exports = Location;

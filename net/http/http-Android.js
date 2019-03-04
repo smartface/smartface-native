@@ -19,6 +19,7 @@ const WITHOUT_BODY_METHODS = {
 const CONTENT_TYPE_KEY = "CONTENT-TYPE";
 var activity = AndroidConfig.activity;
 
+var _instanceCollection = [];
 const Request = function() {
     Object.defineProperties(this, {
         'cancel': {
@@ -28,7 +29,6 @@ const Request = function() {
         }
     });
 };
-
 
 function http(params) {
     const self = this;
@@ -86,6 +86,7 @@ function http(params) {
         enumerable: true
     });
 
+    _instanceCollection.push(this);
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -97,6 +98,12 @@ function http(params) {
     if (!self.timeout)
         self.timeout = 60000;
 }
+
+http.__cancelAll = function() {
+    for(let i = 0; i < _instanceCollection.length; i++) {
+        _instanceCollection[i].cancelAll();
+    }  
+};
 
 http.prototype.cancelAll = function() {
     var dispatcher = this.client.dispatcher();

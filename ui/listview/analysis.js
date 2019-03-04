@@ -343,12 +343,13 @@ ListView.prototype.restoreInstanceState = function(state) {};
  * This method scrolls ListView to a specific index.
  *
  * @param {Number} index
+ * @param {Boolean} [animated = true]
  * @method scrollTo
  * @android
  * @ios
  * @since 0.1
  */
-ListView.prototype.scrollTo = function(index) {};
+ListView.prototype.scrollTo = function(index,animated){};
 
 /**
  * Sets/Gets the bounce effect when scrolling.

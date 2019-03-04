@@ -6,9 +6,7 @@ const View = require("../view");
 const AndroidConfig = require("../../util/Android/androidconfig.js");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 
-const NativeTextInputEditText = requireClass("android.support.design.widget.TextInputEditText");
-const NativeTextInputLayout = requireClass("android.support.design.widget.TextInputLayout");
-const NativeLinearLayout = requireClass("android.widget.LinearLayout");
+const SFMaterialTextBoxWrapper = requireClass("io.smartface.android.sfcore.ui.materialtextbox.SFMaterialTextBoxWrapper");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
 const SfReflectionHelper = requireClass("io.smartface.android.reflection.ReflectionHelper");
 
@@ -27,16 +25,11 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
         _super(this);
         const self = this;
 
-        var nativeTextInputLayout = new NativeTextInputLayout(activity);
-        var layout = new NativeLinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
-        nativeTextInputLayout.setLayoutParams(layout);
-
-        self.nativeObject = nativeTextInputLayout;
+        self.nativeObject = new SFMaterialTextBoxWrapper(activity);
 
         var sfTextBox = new TextBox();
-        var nativeTextInputEditText = new NativeTextInputEditText(nativeTextInputLayout.getContext());
-        nativeTextInputEditText.setLayoutParams(new NativeLinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT, float(1.0)));
 
+        var nativeTextInputEditText = self.nativeObject.getTextInputEditTextInstance();
         self.textBoxNativeObject = nativeTextInputEditText;
         sfTextBox.nativeObject = nativeTextInputEditText;
 
@@ -70,7 +63,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintTextColor) {
                     _hintTextColor = hintTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject, _hintTextColor.nativeObject);
+                    reflectionHelper.changedErrorTextColor(hintTextColorFieldName, self.nativeObject.getInstance(), _hintTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -81,7 +74,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(hintFocusedTextColor) {
                     _hintFocusedTextColor = hintFocusedTextColor;
 
-                    reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject, _hintFocusedTextColor.nativeObject);
+                    reflectionHelper.changedErrorTextColor(hintFocusedTextColorFieldName, self.nativeObject.getInstance(), _hintFocusedTextColor.nativeObject);
                 },
                 enumerable: true
             },
@@ -122,7 +115,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (_enableErrorMessage !== true)
                         self.android.enableErrorMessage = true;
 
-                    let errorView = getReCreatedErrorView();
+                    let errorView = self.nativeObject.getReCreatedErrorView();
                     errorView.setTextColor(_errorColor.nativeObject);
                 },
                 enumerable: true
@@ -154,7 +147,10 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 set: function(params) {
                     _rightLayout = params.view;
                     _rightLayoutWidth = params.width !== undefined ? params.width : 30;
-                    setRightLayout(_rightLayout, _rightLayoutWidth);
+                    
+                    const FlexLayout = require("sf-core/ui/flexlayout");
+                    let parentFL = new FlexLayout();
+                    self.nativeObject.setRightLayout(_rightLayout.nativeObject, _rightLayout.yogaNode, parentFL.nativeObject, _rightLayoutWidth);
                 }
             },
             'onTouch': {
@@ -289,7 +285,7 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                     if (enableCounter !== true)
                         self.android.enableCharacterRestriction = true;
 
-                    let counterView = getReCreatedCounterView();
+                    let counterView = self.nativeObject.getReCreatedCounterView();
                     counterView.setTextColor(_characterRestrictionColor.nativeObject);
                 },
                 enumerable: true
@@ -356,58 +352,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
 
-        /*
-        This method gives more flexablity than implementing TextInputLayout's toggle password icon. 
-        After using this, user cannot use toggle password icon.
-        */
-        function setRightLayout(view, width) {
-            const NativeColorDrawable = requireClass('android.graphics.drawable.ColorDrawable');
-            const NativeFrameLayout = requireClass('android.widget.FrameLayout');
-
-            const FlexLayout = require("sf-core/ui/flexlayout");
-
-            let frameLayout = new NativeFrameLayout.LayoutParams(AndroidUnitConverter.dpToPixel(width), -1, GRAVITY_END);
-            frameLayout.setMargins(0, 0, 0, AndroidUnitConverter.dpToPixel(9)); //9dp given re-position top of textbox line.
-
-            let innerFrameLayout = self.nativeObject.getChildAt(0); //0 child is FrameLayout
-            let textViewNativeObject = self.textBoxNativeObject;
-
-            let myFlexLayout = new FlexLayout();
-            myFlexLayout.addChild(view);
-            myFlexLayout.nativeObject.setLayoutParams(frameLayout);
-            innerFrameLayout.addView(myFlexLayout.nativeObject);
-
-            let mPasswordToggleDummyDrawable = new NativeColorDrawable();
-            mPasswordToggleDummyDrawable.setBounds(0, 0, AndroidUnitConverter.dpToPixel(width), 1);
-
-            /* 
-            ToDo:After solving AND-3433 issue, retrieve compound drawables from textview and assign to directions
-            Assigning null to directions, fine for now  but in feature user can assign compound drawables and we 
-            should not write over it.
-            */
-            textViewNativeObject.setCompoundDrawablesRelative(null, null,
-                mPasswordToggleDummyDrawable, null);
-        }
-
-        /* 
-        TextInputLayout re-creates error & counter view when enabling.
-        */
-        function getReCreatedErrorView() {
-            const NativeR = requireClass(AndroidConfig.packageName + '.R');
-            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
-            let errorTextView = materialLinearLayout.findViewById(NativeR.id.textinput_error);
-
-            return errorTextView;
-        }
-
-        function getReCreatedCounterView() {
-            const NativeR = requireClass(AndroidConfig.packageName + '.R');
-            let materialLinearLayout = self.nativeObject.getChildAt(1); //LinearLayout which contains  errorView & counterView 
-            let counterTextView = materialLinearLayout.findViewById(NativeR.id.textinput_counter);
-
-            return counterTextView;
-        }
-
         self.ios = {};
 
         //Defaults 
@@ -419,10 +363,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 this[param] = params[param];
             }
         }
-
-        // TextInputLayout considers the nativeTextInputEditText hint size as text size when font property
-        // is given before addView. Otherwise  it overrides the hint text size and cannot be changed. 
-        self.nativeObject.addView(nativeTextInputEditText);
     }
 );
 
