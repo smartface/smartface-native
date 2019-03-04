@@ -59,6 +59,11 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
+    },
+    onActivityResult: function(requestCode, resultCode, data) {
+        if(requestCode === Location.CHECK_SETTINGS_CODE) {
+            Location.__onActivityResult && Location.__onActivityResult(resultCode);
+        }
     }
 });
 
