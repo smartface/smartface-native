@@ -106,10 +106,8 @@ function WebSocket(params) {
                 _onOpenCallback && runOnUiThread(_onOpenCallback);
             },
             onMessage: function(data) {
-                console.log(" onMessage" + data);
                 if (typeof(data) === "string" || !data) {
                     _onMessageCallback && runOnUiThread(_onMessageCallback, {string: data});
-                
                 }
                 else {
                     // TODO: onMessage doesn't invoke with bytestring parameter. 
