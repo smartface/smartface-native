@@ -155,9 +155,9 @@ function NavigatonController(params) {
             fromIndex = self.model.childControllers.length - 1;
             toIndex = index;
             this.animationControllerForOperationFromViewControllerToViewController(operation, fromIndex, toIndex);
+            self.model.popToIndex(index);
         }
 
-        self.model.popToIndex(index);
         if (self.model.pageToPush) {
             self.model.pageToPush = null;
         }
