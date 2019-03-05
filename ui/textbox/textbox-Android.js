@@ -75,9 +75,9 @@ const TextBox = extend(TextView)(
             const SFEditText = requireClass("io.smartface.android.sfcore.ui.textbox.SFEditText");
             //AND-3123: Due to the issue, hardware button listener added.
             var callback = {
-                'onKeyPreIme': function(keyCode, keyEvent) {
+                'onKeyPreIme': function(keyCode, keyEventAction) {
                     // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
-                    if (keyCode === 4 && keyEvent.getAction() === 1) {
+                    if (keyCode === 4 && keyEventAction === 1) {
                         self.nativeObject.clearFocus();
                     }
                     // TODO: Below code moved to SFEditText class implementation. 

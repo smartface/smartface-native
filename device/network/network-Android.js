@@ -127,7 +127,7 @@ Network.createNotifier = function(params) {
         var nativeConnectionFilter = new NativeIntentFilter();
         nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
         var callbacks = {
-            onReceive: function(context, intent) {
+            onReceive: function() {
                 // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
                 self.connectionTypeChanged && self.connectionTypeChanged(Network.connectionType);
             }

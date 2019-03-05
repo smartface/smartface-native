@@ -102,12 +102,14 @@ function WebSocket(params) {
     
     function createWebSocketListener() {
         var overrideMethods = {
-            onOpen: function(webSocket, response) {
+            onOpen: function() {
                 _onOpenCallback && runOnUiThread(_onOpenCallback);
             },
-            onMessage: function(webSocket, data) {
+            onMessage: function(data) {
+                console.log(" onMessage" + data);
                 if (typeof(data) === "string" || !data) {
                     _onMessageCallback && runOnUiThread(_onMessageCallback, {string: data});
+                
                 }
                 else {
                     // TODO: onMessage doesn't invoke with bytestring parameter. 
@@ -115,10 +117,10 @@ function WebSocket(params) {
                     _onMessageCallback && runOnUiThread(_onMessageCallback, {blob: new Blob(data.toByteArray(), { type: "" }) });
                 }
             },
-            onClosing: function(webSocket, code, reason) {
+            onClosing: function(code, reason) {
                 _onCloseCallback && runOnUiThread(_onCloseCallback, { code: code, reason: reason });
             },
-            onFailure: function(webSocket, throwable, response) {
+            onFailure: function(throwable, response) {
                 if (response)
                     var code = response.code();
                 if (throwable)

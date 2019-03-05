@@ -109,7 +109,7 @@ const GridView = extend(View)(
                 var selectedItem = _gridViewItems[itemViewHashCode];
                 _onItemSelected && _onItemSelected(selectedItem, position);
             },
-            onLongItemSelected: function(position, itemViewHashCode) {
+            onItemLongSelected: function(position, itemViewHashCode) {
                 var selectedItem = _gridViewItems[itemViewHashCode];
                 _onItemLongSelected && _onItemLongSelected(selectedItem, position);
             }
@@ -429,7 +429,7 @@ const GridView = extend(View)(
         function createOnScrollListernerObject() {
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
-                onScrolled: function(recyclerView, dx, dy) {
+                onScrolled: function(dx, dy) {
                     if (!self.touchEnabled) { return; }
                     _contentOffset.x += dx;
                     _contentOffset.y += dy;
@@ -438,7 +438,7 @@ const GridView = extend(View)(
                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                     _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
                 },
-                onScrollStateChanged: function(recyclerView, newState) {
+                onScrollStateChanged: function(newState) {
                     if (!self.touchEnabled) { return; }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },

@@ -43,10 +43,10 @@ const WebView = extend(View)(
         const self = this;
 
         var overrideMethods = {
-            onPageFinished: function(view, url) {
+            onPageFinished: function(url) {
                 _onShow && _onShow({ url: url });
             },
-            onPageStarted: function(view, url, favicon) {
+            onPageStarted: function(url) {
                 _onLoad && _onLoad({ url: url });
             }
         };
@@ -338,9 +338,10 @@ const WebView = extend(View)(
         });
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-            overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                var uri = request.getUrl();
-                var url = uri.toString();
+            overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
+                // var uri = requestUrl;
+                // var url = uri.toString();
+                var url = requestUrl;
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
                 if (!callbackValue)
@@ -350,7 +351,7 @@ const WebView = extend(View)(
             };
         }
         else {
-            overrideMethods.shouldOverrideUrlLoading = function(view, url) {
+            overrideMethods.shouldOverrideUrlLoading = function(url) {
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
                 if (!callbackValue)
@@ -426,7 +427,7 @@ const WebView = extend(View)(
 
         var overrideMethodsWebChrome = {
             //For Android5.0+
-            onShowFileChooser: function(webView, filePathCallback, fileChooserParams) {
+            onShowFileChooser: function(filePathCallback) {
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
                 }
