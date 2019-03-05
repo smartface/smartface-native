@@ -339,8 +339,8 @@ const WebView = extend(View)(
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
             overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
-                // var uri = requestUrl;
-                // var url = uri.toString();
+                //var uri = requestUrl;
+                //var url = uri.toString();
                 var url = requestUrl;
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
@@ -362,28 +362,26 @@ const WebView = extend(View)(
 
         // SDK version check will not work because implement engine does not supports types
         overrideMethods.onReceivedError = function() {
-            if (arguments.count === 3) {
+            if (arguments.count === 2) {
                 /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView
-                 * arguments[1] = webResourceRequest
-                 * arguments[2] = webResourceError
+                 * arguments[0] = webResourceRequest
+                 * arguments[1] = webResourceError
                  */
                 const NativeString = requireClass('java.lang.String');
-                var uri = arguments[1].getUrl();
+                var uri = arguments[0].getUrl();
                 var url = NativeString.valueOf(uri);
-                var code = arguments[2].getErrorCode();
-                var message = arguments[2].getDescription();
+                var code = arguments[1].getErrorCode();
+                var message = arguments[1].getDescription();
 
                 _onError && _onError({ message: message, code: code, url: url });
             }
             else {
                 /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView, 
-                 * arguments[1] = errorCode, 
-                 * arguments[2] = description, 
-                 * arguments[3] = failingUrl, 
+                 * arguments[0] = errorCode, 
+                 * arguments[1] = description, 
+                 * arguments[2] = failingUrl, 
                  */
-                _onError && _onError({ message: arguments[2], code: arguments[1], url: arguments[3] });
+                _onError && _onError({ message: arguments[1], code: arguments[0], url: arguments[2] });
             }
         };
 

@@ -385,7 +385,7 @@ const GridView = extend(View)(
                     return _onItemLongSelected;
                 },
                 set: function(onItemLongSelected) {
-                    _onItemLongSelected = onItemLongSelected.bind(this);
+                    _onItemLongSelected = onItemLongSelected;
                 },
                 enumerable: true,
                 configurable: true
