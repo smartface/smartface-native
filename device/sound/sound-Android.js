@@ -2,6 +2,7 @@
 const NativeMediaPlayer = requireClass("android.media.MediaPlayer");
 const NativeIntent = requireClass("android.content.Intent");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 var _pickParams = {};
 
@@ -121,7 +122,7 @@ function Sound(params) {
     }
 }
 
-Sound.PICK_SOUND = 1004;
+Sound.PICK_SOUND = RequestCodes.Sound.PICK_SOUND;
 Sound.android = {};
 
 Sound.android.pick = function(params) {

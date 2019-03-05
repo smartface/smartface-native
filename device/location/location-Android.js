@@ -1,5 +1,6 @@
 /* global requireClass */
 const TypeUtil = require('../../util/type');
+const RequestCodes = require('../../util/Android/requestcodes');
 
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
@@ -8,12 +9,29 @@ const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
 const Location = {};
+Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
+
 var _onLocationChanged;
 const locationCallback = function(latitude, longitude) {
     Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
 };
+            
+var _onFailureCallback, _onSucessCallback;
+Location.__onActivityResult = function (resultCode) {
+    if(resultCode === -1) { // -1 = OK
+        _onSucessCallback && _onSucessCallback();
+    } else {
+        _onFailureCallback && _onFailureCallback({statusCode: "DENIED"});
+    }
+};
 
 Location.__instance = null;
+Location.__getInstance = function() {
+    if(!Location.__instance)
+        Location.__instance =  new SFLocationCallback(locationCallback);
+    return Location.__instance;
+};
+
 Object.defineProperties(Location, {
     'android': {
         value: {},
@@ -25,15 +43,12 @@ Object.defineProperties(Location, {
     },
     'start': {
         value: function(priority = Location.Android.Priority.HIGH_ACCURACY) {
-            if (!Location.__instance) {
-                Location.__instance = new SFLocationCallback(locationCallback);
-            }
-            Location.__instance.start(priority);
+            Location.__getInstance().start(priority);
         }
     },
     'stop': {
         value: function() {
-            Location.__instance && Location.__instance.stop();
+            Location.__getInstance().stop();
         }
     },
     'onLocationChanged': {
@@ -82,11 +97,33 @@ Object.defineProperties(Location.Android.Provider, { //ToDo: Deprecated, remove 
 
 Object.assign(Location.android.Provider, Location.Android.Provider); //ToDo: Deprecated, remove next release
 
+Object.defineProperties(Location.android, {
+    'checkSettings': {
+        value: function(params = {}) {
+            params.onSuccess && (_onSucessCallback = params.onSuccess);
+            params.onFailure && (_onFailureCallback = params.onFailure);
+            
+            Location.__getInstance().checkSettings({
+                onSuccess: function() {
+                    _onSucessCallback && _onSucessCallback();
+                },
+                onFailure: function(reason) {
+                    _onFailureCallback && _onFailureCallback({statusCode: reason});
+                }
+           });  
+        }
+    }
+});
+
 //iOS specific methods & properies
 Location.ios = {};
 Location.iOS = {};
 Location.ios.locationServicesEnabled = function() {};
 Location.ios.getAuthorizationStatus = function() {};
 Location.ios.authorizationStatus = {};
+Location.Android.SettingsStatusCodes = {
+    DENIED: "DENIED",
+    OTHER: "SETTINGS_CHANGE_UNAVAILABLE"
+};
 
 module.exports = Location;

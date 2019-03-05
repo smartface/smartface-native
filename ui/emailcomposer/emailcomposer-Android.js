@@ -1,4 +1,5 @@
 const TypeUtil = require("../../util/type");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 const NativeIntent = requireClass("android.content.Intent");
 const NativeUri = requireClass("android.net.Uri");
@@ -98,10 +99,10 @@ function EmailComposer(params) {
     });
 }
 
-EmailComposer.EMAIL_REQUESTCODE = 57;
+EmailComposer.EMAIL_REQUESTCODE = RequestCodes.EmailComposer.EMAIL_REQUESTCODE;
 EmailComposer.onActivityResult = function(requestCode, resultCode, data) {
     _closeCallback && self.onClose();
-}
+};
 
 EmailComposer.canSendMail = function(){
     return true;
