@@ -90,12 +90,9 @@ function View(params) {
             },
             set: function(value) {
                 NativeViewCompat.setElevation(_nativeObject, value);
-                // These ines cause AND-3183 bug. Don't need to remove state 
-                // list animator to set elevation property.
-
-                // if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-                //     _nativeObject.setStateListAnimator(null);
-                // }
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+                    _nativeObject.setStateListAnimator(null);
+                }
             },
             enumerable: true,
             configurable: true
