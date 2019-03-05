@@ -189,6 +189,8 @@ function TabBar(params) {
         enumerable: true,configurable : true
     });
     
+   self.itemColor = { normal: Color.GRAY, selected: Color.create("#00a1f1")}; // Do not remove. COR-1931 describes what happening.
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
