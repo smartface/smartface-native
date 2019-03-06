@@ -52,17 +52,7 @@ const Label = extend(View)(
         }
 
         _super(this);
-
-
-        let _android = {};
-        Object.defineProperty(self, 'android', {
-            get: () => _android,
-            set: function(value) {
-                Object.assign(self.android, value || {});
-            },
-            enumerable: true
-        });
-
+        
         let _textDirection;
         Object.defineProperty(self.android, 'textDirection', {
             get: () => _textDirection,
