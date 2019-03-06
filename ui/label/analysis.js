@@ -88,6 +88,16 @@ Label.prototype.ellipsizeMode;
 
 
 /**
+ * Set the text direction.
+ *
+ * @property {UI.Android.TextDirection} textDirection
+ * @android
+ * @since 4.0.2
+ */
+Label.prototype.textDirection;
+
+
+/**
  * Gets/sets text on Label.
  *
  * @property {String} [text = ""]

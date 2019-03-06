@@ -23,6 +23,7 @@ NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTextUtils.TruncateAt.MIDDLE;
 NativeEllipsizeMode[EllipsizeMode.END] = NativeTextUtils.TruncateAt.END;
 NativeEllipsizeMode[EllipsizeMode.NONE] = null;
 
+
 const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
@@ -51,6 +52,26 @@ const Label = extend(View)(
         }
 
         _super(this);
+
+
+        let _android = {};
+        Object.defineProperty(self, 'android', {
+            get: () => _android,
+            set: function(value) {
+                Object.assign(self.android, value || {});
+            },
+            enumerable: true
+        });
+
+        let _textDirection;
+        Object.defineProperty(self.android, 'textDirection', {
+            get: () => _textDirection,
+            set: (direction) => {
+                _textDirection = direction;
+                this.nativeObject.setTextDirection(direction);
+            },
+            enumerable: true
+        });
 
         // Handling iOS-specific properties
         this.ios = {};
