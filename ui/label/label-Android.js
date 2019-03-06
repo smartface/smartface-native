@@ -50,7 +50,6 @@ const Label = extend(View)(
                 // this.padding = 0;
             }
         }
-
         _super(this);
         
         let _textDirection;
@@ -62,9 +61,6 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-
-        // Handling iOS-specific properties
-        this.ios = {};
 
         // Assign parameters given in constructor
         if (params) {
