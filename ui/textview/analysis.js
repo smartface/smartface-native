@@ -311,7 +311,7 @@ TextView.prototype.lineSpacing = 0;
 
 
 /**
- * Set the text direction.
+ * Gets/sets the text direction.
  *
  * @property {UI.Android.TextDirection} textDirection
  * @android

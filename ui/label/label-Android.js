@@ -51,10 +51,14 @@ const Label = extend(View)(
             }
         }
         _super(this);
-        
+
         let _textDirection;
         Object.defineProperty(self.android, 'textDirection', {
-            get: () => _textDirection,
+            get: () => {
+                if (_textDirection === undefined)
+                    _textDirection = this.nativeObject.getTextDirection();
+                return _textDirection;
+            },
             set: (direction) => {
                 _textDirection = direction;
                 this.nativeObject.setTextDirection(direction);
