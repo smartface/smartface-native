@@ -389,6 +389,8 @@ const TextBox = extend(View)(
             enumerable: true,configurable : true
         });
         
+        this.ios = {};
+        
         Object.defineProperty(self, 'cursorColor', {
             get: function() {
                 return new Color({color : self.nativeObject.valueForKey("tintColor")});

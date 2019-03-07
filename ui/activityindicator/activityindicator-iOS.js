@@ -6,6 +6,8 @@ const ActivityIndicator = extend(View)(
     function(_super, params) {
         var self = this;
 
+        self.ios = {};
+
         if (!self.nativeObject) {
             self.nativeObject = new __SF_UIActivityIndicatorView(ActivityIndicator.iOS.ActivityIndicatorViewStyle.NORMAL);
         }

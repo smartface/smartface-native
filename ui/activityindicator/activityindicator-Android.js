@@ -13,6 +13,9 @@ const ActivityIndicator = extend(View)(
         }
         
         _super(this);
+
+        // Handling ios specific properties.
+        this.ios = {}; 
         this.nativeObject.setIndeterminate(true);
         
         // Assign parameters given in constructor

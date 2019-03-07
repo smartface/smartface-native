@@ -299,6 +299,8 @@ const SearchView = extend(View)(
             self.nativeObject.resignFirstResponder();
         };
         
+        this.ios = {};
+        
         self.ios.showLoading = function(){
             self.nativeObject.activityIndicator.startAnimating();
         };

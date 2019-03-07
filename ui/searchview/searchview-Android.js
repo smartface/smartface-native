@@ -464,6 +464,7 @@ const SearchView = extend(View)(
         };
 
         // Handling ios specific properties
+        this.ios = {};
         this.ios.showLoading = function() {};
         this.ios.hideLoading = function() {};
 

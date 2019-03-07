@@ -89,6 +89,8 @@ const VideoView = extend(View)(
             }
         };
         
+        self.ios = {};
+        
         var _page;
         Object.defineProperty(self.ios, 'page', {
             get: function() {
