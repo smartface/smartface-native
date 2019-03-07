@@ -168,11 +168,6 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
-
             // methods
             'addToHeaderBar': {
                 value: function(page) {
