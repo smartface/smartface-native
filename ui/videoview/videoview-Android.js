@@ -148,9 +148,7 @@ const VideoView = extend(View)(
                 configurable: true
             },
         });
-        
-        // Handling ios specific properties
-        this.ios = {};
+    
         
         // TODO: Set this listener after onReady callback is set.
         this.nativeInner.setOnPreparedListener(NativeMediaPlayer.OnPreparedListener.implement({

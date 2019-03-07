@@ -216,7 +216,6 @@ const ShimmerFlexLayout = extend(View)(
             }
         };
 
-        this.ios = {};
     });
 
 ShimmerFlexLayout.Android = {};

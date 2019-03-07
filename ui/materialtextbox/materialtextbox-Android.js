@@ -351,8 +351,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             }
         }
 
-        self.ios = {};
-
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
 

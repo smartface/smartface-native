@@ -57,8 +57,6 @@ const GifImageView = extend(ImageView)(
             }
         });
 
-        self.ios = {};
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {

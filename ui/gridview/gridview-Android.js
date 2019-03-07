@@ -449,7 +449,6 @@ const GridView = extend(View)(
         }
 
         // ios-only properties
-        this.ios = {};
         this.ios.swipeItems = {};
         this.ios.swipeItem = function(title, action) {
             return {};
