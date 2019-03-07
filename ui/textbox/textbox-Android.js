@@ -406,10 +406,6 @@ const TextBox = extend(TextView)(
             configurable: true
         });
 
-
-        // Handling ios specific properties
-        self.ios = {};
-
         // Don't use self.multiline = false due to AND-2725 bug.
         // setMovementMethod in label-Android.js file removes the textbox cursor. 
         self.nativeObject.setSingleLine(true);
