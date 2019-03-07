@@ -309,4 +309,14 @@ TextView.prototype.letterSpacing = 0;
  */
 TextView.prototype.lineSpacing = 0;
 
+
+/**
+ * Gets/sets the text direction.
+ *
+ * @property {UI.Android.TextDirection} textDirection
+ * @android
+ * @since 4.0.2
+ */
+TextView.prototype.textDirection;
+
 module.exports = TextView;
