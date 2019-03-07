@@ -55,7 +55,14 @@ function View(params) {
         }
     }
 
-    this.android = {};
+    let _android = {};
+    Object.defineProperty(this, 'android', {
+        get: () => _android,
+        set: function(value) {
+            Object.assign(this.android, value || {});
+        },
+        enumerable: true
+    });
     rippleSuperView(this);
 
     // Background drawable properties
