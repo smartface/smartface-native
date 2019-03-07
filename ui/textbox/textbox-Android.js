@@ -150,10 +150,6 @@ const TextBox = extend(TextView)(
                 enumerable: true,
                 configurable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
             'isPassword': {
                 get: function() {
                     return _isPassword;

@@ -8,7 +8,6 @@ const unitconverter = require('sf-core/util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");
-const NativeTypeface = requireClass("android.graphics.Typeface");
 const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 var SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
