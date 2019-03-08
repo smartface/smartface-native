@@ -92,7 +92,6 @@ const ShimmerFlexLayout = extend(View)(
 
         var _duration, _intensity, _repeatCount, _tilt, _highlightColor,
             _baseColor, _shimmerBuilder, _highlightAlpha;
-        this.android = {};
         Object.defineProperties(this.android, {
             'build': {
                 value: function(shimmerEnum) {
@@ -217,7 +216,6 @@ const ShimmerFlexLayout = extend(View)(
             }
         };
 
-        this.ios = {};
     });
 
 ShimmerFlexLayout.Android = {};

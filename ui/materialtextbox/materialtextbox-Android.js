@@ -224,7 +224,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
             },
         });
 
-        self.android = {};
         Object.defineProperties(self.android, {
             'labelsFont': {
                 get: function() {
@@ -351,8 +350,6 @@ const MaterialTextbox = extend(View)( //Actually this class behavior is InputLay
                 });
             }
         }
-
-        self.ios = {};
 
         //Defaults 
         self.textBoxNativeObject.setSingleLine(true);
