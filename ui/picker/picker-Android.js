@@ -200,10 +200,6 @@ const Picker = extend(View)(
                 },
                 enumerable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
             'toString': {
                 value: function() {
                     return 'Picker';
