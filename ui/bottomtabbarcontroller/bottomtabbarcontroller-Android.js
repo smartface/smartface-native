@@ -227,7 +227,10 @@ function BottomTabBarController(params) {
                 catch (e) {
                     Application.onUnhandledError && Application.onUnhandledError(e);
                 }
+            } else {
+                return false;
             }
+            
             return self.tabBar.android && self.tabBar.android.disableItemAnimation ? false : result;
         }
     }));
