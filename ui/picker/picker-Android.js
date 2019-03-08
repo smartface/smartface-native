@@ -20,8 +20,6 @@ const Picker = extend(View)(
         }
         _super(this);
 
-        this.ios = {};
-
         var _items = [];
         var _onSelected;
         var _title = "";
