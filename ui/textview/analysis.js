@@ -83,7 +83,7 @@ TextView.prototype.multiline = false;
 
 
 /**
- * Sets the height of the TextView to be at most maxLines tall. Assigning  0 indicates that maxLine will be as much as given content. 
+ * Sets the height of the TextView to be at most maxLines tall. Assigning  0 indicates that maxLines will be as much as given content. 
  *
  * @property {Number} maxLines
  * @android
