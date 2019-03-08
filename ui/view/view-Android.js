@@ -61,7 +61,8 @@ function View(params) {
         set: function(value) {
             Object.assign(this.android, value || {});
         },
-        enumerable: true
+        enumerable: true,
+        configurable: true
     });
     rippleSuperView(this);
 
