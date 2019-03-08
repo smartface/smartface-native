@@ -66,7 +66,7 @@ Label.prototype.multiline = false;
 
 
 /**
- * Sets the height of the Label to be at most maxLines tall. Setting 0 indicated that maxLine will be as much as given content. 
+ * Sets the height of the Label to be at most maxLines tall. Setting 0 indicates that maxLines will be as much as given content. 
  *
  * @property {Number} maxLines
  * @android
