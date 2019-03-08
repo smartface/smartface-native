@@ -257,6 +257,16 @@ TextBox.prototype.removeFocus = function(){};
 TextBox.prototype.onTextChanged = function(e) {};
 
 /**
+ * The text box calls this method in response to the user pressing the built-in clear button. Return value is YES if the text box contents should be cleared; otherwise, NO.
+ * If you do not implement this method, the text box clears the text as if the method had returned YES.
+ *
+ * @event onClearButtonPress
+ * @ios
+ * @since 4.0.2
+ */
+TextBox.prototype.onClearButtonPress = function(e) {};
+
+/**
  * This event is called when user focus on the textbox by selecting it.
  *
  * @event onEditBegins
