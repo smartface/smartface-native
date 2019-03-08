@@ -68,6 +68,13 @@ const TextBox = extend(View)(
                     "actionKeyType": self.actionKeyType
                 });
             }
+            else if(method.name === "textFieldShouldClear"){
+                if(typeof self.ios.onClearButtonPress === 'function'){
+                    var returnValue = self.ios.onClearButtonPress();
+                    return returnValue === undefined ? true : returnValue;
+                }
+                return true;
+            }
             else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
                 if (typeof self.onTextChanged !== 'function'){
                     return true;
