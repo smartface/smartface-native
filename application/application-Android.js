@@ -4,7 +4,7 @@ const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
 const Http = require("sf-core/net/http");
 const Network = require('sf-core/device/network');
-    
+
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -51,8 +51,8 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onDestroy: function() {
         cancelAllBackgroundJobs();
         if (_onExit) {
-            _onExit();  
-        }  
+            _onExit();
+        }
     },
     onRequestPermissionsResult: function(requestCode, permission, grantResult) {
         var permissionResults = {};
@@ -61,7 +61,7 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
     },
     onActivityResult: function(requestCode, resultCode, data) {
-        if(requestCode === Location.CHECK_SETTINGS_CODE) {
+        if (requestCode === Location.CHECK_SETTINGS_CODE) {
             Location.__onActivityResult && Location.__onActivityResult(resultCode);
         }
     }
@@ -79,7 +79,7 @@ Object.defineProperties(ApplicationWrapper, {
             const SliderDrawer = require('../ui/sliderdrawer');
             if (drawer instanceof SliderDrawer) {
                 detachSliderDrawer(_sliderDrawer);
-                
+
                 _sliderDrawer = drawer;
                 attachSliderDrawer(_sliderDrawer);
             }
@@ -237,8 +237,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
-            if(!focusedView)
-               return;
+            if (!focusedView)
+                return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -318,12 +318,12 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if(ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
             let leftItem = ApplicationWrapper.currentPage._headerBarLeftItem;
-            if(leftItem) {
+            if (leftItem) {
                 leftItem.onPress && leftItem.onPress();
             }
         }
@@ -343,7 +343,7 @@ ApplicationWrapper.setRootController = function(params) {
     ViewController.deactivateRootController(ApplicationWrapper.currentPage);
     // ViewController.activateController(params.controller);
     params.controller.__isActive = true;
-    ViewController.setController(params); 
+    ViewController.setController(params);
 };
 
 function attachSliderDrawer(sliderDrawer) {
@@ -497,6 +497,14 @@ Object.defineProperties(ApplicationWrapper.android, {
     'getLayoutDirection': {
         get: function() {
             return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        enumerable: true
+    },
+    'setAppTheme': {
+        value: function(currentTheme) {
+            const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+            let sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
+            sharedPreferences.edit().putInt("CurrentBaseTheme", NativeR.style[currentTheme]).commit();
         },
         enumerable: true
     }
