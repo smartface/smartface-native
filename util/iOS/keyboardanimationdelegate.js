@@ -149,7 +149,7 @@ function KeyboardAnimationDelegate (params) {
                              
                          },6); 
                          invocationAnimation.invoke();
-                         _isKeyboadAnimationCompleted = true;
+                         _isKeyboadAnimationCompleted = true; // bug id : IOS-2763
                      }
                 }else{
                     var parent = self.parentDialog ? self.parentDialog :  self.parentView;
