@@ -1,5 +1,4 @@
 const Screen = require('sf-core/device/screen');
-const System = require('sf-core/device/system');
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
 KeyboardAnimationDelegate.offsetFromTop = function (self) {
@@ -99,7 +98,7 @@ function KeyboardAnimationDelegate (params) {
     
     var _isKeyboadAnimationCompleted = true;
     var _topDistance = 0;
-    self.keyboardShowAnimation = function(keyboardHeight,e){
+    self.keyboardShowAnimation = function(keyboardHeight,e,isBeginEditing){
         KeyboardAnimationDelegate.isKeyboardVisible = true;
         KeyboardAnimationDelegate.ApplicationKeyboardHeight = keyboardHeight;
         var controlValue = 0;
@@ -126,7 +125,7 @@ function KeyboardAnimationDelegate (params) {
                 }
                 
                 
-                if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
+                if (e && e.userInfo) {
                     var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
                     var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
                     var animationOptions = animationCurve << 16;
@@ -146,9 +145,10 @@ function KeyboardAnimationDelegate (params) {
                             parent.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
-                              _isKeyboadAnimationCompleted = true;
+                             
                          },6); 
                          invocationAnimation.invoke();
+                         _isKeyboadAnimationCompleted = true; // bug id : IOS-2763
                      }
                 }else{
                     var parent = self.parentDialog ? self.parentDialog :  self.parentView;
@@ -161,17 +161,17 @@ function KeyboardAnimationDelegate (params) {
                 if (self.getParentViewController()) {
                     if (self.getParentViewController().view.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self) && self.getParentViewController().view.frame.y != 0){
                         if (e && e.userInfo) {
-                            self.keyboardHideAnimation({userInfo : e.userInfo});
+                            self.keyboardHideAnimation({userInfo : e.userInfo,isBeginEditing : isBeginEditing});
                         }else{
-                            self.keyboardHideAnimation();
+                            self.keyboardHideAnimation({isBeginEditing : isBeginEditing});
                         }
                     }
                 }else if (self.parentDialog){
                     if (self.parentDialog.frame.y !== KeyboardAnimationDelegate.offsetFromTop(self)){
                         if (e && e.userInfo) {
-                            self.keyboardHideAnimation({userInfo : e.userInfo});
+                            self.keyboardHideAnimation({userInfo : e.userInfo,isBeginEditing : isBeginEditing});
                         }else{
-                            self.keyboardHideAnimation();
+                            self.keyboardHideAnimation({isBeginEditing : isBeginEditing});
                         }
                     }
                 }
@@ -181,16 +181,18 @@ function KeyboardAnimationDelegate (params) {
      }
     
     self.textFieldShouldBeginEditing = function(){
-        if (parseInt(System.OSVersion) >= 11 && KeyboardAnimationDelegate.ApplicationKeyboardHeight != 0 && KeyboardAnimationDelegate.isKeyboardVisible) {
-            self.keyboardShowAnimation(KeyboardAnimationDelegate.ApplicationKeyboardHeight,{userInfo:{UIKeyboardAnimationDurationUserInfoKey : 0.2,UIKeyboardAnimationCurveUserInfoKey : 2}})
+        if (KeyboardAnimationDelegate.ApplicationKeyboardHeight != 0 && KeyboardAnimationDelegate.isKeyboardVisible) {
+            self.keyboardShowAnimation(KeyboardAnimationDelegate.ApplicationKeyboardHeight,{userInfo:{UIKeyboardAnimationDurationUserInfoKey : 0.2,UIKeyboardAnimationCurveUserInfoKey : 2}},true)
         }
     }
 
     self.keyboardHideAnimation = function(e){
-        KeyboardAnimationDelegate.isKeyboardVisible = false;
+        if (!(e && e.isBeginEditing)) {
+            KeyboardAnimationDelegate.isKeyboardVisible = false;
+        }
         if(self.getParentViewController() || self.parentDialog){
             if (_isKeyboadAnimationCompleted){
-                if (e && e.userInfo && parseInt(System.OSVersion) >= 11) {
+                if (e && e.userInfo) {
                     var animatonDuration = e.userInfo.UIKeyboardAnimationDurationUserInfoKey;
                     var animationCurve = e.userInfo.UIKeyboardAnimationCurveUserInfoKey;
                     var animationOptions = animationCurve << 16;
