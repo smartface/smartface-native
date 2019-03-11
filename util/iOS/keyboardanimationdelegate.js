@@ -146,9 +146,10 @@ function KeyboardAnimationDelegate (params) {
                             parent.frame = frame;
                          },5); 
                          invocationAnimation.setBoolBlockArgumentAtIndex(function(e){
-                              _isKeyboadAnimationCompleted = true;
+                             
                          },6); 
                          invocationAnimation.invoke();
+                         _isKeyboadAnimationCompleted = true;
                      }
                 }else{
                     var parent = self.parentDialog ? self.parentDialog :  self.parentView;
