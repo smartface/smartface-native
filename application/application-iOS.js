@@ -144,6 +144,7 @@ SFApplication.Android.NavigationBar = { Style: {} };
 SFApplication.Android.Permissions = {};
 SFApplication.android.Permissions = {};
 SFApplication.android.navigationBar = {};
+SFApplication.android.setAppTheme = function(){};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
     set:function(value){

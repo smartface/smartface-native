@@ -501,10 +501,11 @@ Object.defineProperties(ApplicationWrapper.android, {
         enumerable: true
     },
     'setAppTheme': {
-        value: function(currentTheme) {
+        value: currentTheme => {
             const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
             let sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
-            sharedPreferences.edit().putInt("CurrentBaseTheme", NativeR.style[currentTheme]).commit();
+            let _themeRes = activity.getResources().getIdentifier(currentTheme, "style", activity.getPackageName());
+            sharedPreferences.edit().putInt("SFCurrentBaseTheme", _themeRes).commit();
         },
         enumerable: true
     }
