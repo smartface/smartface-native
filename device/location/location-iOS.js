@@ -92,8 +92,13 @@ Location.stop = function() {
     }
 }
 
-Location.getLastKnownLocation = function(){
-    return Location.nativeObject.lastKnownLocation();
+Location.getLastKnownLocation = function(onSuccess,onFailure){
+    var location = Location.nativeObject.lastKnownLocation();
+    if (location) {
+        onSuccess && onSuccess(location);
+    }else{
+        onFailure && onFailure();
+    }
 };
 
 Location.onLocationChanged = function onLocationChanged(event) { }

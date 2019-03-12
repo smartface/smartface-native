@@ -81,8 +81,8 @@ Location.onLocationChanged = function onLocationChanged(event) {}
  * 
  * @method getLastKnownLocation
  * @param {Function} onSuccess
- * @param {Number}   onSuccess.Latitude
- * @param {Number}   onSuccess.Longitude
+ * @param {Number}   onSuccess.latitude
+ * @param {Number}   onSuccess.longitude
  * @param {Function} onFailure
  * @android
  * @ios
