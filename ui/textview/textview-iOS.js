@@ -226,7 +226,17 @@ const TextView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self.ios, 'scrollEnabled', {
+        Object.defineProperty(self.ios, 'scrollEnabled', {   //Deprecated
+            get: function() {
+                return self.nativeObject.valueForKey("scrollEnabled");
+            },
+            set: function(value) {
+                self.nativeObject.setValueForKey(value, "scrollEnabled");
+            },
+            enumerable: true
+        });
+        
+        Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.valueForKey("scrollEnabled");
             },

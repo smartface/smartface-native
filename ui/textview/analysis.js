@@ -165,9 +165,10 @@ TextView.prototype.ios.showScrollBar = false;
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.0.0
+ * @android
+ * @since 4.0.2
  */
-TextView.prototype.ios.scrollEnabled = true;
+TextView.prototype.scrollEnabled = true;
 
 /**
  * Sets/Gets the bounce effect when scrolling.
