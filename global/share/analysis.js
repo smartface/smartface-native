@@ -85,7 +85,7 @@ Share.shareFile = function(file, page, blacklist) {};
  *     var text = "Hello from Smartface";
  *     Share.share({ items: [text, file, image] , myPage, []});
  *
- * @method shareFile
+ * @method share
  * @param {Object} params
  * @param {Array} params.items 
  * @param {UI.Page} params.page
