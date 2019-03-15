@@ -59,10 +59,10 @@ function Page(params) {
                 return;
             self.enterRevealTransition = false;
             self.returnRevealAnimation = false;
-            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
-            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
+            // const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
+            // var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+            // var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+            // self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
             pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());

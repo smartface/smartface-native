@@ -2,7 +2,10 @@
 const AndroidConfig = require("../androidconfig");
 const DirectionBasedConverter = require("../directionbasedconverter");
 
+const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
+const NativeAndroidR = requireClass("android.R");
+const API_LEVEL = require('sf-core/device/system').apiLevel;
 
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
@@ -42,8 +45,9 @@ FragmentTransaction.push = function(params) {
     page.popUpBackPage = currentPage;
 
     if (currentPage.transitionViews) {
-        page.enterRevealTransition = true;
-        FragmentTransaction.revealTransition(currentPage.transitionViews, page);
+        console.error("Reveal animation animated: " + params.animated);
+        // page.enterRevealTransition = true;
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     }
     else {
         FragmentTransaction.popUpTransition(page, params.animated);
@@ -103,22 +107,29 @@ FragmentTransaction.replace = function(params) {
 
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
+    
+    params.onComplete && params.onComplete();
 };
 
-FragmentTransaction.revealTransition = function(transitionViews, page) {
+FragmentTransaction.revealTransition = function(transitionViews, page, animated = true) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
-    var lenght = transitionViews.length;
-    for (var i = 0; i < lenght; i++) {
-        var view = transitionViews[i];
-        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+    
+    // console.error("FragmentTransaction.revealTransition transitionViews.length: " + lenght);
+    if(API_LEVEL >= 21) {
+        addSharedElement({
+            page: page,
+            animated: animated,
+            fragmentTransaction: fragmentTransaction,
+            transitionViews: transitionViews
+        });
     }
     _addedFragmentsInContainer = {};
     _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.replace(rootViewId, page.nativeObject);
-    fragmentTransaction.addToBackStack("" + page.pageID);
+    // fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
@@ -147,8 +158,10 @@ FragmentTransaction.dismissTransition = function(page, animation) {
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();
 
     let popupBackPage;
+    console.error("FragmentTransaction.dismissTransition page.parentController: " + (!!page.parentController));
     if (page.parentController) {
         let popupBackNavigator = page.parentController.popupBackNavigator;
+        console.error("FragmentTransaction.dismissTransition popupBackNavigator: " + (!!popupBackNavigator));
         if(popupBackNavigator) {
             popupBackNavigator.__isActive = true;
             let currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
@@ -158,8 +171,8 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         popupBackPage = page.parentController.popUpBackPage;
         if(popupBackPage && popupBackPage.transitionViews) {
             _addedFragmentsInContainer[page.pageID] = false;
-            // reveal back animation
-            fragmentManager.popBackStackImmediate();
+            console.error("FragmentTransaction.dismissTransition revealTransition");
+            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
             return;
         } 
     }
@@ -192,6 +205,23 @@ FragmentTransaction.checkBottomTabBarVisible = function(page) {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
     }
 };
+
+function addSharedElement(params = {}) {
+    let {animated, page, fragmentTransaction, transitionViews} = params;
+    if(animated) {
+        var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+        var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+        page.nativeObject.setSharedElementEnterTransition(inflateTransition);
+    } else {
+        page.nativeObject.setSharedElementEnterTransition(null);
+    }
+        
+    var lenght = transitionViews.length;
+    for (var i = 0; i < lenght; i++) {
+        var view = transitionViews[i];
+        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+    }
+}
 
 function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache["LEFTTORIGHT"]) {

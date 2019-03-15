@@ -64,6 +64,9 @@ function BottomTabBarController(params) {
                 return _selectedIndex;
             },
             set: function(index) {
+                if(index === 0 && _selectedIndex === 4) {
+                    throw new Error("tab4, selectedIndex is set to 0");
+                }
                 _selectedIndex = index;
             },
             enumerable: true
@@ -160,6 +163,7 @@ function BottomTabBarController(params) {
     };
 
     this.show = function() {
+        console.info("BottomTabBarController show");
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
@@ -170,12 +174,18 @@ function BottomTabBarController(params) {
     this.setChecked = function() {
         initializeOnce();
         
+        console.info("BottomTabBarController setChecked");
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
         if (_selectedIndex < 0)
             return;
-        // TODO: This check is a workaround. https://smartface.atlassian.net/browse/SUPDEV-1867
+        console.info("BottomTabBarController _selectedIndex: " + _selectedIndex);
+        if(self.__targetIndex === _selectedIndex) {
+            self.push(self.childControllers[_selectedIndex]);
+            return;
+        }
+        console.info("BottomTabBarController setSelectedItemId: " + _selectedIndex);
+        // TODO: This check is added for https://smartface.atlassian.net/browse/SUPDEV-1867
         // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
-        if(self.__targetIndex === _selectedIndex) return;
         self.__targetIndex = _selectedIndex;
         self.tabBar.nativeObject.setSelectedItemId(_selectedIndex);
     };
@@ -207,6 +217,7 @@ function BottomTabBarController(params) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
+            console.error("onNavigationItemSelected index: " + index + "   result: " + result);
             
             if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
@@ -218,7 +229,7 @@ function BottomTabBarController(params) {
                 // use this property to show/hide bottom naviagtion view after controller transition
                 self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
                 self.childControllers[index].isInsideBottomTabBar = true;
-                self.childControllers[index].__isActive = true;
+                self.childControllers[index].__isActive = self.__isActive;
                 self.push(self.childControllers[index]);
                 _selectedIndex = index;
                 try {
