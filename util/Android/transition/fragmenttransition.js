@@ -5,7 +5,7 @@ const DirectionBasedConverter = require("../directionbasedconverter");
 const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 const NativeAndroidR = requireClass("android.R");
-const API_LEVEL = require('sf-core/device/system').apiLevel;
+const API_LEVEL = require('sf-core/device/system').android.apiLevel;
 
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
