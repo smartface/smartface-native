@@ -13,7 +13,8 @@ Object.defineProperties(Share, {
             shareContent({
                 type: "text/plain",
                 extra: text,
-                extraType: NativeIntent.EXTRA_TEXT
+                extraType: NativeIntent.EXTRA_TEXT,
+                actionType: NativeIntent.ACTION_SEND
             });
         }
     },
