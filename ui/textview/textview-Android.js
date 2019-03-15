@@ -21,8 +21,10 @@ TextAlignmentDic[TextAlignment.BOTTOMLEFT] = 80 | 3; // Gravity.BOTTOM | Gravity
 TextAlignmentDic[TextAlignment.BOTTOMCENTER] = 80 | 1; // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
 TextAlignmentDic[TextAlignment.BOTTOMRIGHT] = 80 | 5; // Gravity.BOTTOM | Gravity.RIGHT
 
+const MAX_VALUE = 2147483647;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
+
 const TextView = extend(Label)(
     function(_super, params) {
         _super(this);
@@ -47,12 +49,12 @@ const TextView = extend(Label)(
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
 
-                    enableScrollable(self.scrollEnabled);
+                    self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
             },
-            'multiline': {
+            'multiline': { //Deprecated usage
                 get: function() {
                     return this.nativeObject.getMaxLines() !== 1;
                 },
@@ -62,7 +64,7 @@ const TextView = extend(Label)(
                     // const NativeInteger = requireClass("java.lang.Integer");
                     this.nativeObject.setMaxLines(multiline ? 1000 : 1);
                     if (multiline)
-                        enableScrollable(self.scrollEnabled);
+                        self.scrollEnabled = _scrollEnabled;
                     else
                         this.nativeObject.setMovementMethod(null);
                 },
@@ -100,7 +102,7 @@ const TextView = extend(Label)(
                     this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
                     this.nativeObject.setSingleLine(false);
-                    enableScrollable(self.scrollEnabled);
+                    self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
                 },
                 enumerable: true
@@ -191,28 +193,10 @@ const TextView = extend(Label)(
                 get: () => _scrollEnabled,
                 set: (scrollEnabled) => {
                     _scrollEnabled = scrollEnabled;
-                    enableScrollable(_scrollEnabled);
+                    enableScrollable.call(self, _scrollEnabled);
                 }
             }
         });
-
-        function enableScrollable(scrollEnabled) {
-            if (scrollEnabled) {
-                if (self.htmlText.length > 0 || self.attributedText.length > 0) {
-                    const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
-                    self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
-                }
-                else {
-                    const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                    self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
-                }
-            }
-            else {
-                self.nativeObject.setMovementMethod(null);
-            }
-        }
-
-
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -222,4 +206,20 @@ const TextView = extend(Label)(
     }
 );
 
+function enableScrollable(scrollEnabled) {
+    const self = this;
+    if (scrollEnabled) {
+        if (self.htmlText.length > 0 || self.attributedText.length > 0) {
+            const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
+            self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+        }
+        else {
+            const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
+            self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
+        }
+    }
+    else {
+        self.nativeObject.setMovementMethod(null);
+    }
+}
 module.exports = TextView;
