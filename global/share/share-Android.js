@@ -1,3 +1,4 @@
+/* global requireClass */
 const AndroidConfig = require("../../util/Android/androidconfig");
 const NativeIntent = requireClass('android.content.Intent');
 const NativeBuildConfig = requireClass(AndroidConfig.activity.getPackageName() + ".BuildConfig");
@@ -9,48 +10,37 @@ const Share = {};
 Object.defineProperties(Share, {
     'shareText': {
         value: function(text, page, blacklist) {
-            var shareIntent = new NativeIntent(NativeIntent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(NativeIntent.EXTRA_TEXT, text);
-            AndroidConfig.activity.startActivity(shareIntent);
+            shareContent({
+                type: "text/plain",
+                extra: text,
+                extraType: NativeIntent.EXTRA_TEXT,
+                actionType: NativeIntent.ACTION_SEND
+            });
         }
     },
     'shareImage': {
         value: function(image, page, blacklist) {
-            const NativeURI = requireClass('android.net.Uri');
             var imageFile = writeImageToFile(image);
+            let uri = getUriFromFile(imageFile);
 
-            var uri;
-            if (AndroidConfig.sdkVersion < 24) {
-                uri = NativeURI.fromFile(imageFile);
-            }
-            else {
-                uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, imageFile);
-            }
-
-            var shareIntent = new NativeIntent();
-            shareIntent.setAction(NativeIntent.ACTION_SEND);
-            shareIntent.putExtra(NativeIntent.EXTRA_STREAM, uri);
-            shareIntent.setType("image/*");
-            AndroidConfig.activity.startActivity(shareIntent);
+            shareContent({
+                type: "image/*",
+                extra: uri,
+                extraType: NativeIntent.EXTRA_STREAM,
+                actionType: NativeIntent.ACTION_SEND
+            });
         }
     },
     'shareFile': {
         value: function(file, page, blacklist) {
-            const NativeURI = requireClass('android.net.Uri');
-            var uri;
-            if (AndroidConfig.sdkVersion < 24) {
-                uri = NativeURI.fromFile(file.nativeObject);
-            }
-            else {
-                uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, file.nativeObject);
-            }
+            let uri = getUriFromFile(file.nativeObject);
 
-            var shareIntent = new NativeIntent();
-            shareIntent.setAction(NativeIntent.ACTION_SEND);
-            shareIntent.putExtra(NativeIntent.EXTRA_STREAM, uri);
-            shareIntent.setType("application/*");
-            AndroidConfig.activity.startActivity(shareIntent);
+            shareContent({
+                type: "application/*",
+                extra: uri,
+                extraType: NativeIntent.EXTRA_STREAM,
+                actionType: NativeIntent.ACTION_SEND
+            });
         }
     },
     'share': {
@@ -63,41 +53,24 @@ Object.defineProperties(Share, {
             let itemList = params.items || [];
             let shareIntent = new NativeIntent(NativeIntent.ACTION_SEND_MULTIPLE);
             shareIntent.setType("*/*");
-            let mimeTypes = [],
-                parcelabels = new NativeArrayList();
+
+            let contentSharing = { mimeTypes: [], parcelabels: new NativeArrayList() };
+            addContent.bind(contentSharing);
+
             itemList.forEach((item) => {
                 if (item instanceof File) {
-                    const NativeURI = requireClass('android.net.Uri');
-                    let uri;
-                    if (AndroidConfig.sdkVersion < 24) {
-                        uri = NativeURI.fromFile(item.nativeObject);
-                    }
-                    else {
-                        uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, item.nativeObject);
-                    }
-                    mimeTypes.push("application/*");
-                    parcelabels.add(uri);
+                    addContent(item.nativeObject, "application/*");
                 }
                 else if (typeof(item) === 'string') {
                     shareIntent.putExtra(NativeIntent.EXTRA_TEXT, item);
-                    mimeTypes.push("text/plain");
+                    contentSharing.mimeTypes.push("text/plain");
                 }
                 else if (item instanceof Image) {
-                    const NativeURI = requireClass('android.net.Uri');
-                    var imageFile = writeImageToFile(item);
-                    let uri;
-                    if (AndroidConfig.sdkVersion < 24) {
-                        uri = NativeURI.fromFile(imageFile);
-                    }
-                    else {
-                        uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, imageFile);
-                    }
-                    parcelabels.add(uri);
-                    mimeTypes.push("image/*");
+                    addContent(item.nativeObject, "image/*");
                 }
             });
-            !(parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, parcelabels);
-            shareIntent.putExtra(NativeIntent.EXTRA_MIME_TYPES, array(mimeTypes, 'java.lang.String'));
+            !(contentSharing.parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, contentSharing.parcelabels);
+            shareIntent.putExtra(NativeIntent.EXTRA_MIME_TYPES, array(contentSharing.mimeTypes, 'java.lang.String'));
             AndroidConfig.activity.startActivity(shareIntent);
         }
     }
@@ -121,7 +94,38 @@ function writeImageToFile(image) {
     fileOutStream.close();
 
     return tempFile;
-};
+}
+
+function getUriFromFile(fileNativeObject) {
+    const NativeURI = requireClass('android.net.Uri');
+    if (AndroidConfig.sdkVersion < 24) {
+        return NativeURI.fromFile(fileNativeObject);
+    }
+    return NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, fileNativeObject);
+}
+
+function addContent(fileNativeObject, fileType) {
+    var contentSharing = this;
+    const NativeURI = requireClass('android.net.Uri');
+    let uri;
+    if (AndroidConfig.sdkVersion < 24) {
+        uri = NativeURI.fromFile(fileNativeObject);
+    }
+    else {
+        uri = NativeFileProvider.getUriForFile(AndroidConfig.activity, Authority, fileNativeObject);
+    }
+    contentSharing.mimeTypes.push(fileType);
+    contentSharing.parcelabels.add(uri);
+}
+
+function shareContent(params = {}) {
+    let { type, extra, extraType, actionType } = params;
+
+    var shareIntent = new NativeIntent(actionType);
+    shareIntent.setType(type);
+    shareIntent.putExtra(extraType, extra);
+    AndroidConfig.activity.startActivity(shareIntent);
+}
 
 Share.ios = {};
 
