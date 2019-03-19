@@ -60,9 +60,25 @@ const TextView = extend(Label)(
                 },
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(!multiline);
-                    // Integer.MAX_VALUE
-                    // const NativeInteger = requireClass("java.lang.Integer");
-                    this.nativeObject.setMaxLines(multiline ? 1000 : 1);
+                    this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
+                    if (multiline)
+                        self.scrollEnabled = _scrollEnabled;
+                    else
+                        this.nativeObject.setMovementMethod(null);
+                },
+                enumerable: true
+            },
+            'maxLines': {
+                get: function() {
+                    let mMaxLines = this.nativeObject.getMaxLines();
+                    return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
+                },
+                set: function(value) {
+                    if (value === 0)
+                        this.nativeObject.setMaxLines(MAX_VALUE);
+                    else
+                        this.nativeObject.setMaxLines(value);
+
                     if (multiline)
                         self.scrollEnabled = _scrollEnabled;
                     else
