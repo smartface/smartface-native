@@ -1,3 +1,5 @@
+const Image = require("sf-core/ui/image");
+const File = require("sf-core/io/file");
 const Invocation = require('sf-core/util/iOS/invocation.js');
 const UIActivityViewController = SF.requireClass("UIActivityViewController");
 
@@ -60,6 +62,31 @@ Object.defineProperties(Share, {
             page.nativeObject.presentViewController(activity);
         }
     },
+    'share': {
+        value: function(object) {
+            var items = object.items;
+            var page = object.page;
+            var blacklist = object.blacklist;
+            
+            var _itemsNativeObject = [];
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                if (item instanceof File) {
+                    var actualPath = item.nativeObject.getActualPath();
+                    var url = __SF_NSURL.fileURLWithPath(actualPath);
+                    _itemsNativeObject.push(url);
+                }else if (item instanceof Image){
+                    _itemsNativeObject.push(item.nativeObject);
+                }else{
+                    _itemsNativeObject.push(item);
+                }
+            }
+            
+            var activity = Share.createActivity(_itemsNativeObject);
+            activity.excludedActivityTypes = blacklist;
+            page.nativeObject.presentViewController(activity);
+        }
+    }
 });
 
 Share.ios = {};
