@@ -61,10 +61,7 @@ const TextView = extend(Label)(
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(!multiline);
                     this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
-                    if (multiline)
-                        self.scrollEnabled = _scrollEnabled;
-                    else
-                        this.nativeObject.setMovementMethod(null);
+                    self.scrollEnabled = _scrollEnabled;
                 },
                 enumerable: true
             },
@@ -78,11 +75,8 @@ const TextView = extend(Label)(
                         this.nativeObject.setMaxLines(MAX_VALUE);
                     else
                         this.nativeObject.setMaxLines(value);
-
-                    if (multiline)
-                        self.scrollEnabled = _scrollEnabled;
-                    else
-                        this.nativeObject.setMovementMethod(null);
+                    // This one is added to match same behavior of multiline. 
+                    self.scrollEnabled = _scrollEnabled;
                 },
                 enumerable: true
             },
@@ -222,19 +216,28 @@ const TextView = extend(Label)(
     }
 );
 
+/*
+ToDo: LinkMovementMethod makes the links clickable and scrollable but this case is restricted to mutually directed each other. 
+To prevent, we need to customize BaseMovementMethod
+*/
 function enableScrollable(scrollEnabled) {
     const self = this;
     if (scrollEnabled) {
         if (self.htmlText.length > 0 || self.attributedText.length > 0) {
+            if (self.linkMovementMethodCreated) return;
             const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
             self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+            self.linkMovementMethodCreated = true;
         }
         else {
+            if (self.scrollableMovementMethodCreated) return;
             const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
             self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
+            self.scrollableMovementMethodCreated = true;
         }
     }
     else {
+        self.linkMovementMethodCreated = self.scrollableMovementMethodCreated = false;
         self.nativeObject.setMovementMethod(null);
     }
 }
