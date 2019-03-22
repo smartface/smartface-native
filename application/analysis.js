@@ -240,7 +240,7 @@ Application.exit = function() {};
  * @static
  * @since 3.2.0
  */
-Application.setRootController = function(params){};
+Application.setRootController = function(params) {};
 /**
  * Restarts the application.
  *
@@ -287,6 +287,25 @@ Application.android.checkPermission = function(permission) {};
  * @since 1.2
  */
 Application.android.requestPermissions = function(requestIdentifier, permission) {};
+
+
+/**
+ * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.). 
+ * Be sure to call this implementation for touch screen events that should be handled normally.
+ * 
+ *     @example
+ *     const Application = require("sf-core/application");
+ *     Application.android.dispatchTouchEvent = function(){
+ *        return true; //Consume all touches & do not pass to window
+ *     }
+ *
+ * @method dispatchTouchEvent
+ * @android
+ * @static
+ * @return {Boolean}
+ * @since 4.0.2
+ */
+Application.android.dispatchTouchEvent = function() {};
 
 /**
  * This method checks for a permission is shown before to user 
@@ -371,7 +390,7 @@ Application.checkUpdate = function(callback, user) {};
  * @static
  * @since 3.2.0
  */
-Application.onBackButtonPressed = function(){};
+Application.onBackButtonPressed = function() {};
 /**
  * Triggered before exiting application.
  * 
