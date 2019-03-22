@@ -108,7 +108,7 @@ System.LAContextBiometricType;
 /**
  *
  * Returns the api level of the Android system.
- * @property {String} apiLevel
+ * @property {Number} apiLevel
  * @readonly
  * @android
  * @static
