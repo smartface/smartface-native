@@ -5,7 +5,8 @@ const AndroidConfig = require("../../../util/Android/androidconfig");
 function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
 
 function RippleEffect(view) {
-    var [_rippleEnabled, _rippleColor, _useForeground] = [false];
+    var [_rippleEnabled, _rippleColor, _useForeground] = [false,false,false];
+    
     Object.defineProperties(view.android, {
         'rippleEnabled': {
             get: function() {
@@ -36,7 +37,7 @@ function RippleEffect(view) {
             },
             set: function(value) {
                 _rippleColor = value;
-
+                
                 if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                     var states = array([array([], "int")]);
                     var colors = array([_rippleColor.nativeObject], 'int');
