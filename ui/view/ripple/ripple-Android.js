@@ -5,7 +5,8 @@ const AndroidConfig = require("../../../util/Android/androidconfig");
 function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
 
 function RippleEffect(view) {
-    var [_rippleEnabled, _rippleColor, _useForeground] = [false,false,false];
+    var _rippleEnabled, _rippleColor, _useForeground;
+    _rippleEnabled = _rippleColor = _useForeground = false;
     
     Object.defineProperties(view.android, {
         'rippleEnabled': {

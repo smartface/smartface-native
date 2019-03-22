@@ -24,7 +24,7 @@ function View(params) {}
  * @property {Boolean} [useForeground = false]
  * @android
  * @member UI.View
- * @since 3.2.1
+ * @since 4.0.2
  */
 View.prototype.useForeground;
 
