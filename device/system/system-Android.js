@@ -175,6 +175,30 @@ Object.defineProperties(System.android, {
             return false;
         },
         enumerable: true
+    },
+    'getPackageVersion':{
+        value: function(params) {
+       
+            if(params && params.packageName){
+                var packageInfo;
+        
+                try{
+                    packageInfo = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName,0);
+                    var packageVersion = packageInfo.versionName;
+                
+                    if(params && params.onSuccess){
+                        params.onSuccess(packageVersion);
+                    }
+                    return packageVersion;
+                
+                }catch(err){
+                    if(params && params.onError){
+                        params.onError(err);
+                    }
+                }
+            }
+        },
+        enumerable: true
     }
 });
 
