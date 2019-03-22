@@ -291,7 +291,7 @@ Application.android.requestPermissions = function(requestIdentifier, permission)
 
 /**
  * Called to process touch screen events. You can assign callback to intercept all touch screen events before they are dispatched to the window (except independent windows like dialog and etc.). 
- * Be sure to call this implementation for touch screen events that should be handled normally.
+ * Be sure to call this implementation for touch screen events that should be handled normally. Callback might be fired several times.
  * 
  *     @example
  *     const Application = require("sf-core/application");
