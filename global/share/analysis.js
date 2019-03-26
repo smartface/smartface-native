@@ -23,6 +23,7 @@ const Share = {};
  * @ios
  * @android
  * @since 0.1
+ * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareText = function(text, page, blacklist) {};
 
@@ -43,6 +44,7 @@ Share.shareText = function(text, page, blacklist) {};
  * @android
  * @ios
  * @since 0.1
+ * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareImage = function(image, page, blacklist) {};
 
@@ -63,8 +65,36 @@ Share.shareImage = function(image, page, blacklist) {};
  * @ios
  * @android
  * @since 0.1
+ * @deprecated 4.0.2 Use {@link Share#share} instead.
  */
 Share.shareFile = function(file, page, blacklist) {};
+
+
+
+/**
+ * Shares file, image & text.
+ * 
+ *     @example
+ *     const Share = require('sf-core/share');
+ *     const File = require('sf-core/io/file');
+ *    
+ *     var file = new File({
+ *         path: 'assets://yourFile.pdf'
+ *     });
+ *     var image = Image.createFromFile("images://smartface.png");
+ *     var text = "Hello from Smartface";
+ *     Share.share({ items: [text, file, image] , myPage, []});
+ *
+ * @method share
+ * @param {Object} params
+ * @param {Array} params.items 
+ * @param {UI.Page} params.page
+ * @param {Array} params.blacklist
+ * @ios
+ * @android
+ * @since 4.0.2
+ */
+Share.share = function(params) {};
 
 /**
  * @property {String} AirDrop
