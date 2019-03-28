@@ -45,8 +45,6 @@ FragmentTransaction.push = function(params) {
     page.popUpBackPage = currentPage;
 
     if (currentPage.transitionViews) {
-        console.error("Reveal animation animated: " + params.animated);
-        // page.enterRevealTransition = true;
         FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
     }
     else {
@@ -117,7 +115,6 @@ FragmentTransaction.revealTransition = function(transitionViews, page, animated 
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
     
-    // console.error("FragmentTransaction.revealTransition transitionViews.length: " + lenght);
     if(API_LEVEL >= 21) {
         addSharedElement({
             page: page,
@@ -158,10 +155,8 @@ FragmentTransaction.dismissTransition = function(page, animation) {
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();
 
     let popupBackPage;
-    console.error("FragmentTransaction.dismissTransition page.parentController: " + (!!page.parentController));
     if (page.parentController) {
         let popupBackNavigator = page.parentController.popupBackNavigator;
-        console.error("FragmentTransaction.dismissTransition popupBackNavigator: " + (!!popupBackNavigator));
         if(popupBackNavigator) {
             popupBackNavigator.__isActive = true;
             let currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
@@ -171,7 +166,6 @@ FragmentTransaction.dismissTransition = function(page, animation) {
         popupBackPage = page.parentController.popUpBackPage;
         if(popupBackPage && popupBackPage.transitionViews) {
             _addedFragmentsInContainer[page.pageID] = false;
-            console.error("FragmentTransaction.dismissTransition revealTransition");
             FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
             return;
         } 

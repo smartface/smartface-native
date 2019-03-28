@@ -160,7 +160,6 @@ function BottomTabBarController(params) {
     };
 
     this.show = function() {
-        console.info("BottomTabBarController show");
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
@@ -171,16 +170,13 @@ function BottomTabBarController(params) {
     this.setChecked = function() {
         initializeOnce();
         
-        console.info("BottomTabBarController setChecked");
         (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
         if (_selectedIndex < 0)
             return;
-        console.info("BottomTabBarController _selectedIndex: " + _selectedIndex);
         if(self.__targetIndex === _selectedIndex) {
             self.push(self.childControllers[_selectedIndex]);
             return;
         }
-        console.info("BottomTabBarController setSelectedItemId: " + _selectedIndex);
         // TODO: This check is added for https://smartface.atlassian.net/browse/SUPDEV-1867
         // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
         self.__targetIndex = _selectedIndex;
@@ -214,7 +210,6 @@ function BottomTabBarController(params) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
-            console.error("onNavigationItemSelected index: " + index + "   result: " + result);
             
             let disableItemAnimation = self.tabBar.android && self.tabBar.android.disableItemAnimation;
             if(!result)
