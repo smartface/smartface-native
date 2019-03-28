@@ -178,21 +178,14 @@ Object.defineProperties(System.android, {
     },
     'getPackageVersion':{
         value: function(params) {
-       
             if(params && params.packageName){
-                var packageInfo;
-        
                 try{
-                    packageInfo = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName,0);
-                    var packageVersion = packageInfo.versionName;
-                
-                    if(params && params.onSuccess){
+                    var packageVersion = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName,0).versionName;
+                    if(params.onSuccess){
                         params.onSuccess(packageVersion);
                     }
-                    return packageVersion;
-                
                 }catch(err){
-                    if(params && params.onError){
+                    if(params.onError){
                         params.onError(err);
                     }
                 }
