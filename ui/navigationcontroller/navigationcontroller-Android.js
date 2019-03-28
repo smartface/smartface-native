@@ -155,9 +155,10 @@ function NavigationController() {
         ViewController.setController({
             controller: params.controller,
             animation: params.animated,
-            isComingFromPresent: true,
-            onComplete: params.onComplete
+            isComingFromPresent: true
         });
+        
+        params.onComplete && params.onComplete();
     };
 
     this.dismiss = function(params = {}) {
