@@ -54,15 +54,6 @@ function Page(params) {
     var actionBar = null;
     var callback = {
         onCreate: function() {
-            // TODO: Add api level check
-            if (!self.enterRevealTransition && !self.returnRevealAnimation)
-                return;
-            self.enterRevealTransition = false;
-            self.returnRevealAnimation = false;
-            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
-            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
             pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());
