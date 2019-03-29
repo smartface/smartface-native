@@ -181,13 +181,9 @@ Object.defineProperties(System.android, {
             if(params && params.packageName){
                 try{
                     var packageVersion = AndroidConfig.activity.getPackageManager().getPackageInfo(params.packageName,0).versionName;
-                    if(params.onSuccess){
-                        params.onSuccess(packageVersion);
-                    }
+                    params.onSuccess && params.onSuccess(packageVersion)
                 }catch(err){
-                    if(params.onError){
-                        params.onError(err);
-                    }
+                    params.onError && params.onError(err);
                 }
             }
         },
