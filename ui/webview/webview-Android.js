@@ -341,8 +341,6 @@ const WebView = extend(View)(
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
             overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
-                //var uri = requestUrl;
-                //var url = uri.toString();
                 var url = requestUrl;
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));

@@ -119,10 +119,8 @@ function WebSocket(params) {
                 _onCloseCallback && runOnUiThread(_onCloseCallback, { code: code, reason: reason });
             },
             onFailure: function(throwableMessage, responseCode) {
-                if (responseCode)
-                    var code = responseCode;
-                if (throwableMessage)
-                    var reason = throwableMessage;
+                var code = responseCode;
+                var reason = throwableMessage;
                 _onFailureCallback && runOnUiThread(_onFailureCallback, { code: code, reason: reason });
             }
         };
