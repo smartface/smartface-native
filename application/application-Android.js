@@ -489,7 +489,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
-                LocaleHelperUtil.changeConfigurationLocale();
+                LocaleHelperUtil.changeConfigurationLocale(activity);
             }
         },
         enumerable: true
