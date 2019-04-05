@@ -26,7 +26,7 @@ function FloatingMenu(params) {
         getCount: function() {
             return _items.length;
         },
-        getViews: function(context, position) {
+        getViews: function(position) {
             position = reposition(position, _items.length);
             
             var item = new NativeMenuItem();

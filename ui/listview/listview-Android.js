@@ -107,7 +107,7 @@ const ListView = extend(View)(
                 var selectedItem = _listViewItems[itemViewHashCode];
                 _onRowSelected && _onRowSelected(selectedItem, position);
             },
-            onLongItemSelected: function(position, itemViewHashCode) {
+            onItemLongSelected: function(position, itemViewHashCode) {
                 var selectedItem = _listViewItems[itemViewHashCode];
                 _onRowLongSelected && _onRowLongSelected(selectedItem, position);
             }
@@ -427,7 +427,7 @@ const ListView = extend(View)(
         function createAndSetScrollListener() {
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
-                onScrolled: function(recyclerView, dx, dy) {
+                onScrolled: function(dx, dy) {
                     if (!self.touchEnabled) { return; }
                     //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
                     var dY = AndroidUnitConverter.pixelToDp(dy);
@@ -439,7 +439,7 @@ const ListView = extend(View)(
                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                     _onScroll && _onScroll({ translation: { x: dX, y: dY }, contentOffset: { x: offsetX, y: offsetY } });
                 },
-                onScrollStateChanged: function(recyclerView, newState) {
+                onScrollStateChanged: function(newState) {
                     if (!self.touchEnabled) { return; }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },

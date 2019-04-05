@@ -104,38 +104,11 @@ function Page(params) {
             }
             return true;
         },
-        onConfigurationChanged: function(newConfig) {
+        onConfigurationChanged: function() {
             const Screen = require("../../device/screen");
             _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
         },
-        onOptionsItemSelected: function(menuItem) {
-            var itemId = menuItem.getItemId();
-            if (itemId === NativeAndroidR.id.home) {
-                let leftItem;
-                if (Application.currentPage.pageID === self.pageID) {
-                    leftItem = self._headerBarLeftItem;
-                }
-                else {
-                    leftItem = Application.currentPage._headerBarLeftItem;
-                }
-
-                if (leftItem) {
-                    leftItem.onPress && leftItem.onPress();
-                }
-                else {
-                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
-                }
-
-            }
-            else if (_headerBarItems[itemId]) {
-                var item = _headerBarItems[itemId];
-                if (item.onPress instanceof Function) {
-                    item.onPress();
-                }
-            }
-            return true;
-        },
-        onCreateContextMenu: function(menu, view, menuInfo) {
+        onCreateContextMenu: function(menu) {
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -146,8 +119,8 @@ function Page(params) {
                 menu.add(0, i, 0, menuTitle);
             }
         },
-        onContextItemSelected: function(item) {
-            var itemId = item.getItemId();
+        onContextItemSelected: function(itemId) {
+
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
                 items[itemId].onSelected();
