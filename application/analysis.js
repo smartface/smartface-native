@@ -506,7 +506,7 @@ Application.onUnhandledError = function(error) {};
 /**
  * Set the configure the native theme. 
  * 
- * @event setAppTheme
+ * @method setAppTheme
  * @param {String} currentTheme
  * @android
  * @static
