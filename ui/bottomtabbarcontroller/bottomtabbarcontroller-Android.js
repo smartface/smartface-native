@@ -163,17 +163,24 @@ function BottomTabBarController(params) {
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
-        self.push(self.childControllers[_selectedIndex]);
+        // Comment out for: https://smartface.atlassian.net/browse/SUPDEV-1867
+        // self.push(self.childControllers[_selectedIndex]);
     };
 
     this.setChecked = function() {
         initializeOnce();
-        if (!self.tabBar.android.disableItemAnimation) {
-            (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
-            if (_selectedIndex < 0)
-                return;
-            _menu.getItem(_selectedIndex).setChecked(true);
+        
+        (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if (_selectedIndex < 0)
+            return;
+        if(self.__targetIndex === _selectedIndex) {
+            self.push(self.childControllers[_selectedIndex]);
+            return;
         }
+        // TODO: This check is added for https://smartface.atlassian.net/browse/SUPDEV-1867
+        // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
+        self.__targetIndex = _selectedIndex;
+        self.tabBar.nativeObject.setSelectedItemId(_selectedIndex);
     };
 
     function initializeOnce() {
@@ -203,28 +210,31 @@ function BottomTabBarController(params) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
             var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
-
-            if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
-                setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
-
-            controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
-
-            if (result) {
-                // TODO: Add this property to controller class
-                // use this property to show/hide bottom naviagtion view after controller transition
-                self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
-                self.childControllers[index].isInsideBottomTabBar = true;
-                self.childControllers[index].__isActive = true;
-                self.push(self.childControllers[index]);
-                _selectedIndex = index;
-                try {
-                    self.didSelectByIndex && self.didSelectByIndex({ index: index });
-                }
-                catch (e) {
-                    Application.onUnhandledError && Application.onUnhandledError(e);
-                }
+            
+            let disableItemAnimation = self.tabBar.android && self.tabBar.android.disableItemAnimation;
+            if(!result)
+                return false;
+                
+            if (disableItemAnimation)
+                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
+ 
+             controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
+             
+            // TODO: Add this property to controller class
+            // use this property to show/hide bottom naviagtion view after controller transition
+            self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
+            self.childControllers[index].isInsideBottomTabBar = true;
+            self.childControllers[index].__isActive = self.__isActive;
+            self.push(self.childControllers[index]);
+            _selectedIndex = index;
+            try {
+                self.didSelectByIndex && self.didSelectByIndex({ index: index });
             }
-            return self.tabBar.android && self.tabBar.android.disableItemAnimation ? false : result;
+            catch (e) {
+                Application.onUnhandledError && Application.onUnhandledError(e);
+            }
+            
+            return !disableItemAnimation;
         }
     }));
 

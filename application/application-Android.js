@@ -1,5 +1,10 @@
+const Accelerometer = require("sf-core/device/accelerometer");
+const Location = require("sf-core/device/location");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
+const Http = require("sf-core/net/http");
+const Network = require('sf-core/device/network');
+    
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -44,6 +49,7 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onStop: function() {},
     onStart: function() {},
     onDestroy: function() {
+        cancelAllBackgroundJobs();
         if (_onExit) {
             _onExit();  
         }  
@@ -53,6 +59,11 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
+    },
+    onActivityResult: function(requestCode, resultCode, data) {
+        if(requestCode === Location.CHECK_SETTINGS_CODE) {
+            Location.__onActivityResult && Location.__onActivityResult(resultCode);
+        }
     }
 });
 
@@ -319,6 +330,13 @@ ApplicationWrapper.registOnItemSelectedListener = function() {
     });
 };
 
+function cancelAllBackgroundJobs() {
+    Location.stop();
+    Accelerometer.stop();
+    Http.__cancelAll();
+    Network.__cancelAll();
+}
+
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
     const ViewController = require("../util/Android/transition/viewcontroller");
@@ -471,7 +489,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
-                LocaleHelperUtil.changeConfigurationLocale();
+                LocaleHelperUtil.changeConfigurationLocale(activity);
             }
         },
         enumerable: true

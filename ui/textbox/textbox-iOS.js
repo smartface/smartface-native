@@ -68,11 +68,19 @@ const TextBox = extend(View)(
                     "actionKeyType": self.actionKeyType
                 });
             }
+            else if(method.name === "textFieldShouldClear"){
+                if(typeof self.ios.onClearButtonPress === 'function'){
+                    var returnValue = self.ios.onClearButtonPress();
+                    return returnValue === undefined ? true : returnValue;
+                }
+                return true;
+            }
             else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
                 if (typeof self.onTextChanged !== 'function'){
                     return true;
                 }
                 
+                var __text = self.text;
                 var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
                 
                 var startPosition;
@@ -111,12 +119,12 @@ const TextBox = extend(View)(
                 
                 if (method.replacementString == "") {
                     if (offset === 0) {
-                        self.text = self.text.slice(0, method.range) + self.text.slice(method.range + 1);
+                        self.text = __text.slice(0, method.range) + __text.slice(method.range + 1);
                     }else{
-                        self.text = self.text.slice(0, method.range) + self.text.slice(method.range + offset);
+                        self.text = __text.slice(0, method.range) + __text.slice(method.range + offset);
                     }
                 }else{
-                    self.text = self.text.slice(0, method.range) + method.replacementString + self.text.slice(method.range);
+                    self.text = __text.slice(0, method.range) + method.replacementString + __text.slice(method.range + offset);
                 }
                 
                 var secondCharacterPosition;

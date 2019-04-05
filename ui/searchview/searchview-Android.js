@@ -168,11 +168,6 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
-
             // methods
             'addToHeaderBar': {
                 value: function(page) {
@@ -464,7 +459,6 @@ const SearchView = extend(View)(
         };
 
         // Handling ios specific properties
-        this.ios = {};
         this.ios.showLoading = function() {};
         this.ios.hideLoading = function() {};
 

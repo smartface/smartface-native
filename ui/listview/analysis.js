@@ -343,12 +343,13 @@ ListView.prototype.restoreInstanceState = function(state) {};
  * This method scrolls ListView to a specific index.
  *
  * @param {Number} index
+ * @param {Boolean} [animated = true]
  * @method scrollTo
  * @android
  * @ios
  * @since 0.1
  */
-ListView.prototype.scrollTo = function(index) {};
+ListView.prototype.scrollTo = function(index,animated){};
 
 /**
  * Sets/Gets the bounce effect when scrolling.
@@ -663,6 +664,16 @@ ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function
  * @since 4.0.2
  */
 ListView.prototype.onAttachedToWindow = function() {};
+
+/**
+ * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+ * 
+ * @event onDetachedFromWindow
+ * @android
+ * @since 4.0.2
+ */
+ListView.prototype.onDetachedFromWindow = function() {};
+
 
 /**
  * iOS Specific Properties.

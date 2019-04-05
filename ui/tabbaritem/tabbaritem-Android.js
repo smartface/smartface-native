@@ -31,7 +31,6 @@ function TabBarItem(params) {
                 const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
 
                 _icon = value;
-
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
                 };

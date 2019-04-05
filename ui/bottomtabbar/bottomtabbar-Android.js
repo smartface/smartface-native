@@ -111,8 +111,8 @@ function BottomTabBar(params) {
             enumerable: true
         }
     });
-    this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
-    // elevation doesn't work with default background white color.
+    this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.
+    this.itemColor = { normal: Color.GRAY, selected: Color.create("#00a1f1")}; // Do not remove. COR-1931 describes what happening.
 
 
     function createTabbarMenuItems(tabBarItems) {

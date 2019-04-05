@@ -102,10 +102,10 @@ function WebSocket(params) {
     
     function createWebSocketListener() {
         var overrideMethods = {
-            onOpen: function(webSocket, response) {
+            onOpen: function() {
                 _onOpenCallback && runOnUiThread(_onOpenCallback);
             },
-            onMessage: function(webSocket, data) {
+            onMessage: function(data) {
                 if (typeof(data) === "string" || !data) {
                     _onMessageCallback && runOnUiThread(_onMessageCallback, {string: data});
                 }
@@ -115,14 +115,12 @@ function WebSocket(params) {
                     _onMessageCallback && runOnUiThread(_onMessageCallback, {blob: new Blob(data.toByteArray(), { type: "" }) });
                 }
             },
-            onClosing: function(webSocket, code, reason) {
+            onClosing: function(code, reason) {
                 _onCloseCallback && runOnUiThread(_onCloseCallback, { code: code, reason: reason });
             },
-            onFailure: function(webSocket, throwable, response) {
-                if (response)
-                    var code = response.code();
-                if (throwable)
-                    var reason = throwable.getMessage();
+            onFailure: function(throwableMessage, responseCode) {
+                var code = responseCode;
+                var reason = throwableMessage;
                 _onFailureCallback && runOnUiThread(_onFailureCallback, { code: code, reason: reason });
             }
         };

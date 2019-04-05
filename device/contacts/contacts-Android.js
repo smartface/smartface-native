@@ -3,6 +3,7 @@ const NativeArrayList = requireClass("java.util.ArrayList");
 const NativeContentProviderOperation = requireClass("android.content.ContentProviderOperation");
 const NativeIntent = requireClass("android.content.Intent");
 const AndroidConfig = require("sf-core/util/Android/androidconfig");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 var contentProviderOperation;
 var uri;
@@ -26,7 +27,7 @@ var _onFailure;
 const CommonColumns_DATA = "data1"; // ContactsContract.CommonDataKinds.CommonColumns.DATA
 
 function Contacts () { }
-Contacts.PICK_REQUEST_CODE = 1001;
+Contacts.PICK_REQUEST_CODE = RequestCodes.Contacts.PICK_REQUEST_CODE;
 
 Contacts.add = function(params) {
     var contact = {};

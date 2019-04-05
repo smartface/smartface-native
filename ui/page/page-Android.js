@@ -39,7 +39,6 @@ function Page(params) {
     var activity = AndroidConfig.activity;
     var pageLayoutContainer = activity.getLayoutInflater().inflate(NativeSFR.layout.page_container_layout, null);
     self.pageLayoutContainer = pageLayoutContainer;
-    pageLayoutContainer.setLayoutDirection(activity.getResources().getConfiguration().getLayoutDirection());
     var pageLayout = pageLayoutContainer.findViewById(NativeSFR.id.page_layout);
     var rootLayout = new FlexLayout({
         isRoot: true,
@@ -55,17 +54,9 @@ function Page(params) {
     var actionBar = null;
     var callback = {
         onCreate: function() {
-            // TODO: Add api level check
-            if (!self.enterRevealTransition && !self.returnRevealAnimation)
-                return;
-            self.enterRevealTransition = false;
-            self.returnRevealAnimation = false;
-            const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
-            var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
-            var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
-            self.nativeObject.setSharedElementEnterTransition(inflateTransition);
         },
         onCreateView: function() {
+            pageLayoutContainer.setLayoutDirection(self.nativeObject.getResources().getConfiguration().getLayoutDirection());
             self.nativeObject.setHasOptionsMenu(true);
             activity.setSupportActionBar(toolbar);
             actionBar = activity.getSupportActionBar();
@@ -102,6 +93,9 @@ function Page(params) {
                 }
             }));
         },
+        onPause: function() {
+            self.onHide && self.onHide();  
+        },
         onCreateOptionsMenu: function(menu) {
             if (!optionsMenu)
                 optionsMenu = menu;
@@ -110,38 +104,11 @@ function Page(params) {
             }
             return true;
         },
-        onConfigurationChanged: function(newConfig) {
+        onConfigurationChanged: function() {
             const Screen = require("../../device/screen");
             _onOrientationChange && _onOrientationChange({ orientation: Screen.orientation });
         },
-        onOptionsItemSelected: function(menuItem) {
-            var itemId = menuItem.getItemId();
-            if (itemId === NativeAndroidR.id.home) {
-                let leftItem;
-                if (Application.currentPage.pageID === self.pageID) {
-                    leftItem = self._headerBarLeftItem;
-                }
-                else {
-                    leftItem = Application.currentPage._headerBarLeftItem;
-                }
-
-                if (leftItem) {
-                    leftItem.onPress && leftItem.onPress();
-                }
-                else {
-                    // self.android.onBackButtonPressed && self.android.onBackButtonPressed();
-                }
-
-            }
-            else if (_headerBarItems[itemId]) {
-                var item = _headerBarItems[itemId];
-                if (item.onPress instanceof Function) {
-                    item.onPress();
-                }
-            }
-            return true;
-        },
-        onCreateContextMenu: function(menu, view, menuInfo) {
+        onCreateContextMenu: function(menu) {
             var items = self.contextMenu.items;
             var headerTitle = self.contextMenu.headerTitle;
             if (self.contextMenu.headerTitle !== "") {
@@ -152,8 +119,8 @@ function Page(params) {
                 menu.add(0, i, 0, menuTitle);
             }
         },
-        onContextItemSelected: function(item) {
-            var itemId = item.getItemId();
+        onContextItemSelected: function(itemId) {
+
             var items = self.contextMenu.items;
             if (items && itemId >= 0) {
                 items[itemId].onSelected();

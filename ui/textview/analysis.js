@@ -71,14 +71,37 @@ TextView.prototype.font = null;
 
 /**
  * Enables/disables multiple line property of a TextView. If set to true
- * and the text is long enough, text will be shown in multiline.
+ * and the text is long enough, text will be shown in multiline. Setting multiline will override the {@link UI.TextView#ellipsizeMode ellipsizeMode} prop.
  *
  * @property {Boolean} [multiline = false]
  * @android
  * @ios
  * @since 3.0.0
+ * @deprecated 4.0.2 Use {@link UI.TextView#maxLines maxLines} instead 
  */
 TextView.prototype.multiline = false;
+
+
+/**
+ * Sets the height of the TextView to be at most maxLines tall. Assigning  0 indicates that maxLines will be as much as given content. 
+ *
+ * @property {Number} maxLines
+ * @android
+ * @ios
+ * @since 4.0.2
+ */
+TextView.prototype.maxLines;
+
+
+/**
+ * Causes words in the text that are longer than the view's width to be ellipsized instead of broken in the middle. 
+ *
+ * @property {UI.EllipsizeMode}  ellipsizeMode
+ * @android
+ * @ios
+ * @since 4.0.2
+ */
+TextView.prototype.ellipsizeMode;
 
 /**
  * Enables/disables selectable status of the TextView. If set to true
@@ -138,13 +161,14 @@ TextView.prototype.textColor = UI.Color.BLACK;
 TextView.prototype.ios.showScrollBar = false;
 
 /**
- * Enable/Disable scroll bar when text is too long. If this property is "false", text alignment mid and bottom doesn't work for textview.
+ * Enable/Disable scroll bar when text is too long. If this property is "false", text alignment mid & bottom doesn't work and in Android, it will lose ability of click in attributed string.
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.0.0
+ * @android
+ * @since 4.0.2
  */
-TextView.prototype.ios.scrollEnabled = true;
+TextView.prototype.scrollEnabled = true;
 
 /**
  * Sets/Gets the bounce effect when scrolling.
@@ -284,5 +308,15 @@ TextView.prototype.letterSpacing = 0;
  * @since 3.0.0
  */
 TextView.prototype.lineSpacing = 0;
+
+
+/**
+ * Gets/sets the text direction.
+ *
+ * @property {UI.Android.TextDirection} textDirection
+ * @android
+ * @since 4.0.2
+ */
+TextView.prototype.textDirection;
 
 module.exports = TextView;

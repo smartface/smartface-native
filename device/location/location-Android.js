@@ -1,23 +1,37 @@
-const AndroidConfig = require('../../util/Android/androidconfig');
+/* global requireClass */
 const TypeUtil = require('../../util/type');
+const RequestCodes = require('../../util/Android/requestcodes');
 
-const NativeLocationRequest = requireClass("com.google.android.gms.location.LocationRequest");
-const NativeLocationServices = requireClass("com.google.android.gms.location.LocationServices");
-const NativeLooper = requireClass("android.os.Looper");
-const NativeOnSuccessListener = requireClass("com.google.android.gms.tasks.OnSuccessListener");
 const SFLocationCallback = requireClass("io.smartface.android.sfcore.device.location.SFLocationCallback");
 
-const LOCATION_INTERVAL = 1000 * 1;
 const GPS_PROVIDER = 'gps'; //ToDo: Deprecated, remove next release
 const NETWORK_PROVIDER = 'network'; //ToDo: Deprecated, remove next release
 
-
 const Location = {};
-
-const locationProviderClient = NativeLocationServices.getFusedLocationProviderClient(AndroidConfig.activity);
-
+Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
 var _onLocationChanged;
-var locationCallback;
+
+const locationCallback = function(latitude, longitude) {
+    Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
+};
+
+var _onFailureCallback, _onSucessCallback;
+Location.__onActivityResult = function(resultCode) {
+    if (resultCode === -1) { // -1 = OK
+        _onSucessCallback && _onSucessCallback();
+    }
+    else {
+        _onFailureCallback && _onFailureCallback({ statusCode: "DENIED" });
+    }
+};
+
+Location.__instance = null;
+Location.__getInstance = function() {
+    if (!Location.__instance)
+        Location.__instance = new SFLocationCallback(locationCallback);
+    return Location.__instance;
+};
+
 Object.defineProperties(Location, {
     'android': {
         value: {},
@@ -28,64 +42,13 @@ Object.defineProperties(Location, {
         enumerable: true
     },
     'start': {
-        value: function(priority) {
-
-            if (locationCallback) {
-                locationProviderClient.removeLocationUpdates(locationCallback);
-            }
-
-            switch (priority) {
-                case Location.Android.Priority.HIGH_ACCURACY:
-                    break;
-
-                case Location.Android.Priority.BALANCED:
-                    break;
-
-                case Location.Android.Priority.LOW_POWER:
-                    break;
-
-                case Location.Android.Priority.NO_POWER:
-                    break;
-
-                default:
-                    priority = Location.Android.Priority.HIGH_ACCURACY;
-            };
-
-            var locationRequest = NativeLocationRequest.create();
-            locationRequest.setInterval(LOCATION_INTERVAL);
-            locationRequest.setPriority(priority);
-
-            locationCallback = {
-                onLocationResult: function(locationResult) {
-                    var location = locationResult.getLastLocation()
-                    _onLocationChanged && _onLocationChanged({
-                        latitude: location.getLatitude(),
-                        longitude: location.getLongitude()
-                    });
-                }
-            }
-            locationCallback = new SFLocationCallback(locationCallback);
-            locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, NativeLooper.myLooper());
-
-            //Last known location is necessary to get location without waiting for interval
-            locationProviderClient.getLastLocation().addOnSuccessListener(NativeOnSuccessListener.implement({
-                onSuccess: function(location) {
-                    if (location) { //Location might return null in some devices.
-                        _onLocationChanged && _onLocationChanged({
-                            latitude: location.getLatitude(),
-                            longitude: location.getLongitude()
-                        });
-                    }
-                }
-            }));
+        value: function(priority = Location.Android.Priority.HIGH_ACCURACY, interval = 1000) {
+            Location.__getInstance().start(priority, interval);
         }
     },
     'stop': {
         value: function() {
-            if (locationCallback) {
-                locationProviderClient.removeLocationUpdates(locationCallback);
-                locationCallback = null;
-            }
+            Location.__getInstance().stop();
         }
     },
     'onLocationChanged': {
@@ -96,6 +59,14 @@ Object.defineProperties(Location, {
             if (TypeUtil.isFunction(callback)) {
                 _onLocationChanged = callback;
             }
+        }
+    },
+    'getLastKnownLocation': {
+        value: function(onSuccess, onFailure) {
+            Location.__getInstance().getLastKnownLocation({
+                'onSuccess': onSuccess,
+                'onFailure': onFailure
+            });
         }
     }
 });
@@ -134,11 +105,33 @@ Object.defineProperties(Location.Android.Provider, { //ToDo: Deprecated, remove 
 
 Object.assign(Location.android.Provider, Location.Android.Provider); //ToDo: Deprecated, remove next release
 
+Object.defineProperties(Location.android, {
+    'checkSettings': {
+        value: function(params = {}) {
+            params.onSuccess && (_onSucessCallback = params.onSuccess);
+            params.onFailure && (_onFailureCallback = params.onFailure);
+
+            Location.__getInstance().checkSettings({
+                onSuccess: function() {
+                    _onSucessCallback && _onSucessCallback();
+                },
+                onFailure: function(reason) {
+                    _onFailureCallback && _onFailureCallback({ statusCode: reason });
+                }
+            });
+        }
+    }
+});
+
 //iOS specific methods & properies
 Location.ios = {};
 Location.iOS = {};
 Location.ios.locationServicesEnabled = function() {};
 Location.ios.getAuthorizationStatus = function() {};
 Location.ios.authorizationStatus = {};
+Location.Android.SettingsStatusCodes = {
+    DENIED: "DENIED",
+    OTHER: "SETTINGS_CHANGE_UNAVAILABLE"
+};
 
 module.exports = Location;

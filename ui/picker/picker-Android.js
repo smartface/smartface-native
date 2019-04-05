@@ -20,8 +20,6 @@ const Picker = extend(View)(
         }
         _super(this);
 
-        this.ios = {};
-
         var _items = [];
         var _onSelected;
         var _title = "";
@@ -200,10 +198,6 @@ const Picker = extend(View)(
                         self.cancelFont && negativeButton.setTypeface(self.cancelFont.nativeObject);
                     }
                 },
-                enumerable: true
-            },
-            'android': {
-                value: {},
                 enumerable: true
             },
             'toString': {

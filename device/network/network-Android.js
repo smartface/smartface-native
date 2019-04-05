@@ -1,4 +1,4 @@
-const AndroidConfig = require('../../util/Android/androidconfig')
+const AndroidConfig = require('../../util/Android/androidconfig');
 const NativeBluetoothAdapter = requireClass('android.bluetooth.BluetoothAdapter');
 const NativeTelephonyManager = requireClass('android.telephony.TelephonyManager');
 const NativeConnectivityManager = requireClass('android.net.ConnectivityManager');
@@ -116,6 +116,7 @@ Object.defineProperties(Network, {
     // }
 });
 
+var _instanceCollection = [];
 Network.createNotifier = function(params) {
     const NativeIntentFilter = requireClass("android.content.IntentFilter");
     const NativeConnectivityManager = requireClass("android.net.ConnectivityManager");
@@ -126,7 +127,7 @@ Network.createNotifier = function(params) {
         var nativeConnectionFilter = new NativeIntentFilter();
         nativeConnectionFilter.addAction(NativeConnectivityManager.CONNECTIVITY_ACTION);
         var callbacks = {
-            onReceive: function(context, intent) {
+            onReceive: function() {
                 // var noConnectivity = intent.getBooleanExtra(NativeConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
                 self.connectionTypeChanged && self.connectionTypeChanged(Network.connectionType);
             }
@@ -139,7 +140,7 @@ Network.createNotifier = function(params) {
     var _connectionTypeChanged;
     Object.defineProperty(self, 'connectionTypeChanged', {
         get: function() {
-            return _connectionTypeChanged
+            return _connectionTypeChanged;
         },
         set: function(value) {
             if (typeof value === 'function') {
@@ -158,13 +159,14 @@ Network.createNotifier = function(params) {
         }
     });
 
+    _instanceCollection.push(this);
     self.subscribe = function(callback) {
         self.connectionTypeChanged = callback;
-    }
+    };
 
     self.unsubscribe = function() {
         self.connectionTypeChanged = null;
-    }
+    };
 
 
     if (params) {
@@ -172,7 +174,13 @@ Network.createNotifier = function(params) {
             this[param] = params[param];
         }
     }
-}
+};
+
+Network.__cancelAll = function() {
+    for(let i = 0; i < _instanceCollection.length; i++) {
+        _instanceCollection[i].unsubscribe();
+    }  
+};
 
 function getActiveInternet() {
     var connectivityManager;

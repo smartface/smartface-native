@@ -5,6 +5,7 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -24,6 +25,7 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
+
 var activity = AndroidConfig.activity;
 
 var mFilePathCallback;
@@ -43,10 +45,10 @@ const WebView = extend(View)(
         const self = this;
 
         var overrideMethods = {
-            onPageFinished: function(view, url) {
+            onPageFinished: function(url) {
                 _onShow && _onShow({ url: url });
             },
-            onPageStarted: function(view, url, favicon) {
+            onPageStarted: function(url) {
                 _onLoad && _onLoad({ url: url });
             }
         };
@@ -338,9 +340,8 @@ const WebView = extend(View)(
         });
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-            overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                var uri = request.getUrl();
-                var url = uri.toString();
+            overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
+                var url = requestUrl;
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
                 if (!callbackValue)
@@ -350,7 +351,7 @@ const WebView = extend(View)(
             };
         }
         else {
-            overrideMethods.shouldOverrideUrlLoading = function(view, url) {
+            overrideMethods.shouldOverrideUrlLoading = function(url) {
                 var callbackValue = true;
                 _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
                 if (!callbackValue)
@@ -361,34 +362,35 @@ const WebView = extend(View)(
 
         // SDK version check will not work because implement engine does not supports types
         overrideMethods.onReceivedError = function() {
-            if (arguments.count === 3) {
+            if (arguments.count === 2) {
                 /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView
-                 * arguments[1] = webResourceRequest
-                 * arguments[2] = webResourceError
+                 * arguments[0] = webResourceRequest
+                 * arguments[1] = webResourceError
                  */
                 const NativeString = requireClass('java.lang.String');
-                var uri = arguments[1].getUrl();
+                var uri = arguments[0].getUrl();
                 var url = NativeString.valueOf(uri);
-                var code = arguments[2].getErrorCode();
-                var message = arguments[2].getDescription();
+                var code = arguments[1].getErrorCode();
+                var message = arguments[1].getDescription();
 
                 _onError && _onError({ message: message, code: code, url: url });
             }
             else {
                 /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView, 
-                 * arguments[1] = errorCode, 
-                 * arguments[2] = description, 
-                 * arguments[3] = failingUrl, 
+                 * arguments[0] = errorCode, 
+                 * arguments[1] = description, 
+                 * arguments[2] = failingUrl, 
                  */
-                _onError && _onError({ message: arguments[2], code: arguments[1], url: arguments[3] });
+                _onError && _onError({ message: arguments[1], code: arguments[0], url: arguments[2] });
             }
         };
 
-        const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
-        var nativeWebClient = new SFWebViewClient(overrideMethods);
-        this.nativeObject.setWebViewClient(nativeWebClient);
+        const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
+        var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
+        /*
+        ToDo: Trying to access any field or methods of instance will cause exception.  Consider when getDeclatedMethods exceptions are handled
+        */
+        this.nativeObject.setWebViewClient(nativeWebClient.getInstance());
         this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
         this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
         var settings = this.nativeObject.getSettings();
@@ -423,7 +425,7 @@ const WebView = extend(View)(
 
         var overrideMethodsWebChrome = {
             //For Android5.0+
-            onShowFileChooser: function(webView, filePathCallback, fileChooserParams) {
+            onShowFileChooser: function(filePathCallback) {
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
                 }
@@ -482,8 +484,8 @@ const WebView = extend(View)(
     }
 );
 
-WebView.REQUEST_CODE_LOLIPOP = 1111;
-WebView.RESULT_CODE_ICE_CREAM = 2222;
+WebView.REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
+WebView.RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;
 
 WebView.onActivityResult = function(requestCode, resultCode, data) {
 

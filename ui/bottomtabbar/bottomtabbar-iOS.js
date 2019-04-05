@@ -1,171 +1,196 @@
+const Color = require('sf-core/ui/color');
 const Image = require('sf-core/ui/image');
 
-function TabBarFlowViewModel(params) {
+function TabBar(params) {
+    const UITabBar = SF.requireClass("UITabBar");
+    const TabBarItem = require('sf-core/ui/tabbaritem');
+    
     var self = this;
-    self.ios = {};
+    
     self.android = {};
     
-    self.type = "TabBarFlow";
-    self.routerPath = null;
+    self.nativeObject = undefined;
+    if (params.nativeObject) {
+        self.nativeObject = params.nativeObject;
+    }
     
-    var _tabBarView = null;
-    Object.defineProperty(self, 'tabBarView', {
+    self.nativeObject.translucent = false;
+    //////////////////////////////////////////////////////////////////////////
+    // ITEMS
+    
+    var _ios = {};
+    Object.defineProperty(self, 'ios', {
         get: function() {
-            return _tabBarView;
+            return _ios;
         },
-        set: function(tabbarview) {
-            if (typeof tabbarview === 'object') {
-                _tabBarView = tabbarview;
-                _tabBarView.tintColor = self.tabBarBrain.itemColor;
-                _tabBarView.barTintColor = self.tabBarBrain.backgroundColor;
+        set: function(value) {
+            if (typeof value === 'object') {
+                Object.assign(_ios, value);
             }
         },
         enumerable: true
     });
     
-    self.tabBarBrain = new TabBarFlowModel();
+    var _items = [];
+    Object.defineProperty(self, 'items', {
+        get: function() {
+            return _items;
+        },
+        set: function(value) {
+            if (typeof value === 'object') {
+                _items = value;
+                
+                for (var i in _items) {
+                    if (typeof _items[i].nativeObject === "undefined"){
+                        _items[i].nativeObject = self.nativeObject.items[i];   
+                    }
+                    _items[i].invalidate();
+                }
+            }
+        },
+        enumerable: true
+    });
     
+    // ITEMS DELEGATE
+    self.tabBarControllerItemsDidChange = function() {        
+        if (self.items.length === self.nativeObject.items.length) {
+            for (var i in self.nativeObject.items) {
+                self.items[i].nativeObject = self.nativeObject.items[i];
+            }
+        } else {
+            var itemsArray = [];
+            for (var i in self.nativeObject.items) {
+                var sfTabBarItem = new TabBarItem({nativeObject : self.nativeObject.items[i]});
+                itemsArray.push(sfTabBarItem);
+            }
+            self.items = itemsArray;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    
+    Object.defineProperty(self.ios, 'translucent', {
+        get: function() {
+            return self.nativeObject.translucent;
+        },
+        set: function(value) {
+            if (typeof value === 'boolean') {
+                self.nativeObject.translucent = value;
+            }
+        },
+        enumerable: true
+    });
+
+    var _itemColor = {
+        normal : undefined,
+        selected : undefined
+    };
     Object.defineProperty(self, 'itemColor', {
         get: function() {
-            return self.tabBarBrain.itemColor;
+            return _itemColor;
         },
         set: function(itemColorObject) {
             if (typeof itemColorObject === 'object') {
-                self.tabBarBrain.itemColor = itemColorObject;
-                if (self.tabBarView) {
-                    self.tabBarView.tintColor = self.tabBarBrain.itemColor;
-                    self.tabBarView.barTintColor = self.tabBarBrain.backgroundColor;
-                }
+                _itemColor = itemColorObject;
+                self.tintColor = _itemColor;
             }
         },
         enumerable: true
     });
+    
+    Object.defineProperty(self, 'tintColor', {
+        get: function() {
+            return new Color({color : self.nativeObject.tintColor});
+        },
+        set: function(value) {
+            if (self.nativeObject) {
+                if (typeof value.normal === 'object') {
+                    var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
+                    if (systemVersion >= 10) {
+                        self.unselectedItemColor = value.normal;
+                    }
+                }
+                if (typeof value.selected === 'object') {
+                    self.nativeObject.tintColor = value.selected.nativeObject;
+                }
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    Object.defineProperty(self, 'unselectedItemColor', {
+        get: function() {
+            return new Color({color : self.nativeObject.unselectedItemTintColor});
+        },
+        set: function(value) {
+            self.nativeObject.unselectedItemTintColor = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
+    
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return self.tabBarBrain.backgroundColor;
+            return new Color({color : self.nativeObject.barTintColor});
         },
-        set: function(backgroundColor) {
-            if (typeof backgroundColor === 'object') {
-                self.tabBarBrain.backgroundColor = backgroundColor;
-                if (self.tabBarView) {
-                    self.tabBarView.barTintColor = self.tabBarBrain.backgroundColor;
-                }
-            }
+        set: function(value) {
+            self.nativeObject.barTintColor = value.nativeObject;
         },
-        enumerable: true
+        enumerable: true,configurable : true
     });
     
-    this.add = function (to, tabbaritem, isSingleton) {
-        if (typeof(to) !== "string") {
-            throw TypeError("add takes string and Page as parameters");
-        }
-        
-        var _isSingleton = true;
-        if (typeof (isSingleton) === "boolean") {
-            _isSingleton = isSingleton;    
-        }
-        
-        if (tabbaritem) {
-            var pageObject = {
-                key : to,
-                values : {
-                    pageClassPath   : null,
-                    title           : tabbaritem.title,
-                    icon            : tabbaritem.icon,
-                    pageInstance    : null,
-                    isSingleton     : _isSingleton
-                }
-            };
-            
-            if (typeof tabbaritem.route === 'string') {
-                pageObject.values.pageClassPath = tabbaritem.route;
-            } else if (typeof tabbaritem.route === 'object') {
-                pageObject.values.pageInstance = tabbaritem.route;
-            }
-            
-            self.tabBarBrain.addObject(pageObject);
-        }
-    };
-    this.setIndex = function (page){
-        if (typeof(page) !== "string") {
-            throw TypeError("add takes string and Page as parameters");
-        }
-        
-        self.tabBarBrain.setIndexWithKey(page);
-    };
-    this.go = function (to, parameters, animated) {
-        
-        var info = self.tabBarBrain.createInstances();
-        
-        var pageToGo = null;
-        var routes = [];
-        
-        if (typeof(to) !== "string") {
-            pageToGo = self.tabBarBrain.getCurrentPage();
-        } else {
-            routes = self.tabBarBrain.divideRoute(to);
-            pageToGo = self.tabBarBrain.getRouteWithKey(routes[0]);
-        }
-        
-        if (pageToGo) {
-            self.tabBarBrain.setIndexWithKey(routes[0]);
-            
-            if (typeof (parameters) != 'undefined' && parameters != null) {
-                pageToGo.__pendingParameters = parameters; 
-            }
-            
-            var _animated = true;
-            if (typeof (animated) === "boolean") {
-                _animated = animated;
-            }
-            
-            if (self.tabBarView == null) {
-                var params = {
-                    currentIndex : self.tabBarBrain.currentIndex,
-                    items        : info.instancesArray,
-                    viewModel    : self
-                };
-                self.tabBarView = new TabBarFlowView(params);
-            } else {
-                switch (pageToGo.type) {
-                    case 'Navigator': {
-                        pageToGo.go(routes[1],parameters,_animated,true);
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-            }
-            
-            if (info.refreshNeeded) {
-                self.tabBarView.changeControllersArray(info.instancesArray);
-            }
-            
-            var showingInfo = {
-                selectedIndex : self.tabBarBrain.currentIndex,
-                animated : _animated
-            };
-            self.tabBarView.show(showingInfo);
-        }
-    };
-    this.getCurrent = function () {
-        var retval = null;
-        if (self.tabBarBrain.getCurrentPage()) {
-            if (self.tabBarBrain.getCurrentPage().type) {
-                retval = "/" + self.tabBarBrain.getCurrentPage().routerPath + self.tabBarBrain.getCurrentPage().getCurrent();
-            } else {
-                retval = "/" + self.tabBarBrain.getCurrentPage().routerPath;
-            }
-        }
-        return retval;
-    };
+    Object.defineProperty(self, 'backgroundImage', {
+        get: function() {
+            return Image.createFromImage(self.nativeObject.backgroundImage);
+        },
+        set: function(value) {
+            self.nativeObject.backgroundImage = value.nativeObject;
+        },
+        enumerable: true,configurable : true
+    });
     
-    // From view's delegate
-    this.indexChanged = function(newIndex){
-        self.tabBarBrain.currentIndex = newIndex;
-    };
+    Object.defineProperty(self, 'height', {
+        get: function() {
+            return self.nativeObject.frame.height;
+        },
+        enumerable: true,configurable : true
+    });
     
+    var _borderVisibility = true;
+    Object.defineProperty(self, 'borderVisibility', {
+        get: function() {
+            return _borderVisibility;
+        },
+        set: function(value) {
+            if (typeof value === "boolean") {
+                if (value) {
+                    self.nativeObject.shadowImage = undefined;
+                    self.nativeObject.backgroundImage = undefined;
+                } else {
+                    var emptyImage = __SF_UIImage.getInstance();
+                    self.nativeObject.shadowImage = emptyImage;
+                    self.nativeObject.backgroundImage = emptyImage;
+                }
+                _borderVisibility = value;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+    var _selectionIndicatorImage;
+    Object.defineProperty(self.ios, 'selectionIndicatorImage', {
+        get: function() {
+            return _selectionIndicatorImage;
+        },
+        set: function(value) {
+            if (typeof value === "object") {
+                _selectionIndicatorImage = value;
+                self.nativeObject.selectionIndicatorImage = _selectionIndicatorImage.nativeObject;
+            }
+        },
+        enumerable: true,configurable : true
+    });
+    
+   self.itemColor = { normal: Color.GRAY, selected: Color.create("#00a1f1")}; // Do not remove. COR-1931 describes what happening.
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
@@ -173,221 +198,4 @@ function TabBarFlowViewModel(params) {
     }
 };
 
-function TabBarFlowView(params) {
-    const UITabBar = SF.requireClass("UITabBar");
-    
-    var self = this;
-    var viewModel = params.viewModel;
-    
-    self.nativeObject = SF.requireClass("UITabBarController").new();
-    self.nativeObject.tabBar.translucent = false;
-    
-    //////////////////////////////////////////////////////////////////
-    
-    var nativeObjectDelegate = SF.defineClass('TabBarControllerDelegate : NSObject <UITabBarControllerDelegate>',{
-        tabBarControllerDidSelectViewController : function (tabBarController, viewController){
-            viewModel.indexChanged(tabBarController.selectedIndex);
-        }
-    }).new();
-    self.nativeObject.delegate = nativeObjectDelegate;
-    
-    this.changeControllersArray = function (array) {
-        self.nativeObject.viewControllers = array;
-    };
-    this.show = function(showingInfo){
-        if (typeof showingInfo.selectedIndex === "number") {
-            self.nativeObject.selectedIndex = showingInfo.selectedIndex;
-        }
-    };
-    this.makeVisible = function () {
-        SF.requireClass("UIApplication").sharedApplication().keyWindow.rootViewController = self.nativeObject;
-        SF.requireClass("UIApplication").sharedApplication().keyWindow.makeKeyAndVisible();
-    };
-    
-    this.configureTabbar = function (){
-        var objects = viewModel.tabBarBrain.getObjectsArray();
-        for (var i = 0; i < objects.length; i++) {
-            
-            // TabbarItem configuration
-            const UITabBarItem = SF.requireClass("UITabBarItem");
-            
-            var tabItem = null;
-            if (objects[i].values.pageInstance.type !== undefined) {
-                switch (objects[i].values.pageInstance.type) {
-                    case 'Navigator': {
-                        tabItem = objects[i].values.pageInstance.view.nativeObject.tabBarItem;
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-            } else {
-                tabItem = objects[i].values.pageInstance.nativeObject.tabBarItem;
-            }
-            
-            // Set appearance of tabBarItem
-            tabItem.title = objects[i].values.title;
-            if (objects[i].values.icon && (objects[i].values.icon.normal || objects[i].values.icon.selected)) {
-                if (typeof objects[i].values.icon.normal === "object") {
-                    tabItem.image = objects[i].values.icon.normal.nativeObject;
-                } else if (typeof objects[i].values.icon.normal === "string") {
-                    var image = Image.createFromFile(objects[i].values.icon.normal);
-                    tabItem.image = image.nativeObject;
-                } else {
-                    tabItem.image = undefined;
-                }
-                
-                if (typeof objects[i].values.icon.selected === "object") {
-                    tabItem.selectedImage = objects[i].values.icon.selected.nativeObject;
-                } else if (typeof objects[i].values.icon.selected === "string") {
-                    var image = Image.createFromFile(objects[i].values.icon.selected);
-                    tabItem.selectedImage = image.nativeObject;
-                } else {
-                    tabItem.selectedImage = undefined;
-                }
-            } else {
-                if (typeof objects[i].values.icon === "object") {
-                    tabItem.image = objects[i].values.icon ? objects[i].values.icon.nativeObject : undefined;
-                } else if (typeof objects[i].values.icon === "string"){
-                    var image = Image.createFromFile(objects[i].values.icon);
-                    tabItem.image = image.nativeObject ? image.nativeObject : undefined;
-                }
-            }
-        }
-    }
-    
-    Object.defineProperty(self, 'tintColor', {
-        set: function(colorsObject) {
-            if (self.nativeObject) {
-                if (typeof colorsObject.normal === 'object') {
-                    var systemVersion = parseInt(SF.requireClass("UIDevice").currentDevice().systemVersion);
-                    if (systemVersion >= 10) {
-                        self.nativeObject.tabBar.unselectedItemTintColor = colorsObject.normal.nativeObject;
-                    }
-                }
-                if (typeof colorsObject.selected === 'object') {
-                    self.nativeObject.tabBar.tintColor = colorsObject.selected.nativeObject;
-                }
-            }
-        },
-        enumerable: true
-    });
-    Object.defineProperty(self, 'barTintColor', {
-        set: function(backgroundColor) {
-            if (self.nativeObject && typeof backgroundColor === 'object') {
-                self.nativeObject.tabBar.barTintColor = backgroundColor.nativeObject;
-            }
-        },
-        enumerable: true
-    });
-    
-    //////////////////////////////////////////////////////////////////
-    
-    self.configureTabbar();
-    
-    if (params) {
-        if (params.currentIndex) {
-            self.nativeObject.selectedIndex = params.currentIndex;
-        }
-        if (params.items.length > 0){
-            self.changeControllersArray(params.items);
-        }
-    }
-};
-
-function TabBarFlowModel(argument) {
-    var self = this;
-    
-    var objects = [];
-    self.currentIndex = 0;
-    
-    self.itemColor = {
-        normal : undefined,
-        selected : undefined
-    };
-    self.backgroundColor = undefined;
-    
-    this.getObjectsArray = function() {
-        return objects;
-    }
-    this.addObject = function (newObject) {
-        objects.push(newObject);
-    };
-    this.getCurrentPage = function() {
-        return objects[self.currentIndex].values.pageInstance;
-    };
-    this.divideRoute = function (route) {
-        var dividedRoute = [];
-        if (route.substr(0,route.indexOf('/')) === "") {
-            dividedRoute.push(route);
-        } else {
-            dividedRoute.push(route.substr(0,route.indexOf('/')));
-            dividedRoute.push(route.substr(route.indexOf('/') + 1));
-        }
-        return dividedRoute;
-    };
-    this.getRouteWithKey = function(key) {
-        var retval = null;
-        for (var i = 0; i < objects.length; i++) { 
-            if (objects[i].key === key) {
-                retval = objects[i];
-            }
-        }
-        return retval.values.pageInstance;
-    };
-    this.getRouteWithIndex = function(index){
-        return objects[index].values.pageInstance;
-    };
-    this.setIndexWithKey = function (key) {
-        for (var i = 0; i < objects.length; i++) { 
-            if (objects[i].key === key) {
-                self.currentIndex = i;
-                break;
-            }
-        }
-    };
-    this.createInstances = function () {
-        var retval = {};
-        var refreshNeeded = false;
-        var instancesArray = [];
-
-        for (var i = 0; i < objects.length; i++) { 
-            if (objects[i].values.isSingleton) {
-                if (objects[i].values.pageInstance === null) {
-                    objects[i].values.pageInstance = new (require(objects[i].values.pageClassPath))();
-                    objects[i].values.pageInstance.routerPath = objects[i].key;
-                }
-            } else {
-                if (objects[i].values.pageClassPath !== null){
-                    objects[i].values.pageInstance = new (require(objects[i].values.pageClassPath))();
-                    objects[i].values.pageInstance.routerPath = objects[i].key;
-                }
-                refreshNeeded = true;
-            }
-            
-            if (objects[i].values.pageInstance.type !== undefined) {
-                switch (objects[i].values.pageInstance.type) {
-                    case 'Navigator': {
-                        if (!objects[i].values.pageInstance.view) {
-                            objects[i].values.pageInstance.go(objects[i].values.pageInstance.model.rootPage, null, null, true);
-                        }
-                        instancesArray.push(objects[i].values.pageInstance.view.nativeObject);
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
-            } else {
-                instancesArray.push(objects[i].values.pageInstance.nativeObject);
-            }
-        }
-        
-        retval.refreshNeeded = refreshNeeded;
-        retval.instancesArray = instancesArray;
-        return retval;
-    };
-};
-
-module.exports = TabBarFlowViewModel;
+module.exports = TabBar;
