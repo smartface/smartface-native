@@ -161,13 +161,14 @@ TextView.prototype.textColor = UI.Color.BLACK;
 TextView.prototype.ios.showScrollBar = false;
 
 /**
- * Enable/Disable scroll bar when text is too long. If this property is "false", text alignment mid and bottom doesn't work for textview.
+ * Enable/Disable scroll bar when text is too long. If this property is "false", text alignment mid & bottom doesn't work and in Android, it will lose ability of click in attributed string.
  *
  * @property {Boolean} [scrollEnabled = true]
  * @ios
- * @since 3.0.0
+ * @android
+ * @since 4.0.2
  */
-TextView.prototype.ios.scrollEnabled = true;
+TextView.prototype.scrollEnabled = true;
 
 /**
  * Sets/Gets the bounce effect when scrolling.

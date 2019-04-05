@@ -25,10 +25,10 @@ function Cluster(params) {
                 markerOptions.snippet(clusterItemObj.getSnippet());
                 markerOptions.title(clusterItemObj.getTitle());
             },
-            shouldRenderAsCluster: function(cluster) {
-                return cluster.getSize() > 1;
+            shouldRenderAsCluster: function(clusterSize) {
+                return clusterSize > 1;
             },
-            getColor: function(cluster) {
+            getColor: function() {
                 return mapView.clusterFillColor && mapView.clusterFillColor;
             },
             makeSquareTextView: function(context) {
