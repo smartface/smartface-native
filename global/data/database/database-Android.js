@@ -3,6 +3,7 @@ const File = require('../../../io/file');
 const Path = require('../../../io/path');
 
 const NativeSQLiteDatabase = requireClass('android.database.sqlite.SQLiteDatabase');
+const SFQueryResult = requireClass('io.smartface.android.sfcore.global.data.database.SFQueryResult');
 
 function Database(params) {
     this.nativeObject = null;
@@ -60,9 +61,10 @@ function Database(params) {
         'query': {
             value: function(sqlCommand) {
                 if (typeof sqlCommand === 'string') {
+                    let nativeCursor = this.nativeObject.rawQuery(sqlCommand, null);
                     return new Database.QueryResult({
-                         isInternal: true,
-                         cursor : this.nativeObject.rawQuery(sqlCommand, null)
+                        isInternal: true,
+                        cursor: new SFQueryResult(nativeCursor)
                     });
                 }
             },
@@ -78,7 +80,7 @@ Database.QueryResult = function(params) {
     }
 
     this.nativeObject = params.cursor;
-  
+
     Object.defineProperties(this, {
         'count': {
             value: function() {
@@ -87,29 +89,29 @@ Database.QueryResult = function(params) {
         },
         'getFirst': {
             value: function() {
-                this.nativeObject.moveToFirst();
                 return new Database.DatabaseObject({
-                     isInternal : true,
-                     cursor : this.nativeObject
+                    isInternal: true,
+                    cursorRefIndex: this.nativeObject.moveToFirst(),
+                    cursor: this.nativeObject
                 });
             }
         },
         'getLast': {
             value: function() {
-                this.nativeObject.moveToLast();
                 return new Database.DatabaseObject({
-                     isInternal: true,
-                     cursor : this.nativeObject
+                    isInternal: true,
+                    cursorRefIndex: this.nativeObject.moveToLast(),
+                    cursor: this.nativeObject
                 });
             }
         },
         'get': {
             value: function(location) {
                 if (typeof location === 'number') {
-                    this.nativeObject.moveToPosition(int(location));
                     return new Database.DatabaseObject({
-                         isInternal : true,
-                         cursor : this.nativeObject
+                        isInternal: true,
+                        cursorRefIndex: this.nativeObject.moveToPosition(int(location)),
+                        cursor: this.nativeObject
                     });
                 }
                 else {
@@ -135,15 +137,13 @@ Database.DatabaseObject = function(params) {
     }
 
     this.nativeObject = params.cursor;
+    let cursorRefIndex = params.cursorRefIndex;
     Object.defineProperties(this, {
         'getString': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    var index = this.nativeObject.getColumnIndex(columnName);
-                    if (index != -1) {
-                        return this.nativeObject.getString(index);
-                    }
-                    return null;
+                    let value = this.nativeObject.getString(cursorRefIndex, columnName);
+                    return value;
                 }
                 else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getString");
@@ -154,11 +154,8 @@ Database.DatabaseObject = function(params) {
         'getInteger': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    var index = this.nativeObject.getColumnIndex(columnName);
-                    if (index != -1) {
-                        return this.nativeObject.getInt(index);
-                    }
-                    return null;
+                    let value = this.nativeObject.getInt(cursorRefIndex, columnName);
+                    return value;
                 }
                 else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getInteger");
@@ -169,11 +166,8 @@ Database.DatabaseObject = function(params) {
         'getBoolean': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    var index = this.nativeObject.getColumnIndex(columnName);
-                    if (index != -1) {
-                        return this.nativeObject.getBoolean(index);
-                    }
-                    return null;
+                    let value = this.nativeObject.getBoolean(cursorRefIndex, columnName);
+                    return value;
                 }
                 else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getBoolean");
@@ -184,11 +178,8 @@ Database.DatabaseObject = function(params) {
         'getFloat': {
             value: function(columnName) {
                 if (typeof columnName === 'string') {
-                    var index = this.nativeObject.getColumnIndex(columnName);
-                    if (index != -1) {
-                        return this.nativeObject.getFloat(index);
-                    }
-                    return null;
+                    let value = this.nativeObject.getFloat(cursorRefIndex, columnName);
+                    return value;
                 }
                 else {
                     throw new Error("Parameter mismatch. Parameter must be String for Database.DatabaseObject#getFloat");
