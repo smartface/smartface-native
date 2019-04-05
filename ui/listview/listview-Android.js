@@ -26,8 +26,12 @@ const ListView = extend(View)(
         let _callbacks = {
             onAttachedToWindow: function() {
                 self.android.onAttachedToWindow && self.android.onAttachedToWindow();
+            },
+            onDetachedFromWindow: function() {
+                self.android.onDetachedFromWindow && self.android.onDetachedFromWindow();
             }
         };
+        
         if (!this.nativeInner) {
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);

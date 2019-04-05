@@ -25,6 +25,9 @@ const GridView = extend(View)(
         let _callbacks = {
             onAttachedToWindow: function() {
                 self.android.onAttachedToWindow && self.android.onAttachedToWindow();
+            },
+            onDetachedFromWindow: function() {
+                self.android.onDetachedFromWindow && self.android.onDetachedFromWindow();
             }
         };
 
