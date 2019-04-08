@@ -58,7 +58,7 @@ Object.defineProperties(Share, {
                 mimeTypes: [],
                 parcelabels: new NativeArrayList()
             };
-            let addContentItem = addContent.bind(contentSharing)();
+            let addContentItem = addContent.bind(contentSharing);
 
             itemList.forEach((item) => {
                 if (item instanceof File) {
@@ -67,7 +67,8 @@ Object.defineProperties(Share, {
                     shareIntent.putExtra(NativeIntent.EXTRA_TEXT, item);
                     contentSharing.mimeTypes.push("text/plain");
                 } else if (item instanceof Image) {
-                    addContentItem(item.nativeObject, "image/*");
+                    var imageFile = writeImageToFile(item)
+                    addContentItem(imageFile, "image/*");
                 }
             });
             !(contentSharing.parcelabels.isEmpty()) && shareIntent.putExtra(NativeIntent.EXTRA_STREAM, contentSharing.parcelabels);
