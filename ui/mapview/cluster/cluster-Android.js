@@ -18,17 +18,16 @@ function Cluster(params) {
                     var iconBitmap = clusterItemObj.mImage.getBitmap();
                     var clusterIcon = NativeDescriptorFactory.fromBitmap(iconBitmap);
                     markerOptions.icon(clusterIcon);
-                }
-                else if (clusterItemObj.mColor !== undefined) {
+                } else if (clusterItemObj.mColor !== undefined) {
                     markerOptions.icon(clusterItemObj.mColor);
                 }
                 markerOptions.snippet(clusterItemObj.getSnippet());
                 markerOptions.title(clusterItemObj.getTitle());
             },
-            shouldRenderAsCluster: function(cluster) {
-                return cluster.getSize() > 1;
+            shouldRenderAsCluster: function(clusterSize) {
+                return clusterSize > 1;
             },
-            getColor: function(cluster) {
+            getColor: function() {
                 return mapView.clusterFillColor && mapView.clusterFillColor;
             },
             makeSquareTextView: function(context) {

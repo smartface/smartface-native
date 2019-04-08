@@ -12,11 +12,11 @@ const MaterialTextbox = extend(TextBox)(
         }
 
         _super(this);
-        
+
         var isLTR_UserInterfaceLayoutDirection = __SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0;
         var isUnspecified = __SF_UIView.viewAppearanceSemanticContentAttribute() == 0;
         var isLTR_ViewAppearance = __SF_UIView.viewAppearanceSemanticContentAttribute() == 3;
-        
+
         var _rightLayout = undefined;
         var _rightLayoutMain;
         Object.defineProperty(self, 'rightLayout', {
@@ -28,19 +28,24 @@ const MaterialTextbox = extend(TextBox)(
                 if (object === undefined) {
                     if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
                         self.nativeObject.setValueForKey(undefined, "rightView");
-                        self.nativeObject.setValueForKey(0, "rightViewMode"); 
-                    }else{
+                        self.nativeObject.setValueForKey(0, "rightViewMode");
+                    } else {
                         self.nativeObject.setValueForKey(undefined, "leftView");
-                        self.nativeObject.setValueForKey(0, "leftViewMode"); 
+                        self.nativeObject.setValueForKey(0, "leftViewMode");
                     }
                     return;
                 }
-                
+
                 if (!_rightLayoutMain) {
                     var flexMain = new FlexLayout();
                     flexMain.nativeObject.yoga.isEnabled = false; // Bug : IOS-2714
                     var flexContent = new FlexLayout();
-                    flexMain.nativeObject.frame = { x: 0, y: 0, width: object.width ? object.width : 30, height: 0 };
+                    flexMain.nativeObject.frame = {
+                        x: 0,
+                        y: 0,
+                        width: object.width ? object.width : 30,
+                        height: 0
+                    };
                     flexMain.nativeObject.addFrameObserver();
                     flexMain.nativeObject.frameObserveHandler = function(e) {
                         flexContent.top = 0;
@@ -52,35 +57,37 @@ const MaterialTextbox = extend(TextBox)(
                     flexMain.addChild(flexContent);
                     flexMain.content = flexContent;
                     _rightLayoutMain = flexMain;
-                }else{
+                } else {
                     var childs = _rightLayoutMain.content.getChildList();
                     for (var i in childs) {
                         _rightLayoutMain.content.removeChild(childs[i]);
                     }
                 }
-                
+
                 _rightLayoutMain.content.addChild(object.view);
                 if (isLTR_UserInterfaceLayoutDirection && (isUnspecified || isLTR_ViewAppearance) || !isLTR_UserInterfaceLayoutDirection && (isUnspecified || !isLTR_ViewAppearance)) {
                     self.nativeObject.setValueForKey(3, "rightViewMode");
-                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"rightView");
-                }else{
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject, "rightView");
+                } else {
                     self.nativeObject.setValueForKey(3, "leftViewMode");
-                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject,"leftView");
+                    self.nativeObject.setValueForKey(_rightLayoutMain.nativeObject, "leftView");
                 }
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'titleColor', {
             get: function() {
-                return new Color({color : self.nativeObject.titleColor});
+                return new Color({
+                    color: self.nativeObject.titleColor
+                });
             },
             set: function(value) {
                 self.nativeObject.titleColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         // var _hintFont;
         // Object.defineProperty(self, 'hintFont', {
         //     get: function() {
@@ -92,40 +99,45 @@ const MaterialTextbox = extend(TextBox)(
         //     },
         //     enumerable: true,configurable : true
         // });
-        
-        Object.defineProperty(self.ios, 'titleFont', {// Deprecated : use labelsFont
+
+        Object.defineProperty(self.ios, 'titleFont', { // Deprecated : use labelsFont
             get: function() {
                 return self.nativeObject.titleLabel.valueForKey("font");
             },
             set: function(value) {
-                self.nativeObject.titleLabel.setValueForKey(value,"font");
+                self.nativeObject.titleLabel.setValueForKey(value, "font");
             },
             enumerable: true
         });
-        
-        Object.defineProperty(self, 'labelsFont', {// Deprecated : use labelsFont
+
+        Object.defineProperty(self, 'labelsFont', { // Deprecated : use labelsFont
             get: function() {
                 return self.nativeObject.titleLabel.valueForKey("font");
             },
             set: function(value) {
-                self.nativeObject.titleLabel.setValueForKey(value,"font");
+                self.nativeObject.titleLabel.setValueForKey(value, "font");
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'selectedHintTextColor', {
             get: function() {
-                return new Color({color : self.nativeObject.selectedTitleColor});
+                return new Color({
+                    color: self.nativeObject.selectedTitleColor
+                });
             },
             set: function(value) {
                 self.nativeObject.selectedTitleColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'lineColor', {
             get: function() {
-                return {normal:self.ios.normallineColor, selected:self.ios.selectedLineColor};
+                return {
+                    normal: self.ios.normallineColor,
+                    selected: self.ios.selectedLineColor
+                };
             },
             set: function(value) {
                 if (value.normal) {
@@ -137,38 +149,44 @@ const MaterialTextbox = extend(TextBox)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'normallineColor', {
             get: function() {
-                return new Color({color : self.nativeObject.lineColor});
+                return new Color({
+                    color: self.nativeObject.lineColor
+                });
             },
             set: function(value) {
                 self.nativeObject.lineColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'selectedLineColor', {
             get: function() {
-                return new Color({color : self.nativeObject.selectedLineColor});
+                return new Color({
+                    color: self.nativeObject.selectedLineColor
+                });
             },
             set: function(value) {
                 self.nativeObject.selectedLineColor = value.nativeObject;
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'errorColor', {
             get: function() {
-                return new Color({color : self.nativeObject.errorColor});
+                return new Color({
+                    color: self.nativeObject.errorColor
+                });
             },
             set: function(value) {
                 self.nativeObject.errorColor = value.nativeObject;
             },
             enumerable: true
         });
-        
-       Object.defineProperty(self, 'errorMessage', {
+
+        Object.defineProperty(self, 'errorMessage', {
             get: function() {
                 return self.nativeObject.errorMessage;
             },
@@ -177,7 +195,7 @@ const MaterialTextbox = extend(TextBox)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'lineHeight', {
             get: function() {
                 return self.nativeObject.lineHeight;
@@ -187,7 +205,7 @@ const MaterialTextbox = extend(TextBox)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'selectedLineHeight', {
             get: function() {
                 return self.nativeObject.selectedLineHeight;
@@ -197,8 +215,8 @@ const MaterialTextbox = extend(TextBox)(
             },
             enumerable: true
         });
-        
-        var _hintTextColor = Color.create(199,199,205);
+
+        var _hintTextColor = Color.create(199, 199, 205);
         Object.defineProperty(self, 'hintTextColor', {
             get: function() {
                 return _hintTextColor;
@@ -208,9 +226,10 @@ const MaterialTextbox = extend(TextBox)(
                 self.nativeObject.placeholderColor = _hintTextColor.nativeObject;
                 self.ios.titleColor = value;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         var _hint;
         Object.defineProperty(self, 'hint', {
             get: function() {
@@ -220,15 +239,16 @@ const MaterialTextbox = extend(TextBox)(
                 _hint = value;
                 self.nativeObject.placeholder = _hint;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];
             }
         }
-        
+
         //Handle android specific properties
         self.android = {};
     }

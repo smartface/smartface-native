@@ -1,8 +1,8 @@
-const TypeUtil      = require("sf-core/util/type");
-const Exception     = require("sf-core/util").Exception;
-const Color         = require('sf-core/ui/color');
-const Invocation    = require('sf-core/util').Invocation;
-const YGUnit        = require('sf-core/util').YogaEnums.YGUnit;
+const TypeUtil = require("sf-core/util/type");
+const Exception = require("sf-core/util").Exception;
+const Color = require('sf-core/ui/color');
+const Invocation = require('sf-core/util').Invocation;
+const YGUnit = require('sf-core/util').YogaEnums.YGUnit;
 
 function View(params) {
 
@@ -11,95 +11,104 @@ function View(params) {
     self.android = {};
     self.ios = {};
 
-    if(!self.nativeObject){
+    if (!self.nativeObject) {
         if (params && params.nativeObject) {
             self.nativeObject = params.nativeObject;
         } else {
             self.nativeObject = new __SF_UIView();
         }
     }
-    
+
     self.uniqueId = self.nativeObject.uuid;
-    
+
     // Defaults
     self.nativeObject.yoga.isEnabled = true;
     self.nativeObject.layer.masksToBounds = true;
-    
+
     Object.defineProperty(self.ios, 'shadowOffset', {
         get: function() {
-            var size = Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowOffset",[],"CGSize");
-            return {x:size.width,y:size.height};
+            var size = Invocation.invokeInstanceMethod(self.nativeObject.layer, "shadowOffset", [], "CGSize");
+            return {
+                x: size.width,
+                y: size.height
+            };
         },
         set: function(shadowOffset) {
             var argShadowOffset = new Invocation.Argument({
-                type:"CGSize",
+                type: "CGSize",
                 value: {
-                    width : shadowOffset.x,
-                    height : shadowOffset.y
+                    width: shadowOffset.x,
+                    height: shadowOffset.y
                 }
             });
-            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOffset:",[argShadowOffset]);
+            Invocation.invokeInstanceMethod(self.nativeObject.layer, "setShadowOffset:", [argShadowOffset]);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self.ios, 'shadowRadius', {
         get: function() {
-            return Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowRadius",[],"CGFloat");
+            return Invocation.invokeInstanceMethod(self.nativeObject.layer, "shadowRadius", [], "CGFloat");
         },
         set: function(shadowRadius) {
             var argShadowRadius = new Invocation.Argument({
-                type:"CGFloat",
+                type: "CGFloat",
                 value: shadowRadius
             });
-            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowRadius:",[argShadowRadius]);
+            Invocation.invokeInstanceMethod(self.nativeObject.layer, "setShadowRadius:", [argShadowRadius]);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self.ios, 'shadowOpacity', {
         get: function() {
-            return Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowOpacity",[],"float");
+            return Invocation.invokeInstanceMethod(self.nativeObject.layer, "shadowOpacity", [], "float");
         },
         set: function(shadowOpacity) {
             var argShadowOpacity = new Invocation.Argument({
-                type:"float",
+                type: "float",
                 value: shadowOpacity
             });
-            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowOpacity:",[argShadowOpacity]);
+            Invocation.invokeInstanceMethod(self.nativeObject.layer, "setShadowOpacity:", [argShadowOpacity]);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self.ios, 'shadowColor', {
         get: function() {
-            var color = Invocation.invokeInstanceMethod(self.nativeObject.layer,"shadowColor",[],"CGColor");
-            return new Color({color : color});
+            var color = Invocation.invokeInstanceMethod(self.nativeObject.layer, "shadowColor", [], "CGColor");
+            return new Color({
+                color: color
+            });
         },
         set: function(shadowColor) {
             var argShadowColor = new Invocation.Argument({
-                type:"CGColor",
+                type: "CGColor",
                 value: shadowColor.nativeObject
             });
-            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setShadowColor:",[argShadowColor]);
+            Invocation.invokeInstanceMethod(self.nativeObject.layer, "setShadowColor:", [argShadowColor]);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self.ios, 'exclusiveTouch', {
         get: function() {
-            return Invocation.invokeInstanceMethod(self.nativeObject,"isExclusiveTouch",[],"BOOL");
+            return Invocation.invokeInstanceMethod(self.nativeObject, "isExclusiveTouch", [], "BOOL");
         },
         set: function(value) {
             var argExclusiveTouch = new Invocation.Argument({
-                type:"BOOL",
+                type: "BOOL",
                 value: value
             });
-            Invocation.invokeInstanceMethod(self.nativeObject,"setExclusiveTouch:",[argExclusiveTouch]);
+            Invocation.invokeInstanceMethod(self.nativeObject, "setExclusiveTouch:", [argExclusiveTouch]);
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.ios, 'masksToBounds', {
         get: function() {
             return self.nativeObject.layer.masksToBounds;
@@ -109,20 +118,22 @@ function View(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self.ios, 'clipsToBounds', {
         get: function() {
             return self.nativeObject.valueForKey("clipsToBounds");
         },
         set: function(value) {
-            self.nativeObject.setValueForKey(value,"clipsToBounds");
+            self.nativeObject.setValueForKey(value, "clipsToBounds");
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'borderColor', {
         get: function() {
-            return new Color({color : self.nativeObject.layer.borderUIColor});
+            return new Color({
+                color: self.nativeObject.layer.borderUIColor
+            });
         },
         set: function(value) {
             self.nativeObject.layer.borderUIColor = value.nativeObject;
@@ -135,9 +146,9 @@ function View(params) {
             return self.nativeObject.alpha;
         },
         set: function(value) {
-            if (typeof value === "number"){
+            if (typeof value === "number") {
                 self.nativeObject.alpha = value;
-            }else{
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -156,14 +167,16 @@ function View(params) {
 
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return new Color({color : self.nativeObject.backgroundColor});
+            return new Color({
+                color: self.nativeObject.backgroundColor
+            });
         },
         set: function(value) {
-            if (value.nativeObject.constructor.name === "CAGradientLayer"){
-                if (!self.gradientColor){
+            if (value.nativeObject.constructor.name === "CAGradientLayer") {
+                if (!self.gradientColor) {
                     self.nativeObject.addFrameObserver();
-                    self.nativeObject.frameObserveHandler = function(e){
-                        if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                    self.nativeObject.frameObserveHandler = function(e) {
+                        if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0) {
                             return;
                         }
                         self.gradientColor.frame = e.frame;
@@ -171,13 +184,13 @@ function View(params) {
                     }
                 }
                 self.gradientColor = value.nativeObject;
-                if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0){
+                if (self.nativeObject.frame.width === 0 || self.nativeObject.frame.height === 0) {
                     return;
                 }
                 self.gradientColor.frame = self.nativeObject.frame;
                 self.nativeObject.backgroundColor = self.gradientColor.layerToColor();
-            }else{
-                if(self.gradientColor){
+            } else {
+                if (self.gradientColor) {
                     self.nativeObject.removeFrameObserver();
                     self.gradientColor = undefined;
                 }
@@ -198,14 +211,14 @@ function View(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'transitionId', {
         get: function() {
             return self.nativeObject.valueForKey("heroID");
         },
         set: function(value) {
             if (typeof value === "string") {
-                self.nativeObject.setValueForKey(value,"heroID");
+                self.nativeObject.setValueForKey(value, "heroID");
             }
         },
         enumerable: true
@@ -214,7 +227,7 @@ function View(params) {
     self.nativeObject.layer.rotationZ = 0;
     self.nativeObject.layer.rotationX = 0;
     self.nativeObject.layer.rotationY = 0;
-    
+
     var _rotation = 0;
     Object.defineProperty(self, 'rotation', {
         get: function() {
@@ -222,12 +235,12 @@ function View(params) {
         },
         set: function(value) {
             _rotation = value;
-            self.nativeObject.layer.rotationZ = _rotation * (Math.PI/180);
+            self.nativeObject.layer.rotationZ = _rotation * (Math.PI / 180);
             self.nativeObject.layer.rotate();
         },
         enumerable: true
     });
-    
+
     var _rotationX = 0;
     Object.defineProperty(self, 'rotationX', {
         get: function() {
@@ -235,12 +248,12 @@ function View(params) {
         },
         set: function(value) {
             _rotationX = value;
-            self.nativeObject.layer.rotationX = _rotationX * (Math.PI/180);
+            self.nativeObject.layer.rotationX = _rotationX * (Math.PI / 180);
             self.nativeObject.layer.rotate();
         },
         enumerable: true
     });
-    
+
     var _rotationY = 0;
     Object.defineProperty(self, 'rotationY', {
         get: function() {
@@ -248,12 +261,12 @@ function View(params) {
         },
         set: function(value) {
             _rotationY = value;
-            self.nativeObject.layer.rotationY = _rotationY * (Math.PI/180);
+            self.nativeObject.layer.rotationY = _rotationY * (Math.PI / 180);
             self.nativeObject.layer.rotate();
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'visible', {
         get: function() {
             return self.nativeObject.visible;
@@ -261,21 +274,29 @@ function View(params) {
         set: function(value) {
             self.nativeObject.visible = value;
         },
-        enumerable: true,configurable: true
+        enumerable: true,
+        configurable: true
     });
 
-    var _scale = {x:1.0, y:1.0};
+    var _scale = {
+        x: 1.0,
+        y: 1.0
+    };
     Object.defineProperty(self, 'scale', {
         get: function() {
             return _scale;
         },
         set: function(value) {
             _scale = value;
-            self.nativeObject.scale({ scaleX: value.x, scaleY: value.y });
+            self.nativeObject.scale({
+                scaleX: value.x,
+                scaleY: value.y
+            });
         },
-        enumerable: true,configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self, 'touchEnabled', {
         get: function() {
             return self.nativeObject.touchEnabled;
@@ -287,64 +308,73 @@ function View(params) {
     });
 
 
-    this.getPosition = function(){
-        return {left : self.left , top : self.top , width : self.width, height : self.height};
+    this.getPosition = function() {
+        return {
+            left: self.left,
+            top: self.top,
+            width: self.width,
+            height: self.height
+        };
     }
-    
-    this.flipHorizontally = function(){
+
+    this.flipHorizontally = function() {
         self.nativeObject.flipHorizontally();
     }
-    
-    
-    this.flipVertically = function(){
+
+
+    this.flipVertically = function() {
         self.nativeObject.flipVertically();
     }
-    
-    this.setPosition = function(position){
+
+    this.setPosition = function(position) {
         self.left = position.left;
         self.top = position.top;
         self.width = position.width;
         self.height = position.height;
     }
-    
+
     //Issue: IOS-2340
-    this.bringToFront = function(){
+    this.bringToFront = function() {
         var parent = self.getParent();
         if (parent) {
             var maxZPosition = 0;
             for (var subview in parent.nativeObject.subviews) {
-               var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer,"zPosition",[],"CGFloat");
-               if (zPosition > maxZPosition) {
-                   maxZPosition = zPosition
-               }
+                var zPosition = Invocation.invokeInstanceMethod(parent.nativeObject.subviews[subview].layer, "zPosition", [], "CGFloat");
+                if (zPosition > maxZPosition) {
+                    maxZPosition = zPosition
+                }
             }
             var argZPosition = new Invocation.Argument({
-                    type: "CGFloat",
-                    value: maxZPosition + 1});
-            Invocation.invokeInstanceMethod(self.nativeObject.layer,"setZPosition:",[argZPosition]);
+                type: "CGFloat",
+                value: maxZPosition + 1
+            });
+            Invocation.invokeInstanceMethod(self.nativeObject.layer, "setZPosition:", [argZPosition]);
         }
     };
 
-    this.getParent = function(){
+    this.getParent = function() {
         return self.parent ? self.parent : null;
     };
-    
+
     this.getScreenLocation = function() {
-        var viewOrigin = {x:self.nativeObject.bounds.x, y:self.nativeObject.bounds.y};
-        var origin= new Invocation.Argument({
-            type:"CGPoint",
+        var viewOrigin = {
+            x: self.nativeObject.bounds.x,
+            y: self.nativeObject.bounds.y
+        };
+        var origin = new Invocation.Argument({
+            type: "CGPoint",
             value: viewOrigin
         });
-        
-        var view= new Invocation.Argument({
-            type:"id",
+
+        var view = new Invocation.Argument({
+            type: "id",
             value: undefined
         });
-        
-        var screenOrigin = Invocation.invokeInstanceMethod(self.nativeObject,"convertPoint:toView:",[origin, view],"CGPoint");
+
+        var screenOrigin = Invocation.invokeInstanceMethod(self.nativeObject, "convertPoint:toView:", [origin, view], "CGPoint");
         return screenOrigin;
     }
-    
+
     var _onTouch;
     Object.defineProperty(self, 'onTouch', {
         get: function() {
@@ -355,14 +385,15 @@ function View(params) {
                 return;
             };
             _onTouch = value;
-            var onTouchHandler = function(e){
+            var onTouchHandler = function(e) {
                 return value.call(this);
             };
             self.nativeObject.onTouch = onTouchHandler.bind(this);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _onTouchEnded;
     Object.defineProperty(self, 'onTouchEnded', {
         get: function() {
@@ -373,18 +404,19 @@ function View(params) {
                 return;
             };
             _onTouchEnded = value;
-            var onTouchEndedHandler = function(e){
+            var onTouchEndedHandler = function(e) {
                 if (e && e.point) {
-                    return value.call(this,isInside(self.nativeObject.frame,e.point));
-                }else{
+                    return value.call(this, isInside(self.nativeObject.frame, e.point));
+                } else {
                     return value.call(this);
                 }
             };
             self.nativeObject.onTouchEnded = onTouchEndedHandler.bind(this);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _onTouchMove;
     Object.defineProperty(self, 'onTouchMoved', {
         get: function() {
@@ -394,18 +426,19 @@ function View(params) {
             if (typeof value !== 'function') {
                 return;
             };
-            var onTouchMoveHandler = function(e){
+            var onTouchMoveHandler = function(e) {
                 if (e && e.point) {
-                    return value.call(this,isInside(self.nativeObject.frame,e.point));
-                }else{
+                    return value.call(this, isInside(self.nativeObject.frame, e.point));
+                } else {
                     return value.call(this);
                 }
             };
             self.nativeObject.onTouchMoved = onTouchMoveHandler.bind(this);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _onTouchCancelled;
     Object.defineProperty(self, 'onTouchCancelled', {
         get: function() {
@@ -415,29 +448,30 @@ function View(params) {
             if (typeof value !== 'function') {
                 return;
             };
-            var onTouchCancelledHandler = function(e){
+            var onTouchCancelledHandler = function(e) {
                 return value.call(this);
             };
             self.nativeObject.onTouchCancelled = onTouchCancelledHandler.bind(this);
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
-    
-    function isInside(frame,point){
+
+    function isInside(frame, point) {
         var x = point.x;
         var y = point.y;
         var w = frame.width;
         var h = frame.height;
         return !(x > w || x < 0 || y > h || y < 0);
     }
-    
+
     function guid() {
-          function s4() {
+        function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1);
-          }
-          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
     };
 
@@ -567,25 +601,34 @@ function View(params) {
         },
         set: function(value) {
             self.nativeObject.yoga.flexGrow = value;
-            if(value > 0){
+            if (value > 0) {
                 self.flexBasis = 1;
-            }
-            else if(value === 0){ // Workaround Bug iOS / IOS-2406
+            } else if (value === 0) { // Workaround Bug iOS / IOS-2406
                 self.flexBasis = NaN;
-                if(self.nativeObject.superview && self.nativeObject.superview.yoga.isEnabled){
-                    if (self.nativeObject.superview.yoga.flexDirection === 0 ||  self.nativeObject.superview.yoga.flexDirection === 1){
+                if (self.nativeObject.superview && self.nativeObject.superview.yoga.isEnabled) {
+                    if (self.nativeObject.superview.yoga.flexDirection === 0 || self.nativeObject.superview.yoga.flexDirection === 1) {
                         var height = self.nativeObject.yoga.getYGValueForKey("height");
                         if (isNaN(height)) {
-                            self.nativeObject.frame = {x: self.left, y: self.top, width: self.width, height: 0};
+                            self.nativeObject.frame = {
+                                x: self.left,
+                                y: self.top,
+                                width: self.width,
+                                height: 0
+                            };
                         }
-                    }else{
+                    } else {
                         var width = self.nativeObject.yoga.getYGValueForKey("width");
                         if (isNaN(width)) {
-                            self.nativeObject.frame = {x: self.left, y: self.top, width: 0, height: self.height};
+                            self.nativeObject.frame = {
+                                x: self.left,
+                                y: self.top,
+                                width: 0,
+                                height: self.height
+                            };
                         }
                     }
                 }
-            }else{
+            } else {
                 self.flexBasis = NaN;
             }
         },
@@ -607,7 +650,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("flexBasis");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"flexBasis");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "flexBasis");
         },
         enumerable: true
     });
@@ -621,9 +664,9 @@ function View(params) {
             return self.nativeObject.frame.x;
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"left");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "left");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -635,9 +678,9 @@ function View(params) {
             return self.nativeObject.frame.y;
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"top");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "top");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -649,9 +692,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("right");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"right");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "right");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -663,9 +706,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("bottom");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"bottom");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "bottom");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -677,7 +720,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("start");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"start");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "start");
         },
         enumerable: true
     });
@@ -687,7 +730,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("end");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"end");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "end");
         },
         enumerable: true
     });
@@ -697,9 +740,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginLeft");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginLeft");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginLeft");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -711,9 +754,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginTop");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginTop");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginTop");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -725,9 +768,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginRight");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginRight");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginRight");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -739,9 +782,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginBottom");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginBottom");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginBottom");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -753,9 +796,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginStart");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginStart");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginStart");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -767,9 +810,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginEnd");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginEnd");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginEnd");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -781,9 +824,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginHorizontal");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginHorizontal");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginHorizontal");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -795,9 +838,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("marginVertical");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"marginVertical");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "marginVertical");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -809,9 +852,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("margin");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"margin");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "margin");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -823,7 +866,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingLeft");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingLeft");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingLeft");
         },
         enumerable: true
     });
@@ -833,7 +876,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingTop");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingTop");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingTop");
         },
         enumerable: true
     });
@@ -843,7 +886,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingRight");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingRight");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingRight");
         },
         enumerable: true
     });
@@ -853,7 +896,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingBottom");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingBottom");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingBottom");
         },
         enumerable: true
     });
@@ -863,7 +906,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingStart");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingStart");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingStart");
         },
         enumerable: true
     });
@@ -873,7 +916,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingEnd");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingEnd");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingEnd");
         },
         enumerable: true
     });
@@ -883,7 +926,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingHorizontal");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingHorizontal");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingHorizontal");
         },
         enumerable: true
     });
@@ -893,7 +936,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("paddingVertical");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"paddingVertical");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "paddingVertical");
         },
         enumerable: true
     });
@@ -903,7 +946,7 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("padding");
         },
         set: function(value) {
-            self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"padding");
+            self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "padding");
         },
         enumerable: true
     });
@@ -979,7 +1022,7 @@ function View(params) {
             self.nativeObject.yoga.borderWidth = value;
         },
         enumerable: true,
-        configurable:true
+        configurable: true
     });
 
     /*
@@ -991,13 +1034,14 @@ function View(params) {
             return self.nativeObject.frame.width;
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"width");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "width");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
 
     Object.defineProperty(self, 'height', {
@@ -1005,13 +1049,14 @@ function View(params) {
             return self.nativeObject.frame.height;
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"height");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "height");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
-        enumerable: true, configurable: true
+        enumerable: true,
+        configurable: true
     });
 
     Object.defineProperty(self, 'minWidth', {
@@ -1019,9 +1064,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("minWidth");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minWidth");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "minWidth");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -1033,9 +1078,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("minHeight");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"minHeight");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "minHeight");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -1047,9 +1092,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("maxWidth");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxWidth");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "maxWidth");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -1061,9 +1106,9 @@ function View(params) {
             return self.nativeObject.yoga.getYGValueForKey("maxHeight");
         },
         set: function(value) {
-            if (typeof value === "number"){
-                self.nativeObject.yoga.setYGValueUnitForKey(value,YGUnit.Point,"maxHeight");
-            }else{
+            if (typeof value === "number") {
+                self.nativeObject.yoga.setYGValueUnitForKey(value, YGUnit.Point, "maxHeight");
+            } else {
                 throw new TypeError(Exception.TypeError.NUMBER);
             }
         },
@@ -1094,7 +1139,7 @@ function View(params) {
     /*
      Perform a layout calculation and update the frames of the views in the hierarchy with the results
      */
-    this.applyLayout = function(){
+    this.applyLayout = function() {
         self.nativeObject.yoga.applyLayoutPreservingOrigin(false);
     }
 
@@ -1131,7 +1176,7 @@ function View(params) {
     /*
      Mark that a view's layout needs to be recalculated. Only works for leaf views.
      */
-    this.dirty = function(){
+    this.dirty = function() {
         self.nativeObject.yoga.markDirty();
     }
 
@@ -1139,7 +1184,7 @@ function View(params) {
     // YOGA STUFF END
     //////////////////////////////////////////////////////////////////////////
 
-     if (params) {
+    if (params) {
         for (var param in params) {
             this[param] = params[param];
         }
@@ -1154,11 +1199,11 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
     get: function() {
         return __SF_UIView.viewAppearanceSemanticContentAttribute();
     },
-    set: function(value){
+    set: function(value) {
         var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); // For application-iOS.js Application Direction Manager
         userDefaults.setObjectForKey(value, "smartface.ios.viewAppearanceSemanticContentAttribute");
         userDefaults.synchronize();
-    
+
         // __SF_UIView.setViewAppearanceSemanticContentAttribute(value);
     },
     enumerable: true
@@ -1167,9 +1212,9 @@ Object.defineProperty(View.ios, 'viewAppearanceSemanticContentAttribute', {
 View.iOS = {};
 
 View.iOS.SemanticContentAttribute = {
-    AUTO : 0,
-    FORCELEFTTORIGHT : 3,
-    FORCERIGHTTOLEFT : 4
+    AUTO: 0,
+    FORCELEFTTORIGHT: 3,
+    FORCERIGHTTOLEFT: 4
 };
 
 module.exports = View;

@@ -27,7 +27,7 @@ function Scrollable(childJsClass, nativeScrollableObject) {
     if (!self.__isRecyclerView)
         return;
 
-    let _onAttachedToWindow;
+    let _onAttachedToWindow, _onDetachedFromWindow;
     Object.defineProperties(self.android, {
         'onGesture': {
             get: function() {
@@ -39,12 +39,14 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                     self.nativeInner.setJsCallbacks({
                         onScrollGesture: function(distanceX, distanceY) {
                             let returnValue = true;
-                            _onGesture && (returnValue = _onGesture({ distanceX: distanceX, distanceY: distanceY }));
+                            _onGesture && (returnValue = _onGesture({
+                                distanceX: distanceX,
+                                distanceY: distanceY
+                            }));
                             return !!returnValue;
                         }
                     });
-                }
-                else {
+                } else {
                     self.nativeInner.setJsCallbacks(null);
                 }
             },
@@ -71,6 +73,15 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             },
             set: function(onAttachedToWindow) {
                 _onAttachedToWindow = onAttachedToWindow;
+            },
+            enumerable: true
+        },
+        'onDetachedFromWindow': {
+            get: function() {
+                return _onDetachedFromWindow;
+            },
+            set: function(onDetachedFromWindow) {
+                _onDetachedFromWindow = onDetachedFromWindow;
             },
             enumerable: true
         }

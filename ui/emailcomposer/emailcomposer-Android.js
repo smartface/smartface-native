@@ -16,6 +16,7 @@ const ACTION_VIEW = "android.intent.action.VIEW";
 
 var _closeCallback;
 var self;
+
 function EmailComposer(params) {
 
     self = this;
@@ -23,8 +24,8 @@ function EmailComposer(params) {
     self.nativeObject.setData(NativeUri.parse("mailto:"));
 
     self.ios = {};
-    self.ios.addAttachmentForiOS = function(blob,mimeType,fileName){};
-    
+    self.ios.addAttachmentForiOS = function(blob, mimeType, fileName) {};
+
     Object.defineProperties(self, {
         'setCC': {
             value: function(cc) {
@@ -48,8 +49,7 @@ function EmailComposer(params) {
             value: function(text, isHtmlText) {
                 if (!isHtmlText && typeof text === "string") {
                     self.nativeObject.putExtra(EXTRA_TEXT, text);
-                }
-                else {
+                } else {
                     self.nativeObject.putExtra(EXTRA_TEXT, NativeHtml.fromHtml(text));
                 }
             }
@@ -68,7 +68,7 @@ function EmailComposer(params) {
                 }
             }
         },
-       'canSendMail': {
+        'canSendMail': {
             get: function() {
                 return true; //always return true
             }
@@ -86,7 +86,7 @@ function EmailComposer(params) {
         },
         enumerable: true
     });
-    
+
     self.android = {};
     Object.defineProperty(self.android, 'addAttachmentForAndroid', {
         value: function(attachment) {
@@ -104,7 +104,7 @@ EmailComposer.onActivityResult = function(requestCode, resultCode, data) {
     _closeCallback && self.onClose();
 };
 
-EmailComposer.canSendMail = function(){
+EmailComposer.canSendMail = function() {
     return true;
 };
 

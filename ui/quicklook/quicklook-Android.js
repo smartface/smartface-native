@@ -1,6 +1,6 @@
 //Generated for handling ios view
 
-function QuickLook (params) {
+function QuickLook(params) {
 
     this.nativeObject = null;
     this.document = null;
@@ -10,11 +10,11 @@ function QuickLook (params) {
     this.document = null;
     this.style = {};
     this.statusBar = {};
-    this.toString = function(){
-        return "QuickLook";  
+    this.toString = function() {
+        return "QuickLook";
     };
-    
-    this.show = function(Page){};
+
+    this.show = function(Page) {};
 
     // Assign parameters given in constructor
     if (params) {

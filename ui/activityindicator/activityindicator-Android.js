@@ -11,11 +11,11 @@ const ActivityIndicator = extend(View)(
         if (!this.nativeObject) {
             this.nativeObject = new NativeProgressBar(AndroidConfig.activity);
         }
-        
+
         _super(this);
-        
+
         this.nativeObject.setIndeterminate(true);
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -25,7 +25,7 @@ const ActivityIndicator = extend(View)(
     },
     function(prop) {
         prop.__color = null;
-        
+
         Object.defineProperties(prop, {
             'color': {
                 get: function() {
@@ -40,7 +40,7 @@ const ActivityIndicator = extend(View)(
                 enumerable: true
             }
         });
-        
+
         prop.toString = function() {
             return 'ActivityIndicator';
         };

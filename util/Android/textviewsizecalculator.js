@@ -18,8 +18,7 @@ SizeCalculator.calculateStringSize = function(params) {
         typeface && nativeTextView.setTypeface(typeface);
         nativeTextView.setText(text, NativeTextView.BufferType.SPANNABLE);
         textSize !== undefined && nativeTextView.setTextSize(textSize); //setTextSize's unit is SP by default
-    }
-    else {
+    } else {
         nativeTextView = text.nativeObject;
     }
 

@@ -19,7 +19,9 @@ const ShimmerFlexLayout = extend(View)(
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
 
-        var _baseAlpha = 1, _direction, _repeatDelay = 400, _contentLayout = null;
+        var _baseAlpha = 1,
+            _direction, _repeatDelay = 400,
+            _contentLayout = null;
         Object.defineProperties(this, {
             'contentLayout': {
                 get: function() {

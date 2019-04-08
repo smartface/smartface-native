@@ -1,13 +1,13 @@
 /**
-* @enum {Number} UI.iOS.ContentInsetAdjustment
-* @ios
-* @static
-* @readonly
-* @since 4.0.0
-*
-* Constants indicating how safe area insets are added to the adjusted content inset.
-*
-*/
+ * @enum {Number} UI.iOS.ContentInsetAdjustment
+ * @ios
+ * @static
+ * @readonly
+ * @since 4.0.0
+ *
+ * Constants indicating how safe area insets are added to the adjusted content inset.
+ *
+ */
 const ContentInsetAdjustment = {};
 
 /**

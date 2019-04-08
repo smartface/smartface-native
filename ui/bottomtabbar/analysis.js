@@ -41,7 +41,10 @@ BottomTabBar.prototype.android.disableItemAnimation = false;
  * @ios
  * @since 1.1.10
  */
-BottomTabBar.prototype.itemColor = {normal: Color.BLACK, selected: Color.BLUE};
+BottomTabBar.prototype.itemColor = {
+    normal: Color.BLACK,
+    selected: Color.BLUE
+};
 
 /**
  * Gets/sets background color of the tab bar items. 

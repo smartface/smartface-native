@@ -5,7 +5,7 @@ Accelerometer.android = {};
 
 Accelerometer.monitonManager = new __SF_CMMotionManager();
 Accelerometer.monitonManager.accelerometerUpdateInterval = 0.1; //Default Value
- 
+
 Accelerometer.start = function() {
     Accelerometer.monitonManager.startAccelerometerUpdates();
 }

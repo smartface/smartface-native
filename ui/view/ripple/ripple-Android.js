@@ -2,10 +2,15 @@
 const AndroidUnitConverter = require("../../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../../util/Android/androidconfig");
 
-function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
+function DpToPixel(dp) {
+    return AndroidUnitConverter.dpToPixel(dp);
+}
 
 function RippleEffect(view) {
-    var [_rippleEnabled, _rippleColor, _useForeground] = [false];
+    var _rippleEnabled = false,
+        _rippleColor = null,
+        _useForeground = false;
+
     Object.defineProperties(view.android, {
         'rippleEnabled': {
             get: function() {
@@ -47,18 +52,17 @@ function RippleEffect(view) {
 
                     var mask = getRippleMask(DpToPixel(view.borderRadius));
 
-                    if (_useForeground === false) {
-                        let currentBackground = view.nativeObject.getBackground();
-                        let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
-                        view.nativeObject.setBackground(rippleDrawableBackgorund);
-                    }
-                    else if (_useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
+                    if (_useForeground === true && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
                         /*
                         Only supported for api level 23 and above
                         */
                         let currentBackground = view.nativeObject.getForeground();
                         let rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
                         view.nativeObject.setForeground(rippleDrawableForegorund);
+                    } else {
+                        let currentBackground = view.nativeObject.getBackground();
+                        let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
+                        view.nativeObject.setBackground(rippleDrawableBackgorund);
                     }
                 }
             },

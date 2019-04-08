@@ -52,12 +52,10 @@ function BottomTabBar(params) {
                         var statelist = new ColorStateList(states, nativeColorArray);
                         self.nativeObject.setItemTextColor(statelist);
                         self.nativeObject.setItemIconTintList(statelist);
-                    }
-                    else {
+                    } else {
                         throw new Error("itemColor should be an object that contains instances of Color");
                     }
-                }
-                else {
+                } else {
                     throw new Error("itemColor should be an object that contains normal and selected state.");
                 }
             },
@@ -111,8 +109,11 @@ function BottomTabBar(params) {
             enumerable: true
         }
     });
-    this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,
-    // elevation doesn't work with default background white color.
+    this.backgroundColor = Color.WHITE; // Don't remove. If don't set backgroundColor,elevation doesn't work with default background white color.
+    this.itemColor = {
+        normal: Color.GRAY,
+        selected: Color.create("#00a1f1")
+    }; // Do not remove. COR-1931 describes what happening.
 
 
     function createTabbarMenuItems(tabBarItems) {
@@ -129,6 +130,7 @@ function BottomTabBar(params) {
 
             tabbarItem.nativeObject = btbMenu.add(0, i, 0, title);
             tabbarItem.icon && (tabbarItem.icon = tabbarItem.icon);
+            tabbarItem.android.systemIcon && (tabbarItem.android.systemIcon = tabbarItem.android.systemIcon);
             tabbarItem.tabBarItemParent = self.nativeObject;
             tabbarItem.index = i;
         }

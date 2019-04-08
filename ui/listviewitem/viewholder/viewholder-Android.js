@@ -1,9 +1,9 @@
-const AndroidUnitConverter  = require("../../../util/Android/unitconverter.js");
-const extend                = require('js-base/core/extend');
-const FlexLayout            = require('../../flexlayout');
+const AndroidUnitConverter = require("../../../util/Android/unitconverter.js");
+const extend = require('js-base/core/extend');
+const FlexLayout = require('../../flexlayout');
 
 const ViewHolder = extend(FlexLayout)(
-    function (_super, params) {
+    function(_super, params) {
         _super(this);
     },
     function(listViewItemPrototype) {
@@ -31,10 +31,10 @@ const ViewHolder = extend(FlexLayout)(
                 configurable: true
             },
             'toString': {
-                value: function(){
+                value: function() {
                     return 'ViewHolder';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });

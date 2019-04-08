@@ -22,8 +22,8 @@ var activity = SpratAndroidActivity;
 AndroidConfig.activity = SpratAndroidActivity;
 AndroidConfig.activityResources = AndroidConfig.activity.getResources();
 
-AndroidConfig.getClass = function(className){
-    if(classesCache[className]){
+AndroidConfig.getClass = function(className) {
+    if (classesCache[className]) {
         return classesCache[className];
     }
     const NativeClass = requireClass('java.lang.Class');
@@ -31,13 +31,12 @@ AndroidConfig.getClass = function(className){
     return classesCache[className];
 };
 
-AndroidConfig.getSystemService = function(serviceName, serviceClassName){
-    if(!servicesCache[serviceName]){
-        if(AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW){
+AndroidConfig.getSystemService = function(serviceName, serviceClassName) {
+    if (!servicesCache[serviceName]) {
+        if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW) {
             var serviceClass = AndroidConfig.getClass(serviceClassName);
             servicesCache[serviceName] = activity.getSystemService(serviceClass);
-        }
-        else{
+        } else {
             servicesCache[serviceName] = activity.getSystemService(serviceName);
         }
     }

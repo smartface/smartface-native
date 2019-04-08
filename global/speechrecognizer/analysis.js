@@ -109,7 +109,7 @@ SpeechRecognizer.isRunning = function() {};
  * @ios
  * @since 1.1.16
  */
-SpeechRecognizer.ios.isLocaleSupported = function(locale){};
+SpeechRecognizer.ios.isLocaleSupported = function(locale) {};
 
 /**
  * @enum {String} SpeechRecognizer.Error

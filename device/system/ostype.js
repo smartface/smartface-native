@@ -1,14 +1,13 @@
-
 const OSType = {};
 
 Object.defineProperty(OSType, 'ANDROID', {
-  value: "Android",
-  enumerable: true 
+    value: "Android",
+    enumerable: true
 });
 
 Object.defineProperty(OSType, 'IOS', {
-  value: "iOS",
-  enumerable: true
+    value: "iOS",
+    enumerable: true
 });
 
 

@@ -10,7 +10,7 @@ const MINAPILEVEL_STATUSBARICONCOLOR = 23;
 // WindowManager.LayoutParams flags
 const FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS = -2147483648;
 const FLAG_FULLSCREEN = 1024;
-const FLAG_TRANSLUCENT_STATUS = 67108864; 
+const FLAG_TRANSLUCENT_STATUS = 67108864;
 
 var statusBar = {};
 var activity = AndroidConfig.activity;
@@ -25,8 +25,7 @@ Object.defineProperty(statusBar, 'style', {
             if (statusBarStyle == StatusBarStyle.DEFAULT) {
                 // SYSTEM_UI_FLAG_LIGHT_STATUS_BAR = 8192
                 AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(8192);
-            }
-            else {
+            } else {
                 //STATUS_BAR_VISIBLE = 0
                 AndroidConfig.activity.getWindow().getDecorView().setSystemUiVisibility(0);
             }
@@ -47,8 +46,7 @@ Object.defineProperty(statusBar, 'visible', {
         var window = activity.getWindow();
         if (visible) {
             window.clearFlags(FLAG_FULLSCREEN);
-        }
-        else {
+        } else {
             window.addFlags(FLAG_FULLSCREEN);
         }
     },
@@ -107,15 +105,13 @@ Object.defineProperty(statusBar.android, 'transparent', {
                 // 256 = View.SYSTEM_UI_FLAG_LAYOUT_STABLE, 1024 = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 flags |= 256 | 1024;
                 window.getDecorView().setSystemUiVisibility(flags);
-            }
-            else {
+            } else {
                 flags |= FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
                 flags |= FLAG_TRANSLUCENT_STATUS;
                 window.addFlags(flags);
             }
             isSetFitsSystemWindows = false;
-        }
-        else {
+        } else {
             window.clearFlags(FLAG_TRANSLUCENT_STATUS);
             flags |= 1024 | 256;
             window.getDecorView().setSystemUiVisibility(flags);
@@ -127,7 +123,7 @@ Object.defineProperty(statusBar.android, 'transparent', {
     configurable: true
 });
 
-function setFitsSystemWindows (window, isSetFitsSystemWindows) {
+function setFitsSystemWindows(window, isSetFitsSystemWindows) {
     const NativeViewCompat = requireClass("android.support.v4.view.ViewCompat");
     // ID_ANDROID_CONTENT = The ID that the main layout in the XML layout file should have.
     // 16908290 = ID_ANDROID_CONTENT
@@ -139,17 +135,17 @@ function setFitsSystemWindows (window, isSetFitsSystemWindows) {
     }
 }
 Object.defineProperty(statusBar, 'height', {
-        get: function() {
-            var result = 0;
-            var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
-            if (resourceId > 0) {
-                result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
-            }
-            return AndroidUnitConverter.pixelToDp(result);
-        },
-        enumerable: true,
-        configurable: true
-    });
+    get: function() {
+        var result = 0;
+        var resourceId = AndroidConfig.activityResources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = AndroidConfig.activityResources.getDimensionPixelSize(resourceId);
+        }
+        return AndroidUnitConverter.pixelToDp(result);
+    },
+    enumerable: true,
+    configurable: true
+});
 //Handling ios value
 statusBar.ios = {};
 statusBar.ios.style = null;

@@ -172,7 +172,9 @@ const Picker = extend(View)(
                     var doneListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             if (done)
-                                done({ index: self.currentIndex });
+                                done({
+                                    index: self.currentIndex
+                                });
                         }
                     });
 

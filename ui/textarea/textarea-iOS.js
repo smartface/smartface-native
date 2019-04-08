@@ -16,9 +16,9 @@ const TextArea = extend(TextBox)(
         }
 
         _super(this);
-        
+
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
-        
+
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
                 return self.nativeObject.textAlignmentNumber;
@@ -28,25 +28,25 @@ const TextArea = extend(TextBox)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self.ios, 'showScrollBar', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.showsHorizontalScrollIndicator;
             },
-            set:function(value) {
+            set: function(value) {
                 self.nativeObject.showsHorizontalScrollIndicator = value;
                 self.nativeObject.showsVerticalScrollIndicator = value;
             },
             enumerable: true
         });
         self.ios.showScrollBar = false;
-        
+
         Object.defineProperty(self, 'hint', {
             get: function() {},
             set: function(value) {},
             enumerable: true
         });
-        
+
         Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
             get: function() {},
             set: function(value) {},
@@ -58,7 +58,7 @@ const TextArea = extend(TextBox)(
             set: function(value) {},
             enumerable: true
         });
-        
+
         Object.defineProperty(this, 'actionKeyType', {
             get: function() {},
             set: function(value) {},
@@ -70,19 +70,19 @@ const TextArea = extend(TextBox)(
             set: function(value) {},
             enumerable: true
         });
-        
+
         Object.defineProperty(this.ios, 'clearButtonEnabled', {
             get: function() {},
             set: function(value) {},
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'isPassword', {
             get: function() {},
             set: function(value) {},
             enumerable: true
         });
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

@@ -4,24 +4,24 @@ const extend = require('js-base/core/extend');
 const UIControlEvents = require("sf-core/util").UIControlEvents;
 
 const Switch = extend(View)(
-    function (_super, params)  {
-       var self = this;
-       
-       if(!self.nativeObject){
-           self.nativeObject = new __SF_UISwitch();            
-       }
-         
-       _super(this);
-       
-       if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
-           self.nativeObject.setValueForKey(3, "semanticContentAttribute");
-       } else if(__SF_UIView.viewAppearanceSemanticContentAttribute() == 4){
-           self.nativeObject.setValueForKey(4, "semanticContentAttribute");
-       }
-        
-       self.nativeObject.layer.masksToBounds = false;
-       
-       Object.defineProperty(self, 'enabled', {
+    function(_super, params) {
+        var self = this;
+
+        if (!self.nativeObject) {
+            self.nativeObject = new __SF_UISwitch();
+        }
+
+        _super(this);
+
+        if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3) {
+            self.nativeObject.setValueForKey(3, "semanticContentAttribute");
+        } else if (__SF_UIView.viewAppearanceSemanticContentAttribute() == 4) {
+            self.nativeObject.setValueForKey(4, "semanticContentAttribute");
+        }
+
+        self.nativeObject.layer.masksToBounds = false;
+
+        Object.defineProperty(self, 'enabled', {
             get: function() {
                 return self.nativeObject.setEnabled;
             },
@@ -30,27 +30,29 @@ const Switch = extend(View)(
             },
             enumerable: true
         });
-        
-       Object.defineProperty(self, 'thumbOnColor', {
+
+        Object.defineProperty(self, 'thumbOnColor', {
             get: function() {
                 if (self.nativeObject.thumbTintColor === undefined) {
                     return null;
-                }else{
-                    return new Color({color : self.nativeObject.thumbTintColor});
+                } else {
+                    return new Color({
+                        color: self.nativeObject.thumbTintColor
+                    });
                 }
             },
             set: function(value) {
                 if (value === null || value === undefined) {
                     self.nativeObject.thumbTintColor = undefined;
-                }else{
+                } else {
                     self.nativeObject.thumbTintColor = value.nativeObject;
                 }
             },
             enumerable: true
-         });
-         
-       var _toggleOnColor = Color.GREEN;
-       Object.defineProperty(self, 'toggleOnColor', {
+        });
+
+        var _toggleOnColor = Color.GREEN;
+        Object.defineProperty(self, 'toggleOnColor', {
             get: function() {
                 return _toggleOnColor;
             },
@@ -59,18 +61,18 @@ const Switch = extend(View)(
                 self.nativeObject.onTintColor = value.nativeObject;
             },
             enumerable: true
-         });
-        
-       Object.defineProperty(self, 'toggle', {
+        });
+
+        Object.defineProperty(self, 'toggle', {
             get: function() {
                 return self.nativeObject.isOn;
             },
             set: function(value) {
-                self.nativeObject.setOnAnimated(value,true);
+                self.nativeObject.setOnAnimated(value, true);
             },
             enumerable: true
-         });
-         
+        });
+
         var _onToggleChanged;
         Object.defineProperty(self, 'onToggleChanged', {
             get: function() {
@@ -78,17 +80,17 @@ const Switch = extend(View)(
             },
             set: function(value) {
                 _onToggleChanged = value.bind(this);
-                var onToggleChangedHandler = function(){
+                var onToggleChangedHandler = function() {
                     if (typeof _onToggleChanged === 'function') {
                         var state = self.toggle;
                         _onToggleChanged(state);
                     }
                 };
-                self.nativeObject.addJSTarget(onToggleChangedHandler,UIControlEvents.valueChanged);
+                self.nativeObject.addJSTarget(onToggleChangedHandler, UIControlEvents.valueChanged);
             },
             enumerable: true
         });
-                
+
         self.android = {};
         // Assign parameters given in constructor
         if (params) {
@@ -96,7 +98,7 @@ const Switch = extend(View)(
                 this[param] = params[param];
             }
         }
-    
+
     }
 );
 

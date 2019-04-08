@@ -69,7 +69,7 @@ Picker.prototype.currentIndex = 0;
  * @ios
  * @since 0.1
  */
-Picker.prototype.onSelected = function onSelected(index){ };
+Picker.prototype.onSelected = function onSelected(index) {};
 
 /**
  * This function shows picker in a dialog.
@@ -83,7 +83,7 @@ Picker.prototype.onSelected = function onSelected(index){ };
  * @ios
  * @since 0.1
  */
-Picker.prototype.show = function(ok, cancel){};
+Picker.prototype.show = function(ok, cancel) {};
 
 /**
  * Gets/sets title of the picker. This property only works with show method. Must set before show method.

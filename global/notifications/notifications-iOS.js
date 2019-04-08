@@ -1,4 +1,4 @@
-const Invocation    = require('sf-core/util').Invocation;
+const Invocation = require('sf-core/util').Invocation;
 
 var Notifications = {};
 
@@ -7,7 +7,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
     if (!self.nativeObject) {
         self.nativeObject = new __SF_UILocalNotification();
     }
-    
+
     Object.defineProperty(this, 'alertBody', {
         get: function() {
             return self.nativeObject.alertBody;
@@ -19,7 +19,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this, 'alertAction', {
         get: function() {
             return self.nativeObject.alertAction;
@@ -31,7 +31,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this, 'sound', {
         get: function() {
             return self.nativeObject.soundName;
@@ -43,7 +43,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this, 'launchImage', {
         get: function() {
             return self.nativeObject.alertLaunchImage;
@@ -65,7 +65,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this, 'repeatInterval', {
         get: function() {
             return self.nativeObject.repeatInterval;
@@ -90,7 +90,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this.ios, 'hasAction', {
         get: function() {
             return self.nativeObject.hasAction;
@@ -102,7 +102,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this.ios, 'userInfo', {
         get: function() {
             return self.nativeObject.userInfo;
@@ -114,22 +114,22 @@ Notifications.LocalNotification = function LocalNotification(params) {
         },
         enumerable: true
     });
-    
+
     this.schedule = function() {
         __SF_UIApplication.sharedApplication().scheduleLocalNotification(self.nativeObject);
     };
-    
+
     this.present = function() {
         __SF_UIApplication.sharedApplication().presentLocalNotificationNow(self.nativeObject);
     };
-    
+
     this.cancel = function() {
         __SF_UIApplication.sharedApplication().cancelLocalNotification(self.nativeObject);
     };
-    
+
     // Handling Android specific properties
     this.android = {};
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -138,7 +138,7 @@ Notifications.LocalNotification = function LocalNotification(params) {
     }
 };
 
-Notifications.cancelAllLocalNotifications = function(){
+Notifications.cancelAllLocalNotifications = function() {
     __SF_UIApplication.sharedApplication().cancelAllLocalNotifications();
 };
 
@@ -158,7 +158,7 @@ Object.defineProperties(Notifications.ios, {
     'scheduledLocalNotifications': {
         get: function() {
             var retval = [];
-            
+
             var nativeNotifications = __SF_UIApplication.sharedApplication().scheduledLocalNotifications;
             var arrayLength = nativeNotifications.length;
             for (var i = 0; i < arrayLength; i++) {
@@ -166,7 +166,7 @@ Object.defineProperties(Notifications.ios, {
                 localNotification.nativeObject = nativeNotifications[i];
                 retval.push(localNotification);
             }
-            
+
             return retval;
         },
         enumerable: true,
@@ -182,54 +182,54 @@ Notifications.Priority = {};
 Notifications.Android = {};
 Notifications.Android.Priority = {};
 
-Notifications.registerForPushNotifications = function(onSuccess, onFailure){
+Notifications.registerForPushNotifications = function(onSuccess, onFailure) {
     Application.ios.registeredRemoteWithSuccessCallback = onSuccess;
     Application.ios.registeredRemoteWithFailureCallback = onFailure;
-    
+
     var userNotificationSettings = __SF_UIUserNotificationSettings.settingsForTypesCategories((__SF_UIUserNotificationTypeSound | __SF_UIUserNotificationTypeAlert | __SF_UIUserNotificationTypeBadge), undefined);
     __SF_UIApplication.sharedApplication().registerUserNotificationSettings(userNotificationSettings);
     __SF_UIApplication.sharedApplication().registerForRemoteNotifications();
 };
 
-Notifications.unregisterForPushNotifications = function(){
+Notifications.unregisterForPushNotifications = function() {
     __SF_UIApplication.sharedApplication().unregisterForRemoteNotifications();
 }
 
 const UNAuthorizationStatus = {
     // The user has not yet made a choice regarding whether the application may post user notifications.
-    NotDetermined : 0,
-    
+    NotDetermined: 0,
+
     // The application is not authorized to post user notifications.
-    Denied : 1,
-    
+    Denied: 1,
+
     // The application is authorized to post user notifications.
-    Authorized : 2
+    Authorized: 2
 };
 
 Notifications.ios.authorizationStatus = UNAuthorizationStatus; //deprecated
 
 Notifications.iOS = {};
 Notifications.iOS.AuthorizationStatus = {
-    NOTDETERMINED : 0,
-    DENIED : 1,
-    AUTHORIZED : 2
+    NOTDETERMINED: 0,
+    DENIED: 1,
+    AUTHORIZED: 2
 };
 
-Notifications.ios.getAuthorizationStatus = function(callback){
-    var current = Invocation.invokeClassMethod("UNUserNotificationCenter","currentNotificationCenter",[],"id");
-    
+Notifications.ios.getAuthorizationStatus = function(callback) {
+    var current = Invocation.invokeClassMethod("UNUserNotificationCenter", "currentNotificationCenter", [], "id");
+
     var argBlock = new Invocation.Argument({
-        type:"IDBlock",
-        value: function(settings){
-            var status = Invocation.invokeInstanceMethod(settings,"authorizationStatus",[],"NSInteger");
+        type: "IDBlock",
+        value: function(settings) {
+            var status = Invocation.invokeInstanceMethod(settings, "authorizationStatus", [], "NSInteger");
             if (typeof callback === 'function') {
-                __SF_Dispatch.mainAsync(function(){
+                __SF_Dispatch.mainAsync(function() {
                     callback(status);
                 });
             }
         }
     });
-    Invocation.invokeInstanceMethod(current,"getNotificationSettingsWithCompletionHandler:",[argBlock]);
+    Invocation.invokeInstanceMethod(current, "getNotificationSettingsWithCompletionHandler:", [argBlock]);
 }
 
 module.exports = Notifications;

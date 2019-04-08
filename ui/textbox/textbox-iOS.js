@@ -46,128 +46,124 @@ const UITextAutocapitalizationType = {
 const TextBox = extend(View)(
     function(_super, params) {
         var self = this;
-        
+
         if (!self.nativeObject) {
             self.nativeObject = new __SF_UITextField();
         }
 
         _super(this);
-        
+
         self.android = {};
-        
+
         self.nativeObject.textBoxDelegate = function(method) {
             if (method.name === "textFieldShouldBeginEditing") {
                 self.keyboardanimationdelegate.textFieldShouldBeginEditing();
                 self.onEditBegins();
-            }
-            else if (method.name === "textFieldShouldEndEditing") {
+            } else if (method.name === "textFieldShouldEndEditing") {
                 self.onEditEnds();
-            }
-            else if (method.name === "textFieldShouldReturn") {
+            } else if (method.name === "textFieldShouldReturn") {
                 self.onActionButtonPress({
                     "actionKeyType": self.actionKeyType
                 });
-            }
-            else if(method.name === "textFieldShouldClear"){
-                if(typeof self.ios.onClearButtonPress === 'function'){
+            } else if (method.name === "textFieldShouldClear") {
+                if (typeof self.ios.onClearButtonPress === 'function') {
                     var returnValue = self.ios.onClearButtonPress();
                     return returnValue === undefined ? true : returnValue;
                 }
                 return true;
-            }
-            else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
-                if (typeof self.onTextChanged !== 'function'){
+            } else if (method.name === "shouldChangeCharactersIn:Range:ReplacementString") {
+                if (typeof self.onTextChanged !== 'function') {
                     return true;
                 }
-                
+
                 var __text = self.text;
                 var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
-                
+
                 var startPosition;
                 var invocationStartPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
                 if (invocationStartPosition) {
                     invocationStartPosition.target = selectedTextRange;
                     invocationStartPosition.setSelectorWithString("start");
                     invocationStartPosition.retainArguments();
-                    
+
                     invocationStartPosition.invoke();
                     startPosition = invocationStartPosition.getReturnValue();
                 }
-                
+
                 var endPosition;
                 var invocationEndPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
                 if (invocationEndPosition) {
                     invocationEndPosition.target = selectedTextRange;
                     invocationEndPosition.setSelectorWithString("end");
                     invocationEndPosition.retainArguments();
-                    
+
                     invocationEndPosition.invoke();
                     endPosition = invocationEndPosition.getReturnValue();
                 }
-                
+
                 var offset = 0;
                 var invocationOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
                 if (invocationOffsetFromPosition) {
                     invocationOffsetFromPosition.target = self.nativeObject;
                     invocationOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
                     invocationOffsetFromPosition.retainArguments();
-                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
-                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition, 2);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition, 3);
                     invocationOffsetFromPosition.invoke();
                     offset = invocationOffsetFromPosition.getNSIntegerReturnValue();
                 }
-                
+
                 if (method.replacementString == "") {
                     if (offset === 0) {
                         self.text = __text.slice(0, method.range) + __text.slice(method.range + 1);
-                    }else{
+                    } else {
                         self.text = __text.slice(0, method.range) + __text.slice(method.range + offset);
                     }
-                }else{
+                } else {
                     self.text = __text.slice(0, method.range) + method.replacementString + __text.slice(method.range + offset);
                 }
-                
+
                 var secondCharacterPosition;
                 var invocationPositionFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
                 if (invocationPositionFromPosition) {
                     invocationPositionFromPosition.target = self.nativeObject;
                     invocationPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
                     invocationPositionFromPosition.retainArguments();
-                    invocationPositionFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
+                    invocationPositionFromPosition.setNSObjectArgumentAtIndex(startPosition, 2);
                     if (method.replacementString == "") {
                         if (offset === 0) {
-                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(-1,3); 
-                        }else{
-                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(0,3);
+                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(-1, 3);
+                        } else {
+                            invocationPositionFromPosition.setNSIntegerArgumentAtIndex(0, 3);
                         }
-                    }else{
-                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(method.replacementString.length,3);
-                    }   
+                    } else {
+                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(method.replacementString.length, 3);
+                    }
 
                     invocationPositionFromPosition.invoke();
                     secondCharacterPosition = invocationPositionFromPosition.getReturnValue();
                 }
-                
+
                 var firstCharacterRange;
                 var invocationTextRangeFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
                 if (invocationTextRangeFromPosition) {
                     invocationTextRangeFromPosition.target = self.nativeObject;
                     invocationTextRangeFromPosition.setSelectorWithString("textRangeFromPosition:toPosition:");
                     invocationTextRangeFromPosition.retainArguments();
-                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition,2);
-                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition,3);
-                    
+                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition, 2);
+                    invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(secondCharacterPosition, 3);
+
                     invocationTextRangeFromPosition.invoke();
                     firstCharacterRange = invocationTextRangeFromPosition.getReturnValue();
                 }
-                
-                self.nativeObject.setValueForKey(firstCharacterRange,"selectedTextRange");
-                
+
+                self.nativeObject.setValueForKey(firstCharacterRange, "selectedTextRange");
+
                 self.onTextChanged({
                     location: method.range,
                     insertedText: method.replacementString
                 });
-                        
+
                 return false;
             }
         };
@@ -185,60 +181,63 @@ const TextBox = extend(View)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'cursorPosition', {
             get: function() {
                 var selectedTextRange = self.nativeObject.valueForKey("selectedTextRange");
-                
+
                 var startPosition;
                 var invocationStartPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("start", selectedTextRange);
                 if (invocationStartPosition) {
                     invocationStartPosition.target = selectedTextRange;
                     invocationStartPosition.setSelectorWithString("start");
                     invocationStartPosition.retainArguments();
-                    
+
                     invocationStartPosition.invoke();
                     startPosition = invocationStartPosition.getReturnValue();
                 }
-                
+
                 var endPosition;
                 var invocationEndPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("end", selectedTextRange);
                 if (invocationEndPosition) {
                     invocationEndPosition.target = selectedTextRange;
                     invocationEndPosition.setSelectorWithString("end");
                     invocationEndPosition.retainArguments();
-                    
+
                     invocationEndPosition.invoke();
                     endPosition = invocationEndPosition.getReturnValue();
                 }
-                
+
                 var beginningOfDocument = self.nativeObject.valueForKey("beginningOfDocument");
-                
+
                 var offsetStart = 0;
                 var invocationOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
                 if (invocationOffsetFromPosition) {
                     invocationOffsetFromPosition.target = self.nativeObject;
                     invocationOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
                     invocationOffsetFromPosition.retainArguments();
-                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
-                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition,3);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument, 2);
+                    invocationOffsetFromPosition.setNSObjectArgumentAtIndex(startPosition, 3);
                     invocationOffsetFromPosition.invoke();
                     offsetStart = invocationOffsetFromPosition.getNSIntegerReturnValue();
                 }
-                
+
                 var offsetEnd = 0;
                 var invocationEndOffsetFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("offsetFromPosition:toPosition:", self.nativeObject);
                 if (invocationEndOffsetFromPosition) {
                     invocationEndOffsetFromPosition.target = self.nativeObject;
                     invocationEndOffsetFromPosition.setSelectorWithString("offsetFromPosition:toPosition:");
                     invocationEndOffsetFromPosition.retainArguments();
-                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
-                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
+                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument, 2);
+                    invocationEndOffsetFromPosition.setNSObjectArgumentAtIndex(endPosition, 3);
                     invocationEndOffsetFromPosition.invoke();
                     offsetEnd = invocationEndOffsetFromPosition.getNSIntegerReturnValue();
                 }
-                
-                return {start: offsetStart,end: offsetEnd};
+
+                return {
+                    start: offsetStart,
+                    end: offsetEnd
+                };
             },
             set: function(value) {
                 if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
@@ -250,45 +249,45 @@ const TextBox = extend(View)(
                         invocationPositionFromPosition.target = self.nativeObject;
                         invocationPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
                         invocationPositionFromPosition.retainArguments();
-                        invocationPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
-                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(value.start,3);
-    
+                        invocationPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument, 2);
+                        invocationPositionFromPosition.setNSIntegerArgumentAtIndex(value.start, 3);
+
                         invocationPositionFromPosition.invoke();
                         startPosition = invocationPositionFromPosition.getReturnValue();
                     }
-                    
+
                     var endPosition;
                     var invocationEndPositionFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("positionFromPosition:offset:", self.nativeObject);
                     if (invocationEndPositionFromPosition) {
                         invocationEndPositionFromPosition.target = self.nativeObject;
                         invocationEndPositionFromPosition.setSelectorWithString("positionFromPosition:offset:");
                         invocationEndPositionFromPosition.retainArguments();
-                        invocationEndPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument,2);
-                        invocationEndPositionFromPosition.setNSIntegerArgumentAtIndex(value.end,3);
-    
+                        invocationEndPositionFromPosition.setNSObjectArgumentAtIndex(beginningOfDocument, 2);
+                        invocationEndPositionFromPosition.setNSIntegerArgumentAtIndex(value.end, 3);
+
                         invocationEndPositionFromPosition.invoke();
                         endPosition = invocationEndPositionFromPosition.getReturnValue();
                     }
-                    
+
                     var characterRange;
                     var invocationTextRangeFromPosition = __SF_NSInvocation.createInvocationWithSelectorInstance("textRangeFromPosition:toPosition:", self.nativeObject);
                     if (invocationTextRangeFromPosition) {
                         invocationTextRangeFromPosition.target = self.nativeObject;
                         invocationTextRangeFromPosition.setSelectorWithString("textRangeFromPosition:toPosition:");
                         invocationTextRangeFromPosition.retainArguments();
-                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(startPosition,2);
-                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(endPosition,3);
-                        
+                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(startPosition, 2);
+                        invocationTextRangeFromPosition.setNSObjectArgumentAtIndex(endPosition, 3);
+
                         invocationTextRangeFromPosition.invoke();
                         characterRange = invocationTextRangeFromPosition.getReturnValue();
                     }
-                    
-                    self.nativeObject.setValueForKey(characterRange,"selectedTextRange");
+
+                    self.nativeObject.setValueForKey(characterRange, "selectedTextRange");
                 }
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'text', {
             get: function() {
                 return self.nativeObject.text;
@@ -301,7 +300,9 @@ const TextBox = extend(View)(
 
         Object.defineProperty(self, 'textColor', {
             get: function() {
-                return new Color({color : self.nativeObject.textColor});
+                return new Color({
+                    color: self.nativeObject.textColor
+                });
             },
             set: function(value) {
                 self.nativeObject.textColor = value.nativeObject;
@@ -320,31 +321,28 @@ const TextBox = extend(View)(
                 var vertical;
                 if (parseInt(value / 3) === 0) {
                     vertical = 1;
-                }
-                else if (parseInt(value / 3) === 1) {
+                } else if (parseInt(value / 3) === 1) {
                     vertical = 0;
-                }
-                else {
+                } else {
                     vertical = 2;
                 }
 
                 var horizontal;
                 if (value % 3 === 0) {
                     horizontal = 0;
-                }
-                else if (value % 3 === 1) {
+                } else if (value % 3 === 1) {
                     horizontal = 1;
-                }
-                else {
+                } else {
                     horizontal = 2;
                 }
 
                 self.nativeObject.contentVerticalAlignment = vertical;
                 self.nativeObject.textAlignment = horizontal;
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
-        
+
         var _hint;
         Object.defineProperty(self, 'hint', {
             get: function() {
@@ -352,26 +350,27 @@ const TextBox = extend(View)(
             },
             set: function(value) {
                 _hint = value;
-                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString","alloc",[],"id");
-        
+                var allocNSAttributedString = Invocation.invokeClassMethod("NSAttributedString", "alloc", [], "id");
+
                 var argString = new Invocation.Argument({
-                    type:"NSString",
+                    type: "NSString",
                     value: value
                 });
-                    
+
                 var argAttributes = new Invocation.Argument({
-                    type:"id",
+                    type: "id",
                     value: {
-                        "NSColor" : _hintTextColor.nativeObject
+                        "NSColor": _hintTextColor.nativeObject
                     }
                 });
-                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString,"initWithString:attributes:",[argString,argAttributes],"NSObject");
-                self.nativeObject.setValueForKey(nativeAttributeString,"attributedPlaceholder");
+                var nativeAttributeString = Invocation.invokeInstanceMethod(allocNSAttributedString, "initWithString:attributes:", [argString, argAttributes], "NSObject");
+                self.nativeObject.setValueForKey(nativeAttributeString, "attributedPlaceholder");
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
-        var _hintTextColor = Color.create(199,199,205);
+
+        var _hintTextColor = Color.create(199, 199, 205);
         Object.defineProperty(self, 'hintTextColor', {
             get: function() {
                 return _hintTextColor;
@@ -380,35 +379,39 @@ const TextBox = extend(View)(
                 _hintTextColor = value;
                 self.hint = _hint;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         Object.defineProperty(self, 'autoCapitalize', {
             get: function() {
-                return Invocation.invokeInstanceMethod(self.nativeObject,"autocapitalizationType",[],"NSInteger");
+                return Invocation.invokeInstanceMethod(self.nativeObject, "autocapitalizationType", [], "NSInteger");
             },
             set: function(value) {
                 var argCapitalizationType = new Invocation.Argument({
-                    type:"NSInteger",
+                    type: "NSInteger",
                     value: value
                 });
-                Invocation.invokeInstanceMethod(self.nativeObject,"setAutocapitalizationType:",[argCapitalizationType]);
+                Invocation.invokeInstanceMethod(self.nativeObject, "setAutocapitalizationType:", [argCapitalizationType]);
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
-        
+
         this.ios = {};
-        
+
         Object.defineProperty(self, 'cursorColor', {
             get: function() {
-                return new Color({color : self.nativeObject.valueForKey("tintColor")});
+                return new Color({
+                    color: self.nativeObject.valueForKey("tintColor")
+                });
             },
             set: function(color) {
-                self.nativeObject.setValueForKey(color.nativeObject,"tintColor");
+                self.nativeObject.setValueForKey(color.nativeObject, "tintColor");
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(this.ios, 'adjustFontSizeToFit', {
             get: function() {
                 return self.nativeObject.adjustsFontSizeToFitWidth;
@@ -416,7 +419,8 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.adjustsFontSizeToFitWidth = value;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
 
         var _keyboardLayout;
@@ -427,16 +431,16 @@ const TextBox = extend(View)(
             set: function(value) {
                 if (typeof value === "object") {
                     value.applyLayout();
-                    
+
                     // Bug : IOS-2601
                     var oldOntouch = value.onTouch;
-                    value.onTouch = function(){
+                    value.onTouch = function() {
                         var returnValue = oldOntouch && oldOntouch();
                         return (typeof returnValue) === "undefined" ? true : returnValue;
                     };
                     //////////////////
-                    
-                    self.nativeObject.setValueForKey(value.nativeObject,"inputAccessoryView");
+
+                    self.nativeObject.setValueForKey(value.nativeObject, "inputAccessoryView");
                 }
             },
             enumerable: true
@@ -449,7 +453,8 @@ const TextBox = extend(View)(
             set: function(value) {
                 self.nativeObject.minimumFontSize = value;
             },
-            enumerable: true,configurable : true
+            enumerable: true,
+            configurable: true
         });
 
         Object.defineProperty(this.ios, 'keyboardAppearance', {
@@ -504,7 +509,8 @@ const TextBox = extend(View)(
                         self.nativeObject.returnKeyType = IOSReturnKeyType.default;
                 }
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
 
         Object.defineProperty(self, 'keyboardType', {
@@ -568,7 +574,8 @@ const TextBox = extend(View)(
                         self.nativeObject.keyboardType = IOSKeyboardTypes.default;
                 }
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
 
         var _clearButtonMode = false;
@@ -579,13 +586,13 @@ const TextBox = extend(View)(
             set: function(value) {
                 if (value) {
                     self.nativeObject.clearButtonMode = 1;
-                }
-                else {
+                } else {
                     self.nativeObject.clearButtonMode = 0;
                 }
 
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
 
         Object.defineProperty(self, 'isPassword', {
@@ -596,39 +603,40 @@ const TextBox = extend(View)(
                 self.nativeObject.isSecure = value;
 
             },
-            enumerable: true,configurable: true
+            enumerable: true,
+            configurable: true
         });
-        
-        this.showKeyboard = function(){
+
+        this.showKeyboard = function() {
             self.nativeObject.becomeFirstResponder();
         };
-       
-        this.hideKeyboard = function(){
-           self.nativeObject.resignFirstResponder();
+
+        this.hideKeyboard = function() {
+            self.nativeObject.resignFirstResponder();
         };
-       
-        this.requestFocus = function(){
+
+        this.requestFocus = function() {
             self.nativeObject.becomeFirstResponder();
         };
-       
-        this.removeFocus = function(){
-           self.nativeObject.resignFirstResponder();
+
+        this.removeFocus = function() {
+            self.nativeObject.resignFirstResponder();
         };
-        
+
         self.nativeObject.addKeyboardObserver();
-        
+
         self.keyboardanimationdelegate = new KeyboardAnimationDelegate({
-            nativeObject : self.nativeObject
+            nativeObject: self.nativeObject
         });
-        
-        self.nativeObject.onShowKeyboard = function(e){
-            self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight,e);
+
+        self.nativeObject.onShowKeyboard = function(e) {
+            self.keyboardanimationdelegate.keyboardShowAnimation(e.keyboardHeight, e);
         }
-           
-        self.nativeObject.onHideKeyboard = function(e){
+
+        self.nativeObject.onHideKeyboard = function(e) {
             self.keyboardanimationdelegate.keyboardHideAnimation(e);
         }
-        
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

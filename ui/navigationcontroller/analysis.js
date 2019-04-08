@@ -1,4 +1,3 @@
-
 /**
  * @class UI.NavigationController
  * @since 3.2
@@ -42,7 +41,7 @@ function NavigationController() {
      * @since 3.2.0
      */
     this.childControllers = [];
-    
+
     /**
      * Gets headerBar of NavigationController instance.
      *
@@ -53,7 +52,7 @@ function NavigationController() {
      * @since 3.2.0
      */
     this.headerBar;
-    
+
     /**
      * Show page with animation parameter. Animated parameter is set to true as default.
      *
@@ -66,7 +65,7 @@ function NavigationController() {
      * @since 3.2.0
      */
     this.push = function(params) {};
-    
+
     /**
      * Pop the last page from the navigation controller's page back stack. 
      *
@@ -78,7 +77,7 @@ function NavigationController() {
      * @since 3.2.0
      */
     this.pop = function(params) {};
-    
+
     /**
      * Until the given page is found, the pages popped from back stack.
      *
@@ -91,7 +90,7 @@ function NavigationController() {
      * @since 3.2.0
      */
     this.popTo = function(params) {};
-    
+
     /**
      * This event is triggered before the page is displayed.
      *
@@ -102,8 +101,8 @@ function NavigationController() {
      * @android
      * @since 3.2.0
      */
-    this.willShow = function(params){};
-    
+    this.willShow = function(params) {};
+
     /**
      * This event is triggered before the page is displayed.
      *
@@ -115,7 +114,7 @@ function NavigationController() {
      * @android
      * @since 3.2.0
      */
-    this.onTransition = function(params){};
+    this.onTransition = function(params) {};
 }
 
 
@@ -133,7 +132,7 @@ function NavigationController() {
  * @since 4.0.0
  *
  */
-NavigationController.prototype.present = function(params){};
+NavigationController.prototype.present = function(params) {};
 
 /**
  * This function dismiss presently shown pop-up controller.
@@ -146,7 +145,7 @@ NavigationController.prototype.present = function(params){};
  * @ios
  * @since 4.0.0
  */
-NavigationController.prototype.dismiss = function(){};
+NavigationController.prototype.dismiss = function() {};
 
 /**
  * @enum {Number} UI.NavigationController.OperationType

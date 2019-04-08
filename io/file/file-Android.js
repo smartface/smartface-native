@@ -65,8 +65,7 @@ File.prototype = {
     get exists() {
         if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
             return this.nativeObject ? true : false;
-        }
-        else {
+        } else {
             return this.nativeObject && this.nativeObject.exists();
         }
     },
@@ -74,8 +73,7 @@ File.prototype = {
         var fileName = this.name;
         if (fileName.lastIndexOf(".") !== -1) {
             return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length);
-        }
-        else {
+        } else {
             return fileName;
         }
     },
@@ -92,7 +90,9 @@ File.prototype = {
         return this.resolvedPath.name;
     },
     get parent() {
-        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? new File({ path: this.nativeObject.getParent().getAbsolutePath() }) : null);
+        return (this.resolvedPath.type === Path.FILE_TYPE.FILE && this.nativeObject ? new File({
+            path: this.nativeObject.getParent().getAbsolutePath()
+        }) : null);
     },
     get path() {
         return this.resolvedPath.path;
@@ -128,7 +128,9 @@ File.prototype.getAbsolutePath = function() {
 
 File.prototype.copy = function(destination) {
     if (this.nativeObject) {
-        var destinationFile = new File({ path: destination });
+        var destinationFile = new File({
+            path: destination
+        });
         if (destinationFile.type === Path.FILE_TYPE.FILE) {
             var destinationFileStream;
             if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
@@ -136,32 +138,34 @@ File.prototype.copy = function(destination) {
                 if (this.isDirectory) {
                     destinationConfigured = destinationFile.isDirectory || (destinationFile.exists ? false : destinationFile.createDirectory(true));
                     return destinationConfigured && copyDirectory(this, destinationFile);
-                }
-                else if (this.isFile) {
+                } else if (this.isFile) {
                     destinationConfigured = false;
                     if (destinationFile.exists && destinationFile.isDirectory) {
-                        destinationFile = new File({ path: destinationFile.path + "/" + this.name });
+                        destinationFile = new File({
+                            path: destinationFile.path + "/" + this.name
+                        });
                         destinationConfigured = destinationFile.createFile(true);
-                    }
-                    else if (!destinationFile.exists) {
+                    } else if (!destinationFile.exists) {
                         destinationConfigured = destinationFile.createFile(true);
                     }
                     return destinationConfigured && copyFile(this, destinationFile);
                 }
-            }
-            else if (this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
+            } else if (this.resolvedPath.type === Path.FILE_TYPE.ASSET) {
                 if (destinationFile.exists && destinationFile.isDirectory) {
-                    destinationFile = new File({ path: destination + "/" + this.name });
+                    destinationFile = new File({
+                        path: destination + "/" + this.name
+                    });
                 }
                 if (destinationFile.createFile(true)) {
                     copyAssetFile(destinationFile.nativeObject, this.resolvedPath.name);
                     return true;
                 }
 
-            }
-            else if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
+            } else if (this.resolvedPath.type === Path.FILE_TYPE.DRAWABLE) {
                 if (destinationFile.exists && destinationFile.isDirectory) {
-                    destinationFile = new File({ path: destination + "/" + this.name + ".png" });
+                    destinationFile = new File({
+                        path: destination + "/" + this.name + ".png"
+                    });
                 }
                 if (destinationFile.createFile(true)) {
                     const NativeByteArrayOutputStream = requireClass('java.io.ByteArrayOutputStream');
@@ -181,13 +185,14 @@ File.prototype.copy = function(destination) {
                     drawableByteArrayStream.close();
                     return true;
                 }
-            }
-            else {
+            } else {
                 if (destinationFile.exists && destinationFile.isDirectory) {
                     var destinationFileName = destination + "/" + this.name;
                     if (this.resolvedPath.type === Path.FILE_TYPE.EMULATOR_DRAWABLE || this.resolvedPath.type === Path.FILE_TYPE.RAU_DRAWABLE)
                         destinationFileName += ".png";
-                    destinationFile = new File({ path: destinationFileName });
+                    destinationFile = new File({
+                        path: destinationFileName
+                    });
 
                 }
                 if (destinationFile.createFile(true)) {
@@ -232,7 +237,9 @@ File.prototype.getFiles = function() {
         var allJSFiles = [];
         var allNativeFiles = toJSArray(this.nativeObject.listFiles());
         allNativeFiles && allNativeFiles.forEach(function(tmpFile) {
-            allJSFiles.push(new File({ path: tmpFile.getAbsolutePath() }));
+            allJSFiles.push(new File({
+                path: tmpFile.getAbsolutePath()
+            }));
         });
 
         return allJSFiles;
@@ -242,15 +249,18 @@ File.prototype.getFiles = function() {
 
 File.prototype.move = function(destination) {
     if (this.resolvedPath.type === Path.FILE_TYPE.FILE) {
-        var destinationFile = new File({ path: destination });
+        var destinationFile = new File({
+            path: destination
+        });
         if (destinationFile === Path.FILE_TYPE.FILE) {
             if (this.isFile || this.isDirectory) {
                 if (destinationFile.exists) {
                     if (destinationFile.isDirectory) {
                         // Move to folder
-                        destinationFile = new File({ path: destinationFile.path + "/" + this.name });
-                    }
-                    else {
+                        destinationFile = new File({
+                            path: destinationFile.path + "/" + this.name
+                        });
+                    } else {
                         // MOVE TO FILE
                         destinationFile.remove();
                     }
@@ -267,7 +277,11 @@ File.prototype.move = function(destination) {
 }
 
 File.prototype.openStream = function(streamType, contentMode) {
-    return new FileStream({ source: this, streamType: streamType, contentMode: contentMode });
+    return new FileStream({
+        source: this,
+        streamType: streamType,
+        contentMode: contentMode
+    });
 };
 
 File.prototype.rename = function(newName) {
@@ -304,13 +318,16 @@ function copyDirectory(sourceDirectory, destinationDirectory) {
         return false;
     sourceFiles.forEach(function(tmpFile) {
         if (tmpFile.isFile) {
-            var destinationFile = new File({ path: destinationDirectory.path + "/" + tmpFile.name });
+            var destinationFile = new File({
+                path: destinationDirectory.path + "/" + tmpFile.name
+            });
             if (destinationFile.createFile(true)) {
                 copyFile(tmpFile, destinationFile);
             }
-        }
-        else if (tmpFile.isDirectory) {
-            var newDirectory = new File({ path: tmpFile.path + "/" + tmpFile.name });
+        } else if (tmpFile.isDirectory) {
+            var newDirectory = new File({
+                path: tmpFile.path + "/" + tmpFile.name
+            });
             if (newDirectory.createDirectory(true)) {
                 copyDirectory(tmpFile, newDirectory);
             }
@@ -359,7 +376,7 @@ function copyFile(sourceFile, destinationFile) {
         copyStream(sourceFileStream, destinationFileStream)
         sourceFileStream.close();
         destinationFileStream.close();
-        
+
         return true;
     }
     return false;

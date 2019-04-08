@@ -67,8 +67,7 @@ ViewController.setController = function(params) {
             isComingFromPresent: params.isComingFromPresent,
             onCompleteCallback: params.onCompleteCallback
         });
-    }
-    else if ((params.controller) instanceof Page) {
+    } else if ((params.controller) instanceof Page) {
         // TODO: Check pageID settings! Code duplicate exists
         !params.controller.pageID && (params.controller.pageID = FragmentTransition.generatePageID());
         // TODO: Check animation type. I am not sure about that!
@@ -78,13 +77,11 @@ ViewController.setController = function(params) {
             isComingFromPresent: params.isComingFromPresent,
             onCompleteCallback: params.onCompleteCallback
         });
-    }
-    else if ((params.controller) instanceof BottomTabBarController) {
+    } else if ((params.controller) instanceof BottomTabBarController) {
         // BottomTabBarController doesn't support pop-up or reveal animation yet.
         params.controller.isInsideBottomTabBar = true;
         params.controller.show();
-    }
-    else {
+    } else {
         throw Error("controller parameter mismatch, Parameter must be UI.Page, UI.NavigationController or UI.BottomTabBarController");
     }
 };
@@ -92,11 +89,11 @@ ViewController.setController = function(params) {
 ViewController.getCurrentPageFromController = function(controller) {
     const NavigationController = require("../../../ui/navigationcontroller");
     const BottomTabBarController = require("../../../ui/bottomtabbarcontroller");
-    
+
     if (controller instanceof Page) {
         return controller;
     }
-    
+
     if (controller.childControllers.length > 0) {
         let childController = controller.childControllers[controller.childControllers.length - 1];
         while (childController instanceof NavigationController || childController instanceof BottomTabBarController) {
@@ -110,10 +107,10 @@ ViewController.getCurrentPageFromController = function(controller) {
 
 ViewController.setIsInsideBottomTabBarForAllChildren = function(controller) {
     controller.isInsideBottomTabBar = true;
-    if(controller instanceof Page) {
-       return;
+    if (controller instanceof Page) {
+        return;
     }
-    
+
     // for NavigationController
     controller.childControllers.forEach(function(childController) {
         childController.isInsideBottomTabBar = true;

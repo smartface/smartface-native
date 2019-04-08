@@ -45,8 +45,7 @@ function Badge(params) {
                 _badgeVisible = visible;
                 if (visible) {
                     self.nativeObject.setVisibility(0);
-                }
-                else {
+                } else {
                     self.nativeObject.setVisibility(4);
                 }
             },
@@ -72,8 +71,7 @@ function Badge(params) {
                 _badgeBackgroundColor = color;
                 if (self.nativeObject && color) {
                     nativeGradientDrawable.setColor(color.nativeObject);
-                }
-                else if (self.nativeObject) {
+                } else if (self.nativeObject) {
                     nativeGradientDrawable.mutate(); //Makes mutable, applied to fix unexpected behavior
                     nativeGradientDrawable.setStroke(_borderWidth, _borderColor.nativeObject);
                 }
@@ -90,8 +88,7 @@ function Badge(params) {
                 if (self.nativeObject && color) {
                     if (color.nativeObject) {
                         self.nativeObject.setTextColor(color.nativeObject);
-                    }
-                    else if (TypeUtil.isObject(color)) {
+                    } else if (TypeUtil.isObject(color)) {
                         var textColorStateListDrawable = createColorStateList(color);
                         this.nativeObject.setTextColor(textColorStateListDrawable);
                     }
