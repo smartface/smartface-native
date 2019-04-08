@@ -8,7 +8,7 @@ function HeaderBarItem(params) {
     var _onPress = null;
     
     var self = this;
-    
+
     var _systemItem;
     if (params && params.ios && params.ios.systemItem) {
         _systemItem = params.ios.systemItem;
@@ -117,6 +117,8 @@ function HeaderBarItem(params) {
     });
     
     this.ios = {};
+    self.android = {};
+
     
     Object.defineProperties(this.ios, {
         'systemItem': {

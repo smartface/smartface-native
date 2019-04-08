@@ -704,12 +704,11 @@ function Page(params) {
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
                 nativeBadgeContainer.setLayoutParams(badgeButtonLayoutParams);
 
-                if (item.image && item.image.nativeObject) {
+                if ((item.image && item.image.nativeObject) || item.android.systemIcon)
                     item.nativeObject = new NativeImageButton(activity);
-                }
-                else {
+                else
                     item.nativeObject = new NativeTextButton(activity);
-                }
+                    
                 nativeBadgeContainer.addView(item.nativeObject);
                 item.nativeObject.setBackground(null); // This must be set null in order to prevent unexpected size
                 item.nativeBadgeContainer = nativeBadgeContainer;
@@ -719,6 +718,7 @@ function Page(params) {
                     item.addToHeaderView(item.badge);
                 }
                 itemView = nativeBadgeContainer;
+                item.itemView = itemView;
                 item.setValues();
             }
             if (itemView) {

@@ -58,6 +58,28 @@ HeaderBarItem.prototype.size;
 HeaderBarItem.prototype.attributedTitle;
 
 /**
+ * Gets/sets the system icon  of header bar item. Built-in icons can be set with the corresponding systemIcon value.
+ *
+ *     @example
+ *     var myItem = new HeaderBarItem({
+ *         android: {
+ *             systemIcon: 17301545   // OR 'ic_dialog_email'
+ *         },
+ *         color: Color.RED,
+ *         onPress: function() {
+ *             console.log("You pressed Done item!");
+ *         }
+ *     });
+ *     this.headerBar.setItems([myItem]);
+ *       
+ * @property {Number | String} systemIcon
+ * @android
+ * @see https://developer.android.com/reference/android/R.drawable
+ * @since 4.0.2
+ */
+HeaderBarItem.prototype.systemIcon;
+
+/**
  * Gets systemItem of header bar item. SystemItem only set in constructor of headerBarItem.
  *
  *     @example

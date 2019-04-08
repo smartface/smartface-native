@@ -24,31 +24,11 @@ const Format = {
 };
 
 function Image(params) {
-    var self = this;
-    self.android = {};
+    const self = this;
 
-    var androidResources = AndroidConfig.activityResources;
-    if (params) {
-        if (params.bitmap) {
-            self.nativeObject = new NativeBitmapDrawable(androidResources, params.bitmap);
-        }
-        else if (params.path) {
-            var bitmap = NativeBitmapFactory.decodeFile(params.path);
-            self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
-        }
-        else if (params.roundedBitmapDrawable) {
-            self.nativeObject = params.roundedBitmapDrawable;
-        }
-        else if (params.drawable) {
-            self.nativeObject = params.drawable;
-        }
-        else {
-            throw new Error("path or bitmap can not be empty for Image!");
-        }
-    }
-    else {
+    const androidResources = AndroidConfig.activityResources;
+    if (typeof(params) !== 'object')
         throw new Error("Constructor parameters needed for Image!");
-    }
 
     Object.defineProperties(this, {
         'height': {
@@ -186,9 +166,50 @@ function Image(params) {
                     return;
                 self.nativeObject.setAutoMirrored(isAutoMirrored);
             }
+        },
+        'bitmap': {
+            set: function(value) {
+                self.nativeObject = new NativeBitmapDrawable(androidResources, value);
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'path': {
+            set: function(value) {
+                var bitmap = NativeBitmapFactory.decodeFile(value);
+                self.nativeObject = new NativeBitmapDrawable(androidResources, bitmap);
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'roundedBitmapDrawable': {
+            set: function(value) {
+                self.nativeObject = value;
+            },
+            enumerable: false,
+            configurable: false
+        },
+        'drawable': {
+            set: function(value) {
+                self.nativeObject = value;
+            },
+            enumerable: false,
+            configurable: false
         }
     });
 
+
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
+    let _systemIcon;
     Object.defineProperties(self.android, {
         'round': {
             value: function(radius) {
@@ -200,6 +221,17 @@ function Image(params) {
                     roundedBitmapDrawable: roundedBitmapDrawable
                 });
             }
+        },
+        'systemIcon': {
+            get: function() {
+                return _systemIcon;
+            },
+            set: function(systemIcon) {
+                const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
+                _systemIcon = systemIcon;
+                self.nativeObject = NativeContextCompat.getDrawable(AndroidConfig.activity, Image.systemDrawableId(_systemIcon));
+            },
+            enumerable: true
         }
     });
 
@@ -213,6 +245,13 @@ function Image(params) {
     self.ios.imageWithRenderingMode = function() {
         return self;
     };
+
+    // Assign parameters given in constructor
+    if (params) {
+        for (var param in params) {
+            this[param] = params[param];
+        }
+    }
 }
 
 Object.defineProperties(Image, {
@@ -235,6 +274,16 @@ Object.defineProperties(Image, {
                 return (new Image({ bitmap: bitmap }));
             }
             return null;
+        },
+        enumerable: true
+    },
+    'createSystemIcon': {
+        value: function(systemIcon) {
+            return (new Image({
+                android: {
+                    systemIcon: systemIcon
+                }
+            }));
         },
         enumerable: true
     },
@@ -329,6 +378,18 @@ Image.createImageFromPath = function(path) {
         path = Image.createFromFile(path);
     return path;
 };
+
+Image.systemDrawableId = function(systemIcon) {
+    let resID;
+    if (systemIcon.constructor === String) {
+        const NativeR = requireClass('android.R');
+        resID = NativeR.drawable["" + systemIcon];
+    }
+    else {
+        resID = systemIcon;
+    }
+    return resID;
+}
 
 Image.iOS = {};
 Image.iOS.RenderingMode = {};
