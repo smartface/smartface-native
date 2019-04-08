@@ -17,7 +17,7 @@ const NativeRoundRectShape = requireClass("android.graphics.drawable.shapes.Roun
 const NativeRectF = requireClass("android.graphics.RectF");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
-                
+
 const YogaEdge = {
     "LEFT": NativeYogaEdge.LEFT,
     "TOP": NativeYogaEdge.TOP,
@@ -46,7 +46,7 @@ const Button = extend(Label)(
         if (!this.nativeObject) {
             this.nativeObject = new NativeButton(AndroidConfig.activity);
         }
-        
+
         _super(this);
 
         Object.defineProperties(this, {
@@ -79,7 +79,7 @@ const Button = extend(Label)(
                 set: function(borderWidth) {
                     this._borderWidth = borderWidth;
                     var dp_borderWidth = AndroidUnitConverter.dpToPixel(borderWidth);
-            
+
                     this.yogaNode.setBorder(YogaEdge.LEFT, dp_borderWidth);
                     this.yogaNode.setBorder(YogaEdge.RIGHT, dp_borderWidth);
                     this.yogaNode.setBorder(YogaEdge.TOP, dp_borderWidth);
@@ -98,8 +98,7 @@ const Button = extend(Label)(
                     this.setBorder();
                     if (this.__backgroundImages) {
                         this.setBackgroundImage();
-                    }
-                    else {
+                    } else {
                         this.setBackgroundColor();
                     }
                 },
@@ -118,22 +117,22 @@ const Button = extend(Label)(
                 configurable: true
             }
         });
-    
+
         this.backgroundDrawable = new NativeGradientDrawable();
         this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
-    
+
         this._borderRadius = 0;
         this.radii = array([0, 0, 0, 0, 0, 0, 0, 0], "float");
         this.rectF = new NativeRectF(0, 0, 0, 0);
         this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
         this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
         this.borderShapeDrawable.getPaint().setColor(0);
-    
+
         this.layerDrawable = createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
         this.__backgroundImages = null;
         this._borderColor = Color.BLACK;
         this._borderWidth = 0;
-    
+
         this.setBackgroundImage = function() {
             var resources = AndroidConfig.activityResources;
             const NativeRoundedBitmapFactory = requireClass("android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory");
@@ -145,8 +144,7 @@ const Button = extend(Label)(
                 this.backgroundDrawable = NativeRoundedBitmapFactory.create(resources, bitmap);
                 this.backgroundDrawable.setCornerRadius(this._borderRadius);
                 this.setBackground(0);
-            }
-            else {
+            } else {
                 if (this.__backgroundImages) {
                     var stateDrawable;
                     var image;
@@ -191,20 +189,18 @@ const Button = extend(Label)(
                 }
             }
         };
-    
+
         this.setBackgroundColor = function() {
             if (this._backgroundColor instanceof Color && this._backgroundColor.isGradient) {
                 // release(this.backgroundDrawable);
                 this.backgroundDrawable = this._backgroundColor.nativeObject;
                 this.backgroundDrawable.setCornerRadius(this._borderRadius);
-            }
-            else if (this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
+            } else if (this._backgroundColor instanceof Color && !(this._backgroundColor.isGradient)) {
                 release(this.backgroundDrawable);
                 this.backgroundDrawable = new NativeGradientDrawable();
                 this.backgroundDrawable.setColor(this._backgroundColor.nativeObject);
                 this.backgroundDrawable.setCornerRadius(this._borderRadius);
-            }
-            else {
+            } else {
                 release(this.backgroundDrawable);
                 this.backgroundDrawable = new NativeStateListDrawable();
                 var stateDrawable;
@@ -212,8 +208,7 @@ const Button = extend(Label)(
                 if ('normal' in this._backgroundColor) {
                     if (this._backgroundColor.normal.isGradient) {
                         stateDrawable = this._backgroundColor.normal.nativeObject;
-                    }
-                    else if ((this._backgroundColor.normal) instanceof Color) {
+                    } else if ((this._backgroundColor.normal) instanceof Color) {
                         stateDrawable = new NativeGradientDrawable();
                         stateDrawable.setColor(this._backgroundColor.normal.nativeObject);
                     }
@@ -223,8 +218,7 @@ const Button = extend(Label)(
                 if ('disabled' in this._backgroundColor) {
                     if (this._backgroundColor.disabled.isGradient) {
                         stateDrawable = this._backgroundColor.disabled.nativeObject;
-                    }
-                    else if ((this._backgroundColor.disabled) instanceof Color) {
+                    } else if ((this._backgroundColor.disabled) instanceof Color) {
                         stateDrawable = new NativeGradientDrawable();
                         stateDrawable.setColor(this._backgroundColor.disabled.nativeObject);
                     }
@@ -234,8 +228,7 @@ const Button = extend(Label)(
                 if ('selected' in this._backgroundColor) {
                     if (this._backgroundColor.selected.isGradient) {
                         stateDrawable = this._backgroundColor.selected.nativeObject;
-                    }
-                    else if ((this._backgroundColor.selected) instanceof Color) {
+                    } else if ((this._backgroundColor.selected) instanceof Color) {
                         stateDrawable = new NativeGradientDrawable();
                         stateDrawable.setColor(this._backgroundColor.selected.nativeObject);
                     }
@@ -245,8 +238,7 @@ const Button = extend(Label)(
                 if ('pressed' in this._backgroundColor) {
                     if (this._backgroundColor.pressed.isGradient) {
                         stateDrawable = this._backgroundColor.pressed.nativeObject;
-                    }
-                    else if ((this._backgroundColor.pressed) instanceof Color) {
+                    } else if ((this._backgroundColor.pressed) instanceof Color) {
                         stateDrawable = new NativeGradientDrawable();
                         stateDrawable.setColor(this._backgroundColor.pressed.nativeObject);
                     }
@@ -256,8 +248,7 @@ const Button = extend(Label)(
                 if ('focused' in this._backgroundColor) {
                     if (this._backgroundColor.focused.isGradient) {
                         stateDrawable = this._backgroundColor.focused.nativeObject;
-                    }
-                    else if ((this._backgroundColor.focused) instanceof Color) {
+                    } else if ((this._backgroundColor.focused) instanceof Color) {
                         stateDrawable = new NativeGradientDrawable();
                         stateDrawable.setColor(this._backgroundColor.focused.nativeObject);
                     }
@@ -267,7 +258,7 @@ const Button = extend(Label)(
             }
             this.setBackground(0);
         };
-    
+
         this.setBorder = function() {
             var dp_borderWidth = AndroidUnitConverter.dpToPixel(this.borderWidth);
             // we should set border with greater equals to zero for resetting but this will cause recreating drawable again and again
@@ -276,22 +267,21 @@ const Button = extend(Label)(
                 this.radii = array([this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius,
                     this._borderRadius, this._borderRadius, this._borderRadius, this._borderRadius
                 ], "float");
-        
+
                 this.rectF = new NativeRectF(dp_borderWidth, dp_borderWidth, dp_borderWidth, dp_borderWidth);
                 this.roundRect = new NativeRoundRectShape(this.radii, this.rectF, this.radii);
                 this.borderShapeDrawable = new NativeShapeDrawable(this.roundRect);
-        
+
                 // This is workaround because when set 0 to borderWith it will cause all views background borderColor.
                 if (dp_borderWidth !== 0) {
                     this.borderShapeDrawable.getPaint().setColor(this._borderColor.nativeObject);
-                }
-                else {
+                } else {
                     this.borderShapeDrawable.getPaint().setColor(0);
                 }
                 this.setBackground(1);
             }
         };
-    
+
         this.setBackground = function(layerIndex) {
             var constantStateForCopy = this.nativeObject.getBackground().getConstantState();
             var layerDrawableNative = constantStateForCopy ? constantStateForCopy.newDrawable() : createNewLayerDrawable([this.backgroundDrawable, this.borderShapeDrawable]);
@@ -310,10 +300,10 @@ const Button = extend(Label)(
             // if (this instanceof Webview) {
             //     this.nativeObject.setBackgroundColor(0);
             // }
-        
+
             this.nativeObject.setBackground(layerDrawableNative);
         };
-    
+
 
         // Default settings
         this.nativeObject.setBackground(this.layerDrawable);
@@ -335,8 +325,7 @@ const Button = extend(Label)(
                 set: function(textAlignment) {
                     if (textAlignment in TextAlignmentDic) {
                         this._textAlignment = textAlignment;
-                    }
-                    else {
+                    } else {
                         this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
                     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);

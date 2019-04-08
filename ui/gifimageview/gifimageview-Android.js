@@ -45,7 +45,9 @@ const GifImageView = extend(ImageView)(
             },
             'currentFrame': {
                 get: function() {
-                    return new Image({ bitmap: self.gifImage.nativeObject.getCurrentFrame() });
+                    return new Image({
+                        bitmap: self.gifImage.nativeObject.getCurrentFrame()
+                    });
                 },
                 enumerable: true
             },
@@ -57,7 +59,6 @@ const GifImageView = extend(ImageView)(
             }
         });
 
-        self.ios = {};
 
         // Assign parameters given in constructor
         if (params) {

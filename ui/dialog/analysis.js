@@ -85,11 +85,22 @@ Dialog.prototype.android.isTransparent;
 
 
 /**
+ * Sets whether this dialog is cancelable with the {@link Application#onBackButtonPressed BACK} key.
+ *
+ * @property {Boolean} cancelable
+ * @android
+ * @since 4.0.2
+ */
+Dialog.prototype.android.cancelable = true;
+
+
+/**
  * This function hides keyboard.
  *
  * @method hideKeyboard
  * @android
  * @static
+ * @deprecated 4.0.2 Use {@link Application#hideKeyboard} instead.
  * @since 3.0.1
  */
 Dialog.prototype.android.hideKeyboard = function() {};

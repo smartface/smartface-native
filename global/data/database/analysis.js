@@ -30,8 +30,8 @@
  *     console.log("Worker count is: " + queryResult.count());
  *
  */
-function Database(params){}
-    
+function Database(params) {}
+
 /**
  * The file for creating/opening database from it. If the given file is Assets, the database will be open but if assets not exists the exception will thrown. 
  * The parameter will setted if only given in constructor.
@@ -72,7 +72,7 @@ Database.prototype.inMemory;
  * @throws {Error}
  * @since 1.0
  */
-Database.prototype.close = function(){};
+Database.prototype.close = function() {};
 
 /**
  * Execute Non SELECT SQL Command on Database. Method will thrown exception when execution failed.
@@ -85,7 +85,7 @@ Database.prototype.close = function(){};
  * @see https://sqlite.org/lang.html
  * @since 1.0
  */
-Database.prototype.execute = function(sqlCommand){};
+Database.prototype.execute = function(sqlCommand) {};
 
 /**
  * Execute SELECT SQL Command on Database. Method will thrown exception when execution failed.
@@ -99,7 +99,7 @@ Database.prototype.execute = function(sqlCommand){};
  * @see https://sqlite.org/lang.html
  * @since 1.0
  */
-Database.prototype.query = function(sqlCommand){};
+Database.prototype.query = function(sqlCommand) {};
 
 
 /**
@@ -119,9 +119,9 @@ Database.prototype.query = function(sqlCommand){};
  *         rateGrater3Names.push( rateGrater3Result.get(i).getString('name') );
  *     }
  */
-Database.QueryResult = function(params){}
+Database.QueryResult = function(params) {}
 
-    /**
+/**
  * Returns the count of the query result.
  * 
  * @method count
@@ -130,7 +130,7 @@ Database.QueryResult = function(params){}
  * @ios
  * @since 1.0
  */
-Database.QueryResult.prototype.count = function(){};
+Database.QueryResult.prototype.count = function() {};
 
 /**
  * Returns first match from Query. If no result match with Query, will return null.
@@ -141,7 +141,7 @@ Database.QueryResult.prototype.count = function(){};
  * @ios
  * @since 1.0
  */
-Database.QueryResult.prototype.getFirst = function(){};
+Database.QueryResult.prototype.getFirst = function() {};
 
 /**
  * Returns last match from Query. If no result match with Query, will return null.
@@ -152,7 +152,7 @@ Database.QueryResult.prototype.getFirst = function(){};
  * @ios
  * @since 1.0
  */
-Database.QueryResult.prototype.getLast = function(){};
+Database.QueryResult.prototype.getLast = function() {};
 
 /**
  * Returns the element at the specified index in this query result. If index greater than count, it will throw exception
@@ -165,7 +165,17 @@ Database.QueryResult.prototype.getLast = function(){};
  * @throws {Error} 
  * @since 1.0
  */
-Database.QueryResult.prototype.get = function(index){};
+Database.QueryResult.prototype.get = function(index) {};
+
+
+/**
+ * Closes the QueryResult, releasing all of its resources and making it completely invalid.
+ * 
+ * @method close
+ * @android
+ * @since 4.0.2
+ */
+Database.QueryResult.prototype.close = function() {};
 
 /**
  * @class Data.Database.DatabaseObject
@@ -191,8 +201,8 @@ Database.QueryResult.prototype.get = function(index){};
  *         } );
  *     }
  */
-Database.DatabaseObject = function(params){};
-    
+Database.DatabaseObject = function(params) {};
+
 /**
  * Returns given column name with String. If the given column is not String will thrown exception.
  * 
@@ -204,7 +214,7 @@ Database.DatabaseObject = function(params){};
  * @throws {Error}
  * @since 1.0
  */
-Database.DatabaseObject.prototype.getString = function(columnName){};
+Database.DatabaseObject.prototype.getString = function(columnName) {};
 
 /**
  * Returns given column name with Integer. If the given column is not Integer will thrown exception.
@@ -217,7 +227,7 @@ Database.DatabaseObject.prototype.getString = function(columnName){};
  * @throws {Error}
  * @since 1.0
  */
-Database.DatabaseObject.prototype.getInteger = function(columnName){};
+Database.DatabaseObject.prototype.getInteger = function(columnName) {};
 
 /**
  * Returns given column name with Boolean. If the given column is not Boolean will thrown exception.
@@ -230,7 +240,7 @@ Database.DatabaseObject.prototype.getInteger = function(columnName){};
  * @throws {Error}
  * @since 1.0
  */
-Database.DatabaseObject.prototype.getBoolean = function(columnName){};
+Database.DatabaseObject.prototype.getBoolean = function(columnName) {};
 
 /**
  * Returns given column name with Float. If the given column is not Float will thrown exception.
@@ -243,6 +253,6 @@ Database.DatabaseObject.prototype.getBoolean = function(columnName){};
  * @throws {Error}
  * @since 1.0
  */
-Database.DatabaseObject.prototype.getFloat = function(columnName){};
+Database.DatabaseObject.prototype.getFloat = function(columnName) {};
 
 module.exports = Database;

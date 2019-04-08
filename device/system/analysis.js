@@ -108,7 +108,7 @@ System.LAContextBiometricType;
 /**
  *
  * Returns the api level of the Android system.
- * @property {String} apiLevel
+ * @property {Number} apiLevel
  * @readonly
  * @android
  * @static
@@ -174,10 +174,10 @@ System.clipboard;
  *     @example
  *     System.android.getPackageVersion({
  *         packageName: "io.smartface.SmartfaceApp",
- *         onSuccess: function(e) {
- *             console.log("App version name:" + e.versionName);
+ *         onSuccess: function(versionName) {
+ *             console.log("App version name:" + versionName);
  *         },
- *         onError: function(e) {
+ *         onError: function(error) {
  *             console.log("Package doesn’t exist");
  *         }
  *     });

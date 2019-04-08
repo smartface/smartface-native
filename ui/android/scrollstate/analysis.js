@@ -1,12 +1,12 @@
 /**
-* @enum {Number} UI.Android.ScrollState
-* @static
-* @readonly
-* @since 3.1.2
-*
-* Indicates the scroll state for GridView, ListView and ScrollView. 
-*
-*/
+ * @enum {Number} UI.Android.ScrollState
+ * @static
+ * @readonly
+ * @since 3.1.2
+ *
+ * Indicates the scroll state for GridView, ListView and ScrollView. 
+ *
+ */
 const ScrollState = {};
 
 /**

@@ -10,7 +10,8 @@
  * For example with KeyboardType.DECIMAL user can't enter 5.1.1 for Android because it's not 
  * a decimal number but can enter this number for iOS.
  *  
- * Keyboard types will cause differences between iOS and Android due to native differences.
+ * Keyboard types will cause differences between iOS and Android due to native differences. In Android, a few indicated enums are not 
+ * supported with the usage of password.
  *
  *     @example
  *     const TextBox = require('sf-core/ui/textbox');
@@ -196,7 +197,7 @@ KeyboardType.android.TEXTCAPWORDS = 14;
 
 /**
  * @property {Number} TEXTEMAILSUBJECT
- * Email subject specific keyboard appearance. This keyboard type works only for Android.
+ * Email subject specific keyboard appearance. This keyboard type works only for Android. Setting the content as password is not supported.
  * @static
  * @android
  * @since 0.1
@@ -262,7 +263,7 @@ KeyboardType.android.TIME = 20;
 
 /**
  * @property {Number} EMAILADDRESS
- * Email address specific keyboard appearance.
+ * Email address specific keyboard appearance. In Android, setting the content as password is not supported.
  * @static
  * @android
  * @ios
@@ -338,6 +339,8 @@ KeyboardType.Android.TEXTAUTOCORRECT = 11;
  * @android
  * @since 3.2.1
  * @readonly
+ * @deprecated 4.0.2 Use {@link UI.TextBox.AutoCapitalize#CHARACTERS} instead.
+ * 
  */
 KeyboardType.Android.TEXTCAPCHARACTERS = 12;
 
@@ -348,6 +351,7 @@ KeyboardType.Android.TEXTCAPCHARACTERS = 12;
  * @android
  * @since 3.2.1
  * @readonly
+ * @deprecated 4.0.2 Use {@link UI.TextBox.AutoCapitalize#SENTENCES} instead.
  */
 KeyboardType.Android.TEXTCAPSENTENCES = 13;
 
@@ -358,12 +362,13 @@ KeyboardType.Android.TEXTCAPSENTENCES = 13;
  * @android
  * @since 3.2.1
  * @readonly
+ * @deprecated 4.0.2 Use {@link UI.TextBox.AutoCapitalize#WORDS} instead.
  */
 KeyboardType.Android.TEXTCAPWORDS = 14;
 
 /**
  * @property {Number} TEXTEMAILSUBJECT
- * Email subject specific keyboard appearance. This keyboard type works only for Android.
+ * Email subject specific keyboard appearance. This keyboard type works only for Android.Setting the content as password is not supported.
  * @static
  * @android
  * @since 3.2.1
@@ -373,7 +378,7 @@ KeyboardType.Android.TEXTEMAILSUBJECT = 15;
 
 /**
  * @property {Number} TEXTLONGMESSAGE
- * Long message specific keyboard appearance. This keyboard type works only for Android.
+ * Long message specific keyboard appearance. This keyboard type works only for Android
  * @static
  * @android
  * @since 3.2.1
@@ -413,7 +418,7 @@ KeyboardType.Android.TEXTSHORTMESSAGE = 19;
 
 /**
  * @property {Number} TIME
- * Time specific keyboard appearance. This keyboard type works only for Android.
+ * Time specific keyboard appearance. This keyboard type works only for Android. Setting the content as password is not supported.
  * @static
  * @android
  * @since 3.2.1

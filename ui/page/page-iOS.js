@@ -4,16 +4,16 @@ const Color = require('sf-core/ui/color');
 const System = require('sf-core/device/system');
 const Screen = require('sf-core/device/screen');
 const OrientationType = require('sf-core/device/screen/orientationtype');
-const Invocation    = require('sf-core/util').Invocation;
+const Invocation = require('sf-core/util').Invocation;
 const HeaderBarItem = require('sf-core/ui/headerbaritem');
 const Application = require("sf-core/application");
 
 const UIInterfaceOrientation = {
-    unknown : 0,
-    portrait : 1, // Device oriented vertically, home button on the bottom
-    portraitUpsideDown : 2, // Device oriented vertically, home button on the top
-    landscapeLeft : 3, // Device oriented horizontally, home button on the right
-    landscapeRight : 4
+    unknown: 0,
+    portrait: 1, // Device oriented vertically, home button on the bottom
+    portraitUpsideDown: 2, // Device oriented vertically, home button on the top
+    landscapeLeft: 3, // Device oriented horizontally, home button on the right
+    landscapeRight: 4
 }
 
 function Page(params) {
@@ -21,25 +21,25 @@ function Page(params) {
 
     self.routerPath = null;
 
-    if(!self.nativeObject){
+    if (!self.nativeObject) {
         self.nativeObject = new __SF_UIViewController();
     }
 
     self.pageView = new FlexLayout();
-    
-    self.pageView.nativeObject.addObserver(function(){
-                    self.layout.nativeObject.endEditing(true);
-                },__SF_UIApplicationWillResignActiveNotification);
-    
+
+    self.pageView.nativeObject.addObserver(function() {
+        self.layout.nativeObject.endEditing(true);
+    }, __SF_UIApplicationWillResignActiveNotification);
+
     self.nativeObject.automaticallyAdjustsScrollViewInsets = false;
-    
+
     var _safeAreaPaddingObject = {
-        "top" : 0,
-        "bottom" : 0,
-        "left" : 0,
-        "right" : 0
+        "top": 0,
+        "bottom": 0,
+        "left": 0,
+        "right": 0
     };
-    
+
     function calculateSafeAreaPaddings(paddingObject) {
         self.pageView.paddingTop = paddingObject.top;
         self.pageView.paddingBottom = paddingObject.bottom;
@@ -47,7 +47,7 @@ function Page(params) {
         self.pageView.paddingRight = paddingObject.right;
         self.calculatePosition();
     }
-    
+
     self.ios = {};
     var _safeAreaLayoutMode = false;
     Object.defineProperty(self.ios, 'safeAreaLayoutMode', {
@@ -60,15 +60,20 @@ function Page(params) {
                 if (_safeAreaLayoutMode === true) {
                     calculateSafeAreaPaddings(_safeAreaPaddingObject);
                 } else {
-                    calculateSafeAreaPaddings({ "top" : 0, "bottom" : 0, "left" : 0, "right" : 0 });
+                    calculateSafeAreaPaddings({
+                        "top": 0,
+                        "bottom": 0,
+                        "left": 0,
+                        "right": 0
+                    });
                 }
                 self.layout.applyLayout();
             }
         },
         enumerable: true
     });
-    
-    self.nativeObject.onViewSafeAreaInsetsDidChange = function (e) {
+
+    self.nativeObject.onViewSafeAreaInsetsDidChange = function(e) {
         _safeAreaPaddingObject = e;
         if (_safeAreaLayoutMode) {
             calculateSafeAreaPaddings(_safeAreaPaddingObject);
@@ -78,7 +83,7 @@ function Page(params) {
             self.ios.onSafeAreaPaddingChange(_safeAreaPaddingObject);
         }
     }
-    
+
     var _transitionViews;
     Object.defineProperty(self, 'transitionViews', {
         get: function() {
@@ -86,36 +91,38 @@ function Page(params) {
         },
         set: function(value) {
             if (typeof value === "object") {
-                _transitionViews = value;   
+                _transitionViews = value;
             }
         },
         enumerable: true
     });
-    
-    self.present = function (params) {
+
+    self.present = function(params) {
         if (typeof params === "object") {
             var controller = params.controller;
             var animation = params.animated;
             var onComplete = params.onComplete;
-            
+
             if (typeof controller === "object") {
                 var _animationNeed = animation;
-                var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-                    
+                var _completionBlock = onComplete ? function() {
+                    onComplete();
+                } : undefined;
+
                 var controllerToPresent;
                 if (controller && controller.nativeObject) {
                     controllerToPresent = controller.nativeObject;
-                    
-                    if (typeof self.transitionViews !== "undefined"){
-                        controllerToPresent.setValueForKey(true,"isHeroEnabled");
+
+                    if (typeof self.transitionViews !== "undefined") {
+                        controllerToPresent.setValueForKey(true, "isHeroEnabled");
                     }
-                    
+
                     self.nativeObject.presentViewController(controllerToPresent, _completionBlock, _animationNeed);
                 }
-            }   
+            }
         }
     };
-    
+
     var _presentationStyle = 0;
     Object.defineProperty(self.ios, 'presentationStyle', {
         get: function() {
@@ -129,45 +136,47 @@ function Page(params) {
         },
         enumerable: true
     });
-    
-    self.dismiss = function (params) {
+
+    self.dismiss = function(params) {
         if (typeof params === "object") {
             var onComplete = params.onComplete;
             var animation = params.animated;
-            var _completionBlock = onComplete ? function(){onComplete();} : undefined;
-            self.nativeObject.dismissViewController(_completionBlock,animation);
+            var _completionBlock = onComplete ? function() {
+                onComplete();
+            } : undefined;
+            self.nativeObject.dismissViewController(_completionBlock, animation);
         }
     };
-    
-    self.calculatePosition = function(){
+
+    self.calculatePosition = function() {
         self.layout.applyLayout();
     }
 
-    self.nativeObject.onViewLoad  = function(){
+    self.nativeObject.onViewLoad = function() {
         self.pageView.nativeObject.backgroundColor = __SF_UIColor.whiteColor();
         return self.pageView.nativeObject;
     }
 
-    self.nativeObject.onViewLayoutSubviews = function(){
+    self.nativeObject.onViewLayoutSubviews = function() {
         self.calculatePosition();
     }
 
-    self.nativeObject.onViewDidAppear = function(){
+    self.nativeObject.onViewDidAppear = function() {
         if (self.nativeObject.navigationController) { //COR-1627 for iOS 11 badge
-            var subviews = Invocation.invokeInstanceMethod(self.nativeObject.navigationController.navigationBar,"subviews",[],"id");
+            var subviews = Invocation.invokeInstanceMethod(self.nativeObject.navigationController.navigationBar, "subviews", [], "id");
             for (var i = 0; i < subviews.length; i++) {
                 if (subviews[i].constructor.name == "_UINavigationBarContentView") {
-                    var argConstant= new Invocation.Argument({
-                        type:"BOOL",
+                    var argConstant = new Invocation.Argument({
+                        type: "BOOL",
                         value: false
                     });
-                    Invocation.invokeInstanceMethod(subviews[i],"setClipsToBounds:",[argConstant]);
+                    Invocation.invokeInstanceMethod(subviews[i], "setClipsToBounds:", [argConstant]);
                     break;
                 }
             }
         }
     }
-    
+
     var _onOrientationChange;
     Object.defineProperty(this, 'onOrientationChange', {
         get: function() {
@@ -178,32 +187,34 @@ function Page(params) {
         },
         enumerable: true
     });
-    
-    self.onOrientationChangeHandler = function(){
-        if (typeof self.onOrientationChange === "function"){
+
+    self.onOrientationChangeHandler = function() {
+        if (typeof self.onOrientationChange === "function") {
             var tempOrientation;
             switch (Screen.orientation) {
                 case OrientationType.PORTRAIT:
                     tempOrientation = Page.Orientation.PORTRAIT;
-                    break; 
+                    break;
                 case OrientationType.UPSIDEDOWN:
                     tempOrientation = Page.Orientation.UPSIDEDOWN;
-                    break; 
+                    break;
                 case OrientationType.LANDSCAPELEFT:
                     tempOrientation = Page.Orientation.LANDSCAPELEFT;
-                    break; 
+                    break;
                 case OrientationType.LANDSCAPERIGHT:
                     tempOrientation = Page.Orientation.LANDSCAPERIGHT;
-                    break; 
-                default: 
-                   tempOrientation = Page.Orientation.PORTRAIT;
+                    break;
+                default:
+                    tempOrientation = Page.Orientation.PORTRAIT;
             }
-            self.onOrientationChange({orientation : tempOrientation});
+            self.onOrientationChange({
+                orientation: tempOrientation
+            });
         }
     }
-    
+
     self.nativeObject.viewWillTransition = self.onOrientationChangeHandler;
-    
+
     Object.defineProperty(self, 'layout', {
         get: function() {
             return self.pageView;
@@ -211,11 +222,11 @@ function Page(params) {
         enumerable: true
     });
 
-    self.layout.applyLayout = function(){
+    self.layout.applyLayout = function() {
         self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(true);
     }
-    
-    var _onLoad = function(){}.bind(this);
+
+    var _onLoad = function() {}.bind(this);
     Object.defineProperty(self, 'onLoad', {
         get: function() {
             return _onLoad;
@@ -231,40 +242,40 @@ function Page(params) {
         enumerable: true
     });
 
-    self.checkOrientation = function(){
+    self.checkOrientation = function() {
         var currentOrientation = __SF_UIApplication.sharedApplication().statusBarOrientation;
-        if (self.orientation.indexOf(currentOrientation) === -1){
+        if (self.orientation.indexOf(currentOrientation) === -1) {
             __SF_UIDevice.changeOrientation(currentOrientation); //Workaround for IOS-2580
             __SF_UIDevice.changeOrientation(self.orientation[0]);
             self.layout.applyLayout();
         }
-        
+
     };
-    
+
     Object.defineProperty(this, 'currentOrientation', {
         get: function() {
             var tempOrientation;
             switch (__SF_UIApplication.sharedApplication().statusBarOrientation) {
                 case 1:
                     tempOrientation = Page.Orientation.PORTRAIT;
-                    break; 
+                    break;
                 case 2:
                     tempOrientation = Page.Orientation.UPSIDEDOWN;
-                    break; 
+                    break;
                 case 3:
                     tempOrientation = Page.Orientation.LANDSCAPELEFT;
-                    break; 
+                    break;
                 case 4:
                     tempOrientation = Page.Orientation.LANDSCAPERIGHT;
-                    break; 
-                default: 
-                   tempOrientation = Page.Orientation.PORTRAIT;
+                    break;
+                default:
+                    tempOrientation = Page.Orientation.PORTRAIT;
             }
             return tempOrientation;
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(this, 'orientation', {
         get: function() {
             return self.nativeObject.orientations;
@@ -274,9 +285,9 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     self.orientation = [UIInterfaceOrientation.portrait]; // Default Portrait
-    
+
     var _onShow = undefined;
     Object.defineProperty(self, 'onShow', {
         get: function() {
@@ -285,9 +296,9 @@ function Page(params) {
         set: function(value) {
             _onShow = value;
             self.nativeObject.onShow = function() {
-                __SF_UIView.animation(0,0,function(){
-                self.layout.nativeObject.endEditing(true);
-                },{});
+                __SF_UIView.animation(0, 0, function() {
+                    self.layout.nativeObject.endEditing(true);
+                }, {});
                 self.checkOrientation();
                 if (_onShow instanceof Function) {
                     _onShow.call(this, this.__pendingParameters);
@@ -296,29 +307,26 @@ function Page(params) {
             }.bind(this);
         },
         enumerable: true,
-        configurable : true
+        configurable: true
     });
-    
-    self.onHideHandler = function(){
-        __SF_UIView.animation(0,0,function(){
+
+    self.onHideHandler = function() {
+        __SF_UIView.animation(0, 0, function() {
             self.layout.nativeObject.endEditing(true);
-        },{});
-        
-        if (typeof self.onHide === "function"){
+        }, {});
+
+        if (typeof self.onHide === "function") {
             self.onHide();
         }
     }
-    
+
     self.nativeObject.onHide = self.onHideHandler;
-    
-    //Deprecated use Application.statusBar
-    this.statusBar = Application.statusBar;
-    
-    function getParentViewController(controller){
-        var parent = Invocation.invokeInstanceMethod(controller,"parentViewController",[],"NSObject");
+
+    function getParentViewController(controller) {
+        var parent = Invocation.invokeInstanceMethod(controller, "parentViewController", [], "NSObject");
         if (parent) {
             return getParentViewController(parent);
-        }else{
+        } else {
             return controller;
         }
     }
@@ -330,10 +338,10 @@ function Page(params) {
     self.headerBar = {};
     self.headerBar.android = {};
     self.headerBar.ios = {};
-    
+
     // New one
     self.ios.navigationItem = {};
-    
+
     // Deprecated
     Object.defineProperty(self.headerBar, 'title', {
         get: function() {
@@ -342,7 +350,8 @@ function Page(params) {
         set: function(value) {
             self.nativeObject.navigationItem.title = value;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
 
     // New one
@@ -353,12 +362,14 @@ function Page(params) {
         set: function(value) {
             self.nativeObject.navigationItem.title = value;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _titleView = true;
-    function checkIfSearchviewIsSubview(nativeObject){ //Workaround Bug : IOS-2707
-        for (var index in nativeObject.subviews){
+
+    function checkIfSearchviewIsSubview(nativeObject) { //Workaround Bug : IOS-2707
+        for (var index in nativeObject.subviews) {
             if (nativeObject.subviews[index].constructor.name === "SMFNative.SMFUISearchBar") {
                 return true;
             }
@@ -377,18 +388,19 @@ function Page(params) {
             if (typeof value === "object") {
                 _titleView = value;
                 _titleView.applyLayout();
-                
+
                 // These calls may need for different cases.
                 if (checkIfSearchviewIsSubview(_titleView.nativeObject)) { //Workaround Bug : IOS-2707
                     _titleView.nativeObject.layoutIfNeeded();
                 }
                 // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
                 _titleView.nativeObject.sizeToFit();
-                
+
                 self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
 
     // New one
@@ -400,18 +412,19 @@ function Page(params) {
             if (typeof value === "object") {
                 _titleView = value;
                 _titleView.applyLayout();
-                
+
                 // These calls may need for different cases.
                 if (checkIfSearchviewIsSubview(_titleView.nativeObject)) { //Workaround Bug : IOS-2707
                     _titleView.nativeObject.layoutIfNeeded();
                 }
                 // _titleView.nativeObject.translatesAutoresizingMaskIntoConstraints = true;
                 _titleView.nativeObject.sizeToFit();
-                
+
                 self.nativeObject.navigationItem.titleView = _titleView.nativeObject;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
 
     // Deprecated
@@ -421,15 +434,16 @@ function Page(params) {
         },
         set: function(value) {
             self.nativeObject.navigationItem.hidesBackButton = !value;
-            if (value){
-                if (_leftItem){
+            if (value) {
+                if (_leftItem) {
                     self.nativeObject.navigationItem.leftBarButtonItem = _leftItem;
                 }
-            }else{
+            } else {
                 self.nativeObject.navigationItem.leftBarButtonItem = undefined;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
 
     // New one
@@ -439,22 +453,23 @@ function Page(params) {
         },
         set: function(value) {
             self.nativeObject.navigationItem.hidesBackButton = !value;
-            if (value){
-                if (_leftItem){
+            if (value) {
+                if (_leftItem) {
                     self.nativeObject.navigationItem.leftBarButtonItem = _leftItem;
                 }
-            }else{
+            } else {
                 self.nativeObject.navigationItem.leftBarButtonItem = undefined;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
 
     // Deprecated
-    self.headerBar.setItems = function(value){
+    self.headerBar.setItems = function(value) {
         var nativeObjectArray = [];
-        
-        for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
+
+        for (var i = value.length - 1; i >= 0; i--) { //Bug : IOS-2399
             nativeObjectArray.push(value[i].nativeObject);
         }
 
@@ -462,10 +477,10 @@ function Page(params) {
     };
 
     // New one
-    self.ios.navigationItem.setItems = function(value){
+    self.ios.navigationItem.setItems = function(value) {
         var nativeObjectArray = [];
-        
-        for (var i = value.length-1; i >= 0; i--) { //Bug : IOS-2399
+
+        for (var i = value.length - 1; i >= 0; i--) { //Bug : IOS-2399
             nativeObjectArray.push(value[i].nativeObject);
         }
 
@@ -474,14 +489,14 @@ function Page(params) {
 
     var _leftItem;
     // Deprecated
-    self.headerBar.setLeftItem = function(value){
-        if(value){
+    self.headerBar.setLeftItem = function(value) {
+        if (value) {
             if (value instanceof HeaderBarItem) {
-                if(self.ios.navigationItem.leftItemEnabled){
+                if (self.ios.navigationItem.leftItemEnabled) {
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
-            }else{
+            } else {
                 throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
             }
         } else {
@@ -489,21 +504,21 @@ function Page(params) {
         }
     };
     // New one
-    self.ios.navigationItem.setLeftItem = function(value){
-        if(value){
+    self.ios.navigationItem.setLeftItem = function(value) {
+        if (value) {
             if (value instanceof HeaderBarItem) {
-                if(self.ios.navigationItem.leftItemEnabled){
+                if (self.ios.navigationItem.leftItemEnabled) {
                     self.nativeObject.navigationItem.leftBarButtonItem = value.nativeObject;
                 }
                 _leftItem = value.nativeObject;
-            }else{
+            } else {
                 throw new Error("leftItem must be null or an instance of UI.HeaderBarItem");
             }
         } else {
             self.nativeObject.navigationItem.leftBarButtonItem = null;
         }
     };
-    
+
     var _largeTitleDisplayMode = 0;
     // Deprecated
     Object.defineProperty(self.headerBar.ios, 'largeTitleDisplayMode', {
@@ -537,21 +552,21 @@ function Page(params) {
         },
         enumerable: true
     });
-    
+
     // Deprecated
     Object.defineProperty(self.headerBar.ios, 'backBarButtonItem', {
         get: function() {
             var retval = undefined;
-            
+
             var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
-            
+
             if (nativeObject) {
                 var backBarButtonItem = new HeaderBarItem();
                 backBarButtonItem.nativeObject = nativeObject;
                 backBarButtonItem.nativeObject.target = nativeObject;
                 retval = backBarButtonItem;
             }
-            
+
             return retval;
         },
         set: function(value) {
@@ -566,16 +581,16 @@ function Page(params) {
     Object.defineProperty(self.ios.navigationItem, 'backBarButtonItem', {
         get: function() {
             var retval = undefined;
-            
+
             var nativeObject = self.nativeObject.navigationItem.backBarButtonItem;
-            
+
             if (nativeObject) {
                 var backBarButtonItem = new HeaderBarItem();
                 backBarButtonItem.nativeObject = nativeObject;
                 backBarButtonItem.nativeObject.target = nativeObject;
                 retval = backBarButtonItem;
             }
-            
+
             return retval;
         },
         set: function(value) {
@@ -594,52 +609,52 @@ function Page(params) {
 }
 
 Page.Orientation = {};
-Object.defineProperty(Page.Orientation,"PORTRAIT",{
+Object.defineProperty(Page.Orientation, "PORTRAIT", {
     value: [UIInterfaceOrientation.portrait]
 });
-Object.defineProperty(Page.Orientation,"UPSIDEDOWN",{
+Object.defineProperty(Page.Orientation, "UPSIDEDOWN", {
     value: [UIInterfaceOrientation.portraitUpsideDown]
 });
-Object.defineProperty(Page.Orientation,"AUTOPORTRAIT",{
-    value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown]
+Object.defineProperty(Page.Orientation, "AUTOPORTRAIT", {
+    value: [UIInterfaceOrientation.portrait, UIInterfaceOrientation.portraitUpsideDown]
 });
-Object.defineProperty(Page.Orientation,"LANDSCAPELEFT",{
+Object.defineProperty(Page.Orientation, "LANDSCAPELEFT", {
     value: [UIInterfaceOrientation.landscapeLeft]
 });
-Object.defineProperty(Page.Orientation,"LANDSCAPERIGHT",{
+Object.defineProperty(Page.Orientation, "LANDSCAPERIGHT", {
     value: [UIInterfaceOrientation.landscapeRight]
 });
-Object.defineProperty(Page.Orientation,"AUTOLANDSCAPE",{
-    value: [UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+Object.defineProperty(Page.Orientation, "AUTOLANDSCAPE", {
+    value: [UIInterfaceOrientation.landscapeLeft, UIInterfaceOrientation.landscapeRight]
 });
-Object.defineProperty(Page.Orientation,"AUTO",{
-    value: [UIInterfaceOrientation.portrait,UIInterfaceOrientation.portraitUpsideDown,UIInterfaceOrientation.landscapeLeft,UIInterfaceOrientation.landscapeRight]
+Object.defineProperty(Page.Orientation, "AUTO", {
+    value: [UIInterfaceOrientation.portrait, UIInterfaceOrientation.portraitUpsideDown, UIInterfaceOrientation.landscapeLeft, UIInterfaceOrientation.landscapeRight]
 });
 
 Page.iOS = {};
 Page.iOS.LargeTitleDisplayMode = {};
-Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"AUTOMATIC",{
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode, "AUTOMATIC", {
     value: 0
 });
-Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"ALWAYS",{
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode, "ALWAYS", {
     value: 1
 });
-Object.defineProperty(Page.iOS.LargeTitleDisplayMode,"NEVER",{
+Object.defineProperty(Page.iOS.LargeTitleDisplayMode, "NEVER", {
     value: 2
 });
 
 Page.iOS = {};
 Page.iOS.PresentationStyle = {};
-Object.defineProperty(Page.iOS.PresentationStyle,"COVERVERTICAL",{
+Object.defineProperty(Page.iOS.PresentationStyle, "COVERVERTICAL", {
     value: 0
 });
-Object.defineProperty(Page.iOS.PresentationStyle,"FLIPHORIZONTAL",{
+Object.defineProperty(Page.iOS.PresentationStyle, "FLIPHORIZONTAL", {
     value: 1
 });
-Object.defineProperty(Page.iOS.PresentationStyle,"CROSSDISSOLVE",{
+Object.defineProperty(Page.iOS.PresentationStyle, "CROSSDISSOLVE", {
     value: 2
 });
-Object.defineProperty(Page.iOS.PresentationStyle,"PARTIALCURL",{
+Object.defineProperty(Page.iOS.PresentationStyle, "PARTIALCURL", {
     value: 3
 });
 

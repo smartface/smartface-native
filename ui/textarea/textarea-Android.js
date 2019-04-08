@@ -1,8 +1,8 @@
-const extend        = require('js-base/core/extend');
-const TextBox       = require("../textbox");
+const extend = require('js-base/core/extend');
+const TextBox = require("../textbox");
 
 const TextArea = extend(TextBox)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
         _super(this);
 
@@ -11,24 +11,24 @@ const TextArea = extend(TextBox)(
         // Remove implementations of some properties
         Object.defineProperties(self, {
             'isPassword': {
-                get: function(){},
-                set: function(){}
+                get: function() {},
+                set: function() {}
             },
             'onActionButtonPress': {
-                get: function(){},
-                set: function(){}
+                get: function() {},
+                set: function() {}
             },
             'actionKeyType': {
-                get: function(){},
-                set: function(){},
+                get: function() {},
+                set: function() {},
             },
             'keyboardType': {
-                get: function(){},
-                set: function(){},
+                get: function() {},
+                set: function() {},
             },
             'hint': {
-                get: function(){},
-                set: function(){}
+                get: function() {},
+                set: function() {}
             }
         });
 

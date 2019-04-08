@@ -3,7 +3,7 @@ const extend = require('js-base/core/extend');
 const YogaEnums = require('sf-core/util').YogaEnums;
 
 const FlexLayout = extend(ViewGroup)(
-    function (_super, params) {
+    function(_super, params) {
         _super(this);
 
         // Assign parameters given in constructor

@@ -2,13 +2,18 @@
 const AndroidConfig = require("../androidconfig");
 const DirectionBasedConverter = require("../directionbasedconverter");
 
+const NativeTransitionInflater = requireClass("android.support.transition.TransitionInflater");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
+const NativeAndroidR = requireClass("android.R");
+const API_LEVEL = require('sf-core/device/system').android.apiLevel;
 
 const activity = AndroidConfig.activity;
 const rootViewId = NativeR.id.page_container;
 
 var pageAnimationsCache = {},
     pagePopUpAnimationsCache;
+
+var _addedFragmentsInContainer = {};
 
 function FragmentTransaction() {}
 
@@ -40,10 +45,8 @@ FragmentTransaction.push = function(params) {
     page.popUpBackPage = currentPage;
 
     if (currentPage.transitionViews) {
-        page.enterRevealTransition = true;
-        FragmentTransaction.revealTransition(currentPage.transitionViews, page);
-    }
-    else {
+        FragmentTransaction.revealTransition(currentPage.transitionViews, page, params.animated);
+    } else {
         FragmentTransaction.popUpTransition(page, params.animated);
 
         var isPresentLayoutFocused = page.layout.nativeObject.isFocused();
@@ -82,34 +85,46 @@ FragmentTransaction.replace = function(params) {
 
     if (params.page.popUpBackPage) {
         // back to popup page
+        _addedFragmentsInContainer[params.page.pageID] = true;
         fragmentTransaction.add(rootViewId, params.page.nativeObject, "" + params.page.pageID);
-    }
-    else {
-        let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
-        if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
-            // first push to pop up navigation controller
-            let firstPageInPopup = params.page.parentController.childControllers[0];
-            fragmentTransaction.remove(firstPageInPopup.nativeObject);
-        }
+    } else {
+        // let hasPopupBackController = params.page.parentController && params.page.parentController.popupBackNavigator;
+        // if (hasPopupBackController && (params.page.parentController.childControllers.length == 2)) {
+        //     // first push to pop up navigation controller
+        //     let firstPageInPopup = params.page.parentController.childControllers[0];
+        //     fragmentTransaction.remove(firstPageInPopup.nativeObject);
+        // }
+
+        _addedFragmentsInContainer = {};
+        _addedFragmentsInContainer[params.page.pageID] = true;
+        // replace removes all added fragments
         fragmentTransaction.replace(rootViewId, params.page.nativeObject, "" + params.page.pageID);
     }
 
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
+
+    params.onComplete && params.onComplete();
 };
 
-FragmentTransaction.revealTransition = function(transitionViews, page) {
+FragmentTransaction.revealTransition = function(transitionViews, page, animated = true) {
     FragmentTransaction.checkBottomTabBarVisible(page);
     var rootViewId = NativeR.id.page_container;
     var fragmentManager = activity.getSupportFragmentManager();
     var fragmentTransaction = fragmentManager.beginTransaction();
-    var lenght = transitionViews.length;
-    for (var i = 0; i < lenght; i++) {
-        var view = transitionViews[i];
-        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+
+    if (API_LEVEL >= 21) {
+        addSharedElement({
+            page: page,
+            animated: animated,
+            fragmentTransaction: fragmentTransaction,
+            transitionViews: transitionViews
+        });
     }
+    _addedFragmentsInContainer = {};
+    _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.replace(rootViewId, page.nativeObject);
-    fragmentTransaction.addToBackStack("" + page.pageID);
+    // fragmentTransaction.addToBackStack("" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
@@ -124,6 +139,8 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 
     if (!(animation === false))
         fragmentTransaction.setCustomAnimations(pagePopUpAnimationsCache.enter, 0);
+
+    _addedFragmentsInContainer[page.pageID] = true;
     fragmentTransaction.add(rootViewId, page.nativeObject, "" + page.pageID);
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
@@ -131,32 +148,41 @@ FragmentTransaction.popUpTransition = function(page, animation) {
 
 FragmentTransaction.dismissTransition = function(page, animation) {
     const ViewController = require("./viewcontroller");
-    
+
     let fragmentManager = activity.getSupportFragmentManager();
     !pagePopUpAnimationsCache && setPopUpAnimationsCache();
 
     let popupBackPage;
     if (page.parentController) {
         let popupBackNavigator = page.parentController.popupBackNavigator;
-        if(popupBackNavigator) {
+        if (popupBackNavigator) {
             popupBackNavigator.__isActive = true;
             let currentPageFromController = ViewController.getCurrentPageFromController(popupBackNavigator);
             page.parentController.popUpBackPage = currentPageFromController;
         }
-        
+
         popupBackPage = page.parentController.popUpBackPage;
-        if(popupBackPage.transitionViews) {
-            // reveal back animation
-            fragmentManager.popBackStackImmediate();
+        if (popupBackPage && popupBackPage.transitionViews) {
+            _addedFragmentsInContainer[page.pageID] = false;
+            FragmentTransaction.revealTransition(popupBackPage.transitionViews, popupBackPage, animation);
             return;
-        } 
+        }
     }
     var fragmentTransaction = fragmentManager.beginTransaction();
+
     if (!(animation === false))
         fragmentTransaction.setCustomAnimations(0, pagePopUpAnimationsCache.exit);
-    popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
-    
-    fragmentTransaction.remove(page.nativeObject);
+
+    // already exists in container
+    if (_addedFragmentsInContainer[popupBackPage.pageID]) {
+        _addedFragmentsInContainer[page.pageID] = false;
+        fragmentTransaction.remove(page.nativeObject);
+    } else {
+        _addedFragmentsInContainer = {};
+        _addedFragmentsInContainer[popupBackPage.pageID] = true;
+        popupBackPage && fragmentTransaction.replace(rootViewId, popupBackPage.nativeObject, "" + popupBackPage.pageID);
+    }
+
     fragmentTransaction.commitAllowingStateLoss();
     fragmentManager.executePendingTransactions();
 };
@@ -166,11 +192,32 @@ FragmentTransaction.checkBottomTabBarVisible = function(page) {
     const Application = require("sf-core/application");
     if (page.isInsideBottomTabBar) {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(0); // VISIBLE
-    }
-    else {
+    } else {
         Application.tabBar && Application.tabBar.nativeObject.setVisibility(8); // GONE
     }
 };
+
+function addSharedElement(params = {}) {
+    let {
+        animated,
+        page,
+        fragmentTransaction,
+        transitionViews
+    } = params;
+    if (animated) {
+        var inflater = NativeTransitionInflater.from(AndroidConfig.activity);
+        var inflateTransition = inflater.inflateTransition(NativeAndroidR.transition.move); // android.R.transition.move
+        page.nativeObject.setSharedElementEnterTransition(inflateTransition);
+    } else {
+        page.nativeObject.setSharedElementEnterTransition(null);
+    }
+
+    var lenght = transitionViews.length;
+    for (var i = 0; i < lenght; i++) {
+        var view = transitionViews[i];
+        fragmentTransaction.addSharedElement(view.nativeObject, view.transitionId);
+    }
+}
 
 function leftToRightTransitionAnimation(fragmentTransaction) {
     if (!pageAnimationsCache["LEFTTORIGHT"]) {

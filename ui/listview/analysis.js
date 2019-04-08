@@ -114,7 +114,7 @@ function ListView(params) {}
  * @return {Number}
  * @since 3.0.2
  */
-ListView.prototype.onRowType = function onRowType(index){};
+ListView.prototype.onRowType = function onRowType(index) {};
 
 /**
  * This event is called when a ListView starts to create a ListViewItem.
@@ -127,7 +127,7 @@ ListView.prototype.onRowType = function onRowType(index){};
  * @return {UI.ListViewItem}
  * @since 0.1
  */
-ListView.prototype.onRowCreate = function onRowCreate(type){};
+ListView.prototype.onRowCreate = function onRowCreate(type) {};
 
 /**
  * The behavior for determining the adjusted content offsets.
@@ -158,7 +158,7 @@ ListView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @return {Number}
  * @since 1.1.18
  */
-ListView.prototype.onRowHeight = function onRowHeight(index){};
+ListView.prototype.onRowHeight = function onRowHeight(index) {};
 
 /**
  * This event is called when a UI.ListViewItem created at specified row index.
@@ -171,7 +171,7 @@ ListView.prototype.onRowHeight = function onRowHeight(index){};
  * @ios
  * @since 0.1
  */
-ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
+ListView.prototype.onRowBind = function onRowBind(listViewItem, index) {};
 
 /**
  * This event is called when a scroll occurs. 
@@ -184,7 +184,7 @@ ListView.prototype.onRowBind = function onRowBind(listViewItem, index){};
  * @android
  * @since 4.0.0
  */
-ListView.prototype.onGesture = function onGesture(params){};
+ListView.prototype.onGesture = function onGesture(params) {};
 
 /**
  * This event is called when user selects a row at specific index.
@@ -196,7 +196,7 @@ ListView.prototype.onGesture = function onGesture(params){};
  * @ios
  * @since 0.1
  */
-ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){};
+ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index) {};
 
 /**
  * This event is called when user long selects a row at specific index.
@@ -207,7 +207,7 @@ ListView.prototype.onRowSelected = function onRowSelected(listViewItem, index){}
  * @android
  * @since 2.0.4
  */
-ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index){};
+ListView.prototype.onRowLongSelected = function onRowLongSelected(listViewItem, index) {};
 
 /**
  * Gets/sets the number of rows that will be shown in a ListView.
@@ -275,7 +275,7 @@ ListView.prototype.refreshEnabled = true;
  * @ios
  * @since 0.1
  */
-ListView.prototype.getFirstVisibleIndex = function(){};
+ListView.prototype.getFirstVisibleIndex = function() {};
 
 /**
  * This method returns the index of row which is visible at
@@ -287,7 +287,7 @@ ListView.prototype.getFirstVisibleIndex = function(){};
  * @ios
  * @since 0.1
  */
-ListView.prototype.getLastVisibleIndex = function(){};
+ListView.prototype.getLastVisibleIndex = function() {};
 
 /**
  * Sets the colors used in the refresh animation. On Android the first color
@@ -300,7 +300,7 @@ ListView.prototype.getLastVisibleIndex = function(){};
  * @ios
  * @since 0.1
  */
-ListView.prototype.setPullRefreshColors = function(colors){};
+ListView.prototype.setPullRefreshColors = function(colors) {};
 
 /**
  * This method notify ListView for data changes. After this method is called
@@ -312,18 +312,44 @@ ListView.prototype.setPullRefreshColors = function(colors){};
  * @ios
  * @since 0.1
  */
-ListView.prototype.refreshData = function(){};
+ListView.prototype.refreshData = function() {};
+
+
+
+/**
+ * Called when the ListView should save its layout state. This is a good time to save your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+ *
+ * @method saveInstanceState
+ * @android
+ * @return {Object}
+ * @since 4.0.2
+ */
+ListView.prototype.saveInstanceState = function() {};
+
+
+/**
+ * Called when the ListView should restore its layout state. This is a good time to restore your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the ListView is recreated.
+ *
+ * @param {Object} state
+ * @method restoreInstanceState
+ * @android
+ * @since 4.0.2
+ */
+ListView.prototype.restoreInstanceState = function(state) {};
 
 /**
  * This method scrolls ListView to a specific index.
  *
  * @param {Number} index
+ * @param {Boolean} [animated = true]
  * @method scrollTo
  * @android
  * @ios
  * @since 0.1
  */
-ListView.prototype.scrollTo = function(index){};
+ListView.prototype.scrollTo = function(index, animated) {};
 
 /**
  * Sets/Gets the bounce effect when scrolling.
@@ -345,7 +371,7 @@ ListView.prototype.bounces = true;
  * @ios
  * @since 0.1
  */
-ListView.prototype.stopRefresh = function(){};
+ListView.prototype.stopRefresh = function() {};
 
 /**
  * Gets contentOffset of the ListView.
@@ -378,7 +404,7 @@ ListView.prototype.contentOffset = {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.onScroll = function onScroll(){ }
+ListView.prototype.onScroll = function onScroll() {}
 
 
 /**
@@ -394,7 +420,7 @@ ListView.prototype.onScroll = function onScroll(){ }
  * @android
  * @since 3.2.1
  */
-ListView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
+ListView.prototype.onScrollStateChanged = function onScrollStateChanged() {}
 
 /**
  * This event is called when user pulls down and releases a ListView
@@ -405,7 +431,7 @@ ListView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
  * @ios
  * @since 0.1
  */
-ListView.prototype.onPullRefresh = function onPullRefresh(){}
+ListView.prototype.onPullRefresh = function onPullRefresh() {}
 
 /**
  * @deprecated 1.1.14
@@ -420,7 +446,7 @@ ListView.prototype.onPullRefresh = function onPullRefresh(){}
  * @ios
  * @since 0.1
  */
-ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
+ListView.prototype.ios.swipeItem = function(title, color, padding, action) {}
 
 /**
  * This event is called when user swipe listview row
@@ -468,7 +494,7 @@ ListView.prototype.ios.swipeItem = function(title,color,padding,action){}
  * @since 0.1
  * 
  */
-ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,index){}
+ListView.prototype.ios.onRowSwiped = function(swipeDirection, expansionSettings, index) {}
 
 /**
  * Gets/Sets contentInset of the ListView.
@@ -480,7 +506,10 @@ ListView.prototype.ios.onRowSwiped  = function(swipeDirection,expansionSettings,
  * @ios
  * @since 3.0.2
  */
-ListView.prototype.contentInset = {top: 0,bottom: 0};
+ListView.prototype.contentInset = {
+    top: 0,
+    bottom: 0
+};
 
 
 /**
@@ -523,7 +552,7 @@ ListView.prototype.ios.rightToLeftSwipeEnabled = false;
  * 
  
  */
-ListView.createSwipeItem = function(title,color,padding,action,isAutoHide){};
+ListView.createSwipeItem = function(title, color, padding, action, isAutoHide) {};
 
 /**
  * 
@@ -548,7 +577,7 @@ ListView.createSwipeItem = function(title,color,padding,action,isAutoHide){};
  * 
  
  */
-ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAutoHide){};
+ListView.createSwipeItemWithIcon = function(title, icon, color, padding, action, isAutoHide) {};
 
 /**
  * This method returns ListViewItem
@@ -560,7 +589,7 @@ ListView.createSwipeItemWithIcon = function(title,icon,color,padding,action,isAu
  * @ios
  * @since 0.1
  */
-ListView.prototype.listViewItemByIndex = function(index){};
+ListView.prototype.listViewItemByIndex = function(index) {};
 
 /**
  * This event is called when the list view is about to start scrolling the content.
@@ -572,7 +601,7 @@ ListView.prototype.listViewItemByIndex = function(index){};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollBeginDragging = function(contentOffset){};
+ListView.prototype.onScrollBeginDragging = function(contentOffset) {};
 
 /**
  * This event is called when the list view is starting to decelerate the scrolling movement.
@@ -584,7 +613,7 @@ ListView.prototype.onScrollBeginDragging = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollBeginDecelerating = function(contentOffset){};
+ListView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
 
 /**
  * This event is called when the list view has ended decelerating the scrolling movement.
@@ -596,7 +625,7 @@ ListView.prototype.onScrollBeginDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDecelerating = function(contentOffset){};
+ListView.prototype.onScrollEndDecelerating = function(contentOffset) {};
 
 /**
  * This event is called when dragging ended in the list view.
@@ -609,7 +638,7 @@ ListView.prototype.onScrollEndDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate){};
+ListView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate) {};
 
 /**
  * This event is called when the user finishes scrolling the content.
@@ -627,7 +656,27 @@ ListView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, d
  * @ios
  * @since 3.2.1
  */
-ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset){};
+ListView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset) {};
+
+
+/**
+ * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing. 
+ * 
+ * @event onAttachedToWindow
+ * @android
+ * @since 4.0.2
+ */
+ListView.prototype.onAttachedToWindow = function() {};
+
+/**
+ * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+ * 
+ * @event onDetachedFromWindow
+ * @android
+ * @since 4.0.2
+ */
+ListView.prototype.onDetachedFromWindow = function() {};
+
 
 /**
  * iOS Specific Properties.

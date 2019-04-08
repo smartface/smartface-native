@@ -182,18 +182,18 @@ MapView.prototype.onClusterPress;
  * @ios
  * @since 3.2.1
  */
-MapView.prototype.setCenterLocationWithZoomLevel = function(centerLocation,zoomLevel,animated) {};
+MapView.prototype.setCenterLocationWithZoomLevel = function(centerLocation, zoomLevel, animated) {};
 
 
- /**
-* This property gets zoom level of the map to the given level. if user changed zoom level via pinching you will get different value than you set. Default of this property is 3 on iOS and 8 on Android.
-*
-* @property {Number} zoomLevel
-* @readonly
-* @android
-* @ios
-* @since 1.1.10
-*/
+/**
+ * This property gets zoom level of the map to the given level. if user changed zoom level via pinching you will get different value than you set. Default of this property is 3 on iOS and 8 on Android.
+ *
+ * @property {Number} zoomLevel
+ * @readonly
+ * @android
+ * @ios
+ * @since 1.1.10
+ */
 MapView.prototype.zoomLevel;
 
 /**

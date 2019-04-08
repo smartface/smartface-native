@@ -2,10 +2,10 @@ const extend = require('js-base/core/extend');
 const View = require('sf-core/ui/view');
 
 const Picker = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
 
-        if(!self.nativeObject) {
+        if (!self.nativeObject) {
             self.nativeObject = new __SF_UIPickerView();
         }
 
@@ -14,8 +14,8 @@ const Picker = extend(View)(
         var _items = [];
         Object.defineProperty(this, 'items', {
             get: function() {
-                return _items;  // todo: Returns self.nativeObject.getDisplayValues()
-            },                  // after string problem is solved.
+                return _items; // todo: Returns self.nativeObject.getDisplayValues()
+            }, // after string problem is solved.
             set: function(items) {
                 _items = items;
             },
@@ -50,10 +50,10 @@ const Picker = extend(View)(
         // UIPickerViewDataSource
         var _component = 1;
         self.pickerDataSource = new __SF_UIPickerViewDataSource();
-        self.pickerDataSource.numberOfComponents = function(){
+        self.pickerDataSource.numberOfComponents = function() {
             return _component;
         };
-        self.pickerDataSource.numberOfRowsInComponent = function(component){
+        self.pickerDataSource.numberOfRowsInComponent = function(component) {
             return _items.length;
         };
         self.nativeObject.dataSource = self.pickerDataSource;
@@ -61,20 +61,20 @@ const Picker = extend(View)(
         //////////////////////////////////////////////////////
         // UIPickerViewDelegate
         self.pickerDelegate = new __SF_UIPickerViewDelegate();
-        self.pickerDelegate.titleForRow = function(e){
+        self.pickerDelegate.titleForRow = function(e) {
             return _items[e.row];
         };
-        self.pickerDelegate.didSelectRow = function(e){
+        self.pickerDelegate.didSelectRow = function(e) {
             _currentIndex = e.row;
-            if (typeof _onSelectedCallback === "function"){
+            if (typeof _onSelectedCallback === "function") {
                 _onSelectedCallback(e.row);
             }
         };
         self.nativeObject.delegate = self.pickerDelegate;
-        
+
         this.ios = {};
         this.android = {};
-        
+
         Object.defineProperty(this.ios, 'rowHeight', {
             get: function() {
                 return self.nativeObject.delegate.rowHeight;
@@ -84,7 +84,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _title;
         Object.defineProperty(this, 'title', {
             get: function() {
@@ -95,7 +95,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _titleColor;
         Object.defineProperty(this, 'titleColor', {
             get: function() {
@@ -106,7 +106,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _titleFont;
         Object.defineProperty(this, 'titleFont', {
             get: function() {
@@ -117,7 +117,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _cancelColor;
         Object.defineProperty(this, 'cancelColor', {
             get: function() {
@@ -128,7 +128,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _cancelHighlightedColor;
         Object.defineProperty(this.ios, 'cancelHighlightedColor', {
             get: function() {
@@ -139,7 +139,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _cancelFont;
         Object.defineProperty(this, 'cancelFont', {
             get: function() {
@@ -150,7 +150,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _okColor;
         Object.defineProperty(this, 'okColor', {
             get: function() {
@@ -161,7 +161,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _okHighlightedColor;
         Object.defineProperty(this.ios, 'okHighlightedColor', {
             get: function() {
@@ -172,7 +172,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _okFont;
         Object.defineProperty(this, 'okFont', {
             get: function() {
@@ -183,7 +183,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _okText;
         Object.defineProperty(this, 'okText', {
             get: function() {
@@ -194,7 +194,7 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
+
         var _cancelText;
         Object.defineProperty(this, 'cancelText', {
             get: function() {
@@ -205,20 +205,22 @@ const Picker = extend(View)(
             },
             enumerable: true
         });
-        
-        self.show = function(ok,cancel){
-              var okFunc = function(e){
-                if (typeof ok === "function"){
-                    ok({index : e.index});
+
+        self.show = function(ok, cancel) {
+            var okFunc = function(e) {
+                if (typeof ok === "function") {
+                    ok({
+                        index: e.index
+                    });
                 }
-              };
-              var cancelFunc = function(e){
-                if (typeof cancel === "function"){
+            };
+            var cancelFunc = function(e) {
+                if (typeof cancel === "function") {
                     cancel();
                 }
-              };
-              
-              self.nativeObject.show(self.nativeObject,
+            };
+
+            self.nativeObject.show(self.nativeObject,
                 (self.title === undefined) ? "" : self.title,
                 cancelFunc,
                 okFunc,
@@ -232,7 +234,7 @@ const Picker = extend(View)(
                 self.okFont ? self.okFont : undefined,
                 self.okText ? self.okText : undefined,
                 self.cancelText ? self.cancelText : undefined
-                );
+            );
         }
         // Assign parameters given in constructor
         if (params) {

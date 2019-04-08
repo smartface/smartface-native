@@ -1,27 +1,27 @@
 /*globals requireClass*/
-const AndroidConfig             = require("../../util/Android/androidconfig");
-const ViewGroup                 = require('../viewgroup');
-const extend                    = require('js-base/core/extend');
+const AndroidConfig = require("../../util/Android/androidconfig");
+const ViewGroup = require('../viewgroup');
+const extend = require('js-base/core/extend');
 
-const NativeYogaLayout          = requireClass('com.facebook.yoga.android.YogaLayout');
-const NativeYogaDirection       = requireClass('com.facebook.yoga.YogaDirection');
-const NativeYogaFlexDirection   = requireClass('com.facebook.yoga.YogaFlexDirection');
-const NativeYogaJustify         = requireClass('com.facebook.yoga.YogaJustify');
-const NativeYogaAlign           = requireClass('com.facebook.yoga.YogaAlign');
-const NativeYogaWrap            = requireClass('com.facebook.yoga.YogaWrap');
-const NativeYogaOverflow        = requireClass('com.facebook.yoga.YogaOverflow');
-const NativeYogaPositionType    = requireClass('com.facebook.yoga.YogaPositionType');
+const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
+const NativeYogaDirection = requireClass('com.facebook.yoga.YogaDirection');
+const NativeYogaFlexDirection = requireClass('com.facebook.yoga.YogaFlexDirection');
+const NativeYogaJustify = requireClass('com.facebook.yoga.YogaJustify');
+const NativeYogaAlign = requireClass('com.facebook.yoga.YogaAlign');
+const NativeYogaWrap = requireClass('com.facebook.yoga.YogaWrap');
+const NativeYogaOverflow = requireClass('com.facebook.yoga.YogaOverflow');
+const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
 
 const activity = AndroidConfig.activity;
 
 const FlexLayout = extend(ViewGroup)(
-    function (_super, params) {
-        if(!this.nativeObject){
+    function(_super, params) {
+        if (!this.nativeObject) {
             this.nativeObject = new NativeYogaLayout(activity);
         }
-        
+
         _super(this);
-        
+
         // Assign parameters given in constructor
         if (params) {
             for (var param in params) {
@@ -94,17 +94,17 @@ const FlexLayout = extend(ViewGroup)(
                 enumerable: true
             }
         });
-        
+
         flexLayoutPrototype.toString = function() {
             return 'FlexLayout';
         };
     }
 );
 
-function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums){
+function convertFlexJavaEnumToJsEnum(javaEnum, jsEnums) {
     var jsKeys = Object.keys(jsEnums);
-    for(var i = 0; i< jsKeys.length ; i++){
-        if(javaEnum.equals(jsEnums[jsKeys[i]])){
+    for (var i = 0; i < jsKeys.length; i++) {
+        if (javaEnum.equals(jsEnums[jsKeys[i]])) {
             return jsEnums[jsKeys[i]];
         }
     }
@@ -189,11 +189,11 @@ Object.defineProperty(FlexLayout.AlignContent, 'STRETCH', {
 
 FlexLayout.FlexWrap = {};
 Object.defineProperty(FlexLayout.FlexWrap, 'NOWRAP', {
-    value : NativeYogaWrap.NO_WRAP,
+    value: NativeYogaWrap.NO_WRAP,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.FlexWrap, 'WRAP', {
-    value : NativeYogaWrap.WRAP,
+    value: NativeYogaWrap.WRAP,
     enumerable: true
 });
 
@@ -221,33 +221,33 @@ Object.defineProperty(FlexLayout.AlignItems, 'STRETCH', {
 
 FlexLayout.AlignSelf = {};
 Object.defineProperty(FlexLayout.AlignSelf, 'AUTO', {
-    value : NativeYogaAlign.AUTO,
+    value: NativeYogaAlign.AUTO,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_START', {
-    value : NativeYogaAlign.FLEX_START,
+    value: NativeYogaAlign.FLEX_START,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'CENTER', {
-    value : NativeYogaAlign.CENTER,
+    value: NativeYogaAlign.CENTER,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'FLEX_END', {
-    value : NativeYogaAlign.FLEX_END,
+    value: NativeYogaAlign.FLEX_END,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.AlignSelf, 'STRETCH', {
-    value : NativeYogaAlign.STRETCH,
+    value: NativeYogaAlign.STRETCH,
     enumerable: true
 });
 
 FlexLayout.PositionType = {};
 Object.defineProperty(FlexLayout.PositionType, 'RELATIVE', {
-    value : NativeYogaPositionType.RELATIVE,
+    value: NativeYogaPositionType.RELATIVE,
     enumerable: true
 });
 Object.defineProperty(FlexLayout.PositionType, 'ABSOLUTE', {
-    value : NativeYogaPositionType.ABSOLUTE,
+    value: NativeYogaPositionType.ABSOLUTE,
     enumerable: true
 });
 

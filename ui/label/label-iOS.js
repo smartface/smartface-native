@@ -2,47 +2,68 @@ const View = require('../view');
 const extend = require('js-base/core/extend');
 const Color = require("sf-core/ui/color");
 const SFTextAlignment = require("sf-core/ui/textalignment");
-const Invocation    = require('sf-core/util').Invocation;
+const Invocation = require('sf-core/util').Invocation;
+const NSLineBreakMode = require('sf-core/util/iOS/nslinebreakmode');
 
 const Label = extend(View)(
-    function (_super, params) {
+    function(_super, params) {
         var self = this;
-        
-        if(!self.nativeObject){
+
+        if (!self.nativeObject) {
             self.nativeObject = new __SF_SMFUILabel();
         }
-        
+
         _super(this);
-        
+
         //Defaults
         self.touchEnabled = true;
-        
+
         Object.defineProperty(self, 'font', {
-            get:function() {
+            get: function() {
                 return self.nativeObject.font;
             },
-            set:function(value) {
+            set: function(value) {
                 self.nativeObject.font = value;
             },
             enumerable: true
-         });
+        });
+
+        Object.defineProperty(self, 'ellipsizeMode', {
+            get: function() {
+                return NSLineBreakMode.nsLineBreakModeToEllipsizeMode(self.nativeObject.lineBreakMode);
+            },
+            set: function(value) {
+                self.nativeObject.lineBreakMode = NSLineBreakMode.ellipsizeModeToNSLineBreakMode(value);
+            },
+            enumerable: true
+        });
+
+        Object.defineProperty(self, 'maxLines', {
+            get: function() {
+                return self.nativeObject.numberOfLines;
+            },
+            set: function(value) {
+                self.nativeObject.numberOfLines = value;
+            },
+            enumerable: true
+        });
 
         Object.defineProperty(self, 'multiline', {
             get: function() {
-               if(self.nativeObject.numberOfLines === 0 && self.nativeObject.numberOfLines === 0){
+                if (self.nativeObject.numberOfLines === 0 && self.nativeObject.numberOfLines === 0) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             },
             set: function(value) {
-            	if (value){
-            		self.nativeObject.numberOfLines = 0;
-    				self.nativeObject.lineBreakMode = 0;
-            	}else{
-            		self.nativeObject.numberOfLines = 1;
-    				self.nativeObject.lineBreakMode = 4;
-            	}
+                if (value) {
+                    self.nativeObject.numberOfLines = 0;
+                    self.nativeObject.lineBreakMode = 0;
+                } else {
+                    self.nativeObject.numberOfLines = 1;
+                    self.nativeObject.lineBreakMode = 4;
+                }
             },
             enumerable: true
         });
@@ -57,7 +78,7 @@ const Label = extend(View)(
             enumerable: true,
             configurable: true
         });
-        
+
         var _textAlignment = SFTextAlignment.MIDLEFT;
         Object.defineProperty(self, 'textAlignment', {
             get: function() {
@@ -71,18 +92,16 @@ const Label = extend(View)(
                 var horizontal;
                 if (value % 3 === 0) {
                     horizontal = 0;
-                }
-                else if (value % 3 === 1) {
+                } else if (value % 3 === 1) {
                     horizontal = 1;
-                }
-                else {
+                } else {
                     horizontal = 2;
                 }
                 self.nativeObject.textAlignment = horizontal;
             },
             enumerable: true
         });
-        
+
         var _textColor = Color.BLACK;
         Object.defineProperty(self, 'textColor', {
             get: function() {
@@ -94,7 +113,7 @@ const Label = extend(View)(
             },
             enumerable: true
         });
-    
+
         if (params) {
             for (var param in params) {
                 this[param] = params[param];

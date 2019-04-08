@@ -19,7 +19,9 @@ const ShimmerFlexLayout = extend(View)(
         var _layout = new FlexLayout();
         this.nativeObject.addView(_layout.nativeObject);
 
-        var _baseAlpha = 1, _direction, _repeatDelay = 400, _contentLayout = null;
+        var _baseAlpha = 1,
+            _direction, _repeatDelay = 400,
+            _contentLayout = null;
         Object.defineProperties(this, {
             'contentLayout': {
                 get: function() {
@@ -92,7 +94,6 @@ const ShimmerFlexLayout = extend(View)(
 
         var _duration, _intensity, _repeatCount, _tilt, _highlightColor,
             _baseColor, _shimmerBuilder, _highlightAlpha;
-        this.android = {};
         Object.defineProperties(this.android, {
             'build': {
                 value: function(shimmerEnum) {
@@ -217,7 +218,6 @@ const ShimmerFlexLayout = extend(View)(
             }
         };
 
-        this.ios = {};
     });
 
 ShimmerFlexLayout.Android = {};

@@ -94,7 +94,7 @@ function GridView(params) {}
  * @return {UI.GridViewItem}
  * @since 3.0.2
  */
-GridView.prototype.onItemCreate = function onItemCreate(type){};
+GridView.prototype.onItemCreate = function onItemCreate(type) {};
 
 /**
  * Gets/sets over-scroll mode for this view.
@@ -116,7 +116,7 @@ GridView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @android
  * @since 4.0.0
  */
-GridView.prototype.onGesture = function onGesture(params){};
+GridView.prototype.onGesture = function onGesture(params) {};
 
 /**
  * This event is called when a UI.GridViewItem created at specified row index.
@@ -129,7 +129,7 @@ GridView.prototype.onGesture = function onGesture(params){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.onItemBind = function onItemBind(gridViewItem, index){};
+GridView.prototype.onItemBind = function onItemBind(gridViewItem, index) {};
 
 /**
  * The behavior for determining the adjusted content offsets.
@@ -150,7 +150,7 @@ GridView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustmen
  * @return {Number}
  * @since 3.2.1
  */
-GridView.prototype.onItemType = function onItemType(index){};
+GridView.prototype.onItemType = function onItemType(index) {};
 
 /**
  * This event is called when user selects a item at specific index.
@@ -162,7 +162,7 @@ GridView.prototype.onItemType = function onItemType(index){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index){};
+GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index) {};
 
 /**
  * This event is called when user long selects a item at specific index.
@@ -173,7 +173,7 @@ GridView.prototype.onItemSelected = function onItemSelected(gridViewItem, index)
  * @android
  * @since 3.0.2
  */
-GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index){};
+GridView.prototype.onItemLongSelected = function onItemLongSelected(gridViewItem, index) {};
 
 /**
  * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES. This property must be set after assigning layout manager.
@@ -281,7 +281,7 @@ GridView.prototype.paginationEnabled;
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.getFirstVisibleIndex = function(){};
+GridView.prototype.getFirstVisibleIndex = function() {};
 
 /**
  * This method returns the index of item which is visible at
@@ -293,7 +293,7 @@ GridView.prototype.getFirstVisibleIndex = function(){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.getLastVisibleIndex = function(){};
+GridView.prototype.getLastVisibleIndex = function() {};
 
 /**
  * Sets the colors used in the refresh animation. On Android the first color
@@ -306,7 +306,7 @@ GridView.prototype.getLastVisibleIndex = function(){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.setPullRefreshColors = function(colors){};
+GridView.prototype.setPullRefreshColors = function(colors) {};
 
 /**
  * This method notify GridView for data changes. After this method is called
@@ -318,7 +318,7 @@ GridView.prototype.setPullRefreshColors = function(colors){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.refreshData = function(){};
+GridView.prototype.refreshData = function() {};
 
 /**
  * This method scrolls GridView to a specific index.
@@ -330,7 +330,30 @@ GridView.prototype.refreshData = function(){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.scrollTo = function(index,animated){};
+GridView.prototype.scrollTo = function(index, animated) {};
+
+/**
+ * Called when the GridView should save its layout state. This is a good time to save your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
+ *
+ * @method saveInstanceState
+ * @android
+ * @return {Object}
+ * @since 4.0.2
+ */
+GridView.prototype.saveInstanceState = function() {};
+
+
+/**
+ * Called when the GridView should restore its layout state. This is a good time to restore your scroll position, 
+ * configuration and anything else that may be required to restore the same layout state if the GridView is recreated.
+ *
+ * @param {Object} state
+ * @method restoreInstanceState
+ * @android
+ * @since 4.0.2
+ */
+GridView.prototype.restoreInstanceState = function(state) {};
 
 /**
  * This method cancels refresh operation and stops the refresh
@@ -343,7 +366,7 @@ GridView.prototype.scrollTo = function(index,animated){};
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.stopRefresh = function(){};
+GridView.prototype.stopRefresh = function() {};
 
 /**
  * This event is called when a GridView is scrolling. To remove this evet, set null.
@@ -359,7 +382,7 @@ GridView.prototype.stopRefresh = function(){};
  * @ios
  * @since 3.1.3
  */
-GridView.prototype.onScroll = function onScroll(){ }
+GridView.prototype.onScroll = function onScroll() {}
 
 /**
  * This event is called when a GridView's scroll state is changed. To remove this evet, set null.
@@ -374,7 +397,7 @@ GridView.prototype.onScroll = function onScroll(){ }
  * @android
  * @since 3.2.1
  */
-GridView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
+GridView.prototype.onScrollStateChanged = function onScrollStateChanged() {}
 
 /**
  * This event is called when user pulls down and releases a GridView
@@ -385,7 +408,7 @@ GridView.prototype.onScrollStateChanged = function onScrollStateChanged(){}
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.onPullRefresh = function onPullRefresh(){}
+GridView.prototype.onPullRefresh = function onPullRefresh() {}
 
 /**
  * This method returns GridViewItem
@@ -397,7 +420,7 @@ GridView.prototype.onPullRefresh = function onPullRefresh(){}
  * @ios
  * @since 3.0.2
  */
-GridView.prototype.itemByIndex = function(index){};
+GridView.prototype.itemByIndex = function(index) {};
 
 /**
  * This event is called when the grid view is about to start scrolling the content.
@@ -409,7 +432,7 @@ GridView.prototype.itemByIndex = function(index){};
  * @ios
  * @since 3.2.1
  */
-GridView.prototype.onScrollBeginDragging = function(contentOffset){};
+GridView.prototype.onScrollBeginDragging = function(contentOffset) {};
 
 /**
  * This event is called when the grid view is starting to decelerate the scrolling movement.
@@ -421,7 +444,7 @@ GridView.prototype.onScrollBeginDragging = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-GridView.prototype.onScrollBeginDecelerating = function(contentOffset){};
+GridView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
 
 /**
  * This event is called when the grid view has ended decelerating the scrolling movement.
@@ -433,7 +456,26 @@ GridView.prototype.onScrollBeginDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-GridView.prototype.onScrollEndDecelerating = function(contentOffset){};
+GridView.prototype.onScrollEndDecelerating = function(contentOffset) {};
+
+
+/**
+ * This event is called when the view is attached to a window. At this point it has a Surface and will start drawing. 
+ * 
+ * @event onAttachedToWindow
+ * @android
+ * @since 4.0.2
+ */
+GridView.prototype.onAttachedToWindow = function() {};
+
+/**
+ * This event is called when the view is detached to a window. At this point it no longer has a surface for drawing.
+ * 
+ * @event onDetachedFromWindow
+ * @android
+ * @since 4.0.2
+ */
+GridView.prototype.onDetachedFromWindow = function() {};
 
 /**
  * This event is called when dragging ended in the grid view.
@@ -446,7 +488,7 @@ GridView.prototype.onScrollEndDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-GridView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate){};
+GridView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate) {};
 
 /**
  * This event is called when the user finishes scrolling the content.
@@ -464,7 +506,7 @@ GridView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, d
  * @ios
  * @since 3.2.1
  */
-GridView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset){};
+GridView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset) {};
 
 /**
  * Android Specific Properties.
@@ -479,7 +521,7 @@ GridView.Android = {};
  * 
  * This enum class used to specify your alignment of snapping. 
  */
-GridView.Android.SnapAlignment ={};
+GridView.Android.SnapAlignment = {};
 
 
 /**

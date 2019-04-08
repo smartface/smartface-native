@@ -45,7 +45,7 @@ MenuItem.prototype.ios.style = "";
  * @android
  * @ios
  */
-MenuItem.prototype.onSelected = function onSelected(){ };
+MenuItem.prototype.onSelected = function onSelected() {};
 
 MenuItem.ios = {};
 

@@ -31,7 +31,7 @@ const Android = {};
  *
  *     myAlertView.show();
  */
-var ButtonType = { };
+var ButtonType = {};
 
 /**
  * @property {Number} POSITIVE
@@ -90,7 +90,7 @@ ButtonType.NEGATIVE = 2;
  *
  *     myAlertView.show();
  */
-Android.ButtonType = { };
+Android.ButtonType = {};
 
 /**
  * @property {Number} POSITIVE
@@ -148,7 +148,7 @@ Android.ButtonType.NEGATIVE = 2;
  *
  *     myAlertView.show();
  */
-function AlertView () {}
+function AlertView() {}
 
 /**
  * Gets/sets title of AlertView.

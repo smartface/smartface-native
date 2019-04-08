@@ -193,6 +193,15 @@ HeaderBar.prototype.titleFont = undefined;
 HeaderBar.prototype.height;
 
 /**
+ * A Boolean value that indicates whether the header bar is translucent. For iOS, you should access this property from page.parentController.
+ *
+ * @property {Boolean} translucent
+ * @ios
+ * @since 4.0.2
+ */
+HeaderBar.prototype.translucent = false;
+
+/**
  * Gets/sets the logo of the HeaderBar image which will shown left
  * side of the left item. You should enable the logo with logoEnabled.
  * If log is not set, the logo image will not shown. 

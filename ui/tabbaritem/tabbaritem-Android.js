@@ -1,5 +1,10 @@
+const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
+
 function TabBarItem(params) {
-    let _title, _icon, _badgeObj = undefined;
+    this.ios = {};
+
+    let _title, _icon, _badgeObj = undefined,
+        _systemIcon;
 
     this.nativeObject = null; // this property should be set at runtime.
     this.tabBarItemParent = null; // this property assigned while adding item.
@@ -12,13 +17,8 @@ function TabBarItem(params) {
                 return _title;
             },
             set: function(title) {
-                if (typeof(title) === "string") {
-                    _title = title;
-                    this.nativeObject && this.nativeObject.setTitle(title);
-                }
-                else {
-                    throw new Error("title should be string.");
-                }
+                _title = title;
+                self.__setTitle(title);
             },
             enumerable: true
         },
@@ -26,48 +26,34 @@ function TabBarItem(params) {
             get: function() {
                 return _icon;
             },
-            set: function(valueObj) {
+            set: function(value) {
                 const Image = require("../image");
                 const NativeDrawable = requireClass("android.graphics.drawable.Drawable");
 
+                _icon = value;
                 var EmptyImage = {
                     nativeObject: NativeDrawable.createFromPath(null)
                 };
 
-                var icon = valueObj;
-                if (!(icon instanceof Object)) { //IDE requires this implementation.
+                let icon = value;
+                if (icon.constructor === String) { //IDE requires this implementation.
                     icon = Image.createImageFromPath(icon);
-                }
-                else {
+                } else if (icon instanceof Object) {
                     icon.normal = Image.createImageFromPath(icon.normal);
                     icon.selected = Image.createImageFromPath(icon.selected);
+                } else {
+                    throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
 
-                if (icon instanceof Image || icon === null) {
-                    _icon = icon;
-                }
-                else if (icon instanceof Object) {
+                if (icon instanceof Object) {
                     // TODO: Refactor this implemenation. Discuss with ios team.
                     if (icon.normal instanceof Image && icon.selected instanceof Image) {
-                        _icon = makeSelector(icon.normal, icon.selected);
+                        icon = makeSelector(icon.normal, icon.selected);
+                    } else if (icon.normal instanceof Image) {
+                        icon = makeSelector(icon.normal, EmptyImage);
+                    } else if (icon.selected instanceof Image) {
+                        icon = makeSelector(EmptyImage, icon.selected);
                     }
-                    else if (icon.normal instanceof Image) {
-                        _icon = makeSelector(icon.normal, EmptyImage);
-                    }
-                    else if (icon.selected instanceof Image) {
-                        _icon = makeSelector(EmptyImage, icon.selected);
-                    }
-                    else if (typeof icon.normal === "string" && typeof icon.selected === "string") { //IDE requires this implementation.
-                        icon.normal = icon.normal && Image.createFromFile(icon.normal);
-                        icon.selected = icon.selected && Image.createFromFile(icon.selected);
-                    }
-
-                }
-                else if (typeof icon === "string") {
-                    icon = Image.createFromFile(icon);
-                }
-                else {
-                    throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
                 self.nativeObject && (self.nativeObject.setIcon(icon.nativeObject));
             },
@@ -92,6 +78,39 @@ function TabBarItem(params) {
             configurable: true
         }
     });
+
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
+    Object.defineProperties(self.android, {
+        'systemIcon': {
+            get: function() {
+                return _systemIcon;
+            },
+            set: function(systemIcon) {
+                _systemIcon = systemIcon;
+                const Image = require("../image");
+                self.nativeObject && (self.nativeObject.setIcon(Image.systemDrawableId(_systemIcon)));
+            },
+            enumerable: true
+        }
+    });
+
+    /*
+    Applies common properties of items.
+    */
+    attributedTitleSuper(self);
+
+    this.__setTitle = function(title) {
+        self.nativeObject && self.nativeObject.setTitle(title);
+    };
 
     // Assign parameters given in constructor
     if (params) {
@@ -128,7 +147,9 @@ function TabBarItem(params) {
         res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
-        return res;
+        return {
+            nativeObject: res
+        };
     }
 }
 

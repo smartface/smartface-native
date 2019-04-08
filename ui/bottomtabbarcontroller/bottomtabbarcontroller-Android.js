@@ -6,7 +6,8 @@ const BottomTabBar = require("../../ui/bottomtabbar");
 
 const NativeBottomNavigationView = requireClass("android.support.design.widget.BottomNavigationView");
 const NativeSFR = requireClass(AndroidConfig.packageName + ".R");
-
+const NativeForegroundColorSpan = requireClass("android.text.style.ForegroundColorSpan");
+const SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 const activity = AndroidConfig.activity;
 
 function BottomTabBarController(params) {
@@ -22,8 +23,10 @@ function BottomTabBarController(params) {
     var self = this;
     var _selectedIndex = 0;
     var _shouldSelectByIndexCallback,
-        _didSelectByIndexCallback;
+        _didSelectByIndexCallback,
+        initializeOneTime = false;
     var cahceNativeViews = {};
+    var cacheNativeBuilders = {};
 
     Object.defineProperties(this, {
         'tabBar': {
@@ -47,8 +50,7 @@ function BottomTabBarController(params) {
                 for (let index in _childControllers) {
                     try {
                         _childControllers[index].parentController = self;
-                    }
-                    catch (e) {
+                    } catch (e) {
                         Application.onUnhandledError && Application.onUnhandledError(e);
                     }
                     ViewController.setIsInsideBottomTabBarForAllChildren(_childControllers[index]);
@@ -128,8 +130,7 @@ function BottomTabBarController(params) {
                 page: childController,
                 animated: false
             });
-        }
-        else if (childController instanceof NavigationController) {
+        } else if (childController instanceof NavigationController) {
             childController.__isActive = true;
             // first press
             if (childController.childControllers.length < 1) {
@@ -139,8 +140,7 @@ function BottomTabBarController(params) {
                     controller: childController.childControllers[0],
                     animated: false
                 });
-            }
-            else if (childController.childControllers.length >= 1) {
+            } else if (childController.childControllers.length >= 1) {
                 var childControllerStack = childController.childControllers;
                 var childControllerStackLenght = childControllerStack.length;
 
@@ -150,8 +150,7 @@ function BottomTabBarController(params) {
                     animated: false
                 });
             }
-        }
-        else {
+        } else {
             throw new Error("BottomTabbarController item is not a Page instance or a NavigationController instance!");
         }
     };
@@ -160,20 +159,36 @@ function BottomTabBarController(params) {
         self.addTabBarToActivity();
         self.setChecked();
         // TODO: check __isActive property
-        self.push(self.childControllers[_selectedIndex]);
+        // Comment out for: https://smartface.atlassian.net/browse/SUPDEV-1867
+        // self.push(self.childControllers[_selectedIndex]);
     };
 
     this.setChecked = function() {
-        if (self.tabBar.android && self.tabBar.android.disableItemAnimation) {
-            setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
+        initializeOnce();
+
+        (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
+        if (_selectedIndex < 0)
+            return;
+        if (self.__targetIndex === _selectedIndex) {
+            self.push(self.childControllers[_selectedIndex]);
+            return;
         }
-        else {
-            (!_menu) && (_menu = self.tabBar.nativeObject.getMenu());
-            if (_selectedIndex < 0)
-                return;
-            _menu.getItem(_selectedIndex).setChecked(true);
-        }
+        // TODO: This check is added for https://smartface.atlassian.net/browse/SUPDEV-1867
+        // setSelectedItemId triggers onNavigationItemSelected (deadlock) 
+        self.__targetIndex = _selectedIndex;
+        self.tabBar.nativeObject.setSelectedItemId(_selectedIndex);
     };
+
+    function initializeOnce() {
+        if (initializeOneTime === true)
+            return;
+        //Set normal color to attributed strings.
+        setNormalColorToAttributed.call(self.tabBar, _selectedIndex);
+        controlAttributedTextColor.call(self.tabBar, _selectedIndex, cacheNativeBuilders);
+        self.tabBar.android.disableItemAnimation && setColorToMenuViewItem.call(self.tabBar, _selectedIndex, cahceNativeViews);
+
+        initializeOneTime = true;
+    }
 
     this.getCurrentController = function() {
         var controller = self.childControllers[_selectedIndex];
@@ -190,27 +205,35 @@ function BottomTabBarController(params) {
         onNavigationItemSelected: function(item) {
             const ViewController = require("../../util/Android/transition/viewcontroller");
             var index = item.getItemId();
-            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({ index: index }) : true;
+            var result = self.shouldSelectByIndex ? self.shouldSelectByIndex({
+                index: index
+            }) : true;
 
-            if (self.tabBar.android && self.tabBar.android.disableItemAnimation)
+            let disableItemAnimation = self.tabBar.android && self.tabBar.android.disableItemAnimation;
+            if (!result)
+                return false;
+
+            if (disableItemAnimation)
                 setColorToMenuViewItem.call(self.tabBar, index, cahceNativeViews);
 
-            if (result) {
-                // TODO: Add this property to controller class
-                // use this property to show/hide bottom naviagtion view after controller transition
-                self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
-                self.childControllers[index].isInsideBottomTabBar = true;
-                self.childControllers[index].__isActive = true;
-                self.push(self.childControllers[index]);
-                _selectedIndex = index;
-                try {
-                    self.didSelectByIndex && self.didSelectByIndex({ index: index });
-                }
-                catch (e) {
-                    Application.onUnhandledError && Application.onUnhandledError(e);
-                }
+            controlAttributedTextColor.call(self.tabBar, index, cacheNativeBuilders);
+
+            // TODO: Add this property to controller class
+            // use this property to show/hide bottom naviagtion view after controller transition
+            self.childControllers[_selectedIndex] && (ViewController.deactivateController(self.childControllers[_selectedIndex]));
+            self.childControllers[index].isInsideBottomTabBar = true;
+            self.childControllers[index].__isActive = self.__isActive;
+            self.push(self.childControllers[index]);
+            _selectedIndex = index;
+            try {
+                self.didSelectByIndex && self.didSelectByIndex({
+                    index: index
+                });
+            } catch (e) {
+                Application.onUnhandledError && Application.onUnhandledError(e);
             }
-            return self.tabBar.android && self.tabBar.android.disableItemAnimation ? false : result;
+
+            return !disableItemAnimation;
         }
     }));
 
@@ -223,8 +246,9 @@ function setColorToMenuViewItem(index, cahce) {
 
     let selectedColorNO = tabBar.itemColor.selected.nativeObject;
     let normalColorNO = tabBar.itemColor.normal.nativeObject;
-    if (Object.keys(cahce).length <= tabBar.items.length) {
-        cahce[index] = {};
+
+    !cahce[index] && (cahce[index] = {});
+    if (!cahce[index].nativeImageView && !cahce[index].nativeTextView) {
         let nativeBottomTabarMenuView = tabBar.nativeObject.getChildAt(0);
         let nativeMenuItem = nativeBottomTabarMenuView.getChildAt(index);
         cahce[index].nativeImageView = nativeMenuItem.getChildAt(0);
@@ -243,6 +267,63 @@ function setColorToMenuViewItem(index, cahce) {
     cahce.prevSelectedIndex = index;
 }
 
+function setNormalColorToAttributed(selectedIndex) {
+    const tabBar = this;
+
+    let normalColorNO = tabBar.itemColor.normal.nativeObject;
+    let tabBarItems = tabBar.items;
+    for (var i = tabBarItems.length; i--;) {
+        if (i === selectedIndex)
+            return;
+
+        let tabBarItem = tabBarItems[i];
+        if (!(tabBarItem._attributedTitleBuilder))
+            return;
+        let nativeStringBuilder = attributedItemBuilder(tabBarItem, normalColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
+    }
+}
+
+/*
+Over draws the given foreground color based on selected and normal color of tabbar item. 
+*/
+function controlAttributedTextColor(index, cache) {
+    const tabBar = this;
+
+    let tabBarItem = tabBar.items[index];
+    let nativeStringBuilder;
+
+    if (tabBarItem._attributedTitleBuilder) {
+        let selectedColorNO = tabBar.itemColor.selected.nativeObject;
+        nativeStringBuilder = attributedItem.call(tabBarItem, selectedColorNO);
+        tabBarItem.__setTitle(nativeStringBuilder);
+    }
+    if (cache.prevSelectedAttributedItem !== undefined &&
+        cache.prevSelectedAttributedItem !== index) {
+        let i = cache.prevSelectedAttributedItem;
+        let prevTabBarItem = tabBar.items[i];
+        if (prevTabBarItem._attributedTitleBuilder) {
+            let normalColorNO = tabBar.itemColor.normal.nativeObject;
+            nativeStringBuilder = attributedItem.call(prevTabBarItem, normalColorNO);
+            prevTabBarItem.__setTitle(nativeStringBuilder);
+        }
+    }
+    cache.prevSelectedAttributedItem = index;
+}
+
+function attributedItem(color) {
+    const tabBarItem = this;
+    return attributedItemBuilder(tabBarItem, color);
+}
+
+function attributedItemBuilder(tabBarItem, color) {
+    let nativeForegroundSpan = new NativeForegroundColorSpan(color);
+    let nativeStringBuilder = tabBarItem._attributedTitleBuilder;
+    nativeStringBuilder.setSpan(nativeForegroundSpan, 0, nativeStringBuilder.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
+
+    return nativeStringBuilder;
+}
+
 function disableShiftMode(bottomTabBar) {
     var menuView = bottomTabBar.nativeObject.getChildAt(0);
     var shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
@@ -259,8 +340,7 @@ function disableShiftMode(bottomTabBar) {
         var checked = (item.getItemData()).isChecked();
         if (bottomTabBar.android && bottomTabBar.android.disableItemAnimation) {
             item.setChecked(false);
-        }
-        else
+        } else
             item.setChecked(checked);
     }
     return true;

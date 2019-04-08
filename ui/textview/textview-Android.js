@@ -8,8 +8,6 @@ const unitconverter = require('sf-core/util/Android/unitconverter');
 const NativeBuild = requireClass("android.os.Build");
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
 const NativeLineHeightSpan = requireClass("android.text.style.LineHeightSpan");
-const NativeTypeface = requireClass("android.graphics.Typeface");
-const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
 var SPAN_EXCLUSIVE_EXCLUSIVE = 33;
 
 const TextAlignmentDic = {};
@@ -23,63 +21,62 @@ TextAlignmentDic[TextAlignment.BOTTOMLEFT] = 80 | 3; // Gravity.BOTTOM | Gravity
 TextAlignmentDic[TextAlignment.BOTTOMCENTER] = 80 | 1; // Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL
 TextAlignmentDic[TextAlignment.BOTTOMRIGHT] = 80 | 5; // Gravity.BOTTOM | Gravity.RIGHT
 
+const MAX_VALUE = 2147483647;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
+
 const TextView = extend(Label)(
     function(_super, params) {
         _super(this);
 
         var self = this;
 
-        var _attributedStringBuilder;
-        var _attributedStringArray = [];
-        var _onLinkClick = undefined;
-        var _onClick = undefined; //Deprecated : Please use self.onLinkClick
-        var _letterSpacing = 0;
-        var _lineSpacing = 0;
-        var isMovementMethodAssigned = false;
+        let _attributedStringBuilder, _attributedStringArray = [],
+            _onLinkClick = undefined,
+            _onClick = undefined; //Deprecated : Please use self.onLinkClick
+        let _letterSpacing = 0,
+            _lineSpacing = 0,
+            _scrollEnabled = true,
+            _htmlText;
+
         Object.defineProperties(self, {
             'htmlText': {
                 get: function() {
-                    var text = this.nativeObject.getText();
-                    if (text) {
-                        const NativeHtml = requireClass("android.text.Html");
-                        var htmlText = NativeHtml.toHtml(text);
-                        return htmlText.toString();
-                    }
-                    else {
-                        return "";
-                    }
-
+                    return _htmlText ? _htmlText : "";
                 },
                 set: function(htmlText) {
+                    _htmlText = htmlText;
                     const NativeHtml = requireClass("android.text.Html");
                     var htmlTextNative = NativeHtml.fromHtml("" + htmlText);
-                    if (!isMovementMethodAssigned) {
-                        isMovementMethodAssigned = true;
-                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
-                    }
+
+                    self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setText(htmlTextNative);
                 },
                 enumerable: true
             },
-            'multiline': {
+            'multiline': { //Deprecated usage
                 get: function() {
                     return this.nativeObject.getMaxLines() !== 1;
                 },
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(!multiline);
-                    // Integer.MAX_VALUE
-                    // const NativeInteger = requireClass("java.lang.Integer");
-                    this.nativeObject.setMaxLines(multiline ? 1000 : 1);
-                    if (multiline) {
-                        const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                        var movementMethod = new NativeScrollingMovementMethod();
-                        this.nativeObject.setMovementMethod(movementMethod);
-                    }
-                    else {
-                        this.nativeObject.setMovementMethod(null);
-                    }
+                    this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
+                    self.scrollEnabled = _scrollEnabled;
+                },
+                enumerable: true
+            },
+            'maxLines': {
+                get: function() {
+                    let mMaxLines = this.nativeObject.getMaxLines();
+                    return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
+                },
+                set: function(value) {
+                    if (value === 0)
+                        this.nativeObject.setMaxLines(MAX_VALUE);
+                    else
+                        this.nativeObject.setMaxLines(value);
+                    // This one is added to match same behavior of multiline. 
+                    self.scrollEnabled = _scrollEnabled;
                 },
                 enumerable: true
             },
@@ -115,10 +112,7 @@ const TextView = extend(Label)(
                     this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
                     this.nativeObject.setSingleLine(false);
-                    if (!isMovementMethodAssigned) {
-                        isMovementMethodAssigned = true;
-                        this.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
-                    }
+                    self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
                 },
                 enumerable: true
@@ -197,13 +191,19 @@ const TextView = extend(Label)(
                 set: function(textAlignment) {
                     if (textAlignment in TextAlignmentDic) {
                         this._textAlignment = textAlignment;
-                    }
-                    else {
+                    } else {
                         this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
                     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
                 },
                 enumerable: true
+            },
+            'scrollEnabled': {
+                get: () => _scrollEnabled,
+                set: (scrollEnabled) => {
+                    _scrollEnabled = scrollEnabled;
+                    enableScrollable.call(self, _scrollEnabled);
+                }
             }
         });
         // Assign parameters given in constructor
@@ -215,4 +215,27 @@ const TextView = extend(Label)(
     }
 );
 
+/*
+ToDo: LinkMovementMethod makes the links clickable and scrollable but this case is restricted to mutually directed each other. 
+To prevent, we need to customize BaseMovementMethod
+*/
+function enableScrollable(scrollEnabled) {
+    const self = this;
+    if (scrollEnabled) {
+        if (self.htmlText.length > 0 || self.attributedText.length > 0) {
+            if (self.linkMovementMethodCreated) return;
+            const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
+            self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
+            self.linkMovementMethodCreated = true;
+        } else {
+            if (self.scrollableMovementMethodCreated) return;
+            const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
+            self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
+            self.scrollableMovementMethodCreated = true;
+        }
+    } else {
+        self.linkMovementMethodCreated = self.scrollableMovementMethodCreated = false;
+        self.nativeObject.setMovementMethod(null);
+    }
+}
 module.exports = TextView;

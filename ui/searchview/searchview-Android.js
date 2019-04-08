@@ -168,11 +168,6 @@ const SearchView = extend(View)(
                 },
                 enumerable: true
             },
-            'android': {
-                value: {},
-                enumerable: true
-            },
-
             // methods
             'addToHeaderBar': {
                 value: function(page) {
@@ -318,7 +313,10 @@ const SearchView = extend(View)(
         var _searchButtonIcon, _closeIcon, _searchIcon, _iconifiedByDefault = false,
             _leftItem;
 
-        var _underlineColor = { normal: _defaultUnderlineColorNormal, focus: _defaultUnderlineColorFocus };
+        var _underlineColor = {
+            normal: _defaultUnderlineColorNormal,
+            focus: _defaultUnderlineColorFocus
+        };
 
         Object.defineProperties(this.android, {
             'hintTextColor': {
@@ -418,8 +416,7 @@ const SearchView = extend(View)(
                     if (_leftItem instanceof Image) {
                         mCompatImageView.setImageDrawable(_leftItem.nativeObject);
                         mSearchEditFrame.addView(mCompatImageView, 0);
-                    }
-                    else
+                    } else
                         mSearchEditFrame.addView(_leftItem.nativeObject, 0);
                     //If searchIcon is assign then can be used leftView as well
                     if (_searchIconAssigned)
@@ -464,7 +461,6 @@ const SearchView = extend(View)(
         };
 
         // Handling ios specific properties
-        this.ios = {};
         this.ios.showLoading = function() {};
         this.ios.hideLoading = function() {};
 
@@ -478,8 +474,7 @@ const SearchView = extend(View)(
                     if (hasFocus) {
                         _onSearchBeginCallback && _onSearchBeginCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.focus.nativeObject, PorterDuff.Mode.MULTIPLY);
-                    }
-                    else {
+                    } else {
                         _onSearchEndCallback && _onSearchEndCallback();
                         mUnderLine.getBackground().setColorFilter(_underlineColor.normal.nativeObject, PorterDuff.Mode.MULTIPLY);
                     }
@@ -494,7 +489,9 @@ const SearchView = extend(View)(
         mSearchEditFrame.removeViewAt(0);
         let a = AndroidConfig.activity.obtainStyledAttributes(null, NativeSupportR.styleable.SearchView, NativeSupportR.attr.searchViewStyle, 0);
         let mSearchHintIcon = a.getDrawable(NativeSupportR.styleable.SearchView_searchHintIcon); //Drawable
-        _searchIcon = new Image({ roundedBitmapDrawable: mSearchHintIcon });
+        _searchIcon = new Image({
+            roundedBitmapDrawable: mSearchHintIcon
+        });
         updateQueryHint(self, mSearchSrcTextView, _searchIcon, _hint);
         a.recycle();
 
@@ -525,8 +522,7 @@ function updateQueryHint(self, mSearchSrcTextView, icon, hint) {
         ssb.setSpan(imageSpan, 1, 2, SPAN_EXCLUSIVE_EXCLUSIVE);
         ssb.append(hint);
         mSearchSrcTextView.setHint(ssb);
-    }
-    else {
+    } else {
         self.nativeObject.setQueryHint(hint);
     }
 

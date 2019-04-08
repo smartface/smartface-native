@@ -1,5 +1,10 @@
+const Accelerometer = require("sf-core/device/accelerometer");
+const Location = require("sf-core/device/location");
 const TypeUtil = require("../util/type");
 const AndroidConfig = require("../util/Android/androidconfig");
+const Http = require("sf-core/net/http");
+const Network = require('sf-core/device/network');
+
 const NativeActivityLifeCycleListener = requireClass("io.smartface.android.listeners.ActivityLifeCycleListener");
 const NativeR = requireClass(AndroidConfig.packageName + '.R');
 
@@ -44,6 +49,7 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
     onStop: function() {},
     onStart: function() {},
     onDestroy: function() {
+        cancelAllBackgroundJobs();
         if (_onExit) {
             _onExit();
         }
@@ -53,6 +59,11 @@ var activityLifeCycleListener = NativeActivityLifeCycleListener.implement({
         permissionResults['requestCode'] = requestCode;
         permissionResults['result'] = (grantResult === 0);
         ApplicationWrapper.android.onRequestPermissionsResult && ApplicationWrapper.android.onRequestPermissionsResult(permissionResults);
+    },
+    onActivityResult: function(requestCode, resultCode, data) {
+        if (requestCode === Location.CHECK_SETTINGS_CODE) {
+            Location.__onActivityResult && Location.__onActivityResult(resultCode);
+        }
     }
 });
 
@@ -68,11 +79,10 @@ Object.defineProperties(ApplicationWrapper, {
             const SliderDrawer = require('../ui/sliderdrawer');
             if (drawer instanceof SliderDrawer) {
                 detachSliderDrawer(_sliderDrawer);
-                
+
                 _sliderDrawer = drawer;
                 attachSliderDrawer(_sliderDrawer);
-            }
-            else {
+            } else {
                 throw TypeError("Object must be SliderDrawer instance");
             }
         },
@@ -150,14 +160,12 @@ Object.defineProperties(ApplicationWrapper, {
                     var activityName = new NativeString(classActivityNameArray[1]);
                     intent.setClassName(className, activityName);
                     uriObject = NativeUri.parse(params);
-                }
-                else {
+                } else {
                     var uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
                 intent.setData(uriObject);
-            }
-            else {
+            } else {
                 if (uriScheme.indexOf("|") !== -1) {
                     var classActivityNameArray = uriScheme.split("|");
                     // JS string pass causes parameter mismatch
@@ -165,8 +173,7 @@ Object.defineProperties(ApplicationWrapper, {
                     var className = new NativeString(classActivityNameArray[0]);
                     var activityName = new NativeString(classActivityNameArray[1]);
                     intent.setClassName(className, activityName);
-                }
-                else {
+                } else {
                     var uri = NativeUri.parse(uriScheme);
                     intent.setData(uri);
                 }
@@ -180,17 +187,14 @@ Object.defineProperties(ApplicationWrapper, {
                     var chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
                         activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
-                }
-                else {
+                } else {
                     try {
                         activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
@@ -210,9 +214,7 @@ Object.defineProperties(ApplicationWrapper, {
     },
     'restart': {
         value: function() {
-            var spratIntent = activity.getIntent();
-            activity.finish();
-            activity.startActivity(spratIntent);
+            spratAndroidActivityInstance.restartSpratActivityFromPushNotification();
         },
         enumerable: true
     },
@@ -228,8 +230,8 @@ Object.defineProperties(ApplicationWrapper, {
     'hideKeyboard': {
         value: function() {
             var focusedView = activity.getCurrentFocus();
-            if(!focusedView)
-               return;
+            if (!focusedView)
+                return;
             var windowToken = focusedView.getWindowToken();
             var inputManager = AndroidConfig.getSystemService(INPUT_METHOD_SERVICE, INPUT_METHOD_MANAGER);
 
@@ -309,17 +311,26 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if(ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) {
+        return;
+    }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
             let leftItem = ApplicationWrapper.currentPage._headerBarLeftItem;
-            if(leftItem) {
+            if (leftItem) {
                 leftItem.onPress && leftItem.onPress();
             }
         }
     });
 };
+
+function cancelAllBackgroundJobs() {
+    Location.stop();
+    Accelerometer.stop();
+    Http.__cancelAll();
+    Network.__cancelAll();
+}
 
 // TODO: Beautify the class. It is too complex! It is not a readable file! 
 ApplicationWrapper.setRootController = function(params) {
@@ -327,7 +338,7 @@ ApplicationWrapper.setRootController = function(params) {
     ViewController.deactivateRootController(ApplicationWrapper.currentPage);
     // ViewController.activateController(params.controller);
     params.controller.__isActive = true;
-    ViewController.setController(params); 
+    ViewController.setController(params);
 };
 
 function attachSliderDrawer(sliderDrawer) {
@@ -391,8 +402,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
                 return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
-            }
-            else {
+            } else {
                 var packageManager = activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
@@ -412,8 +422,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                     requestCode: requestCode,
                     result: ApplicationWrapper.android.checkPermission(permissions)
                 });
-            }
-            else {
+            } else {
                 activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
 
@@ -473,7 +482,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 const LocaleHelperUtil = requireClass("io.smartface.android.utils.LocaleConfigurationUtil");
                 var sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
                 sharedPreferences.edit().putString("AppLocale", languageCode).commit();
-                LocaleHelperUtil.changeConfigurationLocale();
+                LocaleHelperUtil.changeConfigurationLocale(activity);
             }
         },
         enumerable: true
@@ -481,6 +490,15 @@ Object.defineProperties(ApplicationWrapper.android, {
     'getLayoutDirection': {
         get: function() {
             return activity.getResources().getConfiguration().getLayoutDirection();
+        },
+        enumerable: true
+    },
+    'setAppTheme': {
+        value: currentTheme => {
+            const NativePreferenceManager = requireClass("android.preference.PreferenceManager");
+            let sharedPreferences = NativePreferenceManager.getDefaultSharedPreferences(activity);
+            let _themeRes = activity.getResources().getIdentifier(currentTheme, "style", activity.getPackageName());
+            sharedPreferences.edit().putInt("SFCurrentBaseTheme", _themeRes).commit();
         },
         enumerable: true
     }

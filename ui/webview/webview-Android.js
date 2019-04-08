@@ -5,6 +5,7 @@ const AndroidConfig = require('../../util/Android/androidconfig');
 const File = require('../../io/file');
 const Path = require('../../io/path');
 const scrollableSuper = require("../../util/Android/scrollable");
+const RequestCodes = require("sf-core/util/Android/requestcodes");
 
 const NativeView = requireClass("android.view.View");
 const NativeCookieManager = requireClass("android.webkit.CookieManager");
@@ -24,6 +25,7 @@ const NativeIntent = requireClass('android.content.Intent');
 const NativeMediaStore = requireClass('android.provider.MediaStore');
 const NativeUri = requireClass('android.net.Uri');
 const NativeFile = requireClass('java.io.File');
+
 var activity = AndroidConfig.activity;
 
 var mFilePathCallback;
@@ -43,11 +45,15 @@ const WebView = extend(View)(
         const self = this;
 
         var overrideMethods = {
-            onPageFinished: function(view, url) {
-                _onShow && _onShow({ url: url });
+            onPageFinished: function(url) {
+                _onShow && _onShow({
+                    url: url
+                });
             },
-            onPageStarted: function(view, url, favicon) {
-                _onLoad && _onLoad({ url: url });
+            onPageStarted: function(url) {
+                _onLoad && _onLoad({
+                    url: url
+                });
             }
         };
         var _canOpenLinkInside = true;
@@ -68,8 +74,7 @@ const WebView = extend(View)(
                         _scrollBarEnabled = true;
                         this.nativeObject.setHorizontalScrollBarEnabled(true);
                         this.nativeObject.setVerticalScrollBarEnabled(true);
-                    }
-                    else {
+                    } else {
                         _scrollBarEnabled = false;
                         this.nativeObject.setHorizontalScrollBarEnabled(false);
                         this.nativeObject.setVerticalScrollBarEnabled(false);
@@ -84,8 +89,7 @@ const WebView = extend(View)(
                 set: function(value) {
                     if (value) {
                         this.nativeObject.setOverScrollMode(0); // OVER_SCROLL_ALWAYS 
-                    }
-                    else {
+                    } else {
                         this.nativeObject.setOverScrollMode(2); // OVER_SCROLL_NEVER
                     }
                 },
@@ -154,8 +158,7 @@ const WebView = extend(View)(
                         if (file.type == Path.FILE_TYPE.FILE || file.type === Path.FILE_TYPE.EMULATOR_ASSETS || file.type === Path.FILE_TYPE.RAU_ASSETS) {
                             //Generate FILE PATH
                             this.nativeObject.loadUrl("file:///" + file.fullPath);
-                        }
-                        else if (file.type == Path.FILE_TYPE.ASSET) {
+                        } else if (file.type == Path.FILE_TYPE.ASSET) {
                             this.nativeObject.loadUrl("file:///android_asset/" + (file.path.replace("assets://", "")));
                         }
                     }
@@ -173,8 +176,7 @@ const WebView = extend(View)(
                             }
                         });
                         this.nativeObject.evaluateJavascript(javascript, valueCallback);
-                    }
-                    else {
+                    } else {
                         this.nativeObject.loadUrl("javascript:" + javascript);
                     }
                 },
@@ -264,8 +266,7 @@ const WebView = extend(View)(
 
                     if (NativeBuild.VERSION.SDK_INT >= 23) {
                         cookieManager.removeAllCookies(null);
-                    }
-                    else {
+                    } else {
                         cookieManager.removeAllCookie();
                     }
 
@@ -296,7 +297,7 @@ const WebView = extend(View)(
             set: function(onBackButtonPressedCallback) {
                 if (_onBackButtonPressedCallback === undefined) {
                     _onBackButtonPressedCallback = onBackButtonPressedCallback;
-                    
+
                     self.nativeObject.setOnKeyListener(NativeView.OnKeyListener.implement({
                         onKey: function(view, keyCode, keyEvent) {
                             // KeyEvent.KEYCODE_BACK , KeyEvent.ACTION_DOWN
@@ -304,14 +305,12 @@ const WebView = extend(View)(
                                 typeof _onBackButtonPressedCallback === "function" &&
                                     _onBackButtonPressedCallback();
                                 return true;
-                            }
-                            else {
+                            } else {
                                 return false;
                             }
                         }
                     }));
-                }
-                else {
+                } else {
                     _onBackButtonPressedCallback = onBackButtonPressedCallback;
                 }
             },
@@ -338,21 +337,23 @@ const WebView = extend(View)(
         });
 
         if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_NOUGAT) {
-            overrideMethods.shouldOverrideUrlLoading = function(view, request) {
-                var uri = request.getUrl();
-                var url = uri.toString();
+            overrideMethods.shouldOverrideUrlLoading = function(requestUrl) {
+                var url = requestUrl;
                 var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
+                _onChangedURL && (callbackValue = _onChangedURL({
+                    url: url
+                }));
                 if (!callbackValue)
                     return true;
                 return overrideURLChange(url, _canOpenLinkInside);
 
             };
-        }
-        else {
-            overrideMethods.shouldOverrideUrlLoading = function(view, url) {
+        } else {
+            overrideMethods.shouldOverrideUrlLoading = function(url) {
                 var callbackValue = true;
-                _onChangedURL && (callbackValue = _onChangedURL({ url: url }));
+                _onChangedURL && (callbackValue = _onChangedURL({
+                    url: url
+                }));
                 if (!callbackValue)
                     return true;
                 return overrideURLChange(url, _canOpenLinkInside);
@@ -361,34 +362,42 @@ const WebView = extend(View)(
 
         // SDK version check will not work because implement engine does not supports types
         overrideMethods.onReceivedError = function() {
-            if (arguments.count === 3) {
+            if (arguments.count === 2) {
                 /* AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView
-                 * arguments[1] = webResourceRequest
-                 * arguments[2] = webResourceError
+                 * arguments[0] = webResourceRequest
+                 * arguments[1] = webResourceError
                  */
                 const NativeString = requireClass('java.lang.String');
-                var uri = arguments[1].getUrl();
+                var uri = arguments[0].getUrl();
                 var url = NativeString.valueOf(uri);
-                var code = arguments[2].getErrorCode();
-                var message = arguments[2].getDescription();
+                var code = arguments[1].getErrorCode();
+                var message = arguments[1].getDescription();
 
-                _onError && _onError({ message: message, code: code, url: url });
-            }
-            else {
+                _onError && _onError({
+                    message: message,
+                    code: code,
+                    url: url
+                });
+            } else {
                 /* AndroidConfig.sdkVersion < AndroidConfig.SDK.SDK_MARSHMALLOW
-                 * arguments[0] = webView, 
-                 * arguments[1] = errorCode, 
-                 * arguments[2] = description, 
-                 * arguments[3] = failingUrl, 
+                 * arguments[0] = errorCode, 
+                 * arguments[1] = description, 
+                 * arguments[2] = failingUrl, 
                  */
-                _onError && _onError({ message: arguments[2], code: arguments[1], url: arguments[3] });
+                _onError && _onError({
+                    message: arguments[1],
+                    code: arguments[0],
+                    url: arguments[2]
+                });
             }
         };
 
-        const SFWebViewClient = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClient');
-        var nativeWebClient = new SFWebViewClient(overrideMethods);
-        this.nativeObject.setWebViewClient(nativeWebClient);
+        const SFWebViewClientWrapper = requireClass('io.smartface.android.sfcore.ui.webview.SFWebViewClientWrapper');
+        var nativeWebClient = new SFWebViewClientWrapper(overrideMethods);
+        /*
+        ToDo: Trying to access any field or methods of instance will cause exception.  Consider when getDeclatedMethods exceptions are handled
+        */
+        this.nativeObject.setWebViewClient(nativeWebClient.getInstance());
         this.nativeObject.setHorizontalScrollBarEnabled(_scrollBarEnabled);
         this.nativeObject.setVerticalScrollBarEnabled(_scrollBarEnabled);
         var settings = this.nativeObject.getSettings();
@@ -410,8 +419,7 @@ const WebView = extend(View)(
                 if (this.touchEnabled && (_onTouch || _onTouchEnded)) {
                     if (event.getAction() === ACTION_UP) {
                         _onTouchEnded && _onTouchEnded();
-                    }
-                    else if (event.getAction() === ACTION_DOWN) {
+                    } else if (event.getAction() === ACTION_DOWN) {
                         _onTouch && _onTouch();
                     }
                 }
@@ -423,7 +431,7 @@ const WebView = extend(View)(
 
         var overrideMethodsWebChrome = {
             //For Android5.0+
-            onShowFileChooser: function(webView, filePathCallback, fileChooserParams) {
+            onShowFileChooser: function(filePathCallback) {
                 if (mFilePathCallback != null) {
                     mFilePathCallback.onReceiveValue(null);
                 }
@@ -441,8 +449,7 @@ const WebView = extend(View)(
                         mCameraPhotoPath = "file:" + photoFile.getAbsolutePath();
                         takePictureIntent.putExtra(NativeMediaStore.EXTRA_OUTPUT,
                             NativeUri.fromFile(photoFile));
-                    }
-                    else {
+                    } else {
                         takePictureIntent = null;
                     }
                 }
@@ -482,8 +489,8 @@ const WebView = extend(View)(
     }
 );
 
-WebView.REQUEST_CODE_LOLIPOP = 1111;
-WebView.RESULT_CODE_ICE_CREAM = 2222;
+WebView.REQUEST_CODE_LOLIPOP = RequestCodes.WebView.REQUEST_CODE_LOLIPOP;
+WebView.RESULT_CODE_ICE_CREAM = RequestCodes.WebView.RESULT_CODE_ICE_CREAM;
 
 WebView.onActivityResult = function(requestCode, resultCode, data) {
 
@@ -494,8 +501,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
         }
         mUploadMessage.onReceiveValue(uri);
         mUploadMessage = null;
-    }
-    else if (requestCode == WebView.REQUEST_CODE_LOLIPOP) {
+    } else if (requestCode == WebView.REQUEST_CODE_LOLIPOP) {
         var results = null;
         // Check that the response is a good one
         if (resultCode == -1) { // Activity.RESULT_OK
@@ -506,8 +512,7 @@ WebView.onActivityResult = function(requestCode, resultCode, data) {
                     parsedUri.push(NativeUri.parse(mCameraPhotoPath));
                     results = array(parsedUri, "android.net.Uri");
                 }
-            }
-            else {
+            } else {
                 var dataString = data.getDataString();
                 var parsedUri2 = [];
                 parsedUri2.push(NativeUri.parse(dataString));
@@ -539,8 +544,7 @@ function createImageFile() {
 function overrideURLChange(url, _canOpenLinkInside) {
     if (_canOpenLinkInside) {
         return false;
-    }
-    else {
+    } else {
         const NativeIntent = requireClass('android.content.Intent');
         const NativeURI = requireClass('android.net.Uri');
         var action = NativeIntent.ACTION_VIEW;

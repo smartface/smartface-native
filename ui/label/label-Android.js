@@ -6,18 +6,28 @@ const TextAlignment = require("../textalignment");
 const TypeUtil = require("../../util/type");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../util/Android/androidconfig.js");
+const EllipsizeMode = require("../ellipsizemode");
 
 const NativeTextView = requireClass("android.widget.TextView");
 const NativeColorStateList = requireClass("android.content.res.ColorStateList");
+const NativeTextUtils = requireClass("android.text.TextUtils");
 
 const TextAlignmentDic = {};
 TextAlignmentDic[TextAlignment.MIDLEFT] = 16 | 3; // Gravity.CENTER_VERTICAL | Gravity.LEFT
 TextAlignmentDic[TextAlignment.MIDCENTER] = 17; // Gravity.CENTER
 TextAlignmentDic[TextAlignment.MIDRIGHT] = 16 | 5; // Gravity.CENTER_VERTICAL | Gravity.RIGHT
 
+const NativeEllipsizeMode = {};
+NativeEllipsizeMode[EllipsizeMode.START] = NativeTextUtils.TruncateAt.START;
+NativeEllipsizeMode[EllipsizeMode.MIDDLE] = NativeTextUtils.TruncateAt.MIDDLE;
+NativeEllipsizeMode[EllipsizeMode.END] = NativeTextUtils.TruncateAt.END;
+NativeEllipsizeMode[EllipsizeMode.NONE] = null;
+
+
 const activity = AndroidConfig.activity;
 const INT_16_3 = 16 | 3;
 const INT_17 = 17;
+const MAX_VALUE = 2147483647;
 
 const Label = extend(View)(
     function(_super, params) {
@@ -30,9 +40,7 @@ const Label = extend(View)(
             // Gravity.CENTER_VERTICAL | Gravity.LEFT
             self.nativeObject.setGravity(INT_16_3);
             this.viewNativeDefaultTextAlignment = INT_16_3;
-            // self.nativeObject.setEllipsize(NativeTextUtils.TruncateAt.END);
-        }
-        else {
+        } else {
             if (!this.skipDefaults) {
                 this._textAlignment = TextAlignment.MIDCENTER;
                 // Gravity.CENTER
@@ -41,11 +49,21 @@ const Label = extend(View)(
                 // this.padding = 0;
             }
         }
-
         _super(this);
 
-        // Handling iOS-specific properties
-        this.ios = {};
+        let _textDirection;
+        Object.defineProperty(self.android, 'textDirection', {
+            get: () => {
+                if (_textDirection === undefined)
+                    _textDirection = this.nativeObject.getTextDirection();
+                return _textDirection;
+            },
+            set: (direction) => {
+                _textDirection = direction;
+                this.nativeObject.setTextDirection(direction);
+            },
+            enumerable: true
+        });
 
         // Assign parameters given in constructor
         if (params) {
@@ -90,19 +108,32 @@ const Label = extend(View)(
                 },
                 set: function(multiline) {
                     this.nativeObject.setSingleLine(!multiline);
-                    // Integer.MAX_VALUE
-                    // const NativeInteger = requireClass("java.lang.Integer");
-                    // this.nativeObject.setMaxLines (multiline ? 1000 : 1);
-                    // if(multiline){
-                    //     const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
-                    //     var movementMethod = new NativeScrollingMovementMethod();
-                    //     this.nativeObject.setMovementMethod(movementMethod);
-                    // }
-                    // else{
-                    //     this.nativeObject.setMovementMethod(null);
-                    // }
                 },
                 enumerable: true
+            },
+            'maxLines': {
+                get: function() {
+                    let mMaxLines = this.nativeObject.getMaxLines();
+                    return (mMaxLines === MAX_VALUE ? 0 : mMaxLines);
+                },
+                set: function(value) {
+                    if (value === 0)
+                        this.nativeObject.setMaxLines(MAX_VALUE);
+                    else
+                        this.nativeObject.setMaxLines(value);
+                },
+                enumerable: true
+            },
+            'ellipsizeMode': {
+                get: function() {
+                    return this._ellipsizeMode;
+                },
+                set: function(ellipsizeModeEnum) {
+                    this._ellipsizeMode = ellipsizeModeEnum;
+                    this.nativeObject.setEllipsize(NativeEllipsizeMode[ellipsizeModeEnum]);
+                },
+                enumerable: true,
+                configurable: true
             },
             'text': {
                 get: function() {
@@ -122,8 +153,7 @@ const Label = extend(View)(
                     if (textAlignment === TextAlignment.MIDLEFT || textAlignment === TextAlignment.MIDCENTER || textAlignment === TextAlignment.MIDRIGHT) {
                         this._textAlignment = textAlignment;
                         this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
-                    }
-                    else {
+                    } else {
                         throw new Error("Label textAlignment property only supports UI.TextAlignment.MIDLEFT, UI.TextAlignment.MIDCENTER, UI.TextAlignment.MIDRIGHT.");
                     }
                 },
@@ -137,8 +167,7 @@ const Label = extend(View)(
                     if (textColor.nativeObject) {
                         this._textColor = textColor;
                         this.nativeObject.setTextColor(textColor.nativeObject);
-                    }
-                    else if (TypeUtil.isObject(textColor)) {
+                    } else if (TypeUtil.isObject(textColor)) {
                         this._textColor = textColor;
                         var textColorStateListDrawable = createColorStateList(textColor);
                         this.nativeObject.setTextColor(textColorStateListDrawable);

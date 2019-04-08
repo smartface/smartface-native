@@ -22,17 +22,34 @@
 function Location() {}
 
 /**
- * Starts capturing. For android, you should define which priority you want to 
- * use for location; HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
+ * Check whether current location settings are satisfied. If the location service is on, onComplete callback triggers.
+ * Shows an dialog to open the location service when the location service is off. 
+ * 
+ * @method checkSettings
+ * @param {Object} params 
+ * @param {Function} params.onSuccess 
+ * @param {Function} params.onFailure
+ * @param {Object} params.onFailure.params 
+ * @param {Device.Location.Android.SettingsStatusCodes} params.onFailure.params.statusCode
+ * @android
+ * @static
+ * @since 4.0.2
+ */
+Location.checkSettings = function(priority) {};
+
+/**
+ * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;  
+ * HIGH_ACCURACY, LOW_POWER , NO_POWER or BALANCED. iOS will ignore this priority.
  *
  * @method start
- * @param {Location.Android.Priority} priority 
+ * @param {Location.Android.Priority} [priority = Location.Android.Priority.HIGH_ACCURACY]
+ * @param {Number} [interval = 1000] 
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Location.start = function(priority){};
+Location.start = function(priority, interval) {};
 
 /**
  * Stops capturing.
@@ -43,7 +60,7 @@ Location.start = function(priority){};
  * @static
  * @since 0.1
  */
-Location.stop = function(){};
+Location.stop = function() {};
 
 /**
  * Callback to capture location events.
@@ -56,7 +73,23 @@ Location.stop = function(){};
  * @ios
  * @since 0.1
  */
-Location.onLocationChanged = function onLocationChanged(event){}
+Location.onLocationChanged = function onLocationChanged(event) {}
+
+
+/**
+ * Gets last known location. The onFailure function will be triggered if no location data has ever been retrieved or unexpected error occurred.
+ * 
+ * @method getLastKnownLocation
+ * @param {Function} onSuccess
+ * @param {Number}   onSuccess.latitude
+ * @param {Number}   onSuccess.longitude
+ * @param {Function} onFailure
+ * @android
+ * @ios
+ * @static
+ * @since 4.0.2
+ */
+Location.getLastKnownLocation = function(onSuccess, onFailure) {};
 
 /**
  * Callback to capture authorization status changes.
@@ -67,7 +100,7 @@ Location.onLocationChanged = function onLocationChanged(event){}
  * @ios
  * @since 2.0.11
  */
-Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status){}
+Location.onChangeAuthorizationStatus = function onChangeAuthorizationStatus(status) {}
 
 /**
  * Gets authorization status.
@@ -311,5 +344,41 @@ Location.authorizationStatus.Denied = 2;
  * @since 2.0.11
  */
 Location.authorizationStatus.Authorized = 3;
+
+
+/**
+ * Android Specific Properties.
+ * @class Device.Location.Android
+ * @since 4.0.2
+ */
+Location.Android = {};
+
+
+/** 
+ * @enum Device.Location.Android.SettingsStatusCodes
+ * @android
+ * @since 4.0.2
+ * 
+ * Location settings specific status codes.
+ */
+Location.Android.SettingsStatusCodes = {};
+
+/** 
+ * @property {NUMBER} OTHER
+ * @android
+ * @since 4.0.2
+ * 
+ * Location settings can't be changed to meet the requirements, no dialog pops up.
+ */
+Location.Android.SettingsStatusCodes.OTHER = 0;
+
+/** 
+ * @property {NUMBER} DENIED
+ * @android
+ * @since 4.0.2
+ * 
+ * The user explicitly denied the use of location services for this app.
+ */
+Location.Android.SettingsStatusCodes.DENIED = 1;
 
 module.exports = Location;

@@ -14,7 +14,7 @@
  *     myPage.layout.addChild(myTextBox);
  *
  */
-function TextBox(params){}
+function TextBox(params) {}
 
 /**
  * Gets/sets the font of the TextBox.
@@ -72,7 +72,10 @@ TextBox.prototype.textColor = UI.Color.BLACK;
  * @ios
  * @since 2.0.8
  */
-TextBox.prototype.cursorPosition = {start: 0, end: 0};
+TextBox.prototype.cursorPosition = {
+    start: 0,
+    end: 0
+};
 
 
 /**
@@ -114,7 +117,7 @@ TextBox.prototype.android.hintTextColor = UI.Color.LIGHTGRAY;
  * @android
  * @since 2.0.10
  */
-TextBox.prototype.android.maxLength = function(value){};
+TextBox.prototype.android.maxLength = function(value) {};
 
 /**
  * This property adjusts font size according to view's fixed width. If you set it true,
@@ -205,7 +208,7 @@ TextBox.prototype.actionKeyType = UI.ActionKeyType.DEFAULT;
  * @since 0.1     
  * @deprecated 1.1.8 Use {@link UI.TextBox#requestFocus} instead.
  */
-TextBox.prototype.showKeyboard = function(){};
+TextBox.prototype.showKeyboard = function() {};
 
 /**
  * This function hides keyboard.
@@ -216,7 +219,7 @@ TextBox.prototype.showKeyboard = function(){};
  * @since 0.1
  * @deprecated 1.1.8 Use {@link UI.TextBox#removeFocus} instead.
  */
-TextBox.prototype.hideKeyboard = function(){};
+TextBox.prototype.hideKeyboard = function() {};
 
 /**
  * This function gives focus to the TextBox. When the TextBox gained focus, keyboard will appear.
@@ -226,7 +229,7 @@ TextBox.prototype.hideKeyboard = function(){};
  * @ios
  * @since 1.1.8
  */
-TextBox.prototype.requestFocus = function(){};
+TextBox.prototype.requestFocus = function() {};
 
 /**
  * This function removes focus from the TextBox. When the TextBox lost its focus, keyboard will disappear.
@@ -236,7 +239,7 @@ TextBox.prototype.requestFocus = function(){};
  * @ios
  * @since 1.1.8
  */
-TextBox.prototype.removeFocus = function(){};
+TextBox.prototype.removeFocus = function() {};
 
 /**
  * This event is called when user inserts or removes a character from TextBox.
@@ -255,6 +258,16 @@ TextBox.prototype.removeFocus = function(){};
  * @since 0.1
  */
 TextBox.prototype.onTextChanged = function(e) {};
+
+/**
+ * The text box calls this method in response to the user pressing the built-in clear button. Return value is YES if the text box contents should be cleared; otherwise, NO.
+ * If you do not implement this method, the text box clears the text as if the method had returned YES.
+ *
+ * @event onClearButtonPress
+ * @ios
+ * @since 4.0.2
+ */
+TextBox.prototype.onClearButtonPress = function(e) {};
 
 /**
  * This event is called when user focus on the textbox by selecting it.

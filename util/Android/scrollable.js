@@ -4,11 +4,12 @@ const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRe
 
 function Scrollable(childJsClass, nativeScrollableObject) {
     var self = childJsClass;
-    if(!self.android) {
+    if (!self.android) {
         self.android = {};
     }
-    
-    var _overScrollMode = 0, _onGesture;
+
+    var _overScrollMode = 0,
+        _onGesture;
     Object.defineProperties(self.android, {
         'overScrollMode': {
             get: function() {
@@ -22,10 +23,11 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             configurable: true
         }
     });
-    
-    if(!self.__isRecyclerView)
+
+    if (!self.__isRecyclerView)
         return;
-        
+
+    let _onAttachedToWindow, _onDetachedFromWindow;
     Object.defineProperties(self.android, {
         'onGesture': {
             get: function() {
@@ -33,11 +35,14 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             },
             set: function(value) {
                 _onGesture = value;
-                if(_onGesture) {
+                if (_onGesture) {
                     self.nativeInner.setJsCallbacks({
                         onScrollGesture: function(distanceX, distanceY) {
                             let returnValue = true;
-                            _onGesture && (returnValue = _onGesture({distanceX: distanceX, distanceY: distanceY}));
+                            _onGesture && (returnValue = _onGesture({
+                                distanceX: distanceX,
+                                distanceY: distanceY
+                            }));
                             return !!returnValue;
                         }
                     });
@@ -47,16 +52,48 @@ function Scrollable(childJsClass, nativeScrollableObject) {
             },
             enumerable: true,
             configurable: true
+        },
+        'saveInstanceState': {
+            value: function() {
+                return {
+                    nativeObject: self.layoutManager.nativeObject.onSaveInstanceState()
+                };
+            },
+            enumerable: true
+        },
+        'restoreInstanceState': {
+            value: function(savedInstance) {
+                self.layoutManager.nativeObject.onRestoreInstanceState(savedInstance.nativeObject);
+            },
+            enumerable: true
+        },
+        'onAttachedToWindow': {
+            get: function() {
+                return _onAttachedToWindow;
+            },
+            set: function(onAttachedToWindow) {
+                _onAttachedToWindow = onAttachedToWindow;
+            },
+            enumerable: true
+        },
+        'onDetachedFromWindow': {
+            get: function() {
+                return _onDetachedFromWindow;
+            },
+            set: function(onDetachedFromWindow) {
+                _onDetachedFromWindow = onDetachedFromWindow;
+            },
+            enumerable: true
         }
     });
-            
-    
+
+
     self.nativeObject.setOnRefreshListener(NativeSwipeRefreshLayout.OnRefreshListener.implement({
         onRefresh: function() {
             self.onPullRefresh && self.onPullRefresh();
         }
     }));
-        
+
     self.nativeInner.addOnItemTouchListener(NativeRecyclerView.OnItemTouchListener.implement({
         onInterceptTouchEvent: function(recyclerView, motionEvent) {
             return !self.touchEnabled;

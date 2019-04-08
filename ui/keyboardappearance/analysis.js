@@ -22,7 +22,7 @@
  *     myPage.layout.addChild(myTextBox);
  *
  */
-var KeyboardAppearance = { };
+var KeyboardAppearance = {};
 
 /**
  * @property {Number} DEFAULT

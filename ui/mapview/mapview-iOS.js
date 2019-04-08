@@ -30,7 +30,10 @@ const MapView = extend(View)(
                 var point = gesture.locationView(self.nativeObject);
                 var coordinate = self.nativeObject.convertToCoordinateFromView(point, self.nativeObject);
                 if (typeof self.onPress === "function") {
-                    self.onPress({ latitude: coordinate.latitude, longitude: coordinate.longitude });
+                    self.onPress({
+                        latitude: coordinate.latitude,
+                        longitude: coordinate.longitude
+                    });
                 }
             }
         }
@@ -43,7 +46,10 @@ const MapView = extend(View)(
                 var point = gesture.locationView(self.nativeObject);
                 var coordinate = self.nativeObject.convertToCoordinateFromView(point, self.nativeObject);
                 if (typeof self.onLongPress === "function") {
-                    self.onLongPress({ latitude: coordinate.latitude, longitude: coordinate.longitude });
+                    self.onLongPress({
+                        latitude: coordinate.latitude,
+                        longitude: coordinate.longitude
+                    });
                 }
             }
         }
@@ -90,8 +96,7 @@ const MapView = extend(View)(
             set: function(value) {
                 if (value) {
                     Location.start();
-                }
-                else {
+                } else {
                     Location.stop();
                 }
                 self.nativeObject.showsUserLocation = value;
@@ -172,7 +177,9 @@ const MapView = extend(View)(
         Object.defineProperty(self, 'cluster', {
             get: function() {
                 if (_cluster.length === 0) {
-                    var cluster = new Cluster({ nativeObject: self.nativeObject.getCluster() });
+                    var cluster = new Cluster({
+                        nativeObject: self.nativeObject.getCluster()
+                    });
                     _cluster[0] = cluster;
                 }
                 return _cluster[0];
@@ -182,7 +189,9 @@ const MapView = extend(View)(
 
         Object.defineProperty(self, 'clusterFillColor', {
             get: function() {
-                return new Color({ color: self.cluster.nativeObject.fillColor });
+                return new Color({
+                    color: self.cluster.nativeObject.fillColor
+                });
             },
             set: function(value) {
                 self.cluster.nativeObject.fillColor = value.nativeObject;
@@ -192,7 +201,9 @@ const MapView = extend(View)(
 
         Object.defineProperty(self, 'clusterBorderColor', {
             get: function() {
-                return new Color({ color: self.cluster.nativeObject.borderColor });
+                return new Color({
+                    color: self.cluster.nativeObject.borderColor
+                });
             },
             set: function(value) {
                 self.cluster.nativeObject.borderColor = value.nativeObject;
@@ -222,7 +233,9 @@ const MapView = extend(View)(
 
         Object.defineProperty(self, 'clusterTextColor', {
             get: function() {
-                return new Color({ color: self.cluster.nativeObject.textColor });
+                return new Color({
+                    color: self.cluster.nativeObject.textColor
+                });
             },
             set: function(value) {
                 self.cluster.nativeObject.textColor = value.nativeObject;
@@ -246,7 +259,10 @@ const MapView = extend(View)(
                 return self.cluster.nativeObject.size.width;
             },
             set: function(value) {
-                self.cluster.nativeObject.size = { width: value, height: value };
+                self.cluster.nativeObject.size = {
+                    width: value,
+                    height: value
+                };
             },
             enumerable: true
         });
@@ -300,7 +316,9 @@ const MapView = extend(View)(
             value: function() {
                 var nativeObjects = Object
                     .values(_pinArray)
-                    .map(function(pin) { return pin.nativeObject });
+                    .map(function(pin) {
+                        return pin.nativeObject
+                    });
                 self.nativeObject.removeAnnotations(nativeObjects);
                 _pinArray = {};
             },
@@ -356,7 +374,10 @@ const MapView = extend(View)(
             var maxLat = pixelSpaceYToLatitude(topLeftPixelY + scaledMapHeight);
             var latitudeDelta = -1.0 * (maxLat - minLat);
 
-            return { latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta };
+            return {
+                latitudeDelta: latitudeDelta,
+                longitudeDelta: longitudeDelta
+            };
         }
 
         var _zoomLevel = 15; //Default Zoom Level
@@ -380,7 +401,7 @@ const MapView = extend(View)(
             },
             enumerable: true
         });
-        
+
         self.nativeObject.regionWillChangeAnimated = function() {
             if (_isFirstRender) {
                 return;
@@ -408,8 +429,7 @@ const MapView = extend(View)(
 
             if (self.minZoomLevel > 0 && self.zoomLevel < self.minZoomLevel) {
                 self.zoomLevel = self.minZoomLevel;
-            }
-            else if (self.maxZoomLevel < 19 && self.zoomLevel > self.maxZoomLevel) {
+            } else if (self.maxZoomLevel < 19 && self.zoomLevel > self.maxZoomLevel) {
                 self.zoomLevel = self.maxZoomLevel
             }
         }
@@ -420,13 +440,19 @@ const MapView = extend(View)(
 
             // use the zoom level to compute the region
             var span = coordinateSpanWithCenterCoordinate(centerLocation, zoomLevel);
-            self.nativeObject.centerLocation = { latitudeDelta: span.latitudeDelta, longitudeDelta: span.longitudeDelta, latitude: centerLocation.latitude, longitude: centerLocation.longitude, animated: animated };
+            self.nativeObject.centerLocation = {
+                latitudeDelta: span.latitudeDelta,
+                longitudeDelta: span.longitudeDelta,
+                latitude: centerLocation.latitude,
+                longitude: centerLocation.longitude,
+                animated: animated
+            };
         }
-        
-        self.setCenterLocationWithZoomLevel = function(centerLocation, zoomLevel, animated){
+
+        self.setCenterLocationWithZoomLevel = function(centerLocation, zoomLevel, animated) {
             self.setZoomLevelWithAnimated(centerLocation, zoomLevel + 1, animated);
         };
-        
+
         self.getVisiblePins = function() {
             var annotationVisibleRect = Invocation.invokeInstanceMethod(self.nativeObject, "visibleMapRect", [], "CGRect");
 
@@ -509,7 +535,9 @@ function Pin(params) {
 
     Object.defineProperty(self, 'color', {
         get: function() {
-            return new Color({ color: self.nativeObject.color });
+            return new Color({
+                color: self.nativeObject.color
+            });
         },
         set: function(value) {
             self.nativeObject.color = value.nativeObject;

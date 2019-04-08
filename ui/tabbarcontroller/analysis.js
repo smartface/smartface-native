@@ -70,7 +70,7 @@
  *     }
  *
  */
-function TabBarController(params){}
+function TabBarController(params) {}
 
 /**
  * Gets the tab bar height of the TabBarController. You can change barHeight on Android, but not iOS.

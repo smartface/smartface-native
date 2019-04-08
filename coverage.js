@@ -1,8 +1,8 @@
 // This is a proxy class used for replacing native classes
-var ClassProxy = new Proxy(function(params){}, {
+var ClassProxy = new Proxy(function(params) {}, {
     get: function(target, name) {
         if (name.toString() === "Symbol(Symbol.toPrimitive)") {
-            return function(hint) { 
+            return function(hint) {
                 var result;
                 switch (hint) {
                     case 'string':
@@ -15,7 +15,7 @@ var ClassProxy = new Proxy(function(params){}, {
                         result = true;
                         break;
                 }
-                return result; 
+                return result;
             };
         } else if (name.toString() === "implement") {
             return implement;
@@ -38,10 +38,10 @@ var ClassProxy = new Proxy(function(params){}, {
     }
 });
 
-global.log = function(toLog){
+global.log = function(toLog) {
     console.log(toLog);
 }
-global.alert = function(message){
+global.alert = function(message) {
     console.log(message);
 }
 
@@ -61,7 +61,7 @@ if (Device.deviceOS === "Android") {
     }
 
     var callbacksToRun = [];
-    global.implement = function(param){
+    global.implement = function(param) {
         for (var key in param) {
             callbacksToRun.push(param[key].bind(this));
         }
@@ -71,15 +71,15 @@ if (Device.deviceOS === "Android") {
     require("./tests");
 
     callbacksToRun.forEach(function(callback) {
-        for(var i = 0; i < 100; i++) {
+        for (var i = 0; i < 100; i++) {
             callback(ClassProxy, ClassProxy, ClassProxy, ClassProxy);
         }
     });
 }
 
 // Clear require cache
-Object.keys(require.cache).forEach(function(key) { 
-    delete require.cache[key] 
+Object.keys(require.cache).forEach(function(key) {
+    delete require.cache[key]
 });
 
 // Cover iOS
@@ -87,17 +87,18 @@ global.Device = {
     deviceOS: "iOS"
 }
 if (Device.deviceOS === "iOS") {
-    global.__SF_UIColor                  = ClassProxy;
-    global.__SF_UIViewController         = ClassProxy;
-    global.__SF_UIView                   = ClassProxy;
-    global.__SF_UIApplication            = ClassProxy;
-    global.__SF_UITextView               = ClassProxy;
-    global.__SF_UIFont                   = ClassProxy;
-    global.__SF_UIButton                 = ClassProxy;
-    global.__SF_UINavigationController   = ClassProxy;
-    global.__SF_UISlider                 = ClassProxy;
+    global.__SF_UIColor = ClassProxy;
+    global.__SF_UIViewController = ClassProxy;
+    global.__SF_UIView = ClassProxy;
+    global.__SF_UIApplication = ClassProxy;
+    global.__SF_UITextView = ClassProxy;
+    global.__SF_UIFont = ClassProxy;
+    global.__SF_UIButton = ClassProxy;
+    global.__SF_UINavigationController = ClassProxy;
+    global.__SF_UISlider = ClassProxy;
 
     var callbacksToRun = [];
+
     function addJSTarget(callback) {
         callbacksToRun.push(callback.bind(this));
     }
@@ -106,7 +107,7 @@ if (Device.deviceOS === "iOS") {
     require("./tests");
 
     callbacksToRun.forEach(function(callback) {
-        for(var i = 0; i < 100; i++) {
+        for (var i = 0; i < 100; i++) {
             callback(ClassProxy, ClassProxy, ClassProxy, ClassProxy);
         }
     });

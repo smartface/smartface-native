@@ -10,7 +10,7 @@ Object.defineProperty(StatusBar, 'height', {
         return __SF_UIApplication.sharedApplication().statusBarFrame.height;
     },
     enumerable: true,
-    configurable : true
+    configurable: true
 });
 
 Object.defineProperty(StatusBar, 'backgroundColor', {
@@ -21,23 +21,25 @@ Object.defineProperty(StatusBar, 'backgroundColor', {
             if (statusBar) {
                 var backgroundColor = statusBar.valueForKey("backgroundColor");
                 if (backgroundColor) {
-                    return new Color({color : backgroundColor});
+                    return new Color({
+                        color: backgroundColor
+                    });
                 }
             }
         }
         return undefined;
     },
-    set: function(value){
+    set: function(value) {
         var statusBarWindow = __SF_UIApplication.sharedApplication().valueForKey("statusBarWindow")
         if (statusBarWindow) {
             var statusBar = statusBarWindow.valueForKey("statusBar");
             if (statusBar) {
-                value ? statusBar.setValueForKey(value.nativeObject,"backgroundColor") : statusBar.setValueForKey(undefined,"backgroundColor");
+                value ? statusBar.setValueForKey(value.nativeObject, "backgroundColor") : statusBar.setValueForKey(undefined, "backgroundColor");
             }
         }
     },
     enumerable: true,
-    configurable : true
+    configurable: true
 });
 
 Object.defineProperty(StatusBar, 'visible', {
@@ -47,7 +49,8 @@ Object.defineProperty(StatusBar, 'visible', {
     set: function(value) {
         __SF_UIApplication.sharedApplication().sf_statusBarHidden = !value;
     },
-    enumerable: true,configurable : true
+    enumerable: true,
+    configurable: true
 });
 
 Object.defineProperty(StatusBar, 'style', {
@@ -57,7 +60,8 @@ Object.defineProperty(StatusBar, 'style', {
     set: function(value) {
         __SF_UIApplication.sharedApplication().sf_statusBarStyle = value;
     },
-    enumerable: true,configurable : true
+    enumerable: true,
+    configurable: true
 });
 
 //////////////////////////////////////////////////////////////////////////

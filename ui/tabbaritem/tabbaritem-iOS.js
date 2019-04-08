@@ -6,12 +6,14 @@ const Badge = require('sf-core/ui/badge');
 
 function TabBarItem(params) {
     var self = this;
-    
+    self.ios = {};
+    self.android = {}
+
     self.nativeObject = undefined;
     if (params && params.nativeObject) {
         self.nativeObject = params.nativeObject;
     }
-    
+
     var _nativeView;
     Object.defineProperty(this, 'layout', {
         get: function() {
@@ -20,22 +22,24 @@ function TabBarItem(params) {
                 retval = _nativeView;
             } else {
                 var key = new Invocation.Argument({
-                    type:"NSString",
+                    type: "NSString",
                     value: "view"
                 });
-                var view = Invocation.invokeInstanceMethod(self.nativeObject,"valueForKey:",[key],"id");
-                _nativeView = new FlexLayout({nativeObject : view});
+                var view = Invocation.invokeInstanceMethod(self.nativeObject, "valueForKey:", [key], "id");
+                _nativeView = new FlexLayout({
+                    nativeObject: view
+                });
                 retval = _nativeView;
             }
             return retval;
         },
         enumerable: true
     });
-    
-    this.getScreenLocation = function () {
+
+    this.getScreenLocation = function() {
         return this.layout.getScreenLocation();
     };
-    
+
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {
@@ -51,7 +55,7 @@ function TabBarItem(params) {
         },
         enumerable: true
     });
-    
+
     var _icon = null;
     Object.defineProperty(this, 'icon', {
         get: function() {
@@ -70,12 +74,12 @@ function TabBarItem(params) {
                         } else {
                             self.nativeObject.image = undefined;
                         }
-                        
+
                         if (typeof _icon.selected === "object") {
                             self.nativeObject.selectedImage = _icon.selected.nativeObject;
                         } else if (typeof _icon.selected === "string") {
                             var image = Image.createFromFile(_icon.selected);
-                            self.nativeObject.selectedImage =image.nativeObject;
+                            self.nativeObject.selectedImage = image.nativeObject;
                         } else {
                             self.nativeObject.selectedImage = undefined;
                         }
@@ -94,37 +98,89 @@ function TabBarItem(params) {
         },
         enumerable: true
     });
-    
+
+    var _font;
+    Object.defineProperties(self.ios, {
+        'font': {
+            get: function() {
+                return _font;
+            },
+            set: function(value) {
+                _font = value;
+                if (self.nativeObject) {
+                    if (_font) {
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 0); //UIControlStateNormal
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 1 << 0); //UIControlStateHighlighted
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 1 << 1); //UIControlStateDisabled
+                    } else {
+                        self.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
+                        self.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
+                        self.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
+                    }
+                }
+            },
+            enumerable: true
+        }
+    });
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
-    
-    var _badge = self.nativeObject ? new Badge({nativeObject : self.nativeObject}) : {move : function(x,y){this.moveX = x;this.moveY = y;}};
+
+    var _badge = self.nativeObject ? new Badge({
+        nativeObject: self.nativeObject
+    }) : {
+        move: function(x, y) {
+            this.moveX = x;
+            this.moveY = y;
+        }
+    };
     Object.defineProperty(this, 'badge', {
-        get: function(){
+        get: function() {
             return _badge;
         },
         enumerable: true
     });
-    
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     // UTIL
     self.invalidate = function() {
         this.title = _title;
         this.icon = _icon;
+        this.ios.font = _font;
         if (_badge.constructor.name !== "Badge") {
-            delete _badge["move"]; 
-            var _badgeWithNativeObject = new Badge({nativeObject : self.nativeObject, parameters : _badge});
-            _badge.moveX !== undefined && _badgeWithNativeObject.move(_badge.moveX,_badge.moveY);
+            delete _badge["move"];
+            var _badgeWithNativeObject = new Badge({
+                nativeObject: self.nativeObject,
+                parameters: _badge
+            });
+            _badge.moveX !== undefined && _badgeWithNativeObject.move(_badge.moveX, _badge.moveY);
             _badge = _badgeWithNativeObject;
         }
     }
-    
-    if (params) {
+
+    // Assign parameters given in constructor
+    params && (function(params) {
         for (var param in params) {
-            this[param] = params[param];
+            if (param === "ios" || param === "android") {
+                setOSSpecificParams.call(this, params[param], param);
+            } else {
+                this[param] = params[param];
+            }
         }
-    }
+
+        function setOSSpecificParams(params, key) {
+            for (var param in params) {
+                this[key][param] = params[param];
+            }
+        }
+    }.bind(this)(params));
 };
 
 module.exports = TabBarItem;

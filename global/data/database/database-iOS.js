@@ -1,121 +1,122 @@
 const File = require("sf-core/io/file");
 
-function Database(params){
-    
+function Database(params) {
+
     var self = this;
 
-    if(!self.nativeObject){
-        if(params.inMemory){
+    if (!self.nativeObject) {
+        if (params.inMemory) {
             self.nativeObject = new __SF_Database(":memory:");
-        }
-        else{
+        } else {
             self.nativeObject = new __SF_Database(params.file.nativeObject.getActualPath());
         }
     }
-            
-    if(self.nativeObject === null){
+
+    if (self.nativeObject === null) {
         throw new Error("Create or Read Database failed. Invalid file.");
     }
-    
-    self.nativeObject.errorHandler = function(e){
+
+    self.nativeObject.errorHandler = function(e) {
         throw new Error(e.message);
     }
-    
+
     self.file = params.file;
-    
-    self.close = function(){};
-    
-    self.execute = function(sqlCommand){
-        if(typeof sqlCommand === 'string'){
+
+    self.close = function() {};
+
+    self.execute = function(sqlCommand) {
+        if (typeof sqlCommand === 'string') {
             self.nativeObject.run(sqlCommand);
         }
     };
 
-    self.query = function(sqlCommand){
-        if(typeof sqlCommand === 'string'){
+    self.query = function(sqlCommand) {
+        if (typeof sqlCommand === 'string') {
             return new Database.QueryResult({
-                        'data': self.nativeObject.prepare(sqlCommand)
-                    });
+                'data': self.nativeObject.prepare(sqlCommand)
+            });
         }
     };
 }
 
 
-Database.QueryResult = function(params){
-    
+Database.QueryResult = function(params) {
+
     var self = this;
-    
+
     self.data = params.data;
 
-    self.count = function(){
-        if (self.data && self.data.dataArray){
+    self.count = function() {
+        if (self.data && self.data.dataArray) {
             return self.data.dataArray.length;
-        }else{
+        } else {
             return null;
         }
     };
-    
-    self.getFirst = function(){
-        if (self.data && self.data.dataArray){
+
+    self.getFirst = function() {
+        if (self.data && self.data.dataArray) {
             return new Database.DatabaseObject({
                 'data': self.data.dataArray[0],
-                'columNames' : self.data.columnNames
+                'columNames': self.data.columnNames
             });
         }
         return null;
     };
-    
-    self.getLast = function(){
-        if (self.data && self.data.dataArray){
+
+    self.getLast = function() {
+        if (self.data && self.data.dataArray) {
             return new Database.DatabaseObject({
-                'data': self.data.dataArray[self.count()-1],
-                'columNames' : self.data.columnNames
+                'data': self.data.dataArray[self.count() - 1],
+                'columNames': self.data.columnNames
             });
         }
         return null;
     };
-    
-    self.get = function(location){
-        if (self.data && self.data.dataArray){
+
+    self.get = function(location) {
+        if (self.data && self.data.dataArray) {
             return new Database.DatabaseObject({
                 'data': self.data.dataArray[location],
-                'columNames' : self.data.columnNames
+                'columNames': self.data.columnNames
             });
         }
         return null;
     };
+    self.android = {};
+    self.android.close = () => {};
 };
 
-Database.DatabaseObject = function(params){
+Database.DatabaseObject = function(params) {
     var self = this;
-    
+
     self.data = params.data;
     self.columNames = params.columNames;
-    
-    self.getString = function(columnName){
-        return self.getData(columnName);
-    };
-    
-    self.getInteger = function(columnName){
+
+    self.getString = function(columnName) {
         return self.getData(columnName);
     };
 
-    self.getBoolean = function(columnName){
+    self.getInteger = function(columnName) {
         return self.getData(columnName);
     };
-    
-    self.getFloat = function(columnName){
+
+    self.getBoolean = function(columnName) {
         return self.getData(columnName);
     };
-    
-    self.getData = function(columnName){
-        if(typeof columnName === 'string'){
+
+    self.getFloat = function(columnName) {
+        return self.getData(columnName);
+    };
+
+    self.getData = function(columnName) {
+        if (typeof columnName === 'string') {
             var index = self.columNames.indexOf(columnName);
-            if (index != -1 && self.data && self.data.length > 0){
+            if (index != -1 && self.data && self.data.length > 0) {
                 return self.data[index];
             }
             return null;
-        }else{
+        } else {
             throw new Error("Parameter mismatch. Parameter must be String");
         }
     };

@@ -4,58 +4,77 @@ const Invocation = require('sf-core/util/iOS/invocation.js');
 function LayoutManager(params) {
     var sfSelf = this;
     sfSelf.ios = {};
-    
+
     var flowLayout = new __SF_UICollectionViewFlowLayout();
-    
-    sfSelf.calculateItemSize = function(spanCount){
-        var retval = {width: 0, height: 0};
+
+    sfSelf.calculateItemSize = function(spanCount) {
+        var retval = {
+            width: 0,
+            height: 0
+        };
         var insetSize = 0;
-        if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
-        {
-        	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.width,spanCount);
-        	retval.width = calculatedSizes.cellSize;
+        if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
+            var calculatedSizes = calculateSize(sfSelf.collectionView.frame.width, spanCount);
+            retval.width = calculatedSizes.cellSize;
             retval.height = sfSelf.onItemLength(retval.width);
-            var insetSize = calculatedSizes.insetSize/2;
-            sfSelf.sectionInset = {top:0,left:insetSize,bottom:0,right:insetSize};
-        } 
-        else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
-        {
-    	   	var calculatedSizes = calculateSize(sfSelf.collectionView.frame.height,spanCount);
-        	retval.height = calculatedSizes.cellSize;
+            var insetSize = calculatedSizes.insetSize / 2;
+            sfSelf.sectionInset = {
+                top: 0,
+                left: insetSize,
+                bottom: 0,
+                right: insetSize
+            };
+        } else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
+            var calculatedSizes = calculateSize(sfSelf.collectionView.frame.height, spanCount);
+            retval.height = calculatedSizes.cellSize;
             retval.width = sfSelf.onItemLength(retval.height);
-            var insetSize = calculatedSizes.insetSize/2;
-            sfSelf.sectionInset = {top:insetSize,left:0,bottom:insetSize,right:0};
+            var insetSize = calculatedSizes.insetSize / 2;
+            sfSelf.sectionInset = {
+                top: insetSize,
+                left: 0,
+                bottom: insetSize,
+                right: 0
+            };
         }
         return retval;
     };
-    
-    flowLayout.prepareLayoutCallback = function () {
+
+    flowLayout.prepareLayoutCallback = function() {
         var retval = sfSelf.calculateItemSize(sfSelf.spanCount);
-        
+
         if (sfSelf.onFullSpan) {
             var __fullSpanSize = sfSelf.calculateItemSize(1);
-            sfSelf.collectionView.sizeForItemAtIndexPath = function(collectionView,indexPath){
+            sfSelf.collectionView.sizeForItemAtIndexPath = function(collectionView, indexPath) {
                 var itemLength = sfSelf.onFullSpan(parseInt(sfSelf.jsCollectionView.onItemType(indexPath.row, indexPath.section)));
-                
+
                 if (itemLength === undefined) {
                     return retval;
-                }else{
-                    return sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL ? {width: __fullSpanSize.width, height: itemLength} : {width: itemLength, height: __fullSpanSize.height};
+                } else {
+                    return sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL ? {
+                        width: __fullSpanSize.width,
+                        height: itemLength
+                    } : {
+                        width: itemLength,
+                        height: __fullSpanSize.height
+                    };
                 }
             };
-        }else{
+        } else {
             sfSelf.collectionView.sizeForItemAtIndexPath = undefined;
             var argumentSize = new Invocation.Argument({
-                type:"CGSize",
+                type: "CGSize",
                 value: retval
             });
-            Invocation.invokeInstanceMethod(sfSelf.nativeObject,"setItemSize:",[argumentSize]);
+            Invocation.invokeInstanceMethod(sfSelf.nativeObject, "setItemSize:", [argumentSize]);
         }
     };
-    flowLayout.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = function (proposedContentOffset, velocity) {
-        var proposedContentOffsetWithInset = {x:proposedContentOffset.x + sfSelf.contentInset.left,y:proposedContentOffset.y + sfSelf.contentInset.top};
+    flowLayout.targetContentOffsetForProposedContentOffsetWithScrollingVelocityCallback = function(proposedContentOffset, velocity) {
+        var proposedContentOffsetWithInset = {
+            x: proposedContentOffset.x + sfSelf.contentInset.left,
+            y: proposedContentOffset.y + sfSelf.contentInset.top
+        };
         if (sfSelf.ios.targetContentOffset) {
-            var returnValue = sfSelf.ios.targetContentOffset(proposedContentOffsetWithInset,velocity);
+            var returnValue = sfSelf.ios.targetContentOffset(proposedContentOffsetWithInset, velocity);
             returnValue.x -= sfSelf.contentInset.left;
             returnValue.y -= sfSelf.contentInset.top;
             return returnValue;
@@ -64,28 +83,31 @@ function LayoutManager(params) {
     };
 
     function roundDown(number, decimals) {
-	    decimals = decimals || 0;
-	    return ( Math.floor( number * Math.pow(10, decimals) ) / Math.pow(10, decimals) );
-	}
-	
-	function calculateSize(collectionViewSize,spanCount){
-		var size = collectionViewSize;
-    	var cellSize = roundDown(collectionViewSize / spanCount, 1);
-    	var splitSize = (cellSize + "").split(".");
-    	var insetSize = 0;
-    	if (splitSize[1] !== undefined) {
-        	var precision = parseFloat(splitSize[1]);
-        	var scale = __SF_UIScreen.mainScreen().scale;
-        	var decimal = Math.floor(precision/Math.floor(((1/scale)*10))) * (1/scale);
-        	var fixedSize = parseFloat(splitSize[0]) + decimal;
-        	insetSize = roundDown(collectionViewSize - fixedSize*spanCount, 2);
+        decimals = decimals || 0;
+        return (Math.floor(number * Math.pow(10, decimals)) / Math.pow(10, decimals));
+    }
+
+    function calculateSize(collectionViewSize, spanCount) {
+        var size = collectionViewSize;
+        var cellSize = roundDown(collectionViewSize / spanCount, 1);
+        var splitSize = (cellSize + "").split(".");
+        var insetSize = 0;
+        if (splitSize[1] !== undefined) {
+            var precision = parseFloat(splitSize[1]);
+            var scale = __SF_UIScreen.mainScreen().scale;
+            var decimal = Math.floor(precision / Math.floor(((1 / scale) * 10))) * (1 / scale);
+            var fixedSize = parseFloat(splitSize[0]) + decimal;
+            insetSize = roundDown(collectionViewSize - fixedSize * spanCount, 2);
             cellSize = parseFloat(fixedSize);
-    	}
-    	return {"cellSize" : cellSize, "insetSize" : insetSize};
-	}
+        }
+        return {
+            "cellSize": cellSize,
+            "insetSize": insetSize
+        };
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // INITIALIZATION
-    if(!sfSelf.nativeObject){
+    if (!sfSelf.nativeObject) {
         sfSelf.nativeObject = flowLayout;
         sfSelf.collectionView = null; //CollectionView will set this property.
         sfSelf.jsCollectionView = null;
@@ -93,7 +115,7 @@ function LayoutManager(params) {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // PROPERTIES
-    
+
     var _spanCount = 1;
     Object.defineProperty(sfSelf, 'spanCount', {
         get: function() {
@@ -101,12 +123,12 @@ function LayoutManager(params) {
         },
         set: function(value) {
             if (typeof value === "number") {
-                _spanCount = value;   
+                _spanCount = value;
             }
         },
         enumerable: true
     });
-    
+
     var _lineSpacing = sfSelf.nativeObject.minimumLineSpacing;
     Object.defineProperty(sfSelf, 'lineSpacing', {
         get: function() {
@@ -114,15 +136,15 @@ function LayoutManager(params) {
         },
         set: function(value) {
             if (typeof value === "number") {
-                _lineSpacing = value; 
+                _lineSpacing = value;
                 sfSelf.nativeObject.minimumLineSpacing = _lineSpacing;
             }
         },
         enumerable: true
     });
     sfSelf.lineSpacing = 0;
-        
-    
+
+
     var _itemSpacing = sfSelf.nativeObject.minimumInteritemSpacing;
     Object.defineProperty(sfSelf, 'itemSpacing', {
         get: function() {
@@ -130,15 +152,20 @@ function LayoutManager(params) {
         },
         set: function(value) {
             if (typeof value === "number") {
-                _itemSpacing = value; 
+                _itemSpacing = value;
                 sfSelf.nativeObject.minimumInteritemSpacing = _itemSpacing;
             }
         },
         enumerable: true
     });
     sfSelf.itemSpacing = 0;
-    
-    var _contentInset = {top:0, left:0, bottom:0, right:0};
+
+    var _contentInset = {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    };
     Object.defineProperty(sfSelf, 'contentInset', {
         get: function() {
             return _contentInset;
@@ -146,7 +173,7 @@ function LayoutManager(params) {
         set: function(value) {
             if (typeof value === "object") {
                 _contentInset = value;
-                
+
                 if (sfSelf.collectionView) {
                     sfSelf.collectionView.contentInsetDictionary = _contentInset;
                 }
@@ -154,7 +181,7 @@ function LayoutManager(params) {
         },
         enumerable: true
     });
-    
+
     var _scrollDirection = LayoutManager.ScrollDirection.VERTICAL;
     Object.defineProperty(sfSelf, 'scrollDirection', {
         get: function() {
@@ -168,15 +195,15 @@ function LayoutManager(params) {
         },
         enumerable: true
     });
-     
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // METHODS
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // CALLBACKS
-    
-    var _onItemLength = function(){
-    		return 50;
+
+    var _onItemLength = function() {
+        return 50;
     };
     Object.defineProperty(sfSelf, 'onItemLength', {
         get: function() {
@@ -189,7 +216,7 @@ function LayoutManager(params) {
         },
         enumerable: true
     });
-    
+
     var _itemLength = 50;
     Object.defineProperty(sfSelf, 'itemLength', {
         get: function() {
@@ -202,8 +229,13 @@ function LayoutManager(params) {
     });
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // HIDDEN
-    
-    var _sectionInset = {top:0, left:0, bottom:0, right:0};
+
+    var _sectionInset = {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0
+    };
     Object.defineProperty(sfSelf, 'sectionInset', {
         get: function() {
             return _sectionInset;
@@ -211,9 +243,9 @@ function LayoutManager(params) {
         set: function(value) {
             if (typeof value === "object") {
                 _sectionInset = value;
-                
+
                 var argSectionInset = new Invocation.Argument({
-                    type:"UIEdgeInsets",
+                    type: "UIEdgeInsets",
                     value: _sectionInset
                 });
                 Invocation.invokeInstanceMethod(sfSelf.nativeObject, "setSectionInset:", [argSectionInset]);
@@ -221,36 +253,36 @@ function LayoutManager(params) {
         },
         enumerable: true
     });
-    
+
     // LOGIC
-    sfSelf.sizeForItemAtIndexPath = function (collectionView, collectionViewLayout, indexPath) {
-        var retval = {width: 0, height: 0};
-        
-        if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) 
-        {
+    sfSelf.sizeForItemAtIndexPath = function(collectionView, collectionViewLayout, indexPath) {
+        var retval = {
+            width: 0,
+            height: 0
+        };
+
+        if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
             var columnCount = sfSelf.spanCount;
             var itemWidth = collectionView.frame.width / columnCount;
             var itemHeight = 0;
             // itemHeight = sfSelf.onItemLength();
-            
+
             retval.width = itemWidth;
             retval.height = itemHeight;
-        } 
-        else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) 
-        {
+        } else if (sfSelf.scrollDirection == LayoutManager.ScrollDirection.HORIZONTAL) {
             var rowCount = sfSelf.spanCount;
             var itemHeight = collectionView.frame.height / rowCount;
             var itemWidth = 0;
             // itemWidth = sfSelf.onItemLength();
-            
+
             retval.width = itemWidth;
             retval.height = itemHeight;
         }
         return retval;
     };
-     
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     if (params) {
         for (var param in params) {
             this[param] = params[param];
@@ -259,7 +291,7 @@ function LayoutManager(params) {
 }
 
 LayoutManager.ScrollDirection = {};
-Object.defineProperties(LayoutManager.ScrollDirection,{ 
+Object.defineProperties(LayoutManager.ScrollDirection, {
     'VERTICAL': {
         value: 0,
         writable: false

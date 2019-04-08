@@ -12,9 +12,13 @@ const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 
 const rippleSuperView = require("./ripple");
 
-function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
+function PixelToDp(px) {
+    return AndroidUnitConverter.pixelToDp(px);
+}
 
-function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
+function DpToPixel(dp) {
+    return AndroidUnitConverter.dpToPixel(dp);
+}
 
 // MotionEvent.ACTION_UP
 const ACTION_UP = 1;
@@ -45,17 +49,23 @@ function View(params) {
     if (!this.nativeObject) {
         this.nativeObject = new NativeView(activity);
         this.yogaNode = new NativeYogaNode();
-    }
-    else {
+    } else {
         if (this.nativeObject.toString().indexOf("YogaLayout") !== -1) {
             this.yogaNode = this.nativeObject.getYogaNode();
-        }
-        else {
+        } else {
             this.yogaNode = new NativeYogaNode();
         }
     }
 
-    this.android = {};
+    let _android = {};
+    Object.defineProperty(this, 'android', {
+        get: () => _android,
+        set: function(value) {
+            Object.assign(this.android, value || {});
+        },
+        enumerable: true,
+        configurable: true
+    });
     rippleSuperView(this);
 
     // Background drawable properties
@@ -90,12 +100,9 @@ function View(params) {
             },
             set: function(value) {
                 NativeViewCompat.setElevation(_nativeObject, value);
-                // These ines cause AND-3183 bug. Don't need to remove state 
-                // list animator to set elevation property.
-
-                // if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
-                //     _nativeObject.setStateListAnimator(null);
-                // }
+                if (AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
+                    _nativeObject.setStateListAnimator(null);
+                }
             },
             enumerable: true,
             configurable: true
@@ -126,8 +133,7 @@ function View(params) {
                     // this.borderWidth = this.borderWidth;
                     // this.borderColor = this.borderColor;
 
-                }
-                else {
+                } else {
                     this._gradientDrawable.setColor(this._backgroundColor.nativeObject);
                 }
                 setBackgroundDrawable.call(this, _isBackgroundAssigned);
@@ -270,7 +276,10 @@ View.prototype = {
         }
     },
     get scale() {
-        return { x: this.nativeObject.getScaleX(), y: this.nativeObject.getScaleY() }
+        return {
+            x: this.nativeObject.getScaleX(),
+            y: this.nativeObject.getScaleY()
+        }
     },
     set scale(value) {
         if (TypeUtil.isObject(value)) {
@@ -631,8 +640,7 @@ View.prototype = {
         this.yogaNode.setFlexGrow(flexGrow);
         if (flexGrow > 0) {
             this.flexBasis = 1;
-        }
-        else {
+        } else {
             this.flexBasis = NaN;
         }
     },

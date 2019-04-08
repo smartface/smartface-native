@@ -1,7 +1,7 @@
 function Menu(params) {
-    
+
     var self = this;
-        
+
     var _headerTitle = "";
     Object.defineProperty(this, 'headerTitle', {
         get: function() {
@@ -12,7 +12,7 @@ function Menu(params) {
         },
         enumerable: true
     });
-    
+
     var _items = [];
     Object.defineProperty(this, 'items', {
         get: function() {
@@ -23,21 +23,21 @@ function Menu(params) {
         },
         enumerable: true
     });
-    
-    self.show = function(page){
+
+    self.show = function(page) {
         self.nativeObject = __SF_UIAlertController.createAlertController(0);
-        
-        if (self.headerTitle && self.headerTitle !== ""){
-             self.nativeObject.title = self.headerTitle;
+
+        if (self.headerTitle && self.headerTitle !== "") {
+            self.nativeObject.title = self.headerTitle;
         }
-        
-        for (var i = 0; i < self.items.length; i++){
-            var action = __SF_UIAlertAction.createAction(self.items[i].title,self.items[i].ios.style,self.items[i].onSelectedListener);
+
+        for (var i = 0; i < self.items.length; i++) {
+            var action = __SF_UIAlertAction.createAction(self.items[i].title, self.items[i].ios.style, self.items[i].onSelectedListener);
             self.nativeObject.addAction(action);
         }
         page.nativeObject.presentViewController(self.nativeObject);
     };
-     // Assign parameters given in constructor
+    // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
             this[param] = params[param];

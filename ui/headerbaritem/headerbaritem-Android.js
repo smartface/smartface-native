@@ -4,14 +4,17 @@ const Image = require("../image");
 const AndroidUnitConverter = require("../../util/Android/unitconverter.js");
 const HeaderBarItemPadding = require("../../util/Android/headerbaritempadding");
 const AndroidConfig = require("../../util/Android/androidconfig");
-const AttributedString = require("sf-core/ui/attributedstring");
 const SFView = requireClass("io.smartface.android.sfcore.ui.view.SFViewUtil");
 const NativeTextButton = requireClass('android.widget.Button');
 const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
-const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
+const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 
-function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
+function PixelToDp(px) {
+    return AndroidUnitConverter.pixelToDp(px);
+}
+
+const activity = AndroidConfig.activity;
 
 function HeaderBarItem(params) {
 
@@ -26,12 +29,12 @@ function HeaderBarItem(params) {
         _searchView = null,
         _imageButton = false,
         _menuItem = null,
-        _attributedTitleBuilder,
-        _badgeObj = undefined;
-    const activity = AndroidConfig.activity;
+        _badgeObj = undefined,
+        _systemIcon;
+
 
     this.ios = {};
-    this.android = {};
+
 
     self.isBadgeEnabled = false;
     Object.defineProperties(this, {
@@ -48,12 +51,11 @@ function HeaderBarItem(params) {
                 }
                 _color = value;
                 if (this.nativeObject) {
-                    if (this.image && this.image.nativeObject) {
-                        var imageCopy = this.image.nativeObject.mutate();
+                    if (this.image || this.android.systemIcon) {
+                        let imageCopy = this.nativeObject.getDrawable().mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
-                    }
-                    else {
+                    } else {
                         this.nativeObject.setTextColor(_color.nativeObject);
                     }
                 }
@@ -74,12 +76,20 @@ function HeaderBarItem(params) {
             enumerable: true
         },
         'imageButton': {
-            get: function() { return _imageButton; },
-            set: function(value) { _imageButton = value; }
+            get: function() {
+                return _imageButton;
+            },
+            set: function(value) {
+                _imageButton = value;
+            }
         },
         'menuItem': {
-            get: function() { return _menuItem; },
-            set: function(value) { _menuItem = value; }
+            get: function() {
+                return _menuItem;
+            },
+            set: function(value) {
+                _menuItem = value;
+            }
         },
         'image': {
             get: function() {
@@ -91,35 +101,23 @@ function HeaderBarItem(params) {
                 if (value === null || value instanceof Image) {
                     _image = value;
                     if (!this.nativeObject || (this.nativeObject && !this.imageButton)) {
-                        this.nativeObject = new NativeImageButton(activity);
-                        this.nativeObject.setBackground(null);
-                        this.nativeObject.setPaddingRelative(
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
-                            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
-                        );
-                        this.imageButton = true;
-                        if (this.menuItem) {
-                            this.menuItem.setActionView(this.nativeObject);
-                        }
+                        this.nativeObject = createNativeImageButton.call(this);
                     }
                     if (this.nativeObject && this.imageButton) {
                         if (_image) {
                             var imageCopy = _image.nativeObject.mutate();
                             this.nativeObject.setImageDrawable(imageCopy);
-                        }
-                        else {
+                        } else {
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
                             if (_attributedTitle) {
                                 this.attributedTitle = _attributedTitle;
-                            }
-                            else {
+                            } else {
                                 this.title = _title;
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     throw new TypeError("image must be Image instance or image path should be given properly.");
                 }
             },
@@ -159,8 +157,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value instanceof Function) {
                     _onPress = value.bind(this);
-                }
-                else {
+                } else {
                     throw new TypeError("onPress must be function.");
                 }
             },
@@ -168,17 +165,16 @@ function HeaderBarItem(params) {
         },
         'setValues': {
             value: function() {
-                this.color = this.color;
                 this.enabled = this.enabled;
                 if (this.imageButton) {
-                    this.image = this.image;
-                }
-                else if (_attributedTitle) {
+                    this.image && (this.image = this.image);
+                    this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
+                } else if (_attributedTitle) {
                     this.attributedTitle = _attributedTitle;
-                }
-                else {
+                } else {
                     this.title = _title;
                 }
+                this.color = this.color;
 
                 const NativeView = requireClass('android.view.View');
                 this.nativeObject.setOnClickListener(NativeView.OnClickListener.implement({
@@ -196,7 +192,6 @@ function HeaderBarItem(params) {
                 } : undefined;
             },
             set: function(size) {
-                _size = size;
                 if (typeof size === 'object' && self.nativeObject) {
                     self.nativeObject.setWidth(AndroidUnitConverter.dpToPixel(size.width));
                     self.nativeObject.setHeight(AndroidUnitConverter.dpToPixel(size.height));
@@ -226,6 +221,33 @@ function HeaderBarItem(params) {
         }
     });
 
+    let _android = {};
+    Object.defineProperty(self, 'android', {
+        get: function() {
+            return _android;
+        },
+        set: function(value) {
+            Object.assign(self.android, value || {});
+        }
+    });
+
+    Object.defineProperties(self.android, {
+        'systemIcon': {
+            get: function() {
+                return _systemIcon;
+            },
+            set: function(systemIcon) {
+                _systemIcon = systemIcon;
+
+                if (!self.nativeObject || (self.nativeObject && !self.imageButton))
+                    self.nativeObject = createNativeImageButton.call(self);
+
+                self.nativeObject && (self.nativeObject.setImageResource(Image.systemDrawableId(_systemIcon)));
+            },
+            enumerable: true
+        }
+    });
+
     this.assignRules = function(badge) {
         if (!self.nativeObject)
             return;
@@ -241,7 +263,7 @@ function HeaderBarItem(params) {
         layoutParams.addRule(ALIGN_END, self.nativeObject.getId());
 
         badge.nativeObject.setLayoutParams(layoutParams);
-    }
+    };
 
     this.addToHeaderView = function(badge) {
         if (!self.nativeBadgeContainer || !badge)
@@ -249,41 +271,22 @@ function HeaderBarItem(params) {
 
         if (!badge.nativeObject.getParent()) {
             self.nativeBadgeContainer.addView(badge.nativeObject);
-        }
-        else {
+        } else {
             var parentOfNativeObject = badge.nativeObject.getParent();
             parentOfNativeObject.removeAllViews();
             self.nativeBadgeContainer.addView(badge.nativeObject);
         }
     };
 
-    Object.defineProperties(this.android, {
-        'attributedTitle': {
-            get: function() {
-                return _attributedTitle;
-            },
-            set: function(value) {
-                _attributedTitle = value;
-                if (_attributedTitle instanceof AttributedString) {
-                    if (_attributedTitleBuilder)
-                        _attributedTitleBuilder.clear();
-                    else
-                        _attributedTitleBuilder = new NativeSpannableStringBuilder();
-
-                    _attributedTitle.setSpan(_attributedTitleBuilder);
-                    self.__setTitle(_attributedTitleBuilder);
-                }
-                else {
-                    self.__setTitle(null);
-                }
-            },
-            enumerable: true
-        }
-    });
+    /*
+    Applies common properties of items.
+    */
+    attributedTitleSuper(self);
 
     this.__setTitle = function(title) {
         let itemTitle = title ? title : "";
-        if (!self.nativeObject) {
+
+        if (!self.nativeObject || self.imageButton) {
             self.nativeObject = new NativeTextButton(activity);
             self.nativeObject.setText(itemTitle);
             self.nativeObject.setBackgroundColor(Color.TRANSPARENT.nativeObject);
@@ -291,13 +294,14 @@ function HeaderBarItem(params) {
                 HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
                 HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
             );
-
-            self.color = _color;
             self.imageButton = false;
-            if (self.menuItem)
-                self.menuItem.setActionView(self.nativeObject);
-        }
-        else if (!self.imageButton) {
+            self.color = _color;
+            if (self.menuItem) {
+                let itemView = self.menuItem.getActionView();
+                itemView.getChildCount() && itemView.removeAllViews();
+                itemView.addView(self.nativeObject);
+            }
+        } else if (!self.imageButton) {
             self.nativeObject.setText(itemTitle);
             self.color = _color;
         }
@@ -310,6 +314,33 @@ function HeaderBarItem(params) {
         }
     }
 }
+
+function createNativeImageButton() {
+    const headerBarItem = this;
+
+    let nativeImageButton;
+    if (!headerBarItem.nativeObject || !headerBarItem.imageButton) {
+        nativeImageButton = new NativeImageButton(activity);
+        nativeImageButton.setBackground(null);
+        nativeImageButton.setPaddingRelative(
+            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
+            HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
+        );
+    } else
+        nativeImageButton = headerBarItem.nativeObject;
+    headerBarItem.imageButton = true;
+    if (headerBarItem.menuItem) {
+        /*
+        We know that got action view is ViewGroup.
+        */
+        let itemView = headerBarItem.menuItem.getActionView();
+        itemView.getChildCount() && itemView.removeAllViews();
+        itemView.addView(nativeImageButton);
+    }
+
+    return nativeImageButton;
+}
+
 
 
 HeaderBarItem.prototype = {

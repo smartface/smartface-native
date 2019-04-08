@@ -34,7 +34,9 @@ function GifImage(params) {
         'posterImage': {
             get: function() {
                 var newBitmap = self.nativeObject.seekToFrameAndGet(0);
-                return (new Image({ bitmap: newBitmap }));
+                return (new Image({
+                    bitmap: newBitmap
+                }));
             },
             enumerable: true
         },
@@ -42,7 +44,10 @@ function GifImage(params) {
             get: function() {
                 var instrinsicWidth = self.nativeObject.getIntrinsicWidth();
                 var instrinsicHeight = self.nativeObject.getIntrinsicHeight();
-                return { width: instrinsicWidth, height: instrinsicHeight };
+                return {
+                    width: instrinsicWidth,
+                    height: instrinsicHeight
+                };
             },
             enumerable: true
         },
@@ -51,8 +56,7 @@ function GifImage(params) {
                 if (self.content instanceof File) {
                     var myFileStream = self.content.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
                     return myFileStream.readToEnd();
-                }
-                else if (self.content instanceof Blob) {
+                } else if (self.content instanceof Blob) {
                     return self.content;
                 }
             },
@@ -101,18 +105,25 @@ function GifImage(params) {
 
 GifImage.createFromFile = function(pathOrFile) {
     if (typeof pathOrFile === "string")
-        pathOrFile = new File({ path: pathOrFile });
+        pathOrFile = new File({
+            path: pathOrFile
+        });
 
     if (pathOrFile && pathOrFile.nativeObject) {
-        return new GifImage({ drawable: new NativeGifDrawable(pathOrFile.nativeObject), content: pathOrFile });
-    }
-    else
+        return new GifImage({
+            drawable: new NativeGifDrawable(pathOrFile.nativeObject),
+            content: pathOrFile
+        });
+    } else
         return null;
 }
 GifImage.createFromBlob = function(blob) {
     var byteArray = blob.nativeObject.toByteArray();
     if (byteArray)
-        return new GifImage({ drawable: new NativeGifDrawable(byteArray), content: blob });
+        return new GifImage({
+            drawable: new NativeGifDrawable(byteArray),
+            content: blob
+        });
     return null;
 }
 

@@ -1,11 +1,10 @@
 /*globals requireClass */
 const WebBrowser = function() {};
 WebBrowser.show = function(page, options) {
-    
+
     if (!(options && options.url && (options.url.startsWith("https://") || options.url.startsWith("http://")))) {
         throw new Error("The specified URL has an unsupported scheme. Only HTTP and HTTPS URLs are supported.");
-    }
-    else {
+    } else {
         const NativeCustomTabsIntent = requireClass("android.support.customtabs.CustomTabsIntent");
         // const NativeCustomTabsServiceConnection = requireClass("android.support.customtabs.CustomTabsServiceConnection");
         // const NativeCustomTabsClient = requireClass("android.support.customtabs.CustomTabsClient");
@@ -26,8 +25,7 @@ WebBrowser.show = function(page, options) {
         try {
             var customTabsIntent = builder.build();
             customTabsIntent.launchUrl(spratAndroidActivityInstance, NativeUri.parse(options.url));
-        }
-        catch (e) {
+        } catch (e) {
             throw new Error("" + e);
         }
     }

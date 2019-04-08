@@ -20,8 +20,6 @@ const Picker = extend(View)(
         }
         _super(this);
 
-        this.ios = {};
-
         var _items = [];
         var _onSelected;
         var _title = "";
@@ -174,7 +172,9 @@ const Picker = extend(View)(
                     var doneListener = NativeDialogInterface.OnClickListener.implement({
                         onClick: function(dialogInterface, i) {
                             if (done)
-                                done({ index: self.currentIndex });
+                                done({
+                                    index: self.currentIndex
+                                });
                         }
                     });
 
@@ -200,10 +200,6 @@ const Picker = extend(View)(
                         self.cancelFont && negativeButton.setTypeface(self.cancelFont.nativeObject);
                     }
                 },
-                enumerable: true
-            },
-            'android': {
-                value: {},
                 enumerable: true
             },
             'toString': {

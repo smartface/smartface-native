@@ -1,9 +1,18 @@
+//Application Direction Manager (RTL Support)
+(function() {
+    var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
+    var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey("smartface.ios.viewAppearanceSemanticContentAttribute");
+    if (viewAppearanceSemanticContentAttribute != undefined) {
+        __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
+    }
+}())
+
 const RAU = require("./RAU");
 const Invocation = require('sf-core/util/iOS/invocation.js');
 
 var _rootPage;
 var _sliderDrawer;
-const keyWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
+const keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
 
 var SFApplication = {};
 
@@ -23,38 +32,37 @@ Object.defineProperty(SFApplication, 'byteSent', {
     enumerable: true
 });
 
-SFApplication.call = function(uriScheme, data, onSuccess, onFailure){
+SFApplication.call = function(uriScheme, data, onSuccess, onFailure) {
     SMFApplication.call(uriScheme, data, onSuccess, onFailure);
 };
 
-SFApplication.exit = function(){
+SFApplication.exit = function() {
     Application.onExit();
     SMFApplication.exit();
 };
 
-SFApplication.restart = function(){
+SFApplication.restart = function() {
+    cancelAllBackgroundJobs();
     SMFApplication.restart();
 };
 
-SFApplication.hideKeyboard = function(){
-    var keyWindow = __SF_UIApplication.sharedApplication().keyWindow;
+SFApplication.hideKeyboard = function() {
     var argForce = new Invocation.Argument({
-        type:"BOOL",
+        type: "BOOL",
         value: true
     });
-    Invocation.invokeInstanceMethod(keyWindow,"endEditing:",[argForce],"BOOL");
+    Invocation.invokeInstanceMethod(keyWindow, "endEditing:", [argForce], "BOOL");
 };
 
-SFApplication.checkUpdate = function(callback, user){
+SFApplication.checkUpdate = function(callback, user) {
     RAU.checkUpdate(callback, user);
 };
 
-SFApplication.setRootController = function(params){
+SFApplication.setRootController = function(params) {
     if (params && params.controller) {
         SFApplication.rootPage = params.controller;
-        var sfWindow = SF.requireClass("UIApplication").sharedApplication().keyWindow;
-        sfWindow.rootViewController = params.controller.nativeObject;
-        sfWindow.makeKeyAndVisible();
+        keyWindow.rootViewController = params.controller.nativeObject;
+        keyWindow.makeKeyAndVisible();
     }
 };
 
@@ -69,9 +77,10 @@ Object.defineProperty(SFApplication, 'sliderDrawer', {
                 configureSliderDrawer(_rootPage, _sliderDrawer);
             }
         }
-        
+
     },
-    enumerable: true,configurable : true
+    enumerable: true,
+    configurable: true
 });
 
 Object.defineProperty(SFApplication, 'rootPage', {
@@ -81,14 +90,15 @@ Object.defineProperty(SFApplication, 'rootPage', {
     set: function(value) {
         if (typeof value === "object") {
             _rootPage = value;
-            
+
             if (typeof _sliderDrawer !== "undefined") {
                 configureSliderDrawer(_rootPage, _sliderDrawer);
             }
         }
-        
+
     },
-    enumerable: true,configurable : true
+    enumerable: true,
+    configurable: true
 });
 
 function configureSliderDrawer(rootPage, sliderDrawer) {
@@ -98,14 +108,14 @@ function configureSliderDrawer(rootPage, sliderDrawer) {
 };
 
 SFApplication.ios = {};
-SFApplication.ios.canOpenUrl = function (url) {
+SFApplication.ios.canOpenUrl = function(url) {
     return SMFApplication.canOpenUrl(url);
 }
 
 Object.defineProperty(SFApplication.ios, 'bundleIdentifier', {
     get: function() {
-        var mainBundle = Invocation.invokeClassMethod("NSBundle","mainBundle",[],"NSObject");
-        var bundleIdentifier = Invocation.invokeInstanceMethod(mainBundle,"bundleIdentifier",[],"NSString");
+        var mainBundle = Invocation.invokeClassMethod("NSBundle", "mainBundle", [], "NSObject");
+        var bundleIdentifier = Invocation.invokeInstanceMethod(mainBundle, "bundleIdentifier", [], "NSString");
         return bundleIdentifier;
     },
     enumerable: true
@@ -121,24 +131,27 @@ Object.defineProperty(SFApplication.ios, 'userInterfaceLayoutDirection', {
 });
 
 SFApplication.LayoutDirection = {
-    LEFTTORIGHT : 0,
-    RIGHTTOLEFT : 1
+    LEFTTORIGHT: 0,
+    RIGHTTOLEFT: 1
 };
 
 SFApplication.android = {};
 SFApplication.Android = {};
 SFApplication.Android.KeyboardMode = {};
-SFApplication.android.checkPermission = function(){};
-SFApplication.android.requestPermissions = function(){};
-SFApplication.android.shouldShowRequestPermissionRationale = function(){};
-SFApplication.android.onRequestPermissionsResult = function(){};
-SFApplication.Android.NavigationBar = { Style: {} };
+SFApplication.android.checkPermission = function() {};
+SFApplication.android.requestPermissions = function() {};
+SFApplication.android.shouldShowRequestPermissionRationale = function() {};
+SFApplication.android.onRequestPermissionsResult = function() {};
+SFApplication.Android.NavigationBar = {
+    Style: {}
+};
 SFApplication.Android.Permissions = {};
 SFApplication.android.Permissions = {};
 SFApplication.android.navigationBar = {};
+SFApplication.android.setAppTheme = function() {};
 
 Object.defineProperty(SFApplication, 'onUnhandledError', {
-    set:function(value){
+    set: function(value) {
         Application.onUnhandledError = value;
     },
     get: function() {
@@ -147,9 +160,9 @@ Object.defineProperty(SFApplication, 'onUnhandledError', {
     enumerable: true
 });
 
-Application.onExit = function(){};
+Application.onExit = function() {};
 Object.defineProperty(SFApplication, 'onExit', {
-    set:function(value){
+    set: function(value) {
         Application.onExit = value;
     },
     get: function() {
@@ -158,9 +171,9 @@ Object.defineProperty(SFApplication, 'onExit', {
     enumerable: true
 });
 
-Application.onReceivedNotification = function(){};
+Application.onReceivedNotification = function() {};
 Object.defineProperty(SFApplication, 'onReceivedNotification', {
-    set:function(value){
+    set: function(value) {
         Application.onReceivedNotification = value;
     },
     get: function() {
@@ -169,13 +182,13 @@ Object.defineProperty(SFApplication, 'onReceivedNotification', {
     enumerable: true
 });
 
-SFApplication._onUserActivityWithBrowsingWeb = function(){};
+SFApplication._onUserActivityWithBrowsingWeb = function() {};
 Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
-    set:function(value){
+    set: function(value) {
         SFApplication._onUserActivityWithBrowsingWeb = value;
-        Application.onUserActivityCallback = function(e){
-            var url = Invocation.invokeInstanceMethod(e.userActivity,"webpageURL",[],"NSObject");
-            var type = Invocation.invokeInstanceMethod(e.userActivity,"activityType",[],"NSString");
+        Application.onUserActivityCallback = function(e) {
+            var url = Invocation.invokeInstanceMethod(e.userActivity, "webpageURL", [], "NSObject");
+            var type = Invocation.invokeInstanceMethod(e.userActivity, "activityType", [], "NSString");
             if (url && type === "NSUserActivityTypeBrowsingWeb" && typeof value === 'function') {
                 return value(url.absoluteString);
             }
@@ -188,9 +201,9 @@ Object.defineProperty(SFApplication.ios, 'onUserActivityWithBrowsingWeb', {
     enumerable: true
 });
 
-Application.onApplicationCallReceived = function(){};
+Application.onApplicationCallReceived = function() {};
 Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
-    set:function(value){
+    set: function(value) {
         Application.onApplicationCallReceived = value;
     },
     get: function() {
@@ -200,21 +213,21 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
 });
 
 Object.defineProperty(SFApplication, 'currentReleaseChannel', {
-    get: function(){
+    get: function() {
         return Application.currentReleaseChannel;
     },
     enumerable: true
 });
 
 Object.defineProperty(SFApplication, 'smartfaceAppName', {
-    get: function(){
+    get: function() {
         return Application.smartfaceAppName;
     },
     enumerable: true
 });
 
 Object.defineProperty(SFApplication, 'version', {
-    get: function(){
+    get: function() {
         return Application.version;
     },
     enumerable: true
@@ -223,12 +236,12 @@ Object.defineProperty(SFApplication, 'version', {
 // function getProjectJsonObject(){
 //     const File = require("sf-core/io/file");
 //     const projectFile = new File({path: File.getDocumentsDirectory() + "/project.json"});
-    
+
 //     // Publish case
 //     if(!projectFile.exists){ 
 //         projectFile = new File({path: File.getMainBundleDirectory() + "/project.json"});
 //     }
-    
+
 //     var retval = {};
 //     if(projectFile.exists){
 //         const FileStream = require("sf-core/io/filestream");
@@ -244,40 +257,44 @@ Object.defineProperty(SFApplication, 'version', {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const EmulatorResetState = {
-    scan : 0,
-    update : 1,
-    clear : 2
+    scan: 0,
+    update: 1,
+    clear: 2
 }
 
 Application.emulator = {};
 Application.emulator.globalObjectWillReset = function(state) {
-    
-    const Network = require('sf-core/device/network');
-    if (Network.notifierInstance) {
-        Network.notifierInstance.stopNotifier();
-        Network.notifierInstance.removeObserver();
-    }
-    
+    cancelAllBackgroundJobs();
+
     switch (state) {
-        case EmulatorResetState.scan :
+        case EmulatorResetState.scan:
             break;
-        case EmulatorResetState.update :
+        case EmulatorResetState.update:
             break;
-        case EmulatorResetState.clear :
+        case EmulatorResetState.clear:
             break;
         default:
             break;
     }
 };
 
-//Application Direction Manager (RTL Support)
-(function(){
-    var userDefaults = new __SF_NSUserDefaults("SF_USER_DEFAULTS"); //From view-iOS.js viewAppearanceSemanticContentAttribute
-    var viewAppearanceSemanticContentAttribute = userDefaults.stringForKey("smartface.ios.viewAppearanceSemanticContentAttribute");
-    if(viewAppearanceSemanticContentAttribute != undefined){
-        __SF_UIView.setViewAppearanceSemanticContentAttribute(parseInt(viewAppearanceSemanticContentAttribute));
-    }
-}())
+function cancelAllBackgroundJobs() {
+    const Location = require('sf-core/device/location');
+    const Accelerometer = require('sf-core/device/accelerometer');
+    const Network = require('sf-core/device/network');
 
+    if (Location.nativeObject) {
+        Location.stop();
+    }
+
+    Accelerometer.stop();
+
+    if (Network.notifierInstance) {
+        Network.notifierInstance.stopNotifier();
+        Network.notifierInstance.removeObserver();
+    }
+
+    // Http.__cancelAll();
+}
 
 module.exports = SFApplication;

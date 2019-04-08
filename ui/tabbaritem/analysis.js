@@ -32,6 +32,15 @@ function TabBarItem(params) {}
  */
 TabBarItem.prototype.title = "";
 
+/**
+ * Gets/sets font of tab bar item.
+ *
+ * @property {UI.Font} font
+ * @ios
+ * @since 4.0.2
+ */
+TabBarItem.prototype.font = undefined;
+
 
 /**
  * Gets/sets the icon  of tab item. 
@@ -44,6 +53,27 @@ TabBarItem.prototype.title = "";
  * @since 1.1.10
  */
 TabBarItem.prototype.icon = null;
+
+
+
+/**
+ * Gets/sets the system icon  of tab item. Built-in icons can be set with the corresponding systemIcon value.
+ * 
+ *     @example
+ *     var myItem = new TabBarItem({
+ *         android: {
+ *             systemIcon: 17301545   // OR 'ic_dialog_email'
+ *         },
+ *         title: "Page1"
+ *     });
+ * 
+ * 
+ * @property {Number | String} systemIcon
+ * @android
+ * @see https://developer.android.com/reference/android/R.drawable
+ * @since 4.0.2
+ */
+TabBarItem.prototype.systemIcon;
 
 /**
  * Gets badge of tab bar item. Badge that is displayed in the upper-right corner of the item with a surrounding red oval.
@@ -70,5 +100,15 @@ TabBarItem.prototype.badge;
  * @since 1.1.10
  */
 TabBarItem.prototype.route = null;
+
+
+/**
+ * Gets/sets attributed title of tab bar item. 
+ * 
+ * @property {UI.AttributedString} attributedTitle
+ * @android
+ * @since 4.0.2
+ */
+TabBarItem.prototype.attributedTitle;
 
 module.exports = TabBarItem;

@@ -14,27 +14,27 @@ var ButtonType = {
 const MethodNames = {
     didDismissWithButtonIndex: "didDismissWithButtonIndex"
 };
-    
-function AlertView (params) {
+
+function AlertView(params) {
     var self = this;
-    
-    var delegate = function (method){
+
+    var delegate = function(method) {
         switch (method.name) {
             case MethodNames.didDismissWithButtonIndex:
-                if (method.buttonIndex !== -1){
-                   if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
+                if (method.buttonIndex !== -1) {
+                    if (typeof(_buttonArray[method.buttonIndex].onClick) === "function") {
                         _buttonArray[method.buttonIndex].onClick();
                     }
                 }
                 self.onDismiss(self);
-                break; 
-            default: 
-         }
+                break;
+            default:
+        }
     };
-    
+
     this.nativeObject = new __SF_UIAlertView(delegate);
     self.nativeObject.title = "";
-    
+
     // Handling android specific properties
     self.android = {};
 
@@ -49,7 +49,7 @@ function AlertView (params) {
         },
         enumerable: true
     });
-    
+
     var _message = "";
     Object.defineProperty(this, 'message', {
         get: function() {
@@ -61,21 +61,21 @@ function AlertView (params) {
         },
         enumerable: true
     });
-     
+
     this.show = function() {
         self.nativeObject.show();
-    };  
-     
-    this.dismiss = function() {
-        self.nativeObject.dismissWithClickedButtonIndexAnimated(-1,true);
     };
-        
+
+    this.dismiss = function() {
+        self.nativeObject.dismissWithClickedButtonIndexAnimated(-1, true);
+    };
+
     var _buttonArray = [];
     this.addButton = function(params) {
         _buttonArray.push(params);
         self.nativeObject.addButtonWithTitle(params.text);
     };
-     
+
     Object.defineProperty(this, 'isShowing', {
         get: function() {
             return self.nativeObject.isVisible;

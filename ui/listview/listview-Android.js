@@ -7,7 +7,6 @@ const AndroidUnitConverter = require("../../util/Android/unitconverter");
 const AndroidConfig = require("../../util/Android/androidconfig");
 const scrollableSuper = require("../../util/Android/scrollable");
 
-const NativeView = requireClass("android.view.View");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
 const NativeSFLinearLayoutManager = requireClass("io.smartface.android.sfcore.ui.listview.SFLinearLayoutManager");
 const NativeSFRecyclerView = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerView");
@@ -23,13 +22,22 @@ const ListView = extend(View)(
             this.nativeObject = new NativeSwipeRefreshLayout(AndroidConfig.activity);
         }
 
+
+        let _callbacks = {
+            onAttachedToWindow: function() {
+                self.android.onAttachedToWindow && self.android.onAttachedToWindow();
+            },
+            onDetachedFromWindow: function() {
+                self.android.onDetachedFromWindow && self.android.onDetachedFromWindow();
+            }
+        };
+
         if (!this.nativeInner) {
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
-                this.nativeInner = new NativeSFRecyclerView(themeWrapper);
-            }
-            else {
-                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity);
+                this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
+            } else {
+                this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
             }
             this.nativeInner.setHasFixedSize(true);
             this.nativeInner.setDrawingCacheEnabled(true);
@@ -37,23 +45,28 @@ const ListView = extend(View)(
             this.nativeInner.setClipToPadding(false);
         }
 
-        var linearLayoutManager = new NativeSFLinearLayoutManager(AndroidConfig.activity);
-        this.nativeInner.setLayoutManager(linearLayoutManager);
+        this._layoutManager = {};
+        this._layoutManager.nativeObject = new NativeSFLinearLayoutManager(AndroidConfig.activity);
+        this.nativeInner.setLayoutManager(this._layoutManager.nativeObject);
         this.nativeObject.addView(this.nativeInner);
         this.__isRecyclerView = true;
-        
+
         _super(this);
         scrollableSuper(this, this.nativeInner);
 
         var _listViewItems = {};
         const SFRecyclerViewAdapter = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewAdapter");
         var callbacks = {
-            onCreateViewHolder: function(parent, viewType) {
+            onCreateViewHolder: function(viewType) {
                 var holderViewLayout;
                 try {
                     holderViewLayout = _onRowCreate(viewType);
-                }
-                catch (e) {
+                    // INFO: If onRowCreate doesn't return ListViewItem, the app crashes.
+                    // This check handles this case.
+                    if (!holderViewLayout || !holderViewLayout.nativeInner) {
+                        throw new Error("onRowCreate must be return an instanceof UI.ListViewItem");
+                    }
+                } catch (e) {
                     const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
@@ -63,47 +76,21 @@ const ListView = extend(View)(
                     holderViewLayout.height = self.rowHeight;
                 }
                 _listViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
+
+                holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
                 return holderViewLayout.nativeInner;
             },
-            onBindViewHolder: function(nativeHolderView, position) {
-                var itemHashCode = nativeHolderView.itemView.hashCode();
-                var _holderViewLayout = _listViewItems[itemHashCode];
+            onBindViewHolder: function(itemViewHashCode, position) {
+                var _holderViewLayout = _listViewItems[itemViewHashCode];
 
                 if (!self.rowHeight && _onRowHeight) {
                     var rowHeight = _onRowHeight(position);
                     _holderViewLayout.height = rowHeight;
-                }
-                else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
+                } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
                     _holderViewLayout.height = self.rowHeight;
                 }
 
-                if (_onRowBind) {
-                    _onRowBind(_holderViewLayout, position);
-                }
-
-                if (_onRowSelected) {
-                    nativeHolderView.itemView.setOnClickListener(NativeView.OnClickListener.implement({
-                        onClick: function(view) {
-                            var selectedItem = _listViewItems[view.hashCode()];
-                            _onRowSelected && _onRowSelected(selectedItem, position);
-                        }
-                    }));
-                }
-
-                if (_onRowLongSelected) {
-                    nativeHolderView.itemView.setOnLongClickListener(NativeView.OnLongClickListener.implement({
-                        onLongClick: function(view) {
-
-                            if (typeof _onRowLongSelected === 'function') {
-                                var selectedItem = _listViewItems[view.hashCode()];
-                                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
-                                return true;
-                            }
-                            return false;
-                        }
-                    }));
-                }
-
+                _onRowBind && _onRowBind(_holderViewLayout, position);
             },
             getItemCount: function() {
                 if (isNaN(_itemCount))
@@ -113,27 +100,44 @@ const ListView = extend(View)(
                 return _itemCount;
             },
             getItemViewType: function(position) {
-                if (_onRowType)
-                    return _onRowType(position);
-                return 0;
+                let rowType;
+                _onRowType && (rowType = _onRowType(position));
+                return (typeof(rowType) === "number") ? rowType : 0;
+            },
+            onItemSelected: function(position, itemViewHashCode) {
+                var selectedItem = _listViewItems[itemViewHashCode];
+                _onRowSelected && _onRowSelected(selectedItem, position);
+            },
+            onItemLongSelected: function(position, itemViewHashCode) {
+                var selectedItem = _listViewItems[itemViewHashCode];
+                _onRowLongSelected && _onRowLongSelected(selectedItem, position);
             }
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll, _contentOffset = { x: 0, y: 0 },
+        var _onScroll, _contentOffset = {
+                x: 0,
+                y: 0
+            },
             _rowHeight, _onRowCreate, _onRowSelected, _onRowLongSelected,
             _onPullRefresh, _onRowHeight, _onRowBind, _onRowType, _itemCount = 0,
             _contentInset = {},
             _onScrollListener = undefined,
             _scrollEnabled, isScrollListenerAdded = false;
         Object.defineProperties(this, {
+            'layoutManager': {
+                get: function() {
+                    return self._layoutManager;
+                },
+                enumerable: true
+            },
             // properties
             'listViewItemByIndex': {
                 value: function(index) {
                     var viewHolder = self.nativeInner.findViewHolderForAdapterPosition(index);
-                    if (viewHolder)
-                        return _listViewItems[viewHolder.itemView.hashCode()];
-                    return undefined;
+                    if (!viewHolder) return undefined; // like ios
+
+                    return _listViewItems[viewHolder.itemView.hashCode()];
                 },
                 enumerable: true
             },
@@ -176,7 +180,10 @@ const ListView = extend(View)(
             */
             'contentOffset': {
                 get: function() {
-                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
+                    return {
+                        x: AndroidUnitConverter.pixelToDp(_contentOffset.x),
+                        y: AndroidUnitConverter.pixelToDp(_contentOffset.y)
+                    };
                 },
                 enumerable: true
             },
@@ -219,8 +226,7 @@ const ListView = extend(View)(
                 value: function(index, animate) {
                     if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
-                    }
-                    else {
+                    } else {
                         this.nativeInner.scrollToPosition(index);
                     }
                 },
@@ -331,8 +337,7 @@ const ListView = extend(View)(
                     if (onScroll) {
                         self.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    }
-                    else if (!_onScrollStateChanged) {
+                    } else if (!_onScrollStateChanged) {
                         self.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -375,8 +380,7 @@ const ListView = extend(View)(
                     if (onScrollStateChanged) {
                         self.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    }
-                    else if (!_onScroll) {
+                    } else if (!_onScroll) {
                         self.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -427,8 +431,10 @@ const ListView = extend(View)(
         function createAndSetScrollListener() {
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
-                onScrolled: function(recyclerView, dx, dy) {
-                    if(!self.touchEnabled) { return; }
+                onScrolled: function(dx, dy) {
+                    if (!self.touchEnabled) {
+                        return;
+                    }
                     //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
@@ -437,10 +443,21 @@ const ListView = extend(View)(
 
                     var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                    _onScroll && _onScroll({ translation: { x: dX, y: dY }, contentOffset: { x: offsetX, y: offsetY } });
+                    _onScroll && _onScroll({
+                        translation: {
+                            x: dX,
+                            y: dY
+                        },
+                        contentOffset: {
+                            x: offsetX,
+                            y: offsetY
+                        }
+                    });
                 },
-                onScrollStateChanged: function(recyclerView, newState) {
-                    if(!self.touchEnabled) { return; }
+                onScrollStateChanged: function(newState) {
+                    if (!self.touchEnabled) {
+                        return;
+                    }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },
             };
@@ -449,7 +466,6 @@ const ListView = extend(View)(
         }
 
         // ios-only properties
-        this.ios = {};
         this.ios.swipeItems = {};
         this.ios.swipeItem = function(title, action) {
             return {};

@@ -41,7 +41,10 @@ BottomTabBar.prototype.android.disableItemAnimation = false;
  * @ios
  * @since 1.1.10
  */
-BottomTabBar.prototype.itemColor = {normal: Color.BLACK, selected: Color.BLUE};
+BottomTabBar.prototype.itemColor = {
+    normal: Color.BLACK,
+    selected: Color.BLUE
+};
 
 /**
  * Gets/sets background color of the tab bar items. 
@@ -63,5 +66,14 @@ BottomTabBar.prototype.backgroundColor = Color.WHITE;
  * @since 3.2.0
  */
 BottomTabBar.prototype.items = null;
+
+/**
+ * A Boolean value that indicates whether the tab bar is translucent.
+ *
+ * @property {Boolean} translucent
+ * @ios
+ * @since 4.0.2
+ */
+BottomTabBar.prototype.translucent = false;
 
 module.exports = BottomTabBar;

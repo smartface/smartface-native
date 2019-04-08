@@ -29,11 +29,9 @@ const SwipeView = extend(View)(
                     var pageInstance;
                     if (_onPageCreateCallback) {
                         pageInstance = _onPageCreateCallback(position);
-                    }
-                    else if (_pageInstances[position]) {
+                    } else if (_pageInstances[position]) {
                         return (_pageInstances[position]).nativeObject;
-                    }
-                    else { // For backward compatibility
+                    } else { // For backward compatibility
                         var pageClass = _pages[position];
                         pageInstance = new pageClass({
                             skipDefaults: true
@@ -46,13 +44,13 @@ const SwipeView = extend(View)(
                 }
             };
             this.pagerAdapter = new NativePagerAdapter(fragmentManager, callbacks);
-        
+
             var viewID = NativeView.generateViewId();
             self.nativeObject = new NativeViewPager(AndroidConfig.activity);
             DirectionBasedConverter.flipHorizontally(self.nativeObject);
             self.nativeObject.setId(viewID);
         }
-        
+
         _super(self);
         scrollableSuper(this, this.nativeObject);
 
@@ -98,6 +96,7 @@ const SwipeView = extend(View)(
                             throw new TypeError("Array parameter cannot be empty.");
                         }
                         _pages = pages;
+                        this.pagerAdapter.notifyDataSetChanged();
                     }
                 }
             },
@@ -148,7 +147,7 @@ const SwipeView = extend(View)(
                 this[param] = params[param];
             }
         }
-        
+
         // Use setAdapter method after constructor's parameters are assigned.
         self.nativeObject.setAdapter(self.pagerAdapter);
         var listener = NativeOnPageChangeListener.implement({
@@ -160,18 +159,21 @@ const SwipeView = extend(View)(
                 }
             },
             onPageSelected: function(position) {
-                _callbackOnPageSelected && _callbackOnPageSelected(position,_pageInstances[position]);
+                _callbackOnPageSelected && _callbackOnPageSelected(position, _pageInstances[position]);
             },
             onPageScrolled: function(position, positionOffset, positionOffsetPixels) {
-                if(_callbackOnPageScrolled) {
+                if (_callbackOnPageScrolled) {
                     var AndroidUnitConverter = require("sf-core/util/Android/unitconverter");
-                    
+
                     var offsetPixels = AndroidUnitConverter.pixelToDp(positionOffsetPixels);
                     _callbackOnPageScrolled(position, offsetPixels);
                 }
                 var intPosition = position;
                 if (_lastIndex !== intPosition && positionOffset === 0 && positionOffsetPixels === 0) {
                     _lastIndex = intPosition;
+                    // TODO: Hotfix for APC. Please investigate why _pageInstances[intPosition] is null.
+                    // Maybe this custom index propagation has logic error.
+                    if (!_pageInstances[intPosition]) return;
                     _pageInstances[intPosition].onShowSwipeView && _pageInstances[intPosition].onShowSwipeView();
                 }
             }
@@ -185,7 +187,9 @@ function bypassPageSpecificProperties(page) {
     Object.keys(page.headerBar).forEach(function(key) {
         Object.defineProperty(page.headerBar, key, {
             set: function() {},
-            get: function() { return {}; },
+            get: function() {
+                return {};
+            },
         });
     });
     page.isSwipeViewPage = true;

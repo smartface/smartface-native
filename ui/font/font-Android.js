@@ -11,7 +11,12 @@ function Font(params) {
     Object.defineProperties(this, {
         'sizeOfString': {
             value: function(text, maxWidth) {
-                return SizeCalculator.calculateStringSize({ text: text, maxWidth: maxWidth, textSize: this.size, typeface: this });
+                return SizeCalculator.calculateStringSize({
+                    text: text,
+                    maxWidth: maxWidth,
+                    textSize: this.size,
+                    typeface: this
+                });
             },
             enumerable: true
         },
@@ -124,14 +129,11 @@ Object.defineProperties(Font, {
 
                 if (fontFile.exists) {
                     selectedFont = fontFile;
-                }
-                else if (fontFile2.exists) {
+                } else if (fontFile2.exists) {
                     selectedFont = fontFile2;
-                }
-                else if (fontFile3.exists) {
+                } else if (fontFile3.exists) {
                     selectedFont = fontFile3;
-                }
-                else if (fontFile4.exists) {
+                } else if (fontFile4.exists) {
                     selectedFont = fontFile4;
                 }
 
@@ -139,12 +141,10 @@ Object.defineProperties(Font, {
                     font = Font.createFromFile(selectedFont.fullPath, size);
                     addToCache(fontFamily, style, font);
                     return font;
-                }
-                else {
+                } else {
                     typeface = NativeTypeface.create(fontFamily, fontStyle);
                 }
-            }
-            else {
+            } else {
                 typeface = NativeTypeface.defaultFromStyle(fontStyle);
             }
 
@@ -168,8 +168,7 @@ Object.defineProperties(Font, {
                     if (fontFile.type === Path.FILE_TYPE.ASSET) {
                         var assets = AndroidConfig.activity.getAssets();
                         typeface = NativeTypeface.createFromAsset(assets, fontFile.name);
-                    }
-                    else {
+                    } else {
                         typeface = NativeTypeface.createFromFile(fontFile.nativeObject);
                     }
                 }
