@@ -1,7 +1,7 @@
 const AndroidConfig = require("../../util/Android/androidconfig");
 const TypeUtil = require("../../util/type");
 
-function Data(){}
+function Data() {}
 
 var activity = AndroidConfig.activity;
 // Context.MODE_PRIVATE
@@ -9,8 +9,8 @@ var jsSharedPreferences = activity.getSharedPreferences("JS", 0);
 
 Object.defineProperties(Data, {
     'getStringVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
+        value: function(key) {
+            if (TypeUtil.isString(key) && jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getString(key, null);
             }
             return null;
@@ -18,8 +18,8 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'getBooleanVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)) {
+        value: function(key) {
+            if (TypeUtil.isString(key) && jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getBoolean(key, false);
             }
             return null;
@@ -27,8 +27,8 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'getIntVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+        value: function(key) {
+            if (TypeUtil.isString(key) && jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getInt(key, -1);
             }
             return null;
@@ -36,8 +36,8 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'getFloatVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+        value: function(key) {
+            if (TypeUtil.isString(key) && jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getFloat(key, -1);
             }
             return null;
@@ -45,8 +45,8 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'getLongVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key) &&  jsSharedPreferences.contains(key)){
+        value: function(key) {
+            if (TypeUtil.isString(key) && jsSharedPreferences.contains(key)) {
                 return jsSharedPreferences.getLong(key, -1);
             }
             return null;
@@ -54,48 +54,48 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'setStringVariable': {
-        value: function(key, value){
-            if(TypeUtil.isString(key) && TypeUtil.isString(value)){
+        value: function(key, value) {
+            if (TypeUtil.isString(key) && TypeUtil.isString(value)) {
                 jsSharedPreferences.edit().putString(key, value).commit();
             }
         },
         enumerable: true
     },
     'setBooleanVariable': {
-        value: function(key, value){
-            if(TypeUtil.isString(key) && TypeUtil.isBoolean(value)){
+        value: function(key, value) {
+            if (TypeUtil.isString(key) && TypeUtil.isBoolean(value)) {
                 jsSharedPreferences.edit().putBoolean(key, value).commit();
             }
         },
         enumerable: true
     },
     'setIntVariable': {
-        value: function(key, value){
-            if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
+        value: function(key, value) {
+            if (TypeUtil.isString(key) && TypeUtil.isNumeric(value)) {
                 jsSharedPreferences.edit().putInt(key, value).commit();
             }
         },
         enumerable: true
     },
     'setFloatVariable': {
-        value: function(key, value){
-            if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
+        value: function(key, value) {
+            if (TypeUtil.isString(key) && TypeUtil.isNumeric(value)) {
                 jsSharedPreferences.edit().putFloat(key, value).commit();
             }
         },
         enumerable: true
     },
     'setLongVariable': {
-        value: function(key, value){
-            if(TypeUtil.isString(key) && TypeUtil.isNumeric(value)){
+        value: function(key, value) {
+            if (TypeUtil.isString(key) && TypeUtil.isNumeric(value)) {
                 jsSharedPreferences.edit().putLong(key, long(value)).commit();
             }
         },
         enumerable: true
     },
     'containsVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key)){
+        value: function(key) {
+            if (TypeUtil.isString(key)) {
                 return jsSharedPreferences.contains(key);
             }
             return false;
@@ -103,15 +103,15 @@ Object.defineProperties(Data, {
         enumerable: true
     },
     'removeVariable': {
-        value: function(key){
-            if(TypeUtil.isString(key)){
+        value: function(key) {
+            if (TypeUtil.isString(key)) {
                 jsSharedPreferences.edit().remove(key).commit();
             }
         },
         enumerable: true
     },
     'removeAllVariables': {
-        value: function(){
+        value: function() {
             jsSharedPreferences.edit().clear().commit();
         },
         enumerable: true

@@ -1,4 +1,3 @@
-
 /**
  * @class UI.BottomTabbarController
  * @since 3.2
@@ -20,7 +19,7 @@
  */
 
 function BottomTabbarController() {
-    
+
     /**
      * Gets/sets child controllers of BottomTabbarController instance.
      *
@@ -30,7 +29,7 @@ function BottomTabbarController() {
      * @since 3.2.0
      */
     this.childControllers = [];
-    
+
     /**
      * Gets/sets tab bar view of BottomTabbarController instance.
      *
@@ -41,7 +40,7 @@ function BottomTabbarController() {
      * @since 3.2.0
      */
     this.tabBar;
-    
+
     /**
      * Gets/sets the selected tab bar item.
      *
@@ -51,7 +50,7 @@ function BottomTabbarController() {
      * @since 3.2.0
      */
     this.selectedIndex = 0;
-    
+
     /**
      * Return true if you want the item to be displayed as the selected index.
      *
@@ -64,7 +63,7 @@ function BottomTabbarController() {
      * @since 3.2.0
      */
     this.shouldSelectByIndex = function(params) {};
-    
+
     /**
      *  Called when an item in the bottom tabbar item is selected.
      *

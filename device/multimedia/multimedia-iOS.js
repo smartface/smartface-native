@@ -57,8 +57,7 @@ Multimedia.createImagePickerController = function(e) {
                     var image;
                     if (param.info["UIImagePickerControllerEditedImage"]) {
                         image = Image.createFromImage(param.info["UIImagePickerControllerEditedImage"]);
-                    }
-                    else {
+                    } else {
                         image = Image.createFromImage(param.info["UIImagePickerControllerOriginalImage"]);
                     }
 
@@ -66,12 +65,17 @@ Multimedia.createImagePickerController = function(e) {
                         var fixedImage = image.nativeObject.fixOrientation();
                         image = Image.createFromImage(fixedImage);
                     }
-                    e.onSuccess({ image: image });
-                }
-                else if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video) {
+                    e.onSuccess({
+                        image: image
+                    });
+                } else if (param.info["UIImagePickerControllerMediaType"] === UIImagePickerMediaTypes.video) {
                     var videoURL = param.info["UIImagePickerControllerMediaURL"];
-                    var file = new File({ path: videoURL.absoluteString });
-                    e.onSuccess({ video: file });
+                    var file = new File({
+                        path: videoURL.absoluteString
+                    });
+                    e.onSuccess({
+                        video: file
+                    });
                 }
             }
         });
@@ -87,8 +91,7 @@ Multimedia.startCamera = function(e) {
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(this.picker);
-    }
-    else {
+    } else {
         throw new TypeError("Parameter type mismatch. params.page must be Page instance");
     }
 };
@@ -98,8 +101,7 @@ Multimedia.pickFromGallery = function(e) {
     this.picker = Multimedia.createImagePickerController(e);
     if (e.page && (e.page instanceof Page)) {
         e.page.nativeObject.presentViewController(this.picker);
-    }
-    else {
+    } else {
         throw new TypeError("Parameter type mismatch. params.page must be Page instance");
     }
 };
@@ -135,8 +137,7 @@ Multimedia.ios.requestGalleryAuthorization = function(callback) {
         if (typeof callback == 'function') {
             if (status == PHAuthorizationStatus.Authorized) {
                 callback(true);
-            }
-            else {
+            } else {
                 callback(false);
             }
         }

@@ -39,12 +39,14 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                     self.nativeInner.setJsCallbacks({
                         onScrollGesture: function(distanceX, distanceY) {
                             let returnValue = true;
-                            _onGesture && (returnValue = _onGesture({ distanceX: distanceX, distanceY: distanceY }));
+                            _onGesture && (returnValue = _onGesture({
+                                distanceX: distanceX,
+                                distanceY: distanceY
+                            }));
                             return !!returnValue;
                         }
                     });
-                }
-                else {
+                } else {
                     self.nativeInner.setJsCallbacks(null);
                 }
             },

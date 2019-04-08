@@ -191,8 +191,7 @@ const TextView = extend(Label)(
                 set: function(textAlignment) {
                     if (textAlignment in TextAlignmentDic) {
                         this._textAlignment = textAlignment;
-                    }
-                    else {
+                    } else {
                         this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
                     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
@@ -228,15 +227,13 @@ function enableScrollable(scrollEnabled) {
             const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
             self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
             self.linkMovementMethodCreated = true;
-        }
-        else {
+        } else {
             if (self.scrollableMovementMethodCreated) return;
             const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
             self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
             self.scrollableMovementMethodCreated = true;
         }
-    }
-    else {
+    } else {
         self.linkMovementMethodCreated = self.scrollableMovementMethodCreated = false;
         self.nativeObject.setMovementMethod(null);
     }

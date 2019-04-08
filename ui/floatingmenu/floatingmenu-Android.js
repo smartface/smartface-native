@@ -1,15 +1,15 @@
 /*globals requireClass*/
-const NativeClickListener    = requireClass("android.view.View$OnClickListener");
-const NativeSpannableString  = requireClass("android.text.SpannableString");
-const NativeForegroundColor  = requireClass("android.text.style.ForegroundColorSpan");
-const NativeTextView         = requireClass("android.widget.TextView");
-const NativeYogaNode         = requireClass('com.facebook.yoga.YogaNode');
-const NativeFloatingButton   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
-const NativeOnOpenListener   = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
-const NativeOnCloseListener  = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
-const NativeMenuItem         = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
-const Color                  = require("../color");
-const AndroidConfig          = require("../../util/Android/androidconfig");
+const NativeClickListener = requireClass("android.view.View$OnClickListener");
+const NativeSpannableString = requireClass("android.text.SpannableString");
+const NativeForegroundColor = requireClass("android.text.style.ForegroundColorSpan");
+const NativeTextView = requireClass("android.widget.TextView");
+const NativeYogaNode = requireClass('com.facebook.yoga.YogaNode');
+const NativeFloatingButton = requireClass("uk.co.markormesher.android_fab.FloatingActionButton");
+const NativeOnOpenListener = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialOpenListener");
+const NativeOnCloseListener = requireClass("uk.co.markormesher.android_fab.FloatingActionButton$OnSpeedDialCloseListener");
+const NativeMenuItem = requireClass("uk.co.markormesher.android_fab.SpeedDialMenuAdapter$MenuItem");
+const Color = require("../color");
+const AndroidConfig = require("../../util/Android/androidconfig");
 
 function FloatingMenu(params) {
     var nativeObject;
@@ -20,7 +20,7 @@ function FloatingMenu(params) {
     var _callbackClick;
     var _callbackOpen;
     var _callbackClose;
-    
+
     const SFSpeedDialAdapter = requireClass("io.smartface.android.sfcore.ui.floatingmenu.SFSpeedDialAdapter");
     var overrideMethods = {
         getCount: function() {
@@ -28,9 +28,9 @@ function FloatingMenu(params) {
         },
         getViews: function(position) {
             position = reposition(position, _items.length);
-            
+
             var item = new NativeMenuItem();
-            _items[position].icon  && (item.iconDrawable = _items[position].icon.nativeObject);
+            _items[position].icon && (item.iconDrawable = _items[position].icon.nativeObject);
             if (_items[position].title) {
                 var spannedTitle = new NativeSpannableString(_items[position].title);
                 var foregroundColor = new NativeForegroundColor(_items[position].titleColor.nativeObject);
@@ -61,13 +61,13 @@ function FloatingMenu(params) {
         }
     };
     var menuAdapter = new SFSpeedDialAdapter(overrideMethods);
-    
+
     var clickListener = NativeClickListener.implement({
         onClick: function(view) {
             _callbackClick && _callbackClick();
         }
     });
-    
+
     var openListener = NativeOnOpenListener.implement({
         onOpen: function(button) {
             _callbackOpen && _callbackOpen();
@@ -80,10 +80,10 @@ function FloatingMenu(params) {
         }
     });
 
-    if(!this.nativeObject){
-        const NativeYogaEdge         = requireClass('com.facebook.yoga.YogaEdge');
+    if (!this.nativeObject) {
+        const NativeYogaEdge = requireClass('com.facebook.yoga.YogaEdge');
         const NativeYogaPositionType = requireClass('com.facebook.yoga.YogaPositionType');
-        
+
         this.yogaNode = new NativeYogaNode();
         this.yogaNode.setPositionType(NativeYogaPositionType.ABSOLUTE);
         this.yogaNode.setPosition(NativeYogaEdge.TOP, 0);
@@ -100,7 +100,7 @@ function FloatingMenu(params) {
 
         nativeObject = this.nativeObject;
     }
-        
+
     Object.defineProperties(this, {
         'items': {
             get: function() {
@@ -108,11 +108,11 @@ function FloatingMenu(params) {
             },
             set: function(items) {
                 try {
-                _items = items;
-                this.nativeObject.rebuildSpeedDialMenu();
-                    
-                }catch(e) {}
-                
+                    _items = items;
+                    this.nativeObject.rebuildSpeedDialMenu();
+
+                } catch (e) {}
+
             }
         },
         'icon': {
@@ -134,7 +134,7 @@ function FloatingMenu(params) {
             },
             set: function(color) {
                 if (color && (color instanceof Color)) { // Don't add if(color.nativeObject) check. nativeObject value is 0 for Color.TRANSPARENT.
-                    _color = color;                      // It causes exception.
+                    _color = color; // It causes exception.
                     nativeObject.setBackgroundColour(color.nativeObject);
                 } else {
                     throw new Error("Provide floatingMenu's color with a UI.Color.");

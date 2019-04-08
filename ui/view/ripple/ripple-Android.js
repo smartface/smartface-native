@@ -2,11 +2,15 @@
 const AndroidUnitConverter = require("../../../util/Android/unitconverter.js");
 const AndroidConfig = require("../../../util/Android/androidconfig");
 
-function DpToPixel(dp) { return AndroidUnitConverter.dpToPixel(dp); }
+function DpToPixel(dp) {
+    return AndroidUnitConverter.dpToPixel(dp);
+}
 
 function RippleEffect(view) {
-    var _rippleEnabled = false, _rippleColor = null, _useForeground = false;
-    
+    var _rippleEnabled = false,
+        _rippleColor = null,
+        _useForeground = false;
+
     Object.defineProperties(view.android, {
         'rippleEnabled': {
             get: function() {
@@ -37,7 +41,7 @@ function RippleEffect(view) {
             },
             set: function(value) {
                 _rippleColor = value;
-                
+
                 if (this.rippleEnabled && AndroidConfig.sdkVersion >= AndroidConfig.SDK.SDK_LOLLIPOP) {
                     var states = array([array([], "int")]);
                     var colors = array([_rippleColor.nativeObject], 'int');
@@ -55,8 +59,7 @@ function RippleEffect(view) {
                         let currentBackground = view.nativeObject.getForeground();
                         let rippleDrawableForegorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
                         view.nativeObject.setForeground(rippleDrawableForegorund);
-                    }
-                    else{
+                    } else {
                         let currentBackground = view.nativeObject.getBackground();
                         let rippleDrawableBackgorund = new NativeRippleDrawable(colorStateList, currentBackground, mask);
                         view.nativeObject.setBackground(rippleDrawableBackgorund);

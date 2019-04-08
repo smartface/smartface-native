@@ -54,7 +54,7 @@ function FloatingMenu(params) {};
  * @since 1.1.10
  */
 FloatingMenu.prototype.items = [];
-    
+
 /**
  * Gets/sets icon of the button. In Android, the icon has the size of 24dp and it is stretched to a 24dp square container.
  *
@@ -74,7 +74,7 @@ FloatingMenu.prototype.icon;
  * @since 1.1.10
  */
 FloatingMenu.prototype.rotateEnabled = true;
-    
+
 /**
  * Gets/sets color of the button
  *
@@ -84,7 +84,7 @@ FloatingMenu.prototype.rotateEnabled = true;
  * @since 1.1.10
  */
 FloatingMenu.prototype.color;
-    
+
 /**
  * Gets/sets visible of the FloatingMenu
  *
@@ -94,7 +94,7 @@ FloatingMenu.prototype.color;
  * @since 1.1.10
  */
 FloatingMenu.prototype.visible;
-    
+
 /**
  * Gets/sets click event callback function. This function is fired when items array is empty.
  *
@@ -104,7 +104,7 @@ FloatingMenu.prototype.visible;
  * @ios
  */
 FloatingMenu.prototype.onClick = function() {};
-     
+
 /**
  * Gets/sets open event callback.
  *
@@ -114,7 +114,7 @@ FloatingMenu.prototype.onClick = function() {};
  * @ios
  */
 FloatingMenu.prototype.onMenuOpen = function() {};
-     
+
 /**
  * Gets/sets onMenuClose event callback.
  *
@@ -124,7 +124,7 @@ FloatingMenu.prototype.onMenuOpen = function() {};
  * @ios
  */
 FloatingMenu.prototype.onMenuClose = function() {};
-     
+
 /**
  * Opens the menu.
  *
@@ -134,7 +134,7 @@ FloatingMenu.prototype.onMenuClose = function() {};
  * @ios
  */
 FloatingMenu.prototype.open = function() {};
-     
+
 /**
  * Closes the menu.
  *
@@ -148,7 +148,7 @@ FloatingMenu.prototype.close = function() {};
 /**
  * @class UI.FloatingMenu.Item
  * @since 1.1.10
- */ 
+ */
 FloatingMenu.Item = function() {};
 
 /**
@@ -170,7 +170,7 @@ FloatingMenu.Item.prototype.title;
  * @since 1.1.10
  */
 FloatingMenu.Item.prototype.icon;
-        
+
 /**
  * Gets/sets color of the item button.
  *
@@ -190,7 +190,7 @@ FloatingMenu.Item.prototype.color;
  * @since 1.1.10
  */
 FloatingMenu.Item.prototype.onClick = function() {};
-        
+
 /**
  * Gets/sets color of the title.
  *

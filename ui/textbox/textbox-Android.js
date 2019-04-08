@@ -100,7 +100,10 @@ const TextBox = extend(TextView)(
         Object.defineProperties(this, {
             'cursorPosition': {
                 get: function() {
-                    return { start: self.nativeObject.getSelectionStart(), end: self.nativeObject.getSelectionEnd() };
+                    return {
+                        start: self.nativeObject.getSelectionStart(),
+                        end: self.nativeObject.getSelectionEnd()
+                    };
                 },
                 set: function(value) {
                     if (value && value.start === parseInt(value.start, 10) && value.end === parseInt(value.end, 10)) {
@@ -184,8 +187,7 @@ const TextBox = extend(TextView)(
                     let removeFlags = NativeKeyboardType[_keyboardType];
                     if (!TypeUtil.isNumeric(NativeKeyboardType[keyboardType])) {
                         _keyboardType = KeyboardType.DEFAULT;
-                    }
-                    else {
+                    } else {
                         _keyboardType = keyboardType;
                     }
                     updateInputType(this, removeFlags, NativeKeyboardType[_keyboardType]);
@@ -257,8 +259,7 @@ const TextBox = extend(TextView)(
                                     var insertedText = "";
                                     if (before == 0) {
                                         insertedText = charSequence.subSequence(start, start + count).toString();
-                                    }
-                                    else if (before <= count) {
+                                    } else if (before <= count) {
                                         insertedText = charSequence.subSequence(before, count).toString();
                                     }
                                     if (_onTextChanged) {
@@ -287,8 +288,7 @@ const TextBox = extend(TextView)(
                             onFocusChange: function(view, hasFocus) {
                                 if (hasFocus) {
                                     _onEditBegins && _onEditBegins();
-                                }
-                                else {
+                                } else {
                                     _onEditEnds && _onEditEnds();
                                     this.nativeObject.setSelection(0, 0);
                                 }
@@ -310,8 +310,7 @@ const TextBox = extend(TextView)(
                             onFocusChange: function(view, hasFocus) {
                                 if (hasFocus) {
                                     _onEditBegins && _onEditBegins();
-                                }
-                                else {
+                                } else {
                                     _onEditEnds && _onEditEnds();
                                     this.nativeObject.setSelection(0, 0);
                                 }
@@ -335,7 +334,9 @@ const TextBox = extend(TextView)(
                     self.nativeObject.setOnEditorActionListener(NativeTextView.OnEditorActionListener.implement({
                         onEditorAction: function(textView, actionId, event) {
                             if (actionId === NativeActionKeyType[_actionKeyType]) {
-                                _onActionButtonPress && _onActionButtonPress({ actionKeyType: _actionKeyType });
+                                _onActionButtonPress && _onActionButtonPress({
+                                    actionKeyType: _actionKeyType
+                                });
                             }
                             return false;
                         }

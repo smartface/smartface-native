@@ -4,20 +4,20 @@ const Image = require('sf-core/ui/image');
 function TabBar(params) {
     const UITabBar = SF.requireClass("UITabBar");
     const TabBarItem = require('sf-core/ui/tabbaritem');
-    
+
     var self = this;
-    
+
     self.android = {};
-    
+
     self.nativeObject = undefined;
     if (params.nativeObject) {
         self.nativeObject = params.nativeObject;
     }
-    
+
     self.nativeObject.translucent = false;
     //////////////////////////////////////////////////////////////////////////
     // ITEMS
-    
+
     var _ios = {};
     Object.defineProperty(self, 'ios', {
         get: function() {
@@ -30,7 +30,7 @@ function TabBar(params) {
         },
         enumerable: true
     });
-    
+
     var _items = [];
     Object.defineProperty(self, 'items', {
         get: function() {
@@ -39,10 +39,10 @@ function TabBar(params) {
         set: function(value) {
             if (typeof value === 'object') {
                 _items = value;
-                
+
                 for (var i in _items) {
-                    if (typeof _items[i].nativeObject === "undefined"){
-                        _items[i].nativeObject = self.nativeObject.items[i];   
+                    if (typeof _items[i].nativeObject === "undefined") {
+                        _items[i].nativeObject = self.nativeObject.items[i];
                     }
                     _items[i].invalidate();
                 }
@@ -50,9 +50,9 @@ function TabBar(params) {
         },
         enumerable: true
     });
-    
+
     // ITEMS DELEGATE
-    self.tabBarControllerItemsDidChange = function() {        
+    self.tabBarControllerItemsDidChange = function() {
         if (self.items.length === self.nativeObject.items.length) {
             for (var i in self.nativeObject.items) {
                 self.items[i].nativeObject = self.nativeObject.items[i];
@@ -60,14 +60,16 @@ function TabBar(params) {
         } else {
             var itemsArray = [];
             for (var i in self.nativeObject.items) {
-                var sfTabBarItem = new TabBarItem({nativeObject : self.nativeObject.items[i]});
+                var sfTabBarItem = new TabBarItem({
+                    nativeObject: self.nativeObject.items[i]
+                });
                 itemsArray.push(sfTabBarItem);
             }
             self.items = itemsArray;
         }
     }
     //////////////////////////////////////////////////////////////////////////
-    
+
     Object.defineProperty(self.ios, 'translucent', {
         get: function() {
             return self.nativeObject.translucent;
@@ -81,8 +83,8 @@ function TabBar(params) {
     });
 
     var _itemColor = {
-        normal : undefined,
-        selected : undefined
+        normal: undefined,
+        selected: undefined
     };
     Object.defineProperty(self, 'itemColor', {
         get: function() {
@@ -96,10 +98,12 @@ function TabBar(params) {
         },
         enumerable: true
     });
-    
+
     Object.defineProperty(self, 'tintColor', {
         get: function() {
-            return new Color({color : self.nativeObject.tintColor});
+            return new Color({
+                color: self.nativeObject.tintColor
+            });
         },
         set: function(value) {
             if (self.nativeObject) {
@@ -114,29 +118,36 @@ function TabBar(params) {
                 }
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self, 'unselectedItemColor', {
         get: function() {
-            return new Color({color : self.nativeObject.unselectedItemTintColor});
+            return new Color({
+                color: self.nativeObject.unselectedItemTintColor
+            });
         },
         set: function(value) {
             self.nativeObject.unselectedItemTintColor = value.nativeObject;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self, 'backgroundColor', {
         get: function() {
-            return new Color({color : self.nativeObject.barTintColor});
+            return new Color({
+                color: self.nativeObject.barTintColor
+            });
         },
         set: function(value) {
             self.nativeObject.barTintColor = value.nativeObject;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self, 'backgroundImage', {
         get: function() {
             return Image.createFromImage(self.nativeObject.backgroundImage);
@@ -144,16 +155,18 @@ function TabBar(params) {
         set: function(value) {
             self.nativeObject.backgroundImage = value.nativeObject;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     Object.defineProperty(self, 'height', {
         get: function() {
             return self.nativeObject.frame.height;
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _borderVisibility = true;
     Object.defineProperty(self, 'borderVisibility', {
         get: function() {
@@ -172,9 +185,10 @@ function TabBar(params) {
                 _borderVisibility = value;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
+
     var _selectionIndicatorImage;
     Object.defineProperty(self.ios, 'selectionIndicatorImage', {
         get: function() {
@@ -186,10 +200,14 @@ function TabBar(params) {
                 self.nativeObject.selectionIndicatorImage = _selectionIndicatorImage.nativeObject;
             }
         },
-        enumerable: true,configurable : true
+        enumerable: true,
+        configurable: true
     });
-    
-   self.itemColor = { normal: Color.GRAY, selected: Color.create("#00a1f1")}; // Do not remove. COR-1931 describes what happening.
+
+    self.itemColor = {
+        normal: Color.GRAY,
+        selected: Color.create("#00a1f1")
+    }; // Do not remove. COR-1931 describes what happening.
 
     if (params) {
         for (var param in params) {

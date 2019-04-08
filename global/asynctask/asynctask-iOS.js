@@ -57,8 +57,7 @@ function AsyncTask(params) {
                     }.bind(operation));
 
                     self.nativeObject.addOperation(operation);
-                }
-                else {
+                } else {
                     throw new Error("Cannot execute task: the task is already running.");
                 }
             }

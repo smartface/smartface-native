@@ -15,7 +15,7 @@ const ActivityIndicator = extend(View)(
         _super(this);
 
         self.nativeObject.startAnimating();
-        
+
         var _color = Color.create("#00A1F1");
         self.nativeObject.color = _color.nativeObject; // Set Default
         Object.defineProperty(this, 'color', {
@@ -36,8 +36,7 @@ const ActivityIndicator = extend(View)(
             set: function(value) {
                 if (value) {
                     self.nativeObject.startAnimating();
-                }
-                else {
+                } else {
                     self.nativeObject.stopAnimating();
                 }
             },
@@ -71,8 +70,7 @@ const ActivityIndicator = extend(View)(
             for (var param in params) {
                 if (param === "ios" || param === "android") {
                     setOSSpecificParams.call(this, params[param], param);
-                }
-                else {
+                } else {
                     this[param] = params[param];
                 }
             }

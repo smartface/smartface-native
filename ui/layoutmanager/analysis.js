@@ -18,7 +18,7 @@
  * 
  *
  */
- 
+
 function LayoutManager(params) {}
 
 /**
@@ -32,7 +32,7 @@ function LayoutManager(params) {}
  * @return {Number} itemLength
  * @since 3.0.2
  */
-LayoutManager.prototype.onItemLength = function(itemLength){};
+LayoutManager.prototype.onItemLength = function(itemLength) {};
 
 /**
  * This event used to define specified gridview item  to fully occupy width/height  based on direction. According to direction return value must be either desired height or width of gridview item. If the direction
@@ -46,7 +46,7 @@ LayoutManager.prototype.onItemLength = function(itemLength){};
  * @return {Number} height/width
  * @since 4.0.1
  */
-LayoutManager.prototype.onFullSpan = function(itemType){};
+LayoutManager.prototype.onFullSpan = function(itemType) {};
 
 /**
  * If you want the scrolling behavior to snap to specific boundaries, you can override this method and use it to change the point at which to stop. 
@@ -83,7 +83,7 @@ LayoutManager.prototype.onFullSpan = function(itemType){};
  * @return {Number} return.y
  * @since 3.2.0
  */
-LayoutManager.prototype.targetContentOffset = function(proposedContentOffset,velocity){};
+LayoutManager.prototype.targetContentOffset = function(proposedContentOffset, velocity) {};
 
 /**
  * Gets/sets colon or row count depends on scrolling direction of layout.
@@ -104,7 +104,12 @@ LayoutManager.prototype.spanCount = 1;
  * @ios
  * @since 3.0.2
  */
-LayoutManager.prototype.contentInset = {top:0, left:0, bottom:0, right:0};
+LayoutManager.prototype.contentInset = {
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0
+};
 
 
 /**

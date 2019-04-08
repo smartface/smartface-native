@@ -20,14 +20,15 @@ function TabBarItem(params) {
             var retval;
             if (_nativeView) {
                 retval = _nativeView;
-            }
-            else {
+            } else {
                 var key = new Invocation.Argument({
                     type: "NSString",
                     value: "view"
                 });
                 var view = Invocation.invokeInstanceMethod(self.nativeObject, "valueForKey:", [key], "id");
-                _nativeView = new FlexLayout({ nativeObject: view });
+                _nativeView = new FlexLayout({
+                    nativeObject: view
+                });
                 retval = _nativeView;
             }
             return retval;
@@ -67,32 +68,26 @@ function TabBarItem(params) {
                     if (_icon && (_icon.normal || _icon.selected)) {
                         if (typeof _icon.normal === "object") {
                             self.nativeObject.image = _icon.normal.nativeObject;
-                        }
-                        else if (typeof _icon.normal === "string") {
+                        } else if (typeof _icon.normal === "string") {
                             var image = Image.createFromFile(_icon.normal);
                             self.nativeObject.image = image.nativeObject;
-                        }
-                        else {
+                        } else {
                             self.nativeObject.image = undefined;
                         }
 
                         if (typeof _icon.selected === "object") {
                             self.nativeObject.selectedImage = _icon.selected.nativeObject;
-                        }
-                        else if (typeof _icon.selected === "string") {
+                        } else if (typeof _icon.selected === "string") {
                             var image = Image.createFromFile(_icon.selected);
                             self.nativeObject.selectedImage = image.nativeObject;
-                        }
-                        else {
+                        } else {
                             self.nativeObject.selectedImage = undefined;
                         }
-                    }
-                    else {
+                    } else {
                         if (typeof _icon === "object") {
                             self.nativeObject.image = _icon ? _icon.nativeObject : undefined;
                             self.nativeObject.selectedImage = _icon ? _icon.nativeObject : undefined;
-                        }
-                        else if (typeof _icon === "string") {
+                        } else if (typeof _icon === "string") {
                             var image = Image.createFromFile(_icon);
                             self.nativeObject.image = image.nativeObject ? image.nativeObject : undefined;
                             self.nativeObject.selectedImage = image.nativeObject ? image.nativeObject : undefined;
@@ -114,11 +109,16 @@ function TabBarItem(params) {
                 _font = value;
                 if (self.nativeObject) {
                     if (_font) {
-                        self.nativeObject.setTitleTextAttributesForState({ "NSFont": _font }, 0); //UIControlStateNormal
-                        self.nativeObject.setTitleTextAttributesForState({ "NSFont": _font }, 1 << 0); //UIControlStateHighlighted
-                        self.nativeObject.setTitleTextAttributesForState({ "NSFont": _font }, 1 << 1); //UIControlStateDisabled
-                    }
-                    else {
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 0); //UIControlStateNormal
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 1 << 0); //UIControlStateHighlighted
+                        self.nativeObject.setTitleTextAttributesForState({
+                            "NSFont": _font
+                        }, 1 << 1); //UIControlStateDisabled
+                    } else {
                         self.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
                         self.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
                         self.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
@@ -132,7 +132,9 @@ function TabBarItem(params) {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////
     // BADGE
 
-    var _badge = self.nativeObject ? new Badge({ nativeObject: self.nativeObject }) : {
+    var _badge = self.nativeObject ? new Badge({
+        nativeObject: self.nativeObject
+    }) : {
         move: function(x, y) {
             this.moveX = x;
             this.moveY = y;
@@ -154,7 +156,10 @@ function TabBarItem(params) {
         this.ios.font = _font;
         if (_badge.constructor.name !== "Badge") {
             delete _badge["move"];
-            var _badgeWithNativeObject = new Badge({ nativeObject: self.nativeObject, parameters: _badge });
+            var _badgeWithNativeObject = new Badge({
+                nativeObject: self.nativeObject,
+                parameters: _badge
+            });
             _badge.moveX !== undefined && _badgeWithNativeObject.move(_badge.moveX, _badge.moveY);
             _badge = _badgeWithNativeObject;
         }
@@ -165,8 +170,7 @@ function TabBarItem(params) {
         for (var param in params) {
             if (param === "ios" || param === "android") {
                 setOSSpecificParams.call(this, params[param], param);
-            }
-            else {
+            } else {
                 this[param] = params[param];
             }
         }

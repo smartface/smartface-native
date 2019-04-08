@@ -6,32 +6,36 @@ const Badge = require('sf-core/ui/badge');
 
 function HeaderBarItem(params) {
     var _onPress = null;
-    
+
     var self = this;
 
     var _systemItem;
     if (params && params.ios && params.ios.systemItem) {
         _systemItem = params.ios.systemItem;
         self.nativeObject = __SF_UIBarButtonItem.createWithSystemItem(params.ios.systemItem);
-    }else{
+    } else {
         self.nativeObject = new __SF_UIBarButtonItem();
     }
-    
+
     self.nativeObject.target = self.nativeObject;
-    
-    var _badge = new Badge({nativeObject : self.nativeObject});
-    
+
+    var _badge = new Badge({
+        nativeObject: self.nativeObject
+    });
+
     var _nativeView;
     var _font = undefined;
-    
+
     Object.defineProperties(this, {
         'layout': {
-            get: function (argument) {
+            get: function(argument) {
                 var retval;
                 if (_nativeView) {
                     retval = _nativeView;
                 } else {
-                    _nativeView = self.nativeObject.containerView ? new FlexLayout({nativeObject : self.nativeObject.containerView}) : undefined;
+                    _nativeView = self.nativeObject.containerView ? new FlexLayout({
+                        nativeObject: self.nativeObject.containerView
+                    }) : undefined;
                     retval = _nativeView;
                 }
                 return retval;
@@ -65,14 +69,16 @@ function HeaderBarItem(params) {
                 } else {
                     if (value) {
                         self.nativeObject.image = value.nativeObject;
-                    }   
+                    }
                 }
             },
             enumerable: true
         },
         'color': {
             get: function() {
-                return new Color({color : self.nativeObject.tintColor});
+                return new Color({
+                    color: self.nativeObject.tintColor
+                });
             },
             set: function(value) {
                 if (value) {
@@ -103,26 +109,29 @@ function HeaderBarItem(params) {
             enumerable: true
         },
         'badge': {
-            get: function(){
+            get: function() {
                 return _badge;
             },
             enumerable: true
         },
         'size': {
-            get: function(){
-                return self.layout ? {width : self.layout.nativeObject.frame.width, height : self.layout.nativeObject.frame.height} : undefined;
+            get: function() {
+                return self.layout ? {
+                    width: self.layout.nativeObject.frame.width,
+                    height: self.layout.nativeObject.frame.height
+                } : undefined;
             },
             enumerable: true
         }
     });
-    
+
     this.ios = {};
     self.android = {};
 
-    
+
     Object.defineProperties(this.ios, {
         'systemItem': {
-            get: function(){
+            get: function() {
                 return _systemItem;
             },
             enumerable: true
@@ -134,68 +143,74 @@ function HeaderBarItem(params) {
             set: function(value) {
                 _font = value;
                 if (_font) {
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 0);        //UIControlStateNormal
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 0);   //UIControlStateHighlighted
-                    self.nativeObject.setTitleTextAttributesForState({"NSFont": _font}, 1 << 1);   //UIControlStateDisabled
-                }else{
-                    self.nativeObject.setTitleTextAttributesForState({}, 0);        //UIControlStateNormal
-                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 0);   //UIControlStateHighlighted
-                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 1);   //UIControlStateDisabled
+                    self.nativeObject.setTitleTextAttributesForState({
+                        "NSFont": _font
+                    }, 0); //UIControlStateNormal
+                    self.nativeObject.setTitleTextAttributesForState({
+                        "NSFont": _font
+                    }, 1 << 0); //UIControlStateHighlighted
+                    self.nativeObject.setTitleTextAttributesForState({
+                        "NSFont": _font
+                    }, 1 << 1); //UIControlStateDisabled
+                } else {
+                    self.nativeObject.setTitleTextAttributesForState({}, 0); //UIControlStateNormal
+                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 0); //UIControlStateHighlighted
+                    self.nativeObject.setTitleTextAttributesForState({}, 1 << 1); //UIControlStateDisabled
                 }
             },
             enumerable: true
         }
     });
-    
-    this.getScreenLocation = function () {
+
+    this.getScreenLocation = function() {
         return this.layout.getScreenLocation();
     };
-    
+
     // Assign parameters given in constructor
-    function setParams(params){
+    function setParams(params) {
         for (var param in params) {
-            if(param === "ios" || param === "android"){
-                setOSSpecificParams.call(this,params[param],param);
-            }else{
+            if (param === "ios" || param === "android") {
+                setOSSpecificParams.call(this, params[param], param);
+            } else {
                 this[param] = params[param];
             }
         }
     }
-    
-    function setOSSpecificParams(params,key){
+
+    function setOSSpecificParams(params, key) {
         for (var param in params) {
             this[key][param] = params[param];
         }
     }
-    
-    setParams.call(this,params);
+
+    setParams.call(this, params);
 }
 
 HeaderBarItem.iOS = {};
 HeaderBarItem.iOS.SystemItem = {
-    DONE : 0,
-    CANCEL : 1,
-    EDIT : 2,
-    SAVE : 3,
-    ADD : 4,
-    FLEXIBLESPACE : 5,
-    FIXEDSPACE : 6,
-    COMPOSE : 7,
-    REPLY : 8,
-    ACTION : 9,
-    ORGANIZE : 10,
-    BOOKMARKS : 11,
-    SEARCH : 12,
-    REFRESH : 13,
-    STOP : 14,
-    CAMERA : 15,
-    TRASH : 16,
-    PLAY : 17,
-    PAUSE : 18,
-    REWIND : 19,
-    FASTFORWARD : 20,
-    UNDO : 21,
-    REDO : 22
+    DONE: 0,
+    CANCEL: 1,
+    EDIT: 2,
+    SAVE: 3,
+    ADD: 4,
+    FLEXIBLESPACE: 5,
+    FIXEDSPACE: 6,
+    COMPOSE: 7,
+    REPLY: 8,
+    ACTION: 9,
+    ORGANIZE: 10,
+    BOOKMARKS: 11,
+    SEARCH: 12,
+    REFRESH: 13,
+    STOP: 14,
+    CAMERA: 15,
+    TRASH: 16,
+    PLAY: 17,
+    PAUSE: 18,
+    REWIND: 19,
+    FASTFORWARD: 20,
+    UNDO: 21,
+    REDO: 22
 };
 
 module.exports = HeaderBarItem;

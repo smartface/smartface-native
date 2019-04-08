@@ -47,7 +47,7 @@ function Page(params) {}
  * @android
  * @ios
  */
-Page.prototype.onLoad = function (){};
+Page.prototype.onLoad = function() {};
 
 /**
  * Gets/sets custom transition views. Used with custom transitions to map a {@link UI.View View}
@@ -116,7 +116,7 @@ Page.prototype.layout;
  * @android
  * @ios
  */
-Page.prototype.onShow = function (parameters){};
+Page.prototype.onShow = function(parameters) {};
 
 /**
  * This event is called when a page disappears from the screen.
@@ -125,7 +125,7 @@ Page.prototype.onShow = function (parameters){};
  * @android
  * @ios
  */
-Page.prototype.onHide = function (){};
+Page.prototype.onHide = function() {};
 
 Page.prototype.android = {};
 /**
@@ -135,7 +135,7 @@ Page.prototype.android = {};
  * @android
  * @since 0.1
  */
-Page.prototype.android.onBackButtonPressed = function (){};
+Page.prototype.android.onBackButtonPressed = function() {};
 
 Page.prototype.ios = {};
 /**
@@ -155,7 +155,7 @@ Page.prototype.ios.safeAreaLayoutMode = false;
  * @ios
  * @since 0.1
  */
-Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
+Page.prototype.ios.onSafeAreaPaddingChange = function(paddingObject) {};
 
 
 /**
@@ -203,7 +203,7 @@ Page.prototype.ios.onSafeAreaPaddingChange = function (paddingObject){};
  * @since 3.1.1
  *
  */
-Page.prototype.present = function(params){};
+Page.prototype.present = function(params) {};
 
 
 /**
@@ -217,7 +217,7 @@ Page.prototype.present = function(params){};
  * @since 3.1.1
  * @deprecated
  */
-Page.prototype.dismiss = function(params){};
+Page.prototype.dismiss = function(params) {};
 
 /**
  * Gets status bar object. This property is readonly, you can not set
@@ -276,7 +276,7 @@ Page.prototype.orientation = UI.Page.Orientation.PORTRAIT;
  * @ios
  * @since 0.1
  */
-Page.prototype.onOrientationChange = function (e){};
+Page.prototype.onOrientationChange = function(e) {};
 
 /**
  * @enum {Number} UI.Page.Orientation

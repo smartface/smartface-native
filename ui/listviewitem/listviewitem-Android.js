@@ -1,22 +1,21 @@
 /*globals requireClass*/
-const extend                = require('js-base/core/extend');
-const ViewHolder            = require('./viewholder');
-const NativeYogaLayout      = requireClass('com.facebook.yoga.android.YogaLayout');
+const extend = require('js-base/core/extend');
+const ViewHolder = require('./viewholder');
+const NativeYogaLayout = requireClass('com.facebook.yoga.android.YogaLayout');
 
 const ListViewItem = extend(ViewHolder)(
-    function (_super, params) {
+    function(_super, params) {
         _super(this);
-        
-        if(!this.nativeInner){
-            if(params && params.nativeInner){
+
+        if (!this.nativeInner) {
+            if (params && params.nativeInner) {
                 this.nativeInner = params.nativeInner;
-            }
-            else{
+            } else {
                 const SFRecyclerViewHolder = requireClass("io.smartface.android.sfcore.ui.listview.SFRecyclerViewHolder");
                 this.nativeInner = new SFRecyclerViewHolder(this.nativeObject);
             }
 
-            var layoutParams = new NativeYogaLayout.LayoutParams(-1,-2);
+            var layoutParams = new NativeYogaLayout.LayoutParams(-1, -2);
             this.nativeObject.setLayoutParams(layoutParams);
         }
 
@@ -29,10 +28,10 @@ const ListViewItem = extend(ViewHolder)(
     function(listViewItemPrototype) {
         Object.defineProperties(listViewItemPrototype, {
             'toString': {
-                value: function(){
+                value: function() {
                     return 'ListViewItem';
                 },
-                enumerable: true, 
+                enumerable: true,
                 configurable: true
             }
         });

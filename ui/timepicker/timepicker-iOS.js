@@ -1,35 +1,38 @@
 const TypeUtil = require('sf-core/util/type');
 const UIDatePickerMode = require("sf-core/util").UIDatePickerMode;
 
-function TimePicker (params) {
+function TimePicker(params) {
     var self = this;
-        
-    if(!self.nativeObject){
+
+    if (!self.nativeObject) {
         self.nativeObject = new __SF_UIDatePicker();
     }
-    
+
     self.android = {};
-    
-    self.onTimeSelected = function(){};
-    
-    self.onTimeSelectedListener = function(e){
+
+    self.onTimeSelected = function() {};
+
+    self.onTimeSelectedListener = function(e) {
         var time = e.date;
-        self.onTimeSelected({hour:time.getHours(),minute:time.getMinutes()});
+        self.onTimeSelected({
+            hour: time.getHours(),
+            minute: time.getMinutes()
+        });
     };
-    
+
     self.nativeObject.onSelected = self.onTimeSelectedListener;
-    
+
     var _hours = null;
     var _minutes = null;
-    
-    self.setTime = function(time){
+
+    self.setTime = function(time) {
         if (TypeUtil.isNumeric(time.hour) && TypeUtil.isNumeric(time.minute)) {
             _hours = time.hour;
             _minutes = time.minute;
         }
     };
-    
-    self.show = function(){
+
+    self.show = function() {
         var date = new Date();
         if (_hours && _minutes) {
             date.setHours(_hours);
@@ -39,7 +42,7 @@ function TimePicker (params) {
         self.nativeObject.datePickerMode = UIDatePickerMode.time;
         self.nativeObject.show();
     };
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

@@ -240,7 +240,7 @@ Application.exit = function() {};
  * @static
  * @since 3.2.0
  */
-Application.setRootController = function(params){};
+Application.setRootController = function(params) {};
 /**
  * Restarts the application.
  *
@@ -371,7 +371,7 @@ Application.checkUpdate = function(callback, user) {};
  * @static
  * @since 3.2.0
  */
-Application.onBackButtonPressed = function(){};
+Application.onBackButtonPressed = function() {};
 /**
  * Triggered before exiting application.
  * 
@@ -512,7 +512,7 @@ Application.onUnhandledError = function(error) {};
  * @static
  * @since 4.0.2
  */
-Application.setAppTheme = function (currentTheme){};
+Application.setAppTheme = function(currentTheme) {};
 
 /**
  * Android Specific Properties.

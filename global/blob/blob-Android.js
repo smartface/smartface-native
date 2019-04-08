@@ -7,9 +7,9 @@ function Blob(parts, properties) {
     var _type = null;
     if (parts && properties && properties.type) {
         _type = properties.type;
-        
+
         self.nativeObject = new NativeByteArrayOutputStream();
-        if(Array.isArray(parts)) {
+        if (Array.isArray(parts)) {
             self.nativeObject.write(array(parts, "byte"));
         } else {
             self.nativeObject.write(parts);
@@ -58,13 +58,17 @@ function Blob(parts, properties) {
 Blob.createFromBase64 = function(base64String) {
     const NativeBase64 = requireClass("android.util.Base64");
     var byteArray = NativeBase64.decode(base64String, NativeBase64.DEFAULT);
-    var newBlob = new Blob(byteArray, { type: "image" });
+    var newBlob = new Blob(byteArray, {
+        type: "image"
+    });
     return newBlob;
 };
 
 Blob.createFromUTF8String = function(str) { // utf string or string
     var utf8Array = Base64Util.StrToUtf8Array(str);
-    return new Blob(array(utf8Array, "byte"), { type: "text" });
+    return new Blob(array(utf8Array, "byte"), {
+        type: "text"
+    });
 };
 
 module.exports = Blob;

@@ -4,18 +4,42 @@ function Color(params) {
     self.nativeObject = params.color
 }
 
-Color.BLACK = new Color({color : __SF_UIColor.blackColor()});
-Color.BLUE = new Color({color : __SF_UIColor.blueColor()});
-Color.CYAN = new Color({color : __SF_UIColor.cyanColor()});
-Color.DARKGRAY = new Color({color : __SF_UIColor.darkGrayColor()});
-Color.GRAY = new Color({color : __SF_UIColor.grayColor()});
-Color.GREEN = new Color({color : __SF_UIColor.greenColor()});
-Color.LIGHTGRAY = new Color({color : __SF_UIColor.lightGrayColor()});
-Color.MAGENTA = new Color({color : __SF_UIColor.magentaColor()});
-Color.RED = new Color({color : __SF_UIColor.redColor()});
-Color.TRANSPARENT = new Color({color : __SF_UIColor.clearColor()});
-Color.YELLOW = new Color({color : __SF_UIColor.yellowColor()});
-Color.WHITE = new Color({color : __SF_UIColor.whiteColor()});
+Color.BLACK = new Color({
+    color: __SF_UIColor.blackColor()
+});
+Color.BLUE = new Color({
+    color: __SF_UIColor.blueColor()
+});
+Color.CYAN = new Color({
+    color: __SF_UIColor.cyanColor()
+});
+Color.DARKGRAY = new Color({
+    color: __SF_UIColor.darkGrayColor()
+});
+Color.GRAY = new Color({
+    color: __SF_UIColor.grayColor()
+});
+Color.GREEN = new Color({
+    color: __SF_UIColor.greenColor()
+});
+Color.LIGHTGRAY = new Color({
+    color: __SF_UIColor.lightGrayColor()
+});
+Color.MAGENTA = new Color({
+    color: __SF_UIColor.magentaColor()
+});
+Color.RED = new Color({
+    color: __SF_UIColor.redColor()
+});
+Color.TRANSPARENT = new Color({
+    color: __SF_UIColor.clearColor()
+});
+Color.YELLOW = new Color({
+    color: __SF_UIColor.yellowColor()
+});
+Color.WHITE = new Color({
+    color: __SF_UIColor.whiteColor()
+});
 
 Color.create = function(alpha, red, green, blue) {
     if (arguments.length === 1) {
@@ -25,13 +49,17 @@ Color.create = function(alpha, red, green, blue) {
         if (alpha.charAt(0) !== "#") {
             throw new TypeError('Hex parameter must start with "#" character');
         }
-        return new Color({color : __SF_UIColor.hexColor(alpha)});
-    }
-    else if (arguments.length === 3) {
-        return  new Color({color : new __SF_UIColor(alpha / 255, red / 255, green / 255, 1)}); // 1 = 255/255
-    }
-    else if (arguments.length === 4) {
-        return new Color({color : new __SF_UIColor(red / 255, green / 255, blue / 255, alpha / 100)});
+        return new Color({
+            color: __SF_UIColor.hexColor(alpha)
+        });
+    } else if (arguments.length === 3) {
+        return new Color({
+            color: new __SF_UIColor(alpha / 255, red / 255, green / 255, 1)
+        }); // 1 = 255/255
+    } else if (arguments.length === 4) {
+        return new Color({
+            color: new __SF_UIColor(red / 255, green / 255, blue / 255, alpha / 100)
+        });
     }
 };
 
@@ -53,41 +81,46 @@ Color.alpha = function(color) {
 
 Color.createGradient = function(params) {
     if (params.direction === Color.GradientDirection.VERTICAL) { //topToBottom
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
-            x: 0,
-            y: 0
-        }, {
-            x: 0,
-            y: 1
-        })});
-    }
-    else if (params.direction === Color.GradientDirection.HORIZONTAL) { //leftToRight
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
-            x: 0,
-            y: 0
-        }, {
-            x: 1,
-            y: 0
-        })});
-    }
-    else if (params.direction === Color.GradientDirection.DIAGONAL_LEFT) { //topLeftToRightBottom
-        return new Color({color : __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
-            x: 0,
-            y: 0
-        }, {
-            x: 1,
-            y: 1
-        })});
-    }
-    else if (params.direction === Color.GradientDirection.DIAGONAL_RIGHT) { //topRightToLeftBottom
-        return new Color({color :__SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
-            x: 1,
-            y: 0
-        }, {
-            x: 0,
-            y: 1
-        })});
-    }else{
+        return new Color({
+            color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
+                x: 0,
+                y: 0
+            }, {
+                x: 0,
+                y: 1
+            })
+        });
+    } else if (params.direction === Color.GradientDirection.HORIZONTAL) { //leftToRight
+        return new Color({
+            color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
+                x: 0,
+                y: 0
+            }, {
+                x: 1,
+                y: 0
+            })
+        });
+    } else if (params.direction === Color.GradientDirection.DIAGONAL_LEFT) { //topLeftToRightBottom
+        return new Color({
+            color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
+                x: 0,
+                y: 0
+            }, {
+                x: 1,
+                y: 1
+            })
+        });
+    } else if (params.direction === Color.GradientDirection.DIAGONAL_RIGHT) { //topRightToLeftBottom
+        return new Color({
+            color: __SF_CAGradientLayer.createGradient(params.startColor.nativeObject, params.endColor.nativeObject, {
+                x: 1,
+                y: 0
+            }, {
+                x: 0,
+                y: 1
+            })
+        });
+    } else {
         throw new TypeError('direction parameter must be a UI.Color.GradientDirection');
     }
 };

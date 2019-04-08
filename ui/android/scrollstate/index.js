@@ -1,5 +1,5 @@
 if (Device.deviceOS === "iOS") {
-  module.exports = {};
+    module.exports = {};
 } else if (Device.deviceOS === "Android") {
-  module.exports = require('./scrollstate-Android');
+    module.exports = require('./scrollstate-Android');
 }

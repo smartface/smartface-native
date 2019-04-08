@@ -21,8 +21,7 @@ const GridView = extend(View)(
         var defaultflowLayout;
         if (params && params.layoutManager) {
             defaultflowLayout = params.layoutManager;
-        }
-        else {
+        } else {
             throw new Error('GridView constructor must have layoutManager.');
         }
 
@@ -35,7 +34,12 @@ const GridView = extend(View)(
 
         var frame = new Invocation.Argument({
             type: "CGRect",
-            value: { x: 0, y: 0, width: 0, height: 0 }
+            value: {
+                x: 0,
+                y: 0,
+                width: 0,
+                height: 0
+            }
         });
 
         var smfcollectionView = Invocation.invokeInstanceMethod(alloc, "initWithFrame:collectionViewLayout:", [frame, argument], "NSObject");
@@ -46,8 +50,7 @@ const GridView = extend(View)(
             var retval;
             if (_numberOfItemsInSection) {
                 retval = _numberOfItemsInSection(section);
-            }
-            else {
+            } else {
                 retval = _itemCount;
             }
             return retval;
@@ -68,14 +71,13 @@ const GridView = extend(View)(
                 if (sfSelf.onItemBind) {
                     sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
                 }
-            }
-            else {
+            } else {
                 collectionViewItems[cell.uuid] = sfSelf.onItemCreate(parseInt(cell.reuseIdentifier));
-                
+
                 // Bug ID : IOS-2750
                 (collectionViewItems[cell.uuid].nativeObject.yoga.direction == 0) && smfcollectionView.superview && (collectionViewItems[cell.uuid].nativeObject.yoga.direction = smfcollectionView.superview.yoga.resolvedDirection);
                 ///////
-                
+
                 cell.contentView.addSubview(collectionViewItems[cell.uuid].nativeObject);
                 if (sfSelf.onItemBind) {
                     sfSelf.onItemBind(collectionViewItems[cell.uuid], indexPath.row, indexPath.section);
@@ -188,8 +190,7 @@ const GridView = extend(View)(
                 _refreshEnabled = value;
                 if (value) {
                     sfSelf.nativeObject.addSubview(sfSelf.refreshControl);
-                }
-                else {
+                } else {
                     sfSelf.refreshControl.removeFromSuperview();
                 }
             },
@@ -228,8 +229,12 @@ const GridView = extend(View)(
             var visibleIndexArray = sfSelf.nativeObject.indexPathsForVisibleItems();
 
             // visibleIndexArray unordered list needs to sort
-            visibleIndexArray.sort(function(a, b) { return a.row - b.row });
-            visibleIndexArray.sort(function(a, b) { return a.section - b.section });
+            visibleIndexArray.sort(function(a, b) {
+                return a.row - b.row
+            });
+            visibleIndexArray.sort(function(a, b) {
+                return a.section - b.section
+            });
 
             var visibleindex = sfSelf.nativeObject.indexPathsForVisibleItems()[0];
             if (sfSelf.sectionCount > 1) {
@@ -237,8 +242,7 @@ const GridView = extend(View)(
                     index: visibleindex.row,
                     section: visibleindex.section
                 };
-            }
-            else {
+            } else {
                 retval = visibleindex.row;
             }
             return retval;
@@ -249,8 +253,12 @@ const GridView = extend(View)(
             var visibleIndexArray = sfSelf.nativeObject.indexPathsForVisibleItems();
 
             // visibleIndexArray unordered list needs to sort
-            visibleIndexArray.sort(function(a, b) { return a.row - b.row });
-            visibleIndexArray.sort(function(a, b) { return a.section - b.section });
+            visibleIndexArray.sort(function(a, b) {
+                return a.row - b.row
+            });
+            visibleIndexArray.sort(function(a, b) {
+                return a.section - b.section
+            });
 
             var visibleindex = visibleIndexArray[visibleIndexArray.length - 1];
             if (sfSelf.sectionCount > 1) {
@@ -258,8 +266,7 @@ const GridView = extend(View)(
                     index: visibleindex.row,
                     section: visibleindex.section
                 };
-            }
-            else {
+            } else {
                 retval = visibleindex.row;
             }
             return retval;
@@ -268,8 +275,7 @@ const GridView = extend(View)(
         sfSelf.setPullRefreshColors = function(param) {
             if (Object.prototype.toString.call(param) === '[object Array]') {
                 sfSelf.refreshControl.tintColor = param[0].nativeObject;
-            }
-            else {
+            } else {
                 sfSelf.refreshControl.tintColor = param.nativeObject;
             }
         }
@@ -282,15 +288,13 @@ const GridView = extend(View)(
             var indexPath;
             if (typeof section === "number") {
                 indexPath = NSIndexPath.indexPathForItemInSection(index, section);
-            }
-            else {
+            } else {
                 indexPath = NSIndexPath.indexPathForItemInSection(index, 0);
             }
             if (sfSelf.layoutManager) {
                 if (sfSelf.layoutManager.scrollDirection == LayoutManager.ScrollDirection.VERTICAL) {
                     sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 0, (animate === false) ? false : true); // 1 << 0 means UICollectionViewScrollPositionTop
-                }
-                else {
+                } else {
                     sfSelf.nativeObject.scrollToItemAtIndexPathAtScrollPositionAnimated(indexPath, 1 << 3, (animate === false) ? false : true); // 1 << 3 means UICollectionViewScrollPositionLeft
                 }
             }
@@ -394,7 +398,9 @@ const GridView = extend(View)(
             enumerable: true
         });
 
-        var _itemTypeForSection = function() { return "0"; };
+        var _itemTypeForSection = function() {
+            return "0";
+        };
         Object.defineProperty(sfSelf, 'onItemType', {
             get: function() {
                 return _itemTypeForSection;

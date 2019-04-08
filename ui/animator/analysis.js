@@ -74,23 +74,23 @@ Animator.prototype.complete = function(completeFunction) {
 };
 
 /** 
-* Performs the changes declared in animFunction with animation inside the layout provided.
-* Duration indicates how long the animation will take in milliseconds. 
-* For animation rootLayout you should choose parent layout for Android, you can choose page 
-* layout for iOS as shown in example.
-* While animating Textbox, you may see the hint of the Textbox disappear on Android. 
-* This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should 
-* set empty text to the Textbox onComplete callback of animation.
-* @method animate
-* @param {UI.ViewGroup} rootLayout
-* @param {Number} duration
-* @param {Function} animFunction
-* @return {UI.Animator}
-* @static
-* @android
-* @ios
-* @since 0.1
-*/
+ * Performs the changes declared in animFunction with animation inside the layout provided.
+ * Duration indicates how long the animation will take in milliseconds. 
+ * For animation rootLayout you should choose parent layout for Android, you can choose page 
+ * layout for iOS as shown in example.
+ * While animating Textbox, you may see the hint of the Textbox disappear on Android. 
+ * This is related with Android internal issue (same reason of Google Issue Tracker 38303812, 37048478). For getting over from this problem you should 
+ * set empty text to the Textbox onComplete callback of animation.
+ * @method animate
+ * @param {UI.ViewGroup} rootLayout
+ * @param {Number} duration
+ * @param {Function} animFunction
+ * @return {UI.Animator}
+ * @static
+ * @android
+ * @ios
+ * @since 0.1
+ */
 Animator.animate = function(rootLayout, duration, animFunction) {
     // do stuff
     return new Animator();

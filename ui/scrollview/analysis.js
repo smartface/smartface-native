@@ -44,7 +44,7 @@
  *     scrollView.layout.addChild(buttonTop);
  *     scrollView.layout.addChild(buttonBottom);
  */
-function ScrollView(){}
+function ScrollView() {}
 
 /**
  * Gets/sets over-scroll mode for this view.
@@ -66,7 +66,7 @@ ScrollView.prototype.overScrollMode = UI.Android.OverScrollMode.ALWAYS;
  * @readonly
  * @since 0.1
  */
-ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL; 
+ScrollView.prototype.align = UI.ScrollView.Align.VERTICAL;
 
 /**
  * Gets layout of the ScrollView. Use this property to add a child to the ScrollView instead of {@link ScrollView#addChild}
@@ -111,7 +111,7 @@ ScrollView.prototype.autoSizeEnabled = false;
  * @method addChild
  * @since 0.1
  */
-ScrollView.prototype.addChild = function(view){};
+ScrollView.prototype.addChild = function(view) {};
 
 /**
  * Finds a child view with specified id within the layout.
@@ -126,7 +126,7 @@ ScrollView.prototype.addChild = function(view){};
  * @ios
  * @since 0.1
  */
-ScrollView.prototype.findChildById = function(id){};
+ScrollView.prototype.findChildById = function(id) {};
 
 /**
  * If the value of this property is YES , scrolling is enabled, and if it is NO , scrolling is disabled. The default is YES.
@@ -167,7 +167,7 @@ ScrollView.prototype.contentInsetAdjustmentBehavior = UI.iOS.ContentInsetAdjustm
  * @ios
  * @since 0.1
  */
-ScrollView.prototype.getChildCount = function(){};
+ScrollView.prototype.getChildCount = function() {};
 
 /**
  * Removes all child views from viewgroup.
@@ -180,7 +180,7 @@ ScrollView.prototype.getChildCount = function(){};
  * @ios
  * @since 0.1
  */
-ScrollView.prototype.removeAll = function(){};
+ScrollView.prototype.removeAll = function() {};
 
 /**
  * Remove a child view from viewgroup.
@@ -194,7 +194,7 @@ ScrollView.prototype.removeAll = function(){};
  * @method removeChild
  * @since 0.1
  */
-ScrollView.prototype.removeChild = function(view){};
+ScrollView.prototype.removeChild = function(view) {};
 
 /**
  * Immediately scrolls to the edge set.
@@ -205,7 +205,7 @@ ScrollView.prototype.removeChild = function(view){};
  * @param {UI.ScrollView.Edge} edge
  * @since 0.1
  */
-ScrollView.prototype.scrollToEdge = function(){};
+ScrollView.prototype.scrollToEdge = function() {};
 
 /**
  * Immediately scrolls to the given coordinate. Coordinate is X position for horizontal alignment and
@@ -262,7 +262,7 @@ ScrollView.prototype.onViewRemoved = function() {};
  * @ios
  * @since 1.1.13
  */
-ScrollView.prototype.onScroll = function onScroll(){};
+ScrollView.prototype.onScroll = function onScroll() {};
 
 /**
  * Gets contentOffset of the ScrollView.
@@ -288,7 +288,7 @@ ScrollView.prototype.contentOffset = {};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollBeginDragging = function(contentOffset){};
+ScrollView.prototype.onScrollBeginDragging = function(contentOffset) {};
 
 /**
  * This event is called when the scroll view is starting to decelerate the scrolling movement.
@@ -300,7 +300,7 @@ ScrollView.prototype.onScrollBeginDragging = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset){};
+ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset) {};
 
 /**
  * This event is called when the scroll view has ended decelerating the scrolling movement.
@@ -312,7 +312,7 @@ ScrollView.prototype.onScrollBeginDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDecelerating = function(contentOffset){};
+ScrollView.prototype.onScrollEndDecelerating = function(contentOffset) {};
 
 /**
  * This event is called when dragging ended in the scroll view.
@@ -325,7 +325,7 @@ ScrollView.prototype.onScrollEndDecelerating = function(contentOffset){};
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate){};
+ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset, decelerate) {};
 
 /**
  * This event is called when the user finishes scrolling the content.
@@ -343,6 +343,6 @@ ScrollView.prototype.onScrollEndDraggingWillDecelerate = function(contentOffset,
  * @ios
  * @since 3.2.1
  */
-ScrollView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset){};
+ScrollView.prototype.onScrollEndDraggingWithVelocityTargetContentOffset = function(contentOffset, velocity, targetContentOffset) {};
 
 module.exports = ScrollView;

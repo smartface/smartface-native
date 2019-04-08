@@ -12,7 +12,7 @@
  *     Application.statusBar.style = StatusBarStyle.LIGHTCONTENT;
  *
  */
-var StatusBarStyle = { };
+var StatusBarStyle = {};
 
 /**
  * @property {Number} DEFAULT

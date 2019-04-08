@@ -38,7 +38,7 @@ View.prototype.useForeground;
  * @member UI.View
  * @since 3.2.1
  */
- 
+
 View.prototype.rippleEnabled;
 /**
  * Gets/sets ripple effect color for view.
@@ -446,7 +446,10 @@ View.prototype.flexBasis = -1;
  * @ios
  * @since 4.0.1
  */
-View.prototype.scale = {x : 1, y: 1};
+View.prototype.scale = {
+    x: 1,
+    y: 1
+};
 
 /**
  * This property specifies how a child view aligns in the cross-axis.
@@ -649,7 +652,10 @@ View.prototype.ios.clipsToBounds = 0;
  * @ios
  * @since 2.0.6
  */
-View.prototype.ios.shadowOffset = { x: 0.0, y: -3.0 };
+View.prototype.ios.shadowOffset = {
+    x: 0.0,
+    y: -3.0
+};
 
 /**
  * The blur radius (in points) used to render the shadow. "ios.masksToBounds" property must be false for shadow.

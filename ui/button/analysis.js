@@ -26,7 +26,7 @@ const extend = require('js-base/core/extend');
  *     });
  *
  */
-function Button (params) {}
+function Button(params) {}
 
 /**
  * Gets/sets text of button view.
@@ -169,7 +169,7 @@ Button.prototype.backgroundColor = {};
  * @android
  * @ios
  */
-Button.prototype.onPress = function onPress(){}
+Button.prototype.onPress = function onPress() {}
 
 /**
  * Gets/sets long press event callback for a Button. This property only
@@ -179,6 +179,6 @@ Button.prototype.onPress = function onPress(){}
  * @event onLongPress
  * @android
  */
-Button.prototype.onLongPress = function onLongPress(){}
+Button.prototype.onLongPress = function onLongPress() {}
 
 module.exports = Button;

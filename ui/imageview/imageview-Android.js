@@ -36,9 +36,10 @@ const ImageView = extend(View)(
                     if (!this._image || this.__newImageLoaded) {
                         this.__newImageLoaded = false;
                         let drawable = this.nativeObject.getDrawable();
-                        return this._image = (drawable ? new Image({ drawable: drawable}) : null);
-                    }
-                    else
+                        return this._image = (drawable ? new Image({
+                            drawable: drawable
+                        }) : null);
+                    } else
                         return this._image;
                 },
                 set: function(value) {
@@ -47,14 +48,14 @@ const ImageView = extend(View)(
                         var image = value;
                         this._image = image;
                         this.nativeObject.setImageDrawable(image.nativeObject);
-                    }
-                    else if (typeof value === "string") {
+                    } else if (typeof value === "string") {
                         var imageFile = new File({
                             path: value
                         });
-                        this.loadFromFile({ file: imageFile });
-                    }
-                    else {
+                        this.loadFromFile({
+                            file: imageFile
+                        });
+                    } else {
                         this._image = null;
                         this.nativeObject.setImageDrawable(null);
                     }
@@ -103,7 +104,13 @@ const ImageView = extend(View)(
         };
 
         imageViewPrototype.loadFromUrl = function() { //ToDo: Paramters should be object this usage is deprecated
-            var {url, placeholder, fade, onFailure, onSuccess} = getLoadFromUrlParams.apply(null,arguments);
+            var {
+                url,
+                placeholder,
+                fade,
+                onFailure,
+                onSuccess
+            } = getLoadFromUrlParams.apply(null, arguments);
             var callback = null;
             if (onFailure || onSuccess) {
                 const NativePicassoCallback = requireClass("com.squareup.picasso.Callback");
@@ -137,7 +144,9 @@ const ImageView = extend(View)(
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             var target = NativeTarget.implement({
                 onBitmapLoaded: function(bitmap, from) {
-                    params.onSuccess && params.onSuccess(new Image({ bitmap: bitmap }), (from && ImageView.CacheType[from.name()]));
+                    params.onSuccess && params.onSuccess(new Image({
+                        bitmap: bitmap
+                    }), (from && ImageView.CacheType[from.name()]));
                 },
                 onBitmapFailed: function(errorDrawable) {
                     // onFailure callback added instead of onError in sf-core 3.2.1
@@ -153,15 +162,20 @@ const ImageView = extend(View)(
                 var requestCreator = NativePicasso.with(AndroidConfig.activity).load(params.url);
                 if ((params.placeholder) instanceof Image) {
                     requestCreator.placeholder(params.placeholder.nativeObject).into(target);
-                }
-                else {
+                } else {
                     requestCreator.into(target);
                 }
             }
         };
 
         imageViewPrototype.loadFromFile = function(params) {
-            var {file, fade, width, height, placeHolder} = params;
+            var {
+                file,
+                fade,
+                width,
+                height,
+                placeHolder
+            } = params;
             const NativePicasso = requireClass("com.squareup.picasso.Picasso");
             if (file instanceof File) {
                 var resolvedPath = file.resolvedPath;
@@ -173,13 +187,11 @@ const ImageView = extend(View)(
                     (placeHolder instanceof Image) && (plainRequestCreatorDrawable.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plainRequestCreatorDrawable.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreatorDrawable = scaleImage(plainRequestCreatorDrawable);
                         requestCreatorDrawable.into(this.nativeObject);
                     }
-                }
-                else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
+                } else if (!AndroidConfig.isEmulator && resolvedPath.type == Path.FILE_TYPE.ASSET) {
                     var assetPrefix = "file:///android_asset/";
                     var assetFilePath = assetPrefix + resolvedPath.name;
                     var plaingRequestCreatorAsset = NativePicasso.with(AndroidConfig.activity).load(assetFilePath);
@@ -187,20 +199,17 @@ const ImageView = extend(View)(
                     (placeHolder instanceof Image) && (plaingRequestCreatorAsset.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plaingRequestCreatorAsset.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreatorAsset = scaleImage(plaingRequestCreatorAsset);
                         requestCreatorAsset.into(this.nativeObject);
                     }
-                }
-                else {
+                } else {
                     var plainRequestCreator = NativePicasso.with(AndroidConfig.activity).load(file.nativeObject);
                     (fade === false) && (plainRequestCreator = plainRequestCreator.noFade());
                     (placeHolder instanceof Image) && (plainRequestCreator.placeholder(placeHolder.nativeObject));
                     if (width && height) {
                         plainRequestCreator.resize(width, height).onlyScaleDown().into(this.nativeObject);
-                    }
-                    else {
+                    } else {
                         var requestCreator = scaleImage(plainRequestCreator);
                         requestCreator.into(this.nativeObject);
                     }
@@ -223,8 +232,7 @@ const ImageView = extend(View)(
                     default:
                         return loadedImage;
                 }
-            }
-            else {
+            } else {
                 return loadedImage;
             }
         }
@@ -242,8 +250,7 @@ function getLoadFromUrlParams() {
             fade: params.fade,
             onSuccess: params.onSuccess
         };
-    }
-    else {
+    } else {
         return {
             url: arguments[0],
             placeholder: arguments[1],

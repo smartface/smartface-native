@@ -41,8 +41,7 @@ Object.defineProperties(Network, {
             var bluetoothAdapter = NativeBluetoothAdapter.getDefaultAdapter();
             if (bluetoothAdapter === null) {
                 return "null";
-            }
-            else {
+            } else {
                 return bluetoothAdapter.getAddress();
             }
         },
@@ -59,15 +58,12 @@ Object.defineProperties(Network, {
             var activeInternet = getActiveInternet();
             if (activeInternet == null) { // undefined or null
                 return Network.ConnectionType.NONE;
-            }
-            else {
+            } else {
                 if (activeInternet.getType() === NativeConnectivityManager.TYPE_WIFI) {
                     return Network.ConnectionType.WIFI;
-                }
-                else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
+                } else if (activeInternet.getType() === NativeConnectivityManager.TYPE_MOBILE) {
                     return Network.ConnectionType.MOBILE;
-                }
-                else {
+                } else {
                     return Network.ConnectionType.NONE;
                 }
             }
@@ -84,8 +80,7 @@ Object.defineProperties(Network, {
                     "." + ((ipAddress >> 8) & 0xff) +
                     "." + ((ipAddress >> 16) & 0xff) +
                     "." + ((ipAddress >> 24) & 0xff);
-            }
-            else {
+            } else {
                 return "0.0.0.0";
             }
         },
@@ -149,8 +144,7 @@ Network.createNotifier = function(params) {
                     AndroidConfig.activity.registerReceiver(self.nativeObject, nativeConnectionFilter);
                     isReceiverCreated = true;
                 }
-            }
-            else if (value === null) {
+            } else if (value === null) {
                 if (isReceiverCreated) {
                     AndroidConfig.activity.unregisterReceiver(self.nativeObject);
                     isReceiverCreated = false;
@@ -177,9 +171,9 @@ Network.createNotifier = function(params) {
 };
 
 Network.__cancelAll = function() {
-    for(let i = 0; i < _instanceCollection.length; i++) {
+    for (let i = 0; i < _instanceCollection.length; i++) {
         _instanceCollection[i].unsubscribe();
-    }  
+    }
 };
 
 function getActiveInternet() {

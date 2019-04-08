@@ -125,7 +125,7 @@ Network.createNotifier = function() {};
  * @android
  * @since 3.0.1
  */
-Network.createNotifier.subscribe = function(connectionType){};
+Network.createNotifier.subscribe = function(connectionType) {};
 
 /**
  * This method stops receiving subcribed callback.
@@ -135,7 +135,7 @@ Network.createNotifier.subscribe = function(connectionType){};
  * @android
  * @since 3.0.1
  */
-Network.createNotifier.unsubscribe = function(){};
+Network.createNotifier.unsubscribe = function() {};
 
 /**
  * @enum {Number} Device.Network.ConnectionType
@@ -150,7 +150,7 @@ Network.ConnectionType = {};
  * @static
  * @since 0.1
  */
-Network.ConnectionType.None   = 0;
+Network.ConnectionType.None = 0;
 /**
  * @deprecated Use {@link Device.Network.ConnectionType#MOBILE} instead
  * @property {Number} Mobile
@@ -166,7 +166,7 @@ Network.ConnectionType.Mobile = 1;
  * @static
  * @since 0.1
  */
-Network.ConnectionType.WIFI   = 2;
+Network.ConnectionType.WIFI = 2;
 /**
  *
  * @property {Number} MOBILE

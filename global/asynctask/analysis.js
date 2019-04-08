@@ -25,7 +25,7 @@ function AsyncTask(params) {}
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.task = function (){};
+AsyncTask.prototype.task = function() {};
 
 /**
  * This event invokes when task is completed.
@@ -35,7 +35,7 @@ AsyncTask.prototype.task = function (){};
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.onComplete = function (){};
+AsyncTask.prototype.onComplete = function() {};
 
 /**
  * Runs the task.
@@ -45,7 +45,7 @@ AsyncTask.prototype.onComplete = function (){};
  * @ios
  * @since 3.1.0
  */
-AsyncTask.prototype.run = function (){};
+AsyncTask.prototype.run = function() {};
 
 /**
  * Attempts to cancel execution of this task. For Android, This attempt will fail if the task has already completed,
@@ -59,7 +59,7 @@ AsyncTask.prototype.run = function (){};
  * @since 3.2.2
  * @return {Boolean} false For Android, if the task could not be cancelled, typically because it has already completed normally; true otherwise.
  */
-AsyncTask.prototype.cancel = function (){};
+AsyncTask.prototype.cancel = function() {};
 
 
 /**
@@ -70,7 +70,7 @@ AsyncTask.prototype.cancel = function (){};
  * @since 3.2.2
  * @return {AsyncTask.Android.Status} status
  */
-AsyncTask.prototype.getStatus = function (){};
+AsyncTask.prototype.getStatus = function() {};
 
 
 /**
@@ -80,7 +80,7 @@ AsyncTask.prototype.getStatus = function (){};
  * @android
  * @since 3.2.2
  */
-AsyncTask.prototype.onPreExecute = function (){};
+AsyncTask.prototype.onPreExecute = function() {};
 
 /**
  * Runs on the UI thread after cancel() is invoked
@@ -90,7 +90,7 @@ AsyncTask.prototype.onPreExecute = function (){};
  * @ios
  * @since 3.2.2
  */
-AsyncTask.prototype.onCancelled = function (){};
+AsyncTask.prototype.onCancelled = function() {};
 
 /**
  * Android Specific Properties.

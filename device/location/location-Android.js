@@ -12,16 +12,20 @@ Location.CHECK_SETTINGS_CODE = RequestCodes.Location.CHECK_SETTINGS_CODE;
 var _onLocationChanged;
 
 const locationCallback = function(latitude, longitude) {
-    Location.onLocationChanged && Location.onLocationChanged({ latitude, longitude });
+    Location.onLocationChanged && Location.onLocationChanged({
+        latitude,
+        longitude
+    });
 };
 
 var _onFailureCallback, _onSucessCallback;
 Location.__onActivityResult = function(resultCode) {
     if (resultCode === -1) { // -1 = OK
         _onSucessCallback && _onSucessCallback();
-    }
-    else {
-        _onFailureCallback && _onFailureCallback({ statusCode: "DENIED" });
+    } else {
+        _onFailureCallback && _onFailureCallback({
+            statusCode: "DENIED"
+        });
     }
 };
 
@@ -116,7 +120,9 @@ Object.defineProperties(Location.android, {
                     _onSucessCallback && _onSucessCallback();
                 },
                 onFailure: function(reason) {
-                    _onFailureCallback && _onFailureCallback({ statusCode: reason });
+                    _onFailureCallback && _onFailureCallback({
+                        statusCode: reason
+                    });
                 }
             });
         }

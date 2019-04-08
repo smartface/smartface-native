@@ -26,8 +26,7 @@ files.forEach(f => { // gruoping images
             "filename": f,
             "scale": res[2] || "1x"
         });
-    }
-    else {
+    } else {
         imagesets[setName] = [{
             "filename": f,
             "scale": res[2] || "1x"

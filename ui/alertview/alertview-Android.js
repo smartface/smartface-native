@@ -1,7 +1,7 @@
 /*globals requireClass*/
-const AndroidConfig         = require("../../util/Android/androidconfig");
-const Type                  = require("../../util/type");
-const NativeAlertDialog     = requireClass("android.app.AlertDialog");
+const AndroidConfig = require("../../util/Android/androidconfig");
+const Type = require("../../util/type");
+const NativeAlertDialog = requireClass("android.app.AlertDialog");
 const NativeDialogInterface = requireClass("android.content.DialogInterface");
 
 AlertView.Android = {};
@@ -20,11 +20,11 @@ var ButtonType = {
 
 const activity = AndroidConfig.activity;
 
-function AlertView (params) {
-    if(!this.nativeObject){
+function AlertView(params) {
+    if (!this.nativeObject) {
         this.nativeObject = new NativeAlertDialog.Builder(activity).create();
     }
-            
+
     this.__androidProperties = new AndroidSpesificProperties(this);
     this.__buttonCallbacks = [];
 
@@ -43,7 +43,7 @@ AlertView.prototype = {
         return this.__title;
     },
     set title(title) {
-        if(Type.isString(title)){
+        if (Type.isString(title)) {
             this.__title = title;
             this.nativeObject.setTitle(title);
         }
@@ -52,7 +52,7 @@ AlertView.prototype = {
         return this.__message;
     },
     set message(message) {
-        if(Type.isString(message)){
+        if (Type.isString(message)) {
             this.__message = message;
             this.nativeObject.setMessage(message);
         }
@@ -75,24 +75,24 @@ AlertView.prototype = {
 };
 
 AlertView.prototype.isShowing = function() {
-    return this.nativeObject.isShowing();  
+    return this.nativeObject.isShowing();
 };
 
 AlertView.prototype.show = function() {
-    this.nativeObject.show();  
+    this.nativeObject.show();
 };
 
 AlertView.prototype.dismiss = function() {
     this.nativeObject.dismiss();
 };
 
-AlertView.prototype.addButton = function(params){
+AlertView.prototype.addButton = function(params) {
     !params.text && (params.text = "");
     var buttonType = params.index;
     Number.isInteger(params.type) && (buttonType = params.type);
     this.__buttonCallbacks[buttonType] = params.onClick;
     var nativeButtonIndex;
-    switch(buttonType) {
+    switch (buttonType) {
         case AlertView.Android.ButtonType.POSITIVE:
             nativeButtonIndex = -1;
             break;
@@ -109,8 +109,8 @@ AlertView.prototype.addButton = function(params){
 
     this.nativeObject.setButton(nativeButtonIndex, params.text,
         NativeDialogInterface.OnClickListener.implement({
-           onClick: function(dialog,which){
-               switch(which){
+            onClick: function(dialog, which) {
+                switch (which) {
                     case -1:
                         this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE] && this.__buttonCallbacks[AlertView.Android.ButtonType.POSITIVE]();
                         break;
@@ -122,8 +122,8 @@ AlertView.prototype.addButton = function(params){
                         break;
                     default:
                         break;
-               }
-           }.bind(this)
+                }
+            }.bind(this)
         })
     );
 };
@@ -134,14 +134,14 @@ AlertView.prototype.toString = function() {
 
 function setOnDismissListener(object) {
     object.nativeObject.setOnDismissListener(NativeDialogInterface.OnDismissListener.implement({
-        onDismiss: function(dialog){
+        onDismiss: function(dialog) {
             typeof this.__onDismiss === "function" && this.__onDismiss(this);
         }.bind(object)
     }));
     object.__didSetOnDismissListener = true;
 }
 
-function AndroidSpesificProperties (alertview) {
+function AndroidSpesificProperties(alertview) {
     var _cancellable;
     Object.defineProperty(this, 'cancellable', {
         get: function() {

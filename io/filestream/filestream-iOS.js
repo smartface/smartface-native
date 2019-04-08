@@ -1,13 +1,13 @@
 const Blob = require('sf-core/global/blob');
 
-FileStream.create = function(path, streamMode, contentMode){
+FileStream.create = function(path, streamMode, contentMode) {
     var streamModeValue = 0;
-    if(typeof streamMode === 'number'){
+    if (typeof streamMode === 'number') {
         streamModeValue = streamMode;
     }
-    
+
     var contentModeValue = 0;
-    if(typeof contentMode === 'number'){
+    if (typeof contentMode === 'number') {
         contentModeValue = contentMode;
     }
 
@@ -18,59 +18,59 @@ FileStream.create = function(path, streamMode, contentMode){
 
 function FileStream(params) {
     var self = this;
-    
+
     Object.defineProperties(this, {
         'mode': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.streamMode;
             },
         },
         'contentMode': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.contentMode;
             },
         },
         'isReadable': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.isReadable();
             },
         },
         'isWritable': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.isWritable();
             },
         },
         'name': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.getName();
             },
         },
         'path': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.getPath();
             },
         },
         'offset': {
-            get: function(){
+            get: function() {
                 return self.nativeObject.offset;
             },
-            set: function(offsetValue){
-                if(typeof offsetValue === 'number'){
+            set: function(offsetValue) {
+                if (typeof offsetValue === 'number') {
                     self.nativeObject.offset = offsetValue;
                 }
             }
         },
     });
-    
-    this.close = function(){
+
+    this.close = function() {
         return self.nativeObject.closeFile();
     };
-    
-    this.readBlob = function(){
+
+    this.readBlob = function() {
         return new Blob(self.nativeObject.getBlob());
     };
-    
-    this.readToEnd = function(){
+
+    this.readToEnd = function() {
         var retval = self.nativeObject.readToEnd(); //It will return string or nsdata depends on content mode.
         if (self.contentMode === FileStream.ContentMode.BINARY) {
             var blobObject = new Blob(retval);
@@ -78,8 +78,8 @@ function FileStream(params) {
         }
         return retval;
     };
-    
-    this.write = function(content){
+
+    this.write = function(content) {
         var retval = null;
         switch (self.contentMode) {
             case FileStream.ContentMode.TEXT:
@@ -93,11 +93,11 @@ function FileStream(params) {
         }
         return retval;
     };
-    
-    this.seekToEnd = function(){
+
+    this.seekToEnd = function() {
         return self.nativeObject.seekToEnd();
     }
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

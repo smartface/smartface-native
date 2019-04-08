@@ -27,7 +27,7 @@ function SecureData(params) {}
  * @since 4.0.2
  * @returns {Promise} 
  */
-SecureData.prototype.save = function(params){};
+SecureData.prototype.save = function(params) {};
 
 
 /**
@@ -39,7 +39,7 @@ SecureData.prototype.save = function(params){};
  * @since 4.0.2
  * @returns {Promise} 
  */
-SecureData.prototype.read = function(){};
+SecureData.prototype.read = function() {};
 
 
 
@@ -52,7 +52,7 @@ SecureData.prototype.read = function(){};
  * @since 4.0.2
  * @returns {Promise} 
  */
-SecureData.prototype.delete = function(){};
+SecureData.prototype.delete = function() {};
 
 
 

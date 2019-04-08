@@ -36,8 +36,7 @@ const GridView = extend(View)(
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
                 this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
-            }
-            else {
+            } else {
                 this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
             }
 
@@ -66,8 +65,7 @@ const GridView = extend(View)(
                     if (!holderViewLayout || !holderViewLayout.nativeInner) {
                         throw new Error("onItemCreate must be return an instanceof UI.GridViewItem");
                     }
-                }
-                catch (e) {
+                } catch (e) {
                     const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new GridViewItem();
@@ -85,7 +83,7 @@ const GridView = extend(View)(
 
                 holderViewLayout.viewType = viewType;
                 _gridViewItems[holderViewLayout.nativeInner.itemView.hashCode()] = holderViewLayout;
-                
+
                 holderViewLayout.nativeInner.setRecyclerViewAdapter(dataAdapter);
                 return holderViewLayout.nativeInner;
             },
@@ -124,7 +122,10 @@ const GridView = extend(View)(
             _onItemCreate, _onItemSelected, _onItemType,
             _onItemLongSelected, _onPullRefresh, _onItemBind, _itemCount = 0,
             _scrollBarEnabled = false,
-            _contentOffset = { x: 0, y: 0 },
+            _contentOffset = {
+                x: 0,
+                y: 0
+            },
             _scrollEnabled, _onScrollStateChanged = undefined;
         Object.defineProperties(this, {
             // properties
@@ -175,8 +176,7 @@ const GridView = extend(View)(
                             return;
                         if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
                             this.nativeInner.setVerticalScrollBarEnabled(value);
-                        }
-                        else {
+                        } else {
                             this.nativeInner.setHorizontalScrollBarEnabled(value);
                         }
                     }
@@ -194,8 +194,7 @@ const GridView = extend(View)(
                         _scrollEnabled = isScrollEnabled;
                         if (this.layoutManager.scrollDirection === 1) { // 1 = LayoutManager.ScrollDirection.VERTICAL
                             this.nativeInner.getLayoutManager().setCanScrollVerically(isScrollEnabled);
-                        }
-                        else {
+                        } else {
                             this.nativeInner.getLayoutManager().setCanScrollHorizontally(isScrollEnabled);
                         }
                     }
@@ -230,8 +229,7 @@ const GridView = extend(View)(
                 value: function(index, animate) {
                     if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
-                    }
-                    else {
+                    } else {
                         this.nativeInner.scrollToPosition(index);
                     }
                 },
@@ -322,8 +320,7 @@ const GridView = extend(View)(
                     if (onScroll) {
                         this.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    }
-                    else if (!_onScrollStateChanged) {
+                    } else if (!_onScrollStateChanged) {
                         this.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -351,7 +348,10 @@ const GridView = extend(View)(
             */
             'contentOffset': {
                 get: function() {
-                    return { x: AndroidUnitConverter.pixelToDp(_contentOffset.x), y: AndroidUnitConverter.pixelToDp(_contentOffset.y) };
+                    return {
+                        x: AndroidUnitConverter.pixelToDp(_contentOffset.x),
+                        y: AndroidUnitConverter.pixelToDp(_contentOffset.y)
+                    };
                 },
                 enumerable: true
             }
@@ -375,8 +375,7 @@ const GridView = extend(View)(
                     if (onScrollStateChanged) {
                         this.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    }
-                    else if (!_onScroll) {
+                    } else if (!_onScroll) {
                         this.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -433,16 +432,25 @@ const GridView = extend(View)(
             const SFOnScrollListener = requireClass("io.smartface.android.sfcore.ui.listview.SFOnScrollListener");
             var overrideMethods = {
                 onScrolled: function(dx, dy) {
-                    if (!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) {
+                        return;
+                    }
                     _contentOffset.x += dx;
                     _contentOffset.y += dy;
 
                     var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
                     var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
-                    _onScroll && _onScroll({ contentOffset: { x: offsetX, y: offsetY } });
+                    _onScroll && _onScroll({
+                        contentOffset: {
+                            x: offsetX,
+                            y: offsetY
+                        }
+                    });
                 },
                 onScrollStateChanged: function(newState) {
-                    if (!self.touchEnabled) { return; }
+                    if (!self.touchEnabled) {
+                        return;
+                    }
                     _onScrollStateChanged && _onScrollStateChanged(newState, self.contentOffset);
                 },
             };
@@ -478,22 +486,19 @@ function assignSizeBasedOnDirection(holderViewLayout, viewType) {
                 TypeUtil.isNumeric(fullSpanHeight = self._layoutManager.onFullSpan(viewType))) {
                 holderViewLayout.height = fullSpanHeight;
                 applyFullSpan(holderViewLayout);
-            }
-            else {
+            } else {
                 let calculatedItemHeight = self._layoutManager.onItemLength(spanSize);
                 if (holderViewLayout.height != calculatedItemHeight)
                     holderViewLayout.height = self._layoutManager.onItemLength(spanSize);
             }
 
-        }
-        else {
+        } else {
             let fullSpanWidth;
             if (self._layoutManager.onFullSpan &&
                 TypeUtil.isNumeric(fullSpanWidth = self._layoutManager.onFullSpan(viewType))) {
                 holderViewLayout.width = fullSpanWidth;
                 applyFullSpan(holderViewLayout);
-            }
-            else {
+            } else {
                 var calculatedItemWidth = self._layoutManager.onItemLength(spanSize);
                 if (holderViewLayout.width != calculatedItemWidth)
                     holderViewLayout.width = self._layoutManager.onItemLength(spanSize);

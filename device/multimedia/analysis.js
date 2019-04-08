@@ -70,7 +70,7 @@ function Multimedia() {}
  * @ios
  * @since 0.1
  */
-Multimedia.startCamera = function(e) { };
+Multimedia.startCamera = function(e) {};
 
 /**
  * @method pickFromGallery
@@ -130,7 +130,7 @@ Multimedia.startCamera = function(e) { };
  * @ios
  * @since 0.1
  */
-Multimedia.pickFromGallery = function(e) { };
+Multimedia.pickFromGallery = function(e) {};
 
 /**
  * @method requestGalleryAuthorization
@@ -140,7 +140,7 @@ Multimedia.pickFromGallery = function(e) { };
  * @ios
  * @since 2.0.10
  */
-Multimedia.requestGalleryAuthorization = function(callback) { };
+Multimedia.requestGalleryAuthorization = function(callback) {};
 
 /**
  * @method requestCameraAuthorization
@@ -150,7 +150,7 @@ Multimedia.requestGalleryAuthorization = function(callback) { };
  * @ios
  * @since 2.0.10
  */
-Multimedia.requestCameraAuthorization = function(callback) { };
+Multimedia.requestCameraAuthorization = function(callback) {};
 
 Multimedia.android = {};
 
@@ -172,7 +172,7 @@ Multimedia.android = {};
  * @android
  * @since 0.1
  */
-Multimedia.android.getAllGalleryItems = function(e) { };
+Multimedia.android.getAllGalleryItems = function(e) {};
 
 /**
  * @method getGalleryAuthorizationStatus
@@ -181,7 +181,7 @@ Multimedia.android.getAllGalleryItems = function(e) { };
  * @ios
  * @since 2.0.11
  */
-Multimedia.getGalleryAuthorizationStatus = function(){};
+Multimedia.getGalleryAuthorizationStatus = function() {};
 
 /**
  * @method getCameraAuthorizationStatus
@@ -190,7 +190,7 @@ Multimedia.getGalleryAuthorizationStatus = function(){};
  * @ios
  * @since 2.0.11
  */
-Multimedia.getCameraAuthorizationStatus = function(){};
+Multimedia.getCameraAuthorizationStatus = function() {};
 
 /**
  * @enum {Number} Device.Multimedia.Type
@@ -200,7 +200,7 @@ Multimedia.getCameraAuthorizationStatus = function(){};
  *
  * Type is used to indicate type of the media.
  */
-var Type = { };
+var Type = {};
 
 /**
  * @property {Number} IMAGE
@@ -231,7 +231,7 @@ Type.VIDEO = 1;
  *
  * ActionType is used to indicate type of the camera action.
  */
-var ActionType = { };
+var ActionType = {};
 
 /**
  * @property {Number} IMAGE_CAPTURE
