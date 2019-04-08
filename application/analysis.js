@@ -502,6 +502,18 @@ Application.android.onRequestPermissionsResult = function(e) {}
  */
 Application.onUnhandledError = function(error) {};
 
+
+/**
+ * Set the configure the native theme. 
+ * 
+ * @method setAppTheme
+ * @param {String} currentTheme
+ * @android
+ * @static
+ * @since 4.0.2
+ */
+Application.setAppTheme = function (currentTheme){};
+
 /**
  * Android Specific Properties.
  * @class Application.Android
