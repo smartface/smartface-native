@@ -19,6 +19,17 @@
 function View(params) {}
 
 /**
+ * Gets/sets foreground of the view for ripple effect. This property should be set before rippleColor.
+ * This property only supported for api level 23 and above.
+ * 
+ * @property {Boolean} [useForeground = false]
+ * @android
+ * @member UI.View
+ * @since 4.0.2
+ */
+View.prototype.useForeground;
+
+/**
  * Gets/sets ripple effect enabled for view. You should set {@link UI.View#rippleColor rippleColor}
  * to see the effect.
  *
@@ -55,7 +66,7 @@ View.prototype.alpha = 1.0;
 /**
  * Gets/sets background color of a view. It allows setting background
  * color with UI.Color instance.
- *
+ * 
  * @property {UI.Color} [backgroundColor = UI.Color.WHITE]
  * @android
  * @ios
