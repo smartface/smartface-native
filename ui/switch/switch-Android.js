@@ -148,8 +148,7 @@ const Switch = extend(View)(
 function setThumbColor(self) {
     if (self.toggle && self.thumbOnColor) {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOnColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
-    }
-    else if(self.thumbOffColor) {
+    } else if (self.thumbOffColor) {
         self.nativeObject.getThumbDrawable().setColorFilter(self.thumbOffColor.nativeObject, NativePorterDuff.Mode.MULTIPLY);
     }
 }
@@ -157,8 +156,7 @@ function setThumbColor(self) {
 function setTrackColor(self) {
     if (self.toggle) {
         self.toggleOnColor && self.nativeObject.getTrackDrawable().setColorFilter(self.toggleOnColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
-    }
-    else {
+    } else {
         self.android.toggleOffColor && self.nativeObject.getTrackDrawable().setColorFilter(self.android.toggleOffColor.nativeObject, NativePorterDuff.Mode.SRC_ATOP);
     }
 }

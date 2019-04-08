@@ -17,7 +17,7 @@ var DISPLAY_NAME = "data1"; // ContactsContract.CommonDataKinds.StructuredName.D
 var NUMBER = "data1"; // ContactsContract.CommonDataKinds.Phone.NUMBER;
 var TYPE = "data2"; // ContactsContract.CommonDataKinds.CommonColumns.TYPE;
 var TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
-    
+
 const Phone_CONTENT_TYPE = "vnd.android.cursor.dir/phone_v2"; // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
 const Phone_NUMBER = "data1";
 
@@ -26,50 +26,49 @@ var _onFailure;
 
 const CommonColumns_DATA = "data1"; // ContactsContract.CommonDataKinds.CommonColumns.DATA
 
-function Contacts () { }
+function Contacts() {}
 Contacts.PICK_REQUEST_CODE = RequestCodes.Contacts.PICK_REQUEST_CODE;
 
 Contacts.add = function(params) {
     var contact = {};
-    if(params) {
-        contact = params.contact; 
+    if (params) {
+        contact = params.contact;
         _onSuccess = params.onSuccess;
         _onFailure = params.onFailure;
     }
     var contentResolver = activity.getContentResolver();
-    
+
     try {
         contentProviderOperation = new NativeArrayList();
         const ACCOUNT_NAME = "account_name"; // ContactsContract.SyncColumns.ACCOUNT_NAME;
         const ACCOUNT_TYPE = "account_type"; // ContactsContract.SyncColumns.ACCOUNT_TYPE;
         uri = NativeContactsContract.RawContacts.CONTENT_URI;
-    
+
         var newContent = NativeContentProviderOperation.newInsert(uri);
         newContent = newContent.withValue(ACCOUNT_TYPE, null);
         newContent = newContent.withValue(ACCOUNT_NAME, null);
         var content = newContent.build();
         contentProviderOperation.add(content);
-        
+
         uri = NativeContactsContract.Data.CONTENT_URI;
         addContactName(contact.displayName);
         addContactNumber(contact.phoneNumber);
         addContactEmail(contact.email);
         addContactUrl(contact.urlAddress);
         addContactAddress(contact.address);
-    
+
         const AUTHORITY = "com.android.contacts"; // ContactsContract.AUTHORITY;
         contentResolver.applyBatch(AUTHORITY, contentProviderOperation);
-        if(_onSuccess)
+        if (_onSuccess)
             _onSuccess();
-    } 
-    catch(error) {
-        if(_onFailure)
+    } catch (error) {
+        if (_onFailure)
             _onFailure(error);
     }
 };
 
 Contacts.pick = function(params) {
-    if(!(params && (params.page instanceof require("../../ui/page")))){
+    if (!(params && (params.page instanceof require("../../ui/page")))) {
         throw new TypeError('Page parameter required');
     }
     _onSuccess = params.onSuccess;
@@ -82,8 +81,7 @@ Contacts.pick = function(params) {
         intent.setType(Phone_CONTENT_TYPE); //should filter only contacts with phone numbers
 
         params.page.nativeObject.startActivityForResult(intent, Contacts.PICK_REQUEST_CODE);
-    }
-    catch (error) {
+    } catch (error) {
         if (_onFailure)
             _onFailure(error);
     }
@@ -96,18 +94,17 @@ Contacts.onActivityResult = function(requestCode, resultCode, data) {
         }
         return;
     }
-    
+
     var contactUri = data.getData();
     var contact = {};
     try {
         contact.phoneNumber = getContactPhoneNumber(contactUri);
-        contact.displayName = getContactDisplayName(contactUri); 
-        
-        if(_onSuccess)
+        contact.displayName = getContactDisplayName(contactUri);
+
+        if (_onSuccess)
             _onSuccess(contact);
-        }
-    catch(error) {
-        if(_onFailure)
+    } catch (error) {
+        if (_onFailure)
             _onFailure(error);
     }
 };
@@ -118,11 +115,11 @@ Contacts.getAll = function(params) {
         var contentResolver = AndroidConfig.activity.getContentResolver();
         var projection = [
             "_id", // BaseColumns._ID,
-            "display_name"// ContactsContract.Contacts.DISPLAY_NAME
+            "display_name" // ContactsContract.Contacts.DISPLAY_NAME
         ];
         var uri = NativeContactsContract.Contacts.CONTENT_URI;
         var cursor = contentResolver.query(uri, array(projection, "java.lang.String"), null, null, null);
-        if(cursor === null)
+        if (cursor === null)
             throw new Error("query returns null.");
         cursor.moveToFirst();
         var contacts = [];
@@ -134,7 +131,7 @@ Contacts.getAll = function(params) {
                 id: id,
                 projection: [CommonColumns_DATA],
                 contentResolver: contentResolver,
-                columnTag: CommonColumns_DATA, 
+                columnTag: CommonColumns_DATA,
                 uri: uri
             };
             var phoneNumber = getPhonesById(queryParams);
@@ -147,16 +144,15 @@ Contacts.getAll = function(params) {
                 address: address
             });
         } while (cursor.moveToNext());
-        
-    }
-    catch(error) {
+
+    } catch (error) {
         success = false;
-        if(params && params.onFailure) {
+        if (params && params.onFailure) {
             params.onFailure(error);
         }
     }
-        
-    if(success && params && params.onSuccess) {
+
+    if (success && params && params.onSuccess) {
         params.onSuccess(contacts);
     }
 };
@@ -165,23 +161,23 @@ function getContactDataById(params) {
     var cursor = params.contentResolver.query(
         params.uri,
         array(params.projection, "java.lang.String"),
-        CONTACT_ID + " = ?", 
+        CONTACT_ID + " = ?",
         array([params.id], "java.lang.String"), null
     );
-    
+
     var data = [];
-    if(cursor !== null && cursor.getCount() > 0) {
+    if (cursor !== null && cursor.getCount() > 0) {
         cursor.moveToFirst();
         do {
             var columnIndex = cursor.getColumnIndex(params.columnTag);
-            if(columnIndex >= 0) {
+            if (columnIndex >= 0) {
                 data.push(cursor.getString(columnIndex));
                 return data;
             }
-        }while (cursor.moveToNext());
+        } while (cursor.moveToNext());
         cursor.close();
     }
-    
+
     return data;
 }
 
@@ -206,34 +202,34 @@ function getContactDisplayName(contactUri) {
     var contentResolver = context.getContentResolver();
     var projection = ["display_name"];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
-    if(cursor != null) {
+    if (cursor != null) {
         if (cursor.moveToFirst()) {
             var columnIndex = cursor.getColumnIndex(projection[0]);
-            if(columnIndex >= 0)
+            if (columnIndex >= 0)
                 contactName = cursor.getString(columnIndex);
         }
     }
-    
+
     cursor.close();
     return contactName;
 }
 
 function getContactPhoneNumber(contactUri) {
     var contentResolver = activity.getContentResolver();
-    var projection = [ Phone_NUMBER ];
+    var projection = [Phone_NUMBER];
     var cursor = contentResolver.query(contactUri, array(projection, "java.lang.String"), null, null, null);
     cursor.moveToFirst();
-    
+
     var columnIndex = cursor.getColumnIndex(projection[0]);
     var number = "";
-    if(columnIndex >= 0)
+    if (columnIndex >= 0)
         number = cursor.getString(columnIndex);
     return number;
 }
 
 function addContactName(displayName) {
     // ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE;
-    CONTENT_ITEM_TYPE = "vnd.android.cursor.item/name"; 
+    CONTENT_ITEM_TYPE = "vnd.android.cursor.item/name";
     if (displayName) {
         var displayNameContent = NativeContentProviderOperation.newInsert(uri);
         displayNameContent = displayNameContent.withValueBackReference(RAW_CONTACT_ID, 0);
@@ -247,13 +243,13 @@ function addContactName(displayName) {
 function addContactNumber(phoneNumber) {
     //NativeContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE;
     CONTENT_ITEM_TYPE = "vnd.android.cursor.item/phone_v2";
-    
+
     var phoneNumberContent = NativeContentProviderOperation.newInsert(uri);
     phoneNumberContent.withValue(TYPE, TYPE_HOME);
     phoneNumberContent.withValueBackReference(RAW_CONTACT_ID, 0);
     phoneNumberContent.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
     phoneNumberContent.withValue(NUMBER, phoneNumber);
-    
+
     var cpo = phoneNumberContent.build();
     contentProviderOperation.add(cpo);
 }
@@ -263,7 +259,7 @@ function addContactEmail(email) {
         // NativeContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE;
         CONTENT_ITEM_TYPE = "vnd.android.cursor.item/email_v2";
         var TYPE_HOME = 1; // ContactsContract.CommonDataKinds.Email.TYPE_HOME;
-        
+
         var content = NativeContentProviderOperation.newInsert(uri);
         content = content.withValueBackReference(RAW_CONTACT_ID, 0);
         content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
@@ -273,14 +269,14 @@ function addContactEmail(email) {
         contentProviderOperation.add(content);
     }
 }
-    
+
 function addContactUrl(urlAddress) {
-    if(urlAddress) {
+    if (urlAddress) {
         var URL = NativeContactsContract.CommonDataKinds.Website.URL;
         // ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE;
-        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/website"; 
+        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/website";
         var TYPE_OTHER = 7; // ContactsContract.CommonDataKinds.Website.TYPE_OTHER;
-        
+
         var content = NativeContentProviderOperation.newInsert(uri);
         content = content.withValueBackReference(RAW_CONTACT_ID, 0);
         content = content.withValue(MIMETYPE, CONTENT_ITEM_TYPE);
@@ -292,9 +288,9 @@ function addContactUrl(urlAddress) {
 }
 
 function addContactAddress(address) {
-    if(address) {
+    if (address) {
         // ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE;
-        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/postal-address_v2"; 
+        CONTENT_ITEM_TYPE = "vnd.android.cursor.item/postal-address_v2";
         var FORMATTED_ADDRESS = "data1"; // ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS;
         var content = NativeContentProviderOperation.newInsert(uri);
         content = content.withValueBackReference(RAW_CONTACT_ID, 0);

@@ -12,7 +12,7 @@ Accelerometer.__isSetCallback = false;
 Accelerometer.__isStarted = false;
 
 Accelerometer.__getInstance = function() {
-    if(!Accelerometer.__instance)
+    if (!Accelerometer.__instance)
         Accelerometer.__instance = new NativeSFAccelerometerListener();
     return Accelerometer.__instance;
 };
@@ -20,14 +20,14 @@ Accelerometer.__getInstance = function() {
 Object.defineProperties(Accelerometer, {
     'start': {
         value: function() {
-            if(Accelerometer.__isStarted) return;
+            if (Accelerometer.__isStarted) return;
             Accelerometer.__isStarted = true;
             Accelerometer.__getInstance().startListener();
         }
     },
     'stop': {
         value: function() {
-            if(!Accelerometer.__isStarted) return;
+            if (!Accelerometer.__isStarted) return;
             Accelerometer.__isStarted = false;
             Accelerometer.__getInstance().stopListener();
         }
@@ -38,14 +38,18 @@ Object.defineProperties(Accelerometer, {
         },
         set: function(callback) {
             _callback = callback;
-            if(typeof(callback) === "function") {
-                if(Accelerometer.__isSetCallback) return;
+            if (typeof(callback) === "function") {
+                if (Accelerometer.__isSetCallback) return;
                 Accelerometer.__isSetCallback = true;
                 Accelerometer.__getInstance().onAccelerateCallback = function(x, y, z) {
-                    _callback && _callback({x, y, z});
+                    _callback && _callback({
+                        x,
+                        y,
+                        z
+                    });
                 };
             } else {
-                if(!Accelerometer.__isSetCallback) return;
+                if (!Accelerometer.__isSetCallback) return;
                 Accelerometer.__isSetCallback = false;
                 Accelerometer.__getInstance().onAccelerateCallback = null;
             }

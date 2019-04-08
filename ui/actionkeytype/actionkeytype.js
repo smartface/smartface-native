@@ -1,4 +1,4 @@
-const ActionKeyType = { };
+const ActionKeyType = {};
 ActionKeyType.DEFAULT = 0;
 ActionKeyType.NEXT = 1;
 ActionKeyType.GO = 2;

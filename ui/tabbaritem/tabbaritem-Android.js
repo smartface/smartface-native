@@ -38,12 +38,10 @@ function TabBarItem(params) {
                 let icon = value;
                 if (icon.constructor === String) { //IDE requires this implementation.
                     icon = Image.createImageFromPath(icon);
-                }
-                else if (icon instanceof Object) {
+                } else if (icon instanceof Object) {
                     icon.normal = Image.createImageFromPath(icon.normal);
                     icon.selected = Image.createImageFromPath(icon.selected);
-                }
-                else {
+                } else {
                     throw new Error("icon should be an instance of Image or given icon path should be properly.");
                 }
 
@@ -51,11 +49,9 @@ function TabBarItem(params) {
                     // TODO: Refactor this implemenation. Discuss with ios team.
                     if (icon.normal instanceof Image && icon.selected instanceof Image) {
                         icon = makeSelector(icon.normal, icon.selected);
-                    }
-                    else if (icon.normal instanceof Image) {
+                    } else if (icon.normal instanceof Image) {
                         icon = makeSelector(icon.normal, EmptyImage);
-                    }
-                    else if (icon.selected instanceof Image) {
+                    } else if (icon.selected instanceof Image) {
                         icon = makeSelector(EmptyImage, icon.selected);
                     }
                 }
@@ -151,7 +147,9 @@ function TabBarItem(params) {
         res.addState(array([NativeR.attr.state_checked], "int"), selectedImage.nativeObject);
         res.addState(array([], "int"), normalImage.nativeObject);
 
-        return { nativeObject: res };
+        return {
+            nativeObject: res
+        };
     }
 }
 

@@ -23,7 +23,7 @@ function Notifications() {}
  * @static
  * @since 0.1
  */
-Notifications.cancelAllLocalNotifications = function(){};
+Notifications.cancelAllLocalNotifications = function() {};
 
 /**
  * Register for remote push notifications. For emulator this will not work and always calls onFailure callback.
@@ -40,7 +40,7 @@ Notifications.cancelAllLocalNotifications = function(){};
  * @static
  * @since 0.1
  */
-Notifications.registerForPushNotifications = function(onSuccess, onFailure){};
+Notifications.registerForPushNotifications = function(onSuccess, onFailure) {};
 
 /**
  * Unregister for remote push notifications. For emulator this will not work and does nothing.
@@ -51,7 +51,7 @@ Notifications.registerForPushNotifications = function(onSuccess, onFailure){};
  * @static
  * @since 0.1
  */
-Notifications.unregisterForPushNotifications = function(){};
+Notifications.unregisterForPushNotifications = function() {};
 
 /**
  * Gets authorization status.
@@ -197,7 +197,7 @@ Notifications.authorizationStatus.Authorized = 2;
  * 
  */
 Notifications.LocalNotification = function() {};
-    
+
 /**
  * Gets/sets the message displayed in the notification alert. 
  * 
@@ -392,7 +392,7 @@ Notifications.LocalNotification.prototype.ios.userInfo = {};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.schedule = function(){};
+Notifications.LocalNotification.prototype.schedule = function() {};
 
 /**
  * Presents notification to the user immediately.
@@ -403,7 +403,7 @@ Notifications.LocalNotification.prototype.schedule = function(){};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.present = function(){};
+Notifications.LocalNotification.prototype.present = function() {};
 
 /**
  * Cancels this notification even if this is scheduled or presented notification.
@@ -414,7 +414,7 @@ Notifications.LocalNotification.prototype.present = function(){};
  * @static
  * @since 0.1
  */
-Notifications.LocalNotification.prototype.cancel = function(){};
+Notifications.LocalNotification.prototype.cancel = function() {};
 
 /** 
  * @enum {Number} Notifications.Priority 

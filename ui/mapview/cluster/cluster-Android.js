@@ -18,8 +18,7 @@ function Cluster(params) {
                     var iconBitmap = clusterItemObj.mImage.getBitmap();
                     var clusterIcon = NativeDescriptorFactory.fromBitmap(iconBitmap);
                     markerOptions.icon(clusterIcon);
-                }
-                else if (clusterItemObj.mColor !== undefined) {
+                } else if (clusterItemObj.mColor !== undefined) {
                     markerOptions.icon(clusterItemObj.mColor);
                 }
                 markerOptions.snippet(clusterItemObj.getSnippet());

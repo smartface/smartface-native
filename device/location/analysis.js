@@ -35,7 +35,7 @@ function Location() {}
  * @static
  * @since 4.0.2
  */
-Location.checkSettings = function(priority){};
+Location.checkSettings = function(priority) {};
 
 /**
  * Starts capturing.For Android, need to define interval & priority which need to be decided wisely;  

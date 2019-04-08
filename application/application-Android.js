@@ -82,8 +82,7 @@ Object.defineProperties(ApplicationWrapper, {
 
                 _sliderDrawer = drawer;
                 attachSliderDrawer(_sliderDrawer);
-            }
-            else {
+            } else {
                 throw TypeError("Object must be SliderDrawer instance");
             }
         },
@@ -161,14 +160,12 @@ Object.defineProperties(ApplicationWrapper, {
                     var activityName = new NativeString(classActivityNameArray[1]);
                     intent.setClassName(className, activityName);
                     uriObject = NativeUri.parse(params);
-                }
-                else {
+                } else {
                     var uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
                 intent.setData(uriObject);
-            }
-            else {
+            } else {
                 if (uriScheme.indexOf("|") !== -1) {
                     var classActivityNameArray = uriScheme.split("|");
                     // JS string pass causes parameter mismatch
@@ -176,8 +173,7 @@ Object.defineProperties(ApplicationWrapper, {
                     var className = new NativeString(classActivityNameArray[0]);
                     var activityName = new NativeString(classActivityNameArray[1]);
                     intent.setClassName(className, activityName);
-                }
-                else {
+                } else {
                     var uri = NativeUri.parse(uriScheme);
                     intent.setData(uri);
                 }
@@ -191,17 +187,14 @@ Object.defineProperties(ApplicationWrapper, {
                     var chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
                         activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
-                }
-                else {
+                } else {
                     try {
                         activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
@@ -318,7 +311,9 @@ Object.defineProperties(ApplicationWrapper, {
 });
 
 ApplicationWrapper.registOnItemSelectedListener = function() {
-    if (ApplicationWrapper.__isSetOnItemSelectedListener) { return; }
+    if (ApplicationWrapper.__isSetOnItemSelectedListener) {
+        return;
+    }
     ApplicationWrapper.__isSetOnItemSelectedListener = true;
     spratAndroidActivityInstance.attachItemSelectedListener({
         onOptionsItemSelected: function() {
@@ -407,8 +402,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
                 return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
-            }
-            else {
+            } else {
                 var packageManager = activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
@@ -428,8 +422,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                     requestCode: requestCode,
                     result: ApplicationWrapper.android.checkPermission(permissions)
                 });
-            }
-            else {
+            } else {
                 activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
 

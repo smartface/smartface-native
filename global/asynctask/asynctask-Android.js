@@ -24,7 +24,7 @@ function AsyncTask(params) {
     this.nativeObject.setJsCallback(callbacks);
 
 
-    let _onPreExecute,_task, _onComplete, _onCancelled;
+    let _onPreExecute, _task, _onComplete, _onCancelled;
     Object.defineProperties(self, {
         'task': {
             get: function() {
@@ -46,7 +46,7 @@ function AsyncTask(params) {
                 }
             }
         },
-        'onCancelled':{
+        'onCancelled': {
             get: function() {
                 return _onCancelled;
             },

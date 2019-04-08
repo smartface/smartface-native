@@ -77,7 +77,7 @@ VideoView.prototype.borderRadius = 0;
  * @ios
  * @since 0.1
  */
-VideoView.prototype.play = function(){};
+VideoView.prototype.play = function() {};
 
 /**
  * This function pauses the video clip.
@@ -87,7 +87,7 @@ VideoView.prototype.play = function(){};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.pause = function(){};
+VideoView.prototype.pause = function() {};
 
 /**
  * This function stops the video clip by seeking to the initial position of the video.
@@ -97,7 +97,7 @@ VideoView.prototype.pause = function(){};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.stop = function(){};
+VideoView.prototype.stop = function() {};
 
 /**
  * This function returns status of the video, if the video clip is played or not.
@@ -108,7 +108,7 @@ VideoView.prototype.stop = function(){};
  * @ios
  * @since 0.1
  */
-VideoView.prototype.isPlaying = function(){};
+VideoView.prototype.isPlaying = function() {};
 
 /**
  * This function puts the video clip in loop.
@@ -119,7 +119,7 @@ VideoView.prototype.isPlaying = function(){};
  * @param {Boolean} enabled
  * @since 0.1
  */
-VideoView.prototype.setLoopEnabled = function(enabled){};
+VideoView.prototype.setLoopEnabled = function(enabled) {};
 
 /**
  * This function loads the video clip from the given URL.
@@ -130,7 +130,7 @@ VideoView.prototype.setLoopEnabled = function(enabled){};
  * @param {String} url
  * @since 0.1
  */
-VideoView.prototype.loadURL = function(url){};
+VideoView.prototype.loadURL = function(url) {};
 
 /**
  * This function loads the video clip from the local file.
@@ -141,7 +141,7 @@ VideoView.prototype.loadURL = function(url){};
  * @param {IO.File} file
  * @since 0.1
  */
-VideoView.prototype.loadFile = function(file){};
+VideoView.prototype.loadFile = function(file) {};
 
 /**
  * This event is called when the video clip is ready to be played.
@@ -152,7 +152,7 @@ VideoView.prototype.loadFile = function(file){};
  * @param {Function} callback
  * @since 0.1
  */
-VideoView.prototype.onReady = function(){};
+VideoView.prototype.onReady = function() {};
 
 /**
  * This event is called when the video clip completed playing.
@@ -163,7 +163,7 @@ VideoView.prototype.onReady = function(){};
  * @param {Function} callback
  * @since 0.1
  */
-VideoView.prototype.onFinish = function(){};
+VideoView.prototype.onFinish = function() {};
 
 /**
  * This function seeks to desired position of the video.
@@ -174,7 +174,7 @@ VideoView.prototype.onFinish = function(){};
  * @param {Number} milliseconds
  * @since 0.1
  */
-VideoView.prototype.seekTo = function(milliseconds){};
+VideoView.prototype.seekTo = function(milliseconds) {};
 
 /**
  * This function returns the total duration of the video.
@@ -205,7 +205,7 @@ VideoView.prototype.currentDuration;
  * @param {Number} volume
  * @since 0.1
  */
-VideoView.prototype.setVolume = function(volume){};
+VideoView.prototype.setVolume = function(volume) {};
 
 /**
  * This function sets the visibility of video controller
@@ -216,7 +216,7 @@ VideoView.prototype.setVolume = function(volume){};
  * @param {Boolean} enabled
  * @since 0.1
  */
-VideoView.prototype.setControllerEnabled = function(enabled){};
+VideoView.prototype.setControllerEnabled = function(enabled) {};
 
 /**
  * Gets/Sets the page where the videoview is put.

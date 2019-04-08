@@ -40,7 +40,7 @@ const ScrollView = extend(ViewGroup)(
         }
 
         _super(this);
-        
+
         UIScrollViewInheritance.addPropertiesAndMethods.call(this);
 
         Object.defineProperty(self, 'layout', {
@@ -49,14 +49,14 @@ const ScrollView = extend(ViewGroup)(
             },
             enumerable: true
         });
-        
+
         var isLTR = (__SF_UIView.viewAppearanceSemanticContentAttribute() == 0) ? (__SF_UIApplication.sharedApplication().userInterfaceLayoutDirection == 0) : (__SF_UIView.viewAppearanceSemanticContentAttribute() == 3);
         if (!isLTR) {
             self.flipHorizontally();
-            self.layout.onViewAddedInnerCallback = function(view){
+            self.layout.onViewAddedInnerCallback = function(view) {
                 view.flipHorizontally();
             };
-            self.layout.onViewRemovedInnerCallback = function(view){
+            self.layout.onViewRemovedInnerCallback = function(view) {
                 view.flipHorizontally();
             };
         }
@@ -70,7 +70,12 @@ const ScrollView = extend(ViewGroup)(
 
                 self.layout.nativeObject.yoga.applyLayoutPreservingOrigin(false);
                 if (self.autoSizeEnabled) {
-                    var rect = { x: 0, y: 0, width: self.nativeObject.frame.width, height: self.nativeObject.frame.height };
+                    var rect = {
+                        x: 0,
+                        y: 0,
+                        width: self.nativeObject.frame.width,
+                        height: self.nativeObject.frame.height
+                    };
                     var subviews = self.layout.nativeObject.subviews;
                     var widthAffectingView;
                     var heightAffectingView;
@@ -94,8 +99,7 @@ const ScrollView = extend(ViewGroup)(
                         //// PADDING CHECK ///////
                         if (isNumber(self.layout.paddingRight)) {
                             rect.width = rect.width + self.layout.paddingRight;
-                        }
-                        else if (isNumber(self.layout.padding)) {
+                        } else if (isNumber(self.layout.padding)) {
                             rect.width = rect.width + self.layout.padding;
                         }
                         ///////////////////////////
@@ -103,19 +107,16 @@ const ScrollView = extend(ViewGroup)(
                         //// MARGIN CHECK /////////
                         if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("marginLeft"))) {
                             rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("marginLeft");
-                        }
-                        else if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("margin"))) {
+                        } else if (widthAffectingView && isNumber(widthAffectingView.yoga.getYGValueForKey("margin"))) {
                             rect.width = rect.width + widthAffectingView.yoga.getYGValueForKey("margin");
                         }
                         rect.height = self.nativeObject.frame.height;
                         /////////////////////////////
-                    }
-                    else {
+                    } else {
                         //// PADDING CHECK ///////
                         if (isNumber(self.layout.paddingBottom)) {
                             rect.height = rect.height + self.layout.paddingBottom;
-                        }
-                        else if (isNumber(self.layout.padding)) {
+                        } else if (isNumber(self.layout.padding)) {
                             rect.height = rect.height + self.layout.padding;
                         }
                         ///////////////////////////
@@ -123,8 +124,7 @@ const ScrollView = extend(ViewGroup)(
                         //// MARGIN CHECK /////////
                         if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("marginBottom"))) {
                             rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("marginBottom");
-                        }
-                        else if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("margin"))) {
+                        } else if (heightAffectingView && isNumber(heightAffectingView.yoga.getYGValueForKey("margin"))) {
                             rect.height = rect.height + heightAffectingView.yoga.getYGValueForKey("margin");
                         }
                         ///////////////////////////
@@ -178,7 +178,9 @@ const ScrollView = extend(ViewGroup)(
 
         Object.defineProperty(self.layout, 'backgroundColor', {
             get: function() {
-                return new Color({ color: self.layout.nativeObject.backgroundColor });
+                return new Color({
+                    color: self.layout.nativeObject.backgroundColor
+                });
             },
             set: function(value) {
                 if (value.nativeObject.constructor.name === "CAGradientLayer") {
@@ -197,8 +199,7 @@ const ScrollView = extend(ViewGroup)(
                     }
                     self.gradientColor.frame = self.layout.nativeObject.frame;
                     self.layout.nativeObject.backgroundColor = self.gradientColor.layerToColor();
-                }
-                else {
+                } else {
                     if (self.gradientColor) {
                         self.gradientColorFrameObserver = undefined;
                         self.gradientColor = undefined;
@@ -226,8 +227,7 @@ const ScrollView = extend(ViewGroup)(
             get: function() {
                 if (_align === ScrollType.horizontal) {
                     return ScrollViewAlign.HORIZONTAL;
-                }
-                else {
+                } else {
                     return ScrollViewAlign.VERTICAL;
                 }
 
@@ -235,8 +235,7 @@ const ScrollView = extend(ViewGroup)(
             set: function(value) {
                 if (value === ScrollViewAlign.HORIZONTAL) {
                     _align = ScrollType.horizontal;
-                }
-                else {
+                } else {
                     _align = ScrollType.vertical;
                 }
                 if (!self.autoSizeEnabled) {
@@ -249,17 +248,20 @@ const ScrollView = extend(ViewGroup)(
         self.scrollToEdge = function(edge) {
             if (_align === ScrollType.horizontal) {
                 if (edge === ScrollViewEdge.LEFT) {
-                    self.nativeObject.setContentOffsetAnimated({ x: 0, y: 0 }, true);
-                }
-                else if (edge === ScrollViewEdge.RIGHT) {
+                    self.nativeObject.setContentOffsetAnimated({
+                        x: 0,
+                        y: 0
+                    }, true);
+                } else if (edge === ScrollViewEdge.RIGHT) {
                     self.nativeObject.scrollToRight();
                 }
-            }
-            else if (_align === ScrollType.vertical) {
+            } else if (_align === ScrollType.vertical) {
                 if (edge === ScrollViewEdge.TOP) {
-                    self.nativeObject.setContentOffsetAnimated({ x: 0, y: 0 }, true);
-                }
-                else if (edge === ScrollViewEdge.BOTTOM) {
+                    self.nativeObject.setContentOffsetAnimated({
+                        x: 0,
+                        y: 0
+                    }, true);
+                } else if (edge === ScrollViewEdge.BOTTOM) {
                     self.nativeObject.scrollToBottom();
                 }
             }
@@ -267,19 +269,29 @@ const ScrollView = extend(ViewGroup)(
 
         self.scrollToCoordinate = function(coordinate) {
             if (_align === ScrollType.horizontal) {
-                self.nativeObject.setContentOffsetAnimated({ x: coordinate, y: 0 }, true);
-            }
-            else if (_align === ScrollType.vertical) {
-                self.nativeObject.setContentOffsetAnimated({ x: 0, y: coordinate }, true);
+                self.nativeObject.setContentOffsetAnimated({
+                    x: coordinate,
+                    y: 0
+                }, true);
+            } else if (_align === ScrollType.vertical) {
+                self.nativeObject.setContentOffsetAnimated({
+                    x: 0,
+                    y: coordinate
+                }, true);
             }
         };
 
         self.changeContentSize = function(frame) {
             if (_align === ScrollType.vertical) {
-                self.nativeObject.contentSize = { width: 0, height: frame.height };
-            }
-            else {
-                self.nativeObject.contentSize = { width: frame.width, height: 0 };
+                self.nativeObject.contentSize = {
+                    width: 0,
+                    height: frame.height
+                };
+            } else {
+                self.nativeObject.contentSize = {
+                    width: frame.width,
+                    height: 0
+                };
             }
         };
 

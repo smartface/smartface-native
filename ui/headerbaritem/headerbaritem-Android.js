@@ -10,7 +10,9 @@ const NativePorterDuff = requireClass('android.graphics.PorterDuff');
 const NativeImageButton = requireClass('android.widget.ImageButton');
 const attributedTitleSuper = require("../../util/Android/attributedtitle.js");
 
-function PixelToDp(px) { return AndroidUnitConverter.pixelToDp(px); }
+function PixelToDp(px) {
+    return AndroidUnitConverter.pixelToDp(px);
+}
 
 const activity = AndroidConfig.activity;
 
@@ -53,8 +55,7 @@ function HeaderBarItem(params) {
                         let imageCopy = this.nativeObject.getDrawable().mutate();
                         imageCopy.setColorFilter(this.color.nativeObject, NativePorterDuff.Mode.SRC_IN);
                         this.nativeObject.setImageDrawable(imageCopy);
-                    }
-                    else {
+                    } else {
                         this.nativeObject.setTextColor(_color.nativeObject);
                     }
                 }
@@ -75,12 +76,20 @@ function HeaderBarItem(params) {
             enumerable: true
         },
         'imageButton': {
-            get: function() { return _imageButton; },
-            set: function(value) { _imageButton = value; }
+            get: function() {
+                return _imageButton;
+            },
+            set: function(value) {
+                _imageButton = value;
+            }
         },
         'menuItem': {
-            get: function() { return _menuItem; },
-            set: function(value) { _menuItem = value; }
+            get: function() {
+                return _menuItem;
+            },
+            set: function(value) {
+                _menuItem = value;
+            }
         },
         'image': {
             get: function() {
@@ -98,20 +107,17 @@ function HeaderBarItem(params) {
                         if (_image) {
                             var imageCopy = _image.nativeObject.mutate();
                             this.nativeObject.setImageDrawable(imageCopy);
-                        }
-                        else {
+                        } else {
                             this.nativeObject.setImageDrawable(null);
                             this.nativeObject = null;
                             if (_attributedTitle) {
                                 this.attributedTitle = _attributedTitle;
-                            }
-                            else {
+                            } else {
                                 this.title = _title;
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     throw new TypeError("image must be Image instance or image path should be given properly.");
                 }
             },
@@ -151,8 +157,7 @@ function HeaderBarItem(params) {
             set: function(value) {
                 if (value instanceof Function) {
                     _onPress = value.bind(this);
-                }
-                else {
+                } else {
                     throw new TypeError("onPress must be function.");
                 }
             },
@@ -164,11 +169,9 @@ function HeaderBarItem(params) {
                 if (this.imageButton) {
                     this.image && (this.image = this.image);
                     this.android.systemIcon && (this.android.systemIcon = this.android.systemIcon);
-                }
-                else if (_attributedTitle) {
+                } else if (_attributedTitle) {
                     this.attributedTitle = _attributedTitle;
-                }
-                else {
+                } else {
                     this.title = _title;
                 }
                 this.color = this.color;
@@ -268,8 +271,7 @@ function HeaderBarItem(params) {
 
         if (!badge.nativeObject.getParent()) {
             self.nativeBadgeContainer.addView(badge.nativeObject);
-        }
-        else {
+        } else {
             var parentOfNativeObject = badge.nativeObject.getParent();
             parentOfNativeObject.removeAllViews();
             self.nativeBadgeContainer.addView(badge.nativeObject);
@@ -299,8 +301,7 @@ function HeaderBarItem(params) {
                 itemView.getChildCount() && itemView.removeAllViews();
                 itemView.addView(self.nativeObject);
             }
-        }
-        else if (!self.imageButton) {
+        } else if (!self.imageButton) {
             self.nativeObject.setText(itemTitle);
             self.color = _color;
         }
@@ -325,8 +326,7 @@ function createNativeImageButton() {
             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal,
             HeaderBarItemPadding.vertical, HeaderBarItemPadding.horizontal
         );
-    }
-    else
+    } else
         nativeImageButton = headerBarItem.nativeObject;
     headerBarItem.imageButton = true;
     if (headerBarItem.menuItem) {

@@ -17,7 +17,7 @@
  *     let userEmail = Data.getStringVariable('userEmail');
  *    
  */
-function Data(){}
+function Data() {}
 
 /**
  * Get stored string type variable. If variable is not exists, will return null.

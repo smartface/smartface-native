@@ -1,4 +1,4 @@
-const EllipsizeMode = { };
+const EllipsizeMode = {};
 
 EllipsizeMode.START = "start";
 EllipsizeMode.MIDDLE = "middle";

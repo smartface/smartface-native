@@ -6,7 +6,7 @@
  * This class represents badge object. Creating instance of Badge is not valid since you can't use in anywhere.
  * 
  */
-function Badge(params){};
+function Badge(params) {};
 
 /**
  * Gets/sets text of badge.
@@ -89,6 +89,6 @@ Badge.prototype.borderWidth = 0;
  * @ios
  * @since 3.0.0
  */
-Badge.prototype.move = function(x,y){}
+Badge.prototype.move = function(x, y) {}
 
 module.exports = Badge;

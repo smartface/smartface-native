@@ -1,4 +1,4 @@
-var StatusBarStyle = { };
+var StatusBarStyle = {};
 StatusBarStyle.DEFAULT = 0;
 StatusBarStyle.LIGHTCONTENT = 1;
 

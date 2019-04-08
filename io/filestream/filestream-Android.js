@@ -11,18 +11,18 @@ function FileStream(params) {
     var _contentMode = FileStream.ContentMode.hasValue(params.contentMode) ? params.contentMode : FileStream.ContentMode.TEXT;
     if (FileStream.StreamType.hasValue(params.streamType)) {
         if (TypeUtil.isString(params.path)) {
-            fileObject = new File({ path: params.path });
+            fileObject = new File({
+                path: params.path
+            });
         }
         // must check instance of File but
         // instanceof check, but got #<Object>
         else if (params.source) {
             fileObject = params.source;
-        }
-        else {
+        } else {
             throw new Error("File path must be string or source must be given");
         }
-    }
-    else {
+    } else {
         throw new Error("Mode must be FileStream.StreamType");
     }
 
@@ -39,13 +39,11 @@ function FileStream(params) {
             let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             var outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
-        }
-        else {
+        } else {
             let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, true);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
-    }
-    else if (_streamType === FileStream.StreamType.READ) {
+    } else if (_streamType === FileStream.StreamType.READ) {
         if (fileObject.type === Path.FILE_TYPE.ASSET) {
             const NativeInputStreamReader = requireClass("java.io.InputStreamReader");
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
@@ -54,13 +52,11 @@ function FileStream(params) {
             if (_contentMode === FileStream.ContentMode.TEXT) {
                 let inputStreamReader = new NativeInputStreamReader(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
-            }
-            else {
+            } else {
                 var fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedInputStream(fileInputStream);
             }
-        }
-        else if (fileObject.type === Path.FILE_TYPE.DRAWABLE) {
+        } else if (fileObject.type === Path.FILE_TYPE.DRAWABLE) {
             const NativeInputStreamReader = requireClass("java.io.InputStreamReader");
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
@@ -69,12 +65,10 @@ function FileStream(params) {
             if (_contentMode === FileStream.ContentMode.TEXT) {
                 let inputStreamReader = new NativeInputStreamReader(inputStream);
                 this.nativeObject = new NativeBufferedReader(inputStreamReader);
-            }
-            else {
+            } else {
                 this.nativeObject = new NativeBufferedInputStream(inputStream);
             }
-        }
-        else {
+        } else {
             const NativeBufferedReader = requireClass("java.io.BufferedReader");
             const NativeBufferedInputStream = requireClass("java.io.BufferedInputStream");
             const NativeFileInputStream = requireClass("java.io.FileInputStream");
@@ -83,14 +77,12 @@ function FileStream(params) {
             if (_contentMode === FileStream.ContentMode.TEXT) {
                 let fileReader = new NativeFileReader(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedReader(fileReader);
-            }
-            else {
+            } else {
                 let fileInputStream = new NativeFileInputStream(fileObject.nativeObject);
                 this.nativeObject = new NativeBufferedInputStream(fileInputStream);
             }
         }
-    }
-    else if (_streamType === FileStream.StreamType.WRITE) {
+    } else if (_streamType === FileStream.StreamType.WRITE) {
         if (fileObject.type !== Path.FILE_TYPE.FILE) {
             throw new Error("FileStream.StreamType.WRITE can be used for only files.");
         }
@@ -103,13 +95,13 @@ function FileStream(params) {
             var fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             let outputStreamWriter = new NativeOutputStreamWriter(fileOutputStream);
             this.nativeObject = new NativeBufferedWriter(outputStreamWriter);
-        }
-        else {
+        } else {
             let fileOutputStream = new NativeFileOutputStream(fileObject.nativeObject, false);
             this.nativeObject = new NativeBufferedOutputStream(fileOutputStream);
         }
+    } else {
+        throw new Error("Mode must be FileStream.StreamType")
     }
-    else { throw new Error("Mode must be FileStream.StreamType") }
 
 
     // For prevent crashing, we should keep stream status.
@@ -156,11 +148,14 @@ function FileStream(params) {
                 }
                 var fileContent = this.readToEnd();
                 if (_contentMode === FileStream.ContentMode.BINARY) {
-                    return new Blob(fileContent, { type: "file" });
-                }
-                else {
+                    return new Blob(fileContent, {
+                        type: "file"
+                    });
+                } else {
                     const NativeString = requireClass("java.lang.String");
-                    return new Blob(new NativeString(fileContent).getBytes(), { type: "file" });
+                    return new Blob(new NativeString(fileContent).getBytes(), {
+                        type: "file"
+                    });
                 }
             },
             enumerable: true
@@ -178,12 +173,13 @@ function FileStream(params) {
                         readLine = this.nativeObject.readLine();
                     }
                     return fileContent;
-                }
-                else {
+                } else {
                     const NativeFileUtil = requireClass("io.smartface.android.utils.FileUtil");
                     // toByteArray method handle large files by copying the bytes into blocks of 4KiB.
                     var bytes = NativeFileUtil.toByteArray(this.nativeObject);
-                    return new Blob(bytes, { type: "file" });
+                    return new Blob(bytes, {
+                        type: "file"
+                    });
                 }
             },
             enumerable: true
@@ -198,8 +194,7 @@ function FileStream(params) {
                         throw new Error("Parameter must be Blob")
                     }
                     this.nativeObject.write(data.nativeObject.toByteArray());
-                }
-                else {
+                } else {
                     if (!TypeUtil.isString(data)) {
                         throw new Error("Parameter must be string")
                     }

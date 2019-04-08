@@ -107,7 +107,7 @@ ImageView.prototype.imageFillType = UI.ImageView.FillType.NORMAL;
  * @ios
  * @since 3.1.3
  */
-ImageView.prototype.loadFromUrl = function(params){};
+ImageView.prototype.loadFromUrl = function(params) {};
 
 /**
  * Load image from the file and place the returned image into the ImageView.
@@ -122,7 +122,7 @@ ImageView.prototype.loadFromUrl = function(params){};
  * @ios
  * @since 3.1.0
  */
-ImageView.prototype.loadFromFile = function(object){};
+ImageView.prototype.loadFromFile = function(object) {};
 
 /**
  * Fetch image from the server.
@@ -142,7 +142,7 @@ ImageView.prototype.loadFromFile = function(object){};
  * @ios
  * @since 3.0.2
  */
-ImageView.prototype.fetchFromUrl = function(object){};
+ImageView.prototype.fetchFromUrl = function(object) {};
 
 /**
  * @enum {Number} UI.ImageView.FillType

@@ -198,7 +198,10 @@ const TextView = extend(View)(
                     });
 
                     var rect = Invocation.invokeInstanceMethod(_lastModifiedAttributedString, "boundingRectWithSize:options:context:", [argSize, argOptions, argContext], "CGRect");
-                    return { width: rect.width, height: rect.height };
+                    return {
+                        width: rect.width,
+                        height: rect.height
+                    };
                 }
                 return null;
             },
@@ -226,7 +229,7 @@ const TextView = extend(View)(
             enumerable: true
         });
 
-        Object.defineProperty(self.ios, 'scrollEnabled', {   //Deprecated
+        Object.defineProperty(self.ios, 'scrollEnabled', { //Deprecated
             get: function() {
                 return self.nativeObject.valueForKey("scrollEnabled");
             },
@@ -235,7 +238,7 @@ const TextView = extend(View)(
             },
             enumerable: true
         });
-        
+
         Object.defineProperty(self, 'scrollEnabled', {
             get: function() {
                 return self.nativeObject.valueForKey("scrollEnabled");
@@ -263,8 +266,7 @@ const TextView = extend(View)(
             get: function() {
                 if (self.nativeObject.textContainer.maximumNumberOfLines === 0 && self.nativeObject.textContainer.lineBreakMode === 0) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
             },
@@ -272,8 +274,7 @@ const TextView = extend(View)(
                 if (value) {
                     self.nativeObject.textContainer.maximumNumberOfLines = 0;
                     self.nativeObject.textContainer.lineBreakMode = 0;
-                }
-                else {
+                } else {
                     self.nativeObject.textContainer.maximumNumberOfLines = 1;
                     self.nativeObject.textContainer.lineBreakMode = 4;
                 }

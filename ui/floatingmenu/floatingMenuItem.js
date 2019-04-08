@@ -6,7 +6,7 @@ function FloatingMenuItem(params) {
     var _icon;
     var _color = Color.WHITE;
     var _callbackClick;
-    
+
     Object.defineProperties(this, {
         'title': {
             get: function() {
@@ -28,7 +28,7 @@ function FloatingMenuItem(params) {
                 }
             }
         },
-        'icon':{
+        'icon': {
             get: function() {
                 return _icon;
             },
@@ -61,7 +61,7 @@ function FloatingMenuItem(params) {
             }
         }
     });
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {

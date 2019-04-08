@@ -5,28 +5,28 @@ var Path = {};
 Path.android = {};
 
 Object.defineProperty(Path.android, 'storages', {
-    get: function(){},
+    get: function() {},
     enumerable: true
 });
 
 Object.defineProperties(Path, {
     'ImagesUriScheme': {
-        get: function(){
+        get: function() {
             return 'images://';
         },
     },
     'AssetsUriScheme': {
-        get: function(){
+        get: function() {
             return 'assets://';
         },
     },
     'Separator': {
-        get: function(){
+        get: function() {
             return '/';
         },
     },
     'DataDirectory': {
-        get: function(){
+        get: function() {
             return File.getDocumentsDirectory();
         },
     }

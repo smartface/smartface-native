@@ -349,7 +349,7 @@ ListView.prototype.restoreInstanceState = function(state) {};
  * @ios
  * @since 0.1
  */
-ListView.prototype.scrollTo = function(index,animated){};
+ListView.prototype.scrollTo = function(index, animated) {};
 
 /**
  * Sets/Gets the bounce effect when scrolling.
@@ -506,7 +506,10 @@ ListView.prototype.ios.onRowSwiped = function(swipeDirection, expansionSettings,
  * @ios
  * @since 3.0.2
  */
-ListView.prototype.contentInset = { top: 0, bottom: 0 };
+ListView.prototype.contentInset = {
+    top: 0,
+    bottom: 0
+};
 
 
 /**

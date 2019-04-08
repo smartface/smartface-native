@@ -26,7 +26,7 @@ function WebBrowser(params) {}
  * @ios
  * @since 2.0.11
  */
-WebBrowser.show = function(page,options) {};
+WebBrowser.show = function(page, options) {};
 
 /**
  * @class UI.WebBrowser.Options

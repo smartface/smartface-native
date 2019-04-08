@@ -150,7 +150,7 @@ WebView.prototype.zoomEnabled = true;
  * @ios
  * @since 0.1
  */
-WebView.prototype.loadURL =  function(url) {};
+WebView.prototype.loadURL = function(url) {};
 
 /**
  * Loads the web page provided via html code.
@@ -209,7 +209,7 @@ WebView.prototype.loadFile = function(file) {};
  * @ios
  * @since 0.1
  */
-WebView.prototype.evaluateJS = function(javascript,onReceive) {};
+WebView.prototype.evaluateJS = function(javascript, onReceive) {};
 
 /**
  * Callback triggered when the url is changed. If it returns false, cannot navigate to the url.
@@ -233,7 +233,7 @@ WebView.prototype.onChangedURL = function(event) {};
  * @android
  * @since 3.2.1
  */
-WebView.prototype.onBackButtonPressed = function (){};
+WebView.prototype.onBackButtonPressed = function() {};
 
 /**
  * Callback triggered when the web page is loaded.

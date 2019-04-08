@@ -1,12 +1,12 @@
 /**
-* @enum {Number} UI.Android.TextDirection
-* @static
-* @readonly
-* @since 4.0.2
-*
-* These enums are indicates the direction of text.
-*
-*/
+ * @enum {Number} UI.Android.TextDirection
+ * @static
+ * @readonly
+ * @since 4.0.2
+ *
+ * These enums are indicates the direction of text.
+ *
+ */
 const TextDirection = {};
 
 /**

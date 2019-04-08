@@ -77,8 +77,7 @@ function http(params) {
             _cookiePersistenceEnabled = value;
             if (_cookiePersistenceEnabled) {
                 self.clientBuilder.cookieJar(createCookieJar());
-            }
-            else {
+            } else {
                 const NativeCookieJar = requireClass("okhttp3.CookieJar");
                 self.clientBuilder.cookieJar(NativeCookieJar.NO_COOKIES);
             }
@@ -100,9 +99,9 @@ function http(params) {
 }
 
 http.__cancelAll = function() {
-    for(let i = 0; i < _instanceCollection.length; i++) {
+    for (let i = 0; i < _instanceCollection.length; i++) {
         _instanceCollection[i].cancelAll();
-    }  
+    }
 };
 
 http.prototype.cancelAll = function() {
@@ -171,7 +170,9 @@ http.prototype.requestFile = function(params) {
             path = cacheDir + IO.Path.Separator + params.fileName;
         else
             path = cacheDir + params.url.substring(params.url.lastIndexOf('/'));
-        var file = new IO.File({ path: path });
+        var file = new IO.File({
+            path: path
+        });
         if (e && e.body) {
             var stream = file.openStream(IO.FileStream.StreamType.WRITE, IO.FileStream.ContentMode.BINARY);
             stream.write(e.body);
@@ -187,7 +188,9 @@ http.prototype.requestFile = function(params) {
 
 http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) {
     if (!checkInternet()) {
-        params && typeof params.onError === "function" && runOnUiThread(params.onError, { message: "No network connection" });
+        params && typeof params.onError === "function" && runOnUiThread(params.onError, {
+            message: "No network connection"
+        });
         return;
     }
 
@@ -196,7 +199,9 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
         onFailure: function(call, e) {
             if (e)
                 var message = e.getMessage();
-            params && typeof params.onError === "function" && runOnUiThread(params.onError, { message: message });
+            params && typeof params.onError === "function" && runOnUiThread(params.onError, {
+                message: message
+            });
         },
         onResponse: function(call, response) {
             var statusCode = response.code();
@@ -204,7 +209,9 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
 
             if (statusCode != 304 && response.body()) {
                 var bytes = response.body().bytes();
-                var responseBody = new Blob(bytes, { type: {} });
+                var responseBody = new Blob(bytes, {
+                    type: {}
+                });
             }
 
             if (response.isSuccessful()) {
@@ -215,8 +222,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                             headers: responseHeaders,
                             body: responseBody
                         });
-                    }
-                    else {
+                    } else {
                         runOnUiThread(params.onLoad, {
                             statusCode: statusCode,
                             headers: responseHeaders,
@@ -224,8 +230,7 @@ http.prototype.request = function(params, isMultipart, isRunOnBackgroundThread) 
                         });
                     }
                 }
-            }
-            else {
+            } else {
                 params && typeof params.onError === "function" && runOnUiThread(
                     params.onError, {
                         statusCode: statusCode,
@@ -271,8 +276,7 @@ function createRequest(params, isMultipart, httpManagerHeaders) {
     if (params.method) {
         if (params.method in WITHOUT_BODY_METHODS) {
             builder = builder.method(params.method, null);
-        }
-        else {
+        } else {
             var body = createRequestBody(params.body, contentType, isMultipart);
             builder = builder.method(params.method, body);
         }
@@ -294,8 +298,7 @@ function createRequestBody(body, contentType, isMultipart) {
         else if (typeof(body) === "string")
             content = body;
         return RequestBody.create(mediaType, content);
-    }
-    else {
+    } else {
         return createMultipartBody(body);
     }
 }

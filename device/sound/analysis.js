@@ -82,7 +82,7 @@ Sound.prototype.currentDuration;
  * @ios
  * @since 0.1
  */
-Sound.prototype.loadFile = function(file){};
+Sound.prototype.loadFile = function(file) {};
 
 /**
  * Loads the source.
@@ -93,7 +93,7 @@ Sound.prototype.loadFile = function(file){};
  * @ios
  * @since 0.1
  */
-Sound.prototype.loadURL = function(url){};
+Sound.prototype.loadURL = function(url) {};
 
 /**
  * Seeks to specified time position.
@@ -104,7 +104,7 @@ Sound.prototype.loadURL = function(url){};
  * @ios
  * @since 0.1
  */
-Sound.prototype.seekTo = function(milliseconds){};
+Sound.prototype.seekTo = function(milliseconds) {};
 
 /**
  * plays the sound.
@@ -114,7 +114,7 @@ Sound.prototype.seekTo = function(milliseconds){};
  * @ios
  * @since 0.1
  */
-Sound.prototype.play = function(){};
+Sound.prototype.play = function() {};
 
 /**
  * Pauses the sound.
@@ -124,7 +124,7 @@ Sound.prototype.play = function(){};
  * @ios
  * @since 0.1
  */
-Sound.prototype.pause = function(){};
+Sound.prototype.pause = function() {};
 
 /**
  * Stops the sound.
@@ -134,7 +134,7 @@ Sound.prototype.pause = function(){};
  * @ios
  * @since 0.1
  */
-Sound.prototype.stop = function(){};
+Sound.prototype.stop = function() {};
 
 /**
  * Triggered when the sound is ready for playing.
@@ -144,7 +144,7 @@ Sound.prototype.stop = function(){};
  * @ios
  * @event onReady
  */
-Sound.prototype.onReady = function onReady(){ };
+Sound.prototype.onReady = function onReady() {};
 
 /**
  * 
@@ -155,7 +155,7 @@ Sound.prototype.onReady = function onReady(){ };
  * @ios
  * @since 0.1
  */
-Sound.prototype.onFinish = function onFinish(e){ };
+Sound.prototype.onFinish = function onFinish(e) {};
 
 Sound.android = {};
 

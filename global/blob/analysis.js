@@ -1,4 +1,3 @@
-
 /**
  * @class Blob
  * @since 0.1
@@ -11,7 +10,7 @@
  *     var blob = Blob.createFromBase64(myBase64Str);
  */
 function Blob(parts, properties) {}
-    
+
 /**
  * Returns the type of Blob data.
  *
@@ -63,7 +62,7 @@ Blob.prototype.toString = function() {};
  * @static
  * @since 0.1
  */
-Blob.createFromBase64 = function(base64) { };
+Blob.createFromBase64 = function(base64) {};
 
 /**
  * Creates a blob object from given a utf8 string.
@@ -74,6 +73,6 @@ Blob.createFromBase64 = function(base64) { };
  * @static
  * @since 0.1
  */
-Blob.createFromUTF8String = function(utf8String) { };
+Blob.createFromUTF8String = function(utf8String) {};
 
 module.exports = Blob;

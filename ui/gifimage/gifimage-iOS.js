@@ -8,8 +8,8 @@ function GifImage(params) {
     var self = this;
     self.ios = {};
     self.android = {};
-    self.android.reset = function(){};
-    
+    self.android.reset = function() {};
+
     self.nativeObject = params.nativeObject;
 
     Object.defineProperty(self, 'loopCount', {
@@ -88,20 +88,23 @@ GifImage.createFromFile = function(pathOrFile) {
         file = new File({
             path: pathOrFile
         });
-    }
-    else {
+    } else {
         file = pathOrFile
     }
 
     var fileStream = file.openStream(FileStream.StreamType.READ, FileStream.ContentMode.BINARY);
     var blob = fileStream.readToEnd();
     var nativeObject = __SF_FLAnimatedImage.animatedImageWithGIFData(blob.nativeObject);
-    return new GifImage({ "nativeObject": nativeObject });
+    return new GifImage({
+        "nativeObject": nativeObject
+    });
 };
 
 GifImage.createFromBlob = function(blob) {
     var nativeObject = __SF_FLAnimatedImage.animatedImageWithGIFData(blob.nativeObject);
-    return new GifImage({ "nativeObject": nativeObject });
+    return new GifImage({
+        "nativeObject": nativeObject
+    });
 };
 
 module.exports = GifImage;

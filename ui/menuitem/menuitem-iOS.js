@@ -1,6 +1,6 @@
 function MenuItem(params) {
     var self = this;
-    
+
     var _title = "";
     Object.defineProperty(this, 'title', {
         get: function() {
@@ -11,16 +11,16 @@ function MenuItem(params) {
         },
         enumerable: true
     });
-    
-    self.onSelectedListener = function(){
+
+    self.onSelectedListener = function() {
         self.onSelected();
     }
-    self.onSelected = function(){}
-    
+    self.onSelected = function() {}
+
     self.ios = {};
 
     self.android = {};
-    
+
     var _style = 0;
     Object.defineProperty(self.ios, 'style', {
         get: function() {
@@ -31,7 +31,7 @@ function MenuItem(params) {
         },
         enumerable: true
     });
-    
+
     // Assign parameters given in constructor
     if (params) {
         for (var param in params) {
@@ -40,17 +40,17 @@ function MenuItem(params) {
     }
 };
 
-Object.defineProperty(MenuItem, "android",{
+Object.defineProperty(MenuItem, "android", {
     value: {},
     enumerable: true
 });
 
-Object.defineProperty(MenuItem, "ios",{
+Object.defineProperty(MenuItem, "ios", {
     value: {},
     enumerable: true
 });
 
-Object.defineProperty(MenuItem.ios, "Style",{
+Object.defineProperty(MenuItem.ios, "Style", {
     value: {},
     enumerable: true
 });

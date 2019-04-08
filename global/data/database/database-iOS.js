@@ -7,8 +7,7 @@ function Database(params) {
     if (!self.nativeObject) {
         if (params.inMemory) {
             self.nativeObject = new __SF_Database(":memory:");
-        }
-        else {
+        } else {
             self.nativeObject = new __SF_Database(params.file.nativeObject.getActualPath());
         }
     }
@@ -50,8 +49,7 @@ Database.QueryResult = function(params) {
     self.count = function() {
         if (self.data && self.data.dataArray) {
             return self.data.dataArray.length;
-        }
-        else {
+        } else {
             return null;
         }
     };
@@ -118,8 +116,7 @@ Database.DatabaseObject = function(params) {
                 return self.data[index];
             }
             return null;
-        }
-        else {
+        } else {
             throw new Error("Parameter mismatch. Parameter must be String");
         }
     };
