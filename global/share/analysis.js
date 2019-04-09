@@ -78,12 +78,13 @@ Share.shareFile = function(file, page, blacklist) {};
  *     const Share = require('sf-core/share');
  *     const File = require('sf-core/io/file');
  *    
+ *     var myPage = this; // in page scope
  *     var file = new File({
  *         path: 'assets://yourFile.pdf'
  *     });
  *     var image = Image.createFromFile("images://smartface.png");
  *     var text = "Hello from Smartface";
- *     Share.share({ items: [text, file, image] , myPage, []});
+ *     Share.share({ items: [text, file, image] , page: myPage, blacklist = []});
  *
  * @method share
  * @param {Object} params
