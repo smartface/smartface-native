@@ -19,7 +19,7 @@ const Share = {};
  * @method shareText
  * @param {String} text
  * @param {UI.Page} page
- * @param {Array} blacklist
+ * @param {Array} [blacklist]
  * @ios
  * @android
  * @since 0.1
@@ -40,7 +40,7 @@ Share.shareText = function(text, page, blacklist) {};
  * @method shareImage
  * @param {UI.Image} image
  * @param {UI.Page} page
- * @param {Array} blacklist
+ * @param {Array} [blacklist]
  * @android
  * @ios
  * @since 0.1
@@ -61,7 +61,7 @@ Share.shareImage = function(image, page, blacklist) {};
  * @method shareFile
  * @param {IO.File} file
  * @param {UI.Page} page
- * @param {Array} blacklist
+ * @param {Array} [blacklist]
  * @ios
  * @android
  * @since 0.1
@@ -84,13 +84,13 @@ Share.shareFile = function(file, page, blacklist) {};
  *     });
  *     var image = Image.createFromFile("images://smartface.png");
  *     var text = "Hello from Smartface";
- *     Share.share({ items: [text, file, image] , page: myPage, blacklist: []});
+ *     Share.share({ items: [text, file, image] , page: myPage, blacklist: [Share.ios.Twitter, Share.ios.Facebook]});
  *
  * @method share
  * @param {Object} params
  * @param {Array} params.items 
  * @param {UI.Page} params.page
- * @param {Array} params.blacklist
+ * @param {Array} [params.blacklist]
  * @ios
  * @android
  * @since 4.0.2
