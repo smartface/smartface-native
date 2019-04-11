@@ -99,6 +99,9 @@ const ViewGroup = extend(View)(
                 this[param] = params[param];
             }
         }
+
+        //Android spec methods
+        self.android.requestDisallowInterceptTouchEvent = () => {};
     }
 );
 

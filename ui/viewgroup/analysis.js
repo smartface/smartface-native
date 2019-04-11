@@ -75,7 +75,7 @@ ViewGroup.prototype.getChildList = function() {};
  * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
  * 
  * @method requestDisallowInterceptTouchEvent
- * @param {Boolean}
+ * @param {Boolean} disallow
  * @android
  * @since 4.0.3
  */
