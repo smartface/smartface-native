@@ -71,6 +71,17 @@ ViewGroup.prototype.getChildCount = function() {};
 ViewGroup.prototype.getChildList = function() {};
 
 /**
+ * Called when a child does not want this parent and its ancestors to intercept touch events .
+ * This parent should pass this call onto its parents. This parent must obey this request for the duration of the touch
+ * 
+ * @method requestDisallowInterceptTouchEvent
+ * @param {Boolean} disallow
+ * @android
+ * @since 4.0.3
+ */
+ViewGroup.prototype.requestDisallowInterceptTouchEvent = function(disallow) {};
+
+/**
  * Finds a child view with specified id within the layout.
  *
  *     @example
