@@ -175,18 +175,6 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
-            /* 
-            ToDo: There are a few known bugs which comes in front when ListView's items are big.
-            */
-            'contentOffset': {
-                get: function() {
-                    return {
-                        x: AndroidUnitConverter.pixelToDp(self.nativeInner.computeHorizontalScrollOffset()),
-                        y: AndroidUnitConverter.pixelToDp(self.nativeInner.computeVerticalScrollOffset())
-                    };
-                },
-                enumerable: true
-            },
             'verticalScrollBarEnabled': {
                 get: function() {
                     return this.nativeInner.isVerticalScrollBarEnabled();
