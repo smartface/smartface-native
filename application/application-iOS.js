@@ -207,6 +207,28 @@ Object.defineProperty(SFApplication, 'onApplicationCallReceived', {
     enumerable: true
 });
 
+Application.onMaximize = function(){};
+Object.defineProperty(SFApplication, 'onMaximize', {
+    set:function(value){
+        Application.onMaximize = value;
+    },
+    get: function() {
+        return Application.onMaximize;
+    },
+    enumerable: true
+});
+
+Application.onMinimize = function(){};
+Object.defineProperty(SFApplication, 'onMinimize', {
+    set:function(value){
+        Application.onMinimize = value;
+    },
+    get: function() {
+        return Application.onMinimize;
+    },
+    enumerable: true
+});
+
 Object.defineProperty(SFApplication, 'currentReleaseChannel', {
     get: function(){
         return Application.currentReleaseChannel;
