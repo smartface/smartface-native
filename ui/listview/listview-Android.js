@@ -36,7 +36,8 @@ const ListView = extend(View)(
             if (NativeR.style.ScrollBarRecyclerView) {
                 var themeWrapper = new NativeContextThemeWrapper(AndroidConfig.activity, NativeR.style.ScrollBarRecyclerView);
                 this.nativeInner = new NativeSFRecyclerView(themeWrapper, _callbacks);
-            } else {
+            }
+            else {
                 this.nativeInner = new NativeSFRecyclerView(AndroidConfig.activity, _callbacks);
             }
             this.nativeInner.setHasFixedSize(true);
@@ -66,7 +67,8 @@ const ListView = extend(View)(
                     if (!holderViewLayout || !holderViewLayout.nativeInner) {
                         throw new Error("onRowCreate must be return an instanceof UI.ListViewItem");
                     }
-                } catch (e) {
+                }
+                catch (e) {
                     const Application = require("../../application");
                     Application.onUnhandledError && Application.onUnhandledError(e);
                     holderViewLayout = new ListViewItem();
@@ -86,7 +88,8 @@ const ListView = extend(View)(
                 if (!self.rowHeight && _onRowHeight) {
                     var rowHeight = _onRowHeight(position);
                     _holderViewLayout.height = rowHeight;
-                } else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
+                }
+                else if (!_onRowHeight && self.rowHeight && self.rowHeight != _holderViewLayout.height) {
                     _holderViewLayout.height = self.rowHeight;
                 }
 
@@ -115,10 +118,7 @@ const ListView = extend(View)(
         };
         var dataAdapter = new SFRecyclerViewAdapter(callbacks);
 
-        var _onScroll, _contentOffset = {
-                x: 0,
-                y: 0
-            },
+        var _onScroll,
             _rowHeight, _onRowCreate, _onRowSelected, _onRowLongSelected,
             _onPullRefresh, _onRowHeight, _onRowBind, _onRowType, _itemCount = 0,
             _contentInset = {},
@@ -175,18 +175,6 @@ const ListView = extend(View)(
                 },
                 enumerable: true
             },
-            /* 
-            ToDo: Removing onScroll listener makes contentOffset null.
-            */
-            'contentOffset': {
-                get: function() {
-                    return {
-                        x: AndroidUnitConverter.pixelToDp(_contentOffset.x),
-                        y: AndroidUnitConverter.pixelToDp(_contentOffset.y)
-                    };
-                },
-                enumerable: true
-            },
             'verticalScrollBarEnabled': {
                 get: function() {
                     return this.nativeInner.isVerticalScrollBarEnabled();
@@ -226,7 +214,8 @@ const ListView = extend(View)(
                 value: function(index, animate) {
                     if ((typeof(animate) === "undefined") || animate) {
                         this.nativeInner.smoothScrollToPosition(index);
-                    } else {
+                    }
+                    else {
                         this.nativeInner.scrollToPosition(index);
                     }
                 },
@@ -337,7 +326,8 @@ const ListView = extend(View)(
                     if (onScroll) {
                         self.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    } else if (!_onScrollStateChanged) {
+                    }
+                    else if (!_onScrollStateChanged) {
                         self.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -380,7 +370,8 @@ const ListView = extend(View)(
                     if (onScrollStateChanged) {
                         self.nativeInner.setOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = true;
-                    } else if (!_onScroll) {
+                    }
+                    else if (!_onScroll) {
                         self.nativeInner.removeOnScrollListener(scrollListenerObject);
                         isScrollListenerAdded = false;
                     }
@@ -435,23 +426,20 @@ const ListView = extend(View)(
                     if (!self.touchEnabled) {
                         return;
                     }
-                    //ToDo: Duplication is done here because of unexpected calculation of pixelToDp. Check it. 
+                    //Remove  due to the incorrect onScrolled's return parameter. Such as scrollTo(0) causes it to return fault dx & dy parameters.
                     var dY = AndroidUnitConverter.pixelToDp(dy);
                     var dX = AndroidUnitConverter.pixelToDp(dx);
-                    _contentOffset.x += dx;
-                    _contentOffset.y += dy;
+                    // _contentOffset.x += dx;
+                    // _contentOffset.y += dy;
 
-                    var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
-                    var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
+                    // var offsetX = AndroidUnitConverter.pixelToDp(_contentOffset.x);
+                    // var offsetY = AndroidUnitConverter.pixelToDp(_contentOffset.y);
                     _onScroll && _onScroll({
                         translation: {
                             x: dX,
                             y: dY
                         },
-                        contentOffset: {
-                            x: offsetX,
-                            y: offsetY
-                        }
+                        contentOffset: self.contentOffset
                     });
                 },
                 onScrollStateChanged: function(newState) {

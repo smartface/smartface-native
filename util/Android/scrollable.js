@@ -1,6 +1,7 @@
 /* globals requireClass */
 const NativeRecyclerView = requireClass("android.support.v7.widget.RecyclerView");
 const NativeSwipeRefreshLayout = requireClass("android.support.v4.widget.SwipeRefreshLayout");
+const AndroidUnitConverter = require("../../util/Android/unitconverter");
 
 function Scrollable(childJsClass, nativeScrollableObject) {
     var self = childJsClass;
@@ -27,6 +28,21 @@ function Scrollable(childJsClass, nativeScrollableObject) {
     if (!self.__isRecyclerView)
         return;
 
+    Object.defineProperties(self, {
+        /* 
+         ToDo: There are a few known bugs which comes in front when ListView's items are big.
+        */
+        'contentOffset': {
+            get: function() {
+                return {
+                    x: AndroidUnitConverter.pixelToDp(self.nativeInner.computeHorizontalScrollOffset()),
+                    y: AndroidUnitConverter.pixelToDp(self.nativeInner.computeVerticalScrollOffset())
+                };
+            },
+            enumerable: true
+        }
+    });
+
     let _onAttachedToWindow, _onDetachedFromWindow;
     Object.defineProperties(self.android, {
         'onGesture': {
@@ -46,7 +62,8 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                             return !!returnValue;
                         }
                     });
-                } else {
+                }
+                else {
                     self.nativeInner.setJsCallbacks(null);
                 }
             },
