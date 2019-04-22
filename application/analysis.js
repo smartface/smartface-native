@@ -176,45 +176,62 @@ Application.ios.canOpenUrl = function(url) {};
  * 
  *     @example
  *     // Calling application's Google Play Store page. Will work only for iOS
- *     Application.call("market://details",{
- *         'id': Application.android.packageName
+ *     Application.call({
+ *         uriScheme: "market://details",
+ *         data: {
+ *             'id': Application.android.packageName
+ *         }
  *     });
  *     // Open caller app with phone number.
- *     Application.call("tel:+901234567890",{});
+ *     Application.call({ uriScheme: "tel:+901234567890", data: {} });
  *     // Call another application with its own url schema.
- *     Application.call("mySchema://",{
- *         key: encodeURIComponent("Smartace Encoded Data")     
- *     },function(){
- *         alert("Application call completed")
- *     },function(){
- *         alert("Application call failed")
+ *     Application.call({
+ *         uriScheme: "mySchema://",
+ *         data: {
+ *             key: encodeURIComponent("Smartace Encoded Data")
+ *         },
+ *         onSuccess: function() {
+ *             alert("Application call completed")
+ *         },
+ *         onFailure: function() {
+ *             alert("Application call failed")
+ *         }
  *     });
  *     // Call another application with package name and activity name. Works only for Android.
- *     Application.call("io.smartface.SmartfaceApp|io.smartface.SmartfaceApp.A",{});
+ *     Application.call({ uriScheme: "io.smartface.SmartfaceDev|io.smartface.SmartfaceDev.A", data: {} });
  *     // Call Smartface Emulator with url schema.
- *     Application.call("smartface-emulator://",{});
+ *     Application.call({ uriScheme: "smartface-emulator://", data : {} });
  *     // Open Youtube with Chooser for Android
- *     Application.call("https://www.youtube.com/watch?v=VMLU9mfzHYI",{},function(){
- *         alert("Application call completed")
- *     },function(){
- *         alert("Application call failed")
- *     },true,"Select an Application");
+ *     Application.call({
+ *         uriScheme: "https://www.youtube.com/watch?v=VMLU9mfzHYI",
+ *         data: {},
+ *         onSuccess: function() {
+ *             alert("Application call completed")
+ *         },
+ *         onFailure: function() {
+ *             alert("Application call failed")
+ *         },
+ *         isShowChooser: true,
+ *         chooserTitle: "Select an Application"
+ *     });
  * 
  *
  * @method call
- * @param {String} uriScheme
- * @param {Object} data parameter should be url encoded if necessary.
- * @param {Function} onSuccess Added in 1.1.13.
- * @param {Function} onFailure Added in 1.1.13.
- * @param {Boolean} isShowChooser Added in 1.1.13.
- * @param {String} chooserTitle Added in 1.1.13.
+ * @param {Object} params
+ * @param {String} params.uriScheme
+ * @param {Object} params.data parameter should be url encoded if necessary.
+ * @param {Function} params.onSuccess Added in 1.1.13.
+ * @param {Function} params.onFailure Added in 1.1.13.
+ * @param {Boolean} params.isShowChooser Added in 1.1.13.
+ * @param {String} params.chooserTitle Added in 1.1.13.
+ * @param {String} params.action Added in 4.0.3.
  * @readonly
  * @android
  * @ios
  * @static
  * @since 0.1
  */
-Application.call = function(uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle) {};
+Application.call = function(params) {};
 
 /**
  * Exists the application.

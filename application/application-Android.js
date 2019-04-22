@@ -138,7 +138,7 @@ Object.defineProperties(ApplicationWrapper, {
         /* ToDo : Multiple parameter is deprected.*/
         value: function() {
             if (arguments.length === 1 && (typeof arguments[0] === "object"))
-                var { uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, android: { action = ACTION_VIEW } = {} } = arguments[0];
+                var { uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW } = arguments[0];
             else
                 var [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
 
@@ -167,12 +167,12 @@ Object.defineProperties(ApplicationWrapper, {
                 }
             }
             else {
-                if (uriScheme.indexOf("|") !== -1) 
+                if (uriScheme.indexOf("|") !== -1)
                     configureIntent.call(this, uriScheme);
-                else 
+                else
                     uriObject = NativeUri.parse(uriScheme);
             }
-           uriObject && intent.setData(uriObject);
+            uriObject && intent.setData(uriObject);
 
             let packageManager = activity.getPackageManager();
             let activitiesCanHandle = packageManager.queryIntentActivities(intent, 0);
