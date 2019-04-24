@@ -224,7 +224,7 @@ Application.ios.canOpenUrl = function(url) {};
  * @param {Function} params.onFailure Added in 1.1.13.
  * @param {Boolean} params.isShowChooser Added in 1.1.13.
  * @param {String} params.chooserTitle Added in 1.1.13.
- * @param {String} params.action {@link https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW android.intent.action.VIEW} Added in 4.0.3.
+ * @param {String} params.action  Such as <a href="https://developer.android.com/reference/android/content/Intent.html#ACTION_VIEW">android.intent.action.VIEW</a>
  * @readonly
  * @android 
  * @ios
