@@ -38,6 +38,8 @@ const TextView = extend(Label)(
             _lineSpacing = 0,
             _scrollEnabled = true,
             _htmlText;
+        //By hardcoded multiline should be false bcz defauls are already given by style
+        self._multiline = false;
 
         Object.defineProperties(self, {
             'htmlText': {
@@ -59,6 +61,7 @@ const TextView = extend(Label)(
                     return this.nativeObject.getMaxLines() !== 1;
                 },
                 set: function(multiline) {
+                    self._multiline = multiline;
                     this.nativeObject.setSingleLine(!multiline);
                     this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
                     self.scrollEnabled = _scrollEnabled;
@@ -111,7 +114,7 @@ const TextView = extend(Label)(
                     //Sets the given line space
                     this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
-                    this.nativeObject.setSingleLine(false);
+                    self.multiline = self._multiline;
                     self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
                 },
@@ -191,7 +194,8 @@ const TextView = extend(Label)(
                 set: function(textAlignment) {
                     if (textAlignment in TextAlignmentDic) {
                         this._textAlignment = textAlignment;
-                    } else {
+                    }
+                    else {
                         this._textAlignment = this.viewNativeDefaultTextAlignment;
                     }
                     this.nativeObject.setGravity(TextAlignmentDic[this._textAlignment]);
@@ -227,13 +231,15 @@ function enableScrollable(scrollEnabled) {
             const NativeLinkMovementMethod = requireClass("android.text.method.LinkMovementMethod");
             self.nativeObject.setMovementMethod(NativeLinkMovementMethod.getInstance());
             self.linkMovementMethodCreated = true;
-        } else {
+        }
+        else {
             if (self.scrollableMovementMethodCreated) return;
             const NativeScrollingMovementMethod = requireClass("android.text.method.ScrollingMovementMethod");
             self.nativeObject.setMovementMethod(NativeScrollingMovementMethod.getInstance());
             self.scrollableMovementMethodCreated = true;
         }
-    } else {
+    }
+    else {
         self.linkMovementMethodCreated = self.scrollableMovementMethodCreated = false;
         self.nativeObject.setMovementMethod(null);
     }
