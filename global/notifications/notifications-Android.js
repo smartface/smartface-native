@@ -341,11 +341,11 @@ function getNewNotificationId() {
 function unregisterPushNotification() {
     // Implemented due to COR-1281
     if (TypeUtil.isString(senderID) && senderID !== "") {
-        const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
-        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
+        const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+        NativeFCMRegisterUtil.unregisterPushNotification(AndroidConfig.activity);
         if (notificationListener) {
-            NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
+            NativeFCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
     } else {
         throw Error("Not registered to push notification.");
@@ -358,11 +358,11 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
         readSenderIDFromProjectJson();
     }
     if (TypeUtil.isString(senderID) && senderID !== '') {
-        const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-        NativeGCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
+        const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+        NativeFCMRegisterUtil.registerPushNotification(senderID, AndroidConfig.activity, {
             onSuccess: function(token) {
-                const NativeGCMListenerService = requireClass('io.smartface.android.notifications.GCMListenerService');
-                NativeGCMListenerService.registerRemoteNotificationListener(notificationListener);
+                const NativeFCMListenerService = requireClass('io.smartface.android.notifications.FCMListenerService');
+                NativeFCMListenerService.registerRemoteNotificationListener(notificationListener);
                 onSuccessCallback && onSuccessCallback({
                     'token': token
                 });
@@ -377,9 +377,9 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
 }
 
 function readSenderIDFromProjectJson() {
-    // get from GCMRegisterUtil due to the project.json encryption
-    const NativeGCMRegisterUtil = requireClass('io.smartface.android.utils.GCMRegisterUtil');
-    senderID = NativeGCMRegisterUtil.getSenderID();
+    // get from FCMRegisterUtil due to the project.json encryption
+    const NativeFCMRegisterUtil = requireClass('io.smartface.android.utils.FCMRegisterUtil');
+    senderID = NativeFCMRegisterUtil.getSenderID();
 }
 
 function startNotificationIntent(self, params) {
