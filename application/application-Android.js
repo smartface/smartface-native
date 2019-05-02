@@ -82,8 +82,7 @@ Object.defineProperties(ApplicationWrapper, {
 
                 _sliderDrawer = drawer;
                 attachSliderDrawer(_sliderDrawer);
-            }
-            else {
+            } else {
                 throw TypeError("Object must be SliderDrawer instance");
             }
         },
@@ -138,7 +137,15 @@ Object.defineProperties(ApplicationWrapper, {
         /* ToDo : Multiple parameter is deprected.*/
         value: function() {
             if (arguments.length === 1 && (typeof arguments[0] === "object"))
-                var { uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW } = arguments[0];
+                var {
+                    uriScheme,
+                    data,
+                    onSuccess,
+                    onFailure,
+                    isShowChooser,
+                    chooserTitle,
+                    action = ACTION_VIEW
+                } = arguments[0];
             else
                 var [uriScheme, data, onSuccess, onFailure, isShowChooser, chooserTitle, action = ACTION_VIEW] = arguments;
 
@@ -160,13 +167,11 @@ Object.defineProperties(ApplicationWrapper, {
                 if (uriScheme.indexOf("|") !== -1) {
                     configureIntent.call(this, uriScheme);
                     uriObject = NativeUri.parse(params);
-                }
-                else {
+                } else {
                     let uri = uriScheme + "?" + params;
                     uriObject = NativeUri.parse(uri);
                 }
-            }
-            else {
+            } else {
                 if (uriScheme.indexOf("|") !== -1)
                     configureIntent.call(this, uriScheme);
                 else
@@ -182,17 +187,14 @@ Object.defineProperties(ApplicationWrapper, {
                     let chooserIntent = NativeIntent.createChooser(intent, title);
                     try {
                         activity.startActivity(chooserIntent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
-                }
-                else {
+                } else {
                     try {
                         activity.startActivity(intent); // Due to the AND-3202: we have changed startActivityForResult
-                    }
-                    catch (e) {
+                    } catch (e) {
                         onFailure && onFailure();
                         return;
                     }
@@ -410,8 +412,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                 // PackageManager.PERMISSION_GRANTED
                 const NativeContextCompat = requireClass('android.support.v4.content.ContextCompat');
                 return NativeContextCompat.checkSelfPermission(activity, permission) === 0;
-            }
-            else {
+            } else {
                 var packageManager = activity.getPackageManager();
                 // PackageManager.PERMISSION_GRANTED
                 return packageManager.checkPermission(permission, ApplicationWrapper.android.packageName) == 0;
@@ -431,8 +432,7 @@ Object.defineProperties(ApplicationWrapper.android, {
                     requestCode: requestCode,
                     result: ApplicationWrapper.android.checkPermission(permissions)
                 });
-            }
-            else {
+            } else {
                 activity.requestPermissions(array([permissions], "java.lang.String"), requestCode);
             }
 

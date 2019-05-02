@@ -42,8 +42,7 @@ const ScrollView = extend(ViewGroup)(
                     }
                 };
                 this.nativeObject = new NativeHorizontalScroll(activity, callback);
-            }
-            else {
+            } else {
                 const NativeVerticalScroll = requireClass('io.smartface.android.sfcore.SFScrollView');
                 callback = {
                     onScrollChanged: function(xObj, yObj, oldx, oldy) {
@@ -232,8 +231,7 @@ function calculateScrollViewSize(scrollView) {
                 layoutHeight = measuredHeight;
         }
         scrollView.layout.height = layoutHeight;
-    }
-    else {
+    } else {
         var layoutWidth = scrollView.width;
         for (i = 0; i < arrayLenght; i++) {
             var viewX = AndroidUnitConverter.pixelToDp(childViews[keys[i]].nativeObject.getX());
