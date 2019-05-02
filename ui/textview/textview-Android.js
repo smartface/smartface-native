@@ -38,8 +38,7 @@ const TextView = extend(Label)(
             _lineSpacing = 0,
             _scrollEnabled = true,
             _htmlText;
-        //By hardcoded multiline should be false bcz defauls are already given by style
-        self._multiline = false;
+        var _multiline = false;
 
         Object.defineProperties(self, {
             'htmlText': {
@@ -61,7 +60,7 @@ const TextView = extend(Label)(
                     return this.nativeObject.getMaxLines() !== 1;
                 },
                 set: function(multiline) {
-                    self._multiline = multiline;
+                    _multiline = multiline;
                     this.nativeObject.setSingleLine(!multiline);
                     this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
                     self.scrollEnabled = _scrollEnabled;
@@ -114,7 +113,7 @@ const TextView = extend(Label)(
                     //Sets the given line space
                     this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
-                    self.multiline = self._multiline;
+                    self.multiline = _multiline;
                     self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
                 },
