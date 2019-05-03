@@ -38,7 +38,6 @@ const TextView = extend(Label)(
             _lineSpacing = 0,
             _scrollEnabled = true,
             _htmlText;
-        var _multiline = false;
 
         Object.defineProperties(self, {
             'htmlText': {
@@ -60,7 +59,6 @@ const TextView = extend(Label)(
                     return this.nativeObject.getMaxLines() !== 1;
                 },
                 set: function(multiline) {
-                    _multiline = multiline;
                     this.nativeObject.setSingleLine(!multiline);
                     this.nativeObject.setMaxLines(multiline ? MAX_VALUE : 1);
                     self.scrollEnabled = _scrollEnabled;
