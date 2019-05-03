@@ -113,7 +113,7 @@ const TextView = extend(Label)(
                     //Sets the given line space
                     this.lineSpacing = _lineSpacing;
                     this.nativeObject.setText(_attributedStringBuilder);
-                    self.multiline = _multiline;
+                    self.multiline = self.multiline;
                     self.scrollEnabled = _scrollEnabled;
                     this.nativeObject.setHighlightColor(0); //TRANSPARENT COLOR
                 },
