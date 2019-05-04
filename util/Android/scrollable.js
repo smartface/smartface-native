@@ -62,8 +62,7 @@ function Scrollable(childJsClass, nativeScrollableObject) {
                             return !!returnValue;
                         }
                     });
-                }
-                else {
+                } else {
                     self.nativeInner.setJsCallbacks(null);
                 }
             },
