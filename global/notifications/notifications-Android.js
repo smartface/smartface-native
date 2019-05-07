@@ -20,9 +20,10 @@ const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 var selectedNotificationIds = [];
 var senderID = null;
 var notificationListener = NativeNotificationListener.implement({
-    onRemoteNotificationReceived: function(data) {
+    onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
         Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            'remote': JSON.parse(data)
+            remote: JSON.parse(data),
+            clickedOn: isReceivedByOnClick
         });
     },
     onLocalNotificationReceived: function(data) {
@@ -296,7 +297,8 @@ Object.defineProperties(Notifications, {
         value: function(onSuccess, onFailure) {
             if (!AndroidConfig.isEmulator) {
                 registerPushNotification(onSuccess, onFailure);
-            } else {
+            }
+            else {
                 onFailure && onFailure();
             }
         },
@@ -347,7 +349,8 @@ function unregisterPushNotification() {
         if (notificationListener) {
             NativeGCMListenerService.unregisterRemoteNotificationListener(notificationListener);
         }
-    } else {
+    }
+    else {
         throw Error("Not registered to push notification.");
     }
 }
@@ -371,7 +374,8 @@ function registerPushNotification(onSuccessCallback, onFailureCallback) {
                 onFailureCallback && onFailureCallback();
             }
         });
-    } else {
+    }
+    else {
         onFailureCallback && onFailureCallback();
     }
 }
@@ -402,7 +406,8 @@ function startNotificationIntent(self, params) {
     if (params.repeatInterval) {
         // AlarmManager.RTC_WAKEUP
         alarmManager.setRepeating(0, fireDate, params.repeatInterval, self.mPendingIntent);
-    } else {
+    }
+    else {
         // AlarmManager.ELAPSED_REALTIME_WAKEUP
         alarmManager.set(2, fireDate, self.mPendingIntent);
     }

@@ -444,6 +444,7 @@ Application.hideKeyboard = function() {};
  * @param {Object} data 
  * @param {Object} data.remote
  * @param {Object} data.local
+ * @param {Object} data.clickedOn Indicates that returned data.remote object obtained by after pressed on present notification. (Android Specific Argument)
  * @android
  * @ios
  * @static

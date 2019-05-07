@@ -30,6 +30,9 @@ const OrientationDictionary = {
     15: 10
 };
 
+const NOTFICATION_JSON = "NOTFICATION_JSON",
+    NOTIFICATION_CLICKED = "SF_NOTIFICATION_CLICKED";
+
 
 
 function Page(params) {
@@ -79,14 +82,16 @@ function Page(params) {
                     onShowCallback && onShowCallback();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
-                    if (spratIntent.getStringExtra("NOTFICATION_JSON") !== undefined) {
+                    if (spratIntent.hasExtra(NOTFICATION_JSON) === true) {
                         try {
-                            var notificationJson = spratIntent.getStringExtra("NOTFICATION_JSON");
+                            var notificationJson = spratIntent.getStringExtra(NOTFICATION_JSON);
                             Application.onReceivedNotification({
-                                'remote': JSON.parse(notificationJson)
+                                remote: JSON.parse(notificationJson),
+                                clickedOn: spratIntent.getBooleanExtra(NOTIFICATION_CLICKED, false)
                             });
-                            spratIntent.removeExtra("NOTFICATION_JSON"); //clears notification_json intent
-                        } catch (e) {
+                            spratIntent.removeExtra(NOTFICATION_JSON); //clears notification_json intent
+                        }
+                        catch (e) {
                             new Error("An error occured while getting notification json");
                         }
                     }
@@ -142,14 +147,18 @@ function Page(params) {
             // for better performance. Remove if statement.
             if (Contacts.PICK_REQUEST_CODE === requestCode) {
                 Contacts.onActivityResult(requestCode, resultCode, data);
-            } else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            }
+            else if (requestCode === Multimedia.PICK_FROM_GALLERY || requestCode === Multimedia.CAMERA_REQUEST || requestCode === Multimedia.CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 Multimedia.onActivityResult(requestCode, resultCode, data);
-            } else if (requestCode === Sound.PICK_SOUND) {
+            }
+            else if (requestCode === Sound.PICK_SOUND) {
                 Sound.onActivityResult(requestCode, resultCode, data);
 
-            } else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
+            }
+            else if (requestCode === Webview.REQUEST_CODE_LOLIPOP || requestCode === Webview.RESULT_CODE_ICE_CREAM) {
                 Webview.onActivityResult(requestCode, resultCode, data);
-            } else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
+            }
+            else if (requestCode === EmailComposer.EMAIL_REQUESTCODE) {
                 EmailComposer.onActivityResult(requestCode, resultCode, data);
             }
         }
@@ -360,7 +369,8 @@ function Page(params) {
             _borderVisibility = value;
             if (value) {
                 actionBar.setElevation(AndroidUnitConverter.dpToPixel(4));
-            } else {
+            }
+            else {
                 actionBar.setElevation(0);
             }
         },
@@ -391,7 +401,8 @@ function Page(params) {
                 if (_transparent) {
                     pageLayoutParams.removeRule(3); // 3 = RelativeLayout.BELOW
                     self.headerBar.backgroundColor = Color.TRANSPARENT;
-                } else {
+                }
+                else {
                     pageLayoutParams.addRule(3, NativeSFR.id.toolbar);
                 }
                 pageLayoutParams && pageLayout.setLayoutParams(pageLayoutParams);
@@ -431,7 +442,8 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 toolbar.setTitle(text);
-            } else {
+            }
+            else {
                 toolbar.setTitle("");
             }
         },
@@ -496,7 +508,8 @@ function Page(params) {
                 if (visible) {
                     // View.VISIBLE
                     toolbar.setVisibility(0);
-                } else {
+                }
+                else {
                     // View.GONE
                     toolbar.setVisibility(8);
                 }
@@ -526,7 +539,8 @@ function Page(params) {
         set: function(text) {
             if (TypeUtil.isString(text)) {
                 toolbar.setSubtitle(text);
-            } else {
+            }
+            else {
                 toolbar.setSubtitle("");
             }
         },
@@ -670,7 +684,8 @@ function Page(params) {
     self.headerBar.setItems = function(items) {
         if (!(items instanceof Array)) {
             return;
-        } else if (items == null) {
+        }
+        else if (items == null) {
             optionsMenu.clear();
             return;
         }
@@ -692,7 +707,8 @@ function Page(params) {
             var itemView;
             if (item.searchView) {
                 itemView = item.searchView.nativeObject;
-            } else {
+            }
+            else {
 
                 var badgeButtonLayoutParams = new NativeRelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
                 var nativeBadgeContainer = new NativeRelativeLayout(activity);
@@ -739,7 +755,8 @@ function Page(params) {
         if (leftItem && leftItem.image) {
             self._headerBarLeftItem = leftItem;
             actionBar.setHomeAsUpIndicator(self._headerBarLeftItem.image.nativeObject);
-        } else { // null or undefined
+        }
+        else { // null or undefined
             self._headerBarLeftItem = null;
             actionBar.setHomeAsUpIndicator(null);
         }
