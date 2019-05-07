@@ -88,7 +88,7 @@ Notifications.scheduledLocalNotifications = null;
 
 /**
  * Set this property to true to handling notifications with willPresentNotification and receivedNotificationResponse methods.
- * If this property is true, the Application.onReceivedNotification method no longer triggers.
+ * If this property is true, the Application.onReceivedNotification method no longer triggers for iOS.
  * 
  * @property {Boolean} [userNotificationEnabled = false]
  * @ios
