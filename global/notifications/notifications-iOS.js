@@ -232,4 +232,73 @@ Notifications.ios.getAuthorizationStatus = function(callback) {
     Invocation.invokeInstanceMethod(current, "getNotificationSettingsWithCompletionHandler:", [argBlock]);
 }
 
+//UNUserNotificationCenter
+Notifications.iOS.NotificationPresentationOptions = {
+    BADGE: 1 << 0,
+    SOUND: 1 << 1,
+    ALERT: 1 << 2
+};
+
+Notifications.ios.UNUserNotificationCenterDelegate = new __SF_SMFUNUserNotificationCenterDelegate();
+Notifications.ios.UNUserNotificationCenterDelegate.willPresentNotification = function(e){
+    if (Notifications.ios._willPresentNotification === undefined) {
+        return 0;
+    }
+    
+    var returnValue = Notifications.ios._willPresentNotification(e);
+    if (returnValue === undefined || returnValue.length === 0) {
+        return 0;
+    }
+    
+    var returnNSUIInteger;
+    for(var index in returnValue){
+        returnNSUIInteger = returnNSUIInteger | returnValue[index]
+    };
+    
+    return returnNSUIInteger;
+};
+
+Notifications.ios.UNUserNotificationCenterDelegate.didReceiveNotificationResponse = function(e){
+    Notifications.ios._didReceiveNotificationResponse && Notifications.ios._didReceiveNotificationResponse(e);
+};
+
+Notifications.ios._userNotificationEnabled = false;
+Object.defineProperty(Notifications.ios, 'userNotificationEnabled', {
+    get: function() {
+        return Notifications.ios._userNotificationEnabled;
+    },
+    set: function(value) {
+        if (value) {
+            Notifications.ios._userNotificationEnabled = true;
+            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = Notifications.ios.UNUserNotificationCenterDelegate;
+        }else{
+            Notifications.ios._userNotificationEnabled = false
+            __SF_UNUserNotificationCenter.currentNotificationCenter().delegate = undefined;
+        }
+    },
+    enumerable: true
+});
+
+Notifications.ios._willPresentNotification = undefined;
+Object.defineProperty(Notifications.ios, 'willPresentNotification', {
+    get: function() {
+        return Notifications.ios._willPresentNotification;
+    },
+    set: function(value) {
+        Notifications.ios._willPresentNotification = value;
+    },
+    enumerable: true
+});
+
+Notifications.ios._didReceiveNotificationResponse = undefined;
+Object.defineProperty(Notifications.ios, 'receivedNotificationResponse', {
+    get: function() {
+        return Notifications.ios._didReceiveNotificationResponse;
+    },
+    set: function(value) {
+        Notifications.ios._didReceiveNotificationResponse = value;
+    },
+    enumerable: true
+});
+
 module.exports = Notifications;
