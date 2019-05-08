@@ -19,25 +19,42 @@ const LOCAL_NOTIFICATION_RECEIVED = "localNotificationReceived";
 
 var selectedNotificationIds = [];
 var senderID = null;
-var notificationListener = NativeNotificationListener.implement({
-    onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
-        let parsedJson = JSON.parse(data);
-        if (isReceivedByOnClick === true)
-            Notifications.onNotificationClick && runOnUiThread(Notifications.onNotificationClick, parsedJson);
-        else if (isReceivedByOnClick === false)
-            Notifications.onNotificationReceive && runOnUiThread(Notifications.onNotificationReceive, parsedJson);
-        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            remote: parsedJson
-        });
-    },
-    onLocalNotificationReceived: function(data) {
-        Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            'local': JSON.parse(data)
+
+
+var notificationListener = (function() {
+    var sNotificationListener;
+
+    function createNotificationListener() {
+        return NativeNotificationListener.implement({
+            onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
+                let parsedJson = JSON.parse(data);
+                if (isReceivedByOnClick) {
+                    Notifications.onNotificationClick && runOnUiThread(Notifications.onNotificationClick, parsedJson);
+                }
+                else {
+                    Notifications.onNotificationReceive && runOnUiThread(Notifications.onNotificationReceive, parsedJson);
+                    Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
+                        remote: parsedJson
+                    });
+                }
+            },
+            onLocalNotificationReceived: function(data) {
+                Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
+                    'local': JSON.parse(data)
+                });
+            }
         });
     }
-});
+    if (sNotificationListener === undefined)
+        sNotificationListener = createNotificationListener();
 
-NativeLocalNotificationReceiver.registerRemoteNotificationListener(notificationListener);
+    /*ToDo: Already register by  registerForPushNotifications method.This implemetation might be 
+    specific to location object. So while refactoring consider.
+    */
+    NativeLocalNotificationReceiver.registerRemoteNotificationListener(sNotificationListener);
+
+    return sNotificationListener;
+})();
 
 function Notifications() {}
 
@@ -320,14 +337,14 @@ Object.defineProperties(Notifications, {
     "onNotificationClick": {
         get: () => _onNotificationClick,
         set: (callback) => {
-            _onNotificationClick = callback
+            _onNotificationClick = callback;
         },
         enumerable: true
     },
     "onNotificationReceive": {
         get: () => _onNotificationReceive,
         set: (callback) => {
-            _onNotificationReceive = callback
+            _onNotificationReceive = callback;
         },
         enumerable: true
     }
