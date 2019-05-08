@@ -84,11 +84,15 @@ function Page(params) {
                     var spratIntent = AndroidConfig.activity.getIntent();
                     if (spratIntent.hasExtra(NOTFICATION_JSON) === true) {
                         try {
+                            const Notifications = require("sf-core/notifications");
+
+                            let parsedJson = JSON.parse(notificationJson);
                             var notificationJson = spratIntent.getStringExtra(NOTFICATION_JSON);
-                            Application.onReceivedNotification({
-                                remote: JSON.parse(notificationJson),
-                                clickedOn: spratIntent.getBooleanExtra(NOTIFICATION_CLICKED, false)
+                            Application.onReceivedNotification && Application.onReceivedNotification({
+                                remote: parsedJson,
+                                clickedOn: spratIntent.getBooleanExtra(NOTIFICATION_CLICKED)
                             });
+                            Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson)
                             spratIntent.removeExtra(NOTFICATION_JSON); //clears notification_json intent
                         }
                         catch (e) {
