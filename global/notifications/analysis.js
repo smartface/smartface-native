@@ -86,29 +86,18 @@ Notifications.applicationIconBadgeNumber = 0;
  */
 Notifications.scheduledLocalNotifications = null;
 
-/**
- * Set this property to true to handling notifications with willPresentNotification and receivedNotificationResponse methods.
- * If this property is true, the Application.onReceivedNotification method no longer triggers for iOS.
- * 
- * @property {Boolean} [userNotificationEnabled = false]
- * @ios
- * @readonly
- * @static
- * @since 4.0.3
- */
-Notifications.userNotificationEnabled = false;
 
 /**
- * Handle a notification that arrived while the app was running in the foreground. The userNotificationEnabled property must be true.
- * Use the return value to specify how you want the system to alert the user, if at all.
+ * Handles a notification messages that arrived while the app was running in the foreground for iOS  but Android handles while in the foreground or background. 
+ * In iOS, the return value  specifies how you want the system to alert the user, if at all. So return values does not effect in Android.
  * 
  *     @example
- *     Notifications.onNotificationClick = function(e){
+ *     Notifications.onNotificationReceive = function(e){
  *      console.log("willPresentNotification", e);
  *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
  *     };
  * 
- * @event onNotificationClick
+ * @event onNotificationReceive
  * @param {Object} data
  * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
  * @ios
@@ -116,19 +105,19 @@ Notifications.userNotificationEnabled = false;
  * @static
  * @since 4.0.3
  */
-Notifications.onNotificationClick = function(data) {};
+Notifications.onNotificationReceive = function(data) {};
 
 /**
- * This event using to process the user's response to a delivered notification. The userNotificationEnabled property must be true
+ * This event triggered when clicked on notification alert
  * 
- * @event onNotificationReceive
+ * @event onNotificationClick
  * @param {Object} data
  * @ios
  * @android
  * @static
  * @since 4.0.3
  */
-Notifications.onNotificationReceive = function(data) {};
+Notifications.onNotificationClick = function(data) {};
 
 /**
  * iOS Specific Properties.
