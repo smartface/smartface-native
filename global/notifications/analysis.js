@@ -103,30 +103,32 @@ Notifications.userNotificationEnabled = false;
  * Use the return value to specify how you want the system to alert the user, if at all.
  * 
  *     @example
- *     Notifications.ios.willPresentNotification = function(e){
+ *     Notifications.onNotificationClick = function(e){
  *      console.log("willPresentNotification", e);
  *      return [Notifications.iOS.NotificationPresentationOptions.SOUND,Notifications.iOS.NotificationPresentationOptions.ALERT]; // or []
  *     };
  * 
- * @event willPresentNotification
+ * @event onNotificationClick
  * @param {Object} data
  * @return {Array|Notifications.iOS.NotificationPresentationOptions} Specify [] to silence the notification completely.
  * @ios
+ * @android
  * @static
  * @since 4.0.3
  */
-Notifications.willPresentNotification = function(data) {};
+Notifications.onNotificationClick = function(data) {};
 
 /**
  * This event using to process the user's response to a delivered notification. The userNotificationEnabled property must be true
  * 
- * @event receivedNotificationResponse
+ * @event onNotificationReceive
  * @param {Object} data
  * @ios
+ * @android
  * @static
  * @since 4.0.3
  */
-Notifications.receivedNotificationResponse = function(data) {};
+Notifications.onNotificationReceive = function(data) {};
 
 /**
  * iOS Specific Properties.

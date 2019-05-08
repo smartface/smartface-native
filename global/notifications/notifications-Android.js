@@ -21,9 +21,13 @@ var selectedNotificationIds = [];
 var senderID = null;
 var notificationListener = NativeNotificationListener.implement({
     onRemoteNotificationReceived: function(data, isReceivedByOnClick) {
+        let parsedJson = JSON.parse(data);
+        if (isReceivedByOnClick === true)
+            Notifications.onNotificationClick && runOnUiThread(Notifications.onNotificationClick, parsedJson);
+        else if (isReceivedByOnClick === false)
+            Notifications.onNotificationReceive && runOnUiThread(Notifications.onNotificationReceive, parsedJson);
         Application.onReceivedNotification && runOnUiThread(Application.onReceivedNotification, {
-            remote: JSON.parse(data),
-            clickedOn: isReceivedByOnClick
+            remote: parsedJson
         });
     },
     onLocalNotificationReceived: function(data) {
@@ -285,6 +289,7 @@ Notifications.LocalNotification = function(params) {
     }
 }
 
+var _onNotificationClick, _onNotificationReceive;
 Object.defineProperties(Notifications, {
     'cancelAllLocalNotifications': {
         value: function() {
@@ -312,6 +317,20 @@ Object.defineProperties(Notifications, {
         },
         enumerable: true
     },
+    "onNotificationClick": {
+        get: () => _onNotificationClick,
+        set: (callback) => {
+            _onNotificationClick = callback
+        },
+        enumerable: true
+    },
+    "onNotificationReceive": {
+        get: () => _onNotificationReceive,
+        set: (callback) => {
+            _onNotificationReceive = callback
+        },
+        enumerable: true
+    }
 });
 
 Object.defineProperty(Notifications, "Priority", {
