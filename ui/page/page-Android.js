@@ -12,7 +12,7 @@ const NativeSupportR = requireClass("android.support.v7.appcompat.R");
 const Application = require("../../application");
 const SFFragment = requireClass('io.smartface.android.sfcore.SFPage');
 const NativeSpannableStringBuilder = requireClass("android.text.SpannableStringBuilder");
-
+const NativeLocalNotificationReceiver = requireClass('io.smartface.android.notifications.LocalNotificationReceiver');
 const OrientationDictionary = {
     // Page.Orientation.PORTRAIT: ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     1: 1,
@@ -29,11 +29,6 @@ const OrientationDictionary = {
     // Page.Orientation.AUTO: ActivityInfo.ActivityInfo.SCREEN_ORIENTATION_FULLSENSOR
     15: 10
 };
-
-const NOTFICATION_JSON = "NOTFICATION_JSON",
-    NOTIFICATION_CLICKED = "SF_NOTIFICATION_CLICKED";
-
-
 
 function Page(params) {
     (!params) && (params = {});
@@ -82,17 +77,17 @@ function Page(params) {
                     onShowCallback && onShowCallback();
 
                     var spratIntent = AndroidConfig.activity.getIntent();
-                    if (spratIntent.hasExtra(NOTFICATION_JSON) === true) {
+                    if (spratIntent.hasExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON) === true) {
                         try {
                             const Notifications = require("sf-core/notifications");
                             
-                            var notificationJson = spratIntent.getStringExtra(NOTFICATION_JSON);
+                            var notificationJson = spratIntent.getStringExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON);
                             let parsedJson = JSON.parse(notificationJson);
                             Application.onReceivedNotification && Application.onReceivedNotification({
                                 remote: parsedJson
                             });
                             Notifications.onNotificationClick && Notifications.onNotificationClick(parsedJson);
-                            spratIntent.removeExtra(NOTFICATION_JSON); //clears notification_json intent
+                            spratIntent.removeExtra(NativeLocalNotificationReceiver.NOTIFICATION_JSON); //clears notification_json intent
                         }
                         catch (e) {
                             new Error("An error occured while getting notification json");
